@@ -1,6 +1,5 @@
 from __future__ import annotations
-import os
-import sys
+import os, sys, re
 import asyncio
 
 import ModuleUpdate
@@ -11,6 +10,21 @@ import Utils
 # Items that have multiple copies; makes duplicate files for each copy of the item
 MULTI_ITEMS = ("Blossom Petal", "Blossom", "Bonus Orb")
 
+# Pack version
+VERSION = "0.2.0"
+
+import typing, zipfile
+
+# Function for extracting a ZIP file while removing the root
+# https://stackoverflow.com/questions/8689938/extract-files-from-zip-without-keep-the-top-level-folder-with-python-zipfile
+def _members_without_root(archive: zipfile.ZipFile, root_filename: str) -> typing.Generator:
+    for info in archive.infolist():
+        parts = info.filename.split(root_filename)
+        if len(parts) > 1 and parts[1]:
+            # We join using the root filename, because there might be a subdirectory with the same name.
+            info.filename = root_filename.join(parts[1:])
+            yield info
+
 # Removes characters that Baba Is You won't like in the storage files
 # ($ is used for color codes, = is used to tell when the data starts)
 def clean(text: str) -> str:
@@ -18,6 +32,63 @@ def clean(text: str) -> str:
     text.replace("$", "S")
     text.replace("#", "")
     return text
+
+def auto_install_pack(path: str, world: str, forceInstall: bool = False):
+    defaultWorldPath = os.path.join(path, "Data", "Worlds", "baba")
+    if os.path.exists(defaultWorldPath):
+        worldPath = os.path.join(path, "Data", "Worlds", world)
+        valid = (forceInstall or (not (os.path.exists(worldPath) and os.path.exists(os.path.join(worldPath, "0level.l")))))
+        updateOnly = False
+        if not valid: # check for only updating the data file
+            updateOnly = True
+            dataPath = os.path.join(worldPath, "world_data.txt")
+            if os.path.isfile(dataPath):
+                lines = []
+                try:
+                    with open(dataPath, 'r') as f:
+                        lines = f.readlines()
+                        f.close()
+                except OSError:
+                    pass
+
+                for line in lines:
+                    if line[0:8] == "version=":
+                        testVersion = line[8:]
+                        if testVersion != VERSION:
+                            valid = True
+                            print("Out of date version: ",testVersion)
+                        break
+
+        if valid:
+            print("Attempting to create babapelago world")
+
+            import shutil
+            from .. import user_folder, local_folder
+
+            try:
+                if not updateOnly:
+                    shutil.copytree(defaultWorldPath, worldPath, dirs_exist_ok=True)
+                
+                isAPWorld = ".apworld" in sys.modules[__name__].__file__
+                if isAPWorld:
+                    apWorldPath = os.path.join(user_folder, "baba_is_you.apworld")
+                    
+                    with zipfile.ZipFile(apWorldPath, mode="r") as archive:
+                        # We will use the first directory with no more than one path segment as the root.
+                        archive.extractall(path=worldPath, members=_members_without_root(archive, "baba_is_you/babapelago"))
+                else:
+                    apWorldPath = os.path.join(local_folder, "baba_is_you")
+                    shutil.copytree(os.path.join(apWorldPath, "babapelago"), worldPath, dirs_exist_ok=True)
+            except Exception as e:
+                print(e)
+                return False
+            
+            return True
+        else:
+            return True
+    else:
+        print("Unable to locate default Baba world")
+        return False
 
 if __name__ == "__main__":
     Utils.init_logging("BabaIsYouClient", exception_logger="Client")
@@ -32,6 +103,64 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
         """Manually trigger a resync."""
         self.output(f"Syncing items.")
         self.ctx.syncing = True
+    
+    def _cmd_filepath(self) -> bool:
+        """Change filepath to Baba Is You installation."""
+        import platform
+        osName = platform.system()
+
+        path = Utils.open_directory("Select Baba Is You directory...")
+        if path is None:
+            msg = "No directory was entered!"
+            self.output("Error: " + msg)
+            return False
+
+        if osName == "Darwin": # Mac
+            path = path.replace("\\ ", " ")
+            path = path.strip()
+        path = path.strip("\"")
+        
+        if osName == "Darwin": # Navigate inside application package
+            path = os.path.join(path, "Baba Is You.app", "Contents", "Resources")
+
+        if os.path.isdir(path):
+            self.output(f"Set communication path to: {os.path.abspath(path)}")
+        else:
+            msg = f"Couldn't find directory at \"{os.path.abspath(path)}\"! Does it exist?"
+            self.output("Error: " + msg)
+            return False
+    
+        self.ctx.game_data_path = path
+        self.ctx.game_communication_path = os.path.join(path, "AP", self.ctx.world_folder)
+
+        if not os.path.exists(self.ctx.game_communication_path):
+            os.makedirs(self.ctx.game_communication_path)
+
+        return True
+    
+    def _cmd_worldfolder(self, folder: str = "") -> bool:
+        """Change world folder being used. Default is \"babapelago\"."""
+
+        if len(folder) <= 0:
+            folder = "babapelago"
+
+        self.ctx.world_folder = folder
+        self.ctx.game_communication_path = os.path.join(self.ctx.game_data_path, "AP", self.world_folder)
+
+        if not os.path.exists(self.ctx.game_communication_path):
+            os.makedirs(self.ctx.game_communication_path)
+        
+        self.output(f"Set world folder to: {folder}")
+        return True
+    
+    def _cmd_installpack(self) -> bool:
+        """Install the Babapelago level pack at the currently selected world"""
+        result = auto_install_pack(self.ctx.game_data_path, self.ctx.world_folder, True)
+        if result:
+            self.output("Successfully installed the pack!")
+        else:
+            self.output("An error occured when trying to install the pack.")
+        return result
 
 class BabaIsYouContext(CommonContext):
     command_processor: int = BabaIsYouClientCommandProcessor
@@ -45,17 +174,29 @@ class BabaIsYouContext(CommonContext):
         self.awaiting_bridge = False
         self.is_connected = False
         self.duplicate_files = {}
-        # TEMP: get communication path; copied from my online mod for now
+
         import platform
         osName = platform.system()
-        # Start with steam installation on windows
-        path = os.path.expandvars(r"%ProgramFiles(x86)%/Steam/steamapps/common/Baba Is You")
+
+        # Find Baba Is You steam installation (dennisw100)
+        if osName == "Windows":
+            import winreg
+            steam_path = os.path.join(winreg.QueryValueEx(winreg.OpenKey(winreg.HKEY_CURRENT_USER, "SOFTWARE\\VALVE\\Steam"), "SteamPath")[0], 'steamapps', 'libraryfolders.vdf')
+        else:
+            steam_path = os.path.expanduser("~/.steam/steam/steamapps/libraryfolders.vdf")
+        with open(steam_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+            library_paths = {index: path for index, path in re.findall(r"\"(\d+)\"\s+?\{[^}]*\"path\"\s+?\"([^\"]+)\"", content)}
+            for index, testpath in library_paths.items():
+                testpath = os.path.join(testpath, "steamapps", "common", "Baba Is You")
+                if os.path.isfile(os.path.join(testpath, "Baba Is You.exe")) or os.path.isdir(os.path.join(testpath, "Baba Is You.app") or os.path.isfile(os.path.join(testpath, "run.sh"))):
+                    path = testpath
         
-        if os.path.isdir(path):
-            print("Found game directory!",os.path.abspath(path))
+        if (path is not None) and os.path.isdir(path):
+            logger.info(f"Found steam installation at: {os.path.abspath(path)}")
         else:
             path = Utils.open_directory("Select Baba Is You directory...")
-            if path == None:
+            if not path:
                 msg = "No directory was entered!"
                 logger.error("Error: " + msg)
                 Utils.messagebox("Error", msg, error=True)
@@ -66,18 +207,25 @@ class BabaIsYouContext(CommonContext):
                 path = path.replace("\\ ", " ")
                 path = path.strip()
         path = path.strip("\"")
+        
+        if osName == "Darwin": # Navigate inside application package
+            path = os.path.join(path, "Baba Is You.app", "Contents", "Resources")
 
         if os.path.isdir(path):
-            if osName == "Darwin":
-                path = path + os.path.join("Baba Is You.app","Contents","MacOS","Chowdren")
+            logger.info(f"Set communication path to: {os.path.abspath(path)}")
         else:
-            msg = "Couldn't find directory at \""+os.path.abspath(path)+"\"! Does it exist?"
+            msg = f"Couldn't find directory at \"{os.path.abspath(path)}\"! Does it exist?"
             logger.error("Error: " + msg)
             Utils.messagebox("Error", msg, error=True)
             sys.exit(1)
             return
         
-        self.game_communication_path = os.path.join(path,"AP")
+        self.world_folder = "babapelago"
+        self.game_data_path = path
+        self.game_communication_path = os.path.join(path, "AP", self.world_folder)
+
+        # auto install pack
+        auto_install_pack(path, self.world_folder)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -115,6 +263,7 @@ class BabaIsYouContext(CommonContext):
             self.is_connected = True
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
+
             # Set up options file
             currPath = os.path.join(self.game_communication_path,"AP_OPTIONS.data")
             self.slot_data = args["slot_data"]
@@ -232,7 +381,7 @@ async def game_watcher(ctx: BabaIsYouContext):
                         victory = True
                     else:
                         st = baba_loc_name_to_id.get(location)
-                        if st != None:
+                        if st is not None:
                             sending = sending+[(int(st))]
                 
                         

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterable
 
 from BaseClasses import Entrance, Region, CollectionState
-from worlds.generic.Rules import add_rule, set_rule
+from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
-from .levels import LEVEL_DATA
-from .words import DEFAULT_WORDS
+from .levels import LEVEL_DATA, can_win
 
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
@@ -44,17 +43,20 @@ def connect_regions(world: BabaIsYouWorld) -> None:
     for orgName in LEVEL_DATA:
         name = orgName
         data = LEVEL_DATA[orgName]
+        if data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+            continue # skip non-accessible areas
+
         parent = data.get("parent")
         connections = data.get("connects")
-        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(name) != None:
+        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(name) is not None:
             name = world.level_shuffle_dict.get(name)
             data = LEVEL_DATA[name]
 
         level = world.get_region(name)
-        if connections != None:
+        if connections is not None:
             for orgOtherRegion in connections:
                 otherRegion = orgOtherRegion
-                if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(otherRegion) != None:
+                if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(otherRegion) is not None:
                     otherRegion = world.level_shuffle_dict.get(otherRegion)
                 
                 entranceName = name + " -> " + otherRegion
@@ -62,18 +64,28 @@ def connect_regions(world: BabaIsYouWorld) -> None:
                 level.connect(subLevel)
                 entrance = world.get_entrance(entranceName)
 
+                rule = True_()
                 data2 = LEVEL_DATA[otherRegion]
-                if world.options.world_keys and data2.get("key") != None:
-                    def has_key(state: CollectionState, key=data2.get("key")):
-                        return state.has(key, world.player)
-                    add_rule(entrance, has_key)
+                if world.options.world_keys and data2.get("key") is not None:
+                    rule = rule & Has(data2.get("key"))
                 
                 # Add connection rules, ignoring for map levels if open map is enabled
-                rule = connections.get(orgOtherRegion)
-                if rule != None and (parent != "Map" or not world.options.open_map):
-                    def ruleFunc(state: CollectionState, player=world.player, level=name):
-                        return rule(state, player, level)
-                    add_rule(entrance, ruleFunc)
+                connectRule = connections.get(orgOtherRegion)
+
+                if (connectRule is not None) and (parent != "Map" or not world.options.open_map):
+                    if callable(connectRule):
+                        rule = rule & connectRule(name, world.options.logic_difficulty)
+                    elif not isinstance(connectRule, Iterable):
+                        rule = rule & connectRule
+                    else:
+                        # iterate through tuple
+                        for subRule in connectRule:
+                            if callable(connectRule):
+                                rule = rule & subRule(name, world.options.logic_difficulty)
+                            else:
+                                rule = rule & subRule
+                
+                world.set_rule(entrance, rule)
 
 # Handle level shuffling
 def handle_level_shuffle(world: BabaIsYouWorld) -> None:
@@ -97,25 +109,31 @@ def handle_level_shuffle(world: BabaIsYouWorld) -> None:
     level_list = [] # every other level
     for name in LEVEL_DATA:
         data = LEVEL_DATA[name]
-        if data.get("map") != True and name != "Map-Finale":
-            if data.get("starting") == True:
-                starting_level_list.append(name)
-            else:
-                level_list.append(name)
-            clearable = (data.get("winLogic") == None)
+        # Skip non-accessible areas unless level shuffle is set to Full
+        if world.options.level_shuffle != 2 and data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+            continue
+        # Don't shuffle maps, levels with transformations, or levels with the noShuffle flag set
+        if (data.get("map") or data.get("noShuffle") or data.get("transforms")):
+            continue
 
-            # When default words is on, include levels that only require those words as clearable
-            if (not clearable) and (world.options.start_with_default_words):
-                clearable = True
-                for word in data.get("winLogic"):
-                    if word not in DEFAULT_WORDS:
-                        clearable = False
-                        break
-            
-            if clearable:
-                clearable_level_list.append(name)
-            else:
-                other_level_list.append(name)
+        if data.get("starting"):
+            starting_level_list.append(name)
+        else:
+            level_list.append(name)
+        rule = can_win(name, world.options.logic_difficulty)
+        clearable = ((data.get("winLogic") is None) or (rule == True_))
+
+        # When default words is on, include levels that only require those words as clearable
+        if (not clearable) and (world.options.start_with_default_words):
+            difficulty = data.get("defaultWordOnlyDiff")
+            if difficulty is None:
+                difficulty = 99
+            clearable = (difficulty <= world.options.logic_difficulty)
+        
+        if clearable:
+            clearable_level_list.append(name)
+        else:
+            other_level_list.append(name)
     
     # Reverse level list and starting list so they are in order
     starting_level_list.reverse()

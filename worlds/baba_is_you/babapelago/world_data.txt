@@ -8,6 +8,7 @@ prize_max=225
 clear_max=12
 bonus_max=3
 mods=1
+version=0.2.0
 [levels]
 levelid=341
 rolling_levelid=12

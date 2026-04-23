@@ -28,7 +28,7 @@ class TestShuffleLogic(BabaIsYouTestBase):
             state = self.multiworld.get_all_state(False)
             for name in LEVEL_DATA:
                 data = LEVEL_DATA[name]
-                if data.get("completeCount") != None:
+                if data.get("completeCount") is not None:
                     itemName = name + " Win"
                     wins = len(self.multiworld.find_item_locations(itemName, self.player))
                     neededWins = data.get("completeCount")

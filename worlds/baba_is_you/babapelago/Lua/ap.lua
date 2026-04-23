@@ -2,17 +2,19 @@ checks = {}
 didAPLoad = false
 ignoreSaveSeed = false
 manualChecks = false
+blossom_petal_count = 0
 local level_mapping = {}
-local thisWorld = "babapelago" -- name of this world
+local thisWorld = generaldata.strings[WORLD] -- name of this world
+if #thisWorld == 0 then thisWorld = "babapelago" end
 
-local noun_checks = {"text_baba", "text_flag", "text_wall", "text_rock", "text_skull", "text_lava", "text_star", "text_crab", "text_keke", "text_love", "text_pillar", "text_jelly", "text_key", "text_door", "text_rose", "text_violet", "text_water", "text_robot", "text_bolt", "text_cog", "text_box", "text_ghost", "text_ice", "text_leaf", "text_fence", "text_me", "text_belt", "text_tree", "text_bug", "text_fungus", "text_cloud", "text_rocket", "text_ufo", "text_moon", "text_dust", "text_grass", "text_hand", "text_fruit", "text_bat", "text_fire", "text_bird", "text_sun", "text_tile", "text_orb", "text_hedge", "text_cliff", "text_cake"}
-local special_noun_checks = {"text_text", "text_empty", "text_all", "text_level", "text_group", "text_cursor", "text_image"}
+local noun_checks = {"text_baba", "text_flag", "text_wall", "text_rock", "text_skull", "text_lava", "text_star", "text_crab", "text_keke", "text_love", "text_pillar", "text_jelly", "text_key", "text_door", "text_rose", "text_violet", "text_water", "text_robot", "text_bolt", "text_cog", "text_box", "text_ghost", "text_ice", "text_leaf", "text_fence", "text_me", "text_belt", "text_tree", "text_bug", "text_fungus", "text_anni", "text_cloud", "text_rocket", "text_ufo", "text_moon", "text_dust", "text_grass", "text_hand", "text_fruit", "text_bat", "text_fire", "text_tile", "text_bird", "text_sun", "text_orb", "text_hedge", "text_cliff", "text_line", "text_cake"}
+local special_noun_checks = {"text_text", "text_empty", "text_all", "text_group", "text_level", "text_cursor", "text_image"}
 local verb_checks = {"text_is", "text_has", "text_make", "text_write"}
 local prop_checks = {"text_you", "text_win", "text_stop", "text_push", "text_sink", "text_defeat", "text_hot", "text_melt", "text_move", "text_open", "text_shut", "text_red", "text_blue", "text_float", "text_weak", "text_tele", "text_pull", "text_shift", "text_up", "text_down", "text_left", "text_right", "text_swap", "text_best", "text_fall", "text_more", "text_word", "text_sleep", "text_end", "text_hide", "text_bonus", "text_done"}
 local condition_checks = {"text_on", "text_facing", "text_lonely", "text_near"}
 local letter_checks = {"text_a", "text_ab", "text_b", "text_ba", "text_c", "text_e", "text_f", "text_g", "text_h", "text_i", "text_l", "text_m", "text_n", "text_o", "text_r", "text_s", "text_t", "text_u", "text_v", "text_w", "text_x"}
 local other_checks = {"text_and", "text_not"}
-local world_key_list = {"Lake Key", "Island Key", "Ruins Key", "Fall Key", "Forest Key", "Space Key", "Garden Key", "Chasm Key", "Cavern Key", "Mountain Key", "ABC Key"}
+local world_key_list = {"Lake Key", "Island Key", "Ruins Key", "Fall Key", "Forest Key", "Space Key", "Garden Key", "Chasm Key", "Cavern Key", "Mountain Key", "ABC Key", "Depths Key", "Meta Key", "Center Key"}
 local non_word_items = {
     ["Speck"] = 0,
     ["Blossom"] = 0,
@@ -29,6 +31,9 @@ local non_word_items = {
     ["Cavern Key"] = 1,
     ["Mountain Key"] = 1,
     ["ABC Key"] = 1,
+    ["Depths Key"] = 1,
+    ["Meta Key"] = 1,
+    ["Center Key"] = 1,
 }
 
 local all_checks_list = {noun_checks, verb_checks, prop_checks, condition_checks, special_noun_checks, other_checks, letter_checks, world_key_list}
@@ -48,6 +53,9 @@ local need_key = {
     ["179level"] = "Cavern Key",
     ["232level"] = "Mountain Key",
     ["282level"] = "ABC Key",
+    ["264level"] = "Depths Key",
+    ["283level"] = "Meta Key",
+    ["304level"] = "Center Key",
 }
 local have_clears_or_completes = {
     ["177level"] = 3,
@@ -62,6 +70,13 @@ local have_clears_or_completes = {
     ["232level"] = 3,
     ["282level"] = 3,
 }
+local min_access = {
+    ["106level"] = 0, -- Map
+    ["200level"] = 2, -- ???
+    ["264level"] = 3, -- Depths
+    ["283level"] = 4, -- Meta
+    ["304level"] = 5, -- Center
+}
 
 local message_list = {}
 local error_message = ""
@@ -69,7 +84,7 @@ function add_to_messages(text)
     table.insert(message_list, {text, 300})
 end
 
--- Set up options
+-- Set up default options
 local options = {
     goal=0,
     goal_levels=80,
@@ -80,7 +95,7 @@ local options = {
     area_access=0,
     exclude_whoa=1,
     exclude_gallery=1,
-    exclude_write=1,
+    exclude_maze_transform=1,
     blossom_petals=0,
     blossoms=12,
     first_gate_blossoms=3,
@@ -88,23 +103,9 @@ local options = {
     third_gate_blossoms=7,
     complete_checks=1,
     level_shuffle=0,
+    transformsanity=0,
     seed="",
 }
-MF_setfile("level","AP/AP_OPTIONS.data")
-for option, default in pairs(options) do
-    local value = MF_read("level", "options", option) or "0"
-    if value == "True" then
-        value = "1"
-    elseif value == "False" then
-        value = "0"
-    end
-    if option ~= "seed" then
-        options[option] = tonumber(value) or default
-    else
-        options[option] = value
-    end
-end
-MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
 
 function deep_copy(thisTable)
     local result = {}
@@ -125,7 +126,7 @@ table.insert(mod_hook_functions.rule_baserules, function()
     addbaserule("text", "is", "missing", { { "unchecked", {} } })
 end)
 
--- Handle win checks
+-- Unchecked particle effect
 timer = 0
 table.insert(mod_hook_functions.effect_always, function()
     timer = (timer % 100) + 1
@@ -134,13 +135,47 @@ end)
 
 -- Handle win checks
 table.insert(mod_hook_functions.level_win_after, function()
-    MF_setfile("level","AP/AP_CHECKS.data")
+    MF_setfile("level", "AP/"..thisWorld.."/AP_CHECKS.data")
     local levelname = generaldata.strings[LEVELNAME]
     levelname = capitalize(levelname)
+
+    -- mark win
     MF_store("level","checks",levelname..": Win", "1")
+
+    -- mark bonus
+    if tonumber(MF_read("save", generaldata.strings[WORLD] .. "_bonus", generaldata2.strings[PREVIOUSLEVEL])) == 1 then
+        MF_store("level","checks",levelname..": Bonus", "1")
+    end
+
     MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
 end)
 
+-- Hardcoded level tree.
+hardcodetree = {
+	["106level"] = {"106level"}, -- Map
+	["200level"] = {"106level", "200level"}, -- ???
+    ["264level"] = {"106level", "200level", "264level"}, -- Depths
+    ["283level"] = {"106level", "200level", "264level", "283level"}, -- Meta
+    ["304level"] = {"106level", "200level", "264level", "283level", "304level"}, -- Center
+}
+
+table.insert(mod_hook_functions["level_start"],function()
+    local name = generaldata.strings[CURRLEVEL]
+    if hardcodetree[name] ~= nil then
+        leveltree = {}
+        for i,v in ipairs(hardcodetree[name]) do
+            table.insert(leveltree,v)
+        end
+        leveltree_id = {}
+        for i,v in ipairs(leveltree) do
+            local insert = getlevelid(nil,nil,v)
+            table.insert(leveltree_id,insert)
+        end
+    end
+end)
+
+
+-- Condition to check if we have obtained a text unit or not
 condlist["unchecked"] = function(params, checkedconds, checkedconds_, cdata)
     local name = "empty"
     if cdata.unitid == 1 then
@@ -158,11 +193,20 @@ function addpath(id)
     orig_addpath(id)
     local unitid = paths[#paths]
     local unit = mmf.newObject(unitid)
+
+    if (unit.values[PATH_GATE] ~= 0) and manualChecks then
+        unit.values[PATH_REQUIREMENT] = 0
+        return
+    end
+
     if (unit.values[PATH_GATE] == 2) then
-        if manualChecks then
-            unit.values[PATH_REQUIREMENT] = 0
-        elseif unit.values[PATH_REQUIREMENT] == 3 then -- First gate
+        if unit.values[PATH_REQUIREMENT] == 3 then -- First gate
             unit.values[PATH_REQUIREMENT] = options.first_gate_blossoms
+
+            -- prevent softlock when exiting A Way Out?
+            if generaldata2.strings[PREVIOUSLEVEL] == "203level" then
+                unit.values[PATH_REQUIREMENT] = 0
+            end
         elseif unit.values[PATH_REQUIREMENT] == 5 then -- Second gate
             unit.values[PATH_REQUIREMENT] = options.second_gate_blossoms
         elseif unit.values[PATH_REQUIREMENT] == 7 then -- Third gate
@@ -172,6 +216,8 @@ function addpath(id)
                 unit.values[PATH_REQUIREMENT] = 999 -- block access when area access is early
             end
         end
+    elseif (unit.values[PATH_GATE] == 3) and options.exclude_gallery ~= 0 then
+        unit.values[PATH_REQUIREMENT] = 999 -- block access to gallery
     end
 end
 
@@ -259,15 +305,29 @@ function mapcursor_enter(varsunitid)
 						end
 					end
 
-                    -- KEY CHECK
-                    local needed_key = need_key[lunit.strings[U_LEVELFILE]]
-                    if options.world_keys ~= 0 and needed_key and not checks[needed_key] then
-                        MF_playsound("tune_blop")
-                        particles("wonder",unit.values[XPOS],unit.values[YPOS],5,{2,2})
-                        add_to_messages("Need \""..needed_key.."\"")
-                        valid = false
+                    -- ACCESS CHECK
+                    if valid then
+                        local needed_key = need_key[lunit.strings[U_LEVELFILE]]
+                        local check_min_access = min_access[generaldata.strings[CURRLEVEL]] or 0
+                        local this_min_access = min_access[lunit.strings[U_LEVELFILE]]
+                        if this_min_access and check_min_access > this_min_access then
+                            check_min_access = this_min_access
+                        end
+
+                        if check_min_access > options.area_access then
+                            add_to_messages("Area is not accessible.")
+                            valid = false
+                        elseif options.world_keys ~= 0 and needed_key and not checks[needed_key] then
+                            add_to_messages("Need \""..needed_key.."\"")
+                            valid = false
+                        end
+
+                        if not valid then
+                            MF_playsound("tune_blop")
+                            particles("wonder",unit.values[XPOS],unit.values[YPOS],5,{2,2})
+                        end
                     end
-                    -- END KEY CHECK
+                    -- END ACCESS CHECK
 					
 					if valid then
 						table.insert(entering, {b, lunit.strings[U_LEVELNAME], lunit.strings[U_LEVELFILE]})
@@ -291,6 +351,16 @@ function mapcursor_enter(varsunitid)
 		submenu("enterlevel_multiple",entering)
 		print("Trying to enter multiple levels!")
 	end
+end
+
+orig_findletterwords = findletterwords
+function findletterwords(...)
+    -- behave as base world
+    local prevBase = generaldata.strings[BASEWORLD]
+    generaldata.strings[BASEWORLD] = generaldata.strings[WORLD]
+    local results = table.pack(orig_findletterwords(...))
+    generaldata.strings[BASEWORLD] = prevBase -- change back after running
+    return table.unpack(results)
 end
 
 -- Go to different first level when level shuffle is on
@@ -360,6 +430,8 @@ menufuncs.item_categories = {
         end
         goal = "Goal: " .. goal
         writetext(goal, 0, screenw / 2, screenh - f_tilesize * 2, name, true, 2)
+
+        writetext("Blossom Petals: "..(blossom_petal_count%8).."/8", 0, screenw / 2, screenh - f_tilesize, name, true, 2)
 
         table.insert(dynamic_structure, { { "item_close" } })
         buildmenustructure(dynamic_structure)
@@ -447,9 +519,6 @@ end
 -- utility function to list all levels
 local test_level_list = {}
 function listlevels()
-    local world = generaldata.strings[WORLD]
-    local files = MF_filelist("Data/Worlds/" .. world .. "/", "*.l")
-
     if #test_level_list ~= 0 then
         MF_setfile("level", "LEVEL_LIST.data")
         for i, level in ipairs(test_level_list) do
@@ -465,60 +534,7 @@ function listlevels()
         return
     end
 
-    -- to know the parent, we instead look for a map level and check all levels inside of it
-    for a, file in ipairs(files) do
-        local parent = string.sub(file, 1, -3)
-        MF_setfile("level", "Data/Worlds/" .. world .. "/" .. parent .. ".ld")
-        local parentName = MF_read("level", "general", "name")
-
-        local levels = {}
-        local totalLevels = MF_read("level", "general", "levels")
-        if totalLevels ~= 0 then
-            for b = 0, totalLevels - 1 do
-                local level = MF_read("level", "levels", tostring(b) .. "file")
-                table.insert(levels, level)
-            end
-        end
-        local totalSpecials = MF_read("level", "general", "specials")
-        if totalSpecials ~= 0 then
-            for b = 0, totalSpecials - 1 do
-                local data = MF_read("level", "specials", tostring(b) .. "data")
-                if data:sub(1, 6) == "level," then
-                    local dataTable = split(data, ",")
-                    table.insert(levels, dataTable[2])
-                end
-            end
-        end
-
-        -- hardcoded woah
-        if world == generaldata.strings[BASEWORLD] and parent == "283level" then
-            table.insert(levels, "327level")
-        end
-
-        local alreadyDid = {}
-        for i, level in ipairs(levels) do
-            MF_setfile("level", "Data/Worlds/" .. world .. "/" .. level .. ".ld")
-            local customparent = MF_read("level", "general", "customparent") or ""
-            if customparent == "" or customparent == parent then
-                if not alreadyDid[level] then
-                    local map = (MF_read("level", "general", "leveltype") == "1")
-                    if not map then
-                        print("\""..level.."\",")
-                        local name = MF_read("level", "general", "name")
-                        table.insert(test_level_list, capitalize(name)..": "..capitalize(parentName))
-                        alreadyDid[level] = 1
-                    end
-                end
-            end
-        end
-    end
-
-    if generaldata.strings[CURRLEVEL] == "" then
-        MF_setfile("level", "Data/Temp/temp.ld")
-    else
-        MF_setfile("level",
-            "Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
-    end
+    auto_gen_level_name_to_id(level_name_to_id)
 end
 
 table.insert(mod_hook_functions.keyboard_input, function(data)
@@ -540,14 +556,15 @@ table.insert(mod_hook_functions.keyboard_input, function(data)
         else
             add_to_messages("No longer ignoring save file's seed")
         end
-    elseif key == "L" then
-        --add_to_messages("Level list test")
-        --listlevels()
+    elseif key == "L" and manualChecks then
+        add_to_messages("Level list test")
+        listlevels()
     end
 end)
 
 local checkTimer = 0
 local clear_goal_locations = {}
+local transform_locations = {}
 function update_checks()
     if generaldata.strings[WORLD] ~= thisWorld or editor.strings[MENU] ~= "ingame" then return end
     if manualChecks then return end
@@ -560,48 +577,53 @@ function update_checks()
     error_message = ""
     local trueSeed = ""
     local ourSeed = options.seed or ""
-    local files = MF_filelist("AP", "*.data")
+    local files = MF_filelist("AP/"..thisWorld, "/*.data")
     for i, file in ipairs(files) do
         if file:sub(1, 8) == "AP_SEED_" then
             trueSeed = file:sub(9, -6)
             break
         end
     end
+
     if #trueSeed == 0 or trueSeed ~= ourSeed then
         if #trueSeed == 0 then
             error_message = ("$2,2Missing seed file. Please connect to the server using the Baba Is You client.")
         else
             error_message = ("$2,2Game seed does not match AP seed. Please relaunch Baba Is You.")
         end
-        MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
+        didAPLoad = false
         return
     end
 
     -- Compare save file seed to AP seed
-    if not (didAPLoad or ignoreSaveSeed) then
-        local savedSeed = MF_read("save", thisWorld, "apseed")
-        if savedSeed == nil or #savedSeed == 0 then
-            MF_store("save", thisWorld, "apseed", ourSeed)
-        elseif savedSeed ~= ourSeed then
-            error_message = ("$2,2Save file is for another seed! Press I to ignore.")
-            MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
-            return
+    if not didAPLoad then
+        if not ignoreSaveSeed then
+            local savedSeed = MF_read("save", thisWorld, "apseed")
+            if savedSeed == nil or #savedSeed == 0 then
+                MF_store("save", thisWorld, "apseed", ourSeed)
+            elseif savedSeed ~= ourSeed then
+                error_message = ("$2,2Save file is for another seed! Press I to ignore.")
+                return
+            end
         end
+
+        load_ap_options()
     end
     
     local world = generaldata.strings[WORLD]
+    local currLevel = generaldata.strings[CURRLEVEL]
 
     local prev_blossom_count = tonumber(MF_read("save",world .. "_clears","total")) or 0
     local blossom_count = 0
-    local blossom_petal_count = 0
+    blossom_petal_count = 0
     local bonus_count = 0
 
-    files = MF_filelist("AP", "*.item")
+    files = MF_filelist("AP/"..thisWorld, "/*.item")
     local prevChecks = checks
     checks = {}
     obtained_keys = {}
     for i, file in ipairs(files) do
-        MF_setfile("level","AP/"..file)
+        MF_setfile("level", "AP/"..thisWorld.."/"..file)
         local item = MF_read("level", "data", "item")
         if item and #item ~= 0 then
             local trueName = item
@@ -655,6 +677,7 @@ function update_checks()
 
     -- send clear and complete locations
     local prev_clear_goal_locations = clear_goal_locations
+    local prev_transform_locations = deep_copy(transform_locations) -- not cleared!
     clear_goal_locations = {}
     for level, info in pairs(have_clears_or_completes) do
         MF_setfile("level","Data/Worlds/" .. world .. "/" .. level .. ".ld")
@@ -674,31 +697,66 @@ function update_checks()
         end
     end
 
+    -- send transform locations
+    if options.transformsanity ~= 0 then
+        local totalTrans = tonumber(MF_read("save", world .. "_" .. currLevel .. "_" .. "convert", "converts")) or 0
+        if totalTrans > 0 then
+            for i = 0, totalTrans - 1 do
+                local str = MF_read("save", world .. "_" .. currLevel .. "_" .. "convert", tostring(i))
+                if str then
+                    local transforms = split(str, ",")
+                    local level = transforms[1]
+                    if level then
+                        MF_setfile("level","Data/Worlds/" .. world .. "/" .. level .. ".ld")
+                        local levelname = MF_read("level", "general", "name") or level
+                        levelname = capitalize(levelname)
+                        for a, b in ipairs(transforms) do
+                            if b ~= "" and b ~= level then
+                                transform_locations[capitalize(levelname)..": "..capitalize(b).." Transform"] = 1
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
     -- Check goal
-    local goal = 0
+    local goal = false
     if options.goal == 0 then
-        goal = tonumber(MF_read("save",world .. "_end_single", "total")) or 0
+        goal = (tonumber(MF_read("save",world .. "_end_single", "total")) == 1)
+    elseif options.goal == 1 then
+        goal = (generaldata.strings[CURRLEVEL] == "200level")
+    elseif options.goal == 2 then
+        goal = (generaldata.strings[CURRLEVEL] == "264level")
+    elseif options.goal == 1 then
+        goal = (generaldata.strings[CURRLEVEL] == "283level")
     elseif options.goal == 4 then
-        goal = tonumber(MF_read("save",world .. "_done_single", "total")) or 0
+        goal = (tonumber(MF_read("save",world .. "_done_single", "total")) == 1)
     elseif options.goal == 5 then
         local prizes = tonumber(MF_read("save",world .. "_prize", "total")) or 0
-        goal = (prizes >= options.goal_levels and 1) or 0
+        goal = (prizes >= options.goal_levels)
     elseif options.goal == 6 then
-        goal = (blossom_count >= options.goal_blossoms and 1) or 0
+        goal = (blossom_count >= options.goal_blossoms)
     end
-    if goal ~= 0 then
+    if goal then
         clear_goal_locations["Goal"] = 1
     end
 
-    MF_setfile("level","AP/AP_CHECKS.data")
+    MF_setfile("level", "AP/"..thisWorld.."/AP_CHECKS.data")
     for location, v in pairs(clear_goal_locations) do
         if not prev_clear_goal_locations[location] then
             MF_store("level","checks",location, "1")
         end
     end
+    for location, v in pairs(transform_locations) do
+        if not prev_transform_locations[location] then
+            MF_store("level","checks",location, "1")
+        end
+    end
 
     didAPLoad = true
-    MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
+    MF_setfile("level","Data/Worlds/" .. world .. "/" .. currLevel .. ".ld")
 end
 
 table.insert(mod_hook_functions.always, update_checks)
@@ -757,6 +815,7 @@ function split(s, delimiter)
 end
 
 function capitalize_word(word)
+    if word:upper() == "VIP" or word:upper() == "UFO" then return word:upper() end -- exception for acronyms
     return word:sub(1,1):upper()..word:sub(2)
 end
 function capitalize(str)
@@ -771,6 +830,7 @@ function auto_gen_level_name_to_id(level_name_to_id)
     for a, file in ipairs(files) do
         local parent = string.sub(file, 1, -3)
         MF_setfile("level", "Data/Worlds/" .. world .. "/" .. parent .. ".ld")
+        local parentName = MF_read("level", "general", "name")
 
         local mapId = MF_read("level", "general", "mapid") or ""
 
@@ -805,9 +865,9 @@ function auto_gen_level_name_to_id(level_name_to_id)
                     local numberStr = ""
                     if style == 0 or style > 2 then
                         numberStr = tostring(number)
-                    elseif style == 1 then -- why is it different from normal levels?
-                        numberStr = "Extra "..tostring(number)
                     elseif style == 2 then
+                        numberStr = "Extra "..tostring(number+1)
+                    elseif style == 1 then
                         numberStr = string.char(number + 65)
                     end
                     table.insert(levels, dataTable[2])
@@ -822,11 +882,13 @@ function auto_gen_level_name_to_id(level_name_to_id)
             table.insert(levelExtra, "Secret 2")
         end
 
+        local alreadyDid = {}
         for i, level in ipairs(levels) do
             MF_setfile("level", "Data/Worlds/" .. world .. "/" .. level .. ".ld")
             local customparent = MF_read("level", "general", "customparent") or ""
             
-            if customparent == "" or customparent == parent then
+            if (customparent == "" or customparent == parent) and (not alreadyDid[level]) then
+                alreadyDid[level] = 1
                 local numberStr = levelExtra[i]
                 local isMap = (tonumber(MF_read("level", "general", "leveltype")) == 1)
                 local mapId2 = MF_read("level", "general", "mapid") or ""
@@ -834,8 +896,13 @@ function auto_gen_level_name_to_id(level_name_to_id)
                 if isMap then
                     customLevelName = capitalize(mapId2)
                 else
-                    if #mapId2 ~= 0 then numberStr = capitalize(mapId2) end
+                    if #mapId2 ~= 0 and (mapId2:lower() ~= "secret" or level == "294level") then -- Don't mark levels other than A Prize Well Earned as Secrets
+                        numberStr = capitalize(mapId2)
+                    end
                     customLevelName = capitalize_word(mapId) .. "-" .. numberStr
+
+                    local name = MF_read("level", "general", "name")
+                    table.insert(test_level_list, capitalize(name)..", "..capitalize(parentName)..", "..numberStr)
                 end
                 --error(customLevelName)
                 level_name_to_id[customLevelName] = level
@@ -851,7 +918,7 @@ function auto_gen_level_name_to_id(level_name_to_id)
     -- Set up level shuffle (not active in editor)
     level_mapping = {}
     if options.level_shuffle ~= 0 and editor.values[INEDITOR] == 0 then
-        MF_setfile("level","AP/AP_SHUFFLE.data")
+        MF_setfile("level","AP/"..thisWorld.."/AP_SHUFFLE.data")
         local total = tonumber(MF_read("level", "general", "total")) or 0
         for i=0,total-1 do
             local newPath = MF_read("level", "general", tostring(i))
@@ -874,6 +941,28 @@ function auto_gen_level_name_to_id(level_name_to_id)
             "Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
     end
 end
-if options.level_shuffle ~= 0 then
-    auto_gen_level_name_to_id(level_name_to_id)
+
+-- load options from file
+function load_ap_options()
+    MF_setfile("level","AP/"..thisWorld.."/AP_OPTIONS.data")
+    for option, default in pairs(options) do
+        local value = MF_read("level", "options", option) or "0"
+        if value == "True" then
+            value = "1"
+        elseif value == "False" then
+            value = "0"
+        end
+        if option ~= "seed" then
+            options[option] = tonumber(value) or default
+        else
+            options[option] = value
+        end
+    end
+    if options.level_shuffle ~= 0 then
+        auto_gen_level_name_to_id(level_name_to_id)
+    end
+    MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
 end
+
+-- run on startup
+load_ap_options()

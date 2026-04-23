@@ -1,13 +1,15 @@
 from collections.abc import Mapping
 from typing import Any, Dict, ClassVar
+from Options import OptionError
 
 # Imports of base Archipelago modules must be absolute.
 from worlds.AutoWorld import World
 
 # Imports of your world's files must be relative.
 from . import items, locations, regions, rules
-from .levels import LEVEL_DATA
+from .levels import LEVEL_DATA, get_level_locations
 from . import options as babaisyou_options  # rename due to a name conflict with World.options
+from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
 import logging
 logger = logging.getLogger("Baba Is You")
@@ -22,7 +24,7 @@ UT_SLOT_DATA_OPTION_NAMES = (
     "area_access",
     "exclude_whoa",
     "exclude_gallery",
-    "exclude_write",
+    "exclude_maze_transform",
     "blossom_petals",
     "blossoms",
     "first_gate_blossoms",
@@ -69,6 +71,10 @@ class BabaIsYouWorld(World):
     # We define these in regions.py and items.py respectively, so we just set them here.
     location_name_to_id = locations.LOCATION_NAME_TO_ID
     item_name_to_id = items.ITEM_NAME_TO_ID
+
+    # We can define location and item name groups here as well.
+    location_name_groups = locations.location_name_groups
+    item_name_groups = items.item_name_groups
 
     # There is always one region that the generator starts from & assumes you can always go back to.
     # This defaults to "Menu", but you can change it by overriding origin_region_name.
@@ -177,21 +183,25 @@ class BabaIsYouWorld(World):
         # Validate options
         maxBlossoms = self.options.blossoms + (self.options.blossom_petals // 8)
         if self.options.first_gate_blossoms > maxBlossoms:
-            logger.warning(f"Baba Is You ({self.player_name}): First gate requires {self.options.first_gate_blossoms} blossoms, but only {maxBlossoms} are in the pool."
+            logger.warning(f"Baba Is You ({self.player_name}): First gate requires {self.options.first_gate_blossoms} blossoms, but only {maxBlossoms} are in the pool. "
                            f"Reducing first gate amount...")
             self.options.first_gate_blossoms.value = maxBlossoms
         if self.options.second_gate_blossoms > maxBlossoms:
-            logger.warning(f"Baba Is You ({self.player_name}): Second gate requires {self.options.second_gate_blossoms} blossoms, but only {maxBlossoms} are in the pool."
+            logger.warning(f"Baba Is You ({self.player_name}): Second gate requires {self.options.second_gate_blossoms} blossoms, but only {maxBlossoms} are in the pool. "
                            f"Reducing second gate amount...")
             self.options.second_gate_blossoms.value = maxBlossoms
         if self.options.area_access != 0 and self.options.third_gate_blossoms > maxBlossoms:
-            logger.warning(f"Baba Is You ({self.player_name}): Third gate requires {self.options.third_gate_blossoms} blossoms, but only {maxBlossoms} are in the pool."
+            logger.warning(f"Baba Is You ({self.player_name}): Third gate requires {self.options.third_gate_blossoms} blossoms, but only {maxBlossoms} are in the pool. "
                            f"Reducing third gate amount...")
             self.options.third_gate_blossoms.value = maxBlossoms
         if self.options.goal == 6 and self.options.goal_blossoms > maxBlossoms:
-            logger.warning(f"Baba Is You ({self.player_name}): Goal requires {self.options.goal_blossoms} blossoms, but only {maxBlossoms} are in the pool."
+            logger.warning(f"Baba Is You ({self.player_name}): Goal requires {self.options.goal_blossoms} blossoms, but only {maxBlossoms} are in the pool. "
                            f"Reducing goal amount...")
             self.options.goal_blossoms.value = maxBlossoms
+
+        # Prevent Easy Logic + No Shuffle + No Default (won't generate)
+        if self.options.level_shuffle == 0 and self.options.logic_difficulty == 0 and not self.options.start_with_default_words:
+            raise OptionError(f"Baba Is You ({self.player_name}): Cannot play with Easy logic difficulty when both Level Shuffle and Start With Default Words are disabled.")
 
         # Set area access based on goal
         if self.options.goal == 1: # Reach ???
@@ -207,12 +217,12 @@ class BabaIsYouWorld(World):
         if self.options.area_access == 0: # Early access
             self.options.exclude_whoa.value = True
             self.options.exclude_gallery.value = True
-            self.options.exclude_write.value = True
-            # When transformsanity is added, it will also be disabled here
+            self.options.exclude_maze_transform.value = True
+            self.options.transformsanity.value = False
         elif self.options.area_access == 1: # Map access
             self.options.exclude_whoa.value = True
             self.options.exclude_gallery.value = True
-            self.options.exclude_write.value = True
+            self.options.exclude_maze_transform.value = True
         elif self.options.area_access == 2 or self.options.area_access == 3: # ??? or Depths access
             self.options.exclude_whoa.value = True
             self.options.exclude_gallery.value = True
@@ -226,79 +236,58 @@ class BabaIsYouWorld(World):
             #region2 = self.level_shuffle_dict[region]
             #print(region + " -> " + region2)
 
-        # Mark common words as early items
-        self.multiworld.early_items[self.player]["Baba"] = 1
-        self.multiworld.early_items[self.player]["Is"] = 1
-        self.multiworld.early_items[self.player]["You"] = 1
-        self.multiworld.early_items[self.player]["Flag"] = 1
-        self.multiworld.early_items[self.player]["Win"] = 1
-        self.multiworld.early_items[self.player]["Push"] = 1
-        self.multiworld.early_items[self.player]["And"] = 1
+        # Mark common words as early items if our logic is set to easy
+        if self.options.logic_difficulty == 0:
+            self.multiworld.early_items[self.player]["Baba"] = 1
+            self.multiworld.early_items[self.player]["Is"] = 1
+            self.multiworld.early_items[self.player]["You"] = 1
+            self.multiworld.early_items[self.player]["Flag"] = 1
+            self.multiworld.early_items[self.player]["Win"] = 1
+            self.multiworld.early_items[self.player]["Push"] = 1
+            self.multiworld.early_items[self.player]["And"] = 1
 
-        # Decide on one area to be the "Early Area"
-        early_area = "Lake"
-        if self.options.open_map:
-            early_areas = ["Lake", "Island", "Fall", "Ruins", "Forest", "Space", "Garden", "Chasm"]
-            self.random.shuffle(early_areas)
-            early_area = early_areas.pop()
+            # More early words to prevent getting stuck outside of level shuffle
+            if self.options.level_shuffle == 0:
+                # Include words needed early in some starting worlds
+                if self.options.open_map:
+                    self.multiworld.early_items[self.player]["Sink"] = 1 # Blocks Lake
+                    self.multiworld.early_items[self.player]["Weak"] = 1 # Blocks Ruins
+                    self.multiworld.early_items[self.player]["Float"] = 1 # Blocks Island
+                    self.multiworld.early_items[self.player]["Tele"] = 1 # Blocks Fall
+                    self.multiworld.early_items[self.player]["Belt"] = 1 # Blocks Forest
+                    self.multiworld.early_items[self.player]["Shift"] = 1 # Also blocks Forest
+                    self.multiworld.early_items[self.player]["Empty"] = 1 # Blocks Space
+                    self.multiworld.early_items[self.player]["More"] = 1 # Blocks Chasm
+                else:
+                    # Important words in Lake
+                    self.multiworld.early_items[self.player]["Sink"] = 1
+                    self.multiworld.early_items[self.player]["Crab"] = 1
+                    self.multiworld.early_items[self.player]["Keke"] = 1
+                    self.multiworld.early_items[self.player]["Move"] = 1
+                    self.multiworld.early_items[self.player]["Star"] = 1
+                    self.multiworld.early_items[self.player]["Pillar"] = 1
+                    self.multiworld.early_items[self.player]["Love"] = 1
         
-        # If world keys are on, make the early area's key early
+        # If world keys are on, designate one area as the "Early" area and make that area's key early
         if self.options.world_keys:
+            early_area = "Lake"
+            if self.options.open_map:
+                early_areas = ["Lake", "Island", "Fall", "Ruins", "Forest", "Space", "Garden", "Chasm"]
+                self.random.shuffle(early_areas)
+                early_area = early_areas.pop()
             #print(early_area)
             self.multiworld.early_items[self.player][f"{early_area} Key"] = 1
-
-        # Get first level of that area, and make all words required early items
-        firstLevel = f"{early_area}-1"
-        if early_area == "Chasm": # Chasm doesn't have a level 1, use extra 1 instead
-            firstLevel = "Chasm-Extra 1"
-        if self.options.level_shuffle != 0 and self.level_shuffle_dict.get(firstLevel) != None:
-            firstLevel = self.level_shuffle_dict.get(firstLevel)
-        data = LEVEL_DATA[firstLevel]
-        #print(firstLevel)
-        if data.get("winLogic") != None:
-            for word in data["winLogic"]:
-               #print(word)
-               self.multiworld.early_items[self.player][word] = 1
-
-        # Unused: give even more early words
-        """if self.options.level_shuffle == 0:
-            # Include words needed early in some starting worlds
-            if self.options.open_map:
-                self.multiworld.early_items[self.player]["Sink"] = 1 # Blocks Lake
-                self.multiworld.early_items[self.player]["Weak"] = 1 # Blocks Ruins
-                self.multiworld.early_items[self.player]["Float"] = 1 # Blocks Island
-                self.multiworld.early_items[self.player]["Tele"] = 1 # Blocks Fall
-                self.multiworld.early_items[self.player]["Belt"] = 1 # Blocks Forest
-                self.multiworld.early_items[self.player]["Shift"] = 1 # Also blocks Forest
-                self.multiworld.early_items[self.player]["Empty"] = 1 # Blocks Space
-                self.multiworld.early_items[self.player]["More"] = 1 # Blocks Chasm
-            else:
-                # Important words in Lake
-                self.multiworld.early_items[self.player]["Sink"] = 1
-                self.multiworld.early_items[self.player]["Crab"] = 1
-                self.multiworld.early_items[self.player]["Keke"] = 1
-                self.multiworld.early_items[self.player]["Move"] = 1
-                self.multiworld.early_items[self.player]["Star"] = 1
-                self.multiworld.early_items[self.player]["Pillar"] = 1
-                self.multiworld.early_items[self.player]["Love"] = 1
-        else:
-            # Include more general common words early
-            self.multiworld.early_items[self.player]["Rock"] = 1
-            self.multiworld.early_items[self.player]["Wall"] = 1
-            self.multiworld.early_items[self.player]["Keke"] = 1
-            self.multiworld.early_items[self.player]["Move"] = 1
-            self.multiworld.early_items[self.player]["Open"] = 1
-            self.multiworld.early_items[self.player]["Defeat"] = 1"""
         
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         level_hint_data = {}
         for name in LEVEL_DATA:
             data = LEVEL_DATA[name]
-            if data.get("map") == True or data.get("parent") == None:
+            if self.options.level_shuffle != 0 and self.level_shuffle_dict.get(name) is not None:
+                name = self.level_shuffle_dict.get(name)
+                data = LEVEL_DATA[name]
+            if data.get("areaAccess") and data.get("areaAccess") > self.options.area_access:
                 continue
             
-            # TODO: Need to also do this for bonus, etc.
-            locationName = data.get("name") + ": Win"
             # Get parent based where the level is placed
             mapName = name
             if self.options.level_shuffle != 0:
@@ -307,9 +296,10 @@ class BabaIsYouWorld(World):
                     if name == name2: # This level got shuffled into the other one, get the old parent
                         mapName = oldName
                         break
-                    
-            location = self.multiworld.get_location(locationName, self.player)
-            level_hint_data[location.address] = mapName
+            
+            for locationName in get_level_locations(data, self):
+                location = self.multiworld.get_location(locationName, self.player)
+                level_hint_data[location.address] = mapName
                             
             hint_data[self.player] = level_hint_data
 

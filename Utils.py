@@ -18,11 +18,14 @@ import logging
 import warnings
 
 from argparse import Namespace
+from datetime import datetime, timezone
+
 from settings import Settings, get_settings
 from time import sleep
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
+from typing import BinaryIO, Coroutine, Mapping, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 from pathspec import PathSpec, GitIgnoreSpec
+from typing_extensions import deprecated
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -233,10 +236,7 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
 
-        env = os.environ
-        if "LD_LIBRARY_PATH" in env:
-            env = env.copy()
-            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        env = env_cleared_lib_path()
         subprocess.call([open_command, filename], env=env)
 
 
@@ -315,6 +315,7 @@ def get_public_ipv6() -> str:
     return ip
 
 
+@deprecated("Utils.get_options() is deprecated. Use the settings API instead.")
 def get_options() -> Settings:
     deprecate("Utils.get_options() is deprecated. Use the settings API instead.")
     return get_settings()
@@ -341,6 +342,9 @@ def persistent_load() -> Dict[str, Dict[str, Any]]:
         try:
             with open(path, "r") as f:
                 storage = unsafe_parse_yaml(f.read())
+            if "datapackage" in storage:
+                del storage["datapackage"]
+                logging.debug("Removed old datapackage from persistent storage")
         except Exception as e:
             logging.debug(f"Could not read store: {e}")
     if storage is None:
@@ -364,11 +368,6 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) ->
                     return json.load(f)
             except Exception as e:
                 logging.debug(f"Could not load data package: {e}")
-
-    # fall back to old cache
-    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
-    if cache.get("checksum") == checksum:
-        return cache
 
     # cache does not match
     return {}
@@ -754,6 +753,19 @@ def is_kivy_running() -> bool:
     return False
 
 
+def env_cleared_lib_path() -> Mapping[str, str]:
+    """
+    Creates a copy of the current environment vars with the LD_LIBRARY_PATH removed if set, as this can interfere when
+    launching something in a subprocess.
+    """
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]
+
+    return env
+
+
 def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
@@ -766,10 +778,7 @@ def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(save_filename(*args))
     
 def _run_for_stdout(*args: str):
-    env = os.environ
-    if "LD_LIBRARY_PATH" in env:
-        env = env.copy()
-        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    env = env_cleared_lib_path()
     return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
 
 
@@ -914,6 +923,13 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
+    if not gui_enabled:
+        if error:
+            logging.error(f"{title}: {text}")
+        else:
+            logging.info(f"{title}: {text}")
+        return
+
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
@@ -948,6 +964,9 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         showerror(title, text) if error else showinfo(title, text)
         root.update()
 
+
+gui_enabled = not sys.stdout or "--nogui" not in sys.argv
+"""Checks if the user wanted no GUI mode and has a terminal to use it with."""
 
 def title_sorted(data: typing.Iterable, key=None, ignore: typing.AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
@@ -993,6 +1012,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
 
 
 def deprecate(message: str, add_stacklevels: int = 0):
+    """also use typing_extensions.deprecated wherever you use this"""
     if __debug__:
         raise Exception(message)
     warnings.warn(message, stacklevel=2 + add_stacklevels)
@@ -1057,6 +1077,7 @@ def _extend_freeze_support() -> None:
     multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support if is_frozen() else _noop
 
 
+@deprecated("Use multiprocessing.freeze_support() instead")
 def freeze_support() -> None:
     """This now only calls multiprocessing.freeze_support since we are patching freeze_support on module load."""
     import multiprocessing
@@ -1275,6 +1296,15 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+def utcnow() -> datetime:
+    """
+    Implementation of Python's datetime.utcnow() function for use after deprecation.
+    Needed for timezone-naive UTC datetimes stored in databases with PonyORM (upstream).
+    https://ponyorm.org/ponyorm-list/2014-August/000113.html
+    """
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
 class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):

@@ -22,7 +22,7 @@ class Goal(Choice):
     levels: Win a specified amount of levels.
     blossoms: Collect a specified amount of blossoms.
 
-    NOTICE: Only "end", "levels", and "blossoms" are implemented at this time. Do not select the other options.
+    NOTICE: Only "end", "flower", "levels", and "blossoms" are implemented at this time. Do not select the other options.
     """
 
     display_name = "Goal"
@@ -38,12 +38,12 @@ class Goal(Choice):
 class GoalLevels(Range):
     """
     Determines how many levels need to be won when the goal is set to "levels".
-    160 requires every level in the early game.
+    160 requires every level in the early game. 231 requires all levels.
     """
 
     display_name = "Goal Levels"
     range_start = 0
-    range_end = 160 # TEMP: true max total is 231
+    range_end = 231
     default = 80 # 160 total before top gate
 
 class GoalBlossoms(Range):
@@ -55,6 +55,20 @@ class GoalBlossoms(Range):
     range_start = 0
     range_end = 12
     default = 7
+
+class LogicDifficulty(Choice):
+    """
+    Determines the logic difficulty for levels.
+    easy: All interactable words are expected to complete a level.
+    normal: Only the necessary words will be expected to complete a level. You may have to use alternative solutions.
+    hard: Like normal, but also includes very difficult solutions, some of which require advanced techniques like parsing bugs and object priority.
+    """
+
+    display_name = "Logic Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    default = 1
 
 class StartWithDefaultWords(DefaultOnToggle):
     """
@@ -103,15 +117,15 @@ class AreaAccess(Choice):
     option_full = 5
     default = 0
 
-class ExcludeWhoa(Toggle):
+class ExcludeWhoa(DefaultOnToggle):
     """
-    Excludes the level "Whoa" from logic.
+    Excludes the level "Whoa" from logic and level shuffle.
     Only applies if Meta and its levels are accessible.
     """
 
     display_name = "Exclude Whoa"
 
-class ExcludeGallery(Toggle):
+class ExcludeGallery(DefaultOnToggle):
     """
     Excludes the level "Gallery" from logic.
     When disabled, the 3 Bonus items will become progression items.
@@ -120,14 +134,15 @@ class ExcludeGallery(Toggle):
 
     display_name = "Exclude Gallery"
 
-class ExcludeWrite(Toggle):
+class ExcludeMazeTransform(DefaultOnToggle):
     """
-    Excludes the 4 levels in "???" that introduce the "Write" verb from logic.
-    Also excludes the Win location for "???" and transforms for "Ultimate Maze" if Transformsanity is enabled.
+    Excludes transformations for "Ultimate Maze" from logic.
+    This removes some locations if Transformsanity is enabled.
+    This does NOT remove the 4 "Write" levels from logic, as those can be accessed regardless.
     Only applies if ??? and its levels are accessible.
     """
 
-    display_name = "Exclude Write Levels"
+    display_name = "Exclude Ultimate Maze Transform"
 
 class BlossomPetals(Range):
     """
@@ -203,8 +218,7 @@ class Transformsanity(Toggle):
 class LevelShuffle(Choice):
     """
     Swaps normal levels with other normal levels.
-    Levels with transformations will also be shuffled in a way that does not break logic.
-    Note that "A Way Out?", "The End", and "Gallery" will never be shuffled.
+    Levels with transformations, as well as "A Way Out?", "The End", and "Gallery", will not be shuffled.
     disabled: Levels will not be shuffled (default).
     limited: Only levels within accessible areas will be shuffled.
     full: All levels will be shuffled, minus the exceptions listed above.
@@ -226,13 +240,14 @@ class BabaIsYouOptions(PerGameCommonOptions):
     goal: Goal
     goal_levels: GoalLevels
     goal_blossoms: GoalBlossoms
+    logic_difficulty: LogicDifficulty
     start_with_default_words: StartWithDefaultWords
     open_map: OpenMap
     world_keys: WorldKeys
     area_access: AreaAccess
     exclude_whoa: ExcludeWhoa
     exclude_gallery: ExcludeGallery
-    exclude_write: ExcludeWrite
+    exclude_maze_transform: ExcludeMazeTransform
     blossom_petals: BlossomPetals
     blossoms: Blossoms
     first_gate_blossoms: FirstGateBlossoms

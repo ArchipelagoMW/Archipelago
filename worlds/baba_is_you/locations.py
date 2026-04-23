@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import ItemClassification, Location
 
 from . import items
-from .levels import LEVEL_DATA
+from .levels import LEVEL_DATA, get_level_locations
 
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
@@ -15,26 +15,24 @@ if TYPE_CHECKING:
 # Even if a location doesn't exist on specific options, it must be present in this lookup.
 LOCATION_NAME_TO_ID = {}
 
+# Define location groups
+location_name_groups = {
+    "Level Wins": set(),
+    "Level Bonuses": set(),
+    "Level Transforms": set(),
+    "World Clears": set(),
+    "World Completes": set(),
+}
+
 # Set up location ids
 locationID = 1
 for name in LEVEL_DATA:
     data = LEVEL_DATA[name]
-
-    if data.get("map") != True:
-        # Add win location
-        locationName = data["name"] + ": Win"
+    
+    for locationName in get_level_locations(data, None):
         LOCATION_NAME_TO_ID[locationName] = locationID
+        location_name_groups["Level Wins"].add(locationName)
         locationID += 1
-    else:
-        # Add clear and complete locations
-        if data.get("clearCount") != None:
-            locationName = data["name"] + ": Clear"
-            LOCATION_NAME_TO_ID[locationName] = locationID
-            locationID += 1
-        if data.get("completeCount") != None:
-            locationName = data["name"] + ": Complete"
-            LOCATION_NAME_TO_ID[locationName] = locationID
-            locationID += 1
 
 
 # Each Location instance must correctly report the "game" it belongs to.
@@ -60,55 +58,39 @@ def create_all_locations(world: BabaIsYouWorld) -> None:
 
 def create_locations(world: BabaIsYouWorld) -> None:
     # Add each level's win, clears, completes, and bonuses as locations
+    # Also add transforms if transformsanity is enabled
     for name in LEVEL_DATA:
         data = LEVEL_DATA[name]
+        if data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+            continue
+
+        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(name) is not None:
+            name = world.level_shuffle_dict.get(name)
+            data = LEVEL_DATA[name]
+        
         level = world.get_region(name)
-        loc_list = []
-        # Add win, clear, and complete locations
-        if data.get("map") != True:
-            locationName = data["name"] + ": Win"
-            loc_list.append(locationName)
-        else:
-            if data.get("clearCount") != None:
-                locationName = data["name"] + ": Clear"
-                loc_list.append(locationName)
-            if world.options.complete_checks and data.get("completeCount") != None:
-                locationName = data["name"] + ": Complete"
-                loc_list.append(locationName)
+        loc_list = get_level_locations(data, world)
 
         level_locations = get_location_names_with_ids(loc_list)
         level.add_locations(level_locations, BabaIsYouLocation)
 
 
 def create_events(world: BabaIsYouWorld) -> None:
-    # Ending event
-    a_way_out = world.get_region("Map-Finale")
-    a_way_out.add_event(
-        "Ending", "goal_end", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
+    # Create goal event (not applicable to level or blossom goal)
 
-    """
-    # Reached ??? event
-    flower = world.get_region("???")
-    flower.add_event(
-        "??? Reached", "goal_flower", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
-
-    # Reached Depths event
-    depths = world.get_region("Depths")
-    depths.add_event(
-        "Depths Reached", "goal_depths", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
-
-    # Reached Meta event
-    meta = world.get_region("Meta")
-    meta.add_event(
-        "Meta Reached", "goal_meta", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
-
-    # Done event
-    center = world.get_region("Center")
-    center.add_event(
-        "Done", "goal_done", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
-    """
+    region = None
+    if world.options.goal == 0:
+        region = world.get_region("Map-Finale")
+    elif world.options.goal == 1:
+        region = world.get_region("???")
+    elif world.options.goal == 2:
+        region = world.get_region("Depths")
+    elif world.options.goal == 3:
+        region = world.get_region("Meta")
+    elif world.options.goal == 4:
+        region = world.get_region("Center")
+        
+    if region is not None:
+        region.add_event(
+            "Goal Reached", "goal_reached", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
+        )
