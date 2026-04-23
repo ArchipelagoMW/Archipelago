@@ -100,7 +100,7 @@ class GameInterface:
 
     def verify_game_version(self) -> bool:
         """Verify that the current game loaded in the PCSX connection has a valid game ID for Ratchet and Clank 3"""
-        logger.debug("Start Game Verification")
+        #logger.debug("Start Game Verification")
         try:
             game_id = self.pcsx2_interface.get_game_id()
         except ConnectionError as error:
@@ -153,7 +153,7 @@ class GameInterface:
             logger.warning(f"Connected to the wrong game ({game_id})")
             self.game_id_error = game_id
             return False
-        logger.debug("Valid Game detected")
+        #logger.debug("Valid Game detected")
         return True
 
     def get_connection_state(self) -> bool:

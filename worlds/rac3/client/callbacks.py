@@ -201,7 +201,7 @@ async def _handle_game_ready(ctx: "Context") -> None:
             after_time = time()
             elapsed = after_time - current_time
             logger.debug(f"Update cycle took {elapsed:.5f} seconds")
-            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
+            #logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
             ctx.game_interface.cycle_times.append(elapsed)
             if len(ctx.game_interface.cycle_times) > 100:
                 ctx.game_interface.cycle_times.pop(0)

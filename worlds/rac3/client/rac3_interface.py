@@ -866,7 +866,7 @@ class Rac3Interface(GameInterface):
                 death = "softlocked."
             return False, f"{self.player_type} {death}"
 
-        logger.debug(f"{self.player_type} is Alive")
+        #logger.debug(f"{self.player_type} is Alive")
         return True, f"{self.player_type} is Alive"
 
     def kill_player(self) -> bool:
@@ -1584,9 +1584,11 @@ class Rac3Interface(GameInterface):
                         target_level = 1
                 if self.ryno and weapon_name == RAC3ITEM.RY3N0 and target_level > 4:
                     target_level = 4
+                #logger.debug(f"weapon: {weapon_name}, target: {target_level}")
                 target_id = UPGRADE_DICT[weapon_name][target_level - 1]
                 target_name = ITEM_NAME_FROM_ID[target_id]
                 target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
+                #logger.debug(f"{target_name}, id: {target_id}, xp:{target_xp}")
                 self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
                 self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
         else:
