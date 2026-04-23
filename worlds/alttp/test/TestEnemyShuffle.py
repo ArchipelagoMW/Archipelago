@@ -47,7 +47,12 @@ from worlds.alttp.EnemyShuffle import (
     validate_enemy_shuffle_state,
 )
 from worlds.alttp.Items import item_table
-from worlds.alttp.StateHelpers import can_clear_enemy_room, can_clear_enemy_region, can_kill_key_drop_enemy
+from worlds.alttp.StateHelpers import (
+    can_clear_enemy_room,
+    can_clear_enemy_region,
+    can_kill_enemy_sprite,
+    can_kill_key_drop_enemy,
+)
 from worlds.alttp.test.bases import item_factory
 from worlds.alttp.test.owg.TestLightWorld import TestLightWorld
 
@@ -202,49 +207,26 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
 
-    def test_kyameron_requires_freeze_and_hammer(self) -> None:
+    def test_kyameron_is_not_killable(self) -> None:
         logic_test = TestLightWorld()
         logic_test.setUp()
         world = logic_test.multiworld.worlds[1]
-        original_enemy_shuffle = world.options.enemy_shuffle
-        original_enemy_shuffle_state = world.enemy_shuffle_state
         try:
-            world.options.enemy_shuffle = True
-            world.enemy_shuffle_state = SimpleNamespace(
-                randomized_dungeon_rooms={
-                    291: RandomizedDungeonEnemyRoom(
-                        room_id=291,
-                        room_header_address=0,
-                        sprite_table_address=0,
-                        original_graphics_block_id=0,
-                        graphics_block_id=0,
-                        tag_1=0,
-                        tag_2=0,
-                        sort_sprites_value=0,
-                        sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 154, 154, False, False),
-                        ),
-                        skipped_randomization=False,
-                    )
-                }
-            )
+            no_items_state = logic_test.get_state([])
+            self.assertFalse(can_kill_enemy_sprite(no_items_state, 1, "KyameronWaterSplashSprite"))
 
-            hammer_only_state = logic_test.get_state(item_factory(["Hammer"], world))
-            self.assertFalse(can_clear_enemy_room(hammer_only_state, 1, "Mini-Moldorm Cave"))
-
-            ice_only_state = logic_test.get_state(item_factory(["Ice Rod"], world))
-            self.assertFalse(can_clear_enemy_room(ice_only_state, 1, "Mini-Moldorm Cave"))
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertFalse(can_kill_enemy_sprite(hammer_state, 1, "KyameronWaterSplashSprite"))
 
             ice_hammer_state = logic_test.get_state(item_factory(["Ice Rod", "Hammer"], world))
-            self.assertTrue(can_clear_enemy_room(ice_hammer_state, 1, "Mini-Moldorm Cave"))
+            self.assertFalse(can_kill_enemy_sprite(ice_hammer_state, 1, "KyameronWaterSplashSprite"))
 
             ether_hammer_state = logic_test.get_state(
                 item_factory(["Ether", "Hammer", "Fighter Sword", "Magic Upgrade (1/2)"], world)
             )
-            self.assertTrue(can_clear_enemy_room(ether_hammer_state, 1, "Mini-Moldorm Cave"))
+            self.assertFalse(can_kill_enemy_sprite(ether_hammer_state, 1, "KyameronWaterSplashSprite"))
         finally:
-            world.options.enemy_shuffle = original_enemy_shuffle
-            world.enemy_shuffle_state = original_enemy_shuffle_state
+            logic_test.tearDown()
 
     def test_floating_stalfos_head_is_not_logically_killable_with_sword_or_hammer(self) -> None:
         logic_test = TestLightWorld()
@@ -1021,10 +1003,15 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertEqual(terrorpin.kill_abilities, tuple())
         self.assertIn("Only Hammer is listed in kill_items", terrorpin.damage_notes)
         self.assertEqual(requirements["RedBariSprite"].key_drop_kill_items, ("Fire Rod", "Bombos"))
-        self.assertEqual(kyameron.kill_items, ("Hammer", "Ice Rod", "Ether"))
-        self.assertEqual(kyameron.kill_combo_all_of_items, ("Hammer",))
-        self.assertEqual(kyameron.kill_combo_one_of_items, ("Ice Rod", "Ether"))
-        self.assertIn("freezing it with Ice Rod or Ether", kyameron.damage_notes)
+        self.assertFalse(kyameron.killable)
+        self.assertTrue(kyameron.cannot_have_key)
+        self.assertEqual(kyameron.subgroup_2, (34,))
+        self.assertEqual(kyameron.excluded_rooms, (268,))
+        self.assertEqual(kyameron.dont_randomize_rooms, (40,))
+        self.assertEqual(kyameron.kill_items, tuple())
+        self.assertEqual(kyameron.kill_combo_all_of_items, tuple())
+        self.assertEqual(kyameron.kill_combo_one_of_items, tuple())
+        self.assertIn("placement constraints are preserved", kyameron.damage_notes)
         self.assertEqual(
             floating_stalfos_head.kill_items,
             ("Blue Boomerang", "Red Boomerang", "Cane of Somaria", "Cane of Byrna"),
