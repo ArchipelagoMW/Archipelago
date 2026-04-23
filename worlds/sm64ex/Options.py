@@ -178,10 +178,10 @@ class BLJLogic(Choice):
     """
     display_name = "BLJ Logic"
     option_Vanilla = 0
-    option_LBLJ = 1
-    option_BBLJ = 2
-    option_US_BLJ = 3
-    option_IS_BLJ = 4
+    option_LBLJ = 4
+    option_BBLJ = 3
+    option_US_BLJ = 2
+    option_IS_BLJ = 1
 
 sm64_options_groups = [
     OptionGroup("Logic Options", [

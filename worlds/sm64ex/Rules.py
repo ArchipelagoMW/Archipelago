@@ -86,7 +86,7 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
     connect_regions(multiworld, player, "Menu", randomized_entrances_s["Tower of the Wing Cap"], lambda state: state.has("Power Star", player, 10))
     connect_regions(multiworld, player, "Menu", randomized_entrances_s["Bowser in the Dark World"],
                     lambda state: (state.has("Power Star", player, star_costs["FirstBowserDoorCost"])) or
-                    (options.blj_logic == 1 and rf.build_rule("LJ & LG & DJ")))
+                    (options.blj_logic == 4 and rf.build_rule("LJ & LG & DJ")))
 
     connect_regions(multiworld, player, "Menu", "Basement", lambda state: state.has("Basement Key", player) or state.has("Progressive Key", player, 1))
 
@@ -96,7 +96,7 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
     connect_regions(multiworld, player, "Basement", randomized_entrances_s["Shifting Sand Land"],
                     rf.build_rule("", painting_lvl_name="SSL"))
     connect_regions(multiworld, player, "Basement", randomized_entrances_s["Dire, Dire Docks"],
-                    (options.blj_logic in [1, 2] and rf.build_rule("LJ")) or
+                    (options.blj_logic >= 3 and rf.build_rule("LJ")) or
                     (rf.build_rule("", painting_lvl_name="DDD", star_num_req=star_costs["BasementDoorCost"])))
     connect_regions(multiworld, player, "Hazy Maze Cave", randomized_entrances_s["Cavern of the Metal Cap"])
     connect_regions(multiworld, player, "Basement", randomized_entrances_s["Vanish Cap under the Moat"],
@@ -104,7 +104,7 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
     entrance = connect_regions(multiworld, player, "Basement", randomized_entrances_s["Bowser in the Fire Sea"],
                                 lambda state: (state.has("Power Star", player, star_costs["BasementDoorCost"]) and
                                 state.can_reach("DDD: Board Bowser's Sub", 'Location', player)) or
-                                ((options.blj_logic in [1, 2] and rf.build_rule("LJ")) and
+                                ((options.blj_logic >= 3 and rf.build_rule("LJ")) and
                                 state.can_reach("DDD: Board Bowser's Sub", 'Location', player)))
     # Access to "DDD: Board Bowser's Sub" does not require access to other locations or regions, so the only region that
     # needs to be registered is its parent region.
@@ -126,14 +126,14 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
     connect_regions(multiworld, player, "Tiny-Huge Island (Huge)", "Tiny-Huge Island")
 
     connect_regions(multiworld, player, "Second Floor", "Third Floor", lambda state: (state.has("Power Star", player, star_costs["SecondFloorDoorCost"])) or
-                    (options.blj_logic in [1, 2, 3] and rf.build_rule("LJ")))
+                    (options.blj_logic >= 2 and rf.build_rule("LJ")))
 
     connect_regions(multiworld, player, "Third Floor", randomized_entrances_s["Tick Tock Clock"],
                     rf.build_rule("LG/TJ/SF/BF/WK", painting_lvl_name="TTC"))
     connect_regions(multiworld, player, "Third Floor", randomized_entrances_s["Rainbow Ride"], rf.build_rule("TJ/SF/BF"))
     connect_regions(multiworld, player, "Third Floor", randomized_entrances_s["Wing Mario over the Rainbow"], rf.build_rule("TJ/SF/BF"))
     connect_regions(multiworld, player, "Third Floor", "Bowser in the Sky", lambda state: (state.has("Power Star", player, star_costs["StarsToFinish"])) or
-                    (options.blj_logic in [1, 2, 3, 4] and rf.build_rule("LJ")))
+                    (options.blj_logic >= 1 and rf.build_rule("LJ")))
 
     # Course Rules
     # Bob-omb Battlefield
