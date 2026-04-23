@@ -108,7 +108,6 @@ Example:
 ```json
 {
 ...
-"Donkey Kong Country 3":"f90acedcd958213f483a6a4c238e2a3faf92165e",
 "Factorio":"a699194a9589db3ebc0d821915864b422c782f44",
 ...
 }

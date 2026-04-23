@@ -88,23 +88,23 @@ class APQuestManager(GameManager):
             self.game_view.force_focus()
         self.sound_manager.game_started = True
 
-    def render(self, game: Game, player_sprite: PlayerSprite) -> None:
+    def render(self, game: Game, player_sprite: PlayerSprite, hard_mode: bool) -> None:
         self.setup_game_grid_if_not_setup(game)
 
         # This calls game.render(), which needs to happen to update the state of math traps
-        self.render_gameboard(game, player_sprite)
+        self.render_gameboard(game, player_sprite, hard_mode)
         # Only now can we check whether a math problem is active
         self.render_background_game_grid(game.gameboard.size, game.active_math_problem is None)
         self.sound_manager.math_trap_active = game.active_math_problem is not None
 
         self.render_item_column(game)
 
-    def render_gameboard(self, game: Game, player_sprite: PlayerSprite) -> None:
+    def render_gameboard(self, game: Game, player_sprite: PlayerSprite, hard_mode: bool) -> None:
         rendered_gameboard = game.render()
 
         for gameboard_row, image_row in zip(rendered_gameboard, self.top_image_grid, strict=False):
             for graphic, image in zip(gameboard_row, image_row[:11], strict=False):
-                texture = get_texture(graphic, player_sprite)
+                texture = get_texture(graphic, player_sprite, hard_mode)
 
                 if texture is None:
                     image.opacity = 0
