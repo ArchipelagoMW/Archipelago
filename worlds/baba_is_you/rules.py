@@ -39,11 +39,13 @@ def set_up_gates(world: BabaIsYouWorld) -> None:
     # Gate to A Way Out?
     a_way_out = world.get_region("Map-Finale")
     for entrance in a_way_out.entrances:
+        if entrance.parent_region.name == "Map": continue # exception for Baba transform
         add_rule(entrance, check_first_gate)
 
     # Gate to Cavern
     cavern = world.get_region("Cavern")
     for entrance in cavern.entrances:
+        if entrance.parent_region.name == "Map": continue # exception for Baba transform
         add_rule(entrance, check_second_gate)
 
     # Gate to Slideshow

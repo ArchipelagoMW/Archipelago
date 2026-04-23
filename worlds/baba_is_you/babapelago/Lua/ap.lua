@@ -159,7 +159,9 @@ hardcodetree = {
     ["304level"] = {"106level", "200level", "264level", "283level", "304level"}, -- Center
 }
 
-table.insert(mod_hook_functions["level_start"],function()
+table.insert(mod_hook_functions["level_start"], function()
+    if generaldata2.values[UNLOCK] ~= 0 then return end
+
     local name = generaldata.strings[CURRLEVEL]
     if hardcodetree[name] ~= nil then
         leveltree = {}
@@ -197,6 +199,11 @@ function addpath(id)
     if (unit.values[PATH_GATE] ~= 0) and manualChecks then
         unit.values[PATH_REQUIREMENT] = 0
         return
+    end
+
+    -- prevent softlock when entering ?
+    if generaldata.strings[CURRLEVEL] == "106level" and unit.values[COMPLETED] == 0 and unit.values[XPOS] >= roomsizex - 8 then
+        unit.values[COMPLETED] = 2
     end
 
     if (unit.values[PATH_GATE] == 2) then

@@ -112,7 +112,7 @@ def handle_level_shuffle(world: BabaIsYouWorld) -> None:
         else:
             level_list.append(name)
         rule = can_win(name, world.options.logic_difficulty)
-        clearable = ((data.get("winLogic") is None) or (rule == True_))
+        clearable = ((data.get("winLogic") is None) or (rule == True_()))
 
         # When default words is on, include levels that only require those words as clearable
         if (not clearable) and (world.options.start_with_default_words):

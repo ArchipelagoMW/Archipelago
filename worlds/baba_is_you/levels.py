@@ -99,7 +99,8 @@ LEVEL_DATA = {
         "connects": {
             "Map-0": None,
             "Map-?": HasAll("Fragile Existence -> Baba"),
-            "Map-Finale": HasAll("Fragile Existence -> Baba"), # TODO: disable gate when taking this route
+            "Map-Finale": HasAll("Fragile Existence -> Baba"),
+            "Cavern": HasAll("Fragile Existence -> Baba"),
             "???": can_win,
         },
     },
@@ -243,7 +244,7 @@ LEVEL_DATA = {
         "areaAccess": 1,
         "transforms": {
             "Flag": HasAll("Keke", "Flag", "Is", "Has", "And", "Weak", "Move", "Defeat"),
-            "Keke": HasAll("Keke", "Flag", "Is", "Has", "And", "Weak", "Move", "Defeat"),
+            "Keke": HasAll("Keke", "Is") & (Has("Move") | HasAll("Flag", "And")),
         },
         "connects": {
             "Map-8": can_win,
@@ -744,7 +745,7 @@ LEVEL_DATA = {
         "name": "Double Moat",
         "parent": "Ruins",
         "winLogic": HasAll("Baba", "Is", "You", "Has", "Keke", "Move"),
-        "winLogicAdv": HasAll("Baba", "Is", "Keke", "Has") & HasAny("You", "Move"),
+        "winLogicAdv": HasAll("Baba", "Is", "Keke") & (Has("You") | HasAll("Has", "Move")),
         "connects": {
             "Ruins-6": can_win,
             "Ruins-9": can_win,
@@ -1352,7 +1353,6 @@ LEVEL_DATA = {
         "name": "Platformer",
         "parent": "Space",
         "winLogic": HasAll("Rocket", "And", "UFO", "Open"), # min logic
-        "winLogicAdv": HasAll("Empty", "Win", "And", "Defeat") & ((Has("Is") & HasAny("Rocket", "Push")) | HasAny("Rocket", "Push")),
         "connects": {
             "Space-6": can_win,
             "Space-7": can_win,
