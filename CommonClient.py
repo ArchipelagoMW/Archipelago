@@ -873,7 +873,7 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
                                           ssl=get_ssl_context() if address.startswith("wss://") else None,
                                           max_size=ctx.max_size)
         if ctx.ui is not None:
-            ctx.ui.update_address_bar(server_url.netloc)
+            ctx.ui.update_address_bar(server_url.netloc + server_url.path)
         ctx.server = Endpoint(socket)
         logger.info('Connected')
         ctx.server_address = address
@@ -1042,7 +1042,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.server_locations = ctx.missing_locations | ctx. checked_locations
 
         server_url = urllib.parse.urlparse(ctx.server_address)
-        Utils.persistent_store("client", "last_server_address", server_url.netloc)
+        Utils.persistent_store("client", "last_server_address", server_url.netloc+server_url.path)
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
