@@ -23,7 +23,7 @@ class RAC3OPTION:
     SHIP_NOSE = "Ship Nose"
     SHIP_WINGS = "Ship Wings"
     SHIP_SKIN = "Ship Skin"
-    SKIN = "Skin"
+    PLAYER_SKIN = "Player Skin"
     DEATHLINK = "Death Link"
     ENABLE_TRAPS = "Enable Traps"
     TRAP_WEIGHT = "Trap Weight"

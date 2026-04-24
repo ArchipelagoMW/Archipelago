@@ -137,7 +137,7 @@ class Rac3Interface(GameInterface):
         ship_nose: int
         ship_wings: int
         ship_skin: int
-        skin: int
+        player_skin: int
         traps_enabled: int
         trap_weight: dict[str, int]
         rangers: int
@@ -287,7 +287,7 @@ class Rac3Interface(GameInterface):
         self.options.ship_nose = slot_data[RAC3OPTION.SHIP_NOSE]
         self.options.ship_wings = slot_data[RAC3OPTION.SHIP_WINGS]
         self.options.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
-        self.options.skin = slot_data[RAC3OPTION.SKIN]
+        self.options.player_skin = slot_data[RAC3OPTION.PLAYER_SKIN]
         self.options.traps_enabled = slot_data[RAC3OPTION.ENABLE_TRAPS]
         self.options.trap_weight = slot_data[RAC3OPTION.TRAP_WEIGHT]
         self.options.rangers = slot_data[RAC3OPTION.RANGERS]
@@ -412,8 +412,8 @@ class Rac3Interface(GameInterface):
         """Apply the generated cosmetics to the current game"""
         self._write8(RAC3STATUS.SHIP_CONFIG, self.options.ship_nose + self.options.ship_wings)
         self._write8(RAC3STATUS.SHIP_SKIN, self.options.ship_skin)
-        self._write8(RAC3STATUS.PLAYER_SKIN, self.options.skin)
-        self._write8(RAC3STATUS.PLAYER_SKIN_2, self.options.skin)
+        self._write8(RAC3STATUS.PLAYER_SKIN, self.options.player_skin)
+        self._write8(RAC3STATUS.PLAYER_SKIN_2, self.options.player_skin)
 
     #############################
     # Start of Main Update Loop #

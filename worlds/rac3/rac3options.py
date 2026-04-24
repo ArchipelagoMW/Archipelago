@@ -74,7 +74,7 @@ class RaC3Options(PerGameCommonOptions):
     ship_nose: ShipNose
     ship_wings: ShipWings
     ship_skin: ShipSkin
-    skin: RatchetSkin
+    player_skin: RatchetSkin
     one_hp_challenge: OneHpChallenge
     intro_skip: IntroSkip
     holostar_skip: HolostarSkip
@@ -149,7 +149,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.SHIP_NOSE,
     RAC3OPTION.SHIP_WINGS,
     RAC3OPTION.SHIP_SKIN,
-    RAC3OPTION.SKIN,
+    RAC3OPTION.PLAYER_SKIN,
     RAC3OPTION.ENABLE_TRAPS,
     RAC3OPTION.TRAP_WEIGHT,
     RAC3OPTION.RANGERS,

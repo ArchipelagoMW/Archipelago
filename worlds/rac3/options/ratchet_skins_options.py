@@ -9,7 +9,7 @@ class RatchetSkin(Choice):
     Remember to reload your save file after starting a new game to apply the skin!
     Alternatively, go to the Armor Vendor to reload the skin.
     """
-    display_name = RAC3OPTION.SKIN
+    display_name = RAC3OPTION.PLAYER_SKIN
     option_default = 0
     option_old_school = 5
     option_snowman = 6
