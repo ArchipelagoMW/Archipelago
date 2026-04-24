@@ -50,6 +50,7 @@ def get_item_name_to_id_dict() -> dict:
     return item_dict
 
 def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
+    # TODO: Refacto this if we ever need more static precollected items
     precollected_items :List[Item] =[]
 
     rejuvenation = brush_techniques_items[BrushTechniques.REJUVENATION.value]
@@ -58,6 +59,9 @@ def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
     # Temp while power slash tutorial requires this.
     power_slash = brush_techniques_items[BrushTechniques.POWER_SLASH.value]
     precollected_items.append(create_item(BrushTechniques.POWER_SLASH, power_slash.code, power_slash.classification, world))
+
+    astral_pouch = useful_items['Astral Pouch']
+    precollected_items.append(create_item('Astral Pouch', astral_pouch.code, astral_pouch.classification, world))
     return precollected_items
 
 
@@ -106,7 +110,6 @@ equips = {
 
 quest_items = {
     # Quest Items
-
     "Canine Tracker": ItemData(0x42, ItemClassification.progression),
     "Lucky Mallet": ItemData(0x43, ItemClassification.progression),
     "Border Key": ItemData(0x44, ItemClassification.progression),
@@ -142,7 +145,7 @@ bitable_items = {
 useful_items = {
     # Useful items
     "Sun Fragment": ItemData(0x05, ItemClassification.useful),
-    "Astral Pouch": ItemData(0x06, ItemClassification.useful),
+    "Astral Pouch": ItemData(0x06, ItemClassification.useful,count_in_pool=0),
     "Stray Bead": ItemData(0xCC, ItemClassification.useful),
     # probably will have to be changed to progession_skip balancing once DF shops get randomized
     "Demon Fang": ItemData(0x1F, ItemClassification.useful),
