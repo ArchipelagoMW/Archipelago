@@ -11,7 +11,7 @@ class RAC3OPTION:
     START_INVENTORY_FROM_POOL = "Start Inventory From Pool"
     STARTING_WEAPONS = "Starting Weapons"
     BOLT_AND_XP_MULTIPLIER = "Bolt and XP Multiplier"
-    ENABLE_PROGRESSIVE_WEAPONS = "Enable Progressive Weapons"
+    PROGRESSIVE_WEAPONS = "Progressive Weapons"
     ARMOR_UPGRADE = "Armor Upgrade"
     SKILL_POINTS = "Skill Points"
     TROPHIES = "Trophies"

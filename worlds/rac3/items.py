@@ -53,9 +53,9 @@ def create_itempool(world: "RaC3World") -> list[Item]:
             item_amount -= count  # remove one from the pool as it has already been placed
 
         # Progressive Weapons option
-        if RAC3ITEMTAG.PROG_WEAPON in item_tags and not options.enable_progressive_weapons.value:
+        if RAC3ITEMTAG.PROG_WEAPON in item_tags and not options.progressive_weapons.value:
             continue
-        if RAC3ITEMTAG.NON_PROG_WEAPON in item_tags and options.enable_progressive_weapons.value:
+        if RAC3ITEMTAG.NON_PROG_WEAPON in item_tags and options.progressive_weapons.value:
             continue
 
         # ExtraArmorUpgrade option
@@ -113,7 +113,7 @@ def create_item(world: "RaC3World", name: str) -> Item:
 
 def get_filler_selection(world: "RaC3World"):
     frequencies = world.options.filler_weight.value
-    if world.options.enable_progressive_weapons.value:
+    if world.options.progressive_weapons.value:
         frequencies[RAC3ITEM.WEAPON_XP] = 0
     if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
@@ -123,7 +123,7 @@ def get_filler_selection(world: "RaC3World"):
     if not frequencies or all(count == 0 for count in frequencies.values()):
         frequencies[RAC3ITEM.BOLTS] = 1  # set bolts to be the only filler if the filler weights are empty
         # error = "No filler items available. Please enable some filler items."
-        # if world.options.enable_progressive_weapons.value:
+        # if world.options.progressive_weapons.value:
         #     error += " Progressive Weapons option is enabled, so 'Weapon XP' cannot be used as a filler item."
         # if not world.options.traps_enabled.value:
         #     error += " Traps are disabled, so no trap items can be used as filler."
@@ -133,7 +133,7 @@ def get_filler_selection(world: "RaC3World"):
 
 def process_start_inventory(world: "RaC3World") -> list[str]:
     itemlist: list[str] = []
-    if not world.options.enable_progressive_weapons.value:
+    if not world.options.progressive_weapons.value:
         for item in PROG_TO_NAME_DICT.keys():
             if world.options.start_inventory_from_pool.value.get(item, None):
                 world.options.start_inventory_from_pool.value.pop(item)
@@ -156,7 +156,7 @@ def starting_weapons(world: "RaC3World") -> list[str]:
         count = world.options.starting_weapons.value[name]
         if count == 0:
             continue
-        if world.options.enable_progressive_weapons.value:
+        if world.options.progressive_weapons.value:
             new_name = NAME_TO_PROG_DICT[name]
             preplaced_count = world.preplaced_items.count(new_name)
             if preplaced_count <= item_counts[new_name] - 2:

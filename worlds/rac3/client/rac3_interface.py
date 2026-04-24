@@ -126,7 +126,7 @@ class Rac3Interface(GameInterface):
         start_inventory_from_pool: dict[str, int]
         starting_weapons: dict[str, int]
         bolt_and_xp_multiplier: int
-        enable_progressive_weapons: int
+        progressive_weapons: int
         armor_upgrade: int
         skill_points: int
         trophies: int
@@ -276,7 +276,7 @@ class Rac3Interface(GameInterface):
         self.options.start_inventory_from_pool = slot_data[RAC3OPTION.START_INVENTORY_FROM_POOL]
         self.options.starting_weapons = slot_data[RAC3OPTION.STARTING_WEAPONS]
         self.options.bolt_and_xp_multiplier = slot_data[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
-        self.options.enable_progressive_weapons = slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]
+        self.options.progressive_weapons = slot_data[RAC3OPTION.PROGRESSIVE_WEAPONS]
         self.options.armor_upgrade = slot_data[RAC3OPTION.ARMOR_UPGRADE]
         self.options.skill_points = slot_data[RAC3OPTION.SKILL_POINTS]
         self.options.trophies = slot_data[RAC3OPTION.TROPHIES]
@@ -645,7 +645,7 @@ class Rac3Interface(GameInterface):
                     _time = round(time.time() + uniform(10, 30), 4)
                     self.timers[name + str(_time)] = _time
                     self.bolt_and_xp_multiplier_value += 1
-            case RAC3ITEM.PLAYER_XP:
+            case RAC3ITEM.NANOTECH_XP:
                 self.nanotech_exp += 12500 + randint(1, 350 * self.max_health)
                 if self.nanotech_exp > 0x7FFFFFFF:
                     self.nanotech_exp = 0x7FFFFFFF
@@ -1579,7 +1579,7 @@ class Rac3Interface(GameInterface):
         - Handles both progressive and non-progressive weapon logic, including syncing XP and level addresses in memory.
         """
         # TODO: Track weapon EXP
-        if self.options.enable_progressive_weapons:
+        if self.options.progressive_weapons:
             for weapon_name in non_prog_weapon_data.keys():
                 target_level = self.UnlockItem[weapon_name].status
                 if not target_level:

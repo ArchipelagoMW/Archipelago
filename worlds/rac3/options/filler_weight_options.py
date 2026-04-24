@@ -17,7 +17,7 @@ class FillerWeight(ItemDict):
     default = {
         # RAC3ITEM.TITANIUM_BOLT: 0,
         RAC3ITEM.WEAPON_XP: 5,
-        RAC3ITEM.PLAYER_XP: 5,
+        RAC3ITEM.NANOTECH_XP: 5,
         RAC3ITEM.BOLTS: 10,
         RAC3ITEM.JACKPOT: 10,
     }

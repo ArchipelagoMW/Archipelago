@@ -98,7 +98,7 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
-            if self.ctx.slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]:
+            if self.ctx.slot_data[RAC3OPTION.PROGRESSIVE_WEAPONS]:
                 self.output("Weapon EXP item not compatible with Progressive Weapons")
             else:
                 self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.WEAPON_XP].AP_CODE,
