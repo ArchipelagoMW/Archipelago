@@ -19,5 +19,5 @@ class FillerWeight(ItemDict):
         RAC3ITEM.WEAPON_XP: 5,
         RAC3ITEM.NANOTECH_XP: 5,
         RAC3ITEM.BOLTS: 10,
-        RAC3ITEM.JACKPOT: 10,
+        RAC3ITEM.JACKPOT: 5,
     }
