@@ -9,19 +9,375 @@ from . import items
 if TYPE_CHECKING:
     from .world import TeardownWorld
 
-# Locations and their IDs, must include any options or not enabled locations
 LOCATION_NAME_TO_ID = {
+
+#   Mission Locations
     "Old Building Problem": 1,
-    "Lee Computers Target 1": 11,
-    "Lee Computers Target 2": 12,
-    "Lee Computers Target 3": 13,
-    "Login Devices 1": 21,
-    "Login Devices 2": 22,
-    "Login Devices 3": 23,
-    "Making Space 1": 31,
-    "Making Space 2": 32,
-    "Making Space 3": 33,
-    "Temp": 34,
+
+    "Lee Computers Required 1": 11,
+    "Lee Computers Required 2": 12,
+    "Lee Computers Required 3": 13,
+
+    "Login Devices Required 1": 21,
+    "Login Devices Required 2": 22,
+    "Login Devices Required 3": 23,
+
+    "Making Space Required 1": 31,
+    "Making Space Required 2": 32,
+    "Making Space Optional 3": 33,
+
+    "Classic Cars Required 1": 41,
+    "Classic Cars Required 2": 42,
+    "Classic Cars Optional 1": 43,
+    "Classic Cars Optional 2": 44,
+
+    "The GPS Devices Required 1": 51,
+    "The GPS Devices Required 2": 52,
+    "The GPS Devices Required 3": 53,
+    "The GPS Devices Optional 1": 54,
+    "The GPS Devices Optional 2": 55,
+
+    "The Car Wash Required 1": 61,
+    "The Car Wash Required 2": 62,
+    "The Car Wash Required 3": 63,
+    "The Car Wash Optional 1": 64,
+    "The Car Wash Optional 2": 65,
+    "The Car Wash Optional 3": 66,
+
+    "Heavy Lifting Required 1": 71,
+    "Heavy Lifting Optional 1": 72,
+    "Heavy Lifting Optional 2": 73,
+    "Heavy Lifting Optional 3": 74,
+    "Heavy Lifting Optional 4": 75,
+
+    "The Tower": 81,
+
+    "Fine Arts Required 1": 91,
+    "Fine Arts Required 2": 92,
+    "Fine Arts Required 3": 94,
+    "Fine Arts Required 4": 95,
+    "Fine Arts Optional 1": 96,
+    "Fine Arts Optional 2": 97,
+
+    "Tool Up Required 1": 101,
+    "Tool Up Required 2": 102,
+    "Tool Up Required 3": 103,
+    "Tool Up Required 4": 104,
+    "Tool Up Optional 1": 105,
+    "Tool Up Optional 2": 106,
+
+    "Art Return Required 1": 111,
+    "Art Return Required 2": 112,
+    "Art Return Required 3": 113,
+    "Art Return Required 4": 114,
+
+    "Covert Chaos Required 1": 121,
+    "Covert Chaos Optional 1": 122,
+    "Covert Chaos Optional 2": 123,
+
+    "Insurance Fraud Required 1": 131,
+    "Insurance Fraud Required 2": 132,
+    "Insurance Fraud Required 3": 133,
+    "Insurance Fraud Optional 1": 134,
+    "Insurance Fraud Optional 2": 135,
+    "Insurance Fraud Optional 3": 136,
+
+    "The BlueTide Computers Required 1": 141,
+    "The BlueTide Computers Required 2": 142,
+    "The BlueTide Computers Required 3": 143,
+    "The BlueTide Computers Required 4": 144,
+    "The BlueTide Computers Optional 1": 145,
+    "The BlueTide Computers Optional 2": 146,
+    "The BlueTide Computers Optional 3": 147,
+
+    "The Speed Deal Required 1": 151,
+    "The Speed Deal Optional 1": 152,
+    "The Speed Deal Optional 2": 153,
+
+    "A Wet Affair Required 1": 161,
+    "A Wet Affair Required 2": 162,
+    "A Wet Affair Required 3": 163,
+    "A Wet Affair Optional 1": 164,
+    "A Wet Affair Optional 2": 165,
+    "A Wet Affair Optional 4": 166,
+
+    "Power Outage Required 1": 171,
+    "Power Outage Required 2": 172,
+    "Power Outage Required 3": 173,
+    "Power Outage Required 4": 174,
+    "Power Outage Optional 1": 175,
+    "Power Outage Optional 2": 176,
+    "Power Outage Optional 3": 177,
+    "Power Outage Optional 4": 178,
+
+    "Motivational Reminder Required 1": 181,
+    "Motivational Reminder Required 2": 182,
+    "Motivational Reminder Required 3": 183,
+    "Motivational Reminder Required 4": 184,
+    "Motivational Reminder Required 5": 185,
+    "Motivational Reminder Optional 1": 186,
+    "Motivational Reminder Optional 2": 187,
+    "Motivational Reminder Optional 3": 188,
+
+    "An Assortment Of Dishes Required 1": 191,
+    "An Assortment Of Dishes Required 2": 192,
+    "An Assortment Of Dishes Required 3": 193,
+    "An Assortment Of Dishes Required 4": 194,
+    "An Assortment Of Dishes Required 5": 195,
+    "An Assortment Of Dishes Optional 1": 196,
+    "An Assortment Of Dishes Optional 2": 197,
+    "An Assortment Of Dishes Optional 3": 198,
+    "An Assortment Of Dishes Optional 4": 199,
+
+    "Flooding Required 1": 201,
+    "Flooding Required 2": 202,
+    "Flooding Required 3": 203,
+    "Flooding Required 4": 204,
+    "Flooding Required 5": 205,
+    "Flooding Optional 1": 206,
+    "Flooding Optional 2": 207,
+    "Flooding Optional 3": 208,
+
+    "The Chase": 211,
+
+    "Roborazzi Required 1": 221,
+    "Roborazzi Required 2": 222,
+    "Roborazzi Required 3": 223,
+    "Roborazzi Required 4": 224,
+    "Roborazzi Required 5": 225,
+
+    "The Secret Ingredients Required 1": 231,
+    "The Secret Ingredients Required 2": 232,
+    "The Secret Ingredients Required 3": 233,
+    "The Secret Ingredients Required 4": 234,
+    "The Secret Ingredients Optional 1": 235,
+    "The Secret Ingredients Optional 2": 236,
+
+    "The BlueTide Shortage Required 1": 241,
+    "The BlueTide Shortage Required 2": 242,
+    "The BlueTide Shortage Required 3": 243,
+    "The BlueTide Shortage Optional 1": 244,
+    "The BlueTide Shortage Optional 2": 245,
+    "The BlueTide Shortage Optional 3": 246,
+
+    "The Shipping Logs Required 1": 251,
+    "The Shipping Logs Required 2": 252,
+    "The Shipping Logs Required 3": 253,
+    "The Shipping Logs Required 4": 254,
+    "The Shipping Logs Required 5": 255,
+    "The Shipping Logs Optional 1": 256,
+    "The Shipping Logs Optional 2": 257,
+    "The Shipping Logs Optional 3": 258,
+
+    "The Alarm System Required 1": 261,
+    "The Alarm System Required 2": 262,
+    "The Alarm System Required 3": 263,
+    "The Alarm System Required 4": 264,
+    "The Alarm System Optional 1": 265,
+    "The Alarm System Optional 2": 266,
+
+    "Moving The Goods Required 1": 271,
+    "Moving The Goods Required 2": 272,
+    "Moving The Goods Required 3": 273,
+    "Moving The Goods Optional 1": 274,
+    "Moving The Goods Optional 2": 275,
+
+    "Havoc In Paradise Required 1": 281,
+    "Havoc In Paradise Required 2": 282,
+    "Havoc In Paradise Required 3": 283,
+    "Havoc In Paradise Required 4": 284,
+    "Havoc In Paradise Optional 1": 285,
+    "Havoc In Paradise Optional 2": 286,
+    "Havoc In Paradise Optional 3": 287,
+
+    "Elena's Revenge": 291,
+
+    "Truckload Of Trouble Required 1": 301,
+    "Truckload Of Trouble Required 2": 302,
+    "Truckload Of Trouble Optional 1": 303,
+
+    "Ornament Ordeal Required 1": 311,
+    "Ornament Ordeal Required 2": 312,
+    "Ornament Ordeal Required 3": 313,
+    "Ornament Ordeal Required 4": 314,
+    "Ornament Ordeal Optional 1": 315,
+    "Ornament Ordeal Optional 2": 316,
+
+    "The Quilez Tools Required 1": 321,
+    "The Quilez Tools Required 2": 322,
+    "The Quilez Tools Required 3": 323,
+    "The Quilez Tools Required 4": 324,
+    "The Quilez Tools Optional 1": 325,
+    "The Quilez Tools Optional 2": 326,
+
+    "Connecting The Dots Required 1": 331,
+    "Connecting The Dots Required 2": 332,
+    "Connecting The Dots Required 3": 333,
+    "Connecting The Dots Optional 1": 334,
+    "Connecting The Dots Optional 2": 335,
+
+    "The Pawn Shop Required 1": 341,
+    "The Pawn Shop Required 2": 342,
+    "The Pawn Shop Required 3": 343,
+    "The Pawn Shop Required 4": 344,
+    "The Pawn Shop Required 5": 345,
+    "The Pawn Shop Optional 1": 346,
+    "The Pawn Shop Optional 2": 347,
+
+    "The Droid Abduction Required 1": 351,
+    "The Droid Abduction Optional 1": 352,
+    "The Droid Abduction Optional 2": 353,
+    "The Droid Abduction Optional 3": 354,
+
+    "Malice In Woonderland Required 1": 361,
+    "Malice In Woonderland Required 2": 362,
+    "Malice In Woonderland Required 3": 363,
+    "Malice In Woonderland Required 4": 364,
+    "Malice In Woonderland Required 5": 365,
+    "Malice In Woonderland Optional 1": 366,
+    "Malice In Woonderland Optional 2": 367,
+    "Malice In Woonderland Optional 3": 368,
+
+    "Handle With Care Required 1": 371,
+    "Handle With Care Required 2": 372,
+    "Handle With Care Required 3": 373,
+    "Handle With Care Optional 1": 374,
+    "Handle With Care Optional 2": 375,
+    "Handle With Care Optional 3": 376,
+    "Handle With Care Optional 4": 377,
+
+    "Droid Dismount Required 1": 381,
+    "Droid Dismount Required 2": 382,
+    "Droid Dismount Required 3": 383,
+    "Droid Dismount Required 4": 384,
+    "Droid Dismount Required 5": 385,
+    "Droid Dismount Optional 1": 386,
+    "Droid Dismount Optional 2": 387,
+
+    "The Final Diversion": 393,
+
+#   Upgrade Locations
+
+    "Blowtorch Fuel Upgrade 1": 501,
+    "Blowtorch Fuel Upgrade 2": 502,
+    "Blowtorch Fuel Upgrade 3": 503,
+    "Blowtorch Fuel Upgrade 4": 504,
+
+    "Shotgun Rounds Upgrade 1": 511,
+    "Shotgun Rounds Upgrade 2": 512,
+    "Shotgun Rounds Upgrade 3": 513,
+    "Shotgun Rounds Upgrade 4": 514,
+    "Shotgun Rounds Upgrade 5": 515,
+    "Shotgun Rounds Upgrade 6": 516,
+    "Shotgun Rounds Upgrade 7": 517,
+
+    "Shotgun Range Upgrade 1": 521,
+    "Shotgun Range Upgrade 2": 522,
+
+    "Shotgun Damage Upgrade 1": 531,
+    "Shotgun Damage Upgrade 2": 532,
+
+    "Plank Amount Upgrade 1": 541,
+    "Plank Amount Upgrade 2": 542,
+    "Plank Amount Upgrade 3": 543,
+    "Plank Amount Upgrade 4": 544,
+    "Plank Amount Upgrade 5": 545,
+    "Plank Amount Upgrade 6": 546,
+    "Plank Amount Upgrade 7": 547,
+
+    "Plank Width Upgrade 1": 551,
+    "Plank Width Upgrade 2": 552,
+
+    "Plank Max Length Upgrade 1": 561,
+    "Plank Max Length Upgrade 2": 562,
+    "Plank Max Length Upgrade 3": 563,
+
+    "Pipe Bomb Rounds Upgrade 1": 571,
+    "Pipe Bomb Rounds Upgrade 2": 572,
+    "Pipe Bomb Rounds Upgrade 3": 573,
+    "Pipe Bomb Rounds Upgrade 4": 574,
+    "Pipe Bomb Rounds Upgrade 5": 575,
+
+    "Pipe Bomb Blast Upgrade 1": 581,
+    "Pipe Bomb Blast Upgrade 2": 582,
+
+    "Gun Rounds Upgrade 1": 591,
+    "Gun Rounds Upgrade 2": 592,
+    "Gun Rounds Upgrade 3": 593,
+    "Gun Rounds Upgrade 4": 594,
+    "Gun Rounds Upgrade 5": 595,
+
+    "Gun Range Upgrade 1": 601,
+    "Gun Range Upgrade 2": 602,
+    "Gun Range Upgrade 3": 603,
+
+    "Gun Damage Upgrade 1": 611,
+    "Gun Damage Upgrade 2": 612,
+
+    "Bomb Rounds Upgrade 1": 621,
+    "Bomb Rounds Upgrade 2": 622,
+    "Bomb Rounds Upgrade 3": 623,
+    "Bomb Rounds Upgrade 4": 624,
+    "Bomb Rounds Upgrade 5": 625,
+
+    "Bomb Blast Upgrade 1": 631,
+    "Bomb Blast Upgrade 2": 632,
+
+    "Rocket Launcher Rounds Upgrade 1": 641,
+    "Rocket Launcher Rounds Upgrade 2": 642,
+    "Rocket Launcher Rounds Upgrade 3": 643,
+
+    "Rocket Launcher Blast Upgrade 1": 651,
+    "Rocket Launcher Blast Upgrade 2": 652,
+
+    "Rocket Booster Rounds Upgrade 1": 661,
+    "Rocket Booster Rounds Upgrade 2": 662,
+    "Rocket Booster Rounds Upgrade 3": 663,
+
+    "Rocket Booster Power Upgrade 1": 671,
+    "Rocket Booster Power Upgrade 2": 672,
+
+    "Rocket Booster Time Upgrade 1": 681,
+    "Rocket Booster Time Upgrade 2": 682,
+
+    "Leaf Blower Power Upgrade 1": 691,
+    "Leaf Blower Power Upgrade 2": 692,
+    "Leaf Blower Power Upgrade 3": 693,
+
+    "Cable Amount Upgrade 1": 701,
+    "Cable Amount Upgrade 2": 702,
+    "Cable Amount Upgrade 3": 703,
+
+    "Cable Stretch Upgrade 1": 711,
+    "Cable Stretch Upgrade 2": 712,
+
+    "Vehicle Thruster Rounds Upgrade 1": 721,
+    "Vehicle Thruster Rounds Upgrade 2": 722,
+    "Vehicle Thruster Rounds Upgrade 3": 723,
+
+    "Vehicle Thruster Power Upgrade 1": 731,
+    "Vehicle Thruster Power Upgrade 2": 732,
+
+    "Nitroglycerin Rounds Upgrade 1": 741,
+    "Nitroglycerin Rounds Upgrade 2": 742,
+    "Nitroglycerin Rounds Upgrade 3": 743,
+
+    "Nitroglycerin Blast Upgrade 1": 751,
+    "Nitroglycerin Blast Upgrade 2": 752,
+    "Nitroglycerin Blast Upgrade 3": 753,
+
+    "Hunting Rifle Rounds Upgrade 1": 761,
+    "Hunting Rifle Rounds Upgrade 2": 762,
+
+    "BlueTide Bottles Upgrade 1": 771,
+    "BlueTide Bottles Upgrade 2": 772,
+
+    "BlueTide Duration Upgrade 1": 781,
+    "BlueTide Duration Upgrade 2": 782,
+
+#   Valuable Locations
+
+#    "... Valuable": 801,
 }
 
 
