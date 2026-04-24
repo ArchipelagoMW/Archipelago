@@ -47,7 +47,7 @@ class KarmicTransformers(Choice):
 
 
 class OpenGameStart(Toggle):
-    """Remove some early events for a more open game start:
+    """ NOT IMPLEMENTED IN CLIENT YET - USE AT YOUR OWN RISK !!
         - Restoring the river of the Heavens
         - Cutting the peach containing the villagers in Kamiki
         - Restoring Kamiki Village with Sunrise
@@ -57,7 +57,7 @@ class OpenGameStart(Toggle):
         - Opening the boulder to Shinshu field
         - Mr. Orange fight after restoring Kamiki Villagers"""
     display_name = "Remove some events for a more open start"
-    default = 1
+    default = 0
 
 
 class BloomGuardianSaplings(Toggle):
