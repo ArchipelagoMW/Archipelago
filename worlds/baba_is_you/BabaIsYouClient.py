@@ -131,31 +131,33 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
             return False
     
         self.ctx.game_data_path = path
-        self.ctx.game_communication_path = os.path.join(path, "AP", self.ctx.world_folder)
+        self.ctx.game_communication_path = os.path.join(path, "AP", f"save{self.ctx.save_slot}")
 
         if not os.path.exists(self.ctx.game_communication_path):
             os.makedirs(self.ctx.game_communication_path)
 
         return True
     
-    def _cmd_worldfolder(self, folder: str = "") -> bool:
-        """Change world folder being used. Default is \"babapelago\"."""
+    def _cmd_save_slot(self, slot: str = "1") -> bool:
+        """Changes the save slot being used. Defaults to 1. Note that using slots beyond 3 requires an additonal mod."""
 
-        if len(folder) <= 0:
-            folder = "babapelago"
+        slotNum = int(slot)
+        if slotNum < 1 or slotNum > 100:
+            self.output(f"Slot out of range (1-100)")
+            return False
 
-        self.ctx.world_folder = folder
-        self.ctx.game_communication_path = os.path.join(self.ctx.game_data_path, "AP", self.world_folder)
+        self.ctx.save_slot = slotNum
+        self.ctx.game_communication_path = os.path.join(self.ctx.game_data_path, "AP", f"save{self.ctx.save_slot}")
 
         if not os.path.exists(self.ctx.game_communication_path):
             os.makedirs(self.ctx.game_communication_path)
         
-        self.output(f"Set world folder to: {folder}")
+        self.output(f"Set save slot to {slotNum}")
         return True
     
-    def _cmd_installpack(self) -> bool:
+    def _cmd_install_pack(self) -> bool:
         """Install the Babapelago level pack at the currently selected world"""
-        result = auto_install_pack(self.ctx.game_data_path, self.ctx.world_folder, True)
+        result = auto_install_pack(self.ctx.game_data_path, f"save{self.ctx.save_slot}", True)
         if result:
             self.output("Successfully installed the pack!")
         else:
@@ -220,12 +222,12 @@ class BabaIsYouContext(CommonContext):
             sys.exit(1)
             return
         
-        self.world_folder = "babapelago"
+        self.save_slot = 1
         self.game_data_path = path
-        self.game_communication_path = os.path.join(path, "AP", self.world_folder)
+        self.game_communication_path = os.path.join(path, "AP", f"save{self.save_slot}")
 
         # auto install pack
-        auto_install_pack(path, self.world_folder)
+        auto_install_pack(path, "babapelago")
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:

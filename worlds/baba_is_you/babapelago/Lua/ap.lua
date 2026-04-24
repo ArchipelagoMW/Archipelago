@@ -135,7 +135,7 @@ end)
 
 -- Handle win checks
 table.insert(mod_hook_functions.level_win_after, function()
-    MF_setfile("level", "AP/"..thisWorld.."/AP_CHECKS.data")
+    MF_setfile("level", "AP/save"..(generaldata2.values[SAVESLOT]+1).."/AP_CHECKS.data")
     local levelname = generaldata.strings[LEVELNAME]
     levelname = capitalize(levelname)
 
@@ -584,7 +584,7 @@ function update_checks()
     error_message = ""
     local trueSeed = ""
     local ourSeed = options.seed or ""
-    local files = MF_filelist("AP/"..thisWorld, "/*.data")
+    local files = MF_filelist("AP/save"..(generaldata2.values[SAVESLOT]+1).."/", "*.data")
     for i, file in ipairs(files) do
         if file:sub(1, 8) == "AP_SEED_" then
             trueSeed = file:sub(9, -6)
@@ -594,7 +594,22 @@ function update_checks()
 
     if #trueSeed == 0 or trueSeed ~= ourSeed then
         if #trueSeed == 0 then
-            error_message = ("$2,2Missing seed file. Please connect to the server using the Baba Is You client.")
+            local found_main_save_slot = false
+            if generaldata2.values[SAVESLOT] ~= 0 then
+                local files2 = MF_filelist("AP/save1/", "*.data")
+                for i, file in ipairs(files2) do
+                    if file:sub(1, 8) == "AP_SEED_" then
+                        found_main_save_slot = true
+                        break
+                    end
+                end
+            end
+
+            if found_main_save_slot then
+                error_message = ("$2,2Missing seed file for slot "..(generaldata2.values[SAVESLOT]+1)..", but found one for the main save. Switch to slot 1 or use /save_slot in the client.")
+            else
+                error_message = ("$2,2Missing seed file for slot "..(generaldata2.values[SAVESLOT]+1)..". Please connect to the server using the Baba Is You client.")
+            end
         else
             error_message = ("$2,2Game seed does not match AP seed. Please relaunch Baba Is You.")
         end
@@ -625,12 +640,12 @@ function update_checks()
     blossom_petal_count = 0
     local bonus_count = 0
 
-    files = MF_filelist("AP/"..thisWorld, "/*.item")
+    files = MF_filelist("AP/save"..(generaldata2.values[SAVESLOT]+1).."/", "*.item")
     local prevChecks = checks
     checks = {}
     obtained_keys = {}
     for i, file in ipairs(files) do
-        MF_setfile("level", "AP/"..thisWorld.."/"..file)
+        MF_setfile("level", "AP/save"..(generaldata2.values[SAVESLOT]+1).."/"..file)
         local item = MF_read("level", "data", "item")
         if item and #item ~= 0 then
             local trueName = item
@@ -750,7 +765,7 @@ function update_checks()
         clear_goal_locations["Goal"] = 1
     end
 
-    MF_setfile("level", "AP/"..thisWorld.."/AP_CHECKS.data")
+    MF_setfile("level", "AP/save"..(generaldata2.values[SAVESLOT]+1).."/AP_CHECKS.data")
     for location, v in pairs(clear_goal_locations) do
         if not prev_clear_goal_locations[location] then
             MF_store("level","checks",location, "1")
@@ -925,7 +940,7 @@ function auto_gen_level_name_to_id(level_name_to_id)
     -- Set up level shuffle (not active in editor)
     level_mapping = {}
     if options.level_shuffle ~= 0 and editor.values[INEDITOR] == 0 then
-        MF_setfile("level","AP/"..thisWorld.."/AP_SHUFFLE.data")
+        MF_setfile("level","AP/save"..(generaldata2.values[SAVESLOT]+1).."/AP_SHUFFLE.data")
         local total = tonumber(MF_read("level", "general", "total")) or 0
         for i=0,total-1 do
             local newPath = MF_read("level", "general", tostring(i))
@@ -951,7 +966,7 @@ end
 
 -- load options from file
 function load_ap_options()
-    MF_setfile("level","AP/"..thisWorld.."/AP_OPTIONS.data")
+    MF_setfile("level","AP/save"..(generaldata2.values[SAVESLOT]+1).."/AP_OPTIONS.data")
     for option, default in pairs(options) do
         local value = MF_read("level", "options", option) or "0"
         if value == "True" then
