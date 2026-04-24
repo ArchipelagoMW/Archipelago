@@ -49,6 +49,23 @@ def get_item_name_to_id_dict() -> dict:
         item_dict[d.item_name] = d.code
     return item_dict
 
+def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
+    # TODO: Refacto this if we ever need more static precollected items
+    precollected_items :List[Item] =[]
+
+    rejuvenation = brush_techniques_items[BrushTechniques.REJUVENATION.value]
+    precollected_items.append(create_item(BrushTechniques.REJUVENATION,rejuvenation.code,rejuvenation.classification,world))
+
+    # Temp while power slash tutorial requires this.
+    power_slash = brush_techniques_items[BrushTechniques.POWER_SLASH.value]
+    precollected_items.append(create_item(BrushTechniques.POWER_SLASH, power_slash.code, power_slash.classification, world))
+
+    astral_pouch = useful_items['Astral Pouch']
+    precollected_items.append(create_item('Astral Pouch', astral_pouch.code, astral_pouch.classification, world))
+    return precollected_items
+
+
+
 
 brush_techniques_items = {
     # Brush Techniques — item codes = 0x100 + game bitfield index (from BrushOverlay enum)
@@ -57,12 +74,14 @@ brush_techniques_items = {
     BrushTechniques.GALESTORM.value: ItemData(0x106, ItemClassification.progression),               # bit 6
     BrushTechniques.THUNDERSTORM.value: ItemData(0x108, ItemClassification.progression),            # bit 8
     BrushTechniques.INFERNO.value: ItemData(0x10A, ItemClassification.progression),                 # bit 10
-    BrushTechniques.POWER_SLASH.value: ItemData(0x10C, ItemClassification.progression, count_in_pool=3),  # bit 12
+    # 1 Less to account for the one given on Sphere 0
+    BrushTechniques.POWER_SLASH.value: ItemData(0x10C, ItemClassification.progression, count_in_pool=2),  # bit 12
     BrushTechniques.WATERSPOUT.value: ItemData(0x10D, ItemClassification.progression),             # bit 13
     BrushTechniques.VEIL_OF_MIST.value: ItemData(0x110, ItemClassification.progression),            # bit 16
     BrushTechniques.CRESCENT.value: ItemData(0x112, ItemClassification.progression),                # bit 18
     BrushTechniques.GREENSPROUT_VINE.value: ItemData(0x113, ItemClassification.progression),        # bit 19
-    BrushTechniques.REJUVENATION.value: ItemData(0x116, ItemClassification.progression),            # bit 22
+    # You always start with that one
+    BrushTechniques.REJUVENATION.value: ItemData(0x116, ItemClassification.progression,count_in_pool=0),            # bit 22
     BrushTechniques.BLIZZARD.value: ItemData(0x117, ItemClassification.progression),                # bit 23
     BrushTechniques.CHERRY_BOMB.value: ItemData(0x119, ItemClassification.progression, count_in_pool=3),  # bit 25
     BrushTechniques.SUNRISE.value: ItemData(0x11B, ItemClassification.progression),                 # bit 27
@@ -91,7 +110,6 @@ equips = {
 
 quest_items = {
     # Quest Items
-
     "Canine Tracker": ItemData(0x42, ItemClassification.progression),
     "Lucky Mallet": ItemData(0x43, ItemClassification.progression),
     "Border Key": ItemData(0x44, ItemClassification.progression),
@@ -127,7 +145,7 @@ bitable_items = {
 useful_items = {
     # Useful items
     "Sun Fragment": ItemData(0x05, ItemClassification.useful),
-    "Astral Pouch": ItemData(0x06, ItemClassification.useful),
+    "Astral Pouch": ItemData(0x06, ItemClassification.useful,count_in_pool=0),
     "Stray Bead": ItemData(0xCC, ItemClassification.useful),
     # probably will have to be changed to progession_skip balancing once DF shops get randomized
     "Demon Fang": ItemData(0x1F, ItemClassification.useful),
