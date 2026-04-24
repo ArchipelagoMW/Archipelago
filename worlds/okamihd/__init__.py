@@ -14,7 +14,7 @@ from .Enums.DivineInstruments import DivineInstruments
 from .Enums.RegionNames import RegionNames
 
 
-# TODO: Replace
+
 class OkamiWebWolrd(WebWorld):
     theme = "grassFlowers"
     option_groups = create_option_groups()
@@ -64,7 +64,7 @@ class OkamiWorld(World):
             "SeedName": self.multiworld.seed_name,
             "TotalLocations": get_total_locations(self),
             # Client configuration
-            "supported_client_version": "0.7.0",  # Minimum client version required
+            "supported_client_version": "0.7.1",  # Minimum client version required
         }
 
         # Add game options to slot_data
