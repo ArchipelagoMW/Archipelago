@@ -193,7 +193,7 @@ class RandomPortSocketCreator:
     """ Creates server sockets on random available ports from a configured range. """
 
     _next_port_index: int
-    _used_ports_cache: tuple[frozenset[int], float] | None
+    _used_ports_cache: tuple[frozenset[int], int] | None
     _parsed_ports: GameRangePorts
 
     def __init__(self, game_ports: Iterable[str | int]) -> None:
@@ -247,7 +247,7 @@ class RandomPortSocketCreator:
 
     def _get_used_ports(self) -> frozenset[int]:
         """ Get currently used ports with 90-second caching. """
-        t_hash = round(time.time() / 90)
+        t_hash = round(time.monotonic() / 90)
         if self._used_ports_cache is None or self._used_ports_cache[1] != t_hash:
             self._used_ports_cache = (frozenset(self._get_active_net_connections()), t_hash)
 
