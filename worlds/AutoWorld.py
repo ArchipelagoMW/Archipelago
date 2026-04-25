@@ -520,7 +520,7 @@ class World(metaclass=AutoWorldRegister):
         """
         raise NotImplementedError
 
-    def get_filler_item_name(self) -> str:
+    def get_filler_item_name(self, reason: FillerReason = FillerReason.undefined) -> str:
         """
         Called when the item pool needs to be filled with additional items to match location count.
 
@@ -588,7 +588,11 @@ class World(metaclass=AutoWorldRegister):
 
     # following methods should not need to be overridden.
     def create_filler(self, reason: FillerReason = FillerReason.undefined) -> "Item":
-        return self.create_item(self.get_filler_item_name())
+        import inspect
+        if len(inspect.signature(self.get_filler_item_name).parameters) == 0:
+            return self.create_item(self.get_filler_item_name())
+        else:
+            return self.create_item(self.get_filler_item_name(reason))
 
     # convenience methods
     def get_location(self, location_name: str) -> "Location":
