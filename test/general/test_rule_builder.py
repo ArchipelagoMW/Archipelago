@@ -32,7 +32,7 @@ from rule_builder.rules import (
 )
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
-from worlds.AutoWorld import AutoWorldRegister, World
+from worlds.AutoWorld import AutoWorldRegister, World, FillerReason
 
 
 class CachedCollectionState(CollectionState):
@@ -122,7 +122,7 @@ class RuleBuilderTestCase(unittest.TestCase):
                 return RuleBuilderItem(name, classification, self.item_name_to_id[name], self.player)
 
             @override
-            def get_filler_item_name(self) -> str:
+            def get_filler_item_name(self, reason: FillerReason = FillerReason.undefined) -> str:
                 return "Filler"
 
         self.world_cls = RuleBuilderWorld
@@ -150,7 +150,7 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
                 return RuleBuilderItem(name, classification, self.item_name_to_id[name], self.player)
 
             @override
-            def get_filler_item_name(self) -> str:
+            def get_filler_item_name(self, reason: FillerReason = FillerReason.undefined) -> str:
                 return "Filler"
 
         self.world_cls = RuleBuilderWorld
