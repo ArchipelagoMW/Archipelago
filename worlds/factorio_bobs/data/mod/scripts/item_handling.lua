@@ -48,14 +48,14 @@ TRAP_TABLE = {
     end,
 }
 
-local function recieve_item(item_name, source)
+local function receive_item(item_name, source)
     for _, force in pairs(library.get_all_ap_forces()) do
         if general.technologies.progressive()[item_name] ~= nil then
             local tech_stack = general.technologies.progressive()[item_name]
                 for _, item_name in ipairs(tech_stack) do
                     local tech = force.technologies[item_name]
                     if tech.researched ~= true then
-                        force.print({"archipelago.recieve-ap-item", "[technology=" .. tech.name .. "]", source})
+                        force.print({"archipelago.receive-ap-item", "[technology=" .. tech.name .. "]", source})
                         force.play_sound({path="utility/research_completed"})
                         tech.researched = true
                         return
@@ -65,13 +65,13 @@ local function recieve_item(item_name, source)
             for _, force in pairs(library.get_all_ap_forces()) do
                 local tech = force.technologies[item_name]
                 if tech.researched ~= true then --if not true, so it only tells you about new technologies.
-                    force.print({"archipelago.recieve-ap-item", "[technology=" .. tech.name .. "]", source})
+                    force.print({"archipelago.receive-ap-item", "[technology=" .. tech.name .. "]", source})
                     force.play_sound({path="utility/research_completed"})
                     tech.researched = true
                 end
             end
         elseif TRAP_TABLE[item_name] ~= nil then
-            force.print({"archipelago.recieve-ap-item", item_name, source})
+            force.print({"archipelago.receive-ap-item", item_name, source})
             TRAP_TABLE[item_name]()
         else
             force.print("Unknown Item " .. item_name)
@@ -82,12 +82,12 @@ end
 local function remote_unlock(item_name, index, source)
     if storage.index_sync[index] ~= item_name then -- not yet received prog item
         storage.index_sync[index] = item_name
-        recieve_item(item_name, source)
+        receive_item(item_name, source)
     end
 end
 
 local function local_unlock(item_name)
-    recieve_item(item_name, general.slot_name)
+    receive_item(item_name, general.slot_name)
 end
 
 local function update_player(index)
@@ -274,7 +274,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif index == "-1" then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
-            game.print({"archipelago.recieve-ap-catchup", "[technology=" .. tech.name .. "]"})
+            game.print({"archipelago.receive-ap-catchup", "[technology=" .. tech.name .. "]"})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true
         end
