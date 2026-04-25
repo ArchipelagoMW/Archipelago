@@ -173,5 +173,7 @@ general.map_preset = {{ dict_to_lua({"default": False, "order": "a", "basic_sett
 --traps
 general.traps = {}
 general.traps.evo_increase = {{ evolution_trap_increase }} / 100
+general.traps.hide_tech_time = 10 * 60
+general.traps.energy_pollution_duration = 120 * 60
 
 return general
