@@ -23,7 +23,7 @@ def get_shapes(world: "FactorioBobs") -> Dict["FactorioScienceLocation", Set["Fa
     prerequisites: Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]] = {}
     layout = world.options.tech_tree_layout.value
     locations: List["FactorioScienceLocation"] = sorted(world.science_locations, key=lambda loc: loc.name)
-    world.random.shuffle(locations)
+    world.seeded_random.shuffle(locations)
 
     if layout == TechTreeLayout.option_single:
         pass
@@ -179,7 +179,7 @@ def get_shapes(world: "FactorioBobs") -> Dict["FactorioScienceLocation", Set["Fa
 
     elif layout in funnel_layers:
         slice_size = funnel_slice_sizes[layout]
-        world.random.shuffle(locations)
+        world.seeded_random.shuffle(locations)
 
         while len(locations) > slice_size:
             locations = locations[slice_size:]
@@ -267,14 +267,14 @@ def get_shapes(world: "FactorioBobs") -> Dict["FactorioScienceLocation", Set["Fa
             all_pre[victim] = set()
             current_choices = already_done.copy()
             if even_distribution:
-                rand_num = world.random.randint(minimum_dependencies, maximum_dependencies)
+                rand_num = world.seeded_random.randint(minimum_dependencies, maximum_dependencies)
             else:
-                rand_num = int(world.random.triangular(minimum_dependencies, maximum_dependencies + 1, weighted_distribution))
+                rand_num = int(world.seeded_random.triangular(minimum_dependencies, maximum_dependencies + 1, weighted_distribution))
 
             while rand_num >= 1 and len(current_choices) > 0:
                 rand_num -= 1
                 dependency = current_choices[
-                    world.random.randint(0, len(current_choices) - 1)]  # pick one of the already established techs.
+                    world.seeded_random.randint(0, len(current_choices) - 1)]  # pick one of the already established techs.
                 prerequisites[victim].add(dependency)  # Take one of the already processed techs as its prerequisite.
 
                 all_pre[victim].add(dependency)
