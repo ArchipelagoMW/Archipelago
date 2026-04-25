@@ -109,6 +109,7 @@ class FactorioContext(CommonContext):
         self.config_file: str = config_file
         self.mod_directory: str = mod_directory
         self.additional_factorio_server_args = factorio_server_args
+        self.local_item_handling = False
         self.silence_rebounce_hints = []
         self.silence_rebounce_toggle = False
 
@@ -484,11 +485,12 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
-                    item_id = transfer_item.item
-                    player_name = ctx.player_names[transfer_item.player]
-                    item_name = ctx.item_names.lookup_in_game(item_id)
-                    factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
-                    commands[ctx.send_index] = f"/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}"
+                    if transfer_item.player != ctx.slot or ctx.local_item_handling == False:
+                        item_id = transfer_item.item
+                        player_name = ctx.player_names[transfer_item.player]
+                        item_name = ctx.item_names.lookup_in_game(item_id)
+                        factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
+                        commands[ctx.send_index] = f"/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}"
                     ctx.send_index += 1
                 if commands:
                     ctx.rcon_client.send_commands(commands)
@@ -533,6 +535,8 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     ctx.seed_name = info["seed_name"]
     death_link = info["death_link"]
     ctx.energy_link_increment = int(info.get("energy_link", 0))
+    if "local_item_handling" in info:
+        ctx.local_item_handling = info["local_item_handling"]
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
         ctx.ui.enable_energy_link()
