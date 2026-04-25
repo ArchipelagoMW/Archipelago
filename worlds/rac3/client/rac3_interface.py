@@ -2071,7 +2071,16 @@ class Rac3Interface(GameInterface):
         logger.info(f"AP World Version: {RAC3OPTION.VERSION_NUMBER}")
         logger.info(f'Game Version: {GAME_ID_TO_VERSION.get(self.current_game, "Unknown")} ({self.current_game})')
         logger.info(f"Current planet Tracked: {self.planet}")
-        logger.info(f"Average update cycle execution time last 100 cycles: {sum(self.cycle_times) / len(self.cycle_times):.4f} seconds")
+        if self.cycle_times:
+            cycle_min = min(self.cycle_times)
+            cycle_avg = sum(self.cycle_times) / len(self.cycle_times)
+            cycle_max = max(self.cycle_times)
+            logger.info(
+                f"Update cycle execution time last {len(self.cycle_times)} cycles: "
+                f"min {cycle_min:.4f}s / avg {cycle_avg:.4f}s / max {cycle_max:.4f}s"
+            )
+        else:
+            logger.info("Update cycle execution time: no samples collected yet")
         logger.info(f"Sewer Crystals Inventory: {self._read8(RAC3STATUS.CRYSTALS_CURRENT)}")
         logger.info(f"Sewer Crystals Traded: {self._read8(RAC3STATUS.CRYSTALS_TRADED)}")
         logger.info(f"Ship Slot Limit: {self.ship_slot_limit}")
