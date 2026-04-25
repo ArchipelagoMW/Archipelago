@@ -228,3 +228,26 @@ replace <>
   "bob-near-inserters": {"useless":  false}
 }
 ```
+
+### defaultOptions.json
+only `additional_logic` in `default` is currently supported
+#### Example:
+```json
+{
+  "default": {
+    "additional_logic": {
+      "2": [
+        {"item": "gun-turret"}
+      ],
+      "3": [
+        {"item": "lab"},
+        {"item": "transport-belt"},
+        {"item": "electric-mining-drill"},
+        {"item": "bob-void-pump"},
+        {"recipe": "bob-basic-greenhouse-cycle"},
+        {"tech": "bob-long-inserters-1"}
+      ]
+    }
+  }
+}
+```

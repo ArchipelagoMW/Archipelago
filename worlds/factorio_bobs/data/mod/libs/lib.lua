@@ -47,14 +47,15 @@ function library.is_valid_ap_force(force)
     return false
 end
 
-function library.all_valid_ap_forces()
-    local forces = {}
+function library.get_all_ap_forces()
+    local forces = game.forces
+    local return_forces = {}
     for _, force_name in pairs(general.player_forces) do
-        if game.forces[force_name] then
-            forces[force_name] = game.forces[force_name]
+        if forces[force_name] then
+            table.insert(return_forces, forces[force_name])
         end
     end
-    return forces
+    return return_forces
 end
 
 return library

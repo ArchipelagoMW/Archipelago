@@ -35,12 +35,12 @@ local function update_player(index)
                 sent = 0
             end
             if sent > 0 then
-                player.print("Received " .. sent .. "x [item=" .. name .. ",quality="..general.free_samples.quality.."]")
+                player.print({"archipelago.recieve-sample-item", sent, "[item=" .. name .. ",quality="..general.free_samples.quality.."]"})
                 data.suppress_full_inventory_message = false
             end
             if sent ~= count then               -- Couldn't full send.
                 if not data.suppress_full_inventory_message then
-                    player.print("Additional items will be sent when inventory space is available.", {r=1, g=1, b=0.25})
+                    player.print({"archipelago.sample-inventory-full"}, {r=1, g=1, b=0.25})
                 end
                 data.suppress_full_inventory_message = true -- Avoid spamming them with repeated full inventory messages.
                 samples[name] = count - sent    -- Buffer the remaining items
@@ -49,7 +49,7 @@ local function update_player(index)
                 samples[name] = nil             -- Remove from the list
             end
         elseif stack.count > 0 then
-            player.print("Unable to receive " .. count .. "x [item=" .. name .. "] as this item does not exist.")
+            player.print({"archipelago.sample-error", count, name})
             samples[name] = nil
         end
     end
@@ -115,6 +115,10 @@ local function on_research_finished(event)
     if technology.researched and string.find(technology.name, "ap%-") == 1 then
         -- check if it came from the server anyway, then we don't need to double send.
         library.dump_info() --is sendable
+        local corrosponding_item = general.technologies.local_items()[technology.name]
+        if corrosponding_item then
+            local_unlock(corrosponding_item)
+        end
     else
         if general.free_samples.state == 0 then
             return  -- Nothing else to do
@@ -182,46 +186,16 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     if index == nil then
         game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
         return
-    elseif index == -1 then -- for coop sync and restoring from an older savegame
+    elseif index == "-1" then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
-            game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
+            game.print({"archipelago.receive-ap-catchup", "[technology=" .. tech.name .. "]"})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true
         end
         return
-    elseif general.technologies.progressive()[item_name] ~= nil then
-        if storage.index_sync[index] ~= item_name then -- not yet received prog item
-            storage.index_sync[index] = item_name
-            local tech_stack = general.technologies.progressive()[item_name]
-            for _, item_name in ipairs(tech_stack) do
-                tech = force.technologies[item_name]
-                if tech.researched ~= true then
-                    game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
-                    game.play_sound({path="utility/research_completed"})
-                    tech.researched = true
-                    return
-                end
-            end
-        end
-    elseif force.technologies[item_name] ~= nil then
-        tech = force.technologies[item_name]
-        if tech ~= nil and storage.index_sync[index] ~= tech then
-            if tech.researched ~= true then --if not true, so it only tells you about new technologies.
-                storage.index_sync[index] = tech
-                game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
-                game.play_sound({path="utility/research_completed"})
-                tech.researched = true
-            end
-        end
-    elseif TRAP_TABLE[item_name] ~= nil then
-        if storage.index_sync[index] ~= item_name then -- not yet received trap
-            storage.index_sync[index] = item_name
-            game.print({"", "Received ", item_name, " from ", source})
-            TRAP_TABLE[item_name]()
-        end
     else
-        game.print("Unknown Item " .. item_name)
+        remote_unlock(item_name, index, source)
     end
 end)
 

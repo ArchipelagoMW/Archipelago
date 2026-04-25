@@ -227,14 +227,20 @@ class RecipeEngine:
                 item = self.get_item_from_entity(name)
                 for category in categories:
                     self.get_category(category).machines.add(item)
+            del raw_settings["missed_machines"]
 
         if "invalid_ingredients" in raw_settings:
             for ingredient in raw_settings["invalid_ingredients"]:
                 self.custom_invalid.add(self.get_game_item(ingredient, DefinitionSource.CUSTOM))
+            del raw_settings["invalid_ingredients"]
 
         if "excluded_first_pool" in raw_settings:
             for ingredient in raw_settings["excluded_first_pool"]:
                 self.get_game_item(ingredient, DefinitionSource.CUSTOM).is_valid_first_pool = False
+            del raw_settings["excluded_first_pool"]
+
+        for key in raw_settings.keys():
+            self.modpack.logger.error(f"Unknown key in recipeEngineSettings.json: {key}")
 
 
     def __remove_bad_items(self):
@@ -302,15 +308,15 @@ class RecipeEngine:
         for item in self.game_items.values():
             if not item.is_valid:
                 continue
-            produced = [recipe_qty[recipe] * recipe.products[item] for recipe in item.crafted_by]
-            consumed = [recipe_qty[recipe] * recipe.ingredients[item] for recipe in item.used_in]
+            produced = [recipe_qty[recipe] * recipe.products[item] for recipe in item.crafted_by if recipe.is_valid]
+            consumed = [recipe_qty[recipe] * recipe.ingredients[item] for recipe in item.used_in if recipe.is_valid]
 
             if item == goal:
                 probBest += pulp.lpSum(produced) - pulp.lpSum(consumed) + slack[item] == 1, f"balance_{item.name}"
             else:
                 probBest += pulp.lpSum(produced) - pulp.lpSum(consumed) + slack[item] == 0 + waste[item], f"balance_{item.name}"
 
-            probBest += can_get_item[item] <= pulp.lpSum(can_get_recipe[recipe] for recipe in item.crafted_by), f"can_get_{item.name}"
+            probBest += can_get_item[item] <= pulp.lpSum(can_get_recipe[recipe] for recipe in item.crafted_by if recipe.is_valid), f"can_get_{item.name}"
 
         big_M = 1e5
         for recipe in self.recipes.values():
@@ -320,16 +326,16 @@ class RecipeEngine:
             can_rec = can_get_recipe[recipe]
 
             probBest += rec_qty <= can_rec * big_M
-            req = ({can_get_item[cat.item] for cat in recipe.needed_items}
+            req = ({can_get_item[cat.item] for cat in recipe.needed_items if cat.is_valid}
                    | {can_get_category[recipe.category]}
-                   | {can_get_item[ingredient] for ingredient in recipe.ingredients})
+                   | {can_get_item[ingredient] for ingredient in recipe.ingredients if ingredient.is_valid})
             for catalyst in req:
                 probBest += can_rec <= catalyst
 
         for category in self.categories.values():
             if category.manual or not category.is_valid:
                 continue
-            probBest += can_get_category[category] <= pulp.lpSum(can_get_item[item] for item in category.machines)
+            probBest += can_get_category[category] <= pulp.lpSum(can_get_item[item] for item in category.machines if item.is_valid)
 
         status = probBest.solve(pulp.PULP_CBC_CMD(msg=False))
         score = probBest.objective.value()

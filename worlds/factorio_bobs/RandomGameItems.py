@@ -35,13 +35,15 @@ class RandomGameItems:
         items_with_req_tech: list[GameItem] = []
 
         for item in self.recipe_engine.get_pool_items():
+            if not item.is_valid:
+                continue
             req_recipes = item.get_best_recipes()
             req_tech = set()
             for recipe in req_recipes:
                 if recipe.is_starter:
                     continue
                 req_tech.update(recipe.technologies)
-            if req_tech:
+            if req_tech or not item.is_valid_first_pool:
                 bisect.insort(items_with_req_tech, item, key=lambda itm: itm.score)
             else:
                 bisect.insort(first_pool, item, key=lambda itm: itm.score)

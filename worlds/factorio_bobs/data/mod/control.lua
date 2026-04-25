@@ -6,6 +6,8 @@ local libs = {
     energy_link = require("scripts/energy_link"), --handles all energy link related things.
     item_handling = require("scripts/item_handling"), -- handles all AP items, sending, recieving. And samples.
     miscellaneous = require("scripts/miscellaneous"), -- handles most AP related comminucation, and other things like setting perms, rocket silo, and victory.
+    --trap_handling = require("scripts/trap_handling.lua"), --does not yet exist
+    tech_obscurity = require("scripts/tech_obscurity.lua"), --I am hopefull. But first getting this refactoring approved before adding this shit.
     trap_handling = require("scripts/trap_handling.lua"), --does not yet exist
     --main = require("scripts/main.lua"), --will probably be removed.
     --tech_obscurity = require("scripts/tech-obscurity.lua"), --I am hopefull. But first getting this refactoring approved before adding this shit.
@@ -88,4 +90,3 @@ if dupes then
         error(error_message)
     end
 end
-

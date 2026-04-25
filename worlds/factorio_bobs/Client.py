@@ -68,6 +68,15 @@ class FactorioCommandProcessor(ClientCommandProcessor):
                           "--mp-connect", "localhost",
                           *self.ctx.additional_factorio_server_args), )
 
+    def _cmd_toggle_silence_rebounce(self):
+        """Toggle sending rebouncing hinted locations from factorio back to itself. To reduce useless spam. The silence only works for the game, not the client."""
+        self.ctx.toggle_silence_rebounce()
+
+    def _cmd_resend_hints(self):
+        """Make all hints resend to the achipelago server."""
+        self.ctx.resend_hints_out()
+
+
 
 
 class FactorioContext(CommonContext):
@@ -100,6 +109,9 @@ class FactorioContext(CommonContext):
         self.config_file: str = config_file
         self.mod_directory: str = mod_directory
         self.additional_factorio_server_args = factorio_server_args
+        self.local_item_handling = False
+        self.silence_rebounce_hints = []
+        self.silence_rebounce_toggle = False
 
     @property
     def energylink_key(self) -> str:
@@ -129,12 +141,20 @@ class FactorioContext(CommonContext):
     def on_print_json(self, args: dict):
         if self.rcon_client:
             if (not self.filter_item_sends or not self.is_uninteresting_item_send(args)) \
-                    and not self.is_echoed_chat(args):
+                    and not self.is_echoed_chat(args) \
+                    and not self.silenced_hint(args):
                 text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
                 if not text.startswith(
                         self.player_names[self.slot] + ":"):  # TODO: Remove string heuristic in the future.
                     self.print_to_game(text)
         super(FactorioContext, self).on_print_json(args)
+    
+    def silenced_hint(self, args: dict) -> bool:
+        if "type" in args and args["type"] == "Hint":
+            if args["item"][1] in self.silence_rebounce_hints and self.silence_rebounce_toggle: #0 = item, 1 = Location, 2 = player who has the location, 3 = flags
+                self.silence_rebounce_hints.remove(args["item"][1]) #remove hinted locations
+                return True
+        return False
 
     @property
     def savegame_name(self) -> str:
@@ -177,12 +197,22 @@ class FactorioContext(CommonContext):
             if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
-            if cmd == "Connected" and self.energy_link_increment:
-                async_start(self.send_msgs([{
-                    "cmd": "SetNotify", "keys": [self.energylink_key]
-                }]))
+            if cmd == "Connected":
+                self.silence_out_bount_hints = []
+
+                self.set_notify(f"_read_hints_{self.team}_{self.slot}")
+                if self.energy_link_increment:
+                    self.set_notify(self.energylink_key)
+
+                self.resend_hints_out()
+
+        elif cmd == "Retrieved":
+            if f"_read_hints_{self.team}_{self.slot}" in args["keys"]:
+                self.update_hints()
         elif cmd == "SetReply":
-            if args["key"].startswith("EnergyLink"):
+            if f"_read_hints_{self.team}_{self.slot}" == args["key"]:
+                self.update_hints()
+            elif args["key"].startswith("EnergyLink"):
                 if self.energy_link_increment and args.get("last_deplete", -1) == self.last_deplete:
                     # it's our deplete request
                     gained = int(args["original_value"] - args["value"])
@@ -191,6 +221,18 @@ class FactorioContext(CommonContext):
                         logger.debug(f"EnergyLink: Received {gained_text}. "
                                      f"{format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
+
+
+    def update_hints(self):
+        commands = {}
+        index = 0
+        for position in range(len(self.stored_data[f"_read_hints_{self.team}_{self.slot}"])):
+            hint = self.stored_data[f"_read_hints_{self.team}_{self.slot}"][position]
+            if hint["finding_player"] == self.slot and not hint["found"]:
+                self.rcon_client.send_command( f'/ap-receive-hint ap-{hint["location"]}-')
+            index +=1
+        if commands:
+            self.rcon_client.send_commands(commands)
 
     def on_user_say(self, text: str) -> typing.Optional[str]:
         # Mirror chat sent from the UI to the Factorio server.
@@ -233,7 +275,47 @@ class FactorioContext(CommonContext):
             announcement = "Chat is no longer bridged to Archipelago."
         logger.info(announcement)
         self.print_to_game(announcement)
+ 
+    def toggle_silence_rebounce(self) -> None:
+        self.silence_rebounce_toggle = not self.silence_rebounce_toggle
+        self.silence_rebounce_hints = []
+        if self.silence_rebounce_toggle:
+            announcement = "The rebouncing hints no longer send to factorio now."
+        else:
+            announcement = "The rebouncing hints are send to factorio now."
+        logger.info(announcement)
+        self.print_to_game(announcement)
 
+    def send_hint_out(self, tech_names: str):
+        #tech_names = "ap-123456- ap-234567- oil-gathering"
+        #tech_names can contain junk techs not meant for AP (like oil-gathering)
+        techs_to_hint = []
+        for tech_name in tech_names.split(" "):
+            tech_split = tech_name.split("-")
+            if len(tech_split) == 3:
+                if tech_split[0] == "ap" and tech_split[2] == "":
+                    location_id = int(tech_split[1])
+                    #this should now only have te location id of the check. So 123456.....
+                    already_hinted = False
+                    if self.stored_data[f"_read_hints_{self.team}_{self.slot}"]:
+                        for hint in self.stored_data[f"_read_hints_{self.team}_{self.slot}"]:
+                            if hint["location"] == location_id and hint["finding_player"] == self.slot:
+                                already_hinted = True
+                    
+                    if not already_hinted:
+                        techs_to_hint.append(location_id)
+                        if self.silence_rebounce_toggle:
+                            self.silence_rebounce_hints.append(location_id)
+        
+        if len(techs_to_hint) > 0:
+            async_start(self.send_msgs([{"cmd": "CreateHints", "locations": techs_to_hint}]))
+
+                
+    def resend_hints_out(self):
+        logger.info("Resending all hints that factorio has collected.")
+        self.print_to_game("Resending all hints that factorio has collected.")
+        self.rcon_client.send_command("/ap-resend-all-hints")
+    
     def run_gui(self):
         from kvui import GameManager
 
@@ -387,6 +469,13 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_bridge_chat_out()
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-silence-rebounce$", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.toggle_silence_rebounce()
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for", msg):
+                    factorio_server_logger.debug(msg)
+                    tech_names = re.sub(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for","", msg)
+                    ctx.send_hint_out(tech_names)
                 else:
                     factorio_server_logger.info(msg)
                     match = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
@@ -396,11 +485,12 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
-                    item_id = transfer_item.item
-                    player_name = ctx.player_names[transfer_item.player]
-                    item_name = ctx.item_names.lookup_in_game(item_id)
-                    factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
-                    commands[ctx.send_index] = f"/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}"
+                    if transfer_item.player != ctx.slot or ctx.local_item_handling == False:
+                        item_id = transfer_item.item
+                        player_name = ctx.player_names[transfer_item.player]
+                        item_name = ctx.item_names.lookup_in_game(item_id)
+                        factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
+                        commands[ctx.send_index] = f"/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}"
                     ctx.send_index += 1
                 if commands:
                     ctx.rcon_client.send_commands(commands)
@@ -445,6 +535,8 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     ctx.seed_name = info["seed_name"]
     death_link = info["death_link"]
     ctx.energy_link_increment = int(info.get("energy_link", 0))
+    if "local_item_handling" in info:
+        ctx.local_item_handling = info["local_item_handling"]
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
         ctx.ui.enable_energy_link()
