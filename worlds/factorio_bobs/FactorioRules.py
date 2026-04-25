@@ -117,8 +117,8 @@ def process_yaml_rule(rule_pair: dict[str, str | list], modpack: FactorioModpack
         assert rule_value in modpack.base_technology_table.keys(), f"{rule_value} is not a valid tech for rules"
         return TechRule(rule_value)
     if rule_type == "item":
-        assert rule_value in modpack.recipe_engine.all_ingredients.keys(), f"{rule_value} is not a valid item in rules"
-        return InternalItemRule(modpack.recipe_engine.all_ingredients[rule_value])
+        assert rule_value in modpack.recipe_engine.game_items.keys(), f"{rule_value} is not a valid item in rules"
+        return InternalItemRule(modpack.recipe_engine.game_items[rule_value])
     if rule_type == "recipe":
         assert rule_value in modpack.recipe_engine.recipes.keys(), f"{rule_value} is not a valid recipe in rules"
         return RecipeRule(modpack.recipe_engine.recipes[rule_value])

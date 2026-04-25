@@ -129,6 +129,11 @@ class FactorioModpack(BaseModpack):
                 self.__forced_locations[location] = index
             for index, location in enumerate(raw_settings["forced_locations"]["end"], start=1):
                 self.__forced_locations[location] = -index
+            del raw_settings["forced_locations"]
+
+        for key in raw_settings.keys():
+            self.logger.error(f"Unknown key in worldSettings.json: {key}")
+
 
     @property
     def required_technologies(self) -> dict[str, FrozenSet[Technology]]:
@@ -217,15 +222,25 @@ class FactorioModpack(BaseModpack):
     def default_options(self):
         try:
             with self.open_file("defaultOptions.json") as file:
-                default_raw = json.load(file)
+                default_raw = json.load(file)["default"]
         except FileNotFoundError:
             self.logger.debug("No default options file")
             return {"additional_logic": {}}
         defaults: dict[str, Any] = {"additional_logic": {}}
-        if "additional_logic" in defaults:
+        if "additional_logic" in default_raw:
             raw_additional_logic = default_raw["additional_logic"]
-            for complexity, rules in raw_additional_logic.values():
-                defaults["additional_logic"][int(complexity)] = rules
+            for complexity, rules in raw_additional_logic.items():
+                match len(rules):
+                    case 0:
+                        break
+                    case 1:
+                        defaults["additional_logic"][int(complexity)] = rules[0]
+                    case _:
+                        defaults["additional_logic"][int(complexity)] = {"and": rules}
+            del default_raw["additional_logic"]
+
+        for key in default_raw.keys():
+            self.logger.error(f"Unknown key in defaultOptions.json: {key}")
         return defaults
 
     @cached_property

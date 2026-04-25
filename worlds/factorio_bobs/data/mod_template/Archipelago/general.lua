@@ -21,9 +21,15 @@ general.local_item_handling = true
 general.mod_setting_names = {}
 general.mod_setting_names.death_link = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
 general.mod_setting_names.energy_link = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}"
+general.mod_setting_names.layer_obscurity = "archipelago-tech-layer-obscurity-{{ slot_player }}-{{ seed_name }}"
+general.mod_setting_names.depth_obscurity = "archipelago-tech-depth-obscurity-{{ slot_player }}-{{ seed_name }}"
+general.mod_setting_names.craft_obscurity = "archipelago-tech-craft-obscurity-{{ slot_player }}-{{ seed_name }}"
 general.mod_setting_defaults = {}
 general.mod_setting_defaults.death_link = {% if death_link %}true{% else %}false{% endif %}
 general.mod_setting_defaults.energy_link = {% if energy_link %}true{% else %}false{% endif %}
+general.mod_setting_defaults.layer_obscurity = {% if tech_layer_obscurity %}true{% else %}false{% endif %}
+general.mod_setting_defaults.depth_obscurity = {{ tech_depth_obscurity }}
+general.mod_setting_defaults.craft_obscurity = {% if tech_craft_obscurity %}true{% else %}false{% endif %}
 
 
 -- energy_link
@@ -41,7 +47,8 @@ general.science_packs.allowed = {{ variable_to_lua(allowed_science_packs) }}
 general.free_samples = {}
 general.free_samples.quality = "{{free_sample_quality_name}}"
 general.free_samples.state = {{ free_samples }} --0 means no samples, 1 means single craft, and 2 means half a stack, 3 means full stack.
-function general.free_samples.get_starter_items ()
+
+function general.free_samples.get_starter_items()
     return {{ dict_to_lua(starting_items) }}
 end
 
@@ -52,6 +59,7 @@ end
 
 --technologies
 general.technologies = {}
+
 function general.technologies.hide_from_player() -- returns a list of all the technologies to disable research of and hide.
     --has an test in data-final-fixes that will throw out the name of the place it is erroring at.
     return {
@@ -60,14 +68,17 @@ function general.technologies.hide_from_player() -- returns a list of all the te
     {% endfor %}
     }
 end
+
 function general.technologies.progressive()
     --has an test in final-fixes that will throw out the name of the place it is erroring at.
     return {{ variable_to_lua(progressive_technology_table) }}
 end
+
 function general.technologies.removed_technologies ()
     return {{ variable_to_lua(removed_technologies) }}
 end
-function general.technologies.local_items ()
+
+function general.technologies.local_items()
     return {
 {%- for location, item in locations -%}
 {%- if (item.player == slot_player) %}
@@ -76,6 +87,8 @@ function general.technologies.local_items ()
 {%- endfor %}
     }
 end
+
+general.technologies.hint_list = {{dict_to_lua(techs_to_hint)}}
 
 --recipes
 general.recipes = {}

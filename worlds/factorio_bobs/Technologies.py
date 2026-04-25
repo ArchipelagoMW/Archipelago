@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Set, Tuple, Union
+from typing import Set, Tuple, Union, TYPE_CHECKING
 
 from .FactorioUtils import FactorioElement
+
+if TYPE_CHECKING:
+    from FactorioModpack import FactorioModpack
 
 
 def always(state) -> bool:
