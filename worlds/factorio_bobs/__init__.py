@@ -729,7 +729,7 @@ class FactorioBobs(World):
                 self.techs_to_hint[f"ap-{self.location_name_to_id[loc.name]}-"] = False
 
         for loc in self.science_locations:
-            set_propper_hint(loc, self.options.tech_layer_obscurity == TechLayerObscurity.disabled and self.options.tech_depth_obscurity == TechDepthObscurity.disabled)
+            set_propper_hint(loc, self.options.tech_layer_obscurity == TechLayerObscurity.disabled and self.options.tech_depth_obscurity == TechDepthObscurity.option_disabled)
 
         #for loc in self.craftsanity_locations:
         #    set_propper_hint(loc, self.options.tech_craft_obscurity == TechCraftObscurity.disabled)
