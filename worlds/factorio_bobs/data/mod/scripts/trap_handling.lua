@@ -175,9 +175,6 @@ local function set_energy_spiral(number)
 end
 
 local function undo_energy_spiral()
-    for _, force in pairs(library.all_valid_ap_forces()) do
-        force.clear_chart()
-    end
 end
 
 --##### ####   ###  ####        ##### #   # #   #  ###  #####  ###   ###  #   #  #### 
@@ -276,13 +273,13 @@ local function clear_map_trap()
     end
 end
 
-local function clear_map_trap()
+local function energy_spiral_trap()
     local clear_effect = game.tick + general.traps.energy_pollution_duration
     repeat
         clear_effect = clear_effect + 1
-    until storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil end
+    until (storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil)
 
-    #To fix
+    -- To fix
     add_action_to_tick(clear_effect, "undo-energy-spiral-trap", undo_energy_spiral)
 end
 
@@ -298,7 +295,8 @@ local trap_table = {
     ["Inventory Spill Trap"] =  inventory_spill_trap,
     ["Peek a Tech Trap"] =  hide_technology_trap,
     ["Tech Reset Trap"] =  reset_technology_progress_trap,
-    ["Reset Map Info Trap"] =  clear_map_trap
+    ["Reset Map Info Trap"] =  clear_map_trap,
+    ["Energy Spiral Trap"] = energy_spiral_trap
 }
 
 --##### ####   ###  ####   ####       #   #  ###  ####  ##### 

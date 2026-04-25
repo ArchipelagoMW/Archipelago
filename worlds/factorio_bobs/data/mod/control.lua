@@ -4,13 +4,10 @@ local handler = require("event_handler")
 local libs = {
     death_link = require("scripts/death_link"), --handles all death link related things.
     energy_link = require("scripts/energy_link"), --handles all energy link related things.
-    item_handling = require("scripts/item_handling"), -- handles all AP items, sending, recieving. And samples.
-    miscellaneous = require("scripts/miscellaneous"), -- handles most AP related comminucation, and other things like setting perms, rocket silo, and victory.
-    --trap_handling = require("scripts/trap_handling.lua"), --does not yet exist
-    tech_obscurity = require("scripts/tech_obscurity.lua"), --I am hopefull. But first getting this refactoring approved before adding this shit.
-    trap_handling = require("scripts/trap_handling.lua"), --does not yet exist
-    --main = require("scripts/main.lua"), --will probably be removed.
-    --tech_obscurity = require("scripts/tech-obscurity.lua"), --I am hopefull. But first getting this refactoring approved before adding this shit.
+    item_handling = require("scripts/item_handling"), -- handles all AP items, sending, receiving. And samples.
+    miscellaneous = require("scripts/miscellaneous"), -- handles most AP related communication, and other things like setting perms, rocket silo, and victory.
+    tech_obscurity = require("scripts/tech_obscurity.lua"), --I am hopeful. But first getting this refactoring approved before adding this shit.
+    trap_handling = require("scripts/trap_handling.lua"), --exists
     control = {} --for all events that get compiled in this file.
 }
 
