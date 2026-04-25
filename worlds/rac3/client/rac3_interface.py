@@ -195,6 +195,7 @@ class Rac3Interface(GameInterface):
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
     last_in_ship_time: float = 0.0
+    last_in_vendor_time: float = 0.0
     deathlink_grace_period: float = 0.0
     nanotech_exp: int = 0
     homewarping: bool = False
@@ -1055,6 +1056,7 @@ class Rac3Interface(GameInterface):
     def vendor_check(self):
         """Returns the current vendor type if the vendor is open, else None"""
         if self.pause_state_value == RAC3PAUSESTATE.VENDOR and self.planet in PLANET_VENDOR_OFFSET.keys():
+            self.last_in_vendor_time = time.time()
             try:
                 return RAC3VENDORTYPE(self._read8(
                     RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
@@ -1865,7 +1867,10 @@ class Rac3Interface(GameInterface):
         """Handle the current displayed pop-up message notification, and message queue"""
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == RAC3PLAYERACTION.TYHRRANOID_MINIGAME
-        paused = (self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT) or (current_time - self.last_in_ship_time) < 1.25
+        paused = ((self.pause_state 
+                   and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT) 
+                   or (current_time - self.last_in_ship_time) < 1.25 
+                   or (current_time - self.last_in_vendor_time) < 0.25)
         self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED,
                       int(self.inside_hacker_puzzle or paused))
         if self.notification_queue:
