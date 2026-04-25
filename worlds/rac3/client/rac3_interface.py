@@ -647,7 +647,8 @@ class Rac3Interface(GameInterface):
                     self.timers[name + str(_time)] = _time
                     self.bolt_and_xp_multiplier_value += 1
             case RAC3ITEM.NANOTECH_XP:
-                self.nanotech_exp += 12500 + randint(1, 350 * self.max_health)
+                nanotech_gain = min(200000, max(20000, int(self.nanotech_exp * 0.15)))
+                self.nanotech_exp += nanotech_gain
                 if self.nanotech_exp > 0x7FFFFFFF:
                     self.nanotech_exp = 0x7FFFFFFF
                 self._write32(RAC3STATUS.NANOTECH_EXP, self.nanotech_exp)
