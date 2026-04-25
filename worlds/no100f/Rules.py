@@ -254,7 +254,7 @@ key_rules = [
         # Balcony
         ConnectionNames.o003_o004: lambda player: lambda state: state.has(ItemNames.Attic_Key, player, 3) or state.has(ItemNames.Attic_KeyRing, player, 1),
         ConnectionNames.o005_o006: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-        ConnectionNames.o006_o005: lambda player: lambda state: state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1),
+        ConnectionNames.o006_o005: lambda player: lambda state: (state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)),
         ConnectionNames.o006_o008: lambda player: lambda state: (state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1)) and state.has(ItemNames.HelmetPower, player, 1),
         ConnectionNames.o006_sn: lambda player: lambda state: ((state.can_reach(RegionNames.o005, "Region", player) and state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1)),
         ConnectionNames.o008_o006: lambda player: lambda state: state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1),
@@ -2340,8 +2340,8 @@ warpgate_rules = [
                                                                         or (state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1)) and state.has(ItemNames.Balc6_Warp, player, 1),
                 LocationNames.key2_o006:  lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1) and state.can_reach(RegionNames.o005, "Region", player)
                                                                         or (state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1)) and state.has(ItemNames.Balc6_Warp, player, 1),
-                LocationNames.key3_o006:  lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1) and state.can_reach(RegionNames.o005, "Region", player)
-                                                                        or (state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1)) and state.has(ItemNames.Balc6_Warp, player, 1),
+                LocationNames.key3_o006:  lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and (state.has(ItemNames.HelmetPower, player, 1) and state.can_reach(RegionNames.o005, "Region", player)
+                                                                        or (state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1)) and state.has(ItemNames.Balc6_Warp, player, 1)),
                 LocationNames.key4_o006:  lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1) and state.can_reach(RegionNames.o005, "Region", player)
                                                                         or (state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Knight_KeyRing, player, 1)) and state.has(ItemNames.Balc6_Warp, player, 1),
             }

@@ -9199,9 +9199,18 @@ async def apply_level_fixes(ctx: NO100FContext):
         upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 11:  # Player does not have the helmet, block entry to Black Knight
             fix_ptr = _find_obj_in_obj_table(0xDEE3B081, ptr, size)  # O008 Loading Trigger Disabled
-            _set_trigger_state(ctx, fix_ptr, 0x1e)
+            _set_trigger_state(ctx, fix_ptr, 0x1c)
         else:
             fix_ptr = _find_obj_in_obj_table(0xDEE3B081, ptr, size)  # O008 Loading Trigger Enabled
+            _set_trigger_state(ctx, fix_ptr, 0x1d)
+
+    if scene == b'O006':
+        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if not upgrades & 2 ** 11:  # Player does not have the helmet, block entry to Black Knight
+            fix_ptr = _find_obj_in_obj_table(0xD1AE493B, ptr, size)  # O008 Loading Trigger Disabled
+            _set_trigger_state(ctx, fix_ptr, 0x1c)
+        else:
+            fix_ptr = _find_obj_in_obj_table(0xD1AE493B, ptr, size)  # O008 Loading Trigger Enabled
             _set_trigger_state(ctx, fix_ptr, 0x1d)
 
 
