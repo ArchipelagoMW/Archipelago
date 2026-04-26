@@ -47,21 +47,27 @@
 
 ## HTML
 
-* Indent with 2 spaces for new code.
+* Indent with 4 spaces for new code.
 * kebab-case for ids and classes.
+* Avoid using on* attributes (onclick, etc.).
 
-## CSS
+## CSS / SCSS
 
-* Indent with 2 spaces for new code.
+* Indent with 4 spaces for new code.
 * `{` on the same line as the selector.
-* No space between selector and `{`.
+* Space between selector and `{`.
 
 ## JS
 
-* Indent with 2 spaces.
-* Indent `case` inside `switch ` with 2 spaces.
-* Use single quotes.
+* Indent with 4 spaces.
+* Indent `case` inside `switch ` with 4 spaces.
+* Prefer double quotation marks (`"`).
 * Semicolons are required after every statement.
+* Use [IIFEs](https://developer.mozilla.org/docs/Glossary/IIFE) to avoid polluting global scope.
+* Prefer to use [defer](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script#defer)
+  in script tags, which retains order of execution but does not block.
+* Avoid `<script async ...` in most cases, see [async and defer](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script#async_and_defer).
+* Use addEventListener.
 
 ## KV
 

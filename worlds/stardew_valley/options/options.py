@@ -3,11 +3,14 @@ import typing
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, Removed, OptionCounter
-from ..items import items_by_group, Group
-from ..mods.mod_data import ModNames
-from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
-from ..strings.bundle_names import all_cc_bundle_names
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, \
+    Visibility, Removed, OptionCounter
+from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
+from ..mods.mod_data import ModNames, invalid_mod_combinations
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
+    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName
+from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
+from ..strings.trap_names import all_traps
 
 
 class StardewValleyOption(Protocol):
@@ -30,6 +33,8 @@ class Goal(Choice):
     Craft Master: Craft every item
     Legend: Earn 10 000 000g
     Mystery of the Stardrops: Find every stardrop
+    Mad Hatter: Complete all your hatsanity locations. If hatsanity is disabled, will enable it on "Easy+Tailoring"
+    Ultimate Foodie: Eat all items in the game. Adapts to Eatsanity
     Allsanity: Complete every check in your slot
     Perfection: Attain Perfection
     """
@@ -50,6 +55,8 @@ class Goal(Choice):
     option_craft_master = 11
     option_legend = 12
     option_mystery_of_the_stardrops = 13
+    option_mad_hatter = 20
+    option_ultimate_foodie = 21
     # option_junimo_kart =
     # option_prairie_king =
     # option_fector_challenge =
@@ -122,18 +129,20 @@ class ProfitMargin(NamedRange):
 
 class BundleRandomization(Choice):
     """What items are needed for the community center bundles?
-    Vanilla: Standard bundles from the vanilla game
-    Thematic: Every bundle will require random items compatible with their original theme
-    Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones
+    Vanilla: Standard bundles from the vanilla game.
+    Thematic: Every bundle will require random items compatible with their original theme.
+    Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones.
     Remixed Anywhere: Remixed, but bundles are not locked to specific rooms.
-    Shuffled: Every bundle will require random items and follow no particular structure"""
+    Shuffled: Every bundle will require random items and follow no particular structure.
+    Meme: A set of entirely custom bundles are generated purely based on jokes, references, and trolling. Funny but not balanced at all. Not for the faint of heart."""
     internal_name = "bundle_randomization"
     display_name = "Bundle Randomization"
     option_vanilla = 0
     option_thematic = 1
     option_remixed = 3
-    option_remixed_anywhere = 4
+    option_remixed_anywhere = 5
     option_shuffled = 6
+    option_meme = 10
     default = option_remixed
 
 
@@ -156,6 +165,30 @@ class BundlePrice(Choice):
     option_expensive = 1
     option_very_expensive = 2
     option_maximum = 8
+
+
+class BundlePerRoom(Choice):
+    """How many bundles are in each room of the community center?
+    Rooms that already have the max cannot increase further
+    2 Fewer: Every room will have 2 fewer bundles
+    1 Fewer: Every room will have 1 fewer bundle
+    Normal: Every room will have its usual number of bundles
+    1 Extra: Every room will have 1 extra bundle
+    2 Extra: Every room will have 2 extra bundles
+    3 Extra: Every room will have 3 extra bundles
+    4 Extra: Every room will have 4 extra bundles"""
+    internal_name = "bundle_per_room"
+    display_name = "Bundle Per Room"
+    default = 0
+    # option_minimum = -8  # I don't think users need this, keeping my options open
+    option_two_fewer = -2
+    option_one_fewer = -1
+    option_normal = 0
+    option_one_extra = 1
+    option_two_extra = 2
+    option_three_extra = 3
+    option_four_extra = 4
+    # option_maximum = 8  # I don't think users need this, keeping my options open
 
 
 class EntranceRandomization(Choice):
@@ -186,6 +219,36 @@ class EntranceRandomization(Choice):
     # option_buildings_one_way = 6
     # option_everything_one_way = 7
     # option_chaos_one_way = 8
+
+
+class StartWithout(OptionSet):
+    """ Items that, in vanilla, you generally start with (or get very quickly), but in Archipelago, you would rather start without them.
+    If the relevant item is not randomized, this option will do nothing.
+    Tools: Start without an Axe, Pickaxe, Hoe, Watering can and Scythe
+    Backpack: Start with 4 backpack slots, instead of 12, if your backpack size allows it
+    Landslide: Start without the landslide that leads to the mines
+    Community Center: Start without the key to the Community Center, and the Forest Magic to allow reading the bundles
+    Buildings: Start without the Shipping Bin and Pet Bowl
+    """
+    internal_name = "start_without"
+    display_name = "Start Without"
+    valid_keys = frozenset({
+        StartWithoutOptionName.tools, StartWithoutOptionName.backpack,
+        StartWithoutOptionName.landslide, StartWithoutOptionName.community_center,
+        StartWithoutOptionName.buildings,
+    })
+    preset_none = frozenset()
+    preset_easy = frozenset({StartWithoutOptionName.landslide, StartWithoutOptionName.community_center})
+    preset_all = valid_keys
+    default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
 
 
 class SeasonRandomization(Choice):
@@ -232,6 +295,26 @@ class BackpackProgression(Choice):
     option_early_progressive = 2
 
 
+class BackpackSize(Choice):
+    """Customize the granularity of the backpack upgrades
+    This works with vanilla and progressive backpack.
+    Default size is 12, which means you start with one backpack (12 slots), and get 2 more upgrades up to 36 slots.
+    If you pick 4, then you start with 3 backpacks (12 slots), and get 6 more upgrades up to 36 slots.
+    If you picked "Start Without Backpack", you will only be provided start upgrades up to 4 slots, instead of up to 12"""
+    internal_name = "backpack_size"
+    option_1 = 1
+    option_2 = 2
+    option_3 = 3
+    option_4 = 4
+    option_6 = 6
+    option_12 = 12
+    default = option_12
+    display_name = "Backpack Size"
+
+    def count_per_tier(self) -> int:
+        return 12 // self.value
+
+
 class ToolProgression(Choice):
     """Shuffle the tool upgrades?
     Vanilla: Clint will upgrade your tools with metal bars.
@@ -241,12 +324,12 @@ class ToolProgression(Choice):
     internal_name = "tool_progression"
     display_name = "Tool Progression"
     default = 1
-    option_vanilla = 0b000  # 0
-    option_progressive = 0b001  # 1
-    option_vanilla_cheap = 0b010  # 2
-    option_vanilla_very_cheap = 0b100  # 4
-    option_progressive_cheap = 0b011  # 3
-    option_progressive_very_cheap = 0b101  # 5
+    option_vanilla = 0b0000  # 0
+    option_progressive = 0b0001  # 1
+    option_vanilla_cheap = 0b0010  # 2
+    option_vanilla_very_cheap = 0b0100  # 4
+    option_progressive_cheap = 0b0011  # 3
+    option_progressive_very_cheap = 0b0101  # 5
 
     @property
     def is_vanilla(self):
@@ -278,7 +361,7 @@ class SkillProgression(Choice):
     With Masteries: Skill levels are unlocked randomly, and earning xp sends checks. Masteries are included"""
     internal_name = "skill_progression"
     display_name = "Skill Progression"
-    default = 2
+    default = 1
     option_vanilla = 0
     option_progressive = 1
     option_progressive_with_masteries = 2
@@ -461,7 +544,7 @@ class Shipsanity(Choice):
     """Locations for shipping items?
     None: There are no checks for shipping items
     Crops: Every crop and forageable being shipped is a check
-    Fish: Every fish being shipped is a check except legendaries
+    Fish: Every fish being shipped is a check
     Full Shipment: Every item in the Collections page is a check
     Full Shipment With Fish: Every item in the Collections page and every fish is a check
     Everything: Every item in the game that can be shipped is a check
@@ -471,15 +554,12 @@ class Shipsanity(Choice):
     default = 0
     option_none = 0
     option_crops = 1
-    # option_quality_crops = 2
     option_fish = 3
-    # option_quality_fish = 4
+    option_crops_and_fish = 4
     option_full_shipment = 5
-    # option_quality_full_shipment = 6
     option_full_shipment_with_fish = 7
-    # option_quality_full_shipment_with_fish = 8
     option_everything = 9
-    # option_quality_everything = 10
+    alias_all = option_everything
 
 
 class Cooksanity(Choice):
@@ -496,38 +576,31 @@ class Cooksanity(Choice):
     option_all = 2
 
 
-class Chefsanity(NamedRange):
-    """Locations for learning cooking recipes?
-    Vanilla: All cooking recipes are learned normally
-    Queen of Sauce: Every Queen of Sauce episode is a check, all Queen of Sauce recipes are items
+class Chefsanity(OptionSet):
+    """Locations for learning cooking recipes? Omitted categories are learned normally
+    Queen of Sauce: Every Queen of Sauce episode is a check
     Purchases: Every purchasable recipe is a check
     Friendship: Recipes obtained from friendship are checks
     Skills: Recipes obtained from skills are checks
-    All: Learning every cooking recipe is a check
     """
     internal_name = "chefsanity"
     display_name = "Chefsanity"
-    default = 0
-    range_start = 0
-    range_end = 15
 
-    option_none = 0b0000  # 0
-    option_queen_of_sauce = 0b0001  # 1
-    option_purchases = 0b0010  # 2
-    option_qos_and_purchases = 0b0011  # 3
-    option_skills = 0b0100  # 4
-    option_friendship = 0b1000  # 8
-    option_all = 0b1111  # 15
+    valid_keys = frozenset({
+        ChefsanityOptionName.queen_of_sauce, ChefsanityOptionName.purchases,
+        ChefsanityOptionName.skills, ChefsanityOptionName.friendship,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = preset_none
 
-    special_range_names = {
-        "none": 0b0000,  # 0
-        "queen_of_sauce": 0b0001,  # 1
-        "purchases": 0b0010,  # 2
-        "qos_and_purchases": 0b0011,  # 3
-        "skills": 0b0100,  # 4
-        "friendship": 0b1000,  # 8
-        "all": 0b1111,  # 15
-    }
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
 
 
 class Craftsanity(Choice):
@@ -573,6 +646,36 @@ class FriendsanityHeartSize(Range):
     # step = 1
 
 
+class Eatsanity(OptionSet):
+    """Locations for eating various items?
+    Cooking: Includes all cooked and crafted edible items
+    Crops: Includes all crops and forageable edible items
+    Fish: Includes all fish and fished edible items
+    Artisan: Includes all edible items produced by machines and animals
+    Shop: Includes all edible items purchased primarily in shops
+    Poisonous: Includes items that cause negative effects when consumed
+    Lock Effects: Whether each positive effect from edible items is unlocked through an archipelago "Enzyme" item. Requires some eatsanity locations to be enabled.
+    """
+    internal_name = "eatsanity"
+    display_name = "Eatsanity"
+    valid_keys = frozenset({
+        EatsanityOptionName.cooking, EatsanityOptionName.crops, EatsanityOptionName.fish,
+        EatsanityOptionName.artisan, EatsanityOptionName.shop,
+        EatsanityOptionName.poisonous, EatsanityOptionName.lock_effects,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
+
+
 class Booksanity(Choice):
     """Shuffle Books?
     None: All books behave like vanilla
@@ -613,6 +716,100 @@ class Walnutsanity(OptionSet):
             return set(self.value) == set(other.value)
         else:
             return typing.cast(bool, self.value == other)
+
+
+class Moviesanity(Choice):
+    """Add checks for watching movies?
+    None: No movie checks
+    One: There is a check for watching a movie, regardless of which
+    All Movies: Watching all individual movies are checks
+    All Movies Loved: Watching all individual movies are checks, but you have to invite someone who loves it
+    All Movies With Loved Snacks: Watching movies only counts if you invite someone who loves it and buy them a loved snack
+    All Movies And All Snacks: Watch all movies with someone who loves them, and purchase all the snacks once
+    All Movies And All Loved Snacks: Watch all movies with someone who loves them, and purchase all the snacks for someone who loves them
+    """
+    internal_name = "moviesanity"
+    display_name = "Moviesanity"
+    default = 1
+    option_none = 0
+    option_one = 1
+    option_all_movies = 2
+    option_all_movies_loved = 3
+    option_all_movies_with_loved_snack = 4
+    option_all_movies_and_all_snacks = 5
+    option_all_movies_and_all_loved_snacks = 6
+
+
+class Secretsanity(OptionSet):
+    """Add checks for the various secrets and easter eggs present in Stardew Valley. Some of them can be very obscure. If you enable this setting, you should expect to need the wiki a lot.
+    Easy: Secrets that can be obtained quickly and easily, if you know what to do
+    Difficult: Includes secrets that require a lot of grinding or a lot of luck. Not for the faint of heart. Enabling this will also modify some secrets from the other categories to require their harder variation, if there is one.
+    Fishing: Various special items and furniture that can be fished up in specific places
+    Secret Notes: Complete tasks described in the various secret notes, when applicable
+    """
+    internal_name = "secretsanity"
+    display_name = "Secretsanity"
+    valid_keys = frozenset({
+        SecretsanityOptionName.easy, SecretsanityOptionName.difficult, SecretsanityOptionName.fishing, SecretsanityOptionName.secret_notes,
+    })
+    preset_none = frozenset()
+    preset_simple = frozenset({
+        SecretsanityOptionName.easy, SecretsanityOptionName.fishing, SecretsanityOptionName.secret_notes,
+    })
+    preset_all = valid_keys
+    default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
+
+
+class Hatsanity(OptionSet):
+    """Add checks for wearing hats?
+    Tailoring: Locations for wearing the hats created through tailoring
+    Easy: Locations for wearing the easily obtainable hats
+    Medium: Locations for wearing the hats that are obtainable through a task that requires a bit of effort
+    Difficult: Locations for wearing hats that are difficult to obtain
+    RNG: Locations for wearing hats that are extremely rng-dependent to obtain. Generally an unpleasant grind.
+    Near Perfection: Locations for wearing hats that are late game and generally obtained by doing the equivalent of a perfection task
+    Post Perfection: Locations for wearing all hats, including the hyper-late game ones that require more work than perfection itself
+    """
+    internal_name = "hatsanity"
+    display_name = "Hatsanity"
+
+    valid_keys = frozenset({
+        HatsanityOptionName.tailoring, HatsanityOptionName.easy, HatsanityOptionName.medium, HatsanityOptionName.difficult,
+        HatsanityOptionName.rng, HatsanityOptionName.near_perfection, HatsanityOptionName.post_perfection
+    })
+    preset_none = frozenset()
+    preset_simple = frozenset({
+        HatsanityOptionName.tailoring, HatsanityOptionName.easy,
+    })
+    preset_difficult = frozenset({
+        HatsanityOptionName.tailoring, HatsanityOptionName.easy, HatsanityOptionName.medium, HatsanityOptionName.difficult,
+    })
+    preset_all = valid_keys
+    default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
+
+
+class IncludeEndgameLocations(Toggle):
+    """Whether to include, as locations, several very expensive things that are usually purchased during the end-game in vanilla.
+    Examples: Obelisks, Community Upgrades, Catalogues, etc"""
+    internal_name = "include_endgame_locations"
+    display_name = "Include Endgame Locations"
+    default = Toggle.option_false
 
 
 class NumberOfMovementBuffs(Range):
@@ -690,6 +887,9 @@ class TrapDifficulty(Choice):
     option_hell = 4
     option_nightmare = 5
 
+    def include_traps(self) -> bool:
+        return self.value > 0
+
 
 trap_default_weight = 100
 
@@ -707,16 +907,54 @@ class TrapDistribution(OptionCounter):
     visibility = Visibility.all ^ Visibility.simple_ui
     min = 0
     max = 1000
-    valid_keys = frozenset({
-        trap_data.name
-        for trap_data in items_by_group[Group.TRAP]
-        if Group.DEPRECATED not in trap_data.groups
-    })
+    valid_keys = frozenset(all_traps)
     default = {
-        trap_data.name: trap_default_weight
-        for trap_data in items_by_group[Group.TRAP]
-        if Group.DEPRECATED not in trap_data.groups
+        trap: trap_default_weight
+        for trap in all_traps
     }
+
+
+class CustomLogic(OptionSet):
+    """Enable various customizations to the logic of the generator.
+    Some flags are inherently incompatible with each other, the harder flag takes priority.
+    Some of these toggles can, if the player is not careful, force them to reset days.
+    Chair Skips: Chair skips are considered in-logic
+    Easy Fishing: +2 Required fishing levels
+    Hard Fishing: -2 Required fishing levels
+    Extreme Fishing: -4 Required fishing levels
+    Easy Mining: +1 required pickaxes and +2 required mining levels
+    Hard Mining: -1 required pickaxes and -2 required mining levels
+    Extreme Mining: -2 required pickaxes and -4 required mining levels
+    Easy Combat: +1 required weapon and +2 required combat levels
+    Hard Combat: -1 required weapon and -2 required combat levels
+    Extreme Combat: -2 required weapon and -4 required combat levels
+    Deep Mining: x2 Mine depth expectations
+    Very Deep Mining: x4 Mine depth expectations
+    Ignore Birthdays: Villager birthdays are not considered in logic
+    Easy Money: x0.25 to earnings expectations
+    Hard Money: x2 to earnings expectations
+    Extreme Money: x8 to earnings expectations
+    Nightmare Money: x20 to earnings expectations
+    Bomb Hoeing: Hoeing ground is in logic without a hoe
+    Rain Watering: Watering crops is in logic without a watering can
+    Critical Free Samples: Free samples of items are considered in logic without a renewable source
+    """
+    internal_name = "custom_logic"
+    display_name = "Custom Logic"
+    valid_keys = frozenset({
+        CustomLogicOptionName.chair_skips,
+        CustomLogicOptionName.easy_fishing, CustomLogicOptionName.hard_fishing, CustomLogicOptionName.extreme_fishing,
+        CustomLogicOptionName.easy_mining, CustomLogicOptionName.hard_mining, CustomLogicOptionName.extreme_mining,
+        CustomLogicOptionName.easy_combat, CustomLogicOptionName.hard_combat, CustomLogicOptionName.extreme_combat,
+        CustomLogicOptionName.deep_mining, CustomLogicOptionName.very_deep_mining,
+        CustomLogicOptionName.ignore_birthdays,
+        CustomLogicOptionName.easy_money, CustomLogicOptionName.hard_money, CustomLogicOptionName.extreme_money, CustomLogicOptionName.nightmare_money,
+        CustomLogicOptionName.bomb_hoeing, CustomLogicOptionName.rain_watering,
+        CustomLogicOptionName.critical_free_samples,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset(preset_none)
 
 
 class MultipleDaySleepEnabled(Toggle):
@@ -828,13 +1066,24 @@ all_mods = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
 # These mods have been disabled because either they are not updated for the current supported version of Stardew Valley,
 # or we didn't find the time to validate that they work or fix compatibility issues if they do.
 # Once a mod is validated to be functional, it can simply be removed from this list
+# SVE specifically is disabled because their main version is significantly ahead of ours, with breaking changes, and nobody is maintaining our integration.
 disabled_mods = {ModNames.deepwoods, ModNames.magic,
                  ModNames.cooking_skill,
                  ModNames.yoba, ModNames.eugene,
                  ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
-                 ModNames.boarding_house}
+                 ModNames.boarding_house, ModNames.sve}
 
 enabled_mods = all_mods.difference(disabled_mods)
+all_mods_except_invalid_combinations = set(all_mods)
+for mod_combination in invalid_mod_combinations:
+    priority_mod = mod_combination[0]
+    if priority_mod not in all_mods_except_invalid_combinations:
+        continue
+    for mod in mod_combination:
+        if mod == priority_mod:
+            continue
+        all_mods_except_invalid_combinations.remove(mod)
+enabled_mods_except_invalid_combinations = all_mods_except_invalid_combinations.difference(disabled_mods)
 
 
 class Mods(OptionSet):
@@ -849,13 +1098,87 @@ class Mods(OptionSet):
         valid_keys = all_mods
 
 
-class BundlePlando(OptionSet):
-    """If using Remixed bundles, this guarantees some of them will show up in your community center.
-    If more bundles are specified than what fits in their parent room, that room will randomly pick from only the plando ones"""
+class BundlePlando(Removed):
+    """Deprecated setting, replaced by BundleWhitelist and BundleBlacklist
+    """
     internal_name = "bundle_plando"
     display_name = "Bundle Plando"
+    default = ""
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option bunde_plando was replaced by bundle_whitelist and bundle_blacklist, please update your options file")
+        super().__init__(value)
+
+
+class BundleWhitelist(OptionSet):
+    """If using Remixed or Meme bundles, this guarantees some of them will show up in your community center.
+    If more bundles are specified than what fits in their parent room, that room will randomly pick from only the whitelist ones"""
+    internal_name = "bundle_whitelist"
+    display_name = "Bundle Whitelist"
     visibility = Visibility.template | Visibility.spoiler
     valid_keys = set(all_cc_bundle_names)
+
+    def prioritizes(self, bundle_name):
+        if self.in_plando(bundle_name):
+            return True
+        if bundle_name == MemeBundleName.scam:
+            return self.in_plando("Investment Bundle")
+        return False
+
+    def in_plando(self, bundle_name) -> bool:
+        return bundle_name in self.value
+
+
+class BundleBlacklist(OptionSet):
+    """If using Remixed or Meme bundles, this guarantees some of them will not show up in your community center.
+    If too many bundles are blacklisted for a given room, that room will pick all the non-blacklist bundles, then random blacklisted ones."""
+    internal_name = "bundle_blacklist"
+    display_name = "Bundle Blacklist"
+    visibility = Visibility.template | Visibility.spoiler
+    valid_keys = set(all_cc_bundle_names)
+
+    def allows(self, bundle_name):
+        if self.in_plando(bundle_name):
+            return False
+        if bundle_name == MemeBundleName.scam:
+            return not self.in_plando("Investment Bundle")
+        return True
+
+    def in_plando(self, bundle_name) -> bool:
+        return bundle_name in self.value
+
+
+class AllowedFillerItems(OptionSet):
+    """Types of filler items that can be generated for this slot. All allowed fillers have the same odds, and duplicates can roll
+    Farming Items: Items to help with farming. Fertilizers, sprinklers...
+    Fishing Items: Items to help with fishing. Baits, Bobbers...
+    Fruit Trees: Extra Fruit Trees
+    Food: Food that doesn't give buffs
+    Buff Food: Food that gives buffs
+    Consumables: Other consumables. Warp Totems, Staircases...
+    Machines: Various machines. Enables a lot of OoL
+    Storage: Storage items. Chests, Big Chests...
+    Quality Of Life: Items that are nice to have. Key to the town, Horse Flute...
+    Materials: Construction Materials. Wood, Stone...
+    Money: Packs of money
+    Currencies: Packs of other currencies. Walnuts, Qi Gems, Calico eggs...
+    Rings: Various rings
+    Hats: Various hats.
+    Decorations: Various decorations and furniture
+    """
+    internal_name = "allowed_filler_items"
+    display_name = "Allowed Filler Items"
+    visibility = Visibility.template | Visibility.spoiler
+    valid_keys = frozenset({AllowedFillerOptionName.farming, AllowedFillerOptionName.fishing, AllowedFillerOptionName.fruit_trees,
+                            AllowedFillerOptionName.food, AllowedFillerOptionName.buff_food, AllowedFillerOptionName.consumables,
+                            AllowedFillerOptionName.machines, AllowedFillerOptionName.storage, AllowedFillerOptionName.quality_of_life,
+                            AllowedFillerOptionName.materials, AllowedFillerOptionName.currencies, AllowedFillerOptionName.money,
+                            AllowedFillerOptionName.hats, AllowedFillerOptionName.decorations, AllowedFillerOptionName.rings})
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = preset_all
 
 
 @dataclass
@@ -864,10 +1187,13 @@ class StardewValleyOptions(PerGameCommonOptions):
     farm_type: FarmType
     bundle_randomization: BundleRandomization
     bundle_price: BundlePrice
+    bundle_per_room: BundlePerRoom
     entrance_randomization: EntranceRandomization
+    start_without: StartWithout
     season_randomization: SeasonRandomization
     cropsanity: Cropsanity
     backpack_progression: BackpackProgression
+    backpack_size: BackpackSize
     tool_progression: ToolProgression
     skill_progression: SkillProgression
     building_progression: BuildingProgression
@@ -885,8 +1211,13 @@ class StardewValleyOptions(PerGameCommonOptions):
     craftsanity: Craftsanity
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
+    eatsanity: Eatsanity
     booksanity: Booksanity
     walnutsanity: Walnutsanity
+    moviesanity: Moviesanity
+    secretsanity: Secretsanity
+    hatsanity: Hatsanity
+    include_endgame_locations: IncludeEndgameLocations
     exclude_ginger_island: ExcludeGingerIsland
     quick_start: QuickStart
     starting_money: StartingMoney
@@ -898,12 +1229,24 @@ class StardewValleyOptions(PerGameCommonOptions):
     enabled_filler_buffs: EnabledFillerBuffs
     trap_difficulty: TrapDifficulty
     trap_distribution: TrapDistribution
+    custom_logic: CustomLogic
     multiple_day_sleep_enabled: MultipleDaySleepEnabled
     multiple_day_sleep_cost: MultipleDaySleepCost
     gifting: Gifting
     mods: Mods
-    bundle_plando: BundlePlando
+    bundle_whitelist: BundleWhitelist
+    bundle_blacklist: BundleBlacklist
+    allowed_filler_items: AllowedFillerItems
     death_link: DeathLink
+
+    # Jojapocalypse
+    jojapocalypse: Jojapocalypse
+    joja_start_price: JojaStartPrice
+    joja_end_price: JojaEndPrice
+    joja_pricing_pattern: JojaPricingPattern
+    joja_purchases_for_membership: JojaPurchasesForMembership
+    joja_are_you_sure: JojaAreYouSure
 
     # removed:
     trap_items: TrapItems
+    bundle_plando: BundlePlando
