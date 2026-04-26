@@ -76,7 +76,7 @@ class VoidSolsWorld(World):
             10: ItemName.frying_pan,
         }
 
-        if starting_weapon_option == 11: # Random
+        if starting_weapon_option == "option_randomized":
             starting_weapon_name = self.random.choice(list(weapon_map.values()))
         else:
             starting_weapon_name = weapon_map.get(starting_weapon_option)
