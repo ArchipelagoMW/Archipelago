@@ -228,7 +228,6 @@ def apply_enemizer_base_patch(rom: "LocalRom") -> None:
         rom.write_bytes(address, patch_data)
 
 def patch_bosses(world: "ALTTPWorld", rom: "LocalRom") -> None:
-    _patch_boss_gfx_tables(rom)
     dungeon_header_base = _get_enemizer_symbol("room_header_table")
     moved_room_object_base = _get_enemizer_symbol("modified_room_object_table")
     gt_dungeon_name = "Ganons Tower" if world.options.mode != "inverted" else "Inverted Ganons Tower"
@@ -460,9 +459,3 @@ def _load_enemizer_symbols() -> dict[str, int]:
     }
 
 
-def _patch_boss_gfx_tables(rom: "LocalRom") -> None:
-    for sheet_name, table_index in BOSS_GFX_SHEET_INDEXES.items():
-        bank, high, low = BOSS_GFX_TABLE[sheet_name]
-        rom.write_byte(0x4FC0 + table_index, bank)
-        rom.write_byte(0x509F + table_index, high)
-        rom.write_byte(0x517E + table_index, low)

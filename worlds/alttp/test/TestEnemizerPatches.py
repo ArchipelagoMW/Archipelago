@@ -3,7 +3,10 @@ from types import SimpleNamespace
 
 from worlds.alttp.EnemizerPatches import (
     ARROW_REFILL_5_SPRITE_ID,
+    BOSS_GFX_SHEET_INDEXES,
+    BOSS_PATCH_DATA,
     DAMAGE_GROUP_TABLE_ADDRESS,
+    DUNGEON_BOSS_PATCH_DATA,
     ENEMY_DAMAGE_TABLE_ADDRESS,
     ENEMY_HP_TABLE_ADDRESS,
     EXCLUDED_ENEMY_TABLE_SPRITE_IDS,
@@ -18,6 +21,7 @@ from worlds.alttp.EnemizerPatches import (
     _get_enemizer_symbol,
     _make_native_enemizer_rng,
     _option_key,
+    patch_bosses,
     _randomize_enemy_damage,
     _randomize_enemy_health,
     _set_enemizer_flag,
@@ -42,6 +46,9 @@ class FakeRom:
 
     def write_bytes(self, startaddress: int, values) -> None:
         self.buffer[startaddress:startaddress + len(values)] = values
+
+    def write_int16(self, address: int, value: int) -> None:
+        self.write_bytes(address, (value & 0xFF, (value >> 8) & 0xFF))
 
 
 class TestEnemizerPatches(unittest.TestCase):
@@ -154,6 +161,34 @@ class TestEnemizerPatches(unittest.TestCase):
             self.assertEqual(blue_mail, green_mail * 3 // 4)
             self.assertEqual(red_mail, green_mail * 3 // 8)
 
+    def test_patch_bosses_overwrites_enemy_shuffle_boss_room_graphics(self) -> None:
+        rom = FakeRom()
+        dungeon_header_base = _get_enemizer_symbol("room_header_table")
+        eastern_dungeon_data = DUNGEON_BOSS_PATCH_DATA[("Eastern Palace", None)]
+        rom.write_byte(dungeon_header_base + (eastern_dungeon_data.room_id * 14) + 3, BOSS_PATCH_DATA["Armos"].graphics)
+
+        for table_index in BOSS_GFX_SHEET_INDEXES.values():
+            rom.write_byte(0x4FC0 + table_index, 0xAA)
+            rom.write_byte(0x509F + table_index, 0xBB)
+            rom.write_byte(0x517E + table_index, 0xCC)
+
+        patch_bosses(self._build_boss_world({"Eastern Palace": "Vitreous"}), rom)
+
+        eastern_boss_data = BOSS_PATCH_DATA["Vitreous"]
+        self.assertEqual(
+            tuple(rom.read_bytes(eastern_dungeon_data.sprite_pointer_address, 2)),
+            eastern_boss_data.pointer,
+        )
+        self.assertEqual(
+            rom.read_byte(dungeon_header_base + (eastern_dungeon_data.room_id * 14) + 3),
+            eastern_boss_data.graphics,
+        )
+
+        for table_index in BOSS_GFX_SHEET_INDEXES.values():
+            self.assertEqual(rom.read_byte(0x4FC0 + table_index), 0xAA)
+            self.assertEqual(rom.read_byte(0x509F + table_index), 0xBB)
+            self.assertEqual(rom.read_byte(0x517E + table_index), 0xCC)
+
     def test_native_enemizer_rng_is_deterministic_for_same_world_settings(self) -> None:
         world = self._build_world(enemy_health="hard", enemy_damage="chaos", bush_shuffle=True)
 
@@ -221,6 +256,36 @@ class TestEnemizerPatches(unittest.TestCase):
                 enemy_health=SimpleNamespace(current_key=enemy_health),
                 enemy_damage=SimpleNamespace(current_key=enemy_damage),
             ),
+        )
+
+    @staticmethod
+    def _build_boss_world(boss_overrides: dict[str, str] | None = None) -> SimpleNamespace:
+        boss_overrides = boss_overrides or {}
+
+        def boss(name: str) -> SimpleNamespace:
+            return SimpleNamespace(enemizer_name=name)
+
+        return SimpleNamespace(
+            options=SimpleNamespace(mode="open"),
+            dungeons={
+                "Eastern Palace": SimpleNamespace(boss=boss(boss_overrides.get("Eastern Palace", "Armos"))),
+                "Desert Palace": SimpleNamespace(boss=boss(boss_overrides.get("Desert Palace", "Lanmola"))),
+                "Tower of Hera": SimpleNamespace(boss=boss(boss_overrides.get("Tower of Hera", "Moldorm"))),
+                "Palace of Darkness": SimpleNamespace(boss=boss(boss_overrides.get("Palace of Darkness", "Helmasaur"))),
+                "Swamp Palace": SimpleNamespace(boss=boss(boss_overrides.get("Swamp Palace", "Arrghus"))),
+                "Skull Woods": SimpleNamespace(boss=boss(boss_overrides.get("Skull Woods", "Mothula"))),
+                "Thieves Town": SimpleNamespace(boss=boss(boss_overrides.get("Thieves Town", "Blind"))),
+                "Ice Palace": SimpleNamespace(boss=boss(boss_overrides.get("Ice Palace", "Kholdstare"))),
+                "Misery Mire": SimpleNamespace(boss=boss(boss_overrides.get("Misery Mire", "Vitreous"))),
+                "Turtle Rock": SimpleNamespace(boss=boss(boss_overrides.get("Turtle Rock", "Trinexx"))),
+                "Ganons Tower": SimpleNamespace(
+                    bosses={
+                        "bottom": boss(boss_overrides.get("Ganons Tower Bottom", "Armos")),
+                        "middle": boss(boss_overrides.get("Ganons Tower Middle", "Lanmola")),
+                        "top": boss(boss_overrides.get("Ganons Tower Top", "Moldorm")),
+                    }
+                ),
+            },
         )
 
 
