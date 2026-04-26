@@ -21,6 +21,7 @@ from worlds.alttp.EnemyShuffle import (
     _get_requirements_for_usable_dungeon_enemies,
     _get_requirements_for_usable_overworld_enemies,
     _get_randomizable_sprites_in_room,
+    _apply_selected_boss_group_requirements,
     _randomize_overworld_groups,
     _randomize_room_sprites,
     _setup_required_overworld_groups,
@@ -565,6 +566,34 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertIn(group.subgroup_1, {44, 30, 32})
         self.assertIn(group.subgroup_2, {12, 18, 23, 24, 28, 46, 34, 35, 39, 40, 38, 41, 36, 37, 42})
 
+    def test_selected_boss_group_requirements_override_shared_boss_graphics_group(self) -> None:
+        sprite_groups = {
+            0x56: DungeonSpriteGroup(
+                group_id=0x56,
+                dungeon_group_id=22,
+                subgroup_0=1,
+                subgroup_1=1,
+                subgroup_2=60,
+                subgroup_3=49,
+            ),
+        }
+        sprite_requirements = (
+            self._requirement(162, subgroup_2=(60,)),
+            self._requirement(189, subgroup_3=(61,)),
+        )
+
+        _apply_selected_boss_group_requirements(
+            self._build_boss_world({"Eastern Palace": "Vitreous"}),
+            sprite_groups,
+            sprite_requirements,
+        )
+
+        group = sprite_groups[0x56]
+        self.assertEqual(group.subgroup_2, 60)
+        self.assertEqual(group.subgroup_3, 61)
+        self.assertTrue(group.preserve_subgroup_2)
+        self.assertTrue(group.preserve_subgroup_3)
+
     @staticmethod
     def _requirement(
         sprite_id: int,
@@ -638,6 +667,36 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             dont_randomize_overworld_area_ids=frozenset(),
             randomized_dungeon_rooms=randomized_dungeon_rooms or {},
             randomized_overworld_areas=randomized_overworld_areas or {},
+        )
+
+    @staticmethod
+    def _build_boss_world(boss_overrides: dict[str, str] | None = None) -> SimpleNamespace:
+        boss_overrides = boss_overrides or {}
+
+        def boss(name: str) -> SimpleNamespace:
+            return SimpleNamespace(enemizer_name=name)
+
+        return SimpleNamespace(
+            options=SimpleNamespace(mode="open"),
+            dungeons={
+                "Eastern Palace": SimpleNamespace(boss=boss(boss_overrides.get("Eastern Palace", "Armos"))),
+                "Desert Palace": SimpleNamespace(boss=boss(boss_overrides.get("Desert Palace", "Lanmola"))),
+                "Tower of Hera": SimpleNamespace(boss=boss(boss_overrides.get("Tower of Hera", "Moldorm"))),
+                "Palace of Darkness": SimpleNamespace(boss=boss(boss_overrides.get("Palace of Darkness", "Helmasaur"))),
+                "Swamp Palace": SimpleNamespace(boss=boss(boss_overrides.get("Swamp Palace", "Arrghus"))),
+                "Skull Woods": SimpleNamespace(boss=boss(boss_overrides.get("Skull Woods", "Mothula"))),
+                "Thieves Town": SimpleNamespace(boss=boss(boss_overrides.get("Thieves Town", "Blind"))),
+                "Ice Palace": SimpleNamespace(boss=boss(boss_overrides.get("Ice Palace", "Kholdstare"))),
+                "Misery Mire": SimpleNamespace(boss=boss(boss_overrides.get("Misery Mire", "Vitreous"))),
+                "Turtle Rock": SimpleNamespace(boss=boss(boss_overrides.get("Turtle Rock", "Trinexx"))),
+                "Ganons Tower": SimpleNamespace(
+                    bosses={
+                        "bottom": boss(boss_overrides.get("Ganons Tower Bottom", "Armos")),
+                        "middle": boss(boss_overrides.get("Ganons Tower Middle", "Lanmola")),
+                        "top": boss(boss_overrides.get("Ganons Tower Top", "Moldorm")),
+                    }
+                ),
+            },
         )
 
 

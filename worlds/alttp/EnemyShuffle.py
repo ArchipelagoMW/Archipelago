@@ -54,6 +54,18 @@ POTENTIAL_SUBGROUP_1 = (44, 30, 32)
 POTENTIAL_SUBGROUP_2 = (12, 18, 23, 24, 28, 46, 34, 35, 39, 40, 38, 41, 36, 37, 42)
 POTENTIAL_SUBGROUP_3 = (17, 16, 27, 20, 82, 83)
 GUARD_SUBGROUP_1_DUNGEON_GROUP_IDS = frozenset((1, 2, 3, 4))
+SELECTED_BOSS_GROUP_REQUIREMENTS = {
+    "Armos": (9, 83),
+    "Lanmola": (11, 84),
+    "Moldorm": (12, 9),
+    "Arrghus": (20, 140),
+    "Helmasaur": (21, 146),
+    "Kholdstare": (22, 162),
+    "Vitreous": (22, 189),
+    "Trinexx": (23, 203),
+    "Mothula": (26, 136),
+    "Blind": (32, 206),
+}
 
 @dataclass(frozen=True)
 class RoomGroupRequirement:
@@ -268,6 +280,7 @@ def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
         for group in _read_sprite_groups(rom_bytes)
     }
     _setup_required_dungeon_groups(world, sprite_groups, metadata["room_requirements"])
+    _apply_selected_boss_group_requirements(world, sprite_groups, sprite_requirements)
     _randomize_dungeon_groups(world, sprite_groups)
     randomized_dungeon_rooms = _randomize_dungeon_rooms(
         world,
@@ -421,6 +434,66 @@ def _setup_required_dungeon_groups(
 
         selected_group = world.random.choice(possible_groups)
         _apply_merged_room_requirement(selected_group, merged_requirement)
+
+
+def _apply_selected_boss_group_requirements(
+    world: "ALTTPWorld",
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    sprite_requirements: tuple[EnemySpriteRequirement, ...],
+) -> None:
+    requirement_by_sprite_id = {requirement.sprite_id: requirement for requirement in sprite_requirements}
+    for boss_name in _get_selected_boss_names(world):
+        boss_group_data = SELECTED_BOSS_GROUP_REQUIREMENTS.get(boss_name)
+        if boss_group_data is None:
+            continue
+        dungeon_group_id, sprite_id = boss_group_data
+        group = sprite_groups.get(dungeon_group_id + 0x40)
+        requirement = requirement_by_sprite_id.get(sprite_id)
+        if group is None or requirement is None:
+            continue
+        _apply_selected_boss_requirement(group, requirement)
+
+
+def _get_selected_boss_names(world: "ALTTPWorld") -> tuple[str, ...]:
+    dungeons = getattr(world, "dungeons", None)
+    if not dungeons:
+        return tuple()
+
+    gt_dungeon_name = "Ganons Tower" if world.options.mode != "inverted" else "Inverted Ganons Tower"
+    gt_dungeon = dungeons.get(gt_dungeon_name)
+    gt_bosses = getattr(gt_dungeon, "bosses", {}) if gt_dungeon is not None else {}
+
+    selected_bosses = [
+        dungeons["Eastern Palace"].boss.enemizer_name,
+        dungeons["Desert Palace"].boss.enemizer_name,
+        dungeons["Tower of Hera"].boss.enemizer_name,
+        dungeons["Palace of Darkness"].boss.enemizer_name,
+        dungeons["Swamp Palace"].boss.enemizer_name,
+        dungeons["Skull Woods"].boss.enemizer_name,
+        dungeons["Thieves Town"].boss.enemizer_name,
+        dungeons["Ice Palace"].boss.enemizer_name,
+        dungeons["Misery Mire"].boss.enemizer_name,
+        dungeons["Turtle Rock"].boss.enemizer_name,
+    ]
+    for gt_slot in ("bottom", "middle", "top"):
+        if gt_slot in gt_bosses:
+            selected_bosses.append(gt_bosses[gt_slot].enemizer_name)
+    return tuple(selected_bosses)
+
+
+def _apply_selected_boss_requirement(group: DungeonSpriteGroup, requirement: EnemySpriteRequirement) -> None:
+    if requirement.subgroup_0:
+        group.subgroup_0 = requirement.subgroup_0[0]
+        group.preserve_subgroup_0 = True
+    if requirement.subgroup_1:
+        group.subgroup_1 = requirement.subgroup_1[0]
+        group.preserve_subgroup_1 = True
+    if requirement.subgroup_2:
+        group.subgroup_2 = requirement.subgroup_2[0]
+        group.preserve_subgroup_2 = True
+    if requirement.subgroup_3:
+        group.subgroup_3 = requirement.subgroup_3[0]
+        group.preserve_subgroup_3 = True
 
 
 def _setup_required_overworld_groups(

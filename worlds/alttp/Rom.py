@@ -1557,12 +1557,14 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int):
                 allow_zero_damage=True,
             )
 
-        if local_world.options.boss_shuffle:
-            enemizer_patches.patch_bosses(local_world, rom)
-
         enemy_shuffle_state = getattr(local_world, "enemy_shuffle_state", None)
         if local_world.options.enemy_shuffle and enemy_shuffle_state is not None:
             apply_enemy_shuffle(rom, enemy_shuffle_state)
+
+        if local_world.options.boss_shuffle:
+            # Boss shuffle must run after enemy shuffle so boss room sprite pointers
+            # and graphics block IDs are not restored to the enemy-shuffled room values.
+            enemizer_patches.patch_bosses(local_world, rom)
 
         pot_shuffle_state = getattr(local_world, "pot_shuffle_state", None)
         if local_world.options.pot_shuffle and pot_shuffle_state is not None:
