@@ -115,7 +115,7 @@ class VoidSolsWorld(World):
         valid_candidates = []
         for loc_name in east_wing_key_candidates:
             try:
-                self.multiworld.get_location(loc_name, self.player)
+                self.get_location(loc_name)
                 valid_candidates.append(loc_name)
             except KeyError:
                 pass # Location disabled by options
