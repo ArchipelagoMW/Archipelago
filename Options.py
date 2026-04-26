@@ -1469,7 +1469,7 @@ class NonLocalItems(ItemSet):
 
 
 class StartInventory(ItemDict):
-    """Start with the specified amount of these items. Example: Bomb: 1 """
+    """Start with the specified amount of these items. Example: {Bomb: 1, Arrow: 3} """
     verify_item_name = True
     display_name = "Start Inventory"
     rich_text_doc = True
