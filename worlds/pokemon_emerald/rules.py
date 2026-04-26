@@ -1548,7 +1548,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         for i in range(NUM_REAL_SPECIES):
             species = data.species[NATIONAL_ID_TO_SPECIES_ID[i + 1]]
 
-            if species.species_id in world.blacklisted_wilds:
+            if species.species_id in world.blacklisted_wilds or species.species_id not in world.allowed_dexsanity_species:
                 continue
 
             set_rule(
@@ -1559,7 +1559,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         # Legendary hunt prevents Latios from being a wild spawn so the roamer
         # can be tracked, and also guarantees that the roamer is a Latios.
         if world.options.goal == Goal.option_legendary_hunt and \
-                data.constants["SPECIES_LATIOS"] not in world.blacklisted_wilds:
+                data.constants["SPECIES_LATIOS"] in world.allowed_dexsanity_species:
             set_rule(
                 get_location(f"Pokedex - Latios"),
                 lambda state: state.has("EVENT_ENCOUNTER_LATIOS", world.player)
