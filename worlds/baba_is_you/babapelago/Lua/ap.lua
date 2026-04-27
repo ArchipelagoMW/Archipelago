@@ -573,7 +573,9 @@ local checkTimer = 0
 local clear_goal_locations = {}
 local transform_locations = {}
 function update_checks()
-    if generaldata.strings[WORLD] ~= thisWorld or editor.strings[MENU] ~= "ingame" then return end
+    if generaldata.strings[WORLD] ~= thisWorld or editor.strings[MENU] ~= "ingame" then
+        return
+    end
     if manualChecks then return end
 
     checkTimer = checkTimer + 1
@@ -606,12 +608,12 @@ function update_checks()
             end
 
             if found_main_save_slot then
-                error_message = ("$2,2Missing seed file for slot "..(generaldata2.values[SAVESLOT]+1)..", but found one for the main save. Switch to slot 1 or use /save_slot in the client.")
+                error_message = ("Missing seed file for slot "..(generaldata2.values[SAVESLOT]+1)..", but found one for the main save. Switch to slot 1 or use /save_slot in the client.")
             else
-                error_message = ("$2,2Missing seed file for slot "..(generaldata2.values[SAVESLOT]+1)..". Please connect to the server using the Baba Is You client.")
+                error_message = ("Missing seed file for slot "..(generaldata2.values[SAVESLOT]+1)..". Please connect to the server using the Baba Is You client.")
             end
         else
-            error_message = ("$2,2Game seed does not match AP seed. Please relaunch Baba Is You.")
+            error_message = ("Game seed does not match AP seed. Please relaunch Baba Is You.")
         end
         didAPLoad = false
         return
@@ -624,7 +626,7 @@ function update_checks()
             if savedSeed == nil or #savedSeed == 0 then
                 MF_store("save", thisWorld, "apseed", ourSeed)
             elseif savedSeed ~= ourSeed then
-                error_message = ("$2,2Save file is for another seed! Press I to ignore.")
+                error_message = ("Save file is for another seed! Press I to ignore.")
                 return
             end
         end
@@ -786,21 +788,26 @@ table.insert(mod_hook_functions.always, update_checks)
 function display_messages()
     local id = "ap_messages"
     MF_letterclear(id)
-    
-    local y = screenh - math.min(#message_list, 10) * 20
-    if #error_message ~= 0 then
-        y = y - 20
-    end
 
     local layer = ((generaldata2.values[INMENU] ~= 0) and 1) or 2
     local i = 1
-    local displayed = 1
-    while i <= #message_list and displayed <= 10 do
+    local lines = {}
+    while i <= #message_list and #lines <= 10 do
         local msgData = message_list[i]
         local msg, time = msgData[1], msgData[2]
         msg = msg:gsub("#", "") -- # has special meaning (also removed on AP's end but it's here for safety)
 
-        writetext(msg, 0, 20, y, id, false, layer, true)
+        local currLine = ""
+        for i,word in ipairs(split(msg, " ")) do
+            local newLine = currLine .. word .. " "
+            if newLine:len() * 10 >= screenw - 20 then
+                table.insert(lines, currLine)
+                newLine = word
+            end
+            currLine = newLine
+        end
+        table.insert(lines, currLine)
+
         time = time - 1
         msgData[2] = time
         if time <= 0 then
@@ -808,13 +815,25 @@ function display_messages()
         else
             i = i + 1
         end
-        displayed = displayed + 1
+    end
 
-        y = y + 20
+    if #error_message ~= 0 then
+        local currLine = ""
+        for i,word in ipairs(split(error_message, " ")) do
+            local newLine = currLine .. word .. " "
+            if newLine:len() * 10 >= screenw - 20 then
+                table.insert(lines, "$2,2"..currLine)
+                newLine = word
+            end
+            currLine = newLine
+        end
+        table.insert(lines, "$2,2"..currLine)
     end
     
-    if #error_message ~= 0 then
-        writetext(error_message, 0, 20, y, id, false, layer, true)
+    local y = screenh - #lines * 20
+    for i, line in ipairs(lines) do
+        writetext(line, 0, 20, y, id, false, layer, true)
+        y = y + 20
     end
 end
 table.insert(mod_hook_functions.always, display_messages)

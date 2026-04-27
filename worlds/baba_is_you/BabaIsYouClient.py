@@ -139,7 +139,7 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
         return True
     
     def _cmd_save_slot(self, slot: str = "1") -> bool:
-        """Changes the save slot being used. Defaults to 1. Note that using slots beyond 3 requires an additonal mod."""
+        """Changes the save slot being used. Defaults to 1. Note that using a slot higher than 3 requires an additional mod."""
 
         slotNum = int(slot)
         if slotNum < 1 or slotNum > 100:
@@ -180,19 +180,24 @@ class BabaIsYouContext(CommonContext):
         import platform
         osName = platform.system()
 
-        # Find Baba Is You steam installation (dennisw100)
+        # Find Baba Is You steam installation (dennisw100, modified)
         if osName == "Windows":
             import winreg
             steam_path = os.path.join(winreg.QueryValueEx(winreg.OpenKey(winreg.HKEY_CURRENT_USER, "SOFTWARE\\VALVE\\Steam"), "SteamPath")[0], 'steamapps', 'libraryfolders.vdf')
+        elif osName == "Darwin":
+            steam_path = os.path.expanduser("~/Library/Application Support/Steam/steamapps/libraryfolders.vdf")
         else:
             steam_path = os.path.expanduser("~/.steam/steam/steamapps/libraryfolders.vdf")
-        with open(steam_path, 'r', encoding='utf-8') as file:
-            content = file.read()
-            library_paths = {index: path for index, path in re.findall(r"\"(\d+)\"\s+?\{[^}]*\"path\"\s+?\"([^\"]+)\"", content)}
-            for index, testpath in library_paths.items():
-                testpath = os.path.join(testpath, "steamapps", "common", "Baba Is You")
-                if os.path.isfile(os.path.join(testpath, "Baba Is You.exe")) or os.path.isdir(os.path.join(testpath, "Baba Is You.app") or os.path.isfile(os.path.join(testpath, "run.sh"))):
-                    path = testpath
+        try:
+            with open(steam_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                library_paths = {index: path for index, path in re.findall(r"\"(\d+)\"\s+?\{[^}]*\"path\"\s+?\"([^\"]+)\"", content)}
+                for index, testpath in library_paths.items():
+                    testpath = os.path.join(testpath, "steamapps", "common", "Baba Is You")
+                    if os.path.isfile(os.path.join(testpath, "Baba Is You.exe")) or os.path.isdir(os.path.join(testpath, "Baba Is You.app") or os.path.isfile(os.path.join(testpath, "run.sh"))):
+                        path = testpath
+        except OSError:
+            path = None # couldn't open
         
         if (path is not None) and os.path.isdir(path):
             logger.info(f"Found steam installation at: {os.path.abspath(path)}")
