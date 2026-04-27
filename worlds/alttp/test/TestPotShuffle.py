@@ -4,6 +4,7 @@ from types import SimpleNamespace
 
 from worlds.alttp.PotShuffle import (
     POT_KEY,
+    POT_HOLE,
     generate_pot_shuffle,
     get_unique_pot_item_position,
 )
@@ -34,6 +35,21 @@ class TestPotShuffle(unittest.TestCase):
             get_unique_pot_item_position(shuffled_pots, 0x36, POT_KEY),
             (114, 16),
         )
+
+    def test_reserved_hole_room_keeps_hole_fixed(self) -> None:
+        for seed in range(25):
+            world = SimpleNamespace(
+                random=random.Random(seed),
+                options=SimpleNamespace(retro_bow=False),
+            )
+            shuffled_pots = generate_pot_shuffle(world)
+            hole_positions = [
+                (pot.x, pot.y)
+                for pot in shuffled_pots[206]
+                if pot.item == POT_HOLE
+            ]
+
+            self.assertEqual(hole_positions, [(204, 11)])
 
 
 if __name__ == "__main__":

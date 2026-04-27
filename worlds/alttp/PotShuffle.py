@@ -45,7 +45,7 @@ def generate_pot_shuffle(world: "ALTTPWorld") -> dict[int, tuple[FilledPot, ...]
     shuffled_pots: dict[int, tuple[FilledPot, ...]] = {}
 
     for room in room_data:
-        room_items = list(room.items)
+        room_items = [item for item in room.items if item != POT_HOLE]
         if world.options.retro_bow:
             room_items = [POT_BLUE_RUPEE if item == POT_ARROW else item for item in room_items]
 
