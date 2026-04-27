@@ -287,6 +287,7 @@ class RaC3World(World):
             RAC3OPTION.SHIP_VENDOR: self.options.ship_vendor.value,
             RAC3OPTION.ARMOR_VENDOR: self.options.armor_vendor.value,
             RAC3OPTION.SCOUT_VENDORS: self.options.scout_vendors.value,
+            RAC3OPTION.HACKER_SKIP: self.options.hacker_skip.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

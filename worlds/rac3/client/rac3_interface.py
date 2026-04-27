@@ -81,11 +81,13 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
+from worlds.rac3.constants.progress_flag import HACKER_PUZZLE_TO_REGION
 from worlds.rac3.constants.region import (
     PLANET_FROM_INFOBOT,
     PLANET_LOAD_OFFSET,
     PLANET_NAME_FROM_ID,
     PLANET_VENDOR_OFFSET,
+    PLANETS_WITH_HACKER_PUZZLES,
     RAC3REGION,
     RESPAWN_COORDS_OFFSET,
     SHIP_SLOTS,
@@ -156,6 +158,7 @@ class Rac3Interface(GameInterface):
         ship_vendor: int
         armor_vendor: int
         scout_vendors: dict[str, int]
+        hacker_skip: dict[str, int]
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
@@ -605,6 +608,15 @@ class Rac3Interface(GameInterface):
             self.UnlockItem[name].status += 1
 
         match name:
+            case RAC3ITEM.HACKER:
+                if self.planet in PLANETS_WITH_HACKER_PUZZLES and self.options.hacker_skip.get(self.planet, False):
+                    self.enqueue_notification(
+                        f"{RAC3TEXTFORMATSTRING.NORMAL}Warning: Received "
+                        f"{RAC3TEXTFORMATSTRING.WHITE}The Hacker "
+                        f"{RAC3TEXTFORMATSTRING.NORMAL}while currently on "
+                        f"{RAC3TEXTFORMATSTRING.GREEN}{self.planet}\n"
+                        f"{RAC3TEXTFORMATSTRING.WHITE}Please reload either by dying, ship teleport or leaving and re-entering the planet to apply hacker skip.",
+                        RAC3BOXTHEME.WARNING, 6)
             case RAC3ITEM.PROGRESSIVE_VIDCOMIC:
                 if self.UnlockItem[name].status > 5:
                     self.UnlockItem[name].status = 5
@@ -1788,6 +1800,17 @@ class Rac3Interface(GameInterface):
             if self.max_health > 10:
                 self._write8(RAC3STATUS.HEALTH, self.max_health)
                 self.main_menu = False
+
+    def hacker_cycler(self):
+        """Marks all hacker puzzles for planets with hacker skip enabled as complete if the hacker is unlocked."""
+        if not self.UnlockItem[RAC3ITEM.HACKER].status:
+            return
+
+        planets = [planet for planet in PLANETS_WITH_HACKER_PUZZLES if self.options.hacker_skip.get(planet, False)]
+        for planet in planets:
+            puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == planet]
+            for puzzle in puzzles:
+                self._write8(puzzle[0], self._read8(puzzle[0]) | (1 << puzzle[1]))
 
     def find_pda_vendor(self) -> int | str:
         """Traverse the moby linked list on Qwarks Hideout to find the PDA vendor moby and return its address"""

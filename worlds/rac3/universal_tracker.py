@@ -50,6 +50,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.ship_vendor.value = world.passthrough[RAC3OPTION.SHIP_VENDOR]
             world.options.armor_vendor.value = world.passthrough[RAC3OPTION.ARMOR_VENDOR]
             world.options.scout_vendors.value = world.passthrough[RAC3OPTION.SCOUT_VENDORS]
+            world.options.hacker_skip.value = world.passthrough[RAC3OPTION.HACKER_SKIP]
         else:
             world.using_ut = False
     else:
