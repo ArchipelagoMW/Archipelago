@@ -1812,7 +1812,7 @@ class Rac3Interface(GameInterface):
                 wrote_hacker_flags = True
 
         if wrote_hacker_flags and self.planet in planets and self.pause_state_value != RAC3PAUSESTATE.PLANET_CHANGE:
-            hacker_message = (
+            notification = (
                 f"{RAC3TEXTFORMATSTRING.NORMAL}Warning:\nReceived "
                 f"{RAC3TEXTFORMATSTRING.MAGENTA}The Hacker "
                 f"{RAC3TEXTFORMATSTRING.NORMAL}while "
@@ -1820,9 +1820,11 @@ class Rac3Interface(GameInterface):
                 f"{RAC3TEXTFORMATSTRING.NORMAL}Please reload either by {RAC3TEXTFORMATSTRING.WHITE}dying, ship teleport or\n"
                 f"{RAC3TEXTFORMATSTRING.WHITE}revisiting the planet {RAC3TEXTFORMATSTRING.NORMAL}for hacker skip to take effect."
             )
-            self.enqueue_notification(
-                hacker_message,
-                RAC3BOXTHEME.WARNING, 6)
+            logger_msg = (f"Warning: Received The Hacker while {self.planet} is loaded, "
+                          f"hacker puzzles have been marked as complete, but requires a reload to take effect. "
+                          f"Please reload either by dying, ship teleport or revisiting the planet for hacker skip to take effect.")
+            self.enqueue_notification(notification, RAC3BOXTHEME.WARNING, 5)
+            logger.warning(logger_msg)
 
     def find_pda_vendor(self) -> int | str:
         """Traverse the moby linked list on Qwarks Hideout to find the PDA vendor moby and return its address"""
