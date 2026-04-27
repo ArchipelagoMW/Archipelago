@@ -16,6 +16,9 @@ from worlds.alttp.EnemizerPatches import (
     RETRO_RUPEE_REPLACEMENT_SPRITE_ID,
     THIEF_DEFAULT_HP,
     THIEF_SPRITE_ID,
+    TRINEXX_ICE_FLOOR_ROUTINE_ADDRESS,
+    TRINEXX_ICE_PROJECTILE_TILE_ADDRESS,
+    TRINEXX_ICE_PROJECTILE_TYPE_ADDRESS,
     VANILLA_HIDDEN_ENEMY_CHANCE_POOL,
     _apply_killable_thief,
     _get_enemizer_symbol,
@@ -62,6 +65,9 @@ class TestEnemizerPatches(unittest.TestCase):
         self.assertEqual(tuple(rom.read_bytes(0x36C08, 5)), (0x22, 0x4E, 0x9A, 0x36, 0xEA))
         self.assertEqual(tuple(rom.read_bytes(0x36DA6, 4)), (0x22, 0x66, 0x9A, 0x36))
         self.assertEqual(tuple(rom.read_bytes(0xF0BB1, 2)), (0x95, 0xC7))
+        self.assertEqual(tuple(rom.read_bytes(TRINEXX_ICE_FLOOR_ROUTINE_ADDRESS, 4)), (0xEA, 0xEA, 0xEA, 0xEA))
+        self.assertEqual(tuple(rom.read_bytes(TRINEXX_ICE_PROJECTILE_TILE_ADDRESS, 2)), (0x88, 0x01))
+        self.assertEqual(rom.read_byte(TRINEXX_ICE_PROJECTILE_TYPE_ADDRESS), 0x12)
 
     def test_enemy_shuffle_enables_hidden_enemy_and_mimic_support(self) -> None:
         rom = FakeRom()
