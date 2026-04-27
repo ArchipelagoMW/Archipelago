@@ -1303,6 +1303,7 @@ class Rac3Interface(GameInterface):
         self.patch_cycler()
         self.overflow_fix()
         self.health_cycler()
+        self.hacker_cycler()
         self.pda_vendor_cycler()
         self.notification_cycler()
 
