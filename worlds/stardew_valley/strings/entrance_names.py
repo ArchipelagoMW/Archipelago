@@ -381,15 +381,6 @@ class LogicEntrance:
     fish_in_island_west_ocean = "Fish in Island West Ocean"
     fish_in_island_west_river = "Fish in Island West River"
 
-    @staticmethod
-    def blacksmith_upgrade(material: str) -> str:
-        return f"Upgrade {material} Tools"
-
-    blacksmith_copper = blacksmith_upgrade("Copper")
-    blacksmith_iron = blacksmith_upgrade("Iron")
-    blacksmith_gold = blacksmith_upgrade("Gold")
-    blacksmith_iridium = blacksmith_upgrade("Iridium")
-
     grow_spring_crops = "Grow Spring Crops"
     grow_summer_crops = "Grow Summer Crops"
     grow_fall_crops = "Grow Fall Crops"

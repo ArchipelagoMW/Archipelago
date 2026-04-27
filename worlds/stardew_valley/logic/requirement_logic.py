@@ -13,7 +13,7 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     LuauDelightRequirementRequirement, MovieRequirement, CookedRecipesRequirement, CraftedItemsRequirement, \
     HelpWantedRequirement, ShipOneCropRequirement, ReceivedRaccoonsRequirement, PrizeMachineRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
-    DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, CatalogueRequirement
+    DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, CatalogueRequirement, MasteryRequirement
 from ..options import IncludeEndgameLocations
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region, LogicRegion
@@ -47,6 +47,10 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: SkillRequirement):
         return self.logic.skill.has_level(requirement.skill, requirement.level)
+
+    @meet_requirement.register
+    def _(self, requirement: MasteryRequirement):
+        return self.logic.skill.has_mastery(requirement.skill)
 
     @meet_requirement.register
     def _(self, requirement: RegionRequirement):

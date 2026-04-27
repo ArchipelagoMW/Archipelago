@@ -243,6 +243,8 @@ def prepare_shop_data_aspect(content: StardewContent, data_to_randomize: set[str
         prepare_shop_item_aspect(prepared_data, shop_source_validator, shop_source_data_extractor, aspect_key, item_name, item_data)
     for building_name, building_data in content.farm_buildings.items():
         prepare_shop_item_aspect(prepared_data, shop_source_validator, shop_source_data_extractor, aspect_key, building_name, building_data)
+    for tool_upgrade_name, tool_upgrade_data in content.tool_upgrades.items():
+        prepare_shop_item_aspect(prepared_data, shop_source_validator, shop_source_data_extractor, aspect_key, tool_upgrade_name, tool_upgrade_data)
     for animal_name, animal_data in content.animals.items():
         prepare_shop_item_aspect(prepared_data, shop_source_validator, shop_source_data_extractor, aspect_key, animal_name, animal_data)
 

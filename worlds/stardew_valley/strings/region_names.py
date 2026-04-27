@@ -1,6 +1,3 @@
-from .tool_names import ToolMaterial
-
-
 class Region:
     stardew_valley = "Stardew Valley"
     farm_house = "Farmhouse"
@@ -178,15 +175,6 @@ class LogicRegion:
     kitchen = "Kitchen"
     shipping = "Shipping"
     queen_of_sauce = "The Queen of Sauce"
-
-    @staticmethod
-    def blacksmith_upgrade(material: str) -> str:
-        return f"Blacksmith {material} Upgrades"
-
-    blacksmith_copper = blacksmith_upgrade(ToolMaterial.copper)
-    blacksmith_iron = blacksmith_upgrade(ToolMaterial.iron)
-    blacksmith_gold = blacksmith_upgrade(ToolMaterial.gold)
-    blacksmith_iridium = blacksmith_upgrade(ToolMaterial.iridium)
 
     spring_farming = "Spring Farming"
     summer_farming = "Summer Farming"

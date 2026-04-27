@@ -40,6 +40,9 @@ class SourceLogic(BaseLogic):
         return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
                                 for source in sources))
 
+    def has_access_to_any_without_other_requirements(self, sources: Iterable[Source]):
+        return self.logic.or_(*(self.logic.source.has_access_to(source) for source in sources))
+
     @functools.singledispatchmethod
     def has_access_to(self, source: Any):
         raise ValueError(f"Sources of type{type(source)} have no rule registered.")

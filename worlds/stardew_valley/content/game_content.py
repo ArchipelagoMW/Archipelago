@@ -15,6 +15,7 @@ from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, Source, ItemTag, Requirement
 from ..data.hats_data import HatItem
 from ..data.skill import Skill
+from ..data.tool import ToolUpgrade
 from ..data.villagers_data import Villager
 
 
@@ -36,6 +37,7 @@ class StardewContent:
     fishes: dict[str, FishItem] = field(default_factory=dict)
     villagers: dict[str, Villager] = field(default_factory=dict)
     farm_buildings: dict[str, Building] = field(default_factory=dict)
+    tool_upgrades: dict[str, ToolUpgrade] = field(default_factory=dict)
     animals: dict[str, Animal] = field(default_factory=dict)
     skills: dict[str, Skill] = field(default_factory=dict)
     quests: dict[str, Any] = field(default_factory=dict)
@@ -45,6 +47,7 @@ class StardewContent:
     def find_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
         yield from find_sources_of_type_on_items(self.game_items, *types)
         yield from find_sources_of_type_on_items(self.farm_buildings, *types)
+        yield from find_sources_of_type_on_items(self.tool_upgrades, *types)
         yield from find_sources_of_type_on_items(self.animals, *types)
 
     def find_item_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
@@ -191,6 +194,12 @@ class ContentPack:
     farm_buildings: Iterable[Building] = ()
 
     def farm_building_hook(self, content: StardewContent):
+        ...
+        ...
+
+    tool_upgrades: Iterable[ToolUpgrade] = ()
+
+    def tool_upgrade_hook(self, content: StardewContent):
         ...
 
     animals: Iterable[Animal] = ()

@@ -20,10 +20,10 @@ from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, s
     all_museum_artifacts, Artifact
 from .data.recipe_data import all_cooking_recipes_by_name
 from .data.secret_note_data import gift_requirements, SecretNote
+from .data.tool import get_tool_upgrade_name
 from .locations import LocationTags
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
-from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
@@ -193,8 +193,12 @@ def set_tool_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, co
     if not tool_progression.is_progressive:
         return
 
-    rule_collector.set_location_rule("Purchase Fiberglass Rod", (logic.skill.has_level(Skill.fishing, 2) & logic.money.can_spend(1800)))
-    rule_collector.set_location_rule("Purchase Iridium Rod", (logic.skill.has_level(Skill.fishing, 6) & logic.money.can_spend(7500)))
+    training_rule = logic.source.has_access_to_any(content.tool_upgrades["Training Rod"].sources)
+    rule_collector.set_location_rule("Purchase Training Rod", training_rule)
+    fiberglass_rule = logic.source.has_access_to_any(content.tool_upgrades["Fiberglass Rod"].sources)
+    rule_collector.set_location_rule("Purchase Fiberglass Rod", fiberglass_rule)
+    iridium_rule = logic.source.has_access_to_any(content.tool_upgrades["Iridium Rod"].sources)
+    rule_collector.set_location_rule("Purchase Iridium Rod", iridium_rule)
 
     rule_collector.set_location_rule("Copper Pan Cutscene", logic.received("Glittering Boulder Removed"))
 
@@ -202,15 +206,21 @@ def set_tool_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, co
     pan_materials = ToolMaterial.materials[1:]
     for previous, material in itertools.product(pan_materials[:-1], pan_materials[1:]):
         location_name = tool_progression.to_upgrade_location_name(Tool.pan, material)
+        upgrade_name = get_tool_upgrade_name(Tool.pan, material)
+        upgrade_data = content.tool_upgrades[upgrade_name]
         # You need to receive the previous tool to be able to upgrade it.
-        rule_collector.set_location_rule(location_name, logic.tool.has_pan(previous))
+        upgrade_rule = logic.tool.has_pan(previous) & logic.source.has_access_to_any(upgrade_data.sources)
+        rule_collector.set_location_rule(location_name, upgrade_rule)
 
     materials = ToolMaterial.materials
     tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.trash_can]
     for (previous, material), tool in itertools.product(zip(materials[:-1], materials[1:]), tool):
         location_name = tool_progression.to_upgrade_location_name(tool, material)
+        upgrade_name = get_tool_upgrade_name(tool, material)
+        upgrade_data = content.tool_upgrades[upgrade_name]
         # You need to receive the previous tool to be able to upgrade it.
-        rule_collector.set_location_rule(location_name, logic.tool.has_tool(tool, previous))
+        upgrade_rule = logic.tool.has_tool(tool, previous) & logic.source.has_access_to_any(upgrade_data.sources)
+        rule_collector.set_location_rule(location_name, upgrade_rule)
 
 
 def set_building_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent):
@@ -263,7 +273,6 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
                        content: StardewContent):
     set_mines_floor_entrance_rules(logic, rule_collector, world_options)
     set_skull_cavern_floor_entrance_rules(logic, rule_collector, world_options)
-    set_blacksmith_entrance_rules(logic, rule_collector)
     set_skill_entrance_rules(logic, rule_collector, content)
     set_traveling_merchant_day_entrance_rules(logic, rule_collector)
     set_dangerous_mine_rules(logic, rule_collector, content)
@@ -551,18 +560,6 @@ def set_skill_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCol
     rule_collector.set_entrance_rule(LogicEntrance.grow_summer_fall_crops_in_fall, true_)
 
     rule_collector.set_entrance_rule(LogicEntrance.fishing, logic.fishing.can_fish_anywhere())
-
-
-def set_blacksmith_entrance_rules(logic, rule_collector: StardewRuleCollector):
-    set_blacksmith_upgrade_rule(logic, rule_collector, LogicEntrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
-    set_blacksmith_upgrade_rule(logic, rule_collector, LogicEntrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
-    set_blacksmith_upgrade_rule(logic, rule_collector, LogicEntrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
-    set_blacksmith_upgrade_rule(logic, rule_collector, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
-
-
-def set_blacksmith_upgrade_rule(logic, rule_collector: StardewRuleCollector, entrance_name: str, item_name: str, tool_material: str):
-    upgrade_rule = logic.has(item_name) & logic.money.can_spend(tool_upgrade_prices[tool_material])
-    rule_collector.set_entrance_rule(entrance_name, upgrade_rule)
 
 
 def set_festival_entrance_rules(logic, rule_collector: StardewRuleCollector, content: StardewContent):

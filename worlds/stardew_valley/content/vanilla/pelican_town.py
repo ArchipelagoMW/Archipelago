@@ -10,9 +10,10 @@ from ...data.requirement import ToolRequirement, BookRequirement, SkillRequireme
     GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
     ReceivedRaccoonsRequirement, \
-    PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement, CatalogueRequirement
+    PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement, CatalogueRequirement, MasteryRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
+from ...data.tool import ToolUpgrade, StartingToolSource
 from ...logic.tailoring_logic import TailoringSource
 from ...logic.time_logic import MAX_MONTHS
 from ...strings.artisan_good_names import ArtisanGood
@@ -34,7 +35,7 @@ from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
 from ...strings.skill_names import Skill
-from ...strings.tool_names import Tool, ToolMaterial
+from ...strings.tool_names import Tool, ToolMaterial, FishingRod
 from ...strings.villager_names import NPC
 
 pelican_town = ContentPack(
@@ -697,6 +698,362 @@ pelican_town = ContentPack(
         #         ),
         #     ),
         # ),
+    ),
+    tool_upgrades=(
+        ToolUpgrade(
+            tool_name=Tool.pickaxe,
+            tool_material=ToolMaterial.basic,
+            sources=(StartingToolSource(),),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.pickaxe,
+            tool_material=ToolMaterial.copper,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=2000,
+                    items_price=((5, MetalBar.copper),),
+                    other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.basic),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.pickaxe,
+            tool_material=ToolMaterial.iron,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=5000,
+                    items_price=((5, MetalBar.iron),),
+                    other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.copper),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.pickaxe,
+            tool_material=ToolMaterial.gold,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=10_000,
+                    items_price=((5, MetalBar.gold),),
+                    other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.iron),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.pickaxe,
+            tool_material=ToolMaterial.iridium,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=25_000,
+                    items_price=((5, MetalBar.iridium),),
+                    other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.gold),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.axe,
+            tool_material=ToolMaterial.basic,
+            sources=(StartingToolSource(),),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.axe,
+            tool_material=ToolMaterial.copper,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=2000,
+                    items_price=((5, MetalBar.copper),),
+                    other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.basic),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.axe,
+            tool_material=ToolMaterial.iron,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=5000,
+                    items_price=((5, MetalBar.iron),),
+                    other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.copper),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.axe,
+            tool_material=ToolMaterial.gold,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=10_000,
+                    items_price=((5, MetalBar.gold),),
+                    other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.axe,
+            tool_material=ToolMaterial.iridium,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=25_000,
+                    items_price=((5, MetalBar.iridium),),
+                    other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.gold),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.watering_can,
+            tool_material=ToolMaterial.basic,
+            sources=(StartingToolSource(),),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.watering_can,
+            tool_material=ToolMaterial.copper,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=2000,
+                    items_price=((5, MetalBar.copper),),
+                    other_requirements=(ToolRequirement(Tool.watering_can, ToolMaterial.basic),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.watering_can,
+            tool_material=ToolMaterial.iron,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=5000,
+                    items_price=((5, MetalBar.iron),),
+                    other_requirements=(ToolRequirement(Tool.watering_can, ToolMaterial.copper),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.watering_can,
+            tool_material=ToolMaterial.gold,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=10_000,
+                    items_price=((5, MetalBar.gold),),
+                    other_requirements=(ToolRequirement(Tool.watering_can, ToolMaterial.iron),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.watering_can,
+            tool_material=ToolMaterial.iridium,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=25_000,
+                    items_price=((5, MetalBar.iridium),),
+                    other_requirements=(ToolRequirement(Tool.watering_can, ToolMaterial.gold),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.hoe,
+            tool_material=ToolMaterial.basic,
+            sources=(StartingToolSource(),),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.hoe,
+            tool_material=ToolMaterial.copper,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=2000,
+                    items_price=((5, MetalBar.copper),),
+                    other_requirements=(ToolRequirement(Tool.hoe, ToolMaterial.basic),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.hoe,
+            tool_material=ToolMaterial.iron,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=5000,
+                    items_price=((5, MetalBar.iron),),
+                    other_requirements=(ToolRequirement(Tool.hoe, ToolMaterial.copper),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.hoe,
+            tool_material=ToolMaterial.gold,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=10_000,
+                    items_price=((5, MetalBar.gold),),
+                    other_requirements=(ToolRequirement(Tool.hoe, ToolMaterial.iron),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.hoe,
+            tool_material=ToolMaterial.iridium,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=25_000,
+                    items_price=((5, MetalBar.iridium),),
+                    other_requirements=(ToolRequirement(Tool.hoe, ToolMaterial.gold),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.hoe,
+            tool_material=ToolMaterial.basic,
+            sources=(GenericSource(),),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.trash_can,
+            tool_material=ToolMaterial.copper,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=1000,
+                    items_price=((5, MetalBar.copper),),
+                    other_requirements=(ToolRequirement(Tool.trash_can, ToolMaterial.basic),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.trash_can,
+            tool_material=ToolMaterial.iron,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=2500,
+                    items_price=((5, MetalBar.iron),),
+                    other_requirements=(ToolRequirement(Tool.trash_can, ToolMaterial.copper),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.trash_can,
+            tool_material=ToolMaterial.gold,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=5_000,
+                    items_price=((5, MetalBar.gold),),
+                    other_requirements=(ToolRequirement(Tool.trash_can, ToolMaterial.iron),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.trash_can,
+            tool_material=ToolMaterial.iridium,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=12_500,
+                    items_price=((5, MetalBar.iridium),),
+                    other_requirements=(ToolRequirement(Tool.trash_can, ToolMaterial.gold),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.pan,
+            tool_material=ToolMaterial.iron,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=5000,
+                    items_price=((5, MetalBar.iron),),
+                    other_requirements=(ToolRequirement(Tool.pan, ToolMaterial.copper),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.pan,
+            tool_material=ToolMaterial.gold,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=10_000,
+                    items_price=((5, MetalBar.gold),),
+                    other_requirements=(ToolRequirement(Tool.pan, ToolMaterial.iron),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.pan,
+            tool_material=ToolMaterial.iridium,
+            sources=(
+                ShopSource(
+                    shop_region=Region.blacksmith,
+                    price=25_000,
+                    items_price=((5, MetalBar.iridium),),
+                    other_requirements=(ToolRequirement(Tool.pan, ToolMaterial.gold),),
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.fishing_rod,
+            full_name=FishingRod.training,
+            sources=(
+                ShopSource(
+                    shop_region=Region.fish_shop,
+                    price=5,
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.fishing_rod,
+            full_name=FishingRod.bamboo,
+            sources=(
+                ShopSource(
+                    shop_region=Region.fish_shop,
+                    price=500,
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.fishing_rod,
+            full_name=FishingRod.fiberglass,
+            sources=(
+                ShopSource(
+                    shop_region=Region.fish_shop,
+                    price=1800,
+                    other_requirements=(SkillRequirement(Skill.fishing, 2),)
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.fishing_rod,
+            full_name=FishingRod.iridium,
+            sources=(
+                ShopSource(
+                    shop_region=Region.fish_shop,
+                    price=7500,
+                    other_requirements=(SkillRequirement(Skill.fishing, 6),)
+                ),
+            ),
+        ),
+        ToolUpgrade(
+            tool_name=Tool.fishing_rod,
+            full_name=FishingRod.advanced_iridium,
+            sources=(
+                ShopSource(
+                    shop_region=Region.fish_shop,
+                    price=25_000,
+                    other_requirements=(MasteryRequirement(Skill.fishing),)
+                ),
+            ),
+        ),
     ),
     hat_sources={
         # Hats from the Hat Mouse

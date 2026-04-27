@@ -353,6 +353,10 @@ def randomize_shop_prices_group(content: StardewContent, behavior: DataRandomiza
         new_sources = get_new_sources(building_data, randomized_prices_per_shop_source)
         if new_sources is not None:
             content.farm_buildings[building_name] = override(building_data, sources=new_sources)
+    for tool_upgrade_name, tool_upgrade_data in content.tool_upgrades.items():
+        new_sources = get_new_sources(tool_upgrade_data, randomized_prices_per_shop_source)
+        if new_sources is not None:
+            content.tool_upgrades[tool_upgrade_name] = override(tool_upgrade_data, sources=new_sources)
     for animal_name, animal_data in content.animals.items():
         new_sources = get_new_sources(animal_data, randomized_prices_per_shop_source)
         if new_sources is not None:

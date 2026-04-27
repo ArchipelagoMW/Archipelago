@@ -28,6 +28,11 @@ class SkillRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class MasteryRequirement(Requirement):
+    skill: str
+
+
+@dataclass(frozen=True)
 class RegionRequirement(Requirement):
     region: str
 
