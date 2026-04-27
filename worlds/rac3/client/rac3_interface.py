@@ -1772,6 +1772,8 @@ class Rac3Interface(GameInterface):
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
             health_addr = self._read32(self._read32(self.vehicle + 0x68))
+            # TODO: Find a better way to determine target health for different vehicles rather than hardcoding based on planet,
+            # maybe by checking max health value if that can be found in memory
             target_health = 5.0
             if self.planet in [RAC3REGION.TYHRRANOSIS_RANGERS, RAC3REGION.MARCADIA]:
                 target_health = 1.0  # For some reason these vehicles have 100 max health instead of 500
@@ -1875,7 +1877,7 @@ class Rac3Interface(GameInterface):
         """Handle the current displayed pop-up message notification, and message queue"""
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == RAC3PLAYERACTION.TYHRRANOID_MINIGAME
-        paused = ((self.pause_state 
+        paused = ((self.pause_state
                    and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT)
                    or (current_time - self.last_in_ship_time) < 1.25
                    or (current_time - self.last_in_vendor_time) < 0.25)
