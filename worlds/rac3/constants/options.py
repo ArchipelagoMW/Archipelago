@@ -42,4 +42,5 @@ class RAC3OPTION:
     CLANK_OPTIONS = "Clank Pack Options"
     SHIP_VENDOR = "Ship Vendor"
     ARMOR_VENDOR = "Armor Vendor"
+    SCOUT_VENDORS = "Scout Vendors"
     HACKER_SKIP = "Hacker Skip"
