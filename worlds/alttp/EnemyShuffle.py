@@ -360,9 +360,11 @@ def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
         group.group_id: group
         for group in _read_sprite_groups(rom_bytes)
     }
+    original_sprite_groups = _snapshot_sprite_groups(sprite_groups)
     _setup_required_dungeon_groups(world, sprite_groups, metadata["room_requirements"])
     _apply_selected_boss_group_requirements(world, sprite_groups, sprite_requirements)
     _randomize_dungeon_groups(world, sprite_groups)
+    _restore_skipped_room_sprite_groups(world, dungeon_rooms, sprite_groups, original_sprite_groups)
     randomized_dungeon_rooms = _randomize_dungeon_rooms(
         world,
         dungeon_rooms,
@@ -469,6 +471,13 @@ def _read_sprite_groups(rom_bytes: bytes) -> tuple[DungeonSpriteGroup, ...]:
             )
         )
     return tuple(groups)
+
+
+def _snapshot_sprite_groups(sprite_groups: dict[int, DungeonSpriteGroup]) -> dict[int, tuple[int, int, int, int]]:
+    return {
+        group_id: (group.subgroup_0, group.subgroup_1, group.subgroup_2, group.subgroup_3)
+        for group_id, group in sprite_groups.items()
+    }
 
 
 def _setup_required_dungeon_groups(
@@ -665,6 +674,32 @@ def _randomize_dungeon_groups(world: "ALTTPWorld", sprite_groups: dict[int, Dung
             group.subgroup_2 = world.random.choice(POTENTIAL_SUBGROUP_2)
         if not group.preserve_subgroup_3:
             group.subgroup_3 = world.random.choice(POTENTIAL_SUBGROUP_3)
+
+
+def _restore_skipped_room_sprite_groups(
+    world: "ALTTPWorld",
+    dungeon_rooms: dict[int, DungeonEnemyRoom],
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    original_sprite_groups: dict[int, tuple[int, int, int, int]],
+) -> None:
+    if world.options.mode != "standard":
+        return
+
+    skipped_group_ids = {
+        room.graphics_block_id + 0x40
+        for room in dungeon_rooms.values()
+        if room.no_special_enemies_standard
+    }
+    for group_id in skipped_group_ids:
+        group = sprite_groups.get(group_id)
+        original_group = original_sprite_groups.get(group_id)
+        if group is None or original_group is None:
+            continue
+        group.subgroup_0, group.subgroup_1, group.subgroup_2, group.subgroup_3 = original_group
+        group.preserve_subgroup_0 = True
+        group.preserve_subgroup_1 = True
+        group.preserve_subgroup_2 = True
+        group.preserve_subgroup_3 = True
 
 
 def _randomize_overworld_groups(world: "ALTTPWorld", sprite_groups: dict[int, DungeonSpriteGroup]) -> None:

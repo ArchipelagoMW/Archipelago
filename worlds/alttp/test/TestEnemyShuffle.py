@@ -46,6 +46,7 @@ from worlds.alttp.EnemyShuffle import (
     _apply_selected_boss_group_requirements,
     _randomize_overworld_groups,
     _randomize_room_sprites,
+    _restore_skipped_room_sprite_groups,
     _setup_required_overworld_groups,
     can_spawn_in_room,
     validate_enemy_shuffle_state,
@@ -1808,6 +1809,106 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertEqual(group.subgroup_3, 61)
         self.assertTrue(group.preserve_subgroup_2)
         self.assertTrue(group.preserve_subgroup_3)
+
+    def test_skipped_standard_rooms_restore_original_graphics_group(self) -> None:
+        room = DungeonEnemyRoom(
+            room_id=80,
+            room_header_address=0,
+            sprite_table_address=0,
+            graphics_block_id=4,
+            tag_1=0,
+            tag_2=0,
+            sort_sprites_value=0,
+            sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x42, is_overlord=False, has_key=False),
+            ),
+            required_group_id=None,
+            required_subgroup_0=tuple(),
+            required_subgroup_1=tuple(),
+            required_subgroup_2=tuple(),
+            required_subgroup_3=tuple(),
+            is_shutter_room=False,
+            is_water_room=False,
+            do_not_randomize=False,
+            no_special_enemies_standard=True,
+        )
+        sprite_groups = {
+            0x44: DungeonSpriteGroup(
+                group_id=0x44,
+                dungeon_group_id=4,
+                subgroup_0=22,
+                subgroup_1=30,
+                subgroup_2=35,
+                subgroup_3=17,
+            ),
+        }
+
+        _restore_skipped_room_sprite_groups(
+            SimpleNamespace(options=SimpleNamespace(mode="standard")),
+            {room.room_id: room},
+            sprite_groups,
+            {0x44: (70, 73, 19, 82)},
+        )
+
+        group = sprite_groups[0x44]
+        self.assertEqual(
+            (group.subgroup_0, group.subgroup_1, group.subgroup_2, group.subgroup_3),
+            (70, 73, 19, 82),
+        )
+        self.assertTrue(group.preserve_subgroup_0)
+        self.assertTrue(group.preserve_subgroup_1)
+        self.assertTrue(group.preserve_subgroup_2)
+        self.assertTrue(group.preserve_subgroup_3)
+
+    def test_non_standard_mode_does_not_restore_standard_escape_group(self) -> None:
+        room = DungeonEnemyRoom(
+            room_id=80,
+            room_header_address=0,
+            sprite_table_address=0,
+            graphics_block_id=4,
+            tag_1=0,
+            tag_2=0,
+            sort_sprites_value=0,
+            sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x42, is_overlord=False, has_key=False),
+            ),
+            required_group_id=None,
+            required_subgroup_0=tuple(),
+            required_subgroup_1=tuple(),
+            required_subgroup_2=tuple(),
+            required_subgroup_3=tuple(),
+            is_shutter_room=False,
+            is_water_room=False,
+            do_not_randomize=False,
+            no_special_enemies_standard=True,
+        )
+        sprite_groups = {
+            0x44: DungeonSpriteGroup(
+                group_id=0x44,
+                dungeon_group_id=4,
+                subgroup_0=22,
+                subgroup_1=30,
+                subgroup_2=35,
+                subgroup_3=17,
+            ),
+        }
+
+        _restore_skipped_room_sprite_groups(
+            SimpleNamespace(options=SimpleNamespace(mode="open")),
+            {room.room_id: room},
+            sprite_groups,
+            {0x44: (70, 73, 19, 82)},
+        )
+
+        group = sprite_groups[0x44]
+        self.assertEqual(
+            (group.subgroup_0, group.subgroup_1, group.subgroup_2, group.subgroup_3),
+            (22, 30, 35, 17),
+        )
+        self.assertFalse(group.preserve_subgroup_0)
+        self.assertFalse(group.preserve_subgroup_1)
+        self.assertFalse(group.preserve_subgroup_2)
+        self.assertFalse(group.preserve_subgroup_3)
 
     @staticmethod
     def _requirement(
