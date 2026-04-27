@@ -609,15 +609,6 @@ class Rac3Interface(GameInterface):
             self.UnlockItem[name].status += 1
 
         match name:
-            case RAC3ITEM.HACKER:
-                if self.planet in PLANETS_WITH_HACKER_PUZZLES and self.options.hacker_skip.get(self.planet, False):
-                    self.enqueue_notification(
-                        f"{RAC3TEXTFORMATSTRING.NORMAL}Warning: Received "
-                        f"{RAC3TEXTFORMATSTRING.WHITE}The Hacker "
-                        f"{RAC3TEXTFORMATSTRING.NORMAL}while currently on "
-                        f"{RAC3TEXTFORMATSTRING.GREEN}{self.planet}\n"
-                        f"{RAC3TEXTFORMATSTRING.WHITE}Please reload either by dying, ship teleport or leaving and re-entering the planet to apply hacker skip.",
-                        RAC3BOXTHEME.WARNING, 6)
             case RAC3ITEM.PROGRESSIVE_VIDCOMIC:
                 if self.UnlockItem[name].status > 5:
                     self.UnlockItem[name].status = 5
@@ -1809,10 +1800,29 @@ class Rac3Interface(GameInterface):
             return
 
         planets = [planet for planet in PLANETS_WITH_HACKER_PUZZLES if self.options.hacker_skip.get(planet, False)]
+        wrote_hacker_flags = False
         for planet in planets:
             puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == planet]
             for puzzle in puzzles:
-                self._write8(puzzle[0], self._read8(puzzle[0]) | (1 << puzzle[1]))
+                bit_mask = 1 << puzzle[1]
+                current_value = self._read8(puzzle[0])
+                if current_value & bit_mask:
+                    continue
+                self._write8(puzzle[0], current_value | bit_mask)
+                wrote_hacker_flags = True
+
+        if wrote_hacker_flags and self.planet in planets and self.pause_state_value != RAC3PAUSESTATE.PLANET_CHANGE:
+            hacker_message = (
+                f"{RAC3TEXTFORMATSTRING.NORMAL}Warning:\nReceived "
+                f"{RAC3TEXTFORMATSTRING.MAGENTA}The Hacker "
+                f"{RAC3TEXTFORMATSTRING.NORMAL}while "
+                f"{RAC3TEXTFORMATSTRING.GREEN}{self.planet}{RAC3TEXTFORMATSTRING.NORMAL} is currently loaded.\n"
+                f"{RAC3TEXTFORMATSTRING.NORMAL}Please reload either by {RAC3TEXTFORMATSTRING.WHITE}dying, ship teleport or\n"
+                f"{RAC3TEXTFORMATSTRING.WHITE}revisiting the planet {RAC3TEXTFORMATSTRING.NORMAL}for hacker skip to take effect."
+            )
+            self.enqueue_notification(
+                hacker_message,
+                RAC3BOXTHEME.WARNING, 6)
 
     def find_pda_vendor(self) -> int | str:
         """Traverse the moby linked list on Qwarks Hideout to find the PDA vendor moby and return its address"""
@@ -1885,10 +1895,10 @@ class Rac3Interface(GameInterface):
             message = message_or_notification
             notification = RAC3NOTIFICATION(message, theme, duration)
 
-        # Warn and truncate if message exceeds 235 characters
-        if len(message) > 235:
-            logger.warning(f"Notification message exceeds 235 chars ({len(message)}), truncating: {message[:50]}...")
-            notification.message = message[:235]
+        # Warn and truncate if message exceeds 240 characters
+        if len(message) > 240:
+            logger.warning(f"Notification message exceeds 240 chars ({len(message)}), truncating: {message[:50]}...")
+            notification.message = message[:240]
         self.notification_queue.append(notification)
 
     def dequeue_notifications(self, count: int = 1) -> None:
@@ -1928,7 +1938,7 @@ class Rac3Interface(GameInterface):
                     next_duration = self.notification_queue[0].duration
                 self.notification_time = current_time + next_duration
             if self.notification_queue:
-                # Merge up to 3 notifications of the same theme, but do not exceed 235 chars
+                # Merge up to 3 notifications of the same theme, but do not exceed 240 chars
                 merged_notification = self.notification_queue[0]
                 merged_message = merged_notification.message
                 theme = merged_notification.theme
@@ -1938,9 +1948,9 @@ class Rac3Interface(GameInterface):
                     next_notification = self.notification_queue[i]
                     next_message = next_notification.message
                     next_theme = next_notification.theme
-                    # +2 for the '\n' separator
-                    add_length = 2 + len(next_message)
-                    if next_theme == theme and (total_length + add_length) <= 235:
+                    # +1 for the '\n' separator
+                    add_length = 1 + len(next_message)
+                    if next_theme == theme and (total_length + add_length) <= 240:
                         merged_message += "\n" + next_message
                         total_length += add_length
                         merge_count += 1
