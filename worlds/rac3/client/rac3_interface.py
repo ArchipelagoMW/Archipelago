@@ -310,6 +310,7 @@ class Rac3Interface(GameInterface):
         self.options.ship_vendor = slot_data[RAC3OPTION.SHIP_VENDOR]
         self.options.armor_vendor = slot_data[RAC3OPTION.ARMOR_VENDOR]
         self.options.scout_vendors = slot_data[RAC3OPTION.SCOUT_VENDORS]
+        self.options.hacker_skip = slot_data[RAC3OPTION.HACKER_SKIP]
 
     ########################################
     # Called on Game and Server Connection #
