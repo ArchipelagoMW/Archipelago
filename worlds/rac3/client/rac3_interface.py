@@ -1853,8 +1853,15 @@ class Rac3Interface(GameInterface):
         """Append a notification to the queue from a message or pre-built RAC3NOTIFICATION."""
         if isinstance(message_or_notification, RAC3NOTIFICATION):
             notification = message_or_notification
+            message = notification.message
         else:
-            notification = RAC3NOTIFICATION(message_or_notification, theme, duration)
+            message = message_or_notification
+            notification = RAC3NOTIFICATION(message, theme, duration)
+
+        # Warn and truncate if message exceeds 235 characters
+        if len(message) > 235:
+            logger.warning(f"Notification message exceeds 235 chars ({len(message)}), truncating: {message[:50]}...")
+            notification.message = message[:235]
         self.notification_queue.append(notification)
 
     def dequeue_notifications(self, count: int = 1) -> None:
@@ -1869,8 +1876,8 @@ class Rac3Interface(GameInterface):
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == RAC3PLAYERACTION.TYHRRANOID_MINIGAME
         paused = ((self.pause_state 
-                   and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT) 
-                   or (current_time - self.last_in_ship_time) < 1.25 
+                   and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT)
+                   or (current_time - self.last_in_ship_time) < 1.25
                    or (current_time - self.last_in_vendor_time) < 0.25)
         self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED,
                       int(self.inside_hacker_puzzle or paused))
