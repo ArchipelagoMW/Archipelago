@@ -387,7 +387,6 @@ This section records hard facts from the local world datasets and logic code so 
 
 Primary local evidence:
 - worlds/kirbyam/data/regions/rooms.json
-- worlds/kirbyam/data/regions/transitions.json
 - worlds/kirbyam/data/regions/areas.json
 - worlds/kirbyam/data/locations.json
 - worlds/kirbyam/data/items.json
@@ -420,7 +419,7 @@ Interpretation:
 
 ### 17.2 Transition Dataset Scale
 
-Canonical totals from transitions.json:
+Canonical totals from rooms.json `transitions` entries:
 - Total directional transitions: 798
 
 Transport type counts:

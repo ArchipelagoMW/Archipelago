@@ -225,14 +225,12 @@ class RegionData:
     exits: list[str]
     locations: list[str]
     events: list[EventData]
-    ability_gates: dict[str, dict[str, Any]]
 
     def __init__(self, name: str) -> None:
         self.name = name
         self.exits = []
         self.locations = []
         self.events = []
-        self.ability_gates = {}
 
 
 class KirbyAmData:
@@ -577,11 +575,6 @@ def _init() -> None:
         for ev in region_def.get("events", []):
             if isinstance(ev, str):
                 region.events.append(EventData(ev, region_name))
-
-        # Ability-gate annotations for future chest/transition rollout.
-        for gate_name, gate_def in region_def.get("ability_gates", {}).items():
-            if isinstance(gate_name, str) and isinstance(gate_def, dict):
-                region.ability_gates[gate_name] = dict(gate_def)
 
         data.regions[region_name] = region
 

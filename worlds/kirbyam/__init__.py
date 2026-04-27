@@ -783,6 +783,11 @@ class KirbyAmWorld(World):
         slot_data["enemy_copy_ability_whitelist"] = list(allowed_abilities)
         slot_data["enemy_copy_ability_policy"] = dict(policy)
 
+        from .rules import get_stake_breaking_abilities, get_stake_gated_transition_entrance_names
+
+        slot_data["stake_breaking_abilities"] = list(get_stake_breaking_abilities())
+        slot_data["stake_gated_transitions"] = list(get_stake_gated_transition_entrance_names())
+
         # Tracker surface integration (Issue #114)
         # Expose all locations and rooms for tracker display
         slot_data["locations"] = {

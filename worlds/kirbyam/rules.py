@@ -28,7 +28,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import forbid_items_for_player, set_rule
 
-from .data import LocationCategory, data
+from .data import LocationCategory, data, load_json_data
 from .generation_logging import logger
 from .groups import resolve_item_group
 from .options import Goal
@@ -64,6 +64,8 @@ _ABILITY_GATE_PLACEHOLDER_SOURCES = {
     "CanLightFuses": frozenset({"Fire", "Burning", "Bomb", "Laser", "UFO", "Master"}),
     "CanPoundPegs": frozenset({"Hammer", "Stone", "Smash", "Master"}),
 }
+
+_STAKE_TRANSITION_GATE_NAME = "CanPoundPegs"
 
 
 def _has_all_shards(state: CollectionState, player: int) -> bool:
@@ -110,12 +112,53 @@ ABILITY_GATE_RULES = {
 }
 
 
-def get_region_ability_gate_annotations() -> dict[str, dict[str, dict[str, object]]]:
-    annotations: dict[str, dict[str, dict[str, object]]] = {}
-    for region_name, region_data in data.regions.items():
-        if region_data.ability_gates:
-            annotations[region_name] = region_data.ability_gates
-    return annotations
+def get_stake_breaking_abilities() -> tuple[str, ...]:
+    """Return the reusable hammer peg/stake ability group in deterministic order."""
+    return tuple(sorted(_ABILITY_GATE_PLACEHOLDER_SOURCES[_STAKE_TRANSITION_GATE_NAME]))
+
+
+def get_stake_gated_transition_entrance_names() -> tuple[str, ...]:
+    """Return directional entrance names that require the shared stake gate.
+
+    Source of truth is regions/rooms.json path-level transition overrides.
+    """
+    rooms_payload = load_json_data("regions/rooms.json")
+    rooms = rooms_payload if isinstance(rooms_payload, dict) else {}
+
+    entrance_names: set[str] = set()
+    for source_room, room_data in rooms.items():
+        if not isinstance(source_room, str) or not isinstance(room_data, dict):
+            continue
+        exits = room_data.get("exits", [])
+        transitions = room_data.get("transitions", [])
+        if not isinstance(exits, list):
+            logger.warning(
+                "Room exits payload has unexpected type for %s; treating as empty list",
+                source_room,
+            )
+            exits = []
+        if not isinstance(transitions, list):
+            continue
+        exit_set = {room for room in exits if isinstance(room, str)}
+        for transition in transitions:
+            if not isinstance(transition, dict):
+                continue
+            destination_room = transition.get("destination_room")
+            ability_gate = transition.get("ability_gate")
+            if not isinstance(destination_room, str):
+                continue
+            if ability_gate != _STAKE_TRANSITION_GATE_NAME:
+                continue
+            if destination_room not in exit_set:
+                logger.warning(
+                    "Stake transition override references non-exit edge: %s -> %s",
+                    source_room,
+                    destination_room,
+                )
+                continue
+            entrance_names.add(f"{source_room} -> {destination_room}")
+
+    return tuple(sorted(entrance_names))
 
 
 def set_rules(world: KirbyAmWorld) -> None:
@@ -161,6 +204,29 @@ def set_rules(world: KirbyAmWorld) -> None:
             world.player,
             entrance_name,
         )
+
+    # Shared stake-gate model (hammer peg) for directional room transitions.
+    stake_gate_rule = lambda state: can_pound_pegs(state, world.player)
+    stake_entrance_names = get_stake_gated_transition_entrance_names()
+    applied_stake_gates = 0
+    for stake_entrance_name in stake_entrance_names:
+        try:
+            stake_entrance = world.multiworld.get_entrance(stake_entrance_name, world.player)
+            set_rule(stake_entrance, stake_gate_rule)
+            applied_stake_gates += 1
+        except KeyError:
+            logger.debug(
+                "[P%s] Stake-gated entrance %r not found; skipping",
+                world.player,
+                stake_entrance_name,
+            )
+
+    logger.debug(
+        "[P%s] Applied %s stake-gated transition rule(s) using abilities: %s",
+        world.player,
+        applied_stake_gates,
+        ", ".join(get_stake_breaking_abilities()),
+    )
 
     for goal_location_name in _GOAL_LOCATION_LABELS.values():
         try:

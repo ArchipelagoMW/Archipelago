@@ -68,6 +68,10 @@ _STARTING_KIRBY_COLOR_MAX = 13
 _STARTING_KIRBY_COLOR_REVALIDATE_TICKS = 4
 _ABILITY_RUNTIME_CONFIG_REVALIDATE_TICKS = 4
 _CHALLENGE_RUNTIME_CONFIG_REVALIDATE_TICKS = 4
+_AREA_KEY_RUNTIME_REVALIDATE_TICKS = 4
+_AREA_KEY_FIRST_ITEM_ID = 3860036
+_AREA_KEY_LAST_ITEM_ID = 3860043
+_AREA_KEY_FIRST_AREA_ID = 2
 _OPTIONAL_UNSAFE_DELIVERY_COUNTERS = (
     ("shadow_kirby_encounters_native", "shadow_kirby_encounters"),
     ("mirra_encounters_native", "mirra_encounters"),
@@ -232,6 +236,7 @@ class KirbyAmClient(BizHawkClient):
         self._delivery_timeout_streak: int = 0
         self._delivery_retry_not_before: float = 0.0
         self._delivery_payload_stall_warned: bool = False
+        self._max_delivered_item_index_seen: int = 0
         self._last_hook_heartbeat: int | None = None
         self._hook_heartbeat_stale_ticks: int = 0
         self._delivery_counter_ahead_fallback_active: bool = False
@@ -389,6 +394,8 @@ class KirbyAmClient(BizHawkClient):
         self._starting_kirby_color_synced_id: int | None = None
         self._starting_kirby_color_logged_signature: tuple[int, str] | None = None
         self._starting_kirby_color_revalidate_counter: int = 0
+        self._last_area_key_runtime_bitfield: int | None = None
+        self._area_key_runtime_revalidate_counter: int = 0
         self._last_challenge_runtime_config_signature: tuple[int, int] | None = None
         self._challenge_runtime_config_revalidate_counter: int = 0
 
@@ -531,6 +538,8 @@ class KirbyAmClient(BizHawkClient):
         self._starting_kirby_color_synced_id = None
         self._starting_kirby_color_logged_signature = None
         self._starting_kirby_color_revalidate_counter = 0
+        self._last_area_key_runtime_bitfield = None
+        self._area_key_runtime_revalidate_counter = 0
         self._last_challenge_runtime_config_signature = None
         self._challenge_runtime_config_revalidate_counter = 0
         self._cached_delivered_map_bits = 0
@@ -883,6 +892,45 @@ class KirbyAmClient(BizHawkClient):
             color_id,
         )
 
+    def _build_delivered_area_key_bitfield(self, ctx: "BizHawkClientContext") -> int:
+        delivered_items = getattr(ctx, "items_received", ())
+        delivered_count = min(self._max_delivered_item_index_seen, len(delivered_items))
+        area_key_bits = 0
+        for item in delivered_items[:delivered_count]:
+            item_fields = self._extract_delivery_item_fields(item)
+            if item_fields is None:
+                continue
+            item_id, _player_id = item_fields
+            if _AREA_KEY_FIRST_ITEM_ID <= item_id <= _AREA_KEY_LAST_ITEM_ID:
+                area_id = _AREA_KEY_FIRST_AREA_ID + (item_id - _AREA_KEY_FIRST_ITEM_ID)
+                area_key_bits |= 1 << area_id
+        return area_key_bits & 0xFFFFFFFF
+
+    async def _sync_area_key_runtime_config(self, ctx: "BizHawkClientContext") -> None:
+        area_key_addr = self._transport_addr("area_key_bitfield_runtime")
+        if area_key_addr is None:
+            return
+
+        desired_bitfield = self._build_delivered_area_key_bitfield(ctx)
+        if desired_bitfield == 0 and self._last_area_key_runtime_bitfield is None:
+            return
+        if self._last_area_key_runtime_bitfield == desired_bitfield:
+            self._area_key_runtime_revalidate_counter += 1
+            if self._area_key_runtime_revalidate_counter < _AREA_KEY_RUNTIME_REVALIDATE_TICKS:
+                return
+        self._area_key_runtime_revalidate_counter = 0
+
+        current_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(area_key_addr, 4, "System Bus")]))[0]
+        if self._u32_le(current_raw) == desired_bitfield:
+            self._last_area_key_runtime_bitfield = desired_bitfield
+            return
+
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [(area_key_addr, int(desired_bitfield).to_bytes(4, "little"), "System Bus")],
+        )
+        self._last_area_key_runtime_bitfield = desired_bitfield
+
     @staticmethod
     def _player_name(ctx: "BizHawkClientContext", player_id: int) -> str:
         if player_id == 0:
@@ -1226,6 +1274,7 @@ class KirbyAmClient(BizHawkClient):
                 self._ram_state_loaded = True
 
             await self._sync_starting_kirby_color_runtime_config(ctx)
+            await self._sync_area_key_runtime_config(ctx)
 
             gameplay_active, defer_reason, ai_state = await self._runtime_gameplay_state(ctx)
             await self._log_boss_shard_debug_window(
@@ -2060,6 +2109,7 @@ class KirbyAmClient(BizHawkClient):
             val = self._u32_le(raw)
             if key == "delivered_item_index":
                 self._delivered_item_index = val
+                self._max_delivered_item_index_seen = max(self._max_delivered_item_index_seen, val)
 
     # --------------------------
     # Location checking
@@ -2808,6 +2858,7 @@ class KirbyAmClient(BizHawkClient):
                 self._delivery_counter_ahead_resume_logged = False
 
             if rom_received_count < self._delivered_item_index:
+                self._max_delivered_item_index_seen = max(self._max_delivered_item_index_seen, self._delivered_item_index)
                 self._log_verbose(
                     "info",
                     "KirbyAM: ROM delivery counter moved backward from %s to %s; rewinding client delivery cursor",
@@ -2839,6 +2890,7 @@ class KirbyAmClient(BizHawkClient):
                     rom_received_count,
                 )
                 self._delivered_item_index = rom_received_count
+                self._max_delivered_item_index_seen = max(self._max_delivered_item_index_seen, self._delivered_item_index)
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
                 self._delivery_pending_time = None
@@ -2877,6 +2929,7 @@ class KirbyAmClient(BizHawkClient):
                     self._delivered_item_index = rom_received_count
                 else:
                     self._delivered_item_index += 1
+                self._max_delivered_item_index_seen = max(self._max_delivered_item_index_seen, self._delivered_item_index)
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
                 await self._emit_receive_notification(ctx, delivered_index)
                 return

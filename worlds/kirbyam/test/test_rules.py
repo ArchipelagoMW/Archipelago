@@ -7,7 +7,13 @@ from unittest.mock import patch
 
 from ..data import data
 from ..options import Goal
-from ..rules import ABILITY_GATE_RULES, _ABILITY_GATE_STATUS_VALUES, get_region_ability_gate_annotations, set_rules
+from ..rules import (
+    ABILITY_GATE_RULES,
+    _ABILITY_GATE_STATUS_VALUES,
+    get_stake_breaking_abilities,
+    get_stake_gated_transition_entrance_names,
+    set_rules,
+)
 
 
 @dataclass
@@ -144,7 +150,7 @@ def test_area_topology_routes_start_through_rainbow_route_anchor() -> None:
     assert "REGION_RAINBOW_ROUTE/MAIN" not in regions["REGION_OLIVE_OCEAN/MAIN"]["exits"]
     assert "REGION_RAINBOW_ROUTE/MAIN" not in regions["REGION_RADISH_RUINS/MAIN"]["exits"]
 
-    # Cross-area mirror connections derived from transitions.json.
+    # Cross-area mirror connections derived from rooms.json transitions data.
     assert set(regions["REGION_CABBAGE_CAVERN/MAIN"]["exits"]) >= {
         "REGION_OLIVE_OCEAN/MAIN", "REGION_RADISH_RUINS/MAIN",
     }
@@ -346,23 +352,173 @@ def test_ability_gate_helpers_default_true_without_ability_items() -> None:
         assert gate_rule(state, 1), f"{gate_name} should default to True until ability items exist"
 
 
-def test_region_ability_gate_annotations_load_for_future_big_chest_rollout() -> None:
-    # ability_gates has moved from areas.json /MAIN regions to rooms.json room entries.
-    # Each room carries an ability_gates dict (empty by default; populated when gate
-    # evidence is confirmed for that specific room).  Areas no longer carry this metadata.
+def test_room_transition_overrides_are_room_local_only() -> None:
+    # Transition-level gate metadata belongs in rooms.json under each room's
+    # transitions list. areas.json should not carry that room graph detail.
     from ..data import load_json_data
 
     rooms = load_json_data("regions/rooms.json")
     areas = load_json_data("regions/areas.json")
 
     for room_name, room_def in rooms.items():
-        assert "ability_gates" in room_def, f"Room {room_name} missing ability_gates key"
-        assert isinstance(room_def["ability_gates"], dict), (
-            f"Room {room_name} ability_gates must be a dict"
+        assert "transitions" in room_def, f"Room {room_name} missing transitions key"
+        assert isinstance(room_def["transitions"], list), (
+            f"Room {room_name} transitions must be a list"
         )
 
     for area_name, area_def in areas.items():
-        assert "ability_gates" not in area_def, (
-            f"Area {area_name} should not have ability_gates (belongs in rooms.json)"
+        assert "transitions" not in area_def, (
+            f"Area {area_name} should not have room transitions (belongs in rooms.json)"
         )
+
+
+def test_stake_breaking_abilities_are_shared_and_expected() -> None:
+    abilities = get_stake_breaking_abilities()
+
+    # Keep ordering deterministic for stable behavior, but do not pin the full
+    # set so stake-breaking abilities can expand over time without brittle tests.
+    assert abilities == tuple(sorted(abilities))
+    assert set(abilities) >= {"Hammer", "Master", "Smash", "Stone"}
+    assert len(abilities) == len(set(abilities))
+
+
+def test_stake_gated_transitions_include_candy_one_way_gate() -> None:
+    stake_entrances = set(get_stake_gated_transition_entrance_names())
+
+    assert "REGION_CANDY_CONSTELLATION/ROOM_9_06 -> REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_1" in stake_entrances
+    assert "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_1 -> REGION_CANDY_CONSTELLATION/ROOM_9_06" not in stake_entrances
+
+
+def test_stake_gated_transitions_cover_cross_region_stake_rooms() -> None:
+    stake_entrances = set(get_stake_gated_transition_entrance_names())
+
+    assert "REGION_OLIVE_OCEAN/ROOM_6_15 -> REGION_OLIVE_OCEAN/ROOM_6_CHEST_2" in stake_entrances
+    assert "REGION_MOONLIGHT_MANSION/ROOM_2_04 -> REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_1" in stake_entrances
+    assert "REGION_CANDY_CONSTELLATION/ROOM_9_HUB -> REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_3" in stake_entrances
+
+
+def test_stake_gated_transitions_come_from_room_transition_overrides() -> None:
+    from ..data import load_json_data
+
+    rooms_payload = load_json_data("regions/rooms.json")
+    rooms = rooms_payload if isinstance(rooms_payload, dict) else {}
+    annotated: set[str] = set()
+    for source_room, room_data in rooms.items():
+        if not isinstance(source_room, str) or not isinstance(room_data, dict):
+            continue
+        transitions = room_data.get("transitions", [])
+        if not isinstance(transitions, list):
+            continue
+        for transition in transitions:
+            if not isinstance(transition, dict):
+                continue
+            if transition.get("ability_gate") != "CanPoundPegs":
+                continue
+            destination_room = transition.get("destination_room")
+            if isinstance(destination_room, str):
+                annotated.add(f"{source_room} -> {destination_room}")
+
+    assert annotated
+    assert set(get_stake_gated_transition_entrance_names()) == annotated
+
+
+def test_stake_gated_transitions_ignore_non_stake_non_exit_mismatch_warning() -> None:
+    rooms_payload = {
+        "REGION_TEST/ROOM_A": {
+            "exits": ["REGION_TEST/ROOM_B"],
+            "transitions": [
+                {
+                    "destination_room": "REGION_TEST/ROOM_MISSING",
+                    "ability_gate": "CanCutRopes",
+                },
+                {
+                    "destination_room": "REGION_TEST/ROOM_MISSING",
+                    "ability_gate": "CanPoundPegs",
+                },
+            ],
+        }
+    }
+
+    with patch("worlds.kirbyam.rules.load_json_data", return_value=rooms_payload), \
+         patch("worlds.kirbyam.rules.logger.warning") as warning_log:
+        assert get_stake_gated_transition_entrance_names() == ()
+        warning_log.assert_called_once_with(
+            "Stake transition override references non-exit edge: %s -> %s",
+            "REGION_TEST/ROOM_A",
+            "REGION_TEST/ROOM_MISSING",
+        )
+
+
+def test_stake_gated_transitions_handles_non_list_exits() -> None:
+    rooms_payload = {
+        "REGION_TEST/ROOM_A": {
+            "exits": None,
+            "transitions": [
+                {
+                    "destination_room": "REGION_TEST/ROOM_B",
+                    "ability_gate": "CanPoundPegs",
+                }
+            ],
+        }
+    }
+
+    with patch("worlds.kirbyam.rules.load_json_data", return_value=rooms_payload), \
+         patch("worlds.kirbyam.rules.logger.warning") as warning_log:
+        assert get_stake_gated_transition_entrance_names() == ()
+        warning_log.assert_any_call(
+            "Room exits payload has unexpected type for %s; treating as empty list",
+            "REGION_TEST/ROOM_A",
+        )
+
+
+def test_lever_rooms_define_four_lever_events() -> None:
+    from ..data import load_json_data
+
+    rooms = load_json_data("regions/rooms.json")
+
+    assert "Activate Lever - Moonlight Mansion 2-11" in rooms["REGION_MOONLIGHT_MANSION/ROOM_2_11"]["events"]
+    assert "Activate Lever - Carrot Castle 5-12" in rooms["REGION_CARROT_CASTLE/ROOM_5_12"]["events"]
+    assert "Activate Lever - Olive Ocean 6-13" in rooms["REGION_OLIVE_OCEAN/ROOM_6_13"]["events"]
+    assert "Activate Lever - Radish Ruins 8-12" in rooms["REGION_RADISH_RUINS/ROOM_8_12"]["events"]
+
+
+def test_hub_switch_locations_have_matching_big_switch_events() -> None:
+    from ..data import load_json_data
+
+    areas = load_json_data("regions/areas.json")
+
+    expected_events_by_hub_switch = {
+        "HUB_SWITCH_MUSTARD": "Activate Big Switch - Mustard Mountain",
+        "HUB_SWITCH_MOONLIGHT": "Activate Big Switch - Moonlight Mansion",
+        "HUB_SWITCH_CANDY": "Activate Big Switch - Candy Constellation",
+        "HUB_SWITCH_OLIVE": "Activate Big Switch - Olive Ocean",
+        "HUB_SWITCH_PEPPERMINT_EAST": "Activate Big Switch - Peppermint Palace East",
+        "HUB_SWITCH_PEPPERMINT_WEST": "Activate Big Switch - Peppermint Palace West",
+        "HUB_SWITCH_CABBAGE_CAVERN_CENTER": "Activate Big Switch - Cabbage Cavern Center",
+        "HUB_SWITCH_CABBAGE_CAVERN_EAST": "Activate Big Switch - Cabbage Cavern East",
+        "HUB_SWITCH_CABBAGE_CAVERN_WEST": "Activate Big Switch - Cabbage Cavern West",
+        "HUB_SWITCH_CARROT": "Activate Big Switch - Carrot Castle",
+        "HUB_SWITCH_RADISH": "Activate Big Switch - Radish Ruins",
+        "HUB_SWITCH_RAINBOW_ROUTE_EAST": "Activate Big Switch - Rainbow Route East",
+        "HUB_SWITCH_RAINBOW_ROUTE_NORTH": "Activate Big Switch - Rainbow Route North",
+        "HUB_SWITCH_RAINBOW_ROUTE_SOUTH": "Activate Big Switch - Rainbow Route South",
+        "HUB_SWITCH_RAINBOW_ROUTE_WEST": "Activate Big Switch - Rainbow Route West",
+    }
+
+    found_events: set[str] = set()
+    for area_data in areas.values():
+        if not isinstance(area_data, dict):
+            continue
+        locations = area_data.get("locations", [])
+        events = area_data.get("events", [])
+        if not isinstance(locations, list) or not isinstance(events, list):
+            continue
+        location_set = {location for location in locations if isinstance(location, str)}
+        event_set = {event for event in events if isinstance(event, str)}
+        for hub_switch_key, expected_event in expected_events_by_hub_switch.items():
+            if hub_switch_key in location_set:
+                assert expected_event in event_set
+                found_events.add(expected_event)
+
+    assert found_events == set(expected_events_by_hub_switch.values())
 

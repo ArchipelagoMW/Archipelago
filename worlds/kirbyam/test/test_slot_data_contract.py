@@ -101,6 +101,14 @@ def test_starting_kirby_color_contract_fields_present_with_expected_shapes() -> 
 def test_tracker_surface_contract_fields_present_with_expected_shapes() -> None:
     slot_data = _emit_slot_data_for_contract_test()
 
+    assert isinstance(slot_data["stake_breaking_abilities"], list)
+    assert slot_data["stake_breaking_abilities"]
+    assert all(isinstance(name, str) for name in slot_data["stake_breaking_abilities"])
+
+    assert isinstance(slot_data["stake_gated_transitions"], list)
+    assert slot_data["stake_gated_transitions"]
+    assert all(isinstance(name, str) for name in slot_data["stake_gated_transitions"])
+
     assert isinstance(slot_data["locations"], dict)
     assert slot_data["locations"]
     first_location = next(iter(slot_data["locations"].values()))

@@ -49,7 +49,10 @@
 #define AP_ABILITY_REROLL_EVENT_COUNTER (*(volatile uint32_t*)(AP_BASE + 0x7Cu))
 #define AP_ABILITY_REROLL_SOURCE_ADDR (*(volatile uint32_t*)(AP_BASE + 0x80u))
 #define AP_ABILITY_REROLL_ABILITY_ID (*(volatile uint32_t*)(AP_BASE + 0x84u))
+#define AP_ABILITY_REROLL_SOURCE_KIND (*(volatile uint32_t*)(AP_BASE + 0x5Cu))
+#define AP_ABILITY_REROLL_CALLSITE_PC (*(volatile uint32_t*)(AP_BASE + 0x60u))
 #define AP_ABILITY_REROLL_KIRBY_INDEX (*(volatile uint32_t*)(AP_BASE + 0x88u))
+#define AP_AREA_KEY_BITFIELD_RUNTIME (*(volatile uint32_t*)(AP_BASE + 0x8Cu))
 // Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
 // Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
 // Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
@@ -64,8 +67,6 @@
 // 0xFFFFFFFF means client has not synced yet (treat as off/0).
 #define AP_ONE_HIT_MODE_RUNTIME    (*(volatile uint32_t*)(AP_BASE + 0x54u))
 #define AP_NO_EXTRA_LIVES_RUNTIME  (*(volatile uint32_t*)(AP_BASE + 0x58u))
-#define AP_ABILITY_REROLL_SOURCE_KIND (*(volatile uint32_t*)(AP_BASE + 0x5Cu))
-#define AP_ABILITY_REROLL_CALLSITE_PC (*(volatile uint32_t*)(AP_BASE + 0x60u))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
 #define KIRBY_ACTIVE_COLOR_ADDR    0x0203ADE0u
@@ -209,6 +210,168 @@ static void ap_unlock_area_map(uint32_t area_id) {
     }
 }
 
+typedef uint32_t (*KirbySpecialDoorVisitedFn)(uint16_t, uint16_t, uint8_t, uint8_t);
+#define KIRBY_SPECIAL_DOOR_VISITED_FN ((KirbySpecialDoorVisitedFn)0x08002BA9u)
+#define ROOM_PROPS_BASE_ADDR 0x089331ACu
+#define ROOM_PROPS_STRIDE 0x28u
+#define ROOM_PROPS_DOORS_IDX_OFFSET 0x24u
+#define ROOM_PROPS_ROOM_ID_LIMIT 0x400u
+#define KIRBY_CURRENT_ROOM_ADDR 0x02023B28u
+#define KIRBY_CURRENT_ROOM      (*(volatile uint16_t*)(KIRBY_CURRENT_ROOM_ADDR))
+
+// doorsIdx -> area ID lookup for native room metadata.
+//
+// DERIVATION AND SYNCHRONIZATION:
+// This table maps each gRoomProps.doorsIdx value to its corresponding area ID (0-9).
+// The mapping is derived from:
+//  1. worlds/kirbyam/data/regions/rooms.json - room definitions and area assignments
+//  2. worlds/kirbyam/client.py - runtime rooms.json metadata lookups keyed by doorsIdx
+//  3. Matching each room's doorsIdx field against gRoomProps in the ROM
+//
+// DRIFT RISK:
+// If the native gRoomProps structure or doorsIdx assignments change between ROM
+// versions (or if room definitions are updated on the Python side), this table
+// can silently become stale. Stale entries cause incorrect Area Key gating in the
+// payload: mirrors to gated areas may be incorrectly allowed/denied.
+//
+// VALIDATION/REGENERATION:
+// - During AP validation: Python-side checks in worlds/kirbyam/client.py and
+//   worlds/kirbyam/test/test_area_first_visit_polling.py verify doorsIdx-driven
+//   room metadata and area visit behavior remain consistent with rooms.json.
+// - During ROM patch: patch_rom.py could generate a checksum of this table and
+//   embed it in the ROM payload, then have runtime code validate on cold boot.
+// - Manual inspection: Compare table entries against current gRoomProps definitions
+//   in the active ROM base, then against the Python-side rooms.json definitions.
+//
+// TODO: Implement table generation as a build artifact (C header generated from
+// rooms.json plus native-room metadata tooling) or add compile-time/runtime
+// checksum validation to detect drift.
+static const uint8_t gApDoorsIdxAreaIds[0x120] = {
+    /* 0x00 */  1,  0,  0,  0,  0,  0,  0,  0,  2,  5,  1,  1,  1,  1,  1,  1,
+    /* 0x10 */  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+    /* 0x20 */  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+    /* 0x30 */  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,
+    /* 0x40 */  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+    /* 0x50 */  2,  2,  2,  2,  2,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
+    /* 0x60 */  7,  5,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
+    /* 0x70 */  7,  7,  7,  7,  7,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
+    /* 0x80 */  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  9,  9,
+    /* 0x90 */  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,
+    /* 0xA0 */  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  3,  3,  3,  3,  3,  3,
+    /* 0xB0 */  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  6,  6,
+    /* 0xC0 */  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
+    /* 0xD0 */  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  3,  8,  8,  8,  8,
+    /* 0xE0 */  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
+    /* 0xF0 */  8,  8,  8,  8,  8,  8,  8,  8,  8,  5,  5,  5,  5,  5,  5,  5,
+    /* 0x100 */  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  0,  0,
+    /* 0x110 */  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+};
+
+static uint16_t ap_room_doors_idx(uint16_t room_id) {
+    if ((uint32_t)room_id >= ROOM_PROPS_ROOM_ID_LIMIT) {
+        return 0xFFFFu;
+    }
+    return *(volatile uint16_t*)(ROOM_PROPS_BASE_ADDR + ((uint32_t)room_id * ROOM_PROPS_STRIDE) + ROOM_PROPS_DOORS_IDX_OFFSET);
+}
+
+static uint8_t ap_doors_idx_area_id(uint16_t doors_idx) {
+    uint8_t area_id;
+    if (doors_idx >= 0x120u) {
+        return 0u;
+    }
+    area_id = gApDoorsIdxAreaIds[doors_idx];
+    if (area_id > 9u) {
+        return 0u;
+    }
+    return area_id;
+}
+
+static uint8_t ap_room_area_id(uint16_t room_id) {
+    return ap_doors_idx_area_id(ap_room_doors_idx(room_id));
+}
+
+static uint8_t ap_has_area_key(uint8_t area_id) {
+    if (area_id < 2u || area_id > 9u) {
+        return 1u;
+    }
+    return (uint8_t)((AP_AREA_KEY_BITFIELD_RUNTIME >> area_id) & 1u);
+}
+
+static uint8_t ap_is_warp_room_doors_idx(uint16_t doors_idx) {
+    switch (doors_idx) {
+        case 30u:   // REGION_RAINBOW_ROUTE/ROOM_1_WARP
+        case 38u:   // REGION_RAINBOW_ROUTE/ROOM_1_13 (Warp Star launch room)
+        case 69u:   // REGION_MOONLIGHT_MANSION/ROOM_2_WARP
+        case 101u:  // REGION_PEPPERMINT_PALACE/ROOM_7_WARP
+        case 134u:  // REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP
+        case 153u:  // REGION_CANDY_CONSTELLATION/ROOM_9_WARP
+        case 269u:  // REGION_CARROT_CASTLE/ROOM_5_WARP
+            return 1u;
+        default:
+            return 0u;
+    }
+}
+
+__attribute__((used)) uint32_t ap_on_query_special_door_state(uint16_t room_id, uint16_t arg1, uint8_t arg2, uint8_t arg3) {
+    uint32_t native_result = KIRBY_SPECIAL_DOOR_VISITED_FN(room_id, arg1, arg2, arg3);
+    uint8_t runtime_source_area;
+    uint8_t room_id_area;
+    uint8_t arg1_area;
+    uint8_t room_id_doors_area;
+    uint8_t arg1_doors_area;
+    uint8_t destination_area = 0u;
+    uint16_t runtime_source_doors_idx;
+
+    if (native_result == 0u) {
+        return 0u;
+    }
+
+    // Warp Star access is intentionally disabled in AP mode because these
+    // transitions bypass Area Key sequencing and can cause progression leaks.
+    runtime_source_doors_idx = ap_room_doors_idx(KIRBY_CURRENT_ROOM);
+    if (ap_is_warp_room_doors_idx(runtime_source_doors_idx)) {
+        return 0u;
+    }
+
+    runtime_source_area = ap_room_area_id(KIRBY_CURRENT_ROOM);
+    room_id_area = ap_room_area_id(room_id);
+    arg1_area = ap_room_area_id(arg1);
+    room_id_doors_area = ap_doors_idx_area_id(room_id);
+    arg1_doors_area = ap_doors_idx_area_id(arg1);
+
+    // Callers are not guaranteed to pass (source_room, destination_room) in a
+    // stable argument order across all transition sites. Derive the destination
+    // as whichever candidate differs from the runtime current area.
+    if (room_id_area >= 2u && room_id_area <= 9u && room_id_area != runtime_source_area) {
+        destination_area = room_id_area;
+    }
+    if (arg1_area >= 2u && arg1_area <= 9u && arg1_area != runtime_source_area) {
+        destination_area = arg1_area;
+    }
+    // Some callsites appear to pass doorsIdx-like values instead of canonical
+    // room IDs; treat those as fallback area candidates for regular mirrors.
+    if ((destination_area < 2u || destination_area > 9u)
+        && room_id_doors_area >= 2u && room_id_doors_area <= 9u
+        && room_id_doors_area != runtime_source_area) {
+        destination_area = room_id_doors_area;
+    }
+    if ((destination_area < 2u || destination_area > 9u)
+        && arg1_doors_area >= 2u && arg1_doors_area <= 9u
+        && arg1_doors_area != runtime_source_area) {
+        destination_area = arg1_doors_area;
+    }
+
+    if (destination_area < 2u || destination_area > 9u) {
+        return native_result;
+    }
+
+    if (ap_has_area_key(destination_area) == 0u) {
+        return 0u;
+    }
+
+    return native_result;
+}
+
 // Hook target for the original boss shard grant call. The game passes the boss's
 // shard index in r0 (same value passed to CollectShard(var->unk218) in sub_0801D948).
 // Records the AP boss-defeat transport flag for client polling AND replicates the
@@ -264,15 +427,13 @@ typedef void (*KirbyGiveInvincibilityFn)(void *kirby, uint16_t duration);
 #define ABILITY_RANDOMIZATION_MODE_COMPLETELY_RANDOM 2u
 #define KIRBY_ABILITY_MASK 0x1Fu
 #define KIRBY_ABILITY_CHANGE_IS_ABILITY_STAR 0x20u
-#define ENEMY_ABILITY_TABLE_BASE_ADDR 0x35164Eu
-#define ENEMY_ABILITY_TABLE_STRIDE 0x18u
-#define OBJECT2_TYPE_OFFSET 0x82u
-#define KIRBY_PLAYER_COUNT 4u
-#define AP_REROLL_KIRBY_INDEX_UNKNOWN 0xFFFFFFFFu
-#define ABILITY_REROLL_SOURCE_KIND_UNSPECIFIED 0u
+#define ABILITY_REROLL_SOURCE_KIND_NONE 0u
 #define ABILITY_REROLL_SOURCE_KIND_OBJECT2_TYPE 1u
 #define ABILITY_REROLL_SOURCE_KIND_NULL_SOURCE_PTR 2u
 #define ABILITY_REROLL_SOURCE_KIND_NON_EWRAM_SOURCE_PTR 3u
+#define ENEMY_ABILITY_TABLE_BASE_ADDR 0x35164Eu
+#define ENEMY_ABILITY_TABLE_STRIDE 0x18u
+#define OBJECT2_TYPE_OFFSET 0x82u
 
 static uint32_t ap_mix_u32(uint32_t x) {
     x ^= x >> 16;
@@ -330,33 +491,21 @@ __attribute__((used)) void ap_on_request_copy_ability_transition(void *kirby, ui
     if (mode == ABILITY_RANDOMIZATION_MODE_COMPLETELY_RANDOM
         && (ability_flags & KIRBY_ABILITY_CHANGE_IS_ABILITY_STAR) == 0u) {
         register uint32_t source_obj_ptr asm("r5");
-        uint32_t caller_lr_snapshot;
         uint32_t no_ability_weight = AP_ABILITY_RANDOMIZATION_NO_ABILITY_WEIGHT;
         uint32_t allowed_mask = AP_ABILITY_RANDOMIZATION_ALLOWED_MASK;
-        uint32_t random_roll;
+        uint32_t random_roll = ap_next_rng_u32();
         uint8_t selected_ability;
         uint32_t source_addr = 0u;
-        uint32_t source_kind = ABILITY_REROLL_SOURCE_KIND_UNSPECIFIED;
-        uint32_t caller_pc;
-        uint32_t kirby_index = AP_REROLL_KIRBY_INDEX_UNKNOWN;
-        uint32_t kirby_addr = (uint32_t)kirby;
+        uint32_t source_kind = ABILITY_REROLL_SOURCE_KIND_NONE;
+        uint32_t caller_lr_snapshot = 0u;
+        uint32_t caller_pc = 0u;
+        uint32_t kirby_index = (uint32_t)KIRBY_CURRENT_PLAYER;
 
-        __asm__ volatile ("mov %0, lr" : "=r" (caller_lr_snapshot));
-        caller_pc = (caller_lr_snapshot & ~1u);
-
+        __asm__ volatile("mov %0, lr" : "=r"(caller_lr_snapshot));
+        caller_pc = caller_lr_snapshot & ~1u;
         if (caller_pc >= 4u) {
             caller_pc -= 4u;
         }
-
-        if (kirby_addr >= KIRBY_STRUCTS_ADDR
-            && kirby_addr < (KIRBY_STRUCTS_ADDR + (KIRBY_STRUCT_STRIDE * KIRBY_PLAYER_COUNT))) {
-            uint32_t kirby_offset = kirby_addr - KIRBY_STRUCTS_ADDR;
-            if ((kirby_offset % KIRBY_STRUCT_STRIDE) == 0u) {
-                kirby_index = kirby_offset / KIRBY_STRUCT_STRIDE;
-            }
-        }
-
-        random_roll = ap_next_rng_u32();
 
         if (no_ability_weight >= 100u) {
             selected_ability = 0u;
@@ -368,13 +517,12 @@ __attribute__((used)) void ap_on_request_copy_ability_transition(void *kirby, ui
 
         rewritten_flags = (ability_flags & ~KIRBY_ABILITY_MASK) | (uint32_t)(selected_ability & KIRBY_ABILITY_MASK);
 
-        if (source_obj_ptr >= 0x02000000u && source_obj_ptr < 0x02040000u) {
-            // source_obj_ptr points at Object2 in this hook path; type is a u8 at +0x82.
-            uint8_t source_type = *(volatile uint8_t*)(source_obj_ptr + OBJECT2_TYPE_OFFSET);
-            source_addr = ENEMY_ABILITY_TABLE_BASE_ADDR + ((uint32_t)source_type * ENEMY_ABILITY_TABLE_STRIDE);
-            source_kind = ABILITY_REROLL_SOURCE_KIND_OBJECT2_TYPE;
-        } else if (source_obj_ptr == 0u) {
+        if (source_obj_ptr == 0u) {
             source_kind = ABILITY_REROLL_SOURCE_KIND_NULL_SOURCE_PTR;
+        } else if (source_obj_ptr >= 0x02000000u && source_obj_ptr < 0x02040000u) {
+            uint8_t source_type = *(volatile uint8_t*)(source_obj_ptr + OBJECT2_TYPE_OFFSET);
+            source_kind = ABILITY_REROLL_SOURCE_KIND_OBJECT2_TYPE;
+            source_addr = ENEMY_ABILITY_TABLE_BASE_ADDR + ((uint32_t)source_type * ENEMY_ABILITY_TABLE_STRIDE);
         } else {
             source_kind = ABILITY_REROLL_SOURCE_KIND_NON_EWRAM_SOURCE_PTR;
         }
@@ -743,6 +891,13 @@ static uint8_t ap_apply_item(uint32_t ap_item_id) {
         return 1u;
     }
 
+    // AREA_KEY_2..AREA_KEY_9 = BASE+36 .. BASE+43
+    if (ap_item_id >= (KIRBY_ITEM_ID_BASE_OFFSET + 36u) && ap_item_id <= (KIRBY_ITEM_ID_BASE_OFFSET + 43u)) {
+        uint32_t area_id = 2u + (ap_item_id - (KIRBY_ITEM_ID_BASE_OFFSET + 36u));
+        AP_AREA_KEY_BITFIELD_RUNTIME |= (1u << area_id);
+        return 1u;
+    }
+
     // Unhandled item - return 0 to signal that the flag should NOT be cleared
     return 0u;
 }
@@ -770,6 +925,7 @@ void ap_poll_mailbox_c(void) {
         AP_STARTING_KIRBY_COLOR_ID = 0xFFFFFFFFu;
         AP_ONE_HIT_MODE_RUNTIME = 0xFFFFFFFFu;
         AP_NO_EXTRA_LIVES_RUNTIME = 0xFFFFFFFFu;
+        AP_AREA_KEY_BITFIELD_RUNTIME = 0u;
         ap_starting_kirby_color_applied = 0u;
         AP_ABILITY_RANDOMIZATION_MODE = 0u;
         AP_ABILITY_RANDOMIZATION_SEED_LO = 0u;
@@ -779,10 +935,10 @@ void ap_poll_mailbox_c(void) {
         AP_ABILITY_RANDOMIZATION_RNG_STATE = 0u;
         AP_ABILITY_REROLL_EVENT_COUNTER = 0u;
         AP_ABILITY_REROLL_SOURCE_ADDR = 0u;
-        AP_ABILITY_REROLL_ABILITY_ID = 0u;
         AP_ABILITY_REROLL_SOURCE_KIND = 0u;
         AP_ABILITY_REROLL_CALLSITE_PC = 0u;
-        AP_ABILITY_REROLL_KIRBY_INDEX = AP_REROLL_KIRBY_INDEX_UNKNOWN;
+        AP_ABILITY_REROLL_KIRBY_INDEX = 0u;
+        AP_ABILITY_REROLL_ABILITY_ID = 0u;
         AP_MAILBOX_INIT_COOKIE = AP_MAILBOX_INIT_COOKIE_VALUE;
     }
 

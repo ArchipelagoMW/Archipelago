@@ -77,9 +77,10 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x7C   | 0x0203B07C | 4B | ability_reroll_event_counter_runtime | u32 | ROM → Client | Incremented by the payload each time a per-swallow reroll fires. Client polls for rises in this counter to detect that one or more rerolls occurred since the previous poll. |
 | 0x80   | 0x0203B080 | 4B | ability_reroll_source_addr_runtime | u32 | ROM → Client | ROM address of the ability-source byte for the **most recent** per-swallow reroll event only. This is a single-slot mailbox field; if multiple rerolls happen between client polls, earlier source addresses are overwritten and cannot be reconstructed. Used by the client to map the most recent source to an enemy name in telemetry (best-effort). |
 | 0x84   | 0x0203B084 | 4B | ability_reroll_ability_id_runtime | u32 | ROM → Client | Ability ID selected by the **most recent** per-swallow reroll event only. Pairs with `ability_reroll_source_addr_runtime` as a best-effort snapshot; if multiple rerolls happen between polls, intermediate ability IDs are overwritten. The client logs how many events were missed when `ability_reroll_event_counter_runtime` advances by more than 1. |
-| 0x88   | 0x0203B088 | 4B | ability_reroll_kirby_index_runtime | u32 | ROM → Client | Kirby slot index (`0..3`) for the **most recent** reroll event, derived from the `kirby` pointer passed into the transition hook. `0xFFFFFFFF` indicates the pointer did not match an aligned player-struct slot. |
+| 0x88   | 0x0203B088 | 4B | ability_reroll_kirby_index_runtime | u32 | ROM → Client | Current player/Kirby slot index (`0..3`) for the **most recent** reroll event. The payload writes the active player index directly to this field and initializes it to `0`. |
+| 0x8C   | 0x0203B08C | 4B | area_key_bitfield_runtime | u32 | ROM ← Client | Bits 2–9 mirror permanently granted Area Key items. The Python client recomputes and rewrites this bitfield from already-delivered item history so special-door gating recovers after soft reset / fresh EWRAM initialization without waiting for mailbox replay order. |
 
-**Total: 140 bytes (0x0203B000 - 0x0203B08B)**
+**Total: 144 bytes (0x0203B000 - 0x0203B08F)**
 
 ### Native Game State (Referenced by AP; some fields are client-reconciled)
 
@@ -196,6 +197,8 @@ Server → Client: ConnectionRefused | Connected
 - `room_sanity` (bool): enables/disables room-visit locations (`Room X-<room code>`, 263 checks).
 - `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Wait`).
 - `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.
+- `stake_breaking_abilities` (list[str]): reusable hammer-peg/stake ability group used by transition logic (currently `Hammer`, `Master`, `Smash`, `Stone`).
+- `stake_gated_transitions` (list[str]): directional entrance names that require the shared hammer-peg/stake gate, derived from room-level `transitions` overrides in `data/regions/rooms.json`.
 - `locations` (dict): tracker-facing location metadata keyed by KirbyAM location key.
 - `rooms` (dict): tracker-facing room metadata keyed by room region key, exported regardless of `room_sanity` option.
 - `unique_items` (list[str]): tracker-facing list of KirbyAM unique item labels.
