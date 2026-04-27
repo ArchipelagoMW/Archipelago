@@ -222,10 +222,15 @@ BOSS_GFX_TABLE = {
     "Trinexx2": (22, 246, 35),
 }
 
+TRINEXX_ICE_FLOOR_ROUTINE_ADDRESS = 0x04B37E
+TRINEXX_ICE_PROJECTILE_TILE_ADDRESS = 0xE7A5
+TRINEXX_ICE_PROJECTILE_TYPE_ADDRESS = 0xF3BED
+
 
 def apply_enemizer_base_patch(rom: "LocalRom") -> None:
     for address, patch_data in _load_enemizer_base_patches():
         rom.write_bytes(address, patch_data)
+    _apply_trinexx_room_fixes(rom)
 
 def patch_bosses(world: "ALTTPWorld", rom: "LocalRom") -> None:
     dungeon_header_base = _get_enemizer_symbol("room_header_table")
@@ -418,6 +423,16 @@ def _update_hidden_enemy_item_table_for_retro_mode(rom: "LocalRom") -> None:
             rom.write_byte(item_table_address + index, RETRO_RUPEE_REPLACEMENT_SPRITE_ID)
 
 
+def _apply_trinexx_room_fixes(rom: "LocalRom") -> None:
+    # Match original Enemizer:
+    # 1. Disable the Trinexx ice-floor routine so blue-head projectiles
+    #    do not create solid walls in non-vanilla rooms.
+    # 2. Repoint the projectile tile data so the blue head shoots spikes.
+    rom.write_bytes(TRINEXX_ICE_FLOOR_ROUTINE_ADDRESS, (0xEA, 0xEA, 0xEA, 0xEA))
+    rom.write_bytes(TRINEXX_ICE_PROJECTILE_TILE_ADDRESS, (0x88, 0x01))
+    rom.write_byte(TRINEXX_ICE_PROJECTILE_TYPE_ADDRESS, 0x12)
+
+
 def _make_native_enemizer_rng(world: "ALTTPWorld") -> random.Random:
     seed_material = "|".join((
         str(world.multiworld.seed),
@@ -457,5 +472,4 @@ def _load_enemizer_symbols() -> dict[str, int]:
         name: snes_to_pc(snes_address)
         for name, snes_address in ENEMIZER_SYMBOLS.items()
     }
-
 
