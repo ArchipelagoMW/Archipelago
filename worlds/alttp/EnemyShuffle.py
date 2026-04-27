@@ -55,6 +55,12 @@ POTENTIAL_SUBGROUP_0 = (22, 31, 47, 14)
 POTENTIAL_SUBGROUP_1 = (44, 30, 32)
 POTENTIAL_SUBGROUP_2 = (12, 18, 23, 24, 28, 46, 34, 35, 39, 40, 38, 41, 36, 37, 42)
 POTENTIAL_SUBGROUP_3 = (17, 16, 27, 20, 82, 83)
+STANDARD_ESCAPE_OVERWORLD_AREA_IDS = frozenset((0x1B, 0x2B, 0x2C))
+# Standard opening escape uses the separate Beginning-mode overworld sheets rather than
+# the ordinary area graphics-block bytes. The three relevant groups are the runtime
+# Beginning sheet observed in Hyrule Castle courtyard (group 2) plus the first-part
+# graphics blocks used by the linked courtyard/Link's House screens (groups 0 and 1).
+STANDARD_BEGINNING_OVERWORLD_GROUP_IDS = frozenset((0x00, 0x01, 0x02))
 GUARD_SUBGROUP_1_DUNGEON_GROUP_IDS = frozenset((1, 2, 3, 4))
 SELECTED_BOSS_GROUP_REQUIREMENTS = {
     "Armos": (9, 83),
@@ -373,6 +379,11 @@ def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
     )
     _setup_required_overworld_groups(sprite_groups, overworld_metadata["forced_group_requirements"])
     _randomize_overworld_groups(world, sprite_groups)
+    _restore_standard_beginning_overworld_sprite_groups(
+        world,
+        sprite_groups,
+        original_sprite_groups,
+    )
     randomized_overworld_areas = _randomize_overworld_areas(
         world,
         overworld_areas,
@@ -714,6 +725,26 @@ def _randomize_overworld_groups(world: "ALTTPWorld", sprite_groups: dict[int, Du
             group.subgroup_2 = world.random.choice(POTENTIAL_SUBGROUP_2)
         if not group.preserve_subgroup_3:
             group.subgroup_3 = world.random.choice(POTENTIAL_SUBGROUP_3)
+
+
+def _restore_standard_beginning_overworld_sprite_groups(
+    world: "ALTTPWorld",
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    original_sprite_groups: dict[int, tuple[int, int, int, int]],
+) -> None:
+    if world.options.mode != "standard":
+        return
+
+    for group_id in STANDARD_BEGINNING_OVERWORLD_GROUP_IDS:
+        group = sprite_groups.get(group_id)
+        original_group = original_sprite_groups.get(group_id)
+        if group is None or original_group is None:
+            continue
+        group.subgroup_0, group.subgroup_1, group.subgroup_2, group.subgroup_3 = original_group
+        group.preserve_subgroup_0 = True
+        group.preserve_subgroup_1 = True
+        group.preserve_subgroup_2 = True
+        group.preserve_subgroup_3 = True
 
 
 def _read_room_header_address(rom_bytes: bytes, room_id: int, room_header_bank: int) -> int:
@@ -1477,7 +1508,8 @@ def _randomize_overworld_areas(
     for area_id in sorted(overworld_areas):
         area = overworld_areas[area_id]
         selected_group = sprite_groups.get(area.graphics_block_id)
-        if not area.do_not_randomize:
+        skip_randomization = area.do_not_randomize
+        if not skip_randomization:
             possible_groups = get_possible_overworld_sprite_groups(state, area)
             if possible_groups:
                 selected_group = world.random.choice(possible_groups)
@@ -1493,7 +1525,7 @@ def _randomize_overworld_areas(
             state,
             area,
             selected_group,
-            area.do_not_randomize,
+            skip_randomization,
         )
 
     return randomized_areas
@@ -1740,7 +1772,7 @@ def validate_enemy_shuffle_state(state: EnemyShuffleState, is_standard_mode: boo
 
     for area_id, area in state.overworld_areas.items():
         randomized_area = state.randomized_overworld_areas[area_id]
-        _validate_overworld_area(state, area, randomized_area)
+        _validate_overworld_area(state, area, randomized_area, is_standard_mode)
 
 
 def _validate_dungeon_room(
@@ -1814,6 +1846,7 @@ def _validate_overworld_area(
     state: EnemyShuffleState,
     area: OverworldEnemyArea,
     randomized_area: RandomizedOverworldEnemyArea,
+    is_standard_mode: bool,
 ) -> None:
     selected_group = state.sprite_groups.get(randomized_area.graphics_block_id)
     if selected_group is None:

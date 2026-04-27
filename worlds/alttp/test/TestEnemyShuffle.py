@@ -44,8 +44,10 @@ from worlds.alttp.EnemyShuffle import (
     _load_default_dungeon_room_sprites,
     _load_enemy_sprite_requirements,
     _apply_selected_boss_group_requirements,
+    _randomize_overworld_areas,
     _randomize_overworld_groups,
     _randomize_room_sprites,
+    _restore_standard_beginning_overworld_sprite_groups,
     _restore_skipped_room_sprite_groups,
     _setup_required_overworld_groups,
     can_spawn_in_room,
@@ -1909,6 +1911,94 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertFalse(group.preserve_subgroup_1)
         self.assertFalse(group.preserve_subgroup_2)
         self.assertFalse(group.preserve_subgroup_3)
+
+    def test_standard_beginning_overworld_uses_original_graphics_groups(self) -> None:
+        sprite_groups = {
+            0x00: DungeonSpriteGroup(group_id=0x00, dungeon_group_id=0, subgroup_0=31, subgroup_1=32, subgroup_2=74, subgroup_3=82),
+            0x01: DungeonSpriteGroup(group_id=0x01, dungeon_group_id=0, subgroup_0=31, subgroup_1=32, subgroup_2=74, subgroup_3=82),
+            0x02: DungeonSpriteGroup(group_id=0x02, dungeon_group_id=0, subgroup_0=47, subgroup_1=32, subgroup_2=35, subgroup_3=16),
+        }
+
+        _restore_standard_beginning_overworld_sprite_groups(
+            SimpleNamespace(options=SimpleNamespace(mode="standard")),
+            sprite_groups,
+            {
+                0x00: (0, 73, 0, 0),
+                0x01: (22, 13, 76, 63),
+                0x02: (72, 73, 19, 29),
+            },
+        )
+
+        self.assertEqual(
+            (sprite_groups[0x00].subgroup_0, sprite_groups[0x00].subgroup_1, sprite_groups[0x00].subgroup_2, sprite_groups[0x00].subgroup_3),
+            (0, 73, 0, 0),
+        )
+        self.assertEqual(
+            (sprite_groups[0x01].subgroup_0, sprite_groups[0x01].subgroup_1, sprite_groups[0x01].subgroup_2, sprite_groups[0x01].subgroup_3),
+            (22, 13, 76, 63),
+        )
+        self.assertEqual(
+            (sprite_groups[0x02].subgroup_0, sprite_groups[0x02].subgroup_1, sprite_groups[0x02].subgroup_2, sprite_groups[0x02].subgroup_3),
+            (72, 73, 19, 29),
+        )
+        self.assertTrue(sprite_groups[0x00].preserve_subgroup_0)
+        self.assertTrue(sprite_groups[0x00].preserve_subgroup_1)
+        self.assertTrue(sprite_groups[0x00].preserve_subgroup_2)
+        self.assertTrue(sprite_groups[0x00].preserve_subgroup_3)
+        self.assertTrue(sprite_groups[0x01].preserve_subgroup_0)
+        self.assertTrue(sprite_groups[0x01].preserve_subgroup_1)
+        self.assertTrue(sprite_groups[0x01].preserve_subgroup_2)
+        self.assertTrue(sprite_groups[0x01].preserve_subgroup_3)
+        self.assertTrue(sprite_groups[0x02].preserve_subgroup_0)
+        self.assertTrue(sprite_groups[0x02].preserve_subgroup_1)
+        self.assertTrue(sprite_groups[0x02].preserve_subgroup_2)
+        self.assertTrue(sprite_groups[0x02].preserve_subgroup_3)
+
+    def test_standard_escape_overworld_areas_still_randomize_graphics_block(self) -> None:
+        area = OverworldEnemyArea(
+            area_id=0x2B,
+            sprite_table_address=0,
+            graphics_block_address=0,
+            graphics_block_id=0x00,
+            bush_sprite_id=0x42,
+            sprites=(
+                OverworldEnemySprite(address=0x1000, y_coord=0x20, x_coord=0x30, sprite_id=0x41),
+            ),
+            do_not_randomize=False,
+        )
+        sprite_groups = {
+            0x00: DungeonSpriteGroup(
+                group_id=0x00,
+                dungeon_group_id=0,
+                subgroup_0=22,
+                subgroup_1=13,
+                subgroup_2=23,
+                subgroup_3=27,
+            ),
+            0x03: DungeonSpriteGroup(
+                group_id=0x03,
+                dungeon_group_id=0,
+                subgroup_0=31,
+                subgroup_1=32,
+                subgroup_2=74,
+                subgroup_3=82,
+            ),
+        }
+
+        with patch("worlds.alttp.EnemyShuffle.get_possible_overworld_sprite_groups", return_value=(sprite_groups[0x03],)):
+            randomized_areas = _randomize_overworld_areas(
+                SimpleNamespace(options=SimpleNamespace(mode="standard"), random=random.Random(0)),
+                {area.area_id: area},
+                sprite_groups,
+                tuple(),
+                tuple(),
+            )
+
+        randomized_area = randomized_areas[0x2B]
+        self.assertFalse(randomized_area.skipped_randomization)
+        self.assertEqual(randomized_area.graphics_block_id, 0x03)
+        self.assertEqual([sprite.sprite_id for sprite in randomized_area.sprites], [0x41])
+        self.assertEqual(randomized_area.bush_sprite_id, 0x42)
 
     @staticmethod
     def _requirement(
