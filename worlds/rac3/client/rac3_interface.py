@@ -1970,10 +1970,10 @@ class Rac3Interface(GameInterface):
                             self.notification_time = current_time + 1
                             display_time = int((self.notification_time - current_time) * 120)
                         self.messagebox(msg_list, longest_line_length, theme, display_time)
-                        logger.debug("Warning: Incorrect Display message detected")
-                        logger.debug(f"Message: {merged_message}")
-                        logger.debug(f"{read_message}")
-                        logger.debug(f"{write_message}")
+                        #logger.debug("Warning: Incorrect Display message detected")
+                        #logger.debug(f"Message: {merged_message}")
+                        #logger.debug(f"{read_message}")
+                        #logger.debug(f"{write_message}")
                     self.notification_paused_remaining = max(0, self.notification_time - current_time)
         else:
             self.notification_time = None
