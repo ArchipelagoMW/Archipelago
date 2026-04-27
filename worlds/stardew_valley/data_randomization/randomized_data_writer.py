@@ -77,6 +77,7 @@ def prepare_festival_data(content: StardewContent, data_to_randomize: set[str], 
 
 def prepare_shops_data(content: StardewContent, data_to_randomize: set[str], prepared_data):
     prepared_data["Shops"] = dict()
+    prepare_shops_currencies_data(content, data_to_randomize, prepared_data)
     prepare_shops_prices_data(content, data_to_randomize, prepared_data)
 
 
@@ -219,20 +220,25 @@ def prepare_festival_data_aspect(content: StardewContent, data_to_randomize: set
         prepared_data["Festivals"][festival_name][aspect_key] = festival_data_extractor(festival_data)
 
 
-def prepare_shops_prices_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
-    prepare_shop_data_aspect(content, data_to_randomize, prepared_data,
-                             DataRandomizationOptionName.shop_prices,
-                             lambda shop_source: shop_source.price is not None and shop_source.price >= 1,
-                             lambda shop_source: shop_source.price,
-                             "Price")
-
-
 def prepare_shops_currencies_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
     prepare_shop_data_aspect(content, data_to_randomize, prepared_data,
                              DataRandomizationOptionName.shop_currencies,
                              lambda shop_source: shop_source.currency is not None and shop_source.price is not None and shop_source.price >= 1,
                              lambda shop_source: shop_source.currency,
                              "Currency")
+    prepare_shop_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.shop_currencies,
+                             lambda shop_source: shop_source.currency is not None and shop_source.price is not None and shop_source.price >= 1,
+                             lambda shop_source: shop_source.price,
+                             "Price")
+
+
+def prepare_shops_prices_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_shop_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.shop_prices,
+                             lambda shop_source: shop_source.price is not None and shop_source.price >= 1,
+                             lambda shop_source: shop_source.price,
+                             "Price")
 
 
 def prepare_shop_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
