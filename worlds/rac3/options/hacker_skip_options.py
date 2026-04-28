@@ -7,8 +7,7 @@ class HackerSkip(OptionCounter):
     """
     Determines which planet's hacker puzzles should be skipped.
     Receiving The Hacker will instantly mark all puzzles on the enabled planets as completed.
-    If The Hacker is received while on a planet with an enabled skip, a reload is required to apply the skip.
-    This can be done either by dying, ship teleporting or leaving and re-entering the planet.
+    If The Hacker is received while on a planet with an enabled skip, the doors open automatically.
 
     1 = Enabled, 0 = Disabled
     """
