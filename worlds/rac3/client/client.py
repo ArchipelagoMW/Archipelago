@@ -214,6 +214,24 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.print_all_vendor_items()
+    
+    def _cmd_traversal(self, *args):
+        """Test command for linked list traversal purposes."""
+        if not self.verify():
+            return
+        if isinstance(self.ctx, Rac3Context):
+            # convert the hex input to an int and then do traversal with that as the target id
+            try:
+                start_address = int(args[0], 16)
+                target_id = int(args[1], 16)
+            except ValueError:
+                self.output("Invalid target ID. Please provide a valid hexadecimal number.")
+                return
+            # try addresses in intervals of 0x100 to see if we find any good ones
+            for addr in range(start_address, start_address + 0x10000, 0x100):
+                moby_addr = self.ctx.game_interface.find_moby_by_id(target_id, addr)
+                if moby_addr is not None:
+                    self.output(f"Found moby with ID {hex(target_id)} at address {hex(moby_addr)} with start address {hex(addr)}")
 
 
 class Rac3Context(CommonContext):
