@@ -88,7 +88,7 @@ class BabaIsYouWorld(World):
         "map_page_folder": "tracker",
         "map_page_maps": "maps/maps.json",
         "map_page_locations": [
-            "locations/???.json",
+            "locations/flower.json",
             "locations/ABC.json",
             "locations/Cavern.json",
             "locations/Center.json",
