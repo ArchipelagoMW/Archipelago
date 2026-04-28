@@ -218,7 +218,7 @@ class Transformsanity(Toggle):
 class LevelShuffle(Choice):
     """
     Swaps normal levels with other normal levels.
-    Levels with transformations, as well as "A Way Out?", "The End", and "Gallery", will not be shuffled.
+    Levels with transformations, as well as "A Way Out?", "The Box", "The End", and "Gallery", will never be shuffled.
     disabled: Levels will not be shuffled (default).
     limited: Only levels within accessible areas will be shuffled.
     full: All levels will be shuffled, minus the exceptions listed above.
