@@ -1887,9 +1887,6 @@ class Rac3Interface(GameInterface):
             next_ptr = self._read32(next_ptr_addr)
             if next_ptr == 0:  # Null pointer found
                 logger.debug(f"Moby with ID {target_id} not found, reached null pointer after {traversal_count} traversals")
-                if traversal_count > 10:
-                    # print start address
-                    logger.debug(f"Start address was: {hex(table_start)}")
                 return None
             moby_offset = next_ptr - table_start
             if moby_offset < 0:

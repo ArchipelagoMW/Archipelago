@@ -222,8 +222,8 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             # convert the hex input to an int and then do traversal with that as the target id
             try:
-                start_address = int(args[0], 16)
-                target_id = int(args[1], 16)
+                target_id = int(args[0], 16)
+                start_address = int(args[1], 16)
             except ValueError:
                 self.output("Invalid target ID. Please provide a valid hexadecimal number.")
                 return
