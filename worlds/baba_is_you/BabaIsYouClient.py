@@ -103,7 +103,8 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
         """Manually trigger a resync."""
         self.output(f"Syncing items.")
         self.ctx.syncing = True
-        self.ctx.create_options_files(self.ctx)
+        if self.ctx.is_connected:
+            self.ctx.create_options_files(self.ctx)
     
     def _cmd_filepath(self) -> bool:
         """Change filepath to Baba Is You installation."""
@@ -154,7 +155,8 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
             os.makedirs(self.ctx.game_communication_path)
         
         self.output(f"Set save slot to {slotNum}")
-        self._cmd_resync(self) # Also run resync
+        if self.ctx.is_connected:
+            self._cmd_resync(self) # Also run resync
         return True
     
     def _cmd_install_pack(self) -> bool:
