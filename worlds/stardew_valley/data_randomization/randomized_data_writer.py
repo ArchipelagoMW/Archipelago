@@ -246,7 +246,7 @@ def prepare_shops_materials_data(content: StardewContent, data_to_randomize: set
     prepare_shop_data_aspect(content, data_to_randomize, prepared_data,
                              DataRandomizationOptionName.shop_extra_materials,
                              lambda shop_source: shop_source.items_price is not None and len(shop_source.items_price) >= 1,
-                             lambda shop_source: shop_source.items_price,
+                             lambda shop_source: {item_price[1]: item_price[0] for item_price in shop_source.items_price},
                              "Materials")
 
 
