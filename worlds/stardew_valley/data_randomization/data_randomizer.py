@@ -61,6 +61,7 @@ def randomize_festivals_data(behavior, content, data_to_randomize, random):
 def randomize_shops_data(behavior, content, data_to_randomize, random):
     randomize_shop_currencies(content, data_to_randomize, behavior, random)
     randomize_shop_prices(content, data_to_randomize, behavior, random)
+    randomize_shop_extra_materials(content, data_to_randomize, behavior, random)
 
 
 def fish_is_included(data_to_randomize: set[str], fish_data: FishItem) -> bool:
@@ -407,6 +408,44 @@ def get_new_price_sources(data, randomized_prices_per_shop_source):
     if len(shop_sources) <= 0:
         return None
     modified_shop_sources = [override(source, price=randomized_prices_per_shop_source[source]) for source in shop_sources]
+    new_sources = list(data.sources)
+    new_sources = [source for source in new_sources if source not in shop_sources]
+    new_sources.extend(modified_shop_sources)
+    return new_sources
+
+
+def randomize_shop_extra_materials(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.shop_extra_materials not in data_to_randomize:
+        return
+
+    shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.items_price is not None and len(shop_source.items_price) >= 1])
+    shop_materials_by_source = {shop_source: shop_source.items_price for shop_source in shop_sources_included}
+    randomized_shop_materials = randomizers_per_behavior[behavior](shop_materials_by_source, random)
+
+    for item_name, item_data in content.game_items.items():
+        new_sources = get_new_extra_material_sources(item_data, randomized_shop_materials)
+        if new_sources is not None:
+            content.game_items[item_name] = override(item_data, sources=new_sources)
+    for building_name, building_data in content.farm_buildings.items():
+        new_sources = get_new_extra_material_sources(building_data, randomized_shop_materials)
+        if new_sources is not None:
+            content.farm_buildings[building_name] = override(building_data, sources=new_sources)
+    for tool_upgrade_name, tool_upgrade_data in content.tool_upgrades.items():
+        new_sources = get_new_extra_material_sources(tool_upgrade_data, randomized_shop_materials)
+        if new_sources is not None:
+            content.tool_upgrades[tool_upgrade_name] = override(tool_upgrade_data, sources=new_sources)
+    for animal_name, animal_data in content.animals.items():
+        new_sources = get_new_extra_material_sources(animal_data, randomized_shop_materials)
+        if new_sources is not None:
+            content.animals[animal_name] = override(animal_data, sources=new_sources)
+
+
+def get_new_extra_material_sources(data, randomized_shop_materials):
+    shop_sources = [source for source in data.sources if isinstance(source, ShopSource) and source in randomized_shop_materials]
+    if len(shop_sources) <= 0:
+        return None
+
+    modified_shop_sources = [override(source, items_price=randomized_shop_materials[source]) for source in shop_sources]
     new_sources = list(data.sources)
     new_sources = [source for source in new_sources if source not in shop_sources]
     new_sources.extend(modified_shop_sources)
