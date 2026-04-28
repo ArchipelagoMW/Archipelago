@@ -1,7 +1,7 @@
 import argparse
 import json
 
-from worlds.stardew_valley.test.options.presets import allsanity_mods_7_x_x_exclude_disabled
+from worlds.stardew_valley.test.options.presets import maxsanity_mods_7_x_x_exclude_disabled
 from ..bases import setup_solo_multiworld
 from ...options import FarmType, EntranceRandomization
 
@@ -12,7 +12,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     seed = args.seed
 
-    options = allsanity_mods_7_x_x_exclude_disabled()
+    options = maxsanity_mods_7_x_x_exclude_disabled()
     options[FarmType.internal_name] = FarmType.option_standard
     options[EntranceRandomization.internal_name] = EntranceRandomization.option_buildings
     multi_world = setup_solo_multiworld(options, seed=seed)
