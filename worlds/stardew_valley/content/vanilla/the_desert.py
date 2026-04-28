@@ -75,9 +75,9 @@ the_desert = ContentPack(
         Hats.mummy_mask: (Tag(ItemTag.HAT), ShopSource(price=120, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
         Hats.arcane_hat: (Tag(ItemTag.HAT), ShopSource(price=20000, shop_region=Region.adventurer_guild,
                                                             other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
-        Hats.green_turban: (Tag(ItemTag.HAT), ShopSource(price=50, currency=Geode.omni, shop_region=Region.desert,),),
-        Hats.magic_cowboy_hat: (Tag(ItemTag.HAT), ShopSource(price=333, currency=Geode.omni, shop_region=Region.desert,),),
-        Hats.magic_turban: (Tag(ItemTag.HAT), ShopSource(price=333, currency=Geode.omni, shop_region=Region.desert,),),
+        Hats.green_turban: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((50, Geode.omni),), shop_region=Region.desert,),),
+        Hats.magic_cowboy_hat: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((333, Geode.omni),), shop_region=Region.desert,),),
+        Hats.magic_turban: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((333, Geode.omni),), shop_region=Region.desert,),),
 
         Hats.laurel_wreath_crown: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
         Hats.joja_cap: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
