@@ -149,7 +149,7 @@ class TechLayerObscurity(Toggle):
 
 class TechDepthObscurity(Range):
     """Hides technologies based on what you have researched.
-    The value determens how far you can see.
+    The value determines how far you can see.
     Tech tree example:
        B   |
        |   |
@@ -229,6 +229,7 @@ class TechTreeLayout(Choice):
     Funnels: Several bottom halves of diamonds (6/10/15 nodes each)
     Trees: Several trees
     Choices: A single balanced binary tree
+    Irregular: A single randomly generated technology tree.
     """
     display_name = "Technology Tree Layout"
     option_single = 0
