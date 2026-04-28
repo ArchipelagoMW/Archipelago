@@ -81,7 +81,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.progress_flag import HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION
+from worlds.rac3.constants.progress_flag import HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION, RAC3PROGRESSFLAG
 from worlds.rac3.constants.region import (
     PLANET_FROM_INFOBOT,
     PLANET_LOAD_OFFSET,
@@ -90,7 +90,7 @@ from worlds.rac3.constants.region import (
     PLANETS_WITH_HACKER_PUZZLES,
     RAC3REGION,
     REGION_TO_HACKER_DOOR_COUNT,
-    REGION_TO_MOBY_TABLE_START,
+    REGION_TO_MOBY_TABLE_START_NTSC,
     RESPAWN_COORDS_OFFSET,
     SHIP_SLOTS,
 )
@@ -1819,11 +1819,7 @@ class Rac3Interface(GameInterface):
         if self.planet in planets and len(self.hacker_door_addresses) == REGION_TO_HACKER_DOOR_COUNT.get(self.planet, 0) and not self.opened_the_hacker_doors:
             for door_id in self.hacker_door_addresses.keys():
                 door_addr = self.hacker_door_addresses[door_id]
-                if door_id == 0xBD or door_id == 0x1FB: # Holostar Elevator and Door
-                    self._write16(door_addr + 0xBE, 5)
-                else:
-                    if self._read8(door_addr + 0x20) == 1:  # If door is in closed state
-                        self._write8(door_addr + 0x20, 2)  # Set door state to opening
+                self._write16(door_addr + 0xBE, 5)
             self.opened_the_hacker_doors = True
 
     def already_marked_hacker_puzzles(self) -> bool:
@@ -1848,6 +1844,11 @@ class Rac3Interface(GameInterface):
             return
         puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == self.planet]
         doors = [HACKER_PUZZLE_TO_DOOR_ID[puzzle] for puzzle in puzzles if puzzle in HACKER_PUZZLE_TO_DOOR_ID]
+        if HACKER_PUZZLE_TO_DOOR_ID[RAC3PROGRESSFLAG.AQUATOS_HACKER_GATE] in doors:
+            # The door is made up of 4 parts that all need the number 5
+            doors.append(0x138)
+            doors.append(0x139)
+            doors.append(0x13A)
 
         # Try to resolve each door id to a moby address; save successful lookups only
         for door_id in doors:
@@ -1861,7 +1862,7 @@ class Rac3Interface(GameInterface):
     def find_moby_by_id(self, target_id: int, table_start: int | None = None) -> int | None:
         """Traverse the moby linked list on the current planet to find a moby with the given ID and return its address"""
         if table_start is None:
-            table_start = REGION_TO_MOBY_TABLE_START.get(self.planet, 0)
+            table_start = REGION_TO_MOBY_TABLE_START_NTSC.get(self.planet, 0)
         elif not table_start:
             logger.debug(f"No moby table for planet {self.planet}, cannot find moby by ID")
             return None
@@ -2205,7 +2206,7 @@ class Rac3Interface(GameInterface):
         else:
             pda_vendor_str = hex(self.pda_vendor) if self.pda_vendor else "Not Found"
         logger.info(f"PDA Vendor Address: {pda_vendor_str}")
-        logger.info(f"Meet Sasha Bridge: {RAC3LOCATION.PHOENIX_MEET_SASHA in self.checked_locations}")
+        logger.info(f"Opened Hacker Doors: {self.opened_the_hacker_doors}")
         logger.info(f"Visited Planets: {[planet for planet in PLANET_NAME_FROM_ID.values() if planet in self.visited_planets and not (planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.holostar_skip)]}")
         logger.info(f"Active Patches: {[PATCH_INSTRUCTION_TO_NAME[patch] for patch in self.get_active_patches()]}")
         failed_patches = self.get_failed_patches()
