@@ -1806,6 +1806,8 @@ class Rac3Interface(GameInterface):
         """Marks all hacker puzzles for planets with hacker skip enabled as complete if the hacker is unlocked."""
         if not self.UnlockItem[RAC3ITEM.HACKER].status:
             return
+        if self.is_reloading and not self.opened_the_hacker_doors:
+            self.opened_the_hacker_doors = True
 
         planets = [planet for planet in PLANETS_WITH_HACKER_PUZZLES if self.options.hacker_skip.get(planet, False)]
         for planet in planets:
