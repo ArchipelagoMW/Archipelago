@@ -91,6 +91,7 @@ from worlds.rac3.constants.region import (
     RAC3REGION,
     REGION_TO_HACKER_DOOR_COUNT,
     REGION_TO_MOBY_TABLE_START_NTSC,
+    REGION_TO_MOBY_TABLE_START_PAL,
     RESPAWN_COORDS_OFFSET,
     SHIP_SLOTS,
 )
@@ -1863,12 +1864,11 @@ class Rac3Interface(GameInterface):
         """Traverse the moby linked list on the current planet to find a moby with the given ID and return its address"""
         if table_start is None:
             table_start = REGION_TO_MOBY_TABLE_START_NTSC.get(self.planet, 0)
-        elif not table_start:
+            if self.current_game == RAC3VERSION.EU_ID:
+                table_start = REGION_TO_MOBY_TABLE_START_PAL.get(self.planet, 0)
+        if table_start == 0:
             logger.debug(f"No moby table for planet {self.planet}, cannot find moby by ID")
             return None
-        if self.current_game == RAC3VERSION.EU_ID:
-            pass
-            # TODO find PAL addresses
         moby_offset = 0
         current_id = 0
         for traversal_count in range(1, 10001):
@@ -1876,7 +1876,13 @@ class Rac3Interface(GameInterface):
                 moby_addr = table_start + moby_offset
                 logger.debug(f"Moby with ID {target_id} found at address: {hex(moby_addr)} after {traversal_count} traversals")
                 return moby_addr
-            next_ptr = self._read32(table_start + 0x28 + moby_offset)
+            next_ptr_addr = table_start + 0x28 + moby_offset
+            if next_ptr_addr < 0 or next_ptr_addr > 0xFFFFFFFF:
+                logger.debug(
+                    f"Moby with ID {target_id} not found, next pointer address out of range "
+                    f"after {traversal_count} traversals")
+                return None
+            next_ptr = self._read32(next_ptr_addr)
             if next_ptr == 0:  # Null pointer found
                 logger.debug(f"Moby with ID {target_id} not found, reached null pointer after {traversal_count} traversals")
                 if traversal_count > 10:
@@ -1887,7 +1893,13 @@ class Rac3Interface(GameInterface):
             if moby_offset < 0:
                 logger.debug(f"Moby with ID {target_id} not found, invalid offset detected after {traversal_count} traversals")
                 return None
-            current_id = self._read16(table_start + 0xB2 + moby_offset)
+            current_id_addr = table_start + 0xB2 + moby_offset
+            if current_id_addr < 0 or current_id_addr > 0xFFFFFFFF:
+                logger.debug(
+                    f"Moby with ID {target_id} not found, current id address out of range "
+                    f"after {traversal_count} traversals")
+                return None
+            current_id = self._read16(current_id_addr)
         logger.debug(f"Moby with ID {target_id} not found after maximum traversals")
         return None
 
