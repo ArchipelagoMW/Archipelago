@@ -131,9 +131,9 @@ ginger_island_content_pack = GingerIslandContentPack(
                                                                     other_requirements=(PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
         Hats.golden_helmet: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                                other_requirements=(RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
-        Hats.bluebird_mask: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
-        Hats.deluxe_cowboy_hat: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
-        Hats.small_cap: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
+        Hats.bluebird_mask: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
+        Hats.deluxe_cowboy_hat: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
+        Hats.small_cap: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
         Hats.mr_qis_hat: (Tag(ItemTag.HAT), ShopSource(price=5, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
         Hats.pink_bow: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=Region.volcano_dwarf_shop),),
 
