@@ -215,8 +215,7 @@ class Rac3Interface(GameInterface):
     vendor_string_pointers: dict[str, int] = None
     should_restore_vendor_item_names: bool = True
     cycle_times: list[float] = []
-    hacker_door_addresses: dict[int, int] = dict()
-    hacker_flags_written: bool = False
+    hacker_door_addresses: dict[int, int] = {}
     opened_the_hacker_doors: bool = False
 
     def __init__(self):
@@ -615,6 +614,8 @@ class Rac3Interface(GameInterface):
             self.UnlockItem[name].status += 1
 
         match name:
+            case RAC3ITEM.HACKER:
+                self.opened_the_hacker_doors = self.already_marked_hacker_puzzles()
             case RAC3ITEM.PROGRESSIVE_VIDCOMIC:
                 if self.UnlockItem[name].status > 5:
                     self.UnlockItem[name].status = 5

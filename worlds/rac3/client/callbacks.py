@@ -189,7 +189,6 @@ async def _handle_game_ready(ctx: "Context") -> None:
             ctx.game_interface.reset_death_count()
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()
-            ctx.game_interface.opened_the_hacker_doors = ctx.game_interface.already_marked_hacker_puzzles()
             logger.info("Load the latest autosave or enter the Armor Vendor to apply cosmetics")
             logger.info("Setting up codecave...")
             ctx.code_cave_setup = False
@@ -347,6 +346,10 @@ async def handle_planet_changed(ctx: "Context") -> None:
     ctx.current_planet, _map = ctx.game_interface.map_switch()
     if last_planet is not ctx.current_planet:
         ctx.game_interface.hacker_door_addresses = {}
+
+        # Changing planet counts as a reload.
+        if ctx.game_interface.already_marked_hacker_puzzles():
+            ctx.game_interface.opened_the_hacker_doors = True
 
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
