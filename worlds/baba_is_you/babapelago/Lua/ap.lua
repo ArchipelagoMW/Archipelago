@@ -321,7 +321,7 @@ function mapcursor_enter(varsunitid)
                             check_min_access = this_min_access
                         end
 
-                        if check_min_access > options.area_access then
+                        if check_min_access > options.area_access and not manualChecks then
                             add_to_messages("Area is not accessible.")
                             valid = false
                         elseif options.world_keys ~= 0 and needed_key and not checks[needed_key] then

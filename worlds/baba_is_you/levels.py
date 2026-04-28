@@ -259,7 +259,7 @@ LEVEL_DATA = {
             "Map-6": None,
         },
         "winLogic": HasAll("Keke", "Is", "Push", "Belt", "Shift", "Rock", "Win"),
-        "winLogicAdv": HasAll("Keke", "Is", "You", "Rock", "Push"),
+        "winLogicAdv": HasAll("Keke", "Is", "You", "Rock", "Push") & (hard_logic_filter | HasAll("Belt", "Shift")),
     },
     "Map-?": {
         "name": "?",
@@ -1333,7 +1333,7 @@ LEVEL_DATA = {
         "name": "Trio",
         "parent": "Space",
         "winLogic": HasAll("Me", "Is", "Push", "And", "Keke", "Move", "Skull", "Defeat"),
-        "winLogicAdv": HasAll("Skull", "Is", "Defeat") & ((Has("Keke") & ((Has("And") & HasAny("Me", "Move")) | HasAll("Me", "Push"))) | (HasAll("Push", "And") & HasAny("Me", "Move"))),
+        "winLogicAdv": HasAll("Is", "Defeat") & ((Has("Keke") & ((Has("And") & HasAny("Me", "Move")) | HasAll("Me", "Push", "Move"))) | (HasAll("Push", "And") & HasAny("Me", "Move"))),
         "connects": {
             "Space-4": can_win,
             "Space-9": can_win,
@@ -1478,7 +1478,7 @@ LEVEL_DATA = {
         "name": "Maritime Adventures",
         "parent": "Garden",
         "winLogic": HasAll("Baba", "Is", "You", "Hand", "Move", "On", "Wall", "Push", "Defeat"),
-        "winLogicAdv": HasAll("Defeat", "Is") & ((hard_logic_filter & (HasAll("You", "Baba", "Move") | (HasAll("Wall", "Hand") & HasAny("Baba", "Move", "You")))) | (HasAll("Wall", "Move", "On") & (Has("Hand") | HasAll("Baba", "You")))),
+        "winLogicAdv": HasAll("Defeat", "Is") & ((HasAll("Wall", "Move", "On") & (Has("Hand") | HasAll("Baba", "You"))) | (hard_logic_filter & ((Has("You") & (Has("Hand") | HasAll("Baba", "Move"))) | (Has("Wall") & ((Has("Hand") & HasAny("Move", "Baba")) | HasAll("Baba", "You")))))), # this is hell
         "connects": {
             "Garden-4": can_win,
             "Garden-8": can_win,
