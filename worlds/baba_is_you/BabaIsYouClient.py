@@ -103,6 +103,7 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
         """Manually trigger a resync."""
         self.output(f"Syncing items.")
         self.ctx.syncing = True
+        self.ctx.create_options_files(self.ctx)
     
     def _cmd_filepath(self) -> bool:
         """Change filepath to Baba Is You installation."""
@@ -153,11 +154,12 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
             os.makedirs(self.ctx.game_communication_path)
         
         self.output(f"Set save slot to {slotNum}")
+        self._cmd_resync(self) # Also run resync
         return True
     
     def _cmd_install_pack(self) -> bool:
-        """Install the Babapelago level pack at the currently selected world"""
-        result = auto_install_pack(self.ctx.game_data_path, f"save{self.ctx.save_slot}", True)
+        """Install the Babapelago level pack, replacing all files."""
+        result = auto_install_pack(self.ctx.game_data_path, "babapelago", True)
         if result:
             self.output("Successfully installed the pack!")
         else:
@@ -271,43 +273,7 @@ class BabaIsYouContext(CommonContext):
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
 
-            # Set up options file
-            currPath = os.path.join(self.game_communication_path,"AP_OPTIONS.data")
-            self.slot_data = args["slot_data"]
-            with open(currPath, 'w') as f:
-                f.write("[options]\n")
-                for option in self.slot_data:
-                    if option != "level_shuffle_dict":
-                        f.write(f"{option}={self.slot_data[option]}\n")
-                f.write(f"seed={str(self.seed_name)}")
-                f.close()
-
-            # Set up seed file (done to prevent getting checks from previous games)
-            currPath = os.path.join(self.game_communication_path,f"AP_SEED_{self.seed_name}.data")
-            with open(currPath, 'w') as f:
-                f.close()
-
-            # Set up level shuffle dict file
-            if self.slot_data["level_shuffle"] != 0:
-                currPath = os.path.join(self.game_communication_path,"AP_SHUFFLE.data")
-                with open(currPath, 'w') as f:
-                    f.write("[general]\n")
-                    i = 0
-                    for region1 in self.slot_data["level_shuffle_dict"]:
-                        region2 = self.slot_data["level_shuffle_dict"][region1]
-                        f.write(f"{i}={region1}@{region2}\n")
-                        i += 1
-                    f.write(f"total={i}")
-                    f.close()
-
-            # Set up already checked locations
-            currPath = os.path.join(self.game_communication_path,"AP_CHECKS.data")
-            with open(currPath, 'w') as f:
-                f.write("[checks]\n")
-                for ss in self.checked_locations:
-                    locationName = self.location_names.lookup_in_game(ss)
-                    f.write(f"{locationName}=1\n")
-                f.close()
+            self.create_options_files(self)
         
         if cmd in {"RoomInfo"}:
             self.seed_name = args['seed_name']
@@ -359,6 +325,43 @@ class BabaIsYouContext(CommonContext):
 
         self.ui = BabaIsYouManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+    
+    def create_options_files(self):
+        currPath = os.path.join(self.game_communication_path,"AP_OPTIONS.data")
+        with open(currPath, 'w') as f:
+            f.write("[options]\n")
+            for option in self.slot_data:
+                if option != "level_shuffle_dict":
+                    f.write(f"{option}={self.slot_data[option]}\n")
+            f.write(f"seed={str(self.seed_name)}")
+            f.close()
+
+        # Set up seed file (done to prevent getting checks from previous games)
+        currPath = os.path.join(self.game_communication_path,f"AP_SEED_{self.seed_name}.data")
+        with open(currPath, 'w') as f:
+            f.close()
+
+        # Set up level shuffle dict file
+        if self.slot_data["level_shuffle"] != 0:
+            currPath = os.path.join(self.game_communication_path,"AP_SHUFFLE.data")
+            with open(currPath, 'w') as f:
+                f.write("[general]\n")
+                i = 0
+                for region1 in self.slot_data["level_shuffle_dict"]:
+                    region2 = self.slot_data["level_shuffle_dict"][region1]
+                    f.write(f"{i}={region1}@{region2}\n")
+                    i += 1
+                f.write(f"total={i}")
+                f.close()
+
+        # Set up already checked locations
+        currPath = os.path.join(self.game_communication_path,"AP_CHECKS.data")
+        with open(currPath, 'w') as f:
+            f.write("[checks]\n")
+            for ss in self.checked_locations:
+                locationName = self.location_names.lookup_in_game(ss)
+                f.write(f"{locationName}=1\n")
+            f.close()
 
 
 async def game_watcher(ctx: BabaIsYouContext):
