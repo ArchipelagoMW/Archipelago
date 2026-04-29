@@ -280,11 +280,12 @@ class BabaIsYouWorld(World):
         level_hint_data = {}
         for name in LEVEL_DATA:
             data = LEVEL_DATA[name]
+            if data.get("areaAccess") and data.get("areaAccess") > self.options.area_access:
+                continue
+            
             if self.options.level_shuffle != 0 and self.level_shuffle_dict.get(name) is not None:
                 name = self.level_shuffle_dict.get(name)
                 data = LEVEL_DATA[name]
-            if data.get("areaAccess") and data.get("areaAccess") > self.options.area_access:
-                continue
             
             # Get parent based where the level is placed
             mapName = name
