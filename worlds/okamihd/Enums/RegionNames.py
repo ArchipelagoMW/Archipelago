@@ -33,6 +33,8 @@ class RegionNames(StrEnum):
     SUSANOS_HOUSE = "Susano's house"
     SUSANOS_UNDERGROUD = "Susano's Secret Underground Meditation Chamber"
     ORANGES_HOUSE = "Mr and Mrs Orange's house"
+    # Special Region te check for merchant avilability for its random items
+    KAMIKI_MERCHANT= "Kamiki Village Merchant"
 
     ## Shinshu Field
     CURSED_SHINSHU_FIELD = "Cursed Shinshu Field"
