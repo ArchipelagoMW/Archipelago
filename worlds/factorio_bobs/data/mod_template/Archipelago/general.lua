@@ -92,23 +92,24 @@ general.technologies.hint_list = {{dict_to_lua(techs_to_hint)}}
 
 --recipes
 general.recipes = {}
-{% if recipe_time_scale %}
+{%- if recipe_time_scale %}
 general.recipes.type = "scale" --scale means that is gets x lower to y higher.
 {% elif recipe_time_range %}
 general.recipes.type = "range" --means new values from x to y.
-{% endif %}
+{% endif -%}
+
 function general.recipes.time_adjustments()
     return {
-        {% if recipe_time_scale %}
+        {%- if recipe_time_scale %}
         {%- for recipe_name, recipe in recipes.items() %}
         {%- if recipe.category not in ("basic-solid", "basic-fluid", "water") %}
-        ["{{ recipe_name }}"] = {{ flop_random(*recipe_time_scale) }}
+        ["{{ recipe_name }}"] = {{ flop_random(*recipe_time_scale) }},
         {%- endif %}
         {%- endfor -%}
         {% elif recipe_time_range %}
         {%- for recipe_name, recipe in recipes.items() %}
         {%- if recipe.category not in ("basic-solid", "basic-fluid", "water") %}
-        ["{{ recipe_name }}"] =  {{ flop_random(*recipe_time_range) }}
+        ["{{ recipe_name }}"] =  {{ flop_random(*recipe_time_range) }},
         {%- endif %}
         {%- endfor -%}
         {% endif %}
