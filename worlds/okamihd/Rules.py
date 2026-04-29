@@ -155,7 +155,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
                 required_techinques+=[]
 
 
-        if data.needs_swim:
+        if data.needs_long_swim:
             add_rule(loc, lambda state: (state.has("Water Tablet", world.player) or state.has(
                 BrushTechniques.GREENSPROUT_WATERLILY, world.player)))
 
@@ -177,7 +177,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
 
 
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
-    if data.needs_swim:
+    if data.needs_long_swim:
         add_rule(etr, lambda state: (
             # Disable bc we won't randomize merchants yet
             # state.has("Water Tablet", world.player) or

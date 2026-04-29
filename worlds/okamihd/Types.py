@@ -35,7 +35,7 @@ class LocData(NamedTuple):
     cherry_bomb_level: int = 0
     required_items_events: [str] = []
     mandatory_enemies: List[OkamiEnemies] = []
-    needs_swim: bool = False
+    needs_long_swim: bool = False
     praise_sanity: int = 0
     progress_type: LocationProgressType | typing.Callable[
         [OkamiOptions], LocationProgressType] = LocationProgressType.DEFAULT
@@ -52,7 +52,7 @@ class EventData(NamedTuple):
     event_item_name: str | None = None
     required_items_events: [str] = []
     mandatory_enemies: List[OkamiEnemies] = []
-    needs_swim: bool = False
+    needs_long_swim: bool = False
     precollected: bool | typing.Callable[[OkamiOptions], bool] = False
     is_event_item: bool | typing.Callable[[OkamiOptions], bool] = False
     progress_type: LocationProgressType | typing.Callable[
@@ -65,7 +65,7 @@ class ExitData(NamedTuple):
     name: str
     destination: str
     has_events: [str] = []
-    needs_swim: bool = False
+    needs_long_swim: bool = False
 
 T = TypeVar('T',str,int,bool)
 # Generic function to return the value or the resolved value of a callable that depends of options.
