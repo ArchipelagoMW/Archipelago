@@ -1,0 +1,362 @@
+[
+  {
+    "name": "Fall",
+    "children": [
+      {
+        "name": "Fall-1",
+        "short_name": "Fall-1",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1872,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-2",
+        "short_name": "Fall-2",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1680,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-3",
+        "short_name": "Fall-3",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1776,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-4",
+        "short_name": "Fall-4",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1680,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-5",
+        "short_name": "Fall-5",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1680,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-6",
+        "short_name": "Fall-6",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1584,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-7",
+        "short_name": "Fall-7",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1584,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-7",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-8",
+        "short_name": "Fall-8",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1584,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-8",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-9",
+        "short_name": "Fall-9",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1488,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-9",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-10",
+        "short_name": "Fall-10",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1776,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-10",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-11",
+        "short_name": "Fall-11",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1680,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-11",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-12",
+        "short_name": "Fall-12",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1776,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-12",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-A",
+        "short_name": "Fall-A",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1200,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-A",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-B",
+        "short_name": "Fall-B",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1296,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-B",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-C",
+        "short_name": "Fall-C",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1200,
+            "y": 816
+          },
+          {
+            "map": "Forest of Fall",
+            "x": 1776,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-C",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-D",
+        "short_name": "Fall-D",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1296,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-D",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-E",
+        "short_name": "Fall-E",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1200,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-E",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-Extra 1",
+        "short_name": "Fall-Extra 1",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1872,
+            "y": 240
+          },
+          {
+            "map": "Forest of Fall",
+            "x": 1872,
+            "y": 432
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-Extra 1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-Extra 2",
+        "short_name": "Fall-Extra 2",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1968,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-Extra 2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Fall-Extra 3",
+        "short_name": "Fall-Extra 3",
+        "map_locations": [
+          {
+            "map": "Forest of Fall",
+            "x": 1296,
+            "y": 528
+          },
+          {
+            "map": "Forest of Fall",
+            "x": 1296,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Fall-Extra 3",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

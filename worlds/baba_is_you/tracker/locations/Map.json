@@ -1,0 +1,228 @@
+[
+  {
+    "name": "Map",
+    "children": [
+      {
+        "name": "Map-0",
+        "short_name": "Map-0",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 912,
+            "y": 1488
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-0",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-1",
+        "short_name": "Map-1",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1008,
+            "y": 1296
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-2",
+        "short_name": "Map-2",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1008,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-3",
+        "short_name": "Map-3",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1104,
+            "y": 1296
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-4",
+        "short_name": "Map-4",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1104,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-5",
+        "short_name": "Map-5",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1008,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-6",
+        "short_name": "Map-6",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1200,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-7",
+        "short_name": "Map-7",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1104,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-7",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-8",
+        "short_name": "Map-8",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1488,
+            "y": 240
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-8",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-9",
+        "short_name": "Map-9",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1392,
+            "y": 240
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-9",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-10",
+        "short_name": "Map-10",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1584,
+            "y": 240
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-10",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-Finale",
+        "short_name": "Map-Finale",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 1488,
+            "y": 1296
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-Finale",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Map-Secret",
+        "short_name": "Map-Secret",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 2544,
+            "y": 1488
+          }
+        ],
+        "sections": [
+          {
+            "name": "Map-Secret",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

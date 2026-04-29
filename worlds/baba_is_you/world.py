@@ -1,5 +1,5 @@
 from collections.abc import Mapping
-from typing import Any, Dict
+from typing import Any, Dict, ClassVar
 from Options import OptionError
 
 # Imports of base Archipelago modules must be absolute.
@@ -13,6 +13,27 @@ from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rul
 
 import logging
 logger = logging.getLogger("Baba Is You")
+
+UT_SLOT_DATA_OPTION_NAMES = (
+    "goal",
+    "goal_levels",
+    "goal_blossoms",
+    "start_with_default_words",
+    "open_map",
+    "world_keys",
+    "area_access",
+    "exclude_whoa",
+    "exclude_gallery",
+    "exclude_maze_transform",
+    "blossom_petals",
+    "blossoms",
+    "first_gate_blossoms",
+    "second_gate_blossoms",
+    "third_gate_blossoms",
+    "complete_checks",
+    "transformsanity",
+    "level_shuffle",
+)
 
 # APQuest will go through all the parts of the world api one step at a time,
 # with many examples and comments across multiple files.
@@ -44,6 +65,7 @@ class BabaIsYouWorld(World):
     # (Note: options.py has been imported as "babaisyou_options" at the top of this file to avoid a name conflict)
     options_dataclass = babaisyou_options.BabaIsYouOptions
     options: babaisyou_options.BabaIsYouOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
+    ut_can_gen_without_yaml = True
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.
@@ -59,9 +81,105 @@ class BabaIsYouWorld(World):
     origin_region_name = "Map"
 
     # Mapping for level shuffle
-    active_level_dict: dict[str,str]
-    
+    level_shuffle_dict: dict[str, str]
+
+    # Universal Tracker
+    tracker_world: ClassVar = {
+        "map_page_folder": "tracker",
+        "map_page_maps": "maps/maps.json",
+        "map_page_locations": [
+            "locations/flower.json",
+            "locations/ABC.json",
+            "locations/Cavern.json",
+            "locations/Center.json",
+            "locations/Chasm.json",
+            "locations/Depths.json",
+            "locations/Fall.json",
+            "locations/Forest.json",
+            "locations/Garden.json",
+            "locations/Island.json",
+            "locations/Lake.json",
+            "locations/Map.json",
+            "locations/Meta.json",
+            "locations/Mountain.json",
+            "locations/Ruins.json",
+            "locations/Space.json"
+        ],
+        "poptracker_name_mapping": {},
+    }
+
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
+        return slot_data
+
+    def _get_ut_slot_data(self) -> dict[str, Any] | None:
+        re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", None)
+        if isinstance(re_gen_passthrough, dict):
+            slot_data = re_gen_passthrough.get(self.game)
+            if isinstance(slot_data, dict):
+                return slot_data
+        return None
+
+    def _restore_ut_slot_data(self, slot_data: dict[str, Any]) -> None:
+        for option_name in UT_SLOT_DATA_OPTION_NAMES:
+            if option_name not in slot_data:
+                continue
+            option = getattr(self.options, option_name, None)
+            if option is not None:
+                setattr(self.options, option_name, option.from_any(slot_data[option_name]))
+
+        level_shuffle_dict = slot_data.get("level_shuffle_dict")
+        if isinstance(level_shuffle_dict, dict):
+            self.level_shuffle_dict = dict(level_shuffle_dict)
+        elif self.options.level_shuffle != 0:
+            logger.warning(
+                "Baba Is You (%s): UT slot data is missing level_shuffle_dict while level shuffle is enabled. "
+                "Tracker logic may be inaccurate.",
+                self.player_name,
+            )
+
+    def _build_poptracker_name_mapping(self) -> dict[str, int]:
+        mapping: dict[str, int] = {}
+        for slot_name, slot_data in LEVEL_DATA.items():
+            if slot_data.get("map") is True:
+                continue
+
+            level_name = self.level_shuffle_dict.get(slot_name, slot_name)
+            level_data = LEVEL_DATA.get(level_name)
+            if level_data is None or level_data.get("map") is True:
+                logger.warning(
+                    "Baba Is You (%s): tracker mapping skipped invalid level slot %s -> %s.",
+                    self.player_name,
+                    slot_name,
+                    level_name,
+                )
+                continue
+
+            location_name = f"{level_data['name']}: Win"
+            location_id = locations.LOCATION_NAME_TO_ID.get(location_name)
+            if location_id is None:
+                logger.warning(
+                    "Baba Is You (%s): tracker mapping could not find location id for %s.",
+                    self.player_name,
+                    location_name,
+                )
+                continue
+
+            mapping[f"{slot_name}/{slot_name}"] = location_id
+
+        return mapping
+
+    def _refresh_tracker_world_name_mapping(self) -> None:
+        type(self).tracker_world["poptracker_name_mapping"] = self._build_poptracker_name_mapping()
+
     def generate_early(self) -> None:
+        self.level_shuffle_dict = {}
+        self._refresh_tracker_world_name_mapping()
+
+        slot_data = self._get_ut_slot_data()
+        if slot_data:
+            self._restore_ut_slot_data(slot_data)
+
         # Validate options
         maxBlossoms = self.options.blossoms + (self.options.blossom_petals // 8)
         if self.options.first_gate_blossoms > maxBlossoms:
@@ -190,6 +308,7 @@ class BabaIsYouWorld(World):
     # For better structure and readability, we put each of these in their own file.
     def create_regions(self) -> None:
         regions.create_and_connect_regions(self)
+        self._refresh_tracker_world_name_mapping()
         locations.create_all_locations(self)
 
     def set_rules(self) -> None:
@@ -216,26 +335,6 @@ class BabaIsYouWorld(World):
     # slot_data is just a dictionary using basic types, that will be converted to json when sent to the client.
     def fill_slot_data(self) -> Mapping[str, Any]:
         # If you need access to the player's chosen options on the client side, there is a helper for that.
-        slot_data = self.options.as_dict(
-            "goal",
-            "goal_levels",
-            "goal_blossoms",
-            "logic_difficulty",
-            "start_with_default_words",
-            "open_map",
-            "world_keys",
-            "area_access",
-            "exclude_whoa",
-            "exclude_gallery",
-            "exclude_maze_transform",
-            "blossom_petals",
-            "blossoms",
-            "first_gate_blossoms",
-            "second_gate_blossoms",
-            "third_gate_blossoms",
-            "complete_checks",
-            "transformsanity",
-            "level_shuffle",
-        )
+        slot_data = self.options.as_dict(*UT_SLOT_DATA_OPTION_NAMES)
         slot_data["level_shuffle_dict"] = self.level_shuffle_dict
         return slot_data

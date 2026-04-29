@@ -1,0 +1,211 @@
+[
+  {
+    "name": "Garden",
+    "children": [
+      {
+        "name": "Garden-1",
+        "short_name": "Garden-1",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1584,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-2",
+        "short_name": "Garden-2",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1392,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-3",
+        "short_name": "Garden-3",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1584,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-4",
+        "short_name": "Garden-4",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1584,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-5",
+        "short_name": "Garden-5",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1488,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-6",
+        "short_name": "Garden-6",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1392,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-7",
+        "short_name": "Garden-7",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1584,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-7",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-8",
+        "short_name": "Garden-8",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1392,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-8",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-9",
+        "short_name": "Garden-9",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1488,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-9",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-10",
+        "short_name": "Garden-10",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1392,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-10",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-Extra 1",
+        "short_name": "Garden-Extra 1",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1776,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-Extra 1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Garden-Extra 2",
+        "short_name": "Garden-Extra 2",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 1488,
+            "y": 1296
+          }
+        ],
+        "sections": [
+          {
+            "name": "Garden-Extra 2",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

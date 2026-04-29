@@ -1,0 +1,160 @@
+[
+  {
+    "name": "Mountain",
+    "children": [
+      {
+        "name": "Mountain-1",
+        "short_name": "Mountain-1",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1584,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Mountain-2",
+        "short_name": "Mountain-2",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1584,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Mountain-3",
+        "short_name": "Mountain-3",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1488,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Mountain-4",
+        "short_name": "Mountain-4",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1488,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Mountain-5",
+        "short_name": "Mountain-5",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1584,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Mountain-6",
+        "short_name": "Mountain-6",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1488,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Mountain-7",
+        "short_name": "Mountain-7",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1392,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-7",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Mountain-8",
+        "short_name": "Mountain-8",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1392,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-8",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Mountain-Extra 1",
+        "short_name": "Mountain-Extra 1",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 1488,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Mountain-Extra 1",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

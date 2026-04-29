@@ -1,0 +1,262 @@
+[
+  {
+    "name": "Lake",
+    "children": [
+      {
+        "name": "Lake-1",
+        "short_name": "Lake-1",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1392,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-2",
+        "short_name": "Lake-2",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1392,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-3",
+        "short_name": "Lake-3",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1296,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-4",
+        "short_name": "Lake-4",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1392,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-5",
+        "short_name": "Lake-5",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1296,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-6",
+        "short_name": "Lake-6",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1488,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-7",
+        "short_name": "Lake-7",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1392,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-7",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-8",
+        "short_name": "Lake-8",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1584,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-8",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-9",
+        "short_name": "Lake-9",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1680,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-9",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-10",
+        "short_name": "Lake-10",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1488,
+            "y": 528
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-10",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-11",
+        "short_name": "Lake-11",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1776,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-11",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-12",
+        "short_name": "Lake-12",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1872,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-12",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-13",
+        "short_name": "Lake-13",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1392,
+            "y": 528
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-13",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-Extra 1",
+        "short_name": "Lake-Extra 1",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1104,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-Extra 1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Lake-Extra 2",
+        "short_name": "Lake-Extra 2",
+        "map_locations": [
+          {
+            "map": "The Lake",
+            "x": 1008,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Lake-Extra 2",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]
