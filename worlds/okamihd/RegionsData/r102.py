@@ -68,7 +68,7 @@ locations = {
         "Kamiki Village - Sunrise": LocData(200027, type=LocationType.CONSTELLATION),  # Brush acquisition (bit 27)
     },
     RegionNames.KAMIKI_VILLAGE: {
-        "Kamiki Village - Chest After Mr.Orange Yokai Fight": LocData(966098),  # spawn_idx=16, Rabbit Statue
+        "Kamiki Village - Chest After Mr.Orange Yokai Fight": LocData(966135),  # spawn_idx=87, Feedbag(Seeds)
         "Kamiki Village - Buried Chest near Komuso": LocData(966048, type=LocationType.BURIED_CHEST),  # spawn_idx=0, Traveler's Charm
         "Kamiki Village - Underwater Chest 1": LocData(966064, type=LocationType.UNDERWATER_CHEST_SHALLOW),  # spawn_idx=7, Inkfinity Stone
         "Kamiki Village - Underwater Chest 2": LocData(966081, type=LocationType.UNDERWATER_CHEST_SHALLOW),  # spawn_idx=8, Stray Bead
