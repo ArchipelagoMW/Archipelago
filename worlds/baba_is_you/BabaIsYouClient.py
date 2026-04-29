@@ -185,13 +185,18 @@ class BabaIsYouContext(CommonContext):
         osName = platform.system()
 
         # Find Baba Is You steam installation (dennisw100, modified)
-        if osName == "Windows":
-            import winreg
-            steam_path = os.path.join(winreg.QueryValueEx(winreg.OpenKey(winreg.HKEY_CURRENT_USER, "SOFTWARE\\VALVE\\Steam"), "SteamPath")[0], 'steamapps', 'libraryfolders.vdf')
-        elif osName == "Darwin":
-            steam_path = os.path.expanduser("~/Library/Application Support/Steam/steamapps/libraryfolders.vdf")
-        else:
-            steam_path = os.path.expanduser("~/.steam/steam/steamapps/libraryfolders.vdf")
+        path = None
+        try:
+            if osName == "Windows":
+                import winreg
+                steam_path = os.path.join(winreg.QueryValueEx(winreg.OpenKey(winreg.HKEY_CURRENT_USER, "SOFTWARE\\VALVE\\Steam"), "SteamPath")[0], 'steamapps', 'libraryfolders.vdf')
+            elif osName == "Darwin":
+                steam_path = os.path.expanduser("~/Library/Application Support/Steam/steamapps/libraryfolders.vdf")
+            else:
+                steam_path = os.path.expanduser("~/.steam/steam/steamapps/libraryfolders.vdf") # Is this even correct?
+        except Exception as e:
+            logger.info("Error: "+str(e)) # Happens on linux?
+        
         try:
             with open(steam_path, 'r', encoding='utf-8') as file:
                 content = file.read()
