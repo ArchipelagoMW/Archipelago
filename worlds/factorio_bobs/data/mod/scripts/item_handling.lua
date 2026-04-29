@@ -48,10 +48,11 @@ TRAP_TABLE = {
     end,
 }
 
+general.technologies.progressive = general.technologies.progressive()
 local function receive_item(item_name, source)
     for _, force in pairs(library.get_all_ap_forces()) do
-        if general.technologies.progressive()[item_name] ~= nil then
-            local tech_stack = general.technologies.progressive()[item_name]
+        if general.technologies.progressive[item_name] ~= nil then
+            local tech_stack = general.technologies.progressive[item_name]
                 for _, item_name in ipairs(tech_stack) do
                     local tech = force.technologies[item_name]
                     if tech.researched ~= true then
@@ -191,6 +192,8 @@ local function on_force_created(event)
 end
 
 -- hook into researches done
+general.free_samples.get_black_list = general.free_samples.get_black_list()
+general.technologies.local_items = general.technologies.local_items
 local function on_research_finished(event)
     local technology = event.research
     if library.is_valid_ap_force(technology.force) == false then
@@ -217,7 +220,7 @@ local function on_research_finished(event)
                 for _, result in pairs(recipe.products) do
                     if result.type == "item" and result.amount then
                         local name = result.name
-                        if general.free_samples.get_black_list()[name] ~= true then
+                        if general.free_samples.get_black_list[name] ~= true then
                             local count
                             if general.free_samples.state == 1 then
                                 count = result.amount
