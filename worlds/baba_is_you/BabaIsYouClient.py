@@ -104,7 +104,7 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
         self.output(f"Syncing items.")
         self.ctx.syncing = True
         if self.ctx.is_connected:
-            self.ctx.create_options_files(self.ctx)
+            self.ctx.create_options_files()
     
     def _cmd_filepath(self) -> bool:
         """Change filepath to Baba Is You installation."""
@@ -275,7 +275,8 @@ class BabaIsYouContext(CommonContext):
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
 
-            self.create_options_files(self)
+            self.slot_data = args["slot_data"]
+            self.create_options_files()
         
         if cmd in {"RoomInfo"}:
             self.seed_name = args['seed_name']
