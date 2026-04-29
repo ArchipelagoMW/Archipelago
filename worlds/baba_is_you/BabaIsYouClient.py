@@ -250,7 +250,7 @@ class BabaIsYouContext(CommonContext):
         await super(BabaIsYouContext, self).connection_closed()
         for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
-                if file.find(".item") <= -1 or file.find(".data") <= -1 or file.find(".tmp") <= -1 or file.find(".sent") <= -1:
+                if file.endswith(".item") or file.endswith(".data") or file.endswith(".tmp") or file.endswith(".sent"):
                     os.remove(root + "/" + file)
 
     @property
@@ -266,7 +266,7 @@ class BabaIsYouContext(CommonContext):
         await super(BabaIsYouContext, self).shutdown()
         for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
-                if file.find(".item") <= -1 or file.find(".data") <= -1 or file.find(".tmp") <= -1 or file.find(".sent") <= -1:
+                if file.endswith(".item") or file.endswith(".data") or file.endswith(".tmp") or file.endswith(".sent"):
                     os.remove(root+"/"+file)
 
     def on_package(self, cmd: str, args: dict):
@@ -329,7 +329,7 @@ class BabaIsYouContext(CommonContext):
         self.ui = BabaIsYouManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
     
-    def create_options_files(self):
+    def create_options_files(self):  
         currPath = os.path.join(self.game_communication_path,"AP_OPTIONS.data")
         with open(currPath, 'w') as f:
             f.write("[options]\n")
@@ -338,6 +338,12 @@ class BabaIsYouContext(CommonContext):
                     f.write(f"{option}={self.slot_data[option]}\n")
             f.write(f"seed={str(self.seed_name)}")
             f.close()
+
+        # Remove existing seed file
+        for root, dirs, files in os.walk(self.game_communication_path):
+            for file in files:
+                if file.startswith("AP_SEED_") and file.endswith(".data"):
+                    os.remove(root + "/" + file)
 
         # Set up seed file (done to prevent getting checks from previous games)
         currPath = os.path.join(self.game_communication_path,f"AP_SEED_{self.seed_name}.data")
