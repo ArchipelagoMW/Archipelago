@@ -19,6 +19,8 @@ exits = {
                                  ExitData("Enter Kushi's House", RegionNames.KUSHIS_HOUSE),
                                  ExitData("Enter Oranges' House", RegionNames.ORANGES_HOUSE),
                                  ExitData("Exit Village to Cursed Shinshu field", RegionNames.CURSED_SHINSHU_FIELD,
+                                          has_events=["Kamiki Village - Help Susano Train/Break the boulder"]),
+                                 ExitData("Kamiki merchant opens shop",RegionNames.KAMIKI_MERCHANT,
                                           has_events=["Kamiki Village - Help Susano Train/Break the boulder"])],
     RegionNames.SUSANOS_HOUSE: [ExitData("Enter meditation Chamber", RegionNames.SUSANOS_UNDERGROUD)]
 }
@@ -101,7 +103,7 @@ locations = {
 # Shop locations (shopId=5): 300000 + 5*1000 + slot = 305000 + slot
 # These are added separately and conditionally created based on RandomizeShops option
 shop_locations = {
-    RegionNames.KAMIKI_VILLAGE: {
+    RegionNames.KAMIKI_MERCHANT: {
         "Kamiki Village - Shop Slot 1": LocData(305000, type=LocationType.SHOP),
         "Kamiki Village - Shop Slot 2": LocData(305001, type=LocationType.SHOP),
         "Kamiki Village - Shop Slot 3": LocData(305002, type=LocationType.SHOP),
