@@ -62,17 +62,18 @@ class OpenGameStart(Toggle):
 
 
 class BloomGuardianSaplings(Toggle):
-    """
+    """ NOT IMPLEMENTED IN CLIENT YET - USE AT YOUR OWN RISK !!
     Bloom every guardian sapling except Kamiki Village and Hana Valley
     """
     display_name = "Bloom all guardian saplings"
-    default = 1
+    default = 0
 
 
 class RemoveBlockHead(Toggle):
-    """Removes all 3 instances of Blockhead"""
+    """ NOT IMPLEMENTED IN CLIENT YET - USE AT YOUR OWN RISK !!
+    Removes all 3 instances of Blockhead"""
     display_name = "Removes all 3 instances of Blockhead"
-    default = 1
+    default = 0
 
 
 class RequiredDoggorbs(Range):
