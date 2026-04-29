@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.SHINSHU_FIELD: [
-        ExitData("Cross Cave to Agata Forest", RegionNames.SHINSHU_FIELD_AGATA_CAVE, needs_swim=True),
+        ExitData("Cross Cave to Agata Forest", RegionNames.SHINSHU_FIELD_AGATA_CAVE, needs_long_swim=True),
         ExitData("Enter Tama's house", RegionNames.TAMA_HOUSE),
         ExitData("To Moon Cave Entrance",RegionNames.MOON_CAVE_OUTSIDE)],
     RegionNames.SHINSHU_FIELD_AGATA_CAVE: [ExitData('To Cursed Agata Forest', RegionNames.CURSED_AGATA_FOREST,
@@ -45,7 +45,7 @@ locations = {
         "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(1883670,
                                                                                type=LocationType.BURIED_UNDER_LEAF_PILE),
         "Shinshu Field - Chest on Big Torii": LocData(1883641, required_brush_techniques=[BrushTechniques.WATERSPOUT],
-                                                      needs_swim=True),
+                                                      needs_long_swim=True),
         "Shinshu Field - Freestanding chest after Rejuvenation": LocData(40),
         "Shinshu Field - Freestanding chest near Agata Forest Cave": LocData(41),
         "Shinshu Field - Freestanding chest near Tama's house": LocData(1883669),
