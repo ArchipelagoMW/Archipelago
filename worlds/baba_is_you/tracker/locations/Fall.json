@@ -303,11 +303,6 @@
           {
             "map": "Forest of Fall",
             "x": 1872,
-            "y": 240
-          },
-          {
-            "map": "Forest of Fall",
-            "x": 1872,
             "y": 432
           }
         ],
@@ -339,11 +334,6 @@
         "name": "Fall-Extra 3",
         "short_name": "Fall-Extra 3",
         "map_locations": [
-          {
-            "map": "Forest of Fall",
-            "x": 1296,
-            "y": 528
-          },
           {
             "map": "Forest of Fall",
             "x": 1296,

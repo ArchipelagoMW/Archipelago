@@ -207,8 +207,8 @@
         ]
       },
       {
-        "name": "Map-Secret",
-        "short_name": "Map-Secret",
+        "name": "Map-?",
+        "short_name": "Map-?",
         "map_locations": [
           {
             "map": "Map",
@@ -218,7 +218,7 @@
         ],
         "sections": [
           {
-            "name": "Map-Secret",
+            "name": "Map-?",
             "item_count": 1
           }
         ]

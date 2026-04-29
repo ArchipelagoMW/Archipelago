@@ -141,12 +141,9 @@ class BabaIsYouWorld(World):
     def _build_poptracker_name_mapping(self) -> dict[str, int]:
         mapping: dict[str, int] = {}
         for slot_name, slot_data in LEVEL_DATA.items():
-            if slot_data.get("map") is True:
-                continue
-
             level_name = self.level_shuffle_dict.get(slot_name, slot_name)
             level_data = LEVEL_DATA.get(level_name)
-            if level_data is None or level_data.get("map") is True:
+            if level_data is None:
                 logger.warning(
                     "Baba Is You (%s): tracker mapping skipped invalid level slot %s -> %s.",
                     self.player_name,
@@ -155,17 +152,18 @@ class BabaIsYouWorld(World):
                 )
                 continue
 
-            location_name = f"{level_data['name']}: Win"
-            location_id = locations.LOCATION_NAME_TO_ID.get(location_name)
-            if location_id is None:
-                logger.warning(
-                    "Baba Is You (%s): tracker mapping could not find location id for %s.",
-                    self.player_name,
-                    location_name,
-                )
-                continue
+            for locationName in get_level_locations(level_data, self):
+                location_id = locations.LOCATION_NAME_TO_ID.get(locationName)
+                if location_id is None:
+                    logger.warning(
+                        "Baba Is You (%s): tracker mapping could not find location id for %s.",
+                        self.player_name,
+                        locationName,
+                    )
+                    continue
 
-            mapping[f"{slot_name}/{slot_name}"] = location_id
+                mapping[f"{slot_name}/{slot_name}"] = location_id
+                break # We can only put one location here as of now
 
         return mapping
 
