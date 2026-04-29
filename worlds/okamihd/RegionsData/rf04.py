@@ -46,18 +46,18 @@ events = {
 locations = {
     RegionNames.AGATA_FOREST: {
         # the names here could be better.
-        "Agata Forest - Treasure Bud near Guardian Sapling Cave": LocData(46, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near Guardian Sapling Cave": LocData(1884064, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud 1": LocData(47, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud on big island": LocData(48, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud island near Kokari": LocData(49, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud near Karude's house": LocData(50, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud near Karude's house cursed patch": LocData(51, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud near waterfall": LocData(52, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud on lone tree island near Kokari": LocData(1884067, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near Karude's house": LocData(1884068, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near Karude's house cursed patch": LocData(1884069, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near waterfall": LocData(1884070, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud near Mme. Fawn's Cave": LocData(1884071, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud 2": LocData(54, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud Inside Tree": LocData(55, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud Inside Tree": LocData(1884081, type=LocationType.TREASURE_BUD),
         "Agata Forest - Chest at Guardian Sapling": LocData(1884082),
-        "Agata Forest - Buried chest near shortcut": LocData(57, type=LocationType.BURIED_CHEST),
+        "Agata Forest - Buried chest near shortcut": LocData(1884083, type=LocationType.BURIED_CHEST),
         # Probably needs something more to get on top
         "Agata Forest - Chest on top of the big tree": LocData(1884087, type=LocationType.UNDERWATER_CHEST,
                                                                required_brush_techniques=[
@@ -68,18 +68,17 @@ locations = {
         "Agata Forest - Freestanding Bull Horn": LocData(1884089,
                                                          required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE],
                                                          type=LocationType.FREESTANDING_ITEM),
-        "Agata Forest - Buried Chest on Lake shore": LocData(65, type=LocationType.BURIED_CHEST),
+        "Agata Forest - Buried Chest on Lake shore": LocData(1884096, type=LocationType.BURIED_CHEST),
         "Agata Forest - Buried Chest behind Karude's house": LocData(1884097, type=LocationType.BURIED_CHEST),
-        "Agata Forest - Buried Chest on Island": LocData(67, type=LocationType.BURIED_CHEST),
+        "Agata Forest - Buried Chest on Island": LocData(1884098, type=LocationType.BURIED_CHEST),
         "Agata Forest - Chest under leaf pile near Shinshu Field entrance": LocData(1884107,
                                                                                     type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Agata Forest - Chest under leaf pile on ledge": LocData(69, type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Agata Forest - Chest under leaf pile near river": LocData(70, type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Agata Forest - Buried chest near Tsuta Ruins entrance": LocData(71, type=LocationType.STONE_BURIED_CHEST),
-        # Add required event after Bridge cutscene
-        "Agata Forest - Chest after Bridge cutscene": LocData(1884111),
-        "Agata Forest - Chest near Demon Fang merchant": LocData(73),
-        "Agata Forest - Chest near Tusta ruins door": LocData(74),
+        "Agata Forest - Chest under leaf pile on ledge": LocData(1884108, type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Agata Forest - Chest under leaf pile near river": LocData(1884109, type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Agata Forest - Buried chest near Tsuta Ruins entrance": LocData(1884110, type=LocationType.STONE_BURIED_CHEST),
+        "Agata Forest - Chest after Bridge cutscene": LocData(1884111,required_items_events=["Agata Forest - Repair Bridge with Kokari"]),
+        "Agata Forest - Chest near Demon Fang merchant": LocData(1884113),
+        "Agata Forest - Chest near Tusta ruins door": LocData(1884114),
         "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1),
         "Agata Forest - Yumigami": LocData(200018, type=LocationType.CONSTELLATION,  # bit 18
                                            required_items_events=["Agata Forest - Fish Whopper with Kokari"])
