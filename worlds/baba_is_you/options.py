@@ -105,7 +105,7 @@ class AreaAccess(Choice):
     meta: All areas other than "Center" and its two levels will be accessible.
     full: All areas will be accessible.
 
-    NOTICE: Only "early" is implemented at this time. Do not select the other options.
+    NOTICE: Only "early" and "map" are implemented at this time. Do not select the other options.
     """
 
     display_name = "Accessible Areas"
