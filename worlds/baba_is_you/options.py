@@ -73,7 +73,7 @@ class LogicDifficulty(Choice):
 class StartWithDefaultWords(DefaultOnToggle):
     """
     Start with the 9 words that appear in the level "Baba Is You".
-    Disabling this will lead to an extremely restrictive start, especially if Shuffle Levels (unimplemented) is disabled.
+    Disabling this will lead to an extremely restrictive start, especially if Shuffle Levels is disabled.
     This will also fail to generate if Shuffle Levels is off and this is a solo game.
     As such, it is recommended to add a few starting items if this is disabled.
     """
