@@ -25,34 +25,33 @@ events = {
 }
 locations = {
     RegionNames.SHINSHU_FIELD: {
-        "Shinshu Field - Buried chest between near Guardian Sapling": LocData(1883602, type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Freestanding chest near Guardian Sapling": LocData(28),
+        "Shinshu Field - Buried chest between near Guardian Sapling": LocData(1883559, type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Freestanding chest behind Guardian Sapling": LocData(1883563),
         "Shinshu Field - Buried chest near Tama's house": LocData(1883578, type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Buried chest near Lake": LocData(30, type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Chest Under Bombable ground near Agata Forest": LocData(31, cherry_bomb_level=1,
+        "Shinshu Field - Buried chest near Lake": LocData(1883582, type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Chest Under Bombable ground near Agata Forest": LocData(1883588, cherry_bomb_level=1,
                                                                                  required_brush_techniques=[
                                                                                      BrushTechniques.GREENSPROUT_BLOOM]),
-        "Shinshu Field - Buried chest near Dojo": LocData(32, type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest near Dojo": LocData(1883594, type=LocationType.BURIED_CHEST),
         "Shinshu Field - Chest after devil gate": LocData(1883599, mandatory_enemies=[OkamiEnemies.GREEN_IMP,
                                                                                  OkamiEnemies.RED_IMP,
                                                                                  OkamiEnemies.YELLOW_IMP]),
         # Probably should find a better name for this one
-        "Shinshu Field - Buried chest on ledge": LocData(34, type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest on ledge": LocData(1883602, type=LocationType.BURIED_CHEST),
         "Shinshu Field - Buried chest near Ovens": LocData(1883630, type=LocationType.BURIED_CHEST),
         # This is the cherry bomb tutorial. Need to check what happens if you blow the wall before doing the tutorial.
         "Shinshu Field - In Bombable cave near Tama's house": LocData(1883634, cherry_bomb_level=1),
         "Shinshu Field - In Bombable cave near cat statue": LocData(1883635, cherry_bomb_level=1),
-        "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(1883670,
+        "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(1883638,
                                                                                type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Shinshu Field - Chest on Big Torii": LocData(1883641, required_brush_techniques=[BrushTechniques.WATERSPOUT],
-                                                      needs_long_swim=True),
-        "Shinshu Field - Freestanding chest after Rejuvenation": LocData(40),
-        "Shinshu Field - Freestanding chest near Agata Forest Cave": LocData(41),
+        "Shinshu Field - Chest on Big Torii": LocData(1883641, required_brush_techniques=[BrushTechniques.WATERSPOUT]),
+        "Shinshu Field - Freestanding chest in front of guardian sapling": LocData(1883647),
+        "Shinshu Field - Freestanding chest near Agata Forest Cave": LocData(1883648),
         "Shinshu Field - Freestanding chest near Tama's house": LocData(1883669),
-        "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(1883594, type=LocationType.BURIED_UNDER_LEAF_PILE)
+        "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(1883670, type=LocationType.BURIED_UNDER_LEAF_PILE)
     },
 
     RegionNames.TAMA_HOUSE: {
-        "Shinshu Field - Bakigami": LocData(200025, required_items_events=["Kamiki Village - Restore Sakuya's Tree"],type=LocationType.CONSTELLATION,special_rule=lambda s,w:night_time_check_rule(s,w))  # bit 25
+        "Shinshu Field - Bakigami": LocData(200025,type=LocationType.CONSTELLATION,special_rule=lambda s,w:night_time_check_rule(s,w))  # bit 25
     }
 }
