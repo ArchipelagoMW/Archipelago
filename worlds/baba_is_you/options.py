@@ -222,8 +222,6 @@ class LevelShuffle(Choice):
     disabled: Levels will not be shuffled (default).
     limited: Only levels within accessible areas will be shuffled.
     full: All levels will be shuffled, minus the exceptions listed above.
-
-    NOTICE: Since only the early game has been implemented, both "limited" and "full" act the same.
     """
 
     display_name = "Shuffle Levels"
