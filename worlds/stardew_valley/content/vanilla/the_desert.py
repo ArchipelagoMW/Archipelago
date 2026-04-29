@@ -6,16 +6,20 @@ from ...data.game_item import CustomRuleSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
-from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement
+from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement, SpecificFriendRequirement
 from ...data.shop import ShopSource
 from ...logic.tailoring_logic import TailoringSource
 from ...logic.time_logic import MAX_MONTHS
+from ...strings.artisan_good_names import ArtisanGood
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
 from ...strings.festival_check_names import FestivalCheck
+from ...strings.food_names import Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.geode_names import Geode
+from ...strings.gift_names import Gift
 from ...strings.metal_names import Artifact
+from ...strings.monster_drop_names import Loot
 from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
@@ -53,6 +57,11 @@ the_desert = ContentPack(
         Seed.beet: (ShopSource(price=20, shop_region=Region.oasis, seasons=(Season.fall,)),),
 
         FestivalCheck.rarecrow_3: (ShopSource(price=10_000, currency=Currency.qi_coin, shop_region=Region.casino),),
+        Gift.void_ghost_pendant: (ShopSource(price=0, items_price=((200, Loot.void_essence),), shop_region=Region.desert,
+                                             other_requirements=(SpecificFriendRequirement(NPC.krobus, 10),)),),
+
+        Meal.ice_cream: (ShopSource(price=240, currency=Currency.money, shop_region=Region.oasis),),
+        ArtisanGood.honey: (ShopSource(price=200, currency=Currency.money, shop_region=Region.oasis),),
     },
     fishes=(
         fish_data.sandfish,

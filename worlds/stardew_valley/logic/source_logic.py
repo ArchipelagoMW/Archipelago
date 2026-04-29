@@ -1,5 +1,5 @@
 import functools
-from typing import Any, Iterable
+from typing import Any, Iterable, Type
 
 from .base_logic import BaseLogicMixin, BaseLogic
 from .tailoring_logic import TailoringSource
@@ -42,6 +42,20 @@ class SourceLogic(BaseLogic):
 
     def has_access_to_any_without_other_requirements(self, sources: Iterable[Source]):
         return self.logic.or_(*(self.logic.source.has_access_to(source) for source in sources))
+
+    def has_access_to_any_without_other_requirements_of_types(self, sources: Iterable[Source], bypassed_requirement_types: Iterable[Type]):
+        if bypassed_requirement_types is None:
+            return self.has_access_to_any(sources)
+        rules = []
+        for source in sources:
+            access_rule = self.logic.source.has_access_to(source)
+            valid_requirements = []
+            for requirement in source.other_requirements:
+                if any(isinstance(requirement, bypass_type) for bypass_type in bypassed_requirement_types):
+                    valid_requirements.append(requirement)
+            requirements_rule = self.logic.requirement.meet_all_requirements(valid_requirements)
+            rules.append(access_rule & requirements_rule)
+        return self.logic.or_(*rules)
 
     @functools.singledispatchmethod
     def has_access_to(self, source: Any):

@@ -6,6 +6,11 @@ from ..strings.tool_names import ToolMaterial
 
 
 @dataclass(frozen=True)
+class ReceivedRequirement(Requirement):
+    item: str
+
+
+@dataclass(frozen=True)
 class HasItemRequirement(Requirement):
     item: str
 
@@ -65,6 +70,11 @@ class MeetRequirement(Requirement):
 @dataclass(frozen=True)
 class SpecificFriendRequirement(Requirement):
     npc: str
+    hearts: int
+
+
+@dataclass(frozen=True)
+class BachelorFriendRequirement(Requirement):
     hearts: int
 
 
@@ -202,5 +212,10 @@ class MonsterKillRequirement(Requirement):
 
 
 @dataclass(frozen=True)
-class CatalogueRequirement(Requirement):
-    catalogue: str
+class EndgameItemReceivedRequirement(Requirement):
+    item_name: str
+
+
+@dataclass(frozen=True)
+class SpeakJunimoRequirement(Requirement):
+    pass

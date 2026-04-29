@@ -1,7 +1,7 @@
 from worlds.stardew_valley import BackpackProgression, ToolProgression, SeasonRandomization
 from worlds.stardew_valley.mods.mod_data import ModNames
 from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity, Booksanity, Hatsanity, Cropsanity, \
-    StartWithout
+    StartWithout, ExcludeGingerIsland, SpecialOrderLocations
 from worlds.stardew_valley.strings.ap_names.ap_option_names import SecretsanityOptionName, StartWithoutOptionName
 from worlds.stardew_valley.test.bases import SVTestBase
 
@@ -207,6 +207,8 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
         ToolProgression: ToolProgression.option_progressive,
         StartWithout: frozenset({StartWithoutOptionName.tools}),
         Secretsanity: frozenset([SecretsanityOptionName.fishing]),
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        SpecialOrderLocations: SpecialOrderLocations.option_board_qi_short
     }
 
     def test_pyramid_decal_requires_level_1(self):

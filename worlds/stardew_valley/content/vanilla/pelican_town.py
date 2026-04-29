@@ -10,24 +10,31 @@ from ...data.requirement import ToolRequirement, BookRequirement, SkillRequireme
     GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
     ReceivedRaccoonsRequirement, \
-    PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement, CatalogueRequirement, MasteryRequirement
+    PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement, EndgameItemReceivedRequirement, MasteryRequirement, ReceivedRequirement, \
+    BachelorFriendRequirement, SeasonRequirement, SpeakJunimoRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
 from ...data.tool import ToolUpgrade, StartingToolSource
 from ...logic.tailoring_logic import TailoringSource
 from ...logic.time_logic import MAX_MONTHS
+from ...strings.animal_product_names import AnimalProduct
+from ...strings.ap_names.shop_location_names import ShopLocation
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
 from ...strings.catalogue_names import Catalogue
-from ...strings.craftable_names import Furniture
+from ...strings.craftable_names import Furniture, Consumable, Fishing, WildSeeds
 from ...strings.crop_names import Fruit
 from ...strings.currency_names import Currency
-from ...strings.fish_names import WaterItem, Fish
+from ...strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
+from ...strings.fish_names import WaterItem, Fish, Trash
 from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
+from ...strings.gift_names import Gift
+from ...strings.ingredient_names import Ingredient
+from ...strings.machine_names import Machine
 from ...strings.material_names import Material
 from ...strings.metal_names import MetalBar
 from ...strings.monster_names import Monster
@@ -337,13 +344,59 @@ pelican_town = ContentPack(
             ShopSource(price=5000, shop_region=LogicRegion.bookseller_experience),),
 
         # Catalogues
-        Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer, other_requirements=(CatalogueRequirement(Catalogue.wizard),)),),
-        Catalogue.furniture: (ShopSource(price=200000, shop_region=Region.carpenter, other_requirements=(CatalogueRequirement(Catalogue.furniture),BuildingRequirement(BuildingNames.kitchen),)),),
+        Catalogue.catalogue: (ShopSource(price=30_000, shop_region=Region.pierre_store, other_requirements=(EndgameItemReceivedRequirement(Catalogue.catalogue),)),),
+        Catalogue.furniture: (ShopSource(price=200_000, shop_region=Region.carpenter, other_requirements=(EndgameItemReceivedRequirement(Catalogue.furniture), BuildingRequirement(BuildingNames.kitchen),)),),
+        Catalogue.joja: (ShopSource(price=25_000, shop_region=Region.movie_theater, other_requirements=(SpeakJunimoRequirement(), EndgameItemReceivedRequirement(Catalogue.joja),)),),
+        Catalogue.junimo: (ShopSource(price=70_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpeakJunimoRequirement(), EndgameItemReceivedRequirement(Catalogue.junimo),)),),
+        Catalogue.retro: (ShopSource(price=110_000, shop_region=LogicRegion.traveling_cart, other_requirements=(EndgameItemReceivedRequirement(Catalogue.retro),)),),
+        Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer, other_requirements=(EndgameItemReceivedRequirement(Catalogue.wizard),)),),
 
         # Furniture
         Furniture.single_bed: (ShopSource(price=500, shop_region=Region.carpenter),),
         Furniture.crane_game_house_plant: (ShopSource(price=500, shop_region=Region.movie_theater),),
         Furniture.cursed_mannequin: (MonsterSource(monsters=(Monster.haunted_skull,), amount_tier=MAX_MONTHS),),
+
+        # Other shop stuff
+        Fertilizer.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
+        Fertilizer.quality: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_store,
+                                        other_requirements=(YearRequirement(2),)),),
+        Ingredient.oil: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_store),),
+        Ingredient.rice: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_store),),
+        Ingredient.sugar: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
+        Ingredient.vinegar: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_store),),
+        Ingredient.wheat_flour: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
+        RetainingSoil.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
+        RetainingSoil.quality: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_store,
+                                           other_requirements=(YearRequirement(2),)),),
+        SpeedGro.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
+        SpeedGro.deluxe: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_store,
+                                     other_requirements=(YearRequirement(2),)),),
+        WildSeeds.grass_starter: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
+        Gift.bouquet: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store,
+                                  other_requirements=(BachelorFriendRequirement(8),)),),
+
+        Machine.crab_pot: (ShopSource(price=1500, currency=Currency.money, shop_region=Region.fish_shop,
+                                      other_requirements=(SkillRequirement(Skill.fishing, 3),)),),
+        Fishing.lead_bobber: (ShopSource(price=200, currency=Currency.money, shop_region=Region.fish_shop,
+                                         other_requirements=(SkillRequirement(Skill.fishing, 6),)),),
+
+        "Energy Tonic": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital),),
+        "Muscle Remedy": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital),),
+
+        Trash.joja_cola: (ShopSource(price=75, currency=Currency.money, shop_region=Region.saloon),),
+
+        AnimalProduct.void_egg_starter: (ShopSource(price=5000, currency=Currency.money, shop_region=Region.sewer),),
+        Consumable.butterfly_powder: (ShopSource(price=20000, currency=Currency.money, shop_region=Region.sewer),),
+        ShopLocation.krobus_stardrop: (ShopSource(price=20000, currency=Currency.money, shop_region=Region.sewer),),
+        Tool.return_scepter: (ShopSource(price=2_000_000, currency=Currency.money, shop_region=Region.sewer),),
+
+        AnimalProduct.golden_egg_starter:  (ShopSource(price=100000, currency=Currency.money, shop_region=Region.ranch,
+                                                       other_requirements=(ReceivedRequirement(AnimalProduct.golden_egg),)),),
+
+        Gift.movie_ticket: (ShopSource(price=1000, currency=Currency.money, shop_region=Region.movie_ticket_stand),),
+
+        Meal.ice_cream: (ShopSource(price=250, currency=Currency.money, shop_region=Region.town,
+                                       other_requirements=(SeasonRequirement(Season.summer),)),),
     },
     fishes=(
         fish_data.albacore,

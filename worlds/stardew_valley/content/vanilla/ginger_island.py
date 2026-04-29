@@ -7,7 +7,7 @@ from ...data.game_item import ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
-from ...data.requirement import WalnutRequirement, ForgeInfinityWeaponRequirement, CookedRecipesRequirement, \
+from ...data.requirement import WalnutRequirement, CookedRecipesRequirement, \
     CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement, ToolRequirement
 from ...data.shop import ShopSource, HatMouseSource
@@ -19,6 +19,7 @@ from ...strings.building_names import Building
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
 from ...strings.fish_names import Fish
+from ...strings.food_names import Beverage
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
@@ -28,7 +29,7 @@ from ...strings.metal_names import Fossil, Mineral
 from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
-from ...strings.seed_names import Seed, TreeSeed
+from ...strings.seed_names import Seed
 from ...strings.tool_names import Tool
 
 
@@ -93,6 +94,8 @@ ginger_island_content_pack = GingerIslandContentPack(
         Book.queen_of_sauce_cookbook: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(price=50000, shop_region=LogicRegion.bookseller_permanent, other_requirements=(WalnutRequirement(100),)),),  # Worst book ever
+
+        Beverage.pina_colada: (ShopSource(price=600, currency=Currency.money, shop_region=Region.island_resort),),
     },
     fishes=(
         # TODO override region so no need to add inaccessible regions in logic
@@ -116,7 +119,6 @@ ginger_island_content_pack = GingerIslandContentPack(
                )),
     ),
     hat_sources={
-        Hats.infinity_crown: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(ForgeInfinityWeaponRequirement(),)),),
         Hats.archers_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(9999),)),),
         Hats.chef_hat: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(9999),)),),
         Hats.eye_patch: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(9999, unique=True),)),),
@@ -146,7 +148,6 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.sunglasses: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Material.cinder_shard,)),),
         Hats.swashbuckler_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Forageable.dragon_tooth,)),),
         Hats.warrior_helmet: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(AnimalProduct.ostrich_egg,)),),
-        Hats.star_helmet: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(TreeSeed.mushroom,)),),
 
         Hats.frog_hat: (Tag(ItemTag.HAT), FishingSource(region=Region.gourmand_frog_cave,),),
     },

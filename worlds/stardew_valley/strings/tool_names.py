@@ -7,6 +7,7 @@ class Tool:
     pan = "Pan"
     fishing_rod = "Fishing Rod"
     scythe = "Scythe"
+    return_scepter = "Return Scepter"
 
 
 class ToolMaterial:

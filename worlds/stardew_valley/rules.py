@@ -1,7 +1,7 @@
 import itertools
 import logging
 from dataclasses import dataclass
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Iterable, Type
 
 from BaseClasses import MultiWorld, CollectionState
 from worlds.generic.Rules import add_rule as _add_rule
@@ -19,6 +19,7 @@ from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, s
     all_museum_items_by_name, all_museum_minerals, \
     all_museum_artifacts, Artifact
 from .data.recipe_data import all_cooking_recipes_by_name
+from .data.requirement import EndgameItemReceivedRequirement
 from .data.secret_note_data import gift_requirements, SecretNote
 from .data.tool import get_tool_upgrade_name
 from .locations import LocationTags
@@ -36,12 +37,14 @@ from .strings.animal_product_names import AnimalProduct
 from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, StartWithoutOptionName, CustomLogicOptionName
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade, Bookseller
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
+from .strings.ap_names.shop_location_names import ShopLocation
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.backpack_tiers import Backpack
 from .strings.building_names import Building, WizardBuilding
 from .strings.bundle_names import CCRoom
 from .strings.calendar_names import Weekday
+from .strings.catalogue_names import Catalogue
 from .strings.craftable_names import Bomb, Furniture, Consumable, Craftable
 from .strings.crop_names import Fruit, Vegetable
 from .strings.currency_names import Currency
@@ -163,24 +166,24 @@ def set_rules(world):
     set_chefsanity_rules(all_location_names, logic, rule_collector, world_options)
     set_craftsanity_rules(all_location_names, logic, rule_collector, world_options)
     set_booksanity_rules(logic, rule_collector, world_content)
-    set_isolated_locations_rules(logic, rule_collector, trash_bear_requests)
+    set_isolated_locations_rules(logic, rule_collector, world_content, trash_bear_requests)
     set_arcade_machine_rules(logic, rule_collector, world_options)
     set_movie_rules(logic, rule_collector, world_options, world_content)
     set_secrets_rules(logic, rule_collector, world_options, world_content)
     set_hatsanity_rules(logic, rule_collector, world_content)
     set_eatsanity_rules(all_location_names, logic, rule_collector, world_options)
-    set_endgame_locations_rules(logic, rule_collector, world_options)
+    set_endgame_locations_rules(logic, rule_collector, world_options, world_content)
 
     set_deepwoods_rules(logic, rule_collector, world_content)
     set_magic_spell_rules(logic, rule_collector, world_content)
     set_sve_rules(logic, rule_collector, world_content)
 
 
-def set_isolated_locations_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, trash_bear_requests: Dict[str, List[str]]):
+def set_isolated_locations_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent, trash_bear_requests: Dict[str, List[str]]):
     rule_collector.set_location_rule("Beach Bridge Repair", logic.grind.can_grind_item(300, "Wood"))
     rule_collector.set_location_rule("Grim Reaper Statue", logic.combat.can_fight_at_level(Performance.decent) & logic.tool.has_tool(Tool.pickaxe))
     rule_collector.set_location_rule("Galaxy Sword Shrine", logic.has("Prismatic Shard"))
-    rule_collector.set_location_rule("Krobus Stardrop", logic.money.can_spend(20000))
+    rule_collector.set_location_rule(ShopLocation.krobus_stardrop, logic.source.has_access_to_any(content.game_items[ShopLocation.krobus_stardrop].sources))
     rule_collector.set_location_rule("Demetrius's Breakthrough", logic.money.can_have_earned_total(25000))
     for request_type in trash_bear_requests:
         location = f"Trash Bear {request_type}"
@@ -1255,7 +1258,7 @@ def set_eatsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_
         rule_collector.set_location_rule(eat_location.name, logic.has(item_name))
 
 
-def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions, content: StardewContent):
     if not world_options.include_endgame_locations:
         return
 
@@ -1264,7 +1267,7 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
     rule_collector.set_location_rule("Desert Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.desert_obelisk))
     rule_collector.set_location_rule("Junimo Hut Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.junimo_hut))
     rule_collector.set_location_rule("Gold Clock Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.gold_clock))
-    rule_collector.set_location_rule("Purchase Return Scepter", logic.money.can_spend_at(Region.sewer, 2_000_000))
+    set_rule_from_purchased_content(logic, rule_collector, content, Tool.return_scepter, [EndgameItemReceivedRequirement])
     rule_collector.set_location_rule("Pam House Blueprint",
                                      logic.money.can_spend_at(Region.carpenter, 500_000) & logic.grind.can_grind_item(950, Material.wood))
     rule_collector.set_location_rule("Forest To Beach Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
@@ -1272,15 +1275,13 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
     rule_collector.set_location_rule("Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
     rule_collector.set_location_rule("Tunnel To Backwoods Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
     rule_collector.set_location_rule("Purchase Statue Of Endless Fortune", logic.can_purchase_statue_of_endless_fortune())
-    rule_collector.set_location_rule("Purchase Catalogue", logic.money.can_spend_at(Region.pierre_store, 30_000))
-    rule_collector.set_location_rule("Purchase Furniture Catalogue", logic.money.can_spend_at(Region.carpenter, 200_000))
-    rule_collector.set_location_rule("Purchase Joja Furniture Catalogue",
-                                     logic.action.can_speak_junimo() & logic.money.can_spend_at(Region.movie_theater, 25_000))
-    rule_collector.set_location_rule("Purchase Junimo Catalogue",
-                                     logic.action.can_speak_junimo() & logic.money.can_spend_at(LogicRegion.traveling_cart, 70_000))
-    rule_collector.set_location_rule("Purchase Retro Catalogue", logic.money.can_spend_at(LogicRegion.traveling_cart, 110_000))
+    set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.catalogue, [EndgameItemReceivedRequirement])
+    set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.furniture, [EndgameItemReceivedRequirement])
+    set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.joja, [EndgameItemReceivedRequirement])
+    set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.junimo, [EndgameItemReceivedRequirement])
+    set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.retro, [EndgameItemReceivedRequirement])
+    set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.wizard, [EndgameItemReceivedRequirement])
     # rule_collector.set_location_rule( "Find Trash Catalogue", logic) # No need, the region is enough
-    rule_collector.set_location_rule("Purchase Wizard Catalogue", logic.money.can_spend_at(Region.sewer, 150_000))
     rule_collector.set_location_rule("Purchase Tea Set", logic.money.can_spend_at(LogicRegion.traveling_cart, 1_000_000) & logic.time.has_lived_max_months)
     if world_options.friendsanity == Friendsanity.option_all_with_marriage:
         rule_collector.set_location_rule("Purchase Abigail Portrait", logic.relationship.can_purchase_portrait(NPC.abigail))
@@ -1429,3 +1430,11 @@ def set_boarding_house_rules(logic: StardewLogic, rule_collector: StardewRuleCol
     if not content.is_enabled(ModNames.boarding_house):
         return
     rule_collector.set_entrance_rule(BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
+
+
+def set_rule_from_content(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent, location: str):
+    rule_collector.set_location_rule(location, logic.source.has_access_to_any(content.game_items[location].sources))
+
+
+def set_rule_from_purchased_content(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent, purchased_item: str, bypassed_requirement_types: Iterable[Type] = None):
+    rule_collector.set_location_rule(f"Purchase {purchased_item}", logic.source.has_access_to_any_without_other_requirements_of_types(content.game_items[purchased_item].sources, bypassed_requirement_types))

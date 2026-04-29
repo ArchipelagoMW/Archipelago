@@ -13,7 +13,8 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     LuauDelightRequirementRequirement, MovieRequirement, CookedRecipesRequirement, CraftedItemsRequirement, \
     HelpWantedRequirement, ShipOneCropRequirement, ReceivedRaccoonsRequirement, PrizeMachineRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
-    DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, CatalogueRequirement, MasteryRequirement
+    DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, MasteryRequirement, ReceivedRequirement, \
+    BachelorFriendRequirement, SpeakJunimoRequirement, EndgameItemReceivedRequirement
 from ..options import IncludeEndgameLocations
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region, LogicRegion
@@ -35,6 +36,10 @@ class RequirementLogic(BaseLogic):
     @functools.singledispatchmethod
     def meet_requirement(self, requirement: Requirement):
         raise ValueError(f"Requirements of type{type(requirement)} have no rule registered.")
+
+    @meet_requirement.register
+    def _(self, requirement: ReceivedRequirement):
+        return self.logic.received(requirement.item)
 
     @meet_requirement.register
     def _(self, requirement: HasItemRequirement):
@@ -87,6 +92,10 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: SpecificFriendRequirement):
         return self.logic.relationship.has_hearts(requirement.npc, requirement.hearts)
+
+    @meet_requirement.register
+    def _(self, requirement: BachelorFriendRequirement):
+        return self.logic.relationship.has_hearts_with_any_bachelor(requirement.hearts)
 
     @meet_requirement.register
     def _(self, requirement: NumberOfFriendsRequirement):
@@ -198,7 +207,11 @@ class RequirementLogic(BaseLogic):
         return self.logic.monster.can_kill_any(requirement.monsters, math.log10(requirement.amount) // 1)
 
     @meet_requirement.register
-    def _(self, requirement: CatalogueRequirement):
+    def _(self, requirement: EndgameItemReceivedRequirement):
         if self.options.include_endgame_locations == IncludeEndgameLocations.option_true:
-            return self.logic.received(requirement.catalogue)
+            return self.logic.received(requirement.item_name)
         return self.logic.true_
+
+    @meet_requirement.register
+    def _(self, requirement: SpeakJunimoRequirement):
+        return self.logic.action.can_speak_junimo()
