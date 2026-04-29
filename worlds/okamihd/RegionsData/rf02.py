@@ -25,7 +25,7 @@ events = {
 }
 locations = {
     RegionNames.SHINSHU_FIELD: {
-        "Shinshu Field - Buried chest between near Guardian Sapling": LocData(1883559, type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest near Guardian Sapling": LocData(1883559, type=LocationType.BURIED_CHEST),
         "Shinshu Field - Freestanding chest behind Guardian Sapling": LocData(1883563),
         "Shinshu Field - Buried chest near Tama's house": LocData(1883578, type=LocationType.BURIED_CHEST),
         "Shinshu Field - Buried chest near Lake": LocData(1883582, type=LocationType.BURIED_CHEST),
