@@ -1,4 +1,4 @@
-These instructions are no longer necessary, since you can now use the /installpack command in the client to do this process automatically. However, if this process isn't working for whatever reason, or you would simply prefer to do it manually.
+These instructions are no longer necessary, since you can now use the /install_pack command in the client to do this process automatically. However, if this process isn't working for whatever reason, or you would simply prefer to do it manually.
 
 1. Download the pack manually from the GitHub releases page.
 
