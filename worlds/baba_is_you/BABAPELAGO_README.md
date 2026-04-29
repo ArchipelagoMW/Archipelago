@@ -28,7 +28,7 @@ NOTE: You may have a hard time generating with certain options due to the restri
     - Windows: Baba Is You.exe
     - Mac: Baba Is You.app
     - Linux: run.sh (?). If unsure, check if the "Data" folder exists and contains the game's Lua files.
-3. The levelpack should be automatically installed/updated. To re-install the files, run the /installpack command in the client. If this doesn't work for some reason, look [here](BABAPELAGO_PACK_INSTALL.md) for the instructions to install the levelpack manually.
+3. The levelpack should be automatically installed/updated. To re-install the files, run the /install_pack command in the client. If this doesn't work for some reason, look [here](BABAPELAGO_PACK_INSTALL.md) for the instructions to install the levelpack manually.
 4. If you'd like to use a different in-game save slot besides slot 1, use /save_slot [number] on the client. If you need more than 3 slots simultaenously, see the "Advanced Features" section. Make sure you do this BEFORE joining the multiworld!
 5. Join the multiworld by entering the IP and port at the top, like how you would join with the normal text client. Enter your slot name and the password (leave blank if there is not a password).
 6. Launch the Baba Is You game, and open the Babapelago level pack using the same save slot you selected on the client. If you'd like to continue playing the same multiworld later, make sure you keep the save file and don't erase it.
