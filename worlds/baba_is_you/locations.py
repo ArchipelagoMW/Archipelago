@@ -31,8 +31,21 @@ for name in LEVEL_DATA:
     
     for locationName in get_level_locations(data, None):
         LOCATION_NAME_TO_ID[locationName] = locationID
-        location_name_groups["Level Wins"].add(locationName)
         locationID += 1
+
+        group = ""
+        if locationName.endswith("Win"):
+            group = "Level Wins"
+        elif locationName.endswith("Bonus"):
+            group = "Level Bonuses"
+        elif locationName.endswith("Transform"):
+            group = "Level Transforms"
+        elif locationName.endswith("Clear"):
+            group = "World Clears"
+        elif locationName.endswith("Complete"):
+            group = "World Completes"
+        if len(group) != 0:
+            location_name_groups[group].add(locationName)
 
 
 # Each Location instance must correctly report the "game" it belongs to.
