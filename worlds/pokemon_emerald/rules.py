@@ -1,6 +1,7 @@
 """
 Logic rule definitions for Pokemon Emerald
 """
+from collections import defaultdict
 from typing import TYPE_CHECKING, Literal
 
 from rule_builder.rules import (Rule, CanReachEntrance, Has, HasAll, HasAny, HasFromListUnique, HasGroupUnique,
@@ -18,20 +19,8 @@ if TYPE_CHECKING:
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
 def set_rules(world: "PokemonEmeraldWorld") -> None:
-    entrance_rules: dict[str, Rule] = {}
-    location_rules: dict[str, Rule] = {}
-
-    def add_rule(rule_dict: dict[str, Rule], name: str, rule: Rule, operation: Literal["AND"] | Literal["OR"] = "AND"):
-        if name not in rule_dict:
-            rule_dict[name] = True_()
-
-        match operation:
-            case "AND":
-                rule_dict[name] &= rule
-            case "OR":
-                rule_dict[name] |= rule
-            case _:
-                raise ValueError(f'Invalid operation. Must be "AND" or "OR": {operation}')
+    entrance_rules: defaultdict[str, Rule] = defaultdict(True_)
+    location_rules: defaultdict[str, Rule] = defaultdict(True_)
 
     hm_rules: dict[str, Rule] = {}
     for hm, badges in world.hm_requirements.items():
@@ -713,27 +702,27 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         for location in world.multiworld.get_locations(world.player):
             assert isinstance(location, PokemonEmeraldLocation)
             if location.key is not None and data.locations[location.key].category == LocationCategory.HIDDEN_ITEM:
-                add_rule(location_rules, location.key, Has("Itemfinder"))
+                location_rules[location.key] &= Has("Itemfinder")
 
     # Add Flash requirements to dark caves
     # Granite Cave
     if world.options.require_flash in [DarkCavesRequireFlash.option_only_granite_cave, DarkCavesRequireFlash.option_both]:
-        add_rule(entrance_rules, "MAP_GRANITE_CAVE_1F:2/MAP_GRANITE_CAVE_B1F:1", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_GRANITE_CAVE_B1F:3/MAP_GRANITE_CAVE_B2F:1", hm_rules["HM05 Flash"])
+        entrance_rules["MAP_GRANITE_CAVE_1F:2/MAP_GRANITE_CAVE_B1F:1"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_GRANITE_CAVE_B1F:3/MAP_GRANITE_CAVE_B2F:1"] &= hm_rules["HM05 Flash"]
 
     # Victory Road
     if world.options.require_flash in [DarkCavesRequireFlash.option_only_victory_road, DarkCavesRequireFlash.option_both]:
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_1F:2/MAP_VICTORY_ROAD_B1F:5", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_1F:4/MAP_VICTORY_ROAD_B1F:4", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_1F:3/MAP_VICTORY_ROAD_B1F:2", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_B1F:3/MAP_VICTORY_ROAD_B2F:1", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_B1F:1/MAP_VICTORY_ROAD_B2F:2", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_B1F:6/MAP_VICTORY_ROAD_B2F:3", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_B1F:0/MAP_VICTORY_ROAD_B2F:0", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_B2F:3/MAP_VICTORY_ROAD_B1F:6", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_B2F:2/MAP_VICTORY_ROAD_B1F:1", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_B2F:0/MAP_VICTORY_ROAD_B1F:0", hm_rules["HM05 Flash"])
-        add_rule(entrance_rules, "MAP_VICTORY_ROAD_B2F:1/MAP_VICTORY_ROAD_B1F:3", hm_rules["HM05 Flash"])
+        entrance_rules["MAP_VICTORY_ROAD_1F:2/MAP_VICTORY_ROAD_B1F:5"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_1F:4/MAP_VICTORY_ROAD_B1F:4"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_1F:3/MAP_VICTORY_ROAD_B1F:2"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_B1F:3/MAP_VICTORY_ROAD_B2F:1"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_B1F:1/MAP_VICTORY_ROAD_B2F:2"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_B1F:6/MAP_VICTORY_ROAD_B2F:3"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_B1F:0/MAP_VICTORY_ROAD_B2F:0"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_B2F:3/MAP_VICTORY_ROAD_B1F:6"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_B2F:2/MAP_VICTORY_ROAD_B1F:1"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_B2F:0/MAP_VICTORY_ROAD_B1F:0"] &= hm_rules["HM05 Flash"]
+        entrance_rules["MAP_VICTORY_ROAD_B2F:1/MAP_VICTORY_ROAD_B1F:3"] &= hm_rules["HM05 Flash"]
 
     for name, rule in entrance_rules.items():
         world.set_rule(world.get_entrance(name), rule)
