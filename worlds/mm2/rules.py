@@ -77,17 +77,18 @@ weapon_costs = {
 class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
     @override
     def _instantiate(self, world: "MM2World") -> Rule.Resolved:
-        return self.Resolved(tuple([(key, tuple(val)) for key, val in sorted(world.wily_5_weapons.items())]), world.options.wily_5_requirement.value,
+        return self.Resolved(tuple([(key, tuple(map(lambda x: weapons_to_name[x], val))) for key, val in
+                                    sorted(world.wily_5_weapons.items())]), world.options.wily_5_requirement.value,
                              player=world.player, caching_enabled=getattr(world, "rule_caching_enabled", False))
 
     class Resolved(Rule.Resolved):
-        boss_requirements: tuple[tuple[int, tuple[int, ...]], ...]
+        boss_requirements: tuple[tuple[int, tuple[str, ...]], ...]
         required: int
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
             return {
-                weapons_to_name[x]: {id(self)} for boss, weapons in self.boss_requirements for x in weapons
+                x: {id(self)} for boss, weapons in self.boss_requirements for x in weapons
             }
 
         @override
@@ -104,8 +105,11 @@ class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
             explain_str = f"Required RBMs: {self.required}"
             for boss, reqs in self.boss_requirements:
                 if boss in robot_masters:
-                    verb = "Can Defeat" if state.has_all(map(lambda x: weapons_to_name[x], reqs), self.player) \
-                        else "Cannot Defeat"
+                    if state:
+                        verb = "Can Defeat" if state.has_all(reqs, self.player) \
+                            else "Cannot Defeat"
+                    else:
+                        verb = ", ".join(reqs)
                     explain_str += f"\n{robot_masters[boss][:-9]}: {verb}"
             return explain_str
 
@@ -114,7 +118,7 @@ class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
             can_defeat = 0
             for boss, reqs in self.boss_requirements:
                 if boss in robot_masters:
-                    if state.has_all(map(lambda x: weapons_to_name[x], reqs), self.player):
+                    if state.has_all(reqs, self.player):
                         can_defeat += 1
                         if can_defeat >= self.required:
                             return True
