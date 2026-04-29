@@ -391,9 +391,13 @@ async def game_watcher(ctx: BabaIsYouContext):
             currPath = os.path.join(ctx.game_communication_path,"AP_CHECKS.data")
             if os.path.isfile(currPath):
                 lines = []
-                with open(currPath, 'r') as f:
-                    lines = f.readlines()
-                    f.close()
+                try:
+                    with open(currPath, 'r') as f:
+                        lines = f.readlines()
+                        f.close()
+                except OSError as e:
+                    logger.info("Error: "+str(e))
+                
                 for line in lines:
                     location = line[:-3]
                     if location == "Goal":
@@ -402,14 +406,12 @@ async def game_watcher(ctx: BabaIsYouContext):
                         st = baba_loc_name_to_id.get(location)
                         if st is not None:
                             sending = sending+[(int(st))]
-                
-                        
         
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
 
-        if not ctx.finished_game and victory:
+        if (not ctx.finished_game) and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
         await asyncio.sleep(0.1)

@@ -4,10 +4,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
 
-from .options import LogicDifficulty
+from .options import LogicDifficulty, OpenMap
 from rule_builder.rules import And, False_, CanReachRegion, Has, HasAny, HasAll, OptionFilter, Or, Rule, True_
 
 hard_logic_filter = [OptionFilter(LogicDifficulty, LogicDifficulty.option_hard)]
+open_map_filter = [OptionFilter(OpenMap, 1)]
 
 # Gets the rule to win a level
 def can_win(level : str, logic_diff : int) -> Rule:
@@ -98,9 +99,9 @@ LEVEL_DATA = {
         "winAreaAccess": 1,
         "connects": {
             "Map-0": None,
-            "Map-?": HasAll("Fragile Existence -> Baba"),
-            "Map-Finale": HasAll("Fragile Existence -> Baba"),
-            "Cavern": HasAll("Fragile Existence -> Baba"),
+            "Map-?": Has("Fragile Existence -> Baba"),
+            "Map-Finale": Has("Fragile Existence -> Baba"),
+            "Cavern": open_map_filter & Has("Fragile Existence -> Baba"),
             "???": can_win,
         },
     },
@@ -244,7 +245,7 @@ LEVEL_DATA = {
         "areaAccess": 1,
         "transforms": {
             "Flag": HasAll("Keke", "Flag", "Is", "Has", "And", "Weak", "Move", "Defeat"),
-            "Keke": HasAll("Keke", "Is") & (Has("Move") | HasAll("Flag", "And")),
+            "Keke": HasAll("Keke", "Is", "Defeat") & (Has("Move") | HasAll("Flag", "And")),
         },
         "connects": {
             "Map-8": can_win,
@@ -1314,6 +1315,7 @@ LEVEL_DATA = {
         "connects": {
             "Space-1": can_win,
             "Space-3": can_win,
+            "Space-12": can_win,
             "Space-Extra 1": can_win,
         },
     },
