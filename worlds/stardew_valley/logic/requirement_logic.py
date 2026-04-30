@@ -14,8 +14,8 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     HelpWantedRequirement, ShipOneCropRequirement, ReceivedRaccoonsRequirement, PrizeMachineRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
     DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, MasteryRequirement, ReceivedRequirement, \
-    BachelorFriendRequirement, SpeakJunimoRequirement, EndgameItemReceivedRequirement
-from ..options import IncludeEndgameLocations
+    BachelorFriendRequirement, SpeakJunimoRequirement, EndgameItemReceivedRequirement, FestivalItemReceivedRequirement
+from ..options import IncludeEndgameLocations, FestivalLocations
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region, LogicRegion
 
@@ -208,6 +208,12 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: MonsterKillRequirement):
         return self.logic.monster.can_kill_any(requirement.monsters, math.log10(requirement.amount) // 1)
+
+    @meet_requirement.register
+    def _(self, requirement: FestivalItemReceivedRequirement):
+        if self.options.festival_locations == FestivalLocations.option_disabled:
+            return self.logic.true_
+        return self.logic.received(requirement.item_name)
 
     @meet_requirement.register
     def _(self, requirement: EndgameItemReceivedRequirement):

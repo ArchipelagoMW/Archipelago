@@ -11,7 +11,7 @@ from ...data.requirement import ToolRequirement, BookRequirement, SkillRequireme
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
     ReceivedRaccoonsRequirement, \
     PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement, EndgameItemReceivedRequirement, MasteryRequirement, ReceivedRequirement, \
-    BachelorFriendRequirement, SeasonRequirement, SpeakJunimoRequirement
+    BachelorFriendRequirement, SeasonRequirement, SpeakJunimoRequirement, FestivalItemReceivedRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
 from ...data.tool import ToolUpgrade, StartingToolSource
@@ -27,6 +27,7 @@ from ...strings.craftable_names import Furniture, Consumable, Fishing, WildSeeds
 from ...strings.crop_names import Fruit
 from ...strings.currency_names import Currency
 from ...strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
+from ...strings.festival_check_names import FestivalCheck
 from ...strings.fish_names import WaterItem, Fish, Trash
 from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
@@ -412,6 +413,17 @@ pelican_town = ContentPack(
         f"{NPC.sebastian} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.sebastian, 14),)),),
         f"{NPC.shane} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.shane, 14),)),),
         Gift.tea_set: (ShopSource(price=1_000_000, shop_region=LogicRegion.traveling_cart, other_requirements=(YearRequirement(10),)),),
+
+        Furniture.tub_o_flowers: (ShopSource(price=250, shop_region=LogicRegion.flower_dance),),
+        f"{Furniture.tub_o_flowers} Recipe": (ShopSource(price=1000, shop_region=LogicRegion.flower_dance),),
+        FestivalCheck.rarecrow_5: (ShopSource(price=2500, shop_region=LogicRegion.flower_dance, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #5"),)),),
+        FestivalCheck.moonlight_jellies_banner: (ShopSource(price=800, shop_region=LogicRegion.moonlight_jellies),),
+        FestivalCheck.starport_decal: (ShopSource(price=1000, shop_region=LogicRegion.moonlight_jellies),),
+        FestivalCheck.rarecrow_1: (ShopSource(price=800, currency=Currency.star_token, shop_region=LogicRegion.fair, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #1"),)),),
+        FestivalCheck.fair_stardrop: (ShopSource(price=2000, currency=Currency.star_token, shop_region=LogicRegion.fair),),
+        FestivalCheck.jack_o_lantern: (ShopSource(price=2000, shop_region=LogicRegion.spirit_eve),),
+        FestivalCheck.rarecrow_2: (ShopSource(price=5000, shop_region=LogicRegion.spirit_eve, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #2"),)),),
+        FestivalCheck.rarecrow_4: (ShopSource(price=5000, shop_region=LogicRegion.festival_of_ice, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #4"),)),),
     },
     fishes=(
         fish_data.albacore,

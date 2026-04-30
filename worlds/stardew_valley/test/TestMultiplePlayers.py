@@ -41,14 +41,14 @@ class TestDifferentSettings(SVTestCase):
                                options_hard_festivals_unlimited_money, options_hard_festivals_limited_money]
         multiworld = setup_multiworld(multiplayer_options)
 
-        self.check_location_rule(multiworld, 1, FestivalCheck.rarecrow_4, False)
-        self.check_location_rule(multiworld, 2, FestivalCheck.rarecrow_4, False)
+        self.check_location_rule(multiworld, 1, FestivalCheck.lupini_red_eagle, False)
+        self.check_location_rule(multiworld, 2, FestivalCheck.lupini_red_eagle, False)
 
-        self.check_location_rule(multiworld, 3, FestivalCheck.rarecrow_4, True, True)
-        self.check_location_rule(multiworld, 4, FestivalCheck.rarecrow_4, True, False)
+        self.check_location_rule(multiworld, 3, FestivalCheck.lupini_red_eagle, True, True)
+        self.check_location_rule(multiworld, 4, FestivalCheck.lupini_red_eagle, True, False)
 
-        self.check_location_rule(multiworld, 5, FestivalCheck.rarecrow_4, True, True)
-        self.check_location_rule(multiworld, 6, FestivalCheck.rarecrow_4, True, False)
+        self.check_location_rule(multiworld, 5, FestivalCheck.lupini_red_eagle, True, True)
+        self.check_location_rule(multiworld, 6, FestivalCheck.lupini_red_eagle, True, False)
 
     def test_money_rule_caching(self):
         options_festivals_limited_money = {FestivalLocations.internal_name: FestivalLocations.option_easy,
@@ -57,10 +57,10 @@ class TestDifferentSettings(SVTestCase):
         multiplayer_options = [options_festivals_limited_money, options_festivals_limited_money]
         multiworld = setup_multiworld(multiplayer_options)
 
-        player_1_rarecrow_2 = get_access_rule(multiworld, 1, FestivalCheck.rarecrow_2)
-        player_1_rarecrow_4 = get_access_rule(multiworld, 1, FestivalCheck.rarecrow_4)
-        player_2_rarecrow_2 = get_access_rule(multiworld, 2, FestivalCheck.rarecrow_2)
-        player_2_rarecrow_4 = get_access_rule(multiworld, 2, FestivalCheck.rarecrow_4)
+        player_1_rarecrow_2 = get_access_rule(multiworld, 1, FestivalCheck.lupini_portrait_mermaid)
+        player_1_rarecrow_4 = get_access_rule(multiworld, 1, FestivalCheck.lupini_red_eagle)
+        player_2_rarecrow_2 = get_access_rule(multiworld, 2, FestivalCheck.lupini_portrait_mermaid)
+        player_2_rarecrow_4 = get_access_rule(multiworld, 2, FestivalCheck.lupini_red_eagle)
 
         with self.subTest("Rules are not cached between players"):
             self.assertNotEqual(id(player_1_rarecrow_2), id(player_2_rarecrow_2))

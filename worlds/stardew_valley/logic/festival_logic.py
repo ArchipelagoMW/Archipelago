@@ -1,4 +1,7 @@
 from .base_logic import BaseLogicMixin, BaseLogic
+from ..data.game_item import Source
+from ..data.hats_data import Hats
+from ..data.requirement import FestivalItemReceivedRequirement
 from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
@@ -13,6 +16,7 @@ from ..strings.machine_names import Machine
 from ..strings.monster_names import Monster
 from ..strings.region_names import Region
 from ..strings.season_names import Season
+from ..strings.seed_names import Seed
 
 
 class FestivalLogicMixin(BaseLogicMixin):
@@ -26,25 +30,25 @@ class FestivalLogic(BaseLogic):
     def initialize_rules(self):
         self.registry.festival_rules.update({
             FestivalCheck.egg_hunt: self.logic.festival.can_win_egg_hunt(),
-            FestivalCheck.strawberry_seeds: self.logic.money.can_spend(1000),
+            FestivalCheck.strawberry_seeds: self.logic.source.has_access_to_any(self.content.game_items[Seed.strawberry].sources),
             FestivalCheck.dance: self.logic.relationship.has_hearts_with_any_bachelor(4),
-            FestivalCheck.tub_o_flowers: self.logic.money.can_spend(2000),
-            FestivalCheck.rarecrow_5: self.logic.money.can_spend(2500),
+            FestivalCheck.tub_o_flowers: self.logic.festival.has_access_to_source(FestivalCheck.tub_o_flowers),
+            FestivalCheck.rarecrow_5: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_5),
             FestivalCheck.luau_soup: self.logic.festival.can_succeed_luau_soup(),
             FestivalCheck.moonlight_jellies: self.logic.true_,
-            FestivalCheck.moonlight_jellies_banner: self.logic.money.can_spend(800),
-            FestivalCheck.starport_decal: self.logic.money.can_spend(1000),
+            FestivalCheck.moonlight_jellies_banner: self.logic.festival.has_access_to_source(FestivalCheck.moonlight_jellies_banner),
+            FestivalCheck.starport_decal: self.logic.festival.has_access_to_source(FestivalCheck.starport_decal),
             FestivalCheck.smashing_stone: self.logic.true_,
             FestivalCheck.grange_display: self.logic.festival.can_succeed_grange_display(),
-            FestivalCheck.rarecrow_1: self.logic.true_,  # only cost star tokens
-            FestivalCheck.fair_stardrop: self.logic.true_,  # only cost star tokens
+            FestivalCheck.rarecrow_1: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_1),
+            FestivalCheck.fair_stardrop: self.logic.festival.has_access_to_source(FestivalCheck.fair_stardrop),
             FestivalCheck.spirit_eve_maze: self.logic.true_,
-            FestivalCheck.jack_o_lantern: self.logic.money.can_spend(2000),
-            FestivalCheck.rarecrow_2: self.logic.money.can_spend(5000),
+            FestivalCheck.jack_o_lantern: self.logic.festival.has_access_to_source(FestivalCheck.jack_o_lantern),
+            FestivalCheck.rarecrow_2: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_2),
             FestivalCheck.fishing_competition: self.logic.festival.can_win_fishing_competition(),
-            FestivalCheck.rarecrow_4: self.logic.money.can_spend(5000),
+            FestivalCheck.rarecrow_4: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_4),
             FestivalCheck.mermaid_show: self.logic.true_,
-            FestivalCheck.cone_hat: self.logic.money.can_spend(2500),
+            FestivalCheck.cone_hat: self.logic.festival.has_access_to_source(Hats.cone_hat.clarified_name),
             FestivalCheck.iridium_fireplace: self.logic.money.can_spend(15000),
             FestivalCheck.rarecrow_7: self.logic.money.can_spend(5000) & self.logic.museum.can_donate_museum_artifacts(20),
             FestivalCheck.rarecrow_8: self.logic.money.can_spend(5000) & self.logic.museum.can_donate_museum_items(40),
@@ -196,3 +200,8 @@ class FestivalLogic(BaseLogic):
         if self.options.festival_locations == FestivalLocations.option_disabled:
             return self.logic.season.has(Season.fall)
         return self.logic.received(Gift.golden_pumpkin) & self.logic.season.has(Season.fall)
+
+    def has_access_to_source(self, item_name: str, sources: list[Source] = None) -> StardewRule:
+        if sources is None:
+            sources = self.content.game_items[item_name].sources
+        return self.logic.source.has_access_to_any_without_other_requirements_of_types(sources, [FestivalItemReceivedRequirement])

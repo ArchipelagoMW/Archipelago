@@ -212,6 +212,11 @@ class MonsterKillRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class FestivalItemReceivedRequirement(Requirement):
+    item_name: str
+
+
+@dataclass(frozen=True)
 class EndgameItemReceivedRequirement(Requirement):
     item_name: str
 
