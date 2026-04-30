@@ -1281,7 +1281,7 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
     set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.retro, [EndgameItemReceivedRequirement])
     set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.wizard, [EndgameItemReceivedRequirement])
     # rule_collector.set_location_rule( "Find Trash Catalogue", logic) # No need, the region is enough
-    rule_collector.set_location_rule("Purchase Tea Set", logic.money.can_spend_at(LogicRegion.traveling_cart, 1_000_000) & logic.time.has_lived_max_months)
+    set_rule_from_purchased_content(logic, rule_collector, content, "Tea Set")
     if world_options.friendsanity == Friendsanity.option_all_with_marriage:
         set_rule_from_purchased_content(logic, rule_collector, content, "Abigail Portrait")
         set_rule_from_purchased_content(logic, rule_collector, content, "Alex Portrait")
