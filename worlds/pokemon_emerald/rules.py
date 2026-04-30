@@ -65,7 +65,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         (OptionFilter(Goal, Goal.option_champion) & Has("EVENT_DEFEAT_CHAMPION")) |
         (OptionFilter(Goal, Goal.option_steven) & Has("EVENT_DEFEAT_STEVEN")) |
         (OptionFilter(Goal, Goal.option_norman) & Has("EVENT_DEFEAT_NORMAN")) |
-        (OptionFilter(Goal, Goal.option_legendary_hunt) & HasFromListUnique(*huntable_legendary_events))
+        (OptionFilter(Goal, Goal.option_legendary_hunt) & HasFromListUnique(
+            *huntable_legendary_events,
+            count=world.options.legendary_hunt_count.value,
+        ))
     )
 
     if world.options.legendary_hunt_catch:
