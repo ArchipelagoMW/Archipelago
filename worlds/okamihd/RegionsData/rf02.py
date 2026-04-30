@@ -55,3 +55,22 @@ locations = {
         "Shinshu Field - Bakigami": LocData(200025,type=LocationType.CONSTELLATION,special_rule=lambda s,w:night_time_check_rule(s,w))  # bit 25
     }
 }
+
+# Shop locations (shopId=18): 300000 + 18*1000 + slot = 318000 + slot
+# These are added separately and conditionally created based on RandomizeShops option
+shop_locations = {
+    RegionNames.SHINSHU_FIELD: {
+        "Shinshu Field - Shop Slot 1": LocData(318000, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 2": LocData(318001, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 3": LocData(318002, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 4": LocData(318003, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 5": LocData(318004, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 6": LocData(318005, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 7": LocData(318006, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 8": LocData(318007, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 9": LocData(318008, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 10": LocData(318009, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 11": LocData(318010, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 12": LocData(318011, type=LocationType.SHOP),
+    }
+}
