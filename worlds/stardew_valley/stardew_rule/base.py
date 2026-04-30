@@ -465,7 +465,9 @@ class Has(BaseStardewRule):
         return self.evaluate_while_simplifying(state)[1]
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self.other_rules[self.item].evaluate_while_simplifying(state)
+        item_rule = self.other_rules[self.item]
+        result = item_rule.evaluate_while_simplifying(state)
+        return result
 
     def __str__(self):
         if self.item not in self.other_rules:

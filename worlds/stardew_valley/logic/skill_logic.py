@@ -4,6 +4,7 @@ from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.base import base_game
 from ..data.harvest import HarvestCropSource
+from ..options import ExcludeGingerIsland, SpecialOrderLocations
 from ..stardew_rule import StardewRule, true_, True_, False_
 from ..strings.ap_names.ap_option_names import EatsanityOptionName
 from ..strings.currency_names import Currency
@@ -112,9 +113,12 @@ class SkillLogic(BaseLogic):
                 foods_only_with_seasoning_level.extend(potential_foods[level])
 
         normal_food_rule = self.logic.or_(*[self.logic.has(food) for food in foods_correct_level], allow_empty=True)
-        qi_seasoning_food_rule = self.logic.has(Ingredient.qi_seasoning) &\
+        if self.options.exclude_ginger_island == ExcludeGingerIsland.option_false and self.options.special_order_locations & SpecialOrderLocations.value_qi:
+            qi_seasoning_food_rule = self.logic.has(Ingredient.qi_seasoning) &\
                                  self.logic.or_(*[self.logic.cooking.can_cook(food) for food in foods_only_with_seasoning_level], allow_empty=True)
-        food_rule = normal_food_rule | qi_seasoning_food_rule
+            food_rule = normal_food_rule | qi_seasoning_food_rule
+        else:
+            food_rule = normal_food_rule
 
         if EatsanityOptionName.lock_effects in self.options.eatsanity:
             enzyme_rule = self.logic.received("Fishing Enzyme", buff_levels)
