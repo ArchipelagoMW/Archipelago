@@ -47,14 +47,14 @@ locations = {
     RegionNames.AGATA_FOREST: {
         # the names here could be better.
         "Agata Forest - Treasure Bud near Guardian Sapling Cave": LocData(1884064, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud 1": LocData(47, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud on big island": LocData(48, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud on lone tree island next to big rocks": LocData(1884065, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud on big rock island": LocData(1884066, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud on lone tree island near Kokari": LocData(1884067, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud near Karude's house": LocData(1884068, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud near Karude's house cursed patch": LocData(1884069, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud near waterfall": LocData(1884070, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud near Mme. Fawn's Cave": LocData(1884071, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud 2": LocData(54, type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud on center lone tree island": LocData(1884072, type=LocationType.TREASURE_BUD),
         "Agata Forest - Treasure Bud Inside Tree": LocData(1884081, type=LocationType.TREASURE_BUD),
         "Agata Forest - Chest at Guardian Sapling": LocData(1884082),
         "Agata Forest - Buried chest near shortcut": LocData(1884083, type=LocationType.BURIED_CHEST),
@@ -79,6 +79,7 @@ locations = {
         "Agata Forest - Chest after Bridge cutscene": LocData(1884111,required_items_events=["Agata Forest - Repair Bridge with Kokari"]),
         "Agata Forest - Chest near Demon Fang merchant": LocData(1884113),
         "Agata Forest - Chest near Tusta ruins door": LocData(1884114),
+        ## Special check
         "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1),
         "Agata Forest - Yumigami": LocData(200018, type=LocationType.CONSTELLATION,  # bit 18
                                            required_items_events=["Agata Forest - Fish Whopper with Kokari"])

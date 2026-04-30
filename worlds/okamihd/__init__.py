@@ -91,7 +91,7 @@ class OkamiWorld(World):
         # Static Precollected Items
         precollected_items = create_static_precollected_item_list(world)
 
-        ## Don't give a random Divine Instrument as we alaways start with one currently
+        ## Don't give a random Divine Instrument as we always start with one currently
 
         if not world.options.ProgressiveWeapons:
         #    # Get a random tier 1 divine instrument to start with.
