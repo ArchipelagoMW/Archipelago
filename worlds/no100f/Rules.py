@@ -279,7 +279,7 @@ key_rules = [
 
         # Basement
         ConnectionNames.b002_b003: lambda player: lambda state: state.has(ItemNames.Cellar2_Key, player, 3) or state.has(ItemNames.Cellar2_KeyRing, player, 1),
-        ConnectionNames.b003_b004: lambda player: lambda state: state.has(ItemNames.Cellar3_Key, player, 4) or state.has(ItemNames.Cellar3_KeyRing, player, 1),
+        ConnectionNames.b003_b004: lambda player: lambda state: (state.has(ItemNames.Cellar3_Key, player, 4) or state.has(ItemNames.Cellar3_KeyRing, player, 1)) and state.has(ItemNames.HelmetPower, player, 1),
 
         # Lighthouse
         ConnectionNames.l011_l013: lambda player: lambda state: state.has(ItemNames.Coast_Key, player, 4) or state.has(ItemNames.Coast_KeyRing, player, 1),
@@ -2085,7 +2085,7 @@ snack_rules = [
             LocationNames.b004_SS21: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
             LocationNames.b004_SS22: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
             LocationNames.b004_SS23: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
-            LocationNames.b004_SNACKBOX2: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACKBOX2: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)) and state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.b004_DRYER__SNACKBOX__1: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1) and (state.has(ItemNames.ProgressiveJump, player, 1) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
             LocationNames.b004_DRYER__SNACKBOX__2: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1) and (state.has(ItemNames.ProgressiveJump, player, 1) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
 
@@ -2570,6 +2570,7 @@ def set_rules(multiworld: MultiWorld, options: NO100FOptions, player: int):
 
         add_rule(multiworld.get_entrance(ConnectionNames.hub1_e001, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1))
         add_rule(multiworld.get_entrance(ConnectionNames.hub1_f001, player), lambda state: state.has(ItemNames.ShovelPower, player, 1))
+        add_rule(multiworld.get_entrance(ConnectionNames.b003_b004, player), lambda state: state.has(ItemNames.HelmetPower, player, 1))
         add_rule(multiworld.get_entrance(ConnectionNames.i003_i004, player), lambda state: state.has(ItemNames.HelmetPower, player, 1))
         add_rule(multiworld.get_entrance(ConnectionNames.g007_g008, player), lambda state: state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1))
         add_rule(multiworld.get_entrance(ConnectionNames.c005_c006, player), lambda state: state.has(ItemNames.PlungerPower, player, 1))
