@@ -66,3 +66,4 @@ class LocationRules(MuseDashTestBase):
             sheets_to_win -= 1
             
         self.assertBeatable(True)
+        
