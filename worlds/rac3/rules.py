@@ -521,6 +521,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach_location(RAC3LOCATION.BLACKWATER_CITY_RANGERS_3, world.player),
 
         # RAC3VENDOR.HOLOSTAR_RIFT_INDUCER
+        RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.HACKER], world.player),
         RAC3TROPHY.HOLOSTAR_CLANK: lambda state: state.has(RAC3ITEM.HACKER, world.player),
         RAC3TBOLT.HOLOSTAR_CHAIRS: lambda state: state.has(RAC3ITEM.HACKER, world.player),
         RAC3SKILLPOINT.HOLOSTAR_LUCKY: lambda state: state.has(RAC3ITEM.HACKER, world.player),
