@@ -44,6 +44,12 @@ qi_board_content_pack = QiBoardContentPack(
         "Galaxy Soul": (ShopSource(price=40, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
         AnimalProduct.golden_egg_starter: (ShopSource(price=100, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room,
                                                       other_requirements=(ReceivedRequirement(AnimalProduct.golden_egg),)),),
+
+        "Horse Flute": (ShopSource(price=50, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
+        "Pierre's Missing Stocklist": (ShopSource(price=50, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
+        "Key To The Town": (ShopSource(price=20, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
+        "Mini-Shipping Bin": (ShopSource(price=60, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
+        "Exotic Double Bed": (ShopSource(price=50, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
     },
     fishes=(
         fish_data.ms_angler,

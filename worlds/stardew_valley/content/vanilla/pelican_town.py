@@ -397,6 +397,20 @@ pelican_town = ContentPack(
 
         Meal.ice_cream: (ShopSource(price=250, currency=Currency.money, shop_region=Region.town,
                                        other_requirements=(SeasonRequirement(Season.summer),)),),
+
+        f"{NPC.abigail} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.abigail, 14),)),),
+        f"{NPC.alex} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.alex, 14),)),),
+        f"{NPC.elliott} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.elliott, 14),)),),
+        f"{NPC.emily} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.emily, 14),)),),
+        f"{NPC.haley} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.haley, 14),)),),
+        f"{NPC.harvey} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.harvey, 14),)),),
+        f"{NPC.krobus} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.krobus, 14),)),),
+        f"{NPC.leah} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.leah, 14),)),),
+        f"{NPC.maru} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.maru, 14),)),),
+        f"{NPC.penny} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.penny, 14),)),),
+        f"{NPC.sam} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.sam, 14),)),),
+        f"{NPC.sebastian} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.sebastian, 14),)),),
+        f"{NPC.shane} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.shane, 14),)),),
     },
     fishes=(
         fish_data.albacore,

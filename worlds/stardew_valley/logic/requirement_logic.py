@@ -91,7 +91,10 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: SpecificFriendRequirement):
-        return self.logic.relationship.has_hearts(requirement.npc, requirement.hearts)
+        hearts_rule = self.logic.relationship.has_hearts(requirement.npc, requirement.hearts)
+        if requirement.hearts > 10:
+            return hearts_rule & self.logic.relationship.can_marry(requirement.npc)
+        return hearts_rule
 
     @meet_requirement.register
     def _(self, requirement: BachelorFriendRequirement):

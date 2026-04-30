@@ -47,7 +47,6 @@ from .strings.calendar_names import Weekday
 from .strings.catalogue_names import Catalogue
 from .strings.craftable_names import Bomb, Furniture, Consumable, Craftable
 from .strings.crop_names import Fruit, Vegetable
-from .strings.currency_names import Currency
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \
     DeepWoodsEntrance, AlecEntrance, \
     SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance
@@ -1284,31 +1283,30 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
     # rule_collector.set_location_rule( "Find Trash Catalogue", logic) # No need, the region is enough
     rule_collector.set_location_rule("Purchase Tea Set", logic.money.can_spend_at(LogicRegion.traveling_cart, 1_000_000) & logic.time.has_lived_max_months)
     if world_options.friendsanity == Friendsanity.option_all_with_marriage:
-        rule_collector.set_location_rule("Purchase Abigail Portrait", logic.relationship.can_purchase_portrait(NPC.abigail))
-        rule_collector.set_location_rule("Purchase Alex Portrait", logic.relationship.can_purchase_portrait(NPC.alex))
-        rule_collector.set_location_rule("Purchase Elliott Portrait", logic.relationship.can_purchase_portrait(NPC.elliott))
-        rule_collector.set_location_rule("Purchase Emily Portrait", logic.relationship.can_purchase_portrait(NPC.emily))
-        rule_collector.set_location_rule("Purchase Haley Portrait", logic.relationship.can_purchase_portrait(NPC.haley))
-        rule_collector.set_location_rule("Purchase Harvey Portrait", logic.relationship.can_purchase_portrait(NPC.harvey))
-        rule_collector.set_location_rule("Purchase Krobus Portrait", logic.relationship.can_purchase_portrait(NPC.krobus))
-        rule_collector.set_location_rule("Purchase Leah Portrait", logic.relationship.can_purchase_portrait(NPC.leah))
-        rule_collector.set_location_rule("Purchase Maru Portrait", logic.relationship.can_purchase_portrait(NPC.maru))
-        rule_collector.set_location_rule("Purchase Penny Portrait", logic.relationship.can_purchase_portrait(NPC.penny))
-        rule_collector.set_location_rule("Purchase Sam Portrait", logic.relationship.can_purchase_portrait(NPC.sam))
-        rule_collector.set_location_rule("Purchase Sebastian Portrait", logic.relationship.can_purchase_portrait(NPC.sebastian))
-        rule_collector.set_location_rule("Purchase Shane Portrait", logic.relationship.can_purchase_portrait(NPC.shane))
+        set_rule_from_purchased_content(logic, rule_collector, content, "Abigail Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Alex Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Elliott Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Emily Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Haley Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Harvey Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Krobus Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Leah Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Maru Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Penny Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Sam Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Sebastian Portrait")
+        set_rule_from_purchased_content(logic, rule_collector, content, "Shane Portrait")
     elif world_options.friendsanity != Friendsanity.option_none:
         rule_collector.set_location_rule("Purchase Spouse Portrait", logic.relationship.can_purchase_portrait())
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false:
         rule_collector.set_location_rule("Island Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.island_obelisk))
         if world_options.special_order_locations & SpecialOrderLocations.value_qi:
-            rule_collector.set_location_rule("Purchase Horse Flute", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
-            rule_collector.set_location_rule("Purchase Pierre's Missing Stocklist", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
-            rule_collector.set_location_rule("Purchase Key To The Town", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20))
-            rule_collector.set_location_rule("Purchase Mini-Shipping Bin", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 60))
-            rule_collector.set_location_rule("Purchase Exotic Double Bed", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
-            rule_collector.set_location_rule("Purchase Golden Egg",
-                                             logic.received(AnimalProduct.golden_egg) & logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100))
+            set_rule_from_purchased_content(logic, rule_collector, content, "Horse Flute")
+            set_rule_from_purchased_content(logic, rule_collector, content, "Pierre's Missing Stocklist")
+            set_rule_from_purchased_content(logic, rule_collector, content, "Key To The Town")
+            set_rule_from_purchased_content(logic, rule_collector, content, "Mini-Shipping Bin")
+            set_rule_from_purchased_content(logic, rule_collector, content, "Exotic Double Bed")
+            rule_collector.set_location_rule(f"Purchase {AnimalProduct.golden_egg}", logic.source.has_access_to_any(content.game_items[AnimalProduct.golden_egg_starter].sources))
 
 
 def set_friendsanity_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent):
