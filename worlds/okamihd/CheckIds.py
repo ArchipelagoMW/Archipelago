@@ -15,7 +15,7 @@ multiplier 1000.
   - 7_000_000_000 + bitIndex                    Game progress flags
   - 8_000_000_000 + levelId * 1000 + spawnIdx   Container pickups
 """
-from Enums.RegionNames import MapIds, MapIndexes
+from .Enums.RegionNames import MapIds, MapIndexes
 
 BRUSH_BASE = 1_000_000_000
 SHOP_BASE = 2_000_000_000
