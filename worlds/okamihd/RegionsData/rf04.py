@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
+from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
@@ -46,42 +47,42 @@ events = {
 locations = {
     RegionNames.AGATA_FOREST: {
         # the names here could be better.
-        "Agata Forest - Treasure Bud near big rocks": LocData(1884064, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud on lone tree island next to big rocks": LocData(1884065, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud near big rocks 2": LocData(1884066, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud on lone tree island near Kokari": LocData(1884067, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud near Karude's house": LocData(1884068, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud near Karude's house cursed patch": LocData(1884069, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud near waterfall": LocData(1884070, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud near Mme. Fawn's Cave": LocData(1884071, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud on center lone tree island": LocData(1884072, type=LocationType.TREASURE_BUD),
-        "Agata Forest - Treasure Bud inside tree at Hitoshio Spring": LocData(1884081, type=LocationType.TREASURE_BUD,required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM]),
-        "Agata Forest - Chest at Guardian Sapling": LocData(1884082),
-        "Agata Forest - Buried chest on ledge near Tsuta Ruins Entrance": LocData(1884083, type=LocationType.BURIED_CHEST),
+        "Agata Forest - Treasure Bud near big rocks": LocData(container_check_id(0xF04, 0), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud on lone tree island next to big rocks": LocData(container_check_id(0xF04, 1), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near big rocks 2": LocData(container_check_id(0xF04, 2), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud on lone tree island near Kokari": LocData(container_check_id(0xF04, 3), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near Karude's house": LocData(container_check_id(0xF04, 4), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near Karude's house cursed patch": LocData(container_check_id(0xF04, 5), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near waterfall": LocData(container_check_id(0xF04, 6), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud near Mme. Fawn's Cave": LocData(container_check_id(0xF04, 7), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud on center lone tree island": LocData(container_check_id(0xF04, 8), type=LocationType.TREASURE_BUD),
+        "Agata Forest - Treasure Bud inside tree at Hitoshio Spring": LocData(container_check_id(0xF04, 17), type=LocationType.TREASURE_BUD,required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM]),
+        "Agata Forest - Chest at Guardian Sapling": LocData(container_check_id(0xF04, 18)),
+        "Agata Forest - Buried chest on ledge near Tsuta Ruins Entrance": LocData(container_check_id(0xF04, 19), type=LocationType.BURIED_CHEST),
 
-        "Agata Forest - Chest on top of the big tree at Hitoshio Spring": LocData(1884087, type=LocationType.UNDERWATER_CHEST,
+        "Agata Forest - Chest on top of the big tree at Hitoshio Spring": LocData(container_check_id(0xF04, 23), type=LocationType.UNDERWATER_CHEST,
                                                                required_brush_techniques=[
                                                                    BrushTechniques.GREENSPROUT_VINE]),
-        "Agata Forest - Freestanding stray Bead": LocData(1884088,
+        "Agata Forest - Freestanding stray Bead": LocData(container_check_id(0xF04, 24),
                                                           required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE],
                                                           type=LocationType.FREESTANDING_ITEM),
-        "Agata Forest - Freestanding Bull Horn": LocData(1884089,
+        "Agata Forest - Freestanding Bull Horn": LocData(container_check_id(0xF04, 25),
                                                          required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE],
                                                          type=LocationType.FREESTANDING_ITEM),
-        "Agata Forest - Buried Chest on Lake shore": LocData(1884096, type=LocationType.BURIED_CHEST),
-        "Agata Forest - Buried Chest behind Karude's house": LocData(1884097, type=LocationType.BURIED_CHEST),
-        "Agata Forest - Buried Chest on center lone tree island": LocData(1884098, type=LocationType.BURIED_CHEST),
-        "Agata Forest - Chest under leaf pile near Shinshu Field entrance": LocData(1884107,
+        "Agata Forest - Buried Chest on Lake shore": LocData(container_check_id(0xF04, 32), type=LocationType.BURIED_CHEST),
+        "Agata Forest - Buried Chest behind Karude's house": LocData(container_check_id(0xF04, 33), type=LocationType.BURIED_CHEST),
+        "Agata Forest - Buried Chest on center lone tree island": LocData(container_check_id(0xF04, 34), type=LocationType.BURIED_CHEST),
+        "Agata Forest - Chest under leaf pile near Shinshu Field entrance": LocData(container_check_id(0xF04, 43),
                                                                                     type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Agata Forest - Buried Chest under leaf pile near shortcut": LocData(1884108, type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Agata Forest - Chest under leaf pile near river": LocData(1884109, type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Agata Forest - Buried chest near Tsuta Ruins entrance": LocData(1884110, type=LocationType.STONE_BURIED_CHEST),
-        "Agata Forest - Chest after Bridge cutscene": LocData(1884111,required_items_events=["Agata Forest - Repair Bridge with Kokari"]),
-        "Agata Forest - Chest near Kiba": LocData(1884113),
-        "Agata Forest - Chest near Tusta ruins door": LocData(1884114),
+        "Agata Forest - Buried Chest under leaf pile near shortcut": LocData(container_check_id(0xF04, 44), type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Agata Forest - Chest under leaf pile near river": LocData(container_check_id(0xF04, 45), type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Agata Forest - Buried chest near Tsuta Ruins entrance": LocData(container_check_id(0xF04, 46), type=LocationType.STONE_BURIED_CHEST),
+        "Agata Forest - Chest after Bridge cutscene": LocData(container_check_id(0xF04, 47),required_items_events=["Agata Forest - Repair Bridge with Kokari"]),
+        "Agata Forest - Chest near Kiba": LocData(container_check_id(0xF04, 49)),
+        "Agata Forest - Chest near Tusta ruins door": LocData(container_check_id(0xF04, 50)),
         ## Special check
         "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1),
-        "Agata Forest - Yumigami": LocData(200018, type=LocationType.CONSTELLATION,  # bit 18
+        "Agata Forest - Yumigami": LocData(brush_check_id(18), type=LocationType.CONSTELLATION,  # bit 18
                                            required_items_events=["Agata Forest - Fish Whopper with Kokari"])
     }
 }

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from ..CheckIds import container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.RegionNames import RegionNames
@@ -19,12 +20,12 @@ events = {
 }
 locations = {
     RegionNames.CURSED_AGATA_FOREST:{
-        "Agata Forest - Burning Chest near Madame Fawn's 1": LocData(1883828,type=LocationType.BURNING_CHEST),
-        "Agata Forest - Burning Chest near Madame Fawn's 2": LocData(1883829,type=LocationType.BURNING_CHEST),
-        "Agata Forest - Burning Chest near Madame Fawn's 3": LocData(1883830,type=LocationType.BURNING_CHEST),
-        "Agata Forest - Ledge chest near Madame Fawn's ": LocData(1883834, required_brush_techniques=[BrushTechniques.WATERSPOUT]),
+        "Agata Forest - Burning Chest near Madame Fawn's 1": LocData(container_check_id(0xF03, 20),type=LocationType.BURNING_CHEST),
+        "Agata Forest - Burning Chest near Madame Fawn's 2": LocData(container_check_id(0xF03, 21),type=LocationType.BURNING_CHEST),
+        "Agata Forest - Burning Chest near Madame Fawn's 3": LocData(container_check_id(0xF03, 22),type=LocationType.BURNING_CHEST),
+        "Agata Forest - Ledge chest near Madame Fawn's ": LocData(container_check_id(0xF03, 26), required_brush_techniques=[BrushTechniques.WATERSPOUT]),
     },
     RegionNames.FAWNS_HOUSE:{
-        "Agata Forest - Stray Bead in Madame Fawn's":LocData(968096)
+        "Agata Forest - Stray Bead in Madame Fawn's":LocData(container_check_id(0x10A, 0))
     }
 }

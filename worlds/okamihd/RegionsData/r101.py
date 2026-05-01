@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Types import ExitData, LocData, EventData
@@ -26,10 +27,10 @@ events = {
 }
 locations = {
     RegionNames.CAVE_OF_NAGI: {
-        # Container IDs: 900000 + (0x101 << 8) + spawn_idx
-        "Cave of Nagi - Stray Bead Chest": LocData(965806),  # spawn_idx=14, Stray Bead
+        # Containers in this file are at level 0x101.
+        "Cave of Nagi - Stray Bead Chest": LocData(container_check_id(0x101, 14)),  # Stray Bead
     },
     RegionNames.CAVE_OF_NAGI_TACHIGAMI: {
-        "Cave of Nagi - Tachigami": LocData(200012, type=LocationType.CONSTELLATION),  # Brush acquisition (Power Slash, bit 12)
+        "Cave of Nagi - Tachigami": LocData(brush_check_id(12), type=LocationType.CONSTELLATION),  # Power Slash
     }
 }

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from ..CheckIds import brush_check_id, collected_object_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
@@ -26,19 +27,18 @@ events = {
     }
 }
 locations = {
-    # Container IDs: 900000 + (0x103 << 8) + spawn_idx = 966304 + spawn_idx
     RegionNames.CURSED_HANA_VALLEY: {
-        "Hana Valley - Freestanding Chest": LocData(966313),  # spawn_idx=9, Traveler's Charm
-        "Hana Valley - Buried chest near tunnel": LocData(966309, type=LocationType.BURIED_CHEST),  # spawn_idx=5, Stray Bead
-        "Hana Valley - Buried chest at entrance boulder": LocData(966310, type=LocationType.BURIED_CHEST),  # spawn_idx=6, Coral Fragment
+        "Hana Valley - Freestanding Chest": LocData(container_check_id(0x103, 9)),  # spawn_idx=9, Traveler's Charm
+        "Hana Valley - Buried chest near tunnel": LocData(container_check_id(0x103, 5), type=LocationType.BURIED_CHEST),  # spawn_idx=5, Stray Bead
+        "Hana Valley - Buried chest at entrance boulder": LocData(container_check_id(0x103, 6), type=LocationType.BURIED_CHEST),  # spawn_idx=6, Coral Fragment
     },
     RegionNames.HANA_VALLEY_SAKIGAMI: {
-        "Hana Valley - Sakigami": LocData(200004, type=LocationType.CONSTELLATION),  # Brush acquisition (Bloom)
+        "Hana Valley - Sakigami": LocData(brush_check_id(4), type=LocationType.CONSTELLATION),  # Brush acquisition (Bloom)
     },
     RegionNames.HANA_VALLEY: {
-        "Hana Valley - Chest on Island": LocData(966314),  # spawn_idx=10, Travel Guide: Digging Tips
+        "Hana Valley - Chest on Island": LocData(container_check_id(0x103, 10)),  # spawn_idx=10, Travel Guide: Digging Tips
         # Note: Sun Fragment chest (idx=80 in spreadsheet) may use a different system - keeping as collected object for now
-        "Hana Valley - Sun Fragment Chest (Bloom every Tree)": LocData(500000 + 4 * 10000 + 80,  # mapId=4 (HanaValley enum index)
+        "Hana Valley - Sun Fragment Chest (Bloom every Tree)": LocData(collected_object_check_id(4, 80),  # mapId=4 (HanaValley enum index)
             required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM], power_slash_level=1),
     }
 }
