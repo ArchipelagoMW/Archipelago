@@ -18,22 +18,22 @@ class GameInterface:
     def __init__(self) -> None:
         pass
 
-    def _read8(self, address: int):
+    def _read8(self, address: int) -> int:
         return self.pcsx2_interface.read_int8(address)
 
-    def _read16(self, address: int):
+    def _read16(self, address: int) -> int:
         return self.pcsx2_interface.read_int16(address)
 
-    def _read32(self, address: int):
+    def _read32(self, address: int) -> int:
         return self.pcsx2_interface.read_int32(address)
 
-    def _read_bytes(self, address: int, n: int):
+    def _read_bytes(self, address: int, n: int) -> bytes:
         return self.pcsx2_interface.read_bytes(address, n)
 
-    def _read_float(self, address: int):
+    def _read_float(self, address: int) -> float:
         return unpack("f", self.pcsx2_interface.read_bytes(address, 4))[0]
 
-    def _read_string(self, address: int, n: int):
+    def _read_string(self, address: int, n: int) -> str:
         return self.pcsx2_interface.read_string(address, n)
 
     def _write8(self, address: int, value: int):
@@ -55,11 +55,8 @@ class GameInterface:
         self.pcsx2_interface.write_string(address, value)
 
     def connect_to_game(self):
-        """
-        Initializes the connection to PCSX2 and verifies it is connected to the
-        right game
-        """
-        if not self.pcsx2_interface._sock_state:
+        """Initializes the connection to PCSX2 and verifies it is connected to the right game"""
+        if not self.pcsx2_interface.is_connected():
             self.is_connecting = True
             logger.debug("Begin attempting emulator connection...")
             try:
@@ -75,7 +72,7 @@ class GameInterface:
                 logger.warning("Duplicate connection to PCSX2 Emulator detected")
                 return
             self.is_connecting = False
-            if not self.pcsx2_interface._sock_state:
+            if not self.pcsx2_interface.is_connected():
                 self.emulator_connected = False
                 logger.debug("No Connection to PCSX2 Emulator")
                 return
@@ -100,7 +97,7 @@ class GameInterface:
 
     def verify_game_version(self) -> bool:
         """Verify that the current game loaded in the PCSX connection has a valid game ID for Ratchet and Clank 3"""
-        #logger.debug("Start Game Verification")
+        # logger.debug("Start Game Verification")
         try:
             game_id = self.pcsx2_interface.get_game_id()
         except ConnectionError as error:
@@ -153,13 +150,13 @@ class GameInterface:
             logger.warning(f"Connected to the wrong game ({game_id})")
             self.game_id_error = game_id
             return False
-        #logger.debug("Valid Game detected")
+        # logger.debug("Valid Game detected")
         return True
 
     def get_connection_state(self) -> bool:
         """Safe connection test"""
         try:
-            if not self.pcsx2_interface._sock_state:
+            if not self.pcsx2_interface.is_connected():
                 return False
             return self.verify_game_version()
         except RuntimeError:

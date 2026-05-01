@@ -35,6 +35,7 @@ def get_sent_item_message(ctx: "Rac3Context", net_item: NetworkItem, player_name
         return f"Sent {item_name} to {RAC3TEXTFORMATSTRING.GREEN}{player_name}"
     return f"Sent {player_name}'s {item_name}"
 
+
 TEXT_BYTE_TO_EXPECTED_WIDTH = {
     0x00: 0,  # Null terminator
     0x01: 0,  # Newline

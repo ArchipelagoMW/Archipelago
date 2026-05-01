@@ -198,17 +198,20 @@ class Pine:
         bytes_written = 0
         while bytes_written < len(data):
             if len(data) - bytes_written >= 8:
-                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written, 9 + Pine.DataSize.INT64)
+                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written,
+                                               9 + Pine.DataSize.INT64)
                 request += data[bytes_written:bytes_written + 8]
                 self._send_request(request)
                 bytes_written += 8
             elif len(data) - bytes_written >= 4:
-                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written, 9 + Pine.DataSize.INT32)
+                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written,
+                                               9 + Pine.DataSize.INT32)
                 request += data[bytes_written:bytes_written + 4]
                 self._send_request(request)
                 bytes_written += 4
             elif len(data) - bytes_written >= 2:
-                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written, 9 + Pine.DataSize.INT16)
+                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written,
+                                               9 + Pine.DataSize.INT16)
                 request += data[bytes_written:bytes_written + 2]
                 self._send_request(request)
                 bytes_written += 2

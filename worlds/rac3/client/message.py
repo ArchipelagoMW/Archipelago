@@ -1,4 +1,3 @@
-
 from NetUtils import ClientStatus
 from worlds.rac3.constants.options import RAC3OPTION
 

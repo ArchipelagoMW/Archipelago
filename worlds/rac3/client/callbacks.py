@@ -11,22 +11,13 @@ from worlds.rac3.client.texthelper import colorize_item_name, get_sent_item_mess
 from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
-from worlds.rac3.constants.instruction import RAC3INSTRUCTION
-from worlds.rac3.constants.locations.vendors import (
-    ITEM_TO_ARMOR_VENDOR_LOCATION,
-    ITEM_TO_WEAPON_VENDOR_LOCATION,
-    MEGACORP_WEAPONS,
-    SHIP_VENDOR_INVENTORY,
-)
+from worlds.rac3.constants.locations.vendors import (ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION,
+                                                     SHIP_VENDOR_INVENTORY)
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
-from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import PERMITTED_DEATHLINK_SHIP_TELEPORT_ACTIONS
 from worlds.rac3.constants.region import PLANET_VENDOR_OFFSET, RAC3REGION
-from worlds.rac3.constants.vendors.name import RAC3VENDORNAME
-from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
-from worlds.rac3.constants.vendors.vendor import RAC3VENDOR, RAC3WEAPONVENDOR
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -41,9 +32,9 @@ async def pcsx2_sync_task(ctx: "Context"):
     version_dots = RAC3OPTION.VERSION_NUMBER.count(".")
     if version_dots >= 3 or "dev" in RAC3OPTION.VERSION_NUMBER:
         logger.warning("\nYou are using a development build of the RaC3 Archipelago Randomizer!\n"
-                        "There may be bugs present and features that have not been tested fully.\n"
-                        "These builds are meant for testing and bug reporting purposes "
-                        "and should not be used for normal play!\n")
+                       "There may be bugs present and features that have not been tested fully.\n"
+                       "These builds are meant for testing and bug reporting purposes "
+                       "and should not be used for normal play!\n")
     connected_to_game: bool = False
     connection_retry_attempts: int = 0
     correct_version: bool = True
@@ -107,8 +98,9 @@ async def pcsx2_sync_task(ctx: "Context"):
                             f"already connected. Please launch RaC3.")
                     else:
                         logger.warning(
-                            f"Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease check "
-                            f"your PINE settings both global and game specific, and restart PCSX2 if you changed them.")
+                            f"Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease "
+                            f"check your PINE settings both global and game specific, and restart PCSX2 if you "
+                            f"changed them.")
                     await sleep(retry_wait)
                 else:
                     connection_retry_attempts = 0
@@ -201,7 +193,7 @@ async def _handle_game_ready(ctx: "Context") -> None:
             after_time = time()
             elapsed = after_time - current_time
             logger.debug(f"Update cycle took {elapsed:.5f} seconds")
-            #logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
+            # logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
             ctx.game_interface.cycle_times.append(elapsed)
             if len(ctx.game_interface.cycle_times) > 100:
                 ctx.game_interface.cycle_times.pop(0)
@@ -240,12 +232,46 @@ async def update(ctx: "Context") -> None:
     # logger.info(f"Update is called")
 
 
+async def handle_codecave(ctx: "Context") -> None:
+    """Set up the codecave with the current item locations for use in the randomizer"""
+    if ctx.slot_data is None or ctx.code_cave_setup:
+        return
+    all_vendor_locations: list[str] = []
+    if ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False):
+        all_vendor_locations.extend(ITEM_TO_WEAPON_VENDOR_LOCATION.values())
+    if ctx.slot_data.get(RAC3OPTION.ARMOR_VENDOR, False):
+        all_vendor_locations.extend(ITEM_TO_ARMOR_VENDOR_LOCATION.values())
+    if ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False):
+        all_vendor_locations.extend(SHIP_VENDOR_INVENTORY.keys())
+    if not all_vendor_locations:
+        return
+
+    ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in all_vendor_locations]
+    location_data: list[tuple[str, str]] = []
+    for loc_key, ap_code in zip(all_vendor_locations, ap_codes, strict=False):
+        net_item = ctx.locations_info.get(ap_code, None)
+        if net_item is not None:
+            item_name = colorize_item_name(
+                ctx.item_names.lookup_in_slot(net_item.item, net_item.player),
+                net_item.flags
+            )
+            if ctx.slot == net_item.player:
+                string = item_name
+            else:
+                player_name = ctx.player_names.get(net_item.player, "???")
+                string = f"{player_name}'s {item_name}"
+            location_data.append((loc_key, string))
+
+    ctx.game_interface.setup_code_cave(location_data)
+    ctx.code_cave_setup = True
+
+
 async def handle_intro_skip(ctx: "Context") -> None:
     """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
     if ctx.slot_data is None:
         return
     if (ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False)
-            and ctx.current_planet == RAC3REGION.VELDIN and not ctx.game_interface.homewarping):
+        and ctx.current_planet == RAC3REGION.VELDIN and not ctx.game_interface.homewarping):
         locations = []
         for ap_code in [ap_code for ap_code in ctx.missing_locations if
                         RAC3_LOCATION_DATA_TABLE[ctx.location_names.lookup_in_slot(ap_code, ctx.slot)].REGION
@@ -398,64 +424,15 @@ async def handle_vendors(ctx: "Context") -> None:
     if ctx.slot_data is None or ctx.current_planet not in PLANET_VENDOR_OFFSET.keys():
         return
 
-    if ctx.slot_data.get(RAC3OPTION.ARMOR_VENDOR, False):
-        new_armor = ctx.game_interface._read32(
-                    RAC3VENDOR.get_vendor_property_address(ctx.game_interface.planet, RAC3VENDOR.NEW_ARMOR_OFFSET))
-        if new_armor > 0 and new_armor < 5:
-            ctx.game_interface._write8(RAC3INSTRUCTION.CODECAVE_START + new_armor, 1)
-            if new_armor == 4:
-                ctx.game_interface._write8(0x001D54B4, 1) # Infernox skill point
-
     ctx.game_interface.vendor_update()
-    vendor_scouting = ctx.slot_data.get(RAC3OPTION.SCOUT_VENDORS)
-
-    if ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR or not vendor_scouting:
-        return
-
-    vendor_type = ctx.game_interface.vendor_type
-    vendor_location_apcodes = []
-    match vendor_type:
-        case RAC3VENDORTYPE.WEAPON:
-            if not ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False) or not vendor_scouting.get(RAC3VENDORNAME.WEAPON, False):
-                return
-            vendor_items = ctx.game_interface.weapon_vendor_items
-            is_slimcognito = (
-            ctx.game_interface.planet == RAC3REGION.AQUATOS and
-            bool(ctx.game_interface._read8(
-                RAC3VENDOR.get_vendor_property_address(
-                    ctx.game_interface.planet,
-                    RAC3WEAPONVENDOR.VENDOR_WEAPON_TYPE_OFFSET)))
-            )
-            if is_slimcognito:
-                # Only hint Megacorp weapons
-                filtered_items = [item for item in vendor_items if item in MEGACORP_WEAPONS]
-            else:
-                # Only hint Gadgetron weapons
-                filtered_items = [item for item in vendor_items if item not in MEGACORP_WEAPONS]
-
-            vendor_locations = [ITEM_TO_WEAPON_VENDOR_LOCATION[item]
-                            for item in filtered_items if item in ITEM_TO_WEAPON_VENDOR_LOCATION]
-            vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
-        case RAC3VENDORTYPE.ARMOR:
-            if not ctx.slot_data.get(RAC3OPTION.ARMOR_VENDOR, False) or not vendor_scouting.get(RAC3VENDORNAME.ARMOR, False):
-                return
-
-            armor_items = ctx.game_interface.armor_vendor_items
-            vendor_locations = [ITEM_TO_ARMOR_VENDOR_LOCATION[item] for item in armor_items if item in ITEM_TO_ARMOR_VENDOR_LOCATION]
-            vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
-        case RAC3VENDORTYPE.SHIP:
-            if not ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False) or not vendor_scouting.get(RAC3VENDORNAME.SHIP, False):
-                return
-            ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:ctx.game_interface.UnlockItem[RAC3REGION.SLOT_0].status*3]
-            filtered_ship_keys = [key for key in ship_keys if key not in ctx.game_interface.checked_locations]
-            vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[key].AP_CODE for key in filtered_ship_keys]
-
-    current_hints = set(vendor_location_apcodes)
-    if current_hints and current_hints != ctx.already_hinted:
-        await ctx.send_msgs([
-            {"cmd": "CreateHints", "locations": vendor_location_apcodes, "player": ctx.slot}
-        ])
-        ctx.already_hinted.update(current_hints)
+    vendor_location_apcodes = ctx.game_interface.get_vendor_apcodes()
+    if vendor_location_apcodes:
+        current_hints = set(vendor_location_apcodes)
+        if current_hints and current_hints != ctx.already_hinted:
+            await ctx.send_msgs([
+                {"cmd": "CreateHints", "locations": vendor_location_apcodes, "player": ctx.slot}
+            ])
+            ctx.already_hinted.update(current_hints)
 
 
 async def handle_sequence_break(ctx: "Context") -> None:
@@ -464,56 +441,3 @@ async def handle_sequence_break(ctx: "Context") -> None:
     if ctx.slot_data is None:
         return
     ctx.game_interface.sequence_break()
-
-async def handle_codecave(ctx: "Context") -> None:
-    """Set up the codecave with the current item locations for use in the randomizer"""
-    if ctx.slot_data is None or ctx.code_cave_setup:
-        return
-    all_vendor_locations = []
-    if ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False):
-        all_vendor_locations.extend(ITEM_TO_WEAPON_VENDOR_LOCATION.values())
-    if ctx.slot_data.get(RAC3OPTION.ARMOR_VENDOR, False):
-        all_vendor_locations.extend(ITEM_TO_ARMOR_VENDOR_LOCATION.values())
-    if ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False):
-        all_vendor_locations.extend(SHIP_VENDOR_INVENTORY.keys())
-    if not all_vendor_locations:
-        return
-
-    ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in all_vendor_locations]
-    ctx.game_interface.vendor_string_pointers = {}
-    offset = 0x10
-
-    no_items_addr = RAC3INSTRUCTION.CODECAVE_START + offset
-    ctx.game_interface._write_string(no_items_addr, RAC3VENDOR.NO_ITEMS_AVAILABLE_MSG)
-    offset += len(RAC3VENDOR.NO_ITEMS_AVAILABLE_MSG) + 1
-
-    all_sold_out_addr = RAC3INSTRUCTION.CODECAVE_START + offset
-    ctx.game_interface._write_string(all_sold_out_addr, RAC3VENDOR.ALL_ITEMS_SOLD_OUT_MSG)
-    offset += len(RAC3VENDOR.ALL_ITEMS_SOLD_OUT_MSG) + 1
-
-    if ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False):
-        ctx.game_interface.vendor_string_pointers[RAC3VENDOR.NO_ITEMS_AVAILABLE_LOC_KEY] = no_items_addr
-        ctx.game_interface.vendor_string_pointers[RAC3VENDOR.ALL_ITEMS_SOLD_OUT_LOC_KEY] = all_sold_out_addr
-
-    for loc_key, ap_code in zip(all_vendor_locations, ap_codes, strict=False):
-        net_item = ctx.locations_info.get(ap_code, None)
-        if net_item is not None:
-            item_name = colorize_item_name(
-                ctx.item_names.lookup_in_slot(net_item.item, net_item.player),
-                net_item.flags
-            )
-            if ctx.slot == net_item.player:
-                string = item_name
-            else:
-                player_name = ctx.player_names.get(net_item.player, "???")
-                string = f"{player_name}'s {item_name}"
-            addr = RAC3INSTRUCTION.CODECAVE_START + offset
-            format_string = ctx.game_interface.format_color_string(string)
-            # Ensure null terminator at end of byte array
-            byte_array = format_string[0]
-            if not byte_array or byte_array[-1] != 0:
-                byte_array = byte_array + bytes([0])
-            ctx.game_interface._write_bytes(addr, byte_array)
-            ctx.game_interface.vendor_string_pointers[loc_key] = addr
-            offset += len(byte_array)
-            ctx.code_cave_setup = True

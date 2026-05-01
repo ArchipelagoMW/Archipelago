@@ -1,5 +1,5 @@
 """This module provides a launchable client for connecting RAC3 running on PCSX2 Emulation to a Multiworld"""
-from asyncio import Task, create_task, run, sleep
+from asyncio import create_task, run, sleep, Task
 from multiprocessing import freeze_support
 from time import time
 
@@ -21,9 +21,8 @@ from worlds.rac3.constants.region import RAC3REGION
 # Load Universal Tracker modules with aliases
 tracker_loaded: bool = False
 try:
-    from worlds.tracker.TrackerClient import UT_VERSION
-    from worlds.tracker.TrackerClient import TrackerCommandProcessor as ClientCommandProcessor
-    from worlds.tracker.TrackerClient import TrackerGameContext as CommonContext
+    from worlds.tracker.TrackerClient import (TrackerCommandProcessor as ClientCommandProcessor,
+                                              TrackerGameContext as CommonContext, UT_VERSION)
 
     tracker_loaded = True
 except ImportError:
@@ -61,7 +60,8 @@ class CommandProcessor(ClientCommandProcessor):
         self.output(f"Somehow this client isn't for {RAC3OPTION.GAME_TITLE_FULL}, delete this build and try again")
         return False
 
-    def is_development_build(self) -> bool:
+    @staticmethod
+    def is_development_build() -> bool:
         """Checks if this is a development build by looking for -dev or a subversion."""
         return "-dev" in RAC3OPTION.VERSION_NUMBER or RAC3OPTION.VERSION_NUMBER.count(".") >= 3
 
@@ -244,7 +244,9 @@ class CommandProcessor(ClientCommandProcessor):
             for addr in range(start_address, start_address + 0x10000, 0x100):
                 moby_addr = self.ctx.game_interface.find_moby_by_id(target_id, addr)
                 if moby_addr is not None:
-                    self.output(f"Found moby with ID {hex(target_id)} at address {hex(moby_addr)} with start address {hex(addr)}")
+                    self.output(
+                        f"Found moby with ID {hex(target_id)} at address {hex(moby_addr)} with start address "
+                        f"{hex(addr)}")
 
 
 class Rac3Context(CommonContext):
@@ -336,18 +338,21 @@ class Rac3Context(CommonContext):
                     logger.warning("Received PrintJSON command with type Hint but no item data!")
                     return
                 location_name = self.location_names.lookup_in_slot(net_item.location, net_item.player)
-                receiving_player = args.get("receiving", None)
-                item_name = colorize_item_name(
-                    self.item_names.lookup_in_slot(net_item.item, receiving_player),
-                    net_item.flags
-                )
-                format_color = RAC3TEXTFORMATSTRING.NORMAL if receiving_player == self.slot else RAC3TEXTFORMATSTRING.GREEN
+                receiving_player = args.get("receiving", -1)
+                item_name = colorize_item_name(self.item_names.lookup_in_slot(net_item.item, receiving_player),
+                                               net_item.flags)
+                format_color = RAC3TEXTFORMATSTRING.NORMAL if receiving_player == self.slot else (
+                    RAC3TEXTFORMATSTRING.GREEN)
                 player_name = self.player_names.get(receiving_player, "???")
-                hint_text = f"{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}"
+                hint_text = (
+                    f"{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s "
+                    f"{item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}")
                 if net_item.player != self.slot:
                     player_name = self.player_names.get(net_item.player, "???")
-                    format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else RAC3TEXTFORMATSTRING.GREEN
-                    hint_text += f"\n{RAC3TEXTFORMATSTRING.WHITE}in {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s world."
+                    format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else (
+                        RAC3TEXTFORMATSTRING.GREEN)
+                    hint_text += (f"\n{RAC3TEXTFORMATSTRING.WHITE}in {format_color}{player_name}"
+                                  f"{RAC3TEXTFORMATSTRING.WHITE}'s world.")
                 self.game_interface.enqueue_notification(hint_text, RAC3BOXTHEME.HINT)
 
 
