@@ -61,6 +61,10 @@ class CommandProcessor(ClientCommandProcessor):
         self.output(f"Somehow this client isn't for {RAC3OPTION.GAME_TITLE_FULL}, delete this build and try again")
         return False
 
+    def is_development_build(self) -> bool:
+        """Checks if this is a development build by looking for -dev or a subversion."""
+        return "-dev" in RAC3OPTION.VERSION_NUMBER or RAC3OPTION.VERSION_NUMBER.count(".") >= 3
+
     # This is not mandatory for the game. Just a client command implementation.
     def _cmd_kill(self):
         """Kill the player."""
@@ -98,6 +102,9 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
+            if not self.is_development_build():
+                self.output("Weapon EXP test command is only available in development builds.")
+                return
             if self.ctx.slot_data[RAC3OPTION.PROGRESSIVE_WEAPONS]:
                 self.output("Weapon EXP item not compatible with Progressive Weapons")
             else:
@@ -110,6 +117,9 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
+            if not self.is_development_build():
+                self.output("Bolt test command is only available in development builds.")
+                return
             self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE,
                                                   self.ctx.player_names[self.ctx.slot], "Test Command", 0)
             self.output("Bolts Received")
@@ -214,12 +224,15 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.print_all_vendor_items()
-    
+
     def _cmd_traversal(self, *args):
         """Test command for linked list traversal purposes."""
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
+            if not self.is_development_build():
+                self.output("Traversal command is only available in development builds.")
+                return
             # convert the hex input to an int and then do traversal with that as the target id
             try:
                 target_id = int(args[0], 16)
