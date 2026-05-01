@@ -72,7 +72,7 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             if self.ctx.death_link:
-                self.ctx.on_deathlink({"time": time(), "cause": "Amondo got gaslit"})
+                self.ctx.on_deathlink({"time": time(), "cause": "Amondo got gaslit", "source": "Amondo"})
             else:
                 self.output("Death Link is not enabled. You can toggle Death Link with /deathlink")
 
@@ -103,8 +103,8 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
-                self.output("Weapon EXP test command is only available in development builds.")
-                return
+                self.default("Development command \"weapon_exp_test\" was used in a non-development build.")
+
             if self.ctx.slot_data[RAC3OPTION.PROGRESSIVE_WEAPONS]:
                 self.output("Weapon EXP item not compatible with Progressive Weapons")
             else:
@@ -118,8 +118,7 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
-                self.output("Bolt test command is only available in development builds.")
-                return
+                self.default("Development command \"bolt_test\" was used in a non-development build.")
             self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE,
                                                   self.ctx.player_names[self.ctx.slot], "Test Command", 0)
             self.output("Bolts Received")
@@ -231,8 +230,9 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
-                self.output("Traversal command is only available in development builds.")
-                return
+                # let everyone know that a development command was used in a release build.
+                self.default("Development command \"traversal\" was used in a non-development build.")
+            
             # convert the hex input to an int and then do traversal with that as the target id
             try:
                 target_id = int(args[0], 16)
