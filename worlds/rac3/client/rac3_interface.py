@@ -2040,10 +2040,10 @@ class Rac3Interface(GameInterface):
             message = message_or_notification
             notification = RAC3NOTIFICATION(message, theme, duration)
 
-        # Warn and truncate if message exceeds 240 characters
-        if len(message) > 240:
-            logger.warning(f"Notification message exceeds 240 chars ({len(message)}), truncating: {message[:50]}...")
-            notification.message = message[:240]
+        # Warn and truncate if message exceeds 250 characters
+        if len(message) > 250:
+            logger.warning(f"Notification message exceeds 250 chars ({len(message)}), truncating: {message[:50]}...")
+            notification.message = message[:250]
         self.notification_queue.append(notification)
 
     def dequeue_notifications(self, count: int = 1) -> None:
@@ -2084,7 +2084,7 @@ class Rac3Interface(GameInterface):
                     next_duration = self.notification_queue[0].duration
                 self.notification_time = current_time + next_duration
             if self.notification_queue:
-                # Merge up to 3 notifications of the same theme, but do not exceed 240 chars
+                # Merge up to 3 notifications of the same theme, but do not exceed 250 chars
                 merged_notification = self.notification_queue[0]
                 merged_message = merged_notification.message
                 theme = merged_notification.theme
@@ -2096,7 +2096,7 @@ class Rac3Interface(GameInterface):
                     next_theme = next_notification.theme
                     # +1 for the '\n' separator
                     add_length = 1 + len(next_message)
-                    if next_theme == theme and (total_length + add_length) <= 240:
+                    if next_theme == theme and (total_length + add_length) <= 250:
                         merged_message += "\n" + next_message
                         total_length += add_length
                         merge_count += 1
@@ -2196,7 +2196,6 @@ class Rac3Interface(GameInterface):
         """Update the contents of the current pop-up message"""
         if _time < 0:
             _time = 0
-        # real overflow cap is actually about 248, but we don't need that long messages
         curr_addr = RAC3MESSAGEBOX.MESSAGE
         msg_bytes = b""
         for idx, line in enumerate(msg_list):
@@ -2208,10 +2207,6 @@ class Rac3Interface(GameInterface):
             curr_addr += len(line)
         self._write32(RAC3MESSAGEBOX.NUM_LINES, len(msg_list))
         width = longest_line_length
-        if width % 2 != 0:
-            # Odd numbered width values display as if it was the even number below it
-            # Ex: 101 width displays as 100 width
-            width += 1
         self.write_messagebox_theme(box_theme)
 
         self._write32(RAC3MESSAGEBOX.TIMER, _time)

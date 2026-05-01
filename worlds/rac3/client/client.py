@@ -195,10 +195,10 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             message = " ".join(args).replace("\\n", "\n")
-            self.ctx.game_interface.enqueue_notification(message[:235:], duration=5.0)
-            if len(message) > 235:
-                self.output("Message longer than 235 characters, truncated to fit in message box.")
-            self.output(f"Message box displayed with message: {message[:235:]}")
+            self.ctx.game_interface.enqueue_notification(message[:250:], duration=5.0)
+            if len(message) > 250:
+                self.output("Message longer than 250 characters, truncated to fit in message box.")
+            self.output(f"Message box displayed with message: {message[:250:]}")
 
     def _cmd_one_hp(self, *args):
         """Toggles One HP Challenge for the specified character."""
