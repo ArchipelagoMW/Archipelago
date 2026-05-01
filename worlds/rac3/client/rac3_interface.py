@@ -685,7 +685,7 @@ class Rac3Interface(GameInterface):
 
         match name:
             case RAC3ITEM.HACKER:
-                self.opened_the_hacker_doors = self.already_marked_hacker_puzzles()
+                self.already_marked_hacker_puzzles()
             case RAC3ITEM.PROGRESSIVE_VIDCOMIC:
                 if self.UnlockItem[name].status > 5:
                     self.UnlockItem[name].status = 5
@@ -1942,7 +1942,7 @@ class Rac3Interface(GameInterface):
                 self._write16(door_addr + 0xBE, 5)
             self.opened_the_hacker_doors = True
 
-    def already_marked_hacker_puzzles(self) -> bool:
+    def already_marked_hacker_puzzles(self):
         """Check if all hacker puzzles for planets with hacker skip enabled are already marked as complete."""
         planets = [planet for planet in PLANETS_WITH_HACKER_PUZZLES if self.options.hacker_skip.get(planet, False)]
         for planet in planets:
@@ -1951,8 +1951,9 @@ class Rac3Interface(GameInterface):
                 bit_mask = 1 << puzzle[1]
                 current_value = self._read8(puzzle[0])
                 if not current_value & bit_mask:
-                    return False
-        return True
+                    self.opened_the_hacker_doors = False
+                    return
+        self.opened_the_hacker_doors = True
 
     def find_moby_by_id(self, target_id: int, table_start: int | None = None) -> int | None:
         """Traverse the moby linked list on the current planet to find a moby with the given ID and return its

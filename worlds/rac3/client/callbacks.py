@@ -374,8 +374,7 @@ async def handle_planet_changed(ctx: "Context") -> None:
         ctx.game_interface.hacker_door_addresses = {}
 
         # Changing planet counts as a reload.
-        if ctx.game_interface.already_marked_hacker_puzzles():
-            ctx.game_interface.opened_the_hacker_doors = True
+        ctx.game_interface.already_marked_hacker_puzzles()
 
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
