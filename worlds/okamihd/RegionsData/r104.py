@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
@@ -76,44 +77,43 @@ events = {
     }
 }
 locations = {
-    # Container IDs: 900000 + (0x104 << 8) + spawn_idx = 966560 + spawn_idx
     RegionNames.TSUTA_RUINS_1F_MAIN_PART: {
-        "Tsuta Ruins - Freestanding Chest at Entrance": LocData(966577),  # spawn_idx=17, Travel Guide: Enhancing Divinity
-        "Tsuta Ruins - Treasure Bud in Entrance Hall Middle": LocData(966568, type=LocationType.TREASURE_BUD),  # spawn_idx=8, Traveler's Charm
-        "Tsuta Ruins - Treasure Bud in Entrance Hall Right Side": LocData(966569, type=LocationType.TREASURE_BUD),  # spawn_idx=9, Steel Soul Sake
-        "Tsuta Ruins - Chest in Entrance Hall near right side door": LocData(966586),  # spawn_idx=26, Vase
-        "Tsuta Ruins - Treasure Bud on 1F rightside path before ledge": LocData(966572, type=LocationType.TREASURE_BUD),  # spawn_idx=12, Steel Fist Sake
-        "Tsuta Ruins - Treasure Bud near glass ball": LocData(966560, type=LocationType.TREASURE_BUD),  # spawn_idx=0, Incense Burner
-        "Tsuta Ruins - Stray bead chest on 1F rightside path upper part": LocData(966575, required_brush_techniques=[
+        "Tsuta Ruins - Freestanding Chest at Entrance": LocData(container_check_id(0x104, 17)),  # spawn_idx=17, Travel Guide: Enhancing Divinity
+        "Tsuta Ruins - Treasure Bud in Entrance Hall Middle": LocData(container_check_id(0x104, 8), type=LocationType.TREASURE_BUD),  # spawn_idx=8, Traveler's Charm
+        "Tsuta Ruins - Treasure Bud in Entrance Hall Right Side": LocData(container_check_id(0x104, 9), type=LocationType.TREASURE_BUD),  # spawn_idx=9, Steel Soul Sake
+        "Tsuta Ruins - Chest in Entrance Hall near right side door": LocData(container_check_id(0x104, 26)),  # spawn_idx=26, Vase
+        "Tsuta Ruins - Treasure Bud on 1F rightside path before ledge": LocData(container_check_id(0x104, 12), type=LocationType.TREASURE_BUD),  # spawn_idx=12, Steel Fist Sake
+        "Tsuta Ruins - Treasure Bud near glass ball": LocData(container_check_id(0x104, 0), type=LocationType.TREASURE_BUD),  # spawn_idx=0, Incense Burner
+        "Tsuta Ruins - Stray bead chest on 1F rightside path upper part": LocData(container_check_id(0x104, 15), required_brush_techniques=[
             BrushTechniques.GREENSPROUT_VINE], type=LocationType.TREASURE_BUD),  # spawn_idx=15, Stray Bead
     },
     RegionNames.TSUTA_RUINS_MUSHROOMS: {
-        "Tsuta Ruins - Treasure bud behind logs in Mushrooms room": LocData(966562, power_slash_level=1,
+        "Tsuta Ruins - Treasure bud behind logs in Mushrooms room": LocData(container_check_id(0x104, 2), power_slash_level=1,
                                                                             type=LocationType.TREASURE_BUD),  # spawn_idx=2, Vengeance Slip
     },
     RegionNames.TSUTA_RUINS_LEFT_SIDE: {
-        "Tsuta Ruins - Treasure Bud behind hidden bombable wall on third plaform.": LocData(966561, cherry_bomb_level=1,
+        "Tsuta Ruins - Treasure Bud behind hidden bombable wall on third plaform.": LocData(container_check_id(0x104, 1), cherry_bomb_level=1,
                                                                                             type=LocationType.TREASURE_BUD),  # spawn_idx=1, Stray Bead
-        "Tsuta Ruins - Treasure Bud behind Lockjaw": LocData(966564, type=LocationType.TREASURE_BUD, required_items_events=[
+        "Tsuta Ruins - Treasure Bud behind Lockjaw": LocData(container_check_id(0x104, 4), type=LocationType.TREASURE_BUD, required_items_events=[
             "Tsuta Ruins - Open Lockjaw with Exorcising Arrow"]),  # spawn_idx=4, Exorcism Slip S
-        "Tsuta Ruins - Left side hidden treasure bud": LocData(966578, required_brush_techniques=[
+        "Tsuta Ruins - Left side hidden treasure bud": LocData(container_check_id(0x104, 18), required_brush_techniques=[
             BrushTechniques.GREENSPROUT_VINE], type=LocationType.TREASURE_BUD),  # spawn_idx=18, Golden Peach
     },
     RegionNames.TSUTA_RUINS_DEVIL_GATES: {
-        "Tsuta Ruins - Treasure Bud near Devil gates": LocData(966583, type=LocationType.TREASURE_BUD),  # spawn_idx=23, Lacquerware Set
-        "Tsuta Ruins - Treasure Bud #2 near Devil gates": LocData(966584, type=LocationType.TREASURE_BUD),  # spawn_idx=24, Holy Bone S
-        "Tsuta Ruins - Map Chest near poison pots": LocData(966594, required_items_events=[
+        "Tsuta Ruins - Treasure Bud near Devil gates": LocData(container_check_id(0x104, 23), type=LocationType.TREASURE_BUD),  # spawn_idx=23, Lacquerware Set
+        "Tsuta Ruins - Treasure Bud #2 near Devil gates": LocData(container_check_id(0x104, 24), type=LocationType.TREASURE_BUD),  # spawn_idx=24, Holy Bone S
+        "Tsuta Ruins - Map Chest near poison pots": LocData(container_check_id(0x104, 34), required_items_events=[
             "Tsuta Ruins - Grow Mushrooms in Devil Gates Room"]),  # spawn_idx=34, Tsuta Ruins Map
-        "Tsuta Ruins - Treasure Bud behind waterfall bombable wall": LocData(966585, required_items_events=[
+        "Tsuta Ruins - Treasure Bud behind waterfall bombable wall": LocData(container_check_id(0x104, 25), required_items_events=[
             "Tsuta Ruins - Destroy Poison Pots"], cherry_bomb_level=1, type=LocationType.TREASURE_BUD),  # spawn_idx=25, Stray Bead
     },
     RegionNames.TSUTA_RUINS_CENTRAL_STATUE: {
-        "Tsuta Ruins - Tsutagami": LocData(200019, required_items_events=[
+        "Tsuta Ruins - Tsutagami": LocData(brush_check_id(19), required_items_events=[
             "Tsuta Ruins - Bloom every cursed patch inside statue"], type=LocationType.CONSTELLATION),  # Brush acquisition (Vine, bit 19)
     },
     RegionNames.TSUTA_RUINS_SPIDER: {
-        "Tsuta Ruins - Left Chest before Spider queen": LocData(966581),  # spawn_idx=21, Travel Guide: Godhood Tips
-        "Tsuta Ruins - Right Chest before Spider queen": LocData(966582),  # spawn_idx=22, Holy Bone S
-        "Tsuta Ruins - Boss reward": LocData(966595, required_items_events=["Tsuta Ruins - Defeat the spider queen"]),  # spawn_idx=35, Bull Horn
+        "Tsuta Ruins - Left Chest before Spider queen": LocData(container_check_id(0x104, 21)),  # spawn_idx=21, Travel Guide: Godhood Tips
+        "Tsuta Ruins - Right Chest before Spider queen": LocData(container_check_id(0x104, 22)),  # spawn_idx=22, Holy Bone S
+        "Tsuta Ruins - Boss reward": LocData(container_check_id(0x104, 35), required_items_events=["Tsuta Ruins - Defeat the spider queen"]),  # spawn_idx=35, Bull Horn
     }
 }

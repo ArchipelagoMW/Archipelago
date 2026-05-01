@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
+from ..CheckIds import brush_check_id, collected_object_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
@@ -65,56 +66,54 @@ events = {
     }
 }
 locations = {
-    # Container IDs: 900000 + (0x102 << 8) + spawn_idx = 966048 + spawn_idx
     RegionNames.STONE_KAMIKI: {
-        "Kamiki Village - Sunrise": LocData(200027, type=LocationType.CONSTELLATION),  # Brush acquisition (bit 27)
+        "Kamiki Village - Sunrise": LocData(brush_check_id(27), type=LocationType.CONSTELLATION),  # Brush acquisition (bit 27)
     },
     RegionNames.KAMIKI_VILLAGE: {
-        "Kamiki Village - Chest After Mr.Orange Yokai Fight": LocData(966135),  # spawn_idx=87, Feedbag(Seeds)
-        "Kamiki Village - Buried Chest near Komuso": LocData(966048, type=LocationType.BURIED_CHEST),  # spawn_idx=0, Traveler's Charm
-        "Kamiki Village - Underwater Chest 1": LocData(966064, type=LocationType.UNDERWATER_CHEST_SHALLOW),  # spawn_idx=16, Rabbit Statue
-        "Kamiki Village - Underwater Chest 2": LocData(966081, type=LocationType.UNDERWATER_CHEST_SHALLOW),  # spawn_idx=33, Glass Beads
-        "Kamiki Village - Underwater chest in lake near Kushi's house": LocData(966080, type=LocationType.UNDERWATER_CHEST),  # spawn_idx=32, Vase
-        "Kamiki Village - Hasugami": LocData(200005, required_items_events=["Kamiki Village - Restore Sakuya's Tree"],
+        "Kamiki Village - Chest After Mr.Orange Yokai Fight": LocData(container_check_id(0x102, 87)),  # spawn_idx=87, Feedbag(Seeds)
+        "Kamiki Village - Buried Chest near Komuso": LocData(container_check_id(0x102, 0), type=LocationType.BURIED_CHEST),  # spawn_idx=0, Traveler's Charm
+        "Kamiki Village - Underwater Chest 1": LocData(container_check_id(0x102, 16), type=LocationType.UNDERWATER_CHEST_SHALLOW),  # spawn_idx=16, Rabbit Statue
+        "Kamiki Village - Underwater Chest 2": LocData(container_check_id(0x102, 33), type=LocationType.UNDERWATER_CHEST_SHALLOW),  # spawn_idx=33, Glass Beads
+        "Kamiki Village - Underwater chest in lake near Kushi's house": LocData(container_check_id(0x102, 32), type=LocationType.UNDERWATER_CHEST),  # spawn_idx=32, Vase
+        "Kamiki Village - Hasugami": LocData(brush_check_id(5), required_items_events=["Kamiki Village - Restore Sakuya's Tree"],
                                              type=LocationType.CONSTELLATION),  # Brush acquisition (Waterlily)
-        "Kamiki Village - Buried chest in field": LocData(966061, type=LocationType.BURIED_CHEST),  # spawn_idx=13, Dragonfly Bead
-        "Kamiki Village - Chest on Ledge": LocData(966057, required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),  # spawn_idx=9, Exorcism Slip S
-        "Kamiki Village - Rafters Lower Chest": LocData(966059),  # spawn_idx=11, Stray Bead
-        "Kamiki Village - Rafters Upper Chest": LocData(966058, power_slash_level=1),  # spawn_idx=10, Glass Beads,
+        "Kamiki Village - Buried chest in field": LocData(container_check_id(0x102, 13), type=LocationType.BURIED_CHEST),  # spawn_idx=13, Dragonfly Bead
+        "Kamiki Village - Chest on Ledge": LocData(container_check_id(0x102, 9), required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),  # spawn_idx=9, Exorcism Slip S
+        "Kamiki Village - Rafters Lower Chest": LocData(container_check_id(0x102, 11)),  # spawn_idx=11, Stray Bead
+        "Kamiki Village - Rafters Upper Chest": LocData(container_check_id(0x102, 10), power_slash_level=1),  # spawn_idx=10, Glass Beads,
         # West Island doesn't require long swim
-        "Kamiki Village - West Island chest ": LocData(966096),  # spawn_idx=48, Dragonfly Bead
-        "Kamiki Village - West Island buried chest": LocData(966102, type=LocationType.BURIED_CHEST),# spawn_idx=54, Wooden Bear
+        "Kamiki Village - West Island chest ": LocData(container_check_id(0x102, 48)),  # spawn_idx=48, Dragonfly Bead
+        "Kamiki Village - West Island buried chest": LocData(container_check_id(0x102, 54), type=LocationType.BURIED_CHEST),# spawn_idx=54, Wooden Bear
     },
     RegionNames.ORANGES_HOUSE: {
-        "Kamiki Village - Chest buried in Oranges' house": LocData(966067, type=LocationType.BURIED_CHEST),  # spawn_idx=19, Coral Fragment
+        "Kamiki Village - Chest buried in Oranges' house": LocData(container_check_id(0x102, 19), type=LocationType.BURIED_CHEST),  # spawn_idx=19, Coral Fragment
     },
     RegionNames.KUSHIS_HOUSE: {
         # Kushi's Gift is not a container - it's an event/NPC reward. Keep old ID for now.
-        "Kamiki Village - Kushi's Gift": LocData(500000 + 3 * 10000 + 11,  # mapId=3 (KamikiVillage enum index)
+        "Kamiki Village - Kushi's Gift": LocData(collected_object_check_id(3, 11),  # mapId=3 (KamikiVillage enum index)
                                                  required_items_events=["Kamiki Village - Repair Kushi's Watermill"]),
     },
     RegionNames.KAMIKI_ISLANDS: {
-        "Kamiki Village - East Islands Sun fragment chest": LocData(966090),  # spawn_idx=42, Sun Fragment
-        "Kamiki Village - East Islands Right Buried Chest": LocData(966055, type=LocationType.BURIED_CHEST),  # spawn_idx=7, Inkfinity Stone
-        "Kamiki Village - East Islands Left Buried Chest": LocData(966056, type=LocationType.BURIED_CHEST),  # spawn_idx=8, Stray Bead
+        "Kamiki Village - East Islands Sun fragment chest": LocData(container_check_id(0x102, 42)),  # spawn_idx=42, Sun Fragment
+        "Kamiki Village - East Islands Right Buried Chest": LocData(container_check_id(0x102, 7), type=LocationType.BURIED_CHEST),  # spawn_idx=7, Inkfinity Stone
+        "Kamiki Village - East Islands Left Buried Chest": LocData(container_check_id(0x102, 8), type=LocationType.BURIED_CHEST),  # spawn_idx=8, Stray Bead
     }
 }
 
-# Shop locations (shopId=5): 300000 + 5*1000 + slot = 305000 + slot
 # These are added separately and conditionally created based on RandomizeShops option
 shop_locations = {
     RegionNames.KAMIKI_MERCHANT: {
-        "Kamiki Village - Shop Slot 1": LocData(305000, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 2": LocData(305001, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 3": LocData(305002, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 4": LocData(305003, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 5": LocData(305004, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 6": LocData(305005, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 7": LocData(305006, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 8": LocData(305007, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 9": LocData(305008, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 10": LocData(305009, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 11": LocData(305010, type=LocationType.SHOP),
-        "Kamiki Village - Shop Slot 12": LocData(305011, type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 1": LocData(shop_check_id(5, 0), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 2": LocData(shop_check_id(5, 1), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 3": LocData(shop_check_id(5, 2), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 4": LocData(shop_check_id(5, 3), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 5": LocData(shop_check_id(5, 4), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 6": LocData(shop_check_id(5, 5), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 7": LocData(shop_check_id(5, 6), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 8": LocData(shop_check_id(5, 7), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 9": LocData(shop_check_id(5, 8), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 10": LocData(shop_check_id(5, 9), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 11": LocData(shop_check_id(5, 10), type=LocationType.SHOP),
+        "Kamiki Village - Shop Slot 12": LocData(shop_check_id(5, 11), type=LocationType.SHOP),
     }
 }

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
@@ -25,52 +26,51 @@ events = {
 }
 locations = {
     RegionNames.SHINSHU_FIELD: {
-        "Shinshu Field - Buried chest near Guardian Sapling": LocData(1883559, type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Freestanding chest behind Guardian Sapling": LocData(1883563),
-        "Shinshu Field - Buried chest near Tama's house": LocData(1883578, type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Buried chest near Lake": LocData(1883582, type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Chest Under Bombable ground near Agata Forest": LocData(1883588, cherry_bomb_level=1,
+        "Shinshu Field - Buried chest near Guardian Sapling": LocData(container_check_id(0xF02, 7), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Freestanding chest behind Guardian Sapling": LocData(container_check_id(0xF02, 11)),
+        "Shinshu Field - Buried chest near Tama's house": LocData(container_check_id(0xF02, 26), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest near Lake": LocData(container_check_id(0xF02, 30), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Chest Under Bombable ground near Agata Forest": LocData(container_check_id(0xF02, 36), cherry_bomb_level=1,
                                                                                  required_brush_techniques=[
                                                                                      BrushTechniques.GREENSPROUT_BLOOM]),
-        "Shinshu Field - Buried chest near Dojo": LocData(1883594, type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Chest after devil gate": LocData(1883599, mandatory_enemies=[OkamiEnemies.GREEN_IMP,
+        "Shinshu Field - Buried chest near Dojo": LocData(container_check_id(0xF02, 42), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Chest after devil gate": LocData(container_check_id(0xF02, 47), mandatory_enemies=[OkamiEnemies.GREEN_IMP,
                                                                                  OkamiEnemies.RED_IMP,
                                                                                  OkamiEnemies.YELLOW_IMP]),
         # Probably should find a better name for this one
-        "Shinshu Field - Buried chest on ledge": LocData(1883602, type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Buried chest near Ovens": LocData(1883630, type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest on ledge": LocData(container_check_id(0xF02, 50), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest near Ovens": LocData(container_check_id(0xF02, 78), type=LocationType.BURIED_CHEST),
         # This is the cherry bomb tutorial. Need to check what happens if you blow the wall before doing the tutorial.
-        "Shinshu Field - In Bombable cave near Tama's house": LocData(1883634, cherry_bomb_level=1),
-        "Shinshu Field - In Bombable cave near cat statue": LocData(1883635, cherry_bomb_level=1),
-        "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(1883638,
+        "Shinshu Field - In Bombable cave near Tama's house": LocData(container_check_id(0xF02, 82), cherry_bomb_level=1),
+        "Shinshu Field - In Bombable cave near cat statue": LocData(container_check_id(0xF02, 83), cherry_bomb_level=1),
+        "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(container_check_id(0xF02, 86),
                                                                                type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Shinshu Field - Chest on Big Torii": LocData(1883641, required_brush_techniques=[BrushTechniques.WATERSPOUT]),
-        "Shinshu Field - Freestanding chest in front of guardian sapling": LocData(1883647),
-        "Shinshu Field - Freestanding chest near Agata Forest Cave": LocData(1883648),
-        "Shinshu Field - Freestanding chest near Tama's house": LocData(1883669),
-        "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(1883670, type=LocationType.BURIED_UNDER_LEAF_PILE)
+        "Shinshu Field - Chest on Big Torii": LocData(container_check_id(0xF02, 89), required_brush_techniques=[BrushTechniques.WATERSPOUT]),
+        "Shinshu Field - Freestanding chest in front of guardian sapling": LocData(container_check_id(0xF02, 95)),
+        "Shinshu Field - Freestanding chest near Agata Forest Cave": LocData(container_check_id(0xF02, 96)),
+        "Shinshu Field - Freestanding chest near Tama's house": LocData(container_check_id(0xF02, 117)),
+        "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(container_check_id(0xF02, 118), type=LocationType.BURIED_UNDER_LEAF_PILE)
     },
 
     RegionNames.TAMA_HOUSE: {
-        "Shinshu Field - Bakigami": LocData(200025,type=LocationType.CONSTELLATION,special_rule=lambda s,w:night_time_check_rule(s,w))  # bit 25
+        "Shinshu Field - Bakigami": LocData(brush_check_id(25),type=LocationType.CONSTELLATION,special_rule=lambda s,w:night_time_check_rule(s,w))  # bit 25
     }
 }
 
-# Shop locations (shopId=18): 300000 + 18*1000 + slot = 318000 + slot
 # These are added separately and conditionally created based on RandomizeShops option
 shop_locations = {
     RegionNames.SHINSHU_FIELD: {
-        "Shinshu Field - Shop Slot 1": LocData(318000, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 2": LocData(318001, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 3": LocData(318002, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 4": LocData(318003, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 5": LocData(318004, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 6": LocData(318005, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 7": LocData(318006, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 8": LocData(318007, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 9": LocData(318008, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 10": LocData(318009, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 11": LocData(318010, type=LocationType.SHOP),
-        "Shinshu Field - Shop Slot 12": LocData(318011, type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 1": LocData(shop_check_id(18, 0), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 2": LocData(shop_check_id(18, 1), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 3": LocData(shop_check_id(18, 2), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 4": LocData(shop_check_id(18, 3), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 5": LocData(shop_check_id(18, 4), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 6": LocData(shop_check_id(18, 5), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 7": LocData(shop_check_id(18, 6), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 8": LocData(shop_check_id(18, 7), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 9": LocData(shop_check_id(18, 8), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 10": LocData(shop_check_id(18, 9), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 11": LocData(shop_check_id(18, 10), type=LocationType.SHOP),
+        "Shinshu Field - Shop Slot 12": LocData(shop_check_id(18, 11), type=LocationType.SHOP),
     }
 }
