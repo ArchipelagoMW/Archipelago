@@ -2179,6 +2179,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Set', "original_cmd": cmd}])
                 return
+            if args["key"].startswith("_admin_") and not client.messageprocessor.is_authenticated():
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', 'type': 'permission',
+                                              'text': 'Modifying an "_admin_" key requires admin authentication first', 'original_cmd': cmd}])
+                return
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = copy.copy(value)

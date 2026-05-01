@@ -244,6 +244,7 @@ Sent to clients if the server caught a problem with a packet. This only occurs f
 | ---- | ----- |
 | cmd | `cmd` argument of the faulty packet that could not be parsed correctly. |
 | arguments | Arguments of the faulty packet which were not correct. |
+| permission | Client was not authenticated as admin, and command required admin permission. |
 
 ### Retrieved
 Sent to clients as a response the a [Get](#Get) package.
@@ -450,6 +451,7 @@ Some special keys exist with specific return data, all of them have the prefix `
 ### Set
 Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
 Keys that start with `_read_` cannot be set.
+Keys that start with `_admin_` require the client to be logged in as a room admin via `!admin login` before modifying.
 #### Arguments
 | Name       | Type                                                  | Notes                                                                                                                  |
 |------------|-------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
