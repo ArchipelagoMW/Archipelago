@@ -325,6 +325,14 @@ def randomize_shop_currencies(content: StardewContent, data_to_randomize: set[st
         return
 
     shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.price is not None and shop_source.price >= 1])
+    shop_currencies = dict()
+    for shop_source in shop_sources_included:
+        if shop_source.shop_region not in shop_currencies:
+            shop_currencies[shop_source.shop_region] = []
+        shop_currencies[shop_source.shop_region].append(shop_source.currency)
+    for shop, currencies in shop_currencies.items():
+        assert all(currency == currencies[0] for currency in currencies), f"Not all items in shop [{shop}] use the same currency [{currencies[0]}]"
+
     shop_currencies_by_source = {shop_source: (shop_source.currency, shop_source.price) for shop_source in shop_sources_included}
     randomized_shop_currencies = randomizers_per_behavior[behavior](shop_currencies_by_source, random)
 
