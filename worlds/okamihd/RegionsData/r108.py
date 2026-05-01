@@ -5,7 +5,7 @@ from ..CheckIds import container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Enums.RegionNames import RegionNames
+from ..Enums.RegionNames import RegionNames, MapIds
 from ..Rules import gale_shrine_access
 from ..Types import EventData, ExitData, LocData
 
@@ -52,7 +52,7 @@ events = {
 }
 locations = {
     RegionNames.KUSA_VILLAGE: {
-        "Kusa Village - Chest on rafters after banners": LocData(container_check_id(0x108, 11),
+        "Kusa Village - Chest on rafters after banners": LocData(container_check_id(MapIds.KUSA_VILLAGE, 11),
                                                                  required_brush_techniques=[BrushTechniques.GALESTORM,
                                                                                             BrushTechniques.GREENSPROUT_VINE]),
         "Kusa Village - Chest on rafters before banners": LocData(container_check_id(0x108, 42),

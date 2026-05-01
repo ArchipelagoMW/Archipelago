@@ -6,15 +6,16 @@ the okami-apclient mod.
 ID range scheme: categories spaced 1e9 apart, within-category
 multiplier 1000.
 
-  - 1_000_000_000 + brushIndex                 Brush acquisitions
-  - 2_000_000_000 + shopId * 1000 + slot       Shop purchases
-  - 3_000_000_000 + mapId * 1000 + bitIndex    World state changes
-  - 4_000_000_000 + mapId * 1000 + bitIndex    Collected objects
-  - 5_000_000_000 + mapId * 1000 + bitIndex    Area restorations
-  - 6_000_000_000 + bitIndex                   Global flags
-  - 7_000_000_000 + bitIndex                   Game progress flags
-  - 8_000_000_000 + levelId * 1000 + spawnIdx  Container pickups
+  - 1_000_000_000 + brushIndex                  Brush acquisitions
+  - 2_000_000_000 + shopId * 1000 + slot        Shop purchases
+  - 3_000_000_000 + mapId * 1000 + bitIndex     World state changes
+  - 4_000_000_000 + mapIndex * 1000 + bitIndex  Collected objects
+  - 5_000_000_000 + mapId * 1000 + bitIndex     Area restorations
+  - 6_000_000_000 + bitIndex                    Global flags
+  - 7_000_000_000 + bitIndex                    Game progress flags
+  - 8_000_000_000 + levelId * 1000 + spawnIdx   Container pickups
 """
+from Enums.RegionNames import MapIds, MapIndexes
 
 BRUSH_BASE = 1_000_000_000
 SHOP_BASE = 2_000_000_000
@@ -34,16 +35,16 @@ def shop_check_id(shop_id: int, slot: int) -> int:
     return SHOP_BASE + shop_id * 1000 + slot
 
 
-def world_state_check_id(map_id: int, bit_index: int) -> int:
-    return WORLD_STATE_BASE + map_id * 1000 + bit_index
+def world_state_check_id(map_id: MapIds, bit_index: int) -> int:
+    return WORLD_STATE_BASE + map_id.value * 1000 + bit_index
 
 
-def collected_object_check_id(map_id: int, bit_index: int) -> int:
-    return COLLECTED_OBJECT_BASE + map_id * 1000 + bit_index
+def collected_object_check_id(map_index: MapIndexes, bit_index: int) -> int:
+    return COLLECTED_OBJECT_BASE + map_index.value * 1000 + bit_index
 
-
-def area_restored_check_id(map_id: int, bit_index: int) -> int:
-    return AREA_RESTORED_BASE + map_id * 1000 + bit_index
+# not sure which is user here map Id or Index
+def area_restored_check_id(map_id: MapIds, bit_index: int) -> int:
+    return AREA_RESTORED_BASE + map_id.value * 1000 + bit_index
 
 
 def global_flag_check_id(bit_index: int) -> int:
@@ -53,6 +54,6 @@ def global_flag_check_id(bit_index: int) -> int:
 def game_progress_check_id(bit_index: int) -> int:
     return GAME_PROGRESS_BASE + bit_index
 
-
-def container_check_id(level_id: int, spawn_idx: int) -> int:
-    return CONTAINER_BASE + level_id * 1000 + spawn_idx
+# Was previously levelId, for me it the same value as MapId ?
+def container_check_id(map_id: MapIds, spawn_idx: int) -> int:
+    return CONTAINER_BASE + map_id.value * 1000 + spawn_idx

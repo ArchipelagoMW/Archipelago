@@ -5,7 +5,7 @@ from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Enums.RegionNames import RegionNames
+from ..Enums.RegionNames import RegionNames, MapIds
 from ..Rules import gale_shrine_access
 from ..Types import EventData, ExitData, LocData
 
@@ -36,26 +36,26 @@ events = {
 }
 locations = {
     RegionNames.SASA_SANCTUARY_ENTRANCE: {
-        "Sasa Sanctuary - Buried Chest near Entrance": LocData(container_check_id(0x109, 40), type=LocationType.BURIED_CHEST)
+        "Sasa Sanctuary - Buried Chest near Entrance": LocData(container_check_id(MapIds.SASA_SANCTUARY, 40), type=LocationType.BURIED_CHEST)
     },
     RegionNames.SASA_SANCTUARY: {
-        "Sasa Sanctuary - 4th West side chest near Papa Jamba": LocData(container_check_id(0x109, 0), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 2nd West side chest near Papa Jamba": LocData(container_check_id(0x109, 1), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 5th East side chest near Papa Jamba": LocData(container_check_id(0x109, 2), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 3rd East side chest near Papa Jamba": LocData(container_check_id(0x109, 3), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 1st East side chest near Papa Jamba": LocData(container_check_id(0x109, 4), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 4th East side chest near Papa Jamba": LocData(container_check_id(0x109, 20), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 2nd East side chest near Papa Jamba": LocData(container_check_id(0x109, 21), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 5th West side chest near Papa Jamba": LocData(container_check_id(0x109, 22), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 3rd West side chest near Papa Jamba": LocData(container_check_id(0x109, 23), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - 1st West side chest near Papa Jamba": LocData(container_check_id(0x109, 24), type=LocationType.NORMAL_CHEST),
-        "Sasa Sanctuary - Buried Chest near hot springs": LocData(container_check_id(0x109, 41), type=LocationType.BURIED_CHEST),
+        "Sasa Sanctuary - 4th West side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 0), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 2nd West side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 1), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 5th East side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 2), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 3rd East side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 3), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 1st East side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 4), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 4th East side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 20), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 2nd East side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 21), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 5th West side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 22), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 3rd West side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 23), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - 1st West side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 24), type=LocationType.NORMAL_CHEST),
+        "Sasa Sanctuary - Buried Chest near hot springs": LocData(container_check_id(MapIds.SASA_SANCTUARY, 41), type=LocationType.BURIED_CHEST),
         "Sasa Sanctuary - Nuregami": LocData(brush_check_id(13), type=LocationType.CONSTELLATION),  # bit 13
-        "Sasa Sanctuary - Daruma Doll": LocData(container_check_id(0x109, 43), type=LocationType.DARUMA)
+        "Sasa Sanctuary - Daruma Doll": LocData(container_check_id(MapIds.SASA_SANCTUARY, 43), type=LocationType.DARUMA)
     },
     RegionNames.SASA_SANCTUARY_BAMBOO: {
-        "Sasa Sanctuary - Buried Chest in bamboo grove stairs": LocData(container_check_id(0x109, 42), type=LocationType.BURIED_CHEST),
-        "Sasa Sanctuary - Left side Buried Chest in bamboo grove back": LocData(container_check_id(0x109, 46), type=LocationType.BURIED_CHEST),
-        "Sasa Sanctuary - Right side Buried Chest in bamboo grove back": LocData(container_check_id(0x109, 45), type=LocationType.BURIED_CHEST),
+        "Sasa Sanctuary - Buried Chest in bamboo grove stairs": LocData(container_check_id(MapIds.SASA_SANCTUARY, 42), type=LocationType.BURIED_CHEST),
+        "Sasa Sanctuary - Left side Buried Chest in bamboo grove back": LocData(container_check_id(MapIds.SASA_SANCTUARY, 46), type=LocationType.BURIED_CHEST),
+        "Sasa Sanctuary - Right side Buried Chest in bamboo grove back": LocData(container_check_id(MapIds.SASA_SANCTUARY, 45), type=LocationType.BURIED_CHEST),
     }
 }

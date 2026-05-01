@@ -4,7 +4,7 @@ from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Enums.RegionNames import RegionNames
+from ..Enums.RegionNames import RegionNames, MapIds
 from ..Rules import gale_shrine_access
 from ..Types import EventData, ExitData, LocData
 
@@ -61,38 +61,38 @@ events = {
 }
 locations = {
     RegionNames.GALE_SHRINE: {
-        "Gale Shrine - 1st Underwater Chest in entrance room": LocData(container_check_id(0x107, 26), type=LocationType.UNDERWATER_CHEST),
-        "Gale Shrine - 2nd Underwater Chest in entrance room": LocData(container_check_id(0x107, 27), type=LocationType.UNDERWATER_CHEST),
-        "Gale Shrine - 3rd Underwater Chest in entrance room": LocData(container_check_id(0x107, 28), type=LocationType.UNDERWATER_CHEST),
+        "Gale Shrine - 1st Underwater Chest in entrance room": LocData(container_check_id(MapIds.GALE_SHRINE, 26), type=LocationType.UNDERWATER_CHEST),
+        "Gale Shrine - 2nd Underwater Chest in entrance room": LocData(container_check_id(MapIds.GALE_SHRINE, 27), type=LocationType.UNDERWATER_CHEST),
+        "Gale Shrine - 3rd Underwater Chest in entrance room": LocData(container_check_id(MapIds.GALE_SHRINE, 28), type=LocationType.UNDERWATER_CHEST),
     },
     RegionNames.GALE_SHRINE_LIFT: {
-        "Gale Shrine - 1st Chest Under Lift ": LocData(container_check_id(0x107, 22), required_items_events=["Gale Shrine - Use Lift"]),
-        "Gale Shrine - 2nd Chest Under Lift ": LocData(container_check_id(0x107, 23), required_items_events=["Gale Shrine - Use Lift"]),
-        "Gale Shrine - 3rd Chest Under Lift ": LocData(container_check_id(0x107, 24), required_items_events=["Gale Shrine - Use Lift"])
+        "Gale Shrine - 1st Chest Under Lift ": LocData(container_check_id(MapIds.GALE_SHRINE, 22), required_items_events=["Gale Shrine - Use Lift"]),
+        "Gale Shrine - 2nd Chest Under Lift ": LocData(container_check_id(MapIds.GALE_SHRINE, 23), required_items_events=["Gale Shrine - Use Lift"]),
+        "Gale Shrine - 3rd Chest Under Lift ": LocData(container_check_id(MapIds.GALE_SHRINE, 24), required_items_events=["Gale Shrine - Use Lift"])
     },
     RegionNames.GALE_SHRINE_2F: {
-        "Gale Shrine - 2F Burning Chest": LocData(container_check_id(0x107, 2), type=LocationType.BURNING_CHEST_NO_WATER)
+        "Gale Shrine - 2F Burning Chest": LocData(container_check_id(MapIds.GALE_SHRINE, 2), type=LocationType.BURNING_CHEST_NO_WATER)
     },
     RegionNames.GALE_SHRINE_3F: {
         "Gale Shrine - Kazegami": LocData(brush_check_id(6), type=LocationType.CONSTELLATION),  # bit 6
-        "Gale Shrine - 3F Sun Fragment chest near Kazegami": LocData(container_check_id(0x107, 0)),
-        "Gale Shrine - 3F Burning Chest": LocData(container_check_id(0x107, 1), type=LocationType.BURNING_CHEST_NO_WATER)
+        "Gale Shrine - 3F Sun Fragment chest near Kazegami": LocData(container_check_id(MapIds.GALE_SHRINE, 0)),
+        "Gale Shrine - 3F Burning Chest": LocData(container_check_id(MapIds.GALE_SHRINE, 1), type=LocationType.BURNING_CHEST_NO_WATER)
     },
     RegionNames.GALE_SHRINE_BACK: {
-        "Gale Shrine - 1F Chest after windmills": LocData(container_check_id(0x107, 18)),
-        "Gale Shrine - 1F Burning Chest in banner room": LocData(container_check_id(0x107, 16), type=LocationType.BURNING_CHEST_NO_WATER),
-        "Gale Shrine - 1F Burning Chest in banner room rafters center": LocData(container_check_id(0x107, 17),
+        "Gale Shrine - 1F Chest after windmills": LocData(container_check_id(MapIds.GALE_SHRINE, 18)),
+        "Gale Shrine - 1F Burning Chest in banner room": LocData(container_check_id(MapIds.GALE_SHRINE, 16), type=LocationType.BURNING_CHEST_NO_WATER),
+        "Gale Shrine - 1F Burning Chest in banner room rafters center": LocData(container_check_id(MapIds.GALE_SHRINE, 17),
                                                                                 type=LocationType.BURNING_CHEST_NO_WATER,
                                                                                 required_brush_techniques=[
                                                                                     BrushTechniques.GREENSPROUT_VINE]),
-        "Gale Shrine - 1F Burning Chest in banner room rafters front": LocData(container_check_id(0x107, 19),
+        "Gale Shrine - 1F Burning Chest in banner room rafters front": LocData(container_check_id(MapIds.GALE_SHRINE, 19),
                                                                                type=LocationType.BURNING_CHEST_NO_WATER,
                                                                                required_brush_techniques=[
                                                                                    BrushTechniques.GREENSPROUT_VINE]),
-        "Gale Shrine - 1F Chest in banner room rafters top": LocData(container_check_id(0x107, 20),
+        "Gale Shrine - 1F Chest in banner room rafters top": LocData(container_check_id(MapIds.GALE_SHRINE, 20),
                                                                      required_brush_techniques=[
                                                                          BrushTechniques.GREENSPROUT_VINE]),
-        "Gale Shrine - 1F Chest in banner room between banners": LocData(container_check_id(0x107, 21),
+        "Gale Shrine - 1F Chest in banner room between banners": LocData(container_check_id(MapIds.GALE_SHRINE, 21),
                                                                          required_brush_techniques=[
                                                                              BrushTechniques.GALESTORM]),
         "Gale Shrine - 1F Chest in banner room after banners": LocData(169,
@@ -100,6 +100,6 @@ locations = {
                                                                            BrushTechniques.GALESTORM])
     },
     RegionNames.GALE_SHRINE_BOSS:{
-        "Gale Shrine - Crimson Helm Reward": LocData(container_check_id(0x107, 25), required_items_events=["Gale Shrine - Defeat Crimson Helm"])
+        "Gale Shrine - Crimson Helm Reward": LocData(container_check_id(MapIds.GALE_SHRINE, 25), required_items_events=["Gale Shrine - Defeat Crimson Helm"])
     }
 }
