@@ -1,4 +1,5 @@
 from BaseClasses import Item, ItemClassification
+from .CheckIds import world_state_check_id
 from .Types import OkamiItem, ItemData, resolve_option_callable
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.DivineInstruments import DivineInstruments
@@ -139,7 +140,7 @@ bitable_items = {
     ### Edit: So this Sake only resets if you go outside Kamiki village or on of its interiors;
     ### I'm not sure how that's going to work with ER.
     "Vista of the Gods": ItemData(0x5C, ItemClassification.progression),
-    "Tsuta Ruins Key": ItemData(0x40, ItemClassification.progression),
+    "Tsuta Ruins Key": ItemData(world_state_check_id(0xF04,16), ItemClassification.progression),
     # "Oddly Shaped Turnip": ItemData(0x41, ItemClassification.progression)
 }
 useful_items = {
