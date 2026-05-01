@@ -607,16 +607,20 @@ class Rac3Interface(GameInterface):
     # Intro Skip #
     ##############
 
-    def homewarp(self):
-        """Triggers a planet load to the starship phoenix"""
+    def homewarp(self, planet_id = 3):
+        """Triggers a planet load to the input planet id, defaulting to the Starship Phoenix"""
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
             # Unknown planet, abort homewarp
             logger.error(f"Aborting homewarp, Unknown Planet: {self.planet}")
             return
+        if planet_id not in PLANET_NAME_FROM_ID.keys():
+            # Invalid planet id, abort homewarp
+            logger.error(f"Aborting homewarp, Invalid Planet ID: {planet_id}")
+            return
         planet_data = RAC3_REGION_DATA_TABLE[self.planet]
         if planet_data.PLANET_TO_LOAD:
             self.homewarping = True
-            self._write8(planet_data.PLANET_TO_LOAD, RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID)
+            self._write8(planet_data.PLANET_TO_LOAD, planet_id)
             self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PLANET_LOAD, 1)
             self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PAUSE_STATE, RAC3PAUSESTATE.PLANET_CHANGE)
             logger.debug(f"Player home-warped from {self.planet}")

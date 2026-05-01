@@ -11,6 +11,7 @@ from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.rac3_interface import Rac3Interface
 from worlds.rac3.client.texthelper import colorize_item_name
 from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE
+from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
@@ -223,6 +224,45 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.print_all_vendor_items()
+
+    def _cmd_load_level(self, *args):
+        """Loads the specified level by ID. This is not intended for normal use, but can be used for testing or to recover from softlocks."""
+        if not self.verify():
+            return
+        if isinstance(self.ctx, Rac3Context):
+            if not self.is_development_build():
+                self.default("Development command \"load_level\" was used in a non-development build.")
+            if not args:
+                self.output("No level specified. Provide an integer ID or region name.")
+                return
+
+            arg = args[0]
+            # If the argument is already an int, call directly
+            if isinstance(arg, int):
+                self.ctx.game_interface.homewarp(arg)
+                return
+
+            # Try to parse as integer string first
+            try:
+                level_id = int(arg)
+                self.ctx.game_interface.homewarp(level_id)
+                return
+            except ValueError:
+                # Not an integer string — treat as a region key/name and look up its ID (case-insensitive)
+                key = str(arg).strip()
+                region = RAC3_REGION_DATA_TABLE.get(key)
+                if region is None:
+                    lower_key = key.lower()
+                    for k, v in RAC3_REGION_DATA_TABLE.items():
+                        if k.lower() == lower_key:
+                            region = v
+                            break
+                if region is not None:
+                    level_id = region.ID
+                    self.ctx.game_interface.homewarp(level_id)
+                    return
+                else:
+                    self.output("Invalid level ID or region name. Provide an integer or valid region key.")
 
     def _cmd_traversal(self, *args):
         """Test command for linked list traversal purposes."""
