@@ -253,7 +253,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Gift.golden_pumpkin: self.festival.has_golden_pumpkin(),
             Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts_with_any_bachelor(10) & self.building.has_building(Building.kitchen) & (self.has(Consumable.rain_totem) | self.season.has_any_not_winter()),
             Gift.pearl: self.fish_pond.can_get_fish_pond_reward(Fish.blobfish, 9, Gift.pearl) | self.action.can_open_geode(Geode.artifact_trove),
-            Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months,
             Gift.wilted_bouquet: self.has(Machine.furnace) & self.has(Gift.bouquet) & self.has(Material.coal),
             Ingredient.oil: self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower)),
             Ingredient.rice: self.building.has_building(Building.mill) & self.has(Vegetable.unmilled_rice),

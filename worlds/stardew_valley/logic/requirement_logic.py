@@ -14,7 +14,8 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     HelpWantedRequirement, ShipOneCropRequirement, ReceivedRaccoonsRequirement, PrizeMachineRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
     DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, MasteryRequirement, ReceivedRequirement, \
-    BachelorFriendRequirement, SpeakJunimoRequirement, EndgameItemReceivedRequirement, FestivalItemReceivedRequirement
+    BachelorFriendRequirement, SpeakJunimoRequirement, EndgameItemReceivedRequirement, FestivalItemReceivedRequirement, MuseumArtifactsRequirement, \
+    MuseumMineralsRequirement
 from ..options import IncludeEndgameLocations, FestivalLocations
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region, LogicRegion
@@ -137,6 +138,14 @@ class RequirementLogic(BaseLogic):
         if requirement.unique:
             return self.logic.fishing.can_catch_many_fish(requirement.number_fish)
         return self.logic.fishing.can_catch_many_fish(math.ceil(requirement.number_fish / 10)) & self.logic.time.has_lived_months(requirement.number_fish // 20)
+
+    @meet_requirement.register
+    def _(self, requirement: MuseumMineralsRequirement):
+        return self.logic.museum.can_donate_museum_minerals(requirement.number_donated)
+
+    @meet_requirement.register
+    def _(self, requirement: MuseumArtifactsRequirement):
+        return self.logic.museum.can_donate_museum_artifacts(requirement.number_donated)
 
     @meet_requirement.register
     def _(self, requirement: MuseumCompletionRequirement):

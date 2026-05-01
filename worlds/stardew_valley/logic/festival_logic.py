@@ -49,9 +49,9 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.rarecrow_4: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_4),
             FestivalCheck.mermaid_show: self.logic.true_,
             FestivalCheck.cone_hat: self.logic.festival.has_access_to_source(Hats.cone_hat.clarified_name),
-            FestivalCheck.iridium_fireplace: self.logic.money.can_spend(15000),
-            FestivalCheck.rarecrow_7: self.logic.money.can_spend(5000) & self.logic.museum.can_donate_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.logic.money.can_spend(5000) & self.logic.museum.can_donate_museum_items(40),
+            FestivalCheck.iridium_fireplace: self.logic.festival.has_access_to_source(FestivalCheck.iridium_fireplace),
+            FestivalCheck.rarecrow_7: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_7),
+            FestivalCheck.rarecrow_8: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_8),
             FestivalCheck.lupini_red_eagle: self.logic.money.can_spend(1200),
             FestivalCheck.lupini_portrait_mermaid: self.logic.money.can_spend(1200),
             FestivalCheck.lupini_solar_kingdom: self.logic.money.can_spend(1200),
@@ -63,11 +63,11 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.lupini_land_of_clay: self.logic.time.has_year_three & self.logic.money.can_spend(1200),
             FestivalCheck.secret_santa: self.logic.gifts.has_any_universal_love,
             FestivalCheck.legend_of_the_winter_star: self.logic.true_,
-            FestivalCheck.rarecrow_3: self.logic.money.can_shop_from(self.content.game_items[FestivalCheck.rarecrow_3].sources[0]),
+            FestivalCheck.rarecrow_3: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_3),
             FestivalCheck.all_rarecrows: self.logic.region.can_reach(Region.farm) & self.logic.festival.has_all_rarecrows(),
             FestivalCheck.calico_race: self.logic.true_,
-            FestivalCheck.mummy_mask: self.logic.true_,
-            FestivalCheck.calico_statue: self.logic.true_,
+            FestivalCheck.mummy_mask: self.logic.festival.has_access_to_source(Hats.mummy_mask.clarified_name),
+            FestivalCheck.calico_statue: self.logic.festival.has_access_to_source(FestivalCheck.calico_statue),
             FestivalCheck.emily_outfit_service: self.logic.true_,
             FestivalCheck.earthy_mousse: self.logic.true_,
             FestivalCheck.sweet_bean_cake: self.logic.true_,
@@ -202,6 +202,8 @@ class FestivalLogic(BaseLogic):
         return self.logic.received(Gift.golden_pumpkin) & self.logic.season.has(Season.fall)
 
     def has_access_to_source(self, item_name: str, sources: list[Source] = None) -> StardewRule:
+        if item_name not in self.content.game_items:
+            return self.logic.false_
         if sources is None:
             sources = self.content.game_items[item_name].sources
         return self.logic.source.has_access_to_any_without_other_requirements_of_types(sources, [FestivalItemReceivedRequirement])

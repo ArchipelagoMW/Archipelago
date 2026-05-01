@@ -136,6 +136,16 @@ class CaughtFishRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class MuseumMineralsRequirement(Requirement):
+    number_donated: int = 53
+
+
+@dataclass(frozen=True)
+class MuseumArtifactsRequirement(Requirement):
+    number_donated: int = 42
+
+
+@dataclass(frozen=True)
 class MuseumCompletionRequirement(Requirement):
     number_donated: int = 95
 

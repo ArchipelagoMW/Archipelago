@@ -23,6 +23,9 @@ class MuseumLogic(BaseLogic):
     def can_donate_museum_items(self, number: int) -> StardewRule:
         return self.logic.region.can_reach(Region.museum) & self.logic.museum.can_find_museum_items(number)
 
+    def can_donate_museum_minerals(self, number: int) -> StardewRule:
+        return self.logic.region.can_reach(Region.museum) & self.logic.museum.can_find_museum_minerals(number)
+
     def can_donate_museum_artifacts(self, number: int) -> StardewRule:
         return self.logic.region.can_reach(Region.museum) & self.logic.museum.can_find_museum_artifacts(number)
 

@@ -62,6 +62,8 @@ the_desert = ContentPack(
 
         Meal.ice_cream: (ShopSource(price=240, currency=Currency.money, shop_region=Region.oasis),),
         ArtisanGood.honey: (ShopSource(price=200, currency=Currency.money, shop_region=Region.oasis),),
+
+        FestivalCheck.calico_statue: (ShopSource(price=30, shop_region=LogicRegion.desert_festival),),
     },
     fishes=(
         fish_data.sandfish,
