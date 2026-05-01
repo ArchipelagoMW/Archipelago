@@ -42,7 +42,7 @@ def world_state_check_id(map_id: MapIds, bit_index: int) -> int:
 def collected_object_check_id(map_index: MapIndexes, bit_index: int) -> int:
     return COLLECTED_OBJECT_BASE + map_index.value * 1000 + bit_index
 
-# not sure which is user here map Id or Index
+# not sure which is used here map Id or Index
 def area_restored_check_id(map_id: MapIds, bit_index: int) -> int:
     return AREA_RESTORED_BASE + map_id.value * 1000 + bit_index
 
@@ -54,6 +54,6 @@ def global_flag_check_id(bit_index: int) -> int:
 def game_progress_check_id(bit_index: int) -> int:
     return GAME_PROGRESS_BASE + bit_index
 
-# Was previously levelId, for me it the same value as MapId ?
+# Was previously levelId, it's the same value as MapId ?
 def container_check_id(map_id: MapIds, spawn_idx: int) -> int:
     return CONTAINER_BASE + map_id.value * 1000 + spawn_idx
