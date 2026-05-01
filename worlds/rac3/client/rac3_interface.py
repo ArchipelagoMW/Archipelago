@@ -22,8 +22,13 @@ from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
-from worlds.rac3.constants.data.vendorslot import (RAC3ARMORVENDORSLOTDATA, RAC3SHIPVENDORSLOTDATA,
-                                                   RAC3SKINVENDORSLOTDATA, RAC3VENDORSLOTDATA, RAC3WEAPONVENDORSLOTDATA)
+from worlds.rac3.constants.data.vendorslot import (ARMOR_VENDOR_INVENTORY, ARMOR_VENDOR_LOCATION_TO_ITEM,
+                                                   ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION,
+                                                   ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION,
+                                                   MEGACORP_WEAPONS, RAC3ARMORVENDORSLOTDATA, RAC3SHIPVENDORSLOTDATA,
+                                                   RAC3SKINVENDORSLOTDATA, RAC3VENDORSLOTDATA, RAC3WEAPONVENDORSLOTDATA,
+                                                   SHIP_VENDOR_INVENTORY, WEAPON_VENDOR_LOCATION_TO_ITEM,
+                                                   WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION)
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.instruction import (ORIGINAL_INSTRUCTIONS, PATCH_INSTRUCTION_TO_GAME_IDS,
@@ -33,12 +38,6 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
-from worlds.rac3.constants.locations.vendors import (ARMOR_VENDOR_INVENTORY, ARMOR_VENDOR_LOCATION_TO_ITEM,
-                                                     ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION,
-                                                     ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION,
-                                                     MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY,
-                                                     WEAPON_VENDOR_LOCATION_TO_ITEM,
-                                                     WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION)
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
@@ -1177,23 +1176,20 @@ class Rac3Interface(GameInterface):
                     # Only show megacorp weapons
                     megacorp_weapons = [item for item in self.weapon_vendor_items if item in MEGACORP_WEAPONS]
                     new_inventory.extend(
-                        [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in
-                         megacorp_weapons])
+                        [RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in megacorp_weapons])
                     # Add the memory card item
-                    new_inventory.append(RAC3WEAPONVENDORSLOTDATA([0, 0, 0x0CDB, 0, 0, 0, 1]))
+                    new_inventory.append(RAC3WEAPONVENDORSLOTDATA(memcard=1))
                 else:
                     # Only show gadgetron weapons, keep current inventory up to all_ammo
                     for slot_data in current_inventory:
                         new_inventory.append(slot_data)
                         if slot_data.all_ammo.value:
                             break
-                    gadgetron_weapons = [item for item in self.weapon_vendor_items if item not in MEGACORP_WEAPONS]
-                    new_inventory.extend(
-                        [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in
-                         gadgetron_weapons])
+                    new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
+                                          self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
                     if self.planet == RAC3REGION.STARSHIP_PHOENIX:
                         # add memory card item
-                        new_inventory.append(RAC3WEAPONVENDORSLOTDATA([0, 0, 0x0CDB, 0, 0, 0, 1]))
+                        new_inventory.append(RAC3WEAPONVENDORSLOTDATA(memcard=1))
                 self.overwrite_vendor_item_names()
             case RAC3VENDORTYPE.ARMOR:
                 if not self.options.armor_vendor:
@@ -1232,16 +1228,16 @@ class Rac3Interface(GameInterface):
         match vendor_type:
             case RAC3VENDORTYPE.WEAPON:
                 data = RAC3WEAPONVENDORSLOTDATA(
-                    [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3WEAPONVENDORSLOTDATA().get_data()])
+                    *[self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3WEAPONVENDORSLOTDATA().get_data()])
             case RAC3VENDORTYPE.ARMOR:
                 data = RAC3ARMORVENDORSLOTDATA(
-                    [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3ARMORVENDORSLOTDATA().get_data()])
+                    *[self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3ARMORVENDORSLOTDATA().get_data()])
             case RAC3VENDORTYPE.SHIP:
                 data = RAC3SHIPVENDORSLOTDATA(
-                    [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SHIPVENDORSLOTDATA().get_data()])
+                    *[self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SHIPVENDORSLOTDATA().get_data()])
             case RAC3VENDORTYPE.SKIN:
                 data = RAC3SKINVENDORSLOTDATA(
-                    [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SKINVENDORSLOTDATA().get_data()])
+                    *[self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SKINVENDORSLOTDATA().get_data()])
             case _:
                 raise NotImplementedError(f"Reading vendor type {vendor_type.name} has not been implemented yet")
         return data

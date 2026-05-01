@@ -66,6 +66,7 @@ class RAC3ARMORVENDOR(RAC3VENDOR):
     ITEM_LEVEL_OFFSET: int = 0x08
     ITEM_LEVEL_SIZE: int = 1
 
+
 class RAC3SHIPVENDOR(RAC3VENDOR):
     """Struct for Ship Vendor data, with ship-specific slot size and offsets"""
     SLOT_SIZE: int = 0x24
@@ -89,6 +90,7 @@ class RAC3SHIPVENDOR(RAC3VENDOR):
     ITEM_IS_EQUIPPED_OFFSET: int = 0x20
     ITEM_IS_EQUIPPED_SIZE: int = 1
 
+
 class RAC3SKINVENDOR(RAC3VENDOR):
     """Struct for Skin Vendor data, with skin-specific slot size and offsets"""
     SLOT_SIZE: int = 0xF
@@ -99,6 +101,7 @@ class RAC3SKINVENDOR(RAC3VENDOR):
     ITEM_SKIN_ID_SIZE: int = 4
     ITEM_DESCRIPTION_STRING_ID_OFFSET: int = 0x0C
     ITEM_DESCRIPTION_STRING_ID_SIZE: int = 4
+
 
 VENDORTYPE_TO_SLOT_SIZE: dict[int, int] = {
     RAC3VENDORTYPE.WEAPON: 0x14,

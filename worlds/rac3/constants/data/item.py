@@ -190,6 +190,7 @@ class RAC3ITEMDATA:
             tags: list[str] = [RAC3ITEMTAG.CHEAT]
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.useful, tags=tags)
 
+
 RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     # Items
     # 0x01

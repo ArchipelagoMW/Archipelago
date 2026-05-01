@@ -1,5 +1,6 @@
 """ Constants for Ratchet & Clank 3 player action states. States without a character name defaults to Ratchet."""
 
+
 class RAC3PLAYERACTION:
     IDLE = 0x00
     WRENCH_FIRST_PERSON = 0x01
@@ -114,6 +115,7 @@ class RAC3PLAYERACTION:
     QWARK_WALL_JUMP = 0xA7
     QWARK_LEDGE_GRAB = 0xA9
     HALO_DIVE = 0xB0
+
 
 PERMITTED_DEATHLINK_SHIP_TELEPORT_ACTIONS = [
     RAC3PLAYERACTION.IDLE,

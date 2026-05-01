@@ -1,6 +1,5 @@
 """This module contains the constant strings used to determine which version of RAC3 is being played"""
 
-
 from worlds.rac3.constants.region import RAC3REGION
 
 
@@ -18,6 +17,7 @@ class RAC3VERSION:
     EU_ID = "SCES-52456"
     EU_BETA_ID = "TCES-52456"
     EU_DEMO_ID = "SCED-52847"
+
 
 GAME_ID_TO_VERSION: dict[str, str] = {
     RAC3VERSION.US_ID: "US release",

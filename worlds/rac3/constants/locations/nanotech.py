@@ -90,6 +90,7 @@ class RAC3NANOTECH:
     LEVEL_99 = "Nanotech Milestone: 99"
     LEVEL_100 = "Nanotech Milestone: 100"
 
+
 NANOTECH_OPTION_TO_MOD = {
     1: 20,
     2: 10,
