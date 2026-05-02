@@ -48,10 +48,11 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.progress_flag import (HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION, 
-                                                 TYHRRANOID_PUZZLE_TO_REGION, RAC3PROGRESSFLAG)
+from worlds.rac3.constants.progress_flag import (HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION,
+                                                 REFRACTOR_PUZZLE_TO_REGION, TYHRRANOID_PUZZLE_TO_REGION,
+                                                 RAC3PROGRESSFLAG)
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID,
-                                          PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES, PLANETS_WITH_TYHRRANOID_PUZZLES,
+                                          PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES, PLANETS_WITH_REFRACTOR_PUZZLES, PLANETS_WITH_TYHRRANOID_PUZZLES,
                                           RAC3REGION, REGION_TO_HACKER_DOOR_COUNT, REGION_TO_MOBY_TABLE_START_NTSC,
                                           REGION_TO_MOBY_TABLE_START_PAL, RESPAWN_COORDS_OFFSET)
 from worlds.rac3.constants.ship_slot import RAC3SHIPSLOT, SHIP_SLOTS
@@ -1948,7 +1949,7 @@ class Rac3Interface(GameInterface):
             self.opened_the_hacker_doors = True
 
     def tyhrranoid_cycler(self):
-        """Marks all tyhrranoid puzzles for planets with tyhrranoid skip enabled as complete if the tyhrranoid is unlocked."""
+        """Marks all tyhrranoid puzzles if tyhrranoid skip is enabled as complete if the tyhrranoid is unlocked."""
         if not self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status or not self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRAGUISE, False):
             return
         for planet in PLANETS_WITH_TYHRRANOID_PUZZLES:
@@ -1961,7 +1962,17 @@ class Rac3Interface(GameInterface):
                 self._write8(puzzle[0], current_value | bit_mask)
 
     def refractor_cycler(self):
-        """"""
+        """Marks all refractor puzzles as complete if refractor skip is enabled."""
+        if not self.options.shortcuts.get(RAC3SHORTCUTS.REFRACTOR, False):
+            return
+        for planet in PLANETS_WITH_REFRACTOR_PUZZLES:
+            puzzles = [puzzle for puzzle, region in REFRACTOR_PUZZLE_TO_REGION.items() if region == planet]
+            for puzzle in puzzles:
+                bit_mask = 1 << puzzle[1]
+                current_value = self._read8(puzzle[0])
+                if current_value & bit_mask:
+                    continue
+                self._write8(puzzle[0], current_value | bit_mask)
 
     def already_marked_tyhrra_puzzles(self):
         """Check if all tyhrranoid puzzles for planets with tyhrranoid skip enabled are already marked as complete."""
