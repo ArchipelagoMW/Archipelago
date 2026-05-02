@@ -89,13 +89,13 @@ locations = {
                                                                                type=LocationType.BURNING_CHEST_NO_WATER,
                                                                                required_brush_techniques=[
                                                                                    BrushTechniques.GREENSPROUT_VINE]),
-        "Gale Shrine - 1F Chest in banner room rafters top": LocData(container_check_id(MapIds.GALE_SHRINE, 20),
+        "Gale Shrine - 1F Chest in banner room rafters top": LocData(container_check_id(MapIds.GALE_SHRINE, 18),
                                                                      required_brush_techniques=[
                                                                          BrushTechniques.GREENSPROUT_VINE]),
-        "Gale Shrine - 1F Chest in banner room between banners": LocData(container_check_id(MapIds.GALE_SHRINE, 21),
+        "Gale Shrine - 1F Chest in banner room between banners": LocData(container_check_id(MapIds.GALE_SHRINE, 20),
                                                                          required_brush_techniques=[
                                                                              BrushTechniques.GALESTORM]),
-        "Gale Shrine - 1F Chest in banner room after banners": LocData(169,
+        "Gale Shrine - 1F Chest in banner room after banners": LocData(container_check_id(MapIds.GALE_SHRINE,21),
                                                                        required_brush_techniques=[
                                                                            BrushTechniques.GALESTORM])
     },
