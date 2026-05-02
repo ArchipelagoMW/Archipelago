@@ -82,8 +82,8 @@ locations = {
         "Tsuta Ruins - Treasure Bud in Entrance Hall Middle": LocData(container_check_id(MapIds.TSUTA_RUINS, 8), type=LocationType.TREASURE_BUD),  # spawn_idx=8, Traveler's Charm
         "Tsuta Ruins - Treasure Bud in Entrance Hall Right Side": LocData(container_check_id(MapIds.TSUTA_RUINS, 9), type=LocationType.TREASURE_BUD),  # spawn_idx=9, Steel Soul Sake
         "Tsuta Ruins - Chest in Entrance Hall near right side door": LocData(container_check_id(MapIds.TSUTA_RUINS, 26)),  # spawn_idx=26, Vase
-        "Tsuta Ruins - Treasure Bud on 1F rightside path before ledge": LocData(container_check_id(MapIds.TSUTA_RUINS, 12), type=LocationType.TREASURE_BUD),  # spawn_idx=12, Steel Fist Sake
-        "Tsuta Ruins - Treasure Bud near glass ball": LocData(container_check_id(MapIds.TSUTA_RUINS, 0), type=LocationType.TREASURE_BUD),  # spawn_idx=0, Incense Burner
+        "Tsuta Ruins - Treasure Bud on 1F rightside path before ledge": LocData(container_check_id(MapIds.TSUTA_RUINS, 0), type=LocationType.TREASURE_BUD),  # spawn_idx=12, Steel Fist Sake
+        "Tsuta Ruins - Treasure Bud near glass ball": LocData(container_check_id(MapIds.TSUTA_RUINS, 12), type=LocationType.TREASURE_BUD),  # spawn_idx=0, Incense Burner
         "Tsuta Ruins - Stray bead chest on 1F rightside path upper part": LocData(container_check_id(MapIds.TSUTA_RUINS, 15), required_brush_techniques=[
             BrushTechniques.GREENSPROUT_VINE], type=LocationType.TREASURE_BUD),  # spawn_idx=15, Stray Bead
     },
