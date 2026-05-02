@@ -121,7 +121,7 @@ local function update_player(index)
                 sent = 0
             end
             if sent > 0 then
-                player.print({"archipelago.recieve-sample-item", sent, "[item=" .. name .. ",quality="..general.free_samples.quality.."]"})
+                player.print({"archipelago.receive-sample-item", sent, "[item=" .. name .. ",quality="..general.free_samples.quality.."]"})
                 data.suppress_full_inventory_message = false
             end
             if sent ~= count then               -- Couldn't full send.
