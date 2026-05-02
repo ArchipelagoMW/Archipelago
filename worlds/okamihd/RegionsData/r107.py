@@ -79,7 +79,7 @@ locations = {
         "Gale Shrine - 3F Burning Chest": LocData(container_check_id(MapIds.GALE_SHRINE, 1), type=LocationType.BURNING_CHEST_NO_WATER)
     },
     RegionNames.GALE_SHRINE_BACK: {
-        "Gale Shrine - 1F Chest after windmills": LocData(container_check_id(MapIds.GALE_SHRINE, 18)),
+        "Gale Shrine - 1F Chest after windmills": LocData(container_check_id(MapIds.GALE_SHRINE, 25)),
         "Gale Shrine - 1F Burning Chest in banner room": LocData(container_check_id(MapIds.GALE_SHRINE, 16), type=LocationType.BURNING_CHEST_NO_WATER),
         "Gale Shrine - 1F Burning Chest in banner room rafters center": LocData(container_check_id(MapIds.GALE_SHRINE, 17),
                                                                                 type=LocationType.BURNING_CHEST_NO_WATER,
@@ -89,17 +89,17 @@ locations = {
                                                                                type=LocationType.BURNING_CHEST_NO_WATER,
                                                                                required_brush_techniques=[
                                                                                    BrushTechniques.GREENSPROUT_VINE]),
-        "Gale Shrine - 1F Chest in banner room rafters top": LocData(container_check_id(MapIds.GALE_SHRINE, 20),
+        "Gale Shrine - 1F Chest in banner room rafters top": LocData(container_check_id(MapIds.GALE_SHRINE, 18),
                                                                      required_brush_techniques=[
                                                                          BrushTechniques.GREENSPROUT_VINE]),
-        "Gale Shrine - 1F Chest in banner room between banners": LocData(container_check_id(MapIds.GALE_SHRINE, 21),
+        "Gale Shrine - 1F Chest in banner room between banners": LocData(container_check_id(MapIds.GALE_SHRINE, 20),
                                                                          required_brush_techniques=[
                                                                              BrushTechniques.GALESTORM]),
-        "Gale Shrine - 1F Chest in banner room after banners": LocData(169,
+        "Gale Shrine - 1F Chest in banner room after banners": LocData(container_check_id(MapIds.GALE_SHRINE,21),
                                                                        required_brush_techniques=[
                                                                            BrushTechniques.GALESTORM])
     },
     RegionNames.GALE_SHRINE_BOSS:{
-        "Gale Shrine - Crimson Helm Reward": LocData(container_check_id(MapIds.GALE_SHRINE, 25), required_items_events=["Gale Shrine - Defeat Crimson Helm"])
+        "Gale Shrine - Crimson Helm Reward": LocData(29, required_items_events=["Gale Shrine - Defeat Crimson Helm"])
     }
 }
