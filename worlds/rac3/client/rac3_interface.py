@@ -2185,7 +2185,7 @@ class Rac3Interface(GameInterface):
             if not matched:
                 # Insert the ASCII value of the character
                 msg_ordinal = ord(msg[i])
-                if msg_ordinal < 0 or msg_ordinal > 256:
+                if msg_ordinal < 0 or msg_ordinal > 0x7F:
                     # Replace unsupported characters with a question mark
                     msg_ordinal = ord("?")
                 result.append(msg_ordinal)
