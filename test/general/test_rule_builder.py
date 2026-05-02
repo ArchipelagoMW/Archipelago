@@ -416,6 +416,15 @@ class TestHashes(RuleBuilderTestCase):
         rule2 = HasAll("2", "2", "2", "1")
         self.assertEqual(hash(rule1.resolve(world)), hash(rule2.resolve(world)))
 
+    def test_hash_collision(self) -> None:
+        multiworld = setup_solo_multiworld(self.world_cls, steps=("generate_early",), seed=0)
+        world = multiworld.worlds[1]
+        rule1 = Has("A", count=1).resolve(world)
+        rule2 = Has("A", count=1 << 61).resolve(world)
+        self.assertEqual(hash(rule1), hash(rule2))
+        self.assertNotEqual(rule1, rule2)
+        self.assertNotEqual(id(rule1), id(rule2))
+
 
 class TestCaching(CachedRuleBuilderTestCase):
     multiworld: MultiWorld  # pyright: ignore[reportUninitializedInstanceVariable]

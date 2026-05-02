@@ -1331,6 +1331,13 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
     starting_max_arrows = 30
 
     startingstate = CollectionState(multiworld)
+    has_blue_shield = False
+    has_red_shield = False
+    has_mirror_shield = False
+    progressive_shields = 0
+    has_blue_mail = False
+    has_red_mail = False
+    progressive_mail = 0
 
     if startingstate.has('Silver Bow', player):
         equip[0x340] = 1
@@ -1359,18 +1366,6 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
     elif startingstate.has('Fighter Sword', player):
         equip[0x359] = 1
 
-    if startingstate.has('Mirror Shield', player):
-        equip[0x35A] = 3
-    elif startingstate.has('Red Shield', player):
-        equip[0x35A] = 2
-    elif startingstate.has('Blue Shield', player):
-        equip[0x35A] = 1
-
-    if startingstate.has('Red Mail', player):
-        equip[0x35B] = 2
-    elif startingstate.has('Blue Mail', player):
-        equip[0x35B] = 1
-
     if startingstate.has('Magic Upgrade (1/4)', player):
         equip[0x37B] = 2
         equip[0x36E] = 0x80
@@ -1383,8 +1378,6 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
         if item.name in {'Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
                          'Titans Mitts', 'Power Glove', 'Progressive Glove',
                          'Golden Sword', 'Tempered Sword', 'Master Sword', 'Fighter Sword', 'Progressive Sword',
-                         'Mirror Shield', 'Red Shield', 'Blue Shield', 'Progressive Shield',
-                         'Red Mail', 'Blue Mail', 'Progressive Mail',
                          'Magic Upgrade (1/4)', 'Magic Upgrade (1/2)', 'Triforce Piece'}:
             continue
 
@@ -1489,8 +1482,62 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
             if item.name != 'Piece of Heart' or equip[0x36B] == 0:
                 equip[0x36C] = min(equip[0x36C] + 0x08, 0xA0)
                 equip[0x36D] = min(equip[0x36D] + 0x08, 0xA0)
+        elif item.name == 'Blue Shield':
+            has_blue_shield = True
+            continue
+        elif item.name == 'Red Shield':
+            has_red_shield = True
+            continue
+        elif item.name == 'Mirror Shield':
+            has_mirror_shield = True
+            continue
+        elif item.name == 'Progressive Shield':
+            progressive_shields += 1
+            continue
+        elif item.name == 'Blue Mail':
+            has_blue_mail = True
+            continue
+        elif item.name == 'Red Mail':
+            has_red_mail = True
+            continue
+        elif item.name == 'Progressive Mail':
+            progressive_mail += 1
+            continue
         else:
             raise RuntimeError(f'Unsupported item in starting equipment: {item.name}')
+
+    for _ in range(progressive_shields):
+        if has_mirror_shield:
+            continue
+        if has_red_shield and local_world.difficulty_requirements.progressive_shield_limit >= 3:
+            has_mirror_shield = True
+            continue
+        if has_blue_shield and local_world.difficulty_requirements.progressive_shield_limit >= 2:
+            has_red_shield = True
+            continue
+        if local_world.difficulty_requirements.progressive_shield_limit >= 1:
+            has_blue_shield = True
+
+    for _ in range(progressive_mail):
+        if has_red_mail:
+            continue
+        if has_blue_mail and local_world.difficulty_requirements.progressive_armor_limit >= 2:
+            has_red_mail = True
+            continue
+        if local_world.difficulty_requirements.progressive_armor_limit >= 1:
+            has_blue_mail = True
+
+    if has_mirror_shield:
+        equip[0x35A] = 3
+    elif has_red_shield:
+        equip[0x35A] = 2
+    elif has_blue_shield:
+        equip[0x35A] = 1
+
+    if has_red_mail:
+        equip[0x35B] = 2
+    elif has_blue_mail:
+        equip[0x35B] = 1
 
     equip[0x343] = min(equip[0x343], starting_max_bombs)
     rom.write_byte(0x180034, starting_max_bombs)
