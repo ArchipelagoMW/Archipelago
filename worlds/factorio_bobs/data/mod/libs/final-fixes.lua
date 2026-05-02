@@ -33,7 +33,7 @@ end
 
 local function get_gears_mat()
     return {
-        icon = "__"..general.mod_name.."__/graphics/icons/ap_gears_mat.png",
+        icon = "__"..general.mod_name.."__/graphics/icons/gears_mat.png",
         icon_size = 300,
         scale = 0.426
     }
