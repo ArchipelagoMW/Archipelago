@@ -178,6 +178,7 @@ class Rac3Interface(GameInterface):
     hacker_door_addresses: dict[int, int] = {}
     opened_the_hacker_doors: bool = False
     opened_the_tyhrranoid_doors: bool = False
+    opened_the_refractor_doors: bool = False
     equipped_item: int = 0
     last_used_0: int = 0
     last_used_1: int = 0
@@ -1409,6 +1410,7 @@ class Rac3Interface(GameInterface):
         self.health_cycler()
         self.hacker_cycler()
         self.tyhrranoid_cycler()
+        self.refractor_cycler()
         self.pda_vendor_cycler()
         self.notification_cycler()
 
@@ -2001,6 +2003,20 @@ class Rac3Interface(GameInterface):
                     self.opened_the_hacker_doors = False
                     return
         self.opened_the_hacker_doors = True
+
+    def already_marked_refractor_puzzles(self):
+        """Check if all refractor puzzles for planets with refractor skip enabled are already marked as complete."""
+        if not self.options.shortcuts.get(RAC3SHORTCUTS.REFRACTOR, False):
+            return
+        for planet in PLANETS_WITH_REFRACTOR_PUZZLES:
+            puzzles = [puzzle for puzzle, region in REFRACTOR_PUZZLE_TO_REGION.items() if region == planet]
+            for puzzle in puzzles:
+                bit_mask = 1 << puzzle[1]
+                current_value = self._read8(puzzle[0])
+                if not current_value & bit_mask:
+                    self.opened_the_refractor_doors = False
+                    return
+        self.opened_the_refractor_doors = True
 
     def find_moby_by_id_traversal(self, target_id: int, table_start: int | None = None) -> int | None:
         """Traverse the moby linked list on the current planet to find a moby with the given ID and return its
