@@ -10,7 +10,7 @@ from worlds.rac3.options.armor_vendor_options import ArmorVendors
 from worlds.rac3.options.clank_options import ClankOptions
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
-from worlds.rac3.options.hacker_skip_options import HackerSkip
+from worlds.rac3.options.shortcuts_options import Shortcuts
 from worlds.rac3.options.holostar_skip_options import HolostarSkip
 from worlds.rac3.options.intro_skip_options import IntroSkip
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
@@ -83,7 +83,7 @@ class RaC3Options(PerGameCommonOptions):
     ship_vendor: ShipVendors
     armor_vendor: ArmorVendors
     scout_vendors: ScoutVendors
-    hacker_skip: HackerSkip
+    shortcuts: Shortcuts
 
 
 rac3_option_groups = [
@@ -95,7 +95,7 @@ rac3_option_groups = [
     OptionGroup("RAC3 Game Options", [
         IntroSkip,
         HolostarSkip,
-        HackerSkip,
+        Shortcuts,
         BoltAndXPMultiplier,
         OneHpChallenge,
     ]),
@@ -167,7 +167,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.INTRO_SKIP,
     RAC3OPTION.HOLOSTAR_SKIP,
     RAC3OPTION.CLANK_OPTIONS,
-    RAC3OPTION.HACKER_SKIP,
+    RAC3OPTION.SHORTCUTS,
     RAC3OPTION.SHIP_VENDOR,
     RAC3OPTION.ARMOR_VENDOR,
     RAC3OPTION.SCOUT_VENDORS,

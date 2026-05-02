@@ -48,12 +48,14 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.progress_flag import HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION, RAC3PROGRESSFLAG
+from worlds.rac3.constants.progress_flag import (HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION, 
+                                                 TYHRRANOID_PUZZLE_TO_REGION, RAC3PROGRESSFLAG)
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID,
-                                          PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES, RAC3REGION,
-                                          REGION_TO_HACKER_DOOR_COUNT, REGION_TO_MOBY_TABLE_START_NTSC,
+                                          PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES, PLANETS_WITH_TYHRRANOID_PUZZLES,
+                                          RAC3REGION, REGION_TO_HACKER_DOOR_COUNT, REGION_TO_MOBY_TABLE_START_NTSC,
                                           REGION_TO_MOBY_TABLE_START_PAL, RESPAWN_COORDS_OFFSET)
 from worlds.rac3.constants.ship_slot import RAC3SHIPSLOT, SHIP_SLOTS
+from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.name import RAC3VENDORNAME
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
@@ -116,7 +118,7 @@ class Rac3Interface(GameInterface):
         ship_vendor: int
         armor_vendor: int
         scout_vendors: dict[str, int]
-        hacker_skip: dict[str, int]
+        shortcuts: dict[str, int]
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
@@ -174,6 +176,7 @@ class Rac3Interface(GameInterface):
     cycle_times: list[float] = []
     hacker_door_addresses: dict[int, int] = {}
     opened_the_hacker_doors: bool = False
+    opened_the_tyhrranoid_doors: bool = False
     equipped_item: int = 0
     last_used_0: int = 0
     last_used_1: int = 0
@@ -278,7 +281,7 @@ class Rac3Interface(GameInterface):
         self.options.ship_vendor = slot_data[RAC3OPTION.SHIP_VENDOR]
         self.options.armor_vendor = slot_data[RAC3OPTION.ARMOR_VENDOR]
         self.options.scout_vendors = slot_data[RAC3OPTION.SCOUT_VENDORS]
-        self.options.hacker_skip = slot_data[RAC3OPTION.HACKER_SKIP]
+        self.options.shortcuts = slot_data[RAC3OPTION.SHORTCUTS]
 
     ########################################
     # Called on Game and Server Connection #
@@ -449,7 +452,6 @@ class Rac3Interface(GameInterface):
         self.clank_disabled = bool(self._read8(RAC3STATUS.NO_CLANK))
         self.pda_vendor = self.find_pda_vendor()
         self.vendor_type = self.vendor_check()
-        self.hacker_doors_finder_cycler()
         self.get_visited_planets()
         self.determine_weapon_vendor_items()
         self.determine_armor_vendor_items()
@@ -517,32 +519,6 @@ class Rac3Interface(GameInterface):
                     original_string_ptr += 0x11
                 self._write32(item_string_address, original_string_ptr)
         self.should_restore_vendor_item_names = False
-
-    def hacker_doors_finder_cycler(self):
-        """Finds all the doors with hacker puzzles by moby id and sets their state value to 2 so they open if the
-        hacker is unlocked and the door is on a planet with hacker skip enabled."""
-
-        if not self.UnlockItem[RAC3ITEM.HACKER].status or self.opened_the_hacker_doors:
-            return
-        planets = [planet for planet in PLANETS_WITH_HACKER_PUZZLES if self.options.hacker_skip.get(planet, False)]
-        if self.planet not in planets:
-            return
-        puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == self.planet]
-        doors = [HACKER_PUZZLE_TO_DOOR_ID[puzzle] for puzzle in puzzles if puzzle in HACKER_PUZZLE_TO_DOOR_ID]
-        if HACKER_PUZZLE_TO_DOOR_ID[RAC3PROGRESSFLAG.AQUATOS_HACKER_GATE] in doors:
-            # The door is made up of 4 parts that all need the number 5
-            doors.append(0x138)
-            doors.append(0x139)
-            doors.append(0x13A)
-
-        # Try to resolve each door id to a moby address; save successful lookups only
-        for door_id in doors:
-            if door_id in self.hacker_door_addresses:
-                # already resolved
-                continue
-            addr = self.find_moby_by_id(door_id)
-            if addr is not None and addr != 0:
-                self.hacker_door_addresses[door_id] = addr
 
     def get_visited_planets(self):
         """Returns a set of all planets the player has visited"""
@@ -705,6 +681,8 @@ class Rac3Interface(GameInterface):
         match name:
             case RAC3ITEM.HACKER:
                 self.already_marked_hacker_puzzles()
+            case RAC3ITEM.TYHRRA_GUISE:
+                self.already_marked_tyhrra_puzzles()
             case RAC3ITEM.PROGRESSIVE_VIDCOMIC:
                 if self.UnlockItem[name].status > 5:
                     self.UnlockItem[name].status = 5
@@ -1429,6 +1407,7 @@ class Rac3Interface(GameInterface):
         self.overflow_fix()
         self.health_cycler()
         self.hacker_cycler()
+        self.tyhrranoid_cycler()
         self.pda_vendor_cycler()
         self.notification_cycler()
 
@@ -1923,14 +1902,34 @@ class Rac3Interface(GameInterface):
                 self.main_menu = False
 
     def hacker_cycler(self):
-        """Marks all hacker puzzles for planets with hacker skip enabled as complete if the hacker is unlocked."""
-        if not self.UnlockItem[RAC3ITEM.HACKER].status:
+        """Finds hacker puzzle doors on current planet and marks all hacker puzzles complete if hacker is unlocked."""
+        if not self.UnlockItem[RAC3ITEM.HACKER].status or not self.options.shortcuts.get(RAC3SHORTCUTS.HACKER, False):
             return
+
+        # Handle door finding for the current planet
+        if not self.opened_the_hacker_doors and self.planet in PLANETS_WITH_HACKER_PUZZLES:
+            puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == self.planet]
+            doors = [HACKER_PUZZLE_TO_DOOR_ID[puzzle] for puzzle in puzzles if puzzle in HACKER_PUZZLE_TO_DOOR_ID]
+            if HACKER_PUZZLE_TO_DOOR_ID[RAC3PROGRESSFLAG.AQUATOS_HACKER_GATE] in doors:
+                # The door is made up of 4 parts that all need the number 5
+                doors.append(0x138)
+                doors.append(0x139)
+                doors.append(0x13A)
+
+            # Try to resolve each door id to a moby address; save successful lookups only
+            for door_id in doors:
+                if door_id in self.hacker_door_addresses:
+                    # already resolved
+                    continue
+                addr = self.find_moby_by_id_iteration(door_id)
+                if addr is not None and addr != 0:
+                    self.hacker_door_addresses[door_id] = addr
+
+        # Mark all hacker puzzles as complete
         if self.is_reloading and not self.opened_the_hacker_doors:
             self.opened_the_hacker_doors = True
 
-        planets = [planet for planet in PLANETS_WITH_HACKER_PUZZLES if self.options.hacker_skip.get(planet, False)]
-        for planet in planets:
+        for planet in PLANETS_WITH_HACKER_PUZZLES:
             puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == planet]
             for puzzle in puzzles:
                 bit_mask = 1 << puzzle[1]
@@ -1939,7 +1938,8 @@ class Rac3Interface(GameInterface):
                     continue
                 self._write8(puzzle[0], current_value | bit_mask)
 
-        if (self.planet in planets
+        # Open doors if all are resolved
+        if (self.planet in PLANETS_WITH_HACKER_PUZZLES
             and len(self.hacker_door_addresses) == REGION_TO_HACKER_DOOR_COUNT.get(self.planet, 0)
             and not self.opened_the_hacker_doors):
             for door_id in self.hacker_door_addresses.keys():
@@ -1947,10 +1947,41 @@ class Rac3Interface(GameInterface):
                 self._write16(door_addr + 0xBE, 5)
             self.opened_the_hacker_doors = True
 
+    def tyhrranoid_cycler(self):
+        """Marks all tyhrranoid puzzles for planets with tyhrranoid skip enabled as complete if the tyhrranoid is unlocked."""
+        if not self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status or not self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRAGUISE, False):
+            return
+        for planet in PLANETS_WITH_TYHRRANOID_PUZZLES:
+            puzzles = [puzzle for puzzle, region in TYHRRANOID_PUZZLE_TO_REGION.items() if region == planet]
+            for puzzle in puzzles:
+                bit_mask = 1 << puzzle[1]
+                current_value = self._read8(puzzle[0])
+                if current_value & bit_mask:
+                    continue
+                self._write8(puzzle[0], current_value | bit_mask)
+
+    def refractor_cycler(self):
+        """"""
+
+    def already_marked_tyhrra_puzzles(self):
+        """Check if all tyhrranoid puzzles for planets with tyhrranoid skip enabled are already marked as complete."""
+        if not self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRAGUISE, False):
+            return
+        for planet in PLANETS_WITH_TYHRRANOID_PUZZLES:
+            puzzles = [puzzle for puzzle, region in TYHRRANOID_PUZZLE_TO_REGION.items() if region == planet]
+            for puzzle in puzzles:
+                bit_mask = 1 << puzzle[1]
+                current_value = self._read8(puzzle[0])
+                if not current_value & bit_mask:
+                    self.opened_the_tyhrranoid_doors = False
+                    return
+        self.opened_the_tyhrranoid_doors = True
+
     def already_marked_hacker_puzzles(self):
         """Check if all hacker puzzles for planets with hacker skip enabled are already marked as complete."""
-        planets = [planet for planet in PLANETS_WITH_HACKER_PUZZLES if self.options.hacker_skip.get(planet, False)]
-        for planet in planets:
+        if not self.options.shortcuts.get(RAC3SHORTCUTS.HACKER, False):
+            return
+        for planet in PLANETS_WITH_HACKER_PUZZLES:
             puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == planet]
             for puzzle in puzzles:
                 bit_mask = 1 << puzzle[1]
@@ -1960,7 +1991,7 @@ class Rac3Interface(GameInterface):
                     return
         self.opened_the_hacker_doors = True
 
-    def find_moby_by_id(self, target_id: int, table_start: int | None = None) -> int | None:
+    def find_moby_by_id_traversal(self, target_id: int, table_start: int | None = None) -> int | None:
         """Traverse the moby linked list on the current planet to find a moby with the given ID and return its
         address"""
         if table_start is None:
@@ -2002,6 +2033,39 @@ class Rac3Interface(GameInterface):
                 return None
             current_id = self._read16(current_id_addr)
         logger.debug(f"Moby with ID {target_id} not found after maximum traversals")
+        return None
+
+    def find_moby_by_id_iteration(self, target_id: int, table_start: int | None = None) -> int | None:
+        """Traverse the moby table on the current planet to find a moby with the given ID and return its
+        address"""
+        if table_start is None:
+            table_start = REGION_TO_MOBY_TABLE_START_NTSC.get(self.planet, 0)
+            if self.current_game == RAC3VERSION.EU_ID:
+                table_start = REGION_TO_MOBY_TABLE_START_PAL.get(self.planet, 0)
+        if table_start == 0:
+            logger.debug(f"No moby table for planet {self.planet}, cannot find moby by ID")
+            return None
+
+        addr = table_start
+        iteration_count = 0
+        while iteration_count < 2000:
+            current_id_addr = addr + 0xB2
+            if current_id_addr < 0 or current_id_addr > 0xFFFFFFFF:
+                logger.debug(
+                    f"Moby with ID {target_id} not found, current id address out of range at {hex(current_id_addr)}")
+                return None
+            try:
+                current_id = self._read16(current_id_addr)
+            except Exception:
+                logger.debug(f"Failed reading moby id at {hex(current_id_addr)}")
+                return None
+            if current_id == target_id:
+                logger.debug(f"Moby with ID {target_id} found at address: {hex(addr)} after {iteration_count} iterations")
+                return addr
+            addr += 0x100
+            iteration_count += 1
+
+        logger.debug(f"Moby with ID {target_id} not found after {iteration_count} iterations")
         return None
 
     def pda_vendor_cycler(self):
@@ -2305,6 +2369,7 @@ class Rac3Interface(GameInterface):
             pda_vendor_str = hex(self.pda_vendor) if self.pda_vendor else "Not Found"
         logger.info(f"PDA Vendor Address: {pda_vendor_str}")
         logger.info(f"Opened Hacker Doors: {self.opened_the_hacker_doors}")
+        logger.info(f"Opened Tyhrranoid Doors: {self.opened_the_tyhrranoid_doors}")
         visited_planets = [planet for planet in PLANET_NAME_FROM_ID.values() if planet in self.visited_planets and not (
             planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.holostar_skip)]
         logger.info(f"Visited Planets: {visited_planets}")
