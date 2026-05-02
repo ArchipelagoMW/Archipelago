@@ -685,6 +685,8 @@ class Rac3Interface(GameInterface):
                 self.already_marked_hacker_puzzles()
             case RAC3ITEM.TYHRRA_GUISE:
                 self.already_marked_tyhrra_puzzles()
+            case RAC3ITEM.REFRACTOR:
+                self.already_marked_refractor_puzzles()
             case RAC3ITEM.PROGRESSIVE_VIDCOMIC:
                 if self.UnlockItem[name].status > 5:
                     self.UnlockItem[name].status = 5
@@ -1954,6 +1956,10 @@ class Rac3Interface(GameInterface):
         """Marks all tyhrranoid puzzles if tyhrranoid skip is enabled as complete if the tyhrranoid is unlocked."""
         if not self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status or not self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRAGUISE, False):
             return
+
+        if self.is_reloading and not self.opened_the_tyhrranoid_doors:
+            self.opened_the_tyhrranoid_doors = True
+
         for planet in PLANETS_WITH_TYHRRANOID_PUZZLES:
             puzzles = [puzzle for puzzle, region in TYHRRANOID_PUZZLE_TO_REGION.items() if region == planet]
             for puzzle in puzzles:
@@ -1965,8 +1971,12 @@ class Rac3Interface(GameInterface):
 
     def refractor_cycler(self):
         """Marks all refractor puzzles as complete if refractor skip is enabled."""
-        if not self.options.shortcuts.get(RAC3SHORTCUTS.REFRACTOR, False):
+        if not self.UnlockItem[RAC3ITEM.REFRACTOR].status or not self.options.shortcuts.get(RAC3SHORTCUTS.REFRACTOR, False):
             return
+
+        if self.is_reloading and not self.opened_the_refractor_doors:
+            self.opened_the_refractor_doors = True
+
         for planet in PLANETS_WITH_REFRACTOR_PUZZLES:
             puzzles = [puzzle for puzzle, region in REFRACTOR_PUZZLE_TO_REGION.items() if region == planet]
             for puzzle in puzzles:
@@ -2397,6 +2407,7 @@ class Rac3Interface(GameInterface):
         logger.info(f"PDA Vendor Address: {pda_vendor_str}")
         logger.info(f"Opened Hacker Doors: {self.opened_the_hacker_doors}")
         logger.info(f"Opened Tyhrranoid Doors: {self.opened_the_tyhrranoid_doors}")
+        logger.info(f"Opened Refractor Doors: {self.opened_the_refractor_doors}")
         visited_planets = [planet for planet in PLANET_NAME_FROM_ID.values() if planet in self.visited_planets and not (
             planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.holostar_skip)]
         logger.info(f"Visited Planets: {visited_planets}")
