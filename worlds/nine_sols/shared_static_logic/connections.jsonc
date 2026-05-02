@@ -961,14 +961,20 @@
                 [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
             ] }
         ],
-        "medium_requires": [ { "anyOf": [
-            { "item": "Cloud Leap" }, // and swift runner
-            { "item": "Trick - Bow Hover" }
-        ] } ] // can't assume you have qi for T-dash since you may have already spent it reaching FU-BS
+        "medium_requires": [
+            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // getting onto the ledge is the same
+            { "anyOf": [
+                { "item": "Cloud Leap" }, // and swift runner
+                { "item": "Trick - Bow Hover" }
+            ] } // can't assume you have qi for T-dash since you may have already spent it reaching FU-BS
+        ]
     },
     {
         "from": "Factory (U) - Broken Shanhai (with qi)", "to": "Factory (U) - Middle Right Exit",
-        "medium_requires": [] // T-dash
+        "medium_requires": [
+            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // getting onto the ledge is the same
+            // then just T-dash to get across the big crystal pit
+        ]
     },
     // we skip the BS <- MRE connection because MRE -> MI -> BS has weaker requirements (unless we want a precise TCK-only jump)
     {
