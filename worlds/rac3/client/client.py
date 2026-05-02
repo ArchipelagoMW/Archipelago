@@ -102,7 +102,7 @@ class CommandProcessor(ClientCommandProcessor):
         """Give weapon exp for testing purposes."""
         if not self.verify():
             return
-        if isinstance(self.ctx, Rac3Context):
+        if isinstance(self.ctx, Rac3Context) and self.ctx.slot is not None:
             if not self.is_development_build():
                 self.default("Development command \"weapon_exp_test\" was used in a non-development build.")
 
@@ -110,14 +110,14 @@ class CommandProcessor(ClientCommandProcessor):
                 self.output("Weapon EXP item not compatible with Progressive Weapons")
             else:
                 self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.WEAPON_XP].AP_CODE,
-                                                      self.ctx.player_names[self.ctx.slot], "Test Command", 0)
+                                                      self.ctx.player_names.get(self.ctx.slot, None), "Test Command", 0)
                 self.output("Weapon EXP Received")
 
     def _cmd_bolt_test(self):
         """Give bolts for testing purposes."""
         if not self.verify():
             return
-        if isinstance(self.ctx, Rac3Context):
+        if isinstance(self.ctx, Rac3Context) and self.ctx.slot is not None:
             if not self.is_development_build():
                 self.default("Development command \"bolt_test\" was used in a non-development build.")
             self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE,
@@ -226,7 +226,8 @@ class CommandProcessor(ClientCommandProcessor):
             self.ctx.game_interface.print_all_vendor_items()
 
     def _cmd_load_level(self, *args):
-        """Loads the specified level by ID. This is not intended for normal use, but can be used for testing or to recover from softlocks."""
+        """Loads the specified level by ID. This is not intended for normal use, but can be used for testing or to
+        recover from softlocks."""
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
@@ -272,7 +273,7 @@ class CommandProcessor(ClientCommandProcessor):
             if not self.is_development_build():
                 # let everyone know that a development command was used in a release build.
                 self.default("Development command \"traversal\" was used in a non-development build.")
-            
+
             # convert the hex input to an int and then do traversal with that as the target id
             try:
                 target_id = int(args[0], 16)
@@ -295,6 +296,7 @@ class Rac3Context(CommonContext):
     already_hinted: set[int] = set()
     command_processor = CommandProcessor
     current_planet: str = RAC3REGION.GALAXY
+    current_map: str = RAC3REGION.GALAXY
     death_link: bool = False
     game: str = RAC3OPTION.GAME_TITLE_FULL
     game_interface: Rac3Interface
@@ -349,7 +351,7 @@ class Rac3Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         super().on_package(cmd, args)
         if cmd == "Connected":
-            self.slot_data = args["slot_data"]
+            self.slot_data: dict[str, Any] = args["slot_data"]
             # logger.info(f"Received data: {args}")
             self.game_interface.proc_option(self.slot_data)
             self.locations_scouted = self.server_locations
@@ -373,7 +375,7 @@ class Rac3Context(CommonContext):
                 async_start(self.send_msgs([{"cmd": "Sync"}]))
         if cmd == "PrintJSON":
             if args.get("type") == "Hint" and self.is_connected_to_game and not self.main_menu:
-                net_item: NetworkItem = args.get("item")
+                net_item: NetworkItem | None = args.get("item")
                 if net_item is None:
                     logger.warning("Received PrintJSON command with type Hint but no item data!")
                     return
@@ -381,15 +383,15 @@ class Rac3Context(CommonContext):
                 receiving_player = args.get("receiving", -1)
                 item_name = colorize_item_name(self.item_names.lookup_in_slot(net_item.item, receiving_player),
                                                net_item.flags)
-                format_color = RAC3TEXTFORMATSTRING.NORMAL if receiving_player == self.slot else (
+                format_color = RAC3TEXTFORMATSTRING.NORMAL if self.slot_concerns_self(receiving_player) else (
                     RAC3TEXTFORMATSTRING.GREEN)
                 player_name = self.player_names.get(receiving_player, "???")
                 hint_text = (
                     f"{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s "
                     f"{item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}")
-                if net_item.player != self.slot:
+                if not self.slot_concerns_self(net_item.player):
                     player_name = self.player_names.get(net_item.player, "???")
-                    format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else (
+                    format_color = RAC3TEXTFORMATSTRING.NORMAL if self.slot_concerns_self(net_item.player) else (
                         RAC3TEXTFORMATSTRING.GREEN)
                     hint_text += (f"\n{RAC3TEXTFORMATSTRING.WHITE}in {format_color}{player_name}"
                                   f"{RAC3TEXTFORMATSTRING.WHITE}'s world.")

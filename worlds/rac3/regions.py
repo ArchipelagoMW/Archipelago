@@ -454,7 +454,8 @@ def create_regions(world: "RaC3World"):
 
     # New Game Plus
 
-    create_region_and_connect(world, RAC3REGION.NGPLUS, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.NGPLUS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.NGPLUS, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.NGPLUS}",
+                              starship_phoenix)
 
     # shock_blaster_upgrades = create_region(world, f"{RAC3ITEM.SHOCK_BLASTER} Upgrades")
     # menu.connect(shock_blaster_upgrades, rule=lambda state: state.has(RAC3ITEM.SHOCK_BLASTER, world.player)),
@@ -549,7 +550,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
                 if (options.skill_points.value < 2 and options.sewer_limitation < 100 and loc ==
-                      RAC3TROPHY.PHOENIX_SKILL_MASTER):
+                    RAC3TROPHY.PHOENIX_SKILL_MASTER):
                     return True
             case RAC3TAG.SKILLPOINT:
                 if options.skill_points.value == 0:

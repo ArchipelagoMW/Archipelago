@@ -1,37 +1,27 @@
 """This module contains the World class for Ratchet and Clank 3"""
 from logging import DEBUG, getLogger
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar, TYPE_CHECKING
 
 from BaseClasses import CollectionState, Item, MultiWorld
 from Options import OptionError
 from worlds.AutoWorld import World
-from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE, item_groups
+from worlds.rac3.constants.data.item import item_groups, RAC3_ITEM_DATA_TABLE
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.options import RAC3OPTION
-from worlds.rac3.items import (
-    create_item,
-    create_itempool,
-    get_filler_selection,
-    process_start_inventory,
-    starting_planets,
-    starting_weapons,
-)
-from worlds.rac3.locations import (
-    get_level_locations,
-    get_location_names,
-    get_regions,
-    get_total_locations,
-    location_groups,
-)
+from worlds.rac3.items import (create_item, create_itempool, get_filler_selection, process_start_inventory,
+                               starting_planets, starting_weapons)
+from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
+                                   location_groups)
 from worlds.rac3.rac3options import RaC3Options
-from worlds.rac3.regions import create_regions, every_5_nanotech, every_10_nanotech, every_20_nanotech, every_nanotech
+from worlds.rac3.regions import create_regions, every_10_nanotech, every_20_nanotech, every_5_nanotech, every_nanotech
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
 from worlds.rac3.web_world import RaC3Web
 
 rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
 rac3_logger.setLevel(DEBUG)
+
 
 class RaC3World(World):
     f"""
@@ -55,7 +45,7 @@ class RaC3World(World):
     tracker_world: ClassVar = tracker_world
 
     for region in get_regions():
-        location_name_groups[region] = set(get_level_locations(region))
+        location_name_groups[region] = get_level_locations(region)
 
     options_dataclass = RaC3Options
     web = RaC3Web()
@@ -119,12 +109,12 @@ class RaC3World(World):
     def handle_option_errors(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
         """Check for option combinations that will never result in successful seed generation and warn the player"""
         if (not self.options.intro_skip.value
-                and self.options.clank_options.value
-                and not self.options.titanium_bolts.value
-                and not self.options.weapon_vendors.value
-                and len(starting_weapon_list) > 1
-                and starting_planet_list
-                and self.multiworld.players == 1):
+            and self.options.clank_options.value
+            and not self.options.titanium_bolts.value
+            and not self.options.weapon_vendors.value
+            and len(starting_weapon_list) > 1
+            and starting_planet_list
+            and self.multiworld.players == 1):
             raise OptionError("Options selected do not allow Ratchet to collect a Clank Pack and advance past Florana")
 
     def dead_seed_check(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
@@ -144,17 +134,17 @@ class RaC3World(World):
         no_nanotech_locations = not nanotech_milestones or (nanotech_milestones != 0 and len(nanotech_locations) == 0)
 
         if (not self.options.intro_skip.value
-                and not self.options.titanium_bolts.value
-                and not self.options.trophies.value
-                and not self.options.weapon_vendors.value
-                and not self.options.ship_vendor.value
-                and not self.options.armor_vendor.value
-                and not self.options.vr_challenges.value
-                and self.options.skill_points.value < 2
-                and no_nanotech_locations
-                and len(starting_weapon_list) > 1
-                and starting_planet_list
-                and self.multiworld.players == 1):
+            and not self.options.titanium_bolts.value
+            and not self.options.trophies.value
+            and not self.options.weapon_vendors.value
+            and not self.options.ship_vendor.value
+            and not self.options.armor_vendor.value
+            and not self.options.vr_challenges.value
+            and self.options.skill_points.value < 2
+            and no_nanotech_locations
+            and len(starting_weapon_list) > 1
+            and starting_planet_list
+            and self.multiworld.players == 1):
             raise OptionError("Options selected do not allow Ratchet to advance past Starship Phoenix")
 
     def generate_starting_items(self):

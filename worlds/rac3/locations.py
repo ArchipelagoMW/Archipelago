@@ -210,8 +210,8 @@ location_groups: dict[str, set[str]] = {
 }
 
 
-def get_level_locations(region: str) -> map:
-    return (level[0] for level in get_level_location_data(region))
+def get_level_locations(region: str) -> set[str]:
+    return set(level[0] for level in get_level_location_data(region))
 
 
 def get_level_location_data(region: str) -> filter:

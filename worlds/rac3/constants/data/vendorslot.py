@@ -1,6 +1,5 @@
 """This module provides data structures for individual items occupying a vendor slot"""
 from dataclasses import dataclass
-from typing import Optional
 
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -61,13 +60,13 @@ class RAC3WEAPONVENDORSLOTDATA(RAC3VENDORSLOTDATA):
     memcard: RAC3VENDORSLOTDATA.Property
 
     def __init__(self,
-                 item_id: Optional[int] = 0,
-                 ammo_text: Optional[int] = 0,
-                 item_class: Optional[int] = 0x0CDB,
-                 free: Optional[int] = 0,
-                 mega: Optional[int] = 0,
-                 all_ammo: Optional[int] = 0,
-                 memcard: Optional[int] = 0, ):
+                 item_id: int = 0,
+                 ammo_text: int = 0,
+                 item_class: int = 0x0CDB,
+                 free: int = 0,
+                 mega: int = 0,
+                 all_ammo: int = 0,
+                 memcard: int = 0):
         self.item_id = self.Property("ID", item_id, 2, RAC3WEAPONVENDOR.ITEM_ID_SIZE, RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
         self.ammo_text = self.Property("Ammo text?", ammo_text, 1, RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_SIZE,
                                        RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_OFFSET)
@@ -93,11 +92,12 @@ class RAC3ARMORVENDORSLOTDATA(RAC3VENDORSLOTDATA):
     armor_level: RAC3VENDORSLOTDATA.Property
 
     def __init__(self,
-                 icon: Optional[int] = 0,
-                 cost: Optional[int] = 0,
-                 armor_level: Optional[int] = 0, ):
+                 icon: int = 0,
+                 cost: int = 0,
+                 armor_level: int = 0):
         self.icon = self.Property("Icon", icon, 2, RAC3ARMORVENDOR.ITEM_ICON_SIZE, RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
-        self.cost = self.Property("Cost", cost, 0, RAC3ARMORVENDOR.ITEM_COST_SIZE, RAC3ARMORVENDOR.ITEM_COST_OFFSET)
+        self.cost = self.Property("Cost", cost, 0, RAC3ARMORVENDOR.ITEM_COST_SIZE,
+                                  RAC3ARMORVENDOR.ITEM_COST_OFFSET)
         self.armor_level = self.Property("Armor Level", armor_level, 0, RAC3ARMORVENDOR.ITEM_LEVEL_SIZE,
                                          RAC3ARMORVENDOR.ITEM_LEVEL_OFFSET)
 
@@ -119,15 +119,15 @@ class RAC3SHIPVENDORSLOTDATA(RAC3VENDORSLOTDATA):
     is_equipped: RAC3VENDORSLOTDATA.Property
 
     def __init__(self,
-                 icon_id: Optional[int] = 0,
-                 cost: Optional[int] = 0,
-                 highlighted_part: Optional[int] = 0,
-                 color_id: Optional[int] = 0,
-                 ship_config: Optional[int] = 0,
-                 unlock_id: Optional[int] = 0,
-                 item_name_ptr: Optional[int] = 0,
-                 icon_color: Optional[int] = 0,
-                 is_equipped: Optional[int] = 0, ):
+                 icon_id: int = 0,
+                 cost: int = 0,
+                 highlighted_part: int = 0,
+                 color_id: int = 0,
+                 ship_config: int = 0,
+                 unlock_id: int = 0,
+                 item_name_ptr: int = 0,
+                 icon_color: int = 0,
+                 is_equipped: int = 0):
         self.icon_id = self.Property("Icon ID", icon_id, 2, RAC3SHIPVENDOR.ITEM_ICON_SIZE,
                                      RAC3SHIPVENDOR.ITEM_ICON_OFFSET)
         self.cost = self.Property("Cost", cost, 0, RAC3SHIPVENDOR.ITEM_COST_SIZE, RAC3SHIPVENDOR.ITEM_COST_OFFSET)
@@ -159,9 +159,9 @@ class RAC3SKINVENDORSLOTDATA(RAC3VENDORSLOTDATA):
     description_string_id: RAC3VENDORSLOTDATA.Property
 
     def __init__(self,
-                 cost: Optional[int] = 0,
-                 skin_id: Optional[int] = 0,
-                 description_string_id: Optional[int] = 0, ):
+                 cost: int = 0,
+                 skin_id: int = 0,
+                 description_string_id: int = 0):
         self.cost = self.Property("Cost", cost, 0, RAC3SKINVENDOR.ITEM_COST_SIZE, RAC3SKINVENDOR.ITEM_COST_OFFSET)
         self.skin_id = self.Property("Skin ID", skin_id, 2, RAC3SKINVENDOR.ITEM_SKIN_ID_SIZE,
                                      RAC3SKINVENDOR.ITEM_SKIN_ID_OFFSET)
@@ -241,12 +241,12 @@ ARMOR_VENDOR_INVENTORY: dict[str, RAC3ARMORVENDORSLOTDATA] = {
     RAC3VENDORLOCATION.PHOENIX_INFERNOX: RAC3ARMORVENDORSLOTDATA(0xEA96, 1000000, 0x4),
 }
 SHIP_VENDOR_INVENTORY: dict[str, RAC3SHIPVENDORSLOTDATA] = {
-    RAC3VENDORLOCATION.PHOENIX_WINGS_1: RAC3SHIPVENDORSLOTDATA(5, 2000, 0xC, 0, 0, 0, 0x1c21160, 0),
-    RAC3VENDORLOCATION.PHOENIX_WINGS_2: RAC3SHIPVENDORSLOTDATA(6, 4000, 0xC, 0, 4, 1, 0x1c1ff4a, 0),
-    RAC3VENDORLOCATION.PHOENIX_WINGS_3: RAC3SHIPVENDORSLOTDATA(7, 6000, 0xC, 0, 8, 2, 0x1c1ff58, 0),
-    RAC3VENDORLOCATION.PHOENIX_NOSE_1: RAC3SHIPVENDORSLOTDATA(3, 8000, 0x3, 0, 0, 3, 0x1c2116f, 0),
-    RAC3VENDORLOCATION.PHOENIX_NOSE_2: RAC3SHIPVENDORSLOTDATA(4, 10000, 0x3, 0, 1, 4, 0x1c1ff79, 0),
-    RAC3VENDORLOCATION.PHOENIX_NOSE_3: RAC3SHIPVENDORSLOTDATA(2, 12000, 0x3, 0, 2, 5, 0x1c1ff6e, 0),
+    RAC3VENDORLOCATION.PHOENIX_WINGS_1: RAC3SHIPVENDORSLOTDATA(5, 2000, 0xC, 0, 0, 0, 0x1c21160),
+    RAC3VENDORLOCATION.PHOENIX_WINGS_2: RAC3SHIPVENDORSLOTDATA(6, 4000, 0xC, 0, 4, 1, 0x1c1ff4a),
+    RAC3VENDORLOCATION.PHOENIX_WINGS_3: RAC3SHIPVENDORSLOTDATA(7, 6000, 0xC, 0, 8, 2, 0x1c1ff58),
+    RAC3VENDORLOCATION.PHOENIX_NOSE_1: RAC3SHIPVENDORSLOTDATA(3, 8000, 0x3, 0, 0, 3, 0x1c2116f),
+    RAC3VENDORLOCATION.PHOENIX_NOSE_2: RAC3SHIPVENDORSLOTDATA(4, 10000, 0x3, 0, 1, 4, 0x1c1ff79),
+    RAC3VENDORLOCATION.PHOENIX_NOSE_3: RAC3SHIPVENDORSLOTDATA(2, 12000, 0x3, 0, 2, 5, 0x1c1ff6e),
     RAC3VENDORLOCATION.PHOENIX_SKIN_1: RAC3SHIPVENDORSLOTDATA(0, 14000, 0x1f0000, 0, 0, 6, 0x1c1fc64, 0x15236d),
     RAC3VENDORLOCATION.PHOENIX_SKIN_2: RAC3SHIPVENDORSLOTDATA(0, 15000, 0x1f0000, 0x17, 0, 7, 0x1c249d3, 0x4ea220),
     RAC3VENDORLOCATION.PHOENIX_SKIN_3: RAC3SHIPVENDORSLOTDATA(0, 16000, 0x1f0000, 0x19, 0, 8, 0x1c24a25, 0xa0215e),

@@ -9,7 +9,7 @@ from worlds.rac3.pcsx2_interface.pine import Pine
 
 class GameInterface:
     """Base class for connecting with a pcsx2 game"""
-    current_game: str | None = None
+    current_game: str = "None"
     game_id_error: str | None = None
     is_connecting: bool = False
     emulator_connected: bool = False
@@ -77,7 +77,7 @@ class GameInterface:
             return
         logger.info("Connected to PCSX2 Emulator")
         self.emulator_connected = True
-        self.current_game = None
+        self.current_game = "None"
         try:
             self.verify_game_version()
         except RuntimeError:
@@ -90,7 +90,7 @@ class GameInterface:
     def disconnect_from_game(self):
         """Remove connection to PCSX Emulator"""
         self.pcsx2_interface.disconnect()
-        self.current_game = None
+        self.current_game = "None"
         logger.info("Disconnected from PCSX2 Emulator")
         self.emulator_connected = False
 
@@ -143,9 +143,9 @@ class GameInterface:
                     logger.warning("WARNING: PAL support is currently in beta, but the game is completable, "
                                    "please inform apworld devs of any inconsistencies found")
                 case _:
-                    self.current_game = None
+                    self.current_game = "None"
                     logger.info("Unknown game version detected")
-        if self.current_game is None and self.game_id_error != game_id and game_id != b"\x00\x00\x00\x00\x00\x00":
+        if self.current_game == "None" and self.game_id_error != game_id and game_id != b"\x00\x00\x00\x00\x00\x00":
             logger.warning(f"Connected to the wrong game ({game_id})")
             self.game_id_error = game_id
             return False

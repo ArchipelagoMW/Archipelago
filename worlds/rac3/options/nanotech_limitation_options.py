@@ -1,6 +1,7 @@
 from Options import Range
 from worlds.rac3.constants.options import RAC3OPTION
 
+
 class NanotechLimitation(Range):
     """
     Determines the upper limit of the nanotech milestone locations in the multiworld between 11 and 100.

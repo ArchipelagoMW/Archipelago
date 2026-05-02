@@ -2,16 +2,8 @@ from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from worlds.rac3.constants.data.item import (
-    NAME_TO_PROG_DICT,
-    PROG_TO_NAME_DICT,
-    RAC3ITEMDATA,
-    goal_data,
-    infobot_data,
-    item_counts,
-    item_table,
-    progressive_data,
-)
+from worlds.rac3.constants.data.item import (goal_data, infobot_data, item_counts, item_table, NAME_TO_PROG_DICT,
+                                             PROG_TO_NAME_DICT, progressive_data, RAC3ITEMDATA)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -70,10 +62,10 @@ def create_itempool(world: "RaC3World") -> list[Item]:
             if options.clank_options.value == options.clank_options.option_shuffled_as_one and name != RAC3ITEM.CLANK:
                 continue
             if (options.clank_options.value == options.clank_options.option_shuffled_independently
-                  and name not in [RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]):
+                and name not in [RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]):
                 continue
             if (options.clank_options.value == options.clank_options.option_shuffled_progressive
-                  and name != RAC3ITEM.PROGRESSIVE_PACK):
+                and name != RAC3ITEM.PROGRESSIVE_PACK):
                 continue
 
         # Vidcomics option
@@ -83,10 +75,10 @@ def create_itempool(world: "RaC3World") -> list[Item]:
         # Catch accidental duplicates
         if item_amount is None:
             rac3_logger.warning(f"{name} has an incorrect amount count")
-        if item_amount > 1 and name not in progressive_data.keys():
-            rac3_logger.warning(f"multiple copies of {name} added to the item pool")
-
-        itempool += create_multiple_items(world, name, item_amount, item_type)
+        else:
+            if item_amount > 1 and name not in progressive_data.keys():
+                rac3_logger.warning(f"multiple copies of {name} added to the item pool")
+            itempool += create_multiple_items(world, name, item_amount, item_type)
 
     victory = create_item(world, RAC3ITEM.VICTORY)
     world.multiworld.get_location(RAC3LOCATION.COMMAND_CENTER_BIOBLITERATOR, world.player).place_locked_item(victory)
@@ -193,6 +185,7 @@ def starting_planets(world: "RaC3World") -> list[str]:
                 planet_list = planet_list[:2]  # [Other, Other]
     return planet_list
 
+
 # TODO: Rework this function during logic overhaul
 def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[str]) -> list[str]:
     """Removes any starting planets that are unreachable from Veldin"""
@@ -221,16 +214,19 @@ def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[s
         to_remove = {RAC3ITEM.ANNIHILATION_NATION}
         current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
 
-    # If you dont start with clank, you cant do leviathan
-    # If you also dont have titanium bolts, you cant get the one before first hypershot node
-    # If you also dont start with hypershot, you cant get the explore the starport rewards
-    if world.options.clank_options.value and not world.options.titanium_bolts.value and (RAC3ITEM.HYPERSHOT not in world.options.start_inventory.value):
+    # If you don't start with clank, you cant do leviathan
+    # If you also don't have titanium bolts, you can't get the one before first hypershot node
+    # If you also don't start with hypershot, you can't get the 'explore the starport' rewards
+    if world.options.clank_options.value and not world.options.titanium_bolts.value and (
+        RAC3ITEM.HYPERSHOT not in world.options.start_inventory.value):
         to_remove = {RAC3ITEM.ZELDRIN_STARPORT}
         current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
 
     # If titanium bolts are disabled, you cant get the one on marcadia before the ranger
-    # If you also dont have rangers or only the optional rangers, you cant get any of the marcadia locations including LDF
-    if world.options.titanium_bolts.value == 0 and (world.options.rangers.value == 0 or world.options.rangers.value == 2):
+    # If you also don't have rangers or only the optional rangers, you cant get any of the marcadia locations
+    # including LDF
+    if world.options.titanium_bolts.value == 0 and (
+        world.options.rangers.value == 0 or world.options.rangers.value == 2):
         to_remove = {RAC3ITEM.MARCADIA}
         current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
 

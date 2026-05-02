@@ -42,28 +42,29 @@ async def pcsx2_sync_task(ctx: "Context"):
         try:
             connected_to_server = (ctx.server is not None) and (ctx.slot is not None)
             if connected_to_server and not ctx.is_connected_to_server:
-                logger.info("Connected to server")
-                ctx.is_connected_to_server = connected_to_server
-                if ctx.slot_data.get(RAC3OPTION.VERSION, "0.0.0") < RAC3OPTION.VERSION_NUMBER:
-                    await ctx.disconnect()
-                    correct_version = False
-                    logger.warning(
-                        f"Client is v{RAC3OPTION.VERSION_NUMBER}, please downgrade to v"
-                        f"{ctx.slot_data[RAC3OPTION.VERSION]}")
-                    await sleep(10)
-                    continue
-                if ctx.slot_data[RAC3OPTION.VERSION] > RAC3OPTION.VERSION_NUMBER:
-                    await ctx.disconnect()
-                    correct_version = False
-                    logger.warning(
-                        f"Client is v{RAC3OPTION.VERSION_NUMBER}, please upgrade to v"
-                        f"{ctx.slot_data[RAC3OPTION.VERSION]}")
-                    await sleep(10)
-                    continue
-                if connected_to_game:
-                    ctx.game_interface.init()
-                else:
-                    logger.info("Waiting for game connection...")
+                if ctx.slot_data:
+                    logger.info("Connected to server")
+                    ctx.is_connected_to_server = connected_to_server
+                    if ctx.slot_data.get(RAC3OPTION.VERSION, "0.0.0") < RAC3OPTION.VERSION_NUMBER:
+                        await ctx.disconnect()
+                        correct_version = False
+                        logger.warning(
+                            f"Client is v{RAC3OPTION.VERSION_NUMBER}, please downgrade to v"
+                            f"{ctx.slot_data[RAC3OPTION.VERSION]}")
+                        await sleep(10)
+                        continue
+                    if ctx.slot_data[RAC3OPTION.VERSION] > RAC3OPTION.VERSION_NUMBER:
+                        await ctx.disconnect()
+                        correct_version = False
+                        logger.warning(
+                            f"Client is v{RAC3OPTION.VERSION_NUMBER}, please upgrade to v"
+                            f"{ctx.slot_data[RAC3OPTION.VERSION]}")
+                        await sleep(10)
+                        continue
+                    if connected_to_game:
+                        ctx.game_interface.init()
+                    else:
+                        logger.info("Waiting for game connection...")
 
             connected_to_game = ctx.game_interface.get_connection_state()
             if connected_to_game and not ctx.is_connected_to_game:
@@ -136,7 +137,7 @@ async def _handle_game_ready(ctx: "Context") -> None:
     # have fit better in init(). It just didn't work when I put it there,
     # probably because of when the game loads stuff.
 
-    if ctx.slot_data is not None:
+    if ctx.slot_data is not None and ctx.slot is not None:
         # Check if exit to main menu
         menu = ctx.main_menu
         ctx.main_menu = ctx.game_interface.check_main_menu()
@@ -248,7 +249,7 @@ async def handle_codecave(ctx: "Context") -> None:
 
     ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in all_vendor_locations]
     location_data: list[tuple[str, str]] = []
-    for loc_key, ap_code in zip(all_vendor_locations, ap_codes, strict=False):
+    for loc_key, ap_code in zip(all_vendor_locations, ap_codes):
         net_item = ctx.locations_info.get(ap_code, None)
         if net_item is not None:
             item_name = colorize_item_name(
@@ -285,7 +286,7 @@ async def handle_intro_skip(ctx: "Context") -> None:
 
 async def handle_received_items(ctx: "Context") -> None:
     """Process items received from the AP server"""
-    if ctx.slot_data is None:
+    if ctx.slot_data is None or ctx.slot is None:
         return
 
     # 初回だけ記録用に items_received の長さを記憶しておく
@@ -380,7 +381,11 @@ async def handle_planet_changed(ctx: "Context") -> None:
             ctx.game_interface.tyhrranosis_fix()
 
         ctx.game_interface.softlock_warning()
+        ctx.current_map = _map
+        await ctx.send_msgs([ClientMessage.set_map(ctx.slot, ctx.team, _map)])
 
+    if ctx.current_map != _map:
+        ctx.current_map = _map
         await ctx.send_msgs([ClientMessage.set_map(ctx.slot, ctx.team, _map)])
 
 

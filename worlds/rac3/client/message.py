@@ -3,20 +3,20 @@ from worlds.rac3.constants.options import RAC3OPTION
 
 
 class ClientMessage:
-    cmd: str = None
-    key: str = None
-    default: str = None
-    want_reply: bool = None
-    operations: list[dict[str, str]] = None
-    status: ClientStatus = None
-    locations: list[int] = None
+    cmd: str
+    key: str | None = None
+    default: str | None = None
+    want_reply: bool = False
+    operations: list[dict[str, str | int]] | None = None
+    status: ClientStatus | None = None
+    locations: list[int] | None = None
 
     def __init__(self,
                  cmd,
                  key: str | None = None,
                  default: str | None = None,
-                 want_reply: bool | None = False,
-                 operations: list[dict[str, str]] | None = None,
+                 want_reply: bool = False,
+                 operations: list[dict[str, str | int]] | None = None,
                  status: ClientStatus | None = None,
                  locations: list[int] | None = None):
         self.cmd = cmd
@@ -37,7 +37,7 @@ class ClientMessage:
         return output
 
     @staticmethod
-    def set_map(slot: int, team: int, planet: str) -> dict:
+    def set_map(slot: int | None, team: int | None, planet: str) -> dict:
         cmd = "Set"
         key = f"rac3_current_planet_{slot}_{team}"
         default = "Galaxy"

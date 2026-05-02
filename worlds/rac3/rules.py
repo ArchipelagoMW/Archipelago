@@ -129,7 +129,7 @@ def set_rules(world: "RaC3World"):
 
         # RAC3VENDOR.PHOENIX_SUCK
         # RAC3VENDOR.PHOENIX_INFECTOR
-        #RAC3VENDORLOCATION.PHOENIX_MAGNA_ARMOR
+        # RAC3VENDORLOCATION.PHOENIX_MAGNA_ARMOR
         RAC3VENDORLOCATION.PHOENIX_ADAMANTINE: lambda state: state.can_reach_region(RAC3REGION.AQUATOS, world.player),
         RAC3VENDORLOCATION.PHOENIX_AEGIS_ARMOR:
             lambda state: state.can_reach_region(RAC3REGION.ZELDRIN_STARPORT, world.player),
@@ -521,7 +521,8 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach_location(RAC3LOCATION.BLACKWATER_CITY_RANGERS_3, world.player),
 
         # RAC3VENDOR.HOLOSTAR_RIFT_INDUCER
-        RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.HACKER], world.player),
+        RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.HACKER],
+                                                                          world.player),
         RAC3TROPHY.HOLOSTAR_CLANK: lambda state: state.has(RAC3ITEM.HACKER, world.player),
         RAC3TBOLT.HOLOSTAR_CHAIRS: lambda state: state.has(RAC3ITEM.HACKER, world.player),
         RAC3SKILLPOINT.HOLOSTAR_LUCKY: lambda state: state.has(RAC3ITEM.HACKER, world.player),
@@ -623,7 +624,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player) and
                           state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
                                          RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
-        RAC3LOCATION.HIDEOUT_QWARK:
+        RAC3LOCATION.HIDEOUT_FIND_QWARK:
             lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player) and
                           state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
                                          RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),

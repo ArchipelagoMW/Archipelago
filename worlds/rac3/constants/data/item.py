@@ -8,33 +8,33 @@ from worlds.rac3.constants.status import RAC3STATUS
 
 @dataclass
 class RAC3ITEMDATA:
-    ID: int = None
-    LEVEL: int = None
-    LEVEL_ADDRESS: int = None
-    UNLOCK_ADDRESS: int = None
-    UNLOCK_ADDRESS_2: int = None
-    XP_ADDRESS: int = None
-    XP_THRESHOLD: int = None
-    POWER: int = None
-    ARMOR: float = None
-    AMMO_ADDRESS: int = None
-    AMMO: int = None
-    AP_CODE: int = None
-    AP_CLASSIFICATION: ItemClassification = None
-    TAGS: list[str] = None
+    ID: int
+    LEVEL: int
+    LEVEL_ADDRESS: int
+    UNLOCK_ADDRESS: int
+    UNLOCK_ADDRESS_2: int
+    XP_ADDRESS: int
+    XP_THRESHOLD: int
+    POWER: int
+    ARMOR: float
+    AMMO_ADDRESS: int
+    AMMO: int
+    AP_CODE: int
+    AP_CLASSIFICATION: ItemClassification
+    TAGS: list[str]
 
     def __init__(self,
                  idx: int,
-                 address: int | None = None,
-                 address_2: int | None = None,
-                 power: int | None = None,
-                 ammo: int | None = None,
-                 xp: int | None = None,
-                 level: int | None = None,
-                 level_address: int | None = None,
-                 armor: float | None = None,
-                 ap_classification: ItemClassification | None = ItemClassification.filler,
-                 tags: list[str] | None = None):
+                 address: int = 0,
+                 address_2: int = 0,
+                 power: int = 0,
+                 ammo: int = 0,
+                 xp: int = 0,
+                 level: int = 0,
+                 level_address: int = 0,
+                 armor: float = 0,
+                 ap_classification: ItemClassification = ItemClassification.filler,
+                 tags: list[str] = None):
         self.ID = idx
         self.AP_CODE = idx + 50000000
         self.AP_CLASSIFICATION = ap_classification
@@ -48,16 +48,16 @@ class RAC3ITEMDATA:
         self.ARMOR = armor
         self.AMMO_ADDRESS = 4 * idx + RAC3STATUS.ITEM_AMMO_ADDRESS
         self.AMMO = ammo
-        self.TAGS = tags
+        self.TAGS = tags if tags else []
 
     @staticmethod
     def construct_unused(idx: int,
-                         ammo: int | None = None,
+                         ammo: int = 0,
                          tags: list[str] | None = None):
         all_tags: list[str] = [RAC3ITEMTAG.UNUSED]
         if tags is not None:
             all_tags.extend(tags)
-        return RAC3ITEMDATA(idx, ammo=ammo, ap_classification=ItemClassification.filler, tags=all_tags)
+        return RAC3ITEMDATA(idx, ammo=ammo, tags=all_tags)
 
     @staticmethod
     def construct_gadget(idx: int,
@@ -73,9 +73,9 @@ class RAC3ITEMDATA:
     @staticmethod
     def construct_weapon(idx: int,
                          power: int,
-                         ammo: int | None = None,
-                         ap_classification: ItemClassification | None = None,
-                         tags: list[str] | None = None):
+                         ammo: int = 0,
+                         ap_classification: ItemClassification = ItemClassification.progression_skip_balancing,
+                         tags: list[str] = None):
         address: int = idx + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
         all_tags: list[str] = [RAC3ITEMTAG.WEAPON, RAC3ITEMTAG.NON_PROG_WEAPON]
@@ -83,16 +83,15 @@ class RAC3ITEMDATA:
             all_tags.append(RAC3ITEMTAG.EQUIPABLE)
         if tags is not None:
             all_tags.extend(tags)
-        return RAC3ITEMDATA(idx, address, address_2, power, ammo, 0, level=1,
-                            level_address=idx + RAC3STATUS.LEVEL_TABLE, ap_classification=ap_classification,
-                            tags=all_tags)
+        return RAC3ITEMDATA(idx, address, address_2, power, ammo, level=1, level_address=idx + RAC3STATUS.LEVEL_TABLE,
+                            ap_classification=ap_classification, tags=all_tags)
 
     @staticmethod
     def construct_weapon_level(idx: int,
                                power: int,
-                               ammo: int | None = None,
-                               xp: int | None = 0,
-                               tags: list[str] | None = None):
+                               ammo: int = 0,
+                               xp: int = 0,
+                               tags: list[str] = None):
         entry: dict[str, list[int]] = dict(filter(lambda data_kv: idx in data_kv[1], UPGRADE_DICT.items()))
         base: int = next(iter(entry.values()))[0]
         name: str = next(iter(entry.keys()))[0]
@@ -159,13 +158,13 @@ class RAC3ITEMDATA:
 
     @staticmethod
     def construct_trap(idx: int,
-                       address: int | None = None):
+                       address: int = 0):
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.trap, tags=[RAC3ITEMTAG.TRAP])
 
     @staticmethod
     def construct_other(idx: int,
-                        address: int | None = None):
-        return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.filler, tags=[RAC3ITEMTAG.FILLER])
+                        address: int = 0):
+        return RAC3ITEMDATA(idx, address, tags=[RAC3ITEMTAG.FILLER])
 
     @staticmethod
     def construct_goal(idx: int):
@@ -182,8 +181,8 @@ class RAC3ITEMDATA:
 
     @staticmethod
     def construct_cheat(idx: int,
-                        address: int | None = None,
-                        tag: list[str] | None = None):
+                        address: int = 0,
+                        tag: list[str] = None):
         if tag:
             tags: list[str] = [*tag, RAC3ITEMTAG.CHEAT]
         else:
@@ -517,8 +516,8 @@ weapon_upgrade_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.WEAPON_UPGRA
 clank_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.CLANK)
 cheat_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.CHEAT)
 
-PROG_TO_NAME_DICT: dict[str, str] = dict(zip(prog_weapon_data.keys(), non_prog_weapon_data.keys(), strict=False))
-NAME_TO_PROG_DICT: dict[str, str] = dict(zip(non_prog_weapon_data.keys(), prog_weapon_data.keys(), strict=False))
+PROG_TO_NAME_DICT: dict[str, str] = dict(zip(prog_weapon_data.keys(), non_prog_weapon_data.keys()))
+NAME_TO_PROG_DICT: dict[str, str] = dict(zip(non_prog_weapon_data.keys(), prog_weapon_data.keys()))
 
 item_counts: dict[str, int] = {
     **dict.fromkeys(non_prog_weapon_data.keys(), 1),

@@ -1,56 +1,40 @@
 """This module contains the dataclass for levels in the game and exportable constants"""
 from dataclasses import dataclass
 
+from constants.checkpoint import PLANET_CHECKPOINT
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
-from worlds.rac3.constants.region import (
-    PLANET_CHECKPOINT,
-    PLANET_LOAD_OFFSET,
-    PLANET_MENU_OFFSET,
-    PLANET_NAME_FROM_ID,
-    PLANET_SPECIAL_OFFSET,
-    PLANET_VENDOR_OFFSET,
-    RAC3REGION,
-    RESPAWN_COORDS_OFFSET,
-)
+from worlds.rac3.constants.region import (PLANET_LOAD_OFFSET, PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID,
+                                          PLANET_SPECIAL_OFFSET, PLANET_VENDOR_OFFSET, RAC3REGION,
+                                          RESPAWN_COORDS_OFFSET)
 from worlds.rac3.constants.status import RAC3STATUS
 
 
 @dataclass
 class RAC3REGIONDATA:
     """Data class for each level of the game"""
-    ID: int = None
-    SLOT_ADDRESS: int | None = None
-    CHECKPOINT: RAC3POSITIONDATA | None = None
-    PAUSE_ADDRESS: int | None = None
-    PLANET_TO_LOAD: int | None = None
-    PLANET_SPECIAL_OFFSET: int | None = None
-    RESPAWN_COORDS_ADDRESS: int | None = None
-    VENDOR_OFFSET: int | None = None
+    ID: int
+    CHECKPOINT: RAC3POSITIONDATA | None
+    PAUSE_ADDRESS: int
+    PLANET_TO_LOAD: int
+    PLANET_SPECIAL_OFFSET: int
+    RESPAWN_COORDS_ADDRESS: int | None
+    VENDOR_OFFSET: int
 
     def __init__(self,
-                 idx: int | None = None,
-                 slot: int | None = None,
-                 checkpoint: RAC3POSITIONDATA | None = None,
-                 pause_address: int | None = None,
-                 planet_to_load_address: int | None = None,
-                 planet_special_offset: int | None = None,
-                 respawn_coords_address: int | None = None,
-                 vendor_offset: int | None = None):
-        self.ID: int | None = idx
-        self.SLOT_ADDRESS: int | None = slot
+                 idx: int,
+                 checkpoint: RAC3POSITIONDATA = None,
+                 pause_address: int = 0,
+                 planet_to_load_address: int = 0,
+                 planet_special_offset: int = 0,
+                 respawn_coords_address: int = None,
+                 vendor_offset: int = 0):
+        self.ID: int = idx
         self.CHECKPOINT: RAC3POSITIONDATA | None = checkpoint
-        self.PAUSE_ADDRESS: int | None = pause_address
-        self.PLANET_TO_LOAD: int | None = planet_to_load_address
-        self.PLANET_SPECIAL_OFFSET: int | None = planet_special_offset
+        self.PAUSE_ADDRESS: int = pause_address
+        self.PLANET_TO_LOAD: int = planet_to_load_address
+        self.PLANET_SPECIAL_OFFSET: int = planet_special_offset
         self.RESPAWN_COORDS_ADDRESS: int | None = respawn_coords_address
-        self.VENDOR_OFFSET: int | None = vendor_offset
-
-    @staticmethod
-    def construct_slot(slot: int):
-        """Generic planet slot constructor"""
-        idx: int = slot + 1
-        addr: int = 4 * slot + RAC3STATUS.PLANET_SLOT_ADDRESS
-        return RAC3REGIONDATA(idx, addr)
+        self.VENDOR_OFFSET: int = vendor_offset
 
     @staticmethod
     def construct_planet(idx: int):
@@ -115,24 +99,4 @@ RAC3_REGION_DATA_TABLE: dict[str, RAC3REGIONDATA] = {
     RAC3REGION.QWARK_VID_COMIC_UNUSED_2: RAC3REGIONDATA(0x24),
     RAC3REGION.NGPLUS: RAC3REGIONDATA(0xFE),
     RAC3REGION.MENU: RAC3REGIONDATA(0xFF),
-    RAC3REGION.SLOT_0: RAC3REGIONDATA.construct_slot(slot=0x00),
-    RAC3REGION.SLOT_1: RAC3REGIONDATA.construct_slot(slot=0x01),
-    RAC3REGION.SLOT_2: RAC3REGIONDATA.construct_slot(slot=0x02),
-    RAC3REGION.SLOT_3: RAC3REGIONDATA.construct_slot(slot=0x03),
-    RAC3REGION.SLOT_4: RAC3REGIONDATA.construct_slot(slot=0x04),
-    RAC3REGION.SLOT_5: RAC3REGIONDATA.construct_slot(slot=0x05),
-    RAC3REGION.SLOT_6: RAC3REGIONDATA.construct_slot(slot=0x06),
-    RAC3REGION.SLOT_7: RAC3REGIONDATA.construct_slot(slot=0x07),
-    RAC3REGION.SLOT_8: RAC3REGIONDATA.construct_slot(slot=0x08),
-    RAC3REGION.SLOT_9: RAC3REGIONDATA.construct_slot(slot=0x09),
-    RAC3REGION.SLOT_A: RAC3REGIONDATA.construct_slot(slot=0x0A),
-    RAC3REGION.SLOT_B: RAC3REGIONDATA.construct_slot(slot=0x0B),
-    RAC3REGION.SLOT_C: RAC3REGIONDATA.construct_slot(slot=0x0C),
-    RAC3REGION.SLOT_D: RAC3REGIONDATA.construct_slot(slot=0x0D),
-    RAC3REGION.SLOT_E: RAC3REGIONDATA.construct_slot(slot=0x0E),
-    RAC3REGION.SLOT_F: RAC3REGIONDATA.construct_slot(slot=0x0F),
-    RAC3REGION.SLOT_10: RAC3REGIONDATA.construct_slot(slot=0x10),
-    RAC3REGION.SLOT_11: RAC3REGIONDATA.construct_slot(slot=0x11),
-    RAC3REGION.SLOT_12: RAC3REGIONDATA.construct_slot(slot=0x12),
-    RAC3REGION.SLOT_13: RAC3REGIONDATA.construct_slot(slot=0x13),
 }

@@ -1,6 +1,6 @@
 """This module contains functionality for universal tracker"""
 
-from typing import TYPE_CHECKING, Any
+from typing import Any, TYPE_CHECKING
 
 from worlds.rac3.constants.data.location import UT_MAPPING
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
