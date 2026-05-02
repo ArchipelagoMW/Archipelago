@@ -9,7 +9,7 @@ from CommonClient import logger
 from Utils import __version__
 from worlds.rac3.client.general_interface import GameInterface
 from worlds.rac3.client.notification import RAC3NOTIFICATION
-from worlds.rac3.client.texthelper import (ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET, ITEM_TO_STRING_TABLE_INDEX_OFFSET,
+from worlds.rac3.client.texthelper import (remove_accents, ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET, ITEM_TO_STRING_TABLE_INDEX_OFFSET,
                                            TEXT_BYTE_TO_EXPECTED_WIDTH)
 from worlds.rac3.constants.action_type import RAC3ACTIONTYPE
 from worlds.rac3.constants.check_type import CHECKTYPE
@@ -2167,6 +2167,12 @@ class Rac3Interface(GameInterface):
     @staticmethod
     def format_color_string(msg: str) -> tuple[bytes, int]:
         """Converts a message string with color formatting to game insertable bytes with color formatting"""
+        # Normalize and strip accents so characters are ASCII-safe for the game
+        try:
+            msg = remove_accents(msg)
+        except Exception:
+            # Fallback: if remove_accents fails, continue with original msg
+            pass
         result = bytearray()
         i = 0
         expected_length = 0
