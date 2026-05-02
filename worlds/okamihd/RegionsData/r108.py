@@ -5,7 +5,7 @@ from ..CheckIds import container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Enums.RegionNames import RegionNames
+from ..Enums.RegionNames import RegionNames, MapIds
 from ..Rules import gale_shrine_access
 from ..Types import EventData, ExitData, LocData
 
@@ -52,28 +52,28 @@ events = {
 }
 locations = {
     RegionNames.KUSA_VILLAGE: {
-        "Kusa Village - Chest on rafters after banners": LocData(container_check_id(0x108, 11),
+        "Kusa Village - Chest on rafters after banners": LocData(container_check_id(MapIds.KUSA_VILLAGE, 11),
                                                                  required_brush_techniques=[BrushTechniques.GALESTORM,
                                                                                             BrushTechniques.GREENSPROUT_VINE]),
-        "Kusa Village - Chest on rafters before banners": LocData(container_check_id(0x108, 42),
+        "Kusa Village - Chest on rafters before banners": LocData(container_check_id(MapIds.KUSA_VILLAGE, 42),
                                                                   required_brush_techniques=[
                                                                       BrushTechniques.GREENSPROUT_VINE]),
-        "Kusa Village - Stray Bead Chest on rafters after banners": LocData(container_check_id(0x108, 43),
+        "Kusa Village - Stray Bead Chest on rafters after banners": LocData(container_check_id(MapIds.KUSA_VILLAGE, 43),
                                                                             required_brush_techniques=[
                                                                                 BrushTechniques.GALESTORM,
                                                                                 BrushTechniques.GREENSPROUT_VINE]),
-        "Kusa Village - Buried Chest near Fuse's house": LocData(container_check_id(0x108, 53), type=LocationType.BURIED_CHEST),
-        "Kusa Village - Buried Chest near Gale Shrine Ledge": LocData(container_check_id(0x108, 58), type=LocationType.BURIED_CHEST),
-        "Kusa Village - Underwater Chest near Fuse's house right": LocData(container_check_id(0x108, 70), type=LocationType.UNDERWATER_CHEST),
-        "Kusa Village - Underwater Chest near Fuse's house left": LocData(container_check_id(0x108, 71), type=LocationType.UNDERWATER_CHEST)
+        "Kusa Village - Buried Chest near Fuse's house": LocData(container_check_id(MapIds.KUSA_VILLAGE, 53), type=LocationType.BURIED_CHEST),
+        "Kusa Village - Buried Chest near Gale Shrine Ledge": LocData(container_check_id(MapIds.KUSA_VILLAGE, 58), type=LocationType.BURIED_CHEST),
+        "Kusa Village - Underwater Chest near Fuse's house right": LocData(container_check_id(MapIds.KUSA_VILLAGE, 70), type=LocationType.UNDERWATER_CHEST),
+        "Kusa Village - Underwater Chest near Fuse's house left": LocData(container_check_id(MapIds.KUSA_VILLAGE, 71), type=LocationType.UNDERWATER_CHEST)
     },
     RegionNames.KUSA_INN: {
-        "Kusa Village - Daruma inside Inn": LocData(container_check_id(0x108, 68), type=LocationType.DARUMA)
+        "Kusa Village - Daruma inside Inn": LocData(container_check_id(MapIds.KUSA_VILLAGE, 68), type=LocationType.DARUMA)
     },
     RegionNames.KUSA_VILLAGE_BLOCKHEAD: {
-        "Kusa Village - Chest inside Blockhead Cave": LocData(container_check_id(0x108, 10))
+        "Kusa Village - Chest inside Blockhead Cave": LocData(container_check_id(MapIds.KUSA_VILLAGE, 10))
     },
     RegionNames.BAMBOO_HOUSE: {
-        "Kusa Village - Buried Chest inside Mr Bamboo's house": LocData(container_check_id(0x108, 47), type=LocationType.BURIED_CHEST)
+        "Kusa Village - Buried Chest inside Mr Bamboo's house": LocData(container_check_id(MapIds.KUSA_VILLAGE, 47), type=LocationType.BURIED_CHEST)
     }
 }

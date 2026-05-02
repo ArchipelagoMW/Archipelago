@@ -4,7 +4,7 @@ from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Enums.RegionNames import RegionNames
+from ..Enums.RegionNames import RegionNames, MapIds
 from ..Rules import night_time_check_rule
 from ..Types import ExitData, LocData, EventData
 
@@ -26,30 +26,30 @@ events = {
 }
 locations = {
     RegionNames.SHINSHU_FIELD: {
-        "Shinshu Field - Buried chest near Guardian Sapling": LocData(container_check_id(0xF02, 7), type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Freestanding chest behind Guardian Sapling": LocData(container_check_id(0xF02, 11)),
-        "Shinshu Field - Buried chest near Tama's house": LocData(container_check_id(0xF02, 26), type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Buried chest near Lake": LocData(container_check_id(0xF02, 30), type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Chest Under Bombable ground near Agata Forest": LocData(container_check_id(0xF02, 36), cherry_bomb_level=1,
+        "Shinshu Field - Buried chest near Guardian Sapling": LocData(container_check_id(MapIds.HEALED_SHINSHU, 7), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Freestanding chest behind Guardian Sapling": LocData(container_check_id(MapIds.HEALED_SHINSHU, 11)),
+        "Shinshu Field - Buried chest near Tama's house": LocData(container_check_id(MapIds.HEALED_SHINSHU, 26), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest near Lake": LocData(container_check_id(MapIds.HEALED_SHINSHU, 30), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Chest Under Bombable ground near Agata Forest": LocData(container_check_id(MapIds.HEALED_SHINSHU, 36), cherry_bomb_level=1,
                                                                                  required_brush_techniques=[
                                                                                      BrushTechniques.GREENSPROUT_BLOOM]),
-        "Shinshu Field - Buried chest near Dojo": LocData(container_check_id(0xF02, 42), type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Chest after devil gate": LocData(container_check_id(0xF02, 47), mandatory_enemies=[OkamiEnemies.GREEN_IMP,
+        "Shinshu Field - Buried chest near Dojo": LocData(container_check_id(MapIds.HEALED_SHINSHU, 42), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Chest after devil gate": LocData(container_check_id(MapIds.HEALED_SHINSHU, 47), mandatory_enemies=[OkamiEnemies.GREEN_IMP,
                                                                                  OkamiEnemies.RED_IMP,
                                                                                  OkamiEnemies.YELLOW_IMP]),
         # Probably should find a better name for this one
-        "Shinshu Field - Buried chest on ledge": LocData(container_check_id(0xF02, 50), type=LocationType.BURIED_CHEST),
-        "Shinshu Field - Buried chest near Ovens": LocData(container_check_id(0xF02, 78), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest on ledge": LocData(container_check_id(MapIds.HEALED_SHINSHU, 50), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried chest near Ovens": LocData(container_check_id(MapIds.HEALED_SHINSHU, 78), type=LocationType.BURIED_CHEST),
         # This is the cherry bomb tutorial. Need to check what happens if you blow the wall before doing the tutorial.
-        "Shinshu Field - In Bombable cave near Tama's house": LocData(container_check_id(0xF02, 82), cherry_bomb_level=1),
-        "Shinshu Field - In Bombable cave near cat statue": LocData(container_check_id(0xF02, 83), cherry_bomb_level=1),
-        "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(container_check_id(0xF02, 86),
+        "Shinshu Field - In Bombable cave near Tama's house": LocData(container_check_id(MapIds.HEALED_SHINSHU, 82), cherry_bomb_level=1),
+        "Shinshu Field - In Bombable cave near cat statue": LocData(container_check_id(MapIds.HEALED_SHINSHU, 83), cherry_bomb_level=1),
+        "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(container_check_id(MapIds.HEALED_SHINSHU, 86),
                                                                                type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Shinshu Field - Chest on Big Torii": LocData(container_check_id(0xF02, 89), required_brush_techniques=[BrushTechniques.WATERSPOUT]),
-        "Shinshu Field - Freestanding chest in front of guardian sapling": LocData(container_check_id(0xF02, 95)),
-        "Shinshu Field - Freestanding chest near Agata Forest Cave": LocData(container_check_id(0xF02, 96)),
-        "Shinshu Field - Freestanding chest near Tama's house": LocData(container_check_id(0xF02, 117)),
-        "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(container_check_id(0xF02, 118), type=LocationType.BURIED_UNDER_LEAF_PILE)
+        "Shinshu Field - Chest on Big Torii": LocData(container_check_id(MapIds.HEALED_SHINSHU, 89), required_brush_techniques=[BrushTechniques.WATERSPOUT]),
+        "Shinshu Field - Freestanding chest in front of guardian sapling": LocData(container_check_id(MapIds.HEALED_SHINSHU, 95)),
+        "Shinshu Field - Freestanding chest near Agata Forest Cave": LocData(container_check_id(MapIds.HEALED_SHINSHU, 96)),
+        "Shinshu Field - Freestanding chest near Tama's house": LocData(container_check_id(MapIds.HEALED_SHINSHU, 117)),
+        "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(container_check_id(MapIds.HEALED_SHINSHU, 118), type=LocationType.BURIED_UNDER_LEAF_PILE)
     },
 
     RegionNames.TAMA_HOUSE: {

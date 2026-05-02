@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, NamedTuple
-from enum import StrEnum
+from enum import StrEnum, Enum
 
 from BaseClasses import ItemClassification
 
@@ -34,7 +34,7 @@ class RegionNames(StrEnum):
     SUSANOS_UNDERGROUD = "Susano's Secret Underground Meditation Chamber"
     ORANGES_HOUSE = "Mr and Mrs Orange's house"
     # Special Region te check for merchant avilability for its random items
-    KAMIKI_MERCHANT= "Kamiki Village Merchant"
+    KAMIKI_MERCHANT = "Kamiki Village Merchant"
 
     ## Shinshu Field
     CURSED_SHINSHU_FIELD = "Cursed Shinshu Field"
@@ -115,3 +115,42 @@ class RegionNames(StrEnum):
     MOON_CAVE_4F_CANON = "Moon Cave (4F Canon)"
     MOON_CAVE_4F_AFTER_CANON = "Moon Cave (4F after canon)"
     MOON_CAVE_OROCHI = "Moon Cave (Orochi)"
+
+# Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
+class MapIds(Enum):
+    CURSED_KAMIKI = 0x100
+    CAVE_OF_NAGI = 0x101
+    KAMIKI_VILLAGE = 0x102
+    HANA_VALLEY = 0x103
+    TSUTA_RUINS = 0x104
+    GALE_SHRINE = 0x107
+    KUSA_VILLAGE = 0x108
+    SASA_SANCTUARY = 0x109
+    AGATA_FOREST_MME_FAWN = 0x10A
+    CALCIFIED_CAVERN=0x10E
+    MOON_CAVE = 0x110
+    RIVER_OF_THE_HEAVENS = 0x122
+    CURSED_SHINSHU = 0xF01
+    HEALED_SHINSHU = 0xF02
+    CURSED_AGATA = 0xF03
+    HEALED_AGATA = 0xF04
+    CURSED_TAKA = 0xF07
+    HEALED_TAKA = 0xF08
+
+
+class MapIndexes(Enum):
+    CURSED_KAMIKI = 1
+    CAVE_OF_NAGI = 2
+    KAMIKI_VILLAGE = 3
+    HANA_VALLEY = 4
+    TSUTA_RUINS = 5
+    GALE_SHRINE = 8
+    KUSA_VILLAGE = 9
+    SASA_SANCTUARY = 10
+    AGATA_FOREST_MME_FAWN = 11
+    CALCIFIED_CAVERN = 15
+    MOON_CAVE = 16
+    RIVER_OF_THE_HEAVENS = 30
+    SHINSHU_FIELD = 71
+    AGATA_FOREST = 72
+    TAKA_PASS = 74

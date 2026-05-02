@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
-from ..Enums.RegionNames import RegionNames
+from ..Enums.RegionNames import RegionNames, MapIds
 from ..Types import ExitData, LocData, EventData
 
 if TYPE_CHECKING:
@@ -25,10 +25,10 @@ events = {
 }
 locations = {
     RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI: {
-        "River of the Heavens - Ledge Chest": LocData(container_check_id(0x122, 0)),  # spawn_idx=0, Holy Bone S
+        "River of the Heavens - Ledge Chest": LocData(container_check_id(MapIds.RIVER_OF_THE_HEAVENS, 0)),  # spawn_idx=0, Holy Bone S
         "River of the Heavens - Yomigami": LocData(brush_check_id(22), type=LocationType.CONSTELLATION),  # Brush acquisition (bit 22)
     },
     RegionNames.RIVER_OF_THE_HEAVENS_NAGI: {
-        "River of the Heavens - Astral Pouch": LocData(container_check_id(0x122, 12)),  # spawn_idx=12, Astral Pouch
+        "River of the Heavens - Astral Pouch": LocData(container_check_id(MapIds.RIVER_OF_THE_HEAVENS, 12)),  # spawn_idx=12, Astral Pouch
     }
 }
