@@ -1,7 +1,7 @@
 """This module contains the dataclass for levels in the game and exportable constants"""
 from dataclasses import dataclass
 
-from constants.checkpoint import PLANET_CHECKPOINT
+from worlds.rac3.constants.checkpoint import PLANET_CHECKPOINT
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
 from worlds.rac3.constants.region import (PLANET_LOAD_OFFSET, PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID,
                                           PLANET_SPECIAL_OFFSET, PLANET_VENDOR_OFFSET, RAC3REGION,
