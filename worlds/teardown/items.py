@@ -4,192 +4,479 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 
+import random
+
 if TYPE_CHECKING:
     from .world import TeardownWorld
 
-# Every item must have a unique integer ID associated with it.
-# We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
-# Even if an item doesn't exist on specific options, it must be present in this lookup.
 ITEM_NAME_TO_ID = {
-    "Level 1 Unlock": 1,
-    "Level 2 Unlock": 2,
-    "Level 3 Unlock": 3,
-    "Bonus Level 4 Unlock": 4,
-    "Blowtorch Unlock": 60,
-    "Blowtorch Fuel 1": 61,
-    #"Blowtorch Fuel 2": 62,
-    #"Blowtorch Fuel 3": 63,
-    #"Blowtorch Fuel 4": 64,
-    #"Blowtorch Fuel 5": 65,
-    "Shotgun Unlock": 80,
-    "Shotgun Rounds 1": 81,
-    #"Shotgun Rounds 2": 82,
-    #"Shotgun Rounds 3": 83,
-    #"Shotgun Rounds 4": 84,
-    #"Shotgun Rounds 5": 85,
-    #"Shotgun Rounds 6": 86,
-    #"Shotgun Rounds 7": 87,
-    #"Shotgun Range 1": 88,
-    #"Shotgun Range 2": 89,
-    "Shotgun Damage 1": 90,
-    #"Shotgun Damage 2": 91,
-    #"Shotgun Damage 3": 92,
-    #"Shotgun Damage 4": 93,
-    "Nothing": 500,
-    "Emotional Damage": 600,
+
+    "Old Building Problem Unlock": 1,
+    "Lee Computers Unlock": 2,
+    "Login Devices Unlock": 3,
+    "Making Space Unlock": 4,
+    "Classic Cars Unlock": 5,
+    "The GPS Devices Unlock": 6,
+    "The Car Wash Unlock": 7,
+    "Heavy Lifting Unlock": 8,
+    "The Tower Unlock": 9,
+    "Fine Arts Unlock": 10,
+    "Tool Up Unlock": 11,
+    "Art Return Unlock": 12,
+    "Covert Chaos Unlock": 13,
+    "Insurance Fraud Unlock": 14,
+    "The BlueTide Computers Unlock": 15,
+    "The Speed Deal Unlock": 15,
+    "A Wet Affair Unlock": 16,
+    "Power Outage Unlock": 17,
+    "Motivational Reminder Unlock": 18,
+    "An Assortment Of Dishes Unlock": 19,
+    "Flooding Unlock": 20,
+    "The Chase Unlock": 21,
+    "Roborazzi Unlock": 22,
+    "The Secret Ingredients Unlock": 23,
+    "The BlueTide Shortage Unlock": 24,
+    "The Shipping Logs Unlock": 25,
+    "The Alarm System Unlock": 26,
+    "Moving The Goods Unlock": 27,
+    "Havoc In Paradise Unlock": 28,
+    "Elena's Revenge Unlock": 29,
+    "Truckload Of Trouble Unlock": 30,
+    "Ornament Ordeal Unlock": 31,
+    "The Quilez Tools Unlock": 32,
+    "Connecting The Dots Unlock": 33,
+    "The Pawn Shop Unlock": 34,
+    "The Droid Abduction Unlock": 35,
+    "Malice In Woonderland Unlock": 36,
+    "Handle With Care Unlock": 37,
+    "Droid Dismount Unlock": 38,
+    "The Final Diversion Unlock": 39,
+
+#   Progressive Tool Upgrades
+
+    "Sledge Hammer Unlock": 41,
+    "Spraycan Unlock": 42,
+    "Extinguisher Unlock": 43,
+
+    "Blowtorch Unlock": 51,
+    "Shotgun Unlock": 52,
+    "Plank Unlock": 53,
+    "Pipe Unlock": 54,
+    "Gun Unlock": 55,
+    "Bomb Unlock": 56,
+    "Rocket Launcher Unlock": 57,
+    "Rocket Booster Unlock": 58,
+    "Leaf Blower Unlock": 59,
+    "Cable Unlock": 60,
+    "Vehicle Thruster Unlock": 61,
+    "Nitroglycerin Unlock": 62,
+    "Hunting Rifle Unlock": 63,
+    "BlueTide Unlock": 64,
+
+    "Blowtorch Fuel Upgrade": 71,
+
+    "Shotgun Rounds Upgrade": 81,
+    "Shotgun Range Upgrade": 82,
+    "Shotgun Damage Upgrade": 83,
+
+    "Plank Amount Upgrade": 91,
+    "Plank Width Upgrade": 92,
+    "Plank Max Length Upgrade": 93,
+
+    "Pipe Bomb Rounds Upgrade": 101,
+    "Pipe Bomb Blast Upgrade": 102,
+
+    "Gun Rounds Upgrade": 111,
+    "Gun Range Upgrade": 112,
+    "Gun Damage Upgrade": 113,
+
+    "Bomb Rounds Upgrade": 121,
+    "Bomb Blast Upgrade": 122,
+
+    "Rocket Launcher Rounds Upgrade": 131,
+    "Rocket Launcher Blast Upgrade": 132,
+
+    "Rocket Booster Rounds Upgrade": 141,
+    "Rocket Booster Power Upgrade": 142,
+    "Rocket Booster Time Upgrade": 143,
+
+    "Leaf Blower Power Upgrade": 151,
+
+    "Cable Amount Upgrade": 161,
+    "Cable Stretch Upgrade": 162,
+
+    "Vehicle Thruster Rounds Upgrade": 171,
+    "Vehicle Thruster Power Upgrade": 172,
+
+    "Nitroglycerin Rounds Upgrade": 181,
+    "Nitroglycerin Blast Upgrade": 182,
+
+    "Hunting Rifle Rounds Upgrade": 191,
+
+    "BlueTide Bottles Upgrade": 201,
+    "BlueTide Duration Upgrade": 202,
+
+    "Extra Nothing": 300,
 
 }
 
-# Items should have a defined default classification.
-# In our case, we will make a dictionary from item name to classification.
 DEFAULT_ITEM_CLASSIFICATIONS = {
-    "Level 1 Unlock": ItemClassification.progression,
-    "Level 2 Unlock": ItemClassification.progression,
-    "Level 3 Unlock": ItemClassification.progression,
-    "Bonus Level 4 Unlock": ItemClassification.progression,
+    "Old Building Problem Unlock": ItemClassification.progression,
+    "Lee Computers Unlock": ItemClassification.progression,
+    "Login Devices Unlock": ItemClassification.progression,
+    "Making Space Unlock": ItemClassification.progression,
+    "Classic Cars Unlock": ItemClassification.progression,
+    "The GPS Devices Unlock": ItemClassification.progression,
+    "The Car Wash Unlock": ItemClassification.progression,
+    "Heavy Lifting Unlock": ItemClassification.progression,
+    "The Tower Unlock": ItemClassification.progression,
+    "Fine Arts Unlock": ItemClassification.progression,
+    "Tool Up Unlock": ItemClassification.progression,
+    "Art Return Unlock": ItemClassification.progression,
+    "Covert Chaos Unlock": ItemClassification.progression,
+    "Insurance Fraud Unlock": ItemClassification.progression,
+    "The BlueTide Computers Unlock": ItemClassification.progression,
+    "The Speed Deal Unlock": ItemClassification.progression,
+    "A Wet Affair Unlock": ItemClassification.progression,
+    "Power Outage Unlock": ItemClassification.progression,
+    "Motivational Reminder Unlock": ItemClassification.progression,
+    "An Assortment Of Dishes Unlock": ItemClassification.progression,
+    "Flooding Unlock": ItemClassification.progression,
+    "The Chase Unlock": ItemClassification.progression,
+    "Roborazzi Unlock": ItemClassification.progression,
+    "The Secret Ingredients Unlock": ItemClassification.progression,
+    "The BlueTide Shortage Unlock": ItemClassification.progression,
+    "The Shipping Logs Unlock": ItemClassification.progression,
+    "The Alarm System Unlock": ItemClassification.progression,
+    "Moving The Goods Unlock": ItemClassification.progression,
+    "Havoc In Paradise Unlock": ItemClassification.progression,
+    "Elena's Revenge Unlock": ItemClassification.progression,
+    "Truckload Of Trouble Unlock": ItemClassification.progression,
+    "Ornament Ordeal Unlock": ItemClassification.progression,
+    "The Quilez Tools Unlock": ItemClassification.progression,
+    "Connecting The Dots Unlock": ItemClassification.progression,
+    "The Pawn Shop Unlock": ItemClassification.progression,
+    "The Droid Abduction Unlock": ItemClassification.progression,
+    "Malice In Woonderland Unlock": ItemClassification.progression,
+    "Handle With Care Unlock": ItemClassification.progression,
+    "Droid Dismount Unlock": ItemClassification.progression,
+    "The Final Diversion Unlock": ItemClassification.progression,
+
+    "Sledge Hammer Unlock": ItemClassification.progression,
+    "Spraycan Unlock": ItemClassification.useful,
+    "Extinguisher Unlock": ItemClassification.progression,
+
     "Blowtorch Unlock": ItemClassification.progression,
-    "Blowtorch Fuel 1": ItemClassification.useful,
     "Shotgun Unlock": ItemClassification.progression,
-    "Shotgun Rounds 1": ItemClassification.progression| ItemClassification.useful,  # Items can have multiple classifications.
-    "Shotgun Damage 1": ItemClassification.useful,
-    "Nothing": ItemClassification.filler,
-    "Emotional Damage": ItemClassification.trap,
+    "Plank Unlock": ItemClassification.progression,
+    "Pipe Unlock": ItemClassification.progression,
+    "Gun Unlock": ItemClassification.progression,
+    "Bomb Unlock": ItemClassification.progression,
+    "Rocket Launcher Unlock": ItemClassification.progression,
+    "Rocket Booster Unlock": ItemClassification.progression,
+    "Leaf Blower Unlock": ItemClassification.progression,
+    "Cable Unlock": ItemClassification.progression,
+    "Vehicle Thruster Unlock": ItemClassification.progression,
+    "Nitroglycerin Unlock": ItemClassification.progression,
+    "Hunting Rifle Unlock": ItemClassification.progression,
+    "BlueTide Unlock": ItemClassification.progression,
+
+    "Blowtorch Fuel Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Shotgun Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Shotgun Range Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Shotgun Damage Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Plank Amount Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Plank Width Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Plank Max Length Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Pipe Bomb Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Pipe Bomb Blast Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Gun Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Gun Range Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Gun Damage Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Bomb Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Bomb Blast Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Rocket Launcher Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Rocket Launcher Blast Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Rocket Booster Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Rocket Booster Power Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Rocket Booster Time Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Leaf Blower Power Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Cable Amount Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Cable Stretch Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Vehicle Thruster Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Vehicle Thruster Power Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Nitroglycerin Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "Nitroglycerin Blast Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Hunting Rifle Rounds Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "BlueTide Bottles Upgrade": ItemClassification.progression| ItemClassification.useful,
+    "BlueTide Duration Upgrade": ItemClassification.progression| ItemClassification.useful,
+
+    "Extra Nothing": ItemClassification.filler,
 }
 
-
-# Each Item instance must correctly report the "game" it belongs to.
-# To make this simple, it is common practice to subclass the basic Item class and override the "game" field.
 class TeardownItem(Item):
     game = "Teardown"
 
 
-# Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
-# To do this, it must define a function called world.get_filler_item_name(), which we will define in world.py later.
-# For now, let's make a function that returns the name of a random filler item here in items.py.
 def get_random_filler_item_name(world: TeardownWorld) -> str:
-    # APQuest has an option called "trap_chance".
-    # This is the percentage chance that each filler item is a Math Trap instead of a Confetti Cannon.
-    # For this purpose, we need to use a random generator.
-
-    # IMPORTANT: Whenever you need to use a random generator, you must use world.random.
-    # This ensures that generating with the same generator seed twice yields the same output.
-    # DO NOT use a bare random object from Python's built-in random module.
-    if world.random.randint(0, 99) < world.options.trap_chance:
-        return "Emotional Damage" #Math Trap"
-    return "Nothing" #Confetti Cannon"
+    return "Extra Nothing"
 
 
-def create_item_with_correct_classification(world: TeardownWorld, name: str) -> TeardownItem:
-    # Our world class must have a create_item() function that can create any of our items by name at any time.
-    # So, we make this helper function that creates the item by name with the correct classification.
-    # Note: This function's content could just be the contents of world.create_item in world.py directly,
-    # but it seemed nicer to have it in its own function over here in items.py.
-    classification = DEFAULT_ITEM_CLASSIFICATIONS[name]
-
-    # It is perfectly normal and valid for an item's classification to differ based on the player's options.
-    # In our case, Health Upgrades are only relevant to logic (and thus labeled as "progression") in hard mode.
-    if name == "Shotgun Rounds 1" and world.options.Bonus_Level:
-        classification = ItemClassification.progression
-
-    return TeardownItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
-
-
-# With those two helper functions defined, let's now get to actually creating and submitting our itempool.
 def create_all_items(world: TeardownWorld) -> None:
-    # This is the function in which we will create all the items that this world submits to the multiworld item pool.
-    # There must be exactly as many items as there are locations.
-    # In our case, there are either six or seven locations.
-    # We must make sure that when there are six locations, there are six items,
-    # and when there are seven locations, there are seven items.
-
-    # Creating items should generally be done via the world's create_item method.
-    # First, we create a list containing all the items that always exist.
-
     itempool: list[Item] = [
-        world.create_item("Level 2 Unlock"),
-        world.create_item("Level 3 Unlock"),
-        world.create_item("Blowtorch Unlock"),
-        world.create_item("Blowtorch Fuel 1"),
+        world.create_item("Lee Computers Unlock"),
+        world.create_item("Login Devices Unlock"),
+        world.create_item("Making Space Unlock"),
+        world.create_item("Classic Cars Unlock"),
+        world.create_item("The GPS Devices Unlock"),
+        world.create_item("The Car Wash Unlock"),
+        world.create_item("Heavy Lifting Unlock"),
+        world.create_item("The Tower Unlock"),
+        world.create_item("Fine Arts Unlock"),
+        world.create_item("Tool Up Unlock"),
+        world.create_item("Art Return Unlock"),
+        world.create_item("Covert Chaos Unlock"),
+        world.create_item("Insurance Fraud Unlock"),
+        world.create_item("The BlueTide Computers Unlock"),
+        world.create_item("The Speed Deal Unlock"),
+        world.create_item("A Wet Affair Unlock"),
+        world.create_item("Power Outage Unlock"),
+        world.create_item("Motivational Reminder Unlock"),
+        world.create_item("An Assortment Of Dishes Unlock"),
+        world.create_item("Flooding Unlock"),
+        world.create_item("The Chase Unlock"),
+        world.create_item("Roborazzi Unlock"),
+        world.create_item("The Secret Ingredients Unlock"),
+        world.create_item("The BlueTide Shortage Unlock"),
+        world.create_item("The Shipping Logs Unlock"),
+        world.create_item("The Alarm System Unlock"),
+        world.create_item("Moving The Goods Unlock"),
+        world.create_item("Havoc In Paradise Unlock"),
+        world.create_item("Elena's Revenge Unlock"),
+        world.create_item("Truckload Of Trouble Unlock"),
+        world.create_item("Ornament Ordeal Unlock"),
+        world.create_item("The Quilez Tools Unlock"),
+        world.create_item("Connecting The Dots Unlock"),
+        world.create_item("The Pawn Shop Unlock"),
+        world.create_item("The Droid Abduction Unlock"),
+        world.create_item("Malice In Woonderland Unlock"),
+        world.create_item("Handle With Care Unlock"),
+        world.create_item("Droid Dismount Unlock"),
+        #world.create_item("The Final Diversion Unlock"),
+
+        world.create_item("Blowtorch Fuel Upgrade"),
+        world.create_item("Blowtorch Fuel Upgrade"),
+        world.create_item("Blowtorch Fuel Upgrade"),
+        world.create_item("Blowtorch Fuel Upgrade"),
+
+        world.create_item("Shotgun Rounds Upgrade"),
+        world.create_item("Shotgun Rounds Upgrade"),
+        world.create_item("Shotgun Rounds Upgrade"),
+        world.create_item("Shotgun Rounds Upgrade"),
+        world.create_item("Shotgun Rounds Upgrade"),
+        world.create_item("Shotgun Rounds Upgrade"),
+        world.create_item("Shotgun Rounds Upgrade"),
+
+        world.create_item("Shotgun Range Upgrade"),
+        world.create_item("Shotgun Range Upgrade"),
+
+        world.create_item("Shotgun Damage Upgrade"),
+        world.create_item("Shotgun Damage Upgrade"),
+
+        world.create_item("Plank Amount Upgrade"),
+        world.create_item("Plank Amount Upgrade"),
+        world.create_item("Plank Amount Upgrade"),
+        world.create_item("Plank Amount Upgrade"),
+        world.create_item("Plank Amount Upgrade"),
+        world.create_item("Plank Amount Upgrade"),
+        world.create_item("Plank Amount Upgrade"),
+
+        world.create_item("Plank Width Upgrade"),
+        world.create_item("Plank Width Upgrade"),
+
+        world.create_item("Plank Max Length Upgrade"),
+        world.create_item("Plank Max Length Upgrade"),
+        world.create_item("Plank Max Length Upgrade"),
+
+        world.create_item("Pipe Bomb Rounds Upgrade"),
+        world.create_item("Pipe Bomb Rounds Upgrade"),
+        world.create_item("Pipe Bomb Rounds Upgrade"),
+        world.create_item("Pipe Bomb Rounds Upgrade"),
+        world.create_item("Pipe Bomb Rounds Upgrade"),
+
+        world.create_item("Pipe Bomb Blast Upgrade"),
+        world.create_item("Pipe Bomb Blast Upgrade"),
+
+        world.create_item("Gun Rounds Upgrade"),
+        world.create_item("Gun Rounds Upgrade"),
+        world.create_item("Gun Rounds Upgrade"),
+        world.create_item("Gun Rounds Upgrade"),
+        world.create_item("Gun Rounds Upgrade"),
+
+        world.create_item("Gun Range Upgrade"),
+        world.create_item("Gun Range Upgrade"),
+        world.create_item("Gun Range Upgrade"),
+
+        world.create_item("Gun Damage Upgrade"),
+        world.create_item("Gun Damage Upgrade"),
+
+        world.create_item("Bomb Rounds Upgrade"),
+        world.create_item("Bomb Rounds Upgrade"),
+        world.create_item("Bomb Rounds Upgrade"),
+        world.create_item("Bomb Rounds Upgrade"),
+        world.create_item("Bomb Rounds Upgrade"),
+
+        world.create_item("Bomb Blast Upgrade"),
+        world.create_item("Bomb Blast Upgrade"),
+
+        world.create_item("Rocket Launcher Rounds Upgrade"),
+        world.create_item("Rocket Launcher Rounds Upgrade"),
+        world.create_item("Rocket Launcher Rounds Upgrade"),
+
+        world.create_item("Rocket Launcher Blast Upgrade"),
+        world.create_item("Rocket Launcher Blast Upgrade"),
+
+        world.create_item("Rocket Booster Rounds Upgrade"),
+        world.create_item("Rocket Booster Rounds Upgrade"),
+        world.create_item("Rocket Booster Rounds Upgrade"),
+
+        world.create_item("Rocket Booster Power Upgrade"),
+        world.create_item("Rocket Booster Power Upgrade"),
+
+        world.create_item("Rocket Booster Time Upgrade"),
+        world.create_item("Rocket Booster Time Upgrade"),
+
+        world.create_item("Leaf Blower Power Upgrade"),
+        world.create_item("Leaf Blower Power Upgrade"),
+        world.create_item("Leaf Blower Power Upgrade"),
+
+        world.create_item("Cable Amount Upgrade"),
+        world.create_item("Cable Amount Upgrade"),
+        world.create_item("Cable Amount Upgrade"),
+
+        world.create_item("Cable Stretch Upgrade"),
+        world.create_item("Cable Stretch Upgrade"),
+
+        world.create_item("Vehicle Thruster Rounds Upgrade"),
+        world.create_item("Vehicle Thruster Rounds Upgrade"),
+        world.create_item("Vehicle Thruster Rounds Upgrade"),
+
+        world.create_item("Vehicle Thruster Power Upgrade"),
+        world.create_item("Vehicle Thruster Power Upgrade"),
+
+        world.create_item("Nitroglycerin Rounds Upgrade"),
+        world.create_item("Nitroglycerin Rounds Upgrade"),
+        world.create_item("Nitroglycerin Rounds Upgrade"),
+
+        world.create_item("Nitroglycerin Blast Upgrade"),
+        world.create_item("Nitroglycerin Blast Upgrade"),
+        world.create_item("Nitroglycerin Blast Upgrade"),
+
+        world.create_item("Hunting Rifle Rounds Upgrade"),
+        world.create_item("Hunting Rifle Rounds Upgrade"),
+
+        world.create_item("BlueTide Bottles Upgrade"),
+        world.create_item("BlueTide Bottles Upgrade"),
+
+        world.create_item("BlueTide Duration Upgrade"),
+        world.create_item("BlueTide Duration Upgrade"),
+
+        world.create_item("Extra Nothing"),
     ]
 
-    # Some items may only exist if the player enables certain options.
-    # In our case, If the hammer option is enabled, the sixth item is the Hammer.
-    # Otherwise, we add a filler Confetti Cannon.
-    if world.options.Bonus_Level:
-        # Once again, it is important to stress that even though the Hammer doesn't always exist,
-        # it must be present in the worlds item_name_to_id.
-        # Whether it is actually in the itempool is determined purely by whether we create and add the item here.
-        itempool.append(world.create_item("Bonus Level 4 Unlock"))
-        itempool.append(world.create_item("Shotgun Unlock"))
-        itempool.append(world.create_item("Shotgun Rounds 1"))
-        itempool.append(world.create_item("Shotgun Damage 1"))
+    if world.options.StartingTool:
+        itempool.append(world.create_item("Sledge Hammer Unlock"))
+        itempool.append(world.create_item("Spraycan Unlock "))
+        itempool.append(world.create_item("Extinguisher Unlock "))
 
-    # Archipelago requires that each world submits as many locations as it submits items.
-    # This is where we can use our filler and trap items.
-    # APQuest has two of these: The Confetti Cannon and the Math Trap.
-    # (Unfortunately, Archipelago is a bit ambiguous about its terminology here:
-    #  "filler" is an ItemClassification separate from "trap", but in a lot of its functions,
-    #  Archipelago will use "filler" to just mean "an additional item created to fill out the itempool".
-    #  "Filler" in this sense can technically have any ItemClassification,
-    #  but most commonly ItemClassification.filler or ItemClassification.trap.
-    #  Starting here, the word "filler" will be used to collectively refer to APQuest's Confetti Cannon and Math Trap,
-    #  which are ItemClassification.filler and ItemClassification.trap respectively.)
-    # Creating filler items works the same as any other item. But there is a question:
-    # How many filler items do we actually need to create?
-    # In regions.py, we created either six or seven locations depending on the "extra_starting_chest" option.
-    # In this function, we have created five or six items depending on whether the "hammer" option is enabled.
-    # We *could* have a really complicated if-else tree checking the options again, but there is a better way.
-    # We can compare the size of our itempool so far to the number of locations in our world.
 
     # The length of our itempool is easy to determine, since we have it as a list.
     number_of_items = len(itempool)
 
-    # The number of locations is also easy to determine, but we have to be careful.
-    # Just calling len(world.get_locations()) would report an incorrect number, because of our *event locations*.
     # What we actually want is the number of *unfilled* locations. Luckily, there is a helper method for this:
     number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
 
     # Now, we just subtract the number of items from the number of locations to get the number of empty item slots.
     needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
 
-    # Finally, we create that many filler items and add them to the itempool.
-    # To create our filler, we could just use world.create_item("Confetti Cannon").
-    # But there is an alternative that works even better for most worlds, including APQuest.
-    # As discussed above, our world must have a get_filler_item_name() function defined,
-    # which must return the name of an infinitely repeatable filler item.
-    # Defining this function enables the use of a helper function called world.create_filler().
     # You can just use this function directly to create as many filler items as you need to complete your itempool.
     itempool += [world.create_filler() for _ in range(needed_number_of_filler_items)]
 
-    # But... is that the right option for your game? Let's explore that.
-    # For some games, the concepts of "regular itempool filler" and "additionally created filler" are different.
-    # These games might want / require specific amounts of specific filler items in their regular pool.
-    # To achieve this, they will have to intentionally create the correct quantities using world.create_item().
-    # They may still use world.create_filler() to fill up the rest of their itempool with "repeatable filler",
-    # after creating their "specific quantity" filler and still having room left over.
-
-    # But there are many other games which *only* have infinitely repeatable filler items.
-    # They don't care about specific amounts of specific filler items, instead only caring about the proportions.
-    # In this case, world.create_filler() can just be used for the entire filler itempool.
-    # APQuest is one of these games:
-    # Regardless of whether it's filler for the regular itempool or additional filler for item links / etc.,
-    # we always just want a Confetti Cannon or a Math Trap depending on the "trap_chance" option.
-    # We defined this behavior in our get_random_filler_item_name() function, which in world.py,
-    # we'll bind to world.get_filler_item_name(). So, we can just use world.create_filler() for all of our filler.
-
-    # Anyway. With our world's itempool finalized, we now need to submit it to the multiworld itempool.
     # This is how the generator actually knows about the existence of our items.
     world.multiworld.itempool += itempool
 
-    # Sometimes, you might want the player to start with certain items already in their inventory.
-    # These items are called "precollected items".
-    # They will be sent as soon as they connect for the first time (depending on your client's item handling flag).
-    # Players can add precollected items themselves via the generic "start_inventory" option.
-    # If you want to add your own precollected items, you can do so via world.push_precollected().
-    #if world.options.start_with_one_confetti_cannon:
-        # We're adding a filler item, but you can also add progression items to the player's precollected inventory.
-        #starting_confetti_cannon = world.create_item("Level 1 Unlock")
-        #world.push_precollected(starting_confetti_cannon)
+    possiblelevels = [
+        "Old Building Problem Unlock"
+        "Lee Computers Unlock"
+        "Login Devices Unlock"
+        "Making Space Unlock"
+        "Classic Cars Unlock"
+        "The GPS Devices Unlock"
+        "The Car Wash Unlock"
+        "Heavy Lifting Unlock"
+        "The Tower Unlock"
+        "Fine Arts Unlock"
+        "Tool Up Unlock"
+        "Art Return Unlock"
+        "Covert Chaos Unlock"
+        "Insurance Fraud Unlock"
+        "The BlueTide Computers Unlock"
+        "The Speed Deal Unlock"
+        "A Wet Affair Unlock"
+        "Power Outage Unlock"
+        "Motivational Reminder Unlock"
+        "An Assortment Of Dishes Unlock"
+        "Flooding Unlock"
+        "The Chase Unlock"
+        "Roborazzi Unlock"
+        "The Secret Ingredients Unlock"
+        "The BlueTide Shortage Unlock"
+        "The Shipping Logs Unlock"
+        "The Alarm System Unlock"
+        "Moving The Goods Unlock"
+        "Havoc In Paradise Unlock"
+        "Elena's Revenge Unlock"
+        "Truckload Of Trouble Unlock"
+        "Ornament Ordeal Unlock"
+        "The Quilez Tools Unlock"
+        "Connecting The Dots Unlock"
+        "The Pawn Shop Unlock"
+        "The Droid Abduction Unlock"
+        "Malice In Woonderland Unlock"
+        "Handle With Care Unlock"
+        "Droid Dismount Unlock"
+        # "The Final Diversion Unlock"
+    ]
 
-    starting_level_unlock = world.create_item("Level 1 Unlock")
-    world.push_precollected(starting_level_unlock)
+
+    if not world.options.StartingTool:
+        sledge_hammer_unlock = world.create_item("Sledge Hammer Unlock")
+        world.push_precollected(sledge_hammer_unlock)
+
+        spraycan_unlock = world.create_item("Spraycan Unlock")
+        world.push_precollected(spraycan_unlock)
+
+        extinguisher_unlock = world.create_item("Extinguisher Unlock")
+        world.push_precollected(extinguisher_unlock)
+
+    if world.options.StartingLevel:
+        predeterminedlevel = random.choice(possiblelevels)
+        starting_level_unlock = world.create_item(predeterminedlevel)
+        world.push_precollected(starting_level_unlock)
+
+    else:
+        starting_level_unlock = world.create_item("Old Building Problem Unlock")
+        world.push_precollected(starting_level_unlock)

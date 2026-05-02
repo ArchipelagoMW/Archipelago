@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification, Location
 
-from . import items
 
 if TYPE_CHECKING:
     from .world import TeardownWorld
@@ -99,7 +98,7 @@ LOCATION_NAME_TO_ID = {
     "A Wet Affair Required 3": 163,
     "A Wet Affair Optional 1": 164,
     "A Wet Affair Optional 2": 165,
-    "A Wet Affair Optional 4": 166,
+    "A Wet Affair Optional 3": 166,
 
     "Power Outage Required 1": 171,
     "Power Outage Required 2": 172,
@@ -392,36 +391,182 @@ def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | No
 # Creates all locations above
 def create_all_locations(world: TeardownWorld) -> None:
     create_regular_locations(world)
-    create_events(world)
+    #create_events(world)
 
 
 def create_regular_locations(world: TeardownWorld) -> None:
-# We set our objects
-    level_1 = world.get_region("Level 1")
-    level_2 = world.get_region("Level 2")
-    level_3 = world.get_region("Level 3")
-
+    # Before we do anything, we can grab our regions we created by using world.get_region()
+    menu = world.get_region("Main Menu")
+    oldbuildingproblem = world.get_region("Old Building Problem")
+    leecomputers = world.get_region("Lee Computers")
+    logindevices = world.get_region("Login Devices")
+    makingspace = world.get_region("Making Space")
+    classiccars = world.get_region("Classic Cars")
+    gpsdevices = world.get_region("The GPS Devices")
+    carwash = world.get_region("The Car Wash")
+    heavylifting = world.get_region("Heavy Lifting")
+    tower = world.get_region("The Tower")
+    finearts = world.get_region("Fine Arts")
+    toolup = world.get_region("Tool Up")
+    artreturn = world.get_region("Art Return")
+    covertchaos = world.get_region("Covert Chaos")
+    insurancefraud = world.get_region("Insurance Fraud")
+    bluetidecomputers = world.get_region("The BlueTide Computers")
+    speeddeal = world.get_region("The Speed Deal")
+    wetaffair = world.get_region("A Wet Affair")
+    poweroutage = world.get_region("Power Outage")
+    motivationalreminder = world.get_region("Motivational Reminder")
+    assortmentofdishes = world.get_region("An Assortment Of Dishes")
+    flooding = world.get_region("Flooding")
+    chase = world.get_region("The Chase")
+    roborazzi = world.get_region("Roborazzi")
+    secretingredients = world.get_region("The Secret Ingredients")
+    bluetideshortage = world.get_region("The BlueTide Shortage")
+    shippinglogs = world.get_region("The Shipping Logs")
+    alarmsystem = world.get_region("The Alarm System")
+    movingthegoods = world.get_region("Moving The Goods")
+    havocinparaside = world.get_region("Havoc In Paradise")
+    elenasrevenge = world.get_region("Elena's Revenge")
+    truckloadoftrouble = world.get_region("Truckload Of Trouble")
+    ornamentordeal = world.get_region("Ornament Ordeal")
+    quileztools = world.get_region("The Quilez Tools")
+    connectingthedots = world.get_region("Connecting The Dots")
+    pawnshop = world.get_region("The Pawn Shop")
+    droidabduction = world.get_region("The Droid Abduction")
+    maliceinwoonderland = world.get_region("Malice In Woonderland")
+    handlewithcare = world.get_region("Handle With Care")
+    droiddismount = world.get_region("Droid Dismount")
+    finaldiversion = world.get_region("The Final Diversion")
 
 
 # Sets our locations to our regions, this is easier method
-    level_1_locations = get_location_names_with_ids(["Old Building Problem"])
-    level_1.add_locations(level_1_locations, TeardownLocation)
+    oldbuildingproblem_locations = get_location_names_with_ids(["Old Building Problem"])
+    oldbuildingproblem.add_locations(oldbuildingproblem_locations, TeardownLocation)
 
-    level_2_locations = get_location_names_with_ids(["Lee Computers Target 1", "Lee Computers Target 2", "Lee Computers Target 3"])
-    level_2.add_locations(level_2_locations, TeardownLocation)
+    leecomputers_locations = get_location_names_with_ids(["Lee Computers Required 1", "Lee Computers Required 2", "Lee Computers Required 3"])
+    leecomputers.add_locations(leecomputers_locations, TeardownLocation)
 
-    level_3_locations = get_location_names_with_ids(["Login Devices 1", "Login Devices 2", "Login Devices 3", "Temp"])
-    level_3.add_locations(level_3_locations, TeardownLocation)
+    logindevices_locations = get_location_names_with_ids(["Login Devices Required 1", "Login Devices Required 2", "Login Devices Required 3"])
+    logindevices.add_locations(logindevices_locations, TeardownLocation)
+
+    makingspace_locations = get_location_names_with_ids(["Making Space Required 1", "Making Space Required 2", "Making Space Optional 3"])
+    makingspace.add_locations(makingspace_locations, TeardownLocation)
+
+    classiccars_locations = get_location_names_with_ids(["Classic Cars Required 1", "Classic Cars Required 2", "Classic Cars Optional 1", "Classic Cars Optional 2"])
+    classiccars.add_locations(classiccars_locations, TeardownLocation)
+
+    gpsdevices_locations = get_location_names_with_ids(["The GPS Devices Required 1", "The GPS Devices Required 2", "The GPS Devices Required 3", "The GPS Devices Optional 1", "The GPS Devices Optional 2"])
+    gpsdevices.add_locations(gpsdevices_locations, TeardownLocation)
+
+    carwash_locations = get_location_names_with_ids(["The Car Wash Required 1", "The Car Wash Required 2", "The Car Wash Required 3", "The Car Wash Optional 1", "The Car Wash Optional 2", "The Car Wash Optional 3"])
+    carwash.add_locations(carwash_locations, TeardownLocation)
+
+    heavylifting_locations = get_location_names_with_ids(["Heavy Lifting Required 1", "Heavy Lifting Optional 1", "Heavy Lifting Optional 2", "Heavy Lifting Optional 3", "Heavy Lifting Optional 4"])
+    heavylifting.add_locations(heavylifting_locations, TeardownLocation)
+
+    tower_locations = get_location_names_with_ids(["The Tower"])
+    tower.add_locations(tower_locations, TeardownLocation)
+
+    finearts_locations = get_location_names_with_ids(["Fine Arts Required 1", "Fine Arts Required 2", "Fine Arts Required 3", "Fine Arts Required 4", "Fine Arts Optional 1", "Fine Arts Optional 2"])
+    finearts.add_locations(finearts_locations, TeardownLocation)
+
+    toolup_locations = get_location_names_with_ids(["Tool Up Required 1", "Tool Up Required 2", "Tool Up Required 3", "Tool Up Required 4", "Tool Up Optional 1", "Tool Up Optional 2"])
+    toolup.add_locations(toolup_locations, TeardownLocation)
+
+    artreturn_locations = get_location_names_with_ids(["Art Return Required 1", "Art Return Required 2", "Art Return Required 3", "Art Return Required 4"])
+    artreturn.add_locations(artreturn_locations, TeardownLocation)
+
+    covertchaos_locations = get_location_names_with_ids(["Covert Chaos Required 1", "Covert Chaos Optional 1", "Covert Chaos Optional 2"])
+    covertchaos.add_locations(covertchaos_locations, TeardownLocation)
+
+    insurancefraud_locations = get_location_names_with_ids(["Insurance Fraud Required 1", "Insurance Fraud Required 2", "Insurance Fraud Required 3", "Insurance Fraud Optional 1", "Insurance Fraud Optional 2", "Insurance Fraud Optional 3"])
+    insurancefraud.add_locations(insurancefraud_locations, TeardownLocation)
+
+    bluetidecomputers_locations = get_location_names_with_ids(["The BlueTide Computers Required 1", "The BlueTide Computers Required 2", "The BlueTide Computers Required 3", "The BlueTide Computers Required 4", "The BlueTide Computers Optional 1", "The BlueTide Computers Optional 2", "The BlueTide Computers Optional 3"])
+    bluetidecomputers.add_locations(bluetidecomputers_locations, TeardownLocation)
+
+    speeddeal_locations = get_location_names_with_ids(["The Speed Deal Required 1", "The Speed Deal Optional 1", "The Speed Deal Optional 2"])
+    speeddeal.add_locations(speeddeal_locations, TeardownLocation)
+
+    wetaffair_locations = get_location_names_with_ids(["A Wet Affair Required 1", "A Wet Affair Required 2", "A Wet Affair Required 3", "A Wet Affair Optional 1", "A Wet Affair Optional 2", "A Wet Affair Optional 3"])
+    wetaffair.add_locations(wetaffair_locations, TeardownLocation)
+
+    poweroutage_locations = get_location_names_with_ids(["Power Outage Required 1", "Power Outage Required 2", "Power Outage Required 3", "Power Outage Required 4", "Power Outage Optional 1", "Power Outage Optional 2", "Power Outage Optional 3", "Power Outage Optional 4"])
+    poweroutage.add_locations(poweroutage_locations, TeardownLocation)
+
+    motivationalreminder_locations = get_location_names_with_ids(["Motivational Reminder Required 1", "Motivational Reminder Required 2", "Motivational Reminder Required 3", "Motivational Reminder Required 4", "Motivational Reminder Required 5", "Motivational Reminder Optional 1", "Motivational Reminder Optional 2", "Motivational Reminder Optional 3"])
+    motivationalreminder.add_locations(motivationalreminder_locations, TeardownLocation)
+
+    assortmentofdishes_locations = get_location_names_with_ids(["An Assortment Of Dishes Required 1", "An Assortment Of Dishes Required 2", "An Assortment Of Dishes Required 3", "An Assortment Of Dishes Required 4", "An Assortment Of Dishes Required 5", "An Assortment Of Dishes Optional 1", "An Assortment Of Dishes Optional 2", "An Assortment Of Dishes Optional 3", "An Assortment Of Dishes Optional 4"])
+    assortmentofdishes.add_locations(assortmentofdishes_locations, TeardownLocation)
+
+    flooding_locations = get_location_names_with_ids(["Flooding Required 1", "Flooding Required 2", "Flooding Required 3", "Flooding Required 4", "Flooding Required 5", "Flooding Optional 1", "Flooding Optional 2", "Flooding Optional 3"])
+    flooding.add_locations(flooding_locations, TeardownLocation)
+
+    chase_locations = get_location_names_with_ids(["The Chase"])
+    chase.add_locations(chase_locations, TeardownLocation)
+
+    roborazzi_locations = get_location_names_with_ids(["Roborazzi Required 1", "Roborazzi Required 2", "Roborazzi Required 3", "Roborazzi Required 4", "Roborazzi Required 5"])
+    roborazzi.add_locations(roborazzi_locations, TeardownLocation)
+
+    secretingredients_locations = get_location_names_with_ids(["The Secret Ingredients Required 1", "The Secret Ingredients Required 2", "The Secret Ingredients Required 3", "The Secret Ingredients Required 4", "The Secret Ingredients Optional 1", "The Secret Ingredients Optional 2"])
+    secretingredients.add_locations(secretingredients_locations, TeardownLocation)
+
+    bluetideshortage_locations = get_location_names_with_ids(["The BlueTide Shortage Required 1", "The BlueTide Shortage Required 2", "The BlueTide Shortage Required 3", "The BlueTide Shortage Optional 1", "The BlueTide Shortage Optional 2", "The BlueTide Shortage Optional 3"])
+    bluetideshortage.add_locations(bluetideshortage_locations, TeardownLocation)
+
+    shippinglogs_locations = get_location_names_with_ids(["The Shipping Logs Required 1", "The Shipping Logs Required 2", "The Shipping Logs Required 3", "The Shipping Logs Required 4", "The Shipping Logs Required 5", "The Shipping Logs Optional 1", "The Shipping Logs Optional 2", "The Shipping Logs Optional 3"])
+    shippinglogs.add_locations(shippinglogs_locations, TeardownLocation)
+
+    alarmsystem_locations = get_location_names_with_ids(["The Alarm System Required 1", "The Alarm System Required 2", "The Alarm System Required 3", "The Alarm System Required 4", "The Alarm System Optional 1", "The Alarm System Optional 2"])
+    alarmsystem.add_locations(alarmsystem_locations, TeardownLocation)
+
+    movingthegoods_locations = get_location_names_with_ids(["Moving The Goods Required 1", "Moving The Goods Required 2", "Moving The Goods Required 3", "Moving The Goods Optional 1", "Moving The Goods Optional 2"])
+    movingthegoods.add_locations(movingthegoods_locations, TeardownLocation)
+
+    havocinparaside_locations = get_location_names_with_ids(["Havoc In Paradise Required 1", "Havoc In Paradise Required 2", "Havoc In Paradise Required 3", "Havoc In Paradise Required 4", "Havoc In Paradise Optional 1", "Havoc In Paradise Optional 2", "Havoc In Paradise Optional 3"])
+    havocinparaside.add_locations(havocinparaside_locations, TeardownLocation)
+
+    elenasrevenge_locations = get_location_names_with_ids(["Elena's Revenge"])
+    elenasrevenge.add_locations(elenasrevenge_locations, TeardownLocation)
+
+    truckloadoftrouble_locations = get_location_names_with_ids(["Truckload Of Trouble Required 1", "Truckload Of Trouble Required 2", "Truckload Of Trouble Optional 1"])
+    truckloadoftrouble.add_locations(truckloadoftrouble_locations, TeardownLocation)
+
+    ornamentordeal_locations = get_location_names_with_ids(["Ornament Ordeal Required 1", "Ornament Ordeal Required 2", "Ornament Ordeal Required 3", "Ornament Ordeal Required 4", "Ornament Ordeal Optional 1", "Ornament Ordeal Optional 2"])
+    ornamentordeal.add_locations(ornamentordeal_locations, TeardownLocation)
+
+    quileztools_locations = get_location_names_with_ids(["The Quilez Tools Required 1", "The Quilez Tools Required 2", "The Quilez Tools Required 3", "The Quilez Tools Required 4", "The Quilez Tools Optional 1", "The Quilez Tools Optional 2"])
+    quileztools.add_locations(quileztools_locations, TeardownLocation)
+
+    connectingthedots_locations = get_location_names_with_ids(["Connecting The Dots Required 1", "Connecting The Dots Required 2", "Connecting The Dots Required 3", "Connecting The Dots Optional 1", "Connecting The Dots Optional 2"])
+    connectingthedots.add_locations(connectingthedots_locations, TeardownLocation)
+
+    pawnshop_locations = get_location_names_with_ids(["The Pawn Shop Required 1", "The Pawn Shop Required 2", "The Pawn Shop Required 3", "The Pawn Shop Required 4", "The Pawn Shop Required 5", "The Pawn Shop Optional 1", "The Pawn Shop Optional 2"])
+    pawnshop.add_locations(pawnshop_locations, TeardownLocation)
+
+    droidabduction_locations = get_location_names_with_ids(["The Droid Abduction Required 1", "The Droid Abduction Optional 1", "The Droid Abduction Optional 2", "The Droid Abduction Optional 3"])
+    droidabduction.add_locations(droidabduction_locations, TeardownLocation)
+
+    maliceinwoonderland_locations = get_location_names_with_ids(["Malice In Woonderland Required 1", "Malice In Woonderland Required 2", "Malice In Woonderland Required 3", "Malice In Woonderland Required 4", "Malice In Woonderland Required 5", "Malice In Woonderland Optional 1", "Malice In Woonderland Optional 2", "Malice In Woonderland Optional 3"])
+    maliceinwoonderland.add_locations(maliceinwoonderland_locations, TeardownLocation)
+
+    handlewithcare_locations = get_location_names_with_ids(["Handle With Care Required 1", "Handle With Care Required 2", "Handle With Care Required 3", "Handle With Care Optional 1", "Handle With Care Optional 2", "Handle With Care Optional 3", "Handle With Care Optional 4"])
+    handlewithcare.add_locations(handlewithcare_locations, TeardownLocation)
+
+    droiddismount_locations = get_location_names_with_ids(["Droid Dismount Required 1", "Droid Dismount Required 2", "Droid Dismount Required 3", "Droid Dismount Required 4", "Droid Dismount Required 5", "Droid Dismount Optional 1", "Droid Dismount Optional 2"])
+    droiddismount.add_locations(droiddismount_locations, TeardownLocation)
+
+    finaldiversion_locations = get_location_names_with_ids(["The Final Diversion"])
+    finaldiversion.add_locations(finaldiversion_locations, TeardownLocation)
+
 
 
     # Locations may be in different regions depending on the player's options.
-    # In our case, the hammer option puts the Top Middle Chest into its own room called Top Middle Room.
-    bonus_level_4_locations = get_location_names_with_ids(["Making Space 1", "Making Space 2", "Making Space 3"])
-    if world.options.Bonus_Level:
-        bonus_level_4 = world.get_region("Bonus Level 4")
-        bonus_level_4.add_locations(bonus_level_4_locations, TeardownLocation)
-    #else:
-    #    level_1.add_locations(bonus_level_4_locations, TeardownLocation)
+    #bonus_level_4_locations = get_location_names_with_ids(["Making Space 1", "Making Space 2", "Making Space 3"])
+    #if world.options.Bonus_Level:
+    #    bonus_level_4 = world.get_region("Bonus Level 4")
+    #    bonus_level_4.add_locations(bonus_level_4_locations, TeardownLocation)
 
 # If bonus level is enabled, create locations and add them to bonus level 4
     #if world.options.Bonus_Level:
@@ -430,23 +575,7 @@ def create_regular_locations(world: TeardownWorld) -> None:
 
 
 #def create_events(world: TeardownWorld) -> None:
-#    level_3 = world.get_region("Level 3")
-#    bonus_level_4 = world.get_region("Bonus Level 4")
-#
-#    if world.options.Bonus_Level:
-#        bonus_level_4.add_event(
-#            "Final Mission Completed", "Victory", location_type=TeardownLocation, item_type=items.TeardownItem)
-#    else:
-#        level_3.add_event(
-#        "Final Mission Completed", "Victory", location_type=TeardownLocation, item_type=items.TeardownItem)
-
-
-def create_events(world: TeardownWorld) -> None:
-    if world.options.Bonus_Level:
-        bonus_level_4 = world.get_region("Bonus Level 4")
-        bonus_level_4.add_event(
-            "Final Mission Completed", "Victory", location_type=TeardownLocation, item_type=items.TeardownItem)
-    else:
-        level_3 = world.get_region("Level 3")
-        level_3.add_event(
-            "Final Mission Completed", "Victory", location_type=TeardownLocation, item_type=items.TeardownItem)
+#    levels = possiblelevels
+#    missionamount = world.options.MissionAmount
+#    missiongoal = HasFromList(*levels(), count = missionamount.value)
+#    missiongoal.add_event("Mission Goal Reached", "Unlock Final Mission", location_type=TeardownLocation, item_type=items.TeardownItem)
