@@ -263,8 +263,9 @@ async def handle_codecave(ctx: "Context") -> None:
                 string = f"{player_name}'s {item_name}"
             location_data.append((loc_key, string))
 
-    ctx.game_interface.setup_code_cave(location_data)
-    ctx.code_cave_setup = True
+    if location_data:
+        ctx.game_interface.setup_code_cave(location_data)
+        ctx.code_cave_setup = True
 
 
 async def handle_intro_skip(ctx: "Context") -> None:
