@@ -1,13 +1,17 @@
 class RAC3SHORTCUTS:
     """String constants for RaC3 shortcuts"""
-    REFRACTOR = "Refactor"
+    REFRACTOR = "Refractor"
     TYHRRAGUISE = "Tyhrrguise"
     HACKER = "Hacker"
     BOLT_CRANK = "Bolt Crank"
+    TAXI = "Taxi"
+    DROPSHIP = "Dropship"
 
 SHORTCUTS = [
     RAC3SHORTCUTS.REFRACTOR,
-    RAC3SHORTCUTS.TYHRRAGUISE,
     RAC3SHORTCUTS.HACKER,
+    RAC3SHORTCUTS.TYHRRAGUISE,
     RAC3SHORTCUTS.BOLT_CRANK,
+    RAC3SHORTCUTS.TAXI,
+    RAC3SHORTCUTS.DROPSHIP,
 ]
