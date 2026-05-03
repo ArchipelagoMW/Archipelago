@@ -2000,7 +2000,7 @@ class Rac3Interface(GameInterface):
                              region in PLANETS_WITH_HACKER_PUZZLES]:
             if bit in checks.get(address, []):
                 continue
-            checks[address] += {bit}
+            checks.update({address: {bit}})
         for address, check in checks.items():
             self._write_bits(address, check)
 
@@ -2029,7 +2029,7 @@ class Rac3Interface(GameInterface):
             else:
                 if bit in checks.get(address, []):
                     continue
-                checks[address] += {bit}
+                checks.update({address: {bit}})
         if already:
             self.__setattr__(check, True)
         else:
