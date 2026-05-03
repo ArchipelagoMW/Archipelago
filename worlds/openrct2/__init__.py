@@ -107,9 +107,9 @@ class OpenRCT2World(World):
         "Water Rides": item_info["Water Rides"],
         "Rides": item_info["Rides"],
         "Tracked Rides": item_info["tracked_rides"],
-        "Food Stalls": item_info["food stalls"],
-        "Drink Stalls": item_info["drink stalls"],
-        "Souvenir Stalls": item_info["souvenir stalls"],
+        "Food Stalls": item_info["Food Stalls"],
+        "Drink Stalls": item_info["Drink Stalls"],
+        "Shops": item_info["Shops"],
         "Scenery with Benches": item_info["scenery_with_benches"],
         "Scenery with Bins": item_info["scenery_with_bins"],
         "Scenery with Signs": item_info["scenery_with_signs"]
@@ -591,6 +591,8 @@ class OpenRCT2World(World):
                                 category, excitement, intensity, nausea, length, total_customers]
                         elif category == "Transport Rides" or category == "Water Rides" or category == "Roller Coasters":
                             unlock["RidePrereq"] = [self.random.randint(1, 3), category, 0, 0, 0, 0, total_customers]
+                        elif category == "Food Stalls" or category == "Drink Stalls" or category == "Shops":
+                            unlock["RidePrereq"] = [self.random.randint(2, 10), category, 0, 0, 0, 0, total_customers]
                         else:
                             unlock["RidePrereq"] = [self.random.randint(1, 10), category, 0, 0, 0, 0, total_customers]
                     if self.options.balance_guest_counts.value & total_customers > 0: # Balances rides for throughput
@@ -620,7 +622,7 @@ class OpenRCT2World(World):
             # Add the shop item to the shop prices
             self.location_prices.append(unlock)
             # Handle unlocked rides
-            if item in item_info["Rides"]:  # Don't put items in that require an impossible rule
+            if item in item_info["Rides"] or item in item_info["stalls"]:  # Don't put items in that require an impossible rule
                 if not (self.options.forbid_high_construction.value == "on" and item in item_info[
                         "requires_height"]):
                     if not (self.options.forbid_landscape_changes.value == "on" and item in item_info[
@@ -637,7 +639,8 @@ class OpenRCT2World(World):
         # Okay, here's where we're going to take the last eligible rides in the logic table
         # and make them required for completion, if that's required.
         eligible_rides = [item for item in self.item_table if
-                          item in item_info["Rides"] and item not in item_info["non_starters"]]
+                          (item in item_info["Rides"] or item in item_info["stalls"])
+                          and item not in item_info["non_starters"]]
         eligible_rides = list(set(eligible_rides)) # Remove duplicates
         self.random.shuffle(eligible_rides)
         if self.options.required_unique_rides.value:
@@ -685,8 +688,11 @@ class OpenRCT2World(World):
                 # Add the prereqs if there are any
             if shop_item["RidePrereq"]:
                 prerequisites = str(shop_item["RidePrereq"][0]) + " "
-                if shop_item["RidePrereq"][1] in item_info["Rides"]:
-                    prerequisites += shop_item["RidePrereq"][1] + "(s)"
+                if shop_item["RidePrereq"][1] in item_info["Rides"] or shop_item["RidePrereq"][1] in item_info["stalls"]:
+                    if shop_item["RidePrereq"][1] == "Drinks Stall":
+                        prerequisites += "Drinks Stall(s) (The specific stall. You know, shaped like 4 cans!)"
+                    else:
+                        prerequisites += shop_item["RidePrereq"][1] + "(s)"
                 else:
                     if shop_item["RidePrereq"][1] == "rollercoaster":
                         prerequisites += "Roller Coaster(s)"
@@ -747,8 +753,14 @@ class OpenRCT2World(World):
                     location["RidePrereq"][1] = "gentle"
                 elif category == "Thrill Rides":
                     location["RidePrereq"][1] = "thrill"
-                else:
+                elif category == "Water Rides":
                     location["RidePrereq"][1] = "water"
+                elif category == "Food Stalls":
+                    location["RidePrereq"][1] = "Food Stall"
+                elif category == "Drink Stalls":
+                    location["RidePrereq"][1] = "Drink Stall"
+                else:
+                    location["RidePrereq"][1] = "Shop"
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
         # print("Here's the final unlock shop:")
@@ -777,8 +789,8 @@ class OpenRCT2World(World):
     def create_item(self, item: str) -> OpenRCT2Item:
         classification = ItemClassification.useful
         progressive_items = [
-            "Rides", "progression_rules", "stalls", "food stalls", "drink stalls",
-            "souvenir stalls", "scenery_with_benches", "scenery_with_bins", "scenery_with_signs"
+            "Rides", "progression_rules", "stalls", "Food Stalls", "Drink Stalls",
+            "Shops", "scenery_with_benches", "scenery_with_bins", "scenery_with_signs"
         ]
         if any(item in item_info[key] for key in progressive_items):
             classification = ItemClassification.progression
