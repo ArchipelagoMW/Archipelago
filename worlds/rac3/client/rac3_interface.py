@@ -336,6 +336,7 @@ class Rac3Interface(GameInterface):
         # Bolt and XPMultiplier
         self.bolt_and_xp_multiplier_value = int(self.options.bolt_and_xp_multiplier)
         # EnableWeaponLevelAsItem: if enabled, EXP disabler is running.
+        self.visited_planets = set()
 
     def check_main_menu(self):
         """Check if the player is on the main menu, before starting the game"""
@@ -1208,7 +1209,7 @@ class Rac3Interface(GameInterface):
         if self.planet not in PLANET_VENDOR_OFFSET.keys() or self.vendor_type is None:
             return
 
-        if self.options.armor_vendor:
+        if self.options.armor_vendor and self.planet == RAC3REGION.STARSHIP_PHOENIX:
             new_armor = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.NEW_ARMOR_OFFSET))
             if 0 < new_armor < 5:
                 self._write8(RAC3INSTRUCTION.CODECAVE_START + new_armor, 1)
@@ -1952,7 +1953,7 @@ class Rac3Interface(GameInterface):
                 # Ban shield charger usage if one HP challenge is active for Ratchet
                 if character == RAC3PLAYERTYPE.RATCHET:
                     self._write8(non_prog_weapon_data[RAC3ITEM.SHIELD_CHARGER].AMMO_ADDRESS, 0)
-                if self._read8(RAC3STATUS.HEALTH) > 1:
+                if self.health > 1:
                     self._write8(RAC3STATUS.HEALTH, 1)
                     self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
 
@@ -2417,12 +2418,16 @@ class Rac3Interface(GameInterface):
         else:
             pda_vendor_str = hex(self.pda_vendor) if self.pda_vendor else "Not Found"
         logger.info(f"PDA Vendor Address: {pda_vendor_str}")
+        if self.planet in PLANETS_WITH_HACKER_PUZZLES:
+            hacker_door_addr = {door_id: (hex(addr) if addr else "Not Found") for door_id, addr in self.hacker_door_addresses.items()}
+        else:
+            hacker_door_addr = "N/A"
+        logger.info(f"Hacker Door Addresses: {hacker_door_addr}")
         logger.info(f"Opened Hacker Doors: {self.opened_the_hacker_doors}")
         logger.info(f"Opened Tyhrranoid Doors: {self.opened_the_tyhrranoid_doors}")
         logger.info(f"Opened Refractor Doors: {self.opened_the_refractor_doors}")
-        visited_planets = [planet for planet in PLANET_NAME_FROM_ID.values() if planet in self.visited_planets and not (
-            planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK,
-                                                                                       False))]
+        visited_planets = [planet for planet in self.visited_planets if not (
+            planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK, False))]
         logger.info(f"Visited Planets: {visited_planets}")
         logger.info(f"Active Patches: {[PATCH_INSTRUCTION_TO_NAME[patch] for patch in self.get_active_patches()]}")
         failed_patches = self.get_failed_patches()

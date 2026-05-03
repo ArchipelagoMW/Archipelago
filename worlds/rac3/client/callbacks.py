@@ -193,9 +193,9 @@ async def _handle_game_ready(ctx: "Context") -> None:
             logger.info("Game READY!")
 
         if not ctx.main_menu:
-            current_time = time()
             ctx.game_interface.cycle_reads_count = 0
             ctx.game_interface.cycle_writes_count = 0
+            current_time = time()
             await update(ctx)
             after_time = time()
             elapsed = after_time - current_time
