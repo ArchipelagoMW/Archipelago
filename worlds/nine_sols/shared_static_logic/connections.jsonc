@@ -906,13 +906,16 @@
         "medium_requires": [ { "anyOf": [
             { "item": "Air Dash" }, // plus T-dash, using the enemies on HBRoof
             [
-                { "item": "Grapple" }, // to reach the platforms high enough to hover from
-                { "item": "Trick - Bow Hover" }
+                { "item": "Trick - Bow Hover" },
+                { "anyOf": [
+                    { "item": "Grapple" }, // either we start hovering from higher platforms
+                    { "item": "Ledge Grab" } // or we need to grab the ledge on the far side
+                ] }
             ]
         ] } ],
         "ls_requires": [
-            { "item": "Grapple" }, // to reach the platforms high enough to hover from
             { "item": "Ledge Grab" } // T-dash setup using ledge on the right side of the roof, landing on the conveyer
+            // then parry hover just high enough to grab the ledge on the far side
         ] // CL or AD setups would be redundant with non-LS logic
     },
     { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Hammer Brothers Roof", "requires": [] }, // fall
