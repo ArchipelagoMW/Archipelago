@@ -395,7 +395,7 @@ class Rac3Interface(GameInterface):
                 continue
             for check in location.CHECK_ADDRESS:
                 if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
-                    checks.update({check.ADDRESS: {check.VALUE}})
+                    checks.setdefault(check.ADDRESS, set()).add(check.VALUE)
         for address, value in checks.items():
             self._unwrite_bits(address, value)
 
@@ -419,7 +419,7 @@ class Rac3Interface(GameInterface):
                 continue
             for check in loc_data.CHECK_ADDRESS:
                 if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
-                    checks.update({check.ADDRESS: {check.VALUE}})
+                    checks.setdefault(check.ADDRESS, set()).add(check.VALUE)
         for address, value in checks.items():
             self._write_bits(address, value)
         return output
@@ -2000,7 +2000,7 @@ class Rac3Interface(GameInterface):
                              region in PLANETS_WITH_HACKER_PUZZLES]:
             if bit in checks.get(address, []):
                 continue
-            checks.update({address: {bit}})
+            checks.setdefault(address, set()).add(bit)
         for address, check in checks.items():
             self._write_bits(address, check)
 
@@ -2029,7 +2029,7 @@ class Rac3Interface(GameInterface):
             else:
                 if bit in checks.get(address, []):
                     continue
-                checks.update({address: {bit}})
+                checks.setdefault(address, set()).add(bit)
         if already:
             self.__setattr__(check, True)
         else:
