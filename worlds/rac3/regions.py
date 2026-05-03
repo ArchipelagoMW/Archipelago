@@ -12,6 +12,7 @@ from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_type import RAC3PLAYERTYPE
 from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.rac3options import RaC3Options
 
 if TYPE_CHECKING:
@@ -394,7 +395,7 @@ def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
     veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
-    if world.options.intro_skip.value:
+    if world.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False):
         starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX,
                                                      f"{RAC3REGION.MENU} -> {RAC3REGION.STARSHIP_PHOENIX}", menu)
         create_region_and_connect(world, RAC3REGION.FLORANA,

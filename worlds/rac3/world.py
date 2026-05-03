@@ -9,6 +9,7 @@ from worlds.rac3.constants.data.item import item_groups, RAC3_ITEM_DATA_TABLE
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.items import (create_item, create_itempool, get_filler_selection, process_start_inventory,
                                starting_planets, starting_weapons)
 from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
@@ -80,7 +81,7 @@ class RaC3World(World):
             if len(starting_weapon_list) > 1:
                 self.get_location(RAC3LOCATION.VELDIN_SECOND_RANGER).place_locked_item(
                     self.create_item(starting_weapon_list[1]))
-        if self.options.intro_skip.value:
+        if self.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False):
             if len(starting_planet_list) == 1:  # either [Phoenix] or [Other]
                 if starting_planet_list[0] == RAC3ITEM.STARSHIP_PHOENIX:
                     self.preplaced_items.append(starting_planet_list[0])
@@ -108,7 +109,7 @@ class RaC3World(World):
 
     def handle_option_errors(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
         """Check for option combinations that will never result in successful seed generation and warn the player"""
-        if (not self.options.intro_skip.value
+        if (not self.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False)
             and self.options.clank_options.value
             and not self.options.titanium_bolts.value
             and not self.options.weapon_vendors.value
@@ -133,7 +134,7 @@ class RaC3World(World):
 
         no_nanotech_locations = not nanotech_milestones or (nanotech_milestones != 0 and len(nanotech_locations) == 0)
 
-        if (not self.options.intro_skip.value
+        if (not self.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False)
             and not self.options.titanium_bolts.value
             and not self.options.trophies.value
             and not self.options.weapon_vendors.value
@@ -271,13 +272,12 @@ class RaC3World(World):
             RAC3OPTION.WEAPON_VENDORS: self.options.weapon_vendors.value,
             RAC3OPTION.FILLER_WEIGHT: self.options.filler_weight.value,
             RAC3OPTION.ONE_HP_CHALLENGE: self.options.one_hp_challenge.value,
-            RAC3OPTION.INTRO_SKIP: self.options.intro_skip.value,
-            RAC3OPTION.HOLOSTAR_SKIP: self.options.holostar_skip.value,
             RAC3OPTION.CLANK_OPTIONS: self.options.clank_options.value,
             RAC3OPTION.SHIP_VENDOR: self.options.ship_vendor.value,
             RAC3OPTION.ARMOR_VENDOR: self.options.armor_vendor.value,
             RAC3OPTION.SCOUT_VENDORS: self.options.scout_vendors.value,
             RAC3OPTION.SHORTCUTS: self.options.shortcuts.value,
+            RAC3OPTION.SPEEDUPS: self.options.speedups.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

@@ -8,6 +8,7 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.rac3options import RaC3Options
 
 if TYPE_CHECKING:
@@ -160,7 +161,7 @@ def starting_planets(world: "RaC3World") -> list[str]:
     planet_list = remove_dead_starting_planets(world, planet_list)
     if len(planet_list) > 1:  # [Phoenix], [Florana], or [Other]
         world.random.shuffle(planet_list)
-        if world.options.intro_skip.value:
+        if world.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False):
             if RAC3ITEM.STARSHIP_PHOENIX in planet_list:
                 if planet_list[0] == RAC3ITEM.STARSHIP_PHOENIX:
                     planet_list = planet_list[:2]  # [Phoenix, Other]

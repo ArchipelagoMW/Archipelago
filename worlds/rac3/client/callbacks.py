@@ -18,6 +18,7 @@ from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_action import PERMITTED_DEATHLINK_SHIP_TELEPORT_ACTIONS
 from worlds.rac3.constants.region import PLANET_VENDOR_OFFSET, RAC3REGION
+from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -272,7 +273,7 @@ async def handle_intro_skip(ctx: "Context") -> None:
     """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
     if ctx.slot_data is None:
         return
-    if (ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False)
+    if (ctx.slot_data[RAC3OPTION.SHORTCUTS].value.get(RAC3SHORTCUTS.VELDIN_SKIP, False)
         and ctx.current_planet == RAC3REGION.VELDIN and not ctx.game_interface.homewarping):
         locations = []
         for ap_code in [ap_code for ap_code in ctx.missing_locations if

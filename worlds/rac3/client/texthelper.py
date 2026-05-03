@@ -1,6 +1,7 @@
 """This module contains functions for processing the message displayed when sending items"""
 
 from typing import TYPE_CHECKING
+
 import unicodedata
 
 from BaseClasses import ItemClassification
@@ -35,6 +36,7 @@ def get_sent_item_message(ctx: "Rac3Context", net_item: NetworkItem, player_name
     if player_name_after:
         return f"Sent {item_name} to {RAC3TEXTFORMATSTRING.GREEN}{player_name}"
     return f"Sent {player_name}'s {item_name}"
+
 
 def remove_accents(input_str):
     nfkd_form = unicodedata.normalize(u"NFKD", input_str)
