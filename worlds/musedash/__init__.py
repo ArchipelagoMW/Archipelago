@@ -33,7 +33,16 @@ class MuseDashWebWorld(WebWorld):
         ["Shiny"]
     )
 
-    tutorials = [setup_en, setup_es]
+    setup_it = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Italiano",
+        "setup_it.md",
+        "setup/it",
+        ["UCSA"]
+    )
+
+    tutorials = [setup_en, setup_es, setup_it]
     options_presets = MuseDashPresets
     option_groups = md_option_groups
 
