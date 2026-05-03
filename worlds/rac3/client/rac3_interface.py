@@ -1433,9 +1433,6 @@ class Rac3Interface(GameInterface):
         if self.planet == RAC3REGION.STARSHIP_PHOENIX:
             # Fix can't play Qwark VidComics in some case which first event is skipped
             self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
-            # Bring qwark back to life until Ratchet has met Sasha on the bridge
-            if RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations:
-                self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
         if self.options.shortcuts.get(RAC3SHORTCUTS.MARCADIA_DROPSHIP, False):
             self._write_bits(RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[0],
                              {RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[1]})
