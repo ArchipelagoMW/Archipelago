@@ -44,12 +44,13 @@ from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
 from worlds.rac3.constants.messages.text_format import CLASSIFICATION_TO_COLOR, FORMAT_NAME_TO_BYTE
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
+from worlds.rac3.constants.moby_flag import (HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION,
+                                             REFRACTOR_PUZZLE_TO_REGION,
+                                             TYHRRANOID_PUZZLE_TO_REGION)
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.progress_flag import (HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION,
-                                                 REFRACTOR_PUZZLE_TO_REGION, TYHRRANOID_PUZZLE_TO_REGION)
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID,
                                           PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES,
                                           PLANETS_WITH_REFRACTOR_PUZZLES, PLANETS_WITH_TYHRRANOID_PUZZLES,

@@ -22,6 +22,7 @@ from worlds.rac3.constants.region import RAC3REGION
 # Load Universal Tracker modules with aliases
 tracker_loaded: bool = False
 try:
+    # noinspection PyUnusedImports
     from worlds.tracker.TrackerClient import (TrackerCommandProcessor as ClientCommandProcessor,
                                               TrackerGameContext as CommonContext, UT_VERSION)
 
