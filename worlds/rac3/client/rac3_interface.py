@@ -244,7 +244,7 @@ class Rac3Interface(GameInterface):
         bits = self._read_bits(address)
         if value.issubset(bits):
             return None
-        bits.union(value)
+        bits |= value
         write: int = 0
         for bit in bits:
             if 0 <= bit <= 7:
