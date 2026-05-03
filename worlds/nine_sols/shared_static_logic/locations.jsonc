@@ -724,9 +724,7 @@
     },
     {
         "address": 1607, "name": "Yinglong Canal: Near Root Node",
-        "region": "Yinglong Canal - Root Node", "requires": [ { "anyOf": [
-            { "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ]
+        "region": "Yinglong Canal - Ledges Above Root Node", "requires": []
     },
 
     // Factory (Great Hall)

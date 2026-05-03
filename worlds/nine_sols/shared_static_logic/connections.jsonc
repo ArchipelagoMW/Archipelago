@@ -863,8 +863,13 @@
     { "from": "Yinglong Canal - Above Egg Cave", "to": "Yinglong Canal - Farmland Markings", "requires": [] }, // fall
     { "from": "Yinglong Canal - Above Egg Cave", "to": "Yinglong Canal - Egg Cave & Left Exit", "requires": [] }, // fall
     { "from": "Yinglong Canal - Egg Cave & Left Exit", "to": "Yinglong Canal - Above Egg Cave", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "Yinglong Canal - Farmland Markings", "to": "Yinglong Canal - Ledges Above Root Node", "requires": [] }, // fall
     { "from": "Yinglong Canal - Farmland Markings", "to": "Yinglong Canal - Root Node", "requires": [] }, // fall
-    { "from": "Yinglong Canal - Root Node", "to": "Yinglong Canal - Farmland Markings", "requires": [ { "anyOf": [
+    { "from": "Yinglong Canal - Root Node", "to": "Yinglong Canal - Ledges Above Root Node", "requires": [
+        // this logic is for jumping from the lower roof to the left rock ledge; the others are all single jumps
+        { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
+    ] },
+    { "from": "Yinglong Canal - Ledges Above Root Node", "to": "Yinglong Canal - Farmland Markings", "requires": [ { "anyOf": [
         { "item": "Grapple" },
         [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] },
