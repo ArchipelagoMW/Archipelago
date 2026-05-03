@@ -1535,28 +1535,11 @@
     },
     {
         "address": 3502, "name": "ED (Passages): Hack 2 Statues",
-        "region": "ED (Passages) - Around Root Node",
+        "region": "ED (Passages) - Around Root Node", // where the chest is
         "requires": [
-            // 1st statue requires jumping from slider to slider left of Root Node
-            { "item": "Grapple" }, // take ziplines up to pink pool as usual
-            { "item": "Cloud Leap" }, // up to the highest zipline
-            { "item": "Charged Strike" }, // and the statue itself has a shield
-            // 2nd statue needed its own region because of multiple entrances
-            { "region": "ED (Passages) - Between Root Node & Tianshou Arena" },
-            { "item": "Unbounded Counter" } // and the statue itself has a hammer
-        ],
-        "medium_requires": [
-            { "item": "Grapple" },
-            // instead of Cloud Leaping to the highest zipline, you can take the 2nd highest zipline to the right and:
-            { "item": "Air Dash" }, // and CS-dash and T-dash (qi from pink pool axe guy or sniper near root node)
-            { "item": "Ledge Grab" }, // and finally grab the ledge the statue is on
-            { "item": "Charged Strike" }, // for the CS-dash above and the shielded statue
-            // 2nd statue is unchanged
-            { "region": "ED (Passages) - Between Root Node & Tianshou Arena" },
-            { "item": "Unbounded Counter" }
+            { "region": "ED (Passages) - Hack Statue In Left Chasm" },
+            { "region": "ED (Passages) - Hack Statue Under Robot" }
         ]
-        // LS parry hover also works, but it turns out you need AD OR CL to reach the ledge by the pink pool anyway
-        // (TCK would discard the LS), so LS logic ends up adding nothing new to vanilla + medium logic here
     },
     {
         "address": 3503, "name": "ED (Passages): Alcove Right of Root Node 1st Chest",

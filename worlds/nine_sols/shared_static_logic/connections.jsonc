@@ -2015,6 +2015,31 @@
         ]
     },
     { "from": "ED (Passages) - Outside Tianshou Arena", "to": "ED (Passages) - Between Root Node & Tianshou Arena", "requires": [] }, // shortcut rope
+    // these statues get their own regions because of multiple entrances and logic difficulty changes
+    {
+        "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Statue In Left Chasm",
+        "requires": [ // jumping from slider to slider left of Root Node
+            { "item": "Grapple" }, // take ziplines up to pink pool as usual
+            { "item": "Cloud Leap" } // up to the highest zipline
+        ],
+        "medium_requires": [
+            { "item": "Grapple" },
+            // instead of Cloud Leaping to the highest zipline, you can take the 2nd highest zipline to the right and:
+            { "item": "Charged Strike" }, // CS-dash
+            { "item": "Air Dash" }, // and T-dash (qi from pink pool axe guy or sniper near root node)
+            { "item": "Ledge Grab" } // and finally grab the ledge the statue is on
+        ]
+        // LS parry hover also works, but it turns out you need AD OR CL to reach the ledge by the pink pool anyway
+        // (TCK would discard the LS), so LS logic ends up adding nothing new to vanilla + medium logic here
+    },
+    {
+        "from": "ED (Passages) - Statue In Left Chasm", "to": "ED (Passages) - Hack Statue In Left Chasm",
+        "requires": [ { "item": "Charged Strike" } ] // and the statue itself has a shield
+    },
+    {
+        "from": "ED (Passages) - Between Root Node & Tianshou Arena", "to": "ED (Passages) - Hack Statue Under Robot",
+        "requires": [ { "item": "Unbounded Counter" } ] // and the statue itself has a hammer
+    },
     // this region probably has no practical impact on logic, but let's map it out anyway
     {
         "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Robot Hack Point",
