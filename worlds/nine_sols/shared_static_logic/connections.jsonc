@@ -2024,9 +2024,13 @@
         ],
         "medium_requires": [
             { "item": "Grapple" },
-            // instead of Cloud Leaping to the highest zipline, you can take the 2nd highest zipline to the right and:
-            { "item": "Charged Strike" }, // CS-dash
-            { "item": "Air Dash" }, // and T-dash (qi from pink pool axe guy or sniper near root node)
+            { "anyOf": [
+                [ // now instead of Cloud Leaping to the highest zipline, you can take the 2nd highest zipline to the right and:
+                    { "item": "Charged Strike" }, // CS-dash
+                    { "item": "Air Dash" } // and T-dash (qi from pink pool axe guy or sniper near root node)
+                ],
+                { "item": "Trick - Bow Hover" } // or we can just hover into the ledge
+            ] },
             { "item": "Ledge Grab" } // and finally grab the ledge the statue is on
         ]
         // LS parry hover also works, but it turns out you need AD OR CL to reach the ledge by the pink pool anyway
