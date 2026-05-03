@@ -1,5 +1,5 @@
 """Moby flag addresses and which bit is set."""
-from constants.progress_flag import RAC3PROGRESSFLAG
+from worlds.rac3.constants.progress_flag import RAC3PROGRESSFLAG
 from worlds.rac3.constants.region import RAC3REGION
 
 
