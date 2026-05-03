@@ -1622,6 +1622,12 @@ snack_rules = [
             LocationNames.i001_SN4: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.i001_SN48: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.i001_SN6: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.i001_SN7: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.i001_SN8: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.i001_SN29: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.i001_SN30: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.i001_SN11: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.i001_SNACKBOX__SECRET__AREA: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.i001_SNACKBOX: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.i001_SNACKBOX__CHAND__2: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
 
