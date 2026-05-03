@@ -273,7 +273,7 @@ async def handle_intro_skip(ctx: "Context") -> None:
     """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
     if ctx.slot_data is None:
         return
-    if (ctx.slot_data[RAC3OPTION.SHORTCUTS].value.get(RAC3SHORTCUTS.VELDIN_SKIP, False)
+    if (ctx.slot_data[RAC3OPTION.SHORTCUTS].get(RAC3SHORTCUTS.VELDIN_SKIP, False)
         and ctx.current_planet == RAC3REGION.VELDIN and not ctx.game_interface.homewarping):
         locations = []
         for ap_code in [ap_code for ap_code in ctx.missing_locations if
