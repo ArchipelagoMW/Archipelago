@@ -2,7 +2,7 @@
 import time
 from dataclasses import dataclass
 from random import choice, randint, uniform
-from typing import Any
+from typing import Any, Optional
 
 from BaseClasses import ItemClassification
 from CommonClient import logger
@@ -51,6 +51,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
+from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION, RAC3PROGRESSFLAG
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID,
                                           PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES,
                                           PLANETS_WITH_REFRACTOR_PUZZLES, PLANETS_WITH_TYHRRANOID_PUZZLES,
@@ -213,6 +214,14 @@ class Rac3Interface(GameInterface):
     def _read_string(self, address, n) -> str:
         return super()._read_string(self.address_convert(address), n)
 
+    def _read_bits(self, address: int) -> set[int]:
+        bits: set[int] = set()
+        value = self._read8(self.address_convert(address))
+        for i in range(8):
+            if value & (1 << i):
+                bits.add(i)
+        return bits
+
     def _write8(self, address: int, value: int):
         return super()._write8(self.address_convert(address), value)
 
@@ -230,6 +239,34 @@ class Rac3Interface(GameInterface):
 
     def _write_string(self, address: int, value: str):
         return super()._write_string(self.address_convert(address), value)
+
+    def _write_bits(self, address: int, value: set[int]):
+        bits = self._read_bits(address)
+        if value.issubset(bits):
+            return None
+        bits += value
+        write: int = 0
+        for bit in bits:
+            if 0 <= bit <= 7:
+                write += 1 << bit
+            else:
+                raise ValueError(f"Invalid bit position {bit}")
+
+        return self._write8(address, write)
+
+    def _unwrite_bits(self, address: int, value: set[int]):
+        bits = self._read_bits(address)
+        if value.isdisjoint(bits):
+            return None
+        bits -= value
+        write: int = 0
+        for bit in bits:
+            if 0 <= bit <= 7:
+                write += 1 << bit
+            else:
+                raise ValueError(f"Invalid bit position {bit}")
+
+        return self._write8(address, write)
 
     def address_convert(self, address: int):
         """Address conversion from str to int, and for version correction (with US/JP/EU)"""
@@ -343,6 +380,7 @@ class Rac3Interface(GameInterface):
     def undo_collections(self):
         """Unset flags in the game associated to randomizer locations"""
         self.health = self._read8(RAC3STATUS.HEALTH)
+        checks: dict[int, set[int]] = {}
         sewer, nano = 0, 0
         for location in RAC3_LOCATION_DATA_TABLE.values():
             if RAC3TAG.SEWER in location.TAGS:
@@ -357,7 +395,9 @@ class Rac3Interface(GameInterface):
                 continue
             for check in location.CHECK_ADDRESS:
                 if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
-                    self._write8(check.ADDRESS, self._read8(check.ADDRESS) & (0xFF ^ (0x01 << check.VALUE)))
+                    checks[check.ADDRESS] += {check.VALUE}
+        for address, value in checks.items():
+            self._unwrite_bits(address, value)
 
     def important_items(self, item: int, us: str, location: int):
         """Runs when loading into game from the main menu to update the player with important items from the server,
@@ -367,15 +407,22 @@ class Rac3Interface(GameInterface):
             return
         self.item_received(item, us, None, location)
 
-    def collect_location(self, location: str):
+    def collect_locations(self, locations: set[str]) -> set[str]:
         """Set the in game flags for this location for it to act as if the player has already collected the item here"""
-        self.checked_locations.add(location)
-        loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[location]
-        if RAC3TAG.NANOTECH in loc_data.TAGS or RAC3TAG.SEWER in loc_data.TAGS:
-            return
-        for check in loc_data.CHECK_ADDRESS:
-            if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
-                self._write8(check.ADDRESS, self._read8(check.ADDRESS) | (0x01 << check.VALUE))
+        checks: dict[int, set[int]] = {}
+        output: set[str] = set()
+        for location in locations:
+            self.checked_locations.add(location)
+            output.add(location)
+            loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[location]
+            if RAC3TAG.NANOTECH in loc_data.TAGS or RAC3TAG.SEWER in loc_data.TAGS:
+                continue
+            for check in loc_data.CHECK_ADDRESS:
+                if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
+                    checks[check.ADDRESS] += {check.VALUE}
+        for address, value in checks.items():
+            self._write_bits(address, value)
+        return output
 
     def fix_health(self):
         """Set the player health back to the value before we reset"""
@@ -682,11 +729,14 @@ class Rac3Interface(GameInterface):
 
         match name:
             case RAC3ITEM.HACKER:
-                self.already_marked_hacker_puzzles()
+                self.puzzle_cycler(name, RAC3SPEEDUPS.HACKER, 'opened_the_hacker_doors',
+                                   PLANETS_WITH_HACKER_PUZZLES, HACKER_PUZZLE_TO_REGION, True)
             case RAC3ITEM.TYHRRA_GUISE:
-                self.already_marked_tyhrra_puzzles()
+                self.puzzle_cycler(name, RAC3SPEEDUPS.TYHRRAGUISE, 'opened_the_tyhrranoid_doors',
+                                   PLANETS_WITH_TYHRRANOID_PUZZLES, TYHRRANOID_PUZZLE_TO_REGION, True)
             case RAC3ITEM.REFRACTOR:
-                self.already_marked_refractor_puzzles()
+                self.puzzle_cycler(name, RAC3SPEEDUPS.REFRACTOR, 'opened_the_refractor_doors',
+                                   PLANETS_WITH_REFRACTOR_PUZZLES, REFRACTOR_PUZZLE_TO_REGION, True)
             case RAC3ITEM.PROGRESSIVE_VIDCOMIC:
                 if self.UnlockItem[name].status > 5:
                     self.UnlockItem[name].status = 5
@@ -882,7 +932,7 @@ class Rac3Interface(GameInterface):
         for check in loc_data.CHECK_ADDRESS:
             match check.TYPE & CHECKTYPE.SIZE:
                 case CHECKTYPE.BIT:
-                    check_all &= (self._read8(check.ADDRESS) >> check.VALUE) & 0x01
+                    check_all &= check.VALUE in self._read_bits(check.ADDRESS)
                 case CHECKTYPE.BYTE:
                     check_all &= self.compare(self._read8(check.ADDRESS), check)
                 case CHECKTYPE.SHORT:
@@ -1377,18 +1427,33 @@ class Rac3Interface(GameInterface):
                 and infobot_location not in self.checked_locations
                 and infobot_flag != RAC3STATUS.ALLOW_SHIP):
                 self._write8(infobot_flag, 0)
-
+        if self.options.shortcuts.get(RAC3SHORTCUTS.FLORANA_BRIDGE, False):
+            self._write_bits(RAC3PROGRESSFLAG.FLORANA_REACH_PATH_OF_DEATH[0],
+                             set(RAC3PROGRESSFLAG.FLORANA_REACH_PATH_OF_DEATH[1]))
         if self.planet == RAC3REGION.STARSHIP_PHOENIX:
             # Fix can't play Qwark VidComics in some case which first event is skipped
             self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
             # Bring qwark back to life until Ratchet has met Sasha on the bridge
             if RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations:
                 self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
+        if self.options.shortcuts.get(RAC3SHORTCUTS.MARCADIA_DROPSHIP, False):
+            self._write_bits(RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[0],
+                             set(RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[1]))
+        if self.options.shortcuts.get(RAC3SHORTCUTS.DAXX_TELEPORTER, False):
+            self._write_bits(RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[0],
+                             set(RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[1]))
+        if self.options.shortcuts.get(RAC3SHORTCUTS.AQUATOS_SHUTTLE, False):
+            self._write8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.AQUATOS_SEWERS].ID, 1)
         if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
             self._write8(RAC3STATUS.ZELDRIN_START_LEVIATHAN, 0)
 
         if self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK, False):
             self._write8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.HOLOSTAR_STUDIOS_CLANK].ID, 1)
+
+        if self.options.speedups.get(RAC3SPEEDUPS.HALO_JUMPS, False):
+            for check, region in HALO_JUMP_TO_REGION.items():
+                if self.planet in region:
+                    self._write_bits(check[0], {check[1]})
 
     ##################
     # End of Main Loop #
@@ -1411,8 +1476,10 @@ class Rac3Interface(GameInterface):
         self.overflow_fix()
         self.health_cycler()
         self.hacker_cycler()
-        self.tyhrranoid_cycler()
-        self.refractor_cycler()
+        self.puzzle_cycler(RAC3ITEM.TYHRRA_GUISE, RAC3SPEEDUPS.TYHRRAGUISE, 'opened_the_tyhrranoid_doors',
+                           PLANETS_WITH_TYHRRANOID_PUZZLES, TYHRRANOID_PUZZLE_TO_REGION)
+        self.puzzle_cycler(RAC3ITEM.REFRACTOR, RAC3SPEEDUPS.REFRACTOR, 'opened_the_refractor_doors',
+                           PLANETS_WITH_REFRACTOR_PUZZLES, REFRACTOR_PUZZLE_TO_REGION)
         self.pda_vendor_cycler()
         self.notification_cycler()
 
@@ -1928,15 +1995,14 @@ class Rac3Interface(GameInterface):
         # Mark all hacker puzzles as complete
         if self.is_reloading and not self.opened_the_hacker_doors:
             self.opened_the_hacker_doors = True
-
-        for planet in PLANETS_WITH_HACKER_PUZZLES:
-            puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == planet]
-            for puzzle in puzzles:
-                bit_mask = 1 << puzzle[1]
-                current_value = self._read8(puzzle[0])
-                if current_value & bit_mask:
-                    continue
-                self._write8(puzzle[0], current_value | bit_mask)
+        checks: dict[int, set[int]] = {}
+        for address, bit in [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if
+                             region in PLANETS_WITH_HACKER_PUZZLES]:
+            if bit in checks.get(address, []):
+                continue
+            checks[address] += {bit}
+        for address, check in checks.items():
+            self._write_bits(address, check)
 
         # Open doors if all are resolved
         if (self.planet in PLANETS_WITH_HACKER_PUZZLES
@@ -1947,83 +2013,28 @@ class Rac3Interface(GameInterface):
                 self._write16(door_addr + 0xBE, 5)
             self.opened_the_hacker_doors = True
 
-    def tyhrranoid_cycler(self):
-        """Marks all tyhrranoid puzzles if tyhrranoid skip is enabled as complete if the tyhrranoid is unlocked."""
-        if not self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status or not self.options.speedups.get(RAC3SPEEDUPS.TYHRRAGUISE,
-                                                                                              False):
+    def puzzle_cycler(self, item: str, option: str, check: str, planets: list[str], table: dict[tuple[int, int],
+    str], already: Optional[bool] = False):
+        """General function for handling updating any puzzle type during the cycler iterations."""
+        if (not self.UnlockItem[item].status and not already) or not self.options.speedups.get(option, False):
             return
-
-        if self.is_reloading and not self.opened_the_tyhrranoid_doors:
-            self.opened_the_tyhrranoid_doors = True
-
-        for planet in PLANETS_WITH_TYHRRANOID_PUZZLES:
-            puzzles = [puzzle for puzzle, region in TYHRRANOID_PUZZLE_TO_REGION.items() if region == planet]
-            for puzzle in puzzles:
-                bit_mask = 1 << puzzle[1]
-                current_value = self._read8(puzzle[0])
-                if current_value & bit_mask:
+        if not already and self.is_reloading and not self.__getattribute__(check):
+            self.__setattr__(check, True)
+        checks: dict[int, set[int]] = {}
+        for address, bit in [puzzle for puzzle, region in table.items() if region in planets]:
+            if already:
+                if bit not in self._read_bits(address):
+                    self.__setattr__(check, False)
+                    return
+            else:
+                if bit in checks.get(address, []):
                     continue
-                self._write8(puzzle[0], current_value | bit_mask)
-
-    def refractor_cycler(self):
-        """Marks all refractor puzzles as complete if refractor skip is enabled."""
-        if not self.UnlockItem[RAC3ITEM.REFRACTOR].status or not self.options.speedups.get(RAC3SPEEDUPS.REFRACTOR,
-                                                                                           False):
-            return
-
-        if self.is_reloading and not self.opened_the_refractor_doors:
-            self.opened_the_refractor_doors = True
-
-        for planet in PLANETS_WITH_REFRACTOR_PUZZLES:
-            puzzles = [puzzle for puzzle, region in REFRACTOR_PUZZLE_TO_REGION.items() if region == planet]
-            for puzzle in puzzles:
-                bit_mask = 1 << puzzle[1]
-                current_value = self._read8(puzzle[0])
-                if current_value & bit_mask:
-                    continue
-                self._write8(puzzle[0], current_value | bit_mask)
-
-    def already_marked_tyhrra_puzzles(self):
-        """Check if all tyhrranoid puzzles for planets with tyhrranoid skip enabled are already marked as complete."""
-        if not self.options.speedups.get(RAC3SPEEDUPS.TYHRRAGUISE, False):
-            return
-        for planet in PLANETS_WITH_TYHRRANOID_PUZZLES:
-            puzzles = [puzzle for puzzle, region in TYHRRANOID_PUZZLE_TO_REGION.items() if region == planet]
-            for puzzle in puzzles:
-                bit_mask = 1 << puzzle[1]
-                current_value = self._read8(puzzle[0])
-                if not current_value & bit_mask:
-                    self.opened_the_tyhrranoid_doors = False
-                    return
-        self.opened_the_tyhrranoid_doors = True
-
-    def already_marked_hacker_puzzles(self):
-        """Check if all hacker puzzles for planets with hacker skip enabled are already marked as complete."""
-        if not self.options.speedups.get(RAC3SPEEDUPS.HACKER, False):
-            return
-        for planet in PLANETS_WITH_HACKER_PUZZLES:
-            puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == planet]
-            for puzzle in puzzles:
-                bit_mask = 1 << puzzle[1]
-                current_value = self._read8(puzzle[0])
-                if not current_value & bit_mask:
-                    self.opened_the_hacker_doors = False
-                    return
-        self.opened_the_hacker_doors = True
-
-    def already_marked_refractor_puzzles(self):
-        """Check if all refractor puzzles for planets with refractor skip enabled are already marked as complete."""
-        if not self.options.speedups.get(RAC3SPEEDUPS.REFRACTOR, False):
-            return
-        for planet in PLANETS_WITH_REFRACTOR_PUZZLES:
-            puzzles = [puzzle for puzzle, region in REFRACTOR_PUZZLE_TO_REGION.items() if region == planet]
-            for puzzle in puzzles:
-                bit_mask = 1 << puzzle[1]
-                current_value = self._read8(puzzle[0])
-                if not current_value & bit_mask:
-                    self.opened_the_refractor_doors = False
-                    return
-        self.opened_the_refractor_doors = True
+                checks[address] += {bit}
+        if already:
+            self.__setattr__(check, True)
+        else:
+            for address, bits in checks.items():
+                self._write_bits(address, bits)
 
     def find_moby_by_id_traversal(self, target_id: int, table_start: int | None = None) -> int | None:
         """Traverse the moby linked list on the current planet to find a moby with the given ID and return its

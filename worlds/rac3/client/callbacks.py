@@ -13,12 +13,15 @@ from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.vendorslot import (ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION,
                                                    SHIP_VENDOR_INVENTORY)
 from worlds.rac3.constants.input import RAC3INPUT
+from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
+from worlds.rac3.constants.moby_flag import HACKER_PUZZLE_TO_REGION
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_action import PERMITTED_DEATHLINK_SHIP_TELEPORT_ACTIONS
-from worlds.rac3.constants.region import PLANET_VENDOR_OFFSET, RAC3REGION
+from worlds.rac3.constants.region import PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES, RAC3REGION
 from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
+from worlds.rac3.constants.speedups import RAC3SPEEDUPS
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -173,11 +176,11 @@ async def _handle_game_ready(ctx: "Context") -> None:
             await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
             logger.info(f"Items Processed: {ctx.processed_item_count}")
             logger.info("Checking locations...")
-            counter = 0
+            checks = set()
             for loc in ctx.checked_locations:
                 logger.debug(f"Collecting location: {ctx.location_names.lookup_in_slot(loc, ctx.slot)}")
-                ctx.game_interface.collect_location(ctx.location_names.lookup_in_slot(loc, ctx.slot))
-                counter += 1
+                checks.add(ctx.location_names.lookup_in_slot(loc, ctx.slot))
+            counter = len(ctx.game_interface.collect_locations(checks))
             logger.info(f"Locations collected: {counter}")
             ctx.game_interface.fix_health()
             ctx.game_interface.reset_death_count()
@@ -275,14 +278,16 @@ async def handle_intro_skip(ctx: "Context") -> None:
         return
     if (ctx.slot_data[RAC3OPTION.SHORTCUTS].get(RAC3SHORTCUTS.VELDIN_SKIP, False)
         and ctx.current_planet == RAC3REGION.VELDIN and not ctx.game_interface.homewarping):
-        locations = []
+        ap_codes: set[int] = set()
+        locations: set[str] = set()
         for ap_code in [ap_code for ap_code in ctx.missing_locations if
                         RAC3_LOCATION_DATA_TABLE[ctx.location_names.lookup_in_slot(ap_code, ctx.slot)].REGION
                         == RAC3REGION.VELDIN]:
-            ctx.game_interface.collect_location(ctx.location_names.lookup_in_slot(ap_code, ctx.slot))
             ctx.locations_checked.update([ap_code])
-            locations.append(ap_code)
-        ctx.locations_checked.update(await ctx.check_locations(locations))
+            ap_codes.add(ap_code)
+            locations.add(ctx.location_names.lookup_in_slot(ap_code, ctx.slot))
+        ctx.game_interface.collect_locations(locations)
+        ctx.locations_checked.update(await ctx.check_locations(ap_codes))
         ctx.game_interface.homewarp()
 
 
@@ -377,7 +382,10 @@ async def handle_planet_changed(ctx: "Context") -> None:
         ctx.game_interface.hacker_door_addresses = {}
 
         # Changing planet counts as a reload.
-        ctx.game_interface.already_marked_hacker_puzzles()
+        ctx.game_interface.puzzle_cycler(RAC3ITEM.HACKER,
+                                         ctx.slot_data[RAC3OPTION.SPEEDUPS].get(RAC3SPEEDUPS.HACKER, False),
+                                         'opened_the_hacker_doors', PLANETS_WITH_HACKER_PUZZLES,
+                                         HACKER_PUZZLE_TO_REGION, True)
 
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
