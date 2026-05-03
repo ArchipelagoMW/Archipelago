@@ -1355,12 +1355,16 @@
     { "from": "Prison - After Kanghui", "to": "Factory (MR) - Left Elevator", "requires": [] }, // one-way elevator
 
     // Factory (Machine Room)
-    { "from": "Factory (MR) - Left Elevator", "to": "Factory (MR) - Walking Chest Above Green Pillar", "requires": [
-        { "item": "Wall Climb" }, // partway up the pillar
-        { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }, // left to turret platform
-        { "item": "Unbounded Counter" }, // to break through turret wall
-        { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } // final ledge up to walking chest platform
-    ] }, // no parryable enemies for T-dash
+    {
+        "from": "Factory (MR) - Left Elevator", "to": "Factory (MR) - Walking Chest Above Green Pillar",
+        "requires": [
+            { "item": "Wall Climb" }, // partway up the pillar
+            { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }, // left to turret platform
+            { "item": "Unbounded Counter" }, // to break through turret wall
+            { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } // final ledge up to walking chest platform
+        ], // no parryable enemies for T-dash
+        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // or skip the whole green pillar area using a triple jump
+    },
     { "from": "Factory (MR) - Walking Chest Above Green Pillar", "to": "Factory (MR) - Above Green Pillar", "requires": [] }, // fall
     { "from": "Factory (MR) - Above Green Pillar", "to": "Factory (MR) - Walking Chest Above Green Pillar", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
