@@ -244,7 +244,7 @@ class Rac3Interface(GameInterface):
         bits = self._read_bits(address)
         if value.issubset(bits):
             return None
-        bits += value
+        bits.union(value)
         write: int = 0
         for bit in bits:
             if 0 <= bit <= 7:
@@ -395,7 +395,7 @@ class Rac3Interface(GameInterface):
                 continue
             for check in location.CHECK_ADDRESS:
                 if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
-                    checks[check.ADDRESS] += {check.VALUE}
+                    checks.update({check.ADDRESS: {check.VALUE}})
         for address, value in checks.items():
             self._unwrite_bits(address, value)
 
@@ -419,7 +419,7 @@ class Rac3Interface(GameInterface):
                 continue
             for check in loc_data.CHECK_ADDRESS:
                 if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
-                    checks[check.ADDRESS] += {check.VALUE}
+                    checks.update({check.ADDRESS: {check.VALUE}})
         for address, value in checks.items():
             self._write_bits(address, value)
         return output
@@ -1429,7 +1429,7 @@ class Rac3Interface(GameInterface):
                 self._write8(infobot_flag, 0)
         if self.options.shortcuts.get(RAC3SHORTCUTS.FLORANA_BRIDGE, False):
             self._write_bits(RAC3PROGRESSFLAG.FLORANA_REACH_PATH_OF_DEATH[0],
-                             set(RAC3PROGRESSFLAG.FLORANA_REACH_PATH_OF_DEATH[1]))
+                             {RAC3PROGRESSFLAG.FLORANA_REACH_PATH_OF_DEATH[1]})
         if self.planet == RAC3REGION.STARSHIP_PHOENIX:
             # Fix can't play Qwark VidComics in some case which first event is skipped
             self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
@@ -1438,10 +1438,10 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
         if self.options.shortcuts.get(RAC3SHORTCUTS.MARCADIA_DROPSHIP, False):
             self._write_bits(RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[0],
-                             set(RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[1]))
+                             {RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[1]})
         if self.options.shortcuts.get(RAC3SHORTCUTS.DAXX_TELEPORTER, False):
             self._write_bits(RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[0],
-                             set(RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[1]))
+                             {RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[1]})
         if self.options.shortcuts.get(RAC3SHORTCUTS.AQUATOS_SHUTTLE, False):
             self._write8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.AQUATOS_SEWERS].ID, 1)
         if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
