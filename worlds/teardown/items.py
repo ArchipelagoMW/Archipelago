@@ -227,12 +227,65 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Extra Nothing": ItemClassification.filler,
 }
 
+item_name_groups = {
+    "levels": [
+        "Old Building Problem Unlock",
+        "Lee Computers Unlock",
+        "Login Devices Unlock",
+        "Making Space Unlock",
+        "Classic Cars Unlock",
+        "The GPS Devices Unlock",
+        "The Car Wash Unlock",
+        "Heavy Lifting Unlock",
+        "The Tower Unlock",
+        "Fine Arts Unlock",
+        "Tool Up Unlock",
+        "Art Return Unlock",
+        "Covert Chaos Unlock",
+        "Insurance Fraud Unlock",
+        "The BlueTide Computers Unlock",
+        "The Speed Deal Unlock",
+        "A Wet Affair Unlock",
+        "Power Outage Unlock",
+        "Motivational Reminder Unlock",
+        "An Assortment Of Dishes Unlock",
+        "Flooding Unlock",
+        "The Chase Unlock",
+        "Roborazzi Unlock",
+        "The Secret Ingredients Unlock",
+        "The BlueTide Shortage Unlock",
+        "The Shipping Logs Unlock",
+        "The Alarm System Unlock",
+        "Moving The Goods Unlock",
+        "Havoc In Paradise Unlock",
+        "Elena's Revenge Unlock",
+        "Truckload Of Trouble Unlock",
+        "Ornament Ordeal Unlock",
+        "The Quilez Tools Unlock",
+        "Connecting The Dots Unlock",
+        "The Pawn Shop Unlock",
+        "The Droid Abduction Unlock",
+        "Malice In Woonderland Unlock",
+        "Handle With Care Unlock",
+        "Droid Dismount Unlock",
+        # "The Final Diversion Unlock",
+    ],
+}
+
+
 class TeardownItem(Item):
     game = "Teardown"
 
 
 def get_random_filler_item_name(world: TeardownWorld) -> str:
     return "Extra Nothing"
+
+def create_item_with_correct_classification(world: TeardownWorld, name: str) -> TeardownItem:
+    classification = DEFAULT_ITEM_CLASSIFICATIONS[name]
+    if name == "Elena's Revenge Unlock":
+        classification = ItemClassification.progression
+
+    return TeardownItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
 
 def create_all_items(world: TeardownWorld) -> None:
@@ -418,49 +471,6 @@ def create_all_items(world: TeardownWorld) -> None:
     # This is how the generator actually knows about the existence of our items.
     world.multiworld.itempool += itempool
 
-    possiblelevels = [
-        "Old Building Problem Unlock"
-        "Lee Computers Unlock"
-        "Login Devices Unlock"
-        "Making Space Unlock"
-        "Classic Cars Unlock"
-        "The GPS Devices Unlock"
-        "The Car Wash Unlock"
-        "Heavy Lifting Unlock"
-        "The Tower Unlock"
-        "Fine Arts Unlock"
-        "Tool Up Unlock"
-        "Art Return Unlock"
-        "Covert Chaos Unlock"
-        "Insurance Fraud Unlock"
-        "The BlueTide Computers Unlock"
-        "The Speed Deal Unlock"
-        "A Wet Affair Unlock"
-        "Power Outage Unlock"
-        "Motivational Reminder Unlock"
-        "An Assortment Of Dishes Unlock"
-        "Flooding Unlock"
-        "The Chase Unlock"
-        "Roborazzi Unlock"
-        "The Secret Ingredients Unlock"
-        "The BlueTide Shortage Unlock"
-        "The Shipping Logs Unlock"
-        "The Alarm System Unlock"
-        "Moving The Goods Unlock"
-        "Havoc In Paradise Unlock"
-        "Elena's Revenge Unlock"
-        "Truckload Of Trouble Unlock"
-        "Ornament Ordeal Unlock"
-        "The Quilez Tools Unlock"
-        "Connecting The Dots Unlock"
-        "The Pawn Shop Unlock"
-        "The Droid Abduction Unlock"
-        "Malice In Woonderland Unlock"
-        "Handle With Care Unlock"
-        "Droid Dismount Unlock"
-        # "The Final Diversion Unlock"
-    ]
-
 
     if not world.options.StartingTool:
         sledge_hammer_unlock = world.create_item("Sledge Hammer Unlock")
@@ -473,7 +483,7 @@ def create_all_items(world: TeardownWorld) -> None:
         world.push_precollected(extinguisher_unlock)
 
     if world.options.StartingLevel:
-        predeterminedlevel = random.choice(possiblelevels)
+        predeterminedlevel = random.choice(item_name_groups["levels"])
         starting_level_unlock = world.create_item(predeterminedlevel)
         world.push_precollected(starting_level_unlock)
 

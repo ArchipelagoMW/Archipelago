@@ -2,6 +2,7 @@ from worlds.AutoWorld import World
 
 from . import items, locations, regions, rules, web_world
 from . import options as teardown_options
+from.items import item_name_groups
 
 
 class TeardownWorld(World):
@@ -22,7 +23,7 @@ class TeardownWorld(World):
 
     origin_region_name = "Main Menu"
 
-
+    item_name_groups = item_name_groups
 
     def create_regions(self) -> None:
         regions.create_and_connect_regions(self)
@@ -34,6 +35,8 @@ class TeardownWorld(World):
     def create_items(self) -> None:
         items.create_all_items(self)
 
+    def create_item(self, name: str) -> items.TeardownItem:
+        return items.create_item_with_correct_classification(self, name)
 
     def get_filler_item_name(self) -> str:
         return items.get_random_filler_item_name(self)
