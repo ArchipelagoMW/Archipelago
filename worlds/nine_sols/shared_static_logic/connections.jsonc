@@ -2034,7 +2034,8 @@
     },
     {
         "from": "ED (Passages) - Statue In Left Chasm", "to": "ED (Passages) - Hack Statue In Left Chasm",
-        "requires": [ { "item": "Charged Strike" } ] // and the statue itself has a shield
+        "requires": [ { "item": "Charged Strike" } ], // and the statue itself has a shield
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
     },
     {
         "from": "ED (Passages) - Between Root Node & Tianshou Arena", "to": "ED (Passages) - Hack Statue Under Robot",
