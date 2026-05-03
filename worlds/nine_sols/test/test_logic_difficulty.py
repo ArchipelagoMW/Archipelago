@@ -201,9 +201,9 @@ class TestVanillaFULogic(NineSolsTestBase):
         self.assertNotReachableWith("Factory (U): Find Broken Shanhai 9000", [])
         self.assertNotReachableWith("Factory (U): Examine Evacuation Notice", [])
 
-        self.assertReachableWith("Factory (U): Near Lower Elevator", ["Air Dash"])
-        self.assertReachableWith("Factory (U): Find Broken Shanhai 9000", ["Air Dash"])
-        self.assertNotReachableWith("Factory (U): Examine Evacuation Notice", ["Air Dash"])
+        self.assertReachableWith("Factory (U): Near Lower Elevator", ["Ledge Grab", "Air Dash"])
+        self.assertReachableWith("Factory (U): Find Broken Shanhai 9000", ["Ledge Grab", "Air Dash"])
+        self.assertNotReachableWith("Factory (U): Examine Evacuation Notice", ["Ledge Grab", "Air Dash"])
 
 
 class TestMediumFULogic(NineSolsTestBase):
@@ -223,10 +223,10 @@ class TestMediumFULogic(NineSolsTestBase):
         self.assertNotReachableWith("Factory (U): Find Broken Shanhai 9000", [])
         self.assertNotReachableWith("Factory (U): Examine Evacuation Notice", [])
 
-        self.assertReachableWith("Factory (U): Near Lower Elevator", ["Air Dash"])
-        self.assertReachableWith("Factory (U): Find Broken Shanhai 9000", ["Air Dash"])
+        self.assertReachableWith("Factory (U): Near Lower Elevator", ["Ledge Grab", "Air Dash"])
+        self.assertReachableWith("Factory (U): Find Broken Shanhai 9000", ["Ledge Grab", "Air Dash"])
         # this is the medium logic change: combining AD and T-dash lets you cross both hazards
-        self.assertReachableWith("Factory (U): Examine Evacuation Notice", ["Air Dash"])
+        self.assertReachableWith("Factory (U): Examine Evacuation Notice", ["Ledge Grab", "Air Dash"])
 
 
 class TestPRWGuardedChestVanillaLogic(NineSolsTestBase):
