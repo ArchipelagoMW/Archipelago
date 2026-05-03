@@ -176,7 +176,6 @@ class Rac3Interface(GameInterface):
     vendor_type: RAC3VENDORTYPE | None = None
     vendor_string_pointers: dict[str, int] = {}
     should_restore_vendor_item_names: bool = True
-    cycle_times: list[float] = []
     hacker_door_addresses: dict[int, int] = {}
     opened_the_hacker_doors: bool = False
     opened_the_tyhrranoid_doors: bool = False

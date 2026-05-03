@@ -13,45 +13,60 @@ class GameInterface:
     game_id_error: str | None = None
     is_connecting: bool = False
     emulator_connected: bool = False
+    cycle_reads_count: int = 0
+    cycle_writes_count: int = 0
+    cycle_times: list[float] = []
     pcsx2_interface: Pine = Pine()
 
     def __init__(self) -> None:
         pass
 
     def _read8(self, address: int) -> int:
+        self.cycle_reads_count += 1
         return self.pcsx2_interface.read_int8(address)
 
     def _read16(self, address: int) -> int:
+        self.cycle_reads_count += 1
         return self.pcsx2_interface.read_int16(address)
 
     def _read32(self, address: int) -> int:
+        self.cycle_reads_count += 1
         return self.pcsx2_interface.read_int32(address)
 
     def _read_bytes(self, address: int, n: int) -> bytes:
+        self.cycle_reads_count += 1
         return self.pcsx2_interface.read_bytes(address, n)
 
     def _read_float(self, address: int) -> float:
+        self.cycle_reads_count += 1
         return unpack("f", self.pcsx2_interface.read_bytes(address, 4))[0]
 
     def _read_string(self, address: int, n: int) -> str:
+        self.cycle_reads_count += 1
         return self.pcsx2_interface.read_string(address, n)
 
     def _write8(self, address: int, value: int):
+        self.cycle_writes_count += 1
         self.pcsx2_interface.write_int8(address, value)
 
     def _write16(self, address: int, value: int):
+        self.cycle_writes_count += 1
         self.pcsx2_interface.write_int16(address, value)
 
     def _write32(self, address: int, value: int):
+        self.cycle_writes_count += 1
         self.pcsx2_interface.write_int32(address, value)
 
     def _write_bytes(self, address: int, value: bytes):
+        self.cycle_writes_count += 1
         self.pcsx2_interface.write_bytes(address, value)
 
     def _write_float(self, address: int, value: float):
+        self.cycle_writes_count += 1
         self.pcsx2_interface.write_float(address, value)
 
     def _write_string(self, address: int, value: str):
+        self.cycle_writes_count += 1
         self.pcsx2_interface.write_string(address, value)
 
     def connect_to_game(self):
