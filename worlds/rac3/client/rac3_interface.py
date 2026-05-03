@@ -52,8 +52,8 @@ from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
 from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION, RAC3PROGRESSFLAG
-from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID,
-                                          PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES,
+from worlds.rac3.constants.region import (INFOBOT_FROM_PLANET, PLANET_FROM_INFOBOT, PLANET_LOAD_OFFSET,
+                                          PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES,
                                           PLANETS_WITH_REFRACTOR_PUZZLES, PLANETS_WITH_TYHRRANOID_PUZZLES,
                                           RAC3REGION, REGION_TO_HACKER_DOOR_COUNT, REGION_TO_MOBY_TABLE_START_NTSC,
                                           REGION_TO_MOBY_TABLE_START_PAL, RESPAWN_COORDS_OFFSET)
@@ -570,11 +570,18 @@ class Rac3Interface(GameInterface):
 
     def get_visited_planets(self):
         """Returns a set of all planets the player has visited"""
-        visited_planets: set[str] = set()
-        for region in RAC3_REGION_DATA_TABLE.keys():
-            if self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[region].ID):
-                visited_planets.add(region)
-        self.visited_planets = visited_planets
+        for region, region_data in RAC3_REGION_DATA_TABLE.items():
+            if region in self.visited_planets:
+                continue
+            unlock_item = INFOBOT_FROM_PLANET.get(region, None)
+            if unlock_item is not None:
+                unlock_data = self.UnlockItem.get(unlock_item, None)
+                # skip planets that are not unlocked yet
+                if not unlock_data or unlock_data.status == 0:
+                    continue
+            # only read visited flag for newly-unlocked, unvisited planets
+            if self._read8(RAC3STATUS.VISITED_BASE + region_data.ID):
+                self.visited_planets.add(region)
 
     def determine_weapon_vendor_items(self):
         """Determine which items should be sold by the weapon vendor on the current planet."""
