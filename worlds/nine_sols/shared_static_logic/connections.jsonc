@@ -2170,6 +2170,10 @@
     { "from": "TRC - Lower Sickbay", "to": "TRC - Upper Levels", "requires": [
         { "item": "Wall Climb" }
     ] },
+    { "from": "TRC - Lower Sickbay", "to": "TRC - Chest Above Sol Statue", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "TRC - Upper Levels", "to": "TRC - Chest Above Sol Statue", "medium_requires": [
+        { "item": "Air Dash" } // and T-dash. Probably T-dash first since you need to slash the spikes before landing.
+    ] },
     {
         "from": "TRC - Upper Levels", "to": "TRC - Xingtian Sickbay",
         "requires": [ { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] } ],

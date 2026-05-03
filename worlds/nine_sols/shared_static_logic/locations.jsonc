@@ -1773,7 +1773,7 @@
     },
     {
         "address": 3905, "name": "TRC: Above Sol Statue",
-        "region": "TRC - Lower Sickbay", "requires": [ { "item": "Cloud Leap" } ]
+        "region": "TRC - Chest Above Sol Statue", "requires": []
     },
     {
         "address": 3906, "name": "TRC: Past Spikes In Sickbay Vents",
