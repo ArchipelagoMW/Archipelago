@@ -196,18 +196,30 @@ def get_exe(component: str | Component) -> Sequence[str] | None:
         return [sys.executable, local_path(f"{component.script_name}.py")] if component.script_name else None
 
 
-def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
+def find_terminal() -> str | None:
+    if is_windows:
+        return "start"
+    if is_macos:
+        return which("open")
+    if is_linux:
+        return which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm")
+
+
+def launch(exe: Sequence[str], in_terminal: bool = False, terminal: str | None = None) -> None:
     """Runs the given command/args in `exe` in a new process.
 
     If `in_terminal` is True, it will attempt to run in a terminal window,
-    and the return value will indicate whether one was found."""
+    and it will do so using the specified terminal if given."""
     if in_terminal:
-        if is_windows:
+        if terminal is None:
+            terminal = find_terminal()
+
+        if terminal is None:
+            pass
+        elif is_windows:
             # intentionally using a window title with a space so it gets quoted and treated as a title
-            subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
-            return True
+            subprocess.Popen([terminal, "Running Archipelago", *exe], shell=True)
         elif is_linux:
-            terminal = which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm")
             if terminal:
                 # Clear LD_LIB_PATH during terminal startup, but set it again when running command in case it's needed
                 ld_lib_path = os.environ.get("LD_LIBRARY_PATH")
@@ -215,13 +227,10 @@ def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
                 env = env_cleared_lib_path()
 
                 subprocess.Popen([terminal, "-e", lib_path_setter + shlex.join(exe)], env=env)
-                return True
         elif is_macos:
-            terminal = [which("open"), "-W", "-a", "Terminal.app"]
-            subprocess.Popen([*terminal, *exe])
-            return True
+            terminal_run = [terminal, "-W", "-a", "Terminal.app"]
+            subprocess.Popen([*terminal_run, *exe])
     subprocess.Popen(exe)
-    return False
 
 
 def create_shortcut(button: Any, component: Component) -> None:
@@ -244,8 +253,9 @@ refresh_components: Callable[[], None] | None = None
 
 
 def run_gui(launch_components: list[Component], args: Any) -> None:
-    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
+    from kvui import ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox
     from kivy.properties import ObjectProperty
+    from kivy.clock import Clock
     from kivy.core.window import Window
     from kivy.metrics import dp
     from kivymd.uix.button import MDIconButton, MDButton
@@ -411,16 +421,21 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         @staticmethod
         def component_action(button):
             open_text = "Opening in a new window..."
-            if button.component.func:
-                # Note: if we want to draw the Snackbar before running func, func needs to be wrapped in schedule_once
-                button.component.func()
-            else:
-                # if launch returns False, it started the process in background (not in a new terminal)
-                if not launch(get_exe(button.component), button.component.cli) and button.component.cli:
+            terminal = None
+
+            if button.component.cli:
+                terminal = find_terminal()
+                if terminal is None:
                     open_text = "Running in the background..."
 
             MDSnackbar(MDSnackbarText(text=open_text), y=dp(24), pos_hint={"center_x": 0.5},
                        size_hint_x=0.5).open()
+
+            if button.component.func:
+                # Run using schedule_once so snackbar shows up first
+                Clock.schedule_once(lambda _: button.component.func(), 0)
+            else:
+                launch(get_exe(button.component), button.component.cli, terminal)
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
             """ When a patch file is dropped into the window, run the associated component. """
