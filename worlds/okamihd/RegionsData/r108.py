@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from ..CheckIds import container_check_id
+from .r102 import shop_locations
+from ..CheckIds import container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
@@ -75,5 +76,22 @@ locations = {
     },
     RegionNames.BAMBOO_HOUSE: {
         "Kusa Village - Buried Chest inside Mr Bamboo's house": LocData(container_check_id(MapIds.KUSA_VILLAGE, 47), type=LocationType.BURIED_CHEST)
+    }
+}
+
+shop_locations={
+    RegionNames.KUSA_VILLAGE:{
+        "Kusa Village - Shop Slot 1": LocData(shop_check_id(8, 0), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 2": LocData(shop_check_id(8, 1), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 3": LocData(shop_check_id(8, 2), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 4": LocData(shop_check_id(8, 3), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 5": LocData(shop_check_id(8, 4), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 6": LocData(shop_check_id(8, 5), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 7": LocData(shop_check_id(8, 6), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 8": LocData(shop_check_id(8, 7), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 9": LocData(shop_check_id(8, 8), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 10": LocData(shop_check_id(8, 9), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 11": LocData(shop_check_id(8, 10), type=LocationType.SHOP),
+        "Kusa Village - Shop Slot 12": LocData(shop_check_id(8, 11), type=LocationType.SHOP),
     }
 }

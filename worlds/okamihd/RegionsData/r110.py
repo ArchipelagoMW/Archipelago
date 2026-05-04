@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING
 
-from ..CheckIds import brush_check_id, container_check_id
+from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
 from ..Rules import has_soup_ingerdients, moon_cave_fire_rule, moon_cave_fire_rule_4f
 from ..Types import ExitData, LocData, EventData
+from ...earthbound.modules.shopsanity import shop_locations
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -210,5 +211,36 @@ locations = {
                                                            special_rule=lambda s, w: moon_cave_fire_rule_4f(s, w)),
         "Moon Cave - 4F Upper ledge Frozen Chest": LocData(container_check_id(MapIds.MOON_CAVE, 21), type=LocationType.FROZEN_CHEST,
                                                            special_rule=lambda s, w: moon_cave_fire_rule_4f(s, w))
+    }
+}
+
+shop_locations={
+    RegionNames.MOON_CAVE_2F_3F_RAFTERS:{
+        "Moon Cave - 3F merchant Shop Slot 1": LocData(shop_check_id(9, 0), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 2": LocData(shop_check_id(9, 1), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 3": LocData(shop_check_id(9, 2), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 4": LocData(shop_check_id(9, 3), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 5": LocData(shop_check_id(9, 4), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 6": LocData(shop_check_id(9, 5), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 7": LocData(shop_check_id(9, 6), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 8": LocData(shop_check_id(9, 7), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 9": LocData(shop_check_id(9, 8), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 10": LocData(shop_check_id(9, 9), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 11": LocData(shop_check_id(9, 10), type=LocationType.SHOP),
+        "Moon Cave - 3F merchant Shop Slot 12": LocData(shop_check_id(9, 11), type=LocationType.SHOP),
+    },
+    RegionNames.MOON_CAVE_OROCHI:{
+        "Moon Cave - Merchant Before Orochi Shop Slot 1": LocData(shop_check_id(10, 0), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 2": LocData(shop_check_id(10, 1), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 3": LocData(shop_check_id(10, 2), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 4": LocData(shop_check_id(10, 3), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 5": LocData(shop_check_id(10, 4), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 6": LocData(shop_check_id(10, 5), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 7": LocData(shop_check_id(10, 6), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 8": LocData(shop_check_id(10, 7), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 9": LocData(shop_check_id(10, 8), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 10": LocData(shop_check_id(10, 9), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 11": LocData(shop_check_id(10, 10), type=LocationType.SHOP),
+        "Moon Cave - Merchant Before Orochi Shop Slot 12": LocData(shop_check_id(10, 11), type=LocationType.SHOP),
     }
 }
