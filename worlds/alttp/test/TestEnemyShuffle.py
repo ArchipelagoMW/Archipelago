@@ -1758,6 +1758,57 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             [0x31],
         )
 
+    def test_preserved_full_room_sprites_constrain_group_selection(self) -> None:
+        room = DungeonEnemyRoom(
+            room_id=7,
+            room_header_address=0,
+            sprite_table_address=0,
+            graphics_block_id=1,
+            tag_1=0,
+            tag_2=0,
+            sort_sprites_value=0,
+            sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x30, is_overlord=False, has_key=False),
+            ),
+            required_group_id=None,
+            required_subgroup_0=tuple(),
+            required_subgroup_1=tuple(),
+            required_subgroup_2=tuple(),
+            required_subgroup_3=tuple(),
+            is_shutter_room=False,
+            is_water_room=False,
+            do_not_randomize=False,
+            no_special_enemies_standard=False,
+            all_sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x30, is_overlord=False, has_key=False),
+                DungeonEnemySprite(address=0x1003, byte_0=0, byte_1=0, sprite_id=0x31, is_overlord=False, has_key=False),
+            ),
+        )
+        state = self._build_state(
+            dungeon_rooms={7: room},
+            sprite_requirements=(
+                self._requirement(0x30, subgroup_0=(1,)),
+                self._requirement(0x31, subgroup_2=(2,)),
+            ),
+        )
+        state.sprite_groups[0x42] = DungeonSpriteGroup(
+            group_id=0x42,
+            dungeon_group_id=2,
+            subgroup_0=1,
+            subgroup_1=1,
+            subgroup_2=2,
+            subgroup_3=1,
+        )
+
+        self.assertEqual(
+            [group.group_id for group in get_possible_dungeon_sprite_groups(state, room)],
+            [0x42],
+        )
+        self.assertEqual(
+            [sprite.sprite_id for sprite in _get_randomizable_sprites_in_room(state, room)],
+            [0x30],
+        )
+
     def test_water_rooms_only_use_water_enemies(self) -> None:
         room = DungeonEnemyRoom(
             room_id=1,

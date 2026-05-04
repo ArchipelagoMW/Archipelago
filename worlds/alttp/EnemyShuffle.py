@@ -229,6 +229,7 @@ class DungeonEnemyRoom:
     is_water_room: bool
     do_not_randomize: bool
     no_special_enemies_standard: bool
+    all_sprites: tuple[DungeonEnemySprite, ...] = tuple()
 
 
 @dataclass(frozen=True)
@@ -445,6 +446,7 @@ def _read_dungeon_rooms(rom_bytes: bytes, moved_header_bank_address: int, metada
                 tag_2=rom_bytes[room_header_address + 6],
                 sort_sprites_value=rom_bytes[sprite_table_address],
                 sprites=_read_room_sprites(rom_bytes, room_id, sprite_table_address, dungeon_sprite_metadata),
+                all_sprites=_read_all_room_sprites(rom_bytes, sprite_table_address, dungeon_sprite_metadata),
                 required_group_id=merged_requirement.group_id,
                 required_subgroup_0=merged_requirement.subgroup_0,
                 required_subgroup_1=merged_requirement.subgroup_1,
@@ -839,19 +841,44 @@ def _read_room_sprites(
     sprite_table_address: int,
     dungeon_sprite_metadata: dict[str, object],
 ) -> tuple[DungeonEnemySprite, ...]:
-    sprites: list[DungeonEnemySprite] = []
     keyed_sprite_id_addresses = dungeon_sprite_metadata["keyed_sprite_id_addresses"]
     editable_sprite_id_addresses = dungeon_sprite_metadata["room_sprite_id_addresses"].get(room_id)
 
     if editable_sprite_id_addresses is None:
-        sprite_addresses = []
-        index = sprite_table_address + 1  # byte 0 is sort-sprites metadata
-        while rom_bytes[index] != 0xFF:
-            sprite_addresses.append(index)
-            index += 3
+        sprite_addresses = _read_room_sprite_addresses(rom_bytes, sprite_table_address)
     else:
         sprite_addresses = [sprite_id_address - 2 for sprite_id_address in editable_sprite_id_addresses]
 
+    return _read_room_sprites_from_addresses(rom_bytes, sprite_addresses, keyed_sprite_id_addresses)
+
+
+def _read_all_room_sprites(
+    rom_bytes: bytes,
+    sprite_table_address: int,
+    dungeon_sprite_metadata: dict[str, object],
+) -> tuple[DungeonEnemySprite, ...]:
+    return _read_room_sprites_from_addresses(
+        rom_bytes,
+        _read_room_sprite_addresses(rom_bytes, sprite_table_address),
+        dungeon_sprite_metadata["keyed_sprite_id_addresses"],
+    )
+
+
+def _read_room_sprite_addresses(rom_bytes: bytes, sprite_table_address: int) -> list[int]:
+    sprite_addresses = []
+    index = sprite_table_address + 1  # byte 0 is sort-sprites metadata
+    while rom_bytes[index] != 0xFF:
+        sprite_addresses.append(index)
+        index += 3
+    return sprite_addresses
+
+
+def _read_room_sprites_from_addresses(
+    rom_bytes: bytes,
+    sprite_addresses: list[int],
+    keyed_sprite_id_addresses: frozenset[int],
+) -> tuple[DungeonEnemySprite, ...]:
+    sprites: list[DungeonEnemySprite] = []
     seen_sprite_addresses: set[int] = set()
     unique_sprite_addresses = []
     for address in sprite_addresses:
@@ -1124,13 +1151,25 @@ def _merge_room_requirements(room_id: int, room_requirements: tuple[RoomGroupReq
 
 
 def get_room_do_not_update_requirements(state: EnemyShuffleState, room: DungeonEnemyRoom) -> tuple[EnemySpriteRequirement, ...]:
-    room_sprite_ids = {sprite.sprite_id for sprite in room.sprites}
+    editable_addresses = {sprite.address for sprite in room.sprites}
+    constraint_sprites = _get_room_constraint_sprites(room)
     return tuple(
         requirement for requirement in state.sprite_requirements
-        if (requirement.do_not_randomize or room.room_id in requirement.dont_randomize_rooms)
-        and requirement.sprite_id in room_sprite_ids
+        if any(
+            sprite.sprite_id == requirement.sprite_id
+            and (
+                sprite.address not in editable_addresses
+                or requirement.do_not_randomize
+                or room.room_id in requirement.dont_randomize_rooms
+            )
+            for sprite in constraint_sprites
+        )
         and can_spawn_in_room(requirement, room)
     )
+
+
+def _get_room_constraint_sprites(room: DungeonEnemyRoom) -> tuple[DungeonEnemySprite, ...]:
+    return room.all_sprites or room.sprites
 
 
 def get_possible_dungeon_sprite_groups(state: EnemyShuffleState, room: DungeonEnemyRoom) -> tuple[DungeonSpriteGroup, ...]:
