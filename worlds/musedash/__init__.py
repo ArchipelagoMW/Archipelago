@@ -33,7 +33,16 @@ class MuseDashWebWorld(WebWorld):
         ["Shiny"]
     )
 
-    tutorials = [setup_en, setup_es]
+    setup_it = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Italiano",
+        "setup_it.md",
+        "setup/it",
+        ["UCSA"]
+    )
+
+    tutorials = [setup_en, setup_es, setup_it]
     options_presets = MuseDashPresets
     option_groups = md_option_groups
 
@@ -124,7 +133,8 @@ class MuseDashWorld(World):
 
         self.starting_songs = [s for s in start_items if s in song_items]
         self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
-        self.included_songs = [s for s in include_songs if s in song_items and s not in self.starting_songs]
+        # Sort first for deterministic iteration order.
+        self.included_songs = [s for s in sorted(include_songs) if s in song_items and s not in self.starting_songs]
         self.included_songs = self.md_collection.filter_songs_to_dlc(self.included_songs, dlc_songs)
 
         # Making sure songs chosen for goal are allowed by DLC and remove the chosen from being added to the pool.

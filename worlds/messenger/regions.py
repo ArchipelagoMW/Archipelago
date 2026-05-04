@@ -96,7 +96,7 @@ LOCATIONS: dict[str, list[str]] = {
         "Searing Crags - Power Thistle",
         "Searing Crags - Astral Tea Leaves",
     ],
-    "Searing Crags - Key of Strength Shop": [
+    "Searing Crags - Key of Strength Room": [
         "Searing Crags - Key of Strength",
     ],
     "Searing Crags - Portal": [

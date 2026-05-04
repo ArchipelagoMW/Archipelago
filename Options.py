@@ -212,6 +212,13 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         else:
             return cls.name_lookup[value]
 
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, self.__class__):
+            return self.value == other.value
+        if isinstance(other, Option):
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+        return self.value == other
+
     def __int__(self) -> T:
         return self.value
 
@@ -930,13 +937,34 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
 class OptionCounter(OptionDict):
     min: int | None = None
     max: int | None = None
+    cull_zeroes: bool = False
 
     def __init__(self, value: dict[str, int]) -> None:
-        super(OptionCounter, self).__init__(collections.Counter(value))
+        cleaned_dict = {}
+
+        invalid_value_errors = []
+        for key, value in value.items():
+            if not isinstance(value, (int, float)) or int(value) != value:
+                invalid_value_errors += [f"Invalid value {value} for key {key}, must be an integer."]
+                continue
+
+            if self.cull_zeroes and value == 0:
+                continue
+
+            cleaned_dict[key] = int(value)
+
+        if invalid_value_errors:
+            type_errors = [f"For option {self.__class__.__name__}:"] + invalid_value_errors
+            raise TypeError("\n".join(invalid_value_errors))
+
+        super(OptionCounter, self).__init__(collections.Counter(cleaned_dict))
 
     def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
         super(OptionCounter, self).verify(world, player_name, plando_options)
 
+        self.verify_values()
+
+    def verify_values(self):
         range_errors = []
 
         if self.max is not None:
@@ -959,13 +987,8 @@ class OptionCounter(OptionDict):
 class ItemDict(OptionCounter):
     verify_item_name = True
 
-    min = 0
-
-    def __init__(self, value: dict[str, int]) -> None:
-        # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a OptionCounter
-        value = {item_name: amount for item_name, amount in value.items() if amount != 0}
-
-        super(ItemDict, self).__init__(value)
+    # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a OptionCounter
+    cull_zeroes = True
 
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
@@ -1833,27 +1856,30 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            presets = world.web.options_presets.copy()
-            presets.update({"": {}})
+            try:
+                presets = world.web.options_presets.copy()
+                presets.update({"": {}})
 
-            option_groups = get_option_groups(world)
-            for name, preset in presets.items():
-                res = template.render(
-                    option_groups=option_groups,
-                    __version__=__version__,
-                    game=game_name, 
-                    world_version=world.world_version.as_simple_string(),
-                    yaml_dump=yaml_dump_scalar,
-                    dictify_range=dictify_range,
-                    cleandoc=cleandoc,
-                    preset_name=name,
-                    preset=preset,
-                )
-                preset_name = f" - {name}" if name else ""
-                with open(os.path.join(preset_folder if name else target_folder,
-                                       get_file_safe_name(game_name + preset_name) + ".yaml"),
-                          "w", encoding="utf-8-sig") as f:
-                    f.write(res)
+                option_groups = get_option_groups(world)
+                for name, preset in presets.items():
+                    res = template.render(
+                        option_groups=option_groups,
+                        __version__=__version__,
+                        game=game_name,
+                        world_version=world.world_version.as_simple_string(),
+                        yaml_dump=yaml_dump_scalar,
+                        dictify_range=dictify_range,
+                        cleandoc=cleandoc,
+                        preset_name=name,
+                        preset=preset,
+                    )
+                    preset_name = f" - {name}" if name else ""
+                    with open(os.path.join(preset_folder if name else target_folder,
+                                           get_file_safe_name(game_name + preset_name) + ".yaml"),
+                              "w", encoding="utf-8-sig") as f:
+                        f.write(res)
+            except Exception as ex:
+                raise Exception(f"Template generation failed for world {game_name}") from ex
 
 
 def dump_player_options(multiworld: MultiWorld) -> None:
