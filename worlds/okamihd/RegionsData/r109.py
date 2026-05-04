@@ -62,17 +62,17 @@ locations = {
 
 shop_locations={
     RegionNames.SASA_SANCTUARY:{
-        "Kusa Village - Shop Slot 1": LocData(shop_check_id(15, 0), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 2": LocData(shop_check_id(15, 1), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 3": LocData(shop_check_id(15, 2), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 4": LocData(shop_check_id(15, 3), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 5": LocData(shop_check_id(15, 4), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 6": LocData(shop_check_id(15, 5), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 7": LocData(shop_check_id(15, 6), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 8": LocData(shop_check_id(15, 7), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 9": LocData(shop_check_id(15, 8), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 10": LocData(shop_check_id(15, 9), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 11": LocData(shop_check_id(15, 10), type=LocationType.SHOP),
-        "Kusa Village - Shop Slot 12": LocData(shop_check_id(15, 11), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 1": LocData(shop_check_id(15, 0), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 2": LocData(shop_check_id(15, 1), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 3": LocData(shop_check_id(15, 2), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 4": LocData(shop_check_id(15, 3), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 5": LocData(shop_check_id(15, 4), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 6": LocData(shop_check_id(15, 5), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 7": LocData(shop_check_id(15, 6), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 8": LocData(shop_check_id(15, 7), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 9": LocData(shop_check_id(15, 8), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 10": LocData(shop_check_id(15, 9), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 11": LocData(shop_check_id(15, 10), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 12": LocData(shop_check_id(15, 11), type=LocationType.SHOP),
     }
 }

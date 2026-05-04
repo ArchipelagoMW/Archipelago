@@ -89,17 +89,17 @@ locations = {
 
 shop_locations = {
     RegionNames.AGATA_FOREST: {
-        "Taka Pass - Shop Slot 1": LocData(shop_check_id(0, 0), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 2": LocData(shop_check_id(0, 1), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 3": LocData(shop_check_id(0, 2), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 4": LocData(shop_check_id(0, 3), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 5": LocData(shop_check_id(0, 4), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 6": LocData(shop_check_id(0, 5), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 7": LocData(shop_check_id(0, 6), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 8": LocData(shop_check_id(0, 7), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 9": LocData(shop_check_id(0, 8), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 10": LocData(shop_check_id(0, 9), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 11": LocData(shop_check_id(0, 10), type=LocationType.SHOP),
-        "Taka Pass - Shop Slot 12": LocData(shop_check_id(0, 11), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 1": LocData(shop_check_id(0, 0), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 2": LocData(shop_check_id(0, 1), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 3": LocData(shop_check_id(0, 2), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 4": LocData(shop_check_id(0, 3), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 5": LocData(shop_check_id(0, 4), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 6": LocData(shop_check_id(0, 5), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 7": LocData(shop_check_id(0, 6), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 8": LocData(shop_check_id(0, 7), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 9": LocData(shop_check_id(0, 8), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 10": LocData(shop_check_id(0, 9), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 11": LocData(shop_check_id(0, 10), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 12": LocData(shop_check_id(0, 11), type=LocationType.SHOP),
     }
 }
