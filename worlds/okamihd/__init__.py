@@ -91,26 +91,21 @@ class OkamiWorld(World):
         # Static Precollected Items
         precollected_items = create_static_precollected_item_list(world)
 
-        ## Don't give a random Divine Instrument as we always start with one currently
+
 
         if not world.options.ProgressiveWeapons:
-        #    # Get a random tier 1 divine instrument to start with.
-        #    di = random.choice(list(world.item_name_groups.get('divine_instrument_tier_1')))
-        #    precollected_items.append(create_item(di, get_item_name_to_id_dict()[di], ItemClassification.progression, world))
-        #    # Create other weapons
+            # Create normal weapons
             for (divine_instrument_data) in list(DivineInstruments):
-                #if divine_instrument_data.value.item_name != di:
-                itempool+=[create_item(divine_instrument_data.value.item_name,divine_instrument_data.value.code,ItemClassification.progression,world)]
+                if divine_instrument_data.value.item_name != DivineInstruments.DIVINE_RETRIBUTION.name:
+                    itempool+=[create_item(divine_instrument_data.value.item_name,divine_instrument_data.value.code,ItemClassification.progression,world)]
         else:
-        #    # Get a random progressive weapon
-        #    (di_name, di) = random.choice(list(progressive_weapons.items()))
-        #    precollected_items.append(create_item(di_name, di.code, ItemClassification.progression, world))
-        #    # Create other progressive weapons
+        # Create progressive weapons
             for (progressive_weapon_name, progressive_weapon) in progressive_weapons.items():
-        #        if di_name == progressive_weapon_name:
-        #            count = 4
-        #        else:
-                count = 5
+        # Only Randomize 4 Progressive Mirrors since we start with Divine Retribution
+                if progressive_weapon_name == 'Progressive Mirror':
+                    count= 4
+                else:
+                    count = 5
                 for i in range(count):
                     itempool += [create_item(progressive_weapon_name, progressive_weapon.code, progressive_weapon.classification, world)]
 
