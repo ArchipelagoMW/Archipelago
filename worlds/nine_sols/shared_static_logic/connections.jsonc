@@ -1272,26 +1272,28 @@
     }, // T-dash/bow hover/parry hover can't skip the AD requirement since you need to AD twice in the spikes, not just once
     // if we ever allowed darkroom navigation, then you could go straight up to Yinyue with CL OR LG after the Grapple part
     {
-        "from": "AM - Platforms Left of Root Node", "to": "AM - Above Root Node",
+        "from": "AM - Platforms Left of Root Node", "to": "AM - Highest Light Spinner",
         "requires": [
             { "anyOf": [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ] }, // climb to the light spinner
+        ]
+    },
+    {
+        "from": "AM - Highest Light Spinner", "to": "AM - Above Root Node",
+        "requires": [
             // the spike gauntlet is long enough you simply need TCK for it on vanilla logic,
             { "item": "Tai-Chi Kick" },
             // but the 2nd and 3rd TCK targets are far enough apart you need something else to help
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
         ],
         "medium_requires": [ { "anyOf": [
-            [
-                { "anyOf": [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ] }, // climb to the light spinner
-                { "item": "Trick - Bow Hover" } // this is the only way to avoid using the TCK targets
-            ],
-            [ // T-dash allows for a route with neither AD nor CL
-                { "item": "Wall Climb" }, // climb to the light spinner
+            [{ "item": "Trick - Bow Hover" }], // this is the only way to avoid using the TCK targets
+            [ // T-dash allows for a route with neither AD nor CL (assuming WC was used to reach the spinner)
                 { "item": "Grapple" }, // finally need to use the grapple target now that AD/CL aren't replacing it
                 { "item": "Tai-Chi Kick" } // use the TCK targets as usual, T-dash between the 2nd and 3rd
             ]
         ] } ]
-    }, // LS can't help because if you have WC the ledge on the light spinner won't work for LS
+        // LS can't help because if you have WC the ledge on the light spinner won't work for LS
+    },
     // no point doing the reverse connection since it'd be dark and it's easier to fall down to root node
     { "from": "AM - Above Root Node", "to": "AM - Root Node", "requires": [] }, // fall, break one-way barrier
     {
