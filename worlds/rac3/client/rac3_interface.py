@@ -336,7 +336,6 @@ class Rac3Interface(GameInterface):
         # Bolt and XPMultiplier
         self.bolt_and_xp_multiplier_value = int(self.options.bolt_and_xp_multiplier)
         # EnableWeaponLevelAsItem: if enabled, EXP disabler is running.
-        self.visited_planets = set()
 
     def check_main_menu(self):
         """Check if the player is on the main menu, before starting the game"""
@@ -365,6 +364,7 @@ class Rac3Interface(GameInterface):
         # self.UnlockItem[RAC3ITEM.MUSEUM].status = 1
         self.timers.clear()
         self.checked_locations.clear()
+        self.visited_planets.clear()
         self.gadget_cycler()
         self.planet_cycler()
         self.weapon_cycler()
