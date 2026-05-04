@@ -2219,7 +2219,11 @@
         "medium_requires": [
             { "item": "Super Mutant Buster" },
             { "item": "Grapple" }
-        ] // and T-dash
+        ], // and T-dash
+        "ls_requires": [
+            { "item": "Ledge Grab" }, // setup LS on a ledge down several flights of stairs
+            { "item": "Cloud Leap" } // then triple jump from Ground Floor Bookshelf to the mutant node platform above
+        ]
     },
     { "from": "TRC - Lower Sickbay", "to": "TRC - Upper Levels", "requires": [
         { "item": "Wall Climb" }
