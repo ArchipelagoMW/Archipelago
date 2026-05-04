@@ -920,10 +920,16 @@
     },
     { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Hammer Brothers Roof", "requires": [] }, // fall
     { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [] }, // fall farther
-    { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Upper Platforms of Nymph Puzzle Room", "requires": [
-        { "item": "Mystic Nymph: Scout Mode" }, // to rearrange the platforms
-        { "anyOf": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] } // to actually climb onto them
-    ] },
+    {
+        "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Upper Platforms of Nymph Puzzle Room",
+        "requires": [
+            { "item": "Mystic Nymph: Scout Mode" }, // to rearrange the platforms
+            { "anyOf": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] } // to actually climb onto them
+        ],
+        "ls_requires": [ // wall slide up either wall, then AD and CL onto the platform
+            { "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ]
+    },
     { "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Platform Above Factory (Underground)", "requires": [] }, // fall
     { "from": "Factory (GH) - Platform Above Factory (Underground)", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [ { "anyOf": [
         { "item": "Wall Climb" }, { "item": "Ledge Grab" }, { "item": "Cloud Leap" }
