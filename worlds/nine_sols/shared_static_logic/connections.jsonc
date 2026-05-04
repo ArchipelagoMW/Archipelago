@@ -1743,7 +1743,13 @@
     { "from": "GoS (West) - Cixing Arena Left Overlook", "to": "GoS (West) - Cixing Arena", "requires": [] }, // fall
     {
         "from": "GoS (West) - Cixing Arena Left Overlook", "to": "GoS (West) - Lower Right Exits",
-        "medium_requires": [{ "item": "Trick - Bow Hover" }]
+        "medium_requires": [{ "item": "Trick - Bow Hover" }],
+        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // CL setup into parry hover
+    },
+    {
+        "from": "GoS (West) - Lower Right Exits", "to": "GoS (West) - Cixing Arena Left Overlook",
+        "medium_requires": [{ "item": "Trick - Bow Hover" }],
+        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // CL setup into parry hover
     },
     // And since these are also simple and isolated, we'll do the Lear's grave stuff next
     { "from": "GoS (West) - Cixing Arena", "to": "GoS (West) - Lear's Lecture Hall", "requires": [
