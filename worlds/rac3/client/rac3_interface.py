@@ -1485,6 +1485,10 @@ class Rac3Interface(GameInterface):
             self._write_bits(RAC3PROGRESSFLAG.TYHRRANOSIS_RANGER_DROPSHIP_SPAWNS[0],
                              {RAC3PROGRESSFLAG.TYHRRANOSIS_RANGER_DROPSHIP_SPAWNS[1]})
 
+        if self.options.shortcuts.get(RAC3SHORTCUTS.METROPOLIS_TAXI, False) and self.UnlockItem[RAC3ITEM.GRAV_BOOTS].status and self.UnlockItem[RAC3ITEM.REFRACTOR].status:
+            self._write_bits(RAC3PROGRESSFLAG.METROPOLIS_PRE_BOSS_CHECKPOINT[0],
+                             {RAC3PROGRESSFLAG.METROPOLIS_PRE_BOSS_CHECKPOINT[1]})
+
         if self.options.speedups.get(RAC3SPEEDUPS.HALO_JUMPS, False):
             for check, region in HALO_JUMP_TO_REGION.items():
                 if self.planet in region:
