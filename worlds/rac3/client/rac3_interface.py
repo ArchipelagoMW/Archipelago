@@ -44,7 +44,7 @@ from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
 from worlds.rac3.constants.messages.text_format import CLASSIFICATION_TO_COLOR, FORMAT_NAME_TO_BYTE
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
-from worlds.rac3.constants.moby_flag import (HACKER_PUZZLE_TO_DOOR_ID, HACKER_PUZZLE_TO_REGION,
+from worlds.rac3.constants.moby_flag import (HACKER_PUZZLE_TO_DOOR_IDS, HACKER_PUZZLE_TO_REGION,
                                              REFRACTOR_PUZZLE_TO_REGION,
                                              TYHRRANOID_PUZZLE_TO_REGION)
 from worlds.rac3.constants.options import RAC3OPTION
@@ -2016,7 +2016,7 @@ class Rac3Interface(GameInterface):
         # Handle door finding for the current planet
         if not self.opened_the_hacker_doors and self.planet in PLANETS_WITH_HACKER_PUZZLES:
             puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == self.planet]
-            doors = [HACKER_PUZZLE_TO_DOOR_ID[puzzle] for puzzle in puzzles if puzzle in HACKER_PUZZLE_TO_DOOR_ID]
+            doors = [door_id for puzzle in puzzles if puzzle in HACKER_PUZZLE_TO_DOOR_IDS for door_id in HACKER_PUZZLE_TO_DOOR_IDS[puzzle]]
 
             # Try to resolve each door id to a moby address; save successful lookups only
             for door_id in doors:
