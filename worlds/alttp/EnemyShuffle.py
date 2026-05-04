@@ -910,17 +910,17 @@ def get_possible_dungeon_sprite_groups(state: EnemyShuffleState, room: DungeonEn
                 lambda possible_requirements: (
                     (not needs_killable or any(
                         _is_effectively_killable(requirement) and requirement.sprite_id != STAL_SPRITE_ID
-                        for requirement in possible_requirements
+                        for requirement in _filter_requirements_for_room_water_state(room, possible_requirements)
                     ))
                     and (not needs_key or any(
                         _is_effectively_killable(requirement)
                         and not requirement.cannot_have_key
                         and requirement.sprite_id != STAL_SPRITE_ID
-                        for requirement in possible_requirements
+                        for requirement in _filter_requirements_for_room_water_state(room, possible_requirements)
                     ))
                     and (not needs_water or any(
                         requirement.is_water_sprite
-                        for requirement in possible_requirements
+                        for requirement in _filter_requirements_for_room_water_state(room, possible_requirements)
                     ))
                 )
             )(_get_possible_enemy_requirements_for_group(state, room, group))
@@ -960,6 +960,15 @@ def _get_requirements_for_usable_overworld_enemies(state: EnemyShuffleState) -> 
         and not requirement.absorbable
         and not requirement.never_use_overworld
     )
+
+
+def _filter_requirements_for_room_water_state(
+    room: DungeonEnemyRoom,
+    requirements: tuple[EnemySpriteRequirement, ...],
+) -> tuple[EnemySpriteRequirement, ...]:
+    if room.is_water_room:
+        return tuple(requirement for requirement in requirements if requirement.is_water_sprite)
+    return tuple(requirement for requirement in requirements if not requirement.is_water_sprite)
 
 
 def _is_effectively_killable(requirement: EnemySpriteRequirement) -> bool:
@@ -1292,19 +1301,10 @@ def _randomize_room_sprites(
 
     if not skip_randomization:
         possible_requirements = _get_possible_enemy_requirements_for_group(state, room, selected_group)
-        possible_sprite_ids = [requirement.sprite_id for requirement in possible_requirements]
         sprites_to_update = _get_randomizable_sprites_in_room(state, room)
         sprites_to_update_addresses = {sprite.address for sprite in sprites_to_update}
 
-        if possible_sprite_ids:
-            killable_sprite_ids = [
-                requirement.sprite_id for requirement in possible_requirements
-                if _is_effectively_killable(requirement) and requirement.sprite_id != STAL_SPRITE_ID
-            ]
-            killable_key_sprite_ids = [
-                requirement.sprite_id for requirement in possible_requirements
-                if _is_effectively_killable(requirement) and not requirement.cannot_have_key and requirement.sprite_id != STAL_SPRITE_ID
-            ]
+        if possible_requirements:
             water_sprite_ids = [
                 requirement.sprite_id for requirement in possible_requirements
                 if requirement.is_water_sprite
@@ -1331,9 +1331,18 @@ def _randomize_room_sprites(
                             )
                 return _build_randomized_room(room, selected_group, randomized_sprites, False)
 
-            possible_sprite_ids = [sprite_id for sprite_id in possible_sprite_ids if sprite_id not in water_sprite_ids]
+            non_water_requirements = _filter_requirements_for_room_water_state(room, possible_requirements)
+            possible_sprite_ids = [requirement.sprite_id for requirement in non_water_requirements]
             if not possible_sprite_ids:
                 return _build_randomized_room(room, selected_group, randomized_sprites, False)
+            killable_sprite_ids = [
+                requirement.sprite_id for requirement in non_water_requirements
+                if _is_effectively_killable(requirement) and requirement.sprite_id != STAL_SPRITE_ID
+            ]
+            killable_key_sprite_ids = [
+                requirement.sprite_id for requirement in non_water_requirements
+                if _is_effectively_killable(requirement) and not requirement.cannot_have_key and requirement.sprite_id != STAL_SPRITE_ID
+            ]
             stal_count = 0
 
             for sprite in sprites_to_update:
@@ -1543,6 +1552,10 @@ def _validate_dungeon_room(
         requirement.sprite_id for requirement in possible_requirements
         if requirement.is_water_sprite
     }
+    if not room.is_water_room:
+        possible_sprite_ids -= water_sprite_ids
+        killable_sprite_ids -= water_sprite_ids
+        killable_key_sprite_ids -= water_sprite_ids
     do_not_randomize_sprite_ids = {
         requirement.sprite_id for requirement in state.sprite_requirements
         if requirement.do_not_randomize or room.room_id in requirement.dont_randomize_rooms
@@ -1561,6 +1574,8 @@ def _validate_dungeon_room(
             if randomized_sprite.sprite_id not in water_sprite_ids:
                 raise ValueError(f"Enemy shuffle placed non-water enemy {hex(randomized_sprite.sprite_id)} in water room {room.room_id}")
             continue
+        if randomized_sprite.sprite_id in water_sprite_ids:
+            raise ValueError(f"Enemy shuffle placed water enemy {hex(randomized_sprite.sprite_id)} in non-water room {room.room_id}")
 
         if original_sprite.has_key:
             if randomized_sprite.sprite_id not in killable_key_sprite_ids:
@@ -1574,7 +1589,9 @@ def _validate_dungeon_room(
             raise ValueError(f"Enemy shuffle placed illegal sprite {hex(randomized_sprite.sprite_id)} in room {room.room_id}")
 
     if room.is_shutter_room and _get_randomizable_sprites_in_room(state, room):
-        all_killable_sprite_ids = _get_effectively_killable_sprite_ids(state.sprite_requirements)
+        all_killable_sprite_ids = _get_effectively_killable_sprite_ids(
+            _filter_requirements_for_room_water_state(room, state.sprite_requirements)
+        )
         randomized_sprite_ids = {sprite.sprite_id for sprite in randomized_room.sprites}
         if not (randomized_sprite_ids & all_killable_sprite_ids):
             raise ValueError(f"Enemy shuffle left shutter room {room.room_id} without any killable enemies")
