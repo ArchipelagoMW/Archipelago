@@ -736,13 +736,13 @@ class Rac3Interface(GameInterface):
 
         match name:
             case RAC3ITEM.HACKER:
-                self.puzzle_cycler(name, RAC3SPEEDUPS.HACKER, 'opened_the_hacker_doors',
+                self.puzzle_cycler(name, RAC3SPEEDUPS.HACKER, "opened_the_hacker_doors",
                                    PLANETS_WITH_HACKER_PUZZLES, HACKER_PUZZLE_TO_REGION, True)
             case RAC3ITEM.TYHRRA_GUISE:
-                self.puzzle_cycler(name, RAC3SPEEDUPS.TYHRRAGUISE, 'opened_the_tyhrranoid_doors',
+                self.puzzle_cycler(name, RAC3SPEEDUPS.TYHRRAGUISE, "opened_the_tyhrranoid_doors",
                                    PLANETS_WITH_TYHRRANOID_PUZZLES, TYHRRANOID_PUZZLE_TO_REGION, True)
             case RAC3ITEM.REFRACTOR:
-                self.puzzle_cycler(name, RAC3SPEEDUPS.REFRACTOR, 'opened_the_refractor_doors',
+                self.puzzle_cycler(name, RAC3SPEEDUPS.REFRACTOR, "opened_the_refractor_doors",
                                    PLANETS_WITH_REFRACTOR_PUZZLES, REFRACTOR_PUZZLE_TO_REGION, True)
             case RAC3ITEM.PROGRESSIVE_VIDCOMIC:
                 if self.UnlockItem[name].status > 5:
@@ -1480,9 +1480,9 @@ class Rac3Interface(GameInterface):
         self.overflow_fix()
         self.health_cycler()
         self.hacker_cycler()
-        self.puzzle_cycler(RAC3ITEM.TYHRRA_GUISE, RAC3SPEEDUPS.TYHRRAGUISE, 'opened_the_tyhrranoid_doors',
+        self.puzzle_cycler(RAC3ITEM.TYHRRA_GUISE, RAC3SPEEDUPS.TYHRRAGUISE, "opened_the_tyhrranoid_doors",
                            PLANETS_WITH_TYHRRANOID_PUZZLES, TYHRRANOID_PUZZLE_TO_REGION)
-        self.puzzle_cycler(RAC3ITEM.REFRACTOR, RAC3SPEEDUPS.REFRACTOR, 'opened_the_refractor_doors',
+        self.puzzle_cycler(RAC3ITEM.REFRACTOR, RAC3SPEEDUPS.REFRACTOR, "opened_the_refractor_doors",
                            PLANETS_WITH_REFRACTOR_PUZZLES, REFRACTOR_PUZZLE_TO_REGION)
         self.pda_vendor_cycler()
         self.notification_cycler()
@@ -2249,7 +2249,7 @@ class Rac3Interface(GameInterface):
                         # logger.debug(f"Message: {merged_message}")
                         # logger.debug(f"{read_message}")
                         # logger.debug(f"{write_message}")
-                    self.notification_paused_remaining = max(float(), self.notification_time - current_time)
+                    self.notification_paused_remaining = max(0.0, self.notification_time - current_time)
         else:
             self.notification_time = 0
             self.notification_merge_count = 1
@@ -2419,7 +2419,8 @@ class Rac3Interface(GameInterface):
             pda_vendor_str = hex(self.pda_vendor) if self.pda_vendor else "Not Found"
         logger.info(f"PDA Vendor Address: {pda_vendor_str}")
         if self.planet in PLANETS_WITH_HACKER_PUZZLES:
-            hacker_door_addr = {door_id: (hex(addr) if addr else "Not Found") for door_id, addr in self.hacker_door_addresses.items()}
+            hacker_door_addr = {door_id: (hex(addr) if addr else "Not Found")
+                                for door_id, addr in self.hacker_door_addresses.items()}
         else:
             hacker_door_addr = "N/A"
         logger.info(f"Hacker Door Addresses: {hacker_door_addr}")
@@ -2427,7 +2428,8 @@ class Rac3Interface(GameInterface):
         logger.info(f"Opened Tyhrranoid Doors: {self.opened_the_tyhrranoid_doors}")
         logger.info(f"Opened Refractor Doors: {self.opened_the_refractor_doors}")
         visited_planets = [planet for planet in self.visited_planets if not (
-            planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK, False))]
+            planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK,
+                                                                                       False))]
         logger.info(f"Visited Planets: {visited_planets}")
         logger.info(f"Active Patches: {[PATCH_INSTRUCTION_TO_NAME[patch] for patch in self.get_active_patches()]}")
         failed_patches = self.get_failed_patches()

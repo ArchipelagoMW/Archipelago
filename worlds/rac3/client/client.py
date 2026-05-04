@@ -1,5 +1,5 @@
 """This module provides a launchable client for connecting RAC3 running on PCSX2 Emulation to a Multiworld"""
-from asyncio import create_task, run, sleep, Task
+from asyncio import Task, create_task, run, sleep
 from multiprocessing import freeze_support
 from time import time
 
@@ -105,7 +105,7 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context) and self.ctx.slot is not None:
             if not self.is_development_build():
-                self.default("Development command \"weapon_exp_test\" was used in a non-development build.")
+                self.default('Development command "weapon_exp_test" was used in a non-development build.')
 
             if self.ctx.slot_data[RAC3OPTION.PROGRESSIVE_WEAPONS]:
                 self.output("Weapon EXP item not compatible with Progressive Weapons")
@@ -120,7 +120,7 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context) and self.ctx.slot is not None:
             if not self.is_development_build():
-                self.default("Development command \"bolt_test\" was used in a non-development build.")
+                self.default('Development command "bolt_test" was used in a non-development build.')
             self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE,
                                                   self.ctx.player_names[self.ctx.slot], "Test Command", 0)
             self.output("Bolts Received")
@@ -233,7 +233,7 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
-                self.default("Development command \"load_level\" was used in a non-development build.")
+                self.default('Development command "load_level" was used in a non-development build.')
             if not args:
                 self.output("No level specified. Provide an integer ID or region name.")
                 return
@@ -263,8 +263,7 @@ class CommandProcessor(ClientCommandProcessor):
                     level_id = region.ID
                     self.ctx.game_interface.homewarp(level_id)
                     return
-                else:
-                    self.output("Invalid level ID or region name. Provide an integer or valid region key.")
+                self.output("Invalid level ID or region name. Provide an integer or valid region key.")
 
     def _cmd_traversal(self, *args):
         """Test command for linked list traversal purposes."""
@@ -273,7 +272,7 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
                 # let everyone know that a development command was used in a release build.
-                self.default("Development command \"traversal\" was used in a non-development build.")
+                self.default('Development command "traversal" was used in a non-development build.')
 
             # convert the hex input to an int and then do traversal with that as the target id
             try:
@@ -297,7 +296,7 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
                 # let everyone know that a development command was used in a release build.
-                self.default("Development command \"iteration\" was used in a non-development build.")
+                self.default('Development command "iteration" was used in a non-development build.')
 
             # convert the hex input to an int and then do iteration with that as the target id
             try:

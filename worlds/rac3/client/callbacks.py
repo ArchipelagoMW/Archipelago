@@ -199,7 +199,8 @@ async def _handle_game_ready(ctx: "Context") -> None:
             await update(ctx)
             after_time = time()
             elapsed = after_time - current_time
-            logger.debug(f"Update cycle took {elapsed:.5f} seconds (Reads: {ctx.game_interface.cycle_reads_count}, Writes: {ctx.game_interface.cycle_writes_count})")
+            logger.debug(f"Update cycle took {elapsed:.5f} seconds (Reads: {ctx.game_interface.cycle_reads_count}, "
+                         f"Writes: {ctx.game_interface.cycle_writes_count})")
             # logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
             ctx.game_interface.cycle_times.append(elapsed)
             if len(ctx.game_interface.cycle_times) > 100:
@@ -386,7 +387,7 @@ async def handle_planet_changed(ctx: "Context") -> None:
         # Changing planet counts as a reload.
         ctx.game_interface.puzzle_cycler(RAC3ITEM.HACKER,
                                          ctx.slot_data[RAC3OPTION.SPEEDUPS].get(RAC3SPEEDUPS.HACKER, False),
-                                         'opened_the_hacker_doors', PLANETS_WITH_HACKER_PUZZLES,
+                                         "opened_the_hacker_doors", PLANETS_WITH_HACKER_PUZZLES,
                                          HACKER_PUZZLE_TO_REGION, True)
 
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
