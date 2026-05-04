@@ -1108,6 +1108,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         deadrock = requirements["DeadrockSprite"]
         mimic = requirements["MimicSprite"]
         terrorpin = requirements["TerrorpinSprite"]
+        water_tektite = requirements["WaterTektiteSprite"]
         kyameron = requirements["KyameronWaterSplashSprite"]
         floating_stalfos_head = requirements["FloatingStalfosHeadSprite"]
         spark = requirements["Spark_LeftToRightSprite"]
@@ -1132,11 +1133,12 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertEqual(terrorpin.kill_abilities, tuple())
         self.assertIn("Only Hammer is listed in kill_items", terrorpin.damage_notes)
         self.assertEqual(requirements["RedBariSprite"].key_drop_kill_items, ("Fire Rod", "Bombos"))
+        self.assertEqual(water_tektite.dont_randomize_rooms, (40, 118))
         self.assertFalse(kyameron.killable)
         self.assertTrue(kyameron.cannot_have_key)
         self.assertEqual(kyameron.subgroup_2, (34,))
         self.assertEqual(kyameron.excluded_rooms, (268,))
-        self.assertEqual(kyameron.dont_randomize_rooms, (40,))
+        self.assertEqual(kyameron.dont_randomize_rooms, (40, 118))
         self.assertEqual(kyameron.kill_items, tuple())
         self.assertEqual(kyameron.kill_combo_all_of_items, tuple())
         self.assertEqual(kyameron.kill_combo_one_of_items, tuple())
