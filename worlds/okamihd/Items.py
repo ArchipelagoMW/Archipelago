@@ -67,7 +67,7 @@ def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
 
     # We always start with Divine Retribution:
     divine_retribution = DivineInstruments.DIVINE_RETRIBUTION.value
-    precollected_items.append(create_item(divine_retribution.item_name, divine_retribution.code, divine_retribution.classification, world))
+    precollected_items.append(create_item(divine_retribution.item_name, divine_retribution.code, ItemClassification.progression, world))
 
     return precollected_items
 
