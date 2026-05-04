@@ -1269,7 +1269,7 @@
             { "item": "Cloud Leap" }, { "item": "Air Dash" }, // and T-dash bypasses grapple slides
             { "item": "Mystic Nymph: Scout Mode" } // to flick the light switch
         ]
-    }, // T-dash can't skip the AD requirement since you need to AD twice in the spikes, not just once
+    }, // T-dash/bow hover/parry hover can't skip the AD requirement since you need to AD twice in the spikes, not just once
     // if we ever allowed darkroom navigation, then you could go straight up to Yinyue with CL OR LG after the Grapple part
     {
         "from": "AM - Platforms Left of Root Node", "to": "AM - Above Root Node",
