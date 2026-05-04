@@ -1443,7 +1443,9 @@ class Rac3Interface(GameInterface):
         if self.options.shortcuts.get(RAC3SHORTCUTS.MARCADIA_DROPSHIP, False):
             self._write_bits(RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[0],
                              {RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[1]})
-        if self.options.shortcuts.get(RAC3SHORTCUTS.DAXX_TELEPORTER, False):
+            self._write_bits(RAC3PROGRESSFLAG.MARCADIA_REACH_THE_DROPSHIP[0],
+                             {RAC3PROGRESSFLAG.MARCADIA_REACH_THE_DROPSHIP[1]})
+        if self.options.shortcuts.get(RAC3SHORTCUTS.DAXX_TELEPORTER, False) and self.UnlockItem[RAC3ITEM.HYPERSHOT].status:
             self._write_bits(RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[0],
                              {RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[1]})
         if self.options.shortcuts.get(RAC3SHORTCUTS.AQUATOS_SHUTTLE, False):
@@ -1453,6 +1455,35 @@ class Rac3Interface(GameInterface):
 
         if self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK, False):
             self._write8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.HOLOSTAR_STUDIOS_CLANK].ID, 1)
+
+        if self.options.shortcuts.get(RAC3SHORTCUTS.DRACO_TELEPORTER, False) and self.UnlockItem[RAC3ITEM.GRAV_BOOTS].status:
+            self._write_bits(RAC3PROGRESSFLAG.OBANI_DRACO_REACH_THE_CONTROL_ROOM[0],
+                             {RAC3PROGRESSFLAG.OBANI_DRACO_REACH_THE_CONTROL_ROOM[1]})
+
+        if (self.options.shortcuts.get(RAC3SHORTCUTS.COMMAND_DROPSHIP, False) 
+            and self.UnlockItem[RAC3ITEM.HYPERSHOT].status 
+            and self.UnlockItem[RAC3ITEM.HACKER].status 
+            and self.UnlockItem[RAC3ITEM.GRAV_BOOTS].status 
+            and self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status 
+            and self.UnlockItem[RAC3ITEM.REFRACTOR].status):
+            self._write_bits(RAC3PROGRESSFLAG.COMMAND_CENTER_FORCE_SPAWN_DROPSHIP_BY_SHIP[0],
+                             {RAC3PROGRESSFLAG.COMMAND_CENTER_FORCE_SPAWN_DROPSHIP_BY_SHIP[1]})
+
+        if self.options.shortcuts.get(RAC3SHORTCUTS.HIDEOUT_TELEPORTER, False) and self.UnlockItem[RAC3ITEM.GRAV_BOOTS].status:
+            self._write_bits(RAC3PROGRESSFLAG.QWARKS_HIDEOUT_REACH_PDA_VENDOR[0],
+                             {RAC3PROGRESSFLAG.QWARKS_HIDEOUT_REACH_PDA_VENDOR[1]})
+
+        if self.options.shortcuts.get(RAC3SHORTCUTS.HIDEOUT_TAXI, False) and self.UnlockItem[RAC3ITEM.WARP_PAD].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status:
+            self._write_bits(RAC3PROGRESSFLAG.QWARKS_HIDEOUT_FINISHED_CLANK_SECTION[0],
+                             {RAC3PROGRESSFLAG.QWARKS_HIDEOUT_FINISHED_CLANK_SECTION[1]})
+
+        if self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRANOSIS_INTRO, False):
+            self._write_bits(RAC3PROGRESSFLAG.TYHRRANOSIS_COMPLETE_PROLOGUE[0],
+                             {RAC3PROGRESSFLAG.TYHRRANOSIS_COMPLETE_PROLOGUE[1]})
+
+        if self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP, False):
+            self._write_bits(RAC3PROGRESSFLAG.TYHRRANOSIS_RANGER_DROPSHIP_SPAWNS[0],
+                             {RAC3PROGRESSFLAG.TYHRRANOSIS_RANGER_DROPSHIP_SPAWNS[1]})
 
         if self.options.speedups.get(RAC3SPEEDUPS.HALO_JUMPS, False):
             for check, region in HALO_JUMP_TO_REGION.items():
