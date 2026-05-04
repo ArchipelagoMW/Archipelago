@@ -1307,6 +1307,11 @@
         ]
     },
     { "from": "AM - Above Root Node", "to": "AM - Upper Right Exit", "requires": [ { "item": "Grapple" } ] },
+    {
+        "from": "AM - Highest Light Spinner", "to": "AM - Upper Right Exit",
+        "medium_requires": [{ "item": "Trick - Bow Hover" }],
+        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // parry hover after CL setup
+    },
     { "from": "AM - Above Root Node", "to": "AM - Bottom Right", "requires": [ { "anyOf": [
         { "item": "Air Dash" }, { "item": "Cloud Leap" }
     ] } ] }, // can also fall from the slide/grapple, but I'd rather not include that
