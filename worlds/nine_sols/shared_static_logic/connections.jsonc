@@ -1437,9 +1437,11 @@
     { "from": "Factory (PA) - Root Node", "to": "Factory (PA) - Lower Left Elevator", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] }, // ledge storage can do one of the high jumps here, but not all of them
-    { "from": "Factory (PA) - Root Node", "to": "Factory (PA) - Lower Left Fire Zone", "requires": [
-        { "item": "Mystic Nymph: Scout Mode" } // to lower rope
-    ] },
+    {
+        "from": "Factory (PA) - Root Node", "to": "Factory (PA) - Lower Left Fire Zone",
+        "requires": [{ "item": "Mystic Nymph: Scout Mode" }], // to lower rope
+        "ls_requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }, { "item": "Air Dash" }] // triple jump
+    },
     { "from": "Factory (PA) - Lower Left Fire Zone", "to": "Factory (PA) - Lower Left Elevator", "requires": [] }, // one-way door
     {
         "from": "Factory (PA) - Lower Left Fire Zone", "to": "Factory (PA) - Lower Left Fire Zone Platforms",
