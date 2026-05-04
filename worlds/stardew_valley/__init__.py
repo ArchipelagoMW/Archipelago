@@ -13,7 +13,6 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, icon_paths
 from worlds.stardew_valley.regions.model import reverse_connection_name
-
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
@@ -26,7 +25,7 @@ from .items.item_data import FILLER_GROUPS
 from .locations import LocationData, create_locations, location_table, locations_by_tag
 from .logic.combat_logic import valid_weapons
 from .logic.logic import StardewLogic
-from .options import (BackpackProgression, BuildingProgression, BundleBlacklist, BundlePerRoom, BundlePrice, BundleRandomization, BundleWhitelist,
+from .options import (BackpackProgression, BuildingProgression, BundleBlacklist, BundlesPerRoom, BundlePrice, BundleRandomization, BundleWhitelist,
                       EnabledFillerBuffs, EntranceRandomization, FarmType, Goal, NumberOfMovementBuffs, SeasonRandomization, StardewValleyOptions,
                       ToolProgression, TrapDistribution)
 from .options.forced_options import force_change_options_if_banned, force_change_options_if_incompatible
@@ -586,7 +585,7 @@ class StardewValleyWorld(World):
 
         randomized_data = prepare_randomized_data(self.content, self.options)
 
-        excluded_options = [BundleRandomization, BundlePerRoom, NumberOfMovementBuffs,
+        excluded_options = [BundleRandomization, BundlesPerRoom, NumberOfMovementBuffs,
                             EnabledFillerBuffs, TrapDistribution, BundleWhitelist, BundleBlacklist, JojaAreYouSure]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]

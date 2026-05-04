@@ -183,7 +183,7 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: ReceivedRaccoonsRequirement):
-        amount = min(requirement.number_of_raccoons, 8, 8 + self.options.bundle_per_room)
+        amount = min(requirement.number_of_raccoons, 8, 8 + self.options.bundles_per_room)
         if self.options.quest_locations.has_story_quests():
             amount += 1
         return self.logic.received(CommunityUpgrade.raccoon, amount)

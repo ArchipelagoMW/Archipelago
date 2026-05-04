@@ -100,7 +100,7 @@ def get_meme_bundles(random: Random, content: StardewContent, options: StardewVa
 
 def create_room_from_bundles(template: BundleRoomTemplate, all_bundles: List[Bundle], options: StardewValleyOptions, end_index: int) -> Tuple[BundleRoom, int]:
     start_index = end_index
-    end_index += template.number_bundles + options.bundle_per_room.value
+    end_index += template.number_bundles + options.bundles_per_room.value
     return BundleRoom(template.name, all_bundles[start_index:end_index]), end_index
 
 
@@ -144,14 +144,14 @@ def get_trash_bear_requests(random: Random, content: StardewContent, options: St
         num_per_type = min(4, num_per_type + options.bundle_price)
 
     trash_bear_requests["Foraging"] = pick_trash_bear_items(ItemTag.FORAGE, content, num_per_type, random)
-    if options.bundle_per_room >= 0:
+    if options.bundles_per_room >= 0:
         # Cooking items are not in content packs yet. This can be simplified once they are
         # trash_bear_requests["Cooking"] = pick_trash_bear_items(ItemTag.COOKING, content, num_per_type, random)
         trash_bear_requests["Cooking"] = random.sample(
             [recipe.meal for recipe in all_cooking_recipes if not recipe.content_pack or content.is_enabled(recipe.content_pack)], num_per_type)
-    if options.bundle_per_room >= 1:
+    if options.bundles_per_room >= 1:
         trash_bear_requests["Farming"] = pick_trash_bear_items(ItemTag.CROPSANITY, content, num_per_type, random)
-    if options.bundle_per_room >= 2:
+    if options.bundles_per_room >= 2:
         # Fish items are not tagged properly in content packs yet. This can be simplified once they are
         # trash_bear_requests["Fishing"] = pick_trash_bear_items(ItemTag.FISH, content, num_per_type, random)
         trash_bear_requests["Fishing"] = random.sample([fish for fish in content.fishes], num_per_type)

@@ -57,7 +57,7 @@ class TestDefaultDistributionHasAllTraps(WorldAssertMixin, SVTestBase):
 
 class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
     options = {
-        options.BundlePerRoom.internal_name: options.BundlePerRoom.option_four_extra,
+        options.BundlesPerRoom.internal_name: options.BundlesPerRoom.option_four_extra,
         options.QuestLocations.internal_name: 56,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_hard,
         options.Fishsanity.internal_name: options.Fishsanity.option_all,

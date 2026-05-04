@@ -52,7 +52,7 @@ class BundleRoomTemplate:
             else:
                 blacklist_bundles.append(bundle)
 
-        modifier = options.bundle_per_room.value
+        modifier = options.bundles_per_room.value
         if is_entire_cc:
             modifier *= 6
         number_bundles = self.number_bundles + modifier

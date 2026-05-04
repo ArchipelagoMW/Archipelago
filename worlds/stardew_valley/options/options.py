@@ -168,7 +168,7 @@ class BundlePrice(Choice):
     option_maximum = 8
 
 
-class BundlePerRoom(Choice):
+class BundlesPerRoom(Choice):
     """How many bundles are in each room of the community center?
     Rooms that already have the max cannot increase further
     2 Fewer: Every room will have 2 fewer bundles
@@ -178,8 +178,8 @@ class BundlePerRoom(Choice):
     2 Extra: Every room will have 2 extra bundles
     3 Extra: Every room will have 3 extra bundles
     4 Extra: Every room will have 4 extra bundles"""
-    internal_name = "bundle_per_room"
-    display_name = "Bundle Per Room"
+    internal_name = "bundles_per_room"
+    display_name = "Bundles Per Room"
     default = 0
     # option_minimum = -8  # I don't think users need this, keeping my options open
     option_two_fewer = -2
@@ -1269,7 +1269,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     farm_type: FarmType
     bundle_randomization: BundleRandomization
     bundle_price: BundlePrice
-    bundle_per_room: BundlePerRoom
+    bundles_per_room: BundlesPerRoom
     entrance_randomization: EntranceRandomization
     entrance_randomization_behavior: EntranceRandomizationBehavior
     start_without: StartWithout
