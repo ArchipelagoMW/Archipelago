@@ -1274,7 +1274,7 @@
     {
         "from": "AM - Platforms Left of Root Node", "to": "AM - Highest Light Spinner",
         "requires": [
-            { "anyOf": [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ] }, // climb to the light spinner
+            { "anyOf": [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ] } // climb to the light spinner
         ]
     },
     {
@@ -1294,7 +1294,7 @@
         ] } ]
         // LS can't help because if you have WC the ledge on the light spinner won't work for LS
     },
-    // no point doing the reverse connection since it'd be dark and it's easier to fall down to root node
+    // no point doing the reverse connection since it'd be dark, and it's easier to fall down to root node
     { "from": "AM - Above Root Node", "to": "AM - Root Node", "requires": [] }, // fall, break one-way barrier
     {
         "from": "AM - Root Node", "to": "AM - Above Root Node",
