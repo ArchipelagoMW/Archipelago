@@ -1223,8 +1223,10 @@
     { "from": "Yangu Hall - After Yanlao", "to": "Yangu Hall - Right Exit", "requires": [] },
 
     // Abandoned Mines
-    { "from": "AM - Left Exit", "to": "AM - Above Left Exit", "requires": [
-        { "item": "Grapple" }, // for slider
+    { "from": "AM - Left Exit", "to": "AM - Under First Rope", "requires": [
+        { "item": "Grapple" } // for slider
+    ] },
+    { "from": "AM - Under First Rope", "to": "AM - Above Left Exit", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }, // for rope and lights
         { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } // slightly high jump after rope
     ] },
