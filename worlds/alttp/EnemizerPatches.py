@@ -224,7 +224,7 @@ BOSS_GFX_TABLE = {
 
 TRINEXX_ICE_FLOOR_ROUTINE_ADDRESS = 0x04B37E
 TRINEXX_ICE_PROJECTILE_TILE_ADDRESS = 0xE7A5
-TRINEXX_ICE_PROJECTILE_TYPE_ADDRESS = 0xF3BED
+TILE_TRAP_FLOOR_TILE_ADDRESS = 0xF3BED
 
 
 def apply_enemizer_base_patch(rom: "LocalRom") -> None:
@@ -424,13 +424,17 @@ def _update_hidden_enemy_item_table_for_retro_mode(rom: "LocalRom") -> None:
 
 
 def _apply_trinexx_room_fixes(rom: "LocalRom") -> None:
-    # Match original Enemizer:
-    # 1. Disable the Trinexx ice-floor routine so blue-head projectiles
-    #    do not create solid walls in non-vanilla rooms.
-    # 2. Repoint the projectile tile data so the blue head shoots spikes.
+    # Match original Enemizer's unconditional Trinexx ice-floor removal so
+    # blue-head projectiles do not create solid walls in non-vanilla rooms.
     rom.write_bytes(TRINEXX_ICE_FLOOR_ROUTINE_ADDRESS, (0xEA, 0xEA, 0xEA, 0xEA))
+
+
+def _apply_randomized_tile_trap_floor_tile(rom: "LocalRom") -> None:
+    # Original Enemizer's RandomizeTileTrapFloorTile option changes the tile
+    # left behind by flying floor tile traps. AP does not currently expose or
+    # call this option, so keep the implementation isolated and unused.
     rom.write_bytes(TRINEXX_ICE_PROJECTILE_TILE_ADDRESS, (0x88, 0x01))
-    rom.write_byte(TRINEXX_ICE_PROJECTILE_TYPE_ADDRESS, 0x12)
+    rom.write_byte(TILE_TRAP_FLOOR_TILE_ADDRESS, 0x12)
 
 
 def _make_native_enemizer_rng(world: "ALTTPWorld") -> random.Random:
@@ -472,4 +476,3 @@ def _load_enemizer_symbols() -> dict[str, int]:
         name: snes_to_pc(snes_address)
         for name, snes_address in ENEMIZER_SYMBOLS.items()
     }
-
