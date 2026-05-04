@@ -1856,27 +1856,30 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            presets = world.web.options_presets.copy()
-            presets.update({"": {}})
+            try:
+                presets = world.web.options_presets.copy()
+                presets.update({"": {}})
 
-            option_groups = get_option_groups(world)
-            for name, preset in presets.items():
-                res = template.render(
-                    option_groups=option_groups,
-                    __version__=__version__,
-                    game=game_name, 
-                    world_version=world.world_version.as_simple_string(),
-                    yaml_dump=yaml_dump_scalar,
-                    dictify_range=dictify_range,
-                    cleandoc=cleandoc,
-                    preset_name=name,
-                    preset=preset,
-                )
-                preset_name = f" - {name}" if name else ""
-                with open(os.path.join(preset_folder if name else target_folder,
-                                       get_file_safe_name(game_name + preset_name) + ".yaml"),
-                          "w", encoding="utf-8-sig") as f:
-                    f.write(res)
+                option_groups = get_option_groups(world)
+                for name, preset in presets.items():
+                    res = template.render(
+                        option_groups=option_groups,
+                        __version__=__version__,
+                        game=game_name,
+                        world_version=world.world_version.as_simple_string(),
+                        yaml_dump=yaml_dump_scalar,
+                        dictify_range=dictify_range,
+                        cleandoc=cleandoc,
+                        preset_name=name,
+                        preset=preset,
+                    )
+                    preset_name = f" - {name}" if name else ""
+                    with open(os.path.join(preset_folder if name else target_folder,
+                                           get_file_safe_name(game_name + preset_name) + ".yaml"),
+                              "w", encoding="utf-8-sig") as f:
+                        f.write(res)
+            except Exception as ex:
+                raise Exception(f"Template generation failed for world {game_name}") from ex
 
 
 def dump_player_options(multiworld: MultiWorld) -> None:
