@@ -1,3 +1,5 @@
+"""This module contains options for Progressive weapons in the item pool"""
+
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION
 

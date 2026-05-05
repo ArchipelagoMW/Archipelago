@@ -1,8 +1,11 @@
+"""This module provides utilities to aid sending messages to the server"""
+
 from NetUtils import ClientStatus
 from worlds.rac3.constants.options import RAC3OPTION
 
 
 class ClientMessage:
+    """Packages data into the message structure to be sent to the server"""
     cmd: str
     key: str | None = None
     default: str | None = None
@@ -28,6 +31,7 @@ class ClientMessage:
         self.locations = locations
 
     def output(self) -> dict:
+        """Outputs the data stored in the struct"""
         output = {}
         for attr in dir(self):
             # print(attr)
@@ -38,6 +42,7 @@ class ClientMessage:
 
     @staticmethod
     def set_map(slot: int | None, team: int | None, planet: str) -> dict:
+        """Constructs a message for updating the UT map"""
         cmd = "Set"
         key = f"rac3_current_planet_{slot}_{team}"
         default = "Galaxy"
@@ -50,6 +55,7 @@ class ClientMessage:
 
     @staticmethod
     def set_processed(count: int) -> dict:
+        """Constructs a message for updating some value on the server"""
         cmd = "Set"
         key = RAC3OPTION.PROCESSED_LOCATIONS
         default = "0"
@@ -62,10 +68,12 @@ class ClientMessage:
 
     @staticmethod
     def status_update(status: ClientStatus) -> dict:
+        """Constructs a message for updating the server with the current client status"""
         cmd = "StatusUpdate"
         return ClientMessage(cmd, status=status).output()
 
     @staticmethod
     def location_scouts(locations: list[int]) -> dict:
+        """Constructs a message for updating the Location Scouts on the server"""
         cmd = "LocationScouts"
         return ClientMessage(cmd, locations=locations).output()

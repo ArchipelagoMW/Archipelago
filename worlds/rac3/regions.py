@@ -1,3 +1,5 @@
+"""This module provides handling for location regions"""
+
 from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
@@ -11,7 +13,7 @@ from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_type import RAC3PLAYERTYPE
-from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.constants.region import PLANET_NAME_FROM_ID, RAC3REGION
 from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.rac3options import RaC3Options
 
@@ -20,6 +22,7 @@ if TYPE_CHECKING:
 
 
 class GameLocation(Location):
+    """Rac3 game location"""
     game = RAC3OPTION.GAME_TITLE_FULL
 
 
@@ -392,6 +395,7 @@ simple_skillpoints: list[str] = [
 
 
 def create_regions(world: "RaC3World"):
+    """Creates each region and connects them together"""
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
     veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
@@ -520,6 +524,7 @@ def create_regions(world: "RaC3World"):
 
 
 def create_region(world: "RaC3World", name: str) -> Region:
+    """Returns a new Region object already populated with its item locations"""
     reg = Region(name, world.player, world.multiworld)
     options = world.options
     for key, data in RAC3_LOCATION_DATA_TABLE.items():
@@ -532,6 +537,7 @@ def create_region(world: "RaC3World", name: str) -> Region:
 
 
 def create_region_and_connect(world: "RaC3World", name: str, entrance_name: str, connected_region: Region) -> Region:
+    """Returns a new Region, connected to a given region, already populated with its item locations"""
     reg: Region = create_region(world, name)
     connected_region.connect(reg, entrance_name)
     return reg
@@ -618,3 +624,8 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                     return True  # Skip all armor upgrade locations if armor upgrades are disabled
             # Add more conditions here if needed in the future
     return False
+
+
+def get_regions() -> set[str]:
+    """Returns a set containing the planet names"""
+    return {name for name in PLANET_NAME_FROM_ID.values()}

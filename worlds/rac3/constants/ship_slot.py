@@ -1,4 +1,8 @@
+"""This module contains constants used for tracking the currently available planets in the ship menu"""
+
+
 class RAC3SHIPSLOT:
+    """Each planet slot in the ship menu"""
     SLOT_0 = "Planet Slot 0x00"
     SLOT_1 = "Planet Slot 0x01"
     SLOT_2 = "Planet Slot 0x02"

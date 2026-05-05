@@ -1,3 +1,5 @@
+"""This module contains UnitTesting for the Goal condition"""
+
 from BaseClasses import CollectionState
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION

@@ -1,4 +1,8 @@
+"""This module contains string constants for skillpoint locations"""
+
+
 class RAC3SKILLPOINT:
+    """String constants for skillpoint locations"""
     ARIDIA_HANG_TIME = "Aridia: Skillpoint: Go for hang time"  # 0x001D54B0,
     FLORANA_PATH = "Florana: Skillpoint: Stay Squeaky Clean"  # 0x001D54B1,
     PHOENIX_ARCADE = "Phoenix: Skillpoint: Strive for arcade perfection"  # 0x001D54B2,

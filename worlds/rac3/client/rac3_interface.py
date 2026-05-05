@@ -2152,6 +2152,7 @@ class Rac3Interface(GameInterface):
                 logger.debug(
                     f"Moby with ID {target_id} not found, current id address out of range at {hex(current_id_addr)}")
                 return None
+            # noinspection PyBroadException
             try:
                 current_id = self._read16(current_id_addr)
             except Exception:
@@ -2331,6 +2332,7 @@ class Rac3Interface(GameInterface):
     def format_color_string(msg: str) -> tuple[bytes, int]:
         """Converts a message string with color formatting to game insertable bytes with color formatting"""
         # Normalize and strip accents so characters are ASCII-safe for the game
+        # noinspection PyBroadException
         try:
             msg = remove_accents(msg)
         except Exception:

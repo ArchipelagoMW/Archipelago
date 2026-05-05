@@ -35,6 +35,7 @@ def all_locations(state: CollectionState, world: "RaC3World", tag: str, skip: st
     return check
 
 
+# Todo: Rule Builder
 def set_rules(world: "RaC3World"):
     """Apply logic rules to each location"""
     region_rules_dict: dict[str, Callable] = {

@@ -1,3 +1,5 @@
+"""This module contains additional Armor Upgrade options"""
+
 from Options import Range
 from worlds.rac3.constants.options import RAC3OPTION
 

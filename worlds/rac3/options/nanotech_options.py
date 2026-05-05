@@ -1,3 +1,5 @@
+"""This module contains options for the frequency of nanotech level locations"""
+
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION
 

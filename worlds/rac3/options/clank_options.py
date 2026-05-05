@@ -1,3 +1,5 @@
+"""This module contains options for shuffling clank as an in game item"""
+
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION
 

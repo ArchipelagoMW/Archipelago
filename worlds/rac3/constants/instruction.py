@@ -1,8 +1,11 @@
+"""This module contains constants used for writing instructions to the code cave"""
+
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.constants.version import RAC3VERSION
 
 
 class RAC3INSTRUCTION:
+    """Address constants for the code cave"""
     CODECAVE_START = 0x00095100
     PHOENIX_NEW_ARMOR = 0x004A6DB8  # 24442660 addiu a0, v0, 0x2600
     PHOENIX_CAN_BUY_ARMOR_NTSC = 0x004A66E8  # 1062001A beq v1,v0,0x004A6754

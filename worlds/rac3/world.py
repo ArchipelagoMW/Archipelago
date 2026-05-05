@@ -12,10 +12,10 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.items import (create_item, create_itempool, get_filler_selection, process_start_inventory,
                                starting_planets, starting_weapons)
-from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
-                                   location_groups)
+from worlds.rac3.locations import get_level_locations, get_location_names, get_total_locations, location_groups
 from worlds.rac3.rac3options import RaC3Options
-from worlds.rac3.regions import create_regions, every_10_nanotech, every_20_nanotech, every_5_nanotech, every_nanotech
+from worlds.rac3.regions import (create_regions, every_10_nanotech, every_20_nanotech, every_5_nanotech, every_nanotech,
+                                 get_regions)
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
 from worlds.rac3.web_world import RaC3Web

@@ -1,3 +1,4 @@
+"""This module contains the Items dataclass"""
 from dataclasses import dataclass
 
 from BaseClasses import ItemClassification
@@ -8,6 +9,7 @@ from worlds.rac3.constants.status import RAC3STATUS
 
 @dataclass
 class RAC3ITEMDATA:
+    """Data class for each item"""
     ID: int
     LEVEL: int
     LEVEL_ADDRESS: int
@@ -54,6 +56,7 @@ class RAC3ITEMDATA:
     def construct_unused(idx: int,
                          ammo: int = 0,
                          tags: list[str] | None = None):
+        """Construct an unused item"""
         all_tags: list[str] = [RAC3ITEMTAG.UNUSED]
         if tags is not None:
             all_tags.extend(tags)
@@ -63,6 +66,7 @@ class RAC3ITEMDATA:
     def construct_gadget(idx: int,
                          ap_classification: ItemClassification,
                          tags: list[str] | None = None):
+        """Construct a gadget item"""
         address: int = idx + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
         all_tags: list[str] = [RAC3ITEMTAG.GADGET]
@@ -76,6 +80,7 @@ class RAC3ITEMDATA:
                          ammo: int = 0,
                          ap_classification: ItemClassification = ItemClassification.progression_skip_balancing,
                          tags: list[str] = None):
+        """Construct a weapon item"""
         address: int = idx + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
         all_tags: list[str] = [RAC3ITEMTAG.WEAPON, RAC3ITEMTAG.NON_PROG_WEAPON]
@@ -92,6 +97,7 @@ class RAC3ITEMDATA:
                                ammo: int = 0,
                                xp: int = 0,
                                tags: list[str] = None):
+        """Construct a weapon level item"""
         entry: dict[str, list[int]] = dict(filter(lambda data_kv: idx in data_kv[1], UPGRADE_DICT.items()))
         base: int = next(iter(entry.values()))[0]
         name: str = next(iter(entry.keys()))[0]
@@ -107,6 +113,7 @@ class RAC3ITEMDATA:
     def construct_weapon_prog(idx: int,
                               ap_classification: ItemClassification,
                               tags: list[str] | None = None):
+        """Construct a progressive weapon item"""
         address: int = (idx - 0xCB) * 8 + 0x27 + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
         all_tags: list[str] = [RAC3ITEMTAG.PROG_WEAPON, RAC3ITEMTAG.PROGRESSIVE, RAC3ITEMTAG.WEAPON]
@@ -117,6 +124,7 @@ class RAC3ITEMDATA:
     @staticmethod
     def construct_rac2_prog(idx: int,
                             ap_classification: ItemClassification):
+        """Construct a RaC2 progressive weapon item"""
         address: int = idx - 0xCA + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
         return RAC3ITEMDATA(idx, address, address_2, ap_classification=ap_classification,
@@ -126,6 +134,7 @@ class RAC3ITEMDATA:
     def construct_infobot(idx: int,
                           ap_classification: ItemClassification,
                           tags: list[str] | None = None):
+        """Construct a planet unlock item"""
         all_tags: list[str] = [RAC3ITEMTAG.INFOBOT]
         if tags is not None:
             all_tags.extend(tags)
@@ -136,6 +145,7 @@ class RAC3ITEMDATA:
                         ap_classification: ItemClassification,
                         armor: int,
                         tags: list[str] | None = None):
+        """Construct a player armor item"""
         address: int = RAC3STATUS.ARMOR
         reduction: float = armor / 30
         all_tags: list[str] = [RAC3ITEMTAG.ARMOR]
@@ -146,6 +156,7 @@ class RAC3ITEMDATA:
     @staticmethod
     def construct_vidcomic(idx: int,
                            tag: list[str] | None = None):
+        """Construct a progressive vidcomic item"""
         # Progressive order: 1, 2, 3, 4, 5
         # Memory order:      1, 4, 2, 3, 5
         progressive_to_memory: list[int] = [0, 2, 3, 1, 4]
@@ -159,20 +170,24 @@ class RAC3ITEMDATA:
     @staticmethod
     def construct_trap(idx: int,
                        address: int = 0):
+        """Construct a trap item"""
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.trap, tags=[RAC3ITEMTAG.TRAP])
 
     @staticmethod
     def construct_other(idx: int,
                         address: int = 0):
+        """Construct some filler item"""
         return RAC3ITEMDATA(idx, address, tags=[RAC3ITEMTAG.FILLER])
 
     @staticmethod
     def construct_goal(idx: int):
+        """Construct the goal item"""
         return RAC3ITEMDATA(idx, ap_classification=ItemClassification.progression, tags=[RAC3ITEMTAG.GOAL])
 
     @staticmethod
     def construct_clank(idx: int,
                         tag: list[str] | None = None):
+        """Construct a clank pack item"""
         if tag:
             tags: list[str] = [*tag, RAC3ITEMTAG.CLANK]
         else:
@@ -183,6 +198,7 @@ class RAC3ITEMDATA:
     def construct_cheat(idx: int,
                         address: int = 0,
                         tag: list[str] = None):
+        """Construct a cheat menu item"""
         if tag:
             tags: list[str] = [*tag, RAC3ITEMTAG.CHEAT]
         else:
@@ -486,6 +502,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
 
 
 def from_prop(prop: str) -> filter:
+    """Return a filtered item data table from a given property"""
     return filter(lambda data_kv: getattr(data_kv[1], prop) is not None, RAC3_ITEM_DATA_TABLE.items())
 
 
@@ -495,6 +512,7 @@ ITEM_NAME_FROM_ADDRESS: dict[int, str] = {kv[1].UNLOCK_ADDRESS: kv[0] for kv in 
 
 
 def from_tag(tag: str) -> dict[str, RAC3ITEMDATA]:
+    """Return a filtered item data table from a given tag"""
     return dict(filter(lambda data_kv: tag in data_kv[1].TAGS, RAC3_ITEM_DATA_TABLE.items()))
 
 

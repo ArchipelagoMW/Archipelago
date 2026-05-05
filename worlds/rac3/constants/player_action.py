@@ -2,6 +2,7 @@
 
 
 class RAC3PLAYERACTION:
+    """Ratchet's (or the current player character's) Action states."""
     IDLE = 0x00
     WRENCH_FIRST_PERSON = 0x01
     WALKING = 0x02

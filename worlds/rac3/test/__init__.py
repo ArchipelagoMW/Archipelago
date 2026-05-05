@@ -1,3 +1,5 @@
+"""This package provides UnitTesting for the Rac3 apworld"""
+
 from test.bases import WorldTestBase
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.world import RaC3World

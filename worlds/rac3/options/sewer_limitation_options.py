@@ -1,3 +1,5 @@
+"""This module contains options for limiting the total number of sewer crystal trade locations"""
+
 from Options import Range
 from worlds.rac3.constants.options import RAC3OPTION
 

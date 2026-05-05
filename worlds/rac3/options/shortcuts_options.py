@@ -1,3 +1,5 @@
+"""This module contains options for level shortcuts"""
+
 from Options import OptionCounter
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.shortcuts import SHORTCUTS

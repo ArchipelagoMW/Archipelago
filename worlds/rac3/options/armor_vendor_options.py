@@ -1,3 +1,5 @@
+"""This module defines options for armor vendors"""
+
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION
 

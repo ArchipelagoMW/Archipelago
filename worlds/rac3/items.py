@@ -1,3 +1,5 @@
+"""This module provides handling for Item objects"""
+
 from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING
 
@@ -16,6 +18,7 @@ if TYPE_CHECKING:
 
 
 class GameItem(Item):
+    """Ratchet and Clank 3 Items"""
     game = RAC3OPTION.GAME_TITLE_FULL
 
 
@@ -24,6 +27,7 @@ rac3_logger.setLevel(DEBUG)
 
 
 def create_itempool(world: "RaC3World") -> list[Item]:
+    """Returns a list of items to be added to the item pool after checking options"""
     itempool: list[Item] = []
     options: type[RaC3Options] = world.options
 
@@ -88,6 +92,7 @@ def create_itempool(world: "RaC3World") -> list[Item]:
 
 def create_multiple_items(world: "RaC3World", name: str, count: int = 1,
                           item_type: ItemClassification = ItemClassification.progression) -> list[Item]:
+    """Returns a list containing multiple copies of an item requested"""
     data: RAC3ITEMDATA = item_table[name]
     itemlist: list[Item] = []
 
@@ -98,13 +103,15 @@ def create_multiple_items(world: "RaC3World", name: str, count: int = 1,
 
 
 def create_item(world: "RaC3World", name: str) -> Item:
+    """Returns a new instance of an Item"""
     data = item_table.get(name, goal_data.get(name))
     if data is None:
         raise KeyError(f"{name} not found in item_table")
     return GameItem(name, data.AP_CLASSIFICATION, data.AP_CODE, world.player)
 
 
-def get_filler_selection(world: "RaC3World"):
+def get_filler_selection(world: "RaC3World") -> list[str]:
+    """Returns a list of item names to be used when choosing filler"""
     frequencies = world.options.filler_weight.value
     if world.options.progressive_weapons.value:
         frequencies[RAC3ITEM.WEAPON_XP] = 0
@@ -117,6 +124,7 @@ def get_filler_selection(world: "RaC3World"):
 
 
 def process_start_inventory(world: "RaC3World") -> list[str]:
+    """Returns a list of items the player will start with"""
     itemlist: list[str] = []
     if not world.options.progressive_weapons.value:
         for item in PROG_TO_NAME_DICT.keys():
@@ -136,6 +144,7 @@ def process_start_inventory(world: "RaC3World") -> list[str]:
 
 
 def starting_weapons(world: "RaC3World") -> list[str]:
+    """Returns the weapons randomly selected for the player to start with"""
     weapon_list: list[str] = []
     for name in world.options.starting_weapons.value:
         count = world.options.starting_weapons.value[name]
@@ -157,6 +166,7 @@ def starting_weapons(world: "RaC3World") -> list[str]:
 
 
 def starting_planets(world: "RaC3World") -> list[str]:
+    """Returns the planets randomly selected for the player to start with"""
     planet_list: list[str] = [infobot for infobot in infobot_data.keys() if infobot not in world.preplaced_items]
     planet_list = remove_dead_starting_planets(world, planet_list)
     if len(planet_list) > 1:  # [Phoenix], [Florana], or [Other]

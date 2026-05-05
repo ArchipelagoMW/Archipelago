@@ -1,3 +1,4 @@
+"""This module contains string constants for each general game location"""
 # Todo: Missions
 # "Missions": {
 #     "First Ranger gives weapon": 0x001426E0,
@@ -40,6 +41,7 @@
 #     "Second of two noids - Mylon Landing Point": 0x001C16F4
 
 class RAC3LOCATION:
+    """String constants for locations"""
     VELDIN_FIRST_RANGER = "Veldin: First Ranger"
     VELDIN_SECOND_RANGER = "Veldin: Second Ranger"
     VELDIN_SAVE_VELDIN = "Veldin: Save Veldin"

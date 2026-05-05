@@ -1,3 +1,6 @@
+"""This module contains constants used for gameplay speedups"""
+
+
 class RAC3SPEEDUPS:
     """String constants for RaC3 speedups"""
     CUTSCENES = "Cutscenes"

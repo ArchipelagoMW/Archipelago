@@ -1,8 +1,11 @@
+"""This module contains position constants for checkpoints"""
+
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
 from worlds.rac3.constants.region import RAC3REGION
 
 
 class RAC3CHECKPOINT:
+    """Checkpoint respawn coordinates"""
     FLORANA_SHIP = RAC3POSITIONDATA(478.94168, 597.269287, 315.347198)
     FLORANA_SECOND = RAC3POSITIONDATA(557.119, 484.08, 334.734)
     FLORANA_THIRD = RAC3POSITIONDATA(421.986, 572.106, 314.953)

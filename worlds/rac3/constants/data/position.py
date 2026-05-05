@@ -1,8 +1,11 @@
+"""This module contains data classes for position data"""
+
 from dataclasses import dataclass
 
 
 @dataclass
 class RAC3POSITIONDATA:
+    """Position data class"""
     X: float
     Y: float
     Z: float

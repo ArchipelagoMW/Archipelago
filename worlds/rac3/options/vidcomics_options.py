@@ -1,3 +1,5 @@
+"""This module contains options for Qwark VidComic locations"""
+
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION
 

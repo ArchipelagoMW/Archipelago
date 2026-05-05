@@ -1,4 +1,8 @@
+"""This module contains constants used for tagging each item type"""
+
+
 class RAC3ITEMTAG:
+    """Tags for each Item type"""
     ARMOR = "Armor"
     EQUIPABLE = "Equipable"
     FILLER = "Filler"

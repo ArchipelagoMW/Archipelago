@@ -1,3 +1,5 @@
+"""This module provides handling of location objects"""
+
 from typing import TYPE_CHECKING
 
 from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
@@ -9,19 +11,18 @@ if TYPE_CHECKING:
 
 
 def get_total_locations(world: "RaC3World") -> int:
+    """Returns the total number of locations in the apworld"""
     locations = [loc for loc in world.multiworld.get_locations() if loc.player == world.player]
     return len(locations)
 
 
 def get_location_names() -> dict[str, int]:
+    """Returns a dictionary mapping location names to their apcodes"""
     return {name: data.AP_CODE for name, data in RAC3_LOCATION_DATA_TABLE.items()}
 
 
-def get_regions() -> list[str]:
-    return [data.REGION for data in RAC3_LOCATION_DATA_TABLE.values()]
-
-
 def get_from_tag(tag) -> set[str]:
+    """Return a set of location names that match the given tag"""
     return {loc for loc in RAC3_LOCATION_DATA_TABLE.keys() if tag in RAC3_LOCATION_DATA_TABLE[loc].TAGS}
 
 
@@ -211,8 +212,10 @@ location_groups: dict[str, set[str]] = {
 
 
 def get_level_locations(region: str) -> set[str]:
+    """Returns a set of location names for a given region"""
     return set(level[0] for level in get_level_location_data(region))
 
 
 def get_level_location_data(region: str) -> filter:
+    """Returns the location data table filtered to a specific region"""
     return filter(lambda level: level[1].REGION == region, RAC3_LOCATION_DATA_TABLE.items())

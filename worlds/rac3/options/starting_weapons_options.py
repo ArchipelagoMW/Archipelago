@@ -1,3 +1,5 @@
+"""This module contains options for which weapons it is possible to start with"""
+
 from Options import ItemDict
 from worlds.rac3.constants.data.item import default_starting_weapons
 from worlds.rac3.constants.options import RAC3OPTION

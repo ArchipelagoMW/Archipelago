@@ -7,6 +7,7 @@ from worlds.rac3.constants.status import RAC3STATUS
 
 @dataclass
 class RAC3SHIPDATA:
+    """Dataclass for Planet slots in the ship"""
     ID: int
     SLOT_ADDRESS: int
 

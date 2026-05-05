@@ -1,3 +1,5 @@
+"""This module contains options for customizing the cosmetic nose type of the ship"""
+
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION
 

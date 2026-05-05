@@ -1,3 +1,5 @@
+"""This module contains Arena location .yaml options"""
+
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION
 

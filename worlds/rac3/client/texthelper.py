@@ -39,6 +39,7 @@ def get_sent_item_message(ctx: "Rac3Context", net_item: NetworkItem, player_name
 
 
 def remove_accents(input_str):
+    """Converts Unicode accented characters to their base ASCII equivalent"""
     nfkd_form = unicodedata.normalize(u"NFKD", input_str)
     return nfkd_form.encode("ascii", 'ignore').decode("ascii")
 

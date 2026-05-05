@@ -1,3 +1,5 @@
+"""This module contains options for playing a One health point challenge mode"""
+
 from Options import OptionCounter
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_type import ONE_HP_CHALLENGE_CHARACTERS

@@ -1,3 +1,5 @@
+"""This module contains options for hinting locations in the vendor when scouted"""
+
 from Options import OptionCounter
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.vendors.name import VENDOR_TYPES
