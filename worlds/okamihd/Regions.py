@@ -15,12 +15,12 @@ def get_region_name(key: str):
 
 
 def create_regions(world: "OkamiWorld"):
-    for name in RegionNames:
-        reg = create_region(world, name)
+    for r in RegionNames:
+        reg = create_region(world, r.value)
         world.multiworld.regions.append(reg)
     # Second loop to create exits
-    for name in RegionNames:
-        reg = world.multiworld.get_region(name, world.player)
+    for r in RegionNames:
+        reg = world.multiworld.get_region(r.value, world.player)
         create_region_exits(reg, world)
 
 
