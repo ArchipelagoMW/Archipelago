@@ -712,4 +712,11 @@ SONG_DATA: Dict[str, SongData] = {
     "Chasing Daylight": SongData(2900836, "96-0", "Wuthering Waves Pioneer Podcast", False, 3, 5, 8),
     "CATCH ME IF YOU CAN": SongData(2900837, "96-1", "Wuthering Waves Pioneer Podcast", False, 4, 6, 9),
     "RUNNING FOR YOUR LIFE": SongData(2900838, "96-2", "Wuthering Waves Pioneer Podcast", False, 2, 5, 8),
+    "Denpa-tic Imaginary Girl": SongData(2900839, "43-73", "MD Plus Project", False, 4, 6, 9),
+    "Don't Fight The Music": SongData(2900840, "97-0", "DASH AND SHOOT!", False, 6, 8, 10),
+    "Viyella's Scream": SongData(2900841, "97-1", "DASH AND SHOOT!", False, 7, 9, 11),
+    "Final Flash Flight": SongData(2900842, "97-2", "DASH AND SHOOT!", False, 5, 7, 10),
+    "YURUSHITE": SongData(2900843, "97-3", "DASH AND SHOOT!", False, 6, 8, 11),
+    "girls.exe": SongData(2900844, "97-4", "DASH AND SHOOT!", False, 6, 8, 11),
+    "Baqeela": SongData(2900845, "97-5", "DASH AND SHOOT!", False, 6, 8, 10),
 }
