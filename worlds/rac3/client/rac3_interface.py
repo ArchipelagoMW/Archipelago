@@ -164,6 +164,7 @@ class Rac3Interface(GameInterface):
     last_in_ship_time: float = 0.0
     last_in_vendor_time: float = 0.0
     deathlink_grace_period: float = 0.0
+    gadget_grace_period: float = 0.0
     nanotech_exp: int = 0
     homewarping: bool = False
     checked_locations: set[str] = set()
@@ -792,10 +793,9 @@ class Rac3Interface(GameInterface):
                     new_timer = 0x7FFFFFFF
                 self._write32(RAC3STATUS.INFERNO_TIMER, new_timer)
             case RAC3ITEM.JACKPOT:
-                # TODO rework jackpot filler item to extend time instead of increasing multiplier
                 # Limit multiplier to 128x
                 if self.bolt_and_xp_multiplier_value <= 6:
-                    _time = round(time.time() + uniform(10, 30), 4)
+                    _time = round(time.time() + 20.0, 4)
                     self.timers[name + str(_time)] = _time
                     self.bolt_and_xp_multiplier_value += 1
             case RAC3ITEM.NANOTECH_XP:
@@ -1272,7 +1272,7 @@ class Rac3Interface(GameInterface):
             case RAC3VENDORTYPE.SHIP:
                 if not self.options.ship_vendor:
                     return
-                ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:self.UnlockItem[RAC3SHIPSLOT.SLOT_0].status * 3]
+                ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:(self.UnlockItem[RAC3SHIPSLOT.SLOT_0].status + 1) * 2]
                 # Set item_name_ptr for each ship item using the string pointer
                 for key in ship_keys:
                     addr = self.vendor_string_pointers.get(key, 0)
@@ -1429,7 +1429,7 @@ class Rac3Interface(GameInterface):
             case RAC3VENDORTYPE.SHIP:
                 if not self.options.ship_vendor or not vendor_scouting.get(RAC3VENDORNAME.SHIP, False):
                     return None
-                ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:self.UnlockItem[RAC3SHIPSLOT.SLOT_0].status * 3]
+                ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:(self.UnlockItem[RAC3SHIPSLOT.SLOT_0].status + 1) * 2]
                 filtered_ship_keys = [key for key in ship_keys if key not in self.checked_locations]
                 vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[key].AP_CODE for key in filtered_ship_keys]
 
@@ -1501,10 +1501,13 @@ class Rac3Interface(GameInterface):
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
-        if ((time.time() - self.last_in_ship_time) < 1.5
+        current_time = time.time()
+        if ((current_time - self.last_in_ship_time) < 1
             or self.is_reloading
             or self.self_respawning
             or self.action_type == RAC3ACTIONTYPE.PLAYER_MOVEMENT_LOCKED):
+            self.gadget_grace_period = current_time
+        if current_time - self.gadget_grace_period < 0.5:
             return False
         return True
 
