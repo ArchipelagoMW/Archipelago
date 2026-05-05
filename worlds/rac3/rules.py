@@ -17,6 +17,7 @@ from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.locations.vendors import RAC3VENDORLOCATION
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.locations import location_groups
 
 if TYPE_CHECKING:
@@ -38,8 +39,10 @@ def calc_nanotech_requirement(world: "RaC3World", default_infobot_count: int) ->
     """Calculate the amount of infobots required for a given nanotech level based on the world options"""
     multiplier_option = world.options.bolt_and_xp_multiplier.value
     multiplier_value = MULTIPLIERS.get(multiplier_option, 1)
+    intro_skip_enabled = world.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False)
     # Keep original requirements at 1x, then scale down quickly at higher multipliers.
-    return max(1, (default_infobot_count + multiplier_value - 1) // multiplier_value)
+    intro_skip_offset = 1 if intro_skip_enabled and multiplier_value >= 4 else 0
+    return max(1, (default_infobot_count + multiplier_value - 1) // multiplier_value + intro_skip_offset)
 
 # Todo: Rule Builder
 def set_rules(world: "RaC3World"):
