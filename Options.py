@@ -1860,11 +1860,12 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
                 presets = world.web.options_presets.copy()
                 presets.update({"": {}})
 
+                min_version = world.minimum_ap_version.as_simple_string() if world.minimum_ap_version else __version__
                 option_groups = get_option_groups(world)
                 for name, preset in presets.items():
                     res = template.render(
                         option_groups=option_groups,
-                        __version__=__version__,
+                        __version__=min_version,
                         game=game_name,
                         world_version=world.world_version.as_simple_string(),
                         yaml_dump=yaml_dump_scalar,
