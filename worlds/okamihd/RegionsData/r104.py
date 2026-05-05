@@ -78,6 +78,7 @@ events = {
 }
 locations = {
     RegionNames.TSUTA_RUINS_1F_MAIN_PART: {
+        "Tsuta Ruins - Treasure Bud in Entrance Hall Left Side": LocData(container_check_id(MapIds.TSUTA_RUINS, 13),type=LocationType.TREASURE_BUD),# spawn_idx=13, Exorcism Slip S
         "Tsuta Ruins - Freestanding Chest at Entrance": LocData(container_check_id(MapIds.TSUTA_RUINS, 17)),  # spawn_idx=17, Travel Guide: Enhancing Divinity
         "Tsuta Ruins - Treasure Bud in Entrance Hall Middle": LocData(container_check_id(MapIds.TSUTA_RUINS, 8), type=LocationType.TREASURE_BUD),  # spawn_idx=8, Traveler's Charm
         "Tsuta Ruins - Treasure Bud in Entrance Hall Right Side": LocData(container_check_id(MapIds.TSUTA_RUINS, 9), type=LocationType.TREASURE_BUD),  # spawn_idx=9, Steel Soul Sake
@@ -98,6 +99,8 @@ locations = {
             "Tsuta Ruins - Open Lockjaw with Exorcising Arrow"]),  # spawn_idx=4, Exorcism Slip S
         "Tsuta Ruins - Left side hidden treasure bud": LocData(container_check_id(MapIds.TSUTA_RUINS, 18), required_brush_techniques=[
             BrushTechniques.GREENSPROUT_VINE], type=LocationType.TREASURE_BUD),  # spawn_idx=18, Golden Peach
+        "Tsuta Ruins - Ledge Chest behind lockjaw": LocData(container_check_id(MapIds.TSUTA_RUINS, 35),required_items_events=["Tsuta Ruins - Defeat the spider queen"]), # spawn_idx=35, Bull Horn
+
     },
     RegionNames.TSUTA_RUINS_DEVIL_GATES: {
         "Tsuta Ruins - Treasure Bud near Devil gates": LocData(container_check_id(MapIds.TSUTA_RUINS, 23), type=LocationType.TREASURE_BUD),  # spawn_idx=23, Lacquerware Set
@@ -114,6 +117,6 @@ locations = {
     RegionNames.TSUTA_RUINS_SPIDER: {
         "Tsuta Ruins - Left Chest before Spider queen": LocData(container_check_id(MapIds.TSUTA_RUINS, 21)),  # spawn_idx=21, Travel Guide: Godhood Tips
         "Tsuta Ruins - Right Chest before Spider queen": LocData(container_check_id(MapIds.TSUTA_RUINS, 22)),  # spawn_idx=22, Holy Bone S
-        "Tsuta Ruins - Boss reward": LocData(container_check_id(MapIds.TSUTA_RUINS, 35), required_items_events=["Tsuta Ruins - Defeat the spider queen"]),  # spawn_idx=35, Bull Horn
+        "Tsuta Ruins - Boss reward": LocData(container_check_id(MapIds.TSUTA_RUINS, 36), required_items_events=["Tsuta Ruins - Defeat the spider queen"]),  # spawn_idx=35, Bull Horn
     }
 }
