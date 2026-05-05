@@ -7,7 +7,7 @@ from ..world import TeardownWorld
 # WorldTestBase is a class that performs a set of generic tests on your world using a given set of options.
 # It also enables you to write custom tests with a slew of generic helper functions.
 # The first thing you'll want to do is subclass it. You'll want to override "game" And "world" like this.
-class APQuestTestBase(WorldTestBase):
+class TeardownTestBase(WorldTestBase):
     game = "Teardown"
     world: TeardownWorld
 

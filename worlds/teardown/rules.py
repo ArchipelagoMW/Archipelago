@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 from rule_builder.field_resolvers import FromOption
 from rule_builder.rules import Has, HasGroup
 from .options import MissionAmount
-from .items import item_name_groups
 
 #, ValuableSanity
 
@@ -15,7 +14,6 @@ if TYPE_CHECKING:
 def set_all_rules(world: TeardownWorld) -> None:
 
     set_all_entrance_rules(world)
-    #set_all_location_rules(world)
     set_completion_condition(world)
 
 
@@ -79,170 +77,115 @@ def set_all_entrance_rules(world: TeardownWorld) -> None:
 
 
     # Now, let's make some rules!
-    # For this, we need a rule that says "player has a Sword".
-    # We can use a "Has"-type rule from the rule_builder module for this.
-    can_access_oldbuildingproblem = Has("Old Building Problem Unlock")
-    world.set_rule(menu_to_oldbuildingproblem, can_access_oldbuildingproblem)
+    world.set_rule(menu_to_oldbuildingproblem, Has("Old Building Problem Unlock"))
 
-    can_access_leecomputers = Has("Lee Computers Unlock")
-    world.set_rule(menu_to_leecomputers, can_access_leecomputers)
+    world.set_rule(menu_to_leecomputers, Has("Lee Computers Unlock"))
 
-    can_access_logindevices = Has("Login Devices Unlock")
-    world.set_rule(menu_to_logindevices, can_access_logindevices)
+    world.set_rule(menu_to_logindevices, Has("Login Devices Unlock"))
 
-    can_access_makingspace = Has("Making Space Unlock")
-    world.set_rule(menu_to_makingspace, can_access_makingspace)
+    world.set_rule(menu_to_makingspace, Has("Making Space Unlock"))
 
-    can_access_classiccars = Has("Classic Cars Unlock")
-    world.set_rule(menu_to_classiccars, can_access_classiccars)
+    world.set_rule(menu_to_classiccars, Has("Classic Cars Unlock"))
 
-    can_access_gpsdevices = Has("The GPS Devices Unlock")
-    world.set_rule(menu_to_gpsdevices, can_access_gpsdevices)
+    world.set_rule(menu_to_gpsdevices, Has("The GPS Devices Unlock"))
 
-    can_access_carwash = Has("The Car Wash Unlock")
-    world.set_rule(menu_to_carwash, can_access_carwash)
+    world.set_rule(menu_to_carwash, Has("The Car Wash Unlock"))
 
-    can_access_heavylifting = Has("Heavy Lifting Unlock")
-    world.set_rule(menu_to_heavylifting, can_access_heavylifting)
+    world.set_rule(menu_to_heavylifting, Has("Heavy Lifting Unlock"))
 
-    can_access_tower = Has("The Tower Unlock")
-    world.set_rule(menu_to_tower, can_access_tower)
+    world.set_rule(menu_to_tower, Has("The Tower Unlock"))
 
-    can_access_finearts = Has("Fine Arts Unlock")
-    world.set_rule(menu_to_finearts, can_access_finearts)
+    world.set_rule(menu_to_finearts, Has("Fine Arts Unlock"))
 
-    can_access_toolup = Has("Tool Up Unlock")
-    world.set_rule(menu_to_toolup, can_access_toolup)
+    world.set_rule(menu_to_toolup, Has("Tool Up Unlock"))
 
-    can_access_artreturn = Has("Art Return Unlock")
-    world.set_rule(menu_to_artreturn, can_access_artreturn)
+    world.set_rule(menu_to_artreturn, Has("Art Return Unlock"))
 
-    can_access_covertchaos = Has("Covert Chaos Unlock")
-    world.set_rule(menu_to_covertchaos, can_access_covertchaos)
+    world.set_rule(menu_to_covertchaos, Has("Covert Chaos Unlock"))
 
-    can_access_insurancefraud = Has("Insurance Fraud Unlock")
-    world.set_rule(menu_to_insurancefraud, can_access_insurancefraud)
+    world.set_rule(menu_to_insurancefraud, Has("Insurance Fraud Unlock"))
 
-    can_access_bluetidecomputers = Has("The BlueTide Computers Unlock")
-    world.set_rule(menu_to_bluetidecomputers, can_access_bluetidecomputers)
+    world.set_rule(menu_to_bluetidecomputers, Has("The BlueTide Computers Unlock"))
 
-    can_access_speeddeal = Has("The Speed Deal Unlock")
-    world.set_rule(menu_to_speeddeal, can_access_speeddeal)
+    world.set_rule(menu_to_speeddeal, Has("The Speed Deal Unlock"))
 
-    can_access_wetaffair = Has("A Wet Affair Unlock")
-    world.set_rule(menu_to_wetaffair, can_access_wetaffair)
+    world.set_rule(menu_to_wetaffair, Has("A Wet Affair Unlock"))
 
-    can_access_poweroutage = Has("Power Outage Unlock")
-    world.set_rule(menu_to_poweroutage, can_access_poweroutage)
+    world.set_rule(menu_to_poweroutage, Has("Power Outage Unlock"))
 
-    can_access_motivationalreminder = Has("Motivational Reminder Unlock")
-    world.set_rule(menu_to_motivationalreminder, can_access_motivationalreminder)
+    world.set_rule(menu_to_motivationalreminder, Has("Motivational Reminder Unlock"))
 
-    can_access_assortmentofdishes = Has("An Assortment Of Dishes Unlock")
-    world.set_rule(menu_to_assortmentofdishes, can_access_assortmentofdishes)
+    world.set_rule(menu_to_assortmentofdishes, Has("An Assortment Of Dishes Unlock"))
 
-    can_access_flooding = Has("Flooding Unlock")
-    world.set_rule(menu_to_flooding, can_access_flooding)
+    world.set_rule(menu_to_flooding, Has("Flooding Unlock"))
 
-    can_access_chase = Has("The Chase Unlock")
-    world.set_rule(menu_to_chase, can_access_chase)
+    world.set_rule(menu_to_chase, Has("The Chase Unlock"))
 
-    can_access_roborazzi = Has("Roborazzi Unlock")
-    world.set_rule(menu_to_roborazzi, can_access_roborazzi)
+    world.set_rule(menu_to_roborazzi, Has("Roborazzi Unlock"))
 
-    can_access_secretingredients = Has("The Secret Ingredients Unlock")
-    world.set_rule(menu_to_secretingredients, can_access_secretingredients)
+    world.set_rule(menu_to_secretingredients, Has("The Secret Ingredients Unlock"))
 
-    can_access_bluetideshortage = Has("The BlueTide Shortage Unlock")
-    world.set_rule(menu_to_bluetideshortage, can_access_bluetideshortage)
+    world.set_rule(menu_to_bluetideshortage, Has("The BlueTide Shortage Unlock"))
 
-    can_access_shippinglogs = Has("The Shipping Logs Unlock")
-    world.set_rule(menu_to_shippinglogs, can_access_shippinglogs)
+    world.set_rule(menu_to_shippinglogs, Has("The Shipping Logs Unlock"))
 
-    can_access_alarmsystem = Has("The Alarm System Unlock")
-    world.set_rule(menu_to_alarmsystem, can_access_alarmsystem)
+    world.set_rule(menu_to_alarmsystem, Has("The Alarm System Unlock"))
 
-    can_access_movingthegoods = Has("Moving The Goods Unlock")
-    world.set_rule(menu_to_movingthegoods, can_access_movingthegoods)
+    world.set_rule(menu_to_movingthegoods, Has("Moving The Goods Unlock"))
 
-    can_access_havocinparaside = Has("Havoc In Paradise Unlock")
-    world.set_rule(menu_to_havocinparaside, can_access_havocinparaside)
+    world.set_rule(menu_to_havocinparaside, Has("Havoc In Paradise Unlock"))
 
-    can_access_elenasrevenge = Has("Elena's Revenge Unlock")
-    world.set_rule(menu_to_elenasrevenge, can_access_elenasrevenge)
+    world.set_rule(menu_to_elenasrevenge, Has("Elena's Revenge Unlock"))
 
-    can_access_truckloadoftrouble = Has("Truckload Of Trouble Unlock")
-    world.set_rule(menu_to_truckloadoftrouble, can_access_truckloadoftrouble)
+    world.set_rule(menu_to_truckloadoftrouble, Has("Truckload Of Trouble Unlock"))
 
-    can_access_ornamentordeal = Has("Ornament Ordeal Unlock")
-    world.set_rule(menu_to_ornamentordeal, can_access_ornamentordeal)
+    world.set_rule(menu_to_ornamentordeal, Has("Ornament Ordeal Unlock"))
 
-    can_access_quileztools = Has("The Quilez Tools Unlock")
-    world.set_rule(menu_to_quileztools, can_access_quileztools)
+    world.set_rule(menu_to_quileztools, Has("The Quilez Tools Unlock"))
 
-    can_access_connectingthedots = Has("Connecting The Dots Unlock")
-    world.set_rule(menu_to_connectingthedots, can_access_connectingthedots)
+    world.set_rule(menu_to_connectingthedots, Has("Connecting The Dots Unlock"))
 
-    can_access_pawnshop = Has("The Pawn Shop Unlock")
-    world.set_rule(menu_to_pawnshop, can_access_pawnshop)
+    world.set_rule(menu_to_pawnshop, Has("The Pawn Shop Unlock"))
 
-    can_access_droidabduction = Has("The Droid Abduction Unlock")
-    world.set_rule(menu_to_droidabduction, can_access_droidabduction)
+    world.set_rule(menu_to_droidabduction, Has("The Droid Abduction Unlock"))
 
-    can_access_maliceinwoonderland = Has("Malice In Woonderland Unlock")
-    world.set_rule(menu_to_maliceinwoonderland, can_access_maliceinwoonderland)
+    world.set_rule(menu_to_maliceinwoonderland, Has("Malice In Woonderland Unlock"))
 
-    can_access_handlewithcare = Has("Handle With Care Unlock")
-    world.set_rule(menu_to_handlewithcare, can_access_handlewithcare)
+    world.set_rule(menu_to_handlewithcare, Has("Handle With Care Unlock"))
 
-    can_access_droiddismount = Has("Droid Dismount Unlock")
-    world.set_rule(menu_to_droiddismount, can_access_droiddismount)
+    world.set_rule(menu_to_droiddismount, Has("Droid Dismount Unlock"))
 
-    can_access_finaldiversion = Has("The Final Diversion Unlock")
-    world.set_rule(menu_to_finaldiversion, can_access_finaldiversion)
+    world.set_rule(menu_to_finaldiversion, HasGroup("levels", count=FromOption(MissionAmount)))
 
 
-    can_access_blowtorchupgrade = Has("Blowtorch Unlock")
-    world.set_rule(menu_to_blowtorchupgrade, can_access_blowtorchupgrade)
 
-    can_access_shotgunupgrade = Has("Shotgun Unlock")
-    world.set_rule(menu_to_shotgunupgrade, can_access_shotgunupgrade)
+    world.set_rule(menu_to_blowtorchupgrade, Has("Blowtorch Unlock"))
 
-    can_access_plankupgrade = Has("Plank Unlock")
-    world.set_rule(menu_to_plankupgrade, can_access_plankupgrade)
+    world.set_rule(menu_to_shotgunupgrade, Has("Shotgun Unlock"))
 
-    can_access_pipebombupgrade = Has("Pipe Unlock")
-    world.set_rule(menu_to_pipebombupgrade, can_access_pipebombupgrade)
+    world.set_rule(menu_to_plankupgrade, Has("Plank Unlock"))
 
-    can_access_gunupgrade = Has("Gun Unlock")
-    world.set_rule(menu_to_gunupgrade, can_access_gunupgrade)
+    world.set_rule(menu_to_pipebombupgrade, Has("Pipe Unlock"))
 
-    can_access_bombupgrade = Has("Bomb Unlock")
-    world.set_rule(menu_to_bombupgrade, can_access_bombupgrade)
+    world.set_rule(menu_to_gunupgrade, Has("Gun Unlock"))
 
-    can_access_rocketlauncherupgrade = Has("Rocket Launcher Unlock")
-    world.set_rule(menu_to_rocketlauncherupgrade, can_access_rocketlauncherupgrade)
+    world.set_rule(menu_to_bombupgrade, Has("Bomb Unlock"))
 
-    can_access_rocketboosterupgrade = Has("Rocket Booster Unlock")
-    world.set_rule(menu_to_rocketboosterupgrade, can_access_rocketboosterupgrade)
+    world.set_rule(menu_to_rocketlauncherupgrade, Has("Rocket Launcher Unlock"))
 
-    can_access_leafblowerupgrade = Has("Leaf Blower Unlock")
-    world.set_rule(menu_to_leafblowerupgrade, can_access_leafblowerupgrade)
+    world.set_rule(menu_to_rocketboosterupgrade, Has("Rocket Booster Unlock"))
 
-    can_access_cableupgrade = Has("Cable Unlock")
-    world.set_rule(menu_to_cableupgrade, can_access_cableupgrade)
+    world.set_rule(menu_to_leafblowerupgrade, Has("Leaf Blower Unlock"))
 
-    can_access_vehiclethrusterupgrade = Has("Vehicle Thruster Unlock")
-    world.set_rule(menu_to_vehiclethrusterupgrade, can_access_vehiclethrusterupgrade)
+    world.set_rule(menu_to_cableupgrade, Has("Cable Unlock"))
 
-    can_access_nitroglycerinupgrade = Has("Nitroglycerin Unlock")
-    world.set_rule(menu_to_nitroglycerinupgrade, can_access_nitroglycerinupgrade)
+    world.set_rule(menu_to_vehiclethrusterupgrade, Has("Vehicle Thruster Unlock"))
 
-    can_access_huntingrifleupgrade = Has("Hunting Rifle Unlock")
-    world.set_rule(menu_to_huntingrifleupgrade, can_access_huntingrifleupgrade)
+    world.set_rule(menu_to_nitroglycerinupgrade, Has("Nitroglycerin Unlock"))
 
-    can_access_bluetideupgrade = Has("BlueTide Unlock")
-    world.set_rule(menu_to_bluetideupgrade, can_access_bluetideupgrade)
+    world.set_rule(menu_to_huntingrifleupgrade, Has("Hunting Rifle Unlock"))
+
+    world.set_rule(menu_to_bluetideupgrade, Has("BlueTide Unlock"))
 
 
 def set_completion_condition(world: TeardownWorld) -> None:

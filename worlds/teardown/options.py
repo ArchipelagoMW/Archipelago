@@ -15,14 +15,14 @@ class MissionAmount(Range):
 
 class StartingTool(Toggle):
     """
-    If enabled, the starting tools will be randomized
+    If enabled, the starting tools will be randomized.
     """
     display_name = "Randomize Starting Tools"
 
 
 class StartingLevel(DefaultOnToggle):
     """
-    If disabled, the starting level is not randomized and is Old Building Problem
+    If enabled, the starting level is randomized, if not it is Old Building Problem.
     """
     display_name = "Randomize Starting Level"
 

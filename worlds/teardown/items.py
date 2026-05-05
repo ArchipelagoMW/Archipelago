@@ -268,7 +268,6 @@ item_name_groups = {
         "Malice In Woonderland Unlock",
         "Handle With Care Unlock",
         "Droid Dismount Unlock",
-        # "The Final Diversion Unlock",
     ],
 }
 
@@ -290,46 +289,6 @@ def create_item_with_correct_classification(world: TeardownWorld, name: str) -> 
 
 def create_all_items(world: TeardownWorld) -> None:
     itempool: list[Item] = [
-        world.create_item("Lee Computers Unlock"),
-        world.create_item("Login Devices Unlock"),
-        world.create_item("Making Space Unlock"),
-        world.create_item("Classic Cars Unlock"),
-        world.create_item("The GPS Devices Unlock"),
-        world.create_item("The Car Wash Unlock"),
-        world.create_item("Heavy Lifting Unlock"),
-        world.create_item("The Tower Unlock"),
-        world.create_item("Fine Arts Unlock"),
-        world.create_item("Tool Up Unlock"),
-        world.create_item("Art Return Unlock"),
-        world.create_item("Covert Chaos Unlock"),
-        world.create_item("Insurance Fraud Unlock"),
-        world.create_item("The BlueTide Computers Unlock"),
-        world.create_item("The Speed Deal Unlock"),
-        world.create_item("A Wet Affair Unlock"),
-        world.create_item("Power Outage Unlock"),
-        world.create_item("Motivational Reminder Unlock"),
-        world.create_item("An Assortment Of Dishes Unlock"),
-        world.create_item("Flooding Unlock"),
-        world.create_item("The Chase Unlock"),
-        world.create_item("Roborazzi Unlock"),
-        world.create_item("The Secret Ingredients Unlock"),
-        world.create_item("The BlueTide Shortage Unlock"),
-        world.create_item("The Shipping Logs Unlock"),
-        world.create_item("The Alarm System Unlock"),
-        world.create_item("Moving The Goods Unlock"),
-        world.create_item("Havoc In Paradise Unlock"),
-        world.create_item("Elena's Revenge Unlock"),
-        world.create_item("Truckload Of Trouble Unlock"),
-        world.create_item("Ornament Ordeal Unlock"),
-        world.create_item("The Quilez Tools Unlock"),
-        world.create_item("Connecting The Dots Unlock"),
-        world.create_item("The Pawn Shop Unlock"),
-        world.create_item("The Droid Abduction Unlock"),
-        world.create_item("Malice In Woonderland Unlock"),
-        world.create_item("Handle With Care Unlock"),
-        world.create_item("Droid Dismount Unlock"),
-        #world.create_item("The Final Diversion Unlock"),
-
         world.create_item("Blowtorch Fuel Upgrade"),
         world.create_item("Blowtorch Fuel Upgrade"),
         world.create_item("Blowtorch Fuel Upgrade"),
@@ -450,11 +409,108 @@ def create_all_items(world: TeardownWorld) -> None:
         world.create_item("Extra Nothing"),
     ]
 
+
+
+
+
+
     if world.options.StartingTool:
         itempool.append(world.create_item("Sledge Hammer Unlock"))
-        itempool.append(world.create_item("Spraycan Unlock "))
-        itempool.append(world.create_item("Extinguisher Unlock "))
+        itempool.append(world.create_item("Spraycan Unlock"))
+        itempool.append(world.create_item("Extinguisher Unlock"))
 
+    else:
+        world.push_precollected(world.create_item("Sledge Hammer Unlock"))
+        world.push_precollected(world.create_item("Spraycan Unlock"))
+        world.push_precollected(world.create_item("Extinguisher Unlock"))
+
+
+    if world.options.StartingLevel:
+        predeterminedlevel = world.random.choice(item_name_groups["levels"])
+        nonstartinglevel = [lvl for lvl in (item_name_groups["levels"]) if lvl != predeterminedlevel]
+        world.push_precollected(world.create_item(predeterminedlevel))
+
+        itempool.append(world.create_item(nonstartinglevel[0]))
+        itempool.append(world.create_item(nonstartinglevel[1]))
+        itempool.append(world.create_item(nonstartinglevel[2]))
+        itempool.append(world.create_item(nonstartinglevel[3]))
+        itempool.append(world.create_item(nonstartinglevel[4]))
+        itempool.append(world.create_item(nonstartinglevel[5]))
+        itempool.append(world.create_item(nonstartinglevel[6]))
+        itempool.append(world.create_item(nonstartinglevel[7]))
+        itempool.append(world.create_item(nonstartinglevel[8]))
+        itempool.append(world.create_item(nonstartinglevel[9]))
+        itempool.append(world.create_item(nonstartinglevel[10]))
+        itempool.append(world.create_item(nonstartinglevel[11]))
+        itempool.append(world.create_item(nonstartinglevel[12]))
+        itempool.append(world.create_item(nonstartinglevel[13]))
+        itempool.append(world.create_item(nonstartinglevel[14]))
+        itempool.append(world.create_item(nonstartinglevel[15]))
+        itempool.append(world.create_item(nonstartinglevel[16]))
+        itempool.append(world.create_item(nonstartinglevel[17]))
+        itempool.append(world.create_item(nonstartinglevel[18]))
+        itempool.append(world.create_item(nonstartinglevel[19]))
+        itempool.append(world.create_item(nonstartinglevel[20]))
+        itempool.append(world.create_item(nonstartinglevel[21]))
+        itempool.append(world.create_item(nonstartinglevel[22]))
+        itempool.append(world.create_item(nonstartinglevel[23]))
+        itempool.append(world.create_item(nonstartinglevel[24]))
+        itempool.append(world.create_item(nonstartinglevel[25]))
+        itempool.append(world.create_item(nonstartinglevel[26]))
+        itempool.append(world.create_item(nonstartinglevel[27]))
+        itempool.append(world.create_item(nonstartinglevel[28]))
+        itempool.append(world.create_item(nonstartinglevel[29]))
+        itempool.append(world.create_item(nonstartinglevel[30]))
+        itempool.append(world.create_item(nonstartinglevel[31]))
+        itempool.append(world.create_item(nonstartinglevel[32]))
+        itempool.append(world.create_item(nonstartinglevel[33]))
+        itempool.append(world.create_item(nonstartinglevel[34]))
+        itempool.append(world.create_item(nonstartinglevel[35]))
+        itempool.append(world.create_item(nonstartinglevel[36]))
+        itempool.append(world.create_item(nonstartinglevel[37]))
+
+
+    else:
+        world.push_precollected(world.create_item("Old Building Problem Unlock"))
+
+        itempool.append(world.create_item("Lee Computers Unlock"))
+        itempool.append(world.create_item("Login Devices Unlock"))
+        itempool.append(world.create_item("Making Space Unlock"))
+        itempool.append(world.create_item("Classic Cars Unlock"))
+        itempool.append(world.create_item("The GPS Devices Unlock"))
+        itempool.append(world.create_item("The Car Wash Unlock"))
+        itempool.append(world.create_item("Heavy Lifting Unlock"))
+        itempool.append(world.create_item("The Tower Unlock"))
+        itempool.append(world.create_item("Fine Arts Unlock"))
+        itempool.append(world.create_item("Tool Up Unlock"))
+        itempool.append(world.create_item("Art Return Unlock"))
+        itempool.append(world.create_item("Covert Chaos Unlock"))
+        itempool.append(world.create_item("Insurance Fraud Unlock"))
+        itempool.append(world.create_item("The BlueTide Computers Unlock"))
+        itempool.append(world.create_item("The Speed Deal Unlock"))
+        itempool.append(world.create_item("A Wet Affair Unlock"))
+        itempool.append(world.create_item("Power Outage Unlock"))
+        itempool.append(world.create_item("Motivational Reminder Unlock"))
+        itempool.append(world.create_item("An Assortment Of Dishes Unlock"))
+        itempool.append(world.create_item("Flooding Unlock"))
+        itempool.append(world.create_item("The Chase Unlock"))
+        itempool.append(world.create_item("Roborazzi Unlock"))
+        itempool.append(world.create_item("The Secret Ingredients Unlock"))
+        itempool.append(world.create_item("The BlueTide Shortage Unlock"))
+        itempool.append(world.create_item("The Shipping Logs Unlock"))
+        itempool.append(world.create_item("The Alarm System Unlock"))
+        itempool.append(world.create_item("Moving The Goods Unlock"))
+        itempool.append(world.create_item("Havoc In Paradise Unlock"))
+        itempool.append(world.create_item("Elena's Revenge Unlock"))
+        itempool.append(world.create_item("Truckload Of Trouble Unlock"))
+        itempool.append(world.create_item("Ornament Ordeal Unlock"))
+        itempool.append(world.create_item("The Quilez Tools Unlock"))
+        itempool.append(world.create_item("Connecting The Dots Unlock"))
+        itempool.append(world.create_item("The Pawn Shop Unlock"))
+        itempool.append(world.create_item("The Droid Abduction Unlock"))
+        itempool.append(world.create_item("Malice In Woonderland Unlock"))
+        itempool.append(world.create_item("Handle With Care Unlock"))
+        itempool.append(world.create_item("Droid Dismount Unlock"))
 
     # The length of our itempool is easy to determine, since we have it as a list.
     number_of_items = len(itempool)
@@ -470,23 +526,3 @@ def create_all_items(world: TeardownWorld) -> None:
 
     # This is how the generator actually knows about the existence of our items.
     world.multiworld.itempool += itempool
-
-
-    if not world.options.StartingTool:
-        sledge_hammer_unlock = world.create_item("Sledge Hammer Unlock")
-        world.push_precollected(sledge_hammer_unlock)
-
-        spraycan_unlock = world.create_item("Spraycan Unlock")
-        world.push_precollected(spraycan_unlock)
-
-        extinguisher_unlock = world.create_item("Extinguisher Unlock")
-        world.push_precollected(extinguisher_unlock)
-
-    if world.options.StartingLevel:
-        predeterminedlevel = random.choice(item_name_groups["levels"])
-        starting_level_unlock = world.create_item(predeterminedlevel)
-        world.push_precollected(starting_level_unlock)
-
-    else:
-        starting_level_unlock = world.create_item("Old Building Problem Unlock")
-        world.push_precollected(starting_level_unlock)

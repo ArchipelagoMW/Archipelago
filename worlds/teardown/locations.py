@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from BaseClasses import ItemClassification, Location
-
+from BaseClasses import Location
 
 if TYPE_CHECKING:
     from .world import TeardownWorld
@@ -391,12 +390,9 @@ def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | No
 # Creates all locations above
 def create_all_locations(world: TeardownWorld) -> None:
     create_regular_locations(world)
-    #create_events(world)
-
 
 def create_regular_locations(world: TeardownWorld) -> None:
     # Before we do anything, we can grab our regions we created by using world.get_region()
-    menu = world.get_region("Main Menu")
     oldbuildingproblem = world.get_region("Old Building Problem")
     leecomputers = world.get_region("Lee Computers")
     logindevices = world.get_region("Login Devices")
@@ -572,10 +568,3 @@ def create_regular_locations(world: TeardownWorld) -> None:
     #if world.options.Bonus_Level:
     #    making_space = get_location_names_with_ids(["Making Space 1", "Making Space 2", "Making Space 3"])
     #    bonus_level_4.add_locations(making_space, TeardownLocation)
-
-
-#def create_events(world: TeardownWorld) -> None:
-#    levels = possiblelevels
-#    missionamount = world.options.MissionAmount
-#    missiongoal = HasFromList(*levels(), count = missionamount.value)
-#    missiongoal.add_event("Mission Goal Reached", "Unlock Final Mission", location_type=TeardownLocation, item_type=items.TeardownItem)
