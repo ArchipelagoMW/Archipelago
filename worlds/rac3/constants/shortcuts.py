@@ -1,8 +1,12 @@
+"""This module contains string constants for RaC3 shortcuts."""
+
+
 class RAC3SHORTCUTS:
     """String constants for RaC3 shortcuts"""
     VELDIN_SKIP = "Veldin skip"
     FLORANA_BRIDGE = "Florana drawbridge"
     MARCADIA_DROPSHIP = "Marcadia Dropship"
+    MARCADIA_LDF = "Marcadia LDF Early"
     DAXX_TAXI = "Daxx taxi"
     DAXX_TELEPORTER = "Daxx teleporter"
     AQUATOS_SHUTTLE = "Aquatos shuttle"
@@ -24,6 +28,7 @@ SHORTCUTS = [
     RAC3SHORTCUTS.VELDIN_SKIP,
     RAC3SHORTCUTS.FLORANA_BRIDGE,
     RAC3SHORTCUTS.MARCADIA_DROPSHIP,
+    RAC3SHORTCUTS.MARCADIA_LDF,
     RAC3SHORTCUTS.DAXX_TAXI,
     RAC3SHORTCUTS.DAXX_TELEPORTER,
     RAC3SHORTCUTS.AQUATOS_SHUTTLE,

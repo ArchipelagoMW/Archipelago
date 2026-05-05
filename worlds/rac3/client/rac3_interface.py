@@ -20,8 +20,9 @@ from worlds.rac3.constants.data.item import (armor_data, cheat_data, equipable_d
 from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION_TO_INFOBOT_FLAG,
                                                  RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA, REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
-from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.data.region import INFOBOT_FROM_PLANET, PLANET_FROM_INFOBOT, RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.ship_slot import RAC3_SHIP_DATA_TABLE
+from worlds.rac3.constants.data.shortcut import RAC3_SHORTCUT_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.data.vendorslot import (ARMOR_VENDOR_INVENTORY, ARMOR_VENDOR_LOCATION_TO_ITEM,
                                                    ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION,
@@ -44,19 +45,18 @@ from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
 from worlds.rac3.constants.messages.text_format import CLASSIFICATION_TO_COLOR, FORMAT_NAME_TO_BYTE
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
-from worlds.rac3.constants.moby_flag import (HACKER_PUZZLE_TO_DOOR_IDS, HACKER_PUZZLE_TO_REGION,
-                                             REFRACTOR_PUZZLE_TO_REGION,
-                                             TYHRRANOID_PUZZLE_TO_REGION)
+from worlds.rac3.constants.moby_flag import (BOLT_CRANK_TO_REGION, HACKER_PUZZLE_TO_DOOR_IDS, HACKER_PUZZLE_TO_REGION,
+                                             REFRACTOR_PUZZLE_TO_REGION, TYHRRANOID_PUZZLE_TO_REGION)
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION, RAC3PROGRESSFLAG
-from worlds.rac3.constants.region import (INFOBOT_FROM_PLANET, PLANET_FROM_INFOBOT, PLANET_LOAD_OFFSET,
-                                          PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET, PLANETS_WITH_HACKER_PUZZLES,
-                                          PLANETS_WITH_REFRACTOR_PUZZLES, PLANETS_WITH_TYHRRANOID_PUZZLES,
-                                          RAC3REGION, REGION_TO_HACKER_DOOR_COUNT, REGION_TO_MOBY_TABLE_START_NTSC,
-                                          REGION_TO_MOBY_TABLE_START_PAL, RESPAWN_COORDS_OFFSET)
+from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION
+from worlds.rac3.constants.region import (PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET,
+                                          PLANETS_WITH_HACKER_PUZZLES, PLANETS_WITH_REFRACTOR_PUZZLES,
+                                          PLANETS_WITH_TYHRRANOID_PUZZLES, RAC3REGION, REGION_TO_HACKER_DOOR_COUNT,
+                                          REGION_TO_MOBY_TABLE_START_NTSC, REGION_TO_MOBY_TABLE_START_PAL,
+                                          RESPAWN_COORDS_OFFSET)
 from worlds.rac3.constants.ship_slot import RAC3SHIPSLOT, SHIP_SLOTS
 from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.constants.speedups import RAC3SPEEDUPS
@@ -176,6 +176,8 @@ class Rac3Interface(GameInterface):
     vendor_type: RAC3VENDORTYPE | None = None
     vendor_string_pointers: dict[str, int] = {}
     should_restore_vendor_item_names: bool = True
+    metro_dropship: int = 0
+    holo_teleport: int = 0
     hacker_door_addresses: dict[int, int] = {}
     opened_the_hacker_doors: bool = False
     opened_the_tyhrranoid_doors: bool = False
@@ -385,7 +387,7 @@ class Rac3Interface(GameInterface):
         for location in RAC3_LOCATION_DATA_TABLE.values():
             if RAC3TAG.SEWER in location.TAGS:
                 if not sewer:
-                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 0)  # Reset to 0 Crystals
+                    # self._write8(location.CHECK_ADDRESS[0].ADDRESS, 0)  # Reset to 0 Crystals
                     sewer += 1
                 continue
             if RAC3TAG.NANOTECH in location.TAGS:
@@ -467,6 +469,17 @@ class Rac3Interface(GameInterface):
             self._write_bytes(addr, byte_array)
             self.vendor_string_pointers[loc_key] = addr
             offset += len(byte_array)
+
+    def speedup_setup(self):
+        """One time setup of speedup options when starting a new session"""
+        if self.options.speedups.get(RAC3SPEEDUPS.BOLT_CRANK, False):
+            for check, region in BOLT_CRANK_TO_REGION.items():
+                if self.planet in region:
+                    self._write_bits(check[0], {check[1]})
+
+        if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
+            for i in range(5, 25):
+                self._write8(RAC3STATUS.RANGER_COMPLETION_TABLE_START + i, 1)
 
     #############################
     # Start of Main Update Loop #
@@ -581,7 +594,7 @@ class Rac3Interface(GameInterface):
                 if not unlock_data or unlock_data.status == 0:
                     continue
             # only read visited flag for newly-unlocked, unvisited planets
-            if self._read8(RAC3STATUS.VISITED_BASE + region_data.ID):
+            if self._read8(region_data.VISIT_ADDRESS):
                 self.visited_planets.add(region)
 
     def determine_weapon_vendor_items(self):
@@ -1195,7 +1208,7 @@ class Rac3Interface(GameInterface):
 
     def check_intro(self) -> bool:
         """Checks if the player has reached the end of the intro by collecting the phoenix coordinates"""
-        if not self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID):
+        if not self._read8(RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].VISIT_ADDRESS):
             return True
         return False
 
@@ -1381,6 +1394,7 @@ class Rac3Interface(GameInterface):
         self.should_restore_vendor_item_names = True
 
     def get_vendor_apcodes(self) -> list | None:
+        """Returns a list of apcodes for the currently open vendor. Returns None if no vendor is open"""
 
         vendor_scouting = self.options.scout_vendors
 
@@ -1434,65 +1448,13 @@ class Rac3Interface(GameInterface):
                 and infobot_location not in self.checked_locations
                 and infobot_flag != RAC3STATUS.ALLOW_SHIP):
                 self._write8(infobot_flag, 0)
-        if self.options.shortcuts.get(RAC3SHORTCUTS.FLORANA_BRIDGE, False):
-            self._write_bits(RAC3PROGRESSFLAG.FLORANA_REACH_PATH_OF_DEATH[0],
-                             {RAC3PROGRESSFLAG.FLORANA_REACH_PATH_OF_DEATH[1]})
+
         if self.planet == RAC3REGION.STARSHIP_PHOENIX:
             # Fix can't play Qwark VidComics in some case which first event is skipped
             self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
-        if self.options.shortcuts.get(RAC3SHORTCUTS.MARCADIA_DROPSHIP, False):
-            self._write_bits(RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[0],
-                             {RAC3PROGRESSFLAG.MARCADIA_COMPLETE_RANGER_MISSIONS[1]})
-            self._write_bits(RAC3PROGRESSFLAG.MARCADIA_REACH_THE_DROPSHIP[0],
-                             {RAC3PROGRESSFLAG.MARCADIA_REACH_THE_DROPSHIP[1]})
-        if self.options.shortcuts.get(RAC3SHORTCUTS.DAXX_TELEPORTER, False) and self.UnlockItem[RAC3ITEM.HYPERSHOT].status:
-            self._write_bits(RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[0],
-                             {RAC3PROGRESSFLAG.DAXX_WARSHIP_PRE_FIGHT_CHECKPOINT[1]})
-        if self.options.shortcuts.get(RAC3SHORTCUTS.AQUATOS_SHUTTLE, False):
-            self._write8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.AQUATOS_SEWERS].ID, 1)
+
         if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
             self._write8(RAC3STATUS.ZELDRIN_START_LEVIATHAN, 0)
-
-        if self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK, False):
-            self._write8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.HOLOSTAR_STUDIOS_CLANK].ID, 1)
-
-        if self.options.shortcuts.get(RAC3SHORTCUTS.DRACO_TELEPORTER, False) and self.UnlockItem[RAC3ITEM.GRAV_BOOTS].status:
-            self._write_bits(RAC3PROGRESSFLAG.OBANI_DRACO_REACH_THE_CONTROL_ROOM[0],
-                             {RAC3PROGRESSFLAG.OBANI_DRACO_REACH_THE_CONTROL_ROOM[1]})
-
-        if (self.options.shortcuts.get(RAC3SHORTCUTS.COMMAND_DROPSHIP, False) 
-            and self.UnlockItem[RAC3ITEM.HYPERSHOT].status 
-            and self.UnlockItem[RAC3ITEM.HACKER].status 
-            and self.UnlockItem[RAC3ITEM.GRAV_BOOTS].status 
-            and self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status 
-            and self.UnlockItem[RAC3ITEM.REFRACTOR].status):
-            self._write_bits(RAC3PROGRESSFLAG.COMMAND_CENTER_FORCE_SPAWN_DROPSHIP_BY_SHIP[0],
-                             {RAC3PROGRESSFLAG.COMMAND_CENTER_FORCE_SPAWN_DROPSHIP_BY_SHIP[1]})
-
-        if self.options.shortcuts.get(RAC3SHORTCUTS.HIDEOUT_TELEPORTER, False) and self.UnlockItem[RAC3ITEM.GRAV_BOOTS].status:
-            self._write_bits(RAC3PROGRESSFLAG.QWARKS_HIDEOUT_REACH_PDA_VENDOR[0],
-                             {RAC3PROGRESSFLAG.QWARKS_HIDEOUT_REACH_PDA_VENDOR[1]})
-
-        if self.options.shortcuts.get(RAC3SHORTCUTS.HIDEOUT_TAXI, False) and self.UnlockItem[RAC3ITEM.WARP_PAD].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status:
-            self._write_bits(RAC3PROGRESSFLAG.QWARKS_HIDEOUT_FINISHED_CLANK_SECTION[0],
-                             {RAC3PROGRESSFLAG.QWARKS_HIDEOUT_FINISHED_CLANK_SECTION[1]})
-
-        if self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRANOSIS_INTRO, False):
-            self._write_bits(RAC3PROGRESSFLAG.TYHRRANOSIS_COMPLETE_PROLOGUE[0],
-                             {RAC3PROGRESSFLAG.TYHRRANOSIS_COMPLETE_PROLOGUE[1]})
-
-        if self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP, False):
-            self._write_bits(RAC3PROGRESSFLAG.TYHRRANOSIS_RANGER_DROPSHIP_SPAWNS[0],
-                             {RAC3PROGRESSFLAG.TYHRRANOSIS_RANGER_DROPSHIP_SPAWNS[1]})
-
-        if self.options.shortcuts.get(RAC3SHORTCUTS.METROPOLIS_TAXI, False) and self.UnlockItem[RAC3ITEM.GRAV_BOOTS].status and self.UnlockItem[RAC3ITEM.REFRACTOR].status:
-            self._write_bits(RAC3PROGRESSFLAG.METROPOLIS_PRE_BOSS_CHECKPOINT[0],
-                             {RAC3PROGRESSFLAG.METROPOLIS_PRE_BOSS_CHECKPOINT[1]})
-
-        if self.options.speedups.get(RAC3SPEEDUPS.HALO_JUMPS, False):
-            for check, region in HALO_JUMP_TO_REGION.items():
-                if self.planet in region:
-                    self._write_bits(check[0], {check[1]})
 
     ##################
     # End of Main Loop #
@@ -1514,11 +1476,8 @@ class Rac3Interface(GameInterface):
         self.patch_cycler()
         self.overflow_fix()
         self.health_cycler()
-        self.hacker_cycler()
-        self.puzzle_cycler(RAC3ITEM.TYHRRA_GUISE, RAC3SPEEDUPS.TYHRRAGUISE, "opened_the_tyhrranoid_doors",
-                           PLANETS_WITH_TYHRRANOID_PUZZLES, TYHRRANOID_PUZZLE_TO_REGION)
-        self.puzzle_cycler(RAC3ITEM.REFRACTOR, RAC3SPEEDUPS.REFRACTOR, "opened_the_refractor_doors",
-                           PLANETS_WITH_REFRACTOR_PUZZLES, REFRACTOR_PUZZLE_TO_REGION)
+        self.shortcut_cycler()
+        self.speedup_cycler()
         self.pda_vendor_cycler()
         self.notification_cycler()
 
@@ -2012,6 +1971,60 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.HEALTH, self.max_health)
                 self.main_menu = False
 
+    def shortcut_cycler(self):
+        """Activates Taxis/Dropships/Teleporter shortcuts"""
+        for name, data in RAC3_SHORTCUT_DATA_TABLE.items():
+            if (self.planet != RAC3REGION.METROPOLIS
+                and RAC3LOCATION.METROPOLIS_DEFEAT_KLUNK not in self.checked_locations):
+                self.metro_dropship = 0
+            if (self.planet != RAC3REGION.HOLOSTAR_STUDIOS
+                and RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP not in self.checked_locations):
+                self.holo_teleport = 0
+            if self.planet == data.PLANET and self.options.shortcuts.get(name, False):
+                if data.ITEMS is None or any(
+                    [all([self.UnlockItem[item].status for item in items]) for items in data.ITEMS]):
+                    # special cases for metropolis and holostar
+                    if name == RAC3SHORTCUTS.METROPOLIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
+                        if self.metro_dropship == 0 and self.pause_state_value == RAC3PAUSESTATE.UNPAUSED:
+                            self.metro_dropship += 1
+                            self._write_bits(*data.FLAG_ADDRESSES[0])
+                        elif self.metro_dropship == 1:
+                            self.metro_dropship += 1
+                            self._unwrite_bits(*data.FLAG_ADDRESSES[0])
+                        return
+                    if name == RAC3SHORTCUTS.HOLOSTAR_TELEPORTER and data.FLAG_ADDRESSES is not None:
+                        if self.holo_teleport == 0:
+                            self.holo_teleport += 1
+                            self._write_bits(*data.FLAG_ADDRESSES[0])
+                        if self.holo_teleport == 1:
+                            self.holo_teleport += 1
+                            self._unwrite_bits(*data.FLAG_ADDRESSES[0])
+                            self.force_respawn()
+                        return
+                    # all other shortcuts
+                    if data.FLAG_ADDRESSES is not None:
+                        _write: dict[int, set[int]] = {}
+                        for check in data.FLAG_ADDRESSES:
+                            _write.setdefault(check[0], set()).add(check[1])
+                        for address, flag in _write.items():
+                            self._write_bits(address, flag)
+                    if data.VISIT_ADDRESSES is not None and data.VISIT_ADDRESSES not in self.visited_planets:
+                        for address in data.VISIT_ADDRESSES:
+                            self._write8(RAC3_REGION_DATA_TABLE[address].VISIT_ADDRESS, 1)
+
+    def speedup_cycler(self):
+        """Completes puzzles and speeds up other gameplay"""
+        self.hacker_cycler()
+        self.puzzle_cycler(RAC3ITEM.TYHRRA_GUISE, RAC3SPEEDUPS.TYHRRAGUISE, "opened_the_tyhrranoid_doors",
+                           PLANETS_WITH_TYHRRANOID_PUZZLES, TYHRRANOID_PUZZLE_TO_REGION)
+        self.puzzle_cycler(RAC3ITEM.REFRACTOR, RAC3SPEEDUPS.REFRACTOR, "opened_the_refractor_doors",
+                           PLANETS_WITH_REFRACTOR_PUZZLES, REFRACTOR_PUZZLE_TO_REGION)
+
+        if self.options.speedups.get(RAC3SPEEDUPS.HALO_JUMPS, False):
+            for check, region in HALO_JUMP_TO_REGION.items():
+                if self.planet in region:
+                    self._write_bits(check[0], {check[1]})
+
     def hacker_cycler(self):
         """Finds hacker puzzle doors on current planet and marks all hacker puzzles complete if hacker is unlocked."""
         if not self.UnlockItem[RAC3ITEM.HACKER].status or not self.options.speedups.get(RAC3SPEEDUPS.HACKER, False):
@@ -2020,7 +2033,8 @@ class Rac3Interface(GameInterface):
         # Handle door finding for the current planet
         if not self.opened_the_hacker_doors and self.planet in PLANETS_WITH_HACKER_PUZZLES:
             puzzles = [puzzle for puzzle, region in HACKER_PUZZLE_TO_REGION.items() if region == self.planet]
-            doors = [door_id for puzzle in puzzles if puzzle in HACKER_PUZZLE_TO_DOOR_IDS for door_id in HACKER_PUZZLE_TO_DOOR_IDS[puzzle]]
+            doors = [door_id for puzzle in puzzles if puzzle in HACKER_PUZZLE_TO_DOOR_IDS for door_id in
+                     HACKER_PUZZLE_TO_DOOR_IDS[puzzle]]
 
             # Try to resolve each door id to a moby address; save successful lookups only
             for door_id in doors:

@@ -1,5 +1,5 @@
 """This module provides a launchable client for connecting RAC3 running on PCSX2 Emulation to a Multiworld"""
-from asyncio import Task, create_task, run, sleep
+from asyncio import create_task, run, sleep, Task
 from multiprocessing import freeze_support
 from time import time
 

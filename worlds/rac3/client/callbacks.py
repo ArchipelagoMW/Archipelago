@@ -190,6 +190,8 @@ async def _handle_game_ready(ctx: "Context") -> None:
             logger.info("Setting up codecave...")
             ctx.code_cave_setup = False
             await handle_codecave(ctx)
+            logger.info("Adding Speedups...")
+            ctx.game_interface.speedup_setup()
             logger.info("Game READY!")
 
         if not ctx.main_menu:
