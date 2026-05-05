@@ -964,10 +964,10 @@ class OptionCounter(OptionDict):
     def from_any(cls, data: Mapping[str, int] | Sequence[str]) -> Self:
         if isinstance(data, Mapping):
             return cls(data)
-        elif isinstance(data, Sequence) and not isinstance(data, str):
+        elif is_iterable_except_str(data):
             return cls(collections.Counter(data))
         else:
-            raise NotImplementedError(f"Can only Convert from Mapping or Sequence, got {type(data)}")
+            raise NotImplementedError(f"Can only Convert from Mapping or Iterable, got {type(data)}")
 
     def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
         super(OptionCounter, self).verify(world, player_name, plando_options)
