@@ -22,4 +22,4 @@ def get_players(seed: Seed) -> List[Tuple[str, str]]:
     return [(slot.player_name, slot.game) for slot in seed.slots.order_by(Slot.player_id)]
 
 # trigger endpoint registration
-from . import datapackage, generate, room, tracker, user
+from . import datapackage, generate, room, tracker, user, datastore
