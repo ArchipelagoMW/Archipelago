@@ -84,6 +84,7 @@ locations = {
         # West Island doesn't require long swim
         "Kamiki Village - West Island chest ": LocData(container_check_id(MapIds.KAMIKI_VILLAGE, 48)),  # spawn_idx=48, Dragonfly Bead
         "Kamiki Village - West Island buried chest": LocData(container_check_id(MapIds.KAMIKI_VILLAGE, 54), type=LocationType.BURIED_CHEST),# spawn_idx=54, Wooden Bear
+        "Kamiki Village - Vine Chest by Waterfall": LocData(container_check_id(MapIds.KAMIKI_VILLAGE,50),required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE])
     },
     RegionNames.ORANGES_HOUSE: {
         "Kamiki Village - Chest buried in Oranges' house": LocData(container_check_id(MapIds.KAMIKI_VILLAGE, 19), type=LocationType.BURIED_CHEST),  # spawn_idx=19, Coral Fragment
