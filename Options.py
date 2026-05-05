@@ -10,7 +10,7 @@ import random
 import typing
 import enum
 from collections import defaultdict
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, Iterable
 from copy import deepcopy
 from dataclasses import dataclass
 
@@ -961,7 +961,7 @@ class OptionCounter(OptionDict):
         super(OptionCounter, self).__init__(collections.Counter(cleaned_dict))
 
     @classmethod
-    def from_any(cls, data: Mapping[str, int] | Sequence[str]) -> Self:
+    def from_any(cls, data: Mapping[str, int] | Iterable[str]) -> Self:
         if isinstance(data, Mapping):
             return cls(data)
         elif is_iterable_except_str(data):
