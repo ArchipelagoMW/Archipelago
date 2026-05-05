@@ -100,13 +100,18 @@ def init_generator(config: dict[str, Any]) -> None:
     db.generate_mapping()
 
 
-def cleanup():
-    """delete unowned user-content"""
+def cleanup(config: dict[str, Any]):
+    """delete unowned or old user-content"""
+    auto_delete: int = config.get("ROOM_AUTO_DELETE", 0)
     with db_session:
         # >>> bool(uuid.UUID(int=0))
         # True
         rooms = Room.select(lambda room: room.owner == UUID(int=0)).delete(bulk=True)
         seeds = Seed.select(lambda seed: seed.owner == UUID(int=0) and not seed.rooms).delete(bulk=True)
+        if auto_delete > 0:
+            cutoff = utcnow() - timedelta(days=auto_delete)
+            rooms += Room.select(lambda room: room.last_activity < cutoff).delete(bulk=True)
+            seeds += Seed.select(lambda seed: not seed.rooms and seed.creation_time < cutoff).delete(bulk=True)
         slots = Slot.select(lambda slot: not slot.seed).delete(bulk=True)
         # Command gets deleted by ponyorm Cascade Delete, as Room is Required
     if rooms or seeds or slots:
@@ -118,7 +123,7 @@ def autohost(config: dict):
         stop_event = _stop_event
         try:
             with Locker("autohost"):
-                cleanup()
+                cleanup(config)
                 hosters = []
                 for x in range(config["HOSTERS"]):
                     hoster = MultiworldInstance(config, x)

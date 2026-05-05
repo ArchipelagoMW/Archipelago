@@ -48,6 +48,8 @@ app.config["JOB_THRESHOLD"] = 1
 app.config["JOB_TIME"] = 600
 # maximum time in seconds since last activity for a room to be hosted
 app.config["MAX_ROOM_TIMEOUT"] = 259200
+# minimum time in days since last activity for a room to be deleted. 0 to disable.
+app.config["ROOM_AUTO_DELETE"] = 0
 # memory limit for generator processes in bytes
 app.config["GENERATOR_MEMORY_LIMIT"] = 4294967296
 
