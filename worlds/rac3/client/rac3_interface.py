@@ -177,6 +177,7 @@ class Rac3Interface(GameInterface):
     vendor_type: RAC3VENDORTYPE | None = None
     vendor_string_pointers: dict[str, int] = {}
     should_restore_vendor_item_names: bool = True
+    tyhrra_dropship: int = 0
     metro_dropship: int = 0
     holo_teleport: int = 0
     hacker_door_addresses: dict[int, int] = {}
@@ -1977,6 +1978,9 @@ class Rac3Interface(GameInterface):
     def shortcut_cycler(self):
         """Activates Taxis/Dropships/Teleporter shortcuts"""
         for name, data in RAC3_SHORTCUT_DATA_TABLE.items():
+            if (self.planet != RAC3REGION.TYHRRANOSIS
+                and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations):
+                self.tyhrra_dropship = 0
             if (self.planet != RAC3REGION.METROPOLIS
                 and RAC3LOCATION.METROPOLIS_DEFEAT_KLUNK not in self.checked_locations):
                 self.metro_dropship = 0
@@ -1986,7 +1990,15 @@ class Rac3Interface(GameInterface):
             if self.planet == data.PLANET and self.options.shortcuts.get(name, False):
                 if data.ITEMS is None or any(
                     [all([self.UnlockItem[item].status for item in items]) for items in data.ITEMS]):
-                    # special cases for metropolis and holostar
+                    # special cases
+                    if name == RAC3SHORTCUTS.TYHRRANOSIS_INTRO and data.FLAG_ADDRESSES is not None:
+                        if self.tyhrra_dropship == 0 and self.pause_state_value == RAC3PAUSESTATE.UNPAUSED:
+                            self.tyhrra_dropship += 1
+                            self._write_bits(*data.FLAG_ADDRESSES[0])
+                        elif self.tyhrra_dropship == 1:
+                            self.tyhrra_dropship += 1
+                            self._unwrite_bits(*data.FLAG_ADDRESSES[0])
+                        return
                     if name == RAC3SHORTCUTS.METROPOLIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
                         if self.metro_dropship == 0 and self.pause_state_value == RAC3PAUSESTATE.UNPAUSED:
                             self.metro_dropship += 1
@@ -1995,6 +2007,7 @@ class Rac3Interface(GameInterface):
                             self.metro_dropship += 1
                             self._unwrite_bits(*data.FLAG_ADDRESSES[0])
                         return
+                    # Todo: check for the player opening the final door
                     if name == RAC3SHORTCUTS.HOLOSTAR_TELEPORTER and data.FLAG_ADDRESSES is not None:
                         if self.holo_teleport == 0:
                             self.holo_teleport += 1
