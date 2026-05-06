@@ -199,3 +199,16 @@ _speedups.html
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+fuzz.py
+hooks/check_placement_item_location_references.py
+hooks/collect_accessibility_test.py
+hooks/deprecated_get_options.py
+hooks/deprecated_get_settings.py
+hooks/detect_output_placement_changes.py
+hooks/detect_rule_variable_capture_issues.py
+hooks/determinism.py
+hooks/gerpocalypse.py
+hooks/indirect_conditions.py
+hooks/item_location_count.py
+hooks/profile.py
+hooks/with_empty.py

@@ -103,13 +103,14 @@ def set_all_location_rules(world: BabaIsYouWorld) -> None:
             world.set_rule(location, rule)
         
         # Transform rules
-        if world.options.transformsanity and data.get("transforms"):
+        if data.get("transforms"):
             for transform in data["transforms"]:
                 locationName = f"{data["name"]}: {transform} Transform"
-                location = world.get_location(locationName)
-
                 rule = can_transform(name, transform, world.options.logic_difficulty)
-                world.set_rule(location, rule)
+                
+                if world.options.transformsanity:
+                    location = world.get_location(locationName)
+                    world.set_rule(location, rule)
                 
                 # Create event with same logic
                 region = world.get_region(name)
