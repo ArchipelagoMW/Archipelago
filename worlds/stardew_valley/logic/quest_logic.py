@@ -70,7 +70,7 @@ class QuestLogic(BaseLogic):
                                       self.logic.has_all(ArtisanGood.battery_pack, Forageable.rainbow_shell, Vegetable.beet, Loot.solar_essence)),
             Quest.carving_pumpkins: self.logic.season.has(Season.fall) & self.logic.has(Vegetable.pumpkin) & self.logic.relationship.can_meet(NPC.caroline),
             Quest.a_winter_mystery: self.logic.season.has(Season.winter) & self.logic.region.can_reach_all(Region.town, LogicRegion.bus_stop_krobus_cutscene),
-            Quest.strange_note: self.logic.has(Forageable.secret_note) & self.logic.has(ArtisanGood.maple_syrup),
+            Quest.strange_note: self.logic.region.can_reach(Region.secret_woods) & self.logic.has(Forageable.secret_note) & self.logic.has(ArtisanGood.maple_syrup),
             Quest.cryptic_note: self.logic.has(Forageable.secret_note) & self.logic.region.can_reach(Region.skull_cavern_100),
             Quest.fresh_fruit: self.logic.season.has(Season.spring) & self.logic.has(Fruit.apricot) & self.logic.relationship.can_meet(NPC.emily),
             Quest.aquatic_research: self.logic.season.has(Season.summer) & self.logic.has(Fish.pufferfish) & self.logic.relationship.can_meet(NPC.demetrius),
