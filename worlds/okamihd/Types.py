@@ -61,6 +61,9 @@ class EventData(NamedTuple):
     special_rule: typing.Callable[[CollectionState, World], bool] | None = None
 
 
+
+
+
 class ExitData(NamedTuple):
     name: str
     destination: str

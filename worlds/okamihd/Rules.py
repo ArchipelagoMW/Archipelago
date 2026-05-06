@@ -1,11 +1,15 @@
+from rule_builder.rules import Has, And, Rule, True_, OptionFilter, Or
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.DivineInstruments import DivineInstruments
 from .Enums.LocationType import LocationType
+from .Options import ProgressiveWeapons
 from .Types import LocData, ExitData, EventData
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
+
+from ..hk.Options import count
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -58,40 +62,23 @@ def moon_cave_fire_rule_4f(state:CollectionState,world:"OkamiWorld")->bool:
        return has_portable_fire_source(state,world) or state.has("Moon Cave - 4F Move Fireball",world.player)
 
 
-def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiWorld") -> bool:
-    if not world.options.ProgressiveWeapons:
-        match tier:
-            case 1:
-                return (state.has_group('divine_instrument_tier_1', world.player, 1) or
-                        state.has_group('divine_instrument_tier_2', world.player, 1) or
-                        state.has_group('divine_instrument_tier_3', world.player, 1) or
-                        state.has_group('divine_instrument_tier_4', world.player, 1) or
-                        state.has_group('divine_instrument_tier_5', world.player, 1))
-            case 2:
-                return (state.has_group('divine_instrument_tier_2', world.player, 1) or
-                        state.has_group('divine_instrument_tier_3', world.player, 1) or
-                        state.has_group('divine_instrument_tier_4', world.player, 1) or
-                        state.has_group('divine_instrument_tier_5', world.player, 1))
-            case 3:
-                return (state.has_group('divine_instrument_tier_3', world.player, 1) or
-                        state.has_group('divine_instrument_tier_4', world.player, 1) or
-                        state.has_group('divine_instrument_tier_5', world.player, 1))
-            case 4:
-                return (state.has_group('divine_instrument_tier_4', world.player, 1) or
-                        state.has_group('divine_instrument_tier_5', world.player, 1))
-            case 5:
-                return state.has_group('divine_instrument_tier_5', world.player, 1)
-    else:
-        return state.has_any_count(
-            {
-                "Progressive Mirror": tier,
-                "Progressive Rosary": tier,
-                "Progressive Sword": tier
-            },
-            world.player)
+def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiWorld") -> Rule | True_ :
+    progressive_weapon_rule = OptionFilter(ProgressiveWeapons,1) & Or(Has("Progressive Mirror", count=tier),Has("Progressive Sword", count=tier),Has("Progressive Rosary", count=tier))
+
+    match tier:
+        case 2:
+            return Or(progressive_weapon_rule,)
+        case _:
+            return True_
+
 
 
 def apply_event_or_location_rules(loc: Location, name: str, data: LocData | EventData, world: "OkamiWorld"):
+        ## RULE BUILDER REWORK:
+        # - FOR EACH LOCATION, BUILD AN ARRAY OF RULES THAT WILL BE ADDED TO THE world.set_rule(loc,AND(*Rules))
+
+        rules : List[Rule |True_] = []
+
 
         required_techinques = []
         required_power_slash_level = data.power_slash_level
@@ -109,10 +96,8 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
                     required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
 
             if weapon_tier_required > 0:
-                add_rule(loc,
-                         lambda state, level=weapon_tier_required: has_divine_instrument_tier(weapon_tier_required,
-                                                                                              state,
-                                                                                              world))
+               rules.append( has_divine_instrument_tier(weapon_tier_required,state,world))
+
         required_techinques += data.required_brush_techniques
 
         match data.type:
@@ -174,6 +159,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         if data.special_rule is not None:
             # Call special rule if it's defined
             add_rule(loc, lambda state: data.special_rule(state, world))
+        world.set_rule(loc,And(Has('Item'),Has('Item2')))
 
 
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
@@ -194,6 +180,4 @@ def set_rules(world: "OkamiWorld"):
     world.multiworld.completion_condition[world.player] = lambda state: state.has(
         "Moon Cave - Defeat Orochi", world.player)
     return
-    # set_specific_rules(world)
 
-    # set_event_rules(world)
