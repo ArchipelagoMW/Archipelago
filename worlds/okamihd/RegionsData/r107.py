@@ -25,7 +25,7 @@ exits = {
 }
 events = {
     RegionNames.GALE_SHRINE_ENTRANCE: {
-        "Gale Shrine - Open Door": EventData(special_rule=lambda s, w: gale_shrine_access(s, w)),
+        "Gale Shrine - Open Door": EventData(special_rule=gale_shrine_access),
     },
     RegionNames.GALE_SHRINE: {
         # Gives a key

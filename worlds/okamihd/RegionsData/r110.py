@@ -1,11 +1,13 @@
 from typing import TYPE_CHECKING
 
+from MultiServer import countdown
+from rule_builder.rules import HasGroup
 from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Rules import has_soup_ingerdients, moon_cave_fire_rule, moon_cave_fire_rule_4f
+from ..Rules import has_soup_ingerdients, moon_cave_fire_rule, moon_cave_4f_fire_rule
 from ..Types import ExitData, LocData, EventData
 from ...earthbound.modules.shopsanity import shop_locations
 
@@ -63,15 +65,15 @@ events = {
         "Moon Cave - 1F Free Ajimi from soup": EventData(
             required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
         "Moon Cave - 1F Main room geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],
-                                                     special_rule=lambda s, w: has_soup_ingerdients(s, w, 1)),
+                                                     special_rule=HasGroup("soup_ingredients",count=1)),
         "Moon Cave - 1F Main room disturb lift": EventData(power_slash_level=1,
                                                            required_items_events=["Moon Cave - B1F Open lift hatch"]),
         "Moon Cave - 1F Melt Kitchen Ice from front": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
                                                                 event_item_name="Moon Cave - Melt Kicthen Ice"),
         "Moon Cave - 1F Blue Flower to 2F accessible": EventData(
-            special_rule=lambda s, w: has_soup_ingerdients(s, w, 2)),
+            special_rule=HasGroup("soup_ingredients",count=2)),
         "Moon Cave - 1F Give all ingredients to Ajimi": EventData(
-            special_rule=lambda s, w: has_soup_ingerdients(s, w, 4))
+            special_rule=HasGroup("soup_ingredients",count=4))
     },
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE: {
         "Moon Cave - Cross 1F Locked Cave": EventData(required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
@@ -143,14 +145,14 @@ events = {
         "Moon Cave - 4F Rafters cross banners": EventData(required_brush_techniques=[BrushTechniques.GALESTORM])
     },
     RegionNames.MOON_CAVE_4F_CANON: {
-        "Moon Cave - 4F Fire the canon!": EventData(required_brush_techniques=[BrushTechniques.INFERNO],special_rule=lambda s, w: moon_cave_fire_rule(s, w)),
+        "Moon Cave - 4F Fire the canon!": EventData(required_brush_techniques=[BrushTechniques.INFERNO],special_rule=moon_cave_fire_rule),
         # FIXME: Add enemies
         "Moon Cave - 4F Mandatory Fight": EventData(mandatory_enemies=[],
                                                     required_items_events=['Moon Cave - 4F Fire the canon!']),
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Move Fireball": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
-        "Moon Cave - 4F Melt Ice Blocks": EventData(required_brush_techniques=[BrushTechniques.INFERNO],special_rule=lambda s, w: moon_cave_fire_rule_4f(s, w)),
+        "Moon Cave - 4F Melt Ice Blocks": EventData(required_brush_techniques=[BrushTechniques.INFERNO], special_rule=moon_cave_4f_fire_rule),
         "Moon Cave - 4F Black Demon Horn Torii": EventData(mandatory_enemies=[],
                                                            required_items_events=["Moon Cave - 4F Melt Ice Blocks"]),
         "Moon Cave - 4F Get Black Demon Horn": EventData(
@@ -167,9 +169,9 @@ locations = {
     RegionNames.MOON_CAVE: {
         "Moon Cave - 1F Chest on ledge in the kitchen": LocData(container_check_id(MapIds.MOON_CAVE, 11)),
         "Moon Cave - 1F Frozen Chest after 3 ingredients": LocData(container_check_id(MapIds.MOON_CAVE, 7), type=LocationType.FROZEN_CHEST, special_rule=
-            lambda s, w: has_soup_ingerdients(s, w, 3) ),
+        HasGroup("soup_ingredients", count=3)),
         "Moon Cave - 1F Chest after 4 ingredients": LocData(container_check_id(MapIds.MOON_CAVE, 8),
-                                                            special_rule=(lambda s, w: has_soup_ingerdients(s, w, 4))),
+                                                            special_rule=HasGroup("soup_ingredients",count=4)),
     },
     # TODO: CHECK IF THERE IS FIRE NEARBY
     RegionNames.MOON_CAVE_B1F_LAKE: {
@@ -193,28 +195,25 @@ locations = {
         "Moon Cave - 2F Map Chest after ball puzzle": LocData(container_check_id(MapIds.MOON_CAVE, 9))
     },
     RegionNames.MOON_CAVE_2F_3F_RAFTERS: {
-        "Moon Cave - 3F Frozen Chest near merchant": LocData(container_check_id(MapIds.MOON_CAVE, 12), type=LocationType.FROZEN_CHEST, special_rule=lambda s, w: moon_cave_fire_rule(s, w)),
+        "Moon Cave - 3F Frozen Chest near merchant": LocData(container_check_id(MapIds.MOON_CAVE, 12), type=LocationType.FROZEN_CHEST, special_rule=moon_cave_fire_rule),
         "Moon Cave - 2F Rafters Chest under 3F Rafters": LocData(container_check_id(MapIds.MOON_CAVE, 5)),
     },
     RegionNames.MOON_CAVE_2F_FIRE_EYE: {
         "Moon Cave - 2F Left Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 19),
                                                                         type=LocationType.FROZEN_CHEST,
-                                                                        special_rule=lambda s, w: moon_cave_fire_rule(s,
-                                                                                                                      w)),
+                                                                        special_rule=moon_cave_fire_rule),
         "Moon Cave - 2F Middle Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 17),
                                                                           type=LocationType.FROZEN_CHEST,
-                                                                          special_rule=lambda s, w: moon_cave_fire_rule(s,
-                                                                                                                      w)),
+                                                                          special_rule=moon_cave_fire_rule),
         "Moon Cave - 2F Right Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 18),
                                                                          type=LocationType.FROZEN_CHEST,
-                                                                         special_rule=lambda s, w: moon_cave_fire_rule(s,
-                                                                                                                      w)),
+                                                                         special_rule=moon_cave_fire_rule),
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Lower ledge Frozen Chest": LocData(container_check_id(MapIds.MOON_CAVE, 20), type=LocationType.FROZEN_CHEST,
-                                                           special_rule=lambda s, w: moon_cave_fire_rule_4f(s, w)),
+                                                           special_rule=moon_cave_4f_fire_rule),
         "Moon Cave - 4F Upper ledge Frozen Chest": LocData(container_check_id(MapIds.MOON_CAVE, 21), type=LocationType.FROZEN_CHEST,
-                                                           special_rule=lambda s, w: moon_cave_fire_rule_4f(s, w))
+                                                           special_rule=moon_cave_4f_fire_rule)
     }
 }
 

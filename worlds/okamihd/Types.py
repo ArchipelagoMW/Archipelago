@@ -2,6 +2,7 @@ import typing
 from typing import NamedTuple, Optional, List, Callable,TYPE_CHECKING, TypeVar
 
 from BaseClasses import Location, Item, ItemClassification, LocationProgressType, CollectionState
+from rule_builder.rules import Rule
 from worlds.AutoWorld import World
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.LocationType import LocationType
@@ -40,7 +41,7 @@ class LocData(NamedTuple):
     progress_type: LocationProgressType | typing.Callable[
         [OkamiOptions], LocationProgressType] = LocationProgressType.DEFAULT
     # This rule overrides all other access rules
-    special_rule: typing.Callable[[CollectionState, World], bool] | None = None
+    special_rule: Rule | None = None
 
 
 class EventData(NamedTuple):
@@ -57,8 +58,11 @@ class EventData(NamedTuple):
     is_event_item: bool | typing.Callable[[OkamiOptions], bool] = False
     progress_type: LocationProgressType | typing.Callable[
         [OkamiOptions], LocationProgressType] = LocationProgressType.DEFAULT
-    # This rule overrides all other access rules
-    special_rule: typing.Callable[[CollectionState, World], bool] | None = None
+    # This rule is added with all other access rules
+    special_rule: Rule | None = None
+
+
+
 
 
 class ExitData(NamedTuple):

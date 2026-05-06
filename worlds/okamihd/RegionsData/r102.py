@@ -39,7 +39,7 @@ events = {
                                                                 o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
                                                             else LocationProgressType.DEFAULT,
                                                             event_item_name="Loyalty Orb",
-                                                            special_rule=lambda s,w:night_time_check_rule(s,w))
+                                                            special_rule=night_time_check_rule)
 
     },
     RegionNames.SUSANOS_UNDERGROUD: {
