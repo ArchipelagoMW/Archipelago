@@ -42,7 +42,7 @@ class QuestLogic(BaseLogic):
             Quest.feeding_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.silo),
             Quest.advancement: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.has(Craftable.scarecrow),
             Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.fishing.can_fish_chests,
-            Quest.rat_problem: self.logic.region.can_reach_all(Region.community_center, LogicRegion.town_cutscene),
+            Quest.rat_problem: self.logic.region.can_reach_all(Region.community_center, LogicRegion.town_community_center_cutscene),
             Quest.meet_the_wizard: self.logic.region.can_reach_all(Region.community_center, Region.wizard_tower) & self.logic.received("Wizard Invitation"),
             Quest.forging_ahead: self.logic.has(Ore.copper) & self.logic.has(Machine.furnace),
             Quest.smelting: self.logic.has(MetalBar.copper),
@@ -65,7 +65,7 @@ class QuestLogic(BaseLogic):
             Quest.the_mysterious_qi: (self.logic.region.can_reach_all(Region.bus_tunnel, Region.railroad, Region.mayor_house) &
                                       self.logic.has_all(ArtisanGood.battery_pack, Forageable.rainbow_shell, Vegetable.beet, Loot.solar_essence)),
             Quest.carving_pumpkins: self.logic.season.has(Season.fall) & self.logic.has(Vegetable.pumpkin) & self.logic.relationship.can_meet(NPC.caroline),
-            Quest.a_winter_mystery: self.logic.season.has(Season.winter) & self.logic.region.can_reach_all(Region.town, LogicRegion.bus_stop_cutscene),
+            Quest.a_winter_mystery: self.logic.season.has(Season.winter) & self.logic.region.can_reach_all(Region.town, LogicRegion.bus_stop_krobus_cutscene),
             Quest.strange_note: self.logic.has(Forageable.secret_note) & self.logic.has(ArtisanGood.maple_syrup),
             Quest.cryptic_note: self.logic.has(Forageable.secret_note) & self.logic.region.can_reach(Region.skull_cavern_100),
             Quest.fresh_fruit: self.logic.season.has(Season.spring) & self.logic.has(Fruit.apricot) & self.logic.relationship.can_meet(NPC.emily),
@@ -86,8 +86,8 @@ class QuestLogic(BaseLogic):
             Quest.grannys_gift: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek) & self.logic.relationship.can_meet(NPC.evelyn),
             Quest.exotic_spirits: self.logic.season.has(Season.winter) & self.logic.has(Forageable.coconut) & self.logic.relationship.can_meet(NPC.gus),
             Quest.catch_a_lingcod: self.logic.season.has(Season.winter) & self.logic.has(Fish.lingcod) & self.logic.relationship.can_meet(NPC.willy),
-            Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(
-                NPC.krobus),
+            Quest.dark_talisman: self.logic.region.can_reach(
+                LogicRegion.railroad_cutscenes) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(NPC.krobus),
             Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp)
                                   # Void mayo can be fished at 5% chance in the witch swamp while the quest is active. It drops a lot after the quest.
                                   & (self.logic.has(ArtisanGood.void_mayonnaise) | self.logic.fishing.can_fish()),

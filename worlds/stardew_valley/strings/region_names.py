@@ -237,8 +237,14 @@ class LogicRegion:
     town_fence_shortcut = "Fence For Shortcut to Mountain"
     mountain_walkway_shortcut = "Mountian Walkway to Jojamart Shortcut"
     mountain_fence_shortcut = "Mountain Behind Fence Shortcut"
-    bus_stop_cutscene = "Bus Stop Cutscene"
-    town_cutscene = "Town Cutscene"
+    bus_stop_krobus_cutscene = "Enter Bus Stop From Farm"
+    town_community_center_cutscene = "Enter Town From Bus Stop"
+
+    town_cutscenes = "Town Map Anywhere"
+    beach_cutscenes = "Beach Map Anywhere"
+    mountain_cutscenes = "Mountain Map Anywhere"
+    forest_cutscenes = "Forest Map Anywhere"
+    railroad_cutscenes = "Railroad Map Anywhere"
 
 
 class DeepWoodsRegion:

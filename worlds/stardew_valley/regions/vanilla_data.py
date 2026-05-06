@@ -67,7 +67,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.minecart_bus_stop_to_town,
         ),
     ),
-    RegionData(LogicRegion.bus_stop_cutscene, (Entrance.bus_stop_cutscene_to_bus_stop,)),
+    RegionData(LogicRegion.bus_stop_krobus_cutscene, (Entrance.bus_stop_cutscene_to_bus_stop,)),
     RegionData(
         RegionName.forest,
         (
@@ -87,15 +87,14 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.fish_in_forest_pond,
             LogicEntrance.fish_in_waterfall,
             LogicEntrance.place_crab_pot_in_forest,
-            LogicEntrance.attend_flower_dance,
             LogicEntrance.attend_trout_derby,
-            LogicEntrance.attend_festival_of_ice,
             LogicEntrance.buy_from_hat_mouse,
+            LogicEntrance.forest_cutscenes_from_forest
         ),
     ),
     RegionData(
         LogicRegion.forest_part_behind_tree_stump,
-        (LogicEntrance.part_behind_tree_stump_to_forest, Entrance.enter_secret_woods),
+        (LogicEntrance.part_behind_tree_stump_to_forest, Entrance.enter_secret_woods, LogicEntrance.forest_cutscenes_from_secret_woods),
     ),
     RegionData(LogicRegion.forest_river),
     RegionData(LogicRegion.forest_pond),
@@ -126,6 +125,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_lake_to_outside_adventure_guild_shortcut,  # can't randomize
             LogicEntrance.mountain_shortcut_fence_entrance,
             LogicEntrance.place_crab_pot_in_mountain,
+            LogicEntrance.mountain_cutscenes_from_mountain
         ),
     ),
     RegionData(
@@ -137,6 +137,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.outside_adventure_guild_to_mountain_lake_shortcut,
             Entrance.outside_adventure_guild_to_mountain,
             LogicEntrance.mountain_shortcut_walkway_entrance,
+            LogicEntrance.mountain_cutscenes_from_guild
         ),
     ),
     RegionData(RegionName.maru_room, (Entrance.maru_room_to_carpenter_shop, Entrance.maru_room_to_mountain)),
@@ -149,7 +150,7 @@ vanilla_regions: tuple[RegionData, ...] = (
         ),
     ),
     RegionData(RegionName.bus_tunnel, (Entrance.bus_tunnel_to_tunnel_entrance,)),
-    RegionData(LogicRegion.town_cutscene, (Entrance.town_cutscene_to_town,)),
+    RegionData(LogicRegion.town_community_center_cutscene, (Entrance.town_cutscene_to_town,)),
     RegionData(
         RegionName.town,
         (
@@ -176,29 +177,27 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.minecart_town_to_quarry,
             LogicEntrance.purchase_movie_ticket,
             LogicEntrance.buy_books,
-            LogicEntrance.attend_egg_festival,
-            LogicEntrance.attend_fair,
-            LogicEntrance.attend_spirit_eve,
-            LogicEntrance.attend_winter_star,
             LogicEntrance.search_garbage_cans,
             LogicEntrance.jojamart_shortcut_cave_entrance,
             LogicEntrance.town_shortcut_fence_entrance,
             LogicEntrance.place_crab_pot_in_town,
+            LogicEntrance.town_cutscenes_from_town,
         ),
     ),
     RegionData(
         LogicRegion.mountain_fence_shortcut,
-        (LogicEntrance.mountain_shortcut_fence_exit, Entrance.mountain_town_shortcut),
+        (LogicEntrance.mountain_shortcut_fence_exit, Entrance.mountain_town_shortcut, LogicEntrance.mountain_cutscenes_from_fence_shortcut),
     ),
     RegionData(
         LogicRegion.mountain_walkway_shortcut,
-        (LogicEntrance.mountain_shortcut_walkway_exit, Entrance.mountain_jojamart_shortcut),
+        (LogicEntrance.mountain_shortcut_walkway_exit, Entrance.mountain_jojamart_shortcut, LogicEntrance.mountain_cutscenes_from_cave_shortcut),
     ),
     RegionData(
         LogicRegion.town_cave_joja_shortcut,
-        (LogicEntrance.jojamart_shortcut_cave_exit, Entrance.jojamart_mountain_shortcut),
+        (LogicEntrance.jojamart_shortcut_cave_exit, Entrance.jojamart_mountain_shortcut, LogicEntrance.town_cutscenes_from_mountain_cave_shortcut),
     ),
-    RegionData(LogicRegion.town_fence_shortcut, (LogicEntrance.town_shortcut_fence_exit, Entrance.town_mountain_shortcut)),
+    RegionData(LogicRegion.town_fence_shortcut,
+               (LogicEntrance.town_shortcut_fence_exit, Entrance.town_mountain_shortcut, LogicEntrance.town_cutscenes_from_mountain_fence_shortcut)),
     RegionData(
         RegionName.beach,
         (
@@ -207,11 +206,10 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.beach_to_willy_fish_shop,
             Entrance.enter_elliott_house,
             Entrance.enter_tide_pools,  # can't randomize
-            LogicEntrance.attend_luau,
-            LogicEntrance.attend_moonlight_jellies,
             LogicEntrance.attend_night_market,
             LogicEntrance.attend_squidfest,
             LogicEntrance.place_crab_pot_in_ocean,
+            LogicEntrance.beach_cutscenes_from_beach,
         ),
     ),
     RegionData(
@@ -220,11 +218,12 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.railroad_to_mountain,
             Entrance.enter_bathhouse_entrance,
             LogicEntrance.railroad_to_part_behind_chicken_stone,
+            LogicEntrance.railroad_cutscenes_from_railroad
         ),
     ),
     RegionData(
         LogicRegion.railroad_part_behind_chicken_stone,
-        (Entrance.enter_witch_warp_cave, LogicEntrance.part_behind_chicken_stone_to_railroad),
+        (Entrance.enter_witch_warp_cave, LogicEntrance.part_behind_chicken_stone_to_railroad, LogicEntrance.railroad_cutscenes_from_statue),
     ),
     RegionData(RegionName.ranch, (Entrance.marnie_ranch_to_forest,)),
     RegionData(RegionName.leah_house, (Entrance.leah_cottage_to_forest,)),
@@ -317,7 +316,8 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.fish_shop, (Entrance.willy_fish_shop_to_beach,)),
     RegionData(RegionName.elliott_house, (Entrance.leave_elliott_house,)),
     RegionData(RegionName.tide_pools, (Entrance.enter_tide_pools_shortcut, Entrance.leave_tide_pools)),
-    RegionData(RegionName.tide_pools_shortcut, (Entrance.leave_tide_pools_shortcut, Entrance.tidepools_town_shortcut)),
+    RegionData(RegionName.tide_pools_shortcut,
+               (Entrance.leave_tide_pools_shortcut, Entrance.tidepools_town_shortcut, LogicEntrance.beach_cutscenes_from_tide_pools)),
     RegionData(
         RegionName.bathhouse_entrance,
         (Entrance.leave_bathhouse_entrance, Entrance.enter_mens_locker_room, Entrance.enter_womens_locker_room),
@@ -493,6 +493,23 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.garbage_cans),
     RegionData(LogicRegion.crab_pot_freshwater),
     RegionData(LogicRegion.crab_pot_seawater),
+
+    RegionData(LogicRegion.beach_cutscenes, (
+        LogicEntrance.attend_luau,
+        LogicEntrance.attend_moonlight_jellies,
+    )),
+    RegionData(LogicRegion.town_cutscenes, (
+        LogicEntrance.attend_egg_festival,
+        LogicEntrance.attend_fair,
+        LogicEntrance.attend_spirit_eve,
+        LogicEntrance.attend_winter_star,
+    )),
+    RegionData(LogicRegion.mountain_cutscenes),
+    RegionData(LogicRegion.forest_cutscenes, (
+        LogicEntrance.attend_flower_dance,
+        LogicEntrance.attend_festival_of_ice,
+    )),
+    RegionData(LogicRegion.railroad_cutscenes),
 )
 
 # Exists and where they lead
@@ -1543,6 +1560,22 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.place_crab_pot_in_mountain, LogicRegion.crab_pot_freshwater),
     ConnectionData(LogicEntrance.place_crab_pot_in_forest, LogicRegion.crab_pot_freshwater),
     ConnectionData(LogicEntrance.place_crab_pot_in_ocean, LogicRegion.crab_pot_seawater),
+
+    ConnectionData(LogicEntrance.beach_cutscenes_from_beach, LogicRegion.beach_cutscenes),
+    ConnectionData(LogicEntrance.beach_cutscenes_from_tide_pools, LogicRegion.beach_cutscenes),
+    ConnectionData(LogicEntrance.mountain_cutscenes_from_cave_shortcut, LogicRegion.mountain_cutscenes),
+    ConnectionData(LogicEntrance.mountain_cutscenes_from_fence_shortcut, LogicRegion.mountain_cutscenes),
+    ConnectionData(LogicEntrance.mountain_cutscenes_from_guild, LogicRegion.mountain_cutscenes),
+    ConnectionData(LogicEntrance.mountain_cutscenes_from_mountain, LogicRegion.mountain_cutscenes),
+    ConnectionData(LogicEntrance.mountain_cutscenes_from_quarry, LogicRegion.mountain_cutscenes),
+    ConnectionData(LogicEntrance.forest_cutscenes_from_forest, LogicRegion.forest_cutscenes),
+    ConnectionData(LogicEntrance.forest_cutscenes_from_secret_woods, LogicRegion.forest_cutscenes),
+    ConnectionData(LogicEntrance.railroad_cutscenes_from_railroad, LogicRegion.railroad_cutscenes),
+    ConnectionData(LogicEntrance.railroad_cutscenes_from_statue, LogicRegion.railroad_cutscenes),
+    ConnectionData(LogicEntrance.town_cutscenes_from_town, LogicRegion.town_cutscenes),
+    ConnectionData(LogicEntrance.town_cutscenes_from_mountain_cave_shortcut, LogicRegion.town_cutscenes),
+    ConnectionData(LogicEntrance.town_cutscenes_from_mountain_fence_shortcut, LogicRegion.town_cutscenes),
+    ConnectionData(LogicEntrance.town_cutscenes_from_tide_pools_shortcut, LogicRegion.town_cutscenes),
 )
 
 connections_without_ginger_island_by_name: Mapping[str, ConnectionData] = MappingProxyType({connection.name: connection for connection in vanilla_connections})

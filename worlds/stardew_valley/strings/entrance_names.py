@@ -445,6 +445,22 @@ class LogicEntrance:
     purchase_movie_ticket = "Purchase Movie Ticket"
     feed_trash_bear = "Feed Trash Bear"
 
+    town_cutscenes_from_town = "Watch Town Cutscenes From Town"
+    town_cutscenes_from_mountain_fence_shortcut = "Watch Town Cutscenes From Behind Fence"
+    town_cutscenes_from_mountain_cave_shortcut = "Watch Town Cutscenes From Cave"
+    town_cutscenes_from_tide_pools_shortcut = "Watch Town Cutscenes From Beach Shortcut"
+    beach_cutscenes_from_beach = "Watch Beach Cutscenes From Beach"
+    beach_cutscenes_from_tide_pools = "Watch Beach Cutscenes From Tide Pools Shortcut"
+    mountain_cutscenes_from_mountain = "Watch Mountain Cutscenes From Mountain"
+    mountain_cutscenes_from_quarry = "Watch Mountain Cutscenes From Quarry"
+    mountain_cutscenes_from_guild = "Watch Mountain Cutscenes From Adventurer's Guild"
+    mountain_cutscenes_from_fence_shortcut = "Watch Mountain Cutscenes From Fence Shortcut"
+    mountain_cutscenes_from_cave_shortcut = "Watch Mountain Cutscenes From Cave Shortcut"
+    forest_cutscenes_from_forest = "Watch Forest Cutscenes From Forest"
+    forest_cutscenes_from_secret_woods = "Watch Forest Cutscenes From Secret Woods"
+    railroad_cutscenes_from_railroad = "Watch Railroad Cutscenes From Railroad"
+    railroad_cutscenes_from_statue = "Watch Railroad Cutscenes From Behind Statue"
+
 
 # Skull Cavern Elevator
 

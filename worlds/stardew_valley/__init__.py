@@ -475,8 +475,8 @@ class StardewValleyWorld(World):
         is_chaos = self.options.entrance_randomization_behavior.is_chaos()
         # when the cutscene-relevant entrances aren't randomized, connect them manually
         if self.options.entrance_randomization.value < EntranceRandomization.option_overworld or is_chaos:
-            self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(LogicRegion.bus_stop_cutscene)
-            self.get_entrance(EntranceNames.bus_stop_to_town).connected_region = self.get_region(LogicRegion.town_cutscene)
+            self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(LogicRegion.bus_stop_krobus_cutscene)
+            self.get_entrance(EntranceNames.bus_stop_to_town).connected_region = self.get_region(LogicRegion.town_community_center_cutscene)
 
         def connect_cutscene_regions_as_well(state: entrance_rando.ERPlacementState, placed_exits: list[Entrance], placed_entrances: list[Entrance]):
             additional_sweep_needed = False
@@ -484,14 +484,14 @@ class StardewValleyWorld(World):
                 if entr.name == EntranceNames.farm_to_bus_stop:
                     assert ex.connected_region is not None
                     ex.connected_region.entrances.remove(ex)
-                    new_region = self.get_region(LogicRegion.bus_stop_cutscene)
+                    new_region = self.get_region(LogicRegion.bus_stop_krobus_cutscene)
                     ex.connected_region = new_region
                     new_region.entrances.append(ex)
                     additional_sweep_needed = True
                 elif entr.name == EntranceNames.bus_stop_to_town:
                     assert ex.connected_region is not None
                     ex.connected_region.entrances.remove(ex)
-                    new_region = self.get_region(LogicRegion.town_cutscene)
+                    new_region = self.get_region(LogicRegion.town_community_center_cutscene)
                     ex.connected_region = new_region
                     new_region.entrances.append(ex)
                     additional_sweep_needed = True
