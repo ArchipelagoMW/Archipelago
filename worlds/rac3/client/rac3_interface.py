@@ -243,8 +243,10 @@ class Rac3Interface(GameInterface):
     def _write_string(self, address: int, value: str):
         return super()._write_string(self.address_convert(address), value)
 
-    def _write_bits(self, address: int, value: set[int]):
+    def _write_bits(self, address: int, value: set[int] | int):
         bits = self._read_bits(address)
+        if isinstance(value, int):
+            value = {value}
         if value.issubset(bits):
             return None
         bits |= value
@@ -257,8 +259,10 @@ class Rac3Interface(GameInterface):
 
         return self._write8(address, write)
 
-    def _unwrite_bits(self, address: int, value: set[int]):
+    def _unwrite_bits(self, address: int, value: set[int] | int):
         bits = self._read_bits(address)
+        if isinstance(value, int):
+            value = {value}
         if value.isdisjoint(bits):
             return None
         bits -= value
@@ -2024,7 +2028,8 @@ class Rac3Interface(GameInterface):
                             _write.setdefault(check[0], set()).add(check[1])
                         for address, flag in _write.items():
                             self._write_bits(address, flag)
-                    if data.VISIT_ADDRESSES is not None and data.VISIT_ADDRESSES not in self.visited_planets:
+                    if (data.VISIT_ADDRESSES is not None
+                        and any(address not in self.visited_planets for address in data.VISIT_ADDRESSES)):
                         for address in data.VISIT_ADDRESSES:
                             self._write8(RAC3_REGION_DATA_TABLE[address].VISIT_ADDRESS, 1)
 
