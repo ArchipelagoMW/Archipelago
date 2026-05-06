@@ -208,6 +208,7 @@ location_groups: dict[str, set[str]] = {
     RAC3TAG.GADGETS: get_from_tag(RAC3TAG.GADGETS),
     RAC3TAG.INFOBOT: get_from_tag(RAC3TAG.INFOBOT),
     RAC3TAG.ONE_HP_UNSTABLE: get_from_tag(RAC3TAG.ONE_HP_UNSTABLE),
+    RAC3TAG.NGPLUS: get_from_tag(RAC3TAG.NGPLUS),
 }
 
 
