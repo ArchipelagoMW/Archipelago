@@ -6,7 +6,7 @@ from .Items import item_table, create_item, create_multiple_items, create_junk_i
 from .Regions import create_regions
 from .Locations import get_location_names, get_total_locations
 from .RegionsData import okami_events,okami_locations
-from .Rules import set_rules
+from .Rules import set_completion_rules
 from .Options import create_option_groups, OkamiOptions, slot_data_options, KarmicTransformers
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from typing import List
@@ -54,7 +54,7 @@ class OkamiWorld(World):
 
     def set_rules(self):
 
-        set_rules(self)
+        set_completion_rules(self)
 
     def create_item(self, name: str) -> Item:
         return create_standard_item(self, name)

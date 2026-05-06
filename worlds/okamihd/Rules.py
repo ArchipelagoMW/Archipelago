@@ -180,7 +180,8 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
         world.set_rule(etr, final_rule)
 
 
-def set_rules(world: "OkamiWorld"):
+def set_completion_rules(world: "OkamiWorld"):
+    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm","Tsuta Ruins - Defeat the spider queen"))
     world.multiworld.completion_condition[world.player] = lambda state: state.has(
         "Moon Cave - Defeat Orochi", world.player)
     return
