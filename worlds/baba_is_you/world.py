@@ -18,6 +18,7 @@ UT_SLOT_DATA_OPTION_NAMES = (
     "goal",
     "goal_levels",
     "goal_blossoms",
+    "logic_difficulty",
     "start_with_default_words",
     "open_map",
     "world_keys",
