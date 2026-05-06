@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from ..CheckIds import brush_check_id, container_check_id
+from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
@@ -57,5 +57,22 @@ locations = {
         "Sasa Sanctuary - Buried Chest in bamboo grove stairs": LocData(container_check_id(MapIds.SASA_SANCTUARY, 42), type=LocationType.BURIED_CHEST),
         "Sasa Sanctuary - Left side Buried Chest in bamboo grove back": LocData(container_check_id(MapIds.SASA_SANCTUARY, 46), type=LocationType.BURIED_CHEST),
         "Sasa Sanctuary - Right side Buried Chest in bamboo grove back": LocData(container_check_id(MapIds.SASA_SANCTUARY, 45), type=LocationType.BURIED_CHEST),
+    }
+}
+
+shop_locations={
+    RegionNames.SASA_SANCTUARY:{
+        "Sasa Sanctuary - Shop Slot 1": LocData(shop_check_id(15, 0), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 2": LocData(shop_check_id(15, 1), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 3": LocData(shop_check_id(15, 2), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 4": LocData(shop_check_id(15, 3), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 5": LocData(shop_check_id(15, 4), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 6": LocData(shop_check_id(15, 5), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 7": LocData(shop_check_id(15, 6), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 8": LocData(shop_check_id(15, 7), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 9": LocData(shop_check_id(15, 8), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 10": LocData(shop_check_id(15, 9), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 11": LocData(shop_check_id(15, 10), type=LocationType.SHOP),
+        "Sasa Sanctuary - Shop Slot 12": LocData(shop_check_id(15, 11), type=LocationType.SHOP),
     }
 }

@@ -73,6 +73,10 @@ okami_events = {
 # Shop locations are separate because they're conditionally created based on RandomizeShops
 okami_shop_locations = {
     **getattr(r102, 'shop_locations', {}),
+    **getattr(r108, 'shop_locations', {}),
+    **getattr(r109, 'shop_locations', {}),
+    **getattr(r110, 'shop_locations', {}),
     **getattr(rf02, 'shop_locations', {}),
+    **getattr(rf04, 'shop_locations', {}),
     **getattr(rf08, 'shop_locations', {}),
 }

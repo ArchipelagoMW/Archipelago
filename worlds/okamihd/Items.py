@@ -52,7 +52,7 @@ def get_item_name_to_id_dict() -> dict:
     return item_dict
 
 def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
-    # TODO: Refacto this if we ever need more static precollected items
+    # TODO: Refacto this
     precollected_items :List[Item] =[]
 
     rejuvenation = brush_techniques_items[BrushTechniques.REJUVENATION.value]
@@ -64,6 +64,11 @@ def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
 
     astral_pouch = useful_items['Astral Pouch']
     precollected_items.append(create_item('Astral Pouch', astral_pouch.code, astral_pouch.classification, world))
+
+    # We always start with Divine Retribution:
+    divine_retribution = DivineInstruments.DIVINE_RETRIBUTION.value
+    precollected_items.append(create_item(divine_retribution.item_name, divine_retribution.code, ItemClassification.progression, world))
+
     return precollected_items
 
 

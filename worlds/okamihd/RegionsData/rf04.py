@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from ..CheckIds import brush_check_id, container_check_id
+from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
@@ -84,5 +84,22 @@ locations = {
         "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1),
         "Agata Forest - Yumigami": LocData(brush_check_id(18), type=LocationType.CONSTELLATION,  # bit 18
                                            required_items_events=["Agata Forest - Fish Whopper with Kokari"])
+    }
+}
+
+shop_locations = {
+    RegionNames.AGATA_FOREST: {
+        "Agata Forest - Shop Slot 1": LocData(shop_check_id(0, 0), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 2": LocData(shop_check_id(0, 1), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 3": LocData(shop_check_id(0, 2), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 4": LocData(shop_check_id(0, 3), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 5": LocData(shop_check_id(0, 4), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 6": LocData(shop_check_id(0, 5), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 7": LocData(shop_check_id(0, 6), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 8": LocData(shop_check_id(0, 7), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 9": LocData(shop_check_id(0, 8), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 10": LocData(shop_check_id(0, 9), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 11": LocData(shop_check_id(0, 10), type=LocationType.SHOP),
+        "Agata Forest - Shop Slot 12": LocData(shop_check_id(0, 11), type=LocationType.SHOP),
     }
 }
