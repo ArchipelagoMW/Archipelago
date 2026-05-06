@@ -2040,6 +2040,10 @@
         ]
     },
     { "from": "ED (Passages) - Outside Tianshou Arena", "to": "ED (Passages) - Between Root Node & Tianshou Arena", "requires": [] }, // shortcut rope
+    {
+        "from": "ED (Passages) - Between Root Node & Tianshou Arena", "to": "ED (Passages) - Outside Tianshou Arena",
+        "ls_requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }] // triple jump
+    },
     // these statues get their own regions because of multiple entrances and logic difficulty changes
     {
         "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Statue In Left Chasm",
