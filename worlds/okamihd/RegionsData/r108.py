@@ -7,7 +7,6 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Rules import gale_shrine_access
 from ..Types import EventData, ExitData, LocData
 
 if TYPE_CHECKING:

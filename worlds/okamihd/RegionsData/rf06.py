@@ -12,7 +12,7 @@ exits = {
 }
 events = {
     RegionNames.MOON_CAVE_OUTSIDE: {
-        "Moon Cave - Open entrance": EventData(special_rule=lambda s,w:moon_cave_access(s,w))
+        "Moon Cave - Open entrance": EventData(special_rule=moon_cave_access())
     }
 }
 locations = {

@@ -1,10 +1,11 @@
+from rule_builder.field_resolvers import FromOption
 from rule_builder.rules import Has, And, Rule, True_, OptionFilter, Or, HasGroup, HasAny, HasAll
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.DivineInstruments import DivineInstruments
 from .Enums.LocationType import LocationType
-from .Options import ProgressiveWeapons
+from .Options import ProgressiveWeapons, RequiredDoggorbs
 from .Types import LocData, ExitData, EventData
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
@@ -14,40 +15,18 @@ from ..hk.Options import count
 if TYPE_CHECKING:
     from . import OkamiWorld
 
+has_portable_fire_source: Rule = Has(DivineInstruments.SOLAR_FLARE.value.item_name)
 
-def has_power_slash_level(state: CollectionState, world: "OkamiWorld", level: int) -> bool:
-    return state.has(BrushTechniques.POWER_SLASH, world.player, level)
+has_portable_thunder_source: Rule = Has(DivineInstruments.THUNDER_EDGE.value.item_name)
 
+has_portable_ice_source: Rule = Has(DivineInstruments.TUNDRA_BEADS.value.item_name)
 
-def has_cherry_bomb_level(state: CollectionState, world: "OkamiWorld", level: int) -> bool:
-    return state.has(BrushTechniques.CHERRY_BOMB, world.player, level)
+gale_shrine_access: Rule = HasGroup("canine_warriors", count=FromOption(RequiredDoggorbs))
 
+moon_cave_access: Rule = Has("Serpent Crystal")
 
-def has_brush_technique(state: CollectionState, world: "OkamiWorld", technique: BrushTechniques) -> bool:
-    return state.has(technique, world.player)
-
-
-def has_portable_fire_source(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has(DivineInstruments.SOLAR_FLARE.value.item_name, world.player)
-
-
-def has_portable_thunder_source(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has(DivineInstruments.THUNDER_EDGE.value.item_name, world.player)
-
-
-def has_portable_ice_source(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has(DivineInstruments.TUNDRA_BEADS.value.item_name, world.player)
-
-
-def gale_shrine_access(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has_group("canine_warriors", world.player, world.options.RequiredDoggorbs.value)
-
-
-def moon_cave_access(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has('Serpent Crystal', world.player)
-
-
-def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount: int) -> bool:
+# Probably should be removed;Directly add it to the checks that require it.
+def has_soup_ingerdients (state: CollectionState, world: "OkamiWorld", amount: int) -> bool:
     return state.has_group("soup_ingredients", world.player, amount)
 
 
@@ -143,13 +122,13 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.BURNING_CHEST:
-            rules.append(HasAny(BrushTechniques.GALESTORM,BrushTechniques.WATERSPOUT))
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WATERSPOUT))
         case LocationType.BURNING_CHEST_NO_WATER:
             required_techinques += [BrushTechniques.GALESTORM]
         case LocationType.UNDERWATER_CHEST:
             required_power_slash_level = max(required_power_slash_level, 1)
         case LocationType.UNDERWATER_CHEST_SHALLOW:
-            rules.append(HasAny(BrushTechniques.POWER_SLASH,BrushTechniques.CHERRY_BOMB))
+            rules.append(HasAny(BrushTechniques.POWER_SLASH, BrushTechniques.CHERRY_BOMB))
         case LocationType.DIGGING_MINIGAME_EARLY:
             required_power_slash_level = max(required_power_slash_level, 1)
             required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
@@ -166,36 +145,38 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             required_techinques += []
 
     if data.needs_long_swim:
-        rules.append(HasAny("Water Tablet",BrushTechniques.GREENSPROUT_WATERLILY))
+        rules.append(HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY))
 
     if len(required_techinques) > 0:
         rules.append(HasAll(*required_techinques))
 
     if required_power_slash_level > 0:
-        rules.append(Has(BrushTechniques.POWER_SLASH,count=required_power_slash_level))
+        rules.append(Has(BrushTechniques.POWER_SLASH, count=required_power_slash_level))
 
     if required_cherry_bomb_level > 0:
-        rules.append(Has(BrushTechniques.CHERRY_BOMB,count=required_power_slash_level))
+        rules.append(Has(BrushTechniques.CHERRY_BOMB, count=required_power_slash_level))
 
-    if len(data.required_items_events)> 0:
+    if len(data.required_items_events) > 0:
         rules.append(HasAll(*data.required_items_events))
     # TODO: Fix special rules
-    #if data.special_rule is not None:
+    # if data.special_rule is not None:
     #    # Call special rule if it's defined
     #    add_rule(loc, lambda state: data.special_rule(state, world))
 
     # Set the location to require all concatenated rule
     if len(rules) > 0:
-        final_rule= And(*rules)
+        final_rule = And(*rules)
         world.set_rule(loc, final_rule)
-   #    print(final_rule)
-   #else:
-   #    print("no rule for this check")
+
+
+#    print(final_rule)
+# else:
+#    print("no rule for this check")
 
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
-    rules : List[Rule] =[]
+    rules: List[Rule] = []
     if data.needs_long_swim:
-        rules.append(HasAny("Water Tablet",BrushTechniques.GREENSPROUT_WATERLILY))
+        rules.append(HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY))
 
     if len(data.has_events) > 0:
         rules.append(HasAll(*data.has_events))

@@ -5,7 +5,7 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Rules import gale_shrine_access
+from ..Rules import gale_shrine_access, gale_shrine_access2
 from ..Types import EventData, ExitData, LocData
 
 if TYPE_CHECKING:
@@ -25,7 +25,7 @@ exits = {
 }
 events = {
     RegionNames.GALE_SHRINE_ENTRANCE: {
-        "Gale Shrine - Open Door": EventData(special_rule=lambda s, w: gale_shrine_access(s, w)),
+        "Gale Shrine - Open Door": EventData(special_rule=gale_shrine_access2),
     },
     RegionNames.GALE_SHRINE: {
         # Gives a key
