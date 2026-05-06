@@ -34,7 +34,8 @@ region_order = [
     # List this late because it contains a Titanite Slab in the base game
     "Firelink Shrine Bell Tower",
     "Grand Archives",
-    "Archdragon Peak",
+    "Archdragon Peak (Through Fort)",
+    "Archdragon Peak (After Fort)",
     "Kiln of the First Flame",
     # Both areas of DLC2 have premium rewards.
     "Dreg Heap",
@@ -196,6 +197,8 @@ class DS3LocationData:
         if self.hostile_npc: names.append("Hostile NPC Rewards")
         if self.npc: names.append("Friendly NPC Rewards")
         if self.lizard: names.append("Small Crystal Lizards")
+        if self.drop: names.append("Drops")
+        if self.shop: names.append("Shops")
         if self.hidden: names.append("Hidden")
 
         default_item = item_dictionary[cast(str, self.default_item_name)]
@@ -628,7 +631,8 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         static='02,0:50006141::', npc=True),
         DS3LocationData("US: Cornyx's Skirt - kill Cornyx", "Cornyx's Skirt",
                         static='02,0:50006141::', npc=True),
-        DS3LocationData("US: Tower Key - kill Irina", "Tower Key", missable=True, npc=True),
+        DS3LocationData("US: Tower Key - kill Irina", "Tower Key", missable=True, npc=True,
+                        drop=True),
         DS3LocationData("US: Flynn's Ring - tower village, rooftop", "Flynn's Ring"),
         DS3LocationData("US: Undead Bone Shard - by white tree", "Undead Bone Shard"),
         DS3LocationData("US: Alluring Skull - foot, behind carriage", "Alluring Skull x2"),
@@ -780,13 +784,15 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("FS: Soul Greatsword - Yoel/Yuria shop", "Soul Greatsword",
                         static='99,0:-1:50000,110000,70000450,70000475:', missable=True,
                         npc=True, shop=True),
-        DS3LocationData("FS: Dark Hand - Yuria shop", "Dark Hand", missable=True, npc=True),
+        DS3LocationData("FS: Dark Hand - Yuria shop", "Dark Hand", missable=True, npc=True,
+                        shop=True),
         DS3LocationData("FS: Untrue White Ring - Yuria shop", "Untrue White Ring", missable=True,
-                        npc=True),
+                        npc=True, shop=True),
         DS3LocationData("FS: Untrue Dark Ring - Yuria shop", "Untrue Dark Ring", missable=True,
-                        npc=True),
+                        npc=True, shop=True),
         DS3LocationData("FS: Londor Braille Divine Tome - Yuria shop", "Londor Braille Divine Tome",
-                        static='99,0:-1:40000,110000,70000116:', missable=True, npc=True),
+                        static='99,0:-1:40000,110000,70000116:', missable=True, npc=True,
+                        shop=True),
         DS3LocationData("FS: Darkdrift - kill Yuria", "Darkdrift", missable=True, drop=True,
                         npc=True),  # kill her or kill Soul of Cinder
 
@@ -2086,13 +2092,13 @@ location_tables: Dict[str, List[DS3LocationData]] = {
 
         # Shrine Handmaid after killing Dragonslayer Armour (or Eygon of Carim)
         DS3LocationData("FS: Morne's Helm - shop after killing Eygon or LC boss", "Morne's Helm",
-                        boss=True, shop=True),
+                        boss=True, shop=True, missable=True),
         DS3LocationData("FS: Morne's Armor - shop after killing Eygon or LC boss", "Morne's Armor",
-                        boss=True, shop=True),
+                        boss=True, shop=True, missable=True),
         DS3LocationData("FS: Morne's Gauntlets - shop after killing Eygon or LC boss",
-                        "Morne's Gauntlets", boss=True, shop=True),
+                        "Morne's Gauntlets", boss=True, shop=True, missable=True),
         DS3LocationData("FS: Morne's Leggings - shop after killing Eygon or LC boss",
-                        "Morne's Leggings", boss=True, shop=True),
+                        "Morne's Leggings", boss=True, shop=True, missable=True),
     ],
     "Consumed King's Garden": [
         DS3LocationData("CKG: Soul of Consumed Oceiros", "Soul of Consumed Oceiros",
@@ -2356,9 +2362,61 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("FS: Gundyr's Leggings - shop after killing UG boss", "Gundyr's Leggings",
                         boss=True, shop=True),
     ],
-    "Archdragon Peak": [
+    "Archdragon Peak (Through Fort)": [
         DS3LocationData("AP: Dragon Head Stone - fort, boss drop", "Dragon Head Stone",
                         prominent=True, boss=True),
+        DS3LocationData("AP: Lightning Clutch Ring - intro, left of boss door",
+                        "Lightning Clutch Ring",
+                        static='10,0:53200000::'),
+        DS3LocationData("AP: Stalk Dung Pie - fort overlook", "Stalk Dung Pie x6",
+                        static='10,0:53200010::'),
+        DS3LocationData("AP: Titanite Chunk - fort, second room balcony", "Titanite Chunk",
+                        static='10,0:53200020::'),
+        DS3LocationData("AP: Soul of a Weary Warrior - intro, first cliff edge",
+                        "Soul of a Weary Warrior",
+                        static='10,0:53200040::'),
+        DS3LocationData("AP: Titanite Chunk - intro, left before archway", "Titanite Chunk",
+                        static='10,0:53200050::'),
+        DS3LocationData("AP: Lightning Gem - intro, side rise", "Lightning Gem",
+                        static='10,0:53200060::'),
+        DS3LocationData("AP: Homeward Bone - intro, path to bonfire", "Homeward Bone x2",
+                        static='10,0:53200070::'),
+        DS3LocationData("AP: Soul of a Nameless Soldier - intro, right before archway",
+                        "Soul of a Nameless Soldier",
+                        static='10,0:53200080::'),
+        DS3LocationData("AP: Titanite Chunk - intro, archway corner", "Titanite Chunk",
+                        static='10,0:53200090::'),
+        DS3LocationData("AP: Ember - fort overlook #1", "Ember",
+                        static='10,0:53200100::'),
+        DS3LocationData("AP: Large Soul of a Weary Warrior - fort, center",
+                        "Large Soul of a Weary Warrior",
+                        static='10,0:53200110::'),
+        DS3LocationData("AP: Large Soul of a Nameless Soldier - fort, by stairs to first room",
+                        "Large Soul of a Nameless Soldier",
+                        static='10,0:53200120::'),
+        # Not 100% sure about this location name, can't find this on any maps
+        DS3LocationData("AP: Dung Pie - fort, landing after second room", "Dung Pie x3",
+                        static='10,0:53200160::'),
+        DS3LocationData("AP: Lightning Urn - fort, left of first room entrance",
+                        "Lightning Urn x4",
+                        static='10,0:53200130::'),
+        DS3LocationData("AP: Titanite Chunk - intro, behind rock", "Titanite Chunk",
+                        static='10,0:53200200::'),
+        DS3LocationData("AP: Ember - fort overlook #2", "Ember",
+                        static='10,0:53200210::'),
+        DS3LocationData("AP: Ancient Dragon Greatshield - intro, on archway",
+                        "Ancient Dragon Greatshield"),
+        DS3LocationData("AP: Ember - intro, by bonfire", "Ember",
+                        static='10,0:53200290::'),
+        DS3LocationData("AP: Twinkling Titanite - fort, end of rafters", "Twinkling Titanite x2",
+                        static='10,0:53200330::'),
+        DS3LocationData("AP: Twinkling Titanite - fort, down second room balcony ladder",
+                        "Twinkling Titanite x2",
+                        static='10,0:53200340::'),
+        DS3LocationData("AP: Ring of Steel Protection - fort overlook, beside stairs",
+                        "Ring of Steel Protection"),
+    ],
+    "Archdragon Peak (After Fort)": [
         DS3LocationData("AP: Soul of the Nameless King", "Soul of the Nameless King",
                         prominent=True, boss=True),
         DS3LocationData("AP: Dragon Tooth - belfry roof, NPC drop", "Dragon Tooth",
@@ -2369,82 +2427,65 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         hostile_npc=True),
         DS3LocationData("AP: Ricard's Rapier - belfry, NPC drop", "Ricard's Rapier",
                         hostile_npc=True),
-        DS3LocationData("AP: Lightning Clutch Ring - intro, left of boss door",
-                        "Lightning Clutch Ring"),
-        DS3LocationData("AP: Stalk Dung Pie - fort overlook", "Stalk Dung Pie x6"),
-        DS3LocationData("AP: Titanite Chunk - fort, second room balcony", "Titanite Chunk"),
         DS3LocationData("AP: Titanite Scale - mausoleum, downstairs balcony #1",
                         "Titanite Scale"),
-        DS3LocationData("AP: Soul of a Weary Warrior - intro, first cliff edge",
-                        "Soul of a Weary Warrior"),
-        DS3LocationData("AP: Titanite Chunk - intro, left before archway", "Titanite Chunk"),
-        DS3LocationData("AP: Lightning Gem - intro, side rise", "Lightning Gem"),
-        DS3LocationData("AP: Homeward Bone - intro, path to bonfire", "Homeward Bone x2"),
-        DS3LocationData("AP: Soul of a Nameless Soldier - intro, right before archway",
-                        "Soul of a Nameless Soldier"),
-        DS3LocationData("AP: Titanite Chunk - intro, archway corner", "Titanite Chunk"),
-        DS3LocationData("AP: Ember - fort overlook #1", "Ember"),
-        DS3LocationData("AP: Large Soul of a Weary Warrior - fort, center",
-                        "Large Soul of a Weary Warrior"),
-        DS3LocationData("AP: Large Soul of a Nameless Soldier - fort, by stairs to first room",
-                        "Large Soul of a Nameless Soldier"),
-        DS3LocationData("AP: Lightning Urn - fort, left of first room entrance",
-                        "Lightning Urn x4"),
-        DS3LocationData("AP: Lightning Bolt - rotunda", "Lightning Bolt x12"),
-        DS3LocationData("AP: Titanite Chunk - rotunda", "Titanite Chunk x2"),
-        # Not 100% sure about this location name, can't find this on any maps
-        DS3LocationData("AP: Dung Pie - fort, landing after second room", "Dung Pie x3"),
-        DS3LocationData("AP: Titanite Scale - mausoleum, downstairs balcony #2", "Titanite Scale"),
+        DS3LocationData("AP: Lightning Bolt - rotunda", "Lightning Bolt x12",
+                        static='10,0:53200140::'),
+        DS3LocationData("AP: Titanite Chunk - rotunda", "Titanite Chunk x2",
+                        static='10,0:53200150::'),
+        DS3LocationData("AP: Titanite Scale - mausoleum, downstairs balcony #2", "Titanite Scale",
+                        static='10,0:53200170::'),
         DS3LocationData("AP: Soul of a Weary Warrior - walkway, building window",
-                        "Soul of a Weary Warrior"),
+                        "Soul of a Weary Warrior",
+                        static='10,0:53200180::'),
         DS3LocationData("AP: Soul of a Crestfallen Knight - mausoleum, upstairs",
-                        "Soul of a Crestfallen Knight"),
-        DS3LocationData("AP: Titanite Chunk - intro, behind rock", "Titanite Chunk"),
-        DS3LocationData("AP: Ember - fort overlook #2", "Ember"),
+                        "Soul of a Crestfallen Knight",
+                        static='10,0:53200190::'),
         DS3LocationData("AP: Thunder Stoneplate Ring - walkway, up ladder",
                         "Thunder Stoneplate Ring"),
-        DS3LocationData("AP: Titanite Scale - mausoleum, upstairs balcony", "Titanite Scale"),
-        DS3LocationData("AP: Ember - belfry, below bell", "Ember"),
-        DS3LocationData("AP: Ancient Dragon Greatshield - intro, on archway",
-                        "Ancient Dragon Greatshield"),
+        DS3LocationData("AP: Titanite Scale - mausoleum, upstairs balcony", "Titanite Scale",
+                        static='10,0:53200230::'),
+        DS3LocationData("AP: Ember - belfry, below bell", "Ember",
+                        static='10,0:53200240::'),
         DS3LocationData("AP: Large Soul of a Crestfallen Knight - summit, by fountain",
-                        "Large Soul of a Crestfallen Knight"),
+                        "Large Soul of a Crestfallen Knight",
+                        static='10,0:53200270::'),
         DS3LocationData("AP: Dragon Chaser's Ashes - summit, side path", "Dragon Chaser's Ashes",
                         progression=True),
-        DS3LocationData("AP: Ember - intro, by bonfire", "Ember"),
         DS3LocationData("AP: Dragonslayer Spear - gate after mausoleum", "Dragonslayer Spear"),
         DS3LocationData("AP: Dragonslayer Helm - plaza", "Dragonslayer Helm"),
         DS3LocationData("AP: Dragonslayer Armor - plaza", "Dragonslayer Armor"),
         DS3LocationData("AP: Dragonslayer Gauntlets - plaza", "Dragonslayer Gauntlets"),
         DS3LocationData("AP: Dragonslayer Leggings - plaza", "Dragonslayer Leggings"),
-        DS3LocationData("AP: Twinkling Titanite - fort, end of rafters", "Twinkling Titanite x2"),
-        DS3LocationData("AP: Twinkling Titanite - fort, down second room balcony ladder",
-                        "Twinkling Titanite x2"),
-        DS3LocationData("AP: Titanite Slab - belfry roof", "Titanite Slab"),
+        DS3LocationData("AP: Titanite Slab - belfry roof", "Titanite Slab",
+                        static='10,0:53200350::'),
         DS3LocationData("AP: Great Magic Barrier - drop off belfry roof", "Great Magic Barrier",
                         hidden=True),  # Hidden fall
-        DS3LocationData("AP: Titanite Slab - plaza", "Titanite Slab"),
-        DS3LocationData("AP: Ring of Steel Protection - fort overlook, beside stairs",
-                        "Ring of Steel Protection"),
+        DS3LocationData("AP: Titanite Slab - plaza", "Titanite Slab",
+                        static='10,0:53200370::'),
         DS3LocationData("AP: Havel's Ring+1 - summit, after building", "Havel's Ring+1",
                         ngp=True),
         DS3LocationData("AP: Covetous Gold Serpent Ring+2 - plaza", "Covetous Gold Serpent Ring+2",
                         ngp=True),
-        DS3LocationData("AP: Titanite Scale - walkway building", "Titanite Scale x3"),
+        DS3LocationData("AP: Titanite Scale - walkway building", "Titanite Scale x3",
+                        static='10,0:53200700::'),
         DS3LocationData("AP: Twinkling Titanite - belfry, by ladder to roof",
-                        "Twinkling Titanite x3"),
+                        "Twinkling Titanite x3",
+                        static='10,0:53200710::'),
         DS3LocationData("AP: Twinkling Dragon Torso Stone - summit, gesture at altar",
-                        "Twinkling Dragon Torso Stone", hidden=True),  # Requires gesture
+                        "Twinkling Dragon Torso Stone",
+                        hidden=True),  # Requires gesture
         DS3LocationData("AP: Calamity Ring - mausoleum, gesture at altar", "Calamity Ring",
                         hidden=True),  # Requires gesture
         DS3LocationData("AP: Twinkling Titanite - walkway building, lizard",
-                        "Twinkling Titanite x3", lizard=True),
+                        "Twinkling Titanite x3",
+                        static='10,1:3200259::', lizard=True),
         DS3LocationData("AP: Titanite Chunk - walkway, miniboss drop", "Titanite Chunk x6",
-                        miniboss=True),  # Wyvern miniboss drop
+                        static='10,1:3200300::', miniboss=True),  # Wyvern miniboss drop
         DS3LocationData("AP: Titanite Scale - walkway, miniboss drop", "Titanite Scale x3",
-                        miniboss=True),  # Wyvern miniboss drop
+                        static='10,1:3200300::', miniboss=True),  # Wyvern miniboss drop
         DS3LocationData("AP: Twinkling Titanite - walkway, miniboss drop", "Twinkling Titanite x3",
-                        miniboss=True),  # Wyvern miniboss drop
+                        static='10,1:3200300::', miniboss=True),  # Wyvern miniboss drop
         DS3LocationData("FS: Hawkwood's Swordgrass - Andre after gesture in AP summit",
                         "Hawkwood's Swordgrass", conditional=True, hidden=True),
 
@@ -2466,25 +2507,27 @@ location_tables: Dict[str, List[DS3LocationData]] = {
 
         # Shrine Handmaid after placing all Cinders of a Lord
         DS3LocationData("FS: Titanite Slab - shop after placing all Cinders", "Titanite Slab",
-                        static='99,0:-1:9210,110000:', hidden=True),
-        DS3LocationData("FS: Firelink Helm - shop after placing all Cinders", "Firelink Helm",
+                        static='99,0:-1:9210,110000:', shop=True),
+
+        # Shrine Handmaid after defeating Soul of Cinder
+        DS3LocationData("FS: Firelink Helm - shop after beating KFF boss", "Firelink Helm",
                         boss=True, shop=True),
-        DS3LocationData("FS: Firelink Armor - shop after placing all Cinders", "Firelink Armor",
+        DS3LocationData("FS: Firelink Armor - shop after beating KFF boss", "Firelink Armor",
                         boss=True, shop=True),
-        DS3LocationData("FS: Firelink Gauntlets - shop after placing all Cinders",
+        DS3LocationData("FS: Firelink Gauntlets - shop after beating KFF boss",
                         "Firelink Gauntlets", boss=True, shop=True),
-        DS3LocationData("FS: Firelink Leggings - shop after placing all Cinders",
+        DS3LocationData("FS: Firelink Leggings - shop after beating KFF boss",
                         "Firelink Leggings", boss=True, shop=True),
 
         # Yuria (quest, after Soul of Cinder)
         DS3LocationData("FS: Billed Mask - shop after killing Yuria", "Billed Mask",
-                        missable=True, npc=True),
+                        missable=True, npc=True, shop=True),
         DS3LocationData("FS: Black Dress - shop after killing Yuria", "Black Dress",
-                        missable=True, npc=True),
+                        missable=True, npc=True, shop=True),
         DS3LocationData("FS: Black Gauntlets - shop after killing Yuria", "Black Gauntlets",
-                        missable=True, npc=True),
+                        missable=True, npc=True, shop=True),
         DS3LocationData("FS: Black Leggings - shop after killing Yuria", "Black Leggings",
-                        missable=True, npc=True),
+                        missable=True, npc=True, shop=True),
     ],
 
     # DLC
@@ -3045,6 +3088,8 @@ location_name_groups: Dict[str, Set[str]] = {
     "Hostile NPC Rewards": set(),
     "Friendly NPC Rewards": set(),
     "Small Crystal Lizards": set(),
+    "Drops": set(),
+    "Shops": set(),
     "Upgrade": set(),
     "Small Souls": set(),
     "Boss Souls": set(),
@@ -3071,6 +3116,9 @@ location_descriptions = {
                            "invaders and initially-friendly NPCs that must be fought as part of their quest.",
     "Friendly NPC Rewards": "Items given by friendly NPCs as part of their quests or from " + \
                             "non-violent interaction.",
+    "Drops": "Drops from anything other than bosses, including minibosses, mimics, lizards, " + \
+             "NPCs, or just normal enemies.",
+    "Shops": "Locations in NPC shops such as the Shrine Handmaiden, Greirat, Cornyx, and so on.",
     "Upgrade": "Locations that contain upgrade items in vanilla, including titanite, gems, and " + \
                "Shriving Stones.",
     "Small Souls": "Locations that contain soul items in vanilla, not including boss souls.",
@@ -3105,6 +3153,13 @@ for location_name, location_table in location_tables.items():
             location_data.name for location_data in location_table
             if not location_data.is_event
         ])
+
+location_name_groups["Archdragon Peak"] = (
+    location_name_groups["Archdragon Peak (Through Fort)"]
+    .union(location_name_groups["Archdragon Peak (After Fort)"])
+)
+del location_name_groups["Archdragon Peak (Through Fort)"]
+del location_name_groups["Archdragon Peak (After Fort)"]
 
 location_name_groups["Painted World of Ariandel"] = (
     location_name_groups["Painted World of Ariandel (Before Contraption)"]
