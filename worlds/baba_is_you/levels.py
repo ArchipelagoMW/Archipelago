@@ -1869,7 +1869,7 @@ LEVEL_DATA = {
         "name": "Trick Door",
         "parent": "Cavern",
         "winLogic": HasAll("Ghost", "Facing", "Wall", "Is", "Push", "Key", "Not", "Tile", "Flag"),
-        "winLogicAdv": HasAll("Flag", "Is", "Tile") & (HasAll("Ghost", "Key", "Not") | (((Has("Ghost") & HasAny("Key", "Not")) | HasAll("Key", "Not")) & HasAll("Facing", "Wall", "Push"))),
+        "winLogicAdv": HasAll("Flag", "Is", "Tile") & ((HasAll("Ghost", "Key") & HasAny("Not", "Push")) | (HasAll("Facing", "Wall", "Push") & (Has("Key") | HasAll("Ghost", "Not")))),
         "connects": {
             "Cavern-3": can_win,
             "Cavern-5": can_win,
