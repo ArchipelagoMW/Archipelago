@@ -57,7 +57,7 @@ locations = {
     },
 
     RegionNames.TAMA_HOUSE: {
-        "Shinshu Field - Bakigami": LocData(brush_check_id(25),type=LocationType.CONSTELLATION,special_rule=lambda s,w:night_time_check_rule(s,w))  # bit 25
+        "Shinshu Field - Bakigami": LocData(brush_check_id(25),type=LocationType.CONSTELLATION,special_rule=night_time_check_rule)  # bit 25
     },
 
     RegionNames.SHINSHU_PLATEAU:{

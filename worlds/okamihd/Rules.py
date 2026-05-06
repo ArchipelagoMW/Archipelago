@@ -5,7 +5,7 @@ from worlds.generic.Rules import add_rule, set_rule
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.DivineInstruments import DivineInstruments
 from .Enums.LocationType import LocationType
-from .Options import ProgressiveWeapons, RequiredDoggorbs
+from .Options import ProgressiveWeapons, RequiredDoggorbs, NightTimeChecksRequireCrescent
 from .Types import LocData, ExitData, EventData
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
@@ -26,23 +26,16 @@ gale_shrine_access: Rule = HasGroup("canine_warriors", count=FromOption(Required
 moon_cave_access: Rule = Has("Serpent Crystal")
 
 # Probably should be removed;Directly add it to the checks that require it.
-def has_soup_ingerdients (state: CollectionState, world: "OkamiWorld", amount: int) -> bool:
+def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount: int) -> bool:
     return state.has_group("soup_ingredients", world.player, amount)
 
 
-def night_time_check_rule(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has(BrushTechniques.CRESCENT, world.player) or not world.options.NightTimeChecksRequireCrescent
+night_time_check_rule: Rule = Has(BrushTechniques.CRESCENT, options=[
+    OptionFilter(NightTimeChecksRequireCrescent, NightTimeChecksRequireCrescent.option_true)], filtered_resolution=True)
 
+moon_cave_fire_rule: Rule = Or(has_portable_fire_source, Has("Moon Cave - 2F Push the ball"))
 
-# Special Rule to handle fire with the big ball torches in Moon Cave
-# Player needs to have either fire, or lit the torches by solving the sand room.
-def moon_cave_fire_rule(state: CollectionState, world: "OkamiWorld") -> bool:
-    return has_portable_fire_source(state, world) or state.has("Moon Cave - 2F Push the ball", world.player)
-
-
-# Variant for the 4F fireball room
-def moon_cave_fire_rule_4f(state: CollectionState, world: "OkamiWorld") -> bool:
-    return has_portable_fire_source(state, world) or state.has("Moon Cave - 4F Move Fireball", world.player)
+moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source, Has("Moon Cave - 4F Move Fireball"))
 
 
 def has_divine_instrument_tier(tier: int) -> Rule:
@@ -159,9 +152,10 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
     if len(data.required_items_events) > 0:
         rules.append(HasAll(*data.required_items_events))
     # TODO: Fix special rules
-    # if data.special_rule is not None:
-    #    # Call special rule if it's defined
-    #    add_rule(loc, lambda state: data.special_rule(state, world))
+    if data.special_rule is not None:
+        # Append special rule if it's defined
+        rules.append(data.special_rule)
+
 
     # Set the location to require all concatenated rule
     if len(rules) > 0:
