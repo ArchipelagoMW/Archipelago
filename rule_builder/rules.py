@@ -1091,15 +1091,27 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        item_counts: list[tuple[str, int]] = []
+        has_counts = False
+        for item_name, count in self.item_counts.items():
+            resolved_count = resolve_field(count, world, int)
+            if resolved_count == 0:
+                continue
+            if resolved_count > 1:
+                has_counts = True
+            item_counts.append((item_name, resolved_count))
+
         if len(self.item_counts) == 0:
             # match state.has_all_counts
             return True_().resolve(world)
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
-        item_counts = tuple((name, resolve_field(count, world, int)) for name, count in self.item_counts.items())
+        if not has_counts:
+            return HasAll(*[item_name for item_name, _ in item_counts]).resolve(world)
+        item_counts.sort() # Order shouldn't matter for HasAllCounts.Resolved
         return self.Resolved(
-            item_counts,
+            tuple(item_counts),
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
