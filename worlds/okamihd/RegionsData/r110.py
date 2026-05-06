@@ -162,7 +162,7 @@ events = {
                                                power_slash_level=1)
     }
 }
-#TODO: Check basment chest, there's probably one or two missing
+
 locations = {
     RegionNames.MOON_CAVE: {
         "Moon Cave - 1F Chest on ledge in the kitchen": LocData(container_check_id(MapIds.MOON_CAVE, 11)),
@@ -170,6 +170,10 @@ locations = {
             lambda s, w: has_soup_ingerdients(s, w, 3) ),
         "Moon Cave - 1F Chest after 4 ingredients": LocData(container_check_id(MapIds.MOON_CAVE, 8),
                                                             special_rule=(lambda s, w: has_soup_ingerdients(s, w, 4))),
+    },
+    # TODO: CHECK IF THERE IS FIRE NEARBY
+    RegionNames.MOON_CAVE_B1F_LAKE: {
+        "Moon Cave B1F Chest behind ice" : LocData(container_check_id(MapIds.MOON_CAVE,14),required_items_events=[BrushTechniques.INFERNO])
     },
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE: {
         "Moon Cave - 1F locked cave Treasure bud behind bombable wall": LocData(container_check_id(MapIds.MOON_CAVE,10), type=LocationType.TREASURE_BUD)

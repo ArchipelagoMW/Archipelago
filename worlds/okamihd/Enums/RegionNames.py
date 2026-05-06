@@ -41,6 +41,7 @@ class RegionNames(StrEnum):
     SHINSHU_FIELD = "Shinshu Field"
     SHINSHU_FIELD_AGATA_CAVE = "Shinshu Field (Cave to Agata Forest)"
     TAMA_HOUSE = "Tama's house"
+    SHINSHU_PLATEAU="Shinshu Field Plateau"
 
     ## HANA VALLEY
     CURSED_HANA_VALLEY = "Cursed Hana Valley"

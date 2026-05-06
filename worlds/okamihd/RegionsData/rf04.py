@@ -75,7 +75,7 @@ locations = {
         "Agata Forest - Chest under leaf pile near Shinshu Field entrance": LocData(container_check_id(MapIds.HEALED_AGATA, 43),
                                                                                     type=LocationType.BURIED_UNDER_LEAF_PILE),
         "Agata Forest - Buried Chest under leaf pile near shortcut": LocData(container_check_id(MapIds.HEALED_AGATA, 44), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Agata Forest - Chest under leaf pile near river": LocData(container_check_id(MapIds.HEALED_AGATA, 45), type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Agata Forest - Chest under leaf pile near river": LocData(container_check_id(MapIds.HEALED_AGATA, 45), type=LocationType.BURIED_UNDER_LEAF_PILE,required_items_events=["Agata Forest - Repair Bridge with Kokari"]),
         "Agata Forest - Buried chest near Tsuta Ruins entrance": LocData(container_check_id(MapIds.HEALED_AGATA, 46), type=LocationType.STONE_BURIED_CHEST),
         "Agata Forest - Chest after Bridge cutscene": LocData(container_check_id(MapIds.HEALED_AGATA, 47),required_items_events=["Agata Forest - Repair Bridge with Kokari"]),
         "Agata Forest - Chest near Kiba": LocData(container_check_id(MapIds.HEALED_AGATA, 49)),

@@ -15,13 +15,17 @@ exits = {
     RegionNames.SHINSHU_FIELD: [
         ExitData("Cross Cave to Agata Forest", RegionNames.SHINSHU_FIELD_AGATA_CAVE, needs_long_swim=True),
         ExitData("Enter Tama's house", RegionNames.TAMA_HOUSE),
-        ExitData("To Moon Cave Entrance",RegionNames.MOON_CAVE_OUTSIDE)],
+        ExitData("To Moon Cave Entrance",RegionNames.MOON_CAVE_OUTSIDE),
+        ExitData("To Shinshu Plateau",RegionNames.SHINSHU_PLATEAU,has_events=["Shinshu Field - Climb on plateau"])],
     RegionNames.SHINSHU_FIELD_AGATA_CAVE: [ExitData('To Cursed Agata Forest', RegionNames.CURSED_AGATA_FOREST,
                                                     has_events=["Shinshu Field - Open Entrance to Agata Forest"])]
 }
 events = {
     RegionNames.SHINSHU_FIELD_AGATA_CAVE: {
         "Shinshu Field - Open Entrance to Agata Forest": EventData(cherry_bomb_level=1)
+    },
+    RegionNames.SHINSHU_FIELD:{
+        "Shinshu Field - Climb on plateau": EventData(required_items_events=[BrushTechniques.CATWALK])
     }
 }
 locations = {
@@ -54,6 +58,13 @@ locations = {
 
     RegionNames.TAMA_HOUSE: {
         "Shinshu Field - Bakigami": LocData(brush_check_id(25),type=LocationType.CONSTELLATION,special_rule=lambda s,w:night_time_check_rule(s,w))  # bit 25
+    },
+
+    RegionNames.SHINSHU_PLATEAU:{
+        "Shinshu Field - Buried Chest on Plateau near Ovens" : LocData(container_check_id(MapIds.HEALED_SHINSHU,113), type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Buried Chest on Plateau near Eastmost Clover": LocData(container_check_id(MapIds.HEALED_SHINSHU, 91),type=LocationType.BURIED_CHEST),
+        "Shinshu Field - Freestanding chest on Plateau behind Thunderhead": LocData(container_check_id(MapIds.HEALED_SHINSHU, 97)),
+        "Shinshu Field - Buried Chest on Plateau near Thunderhead": LocData(container_check_id(MapIds.HEALED_SHINSHU, 99), type=LocationType.BURIED_CHEST),
     }
 }
 
