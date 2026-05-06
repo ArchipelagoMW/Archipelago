@@ -531,7 +531,6 @@ class Or(NestedRule[TWorld], game="Archipelago"):
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         children_to_process = [c.resolve(world) for c in self.children]
         clauses: list[Rule.Resolved] = []
-        items: dict[str, int] = {}
 
         while children_to_process:
             child = children_to_process.pop(0)
@@ -545,29 +544,24 @@ class Or(NestedRule[TWorld], game="Archipelago"):
                 children_to_process.extend(child.children)
                 continue
 
-            if isinstance(child, Has.Resolved):
-                if child.item_name not in items or child.count < items[child.item_name]:
-                    items[child.item_name] = child.count
-            elif isinstance(child, HasAny.Resolved):
-                for item in child.item_names:
-                    items[item] = 1
-            elif isinstance(child, HasAnyCount.Resolved):
-                for item, count in child.item_counts:
-                    if item not in items or count < items[item]:
-                        items[item] = count
+            for i in range(len(clauses) - 1, -1, -1):
+                clause = clauses[i]
+                intersection = clause.combine_or(child, world)
+                if intersection is not None:
+                    if clause == intersection:
+                        # The child was destroyed, nothing new can happen
+                        break
+                    del clauses[i]
+                    if child != intersection:
+                        # This intersection might have new properties
+                        children_to_process.insert(0, intersection)
+                        break
             else:
+                # Only happens when break didn't happen
                 clauses.append(child)
 
-        if not clauses and not items:
+        if not clauses:
             return False_().resolve(world)
-
-        if len(items) == 1:
-            item, count = next(iter(items.items()))
-            clauses.append(Has(item, count).resolve(world))
-        elif items and all(count == 1 for count in items.values()):
-            clauses.append(HasAny(*items).resolve(world))
-        elif items:
-            clauses.append(HasAnyCount(items).resolve(world))
 
         if len(clauses) == 1:
             return clauses[0]
@@ -787,7 +781,7 @@ class Has(Rule[TWorld], game="Archipelago"):
                     if self.count < other_rule.count:
                         return other_rule
                     return self
-                return HasAll(self.item_name, other_rule.item_name).resolve(world)
+                return HasAllCounts({self.item_name: self.count, other_rule.item_name: other_rule.count}).resolve(world)
 
             if isinstance(other_rule, HasAll.Resolved):
                 if self.count > 1:
@@ -808,6 +802,37 @@ class Has(Rule[TWorld], game="Archipelago"):
 
             return None
 
+        @override
+        def combine_or(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+            result = super().combine_or(other_rule, world)
+            if result is not None:
+                return result
+
+            if isinstance(other_rule, Has.Resolved):
+                if self.item_name == other_rule.item_name:
+                    if self.count > other_rule.count:
+                        return other_rule
+                    return self
+                return HasAnyCount({self.item_name: self.count, other_rule.item_name: other_rule.count}).resolve(world)
+
+            if isinstance(other_rule, HasAny.Resolved):
+                if self.item_name in other_rule.item_names:
+                    return other_rule
+                if self.count > 1:
+                    items = dict.fromkeys(other_rule.item_names, 1)
+                    items[self.item_name] = self.count
+                    return HasAnyCount(items).resolve(world)
+
+                return HasAny(*other_rule.item_names, self.item_name).resolve(world)
+
+            if isinstance(other_rule, HasAnyCount.Resolved):
+                items = dict(other_rule.item_counts)
+                if self.item_name in items and self.count >= items[self.item_name]:
+                    return other_rule
+                items[self.item_name] = self.count
+                return HasAnyCount(items).resolve(world)
+
+            return None
 
 
 @dataclasses.dataclass(init=False)
@@ -934,12 +959,12 @@ class HasAll(Rule[TWorld], game="Archipelago"):
                 return result
 
             if isinstance(other_rule, Has.Resolved):
+                if other_rule.item_name in self.item_names:
+                    return self
                 if other_rule.count > 1:
                     items = dict.fromkeys(self.item_names, 1)
                     items[other_rule.item_name] = other_rule.count
                     return HasAllCounts(items).resolve(world)
-                if other_rule.item_name in self.item_names:
-                    return self
                 return HasAll(*self.item_names, other_rule.item_name).resolve(world)
 
             if isinstance(other_rule, HasAll.Resolved):
@@ -963,6 +988,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
                 return HasAllCounts(items).resolve(world)
 
             return None
+
 
 @dataclasses.dataclass(init=False)
 class HasAny(Rule[TWorld], game="Archipelago"):
@@ -1081,6 +1107,43 @@ class HasAny(Rule[TWorld], game="Archipelago"):
             items = ", ".join(self.item_names)
             return f"Has any of ({items})"
 
+        @override
+        def combine_or(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+            result = super().combine_or(other_rule, world)
+            if result is not None:
+                return result
+
+            if isinstance(other_rule, Has.Resolved):
+                if other_rule.item_name in self.item_names:
+                    return self
+                if other_rule.count > 1:
+                    items = dict.fromkeys(self.item_names, 1)
+                    items[other_rule.item_name] = other_rule.count
+                    return HasAllCounts(items).resolve(world)
+                return HasAny(*self.item_names, other_rule.item_name).resolve(world)
+
+            if isinstance(other_rule, HasAny.Resolved):
+                items = set(self.item_names)
+                items = items.union(other_rule.item_names)
+                if len(items) == len(self.item_names):
+                    return self
+                if len(items) == len(other_rule.item_names):
+                    return other_rule
+                return HasAny(*items).resolve(world)
+
+            if isinstance(other_rule, HasAnyCount.Resolved):
+                items = dict(other_rule.item_counts)
+                changed = False
+                for item_name in self.item_names:
+                    if item_name not in items or items[item_name] > 1:
+                        items[item_name] = 1
+                        changed = True
+                if not changed:
+                    return other_rule
+                return HasAnyCount(items).resolve(world)
+
+            return None
+
 
 @dataclasses.dataclass()
 class HasAllCounts(Rule[TWorld], game="Archipelago"):
@@ -1109,7 +1172,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
             return Has(item, self.item_counts[item]).resolve(world)
         if not has_counts:
             return HasAll(*[item_name for item_name, _ in item_counts]).resolve(world)
-        item_counts.sort() # Order shouldn't matter for HasAllCounts.Resolved
+        item_counts.sort()  # Order shouldn't matter for HasAllCounts.Resolved
         return self.Resolved(
             tuple(item_counts),
             player=world.player,
@@ -1224,7 +1287,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
 
             if isinstance(other_rule, Has.Resolved):
                 items = dict(self.item_counts)
-                if other_rule.item_name in items and items[other_rule.item_name] >= other_rule.count:
+                if other_rule.item_name in items and items[other_rule.item_name] <= other_rule.count:
                     return self
                 items[other_rule.item_name] = other_rule.count
                 return HasAllCounts(items).resolve(world)
@@ -1258,15 +1321,27 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        item_counts: list[tuple[str, int]] = []
+        has_counts = False
+        for item_name, count in self.item_counts.items():
+            resolved_count = resolve_field(count, world, int)
+            if resolved_count == 0:
+                continue
+            if resolved_count > 1:
+                has_counts = True
+            item_counts.append((item_name, resolved_count))
+
         if len(self.item_counts) == 0:
             # match state.has_any_count
             return False_().resolve(world)
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
-        item_counts = tuple((name, resolve_field(count, world, int)) for name, count in self.item_counts.items())
+        if not has_counts:
+            return HasAny(*[item_name for item_name, _ in item_counts]).resolve(world)
+        item_counts.sort()  # Order shouldn't matter for HasAllCounts.Resolved
         return self.Resolved(
-            item_counts,
+            tuple(item_counts),
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
@@ -1370,6 +1445,38 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
         def __str__(self) -> str:
             items = ", ".join([f"{item} x{count}" for item, count in self.item_counts])
             return f"Has any of ({items})"
+
+        @override
+        def combine_or(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+            result = super().combine_or(other_rule, world)
+            if result is not None:
+                return result
+
+            if isinstance(other_rule, Has.Resolved):
+                items = dict(self.item_counts)
+                if other_rule.item_name in items and items[other_rule.item_name] >= other_rule.count:
+                    return self
+                items[other_rule.item_name] = other_rule.count
+                return HasAnyCount(items).resolve(world)
+
+            if isinstance(other_rule, HasAny.Resolved):
+                items = dict(self.item_counts)
+                changed = False
+                for item_name in other_rule.item_names:
+                    if item_name not in items or items[item_name] > 1:
+                        items[item_name] = 1
+                        changed = True
+                if not changed:
+                    return other_rule
+                return HasAnyCount(items).resolve(world)
+
+            if isinstance(other_rule, HasAnyCount.Resolved):
+                items = dict(self.item_counts)
+                for item, count in other_rule.item_counts:
+                    items[item] = min(items[item], count)
+                return HasAnyCount(items).resolve(world)
+
+            return None
 
 
 @dataclasses.dataclass(init=False)
