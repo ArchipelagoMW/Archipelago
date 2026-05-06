@@ -473,11 +473,11 @@ class And(NestedRule[TWorld], game="Archipelago"):
                     if clause == intersection:
                         # The child was destroyed, nothing new can happen
                         break
+                    del clauses[i]
                     if child != intersection:
                         # This intersection might have new properties
-                        children_to_process.append(intersection)
+                        children_to_process.insert(0, intersection)
                         break
-                    del clauses[i]
             else:
                 # Only happens when break didn't happen
                 clauses.append(child)
@@ -1229,8 +1229,9 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
                 return HasAllCounts(items).resolve(world)
 
             if isinstance(other_rule, HasAllCounts.Resolved):
-                items = dict(self.item_counts) & dict(other_rule.item_counts)
-                # Checking intersection is costly, it's probably not worth it to check it
+                items = dict(self.item_counts)
+                for item, count in other_rule.item_counts:
+                    items[item] = max(items[item], count)
                 return HasAllCounts(items).resolve(world)
 
             return None
