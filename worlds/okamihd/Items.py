@@ -106,7 +106,7 @@ brush_techniques_items = {
 equips = {
 
     # Equips
-    # "Water Tablet": ItemData(0x9c, ItemClassification.progression),
+    "Water Tablet": ItemData(0x9c, ItemClassification.progression),
     "Peace Bell": ItemData(0x0b, ItemClassification.useful),
     "Golden Lucky Cat": ItemData(0x95, ItemClassification.useful),
     "Thief's Glove": ItemData(0x96, ItemClassification.useful),
