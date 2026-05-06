@@ -34,7 +34,11 @@ class QuestLogic(BaseLogic):
 
     def initialize_rules(self):
         self.update_rules({
-            Quest.introductions: True_(),
+            # NOTE: Robin and Lewis start met, so they aren't needed for introductions
+            Quest.introductions: self.logic.relationship.can_meet_all(NPC.alex, NPC.elliott, NPC.harvey, NPC.sam, NPC.sebastian, NPC.shane, NPC.abigail,
+                                                                      NPC.emily, NPC.haley, NPC.leah, NPC.maru, NPC.penny, NPC.caroline, NPC.clint,
+                                                                      NPC.demetrius, NPC.evelyn, NPC.george, NPC.gus, NPC.jas, NPC.linus, NPC.marnie,
+                                                                      NPC.pam, NPC.pierre, NPC.vincent, NPC.willy, NPC.wizard),
             Quest.how_to_win_friends: self.logic.quest.can_complete_quest(Quest.introductions),
             Quest.getting_started: self.logic.has(Vegetable.parsnip),
             Quest.to_the_beach: self.logic.region.can_reach(Region.beach),
