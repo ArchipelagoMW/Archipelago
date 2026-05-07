@@ -2546,6 +2546,8 @@ class KirbyAmClient(BizHawkClient):
         try:
             doors_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(rom_doors_idx_addr, 2, "ROM")]))[0]
         except (bizhawk.RequestFailedError, bizhawk.ConnectorError, bizhawk.SyncError, TypeError, AttributeError):
+            if room_changed and previous_room_region_key:
+                await self._stage_boss_room_departure_fallback(ctx, previous_room_region_key)
             logger.info(
                 "KirbyAM: room entry — native=0x%04x (doorsIdx lookup failed)",
                 native_room_id,
@@ -2554,6 +2556,8 @@ class KirbyAmClient(BizHawkClient):
             return
 
         if len(doors_raw) != 2:
+            if room_changed and previous_room_region_key:
+                await self._stage_boss_room_departure_fallback(ctx, previous_room_region_key)
             return
 
         doors_idx = unpack_from("<H", doors_raw)[0]
@@ -2561,7 +2565,7 @@ class KirbyAmClient(BizHawkClient):
         room_region_key = self._room_region_key_by_doors_idx.get(doors_idx, "")
         self._last_room_region_key = room_region_key
 
-        if room_changed and previous_room_region_key and previous_room_region_key != room_region_key:
+        if room_changed and previous_room_region_key:
             await self._stage_boss_room_departure_fallback(ctx, previous_room_region_key)
 
         if room_changed:
