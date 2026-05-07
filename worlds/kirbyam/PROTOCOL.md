@@ -385,7 +385,7 @@ Boss shard scrub timing contract (Issue #505):
 
 **Behavior notes:**
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
-- Hub-switch polling suppresses only pre-session baseline bits on first poll when server state is empty, preventing stale EWRAM bits from being resent as fresh checks.
+- Hub-switch polling suppresses only pre-session baseline bits on first poll when no hub-switch checks are yet acknowledged by the server, preventing stale EWRAM bits from being resent as fresh checks.
 - No checks are sent for bits already in `server_checked_locations`.
 - No checks are sent for reserved/unmapped bits even when set.
 - Boss-defeat, major-chest, vitality-chest, sound-player-chest, hub-switch, and room-sanity polling follow the same resend/dedupe diagnostic contract.

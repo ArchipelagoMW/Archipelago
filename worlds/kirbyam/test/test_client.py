@@ -857,6 +857,30 @@ async def test_poll_hub_switch_suppresses_pre_session_stale_bits(mock_bizhawk_co
 
 
 @pytest.mark.asyncio
+async def test_poll_hub_switch_suppresses_pre_session_stale_bits_with_unrelated_server_checks(mock_bizhawk_context):
+    """First-poll stale hub-switch bits should still be baselined when only non-hub checks are acknowledged."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    unrelated_location = next(
+        loc.location_id
+        for loc in data.locations.values()
+        if loc.location_id is not None and loc.category != LocationCategory.HUB_SWITCH
+    )
+    mock_bizhawk_context.checked_locations = {unrelated_location}
+
+    with patch.dict(data.transport_ram_addresses, {"hub_switch_flags": 0x0203B04C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        mock_read.return_value = [((1 << 0)).to_bytes(4, 'little')]
+
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+
+    mock_send.assert_not_awaited()
+
+
+@pytest.mark.asyncio
 async def test_poll_hub_switch_skips_already_server_acknowledged(mock_bizhawk_context):
     """No hub-switch resend when server already acknowledges all mapped transport checks."""
     client = KirbyAmClient()

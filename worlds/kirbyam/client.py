@@ -305,6 +305,11 @@ class KirbyAmClient(BizHawkClient):
             fallback_ids = self._hub_switch_location_ids_by_bit.setdefault(15, [])
             if rr_north.location_id not in fallback_ids:
                 fallback_ids.append(rr_north.location_id)
+        self._hub_switch_location_ids_all: set[int] = {
+            location_id
+            for location_ids in self._hub_switch_location_ids_by_bit.values()
+            for location_id in location_ids
+        }
 
         # Room-sanity bitfield index (doorsIdx) → location IDs.
         self._room_sanity_location_ids_by_bit: dict[int, list[int]] = {}
@@ -2405,15 +2410,17 @@ class KirbyAmClient(BizHawkClient):
             self._hub_switch_baseline_mask = None
 
         # Capture baseline only on first hub-switch poll of a session when the server
-        # has not yet acknowledged any locations. This suppresses pre-session stale
-        # transport bits while avoiding suppression when the session is already active.
+        # has not yet acknowledged any hub-switch locations. This suppresses
+        # pre-session stale transport bits without suppressing legitimate reconnect
+        # resends for hub-switch checks that the server already knows about.
+        has_hub_switch_acknowledgements = bool(self._hub_switch_location_ids_all & ctx.checked_locations)
         if not self._hub_switch_session_initialized:
             self._hub_switch_session_initialized = True
-            if self._hub_switch_baseline_mask is None and switch_bits != 0 and not ctx.checked_locations:
+            if self._hub_switch_baseline_mask is None and switch_bits != 0 and not has_hub_switch_acknowledgements:
                 self._hub_switch_baseline_mask = switch_bits
                 self._log_verbose(
                     "info",
-                    "KirbyAM: hub-switch baseline initialized from first-poll transport state before any server acknowledgements (baseline=0x%08X)",
+                    "KirbyAM: hub-switch baseline initialized from first-poll transport state before any hub-switch server acknowledgements (baseline=0x%08X)",
                     switch_bits,
                 )
 
