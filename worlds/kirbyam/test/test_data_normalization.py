@@ -42,3 +42,22 @@ def test_hub_switch_moonlight_and_peppermint_east_mapping() -> None:
     assert moonlight.location_id == 3960411
     assert peppermint_east.bit_index == 10
     assert peppermint_east.location_id == 3960410
+
+
+def test_hub_switch_labels_match_expected_location_ids() -> None:
+    expected_labels_by_location_id = {
+        3960401: "Peppermint Palace East - Big Switch",
+        3960402: "Cabbage Cavern East - Big Switch",
+        3960404: "Candy Constellation - Big Switch",
+        3960410: "Rainbow Route East - Big Switch",
+        3960412: "Rainbow Route South - Big Switch",
+        3960414: "Rainbow Route West - Big Switch",
+    }
+
+    labels_by_location_id = {
+        location.location_id: location.label
+        for location in kirby_data.locations.values()
+        if location.location_id in expected_labels_by_location_id
+    }
+
+    assert labels_by_location_id == expected_labels_by_location_id
