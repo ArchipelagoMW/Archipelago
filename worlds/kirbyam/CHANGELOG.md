@@ -11,6 +11,24 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### New Features
 
+- None.
+
+### Improvements
+
+- None.
+
+### Bug Fixes
+
+- None.
+
+### Internal Changes
+
+- None.
+
+## v0.2.2
+
+### New Features
+
 - Expanded `MINOR_CHEST` AP checks by enabling additional unique native small-chest bit mappings across multiple areas while keeping ambiguous/reused-bit mappings deferred.
 
 ### Improvements
