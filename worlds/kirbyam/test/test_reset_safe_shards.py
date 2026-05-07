@@ -3,7 +3,6 @@
 import re
 import sys
 import os
-import importlib.util
 
 # Prevent stdlib types module shadowing
 _SCRIPT_DIR = os.path.realpath(os.path.dirname(__file__))
@@ -13,7 +12,7 @@ for path_entry in list(sys.path):
     if resolved == _WORLD_DIR:
         sys.path.remove(path_entry)
 
-import pytest
+import pytest  # noqa: E402
 
 
 def test_shard_persistence_addresses_defined():
@@ -22,15 +21,15 @@ def test_shard_persistence_addresses_defined():
     # - SRAM_BASE (0x0E000000)
     # - SRAM_SHARD_FIELD_OFFSET (0x12)
     # - SRAM_CHECKSUM_1/2/3 offsets (0x18, 0x1A, 0x1C)
-    
+
     # This is verified at compile time in ap_payload.c, so this test
     # confirms the implementation exists and is documented.
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
     assert os.path.exists(payload_path), "ap_payload.c should exist"
-    
+
     with open(payload_path, 'r') as f:
         content = f.read()
-    
+
     # Verify SRAM definitions are present
     assert "SRAM_BASE" in content, "SRAM_BASE should be defined"
     assert "SRAM_SHARD_FIELD_OFFSET" in content, "SRAM_SHARD_FIELD_OFFSET should be defined"
@@ -41,10 +40,10 @@ def test_shard_persistence_addresses_defined():
 def test_shard_persistence_function_exists():
     """Verify persist_shard_to_sram function is called when granting shards."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
-    
+
     with open(payload_path, 'r') as f:
         content = f.read()
-    
+
     # Verify the function is defined
     assert "persist_shard_to_sram(new_shard_flags)" in content, \
         "persist_shard_to_sram should be called when granting shards"
@@ -120,7 +119,12 @@ def test_payload_tracks_sound_player_chest_checks_and_ap_unlock_apply():
 
 
 def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
-    """Verify world-map big-switch unlock callbacks set dedicated AP hub-switch check flags."""
+    """Verify world-map unlock hook records AP hub-switch checks using the task +0x08 index.
+
+    Decomp reference (katam): `sub_08039ED4` dispatches unlock callbacks from
+    `gUnk_0834BD94` using `ldrh [task, #8]`. The AP hook must read the same
+    halfword and set `AP_HUB_SWITCH_FLAGS` based on that runtime index.
+    """
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
     with open(payload_path, 'r') as f:
@@ -129,21 +133,37 @@ def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
     assert "AP_HUB_SWITCH_FLAGS" in content, "Hub switch transport register should be defined"
     assert "ap_set_hub_switch_flag" in content, "Hub switch flag helper should exist"
     assert "ap_on_world_map_unlock_call" in content, "World-map unlock hook target should exist"
-    assert "door_index" in content, "World-map unlock hook should read the unlock door index"
+    assert "task_ptr + 0x08u" in content, "Hook should read the world-map unlock task index at +0x08"
+    assert "unlock_fn();" in content, "Hook should preserve native unlock callback behavior"
+
+    hook_match = re.search(
+        r"void\s+ap_on_world_map_unlock_call[^{]*\{(?P<body>.*?)^}",
+        content,
+        flags=re.DOTALL | re.MULTILINE,
+    )
+    assert hook_match is not None, "ap_on_world_map_unlock_call definition must exist"
+    hook_body = hook_match.group("body")
+
+    assert "door_index = *(volatile uint16_t*)(task_ptr + 0x08u);" in hook_body, (
+        "Hook should read world-map unlock index from task +0x08"
+    )
+    assert "ap_set_hub_switch_flag((uint32_t)door_index);" in hook_body, (
+        "Hook should map task index directly into AP_HUB_SWITCH_FLAGS"
+    )
 
 
 def test_sram_checksum_fields_updated():
     """Verify that checksum fields are updated alongside shard persistence."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
-    
+
     with open(payload_path, 'r') as f:
         content = f.read()
-    
+
     # Verify checksum update logic exists
     assert "SRAM_CHECKSUM_1 = " in content, "Checksum 1 should be updated"
     assert "SRAM_CHECKSUM_2 = " in content, "Checksum 2 should be updated"
     assert "SRAM_CHECKSUM_3 = " in content, "Checksum 3 should be updated"
-    
+
     # Verify they use the shard bitfield value
     assert "new_shard_bitfield" in content, "Checksums should be derived from shard bitfield"
 
@@ -151,14 +171,14 @@ def test_sram_checksum_fields_updated():
 def test_issue_109_addresses_documented():
     """Verify Issue #109 addresses are documented in the payload."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
-    
+
     with open(payload_path, 'r') as f:
         content = f.read()
-    
+
     # Verify the specific candidate SRAM addresses are in some form
     # Issue #109 mentions: 000018, 00001A, 00001C, 00032C, 00032E, 000330
     # Our implementation uses: 0x12 (18), 0x18 (24), 0x1A (26), 0x1C (28)
-    
+
     # These are in the ranges mentioned in Issue #109
     assert "0x12" in content or "18" in content, "SRAM offset 0x12 should be defined"
     assert "0x18" in content or "24" in content, "SRAM offset 0x18 should be defined"
