@@ -1927,6 +1927,11 @@
             { "item": "Trick - Bow Hover" }, // across first gap
             { "item": "Cloud Leap" },
             { "item": "Tai-Chi Kick" }
+        ],
+        "ls_requires": [
+            { "item": "Ledge Grab" }, // parry hover
+            { "item": "Cloud Leap" },
+            { "item": "Tai-Chi Kick" }
         ]
     },
     {
@@ -1967,7 +1972,8 @@
         "medium_requires": [
             { "item": "Trick - Bow Hover" },
             { "item": "Ledge Grab" } // just low enough you still need to grab the ledge left of node
-        ]
+        ],
+        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // parry hover
     },
     {
         "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Top Of TCK Platform Tutorial Room",
