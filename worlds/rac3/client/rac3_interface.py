@@ -13,7 +13,7 @@ from worlds.rac3.client.texthelper import (ITEM_TO_ORIGINAL_STRING_POINTER_OFFSE
                                            remove_accents, TEXT_BYTE_TO_EXPECTED_WIDTH)
 from worlds.rac3.constants.action_type import RAC3ACTIONTYPE
 from worlds.rac3.constants.check_type import CHECKTYPE
-from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
+from worlds.rac3.constants.data.address import RAC3ADDRESSDATA, SAVE_DATA
 from worlds.rac3.constants.data.item import (armor_data, cheat_data, equipable_data, gadget_data, infobot_data,
                                              ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID, non_prog_weapon_data,
                                              PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data)
@@ -386,19 +386,9 @@ class Rac3Interface(GameInterface):
 
     def undo_collections(self):
         """Unset flags in the game associated to randomizer locations"""
-        self.health = self._read8(RAC3STATUS.HEALTH)
         checks: dict[int, set[int]] = {}
-        sewer, nano = 0, 0
         for location in RAC3_LOCATION_DATA_TABLE.values():
-            if RAC3TAG.SEWER in location.TAGS:
-                if not sewer:
-                    # self._write8(location.CHECK_ADDRESS[0].ADDRESS, 0)  # Reset to 0 Crystals
-                    sewer += 1
-                continue
-            if RAC3TAG.NANOTECH in location.TAGS:
-                if not nano:
-                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 10)  # Reset to 10 Health
-                    nano += 1
+            if RAC3TAG.SEWER in location.TAGS or RAC3TAG.NANOTECH in location.TAGS:
                 continue
             for check in location.CHECK_ADDRESS:
                 if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
@@ -431,9 +421,24 @@ class Rac3Interface(GameInterface):
             self._write_bits(address, value)
         return output
 
-    def fix_health(self):
-        """Set the player health back to the value before we reset"""
-        self._write8(RAC3STATUS.HEALTH, self.health)
+    def load_save(self, save: dict[int, tuple[int, int]]):
+        """Set the player's current values based on the server's save-data"""
+        if self.main_menu:
+            return
+        logger.debug(f"Save data: {save}")
+        defaults: dict[int, tuple[int, int]] = {data.ADDRESS: (data.TYPE, data.VALUE) for data in SAVE_DATA}
+        logger.debug(f"Default values: {defaults}")
+        for address, data in save.items():
+            if data == defaults[address]:  # Skip writing default values
+                continue
+            size, value = data
+            match size:
+                case CHECKTYPE.BYTE:
+                    self._write8(address, value)
+                case CHECKTYPE.SHORT:
+                    self._write16(address, value)
+                case CHECKTYPE.INT:
+                    self._write32(address, value)
 
     def reset_death_count(self):
         """Update the tracked death count to the value in game"""
@@ -2429,6 +2434,20 @@ class Rac3Interface(GameInterface):
         self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
         self._write_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER), 1.0)
+
+    def update_save(self) -> dict[int, tuple[int, int]]:
+        """Check if the game save is different to the server"""
+        save: dict[int, tuple[int, int]] = {}
+        for data in SAVE_DATA:
+            match data.TYPE:
+                case CHECKTYPE.BYTE:
+                    save[data.ADDRESS] = (data.TYPE, self._read8(data.ADDRESS))
+                case CHECKTYPE.SHORT:
+                    save[data.ADDRESS] = (data.TYPE, self._read16(data.ADDRESS))
+                case CHECKTYPE.INT:
+                    save[data.ADDRESS] = (data.TYPE, self._read32(data.ADDRESS))
+
+        return save
 
     #######################
     # Command Only        #

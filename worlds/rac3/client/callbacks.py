@@ -182,7 +182,8 @@ async def _handle_game_ready(ctx: "Context") -> None:
                 checks.add(ctx.location_names.lookup_in_slot(loc, ctx.slot))
             counter = len(ctx.game_interface.collect_locations(checks))
             logger.info(f"Locations collected: {counter}")
-            ctx.game_interface.fix_health()
+            logger.info("Updating save data...")
+            ctx.game_interface.load_save(ctx.save_data)
             ctx.game_interface.reset_death_count()
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()
@@ -239,6 +240,8 @@ async def update(ctx: "Context") -> None:
     # Check sequence breaks
     await handle_sequence_break(ctx)
     ctx.game_interface.late_update()
+    # Save to the server
+    await handle_save(ctx)
     # logger.info(f"Update is called")
 
 
@@ -461,3 +464,20 @@ async def handle_sequence_break(ctx: "Context") -> None:
     if ctx.slot_data is None:
         return
     ctx.game_interface.sequence_break()
+
+
+async def handle_save(ctx: "Context") -> None:
+    """Checks if any memory values need to be saved to the server"""
+    if ctx.slot_data is None or ctx.slot is None:
+        return
+    if ctx.data_received:
+        local_save = ctx.game_interface.update_save()
+        logger.debug(f"local_save : {local_save}")
+        logger.debug(f"server_save: {ctx.save_data}")
+        if not (local_save == ctx.save_data):
+            logger.debug("Sending new save data to server")
+            ctx.data_received = False
+            ctx.save_data = local_save
+            await ctx.send_msgs([ClientMessage.update_save(ctx.uuid, local_save)])
+    else:
+        logger.debug("Waiting for save data from server")

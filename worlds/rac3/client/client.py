@@ -3,6 +3,7 @@ from asyncio import create_task, run, sleep, Task
 from multiprocessing import freeze_support
 from time import time
 
+import Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import NetworkItem
 from Utils import Any, async_start, init_logging
@@ -10,6 +11,8 @@ from worlds.rac3.client.callbacks import handle_respawn, pcsx2_sync_task, update
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.rac3_interface import Rac3Interface
 from worlds.rac3.client.texthelper import colorize_item_name
+from worlds.rac3.constants.check_type import CHECKTYPE
+from worlds.rac3.constants.data.address import SAVE_DATA
 from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.items import RAC3ITEM
@@ -315,6 +318,7 @@ class CommandProcessor(ClientCommandProcessor):
 class Rac3Context(CommonContext):
     """Class for handling server connection with the game client"""
     # Client variables
+    uuid: str
     already_hinted: set[int] = set()
     command_processor = CommandProcessor
     current_planet: str = RAC3REGION.GALAXY
@@ -337,10 +341,14 @@ class Rac3Context(CommonContext):
     last_deathlink_sender: str | None = None
     code_cave_setup: bool = False
     data_package: int = 0
+    data_received: bool = False
+    save_data: dict[int, tuple[int, int]] = {}
 
     def __init__(self, server_address: str, password: str):
         super().__init__(server_address, password)
         self.game_interface = Rac3Interface()
+        self.uuid = Utils.get_unique_identifier()
+        self.save_data = {data.ADDRESS: (data.TYPE, data.VALUE) for data in SAVE_DATA}
 
     def on_deathlink(self, data: dict[str, Any]) -> None:
         text = data.get("cause", "")
@@ -379,8 +387,10 @@ class Rac3Context(CommonContext):
             self.locations_scouted = self.server_locations
             self.code_cave_setup = False
             async_start(self.send_msgs([ClientMessage.location_scouts(list(self.server_locations))]))
-            # async_start(self.send_msgs([{"cmd": "GetDataPackage", "games": [RAC3OPTION.PROCESSED_LOCATIONS]}]))
-
+            async_start(self.send_msgs([{"cmd": "GetDataPackage", "games": [RAC3OPTION.GAME_TITLE_FULL]}]))
+            self.data_received = False
+            async_start(self.send_msgs([ClientMessage.get_save(self.uuid)]))
+            logger.debug(f"Requested Save Data on Connection")
             # Set death link tag if it was requested in options
             if RAC3OPTION.DEATHLINK in self.slot_data:
                 if self.slot_data[RAC3OPTION.DEATHLINK]:
@@ -392,9 +402,32 @@ class Rac3Context(CommonContext):
         if cmd == "DataPackage":
             logger.debug(f"Data Package received with args {args}")
             if RAC3OPTION.GAME_TITLE_FULL in args["data"]["games"]:
-                self.data_package = args["data"]["games"][RAC3OPTION.GAME_TITLE_FULL][RAC3OPTION.PROCESSED_LOCATIONS]
+                self.data_package = args["data"]["games"][RAC3OPTION.GAME_TITLE_FULL]
                 logger.debug(f"Data Package updated: {self.data_package}")
                 async_start(self.send_msgs([{"cmd": "Sync"}]))
+                # logger.debug(f"Requesting Save Data from server for slot {self.uuid}")
+                # self.data_received = False
+                # async_start(self.send_msgs([ClientMessage.get_save(self.uuid)]))
+
+        if cmd == "Retrieved":
+            logger.debug(f"{cmd} server packet: {args}")
+            if args["keys"]:
+                if f"{self.uuid}_save_data" in args["keys"]:
+                    logger.debug(f"Save Data recieved")
+                    self.data_received = True
+                    if args["keys"][f"{self.uuid}_save_data"]:
+                        logger.debug(f"Valid Save data from Server {args['keys'][f'{self.uuid}_save_data']}")
+                        for address, data in args["keys"][f"{self.uuid}_save_data"].items():
+                            self.save_data.update({int(address): (CHECKTYPE(data[0]), data[1])})
+                        self.game_interface.load_save(self.save_data)
+
+        if cmd == "SetReply":
+            logger.debug(f"{cmd} server packet: {args}")
+            if args["key"]:
+                if f"{self.uuid}_save_data" == args["key"]:
+                    logger.debug(f"Save Data recieved by the server")
+                    self.data_received = True
+
         if cmd == "PrintJSON":
             if args.get("type") == "Hint" and self.is_connected_to_game and not self.main_menu:
                 net_item: NetworkItem | None = args.get("item")

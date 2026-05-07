@@ -1,6 +1,8 @@
 """This module provides utilities to aid sending messages to the server"""
+from typing import Any
 
 from NetUtils import ClientStatus
+from worlds.rac3.constants.data.address import SAVE_DATA
 from worlds.rac3.constants.options import RAC3OPTION
 
 
@@ -8,22 +10,25 @@ class ClientMessage:
     """Packages data into the message structure to be sent to the server"""
     cmd: str
     key: str | None = None
-    default: str | None = None
+    keys: list[str] | None = None
+    default: Any | None = None
     want_reply: bool = False
-    operations: list[dict[str, str | int]] | None = None
+    operations: list[dict[str, Any]] | None = None
     status: ClientStatus | None = None
     locations: list[int] | None = None
 
     def __init__(self,
                  cmd,
                  key: str | None = None,
-                 default: str | None = None,
+                 keys: list[str] | None = None,
+                 default: Any | None = None,
                  want_reply: bool = False,
-                 operations: list[dict[str, str | int]] | None = None,
+                 operations: list[dict[str, Any]] | None = None,
                  status: ClientStatus | None = None,
                  locations: list[int] | None = None):
         self.cmd = cmd
         self.key = key
+        self.keys = keys
         self.default = default
         self.want_reply = want_reply
         self.operations = operations
@@ -38,7 +43,32 @@ class ClientMessage:
             if attr == "__dict__":
                 output.update(getattr(self, attr))
                 # print("Added to Output")
-        return output
+                break
+        attributes = {}
+        for key, value in output.items():
+            if value is not None:
+                attributes.update({key: value})
+        return attributes
+
+    @staticmethod
+    def get_save(uuid: str) -> dict:
+        """Constructs a message for getting save data from the server"""
+        cmd = "Get"
+        keys = [f"{uuid}_save_data"]
+        return ClientMessage(cmd, keys=keys, want_reply=True).output()
+
+    @staticmethod
+    def update_save(uuid: str, data: dict[int, tuple[int, int]]) -> dict:
+        """Constructs a message for updating save data on the server"""
+        cmd = "Set"
+        key = f"{uuid}_save_data"
+        default = {data.ADDRESS: (data.TYPE, data.VALUE) for data in SAVE_DATA}
+        want_reply = True
+        operations = [{
+            "operation": "update",
+            "value": data,
+        }]
+        return ClientMessage(cmd, key=key, default=default, want_reply=want_reply, operations=operations).output()
 
     @staticmethod
     def set_map(slot: int | None, team: int | None, planet: str) -> dict:
