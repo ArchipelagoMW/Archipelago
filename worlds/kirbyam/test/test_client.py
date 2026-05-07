@@ -967,7 +967,7 @@ async def test_poll_room_entry_logging_logs_only_on_room_change(mock_bizhawk_con
         "REGION_TEST_ROOM",
         0x0010,
         42,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -1010,7 +1010,7 @@ async def test_poll_room_entry_logging_reads_doors_idx_from_rom_lookup(mock_bizh
         "REGION_LOOKUP_ROOM",
         native_room_id,
         7,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -1033,7 +1033,7 @@ async def test_poll_room_entry_logging_handles_rom_lookup_failure(mock_bizhawk_c
     mock_logger.info.assert_called_once_with(
         "KirbyAM: room entry — native=0x%04x (doorsIdx lookup failed)",
         0x0003,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
     assert client._last_room_region_key == ""
 
@@ -1092,7 +1092,7 @@ async def test_poll_room_entry_logging_retries_after_short_rom_read(mock_bizhawk
         "REGION_RETRY_ROOM",
         0x0008,
         11,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -1158,7 +1158,7 @@ async def test_poll_room_entry_logging_retries_after_bounce_send_failure(mock_bi
         "REGION_SEND_RETRY_ROOM",
         0x0020,
         12,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -1719,11 +1719,12 @@ async def test_deliver_items_fast_forward_log_is_file_only(mock_bizhawk_context)
     ]
     assert matching_disabled
     assert all(call.kwargs.get("extra", {}).get("NoStream") is True for call in matching_disabled)
+    assert all(call.kwargs.get("extra", {}).get("skip_gui") is True for call in matching_disabled)
     mock_logger.info.assert_any_call(
         "KirbyAM: ROM delivery counter moved forward from %s to %s on pending ACK; fast-forwarding client delivery cursor",
         0,
         2,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -1759,7 +1760,7 @@ async def test_deliver_items_mailbox_write_log_is_file_only(mock_bizhawk_context
         0,
         "1 Up",
         "Player 1",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -2214,7 +2215,7 @@ async def test_receive_notification_queue_log_emitted_file_only(mock_bizhawk_con
         "Mirror Shard",
         "PlayerTwo",
         1,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -2573,7 +2574,7 @@ def test_send_notification_queue_log_emitted_file_only(mock_bizhawk_context):
         "Player 1",
         "PlayerTwo",
         "Location 123",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -2604,6 +2605,7 @@ async def test_room_sanity_resend_log_is_file_only(mock_bizhawk_context):
     ]
     assert matching_disabled
     assert all(call.kwargs.get("extra", {}).get("NoStream") is True for call in matching_disabled)
+    assert all(call.kwargs.get("extra", {}).get("skip_gui") is True for call in matching_disabled)
 
 
 @pytest.mark.asyncio
@@ -2844,7 +2846,7 @@ async def test_enforce_no_extra_lives_log_is_file_only(mock_bizhawk_context):
     mock_logger.info.assert_any_call(
         "KirbyAM debug: no-extra-lives clamped native lives from %s to 0",
         1,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -3194,12 +3196,12 @@ async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
                 "KirbyAM: BizHawk request failed during watcher tick; waiting for reconnect (%s)",
                 "Connection timed out",
             ),
-            {"extra": {"NoStream": True}},
+            {"extra": {"NoStream": True, "skip_gui": True}},
         ),
         (
             bizhawk.NotConnectedError(),
             ("KirbyAM: BizHawk disconnected during watcher tick; waiting for reconnect",),
-            {"extra": {"NoStream": True}},
+            {"extra": {"NoStream": True, "skip_gui": True}},
         ),
     ],
 )
@@ -3415,7 +3417,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         assert client._last_unsafe_delivery_counter_values == {}
         mock_logger.info.assert_any_call(
             "KirbyAM: AP session ready; reconnect-safe reconciliation active",
-            extra={"NoStream": True},
+            extra={"NoStream": True, "skip_gui": True},
         )
         mock_load.assert_awaited_once()
         mock_reconcile_maps.assert_awaited()
@@ -3467,7 +3469,7 @@ async def test_game_watcher_reconnect_entry_emits_file_only_session_ready_log(mo
 
     mock_logger.info.assert_any_call(
         "KirbyAM: AP session ready; reconnect-safe reconciliation active",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -3705,7 +3707,7 @@ async def test_game_watcher_emits_file_only_runtime_gate_logs(mock_bizhawk_conte
         "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
         "non_gameplay_tutorial_or_menu",
         0,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -3746,11 +3748,11 @@ async def test_game_watcher_emits_runtime_gate_logs_file_only(mock_bizhawk_conte
         "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
         "non_gameplay_tutorial_or_menu",
         0,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
     mock_logger.info.assert_any_call(
         "KirbyAM: gameplay-active state restored; resuming normal watcher flow",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -4220,7 +4222,7 @@ async def test_poll_enemy_ability_reroll_events_treats_counter_rollback_as_reset
         "Kirby P3",
         "UNKNOWN_NULL_SRC_0x00123456",
         "Burning",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
     mock_logger.info.assert_any_call(
         "KirbyAM reroll telemetry detail: kirby_index=%d, source_kind=%s(%d), callsite=0x%08X, raw_source=0x%08X.",
@@ -4229,7 +4231,7 @@ async def test_poll_enemy_ability_reroll_events_treats_counter_rollback_as_reset
         2,
         0x0806F7A0,
         0x00123456,
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -4263,7 +4265,7 @@ async def test_poll_enemy_ability_reroll_events_resolves_rom_domain_source_addre
         "Kirby P1",
         "FLAMER",
         "Burning",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -4297,7 +4299,7 @@ async def test_poll_enemy_ability_reroll_events_resolves_alternate_golem_form_ad
         "Kirby P2",
         "GOLEM",
         "Wheel",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -4331,7 +4333,7 @@ async def test_poll_enemy_ability_reroll_events_resolves_large_mr_frosty_ice_cub
         "Kirby P4",
         "MR_FROSTY_ICE_CUBE",
         "Normal",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 
@@ -4365,7 +4367,7 @@ async def test_poll_enemy_ability_reroll_events_resolves_boxy_spawned_object(moc
         "Kirby P1",
         "BOXY_SPAWNED_OBJECT",
         "Parasol",
-        extra={"NoStream": True},
+        extra={"NoStream": True, "skip_gui": True},
     )
 
 

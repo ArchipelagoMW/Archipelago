@@ -448,6 +448,8 @@ class KirbyAmClient(BizHawkClient):
         logger_func = getattr(logger_obj, level, logger_obj.info)
         extra = dict(kwargs.pop("extra", {}))
         extra["NoStream"] = True
+        # Keep verbose diagnostics out of the live GUI log panel as well.
+        extra["skip_gui"] = True
         kwargs["extra"] = extra
         logger_func(msg, *args, **kwargs)
 
@@ -2494,7 +2496,7 @@ class KirbyAmClient(BizHawkClient):
             logger.info(
                 "KirbyAM: room entry — native=0x%04x (doorsIdx lookup failed)",
                 native_room_id,
-                extra={"NoStream": True},
+                extra={"NoStream": True, "skip_gui": True},
             )
             return
 
@@ -2513,7 +2515,7 @@ class KirbyAmClient(BizHawkClient):
                 room_label,
                 native_room_id,
                 doors_idx,
-                extra={"NoStream": True},
+                extra={"NoStream": True, "skip_gui": True},
             )
 
         if ctx.slot is not None and send_pending:
@@ -2580,7 +2582,7 @@ class KirbyAmClient(BizHawkClient):
                     "KirbyAM: resending room-sanity LocationChecks missing on server (missing=%s, acked=%s)",
                     missing_on_server,
                     already_acknowledged,
-                    extra={"NoStream": True},
+                    extra={"NoStream": True, "skip_gui": True},
                 )
                 self._last_room_sanity_poll_log = room_log_state
 

@@ -19,6 +19,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### Bug Fixes
 
+- Fixed file-only KirbyAM verbose diagnostics still appearing in the live client log panel by marking verbose messages as GUI-hidden while keeping them in the log file output (Issue #751).
 - Prevent trap items that were already ACKed in the current client session from being redelivered after ROM reload/reconnect rewinds the mailbox counter.
 
 ### Internal Changes
