@@ -1,11 +1,32 @@
 # Contributing
 
-All contributions are welcome, though we have a few requests of contributors, whether they be for core, webhost, or new 
+All contributions are welcome, though we have a few requests of contributors, whether they be for core, webhost, or new
 game contributions:
 
 * **Follow styling guidelines.**
   Please take a look at the [code style documentation](/docs/style.md)
   to ensure ease of communication and uniformity.
+
+* **Run pre-commit checks before pushing.**
+  This repository includes a root-level pre-commit configuration in `.pre-commit-config.yaml` that mirrors the main
+  Python workflow checks:
+  - `flake8` on staged Python files at commit time
+  - `mypy` strict and `pyright` strict at push time
+  - optional KirbyAM pytest suite as a manual pre-commit stage
+
+  Typical setup:
+  ```bash
+  python -m pip install pre-commit flake8 mypy pyright
+  pre-commit install
+  pre-commit install --hook-type pre-push
+  ```
+
+  Useful commands:
+  ```bash
+  pre-commit run --all-files
+  pre-commit run --hook-stage pre-push --all-files
+  pre-commit run --hook-stage manual kirbyam-pytest
+  ```
 
 * **Ensure that critical changes are covered by tests.**
   It is strongly recommended that unit tests are used to avoid regression and to ensure everything is still working.
@@ -19,7 +40,7 @@ game contributions:
   is [Python 3.11](https://www.python.org/downloads/release/python-31113/).
   It is recommended that automated github actions are turned on in your fork to have github run unit tests after
   pushing.
-  You can turn them on here:  
+  You can turn them on here:
   ![Github actions example](/docs/img/github-actions-example.png)
 
 * **When reviewing PRs, please leave a message about what was done.**

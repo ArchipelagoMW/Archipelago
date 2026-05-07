@@ -1,0 +1,50 @@
+minimum_pre_commit_version: 3.7.0
+
+default_stages:
+  - pre-commit
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+
+  - repo: local
+    hooks:
+      - id: flake8-syntax
+        name: flake8 syntax guard (CI parity)
+        entry: python -m flake8 --count --select=E9,F63,F7,F82 --ignore=F824 --show-source --statistics
+        language: system
+        types: [python]
+
+      - id: flake8-lint
+        name: flake8 lint (CI parity)
+        entry: python -m flake8 --count --max-complexity=14 --max-doc-length=120 --max-line-length=120 --statistics
+        language: system
+        types: [python]
+
+      - id: mypy-strict
+        name: mypy strict on staged files (CI parity)
+        entry: python -m mypy --follow-imports=silent --install-types --non-interactive --strict
+        language: system
+        files: \.pyi?$
+        stages: [pre-push]
+
+      - id: pyright-strict
+        name: pyright strict targeted files (CI parity)
+        entry: python .github/type_check.py
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
+
+      - id: kirbyam-pytest
+        name: kirbyam unit tests
+        entry: python -m pytest worlds/kirbyam/test -n auto --dist worksteal
+        language: system
+        pass_filenames: false
+        stages: [manual]
