@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 
-import random
-
 if TYPE_CHECKING:
     from .world import TeardownWorld
 

@@ -1,3 +1,6 @@
+from collections.abc import Mapping
+from typing import Any
+
 from worlds.AutoWorld import World
 
 from . import items, locations, regions, rules, web_world
@@ -41,8 +44,8 @@ class TeardownWorld(World):
     def get_filler_item_name(self) -> str:
         return items.get_random_filler_item_name(self)
 
-    #def fill_slot_data(self) -> Mapping[str, Any]:
-    #    # If you need access to the player's chosen options on the client side, there is a helper for that.
-    #    return self.options.as_dict(
-    #        "Bonus_level", "trap_chance"
-    #    )
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        # If you need access to the player's chosen options on the client side, there is a helper for that.
+        return self.options.as_dict(
+            "MissionAmount"
+        )
