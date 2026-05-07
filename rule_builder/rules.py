@@ -281,7 +281,7 @@ class Rule(Generic[TWorld]):
         def __str__(self) -> str:
             return self.rule_name
 
-        def combine_and(self, other_rule: "Rule.Resolved", world: TWorld) -> "Rule.Resolved | None":
+        def combine_and(self, other_rule: "Rule.Resolved", world: World) -> "Rule.Resolved | None":
             """
             Returns a resolved rule that corresponds to the intersection of this rule with other_rule.
             If no such rule exists, None should be returned.
@@ -290,7 +290,7 @@ class Rule(Generic[TWorld]):
                 return self
             return None
 
-        def combine_or(self, other_rule: "Rule.Resolved", world: TWorld) -> "Rule.Resolved | None":
+        def combine_or(self, other_rule: "Rule.Resolved", world: World) -> "Rule.Resolved | None":
             """
             Returns a resolved rule that corresponds to the union of this rule with other_rule.
             If no such rule exists, None should be returned.
@@ -771,7 +771,7 @@ class Has(Rule[TWorld], game="Archipelago"):
             return f"Has {count}{self.item_name}"
 
         @override
-        def combine_and(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+        def combine_and(self, other_rule: Rule.Resolved, world: World) -> Rule.Resolved | None:
             result = super().combine_and(other_rule, world)
             if result is not None:
                 return result
@@ -803,7 +803,7 @@ class Has(Rule[TWorld], game="Archipelago"):
             return None
 
         @override
-        def combine_or(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+        def combine_or(self, other_rule: Rule.Resolved, world: World) -> Rule.Resolved | None:
             result = super().combine_or(other_rule, world)
             if result is not None:
                 return result
@@ -953,7 +953,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
             return f"Has all of ({items})"
 
         @override
-        def combine_and(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+        def combine_and(self, other_rule: Rule.Resolved, world: World) -> Rule.Resolved | None:
             result = super().combine_and(other_rule, world)
             if result is not None:
                 return result
@@ -1108,7 +1108,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
             return f"Has any of ({items})"
 
         @override
-        def combine_or(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+        def combine_or(self, other_rule: Rule.Resolved, world: World) -> Rule.Resolved | None:
             result = super().combine_or(other_rule, world)
             if result is not None:
                 return result
@@ -1280,7 +1280,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
             return f"Has all of ({items})"
 
         @override
-        def combine_and(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+        def combine_and(self, other_rule: Rule.Resolved, world: World) -> Rule.Resolved | None:
             result = super().combine_and(other_rule, world)
             if result is not None:
                 return result
@@ -1447,7 +1447,7 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
             return f"Has any of ({items})"
 
         @override
-        def combine_or(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+        def combine_or(self, other_rule: Rule.Resolved, world: World) -> Rule.Resolved | None:
             result = super().combine_or(other_rule, world)
             if result is not None:
                 return result
