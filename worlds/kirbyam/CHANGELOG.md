@@ -23,6 +23,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - Prevent trap items that were already ACKed in the current client session from being redelivered after ROM reload/reconnect rewinds the mailbox counter.
 - Fixed hub-switch stale-bit baseline gating so old transport bits are ignored until a real hub-switch check is acknowledged, preventing false `Peppermint Palace West - Big Switch` sends when unrelated checks are already present (Issue #750).
 - Fixed boss-defeat AP checks being missed when the corresponding shard was already AP-delivered before the fight by staging a room-scoped boss fallback on boss-room departure (Issue #754).
+- Corrected the Rainbow Route minor chest with location ID `3960500` to room `1-39`, including key/name relabel from `MINOR_CHEST_RAINBOW_ROUTE_1_20` to `MINOR_CHEST_RAINBOW_ROUTE_1_39` (Issue #758).
 
 ### Internal Changes
 

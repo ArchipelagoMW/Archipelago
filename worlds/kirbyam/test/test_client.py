@@ -654,8 +654,8 @@ async def test_poll_minor_chest_skips_already_server_acknowledged(mock_bizhawk_c
     client.initialize_client()
     client._debug_logging_enabled = True
 
-    room_1_20 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_20"].location_id
-    mock_bizhawk_context.checked_locations = {room_1_20}
+    room_1_39 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_39"].location_id
+    mock_bizhawk_context.checked_locations = {room_1_39}
 
     with patch.dict(data.native_ram_addresses, {"small_chest_flags_native": 0x02038960}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
@@ -668,7 +668,7 @@ async def test_poll_minor_chest_skips_already_server_acknowledged(mock_bizhawk_c
     mock_send.assert_not_awaited()
     assert mock_logger.debug.called
     assert "dedupe suppressed minor-chest LocationChecks" in mock_logger.debug.call_args.args[0]
-    assert mock_logger.debug.call_args.args[1] == [room_1_20]
+    assert mock_logger.debug.call_args.args[1] == [room_1_39]
 
 
 @pytest.mark.asyncio

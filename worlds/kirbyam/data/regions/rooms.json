@@ -2862,9 +2862,7 @@
     ]
   },
   "REGION_RAINBOW_ROUTE/ROOM_1_20": {
-    "locations": [
-      "MINOR_CHEST_RAINBOW_ROUTE_1_20"
-    ],
+    "locations": [],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/ROOM_1_36",
@@ -4831,7 +4829,9 @@
     ]
   },
   "REGION_RAINBOW_ROUTE/ROOM_1_39": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_RAINBOW_ROUTE_1_39"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/ROOM_1_27",
