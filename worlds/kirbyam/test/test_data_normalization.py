@@ -12,11 +12,11 @@ from ..data import _normalize_gba_rom_address, data as kirby_data, format_room_r
         (0x0AF00000, 0x00F00000),
     ],
 )
-def test_normalize_gba_rom_address_mapped_ranges(raw_addr, expected_offset):
+def test_normalize_gba_rom_address_mapped_ranges(raw_addr: int, expected_offset: int) -> None:
     assert _normalize_gba_rom_address(raw_addr) == expected_offset
 
 
-def test_normalize_gba_rom_address_passthrough_for_non_mapped_values():
+def test_normalize_gba_rom_address_passthrough_for_non_mapped_values() -> None:
     assert _normalize_gba_rom_address(0x00F00000) == 0x00F00000
 
 
