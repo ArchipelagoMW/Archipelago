@@ -37,7 +37,7 @@ repos:
 
       - id: pyright-strict
         name: pyright strict targeted files (CI parity)
-        entry: python .github/type_check.py
+        entry: python -m pyright -p .github/pyright-config.json
         language: system
         pass_filenames: false
         stages: [pre-push]
