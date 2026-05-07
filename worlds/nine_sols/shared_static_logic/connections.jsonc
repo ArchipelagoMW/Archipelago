@@ -1914,20 +1914,39 @@
 
     // Empyrean Dist. (Passages)
     {
-        "from": "ED (Passages) - Left Exit", "to": "ED (Passages) - Under Root Node",
+        "from": "ED (Passages) - Left Exit", "to": "ED (Passages) - Top Of TCK Platform Tutorial Room",
         "requires": [
-            { "item": "Cloud Leap" }, // up into the room after 1st zipline
-            { "item": "Tai-Chi Kick" }, // both required to reach the TCK platforms in the middle room
             { "anyOf": [
-                { "item": "Grapple" }, // using the sliders/ziplines as intended
-                [ { "item": "Air Dash" }, { "item": "Ledge Grab" }] // "just" CL + AD across the huge gaps between TCK targets
-            ] }
+                { "item": "Grapple" }, // use the slider/zipline as intended
+                { "item": "Air Dash" } // or CL + AD across the gap
+            ] },
+            { "item": "Cloud Leap" }, // up into the room after zipline
+            { "item": "Tai-Chi Kick" } // CL + TCK required to reach the TCK platforms in the middle room
         ],
         "medium_requires": [
             { "item": "Trick - Bow Hover" }, // across first gap
-            { "item": "Cloud Leap" } // up into room after 1st zipline
-            // 2nd hover from room's lower platform
+            { "item": "Cloud Leap" },
+            { "item": "Tai-Chi Kick" }
         ]
+    },
+    {
+        "from": "ED (Passages) - Top Of TCK Platform Tutorial Room", "to": "ED (Passages) - Left Exit",
+        "requires": [ { "anyOf": [
+            { "item": "Grapple" }, // use the slider/zipline as intended
+            [{ "item": "Cloud Leap" }, { "item": "Air Dash" }] // or CL + AD across the gap
+        ] } ],
+        "medium_requires": [{ "item": "Trick - Bow Hover" }]
+    },
+    {
+        "from": "ED (Passages) - Top Of TCK Platform Tutorial Room", "to": "ED (Passages) - Under Root Node",
+        "requires": [
+            { "anyOf": [
+                { "item": "Grapple" }, // using the sliders/ziplines as intended
+                // "just" CL + AD across the huge gaps between TCK targets
+                [ { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Ledge Grab" }]
+            ] }
+        ],
+        "medium_requires": [{ "item": "Trick - Bow Hover" }] // after dropping down a level
     },
     {
         "from": "ED (Passages) - Under Root Node", "to": "ED (Passages) - Around Root Node",
@@ -1943,16 +1962,15 @@
             { "item": "Ledge Grab" } // CL into LS slash vault into ledge grab bypasses the green wall
         ]
     },
-    {
-        "from": "ED (Passages) - Left Exit", "to": "ED (Passages) - Around Root Node", // without going through Under
+    { // without going through Under
+        "from": "ED (Passages) - Top Of TCK Platform Tutorial Room", "to": "ED (Passages) - Around Root Node",
         "medium_requires": [
-            { "item": "Trick - Bow Hover" }, // across first gap
-            { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }, // use TCK target to reach upper platform of next room
-            { "item": "Ledge Grab" } // doing the 2nd hover from the upper platform lets you grab the ledge left of node
+            { "item": "Trick - Bow Hover" },
+            { "item": "Ledge Grab" } // just low enough you still need to grab the ledge left of node
         ]
     },
     {
-        "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Left Exit",
+        "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Top Of TCK Platform Tutorial Room",
         "requires": [ { "anyOf": [
             [ // take the sliders backwards as intended
                 { "item": "Grapple" },
@@ -1965,13 +1983,14 @@
             ]
         ] } ],
         "medium_requires": [ { "anyOf": [
-            { "item": "Trick - Bow Hover" }, // 2 bow hovers
+            { "item": "Trick - Bow Hover" },
             [
                 { "item": "Tai-Chi Kick" },
                 { "item": "Cloud Leap" }
             ] // T-dashes replace AD, since TCKs give qi
         ] } ]
     },
+    // TODO: needing 2 bow hovers from Left Exit to Root Node is a problem for entrance rando
     { "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Root Node", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Ledge Grab" } ] }
     ] },
