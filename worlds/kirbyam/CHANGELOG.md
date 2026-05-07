@@ -22,6 +22,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - Fixed file-only KirbyAM verbose diagnostics still appearing in the live client log panel by marking verbose messages as GUI-hidden while keeping them in the log file output (Issue #751).
 - Prevent trap items that were already ACKed in the current client session from being redelivered after ROM reload/reconnect rewinds the mailbox counter.
 - Fixed hub-switch stale-bit baseline gating so old transport bits are ignored until a real hub-switch check is acknowledged, preventing false `Peppermint Palace West - Big Switch` sends when unrelated checks are already present (Issue #750).
+- Fixed boss-defeat AP checks being missed when the corresponding shard was already AP-delivered before the fight by staging a room-scoped boss fallback on boss-room departure (Issue #754).
 
 ### Internal Changes
 

@@ -4150,6 +4150,46 @@ async def test_poll_boss_defeat_does_not_stage_probe_fallback_without_rising_edg
 
 
 @pytest.mark.asyncio
+async def test_room_departure_stages_boss_fallback_when_shard_already_owned(mock_bizhawk_context):
+    """Issue #754: leaving a boss room with an already-owned shard should stage fallback checks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
+    assert boss1_loc is not None
+
+    # Use compact test-only room maps so we can drive deterministic room transitions.
+    client._room_region_key_by_doors_idx = {
+        10: "REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP",
+        11: "REGION_MUSTARD_MOUNTAIN/ROOM_4_00",
+    }
+    client._room_label_by_doors_idx = {
+        10: "Mustard Boss Warp",
+        11: "Mustard Exit Room",
+    }
+
+    with patch.dict(
+        data.transport_ram_addresses,
+        {"shard_bitfield": 0x0203B000},
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        # First poll: enter boss room. Second poll: leave boss room.
+        # Shard bit 0 already set (AP-owned) when departure fallback runs.
+        mock_read.side_effect = [
+            [(1).to_bytes(2, 'little')],
+            [(10).to_bytes(2, 'little')],
+            [(2).to_bytes(2, 'little')],
+            [(11).to_bytes(2, 'little')],
+            [(0x01).to_bytes(4, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    assert boss1_loc in client._boss_probe_fallback_location_ids
+
+
+@pytest.mark.asyncio
 async def test_poll_boss_defeat_skips_when_address_missing(mock_bizhawk_context):
     """When boss_defeat_flags address is not in addresses.json the method should no-op."""
     client = KirbyAmClient()

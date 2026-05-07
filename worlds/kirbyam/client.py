@@ -339,6 +339,13 @@ class KirbyAmClient(BizHawkClient):
         self._last_boss_probe_snapshot: bytes | None = None
         self._boss_probe_stream_marker: object = None
         self._boss_probe_fallback_location_ids: set[int] = set()
+        self._boss_location_bit_index_by_location_id: dict[int, int] = {
+            loc.location_id: loc.bit_index
+            for loc in data.locations.values()
+            if loc.location_id is not None
+            and loc.bit_index is not None
+            and loc.category == LocationCategory.BOSS_DEFEAT
+        }
 
         # Runtime gameplay-state gate tracking
         self._last_runtime_gate_reason: str | None = None
@@ -2485,6 +2492,7 @@ class KirbyAmClient(BizHawkClient):
             return
 
         native_room_id = unpack_from("<H", raw)[0]
+        previous_room_region_key = self._last_room_region_key
         room_changed = native_room_id != self._last_native_room_id
         send_pending = native_room_id != self._last_sent_room_update_native_room_id
 
@@ -2514,6 +2522,9 @@ class KirbyAmClient(BizHawkClient):
         room_label = self._room_label_by_doors_idx.get(doors_idx, f"<unknown doorsIdx={doors_idx}>")
         room_region_key = self._room_region_key_by_doors_idx.get(doors_idx, "")
         self._last_room_region_key = room_region_key
+
+        if room_changed and previous_room_region_key and previous_room_region_key != room_region_key:
+            await self._stage_boss_room_departure_fallback(ctx, previous_room_region_key)
 
         if room_changed:
             self._last_native_room_id = native_room_id
@@ -2549,6 +2560,58 @@ class KirbyAmClient(BizHawkClient):
                 )
                 return
             self._last_sent_room_update_native_room_id = native_room_id
+
+    async def _stage_boss_room_departure_fallback(
+        self,
+        ctx: KirbyAmBizHawkClientContext,
+        departed_room_region_key: str,
+    ) -> None:
+        """
+        Stage boss-defeat fallback checks when leaving a known boss room.
+
+        Issue #754: when a shard was already AP-delivered before a boss defeat,
+        the native CollectShard path may be skipped, leaving no transport bit rise
+        and no native probe rising edge. On boss-room departure, use the current
+        shard bitfield as a conservative room-scoped signal to stage fallback checks.
+        """
+        boss_location_ids = self._boss_location_ids_by_room_region.get(departed_room_region_key, [])
+        if not boss_location_ids:
+            return
+
+        shard_addr = self._transport_addr("shard_bitfield")
+        if shard_addr is None:
+            return
+
+        try:
+            raw = (await bizhawk.read(ctx.bizhawk_ctx, [(shard_addr, 4, "System Bus")]))[0]
+        except (bizhawk.RequestFailedError, bizhawk.ConnectorError, bizhawk.SyncError, TypeError, AttributeError):
+            return
+        shard_bits = self._u32_le(raw)
+
+        newly_observed_locations: list[int] = []
+        for location_id in boss_location_ids:
+            bit_index = self._boss_location_bit_index_by_location_id.get(location_id)
+            if bit_index is None:
+                continue
+            if not ((shard_bits >> bit_index) & 1):
+                continue
+            if location_id in ctx.checked_locations:
+                continue
+            newly_observed_locations.append(location_id)
+
+        if not newly_observed_locations:
+            return
+
+        staged_before = set(self._boss_probe_fallback_location_ids)
+        self._boss_probe_fallback_location_ids.update(newly_observed_locations)
+        if self._boss_probe_fallback_location_ids != staged_before:
+            self._log_verbose(
+                "info",
+                "KirbyAM: staged boss fallback from boss-room departure (departed=%s, shard_bits=0x%08x, locations=%s)",
+                departed_room_region_key,
+                shard_bits,
+                sorted(newly_observed_locations),
+            )
 
     async def _poll_room_sanity_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
