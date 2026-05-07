@@ -14,11 +14,8 @@ if TYPE_CHECKING:
     from worlds.AutoWorld import World
 
     TWorld = TypeVar("TWorld", bound=World, contravariant=True, default=World)  # noqa: PLC0105
-    TResolved = TypeVar("TResolved", bound="Rule.Resolved", contravariant=True, default="Rule.Resolved")  # noqa: PLC0105
 else:
     TWorld = TypeVar("TWorld")
-    TResolved = TypeVar("TResolved")
-
 
 
 def _create_hash_fn(resolved_rule_cls: "CustomRuleRegister") -> Callable[..., int]:
@@ -82,7 +79,7 @@ class CustomRuleRegister(type):
 
 
 @dataclasses.dataclass()
-class Rule(Generic[TWorld,TResolved]):
+class Rule(Generic[TWorld]):
     """Base class for a static rule used to generate an access rule"""
 
     options: Iterable[OptionFilter] = dataclasses.field(default=(), kw_only=True)
@@ -132,26 +129,6 @@ class Rule(Generic[TWorld,TResolved]):
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         args = cls._parse_field_resolvers(data.get("args", {}), world_cls.game)
         return cls(**args, options=options, filtered_resolution=data.get("filtered_resolution", False))
-
-    @classmethod
-    def combine_and(cls, rule: TResolved, other_rule: "Rule.Resolved", world: TWorld) -> "Rule.Resolved | None":
-        """
-        Returns a resolved rule that corresponds to the intersection of this rule with other_rule.
-        If no such rule exists, None should be returned.
-        """
-        if rule == other_rule:
-            return other_rule
-        return None
-
-    @classmethod
-    def combine_or(cls, rule: TResolved, other_rule: "Rule.Resolved", world: TWorld) -> "Rule.Resolved | None":
-        """
-        Returns a resolved rule that corresponds to the union of this rule with other_rule.
-        If no such rule exists, None should be returned.
-        """
-        if rule == other_rule:
-            return rule
-        return None
 
     @classmethod
     def _parse_field_resolvers(cls, data: Mapping[str, Any], game_name: str) -> dict[str, Any]:
@@ -303,6 +280,24 @@ class Rule(Generic[TWorld,TResolved]):
         @override
         def __str__(self) -> str:
             return self.rule_name
+
+        def combine_and(self, other_rule: "Rule.Resolved", world: TWorld) -> "Rule.Resolved | None":
+            """
+            Returns a resolved rule that corresponds to the intersection of this rule with other_rule.
+            If no such rule exists, None should be returned.
+            """
+            if self == other_rule:
+                return self
+            return None
+
+        def combine_or(self, other_rule: "Rule.Resolved", world: TWorld) -> "Rule.Resolved | None":
+            """
+            Returns a resolved rule that corresponds to the union of this rule with other_rule.
+            If no such rule exists, None should be returned.
+            """
+            if self == other_rule:
+                return self
+            return None
 
 
 @dataclasses.dataclass()
@@ -734,71 +729,6 @@ class Has(Rule[TWorld], game="Archipelago"):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.item_name}{count}{options})"
 
-    @override
-    @classmethod
-    def combine_and(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
-        result = super().combine_and(other_rule, world)
-        if result is not None:
-            return result
-
-        if isinstance(other_rule, Has.Resolved):
-            if self.item_name == other_rule.item_name:
-                if self.count < other_rule.count:
-                    return other_rule
-                return self
-            return HasAllCounts({self.item_name: self.count, other_rule.item_name: other_rule.count}).resolve(world)
-
-        if isinstance(other_rule, HasAll.Resolved):
-            if self.count > 1:
-                items = dict.fromkeys(other_rule.item_names, 1)
-                items[self.item_name] = self.count
-                return HasAllCounts(items).resolve(world)
-            if self.item_name in other_rule.item_names:
-                return other_rule
-
-            return HasAll(*other_rule.item_names, self.item_name).resolve(world)
-
-        if isinstance(other_rule, HasAllCounts.Resolved):
-            items = dict(other_rule.item_counts)
-            if self.item_name in items and self.count <= items[self.item_name]:
-                return other_rule
-            items[self.item_name] = self.count
-            return HasAllCounts(items).resolve(world)
-
-        return None
-
-    @override
-    @classmethod
-    def combine_or(cls, rule: Rule.Resolved, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
-        result = super().combine_or(other_rule, world)
-        if result is not None:
-            return result
-
-        if isinstance(other_rule, Has.Resolved):
-            if self.item_name == other_rule.item_name:
-                if self.count > other_rule.count:
-                    return other_rule
-                return self
-            return HasAnyCount({self.item_name: self.count, other_rule.item_name: other_rule.count}).resolve(world)
-
-        if isinstance(other_rule, HasAny.Resolved):
-            if self.item_name in other_rule.item_names:
-                return other_rule
-            if self.count > 1:
-                items = dict.fromkeys(other_rule.item_names, 1)
-                items[self.item_name] = self.count
-                return HasAnyCount(items).resolve(world)
-
-            return HasAny(*other_rule.item_names, self.item_name).resolve(world)
-
-        if isinstance(other_rule, HasAnyCount.Resolved):
-            items = dict(other_rule.item_counts)
-            if self.item_name in items and self.count >= items[self.item_name]:
-                return other_rule
-            items[self.item_name] = self.count
-            return HasAnyCount(items).resolve(world)
-
-        return None
     class Resolved(Rule.Resolved):
         item_name: str
         count: int = 1
@@ -839,6 +769,70 @@ class Has(Rule[TWorld], game="Archipelago"):
         def __str__(self) -> str:
             count = f"{self.count}x " if self.count > 1 else ""
             return f"Has {count}{self.item_name}"
+
+        @override
+        def combine_and(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+            result = super().combine_and(other_rule, world)
+            if result is not None:
+                return result
+
+            if isinstance(other_rule, Has.Resolved):
+                if self.item_name == other_rule.item_name:
+                    if self.count < other_rule.count:
+                        return other_rule
+                    return self
+                return HasAllCounts({self.item_name: self.count, other_rule.item_name: other_rule.count}).resolve(world)
+
+            if isinstance(other_rule, HasAll.Resolved):
+                if self.count > 1:
+                    items = dict.fromkeys(other_rule.item_names, 1)
+                    items[self.item_name] = self.count
+                    return HasAllCounts(items).resolve(world)
+                if self.item_name in other_rule.item_names:
+                    return other_rule
+
+                return HasAll(*other_rule.item_names, self.item_name).resolve(world)
+
+            if isinstance(other_rule, HasAllCounts.Resolved):
+                items = dict(other_rule.item_counts)
+                if self.item_name in items and self.count <= items[self.item_name]:
+                    return other_rule
+                items[self.item_name] = self.count
+                return HasAllCounts(items).resolve(world)
+
+            return None
+
+        @override
+        def combine_or(self, other_rule: Rule.Resolved, world: TWorld) -> Rule.Resolved | None:
+            result = super().combine_or(other_rule, world)
+            if result is not None:
+                return result
+
+            if isinstance(other_rule, Has.Resolved):
+                if self.item_name == other_rule.item_name:
+                    if self.count > other_rule.count:
+                        return other_rule
+                    return self
+                return HasAnyCount({self.item_name: self.count, other_rule.item_name: other_rule.count}).resolve(world)
+
+            if isinstance(other_rule, HasAny.Resolved):
+                if self.item_name in other_rule.item_names:
+                    return other_rule
+                if self.count > 1:
+                    items = dict.fromkeys(other_rule.item_names, 1)
+                    items[self.item_name] = self.count
+                    return HasAnyCount(items).resolve(world)
+
+                return HasAny(*other_rule.item_names, self.item_name).resolve(world)
+
+            if isinstance(other_rule, HasAnyCount.Resolved):
+                items = dict(other_rule.item_counts)
+                if self.item_name in items and self.count >= items[self.item_name]:
+                    return other_rule
+                items[self.item_name] = self.count
+                return HasAnyCount(items).resolve(world)
+
+            return None
 
 
 @dataclasses.dataclass(init=False)
