@@ -372,7 +372,7 @@
     "location_id": 3960411
   },
   "HUB_SWITCH_RAINBOW_ROUTE_EAST": {
-    "label": "Rainbow Route East - Big Switch",
+    "label": "Peppermint Palace East - Big Switch",
     "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
     "tags": [
       "HubSwitch",
@@ -383,7 +383,7 @@
     "location_id": 3960401
   },
   "HUB_SWITCH_RAINBOW_ROUTE_SOUTH": {
-    "label": "Rainbow Route South - Big Switch",
+    "label": "Cabbage Cavern East - Big Switch",
     "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
     "tags": [
       "HubSwitch",
@@ -405,7 +405,7 @@
     "location_id": 3960403
   },
   "HUB_SWITCH_RAINBOW_ROUTE_WEST": {
-    "label": "Rainbow Route West - Big Switch",
+    "label": "Candy Constellation - Big Switch",
     "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
     "tags": [
       "HubSwitch",
@@ -471,7 +471,7 @@
     "location_id": 3960409
   },
   "HUB_SWITCH_PEPPERMINT_EAST": {
-    "label": "Peppermint Palace East - Big Switch",
+    "label": "Rainbow Route East - Big Switch",
     "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
     "tags": [
       "HubSwitch",
@@ -493,7 +493,7 @@
     "location_id": 3960400
   },
   "HUB_SWITCH_CABBAGE_CAVERN_EAST": {
-    "label": "Cabbage Cavern East - Big Switch",
+    "label": "Rainbow Route South - Big Switch",
     "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
     "tags": [
       "HubSwitch",
@@ -515,7 +515,7 @@
     "location_id": 3960413
   },
   "HUB_SWITCH_CANDY": {
-    "label": "Candy Constellation - Big Switch",
+    "label": "Rainbow Route West - Big Switch",
     "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
     "tags": [
       "HubSwitch",
