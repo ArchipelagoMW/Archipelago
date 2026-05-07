@@ -37,8 +37,9 @@ repos:
 
       - id: pyright-strict
         name: pyright strict targeted files (CI parity)
-        entry: python -m pyright -p .github/pyright-config.json
-        language: system
+        entry: pyright -p .github/pyright-config.json
+        language: python
+        additional_dependencies: [pyright==1.1.392.post0]
         pass_filenames: false
         stages: [pre-push]
 
