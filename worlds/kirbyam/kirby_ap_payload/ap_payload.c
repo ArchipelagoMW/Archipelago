@@ -180,7 +180,7 @@ static void ap_set_sound_player_chest_flag(uint32_t chest_index) {
 }
 
 static void ap_set_hub_switch_flag(uint32_t door_index) {
-    if (door_index < 15u) {
+    if (door_index < 16u) {
         AP_HUB_SWITCH_FLAGS |= (1u << door_index);
     }
 }

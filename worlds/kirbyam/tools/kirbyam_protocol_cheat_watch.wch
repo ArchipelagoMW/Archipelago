@@ -19,7 +19,7 @@ SystemID GBA
 0203B040	d	h	0	System Bus	mailbox_init_cookie (expect 4B41504D)
 0203B044	d	h	0	System Bus	boss_temp_shard_bitfield
 0203B048	d	h	0	System Bus	delivered_vitality_item_bits
-0203B04C	d	b	0	System Bus	hub_switch_flags (ROM->Client; bit0=PeppermintW, bit1=RREast, bit2=RRSouth, bit3=CabbageCenter, bit4=RRWest, bit5=Carrot, bit6=RRNorth, bit7=Mustard, bit8=CabbageWest, bit9=Radish, bit10=Moonlight, bit11=PeppermintE, bit12=CabbageEast, bit13=Olive, bit14=Candy)
+0203B04C	d	b	0	System Bus	hub_switch_flags (ROM->Client; bit0=PeppermintW, bit1=RREast, bit2=RRSouth, bit3=CabbageCenter, bit4=RRWest, bit5=Carrot, bit6=RRNorth, bit7=Mustard, bit8=CabbageWest, bit9=Radish, bit10=Moonlight, bit11=PeppermintE, bit12=CabbageEast, bit13=Olive, bit14=Candy, bit15=RRNorth compatibility)
 0203B050	d	u	0	System Bus	starting_kirby_color_id (Client->ROM; 0=Pink no-op, 1-13=color; 0xFFFFFFFF=not synced)
 0203B054	d	u	0	System Bus	one_hit_mode_runtime (Client->ROM; 0=off, 1=excl_vitality, 2=incl_vitality; 0xFFFFFFFF=not synced)
 0203B058	d	u	0	System Bus	no_extra_lives_runtime (Client->ROM; 0=off, 1=on; 0xFFFFFFFF=not synced)
@@ -47,7 +47,7 @@ SystemID GBA
 0203B028	d	h	0	System Bus	CHEAT: force major_chest_flags bits for AP checks
 0203B02C	d	h	0	System Bus	CHEAT: force vitality_chest_flags bits for AP checks
 0203B030	d	h	0	System Bus	CHEAT: force sound_player_chest_flags bit0
-0203B04C	d	h	0	System Bus	CHEAT: force hub_switch_flags bits (bit0=PeppermintW, bit10=Moonlight, bit11=PeppermintE, bits0-14)
+0203B04C	d	h	0	System Bus	CHEAT: force hub_switch_flags bits (bit0=PeppermintW, bit10=Moonlight, bit11=PeppermintE, bits0-15; bit15=RRNorth compatibility)
 0	S	_	1		=== Internet Cheat Notes (USA Gameshark source: almarsguides.com) ===
 0	S	_	1		GS Master: 34165F72 B08D117B / 25982608 B17B6C25
 0	S	_	1		GS Invulnerability: 771681C5 6954AFCA

@@ -214,14 +214,19 @@ async def test_validate_rom_rejects_missing_auth_address(mock_bizhawk_context, c
 
     original_auth_addr = data.rom_addresses.pop("gArchipelagoInfo", None)
     try:
-        with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+             patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+            mock_read.side_effect = [
+                [b'AGB KIRBY AM', b'B8KE', b'01'],
+            ]
+
             with caplog.at_level(logging.ERROR):
                 assert await client.validate_rom(mock_bizhawk_context) is False
 
-        mock_display.assert_awaited_once_with(
-            mock_bizhawk_context.bizhawk_ctx,
-            "Unable to load ROM: patch metadata address is missing.",
-        )
+            mock_display.assert_awaited_once_with(
+                mock_bizhawk_context.bizhawk_ctx,
+                "Unable to load ROM: patch metadata address is missing.",
+            )
         assert "missing rom address 'gArchipelagoInfo'" in caplog.text
     finally:
         if original_auth_addr is not None:
@@ -326,6 +331,28 @@ async def test_validate_rom_rejects_missing_main_hook_patch(mock_bizhawk_context
         "Unable to load ROM: this is not a compatible KirbyAM patched ROM.",
     )
     assert "main hook callsite" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_validate_rom_rejects_main_hook_probe_read_failure(mock_bizhawk_context, caplog):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.side_effect = [
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            [b'\x01' + (b'\x00' * 15)],
+            bizhawk.RequestFailedError("Connection closed"),
+        ]
+
+        with caplog.at_level(logging.INFO):
+            assert await client.validate_rom(mock_bizhawk_context) is False
+
+    mock_display.assert_awaited_once_with(
+        mock_bizhawk_context.bizhawk_ctx,
+        "Unable to load ROM: could not verify patch compatibility.",
+    )
+    assert "main hook opcode probe failed during validation" in caplog.text
 
 
 @pytest.mark.asyncio
@@ -773,6 +800,31 @@ async def test_poll_hub_switch_sends_location_checks_for_set_bits(mock_bizhawk_c
 
     mock_send.assert_awaited_once_with([
         {"cmd": "LocationChecks", "locations": [rainbow_east, moonlight]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_poll_hub_switch_bit15_fallback_sends_rainbow_route_north(mock_bizhawk_context):
+    """Compatibility: transport bit 15 should still register Rainbow Route North."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    rr_north = data.locations["HUB_SWITCH_RAINBOW_ROUTE_NORTH"].location_id
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.transport_ram_addresses, {"hub_switch_flags": 0x0203B04C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        mock_read.side_effect = [
+            [(0).to_bytes(4, 'little')],
+            [((1 << 15)).to_bytes(4, 'little')],
+        ]
+
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [rr_north]}
     ])
 
 

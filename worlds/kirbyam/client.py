@@ -300,6 +300,16 @@ class KirbyAmClient(BizHawkClient):
                 continue
             self._hub_switch_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
 
+        # Compatibility fallback for Issue #733:
+        # Some payload builds can emit Rainbow Route North on bit 15 instead of
+        # the canonical bit from locations.json. Mirror that bit to the same AP
+        # location id so the check is still reported.
+        rr_north = data.locations.get("HUB_SWITCH_RAINBOW_ROUTE_NORTH")
+        if rr_north is not None:
+            fallback_ids = self._hub_switch_location_ids_by_bit.setdefault(15, [])
+            if rr_north.location_id not in fallback_ids:
+                fallback_ids.append(rr_north.location_id)
+
         # Room-sanity bitfield index (doorsIdx) → location IDs.
         self._room_sanity_location_ids_by_bit: dict[int, list[int]] = {}
         for loc in data.locations.values():
@@ -1113,12 +1123,6 @@ class KirbyAmClient(BizHawkClient):
             self._last_validation_failure_reason = reason
             return False
 
-        auth_addr = data.rom_addresses.get("gArchipelagoInfo")
-        if auth_addr is None:
-            self._log_client("error", "KirbyAM: missing rom address 'gArchipelagoInfo' in worlds/kirbyam/data/addresses.json")
-            return await _fail("missing_auth_address", "Unable to load ROM: patch metadata address is missing.")
-        auth_addr = _normalize_gba_rom_address(auth_addr)
-
         rom_hash = getattr(ctx, "rom_hash", None)
         if isinstance(rom_hash, str) and rom_hash.lower() == KirbyAmProcedurePatch.hash.lower():
             self._log_client(
@@ -1158,10 +1162,16 @@ class KirbyAmClient(BizHawkClient):
                 return await _fail("header_mismatch")
         except bizhawk.RequestFailedError as exc:
             self._log_verbose("info", "KirbyAM: ROM header read failed during validation: %s", exc)
-            return await _fail("header_read_failed", "Unable to load ROM: could not read ROM header data.")
+            return await _fail("header_read_failed")
         except Exception:
             self._log_client("error", "KirbyAM: unexpected error during ROM header validation", exc_info=True)
-            return await _fail("header_validation_exception", "Unable to load ROM: ROM header validation failed.")
+            return await _fail("header_validation_exception")
+
+        auth_addr = data.rom_addresses.get("gArchipelagoInfo")
+        if auth_addr is None:
+            self._log_client("error", "KirbyAM: missing rom address 'gArchipelagoInfo' in worlds/kirbyam/data/addresses.json")
+            return await _fail("missing_auth_address", "Unable to load ROM: patch metadata address is missing.")
+        auth_addr = _normalize_gba_rom_address(auth_addr)
 
         try:
             auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(auth_addr, _AUTH_TOKEN_SIZE, "ROM")]))[0]
@@ -1195,17 +1205,23 @@ class KirbyAmClient(BizHawkClient):
                     "error",
                     "KirbyAM: main hook callsite at 0x%06X is not patched with a Thumb BL (found=%s). Refusing to claim this ROM.",
                     _MAIN_HOOK_OFFSET,
-                    bytes(hook_bytes).hex(" "),
+                    bytes(hook_bytes).hex(" ")
                 )
                 return await _fail(
                     "main_hook_mismatch",
                     "Unable to load ROM: this is not a compatible KirbyAM patched ROM.",
                 )
-        except Exception as exc:
+        except bizhawk.RequestFailedError as exc:
             self._log_verbose("info", "KirbyAM: main hook opcode probe failed during validation: %s", exc)
             return await _fail(
                 "main_hook_probe_failed",
-                "Unable to load ROM: could not verify KirbyAM patch hook.",
+                "Unable to load ROM: could not verify patch compatibility.",
+            )
+        except Exception:
+            self._log_client("error", "KirbyAM: unexpected error during main hook probe", exc_info=True)
+            return await _fail(
+                "main_hook_probe_exception",
+                "Unable to load ROM: patch compatibility validation failed.",
             )
 
         self._last_validation_failure_reason = None
