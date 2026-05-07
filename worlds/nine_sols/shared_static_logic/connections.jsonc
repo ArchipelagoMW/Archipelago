@@ -2040,6 +2040,14 @@
         { "item": "Air Dash" } // for the pink waterfall
     ] }, // ground dash AND CL can also bypass waterfall, that's out of logic for now
     {
+        "from": "ED (Passages) - Top Of TCK Platform Tutorial Room", "to": "ED (Passages) - Left Pink Pool",
+        "ls_requires": [
+            { "item": "Ledge Grab" }, // wall slide directly up to the ledge at pool level
+            { "item": "Cloud Leap" }, // AD/T-dash setups aren't viable here
+            { "item": "Air Dash" } // for the pink waterfall
+        ]
+    },
+    {
         "from": "ED (Passages) - Left Pink Pool", "to": "ED (Passages) - Outside Tianshou Arena",
         "requires": [
             { "item": "Tai-Chi Kick" }, // platforms above pool
