@@ -38,7 +38,7 @@ from worlds.rac3.constants.instruction import (ORIGINAL_INSTRUCTIONS, PATCH_INST
                                                PATCHED_INSTRUCTIONS, RAC3INSTRUCTION)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
-from worlds.rac3.constants.locations.general import RAC3LOCATION
+from worlds.rac3.constants.locations.general import MISSION_COUNTS, RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
@@ -482,8 +482,11 @@ class Rac3Interface(GameInterface):
                 self._write_bits(check[0], {check[1]})
 
         if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
-            for i in range(5, 25):
-                self._write8(RAC3STATUS.RANGER_COMPLETION_TABLE_START + i, 1)
+            self._write8(RAC3PROGRESSFLAG.ARIDIA_5TH_MISSION_COMPLETE, 80)  # Aridia final mission access
+            for loc, addr in MISSION_COUNTS.items():
+                if RAC3_LOCATION_DATA_TABLE[loc].REGION not in [RAC3REGION.STARSHIP_PHOENIX,
+                                                                RAC3REGION.ANNIHILATION_NATION]:
+                    self._write8(addr, 1)
 
     #############################
     # Start of Main Update Loop #
@@ -960,6 +963,11 @@ class Rac3Interface(GameInterface):
                 and abs(current_pos.Y - sasha_pos.Y) < 8
                 and abs(current_pos.Z - sasha_pos.Z) < 8
             )
+        if location == RAC3LOCATION.ARIDIA_RANGERS_5 and self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
+            if self._read8(MISSION_COUNTS[location]) > 1:  # Aridia final mission needs special checks
+                return True
+            else:
+                return False
         check_all: bool = True
         for check in loc_data.CHECK_ADDRESS:
             match check.TYPE & CHECKTYPE.SIZE:
@@ -2050,6 +2058,11 @@ class Rac3Interface(GameInterface):
                         self.force_respawn()
 
                     self._write_bits(check[0], {check[1]})
+        if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
+            for check, region in RANGER_TO_REGION.items():
+                if self.planet in region:
+                    if region == RAC3REGION.ARIDIA:
+                        pass
 
     def hacker_cycler(self):
         """Finds hacker puzzle doors on current planet and marks all hacker puzzles complete if hacker is unlocked."""
