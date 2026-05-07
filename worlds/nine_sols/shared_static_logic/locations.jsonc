@@ -1518,9 +1518,11 @@
             // and the difference is you can bring a T-dash up here to replace the Air Dash
         ],
         "ls_requires": [
-            // skip the Grapple/zipline using
-            { "item": "Trick - Bow Hover" },
-            { "item": "Ledge Grab" }, // LS vault out of the bow hover
+            { "item": "Ledge Grab" }, // T-dash setup is viable here
+            { "anyOf": [ // then get onto the rope without the Grapple/zipline/slider by using
+                { "item": "Cloud Leap" }, // parry hover into Cloud Leap
+                { "item": "Trick - Bow Hover" } // into LS vault (that's why this isn't in medium)
+            ] },
             // we can't get another LS up here, so the rest is similar to vanilla
             { "item": "Tai-Chi Kick" },
             { "anyOf": [
