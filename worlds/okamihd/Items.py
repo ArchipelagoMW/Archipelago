@@ -1,7 +1,7 @@
 from BaseClasses import Item, ItemClassification
 from .CheckIds import world_state_check_id
 from .Enums.RegionNames import MapIds
-from .Types import OkamiItem, ItemData, resolve_option_callable
+from .Types import OkamiItem, ItemData
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.DivineInstruments import DivineInstruments
 from typing import List, Dict, TYPE_CHECKING

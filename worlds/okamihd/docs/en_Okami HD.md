@@ -6,7 +6,7 @@
 
 Currently, the items randomized are:
 - All Brush Powers and Upgrades
-- All Divine Instruments, excepted Divine Retribution.
+- All Divine Instruments, excepted Divine Retribution *(you always start with it)*.
 - Tools and Treasures
 - Stray Beads, although they don't have any use yet.
 
@@ -24,4 +24,5 @@ Currently, the items randomized are:
 - https://github.com/Ragmoa/Archipelago/issues
 - https://github.com/Axertin/okami-apclient/issues
 - Entering Hana valley Sapling tree area without bloom
+- Checking Tama's without cherry bomb, or if cherry bomb isn't vanilla will softlock you.
 - Melting the ice to exit the Moegami room in Moon Cave will solftlcok you when doing the inferno tutorial.

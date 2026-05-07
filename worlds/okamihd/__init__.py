@@ -1,5 +1,4 @@
-import random
-from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
+from BaseClasses import Item, ItemClassification, Tutorial, MultiWorld
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, get_item_name_to_id_dict, \
     karmic_transformers, \
     progressive_weapons, create_standard_item, create_static_precollected_item_list

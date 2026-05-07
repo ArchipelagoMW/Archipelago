@@ -1,16 +1,13 @@
 from rule_builder.field_resolvers import FromOption
-from rule_builder.rules import Has, And, Rule, True_, OptionFilter, Or, HasGroup, HasAny, HasAll
+from rule_builder.rules import Has, And, Rule, OptionFilter, Or, HasGroup, HasAny, HasAll
 from worlds.AutoWorld import CollectionState
-from worlds.generic.Rules import add_rule, set_rule
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.DivineInstruments import DivineInstruments
 from .Enums.LocationType import LocationType
 from .Options import ProgressiveWeapons, RequiredDoggorbs, NightTimeChecksRequireCrescent
 from .Types import LocData, ExitData, EventData
-from BaseClasses import Location, Entrance, Region
-from typing import TYPE_CHECKING, List, Callable, Union, Dict
-
-from ..hk.Options import count
+from BaseClasses import Location, Entrance
+from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from . import OkamiWorld

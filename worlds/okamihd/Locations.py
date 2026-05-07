@@ -2,7 +2,7 @@ from BaseClasses import Region, Location, ItemClassification
 from .Enums.LocationType import LocationType
 from .Rules import apply_event_or_location_rules
 from .Types import LocData, OkamiLocation, OkamiItem, resolve_option_callable, EventData
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from .RegionsData import okami_locations, okami_events, okami_shop_locations
 
 if TYPE_CHECKING:

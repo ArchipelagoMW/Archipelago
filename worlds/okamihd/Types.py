@@ -1,9 +1,8 @@
 import typing
-from typing import NamedTuple, Optional, List, Callable,TYPE_CHECKING, TypeVar
+from typing import NamedTuple, List, Callable,TYPE_CHECKING, TypeVar
 
-from BaseClasses import Location, Item, ItemClassification, LocationProgressType, CollectionState
+from BaseClasses import Location, Item, ItemClassification, LocationProgressType
 from rule_builder.rules import Rule
-from worlds.AutoWorld import World
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.LocationType import LocationType
 from .Enums.OkamiEnemies import OkamiEnemies
