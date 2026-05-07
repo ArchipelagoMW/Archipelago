@@ -1099,6 +1099,7 @@ async def test_poll_room_entry_logging_clears_room_region_key_on_short_rom_read(
         mock_read.side_effect = [
             [(0x0008).to_bytes(2, 'little')],
             [b'\x0b'],
+            [(0x00000000).to_bytes(4, 'little')],  # shard_bitfield for fallback
         ]
 
         await client._poll_room_entry_logging(mock_bizhawk_context)
