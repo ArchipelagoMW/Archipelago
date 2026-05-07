@@ -1,0 +1,600 @@
+{
+  "MINOR_CHEST_UNMAPPED_X_01_REPORT": {
+    "label": "Unmapped Minor Chest X-1 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 3,
+    "category": "MINOR_CHEST",
+    "location_id": 3960520
+  },
+  "MINOR_CHEST_UNMAPPED_X_02_REPORT": {
+    "label": "Unmapped Minor Chest X-2 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960521
+  },
+  "MINOR_CHEST_UNMAPPED_X_03_REPORT": {
+    "label": "Unmapped Minor Chest X-3 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960522
+  },
+  "MINOR_CHEST_UNMAPPED_X_04_REPORT": {
+    "label": "Unmapped Minor Chest X-4 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 2,
+    "category": "MINOR_CHEST",
+    "location_id": 3960523
+  },
+  "MINOR_CHEST_UNMAPPED_X_05_REPORT": {
+    "label": "Unmapped Minor Chest X-5 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 4,
+    "category": "MINOR_CHEST",
+    "location_id": 3960524
+  },
+  "MINOR_CHEST_UNMAPPED_X_06_REPORT": {
+    "label": "Unmapped Minor Chest X-6 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960525
+  },
+  "MINOR_CHEST_UNMAPPED_X_07_REPORT": {
+    "label": "Unmapped Minor Chest X-7 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 2,
+    "category": "MINOR_CHEST",
+    "location_id": 3960526
+  },
+  "MINOR_CHEST_UNMAPPED_X_08_REPORT": {
+    "label": "Unmapped Minor Chest X-8 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 33,
+    "category": "MINOR_CHEST",
+    "location_id": 3960527
+  },
+  "MINOR_CHEST_UNMAPPED_X_09_REPORT": {
+    "label": "Unmapped Minor Chest X-9 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960528
+  },
+  "MINOR_CHEST_UNMAPPED_X_10_REPORT": {
+    "label": "Unmapped Minor Chest X-10 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 3,
+    "category": "MINOR_CHEST",
+    "location_id": 3960529
+  },
+  "MINOR_CHEST_UNMAPPED_X_11_REPORT": {
+    "label": "Unmapped Minor Chest X-11 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960530
+  },
+  "MINOR_CHEST_UNMAPPED_X_12_REPORT": {
+    "label": "Unmapped Minor Chest X-12 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 3,
+    "category": "MINOR_CHEST",
+    "location_id": 3960531
+  },
+  "MINOR_CHEST_UNMAPPED_X_13_REPORT": {
+    "label": "Unmapped Minor Chest X-13 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960532
+  },
+  "MINOR_CHEST_UNMAPPED_X_14_REPORT": {
+    "label": "Unmapped Minor Chest X-14 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 4,
+    "category": "MINOR_CHEST",
+    "location_id": 3960533
+  },
+  "MINOR_CHEST_UNMAPPED_X_15_REPORT": {
+    "label": "Unmapped Minor Chest X-15 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 3,
+    "category": "MINOR_CHEST",
+    "location_id": 3960534
+  },
+  "MINOR_CHEST_UNMAPPED_X_16_REPORT": {
+    "label": "Unmapped Minor Chest X-16 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 42,
+    "category": "MINOR_CHEST",
+    "location_id": 3960535
+  },
+  "MINOR_CHEST_UNMAPPED_X_17_REPORT": {
+    "label": "Unmapped Minor Chest X-17 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 2,
+    "category": "MINOR_CHEST",
+    "location_id": 3960536
+  },
+  "MINOR_CHEST_UNMAPPED_X_18_REPORT": {
+    "label": "Unmapped Minor Chest X-18 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960537
+  },
+  "MINOR_CHEST_UNMAPPED_X_19_REPORT": {
+    "label": "Unmapped Minor Chest X-19 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960538
+  },
+  "MINOR_CHEST_UNMAPPED_X_20_REPORT": {
+    "label": "Unmapped Minor Chest X-20 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 3,
+    "category": "MINOR_CHEST",
+    "location_id": 3960539
+  },
+  "MINOR_CHEST_UNMAPPED_X_21_REPORT": {
+    "label": "Unmapped Minor Chest X-21 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 28,
+    "category": "MINOR_CHEST",
+    "location_id": 3960540
+  },
+  "MINOR_CHEST_UNMAPPED_X_22_REPORT": {
+    "label": "Unmapped Minor Chest X-22 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960541
+  },
+  "MINOR_CHEST_UNMAPPED_X_23_REPORT": {
+    "label": "Unmapped Minor Chest X-23 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 4,
+    "category": "MINOR_CHEST",
+    "location_id": 3960542
+  },
+  "MINOR_CHEST_UNMAPPED_X_24_REPORT": {
+    "label": "Unmapped Minor Chest X-24 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 4,
+    "category": "MINOR_CHEST",
+    "location_id": 3960543
+  },
+  "MINOR_CHEST_UNMAPPED_X_25_REPORT": {
+    "label": "Unmapped Minor Chest X-25 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960544
+  },
+  "MINOR_CHEST_UNMAPPED_X_26_REPORT": {
+    "label": "Unmapped Minor Chest X-26 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 2,
+    "category": "MINOR_CHEST",
+    "location_id": 3960545
+  },
+  "MINOR_CHEST_UNMAPPED_X_27_REPORT": {
+    "label": "Unmapped Minor Chest X-27 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 4,
+    "category": "MINOR_CHEST",
+    "location_id": 3960546
+  },
+  "MINOR_CHEST_UNMAPPED_X_28_REPORT": {
+    "label": "Unmapped Minor Chest X-28 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960547
+  },
+  "MINOR_CHEST_UNMAPPED_X_29_REPORT": {
+    "label": "Unmapped Minor Chest X-29 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960548
+  },
+  "MINOR_CHEST_UNMAPPED_X_30_REPORT": {
+    "label": "Unmapped Minor Chest X-30 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960549
+  },
+  "MINOR_CHEST_UNMAPPED_X_31_REPORT": {
+    "label": "Unmapped Minor Chest X-31 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 5,
+    "category": "MINOR_CHEST",
+    "location_id": 3960550
+  },
+  "MINOR_CHEST_UNMAPPED_X_32_REPORT": {
+    "label": "Unmapped Minor Chest X-32 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 2,
+    "category": "MINOR_CHEST",
+    "location_id": 3960551
+  },
+  "MINOR_CHEST_UNMAPPED_X_33_REPORT": {
+    "label": "Unmapped Minor Chest X-33 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960552
+  },
+  "MINOR_CHEST_UNMAPPED_X_34_REPORT": {
+    "label": "Unmapped Minor Chest X-34 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960553
+  },
+  "MINOR_CHEST_UNMAPPED_X_35_REPORT": {
+    "label": "Unmapped Minor Chest X-35 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 27,
+    "category": "MINOR_CHEST",
+    "location_id": 3960554
+  },
+  "MINOR_CHEST_UNMAPPED_X_36_REPORT": {
+    "label": "Unmapped Minor Chest X-36 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 3,
+    "category": "MINOR_CHEST",
+    "location_id": 3960555
+  },
+  "MINOR_CHEST_UNMAPPED_X_37_REPORT": {
+    "label": "Unmapped Minor Chest X-37 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960556
+  },
+  "MINOR_CHEST_UNMAPPED_X_38_REPORT": {
+    "label": "Unmapped Minor Chest X-38 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 5,
+    "category": "MINOR_CHEST",
+    "location_id": 3960557
+  },
+  "MINOR_CHEST_UNMAPPED_X_39_REPORT": {
+    "label": "Unmapped Minor Chest X-39 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 4,
+    "category": "MINOR_CHEST",
+    "location_id": 3960558
+  },
+  "MINOR_CHEST_UNMAPPED_X_40_REPORT": {
+    "label": "Unmapped Minor Chest X-40 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 4,
+    "category": "MINOR_CHEST",
+    "location_id": 3960559
+  },
+  "MINOR_CHEST_UNMAPPED_X_41_REPORT": {
+    "label": "Unmapped Minor Chest X-41 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960560
+  },
+  "MINOR_CHEST_UNMAPPED_X_42_REPORT": {
+    "label": "Unmapped Minor Chest X-42 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 5,
+    "category": "MINOR_CHEST",
+    "location_id": 3960561
+  },
+  "MINOR_CHEST_UNMAPPED_X_43_REPORT": {
+    "label": "Unmapped Minor Chest X-43 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 44,
+    "category": "MINOR_CHEST",
+    "location_id": 3960562
+  },
+  "MINOR_CHEST_UNMAPPED_X_44_REPORT": {
+    "label": "Unmapped Minor Chest X-44 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 5,
+    "category": "MINOR_CHEST",
+    "location_id": 3960563
+  },
+  "MINOR_CHEST_UNMAPPED_X_45_REPORT": {
+    "label": "Unmapped Minor Chest X-45 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 46,
+    "category": "MINOR_CHEST",
+    "location_id": 3960564
+  },
+  "MINOR_CHEST_UNMAPPED_X_46_REPORT": {
+    "label": "Unmapped Minor Chest X-46 (Report Location)",
+    "parent_region": "REGION_GAME_START",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "ReportLocation",
+      "UnmappedMinorChest"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960565
+  }
+}

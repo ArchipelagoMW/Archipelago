@@ -672,6 +672,31 @@ async def test_poll_minor_chest_skips_already_server_acknowledged(mock_bizhawk_c
 
 
 @pytest.mark.asyncio
+async def test_poll_minor_chest_respects_active_slot_locations(mock_bizhawk_context):
+    """Minor-chest polling should only send checks active in server locations."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    room_1_39 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_39"].location_id
+    room_1_22 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_22"].location_id
+    mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = {room_1_39}
+
+    with patch.dict(data.native_ram_addresses, {"small_chest_flags_native": 0x02038960}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        # Bits 1 and 23 set; only bit 1 location is active in server_locations.
+        mock_read.return_value = [((1 << 1) | (1 << 23)).to_bytes(10, 'little')]
+
+        await client._poll_minor_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [room_1_39]}
+    ])
+    assert room_1_22 not in mock_send.await_args.args[0][0]["locations"]
+
+
+@pytest.mark.asyncio
 async def test_poll_vitality_chest_sends_location_checks_for_set_bits(mock_bizhawk_context):
     """Set transport vitality-chest bits should map to vitality-chest LocationChecks."""
     client = KirbyAmClient()
@@ -4573,11 +4598,12 @@ def test_minor_chest_locations_defined_in_regions_when_present():
 
 
 def test_minor_chest_locations_have_unique_bit_indices_when_present():
-    """Enabled MINOR_CHEST locations must not reuse native bit indices."""
+    """Non-report MINOR_CHEST locations must not reuse native bit indices."""
     minor_chest_with_bits = [
         loc for loc in data.locations.values()
         if getattr(loc, "category", None) == LocationCategory.MINOR_CHEST
         and getattr(loc, "bit_index", None) is not None
+        and "ReportLocation" not in getattr(loc, "tags", frozenset())
     ]
     if not minor_chest_with_bits:
         return

@@ -11,7 +11,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### New Features
 
-- None.
+- Added provisional unmapped minor chest report locations (`Unmapped Minor Chest X-N (Report Location)`) for the remaining manifest entries, gated behind a new `Unmapped Minor Chest Report Locations` option so standard seeds remain unchanged by default.
 
 ### Improvements
 

@@ -37,6 +37,12 @@ def create_regions(world: "KirbyAmWorld") -> dict[str, Region]:
                 and not world.options.room_sanity.value
             ):
                 continue
+            if (
+                loc_meta.category == LocationCategory.MINOR_CHEST
+                and "ReportLocation" in loc_meta.tags
+                and not world.options.unmapped_minor_chest_report_locations.value
+            ):
+                continue
             region.locations.append(
                 KirbyAmLocation(
                     world.player,

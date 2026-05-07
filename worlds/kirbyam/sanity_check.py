@@ -5,6 +5,27 @@ duplicate claims and give warnings for unused and unignored locations.
 import logging
 
 
+def _validate_unique_bit_indices(data, error) -> None:
+    """Validate bit-index uniqueness within each location category."""
+    bit_to_loc_by_category: dict[str, dict[int, str]] = {}
+    for loc_key, loc in data.locations.items():
+        if loc.bit_index is None:
+            continue
+        tags = getattr(loc, "tags", ()) or ()
+        if "ReportLocation" in tags:
+            # Provisional report-only locations intentionally reuse native bits.
+            continue
+        category_name = getattr(loc.category, "name", str(loc.category))
+        category_bit_map = bit_to_loc_by_category.setdefault(category_name, {})
+        if loc.bit_index in category_bit_map and category_bit_map[loc.bit_index] != loc_key:
+            error(
+                "Kirby & The Amazing Mirror: category %s bit_index %s is assigned to multiple locations (%s, %s)"
+                % (category_name, loc.bit_index, category_bit_map[loc.bit_index], loc_key)
+            )
+        else:
+            category_bit_map[loc.bit_index] = loc_key
+
+
 def validate_group_maps() -> bool:
     """Validate that group definitions only reference existing location labels.
 
@@ -24,7 +45,7 @@ def validate_group_maps() -> bool:
 
     # Location groups should not contain empty strings.
     for group_name, locs in LOCATION_GROUPS.items():
-        if any(not isinstance(l, str) or not l for l in locs):
+        if any(not isinstance(loc_label, str) or not loc_label for loc_label in locs):
             failed = True
             logging.error("Kirby & The Amazing Mirror: Location group %s contains invalid entries", group_name)
 
@@ -72,19 +93,7 @@ def validate_regions() -> bool:
 
     # Optional: Validate that bitfield indices (if present) are unique within
     # their location category/bitfield domain.
-    bit_to_loc_by_category: dict[str, dict[int, str]] = {}
-    for loc_key, loc in data.locations.items():
-        if loc.bit_index is None:
-            continue
-        category_name = getattr(loc.category, "name", str(loc.category))
-        category_bit_map = bit_to_loc_by_category.setdefault(category_name, {})
-        if loc.bit_index in category_bit_map and category_bit_map[loc.bit_index] != loc_key:
-            error(
-                "Kirby & The Amazing Mirror: category %s bit_index %s is assigned to multiple locations (%s, %s)"
-                % (category_name, loc.bit_index, category_bit_map[loc.bit_index], loc_key)
-            )
-        else:
-            category_bit_map[loc.bit_index] = loc_key
+    _validate_unique_bit_indices(data, error)
 
     warn_messages.sort()
     error_messages.sort()
@@ -94,6 +103,10 @@ def validate_regions() -> bool:
     for message in error_messages:
         logging.error(message)
 
-    logging.debug("Kirby & The Amazing Mirror sanity check done. Found %s errors and %s warnings.", len(error_messages), len(warn_messages))
+    logging.debug(
+        "Kirby & The Amazing Mirror sanity check done. Found %s errors and %s warnings.",
+        len(error_messages),
+        len(warn_messages),
+    )
 
     return not failed

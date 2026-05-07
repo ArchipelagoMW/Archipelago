@@ -20,7 +20,7 @@ class Goal(Choice):
     Determines what your goal is to consider the game beaten.
 
     - Dark Mind: Defeat Dark Mind and beat the game.
-    
+
     NOTE: Dark Mind is the only supported value. This option is here for the future.
     """
     display_name = "Goal"
@@ -140,7 +140,7 @@ class NoExtraLives(Toggle):
     """
     Start with zero lives and clamp all extra-life gains to zero during gameplay.
       Starts after the tutorial. Off by default.
-      
+
       Yes, you can combine this with One-Hit Mode for an extra challenge.
     """
     display_name = "No Extra Lives"
@@ -240,6 +240,23 @@ class RoomSanity(Toggle):
     default = 0
 
 
+class UnmappedMinorChestReportLocations(Toggle):
+    """
+    Include provisional minor-chest report locations with labels like
+    `Unmapped Minor Chest X-N (Report Location)`.
+
+    Experimental: these locations are intended for mapping/discovery runs and
+    can share native chest bits while mappings are unresolved.
+
+    If you enable this option, please report which room each chest is in to the
+    KirbyAM developers.
+
+    Off by default.
+    """
+    display_name = "Unmapped Minor Chest Report Locations"
+    default = 0
+
+
 class KirbyAmDeathLink(DeathLink):
     __doc__ = DeathLink.__doc__
 
@@ -276,6 +293,8 @@ class KirbyAmOptions(PerGameCommonOptions):
 
     room_sanity: RoomSanity
 
+    unmapped_minor_chest_report_locations: UnmappedMinorChestReportLocations
+
     death_link: KirbyAmDeathLink
 
 
@@ -285,6 +304,7 @@ OPTION_GROUPS = [
     ]),
     OptionGroup("Make the game last longer", [
         RoomSanity,
+        UnmappedMinorChestReportLocations,
     ]),
     OptionGroup("Make the game harder", [
         EnableTraps,

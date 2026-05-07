@@ -432,6 +432,40 @@ class KirbyAmClient(BizHawkClient):
 
         return getattr(ctx, "slot_data", None) is not None
 
+    @staticmethod
+    def _slot_location_id_set(ctx: "BizHawkClientContext") -> set[int] | None:
+        """Return active slot location IDs from slot_data when available."""
+        slot_data = getattr(ctx, "slot_data", None)
+        if not isinstance(slot_data, dict):
+            return None
+        slot_locations = slot_data.get("locations")
+        if not isinstance(slot_locations, dict):
+            return None
+
+        ids: set[int] = set()
+        for location_meta in slot_locations.values():
+            if not isinstance(location_meta, dict):
+                continue
+            location_id = location_meta.get("location_id")
+            if isinstance(location_id, int):
+                ids.add(location_id)
+        return ids
+
+    @staticmethod
+    def _active_location_id_set(ctx: "BizHawkClientContext") -> set[int] | None:
+        """Return active location IDs from server state, falling back to slot_data metadata."""
+        server_locations = getattr(ctx, "server_locations", None)
+        if isinstance(server_locations, set):
+            return {location_id for location_id in server_locations if isinstance(location_id, int)}
+
+        missing_locations = getattr(ctx, "missing_locations", None)
+        checked_locations = getattr(ctx, "checked_locations", None)
+        if isinstance(missing_locations, set) and isinstance(checked_locations, set):
+            combined = missing_locations | checked_locations
+            return {location_id for location_id in combined if isinstance(location_id, int)}
+
+        return KirbyAmClient._slot_location_id_set(ctx)
+
     def _log_notify(self, level: str, msg: str, *args: object, **kwargs: object) -> None:
         """
         Level 1 (Notify): AP client output + log file, paired with BizHawk popup at call sites.
@@ -2318,6 +2352,10 @@ class KirbyAmClient(BizHawkClient):
                 continue
             if raw[byte_index] & (1 << (bit % 8)):
                 mapped_checked_locations.update(self._minor_chest_location_ids_by_bit.get(bit, []))
+
+        active_location_ids = self._active_location_id_set(ctx)
+        if active_location_ids is not None:
+            mapped_checked_locations.intersection_update(active_location_ids)
 
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)

@@ -614,6 +614,466 @@
         "SmallChest"
       ]
     },
+    "MINOR_CHEST_UNMAPPED_X_01_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-1 (Report Location)",
+      "location_id": 3960520,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_02_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-2 (Report Location)",
+      "location_id": 3960521,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_03_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-3 (Report Location)",
+      "location_id": 3960522,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_04_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-4 (Report Location)",
+      "location_id": 3960523,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_05_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-5 (Report Location)",
+      "location_id": 3960524,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_06_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-6 (Report Location)",
+      "location_id": 3960525,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_07_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-7 (Report Location)",
+      "location_id": 3960526,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_08_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-8 (Report Location)",
+      "location_id": 3960527,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_09_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-9 (Report Location)",
+      "location_id": 3960528,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_10_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-10 (Report Location)",
+      "location_id": 3960529,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_11_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-11 (Report Location)",
+      "location_id": 3960530,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_12_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-12 (Report Location)",
+      "location_id": 3960531,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_13_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-13 (Report Location)",
+      "location_id": 3960532,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_14_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-14 (Report Location)",
+      "location_id": 3960533,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_15_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-15 (Report Location)",
+      "location_id": 3960534,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_16_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-16 (Report Location)",
+      "location_id": 3960535,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_17_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-17 (Report Location)",
+      "location_id": 3960536,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_18_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-18 (Report Location)",
+      "location_id": 3960537,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_19_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-19 (Report Location)",
+      "location_id": 3960538,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_20_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-20 (Report Location)",
+      "location_id": 3960539,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_21_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-21 (Report Location)",
+      "location_id": 3960540,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_22_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-22 (Report Location)",
+      "location_id": 3960541,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_23_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-23 (Report Location)",
+      "location_id": 3960542,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_24_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-24 (Report Location)",
+      "location_id": 3960543,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_25_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-25 (Report Location)",
+      "location_id": 3960544,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_26_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-26 (Report Location)",
+      "location_id": 3960545,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_27_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-27 (Report Location)",
+      "location_id": 3960546,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_28_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-28 (Report Location)",
+      "location_id": 3960547,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_29_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-29 (Report Location)",
+      "location_id": 3960548,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_30_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-30 (Report Location)",
+      "location_id": 3960549,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_31_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-31 (Report Location)",
+      "location_id": 3960550,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_32_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-32 (Report Location)",
+      "location_id": 3960551,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_33_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-33 (Report Location)",
+      "location_id": 3960552,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_34_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-34 (Report Location)",
+      "location_id": 3960553,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_35_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-35 (Report Location)",
+      "location_id": 3960554,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_36_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-36 (Report Location)",
+      "location_id": 3960555,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_37_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-37 (Report Location)",
+      "location_id": 3960556,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_38_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-38 (Report Location)",
+      "location_id": 3960557,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_39_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-39 (Report Location)",
+      "location_id": 3960558,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_40_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-40 (Report Location)",
+      "location_id": 3960559,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_41_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-41 (Report Location)",
+      "location_id": 3960560,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_42_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-42 (Report Location)",
+      "location_id": 3960561,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_43_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-43 (Report Location)",
+      "location_id": 3960562,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_44_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-44 (Report Location)",
+      "location_id": 3960563,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_45_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-45 (Report Location)",
+      "location_id": 3960564,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
+    "MINOR_CHEST_UNMAPPED_X_46_REPORT": {
+      "category": "MINOR_CHEST",
+      "label": "Unmapped Minor Chest X-46 (Report Location)",
+      "location_id": 3960565,
+      "tags": [
+        "ReportLocation",
+        "SmallChest",
+        "UnmappedMinorChest"
+      ]
+    },
     "ROOM_SANITY_1_01": {
       "category": "ROOM_SANITY",
       "label": "Room 1-01",
