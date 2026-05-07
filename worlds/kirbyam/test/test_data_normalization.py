@@ -61,3 +61,35 @@ def test_hub_switch_labels_match_expected_location_ids() -> None:
     }
 
     assert labels_by_location_id == expected_labels_by_location_id
+
+
+def test_all_hub_switches_have_expected_unique_transport_mapping() -> None:
+    expected_hub_switch_keys = {
+        "HUB_SWITCH_MOONLIGHT",
+        "HUB_SWITCH_RAINBOW_ROUTE_EAST",
+        "HUB_SWITCH_RAINBOW_ROUTE_SOUTH",
+        "HUB_SWITCH_CABBAGE_CAVERN_CENTER",
+        "HUB_SWITCH_RAINBOW_ROUTE_WEST",
+        "HUB_SWITCH_CARROT",
+        "HUB_SWITCH_RAINBOW_ROUTE_NORTH",
+        "HUB_SWITCH_MUSTARD",
+        "HUB_SWITCH_CABBAGE_CAVERN_WEST",
+        "HUB_SWITCH_RADISH",
+        "HUB_SWITCH_PEPPERMINT_EAST",
+        "HUB_SWITCH_PEPPERMINT_WEST",
+        "HUB_SWITCH_CABBAGE_CAVERN_EAST",
+        "HUB_SWITCH_OLIVE",
+        "HUB_SWITCH_CANDY",
+    }
+
+    hub_switches = {
+        key: location
+        for key, location in kirby_data.locations.items()
+        if key.startswith("HUB_SWITCH_")
+    }
+
+    assert set(hub_switches) == expected_hub_switch_keys
+    assert len({location.location_id for location in hub_switches.values()}) == len(hub_switches)
+    assert len({location.bit_index for location in hub_switches.values()}) == len(hub_switches)
+    assert {location.location_id for location in hub_switches.values()} == set(range(3960400, 3960415))
+    assert {location.bit_index for location in hub_switches.values()} == set(range(15))
