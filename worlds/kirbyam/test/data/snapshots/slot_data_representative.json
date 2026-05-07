@@ -443,6 +443,150 @@
         "MAP_RAINBOW_ROUTE"
       ]
     },
+    "MINOR_CHEST_CABBAGE_CAVERN_3_08": {
+      "category": "MINOR_CHEST",
+      "label": "Cabbage Cavern 3-08 - Small Chest",
+      "location_id": 3960518,
+      "tags": [
+        "MAP_CABBAGE_CAVERN",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_CABBAGE_CAVERN_3_15": {
+      "category": "MINOR_CHEST",
+      "label": "Cabbage Cavern 3-15 - Small Chest",
+      "location_id": 3960512,
+      "tags": [
+        "MAP_CABBAGE_CAVERN",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_CABBAGE_CAVERN_3_BOSS": {
+      "category": "MINOR_CHEST",
+      "label": "Cabbage Cavern 3-Boss - Small Chest",
+      "location_id": 3960514,
+      "tags": [
+        "MAP_CABBAGE_CAVERN",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_CANDY_CONSTELLATION_9_12": {
+      "category": "MINOR_CHEST",
+      "label": "Candy Constellation 9-12 - Small Chest",
+      "location_id": 3960507,
+      "tags": [
+        "MAP_CANDY_CONSTELLATION",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_CANDY_CONSTELLATION_9_17": {
+      "category": "MINOR_CHEST",
+      "label": "Candy Constellation 9-17 - Small Chest",
+      "location_id": 3960516,
+      "tags": [
+        "MAP_CANDY_CONSTELLATION",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_CANDY_CONSTELLATION_9_CHEST_3": {
+      "category": "MINOR_CHEST",
+      "label": "Candy Constellation 9-Chest 3 - Small Chest",
+      "location_id": 3960505,
+      "tags": [
+        "MAP_CANDY_CONSTELLATION",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_CARROT_CASTLE_5_CHEST_2": {
+      "category": "MINOR_CHEST",
+      "label": "Carrot Castle 5-Chest 2 - Small Chest",
+      "location_id": 3960504,
+      "tags": [
+        "MAP_CARROT_CASTLE",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_MOONLIGHT_MANSION_2_01": {
+      "category": "MINOR_CHEST",
+      "label": "Moonlight Mansion 2-01 - Small Chest",
+      "location_id": 3960511,
+      "tags": [
+        "MAP_MOONLIGHT_MANSION",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_MOONLIGHT_MANSION_2_16": {
+      "category": "MINOR_CHEST",
+      "label": "Moonlight Mansion 2-16 - Small Chest",
+      "location_id": 3960517,
+      "tags": [
+        "MAP_MOONLIGHT_MANSION",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_MUSTARD_MOUNTAIN_4_16": {
+      "category": "MINOR_CHEST",
+      "label": "Mustard Mountain 4-16 - Small Chest",
+      "location_id": 3960513,
+      "tags": [
+        "MAP_MUSTARD_MOUNTAIN",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_OLIVE_OCEAN_6_05": {
+      "category": "MINOR_CHEST",
+      "label": "Olive Ocean 6-05 - Small Chest",
+      "location_id": 3960508,
+      "tags": [
+        "MAP_OLIVE_OCEAN",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_OLIVE_OCEAN_6_13": {
+      "category": "MINOR_CHEST",
+      "label": "Olive Ocean 6-13 - Small Chest",
+      "location_id": 3960519,
+      "tags": [
+        "MAP_OLIVE_OCEAN",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_PEPPERMINT_PALACE_7_07": {
+      "category": "MINOR_CHEST",
+      "label": "Peppermint Palace 7-07 - Small Chest",
+      "location_id": 3960515,
+      "tags": [
+        "MAP_PEPPERMINT_PALACE",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_PEPPERMINT_PALACE_7_BOSS": {
+      "category": "MINOR_CHEST",
+      "label": "Peppermint Palace 7-Boss - Small Chest",
+      "location_id": 3960503,
+      "tags": [
+        "MAP_PEPPERMINT_PALACE",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_PEPPERMINT_PALACE_7_CHEST": {
+      "category": "MINOR_CHEST",
+      "label": "Peppermint Palace 7-Chest - Small Chest",
+      "location_id": 3960506,
+      "tags": [
+        "MAP_PEPPERMINT_PALACE",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_RADISH_RUINS_8_02": {
+      "category": "MINOR_CHEST",
+      "label": "Radish Ruins 8-02 - Small Chest",
+      "location_id": 3960510,
+      "tags": [
+        "MAP_RADISH_RUINS",
+        "SmallChest"
+      ]
+    },
     "MINOR_CHEST_RAINBOW_ROUTE_1_20": {
       "category": "MINOR_CHEST",
       "label": "Rainbow Route 1-20 - Small Chest",

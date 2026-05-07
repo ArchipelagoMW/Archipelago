@@ -5717,7 +5717,9 @@
     ]
   },
   "REGION_MOONLIGHT_MANSION/ROOM_2_01": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_MOONLIGHT_MANSION_2_01"
+    ],
     "events": [],
     "exits": [
       "REGION_MOONLIGHT_MANSION/ROOM_2_03",
@@ -7166,7 +7168,9 @@
     ]
   },
   "REGION_MOONLIGHT_MANSION/ROOM_2_16": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_MOONLIGHT_MANSION_2_16"
+    ],
     "events": [],
     "exits": [
       "REGION_MOONLIGHT_MANSION/ROOM_2_12",
@@ -8063,7 +8067,9 @@
     ]
   },
   "REGION_CABBAGE_CAVERN/ROOM_3_BOSS": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_CABBAGE_CAVERN_3_BOSS"
+    ],
     "events": [],
     "exits": [
       "REGION_CABBAGE_CAVERN/ROOM_3_09",
@@ -8866,7 +8872,9 @@
     ]
   },
   "REGION_CABBAGE_CAVERN/ROOM_3_08": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_CABBAGE_CAVERN_3_08"
+    ],
     "events": [],
     "exits": [
       "REGION_CABBAGE_CAVERN/ROOM_3_05",
@@ -9372,7 +9380,8 @@
   },
   "REGION_CABBAGE_CAVERN/ROOM_3_15": {
     "locations": [
-      "BOSS_DEFEAT_6"
+      "BOSS_DEFEAT_6",
+      "MINOR_CHEST_CABBAGE_CAVERN_3_15"
     ],
     "events": [],
     "exits": [
@@ -11391,7 +11400,9 @@
     ]
   },
   "REGION_MUSTARD_MOUNTAIN/ROOM_4_16": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_MUSTARD_MOUNTAIN_4_16"
+    ],
     "events": [],
     "exits": [
       "REGION_MUSTARD_MOUNTAIN/ROOM_4_BOSS",
@@ -11937,7 +11948,9 @@
     ]
   },
   "REGION_CARROT_CASTLE/ROOM_5_CHEST_2": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_CARROT_CASTLE_5_CHEST_2"
+    ],
     "events": [],
     "exits": [
       "REGION_CARROT_CASTLE/ROOM_5_16",
@@ -14847,7 +14860,9 @@
     ]
   },
   "REGION_OLIVE_OCEAN/ROOM_6_05": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_OLIVE_OCEAN_6_05"
+    ],
     "events": [],
     "exits": [
       "REGION_OLIVE_OCEAN/ROOM_6_04",
@@ -15500,7 +15515,9 @@
     ]
   },
   "REGION_OLIVE_OCEAN/ROOM_6_13": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_OLIVE_OCEAN_6_13"
+    ],
     "events": [
       "Activate Lever - Olive Ocean 6-13"
     ],
@@ -16609,7 +16626,8 @@
   },
   "REGION_PEPPERMINT_PALACE/ROOM_7_CHEST": {
     "locations": [
-      "MAJOR_CHEST_PEPPERMINT_PALACE"
+      "MAJOR_CHEST_PEPPERMINT_PALACE",
+      "MINOR_CHEST_PEPPERMINT_PALACE_7_CHEST"
     ],
     "events": [],
     "exits": [
@@ -16974,7 +16992,9 @@
     ]
   },
   "REGION_PEPPERMINT_PALACE/ROOM_7_BOSS": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_PEPPERMINT_PALACE_7_BOSS"
+    ],
     "events": [],
     "exits": [
       "REGION_PEPPERMINT_PALACE/ROOM_7_11",
@@ -17611,7 +17631,9 @@
     ]
   },
   "REGION_PEPPERMINT_PALACE/ROOM_7_07": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_PEPPERMINT_PALACE_7_07"
+    ],
     "events": [],
     "exits": [
       "REGION_PEPPERMINT_PALACE/ROOM_7_11",
@@ -19809,7 +19831,9 @@
     ]
   },
   "REGION_RADISH_RUINS/ROOM_8_02": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_RADISH_RUINS_8_02"
+    ],
     "events": [],
     "exits": [
       "REGION_RADISH_RUINS/ROOM_8_11",
@@ -22124,7 +22148,9 @@
     ]
   },
   "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_3": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_CANDY_CONSTELLATION_9_CHEST_3"
+    ],
     "events": [],
     "exits": [
       "REGION_CANDY_CONSTELLATION/ROOM_9_08",
@@ -23507,7 +23533,9 @@
     ]
   },
   "REGION_CANDY_CONSTELLATION/ROOM_9_12": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_CANDY_CONSTELLATION_9_12"
+    ],
     "events": [],
     "exits": [
       "REGION_CANDY_CONSTELLATION/ROOM_9_10",
@@ -23859,7 +23887,9 @@
     ]
   },
   "REGION_CANDY_CONSTELLATION/ROOM_9_17": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_CANDY_CONSTELLATION_9_17"
+    ],
     "events": [],
     "exits": [
       "REGION_CANDY_CONSTELLATION/ROOM_9_18",
@@ -24525,6 +24555,3 @@
     ]
   }
 }
-
-
-

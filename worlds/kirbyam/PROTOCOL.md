@@ -29,7 +29,7 @@ Update policy:
 
 ```
 EWRAM Layout (0x02000000 - 0x02040000):
-  
+
     0x02000000 - 0x02040000   EWRAM Region (256 KB)
         ├─ 0x02000000 - 0x0202BFFF   Native game state
         ├─ 0x0203B000 - 0x0203B08B   AP Mailbox (reserved, 140 bytes)
@@ -157,11 +157,27 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | MINOR_CHEST_RAINBOW_ROUTE_1_20 | 3960500 | Rainbow Route 1-20 small chest (native small_chest_flags_native bit 1) |
 | MINOR_CHEST_RAINBOW_ROUTE_1_22 | 3960501 | Rainbow Route 1-22 small chest (native small_chest_flags_native bit 23) |
 | MINOR_CHEST_RAINBOW_ROUTE_1_38 | 3960502 | Rainbow Route 1-38 small chest (native small_chest_flags_native bit 41) |
+| MINOR_CHEST_PEPPERMINT_PALACE_7_BOSS | 3960503 | Peppermint Palace 7-Boss small chest (native small_chest_flags_native bit 20) |
+| MINOR_CHEST_CARROT_CASTLE_5_CHEST_2 | 3960504 | Carrot Castle 5-Chest 2 small chest (native small_chest_flags_native bit 21) |
+| MINOR_CHEST_CANDY_CONSTELLATION_9_CHEST_3 | 3960505 | Candy Constellation 9-Chest 3 small chest (native small_chest_flags_native bit 22) |
+| MINOR_CHEST_PEPPERMINT_PALACE_7_CHEST | 3960506 | Peppermint Palace 7-Chest small chest (native small_chest_flags_native bit 24) |
+| MINOR_CHEST_CANDY_CONSTELLATION_9_12 | 3960507 | Candy Constellation 9-12 small chest (native small_chest_flags_native bit 25) |
+| MINOR_CHEST_OLIVE_OCEAN_6_05 | 3960508 | Olive Ocean 6-05 small chest (native small_chest_flags_native bit 26) |
+| MINOR_CHEST_RADISH_RUINS_8_02 | 3960510 | Radish Ruins 8-02 small chest (native small_chest_flags_native bit 29) |
+| MINOR_CHEST_MOONLIGHT_MANSION_2_01 | 3960511 | Moonlight Mansion 2-01 small chest (native small_chest_flags_native bit 30) |
+| MINOR_CHEST_CABBAGE_CAVERN_3_15 | 3960512 | Cabbage Cavern 3-15 small chest (native small_chest_flags_native bit 31) |
+| MINOR_CHEST_MUSTARD_MOUNTAIN_4_16 | 3960513 | Mustard Mountain 4-16 small chest (native small_chest_flags_native bit 32) |
+| MINOR_CHEST_CABBAGE_CAVERN_3_BOSS | 3960514 | Cabbage Cavern 3-Boss small chest (native small_chest_flags_native bit 43) |
+| MINOR_CHEST_PEPPERMINT_PALACE_7_07 | 3960515 | Peppermint Palace 7-07 small chest (native small_chest_flags_native bit 45) |
+| MINOR_CHEST_CANDY_CONSTELLATION_9_17 | 3960516 | Candy Constellation 9-17 small chest (native small_chest_flags_native bit 47) |
+| MINOR_CHEST_MOONLIGHT_MANSION_2_16 | 3960517 | Moonlight Mansion 2-16 small chest (native small_chest_flags_native bit 48) |
+| MINOR_CHEST_CABBAGE_CAVERN_3_08 | 3960518 | Cabbage Cavern 3-08 small chest (native small_chest_flags_native bit 49) |
+| MINOR_CHEST_OLIVE_OCEAN_6_13 | 3960519 | Olive Ocean 6-13 small chest (native small_chest_flags_native bit 50) |
 | ROOM_SANITY_* | 3961000+ | Room visit checks (`Room X-<room_code>`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15; includes designed goal/warp rooms |
 | *Reserved*    | 3960460+ | Future location families |
 
 Minor chest status (Issue #540):
-- Initial MINOR_CHEST AP checks are active for Rainbow Route rooms 1-20, 1-22, and 1-38.
+- Expanded MINOR_CHEST AP checks are active for unique native chest-bit mappings in Rainbow Route, Cabbage Cavern, Mustard Mountain, Carrot Castle, Olive Ocean, Peppermint Palace, Radish Ruins, Moonlight Mansion, and Candy Constellation.
 - Active MINOR_CHEST checks are polled from native `small_chest_flags_native` and use direct native chest bit semantics.
 - Respawn/reopen policy is documented as non-repeatable (single-fire chest state) based on decomp evidence in `katam/src/treasures.c` and `katam/asm/chest.s`.
 - Multi-chest room index disambiguation remains deferred (tracked in Issue #542).

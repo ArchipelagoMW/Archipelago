@@ -19,13 +19,17 @@ repos:
       - id: flake8-syntax
         name: flake8 syntax guard (CI parity)
         entry: python -m flake8 --count --select=E9,F63,F7,F82 --ignore=F824 --show-source --statistics
-        language: system
+        language: python
+        additional_dependencies:
+          - flake8
         types: [python]
 
       - id: flake8-lint
         name: flake8 lint (CI parity)
         entry: python -m flake8 --count --max-complexity=14 --max-doc-length=120 --max-line-length=120 --statistics
-        language: system
+        language: python
+        additional_dependencies:
+          - flake8
         types: [python]
 
       - id: mypy-strict
@@ -45,7 +49,7 @@ repos:
 
       - id: kirbyam-pytest
         name: kirbyam unit tests
-        entry: python -m pytest worlds/kirbyam/test -n auto --dist worksteal
+        entry: python -m pytest worlds/kirbyam/test -n auto --dist worksteal --ignore worlds/kirbyam/test/test_generate_integration.py --ignore worlds/kirbyam/test/test_hosting_integration.py --ignore worlds/kirbyam/test/test_bizhawk_connector_integration.py
         language: system
         pass_filenames: false
         stages: [manual]

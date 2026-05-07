@@ -607,12 +607,16 @@ async def test_poll_minor_chest_sends_location_checks_for_set_bits(mock_bizhawk_
     client = KirbyAmClient()
     client.initialize_client()
 
-    room_1_20 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_20"].location_id
-    room_1_22 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_22"].location_id
-    room_1_38 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_38"].location_id
-    mock_bizhawk_context.checked_locations = set()
+    minor_with_bits = [
+        loc for loc in data.locations.values()
+        if getattr(loc, "category", None) == LocationCategory.MINOR_CHEST and loc.bit_index is not None
+    ]
+    expected_locations = sorted(loc.location_id for loc in minor_with_bits)
+    bits = 0
+    for loc in minor_with_bits:
+        bits |= (1 << loc.bit_index)
 
-    bits = (1 << 1) | (1 << 23) | (1 << 41)
+    mock_bizhawk_context.checked_locations = set()
 
     with patch.dict(data.native_ram_addresses, {"small_chest_flags_native": 0x02038960}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
@@ -622,7 +626,7 @@ async def test_poll_minor_chest_sends_location_checks_for_set_bits(mock_bizhawk_
         await client._poll_minor_chest_locations(mock_bizhawk_context)
 
     mock_send.assert_awaited_once_with([
-        {"cmd": "LocationChecks", "locations": [room_1_20, room_1_22, room_1_38]}
+        {"cmd": "LocationChecks", "locations": expected_locations}
     ])
 
 
@@ -1265,7 +1269,7 @@ def test_client_initialization():
     """Test client state is properly initialized."""
     client = KirbyAmClient()
     client.initialize_client()
-    
+
     assert client._checked_location_bits == set()
     assert client._delivered_item_index == 0
     assert client._delivery_pending is False

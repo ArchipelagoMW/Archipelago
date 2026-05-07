@@ -560,5 +560,197 @@
     "bit_index": 41,
     "category": "MINOR_CHEST",
     "location_id": 3960502
+  },
+  "MINOR_CHEST_PEPPERMINT_PALACE_7_BOSS": {
+    "label": "Peppermint Palace 7-Boss - Small Chest",
+    "parent_region": "REGION_PEPPERMINT_PALACE/ROOM_7_BOSS",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_PEPPERMINT_PALACE"
+    ],
+    "bit_index": 20,
+    "category": "MINOR_CHEST",
+    "location_id": 3960503
+  },
+  "MINOR_CHEST_CARROT_CASTLE_5_CHEST_2": {
+    "label": "Carrot Castle 5-Chest 2 - Small Chest",
+    "parent_region": "REGION_CARROT_CASTLE/ROOM_5_CHEST_2",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_CARROT_CASTLE"
+    ],
+    "bit_index": 21,
+    "category": "MINOR_CHEST",
+    "location_id": 3960504
+  },
+  "MINOR_CHEST_CANDY_CONSTELLATION_9_CHEST_3": {
+    "label": "Candy Constellation 9-Chest 3 - Small Chest",
+    "parent_region": "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_3",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_CANDY_CONSTELLATION"
+    ],
+    "bit_index": 22,
+    "category": "MINOR_CHEST",
+    "location_id": 3960505
+  },
+  "MINOR_CHEST_PEPPERMINT_PALACE_7_CHEST": {
+    "label": "Peppermint Palace 7-Chest - Small Chest",
+    "parent_region": "REGION_PEPPERMINT_PALACE/ROOM_7_CHEST",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_PEPPERMINT_PALACE"
+    ],
+    "bit_index": 24,
+    "category": "MINOR_CHEST",
+    "location_id": 3960506
+  },
+  "MINOR_CHEST_CANDY_CONSTELLATION_9_12": {
+    "label": "Candy Constellation 9-12 - Small Chest",
+    "parent_region": "REGION_CANDY_CONSTELLATION/ROOM_9_12",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_CANDY_CONSTELLATION"
+    ],
+    "bit_index": 25,
+    "category": "MINOR_CHEST",
+    "location_id": 3960507
+  },
+  "MINOR_CHEST_OLIVE_OCEAN_6_05": {
+    "label": "Olive Ocean 6-05 - Small Chest",
+    "parent_region": "REGION_OLIVE_OCEAN/ROOM_6_05",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_OLIVE_OCEAN"
+    ],
+    "bit_index": 26,
+    "category": "MINOR_CHEST",
+    "location_id": 3960508
+  },
+  "MINOR_CHEST_RADISH_RUINS_8_02": {
+    "label": "Radish Ruins 8-02 - Small Chest",
+    "parent_region": "REGION_RADISH_RUINS/ROOM_8_02",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_RADISH_RUINS"
+    ],
+    "bit_index": 29,
+    "category": "MINOR_CHEST",
+    "location_id": 3960510
+  },
+  "MINOR_CHEST_MOONLIGHT_MANSION_2_01": {
+    "label": "Moonlight Mansion 2-01 - Small Chest",
+    "parent_region": "REGION_MOONLIGHT_MANSION/ROOM_2_01",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_MOONLIGHT_MANSION"
+    ],
+    "bit_index": 30,
+    "category": "MINOR_CHEST",
+    "location_id": 3960511
+  },
+  "MINOR_CHEST_CABBAGE_CAVERN_3_15": {
+    "label": "Cabbage Cavern 3-15 - Small Chest",
+    "parent_region": "REGION_CABBAGE_CAVERN/ROOM_3_15",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_CABBAGE_CAVERN"
+    ],
+    "bit_index": 31,
+    "category": "MINOR_CHEST",
+    "location_id": 3960512
+  },
+  "MINOR_CHEST_MUSTARD_MOUNTAIN_4_16": {
+    "label": "Mustard Mountain 4-16 - Small Chest",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/ROOM_4_16",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_MUSTARD_MOUNTAIN"
+    ],
+    "bit_index": 32,
+    "category": "MINOR_CHEST",
+    "location_id": 3960513
+  },
+  "MINOR_CHEST_CABBAGE_CAVERN_3_BOSS": {
+    "label": "Cabbage Cavern 3-Boss - Small Chest",
+    "parent_region": "REGION_CABBAGE_CAVERN/ROOM_3_BOSS",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_CABBAGE_CAVERN"
+    ],
+    "bit_index": 43,
+    "category": "MINOR_CHEST",
+    "location_id": 3960514
+  },
+  "MINOR_CHEST_PEPPERMINT_PALACE_7_07": {
+    "label": "Peppermint Palace 7-07 - Small Chest",
+    "parent_region": "REGION_PEPPERMINT_PALACE/ROOM_7_07",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_PEPPERMINT_PALACE"
+    ],
+    "bit_index": 45,
+    "category": "MINOR_CHEST",
+    "location_id": 3960515
+  },
+  "MINOR_CHEST_CANDY_CONSTELLATION_9_17": {
+    "label": "Candy Constellation 9-17 - Small Chest",
+    "parent_region": "REGION_CANDY_CONSTELLATION/ROOM_9_17",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_CANDY_CONSTELLATION"
+    ],
+    "bit_index": 47,
+    "category": "MINOR_CHEST",
+    "location_id": 3960516
+  },
+  "MINOR_CHEST_MOONLIGHT_MANSION_2_16": {
+    "label": "Moonlight Mansion 2-16 - Small Chest",
+    "parent_region": "REGION_MOONLIGHT_MANSION/ROOM_2_16",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_MOONLIGHT_MANSION"
+    ],
+    "bit_index": 48,
+    "category": "MINOR_CHEST",
+    "location_id": 3960517
+  },
+  "MINOR_CHEST_CABBAGE_CAVERN_3_08": {
+    "label": "Cabbage Cavern 3-08 - Small Chest",
+    "parent_region": "REGION_CABBAGE_CAVERN/ROOM_3_08",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_CABBAGE_CAVERN"
+    ],
+    "bit_index": 49,
+    "category": "MINOR_CHEST",
+    "location_id": 3960518
+  },
+  "MINOR_CHEST_OLIVE_OCEAN_6_13": {
+    "label": "Olive Ocean 6-13 - Small Chest",
+    "parent_region": "REGION_OLIVE_OCEAN/ROOM_6_13",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_OLIVE_OCEAN"
+    ],
+    "bit_index": 50,
+    "category": "MINOR_CHEST",
+    "location_id": 3960519
   }
 }

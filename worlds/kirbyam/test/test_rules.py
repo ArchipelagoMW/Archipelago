@@ -5,11 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from unittest.mock import patch
 
-from ..data import data
 from ..options import Goal
 from ..rules import (
     ABILITY_GATE_RULES,
-    _ABILITY_GATE_STATUS_VALUES,
     get_stake_breaking_abilities,
     get_stake_gated_transition_entrance_names,
     set_rules,
@@ -223,17 +221,17 @@ def test_room_subareas_pure_topology_with_all_rooms() -> None:
             assert loc_key in known_locations, (
                 f"Room {room_key} claims unknown location key {loc_key!r}"
             )
-    # Exactly 25 rooms carry locations
-    # (9 major chests + 5 vitality/sound + 8 boss defeats + 3 enabled minor chests).
-    assert len(rooms_with_locations) == 25, (
-        f"Expected 25 rooms with locations, got {len(rooms_with_locations)}: {list(rooms_with_locations.keys())}"
+    # Exactly 39 rooms now carry AP location entries after MINOR_CHEST expansion.
+    room_keys = list(rooms_with_locations.keys())
+    assert len(rooms_with_locations) == 39, (
+        f"Expected 39 rooms with locations, got {len(rooms_with_locations)}: {room_keys}"
     )
 
     # Topology includes all rooms, but Room Sanity remains optional metadata.
     assert all(
         "room_sanity" in region for region in room_regions.values()
     ), "All room regions must carry room_sanity metadata"
-    
+
     assert all(
         "exits" in region for region in room_regions.values()
     ), "All room regions must have exits defined"
@@ -267,15 +265,18 @@ def test_room_sanity_binding_optional() -> None:
     from ..rules import _bind_room_sanity_locations
 
     room_regions = load_json_data("regions/rooms.json")
-    
+
     regions_before = {
         name: region.get("locations", []).copy()
         for name, region in room_regions.items()
     }
-    
+
     _bind_room_sanity_locations(room_regions, enable_room_sanity=False)
-    assert room_regions["REGION_RAINBOW_ROUTE/ROOM_1_CENTRAL_CIRCLE"]["locations"] == regions_before["REGION_RAINBOW_ROUTE/ROOM_1_CENTRAL_CIRCLE"]
-    
+    assert (
+        room_regions["REGION_RAINBOW_ROUTE/ROOM_1_CENTRAL_CIRCLE"]["locations"]
+        == regions_before["REGION_RAINBOW_ROUTE/ROOM_1_CENTRAL_CIRCLE"]
+    )
+
     _bind_room_sanity_locations(room_regions, enable_room_sanity=True)
     assert "ROOM_SANITY_1_CENTRAL_CIRCLE" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_CENTRAL_CIRCLE"]["locations"]
     assert "ROOM_SANITY_1_WARP" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_WARP"]["locations"]
@@ -521,4 +522,3 @@ def test_hub_switch_locations_have_matching_big_switch_events() -> None:
                 found_events.add(expected_event)
 
     assert found_events == set(expected_events_by_hub_switch.values())
-
