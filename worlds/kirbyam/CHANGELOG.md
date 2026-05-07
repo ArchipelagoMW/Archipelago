@@ -19,7 +19,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### Bug Fixes
 
-- None.
+- Prevent trap items that were already ACKed in the current client session from being redelivered after ROM reload/reconnect rewinds the mailbox counter.
 
 ### Internal Changes
 

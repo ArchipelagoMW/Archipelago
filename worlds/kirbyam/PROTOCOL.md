@@ -431,6 +431,7 @@ Behavior note:
 
 `debug_item_counter` reconciliation contract:
 - If `debug_item_counter < delivered_item_index`, rewind cursor to the ROM count.
+- If that rewind revisits trap entries already ACKed in the current client session, the client must locally consume those trap indices instead of writing them back to the mailbox again.
 - If `debug_item_counter` is ahead but still within `len(ctx.items_received)`, treat it as advisory unless a mailbox delivery is currently pending and `incoming_item_flag == 0` (same-tick ROM ACK path).
 - If `debug_item_counter > len(ctx.items_received)`, treat the counter as stale/debug-only and continue normal mailbox delivery once the mailbox is empty. This anti-starvation fallback must not permanently suppress writes.
 - Transition-based logs should make the ahead-counter fallback visible without per-tick spam.

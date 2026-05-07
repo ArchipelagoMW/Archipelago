@@ -2,7 +2,7 @@
 import asyncio
 import pytest
 import logging
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import AsyncMock, Mock, call, patch
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.context import _game_watcher, AuthStatus, BizHawkClientCommandProcessor
@@ -2269,6 +2269,44 @@ async def test_receive_notification_reconnect_replay_dedupes_on_rewind(mock_bizh
         await client._deliver_items(mock_bizhawk_context)
 
     mock_display.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_skips_already_acked_trap_on_counter_rewind(mock_bizhawk_context):
+    """Trap deliveries already ACKed in this session should not be replayed after a counter rewind."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860032, player=2),
+    ]
+
+    client._acknowledged_trap_indices.add(0)
+    client._delivered_item_index = 1
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write, \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    assert client._delivered_item_index == 1
+    assert client._delivery_pending is False
+    mock_display.assert_not_awaited()
+    assert mock_write.await_args_list == [
+        call(
+            mock_bizhawk_context.bizhawk_ctx,
+            [(data.transport_ram_addresses["delivered_item_index"], (0).to_bytes(4, 'little'), 'System Bus')],
+        ),
+        call(
+            mock_bizhawk_context.bizhawk_ctx,
+            [(data.transport_ram_addresses["delivered_item_index"], (1).to_bytes(4, 'little'), 'System Bus')],
+        ),
+    ]
 
 
 @pytest.mark.asyncio
