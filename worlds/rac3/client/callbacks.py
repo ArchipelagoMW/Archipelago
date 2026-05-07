@@ -381,9 +381,8 @@ async def handle_planet_changed(ctx: "Context") -> None:
     """Checks if the player is changing planet"""
     if ctx.slot_data is None:
         return
-    last_planet = ctx.current_planet
-    ctx.current_planet, _map = ctx.game_interface.map_switch()
-    if last_planet is not ctx.current_planet:
+    # Player visits a new planet/region
+    if ctx.game_interface.new_planet:
         ctx.game_interface.hacker_door_addresses = {}
 
         # Changing planet counts as a reload.
@@ -391,11 +390,13 @@ async def handle_planet_changed(ctx: "Context") -> None:
                                          ctx.slot_data[RAC3OPTION.SPEEDUPS].get(RAC3SPEEDUPS.HACKER, False),
                                          "opened_the_hacker_doors", PLANETS_WITH_HACKER_PUZZLES,
                                          HACKER_PUZZLE_TO_REGION, True)
-
-        if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
-            ctx.game_interface.tyhrranosis_fix()
-
         ctx.game_interface.softlock_warning()
+        ctx.game_interface.tyhrranosis_fix()
+
+    # Handle UT map changes
+    last_planet = ctx.current_planet
+    ctx.current_planet, _map = ctx.game_interface.map_switch()
+    if last_planet is not ctx.current_planet:
         ctx.current_map = _map
         await ctx.send_msgs([ClientMessage.set_map(ctx.slot, ctx.team, _map)])
 

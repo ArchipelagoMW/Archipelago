@@ -4,6 +4,7 @@
 class RAC3STATUS:
     """Constant addresses for in game memory values"""
     APCODE = 51000000
+    RATCHET_MOBY_POINTER = 0x001A71A0
     ACTION = 0x001A71A4
     PREV_ACTION = 0x001A71B0
     SECOND_PREV_ACTION = 0x001A71BC

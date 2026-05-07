@@ -51,7 +51,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION
+from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION, RAC3PROGRESSFLAG, RANGER_TO_REGION
 from worlds.rac3.constants.region import (PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET,
                                           PLANETS_WITH_HACKER_PUZZLES, PLANETS_WITH_REFRACTOR_PUZZLES,
                                           PLANETS_WITH_TYHRRANOID_PUZZLES, RAC3REGION, REGION_TO_HACKER_DOOR_COUNT,
@@ -131,6 +131,7 @@ class Rac3Interface(GameInterface):
     is_reloading: int = 0
     timers: dict[str, float] = {}
     planet: str = RAC3REGION.GALAXY
+    new_planet: bool = True
     player_type: str = RAC3PLAYERTYPE.RATCHET
     player_pos: RAC3POSITIONDATA
     vehicle: int = 0
@@ -144,6 +145,7 @@ class Rac3Interface(GameInterface):
     health: int = 100
     max_health: int = 10
     main_menu: bool = False
+    between_planets: bool = True
     ryno: bool = False
     death_count: int = 0
     last_death_count: int = 0
@@ -178,6 +180,7 @@ class Rac3Interface(GameInterface):
     vendor_string_pointers: dict[str, int] = {}
     should_restore_vendor_item_names: bool = True
     tyhrra_dropship: int = 0
+    tyhrra_intro: int = 0
     metro_dropship: int = 0
     holo_teleport: int = 0
     hacker_door_addresses: dict[int, int] = {}
@@ -289,7 +292,7 @@ class Rac3Interface(GameInterface):
 
     def proc_option(self, slot_data: dict[str, Any]):
         """Process slot option data received when connecting to the server"""
-        logger.debug(f"{slot_data}")
+        logger.debug(f"Processing options: {slot_data}")
         self.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
         self.options.start_inventory_from_pool = slot_data[RAC3OPTION.START_INVENTORY_FROM_POOL]
         self.options.starting_weapons = slot_data[RAC3OPTION.STARTING_WEAPONS]
@@ -488,7 +491,12 @@ class Rac3Interface(GameInterface):
 
     def early_update(self):
         """Ran early in the update cycle, memory reads should happen here before any evaluations begin"""
-        self.planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
+        new_planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
+        if self.planet != new_planet:
+            self.planet = new_planet
+            self.new_planet = True
+        else:
+            self.new_planet = False
         self.player_type = PLAYER_TYPE_TO_NAME[self._read8(RAC3STATUS.PLAYER_TYPE)]
         self.player_pos = RAC3POSITIONDATA(
             self._read_float(RAC3STATUS.POS_X),
@@ -497,6 +505,10 @@ class Rac3Interface(GameInterface):
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
         self.action = self._read8(RAC3STATUS.ACTION)
         self.action_type = self._read8(RAC3STATUS.ACTION_TYPE)
+        if not self.between_planets:
+            self.between_planets = bool(self._read32(RAC3STATUS.RATCHET_MOBY_POINTER))
+        elif self._read32(RAC3STATUS.RATCHET_MOBY_POINTER):
+            self.between_planets = False if self.action else True
         self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
         self.inputs = RAC3INPUT(self._read16(RAC3STATUS.READ_INPUT))
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -1126,7 +1138,8 @@ class Rac3Interface(GameInterface):
 
     def tyhrranosis_fix(self):
         """Prevent a Crash on Tyhrranosis by disabling the robot tyhrranoids"""
-        self._write8(RAC3STATUS.ROBONOIDS, 0)
+        if self.planet == RAC3REGION.TYHRRANOSIS:
+            self._write8(RAC3STATUS.ROBONOIDS, 0)
 
     def softlock_warning(self):
         """Checks if the player is on a planet with a potential softlock and informs them on how to escape"""
@@ -1448,13 +1461,13 @@ class Rac3Interface(GameInterface):
                 and infobot_location not in self.checked_locations
                 and infobot_flag != RAC3STATUS.ALLOW_SHIP):
                 self._write8(infobot_flag, 0)
+        if self.new_planet:
+            if self.planet == RAC3REGION.STARSHIP_PHOENIX:
+                # Fix can't play Qwark VidComics in some case which first event is skipped
+                self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
 
-        if self.planet == RAC3REGION.STARSHIP_PHOENIX:
-            # Fix can't play Qwark VidComics in some case which first event is skipped
-            self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
-
-        if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
-            self._write8(RAC3STATUS.ZELDRIN_START_LEVIATHAN, 0)
+            if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
+                self._write8(RAC3STATUS.ZELDRIN_START_LEVIATHAN, 0)
 
     ##################
     # End of Main Loop #
@@ -1962,22 +1975,23 @@ class Rac3Interface(GameInterface):
 
     def shortcut_cycler(self):
         """Activates Taxis/Dropships/Teleporter shortcuts"""
+        if (self.planet != RAC3REGION.TYHRRANOSIS
+            and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations):
+            self.tyhrra_dropship = 0
+        if (self.planet != RAC3REGION.METROPOLIS
+            and RAC3LOCATION.METROPOLIS_DEFEAT_KLUNK not in self.checked_locations):
+            self.metro_dropship = 0
+        if (self.planet != RAC3REGION.HOLOSTAR_STUDIOS
+            and RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP not in self.checked_locations):
+            self.holo_teleport = 0
         for name, data in RAC3_SHORTCUT_DATA_TABLE.items():
-            if (self.planet != RAC3REGION.TYHRRANOSIS
-                and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations):
-                self.tyhrra_dropship = 0
-            if (self.planet != RAC3REGION.METROPOLIS
-                and RAC3LOCATION.METROPOLIS_DEFEAT_KLUNK not in self.checked_locations):
-                self.metro_dropship = 0
-            if (self.planet != RAC3REGION.HOLOSTAR_STUDIOS
-                and RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP not in self.checked_locations):
-                self.holo_teleport = 0
             if self.planet == data.PLANET and self.options.shortcuts.get(name, False):
                 if data.ITEMS is None or any(
                     [all([self.UnlockItem[item].status for item in items]) for items in data.ITEMS]):
                     # special cases
-                    if name == RAC3SHORTCUTS.TYHRRANOSIS_INTRO and data.FLAG_ADDRESSES is not None:
-                        if self.tyhrra_dropship == 0 and self.pause_state_value == RAC3PAUSESTATE.UNPAUSED:
+                    if name == RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
+                        logger.debug(f"Pause state: {self.pause_state_value}, latch state: {self.tyhrra_dropship}")
+                        if self.tyhrra_dropship == 0 and not self.between_planets:
                             self.tyhrra_dropship += 1
                             logger.debug("Set Tyhrranosis Dropship")
                             self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
@@ -1987,7 +2001,7 @@ class Rac3Interface(GameInterface):
                             self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                         return
                     if name == RAC3SHORTCUTS.METROPOLIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
-                        if self.metro_dropship == 0 and self.pause_state_value == RAC3PAUSESTATE.UNPAUSED:
+                        if self.metro_dropship == 0 and not self.between_planets:
                             self.metro_dropship += 1
                             self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                         elif self.metro_dropship == 1 and self.action != RAC3PLAYERACTION.IN_CUTSCENE:
@@ -2023,9 +2037,18 @@ class Rac3Interface(GameInterface):
         self.puzzle_cycler(RAC3ITEM.REFRACTOR, RAC3SPEEDUPS.REFRACTOR, "opened_the_refractor_doors",
                            PLANETS_WITH_REFRACTOR_PUZZLES, REFRACTOR_PUZZLE_TO_REGION)
 
+        if self.new_planet and self.planet != RAC3REGION.TYHRRANOSIS and self.tyhrra_intro > 0:
+            if RAC3PROGRESSFLAG.TYHRRANOSIS_COMPLETE_PROLOGUE[1] not in self._read_bits(
+                RAC3PROGRESSFLAG.TYHRRANOSIS_COMPLETE_PROLOGUE[0]):
+                self.tyhrra_intro = 0
         if self.options.speedups.get(RAC3SPEEDUPS.HALO_JUMPS, False):
             for check, region in HALO_JUMP_TO_REGION.items():
                 if self.planet in region:
+                    if (region == RAC3REGION.TYHRRANOSIS and self.tyhrra_intro == 0
+                        and not self.between_planets):
+                        self.tyhrra_intro = 1
+                        self.force_respawn()
+
                     self._write_bits(check[0], {check[1]})
 
     def hacker_cycler(self):
