@@ -1075,6 +1075,7 @@ async def test_poll_room_entry_logging_handles_rom_lookup_failure(mock_bizhawk_c
         mock_read.side_effect = [
             [(0x0003).to_bytes(2, 'little')],
             bizhawk.SyncError("lookup failed"),
+            [(0x00).to_bytes(4, 'little')],
         ]
 
         await client._poll_room_entry_logging(mock_bizhawk_context)
@@ -4249,6 +4250,76 @@ async def test_room_departure_stages_boss_fallback_when_shard_already_owned(mock
         await client._poll_room_entry_logging(mock_bizhawk_context)
         await client._poll_room_entry_logging(mock_bizhawk_context)
 
+    assert boss1_loc in client._boss_probe_fallback_location_ids
+
+
+@pytest.mark.asyncio
+async def test_room_departure_stages_boss_fallback_when_destination_reuses_same_region_key(mock_bizhawk_context):
+    """Issue #754 follow-up: stage fallback even if destination resolves to the same room region key."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
+    assert boss1_loc is not None
+
+    # Two native room IDs can resolve through gRoomProps to the same doorsIdx/region key.
+    client._room_region_key_by_doors_idx = {
+        10: "REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP",
+    }
+    client._room_label_by_doors_idx = {
+        10: "Mustard Boss Room",
+    }
+
+    with patch.dict(
+        data.transport_ram_addresses,
+        {"shard_bitfield": 0x0203B000},
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [(1).to_bytes(2, 'little')],
+            [(10).to_bytes(2, 'little')],
+            [(2).to_bytes(2, 'little')],
+            [(10).to_bytes(2, 'little')],
+            [(0x01).to_bytes(4, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    assert boss1_loc in client._boss_probe_fallback_location_ids
+
+
+@pytest.mark.asyncio
+async def test_room_departure_stages_boss_fallback_when_destination_doors_lookup_fails(mock_bizhawk_context):
+    """Issue #754 follow-up: stage fallback before returning on destination doorsIdx lookup failure."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
+    assert boss1_loc is not None
+
+    client._last_native_room_id = 1
+    client._last_room_region_key = "REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP"
+
+    with patch.dict(
+        data.transport_ram_addresses,
+        {"shard_bitfield": 0x0203B000},
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(2).to_bytes(2, 'little')],
+            bizhawk.SyncError("lookup failed"),
+            [(0x01).to_bytes(4, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    mock_logger.info.assert_any_call(
+        "KirbyAM: room entry — native=0x%04x (doorsIdx lookup failed)",
+        2,
+        extra={"NoStream": True, "skip_gui": True},
+    )
     assert boss1_loc in client._boss_probe_fallback_location_ids
 
 
