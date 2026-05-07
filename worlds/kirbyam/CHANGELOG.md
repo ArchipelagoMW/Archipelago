@@ -19,7 +19,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### Bug Fixes
 
-- None.
+- Fixed an infinite mailbox rewind loop after BizHawk disconnect/ROM reset when the last replayed item is a session-ACKed trap by replaying that trap to ROM only when the ROM counter shows the slot is still unapplied (Issue #766).
 
 ### Internal Changes
 
