@@ -4391,40 +4391,6 @@ async def test_sync_enemy_copy_ability_runtime_config_rewrites_when_revalidation
     )
 
 
-@pytest.mark.asyncio
-async def test_sync_area_key_runtime_config_reseeds_delivered_keys_after_cursor_rewind(mock_bizhawk_context):
-    client = KirbyAmClient()
-    client.initialize_client()
-
-    client._delivered_item_index = 0
-    client._max_delivered_item_index_seen = 4
-    mock_bizhawk_context.items_received = [
-        Mock(item=3860036, player=1),
-        Mock(item=3860001, player=1),
-        Mock(item=3860041, player=1),
-        Mock(item=3860030, player=1),
-        Mock(item=3860043, player=1),
-    ]
-
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
-        mock_read.return_value = [(0).to_bytes(4, 'little')]
-
-        await client._sync_area_key_runtime_config(mock_bizhawk_context)
-
-    area_key_addr = data.transport_ram_addresses["area_key_bitfield_runtime"]
-    expected_bitfield = (1 << 2) | (1 << 7)
-    mock_read.assert_awaited_once_with(
-        mock_bizhawk_context.bizhawk_ctx,
-        [(area_key_addr, 4, "System Bus")],
-    )
-    mock_write.assert_awaited_once_with(
-        mock_bizhawk_context.bizhawk_ctx,
-        [(area_key_addr, expected_bitfield.to_bytes(4, "little"), "System Bus")],
-    )
-    assert client._last_area_key_runtime_bitfield == expected_bitfield
-
-
 def test_vitality_chest_locations_defined_in_regions():
     """Regression test: all VITALITY_CHEST locations must be registered in their regions.
 

@@ -52,7 +52,6 @@
 #define AP_ABILITY_REROLL_SOURCE_KIND (*(volatile uint32_t*)(AP_BASE + 0x5Cu))
 #define AP_ABILITY_REROLL_CALLSITE_PC (*(volatile uint32_t*)(AP_BASE + 0x60u))
 #define AP_ABILITY_REROLL_KIRBY_INDEX (*(volatile uint32_t*)(AP_BASE + 0x88u))
-#define AP_AREA_KEY_BITFIELD_RUNTIME (*(volatile uint32_t*)(AP_BASE + 0x8Cu))
 // Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
 // Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
 // Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
@@ -219,82 +218,11 @@ typedef uint32_t (*KirbySpecialDoorVisitedFn)(uint16_t, uint16_t, uint8_t, uint8
 #define KIRBY_CURRENT_ROOM_ADDR 0x02023B28u
 #define KIRBY_CURRENT_ROOM      (*(volatile uint16_t*)(KIRBY_CURRENT_ROOM_ADDR))
 
-// doorsIdx -> area ID lookup for native room metadata.
-//
-// DERIVATION AND SYNCHRONIZATION:
-// This table maps each gRoomProps.doorsIdx value to its corresponding area ID (0-9).
-// The mapping is derived from:
-//  1. worlds/kirbyam/data/regions/rooms.json - room definitions and area assignments
-//  2. worlds/kirbyam/client.py - runtime rooms.json metadata lookups keyed by doorsIdx
-//  3. Matching each room's doorsIdx field against gRoomProps in the ROM
-//
-// DRIFT RISK:
-// If the native gRoomProps structure or doorsIdx assignments change between ROM
-// versions (or if room definitions are updated on the Python side), this table
-// can silently become stale. Stale entries cause incorrect Area Key gating in the
-// payload: mirrors to gated areas may be incorrectly allowed/denied.
-//
-// VALIDATION/REGENERATION:
-// - During AP validation: Python-side checks in worlds/kirbyam/client.py and
-//   worlds/kirbyam/test/test_area_first_visit_polling.py verify doorsIdx-driven
-//   room metadata and area visit behavior remain consistent with rooms.json.
-// - During ROM patch: patch_rom.py could generate a checksum of this table and
-//   embed it in the ROM payload, then have runtime code validate on cold boot.
-// - Manual inspection: Compare table entries against current gRoomProps definitions
-//   in the active ROM base, then against the Python-side rooms.json definitions.
-//
-// TODO: Implement table generation as a build artifact (C header generated from
-// rooms.json plus native-room metadata tooling) or add compile-time/runtime
-// checksum validation to detect drift.
-static const uint8_t gApDoorsIdxAreaIds[0x120] = {
-    /* 0x00 */  1,  0,  0,  0,  0,  0,  0,  0,  2,  5,  1,  1,  1,  1,  1,  1,
-    /* 0x10 */  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-    /* 0x20 */  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-    /* 0x30 */  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,
-    /* 0x40 */  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
-    /* 0x50 */  2,  2,  2,  2,  2,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
-    /* 0x60 */  7,  5,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
-    /* 0x70 */  7,  7,  7,  7,  7,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
-    /* 0x80 */  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  9,  9,
-    /* 0x90 */  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,
-    /* 0xA0 */  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  3,  3,  3,  3,  3,  3,
-    /* 0xB0 */  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  6,  6,
-    /* 0xC0 */  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
-    /* 0xD0 */  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  3,  8,  8,  8,  8,
-    /* 0xE0 */  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
-    /* 0xF0 */  8,  8,  8,  8,  8,  8,  8,  8,  8,  5,  5,  5,  5,  5,  5,  5,
-    /* 0x100 */  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  0,  0,
-    /* 0x110 */  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-};
-
 static uint16_t ap_room_doors_idx(uint16_t room_id) {
     if ((uint32_t)room_id >= ROOM_PROPS_ROOM_ID_LIMIT) {
         return 0xFFFFu;
     }
     return *(volatile uint16_t*)(ROOM_PROPS_BASE_ADDR + ((uint32_t)room_id * ROOM_PROPS_STRIDE) + ROOM_PROPS_DOORS_IDX_OFFSET);
-}
-
-static uint8_t ap_doors_idx_area_id(uint16_t doors_idx) {
-    uint8_t area_id;
-    if (doors_idx >= 0x120u) {
-        return 0u;
-    }
-    area_id = gApDoorsIdxAreaIds[doors_idx];
-    if (area_id > 9u) {
-        return 0u;
-    }
-    return area_id;
-}
-
-static uint8_t ap_room_area_id(uint16_t room_id) {
-    return ap_doors_idx_area_id(ap_room_doors_idx(room_id));
-}
-
-static uint8_t ap_has_area_key(uint8_t area_id) {
-    if (area_id < 2u || area_id > 9u) {
-        return 1u;
-    }
-    return (uint8_t)((AP_AREA_KEY_BITFIELD_RUNTIME >> area_id) & 1u);
 }
 
 static uint8_t ap_is_warp_room_doors_idx(uint16_t doors_idx) {
@@ -314,12 +242,6 @@ static uint8_t ap_is_warp_room_doors_idx(uint16_t doors_idx) {
 
 __attribute__((used)) uint32_t ap_on_query_special_door_state(uint16_t room_id, uint16_t arg1, uint8_t arg2, uint8_t arg3) {
     uint32_t native_result = KIRBY_SPECIAL_DOOR_VISITED_FN(room_id, arg1, arg2, arg3);
-    uint8_t runtime_source_area;
-    uint8_t room_id_area;
-    uint8_t arg1_area;
-    uint8_t room_id_doors_area;
-    uint8_t arg1_doors_area;
-    uint8_t destination_area = 0u;
     uint16_t runtime_source_doors_idx;
 
     if (native_result == 0u) {
@@ -327,45 +249,9 @@ __attribute__((used)) uint32_t ap_on_query_special_door_state(uint16_t room_id, 
     }
 
     // Warp Star access is intentionally disabled in AP mode because these
-    // transitions bypass Area Key sequencing and can cause progression leaks.
+    // transitions can bypass intended progression routing.
     runtime_source_doors_idx = ap_room_doors_idx(KIRBY_CURRENT_ROOM);
     if (ap_is_warp_room_doors_idx(runtime_source_doors_idx)) {
-        return 0u;
-    }
-
-    runtime_source_area = ap_room_area_id(KIRBY_CURRENT_ROOM);
-    room_id_area = ap_room_area_id(room_id);
-    arg1_area = ap_room_area_id(arg1);
-    room_id_doors_area = ap_doors_idx_area_id(room_id);
-    arg1_doors_area = ap_doors_idx_area_id(arg1);
-
-    // Callers are not guaranteed to pass (source_room, destination_room) in a
-    // stable argument order across all transition sites. Derive the destination
-    // as whichever candidate differs from the runtime current area.
-    if (room_id_area >= 2u && room_id_area <= 9u && room_id_area != runtime_source_area) {
-        destination_area = room_id_area;
-    }
-    if (arg1_area >= 2u && arg1_area <= 9u && arg1_area != runtime_source_area) {
-        destination_area = arg1_area;
-    }
-    // Some callsites appear to pass doorsIdx-like values instead of canonical
-    // room IDs; treat those as fallback area candidates for regular mirrors.
-    if ((destination_area < 2u || destination_area > 9u)
-        && room_id_doors_area >= 2u && room_id_doors_area <= 9u
-        && room_id_doors_area != runtime_source_area) {
-        destination_area = room_id_doors_area;
-    }
-    if ((destination_area < 2u || destination_area > 9u)
-        && arg1_doors_area >= 2u && arg1_doors_area <= 9u
-        && arg1_doors_area != runtime_source_area) {
-        destination_area = arg1_doors_area;
-    }
-
-    if (destination_area < 2u || destination_area > 9u) {
-        return native_result;
-    }
-
-    if (ap_has_area_key(destination_area) == 0u) {
         return 0u;
     }
 
@@ -891,13 +777,6 @@ static uint8_t ap_apply_item(uint32_t ap_item_id) {
         return 1u;
     }
 
-    // AREA_KEY_2..AREA_KEY_9 = BASE+36 .. BASE+43
-    if (ap_item_id >= (KIRBY_ITEM_ID_BASE_OFFSET + 36u) && ap_item_id <= (KIRBY_ITEM_ID_BASE_OFFSET + 43u)) {
-        uint32_t area_id = 2u + (ap_item_id - (KIRBY_ITEM_ID_BASE_OFFSET + 36u));
-        AP_AREA_KEY_BITFIELD_RUNTIME |= (1u << area_id);
-        return 1u;
-    }
-
     // Unhandled item - return 0 to signal that the flag should NOT be cleared
     return 0u;
 }
@@ -925,7 +804,6 @@ void ap_poll_mailbox_c(void) {
         AP_STARTING_KIRBY_COLOR_ID = 0xFFFFFFFFu;
         AP_ONE_HIT_MODE_RUNTIME = 0xFFFFFFFFu;
         AP_NO_EXTRA_LIVES_RUNTIME = 0xFFFFFFFFu;
-        AP_AREA_KEY_BITFIELD_RUNTIME = 0u;
         ap_starting_kirby_color_applied = 0u;
         AP_ABILITY_RANDOMIZATION_MODE = 0u;
         AP_ABILITY_RANDOMIZATION_SEED_LO = 0u;

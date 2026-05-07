@@ -78,9 +78,8 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x80   | 0x0203B080 | 4B | ability_reroll_source_addr_runtime | u32 | ROM → Client | ROM address of the ability-source byte for the **most recent** per-swallow reroll event only. This is a single-slot mailbox field; if multiple rerolls happen between client polls, earlier source addresses are overwritten and cannot be reconstructed. Used by the client to map the most recent source to an enemy name in telemetry (best-effort). |
 | 0x84   | 0x0203B084 | 4B | ability_reroll_ability_id_runtime | u32 | ROM → Client | Ability ID selected by the **most recent** per-swallow reroll event only. Pairs with `ability_reroll_source_addr_runtime` as a best-effort snapshot; if multiple rerolls happen between polls, intermediate ability IDs are overwritten. The client logs how many events were missed when `ability_reroll_event_counter_runtime` advances by more than 1. |
 | 0x88   | 0x0203B088 | 4B | ability_reroll_kirby_index_runtime | u32 | ROM → Client | Current player/Kirby slot index (`0..3`) for the **most recent** reroll event. The payload writes the active player index directly to this field and initializes it to `0`. |
-| 0x8C   | 0x0203B08C | 4B | area_key_bitfield_runtime | u32 | ROM ← Client | Bits 2–9 mirror permanently granted Area Key items. The Python client recomputes and rewrites this bitfield from already-delivered item history so special-door gating recovers after soft reset / fresh EWRAM initialization without waiting for mailbox replay order. |
 
-**Total: 144 bytes (0x0203B000 - 0x0203B08F)**
+**Total: 140 bytes (0x0203B000 - 0x0203B08B)**
 
 ### Native Game State (Referenced by AP; some fields are client-reconciled)
 
