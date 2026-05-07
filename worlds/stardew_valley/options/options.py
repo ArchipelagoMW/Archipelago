@@ -258,7 +258,8 @@ class EntranceRandomizationPlando(OptionDict):
     Should have entries of the format
     `Farm to Forest: Forest to Town`
     which will make leaving the farm leads to the town from the left bottom.
-    Note that this only works for entrances that are randomized by Entrance Randomization
+    Note that this even works for entrances that are not randomized by Entrance Randomization,
+    in the example Forest to Farm would also get randomized even if it wasn't before to negate failures.
     """
     default = {}
     internal_name = "entrance_randomization_plando"
