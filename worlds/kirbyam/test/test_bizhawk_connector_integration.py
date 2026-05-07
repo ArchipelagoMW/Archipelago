@@ -10,6 +10,7 @@ import pytest
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import AutoBizHawkClientRegister
 from worlds.kirbyam.client import (
+    _MAIN_HOOK_OFFSET,
     EXPECTED_ROM_GAME_CODE,
     EXPECTED_ROM_HEADER_TITLE,
     EXPECTED_ROM_MAKER_CODE,
@@ -33,6 +34,7 @@ def _seed_kirby_rom_header(connector: FakeBizHawkConnector) -> None:
     connector.set_bytes("ROM", 0xA0, EXPECTED_ROM_HEADER_TITLE.upper().encode("ascii"))
     connector.set_bytes("ROM", 0xAC, EXPECTED_ROM_GAME_CODE.upper().encode("ascii"))
     connector.set_bytes("ROM", 0xB0, EXPECTED_ROM_MAKER_CODE.encode("ascii"))
+    connector.set_bytes("ROM", _MAIN_HOOK_OFFSET, b"\x00\xF0\x00\xF8")
 
 
 @pytest.mark.asyncio
@@ -81,6 +83,33 @@ async def test_fake_connector_rejects_unpatched_base_rom_hash(monkeypatch: pytes
 
     connector = FakeBizHawkConnector(system="GBA", rom_hash=KirbyAmProcedurePatch.hash)
     _seed_kirby_rom_header(connector)
+    connector.set_bytes("ROM", auth_addr, bytes(range(1, 17)))
+    await connector.start()
+
+    monkeypatch.setattr(bizhawk, "BIZHAWK_SOCKET_PORT_RANGE_START", connector.port)
+    monkeypatch.setattr(bizhawk, "BIZHAWK_SOCKET_PORT_RANGE_SIZE", 1)
+
+    ctx = bizhawk.BizHawkContext()
+    try:
+        assert await bizhawk.connect(ctx)
+        client_ctx = SimpleNamespace(bizhawk_ctx=ctx, rom_hash=await bizhawk.get_hash(ctx))
+        handler = await AutoBizHawkClientRegister.get_handler(client_ctx, "GBA")
+        assert handler is None
+    finally:
+        bizhawk.disconnect(ctx)
+        await connector.close()
+
+
+@pytest.mark.asyncio
+async def test_fake_connector_does_not_claim_non_kirby_gba_rom(monkeypatch: pytest.MonkeyPatch) -> None:
+    auth_addr = data.rom_addresses.get("gArchipelagoInfo")
+    assert isinstance(auth_addr, int)
+    auth_addr = _normalize_gba_rom_address(auth_addr)
+
+    connector = FakeBizHawkConnector(system="GBA", rom_hash="firered-rom")
+    connector.set_bytes("ROM", 0xA0, b"POKEMON FIRE")
+    connector.set_bytes("ROM", 0xAC, b"BPRE")
+    connector.set_bytes("ROM", 0xB0, b"01")
     connector.set_bytes("ROM", auth_addr, bytes(range(1, 17)))
     await connector.start()
 

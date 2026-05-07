@@ -33,6 +33,7 @@ async def test_validate_rom_accepts_patched_kirby_header(mock_bizhawk_context):
         mock_read.side_effect = [
             [b'AGB KIRBY AM', b'B8KE', b'01'],
             [b'\x01' + (b'\x00' * 15)],
+            [b'\x00\xF0\x00\xF8'],
         ]
 
         assert await client.validate_rom(mock_bizhawk_context) is True
@@ -191,6 +192,7 @@ async def test_validate_rom_reads_auth_from_rom_domain_offset(mock_bizhawk_conte
             mock_read.side_effect = [
                 [b'AGB KIRBY AM', b'B8KE', b'01'],
                 [b'\x01' + (b'\x00' * 15)],
+                [b'\x00\xF0\x00\xF8'],
             ]
 
             assert await client.validate_rom(mock_bizhawk_context) is True
@@ -279,10 +281,7 @@ async def test_validate_rom_rejects_non_kirby_header(mock_bizhawk_context, caplo
         with caplog.at_level(logging.INFO):
             assert await client.validate_rom(mock_bizhawk_context) is False
 
-    mock_display.assert_awaited_once_with(
-        mock_bizhawk_context.bizhawk_ctx,
-        "Unable to load ROM: invalid Kirby and the Amazing Mirror ROM.",
-    )
+    mock_display.assert_not_awaited()
     assert "ROM validation failed" in caplog.text
 
 
@@ -305,6 +304,28 @@ async def test_validate_rom_rejects_empty_patch_metadata(mock_bizhawk_context, c
         "Unable to load ROM: missing patch metadata. Rebuild your patched ROM.",
     )
     assert "KirbyAM patch metadata was missing" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_validate_rom_rejects_missing_main_hook_patch(mock_bizhawk_context, caplog):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.side_effect = [
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            [b'\x01' + (b'\x00' * 15)],
+            [b'\x00\x00\x00\x00'],
+        ]
+
+        with caplog.at_level(logging.INFO):
+            assert await client.validate_rom(mock_bizhawk_context) is False
+
+    mock_display.assert_awaited_once_with(
+        mock_bizhawk_context.bizhawk_ctx,
+        "Unable to load ROM: this is not a compatible KirbyAM patched ROM.",
+    )
+    assert "main hook callsite" in caplog.text
 
 
 @pytest.mark.asyncio
