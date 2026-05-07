@@ -20,6 +20,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 ### Bug Fixes
 
 - Fixed an infinite mailbox rewind loop after BizHawk disconnect/ROM reset when the last replayed item is a session-ACKed trap by replaying that trap to ROM only when the ROM counter shows the slot is still unapplied (Issue #766).
+- Fixed false `Peppermint Palace West - Big Switch` AP checks by translating native world-map door enum values to the AP hub-switch bit contract and ignoring `WORLDMAP_NO_UNLOCK` dispatches (Issue #750).
 
 ### Internal Changes
 

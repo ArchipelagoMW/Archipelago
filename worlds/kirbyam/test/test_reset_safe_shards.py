@@ -119,11 +119,12 @@ def test_payload_tracks_sound_player_chest_checks_and_ap_unlock_apply():
 
 
 def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
-    """Verify world-map unlock hook records AP hub-switch checks using the task +0x08 index.
+    """Verify world-map unlock hook translates world-map door indices into AP bits.
 
     Decomp reference (katam): `sub_08039ED4` dispatches unlock callbacks from
     `gUnk_0834BD94` using `ldrh [task, #8]`. The AP hook must read the same
-    halfword and set `AP_HUB_SWITCH_FLAGS` based on that runtime index.
+    halfword and map enum WorldMapDoor values to AP hub-switch bit order while
+    ignoring non-unlock values (e.g., `WORLDMAP_NO_UNLOCK` = 0).
     """
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -132,6 +133,7 @@ def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
 
     assert "AP_HUB_SWITCH_FLAGS" in content, "Hub switch transport register should be defined"
     assert "ap_set_hub_switch_flag" in content, "Hub switch flag helper should exist"
+    assert "ap_try_map_worldmap_door_to_hub_switch_bit" in content, "Hub switch door-to-bit mapper should exist"
     assert "ap_on_world_map_unlock_call" in content, "World-map unlock hook target should exist"
     assert "task_ptr + 0x08u" in content, "Hook should read the world-map unlock task index at +0x08"
     assert "unlock_fn();" in content, "Hook should preserve native unlock callback behavior"
@@ -147,8 +149,35 @@ def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
     assert "door_index = *(volatile uint16_t*)(task_ptr + 0x08u);" in hook_body, (
         "Hook should read world-map unlock index from task +0x08"
     )
-    assert "ap_set_hub_switch_flag((uint32_t)door_index);" in hook_body, (
-        "Hook should map task index directly into AP_HUB_SWITCH_FLAGS"
+    assert "ap_try_map_worldmap_door_to_hub_switch_bit(door_index, &ap_hub_switch_bit)" in hook_body, (
+        "Hook should translate world-map door index before setting AP hub-switch bit"
+    )
+    assert "if (ap_try_map_worldmap_door_to_hub_switch_bit(door_index, &ap_hub_switch_bit) != 0u)" in hook_body, (
+        "Hook should ignore NO_UNLOCK/unknown world-map door indices"
+    )
+    assert "ap_set_hub_switch_flag(ap_hub_switch_bit);" in hook_body, (
+        "Hook should set AP hub-switch bit only after successful door-index translation"
+    )
+
+    mapper_match = re.search(
+        r"uint8_t\s+ap_try_map_worldmap_door_to_hub_switch_bit[^{]*\{(?P<body>.*?)^}",
+        content,
+        flags=re.DOTALL | re.MULTILINE,
+    )
+    assert mapper_match is not None, "ap_try_map_worldmap_door_to_hub_switch_bit definition must exist"
+    mapper_body = mapper_match.group("body")
+
+    assert "case 1u:  // WORLDMAP_MOONLIGHT_MANSION" in mapper_body, (
+        "Mapper should include Moonlight world-map door case"
+    )
+    assert "*out_bit = 11u;" in mapper_body, (
+        "Moonlight world-map door should map to AP hub-switch bit 11"
+    )
+    assert "case 11u: // WORLDMAP_PEPPERMINT_PALACE_EAST" in mapper_body, (
+        "Mapper should include Peppermint East world-map door case"
+    )
+    assert "*out_bit = 10u;" in mapper_body, (
+        "Peppermint East world-map door should map to AP hub-switch bit 10"
     )
 
 

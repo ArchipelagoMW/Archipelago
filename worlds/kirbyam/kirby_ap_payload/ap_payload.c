@@ -140,7 +140,7 @@ const unsigned char gArchipelagoInfo[16] = {0};
 static void persist_shard_to_sram(uint8_t new_shard_bitfield) {
     // Write the primary shard field to SRAM
     SRAM_SHARD_FIELD = new_shard_bitfield;
-    
+
     // Update checksum fields to maintain save file integrity.
     // The game validates these when loading, so they must change consistently with shard changes.
     // These specific addresses were identified through Issue #109 investigation.
@@ -181,6 +181,65 @@ static void ap_set_sound_player_chest_flag(uint32_t chest_index) {
 static void ap_set_hub_switch_flag(uint32_t door_index) {
     if (door_index < 16u) {
         AP_HUB_SWITCH_FLAGS |= (1u << door_index);
+    }
+}
+
+// sub_08039ED4 dispatches using enum WorldMapDoor where 0 = NO_UNLOCK.
+// AP hub-switch bits use a different stable ordering contract, so translate
+// explicitly and ignore non-unlock/unknown indices.
+static uint8_t ap_try_map_worldmap_door_to_hub_switch_bit(uint16_t door_index, uint32_t *out_bit) {
+    if (out_bit == 0) {
+        return 0u;
+    }
+
+    switch (door_index) {
+        case 1u:  // WORLDMAP_MOONLIGHT_MANSION
+            *out_bit = 11u;
+            return 1u;
+        case 2u:  // WORLDMAP_RAINBOW_ROUTE_EAST
+            *out_bit = 1u;
+            return 1u;
+        case 3u:  // WORLDMAP_RAINBOW_ROUTE_SOUTH
+            *out_bit = 2u;
+            return 1u;
+        case 4u:  // WORLDMAP_CABBAGE_CAVERN_CENTER
+            *out_bit = 3u;
+            return 1u;
+        case 5u:  // WORLDMAP_RAINBOW_ROUTE_WEST
+            *out_bit = 4u;
+            return 1u;
+        case 6u:  // WORLDMAP_CARROT_CASTLE
+            *out_bit = 5u;
+            return 1u;
+        case 7u:  // WORLDMAP_RAINBOW_ROUTE_NORTH
+            *out_bit = 6u;
+            return 1u;
+        case 8u:  // WORLDMAP_MUSTARD_MOUNTAIN
+            *out_bit = 7u;
+            return 1u;
+        case 9u:  // WORLDMAP_CABBAGE_CAVERN_WEST
+            *out_bit = 8u;
+            return 1u;
+        case 10u: // WORLDMAP_RADISH_RUINS
+            *out_bit = 9u;
+            return 1u;
+        case 11u: // WORLDMAP_PEPPERMINT_PALACE_EAST
+            *out_bit = 10u;
+            return 1u;
+        case 12u: // WORLDMAP_PEPPERMINT_PALACE_WEST
+            *out_bit = 0u;
+            return 1u;
+        case 13u: // WORLDMAP_CABBAGE_CAVERN_EAST
+            *out_bit = 12u;
+            return 1u;
+        case 14u: // WORLDMAP_OLIVE_OCEAN
+            *out_bit = 13u;
+            return 1u;
+        case 15u: // WORLDMAP_CANDY_CONSTELLATION
+            *out_bit = 14u;
+            return 1u;
+        default:
+            return 0u;
     }
 }
 
@@ -444,7 +503,11 @@ typedef void (*WorldMapUnlockFn)(void);
 __attribute__((used)) void ap_on_world_map_unlock_call(WorldMapUnlockFn unlock_fn) {
     register uint32_t task_ptr asm("r4");
     uint16_t door_index = *(volatile uint16_t*)(task_ptr + 0x08u);
-    ap_set_hub_switch_flag((uint32_t)door_index);
+    uint32_t ap_hub_switch_bit;
+
+    if (ap_try_map_worldmap_door_to_hub_switch_bit(door_index, &ap_hub_switch_bit) != 0u) {
+        ap_set_hub_switch_flag(ap_hub_switch_bit);
+    }
     unlock_fn();
 }
 
