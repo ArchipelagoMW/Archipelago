@@ -13,7 +13,7 @@ from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_type import RAC3PLAYERTYPE
-from worlds.rac3.constants.region import PLANET_NAME_FROM_ID, RAC3REGION
+from worlds.rac3.constants.region import RAC3REGION, REGIONS_WITH_LOCATIONS
 from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS
 from worlds.rac3.rac3options import RaC3Options
 
@@ -628,4 +628,4 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
 
 def get_regions() -> set[str]:
     """Returns a set containing the planet names"""
-    return {name for name in PLANET_NAME_FROM_ID.values()}
+    return {name for name in REGIONS_WITH_LOCATIONS}

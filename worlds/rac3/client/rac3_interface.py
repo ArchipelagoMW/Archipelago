@@ -243,10 +243,8 @@ class Rac3Interface(GameInterface):
     def _write_string(self, address: int, value: str):
         return super()._write_string(self.address_convert(address), value)
 
-    def _write_bits(self, address: int, value: set[int] | int):
+    def _write_bits(self, address: int, value: set[int]):
         bits = self._read_bits(address)
-        if isinstance(value, int):
-            value = {value}
         if value.issubset(bits):
             return None
         bits |= value
@@ -259,10 +257,8 @@ class Rac3Interface(GameInterface):
 
         return self._write8(address, write)
 
-    def _unwrite_bits(self, address: int, value: set[int] | int):
+    def _unwrite_bits(self, address: int, value: set[int]):
         bits = self._read_bits(address)
-        if isinstance(value, int):
-            value = {value}
         if value.isdisjoint(bits):
             return None
         bits -= value
@@ -479,9 +475,8 @@ class Rac3Interface(GameInterface):
     def speedup_setup(self):
         """One time setup of speedup options when starting a new session"""
         if self.options.speedups.get(RAC3SPEEDUPS.BOLT_CRANK, False):
-            for check, region in BOLT_CRANK_TO_REGION.items():
-                if self.planet in region:
-                    self._write_bits(check[0], {check[1]})
+            for check, _ in BOLT_CRANK_TO_REGION.items():
+                self._write_bits(check[0], {check[1]})
 
         if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
             for i in range(5, 25):
@@ -1869,25 +1864,6 @@ class Rac3Interface(GameInterface):
                 else:
                     self.UnlockItem[name].unlock_delay += 1
 
-    def safe_patch_instruction(self, instruction_address: int, restore: bool = False):
-        """Safely apply or restore an instruction patch if current opcode matches the expected source opcode."""
-        original = ORIGINAL_INSTRUCTIONS.get(instruction_address)
-        patched = PATCHED_INSTRUCTIONS.get(instruction_address)
-        if original is None or patched is None:
-            return
-
-        # Determine source and target opcodes based on whether we are restoring or patching
-        source = patched if restore else original
-        target = original if restore else patched
-        current = self._read32(instruction_address)
-        if current == source:
-            self._write32(instruction_address, target)
-
-    def get_planet_patch_instructions(self) -> list[int]:
-        """Return all patch instructions associated with the current planet and game version."""
-        return [instruction for instruction, planet in PATCH_INSTRUCTION_TO_PLANET.items() if
-                planet == self.planet and self.current_game in PATCH_INSTRUCTION_TO_GAME_IDS[instruction]]
-
     def patch_cycler(self):
         """Apply runtime instruction patches based on current planet."""
         planet_patches = self.get_planet_patch_instructions()
@@ -1915,20 +1891,25 @@ class Rac3Interface(GameInterface):
         for instruction in planet_patches:
             self.safe_patch_instruction(instruction)
 
-    def get_active_patches(self) -> list[int]:
-        """Return a list of currently active patch addresses based on the current planet."""
-        return [
-            instruction for instruction in self.get_planet_patch_instructions()
-            if self._read32(instruction) == PATCHED_INSTRUCTIONS[instruction]]
+    def get_planet_patch_instructions(self) -> list[int]:
+        """Return all patch instructions associated with the current planet and game version."""
+        return [instruction for instruction, planet in PATCH_INSTRUCTION_TO_PLANET.items() if
+                planet == self.planet and self.current_game in PATCH_INSTRUCTION_TO_GAME_IDS[instruction]]
 
-    def get_failed_patches(self) -> list[int]:
-        """Return patch addresses whose opcode is neither the original nor patched value."""
-        return [
-            instruction for instruction in self.get_planet_patch_instructions()
-            if self._read32(instruction) not in {
-                ORIGINAL_INSTRUCTIONS[instruction],
-                PATCHED_INSTRUCTIONS[instruction],
-            }]
+    def safe_patch_instruction(self, instruction_address: int, restore: bool = False):
+        """Safely apply or restore an instruction patch if current opcode matches the expected source opcode."""
+        original = ORIGINAL_INSTRUCTIONS.get(instruction_address)
+        patched = PATCHED_INSTRUCTIONS.get(instruction_address)
+        if original is None or patched is None:
+            return
+
+        # Determine source and target opcodes based on whether we are restoring or patching
+        source = patched if restore else original
+        target = original if restore else patched
+        current = self._read32(instruction_address)
+        if current == source:
+            logger.debug(f"Wrote new patch to {PATCH_INSTRUCTION_TO_NAME[instruction_address]}")
+            self._write32(instruction_address, target)
 
     def overflow_fix(self):
         """Detect any integer overflows and reset the value"""
@@ -1998,27 +1979,29 @@ class Rac3Interface(GameInterface):
                     if name == RAC3SHORTCUTS.TYHRRANOSIS_INTRO and data.FLAG_ADDRESSES is not None:
                         if self.tyhrra_dropship == 0 and self.pause_state_value == RAC3PAUSESTATE.UNPAUSED:
                             self.tyhrra_dropship += 1
-                            self._write_bits(*data.FLAG_ADDRESSES[0])
-                        elif self.tyhrra_dropship == 1:
+                            logger.debug("Set Tyhrranosis Dropship")
+                            self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
+                        elif self.tyhrra_dropship == 1 and self.action != RAC3PLAYERACTION.IN_CUTSCENE:
                             self.tyhrra_dropship += 1
-                            self._unwrite_bits(*data.FLAG_ADDRESSES[0])
+                            logger.debug("UnSet Tyhrranosis Dropship")
+                            self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                         return
                     if name == RAC3SHORTCUTS.METROPOLIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
                         if self.metro_dropship == 0 and self.pause_state_value == RAC3PAUSESTATE.UNPAUSED:
                             self.metro_dropship += 1
-                            self._write_bits(*data.FLAG_ADDRESSES[0])
-                        elif self.metro_dropship == 1:
+                            self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
+                        elif self.metro_dropship == 1 and self.action != RAC3PLAYERACTION.IN_CUTSCENE:
                             self.metro_dropship += 1
-                            self._unwrite_bits(*data.FLAG_ADDRESSES[0])
+                            self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                         return
                     # Todo: check for the player opening the final door
                     if name == RAC3SHORTCUTS.HOLOSTAR_TELEPORTER and data.FLAG_ADDRESSES is not None:
                         if self.holo_teleport == 0:
                             self.holo_teleport += 1
-                            self._write_bits(*data.FLAG_ADDRESSES[0])
+                            self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                         if self.holo_teleport == 1:
                             self.holo_teleport += 1
-                            self._unwrite_bits(*data.FLAG_ADDRESSES[0])
+                            self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                             self.force_respawn()
                         return
                     # all other shortcuts
@@ -2028,8 +2011,7 @@ class Rac3Interface(GameInterface):
                             _write.setdefault(check[0], set()).add(check[1])
                         for address, flag in _write.items():
                             self._write_bits(address, flag)
-                    if (data.VISIT_ADDRESSES is not None
-                        and any(address not in self.visited_planets for address in data.VISIT_ADDRESSES)):
+                    if data.VISIT_ADDRESSES is not None and self.visited_planets.issuperset(data.VISIT_ADDRESSES):
                         for address in data.VISIT_ADDRESSES:
                             self._write8(RAC3_REGION_DATA_TABLE[address].VISIT_ADDRESS, 1)
 
@@ -2510,3 +2492,18 @@ class Rac3Interface(GameInterface):
             logger.warning("Failed patches detected: instruction opcodes were neither source nor patched values. "
                            "This may indicate a corrupted ISO or an unsupported game version. "
                            "Please report this to the developers with the above information.")
+
+    def get_active_patches(self) -> list[int]:
+        """Return a list of currently active patch addresses based on the current planet."""
+        return [
+            instruction for instruction in self.get_planet_patch_instructions()
+            if self._read32(instruction) == PATCHED_INSTRUCTIONS[instruction]]
+
+    def get_failed_patches(self) -> list[int]:
+        """Return patch addresses whose opcode is neither the original nor patched value."""
+        return [
+            instruction for instruction in self.get_planet_patch_instructions()
+            if self._read32(instruction) not in {
+                ORIGINAL_INSTRUCTIONS[instruction],
+                PATCHED_INSTRUCTIONS[instruction],
+            }]
