@@ -2108,11 +2108,22 @@
             { "item": "Grapple" },
             { "item": "Wall Climb" }
         ],
-        "medium_requires": [ // skip zipline with CS-dash AND AD AND T-dash AND CL
-            { "item": "Cloud Leap" },
-            { "item": "Air Dash" },
-            { "item": "Charged Strike" },
-            { "item": "Wall Climb" } // we still need to cling to the 2nd green wall to get past the last red floor
+        "medium_requires": [
+            { "anyOf": [ // skip zipline with...
+                { "item": "Trick - Bow Hover" },
+                [ // or CS-dash AND AD AND T-dash AND CL
+                    { "item": "Cloud Leap" },
+                    { "item": "Air Dash" },
+                    { "item": "Charged Strike" }
+                ]
+            ] },
+            { "item": "Wall Climb" } // we still need to cling to the 2nd green wall to wait for a laser
+            // make the final jump over the red floor with T-dash if you used bow hover; if not you have CL+AD+CS
+        ],
+        "ls_requires": [
+            { "item": "Cloud Leap" }, // setting up LS with AD or T-dash is probably possible but impractical here
+            { "item": "Ledge Grab" }, // parry hover
+            { "item": "Wall Climb" } // cling to the 2nd green wall to wait for a laser, then Cloud Leap over red floor
         ]
     },
     { "from": "ED (Passages) - End Of Laser Gauntlet", "to": "ED (Passages) - Above Right Transporter", "requires": [] }, // one-way door
