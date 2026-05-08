@@ -280,18 +280,16 @@ class CommandProcessor(ClientCommandProcessor):
             # convert the hex input to an int and then do traversal with that as the target id
             try:
                 target_id = int(args[0], 16)
-                start_address = int(args[1], 16)
             except ValueError:
                 self.output("Invalid target ID. Please provide a valid hexadecimal number.")
                 return
-            # try addresses in intervals of 0x100 to see if we find any good ones
-            for addr in range(start_address, start_address + 0x10000, 0x100):
-                moby_addr = self.ctx.game_interface.find_moby_by_id_traversal(target_id, addr)
-                if moby_addr is not None:
-                    self.output(
-                        f"Found moby with ID {hex(target_id)} at address {hex(moby_addr)} with start address "
-                        f"{hex(addr)}")
 
+            moby_addr = self.ctx.game_interface.find_moby_by_id_traversal(target_id)
+            if moby_addr:
+                self.output(
+                    f"Found moby with ID {hex(target_id)} at address {hex(moby_addr)}")
+            else:
+                self.output(f"Could not find moby with ID {hex(target_id)}")
     def _cmd_iteration(self, *args):
         """Test command for linked list iteration purposes."""
         if not self.verify():
@@ -304,15 +302,14 @@ class CommandProcessor(ClientCommandProcessor):
             # convert the hex input to an int and then do iteration with that as the target id
             try:
                 target_id = int(args[0], 16)
-                start_address = int(args[1], 16)
             except ValueError:
                 self.output("Invalid target ID. Please provide a valid hexadecimal number.")
                 return
-            moby_addr = self.ctx.game_interface.find_moby_by_id_iteration(target_id, start_address)
-            if moby_addr is not None:
+            moby_addr = self.ctx.game_interface.find_moby_by_id_iteration(target_id)
+            if moby_addr:
                 self.output(f"Found moby with ID {hex(target_id)} at address {hex(moby_addr)}")
             else:
-                self.output(f"Could not find moby with ID {hex(target_id)} by iterating from {hex(start_address)}")
+                self.output(f"Could not find moby with ID {hex(target_id)}")
 
 
 class Rac3Context(CommonContext):
