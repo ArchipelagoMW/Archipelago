@@ -41,7 +41,7 @@ class RegionNames(StrEnum):
     SHINSHU_FIELD = "Shinshu Field"
     SHINSHU_FIELD_AGATA_CAVE = "Shinshu Field (Cave to Agata Forest)"
     TAMA_HOUSE = "Tama's house"
-    SHINSHU_PLATEAU="Shinshu Field Plateau"
+    SHINSHU_PLATEAU = "Shinshu Field Plateau"
 
     ## HANA VALLEY
     CURSED_HANA_VALLEY = "Cursed Hana Valley"
@@ -117,6 +117,13 @@ class RegionNames(StrEnum):
     MOON_CAVE_4F_AFTER_CANON = "Moon Cave (4F after canon)"
     MOON_CAVE_OROCHI = "Moon Cave (Orochi)"
 
+    ##CITY CHECKPOINT
+    CITY_CHECKPOINT_TAKA="City Checkpoint (Taka side)"
+    CITY_CHECKPOINT_DRAWBRIDGE="City Checkpoint Drawbridge"
+    CITY_CHECKPOINT_RYOSHIMA="City Checkpoint (Ryoshima side)"
+    CITY_CHECKPOINT_RIVER="City Checkpoint (River)"
+
+
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
 class MapIds(Enum):
     CURSED_KAMIKI = 0x100
@@ -124,11 +131,12 @@ class MapIds(Enum):
     KAMIKI_VILLAGE = 0x102
     HANA_VALLEY = 0x103
     TSUTA_RUINS = 0x104
+    CITY_CHECKPOINT = 0x105
     GALE_SHRINE = 0x107
     KUSA_VILLAGE = 0x108
     SASA_SANCTUARY = 0x109
     AGATA_FOREST_MME_FAWN = 0x10A
-    CALCIFIED_CAVERN=0x10E
+    CALCIFIED_CAVERN = 0x10E
     MOON_CAVE = 0x110
     RIVER_OF_THE_HEAVENS = 0x122
     CURSED_SHINSHU = 0xF01
@@ -145,6 +153,7 @@ class MapIndexes(Enum):
     KAMIKI_VILLAGE = 3
     HANA_VALLEY = 4
     TSUTA_RUINS = 5
+    CITY_CHECKPOINT = 6
     GALE_SHRINE = 8
     KUSA_VILLAGE = 9
     SASA_SANCTUARY = 10

@@ -37,6 +37,7 @@ def create_region_exits(reg: Region, world: "OkamiWorld"):
             exiting_region = world.multiworld.get_region(exit_data.destination, world.player)
             ext = reg.connect(exiting_region, exit_data.name)
             apply_exit_rules(ext, ext.name, exit_data, world)
+            ext
 
 
 def get_region_location_count(world: "OkamiWorld", region_name: str, included_only: bool = True) -> int:
