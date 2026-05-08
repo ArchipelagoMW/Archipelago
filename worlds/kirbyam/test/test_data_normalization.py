@@ -49,7 +49,9 @@ def test_hub_switch_labels_match_expected_location_ids() -> None:
         3960401: "Peppermint Palace East - Big Switch",
         3960402: "Cabbage Cavern East - Big Switch",
         3960404: "Candy Constellation - Big Switch",
-        3960410: "Rainbow Route East - Big Switch",
+        3960409: "Rainbow Route East - Big Switch",
+        3960410: "Moonlight Mansion - Big Switch",
+        3960411: "Radish Ruins - Big Switch",
         3960412: "Rainbow Route South - Big Switch",
         3960414: "Rainbow Route West - Big Switch",
     }

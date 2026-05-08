@@ -361,7 +361,7 @@
     "location_id": 3960304
   },
   "HUB_SWITCH_MOONLIGHT": {
-    "label": "Moonlight Mansion - Big Switch",
+    "label": "Radish Ruins - Big Switch",
     "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
     "tags": [
       "HubSwitch",
@@ -460,7 +460,7 @@
     "location_id": 3960408
   },
   "HUB_SWITCH_RADISH": {
-    "label": "Radish Ruins - Big Switch",
+    "label": "Rainbow Route East - Big Switch",
     "parent_region": "REGION_RADISH_RUINS/MAIN",
     "tags": [
       "HubSwitch",
@@ -471,7 +471,7 @@
     "location_id": 3960409
   },
   "HUB_SWITCH_PEPPERMINT_EAST": {
-    "label": "Rainbow Route East - Big Switch",
+    "label": "Moonlight Mansion - Big Switch",
     "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
     "tags": [
       "HubSwitch",
