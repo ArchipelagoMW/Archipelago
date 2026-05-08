@@ -12,7 +12,8 @@ if TYPE_CHECKING:
 
 exits={
     RegionNames.TAKA_PASS:[ExitData("Kusa Village Entrance",RegionNames.KUSA_VILLAGE),
-                           ExitData("Sasa Sanctuary Entrance",RegionNames.SASA_SANCTUARY_ENTRANCE)]
+                           ExitData("Sasa Sanctuary Entrance",RegionNames.SASA_SANCTUARY_ENTRANCE),
+                           ExitData("City Checkpoint Entrance",RegionNames.CITY_CHECKPOINT_TAKA)]
 
 }
 events={
