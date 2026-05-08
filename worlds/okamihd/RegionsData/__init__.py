@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from . import menu, r100, r122, r101, r102, r103, r104, rf01, rf02, rf03, rf04, rf07, rf08, r108, r109, r107, \
-    r10e, r110, rf06
+    r10e, r110, rf06, r105
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -13,6 +13,7 @@ okami_exits = {
     **r102.exits,
     **r103.exits,
     **r104.exits,
+    **r105.exits,
     **r107.exits,
     **r108.exits,
     **r109.exits,
@@ -34,6 +35,7 @@ okami_locations = {
     **r102.locations,
     **r103.locations,
     **r104.locations,
+    **r105.locations,
     **r107.locations,
     **r108.locations,
     **r109.locations,
@@ -55,6 +57,7 @@ okami_events = {
     **r102.events,
     **r103.events,
     **r104.events,
+    **r105.events,
     **r107.events,
     **r108.events,
     **r109.events,
@@ -73,6 +76,7 @@ okami_events = {
 # Shop locations are separate because they're conditionally created based on RandomizeShops
 okami_shop_locations = {
     **getattr(r102, 'shop_locations', {}),
+    **getattr(r105, 'shop_locations', {}),
     **getattr(r108, 'shop_locations', {}),
     **getattr(r109, 'shop_locations', {}),
     **getattr(r110, 'shop_locations', {}),
