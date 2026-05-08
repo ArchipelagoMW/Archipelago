@@ -117,11 +117,18 @@ class RegionNames(StrEnum):
     MOON_CAVE_4F_AFTER_CANON = "Moon Cave (4F after canon)"
     MOON_CAVE_OROCHI = "Moon Cave (Orochi)"
 
-    ##CITY CHECKPOINT
+    ## CITY CHECKPOINT
     CITY_CHECKPOINT_TAKA="City Checkpoint (Taka side)"
     CITY_CHECKPOINT_DRAWBRIDGE="City Checkpoint Drawbridge"
     CITY_CHECKPOINT_RYOSHIMA="City Checkpoint (Ryoshima side)"
     CITY_CHECKPOINT_RIVER="City Checkpoint (River)"
+
+    # Western Nippon
+
+    ## RYOSHIMA COAST
+    CURSED_RYOSHIMA_COAST="Cursed Ryoshima Coast"
+    CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE= "Cursed Ryoshima Coast"
+    RYOSHIMA_COAST="Ryoshima Coast"
 
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
@@ -145,6 +152,8 @@ class MapIds(Enum):
     HEALED_AGATA = 0xF04
     CURSED_TAKA = 0xF07
     HEALED_TAKA = 0xF08
+    CURSED_RYOSHIMA = 0xF09
+    HEALED_RYOSHIMA = 0xF0A
 
 
 class MapIndexes(Enum):
@@ -164,3 +173,4 @@ class MapIndexes(Enum):
     SHINSHU_FIELD = 71
     AGATA_FOREST = 72
     TAKA_PASS = 74
+    RYOSHIMA_COAST= 75

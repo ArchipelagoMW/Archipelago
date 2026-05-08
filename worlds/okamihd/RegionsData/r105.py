@@ -19,6 +19,9 @@ exits = {
     ],
     RegionNames.CITY_CHECKPOINT_DRAWBRIDGE: [
         ExitData("Exit the Drawbridge", RegionNames.CITY_CHECKPOINT_RYOSHIMA)
+    ],
+    RegionNames.CITY_CHECKPOINT_RYOSHIMA:[
+        ExitData("Exit to Ryoshima Coast",RegionNames.CURSED_RYOSHIMA_COAST)
     ]
 }
 events = {
