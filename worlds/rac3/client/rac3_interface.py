@@ -486,7 +486,7 @@ class Rac3Interface(GameInterface):
                 self._write_bits(check[0], {check[1]})
 
         if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
-            self._write8(RAC3PROGRESSFLAG.ARIDIA_5TH_MISSION_COMPLETE, 80)  # Aridia final mission access
+            self._write8(RAC3PROGRESSFLAG.ARIDIA_5TH_MISSION_COMPLETE[0], 80)  # Aridia final mission access
             for loc, addr in MISSION_COUNTS.items():
                 if RAC3_LOCATION_DATA_TABLE[loc].REGION not in [RAC3REGION.STARSHIP_PHOENIX,
                                                                 RAC3REGION.ANNIHILATION_NATION]:
