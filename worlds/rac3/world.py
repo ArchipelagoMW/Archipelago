@@ -278,8 +278,8 @@ class RaC3World(World):
             RAC3OPTION.SCOUT_VENDORS: self.options.scout_vendors.value,
             RAC3OPTION.SHORTCUTS: self.options.shortcuts.value,
             RAC3OPTION.SPEEDUPS: self.options.speedups.value,
-            RAC3OPTION.NGPLUS_ITEMS: self.options.ngplusitems.value,
-            RAC3OPTION.NGPLUS_VENDOR: self.options.ngplusvendor.value,
+            RAC3OPTION.NGPLUS_ITEMS: self.options.ngplus_items.value,
+            RAC3OPTION.NGPLUS_VENDOR: self.options.ngplus_vendors.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

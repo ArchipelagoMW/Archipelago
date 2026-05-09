@@ -40,7 +40,7 @@ def create_itempool(world: "RaC3World") -> list[Item]:
             continue
         if RAC3ITEMTAG.UNUSED in item_tags:
             continue
-        if options.ngplusitems.value:
+        if options.ngplus_items.value:
             if name == RAC3ITEM.PROGRESSIVE_RY3N0:
                 item_amount: int = 5
             else:
@@ -63,7 +63,7 @@ def create_itempool(world: "RaC3World") -> list[Item]:
 
         # NG+ Item option
         if RAC3ITEMTAG.NGPLUS in item_tags:
-            if not options.ngplusitems.value:
+            if not options.ngplus_items.value:
                 continue
 
         # ExtraArmorUpgrade option

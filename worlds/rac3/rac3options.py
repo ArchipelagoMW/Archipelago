@@ -84,8 +84,8 @@ class RaC3Options(PerGameCommonOptions):
     scout_vendors: ScoutVendors
     shortcuts: Shortcuts
     speedups: Speedups
-    ngplusitems: NGPlusItems
-    ngplusvendor: NGPlusVendor
+    ngplus_items: NGPlusItems
+    ngplus_vendors: NGPlusVendor
 
 
 rac3_option_groups = [
