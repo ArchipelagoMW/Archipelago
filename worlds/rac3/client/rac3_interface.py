@@ -193,6 +193,7 @@ class Rac3Interface(GameInterface):
     last_used_3: int = 0
     last_used_4: int = 0
     last_used_5: int = 0
+    weapon_demo: int = 0
 
     def __init__(self):
         super().__init__()  # GameInterfaceの初期化
@@ -486,7 +487,7 @@ class Rac3Interface(GameInterface):
                 self._write_bits(check[0], {check[1]})
 
         if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
-            self._write8(RAC3PROGRESSFLAG.ARIDIA_5TH_MISSION_COMPLETE[0], 80)  # Aridia final mission access
+            self._write_bits(*RAC3PROGRESSFLAG.ARIDIA_5TH_MISSION_COMPLETE)  # Aridia final mission access
             for loc, addr in MISSION_COUNTS.items():
                 if RAC3_LOCATION_DATA_TABLE[loc].REGION not in [RAC3REGION.STARSHIP_PHOENIX,
                                                                 RAC3REGION.ANNIHILATION_NATION]:
@@ -529,6 +530,7 @@ class Rac3Interface(GameInterface):
         self.last_used_3 = self._read8(RAC3STATUS.LAST_USED_3)
         self.last_used_4 = self._read8(RAC3STATUS.LAST_USED_4)
         self.last_used_5 = self._read8(RAC3STATUS.LAST_USED_5)
+        self.weapon_demo = self._read8(RAC3STATUS.WEAPON_DEMO)
         self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
         self.nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
         self.clank_disabled = bool(self._read8(RAC3STATUS.NO_CLANK))
@@ -929,6 +931,8 @@ class Rac3Interface(GameInterface):
             return True
         loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[location]
         if not loc_data:
+            return False
+        if RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self.weapon_demo]].UNLOCK_ADDRESS_2 == loc_data.CHECK_ADDRESS:
             return False
         # TODO: Implement a distance based checktype
         if location == RAC3LOCATION.OBANI_GEMINI_SKIDD and self.planet == RAC3REGION.OBANI_GEMINI:
