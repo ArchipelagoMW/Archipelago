@@ -25,7 +25,7 @@ from worlds.rac3.constants.data.ship_slot import RAC3_SHIP_DATA_TABLE
 from worlds.rac3.constants.data.shortcut import RAC3_SHORTCUT_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.data.vendorslot import (ARMOR_VENDOR_INVENTORY, ARMOR_VENDOR_LOCATION_TO_ITEM,
-                                                   ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION,
+                                                   ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION, BASE_WEAPON_TO_OMEGA_WEAPON,
                                                    ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION,
                                                    MEGACORP_WEAPONS, RAC3ARMORVENDORSLOTDATA, RAC3SHIPVENDORSLOTDATA,
                                                    RAC3SKINVENDORSLOTDATA, RAC3VENDORSLOTDATA, RAC3WEAPONVENDORSLOTDATA,
@@ -177,6 +177,7 @@ class Rac3Interface(GameInterface):
     visited_planets: set[str] = set()
     weapon_vendor_items: list[str] = []
     armor_vendor_items: list[str] = []
+    omega_weapon_vendors_items: list[str] = []
     vendor_type: RAC3VENDORTYPE | None = None
     vendor_string_pointers: dict[str, int] = {}
     should_restore_vendor_item_names: bool = True
@@ -606,6 +607,7 @@ class Rac3Interface(GameInterface):
     def determine_weapon_vendor_items(self):
         """Determine which items should be sold by the weapon vendor on the current planet."""
         items_to_sell: list[str] = []
+        omega_items_to_sell: list[str] = []
         already_sold = set()
         for location, item in WEAPON_VENDOR_LOCATION_TO_ITEM.items():
             if item == RAC3ITEM.HOLO_SHIELD and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations:
@@ -617,7 +619,17 @@ class Rac3Interface(GameInterface):
                     already_sold.add(item)
                 else:
                     items_to_sell.append(item)
+
+        v5_weapons = {weapon_name for weapon_name in non_prog_weapon_data if self.weapon_level_from_xp(weapon_name) == 5}
+        already_omega = {weapon_name for weapon_name in non_prog_weapon_data if self.weapon_level_from_xp(weapon_name) > 5}
+        for weapon in v5_weapons:
+            if weapon == RAC3ITEM.RY3N0:
+                continue
+            if weapon not in already_omega and weapon not in omega_items_to_sell:
+                omega_items_to_sell.append(weapon)
+
         self.weapon_vendor_items = items_to_sell
+        self.omega_weapon_vendors_items = omega_items_to_sell
 
     def determine_armor_vendor_items(self):
         """Determine which items should be sold by the armor vendor on the Starship Phoenix."""
@@ -892,14 +904,13 @@ class Rac3Interface(GameInterface):
         current_id = self._read8(weapon_data.LEVEL_ADDRESS)
         current_name = ITEM_NAME_FROM_ID[current_id]
         current_level = max(RAC3_ITEM_DATA_TABLE[current_name].LEVEL, self.weapon_level_from_xp(weapon_name))
-        if current_level < 5:
+        max_level = 8 if self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0 else 5
+        if current_level < max_level:
             target_level = current_level + 1
             target_id = UPGRADE_DICT[weapon_name][target_level - 1]
             target_name = ITEM_NAME_FROM_ID[target_id]
             target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
             target_ammo = RAC3_ITEM_DATA_TABLE[target_name].AMMO
-            logger.debug(f"level up {weapon_name} to {target_name}, target level: {current_level}, "
-                         f"target id: {target_id}, target xp:{target_xp}")
             self._write32(weapon_data.XP_ADDRESS, target_xp)
             self._write8(weapon_data.LEVEL_ADDRESS, target_id)
             if target_ammo:
@@ -909,9 +920,12 @@ class Rac3Interface(GameInterface):
         """Returns the weapon level based on the current xp"""
         current_xp = self._read32(non_prog_weapon_data[weapon_name].XP_ADDRESS)
         level_from_xp = 1
-        for lvl in range(5):
+        max_level = 8 if self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0 else 5
+        for lvl in range(max_level):
             target_id = UPGRADE_DICT[weapon_name][lvl]
             target_name = ITEM_NAME_FROM_ID[target_id]
+            if target_name in BASE_WEAPON_TO_OMEGA_WEAPON.values():
+                continue
             xp_threshold = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
             if current_xp >= xp_threshold:
                 level_from_xp = lvl + 1
@@ -941,8 +955,8 @@ class Rac3Interface(GameInterface):
         loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[location]
         if not loc_data:
             return False
-        if RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self.weapon_demo]].UNLOCK_ADDRESS_2 == loc_data.CHECK_ADDRESS:
-            return False
+        if self.weapon_demo:
+            return RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self.weapon_demo]].UNLOCK_ADDRESS_2 == loc_data.CHECK_ADDRESS
         # TODO: Implement a distance based checktype
         if location == RAC3LOCATION.OBANI_GEMINI_SKIDD and self.planet == RAC3REGION.OBANI_GEMINI:
             current_pos = self.player_pos
@@ -1277,6 +1291,8 @@ class Rac3Interface(GameInterface):
                             break
                     new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
                                           self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
+                    if self.options.ngplus_items:
+                        new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[BASE_WEAPON_TO_OMEGA_WEAPON.get(item, item)].ID, mega=1) for item in self.omega_weapon_vendors_items])
                     if self.planet == RAC3REGION.STARSHIP_PHOENIX:
                         # add memory card item
                         new_inventory.append(RAC3WEAPONVENDORSLOTDATA(memcard=1))
@@ -1393,6 +1409,15 @@ class Rac3Interface(GameInterface):
             return False
         cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
         if self.read_weapon_vendor_slot_data(cursor_pos).ammo_text.value:
+            return True
+        return False
+
+    def hovering_over_mega(self) -> bool:
+        """Check if the player is currently hovering over the mega item in a weapon vendor"""
+        if self.vendor_type != RAC3VENDORTYPE.WEAPON:
+            return False
+        cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+        if self.read_weapon_vendor_slot_data(cursor_pos).mega.value:
             return True
         return False
 
@@ -1820,7 +1845,7 @@ class Rac3Interface(GameInterface):
                     cursor_pos = self._read32(
                         RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
                     if self.read_weapon_vendor_slot_data(cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
-                        weapon_name].ID and not self.hovering_over_ammo():
+                        weapon_name].ID and not self.hovering_over_ammo() and not self.hovering_over_mega():
                         self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS,
                                      RAC3_ITEM_DATA_TABLE[weapon_name].ID)
                     else:
