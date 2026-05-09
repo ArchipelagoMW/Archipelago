@@ -59,9 +59,12 @@ def patch_kh2(self, output_directory):
 
     if self.options.Keyblade_Minimum.value > self.options.Keyblade_Maximum.value:
         logging.info(
-                f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
+                f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum."
+                f"Swapping Minimum and Maximum")
         keyblademin = self.options.Keyblade_Maximum.value
         keyblademax = self.options.Keyblade_Minimum.value
+        self.options.Keyblade_Maximum.value = keyblademax
+        self.options.Keyblade_Minimum.value = keyblademin
     else:
         keyblademin = self.options.Keyblade_Minimum.value
         keyblademax = self.options.Keyblade_Maximum.value
@@ -514,10 +517,10 @@ def patch_kh2(self, output_directory):
 
     # client install generating
     apworldloc = os.path.join("lib","worlds")
-    if not os.path.isfile(Utils.user_path(apworldloc, 'kh2.apworld')): 
+    if not os.path.isfile(Utils.user_path(apworldloc, 'kh2.apworld')):
         apworldloc = os.path.join("custom_worlds", "")
     if os.path.exists(os.path.join(apworldloc,"kh2.apworld")):
-        try: 
+        try:
             with zipfile.ZipFile(Utils.user_path(os.path.join(
                                  apworldloc, 'kh2.apworld')), 'r') as apworld_archive:
                 # zipfile requires the forward slash
