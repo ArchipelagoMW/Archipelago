@@ -60,7 +60,7 @@ def patch_kh2(self, output_directory):
     if self.options.Keyblade_Minimum.value > self.options.Keyblade_Maximum.value:
         logging.info(
                 f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum."
-                f"Swapping Minimum and Maximum")
+                f" Swapping Minimum and Maximum")
         keyblademin = self.options.Keyblade_Maximum.value
         keyblademax = self.options.Keyblade_Minimum.value
         self.options.Keyblade_Maximum.value = keyblademax
