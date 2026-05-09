@@ -359,7 +359,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.QWACK_O_BLITZER_V6: RAC3ITEMDATA.construct_weapon_level(0x94, 4000, tags=[RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.QWACK_O_BLITZER_V7: RAC3ITEMDATA.construct_weapon_level(0x95, 5000, xp=10000, tags=[RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.QWACK_O_BLITZER_V8: RAC3ITEMDATA.construct_weapon_level(0x96, 6000, xp=25000, tags=[RAC3ITEMTAG.NGPLUS]),
-    RAC3ITEM.RY3N0: RAC3ITEMDATA.construct_weapon(0x97, 6000, 25, ItemClassification.progression),
+    RAC3ITEM.RY3N0: RAC3ITEMDATA.construct_weapon(0x97, 6000, 25, ItemClassification.progression, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.RY3NO_V2: RAC3ITEMDATA.construct_weapon_level(0x98, 7000, 30, 20000, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.RY3NO_V3: RAC3ITEMDATA.construct_weapon_level(0x99, 8000, 35, 50000, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.RY3NO_V4: RAC3ITEMDATA.construct_weapon_level(0x9A, 9000, 40, 90000, [RAC3ITEMTAG.NGPLUS]),
@@ -540,6 +540,19 @@ NAME_TO_PROG_DICT: dict[str, str] = dict(zip(non_prog_weapon_data.keys(), prog_w
 item_counts: dict[str, int] = {
     **dict.fromkeys(non_prog_weapon_data.keys(), 1),
     **dict.fromkeys(prog_weapon_data.keys(), 5),
+    **dict.fromkeys(gadget_data.keys(), 1),
+    **dict.fromkeys(cheat_data.keys(), 1),
+    RAC3ITEM.CLANK: 1,
+    RAC3ITEM.PROGRESSIVE_ARMOR: 4,
+    RAC3ITEM.PROGRESSIVE_VIDCOMIC: 5,
+    RAC3ITEM.PROGRESSIVE_PACK: 2,
+    **dict.fromkeys(infobot_data.keys(), 1),
+    RAC3ITEM.VICTORY: 0,
+}
+
+ngplus_item_counts: dict[str, int] = {
+    **dict.fromkeys(non_prog_weapon_data.keys(), 1),
+    **dict.fromkeys(prog_weapon_data.keys(), 8),
     **dict.fromkeys(gadget_data.keys(), 1),
     **dict.fromkeys(cheat_data.keys(), 1),
     RAC3ITEM.CLANK: 1,

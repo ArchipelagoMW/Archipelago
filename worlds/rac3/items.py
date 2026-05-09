@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 from worlds.rac3.constants.data.item import (goal_data, infobot_data, item_counts, item_table, NAME_TO_PROG_DICT,
-                                             PROG_TO_NAME_DICT, progressive_data, RAC3ITEMDATA)
+                                             ngplus_item_counts, PROG_TO_NAME_DICT, progressive_data, RAC3ITEMDATA)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -40,7 +40,13 @@ def create_itempool(world: "RaC3World") -> list[Item]:
             continue
         if RAC3ITEMTAG.UNUSED in item_tags:
             continue
-        item_amount: int = item_counts.get(name, 1)
+        if options.ngplusitems.value:
+            if name == RAC3ITEM.PROGRESSIVE_RY3N0:
+                item_amount: int = 5
+            else:
+                item_amount: int = ngplus_item_counts.get(name, 1)
+        else:
+            item_amount: int = item_counts.get(name, 1)
 
         # Already placed items (Starting items and vanilla)
         if name in world.preplaced_items:
@@ -54,6 +60,11 @@ def create_itempool(world: "RaC3World") -> list[Item]:
             continue
         if RAC3ITEMTAG.NON_PROG_WEAPON in item_tags and options.progressive_weapons.value:
             continue
+
+        # NG+ Item option
+        if RAC3ITEMTAG.NGPLUS in item_tags:
+            if not options.ngplusitems.value:
+                continue
 
         # ExtraArmorUpgrade option
         if RAC3ITEMTAG.ARMOR in item_tags:

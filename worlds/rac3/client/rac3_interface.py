@@ -121,6 +121,8 @@ class Rac3Interface(GameInterface):
         scout_vendors: dict[str, int]
         shortcuts: dict[str, int]
         speedups: dict[str, int]
+        ngplus_items: int
+        ngplus_vendors: int
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
@@ -327,6 +329,8 @@ class Rac3Interface(GameInterface):
         self.options.scout_vendors = slot_data[RAC3OPTION.SCOUT_VENDORS]
         self.options.shortcuts = slot_data[RAC3OPTION.SHORTCUTS]
         self.options.speedups = slot_data[RAC3OPTION.SPEEDUPS]
+        self.options.ngplus_items = slot_data[RAC3OPTION.NGPLUS_ITEMS]
+        self.options.ngplus_vendors = slot_data[RAC3OPTION.NGPLUS_VENDOR]
 
     ########################################
     # Called on Game and Server Connection #
@@ -1784,8 +1788,10 @@ class Rac3Interface(GameInterface):
                 target_level = self.UnlockItem[weapon_name].status
                 if not target_level:
                     continue
-                if target_level > 5:  # TODO: change limit to 8 if NG+ weapons are added
+                if target_level > 5 and (not self.options.ngplus_items or weapon_name == RAC3ITEM.RY3N0):
                     target_level = 5
+                if target_level > 8 and self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0:
+                    target_level = 8
                 if self.vendor_type == RAC3VENDORTYPE.WEAPON:
                     cursor_pos = self._read32(
                         RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))

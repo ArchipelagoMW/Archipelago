@@ -13,6 +13,8 @@ from worlds.rac3.options.filler_weight_options import FillerWeight
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
+from worlds.rac3.options.ngplus_item_options import NGPlusItems
+from worlds.rac3.options.ngplus_vendor_options import NGPlusVendor
 from worlds.rac3.options.one_hp_options import OneHpChallenge
 from worlds.rac3.options.prog_weapons_options import ProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
@@ -82,6 +84,8 @@ class RaC3Options(PerGameCommonOptions):
     scout_vendors: ScoutVendors
     shortcuts: Shortcuts
     speedups: Speedups
+    ngplusitems: NGPlusItems
+    ngplusvendor: NGPlusVendor
 
 
 rac3_option_groups = [
@@ -98,6 +102,7 @@ rac3_option_groups = [
     ]),
     OptionGroup("RAC3 Item Options", [
         StartingWeapons,
+        NGPlusItems,
         ProgressiveWeapons,
         ArmorUpgrade,
         ClankOptions,
@@ -107,6 +112,7 @@ rac3_option_groups = [
     ]),
     OptionGroup("RAC3 Location Options", [
         WeaponVendors,
+        NGPlusVendor,
         ArmorVendors,
         ShipVendors,
         ScoutVendors,
@@ -139,6 +145,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.STARTING_WEAPONS,
     RAC3OPTION.BOLT_AND_XP_MULTIPLIER,
     RAC3OPTION.PROGRESSIVE_WEAPONS,
+    RAC3OPTION.NGPLUS_ITEMS,
     RAC3OPTION.ARMOR_UPGRADE,
     RAC3OPTION.SKILL_POINTS,
     RAC3OPTION.TROPHIES,
@@ -167,4 +174,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.SHIP_VENDOR,
     RAC3OPTION.ARMOR_VENDOR,
     RAC3OPTION.SCOUT_VENDORS,
+    RAC3OPTION.NGPLUS_VENDOR,
 ]

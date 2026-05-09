@@ -43,3 +43,5 @@ class RAC3OPTION:
     SCOUT_VENDORS = "Scout Vendors"
     SHORTCUTS = "Shortcuts"
     SPEEDUPS = "Speedups"
+    NGPLUS_VENDOR = "NG+ Vendor"
+    NGPLUS_ITEMS = "NG+ Items"
