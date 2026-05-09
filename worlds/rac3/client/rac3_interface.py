@@ -180,6 +180,7 @@ class Rac3Interface(GameInterface):
     omega_weapon_vendors_items: list[str] = []
     vendor_type: RAC3VENDORTYPE | None = None
     vendor_string_pointers: dict[str, int] = {}
+    vendor_cursor_pos: int = 0
     should_restore_vendor_item_names: bool = True
     tyhrra_dropship: int = 0
     tyhrra_intro: int = 0
@@ -565,6 +566,7 @@ class Rac3Interface(GameInterface):
         """Returns the current vendor type if the vendor is open, else None"""
         if self.pause_state_value == RAC3PAUSESTATE.VENDOR and self.planet in PLANET_VENDOR_OFFSET.keys():
             self.last_in_vendor_time = time.time()
+            self.vendor_cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
             try:
                 return RAC3VENDORTYPE(
                     self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
@@ -1322,10 +1324,9 @@ class Rac3Interface(GameInterface):
                 logger.debug(f"Vendor cycler does not support vendor type {self.vendor_type} yet")
                 return
         self.write_vendor_inventory(new_inventory, self.vendor_type)
-        cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
         if len(new_inventory) == 0:
             self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET), 0)
-        elif cursor_pos >= len(new_inventory):
+        elif self.vendor_cursor_pos >= len(new_inventory):
             self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET),
                           len(new_inventory) - 1)
 
@@ -1409,8 +1410,7 @@ class Rac3Interface(GameInterface):
         """Check if the player is currently hovering over the max ammo item in a weapon vendor"""
         if self.vendor_type != RAC3VENDORTYPE.WEAPON:
             return False
-        cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
-        if self.read_weapon_vendor_slot_data(cursor_pos).ammo_text.value:
+        if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).ammo_text.value:
             return True
         return False
 
@@ -1418,8 +1418,7 @@ class Rac3Interface(GameInterface):
         """Check if the player is currently hovering over the mega item in a weapon vendor"""
         if self.vendor_type != RAC3VENDORTYPE.WEAPON:
             return False
-        cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
-        if self.read_weapon_vendor_slot_data(cursor_pos).mega.value:
+        if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).mega.value:
             return True
         return False
 
@@ -1825,9 +1824,7 @@ class Rac3Interface(GameInterface):
                 if target_level > 8 and self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0:
                     target_level = 8
                 if self.vendor_type == RAC3VENDORTYPE.WEAPON:
-                    cursor_pos = self._read32(
-                        RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
-                    if self.read_weapon_vendor_slot_data(cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
+                    if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
                         weapon_name].ID and not self.hovering_over_ammo():
                         target_level = 1
                 if weapon_name == RAC3ITEM.RY3N0 and target_level > self.ryno:
@@ -1849,11 +1846,7 @@ class Rac3Interface(GameInterface):
                 if current_level > prev_saved:
                     self.weapon_levels[weapon_name] = current_level
                 if self.vendor_type == RAC3VENDORTYPE.WEAPON:
-                    cursor_pos = self._read32(
-                        RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
-                    # If the vendor slot matches this weapon and we're not hovering special items,
-                    # save the current (highest) weapon level id and temporarily set weapon to base.
-                    if self.read_weapon_vendor_slot_data(cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
+                    if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
                         weapon_name].ID and not self.hovering_over_ammo() and not self.hovering_over_mega():
 
                         # Temporarily set the vendor-focused weapon to its base/display id
@@ -1864,7 +1857,7 @@ class Rac3Interface(GameInterface):
                         restore_level = self.weapon_levels.get(weapon_name, 1)
                         self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, UPGRADE_DICT[weapon_name][restore_level - 1])
             # restore last hovered weapon if we closed the vendor while it was hovering over it
-            if self.last_hovered_weapon and self.vendor_type != RAC3VENDORTYPE.WEAPON:
+            if self.last_hovered_weapon and self.vendor_type != RAC3VENDORTYPE.WEAPON and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE:
                 restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
                 self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS, UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
                 self.last_hovered_weapon = None
