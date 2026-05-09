@@ -147,7 +147,7 @@ class Rac3Interface(GameInterface):
     max_health: int = 10
     main_menu: bool = False
     between_planets: bool = True
-    ryno: bool = False
+    ryno: int = 5
     death_count: int = 0
     last_death_count: int = 0
     last_death_state: int = 0
@@ -610,6 +610,8 @@ class Rac3Interface(GameInterface):
         for location, item in WEAPON_VENDOR_LOCATION_TO_ITEM.items():
             if item == RAC3ITEM.HOLO_SHIELD and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations:
                 continue
+            if item == RAC3ITEM.RY3N0 and not self.options.ngplus_vendors:
+                continue
             if WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[location] in self.visited_planets and item not in already_sold:
                 if location in self.checked_locations:
                     already_sold.add(item)
@@ -816,9 +818,12 @@ class Rac3Interface(GameInterface):
                         level = max(
                             RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL,
                             self.weapon_level_from_xp(weapon_name))
-                        if ((weapon_name != RAC3ITEM.RY3N0 and level < 5) or
-                            (weapon_name == RAC3ITEM.RY3N0 and level < 4) or
-                            (weapon_name == RAC3ITEM.RY3N0 and level < 5 and not self.ryno)):
+                        if self.options.ngplus_items:
+                            max_level = 8
+                        else:
+                            max_level = 5
+                        if ((weapon_name != RAC3ITEM.RY3N0 and level < max_level) or
+                            (weapon_name == RAC3ITEM.RY3N0 and level < self.ryno)):
                             valid_weapons.append(weapon_name)
 
                 if valid_weapons:
@@ -1623,9 +1628,9 @@ class Rac3Interface(GameInterface):
                     self.UnlockItem[name].unlock_delay = 0
                 else:
                     self.UnlockItem[name].unlock_delay += 1
-                if name == RAC3ITEM.RY3N0 and self.ryno:
+                if name == RAC3ITEM.RY3N0:
                     _xp = self._read32(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS)
-                    threshold_id = UPGRADE_DICT[name][3]
+                    threshold_id = UPGRADE_DICT[name][self.ryno - 1]
                     threshold_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[threshold_id]].XP_THRESHOLD
                     if _xp > threshold_xp:
                         self._write32(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS, threshold_xp)
@@ -1798,8 +1803,8 @@ class Rac3Interface(GameInterface):
                     if self.read_weapon_vendor_slot_data(cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
                         weapon_name].ID and not self.hovering_over_ammo():
                         target_level = 1
-                if self.ryno and weapon_name == RAC3ITEM.RY3N0 and target_level > 4:
-                    target_level = 4
+                if weapon_name == RAC3ITEM.RY3N0 and target_level > self.ryno:
+                    target_level = self.ryno
                 # logger.debug(f"weapon: {weapon_name}, target: {target_level}")
                 target_id = UPGRADE_DICT[weapon_name][target_level - 1]
                 target_name = ITEM_NAME_FROM_ID[target_id]

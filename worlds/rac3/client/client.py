@@ -178,20 +178,22 @@ class CommandProcessor(ClientCommandProcessor):
             self.output("Attempting to homewarp to the Phoenix...")
             create_task(handle_respawn(self.ctx, force_load=True))
 
-    def _cmd_ryno(self):
+    def _cmd_ryno(self, *args):
         """Toggles the maximum upgrade level for the RYNO between lv5 and lv4"""
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.ryno = not self.ctx.game_interface.ryno
-            if self.ctx.game_interface.ryno:
-                self.output("RYNO max upgrade is Lv4")
+            if args:
+                if not isinstance(args[0], int):
+                    self.output("Please type a valid number")
+                    return
+                if args[0] not in range(1, 6):
+                    self.output("Please type a valid number")
+                    return
+                self.ctx.game_interface.ryno = args[0]
+                self.output(f"RY3NO max upgrade set to Lv{args[0]}")
                 if self.verify():
-                    self.ctx.game_interface.enqueue_notification("RY3NO max upgrade set to Lv4")
-            else:
-                self.output("RYNO max upgrade is Lv5")
-                if self.verify():
-                    self.ctx.game_interface.enqueue_notification("RY3NO max upgrade set to Lv5")
+                    self.ctx.game_interface.enqueue_notification(f"RY3NO max upgrade set to Lv{args[0]}")
 
     def _cmd_messagebox(self, *args):
         """Displays a message box in-game with the specified message."""
