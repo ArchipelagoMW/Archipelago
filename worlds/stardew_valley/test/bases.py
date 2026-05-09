@@ -282,7 +282,7 @@ def should_cache_world(test_options):
     if "start_inventory" in test_options:
         return False
 
-    entrance_plando_key = "entrance_randomization_plando"
+    entrance_plando_key = "entrance_plando"
     entrance_plando = test_options.get(entrance_plando_key, {})
     if len(entrance_plando) > 0:
         return False

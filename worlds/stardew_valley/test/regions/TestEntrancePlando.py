@@ -8,7 +8,7 @@ from worlds.stardew_valley.strings.ap_names.ap_option_names import EntranceRando
 from ... import options
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
-from ...options.options import EntranceRandomizationBehavior, EntranceRandomizationPlando, all_mods
+from ...options.options import EntranceRandomizationBehavior, EntrancePlando, all_mods
 from ...regions.entrance_rando import connect_regions, create_entrance_rando_target, prepare_mod_data
 from ...regions.model import ConnectionData, RandomizationFlag, RegionData
 from ...strings.entrance_names import Entrance as EntranceName
@@ -21,7 +21,7 @@ class TestEntrancePlandoCoupled(SVTestBase):
     options = {
         EntranceRandomization: EntranceRandomization.option_everywhere,
         EntranceRandomizationBehavior: {},
-        EntranceRandomizationPlando: {
+        EntrancePlando: {
             EntranceName.farmhouse_to_farm: EntranceName.town_to_beach,
             EntranceName.farm_to_backwoods: EntranceName.mountain_to_railroad,
             EntranceName.farm_to_forest: EntranceName.enter_secret_woods,
@@ -79,7 +79,7 @@ class TestEntrancePlandoDecoupled(SVTestBase):
     options = {
         EntranceRandomization: EntranceRandomization.option_everywhere,
         EntranceRandomizationBehavior: {EntranceRandomizationBehaviorOptionName.decoupled},
-        EntranceRandomizationPlando: {
+        EntrancePlando: {
             EntranceName.farmhouse_to_farm: EntranceName.town_to_beach,
             EntranceName.farm_to_backwoods: EntranceName.mountain_to_railroad,
             EntranceName.farm_to_forest: EntranceName.enter_secret_woods,

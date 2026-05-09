@@ -81,7 +81,7 @@ else:
         OptionGroup("Very Advanced Options", [
             options.Mods,
             options.CustomLogic,
-            options.EntranceRandomizationPlando,
+            options.EntrancePlando,
             ap_options.ProgressionBalancing,
             ap_options.Accessibility,
         ]),

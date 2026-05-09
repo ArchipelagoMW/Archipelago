@@ -33,7 +33,7 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
 
     is_chaos = world_options.entrance_randomization_behavior.is_chaos()
     randomized_entrances = connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, randomization_flag,
-                                           world_options.entrance_randomization_plando.value, is_chaos)
+                                           world_options.entrance_plando.value, is_chaos)
 
     return regions_by_name, randomized_entrances
 

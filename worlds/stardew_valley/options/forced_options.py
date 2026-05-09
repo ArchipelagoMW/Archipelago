@@ -176,7 +176,7 @@ def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_op
 def force_reverse_entrance_plando_when_not_decoupled(world_options: options.StardewValleyOptions, player, player_name):
     if EntranceRandomizationBehaviorOptionName.decoupled in world_options.entrance_randomization_behavior:
         return
-    plando_map = world_options.entrance_randomization_plando.value
+    plando_map = world_options.entrance_plando.value
     to_add = {}
     for before, after in plando_map.items():
         after_rev = reverse_connection_name(after)
@@ -187,7 +187,7 @@ def force_reverse_entrance_plando_when_not_decoupled(world_options: options.Star
             continue
         logger.warning(f"Adding forced connection '{after_rev}: {before_rev}' due to '{before}: {after}' existing for player {player} ({player_name})")
         to_add[after_rev] = before_rev
-    world_options.entrance_randomization_plando.value.update(to_add)
+    world_options.entrance_plando.value.update(to_add)
 
 
 def force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options):

@@ -253,7 +253,7 @@ class EntranceRandomizationBehavior(OptionSet):
         return EntranceRandomizationBehaviorOptionName.chaos in self.value
 
 
-class EntranceRandomizationPlando(OptionDict):
+class EntrancePlando(OptionDict):
     """Set where specific Entrances go instead of being randomized.
     Should have entries of the format
     `Farm to Forest: Forest to Town`
@@ -262,7 +262,7 @@ class EntranceRandomizationPlando(OptionDict):
     in the example Forest to Farm would also get randomized even if it wasn't before to negate failures.
     """
     default = {}
-    internal_name = "entrance_randomization_plando"
+    internal_name = "entrance_plando"
     display_name = "Entrance Plando"
 
 
@@ -1284,8 +1284,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     bundle_price: BundlePrice
     bundles_per_room: BundlesPerRoom
     entrance_randomization: EntranceRandomization
-    entrance_randomization_plando: EntranceRandomizationPlando
     entrance_randomization_behavior: EntranceRandomizationBehavior
+    entrance_plando: EntrancePlando
     start_without: StartWithout
     season_randomization: SeasonRandomization
     cropsanity: Cropsanity
