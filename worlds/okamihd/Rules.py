@@ -75,6 +75,8 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
     ## RULE BUILDER REWORK:
     # - FOR EACH LOCATION, BUILD AN ARRAY OF RULES THAT WILL BE ADDED TO THE world.set_rule(loc,AND(*Rules))
 
+    debug_rule=False
+
     rules: List[Rule] = []
 
     required_techinques = []
@@ -108,7 +110,8 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.STONE_BURIED_CHEST:
-            # FIXME when dojo techniques are handled
+            # Digging Champ Requirement
+            rules.append(Has("Ryoshima Coast - Buy Digging Champ"))
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.BURNING_CHEST:
@@ -158,9 +161,9 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
     if len(rules) > 0:
         final_rule = And(*rules)
         world.set_rule(loc, final_rule)
-
-
-#    print(final_rule)
+        if debug_rule:
+            print("[Debug] - Rule for "+ loc.name)
+            print(final_rule)
 # else:
 #    print("no rule for this check")
 

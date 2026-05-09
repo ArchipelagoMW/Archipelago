@@ -130,6 +130,15 @@ class RegionNames(StrEnum):
     CURSED_RYOSHIMA_COAST="Cursed Ryoshima Coast"
     CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE= "Cursed Ryoshima Coast"
     RYOSHIMA_COAST="Ryoshima Coast"
+    RYOSHIMA_COAST_SEA="Ryoshima Coast (Sea)"
+    RYOSHIMA_COAST_DOJO="Ryoshima Coast (Dojo)"
+    RYOSHIMA_COAST_SHIP_TOP="Ryoshima Coast (Top of Sunken Ship)"
+    RYOSHIMA_COAST_CATWALK_TOWER="Ryoshima Coast (Catwalk Tower)"
+    RYOSHIMA_COAST_SEIAN ="Ryoshima Coast (Near Seian City Entrance)"
+    RYOSHIMA_COAST_SEIAN_ENCOUNTER="Ryoshima Coast (Near Seian City Entrance Encounter)"
+    RYOSHIMA_COAST_LUNAR_LAGOON="Ryoshima Coast (Lunar Lagoon)"
+    RYOSHIMA_COAST_WEST_PIER="Ryoshima Coast (West of Pier)"
+    ANKOKU_TEMPLE="Ankoku Temple"
 
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp

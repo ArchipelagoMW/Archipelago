@@ -104,7 +104,6 @@ brush_techniques_items = {
     BrushTechniques.ICESTORM.value: ItemData(0x118, ItemClassification.useful),                     # bit 24
 }
 equips = {
-
     # Equips
     "Water Tablet": ItemData(0x9c, ItemClassification.progression),
     "Peace Bell": ItemData(0x0b, ItemClassification.useful),
