@@ -6,8 +6,8 @@ if TYPE_CHECKING:
     pass
 
 exits = {
-    # TODO: in ER this should be the starting point
-    RegionNames.MENU: [ExitData("New Game", RegionNames.CURSED_KAMIKI)]
+    # TODO: in ER this should be the starting point.
+    RegionNames.MENU: [ExitData(RegionNames.CURSED_KAMIKI,one_way=True)]
 }
 events = {
 }
