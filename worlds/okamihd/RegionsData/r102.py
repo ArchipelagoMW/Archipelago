@@ -36,14 +36,7 @@ events = {
         "Kamiki Village - Fight with Mr.Orange": EventData(mandatory_enemies=[OkamiEnemies.GREEN_IMP], id=0x208,
                                                            precollected=lambda o: o.OpenGameStart,
                                                            required_items_events=[
-                                                               "Kamiki Village - Restoring the villagers"]),
-        "Kamiki Village - Get Orb from Hayabusa": EventData(id=145, mandatory_enemies=[OkamiEnemies.HAYABUSA],
-                                                            is_event_item=lambda o: o.CanineRewards != 0,
-                                                            progress_type=lambda
-                                                                o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                                            else LocationProgressType.DEFAULT,
-                                                            event_item_name="Loyalty Orb",
-                                                            special_rule=night_time_check_rule)
+                                                               "Kamiki Village - Restoring the villagers"])
 
     },
     RegionNames.SUSANOS_UNDERGROUD: {
@@ -66,7 +59,15 @@ events = {
         "Kamiki Village - Bloom every Tree": EventData(required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM]),
         "Kamiki Village - Restore Sakuya's Tree": EventData(required_items_events=["Kamiki Village - Bloom every Tree"],
                                                             required_brush_techniques=[
-                                                                BrushTechniques.GREENSPROUT_BLOOM])
+                                                                BrushTechniques.GREENSPROUT_BLOOM]),
+        # Probably needs more flags to trigger that event
+        "Kamiki Village - Get Orb from Hayabusa": EventData(id=145, mandatory_enemies=[OkamiEnemies.HAYABUSA],
+                                                            is_event_item=lambda o: o.CanineRewards != 0,
+                                                            progress_type=lambda
+                                                                o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
+                                                            else LocationProgressType.DEFAULT,
+                                                            event_item_name="Loyalty Orb",
+                                                            special_rule=night_time_check_rule)
     }
 }
 locations = {
