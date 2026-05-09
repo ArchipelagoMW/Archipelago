@@ -10,7 +10,8 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-    RegionNames.CURSED_AGATA_FOREST: [ExitData("Agata Forest Restoration",RegionNames.AGATA_FOREST_WAKA),ExitData("Enter Madame Fawn's house",RegionNames.FAWNS_HOUSE)],
+    RegionNames.CURSED_AGATA_FOREST: [ExitData(RegionNames.AGATA_FOREST_WAKA,has_events=["Agata Forest - Restore Guardian Sapling"],one_way=True),
+                                      ExitData(RegionNames.FAWNS_HOUSE)],
 }
 events = {
     RegionNames.CURSED_AGATA_FOREST: {

@@ -12,17 +12,19 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.CITY_CHECKPOINT_TAKA: [
-        ExitData("Enter the Drawbridge", RegionNames.CITY_CHECKPOINT_DRAWBRIDGE,
-                 has_events=["City Checkpoint - Activate the Drawbridge"]),
-        # Setup this connection only bc it is always both ways. ignore the fact that you can go down to the river from the other side.
-        ExitData("Use ramp to go down to the river", RegionNames.CITY_CHECKPOINT_RIVER)
+        ExitData(RegionNames.CITY_CHECKPOINT_DRAWBRIDGE,
+                 has_events=["City Checkpoint - Activate the Drawbridge"],loading_screen=False),
+        ExitData(RegionNames.CITY_CHECKPOINT_RIVER,loading_screen=False)
     ],
     RegionNames.CITY_CHECKPOINT_DRAWBRIDGE: [
-        ExitData("Exit the Drawbridge", RegionNames.CITY_CHECKPOINT_RYOSHIMA)
+        ExitData(RegionNames.CITY_CHECKPOINT_RYOSHIMA)
     ],
     RegionNames.CITY_CHECKPOINT_RYOSHIMA:[
-        ExitData("Exit to Ryoshima Coast",RegionNames.CURSED_RYOSHIMA_COAST)
-    ]
+        ExitData(RegionNames.CITY_CHECKPOINT_RIVER,loading_screen=False,one_way=True),
+        ExitData(RegionNames.CURSED_RYOSHIMA_COAST)
+    ],
+
+
 }
 events = {
     RegionNames.CITY_CHECKPOINT_TAKA: {

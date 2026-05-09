@@ -1,5 +1,5 @@
 import typing
-from typing import NamedTuple, List, Callable,TYPE_CHECKING, TypeVar
+from typing import NamedTuple, List, Callable, TYPE_CHECKING, TypeVar
 
 from BaseClasses import Location, Item, ItemClassification, LocationProgressType
 from rule_builder.rules import Rule
@@ -61,19 +61,20 @@ class EventData(NamedTuple):
     special_rule: Rule | None = None
 
 
-
-
-
 class ExitData(NamedTuple):
-    name: str
     destination: str
     has_events: [str] = []
     needs_long_swim: bool = False
+    one_way: bool = False
+    loading_screen:bool = True
 
-T = TypeVar('T',str,int,bool)
+
+T = TypeVar('T', str, int, bool)
+
+
 # Generic function to return the value or the resolved value of a callable that depends of options.
 def resolve_option_callable(value: T | Callable[[OkamiOptions], T], world: "OkamiWorld") -> T:
     if isinstance(value, Callable):
         return value(world.options)
     else:
-        return value  
+        return value
