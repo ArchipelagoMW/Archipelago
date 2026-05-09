@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits={
-    RegionNames.CALCIFIED_CAVERN:[ExitData("Moon Cave Entrance Bottom",RegionNames.MOON_CAVE,has_events=["Calcified Cavern - Fool Yokai Guards"])]
+    RegionNames.CALCIFIED_CAVERN:[ExitData(RegionNames.MOON_CAVE,has_events=["Calcified Cavern - Fool Yokai Guards"])]
 }
 events={
     RegionNames.CALCIFIED_CAVERN:{

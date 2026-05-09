@@ -10,11 +10,12 @@ if TYPE_CHECKING:
     pass
 
 exits = {
-    RegionNames.CAVE_OF_NAGI: [ExitData("Exit to River of the Heavens", RegionNames.RIVER_OF_THE_HEAVENS_NAGI),
-                               ExitData("Repair Nagi's statue", RegionNames.CAVE_OF_NAGI_TACHIGAMI,
-                                        has_events=["Cave of Nagi - Repair statue"])],
-    RegionNames.CAVE_OF_NAGI_TACHIGAMI: [ExitData("Clear power slash tutorial", RegionNames.CAVE_OF_NAGI,
-                                                  has_events=["Cave of Nagi - Cut tutorial rock"])]
+    RegionNames.CAVE_OF_NAGI: [ExitData(RegionNames.CAVE_OF_NAGI_TACHIGAMI,
+                                        has_events=["Cave of Nagi - Repair statue"], one_way=True,
+                                        loading_screen=False)],
+    RegionNames.CAVE_OF_NAGI_TACHIGAMI: [ExitData(RegionNames.CAVE_OF_NAGI,
+                                                  has_events=["Cave of Nagi - Cut tutorial rock"], one_way=True,
+                                                  loading_screen=False)]
 }
 events = {
     RegionNames.CAVE_OF_NAGI: {
