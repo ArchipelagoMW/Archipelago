@@ -265,6 +265,8 @@ class EntrancePlando(OptionDict):
     internal_name = "entrance_plando"
     display_name = "Entrance Plando"
 
+    visibility = Visibility.all & ~Visibility.simple_ui
+
 
 class StartWithout(OptionSet):
     """ Items that, in vanilla, you generally start with (or get very quickly), but in Archipelago, you would rather start without them.
