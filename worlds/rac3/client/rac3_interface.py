@@ -189,6 +189,8 @@ class Rac3Interface(GameInterface):
     opened_the_hacker_doors: bool = False
     opened_the_tyhrranoid_doors: bool = False
     opened_the_refractor_doors: bool = False
+    weapon_levels: dict[str, int] = {}
+    last_hovered_weapon: str = None
     equipped_item: int = 0
     last_used_0: int = 0
     last_used_1: int = 0
@@ -621,7 +623,7 @@ class Rac3Interface(GameInterface):
                     items_to_sell.append(item)
 
         v5_weapons = {weapon_name for weapon_name in non_prog_weapon_data if self.weapon_level_from_xp(weapon_name) == 5}
-        already_omega = {weapon_name for weapon_name in non_prog_weapon_data if self.weapon_level_from_xp(weapon_name) > 5}
+        already_omega = {weapon_name for weapon_name in self.weapon_levels if self.weapon_levels[weapon_name] > 5}
         for weapon in v5_weapons:
             if weapon == RAC3ITEM.RY3N0:
                 continue
@@ -829,7 +831,7 @@ class Rac3Interface(GameInterface):
                     if self.UnlockItem[weapon_name].status:
                         level = max(
                             RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL,
-                            self.weapon_level_from_xp(weapon_name))
+                            self.weapon_levels.get(weapon_name, 1))
                         if self.options.ngplus_items:
                             max_level = 8
                         else:
@@ -903,7 +905,7 @@ class Rac3Interface(GameInterface):
         weapon_data = non_prog_weapon_data[weapon_name]
         current_id = self._read8(weapon_data.LEVEL_ADDRESS)
         current_name = ITEM_NAME_FROM_ID[current_id]
-        current_level = max(RAC3_ITEM_DATA_TABLE[current_name].LEVEL, self.weapon_level_from_xp(weapon_name))
+        current_level = max(RAC3_ITEM_DATA_TABLE[current_name].LEVEL, self.weapon_levels.get(weapon_name, 1))
         max_level = 8 if self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0 else 5
         if current_level < max_level:
             target_level = current_level + 1
@@ -920,12 +922,10 @@ class Rac3Interface(GameInterface):
         """Returns the weapon level based on the current xp"""
         current_xp = self._read32(non_prog_weapon_data[weapon_name].XP_ADDRESS)
         level_from_xp = 1
-        max_level = 8 if self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0 else 5
+        max_level = 5 # 8 if self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0 else 5
         for lvl in range(max_level):
             target_id = UPGRADE_DICT[weapon_name][lvl]
             target_name = ITEM_NAME_FROM_ID[target_id]
-            if target_name in BASE_WEAPON_TO_OMEGA_WEAPON.values():
-                continue
             xp_threshold = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
             if current_xp >= xp_threshold:
                 level_from_xp = lvl + 1
@@ -1838,19 +1838,38 @@ class Rac3Interface(GameInterface):
                 self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
                 self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
         else:
-            for weapon_name in non_prog_weapon_data.keys():
+            for weapon_name, weapon_data in non_prog_weapon_data.items():
                 if not self.UnlockItem[weapon_name].status:
                     continue
+                current_id = self._read8(weapon_data.LEVEL_ADDRESS)
+                current_level = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[current_id]].LEVEL
+                prev_saved = self.weapon_levels.get(weapon_name, 1)
+                if current_level > prev_saved:
+                    self.weapon_levels[weapon_name] = current_level
                 if self.vendor_type == RAC3VENDORTYPE.WEAPON:
                     cursor_pos = self._read32(
                         RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+                    # If the vendor slot matches this weapon and we're not hovering special items,
+                    # save the current (highest) weapon level id and temporarily set weapon to base.
                     if self.read_weapon_vendor_slot_data(cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
                         weapon_name].ID and not self.hovering_over_ammo() and not self.hovering_over_mega():
+
+                        # Temporarily set the vendor-focused weapon to its base/display id
                         self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS,
                                      RAC3_ITEM_DATA_TABLE[weapon_name].ID)
+                        self.last_hovered_weapon = weapon_name
                     else:
-                        restore_id = UPGRADE_DICT[weapon_name][self.weapon_level_from_xp(weapon_name) - 1]
-                        self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, restore_id)
+                        restore_level = self.weapon_levels.get(weapon_name, 1)
+                        restore_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[UPGRADE_DICT[weapon_name][restore_level - 1]]].XP_THRESHOLD
+                        self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, restore_xp)
+                        self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, UPGRADE_DICT[weapon_name][restore_level - 1])
+            # restore last hovered weapon if we closed the vendor while it was hovering over it
+            if self.last_hovered_weapon and self.vendor_type != RAC3VENDORTYPE.WEAPON:
+                restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
+                restore_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1]]].XP_THRESHOLD
+                self._write32(non_prog_weapon_data[self.last_hovered_weapon].XP_ADDRESS, restore_xp)
+                self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS, UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
+                self.last_hovered_weapon = None
 
     def verify_quick_select_and_last_used(self):
         """Check each slot in quick select and held item history, reset if that item has not been collected yet."""
