@@ -18,7 +18,11 @@ exits = {
         ExitData(RegionNames.MOON_CAVE_OUTSIDE),
         ExitData(RegionNames.SHINSHU_PLATEAU,has_events=["Shinshu Field - Climb on plateau"],loading_screen=False)],
     RegionNames.SHINSHU_FIELD_AGATA_CAVE: [ExitData(RegionNames.CURSED_AGATA_FOREST,
-                                                    has_events=["Shinshu Field - Open Entrance to Agata Forest"])]
+                                                    has_events=["Shinshu Field - Open Entrance to Agata Forest"]),
+                                           ExitData(RegionNames.AGATA_FOREST,
+                                                    has_events=["Shinshu Field - Open Entrance to Agata Forest","Agata Forest - Restore Guardian Sapling"]),
+                                           ],
+    RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE:[ExitData(RegionNames.SHINSHU_FIELD,one_way=True,loading_screen=False)]
 }
 events = {
     RegionNames.SHINSHU_FIELD_AGATA_CAVE: {

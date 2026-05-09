@@ -18,8 +18,14 @@ exits = {
                  loading_screen=False)],
     RegionNames.AGATA_FOREST: [ExitData(RegionNames.CURSED_TAKA_PASS,
                                         has_events=["Agata Forest - Repair Bridge with Kokari"]),
+                               ExitData(RegionNames.TAKA_PASS,
+                                        has_events=["Agata Forest - Repair Bridge with Kokari",
+                                                    "Taka pass - Restore Guardian Sapling"]),
                                ExitData(RegionNames.TSUTA_RUINS_1F_MAIN_PART,
-                                        has_events=["Agata Forest - Open Ruins Door"])]
+                                        has_events=["Agata Forest - Open Ruins Door"]),
+                               ExitData(RegionNames.FAWNS_HOUSE,has_events=["Agata Forest - Restore Guardian Sapling"]),
+                               ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE,has_events=["Agata Forest - Open shortcut to Shinshu Field"])
+                               ]
 }
 events = {
     RegionNames.AGATA_FOREST_WAKA: {
@@ -42,7 +48,8 @@ events = {
                                                      progress_type=lambda
                                                          o: LocationProgressType.EXCLUDED if o.CanineRewards == 2 else LocationProgressType.DEFAULT,
                                                      event_item_name="Justice Orb",
-                                                     required_items_events=["Agata Forest - Fish Whopper with Kokari"])
+                                                     required_items_events=["Agata Forest - Fish Whopper with Kokari"]),
+        "Agata Forest - Open shortcut to Shinshu Field": EventData(cherry_bomb_level=1)
     }
 }
 locations = {

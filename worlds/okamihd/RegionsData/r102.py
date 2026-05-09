@@ -21,6 +21,8 @@ exits = {
                                  ExitData(RegionNames.ORANGES_HOUSE),
                                  ExitData(RegionNames.CURSED_SHINSHU_FIELD,
                                           has_events=["Kamiki Village - Help Susano Train/Break the boulder"]),
+                                 ExitData(RegionNames.SHINSHU_FIELD,
+                                          has_events=["Kamiki Village - Help Susano Train/Break the boulder","Shinshu Field - Restore Guardian Sapling"]),
                                  # One way bc this is not a logical access.
                                  ExitData(RegionNames.KAMIKI_MERCHANT,
                                           has_events=["Kamiki Village - Help Susano Train/Break the boulder"],
