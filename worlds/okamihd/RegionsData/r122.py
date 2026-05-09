@@ -10,10 +10,10 @@ if TYPE_CHECKING:
     from .. import OkamiWorld, OkamiOptions
 
 exits = {
-    RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI: [ExitData("Crossing the River to the Cave of Nagi",
+    RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI: [ExitData(
                                                        RegionNames.RIVER_OF_THE_HEAVENS_NAGI,
-                                                       has_events=["River of the Heavens - Restoring the River"])],
-    RegionNames.RIVER_OF_THE_HEAVENS_NAGI: [ExitData("Exit to Cave of Nagi", RegionNames.CAVE_OF_NAGI)]
+                                                       has_events=["River of the Heavens - Restoring the River"],loading_screen=False)],
+    RegionNames.RIVER_OF_THE_HEAVENS_NAGI: [ExitData(RegionNames.CAVE_OF_NAGI)]
 }
 events = {
     RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI: {
