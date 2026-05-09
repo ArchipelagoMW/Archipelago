@@ -1291,7 +1291,7 @@ class Rac3Interface(GameInterface):
                             break
                     new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
                                           self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
-                    if self.options.ngplus_items:
+                    if self.options.ngplus_items and not self.options.progressive_weapons:
                         new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[BASE_WEAPON_TO_OMEGA_WEAPON.get(item, item)].ID, mega=1) for item in self.omega_weapon_vendors_items])
                     if self.planet == RAC3REGION.STARSHIP_PHOENIX:
                         # add memory card item
