@@ -2,5 +2,11 @@
 	"game": "BKSimulator",
 	"authors": ["EmilyV99"],
 	"minimum_ap_version": "0.6.7",
-	"world_version": "1.0.2"
+	"world_version": "1.0.3",
+	"igdb_id": 396121,
+	"repo_url": "https://github.com/BK-Simulator/BK-Simulator",
+	"flags": [
+		"supports_deathlink",
+		"supports_deathlink_groups"
+	]
 }
