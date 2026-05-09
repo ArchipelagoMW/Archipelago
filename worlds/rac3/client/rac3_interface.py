@@ -832,6 +832,8 @@ class Rac3Interface(GameInterface):
                         level = max(
                             RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL,
                             self.weapon_levels.get(weapon_name, 1))
+                        if level == 5:
+                            continue # people should buy NG+ mega variant instead of getting them for free
                         if self.options.ngplus_items:
                             max_level = 8
                         else:
