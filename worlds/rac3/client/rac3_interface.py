@@ -164,7 +164,6 @@ class Rac3Interface(GameInterface):
     one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
-    last_in_ship_time: float = 0.0
     last_in_vendor_time: float = 0.0
     deathlink_grace_period: float = 0.0
     gadget_grace_period: float = 0.0
@@ -551,7 +550,6 @@ class Rac3Interface(GameInterface):
         self.determine_weapon_vendor_items()
         self.determine_armor_vendor_items()
         self.vehicle_check()
-        self.ship_check()
         self.pause_check()
         self.check_latches()
 
@@ -650,14 +648,6 @@ class Rac3Interface(GameInterface):
                 else:
                     items_to_sell.append(item)
         self.armor_vendor_items = items_to_sell
-
-    def ship_check(self):
-        """
-        Updates the last_in_ship_time to address the short moment where everything is 0 while gadgets spawn
-        """
-        current_time = time.time()
-        if self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE:
-            self.last_in_ship_time = current_time
 
     def vehicle_check(self):
         """
@@ -1548,13 +1538,11 @@ class Rac3Interface(GameInterface):
                 self._write8(addr, 0)
 
     def should_cycle_gadgets(self) -> bool:
-        """Check if it's safe to cycle gadgets
-        used to ensure gadgets can respawn without the cycler interfering"""
+        """Check if it's safe to cycle gadgets used to ensure gadgets can respawn without the cycler interfering"""
+        if self.between_planets:
+            return False
         current_time = time.time()
-        if ((current_time - self.last_in_ship_time) < 1
-            or self.is_reloading
-            or self.self_respawning
-            or self.action_type == RAC3ACTIONTYPE.PLAYER_MOVEMENT_LOCKED):
+        if self.is_reloading or self.self_respawning or self.action_type == RAC3ACTIONTYPE.PLAYER_MOVEMENT_LOCKED:
             self.gadget_grace_period = current_time
         if current_time - self.gadget_grace_period < 0.75:
             return False
@@ -2302,9 +2290,8 @@ class Rac3Interface(GameInterface):
         current_time = time.time()
         tyhrranoid_game = (self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action ==
                            RAC3PLAYERACTION.TYHRRANOID_MINIGAME)
-        paused = ((self.pause_state
-                   and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT)
-                  or (current_time - self.last_in_ship_time) < 1.25
+        paused = ((self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT)
+                  or self.between_planets
                   or (current_time - self.last_in_vendor_time) < 0.25)
         self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED,
                       int(self.inside_hacker_puzzle or paused))
