@@ -524,7 +524,7 @@ class Rac3Interface(GameInterface):
         self.action = self._read8(RAC3STATUS.ACTION)
         self.action_type = self._read8(RAC3STATUS.ACTION_TYPE)
         if not self.between_planets:
-            self.between_planets = bool(self._read32(RAC3STATUS.RATCHET_MOBY_POINTER))
+            self.between_planets = not bool(self._read32(RAC3STATUS.RATCHET_MOBY_POINTER))
         elif self._read32(RAC3STATUS.RATCHET_MOBY_POINTER):
             self.between_planets = False if self.action else True
         self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
