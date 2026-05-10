@@ -10,28 +10,17 @@ if TYPE_CHECKING:
     pass
 
 exits = {
-    RegionNames.CAVE_OF_NAGI: [ExitData(RegionNames.CAVE_OF_NAGI_TACHIGAMI,
-                                        has_events=["Cave of Nagi - Repair statue"], one_way=True,
-                                        loading_screen=False)],
-    RegionNames.CAVE_OF_NAGI_TACHIGAMI: [ExitData(RegionNames.CAVE_OF_NAGI,
-                                                  has_events=["Cave of Nagi - Cut tutorial rock"], one_way=True,
-                                                  loading_screen=False)]
 }
 events = {
     RegionNames.CAVE_OF_NAGI: {
         "Cave of Nagi - Repair statue": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION]),
     },
-    # Never gets collected, probably bc it's assumed you can backtrack
-    RegionNames.CAVE_OF_NAGI_TACHIGAMI: {
-        "Cave of Nagi - Cut tutorial rock": EventData(power_slash_level=1)
-    }
 }
 locations = {
     RegionNames.CAVE_OF_NAGI: {
         # Containers in this file are at level 0x101.
         "Cave of Nagi - Stray Bead Chest": LocData(container_check_id(MapIds.CAVE_OF_NAGI, 14)),  # Stray Bead
+        "Cave of Nagi - Tachigami": LocData(brush_check_id(12), type=LocationType.CONSTELLATION,required_items_events=["Cave of Nagi - Repair statue"]),  # Power Slash
     },
-    RegionNames.CAVE_OF_NAGI_TACHIGAMI: {
-        "Cave of Nagi - Tachigami": LocData(brush_check_id(12), type=LocationType.CONSTELLATION),  # Power Slash
-    }
+
 }
