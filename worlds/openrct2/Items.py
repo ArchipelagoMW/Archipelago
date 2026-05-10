@@ -78,8 +78,8 @@ def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[s
     for each in range(options.loan_shark_traps.value):
         openRCT2_items.append("Loan Shark Trap")
 
-    for each in range(options.food_poisioning_traps.value):
-        openRCT2_items.append("Food Poisioning Trap")
+    for each in range(options.food_poisoning_traps.value):
+        openRCT2_items.append("Food poisoning Trap")
 
     for each in range(options.skips.value):
         openRCT2_items.append("Skip")
@@ -102,7 +102,7 @@ def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[s
         if(sum(1 for item in openRCT2_items if item in item_info["trap_items"]) < 5):
             openRCT2_items.append("Bathroom Trap")
             openRCT2_items.append("Furry Convention Trap")
-            openRCT2_items.append("Food Poisioning Trap")
+            openRCT2_items.append("Food poisoning Trap")
             openRCT2_items.append("Spam Trap")
             openRCT2_items.append("Loan Shark Trap")
 

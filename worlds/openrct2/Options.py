@@ -805,9 +805,9 @@ class LoanSharkTraps(Range):
     range_end = 20
     default = 5
 
-class FoodPoisioningTraps(Range):
+class FoodpoisoningTraps(Range):
     """When found, gives everybody with food in the park Norovirus! Adding traps will increase the total number of items in the world."""
-    display_name = "Food Poisioning Traps"
+    display_name = "Food poisoning Traps"
     range_start = 0
     range_end = 20
     default = 5
@@ -907,7 +907,7 @@ openrct2_option_groups = [
         BathroomTraps,
         SpamTraps,
         LoanSharkTraps,
-        FoodPoisioningTraps,
+        FoodpoisoningTraps,
         AllRidesAndSceneryBase,
         AllRidesAndSceneryExpansion
     ]),
@@ -984,6 +984,6 @@ class openRCT2Options(PerGameCommonOptions):
     bathroom_traps: BathroomTraps
     spam_traps: SpamTraps
     loan_shark_traps: LoanSharkTraps
-    food_poisioning_traps: FoodPoisioningTraps
+    food_poisoning_traps: FoodpoisoningTraps
     all_rides_and_scenery_base: AllRidesAndSceneryBase
     all_rides_and_scenery_expansion: AllRidesAndSceneryExpansion
