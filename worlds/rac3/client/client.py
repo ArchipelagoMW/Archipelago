@@ -292,6 +292,7 @@ class CommandProcessor(ClientCommandProcessor):
                     f"Found moby with ID {hex(target_id)} at address {hex(moby_addr)}")
             else:
                 self.output(f"Could not find moby with ID {hex(target_id)}")
+
     def _cmd_iteration(self, *args):
         """Test command for linked list iteration purposes."""
         if not self.verify():

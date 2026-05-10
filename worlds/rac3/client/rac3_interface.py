@@ -51,7 +51,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION, RAC3PROGRESSFLAG, RANGER_TO_REGION
+from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION, RAC3PROGRESSFLAG
 from worlds.rac3.constants.region import (PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET,
                                           PLANETS_WITH_HACKER_PUZZLES, PLANETS_WITH_REFRACTOR_PUZZLES,
                                           PLANETS_WITH_TYHRRANOID_PUZZLES, RAC3REGION, REGION_TO_HACKER_DOOR_COUNT,
@@ -191,7 +191,7 @@ class Rac3Interface(GameInterface):
     opened_the_tyhrranoid_doors: bool = False
     opened_the_refractor_doors: bool = False
     weapon_levels: dict[str, int] = {}
-    last_hovered_weapon: str = None
+    last_hovered_weapon: str = ""
     equipped_item: int = 0
     last_used_0: int = 0
     last_used_1: int = 0
@@ -495,7 +495,8 @@ class Rac3Interface(GameInterface):
                 self._write_bits(check[0], {check[1]})
 
         if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
-            self._write_bits(*RAC3PROGRESSFLAG.ARIDIA_5TH_MISSION_COMPLETE)  # Aridia final mission access
+            self._write_bits(RAC3PROGRESSFLAG.ARIDIA_5TH_MISSION_COMPLETE[0],
+                             {RAC3PROGRESSFLAG.ARIDIA_5TH_MISSION_COMPLETE[0]})  # Aridia final mission access
             for loc, addr in MISSION_COUNTS.items():
                 if RAC3_LOCATION_DATA_TABLE[loc].REGION not in [RAC3REGION.STARSHIP_PHOENIX,
                                                                 RAC3REGION.ANNIHILATION_NATION]:
@@ -566,7 +567,8 @@ class Rac3Interface(GameInterface):
         """Returns the current vendor type if the vendor is open, else None"""
         if self.pause_state_value == RAC3PAUSESTATE.VENDOR and self.planet in PLANET_VENDOR_OFFSET.keys():
             self.last_in_vendor_time = time.time()
-            self.vendor_cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+            self.vendor_cursor_pos = self._read32(
+                RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
             try:
                 return RAC3VENDORTYPE(
                     self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
@@ -624,7 +626,7 @@ class Rac3Interface(GameInterface):
                 else:
                     items_to_sell.append(item)
 
-        v5_weapons = {weapon_name for weapon_name in non_prog_weapon_data if self.weapon_level_from_xp(weapon_name) == 5}
+        v5_weapons = {name for name in non_prog_weapon_data if self.weapon_level_from_xp(name) == 5}
         already_omega = {weapon_name for weapon_name in self.weapon_levels if self.weapon_levels[weapon_name] > 5}
         for weapon in v5_weapons:
             if weapon == RAC3ITEM.RY3N0:
@@ -835,7 +837,7 @@ class Rac3Interface(GameInterface):
                             RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL,
                             self.weapon_levels.get(weapon_name, 1))
                         if level == 5:
-                            continue # people should buy NG+ mega variant instead of getting them for free
+                            continue  # people should buy NG+ mega variant instead of getting them for free
                         if self.options.ngplus_items:
                             max_level = 8
                         else:
@@ -926,7 +928,7 @@ class Rac3Interface(GameInterface):
         """Returns the weapon level based on the current xp"""
         current_xp = self._read32(non_prog_weapon_data[weapon_name].XP_ADDRESS)
         level_from_xp = 1
-        max_level = 5 # 8 if self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0 else 5
+        max_level = 5  # 8 if self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0 else 5
         for lvl in range(max_level):
             target_id = UPGRADE_DICT[weapon_name][lvl]
             target_name = ITEM_NAME_FROM_ID[target_id]
@@ -1296,7 +1298,8 @@ class Rac3Interface(GameInterface):
                     new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
                                           self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
                     if self.options.ngplus_items and not self.options.progressive_weapons:
-                        new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID, mega=1) for item in self.omega_weapon_vendors_items])
+                        new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID, mega=1)
+                                              for item in self.omega_weapon_vendors_items])
                     if self.planet == RAC3REGION.STARSHIP_PHOENIX:
                         # add memory card item
                         new_inventory.append(RAC3WEAPONVENDORSLOTDATA(memcard=1))
@@ -1638,7 +1641,8 @@ class Rac3Interface(GameInterface):
     def weapon_cycler(self):
         """Interval update function: Check unlock/lock status of weapons"""
         # If in vendor, lock all non-progressive weapons to allow second unlock address to work properly
-        if self.vendor_type == RAC3VENDORTYPE.WEAPON and not self.hovering_over_ammo() and not self.hovering_over_mega():
+        if (self.vendor_type == RAC3VENDORTYPE.WEAPON and not self.hovering_over_ammo()
+            and not self.hovering_over_mega()):
             weapons_to_remove = self.weapon_vendor_items
             for name in non_prog_weapon_data.keys():
                 if name in weapons_to_remove:
@@ -1855,12 +1859,15 @@ class Rac3Interface(GameInterface):
                         self.last_hovered_weapon = weapon_name
                     else:
                         restore_level = self.weapon_levels.get(weapon_name, 1)
-                        self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, UPGRADE_DICT[weapon_name][restore_level - 1])
+                        self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS,
+                                     UPGRADE_DICT[weapon_name][restore_level - 1])
             # restore last hovered weapon if we closed the vendor while it was hovering over it
-            if self.last_hovered_weapon and self.vendor_type != RAC3VENDORTYPE.WEAPON and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE:
+            if (self.last_hovered_weapon != "" and self.vendor_type != RAC3VENDORTYPE.WEAPON
+                and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE):
                 restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
-                self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS, UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
-                self.last_hovered_weapon = None
+                self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS,
+                             UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
+                self.last_hovered_weapon = ""
 
     def verify_quick_select_and_last_used(self):
         """Check each slot in quick select and held item history, reset if that item has not been collected yet."""
@@ -2092,11 +2099,11 @@ class Rac3Interface(GameInterface):
                         self.force_respawn()
 
                     self._write_bits(check[0], {check[1]})
-        if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
-            for check, region in RANGER_TO_REGION.items():
-                if self.planet in region:
-                    if region == RAC3REGION.ARIDIA:
-                        pass
+        # if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
+        #     for check, region in RANGER_TO_REGION.items():
+        #         if self.planet in region:
+        #             if region == RAC3REGION.ARIDIA:
+        #                 pass
 
     def hacker_cycler(self):
         """Finds hacker puzzle doors on current planet and marks all hacker puzzles complete if hacker is unlocked."""
