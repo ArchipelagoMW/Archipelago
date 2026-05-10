@@ -1,9 +1,12 @@
 from BaseClasses import Region, LocationProgressType
+from rule_builder.rules import Rule, Has, HasAll, And, False_, True_
+from .Enums.BrushTechniques import BrushTechniques
+from .Enums.WarpType import WarpType
 from .Locations import create_region_locations, create_region_events
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from .Rules import apply_exit_rules
 from .Enums.RegionNames import RegionNames
-from .RegionsData import okami_exits
+from .RegionsData import okami_exits, okami_warps
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -22,6 +25,7 @@ def create_regions(world: "OkamiWorld"):
     for r in RegionNames:
         reg = world.multiworld.get_region(r.value, world.player)
         create_region_exits(reg, world)
+        create_region_warps(reg, world)
 
 
 def create_region(world: "OkamiWorld", region_name: str):
@@ -40,9 +44,32 @@ def create_region_exits(reg: Region, world: "OkamiWorld"):
             apply_exit_rules(ext, ext.name, exit_data, world)
             if not exit_data.one_way:
                 reverse_exit_name = exiting_region.name + ' -> ' + reg.name
-                rev_ext = exiting_region.connect(reg,reverse_exit_name)
-                apply_exit_rules(rev_ext,rev_ext.name,exit_data,world)
+                rev_ext = exiting_region.connect(reg, reverse_exit_name)
+                apply_exit_rules(rev_ext, rev_ext.name, exit_data, world)
 
+
+def create_region_warps(reg: Region, world: "OkamiWorld"):
+    if reg.name in okami_warps:
+        for warp_data in okami_warps[reg.name]:
+            # No support for Mermaid Spring yet - Needs reliable_item_source logic first
+            if warp_data.type == WarpType.MIST_WARP:
+                hub = world.multiworld.get_region(RegionNames.MIST_WARP_HUB.value, world.player)
+                # IF False we don't even create a way to warp from this place
+                if warp_data.trigger_warp_from!=False_:
+                    from_name= reg.name + ' -> ' + hub.name
+                    warp_from = reg.connect(hub,from_name)
+                    if warp_data.trigger_warp_from!=True_:
+                        world.set_rule(warp_from,And(Has(BrushTechniques.MIST_WARP),warp_data.trigger_warp_from))
+                    else:
+                        world.set_rule(warp_from,Has(BrushTechniques.MIST_WARP))
+
+                # IF False we don't even create a way to warp to this place
+                if warp_data.trigger_warp_to != False_:
+                    to_name =  hub.name +' -> ' + reg.name
+                    warp_to = hub.connect(reg, to_name)
+                    if warp_data.trigger_warp_from != True_:
+                        world.set_rule(warp_to, warp_data.trigger_warp_from)
+                    # No need to check if we have Mist warp to get out of the hub.
 
 def get_region_location_count(world: "OkamiWorld", region_name: str, included_only: bool = True) -> int:
     count = 0

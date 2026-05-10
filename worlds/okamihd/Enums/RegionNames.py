@@ -118,6 +118,11 @@ class RegionNames(StrEnum):
     MOON_CAVE_4F_AFTER_CANON = "Moon Cave (4F after canon)"
     MOON_CAVE_OROCHI = "Moon Cave (Orochi)"
 
+
+    # SPECIAL REGIONS
+    # Special Hub regions to handle warps
+    MIST_WARP_HUB = "Mist Warp Hub"
+
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
 class MapIds(Enum):
     CURSED_KAMIKI = 0x100

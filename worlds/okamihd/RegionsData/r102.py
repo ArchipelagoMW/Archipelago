@@ -1,13 +1,15 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
+from rule_builder.rules import True_
 from ..CheckIds import brush_check_id, collected_object_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds, MapIndexes
+from ..Enums.WarpType import WarpType
 from ..Rules import night_time_check_rule
-from ..Types import ExitData, LocData, EventData
+from ..Types import ExitData, LocData, EventData, WarpData
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -151,4 +153,10 @@ shop_locations = {
         "Kamiki Village - Shop Slot 11": LocData(shop_check_id(5, 10), type=LocationType.SHOP),
         "Kamiki Village - Shop Slot 12": LocData(shop_check_id(5, 11), type=LocationType.SHOP),
     }
+}
+
+warps={
+    RegionNames.KAMIKI_VILLAGE:[
+        WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_)
+    ]
 }

@@ -1,11 +1,13 @@
 from typing import TYPE_CHECKING
 
+from rule_builder.rules import True_
 from ..CheckIds import container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Types import EventData, ExitData, LocData
+from ..Enums.WarpType import WarpType
+from ..Types import EventData, ExitData, LocData, WarpData
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -63,4 +65,10 @@ shop_locations = {
         "Taka Pass - Shop Slot 11": LocData(shop_check_id(19, 10), type=LocationType.SHOP),
         "Taka Pass - Shop Slot 12": LocData(shop_check_id(19, 11), type=LocationType.SHOP),
     }
+}
+
+warps={
+    RegionNames.TAKA_PASS:[
+        WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_)
+    ]
 }
