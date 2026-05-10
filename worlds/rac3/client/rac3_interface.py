@@ -147,7 +147,7 @@ class Rac3Interface(GameInterface):
     max_health: int = 10
     main_menu: bool = False
     ratchet_moby: int = 0
-    between_planets: bool = True
+    between_planets: bool = False
     ryno: int = 5
     death_count: int = 0
     last_death_count: int = 0
