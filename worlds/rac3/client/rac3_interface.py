@@ -25,7 +25,7 @@ from worlds.rac3.constants.data.ship_slot import RAC3_SHIP_DATA_TABLE
 from worlds.rac3.constants.data.shortcut import RAC3_SHORTCUT_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.data.vendorslot import (ARMOR_VENDOR_INVENTORY, ARMOR_VENDOR_LOCATION_TO_ITEM,
-                                                   ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION, BASE_WEAPON_TO_OMEGA_WEAPON,
+                                                   ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION,
                                                    ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION,
                                                    MEGACORP_WEAPONS, RAC3ARMORVENDORSLOTDATA, RAC3SHIPVENDORSLOTDATA,
                                                    RAC3SKINVENDORSLOTDATA, RAC3VENDORSLOTDATA, RAC3WEAPONVENDORSLOTDATA,
@@ -1296,7 +1296,7 @@ class Rac3Interface(GameInterface):
                     new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
                                           self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
                     if self.options.ngplus_items and not self.options.progressive_weapons:
-                        new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[BASE_WEAPON_TO_OMEGA_WEAPON.get(item, item)].ID, mega=1) for item in self.omega_weapon_vendors_items])
+                        new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID, mega=1) for item in self.omega_weapon_vendors_items])
                     if self.planet == RAC3REGION.STARSHIP_PHOENIX:
                         # add memory card item
                         new_inventory.append(RAC3WEAPONVENDORSLOTDATA(memcard=1))
@@ -1551,7 +1551,7 @@ class Rac3Interface(GameInterface):
             or self.self_respawning
             or self.action_type == RAC3ACTIONTYPE.PLAYER_MOVEMENT_LOCKED):
             self.gadget_grace_period = current_time
-        if current_time - self.gadget_grace_period < 0.5:
+        if current_time - self.gadget_grace_period < 0.75:
             return False
         return True
 
@@ -1638,7 +1638,7 @@ class Rac3Interface(GameInterface):
     def weapon_cycler(self):
         """Interval update function: Check unlock/lock status of weapons"""
         # If in vendor, lock all non-progressive weapons to allow second unlock address to work properly
-        if self.vendor_type == RAC3VENDORTYPE.WEAPON and not self.hovering_over_ammo():
+        if self.vendor_type == RAC3VENDORTYPE.WEAPON and not self.hovering_over_ammo() and not self.hovering_over_mega():
             weapons_to_remove = self.weapon_vendor_items
             for name in non_prog_weapon_data.keys():
                 if name in weapons_to_remove:
