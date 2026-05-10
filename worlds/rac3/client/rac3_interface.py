@@ -491,8 +491,7 @@ class Rac3Interface(GameInterface):
     def speedup_setup(self):
         """One time setup of speedup options when starting a new session"""
         if self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK, False):
-            region = RAC3_SHORTCUT_DATA_TABLE[RAC3SHORTCUTS.HOLOSTAR_CLANK].VISIT_ADDRESSES[0]
-            self._write8(RAC3_REGION_DATA_TABLE[region].VISIT_ADDRESS, 1)
+            self._write8(RAC3_REGION_DATA_TABLE[RAC3REGION.HOLOSTAR_STUDIOS_CLANK].VISIT_ADDRESS, 1)
         if self.options.speedups.get(RAC3SPEEDUPS.BOLT_CRANK, False):
             for check, _ in BOLT_CRANK_TO_REGION.items():
                 self._write_bits(check[0], {check[1]})
