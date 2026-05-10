@@ -146,6 +146,7 @@ class Rac3Interface(GameInterface):
     health: int = 100
     max_health: int = 10
     main_menu: bool = False
+    ratchet_moby: int = 0
     between_planets: bool = True
     ryno: int = 5
     death_count: int = 0
@@ -523,9 +524,10 @@ class Rac3Interface(GameInterface):
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
         self.action = self._read8(RAC3STATUS.ACTION)
         self.action_type = self._read8(RAC3STATUS.ACTION_TYPE)
+        self.ratchet_moby = self._read32(RAC3STATUS.RATCHET_MOBY_POINTER)
         if not self.between_planets:
-            self.between_planets = not bool(self._read32(RAC3STATUS.RATCHET_MOBY_POINTER))
-        elif self._read32(RAC3STATUS.RATCHET_MOBY_POINTER):
+            self.between_planets = not bool(self.ratchet_moby)
+        elif self.ratchet_moby:
             self.between_planets = False if self.action else True
         self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
         self.inputs = RAC3INPUT(self._read16(RAC3STATUS.READ_INPUT))
@@ -2162,19 +2164,18 @@ class Rac3Interface(GameInterface):
     def find_moby_by_id_traversal(self, target_id: int) -> int:
         """Traverse the moby linked list on the current planet to find a moby with the given ID and return its
         address"""
-        table_start = self._read32(RAC3STATUS.RATCHET_MOBY_POINTER)
-        if not table_start:
+        if not self.ratchet_moby:
             logger.debug("Ratchet pointer is null")
             return 0
         moby_offset = 0
         current_id = 0
         for traversal_count in range(1, 10001):
             if current_id == target_id:
-                moby_addr = table_start + moby_offset
+                moby_addr = self.ratchet_moby + moby_offset
                 logger.debug(
                     f"Moby with ID {target_id} found at address: {hex(moby_addr)} after {traversal_count} traversals")
                 return moby_addr
-            next_ptr_addr = table_start + 0x28 + moby_offset
+            next_ptr_addr = self.ratchet_moby + 0x28 + moby_offset
             if next_ptr_addr < 0 or next_ptr_addr > 0xFFFFFFFF:
                 logger.debug(
                     f"Moby with ID {target_id} not found, next pointer address out of range "
@@ -2185,12 +2186,12 @@ class Rac3Interface(GameInterface):
                 logger.debug(
                     f"Moby with ID {target_id} not found, reached null pointer after {traversal_count} traversals")
                 return 0
-            moby_offset = next_ptr - table_start
+            moby_offset = next_ptr - self.ratchet_moby
             if moby_offset < 0:
                 logger.debug(
                     f"Moby with ID {target_id} not found, invalid offset detected after {traversal_count} traversals")
                 return 0
-            current_id_addr = table_start + 0xB2 + moby_offset
+            current_id_addr = self.ratchet_moby + 0xB2 + moby_offset
             if current_id_addr < 0 or current_id_addr > 0xFFFFFFFF:
                 logger.debug(
                     f"Moby with ID {target_id} not found, current id address out of range "
@@ -2203,11 +2204,10 @@ class Rac3Interface(GameInterface):
     def find_moby_by_id_iteration(self, target_id: int) -> int:
         """Traverse the moby table on the current planet to find a moby with the given ID and return its
         address"""
-        table_start = self._read32(RAC3STATUS.RATCHET_MOBY_POINTER)
-        if not table_start:
+        if not self.ratchet_moby:
             logger.debug("Ratchet pointer is null")
             return 0
-        addr = table_start
+        addr = self.ratchet_moby
         iteration_count = 0
         while iteration_count < 2000:
             current_id_addr = addr + 0xB2
