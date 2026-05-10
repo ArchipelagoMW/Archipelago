@@ -1,0 +1,206 @@
+<ModOps>
+  <ModOp Type="add" GUID="1500004636" Path="Values/Trigger/ResetTrigger/Values/Trigger/TriggerActions">
+    <Item>
+      <TriggerAction>
+        <Template>ActionExecuteScript</Template>
+        <Values>
+          <Action />
+          <ActionExecuteScript>
+            <ScriptFileName>data/scripts/archipelago/on_game_loaded.py</ScriptFileName>
+          </ActionExecuteScript>
+        </Values>
+      </TriggerAction>
+    </Item>
+  </ModOp>
+
+{% for guid in lock_guid_list %}
+  <ModOp Type="remove" Path="//ActionUnlockAsset/UnlockAssets/Item[Asset='{{ guid }}']" />
+  <ModOp Type="remove" Path="//ActionUnlockAsset/UnhideAssets/Item[Asset='{{ guid }}']" Condition="//ActionUnlockAsset/UnhideAssets/Item[Asset='{{ guid }}']" />
+{% endfor %}
+
+  <ModOp Type="addNextSibling" GUID="105568">
+{% for _, (_, location_data) in trigger_to_location_data.items() %}
+{% for guid, location, _ in location_data %}
+    <Asset>
+      <Template>UnlockableAsset</Template>
+      <Values>
+        <Standard>
+          <GUID>{{ guid }}</GUID>
+          <Name>Unlock {{ location.name }}</Name>
+        </Standard>
+        <Locked/>
+      </Values>
+    </Asset>
+{% endfor %}
+{% endfor %}
+    <Asset>
+      <Template>UnlockableAsset</Template>
+      <Values>
+        <Standard>
+          <GUID>{{ victory_condition[3] }}</GUID>
+          <Name>Victory Condition</Name>
+        </Standard>
+        <Locked/>
+      </Values>
+    </Asset>
+  </ModOp>
+
+  <ModOp Type="addNextSibling" GUID="130248">
+    <Asset>
+      <Template>Trigger</Template>
+      <Values>
+        <Standard>
+          <GUID>{{ start_trigger_guid }}</GUID>
+          <Name>unlock_start</Name>
+        </Standard>
+        <Trigger>
+          <TriggerCondition>
+            <IsBaseAutoCreateAsset>1</IsBaseAutoCreateAsset>
+            <Values>
+              <Condition/>
+              <ConditionAlwaysTrue/>
+            </Values>
+          </TriggerCondition>
+          <TriggerActions>
+            <Item>
+              <TriggerAction>
+                <Template>ActionUnlockAsset</Template>
+                <Values>
+                  <Action/>
+                  <ActionUnlockAsset>
+                    <UnlockAssets>
+{%                  for guid in starting_guids %}
+                      <Item>
+                        <Asset>{{ guid }}</Asset>
+                      </Item>
+{%                  endfor %}
+                    </UnlockAssets>
+                    <UnhideAssets />
+                  </ActionUnlockAsset>
+                </Values>
+              </TriggerAction>
+            </Item>
+          </TriggerActions>
+          <ResetTrigger>
+            <IsBaseAutoCreateAsset>1</IsBaseAutoCreateAsset>
+            <Values>
+              <EmptyAutoCreateValue/>
+            </Values>
+          </ResetTrigger>
+        </Trigger>
+        <TriggerSetup>
+          <UsedBySecondParties>0</UsedBySecondParties>
+        </TriggerSetup>
+      </Values>
+    </Asset>
+
+{% for trigger_guid, ((population_guid, amount), location_data) in trigger_to_location_data.items() %}
+    <Asset>
+      <Template>Trigger</Template>
+      <Values>
+        <Standard>
+          <GUID>{{ trigger_guid }}</GUID>
+          <Name>unlock_{{ population_guid }}_{{ amount }}</Name>
+        </Standard>
+        <Trigger>
+          <TriggerCondition>
+            <Template>ConditionPlayerCounter</Template>
+            <Values>
+              <Condition />
+              <ConditionPlayerCounter>
+                <PlayerCounter>PopulationByLevel</PlayerCounter>
+                <Context>{{ population_guid }}</Context>
+                <CounterAmount>{{ amount }}</CounterAmount>
+              </ConditionPlayerCounter>
+            </Values>
+          </TriggerCondition>
+          <TriggerActions>
+            <Item>
+              <TriggerAction>
+                <Template>ActionUnlockAsset</Template>
+                <Values>
+                  <Action/>
+                  <ActionUnlockAsset>
+                    <UnlockAssets>
+{%                  for guid, _, unlock_guids in location_data %}
+                      <Item>
+                        <Asset>{{ guid }}</Asset>
+                      </Item>
+{%                  for unlock_guid in unlock_guids %}
+                      <Item>
+                        <Asset>{{ unlock_guid }}</Asset>
+                      </Item>
+{%                  endfor %}
+{%                  endfor %}
+                    </UnlockAssets>
+                    <UnhideAssets />
+                  </ActionUnlockAsset>
+                </Values>
+              </TriggerAction>
+            </Item>
+          </TriggerActions>
+          <ResetTrigger>
+            <IsBaseAutoCreateAsset>1</IsBaseAutoCreateAsset>
+            <Values>
+              <EmptyAutoCreateValue/>
+            </Values>
+          </ResetTrigger>
+        </Trigger>
+        <TriggerSetup>
+          <UsedBySecondParties>0</UsedBySecondParties>
+        </TriggerSetup>
+      </Values>
+    </Asset>
+{% endfor %}
+
+    <Asset>
+      <Template>Trigger</Template>
+      <Values>
+        <Standard>
+          <GUID>{{ victory_condition[0] }}</GUID>
+          <Name>victory_condition</Name>
+        </Standard>
+        <Trigger>
+          <TriggerCondition>
+            <Template>ConditionPlayerCounter</Template>
+            <Values>
+              <Condition />
+              <ConditionPlayerCounter>
+                <PlayerCounter>PopulationByLevel</PlayerCounter>
+                <Context>{{ victory_condition[1] }}</Context>
+                <CounterAmount>{{ victory_condition[2] }}</CounterAmount>
+              </ConditionPlayerCounter>
+            </Values>
+          </TriggerCondition>
+          <TriggerActions>
+            <Item>
+              <TriggerAction>
+                <Template>ActionUnlockAsset</Template>
+                <Values>
+                  <Action/>
+                  <ActionUnlockAsset>
+                    <UnlockAssets>
+                      <Item>
+                        <Asset>{{ victory_condition[3] }}</Asset>
+                      </Item>
+                    </UnlockAssets>
+                    <UnhideAssets />
+                  </ActionUnlockAsset>
+                </Values>
+              </TriggerAction>
+            </Item>
+          </TriggerActions>
+          <ResetTrigger>
+            <IsBaseAutoCreateAsset>1</IsBaseAutoCreateAsset>
+            <Values>
+              <EmptyAutoCreateValue/>
+            </Values>
+          </ResetTrigger>
+        </Trigger>
+        <TriggerSetup>
+          <UsedBySecondParties>0</UsedBySecondParties>
+        </TriggerSetup>
+      </Values>
+    </Asset>
+  </ModOp>
+</ModOps>

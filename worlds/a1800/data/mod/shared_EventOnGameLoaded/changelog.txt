@@ -1,0 +1,5 @@
+1.01:
+- added "g_LuaScriptBlockers" to the lua script. Only relevant if you are coding in lua (use it to make sure lua scripts are only executed once per local player also in Multiplayer)
+- Note that this is mod-event not executed for AI! There is also no need for it, because OnGameLoaded is only really relevant for lua and AI can not execute lua scripts.
+1.02:
+- usage did not change, but made sure that the trigger does not fire when the mod gets deactivated. before it fired when it was deactivated, because non-existent GUIDs count as unlocked

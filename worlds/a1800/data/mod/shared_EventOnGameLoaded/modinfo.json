@@ -1,0 +1,19 @@
+{
+  "Version": "1.02",
+  "ModID": "shared_EventOnGameLoaded_Serp",
+  "IncompatibleIds": null,
+  "ModDependencies": null,
+  "LoadAfterIds": null,
+  "Category": {
+    "English": "Shared"
+  },
+  "ModName": {
+    "English": "shared_EventOnGameLoaded"
+  },
+  "Description": {
+    "English": "shared_EventOnGameLoaded: Adds a FeatureUnlock you can use as conditionevent, to execute your actions (or start a lua script) everytime a savegame was loaded (~1 second after loaded). Helpful if you do not want to execute your full code on every SessionEnter, just on every Savegame-loaded."
+  },
+  "DLCDependencies": null,
+  "CreatorName": "Serp",
+  "CreatorContact": "https://github.com/Serpens66"
+}

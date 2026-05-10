@@ -1,0 +1,190 @@
+<ModOps>
+    
+  <!-- IMPORTANT: -->
+    <!-- Load after "shared_EventOnGameLoaded_Serp". -->
+    <!-- AND also load after: "shared_LuaTools_Medium_Serp" ! Because this mod will replace shared_EventOnGameLoaded_Serp !! -->
+  
+  
+  <!-- HOW TO USE: xml code -->
+   <!-- add your actions you want to execute on savegame load to 1500004636 this way: -->
+    <!-- (putting them into ResetTrigger, because this way the new actions added by your mod will directly be used (already registered triggers can not change code, but ResetTrigger will only get registered after main trigger is true)) -->
+
+	<!-- <ModOp Type="add" GUID="1500004636" Path="Values/Trigger/ResetTrigger/Values/Trigger/TriggerActions"> -->
+    <!-- <Item> -->
+      <!-- <TriggerAction> -->
+        <!-- ... -->
+      <!-- </TriggerAction> -->
+    <!-- </Item> -->
+  <!-- </ModOp> -->
+  
+  <!-- - Note that this is mod-event not executed for AI! There is also no need for it, because OnGameLoaded is only really relevant for lua and AI can not execute lua scripts. -->
+  
+  <!-- This mod is perfect for usage with lua scripts, especially if you are using any other of my lua shared mods, to make sure all scripts are loading in the right order. -->
+   <!-- (because you load after my shared mod and add you ActionExecuteScript to the same Trigger after my script executions) -->
+  
+  <!-- ########################################### -->
+  <!-- ########################################### -->
+  
+  
+  <!-- Serp GUID 1500004525 and 1500004531 and 1500004636 -->
+  <!-- 1500004525 aktuell nicht mehr verwendet -->
+  
+
+  
+  <ModOp Type="addNextSibling" GUID="130248">
+      <!-- to execute lua code on each savegame load, we unfortunately need to make use of SessionEnter event, because there is no other event or way -->
+       <!-- to execute our lua script for sure on a savegame load. It will execute them on every session-switch, but mostly doing nothing, so should not cause any problems -->
+      <!-- And thanks to this code other more heavy code can check if game was loaded and if it must execute again or not -->    
+    <Asset>
+      <Template>Trigger</Template>
+      <Values>
+        <Standard>
+          <GUID>1500004531</GUID>
+          <Name>Register lua script on SessionEnter</Name>
+        </Standard>
+        <Trigger>
+          <TriggerCondition>
+            <Template>ConditionEvent</Template>
+            <Values>
+              <Condition />
+              <ConditionEvent>
+                <ConditionEvent>SessionEnter</ConditionEvent>
+                <ContextAssetInfolayer>0</ContextAssetInfolayer>
+              </ConditionEvent>
+              <ConditionPropsNegatable />
+            </Values>
+          </TriggerCondition>
+          <TriggerActions>
+            <Item>
+              <TriggerAction>
+                <Template>ActionExecuteScript</Template>
+                <Values>
+                  <Action />
+                  <ActionExecuteScript>
+                    <ScriptFileName>data/scripts_serp/event_savegame_loaded.lua</ScriptFileName>
+                  </ActionExecuteScript>
+                </Values>
+              </TriggerAction>
+            </Item>
+          </TriggerActions>
+          <ResetTrigger>
+            <Template>AutoCreateTrigger</Template>
+            <Values>
+              <Trigger>
+                <TriggerCondition>
+                  <Template>ConditionAlwaysTrue</Template>
+                  <Values>
+                    <Condition />
+                    <ConditionAlwaysTrue />
+                  </Values>
+                </TriggerCondition>
+              </Trigger>
+            </Values>
+          </ResetTrigger>
+        </Trigger>
+        <TriggerSetup>
+          <AutoRegisterTrigger>1</AutoRegisterTrigger>
+          <UsedBySecondParties>0</UsedBySecondParties>
+        </TriggerSetup>
+      </Values>
+    </Asset>
+    
+    
+    <!-- will be unlokced by lua if savegame loaded -->
+    <Asset>
+      <Template>FeatureUnlock</Template>
+      <Values>
+        <Standard>
+          <GUID>1500004636</GUID>
+          <Name>OnSavegameLoaded</Name>
+        </Standard>
+        <Locked>
+          <DefaultLockedState>0</DefaultLockedState>
+        </Locked>
+        <Trigger>
+          <TriggerCondition>
+            <Template>ConditionUnlocked</Template>
+            <Values>
+              <Condition />
+              <ConditionUnlocked>
+                <UnlockNeeded>1500004636</UnlockNeeded>
+              </ConditionUnlocked>
+              <ConditionPropsNegatable>
+                <NegateCondition>1</NegateCondition>
+              </ConditionPropsNegatable>
+            </Values>
+          </TriggerCondition>
+          <TriggerActions>
+            <Item>
+              <TriggerAction>
+                <Template>ActionDelayedActions</Template>
+                <Values>
+                  <Action />
+                  <ActionDelayedActions>
+                    <ExecutionDelay>300</ExecutionDelay>
+                    <DelayedActions>
+                      <IsBaseAutoCreateAsset>1</IsBaseAutoCreateAsset>
+                      <Values>
+                        <ActionList>
+                          <Actions>
+                            <Item>
+                              <Action>
+                                <Template>ActionUnlockAsset</Template>
+                                <Values>
+                                  <Action />
+                                  <ActionUnlockAsset>
+                                    <UnlockAssets>
+                                      <Item>
+                                        <Asset>1500004636</Asset>
+                                      </Item>
+                                    </UnlockAssets>
+                                  </ActionUnlockAsset>
+                                </Values>
+                              </Action>
+                            </Item>
+                          </Actions>
+                        </ActionList>
+                      </Values>
+                    </DelayedActions>
+                  </ActionDelayedActions>
+                </Values>
+              </TriggerAction>
+            </Item>
+          </TriggerActions>
+          <!-- use a small timer to reset, just to be sure (in multiplayer it could be unlocked multiple times within miliseconds) -->
+          <ResetTrigger>
+            <Template>AutoCreateTrigger</Template>
+            <Values>
+              <Trigger>
+                <TriggerCondition>
+                  <Template>ConditionTimer</Template>
+                  <Values>
+                    <Condition />
+                    <ConditionTimer>
+                      <TimeLimit>600</TimeLimit>
+                    </ConditionTimer>
+                  </Values>
+                </TriggerCondition>
+                <TriggerActions>
+                  <!-- other mods can add their actions here to be executed on Savegameloaded -->
+                  <!--  we add them to the ResetTrigger part, because this is only registered after main trigger is true, which means it will use the newest current code -->
+                   <!-- while the main trigger will keep the old code until reset -->
+                </TriggerActions>
+              </Trigger>
+            </Values>
+          </ResetTrigger>
+        </Trigger>
+        <TriggerSetup>
+          <AutoRegisterTrigger>1</AutoRegisterTrigger>
+          <UsedBySecondParties>0</UsedBySecondParties>
+          <AutoSelfUnlock>0</AutoSelfUnlock>
+        </TriggerSetup>
+      </Values>
+    </Asset>
+    
+
+  </ModOp>
+    
+    
+    
+</ModOps>

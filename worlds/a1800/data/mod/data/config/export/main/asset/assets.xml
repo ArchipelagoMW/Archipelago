@@ -1,0 +1,3 @@
+<ModOps>
+  <Include File="./triggers.include.xml" />
+</ModOps>

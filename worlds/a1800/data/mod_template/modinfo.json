@@ -1,0 +1,22 @@
+{
+  "Anno": 7,
+  "Version": "0.1.0",
+  "ModID": "{{ mod_name }}",
+  "ModDependencies": [
+    "shared_EventOnGameLoaded_Serp"
+  ],
+  "LoadAfterIds": [
+    "*"
+  ],
+  "Category": {
+    "English": "Gameplay"
+  },
+  "ModName": {
+    "English": "{{ mod_name }}"
+  },
+  "Description": {
+    "English": "file::readme_en.md",
+    "German": "file::readme_de.md"
+  },
+  "CreatorName": "Archipelago, DarkListener"
+}

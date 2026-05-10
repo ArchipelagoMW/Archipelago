@@ -1,13 +1,27 @@
-from typing import override
+from typing import ClassVar, override
 
 from BaseClasses import Item, MultiWorld, Tutorial
 from worlds.AutoWorld import CollectionState, World, WebWorld
+from worlds.LauncherComponents import Component, components, Type, icon_paths
+from worlds.LauncherComponents import launch as launch_component  # pyright: ignore[reportUnknownVariableType]
 
 from .Items import create_and_push_starting_items, create_item, create_itempool, item_dict
 from .Locations import location_list
+from .Mod import generate_mod
 from .Options import a1800_option_groups, A1800Options
 from .Regions import create_regions
 from .Rules import set_rules
+from .Settings import A1800Settings
+
+
+def launch_client(*args: str):
+    from .Client import launch
+    launch_component(launch, name="Anno 1800 Client", args=args)
+
+
+components.append(Component("Anno 1800 Client", func=launch_client, component_type=Type.CLIENT, icon="a1800"))
+
+icon_paths["a1800"] = f"ap:{__name__}/icons/a1800.png"
 
 
 class A1800Web(WebWorld):
@@ -21,7 +35,7 @@ class A1800Web(WebWorld):
         "setup/en",
         ["Dark Listener"]
     )
-    theme = "grass"
+    theme = "ocean"
     tutorials = [setup_en]
 
 
@@ -40,6 +54,7 @@ class A1800World(World):
     origin_region_name = "Old World"
     topology_present = True
     web = A1800Web()
+    settings: ClassVar[A1800Settings]
 
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
         super().__init__(multiworld, player)
@@ -66,7 +81,7 @@ class A1800World(World):
 
     @override
     def generate_output(self, output_directory: str) -> None:
-        pass
+        generate_mod(self, output_directory)
 
     @override
     def fill_slot_data(self) -> dict[str, object]:

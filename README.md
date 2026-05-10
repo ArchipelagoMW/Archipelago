@@ -1,3 +1,25 @@
+# Anno 1800 Archipelago World
+
+This is the work in progress Archipelago World for Anno 1800.
+
+Find information about the game on its [Game Page](<worlds/a1800/docs/en_Anno 1800.md>). The links in this file are
+likely broken as they are meant for the proper website version.
+
+Find full setup instructions on the [Setup page](worlds/a1800/docs/setup_en.md). Some links in this file may be broken
+as well.
+
+## Thanks
+
+Special thanks to 991jo for their python implementation of an
+[rcon server and client](https://github.com/991jo/rcon-server), which served as the basis for the communication between
+the Archipelago client and the game!
+
+Special thanks to Serpens66/Serp for their
+[shared_EventOnGameLoaded mod](https://github.com/Serpens66/Anno-1800-SharedMods-for-Modders-/tree/main/shared_EventOnGameLoaded),
+which was vital to start the communication services when players load into a game!
+
+Thanks to all other members of the Anno modding community for their amazing tutorials, guides and resources!
+
 # [Archipelago](https://archipelago.gg) ![Discord Shield](https://discordapp.com/api/guilds/731205301247803413/widget.png?style=shield) | [Install](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 Archipelago provides a generic framework for developing multiworld capability for game randomizers. In all cases,

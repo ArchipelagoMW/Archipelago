@@ -45,7 +45,7 @@ def set_rules(world: "A1800World") -> None:
     rules.create_event_rule("OW: Framework Knitters", "Farmers", "Timber", "Wool")
     rules.create_event_rule("OW: Potato Farm", "Farmers", "Timber")
     rules.create_event_rule("OW: Schnapps Distillery", "Farmers", "Timber", "Potatoes")
-    rules.create_event_rule("OW: Worker Residence", "Timber", "Market", "Fish", "Work Clothes")
+    rules.create_event_rule("OW: Worker Residence", "Timber", "Market", "Fish", "Work Clothes", "OW Fire Station")
     rules.create_event_rule("OW: Fire Station", "Timber")
     rules.create_event_rule("OW: Pub", "Timber")
     rules.create_event_rule("OW: Clay Pit", "Workers", "Timber")
@@ -71,7 +71,7 @@ def set_rules(world: "A1800World") -> None:
     rules.create_event_rule("OW: Police Station", "Timber", "Bricks")
     rules.create_event_rule("OW: School", "Timber", "Bricks", "Steel Beams")
     rules.create_event_rule("OW: Artisan Residence", "Timber", "Bricks", "Steel Beams", "Market", "Fish",
-                            "Work Clothes", "Sausages", "Bread", "Soap", "School")
+                            "Work Clothes", "Sausages", "Bread", "Soap", "School", "OW Police Station")
     rules.create_rule("Victory Condition", "Artisans")
 
     world.multiworld.completion_condition[world.player] = _has(world.player, "Victory")

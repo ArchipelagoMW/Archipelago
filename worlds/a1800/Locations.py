@@ -5,6 +5,12 @@ from typing import ClassVar, Optional
 
 from BaseClasses import Location, Region
 
+_populations: dict[str, int] = {
+    "Farmers": 15000000,
+    "Workers": 15000001,
+    "Artisans": 15000002
+}
+
 
 @dataclass
 class A1800LocationData:
@@ -19,6 +25,12 @@ class A1800LocationData:
     region: str
     """The region of this location."""
 
+    population: Optional[str] = None
+
+    amount: Optional[int] = None
+
+    population_guid: Optional[int] = None
+
     ap_code: Optional[int] = None
     """Archipelago's internal ID for this location (also known as its "address")."""
 
@@ -29,6 +41,10 @@ class A1800LocationData:
         if not self.ap_code and not self.is_event:
             self.ap_code = A1800LocationData.__location_id
             A1800LocationData.__location_id += 1
+        if self.population:
+            self.population_guid = _populations[self.population]
+        if self.population and self.amount and not self.is_event:
+            self.name = f"{self.amount} {self.population if self.amount != 1 else self.population[:-1]} - {self.name}"
 
 
 class A1800Location(Location):
@@ -42,46 +58,46 @@ class A1800Location(Location):
 
 
 _anno_1800_unlock_locations: list[A1800LocationData] = [
-    A1800LocationData("050 Farmers - Fishery", "Old World"),
-    A1800LocationData("100 Farmers - Sheep Farm", "Old World"),
-    A1800LocationData("100 Farmers - Framework Knitters", "Old World"),
-    A1800LocationData("100 Farmers - Potato Farm", "Old World"),
-    A1800LocationData("100 Farmers - Schnapps Distillery", "Old World"),
-    A1800LocationData("100 Farmers - Worker Residence", "Old World"),
-    A1800LocationData("150 Farmers - Fire Station", "Old World"),
-    A1800LocationData("150 Farmers - Pub", "Old World"),
-    A1800LocationData("001 Worker - Paved Street", "Old World"),
-    A1800LocationData("001 Worker - Clay Pit", "Old World"),
-    A1800LocationData("001 Worker - Brick Factory", "Old World"),
-    A1800LocationData("001 Worker - Pig Farm", "Old World"),
-    A1800LocationData("001 Worker - Slaugherhouse", "Old World"),
-    A1800LocationData("001 Worker - Medium Warehouse", "Old World"),
-    A1800LocationData("001 Worker - Medium Trading Post", "Old World"),
-    A1800LocationData("001 Worker - Trade Union", "Old World"),
-    A1800LocationData("150 Workers - Grain Farm", "Old World"),
-    A1800LocationData("150 Workers - Flour Mill", "Old World"),
-    A1800LocationData("150 Workers - Bakery", "Old World"),
-    A1800LocationData("150 Workers - Church", "Old World"),
-    A1800LocationData("150 Workers - Sailmakers", "Old World"),
-    A1800LocationData("150 Workers - Sailing Shipyard", "Old World"),
-    A1800LocationData("150 Workers - Mounted Guns", "Old World"),
-    A1800LocationData("150 Workers - Quay", "Old World"),
-    A1800LocationData("150 Workers - Depot", "Old World"),
-    A1800LocationData("150 Workers - Harbourmaster's Office", "Old World"),
-    A1800LocationData("300 Workers - Charcoal Kiln", "Old World"),
-    A1800LocationData("300 Workers - Iron Mine", "Old World"),
-    A1800LocationData("300 Workers - Furnace", "Old World"),
-    A1800LocationData("300 Workers - Steelworks", "Old World"),
-    A1800LocationData("300 Workers - Rendering Works", "Old World"),
-    A1800LocationData("300 Workers - Soap Factory", "Old World"),
-    A1800LocationData("300 Workers - Weapon Factory", "Old World"),
-    A1800LocationData("300 Workers - Cannon Tower", "Old World"),
-    A1800LocationData("500 Workers - Hop Farm", "Old World"),
-    A1800LocationData("500 Workers - Malthouse", "Old World"),
-    A1800LocationData("500 Workers - Brewery", "Old World"),
-    A1800LocationData("500 Workers - Police Station", "Old World"),
-    A1800LocationData("750 Workers - School", "Old World"),
-    A1800LocationData("750 Workers - Artisan Residence", "Old World"),
+    A1800LocationData("Fishery", "Old World", "Farmers", 50),
+    A1800LocationData("Sheep Farm", "Old World", "Farmers", 100),
+    A1800LocationData("Framework Knitters", "Old World", "Farmers", 100),
+    A1800LocationData("Potato Farm", "Old World", "Farmers", 100),
+    A1800LocationData("Schnapps Distillery", "Old World", "Farmers", 100),
+    A1800LocationData("Worker Residence", "Old World", "Farmers", 100),
+    A1800LocationData("Fire Station", "Old World", "Farmers", 150),
+    A1800LocationData("Pub", "Old World", "Farmers", 150),
+    A1800LocationData("Paved Street", "Old World", "Workers", 1),
+    A1800LocationData("Clay Pit", "Old World", "Workers", 1),
+    A1800LocationData("Brick Factory", "Old World", "Workers", 1),
+    A1800LocationData("Pig Farm", "Old World", "Workers", 1),
+    A1800LocationData("Slaugherhouse", "Old World", "Workers", 1),
+    A1800LocationData("Medium Warehouse", "Old World", "Workers", 1),
+    A1800LocationData("Medium Trading Post", "Old World", "Workers", 1),
+    A1800LocationData("Trade Union", "Old World", "Workers", 1),
+    A1800LocationData("Grain Farm", "Old World", "Workers", 150),
+    A1800LocationData("Flour Mill", "Old World", "Workers", 150),
+    A1800LocationData("Bakery", "Old World", "Workers", 150),
+    A1800LocationData("Church", "Old World", "Workers", 150),
+    A1800LocationData("Sailmakers", "Old World", "Workers", 150),
+    A1800LocationData("Sailing Shipyard", "Old World", "Workers", 150),
+    A1800LocationData("Mounted Guns", "Old World", "Workers", 150),
+    A1800LocationData("Quay", "Old World", "Workers", 150),
+    A1800LocationData("Depot", "Old World", "Workers", 150),
+    A1800LocationData("Harbourmaster's Office", "Old World", "Workers", 150),
+    A1800LocationData("Charcoal Kiln", "Old World", "Workers", 300),
+    A1800LocationData("Iron Mine", "Old World", "Workers", 300),
+    A1800LocationData("Furnace", "Old World", "Workers", 300),
+    A1800LocationData("Steelworks", "Old World", "Workers", 300),
+    A1800LocationData("Rendering Works", "Old World", "Workers", 300),
+    A1800LocationData("Soap Factory", "Old World", "Workers", 300),
+    A1800LocationData("Weapon Factory", "Old World", "Workers", 300),
+    A1800LocationData("Cannon Tower", "Old World", "Workers", 300),
+    A1800LocationData("Hop Farm", "Old World", "Workers", 500),
+    A1800LocationData("Malthouse", "Old World", "Workers", 500),
+    A1800LocationData("Brewery", "Old World", "Workers", 500),
+    A1800LocationData("Police Station", "Old World", "Workers", 500),
+    A1800LocationData("School", "Old World", "Workers", 750),
+    A1800LocationData("Artisan Residence", "Old World", "Workers", 750),
 ]
 
 _anno_1800_event_locations: list[A1800LocationData] = [
@@ -120,7 +136,7 @@ _anno_1800_event_locations: list[A1800LocationData] = [
     A1800LocationData("OW: Police Station", "Old World", is_event=True),
     A1800LocationData("OW: School", "Old World", is_event=True),
     A1800LocationData("OW: Artisan Residence", "Old World", is_event=True),
-    A1800LocationData("Victory Condition", "Old World", is_event=True),
+    A1800LocationData("Victory Condition", "Old World", "Artisans", 1, is_event=True),
 ]
 
 unlock_location_list: list[A1800LocationData] = [
