@@ -122,6 +122,7 @@ class RegionNames(StrEnum):
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
+    MERMAID_SPRING_HUB = "Mermaid Spring Hub"
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
 class MapIds(Enum):
