@@ -100,7 +100,7 @@ def get_encounter_type_label(encounter_type: PokemonSource, slot: int) -> str:
             8: "Super Rod",
             9: "Super Rod",
         }[slot]
-    
+
     return {
         PokemonSource.LAND: 'Land',
         PokemonSource.WATER: 'Water',
