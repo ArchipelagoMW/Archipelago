@@ -2,6 +2,7 @@ import asyncio
 import subprocess
 import os
 import json
+import time
 import xml.etree.ElementTree as ET
 from Utils import gui_enabled, open_filename, user_path
 from CommonClient import CommonContext, get_base_parser, server_loop
@@ -93,6 +94,61 @@ Missionmap = {
     "Droid Dismount Unlock": "message/caveisland_roboclear",
     "The Final Diversion Unlock": "message/cullington_bomb",
 }
+
+Toolmap = {
+    "Sledge Hammer Unlock": "tool/sledge/enabled",
+    "Spraycan Unlock": "tool/spraycan/enabled",
+    "Extinguisher Unlock": "tool/extinguisher/enabled",
+    "Blowtorch Unlock": "tool/blowtorch/enabled",
+    "Shotgun Unlock": "tool/shotgun/enabled",
+    "Plank Unlock": "tool/plank/enabled",
+    "Pipe Unlock": "tool/pipebomb/enabled",
+    "Gun Unlock": "tool/gun/enabled",
+    "Bomb Unlock": "tool/bomb/enabled",
+    "Rocket Launcher Unlock": "tool/rocket/enabled",
+    "Rocket Booster Unlock": "tool/booster/enabled",
+    "Leaf Blower Unlock": "tool/leafblower/enabled",
+    "Cable Unlock": "tool/wire/enabled",
+    "Vehicle Thruster Unlock": "tool/turbo/enabled",
+    "Nitroglycerin Unlock": "tool/explosive/enabled",
+    "Hunting Rifle Unlock": "tool/rifle/enabled",
+    "BlueTide Unlock": "tool/steroid/enabled",
+}
+
+Upgrademap = {
+    "Blowtorch Fuel Upgrade": "tool/blowtorch/ammo",
+    "Shotgun Rounds Upgrade": "tool/shotgun/ammo",
+    "Shotgun Range Upgrade": "tool/shotgun/range",
+    "Shotgun Damage Upgrade": "tool/shotgun/damage",
+    "Plank Amount Upgrade": "tool/plank/ammo",
+    "Plank Width Upgrade": "tool/plank/width",
+    "Plank Max Length Upgrade": "tool/plank/length",
+    "Pipe Bomb Rounds Upgrade": "tool/pipebomb/ammo",
+    "Pipe Bomb Blast Upgrade": "tool/pipebomb/damage",
+    "Gun Rounds Upgrade": "tool/gun/ammo",
+    "Gun Range Upgrade": "tool/gun/range",
+    "Gun Damage Upgrade": "tool/gun/damage",
+    "Bomb Rounds Upgrade": "tool/bomb/ammo",
+    "Bomb Blast Upgrade": "tool/bomb/damage",
+    "Rocket Launcher Rounds Upgrade": "tool/rocket/ammo",
+    "Rocket Launcher Blast Upgrade": "tool/rocket/damage",
+    "Rocket Booster Rounds Upgrade": "tool/booster/ammo",
+    "Rocket Booster Power Upgrade": "tool/booster/power",
+    "Rocket Booster Time Upgrade": "tool/booster/time",
+    "Leaf Blower Power Upgrade": "tool/leafblower/power",
+    "Cable Amount Upgrade": "tool/wire/ammo",
+    "Cable Stretch Upgrade": "tool/wire/stretch",
+    "Vehicle Thruster Rounds Upgrade": "tool/turbo/ammo",
+    "Vehicle Thruster Power Upgrade": "tool/turbo/power",
+    "Nitroglycerin Rounds Upgrade": "tool/explosive/ammo",
+    "Nitroglycerin Blast Upgrade": "tool/explosive/damage",
+    "Hunting Rifle Rounds Upgrade": "tool/rifle/ammo",
+    "BlueTide Bottles Upgrade": "tool/steroid/ammo",
+    "BlueTide Duration Upgrade": "tool/steroid/time",
+
+}
+
+
 
 Mission_upgrade_send_map = {
     "mall_intro": [
@@ -798,6 +854,8 @@ SAVE_TEMPLATE = {
         "caveisland_roboclear/score": "0",
         "cullington_bomb": "0",
         "cullington_bomb/score": "0",
+        "lastcompleted": "",
+
     }
 }
 
@@ -832,16 +890,6 @@ class TeardownContext(CommonContext):
                 self.game_exe_path = data.get("game_exe_path", "")
                 self.savegame_path = data.get("savegame_path", "")
 
-    def savesettings(self):
-        # Save our settings to our json file
-        data = {
-            "game_exe_path": self.game_exe_path,
-            "savegame_path": self.savegame_path
-        }
-        with open(SETTINGS_PATH, "w") as f:
-            json.dump(data, f, indent=4)
-
-
 
     def checkgamepath(self):
         # Ask for exe if not found
@@ -864,6 +912,16 @@ class TeardownContext(CommonContext):
                 if new_save:
                     self.savegame_path = new_save
                     self.savesettings()
+
+
+    def savesettings(self):
+        # Save our settings to our json file
+        data = {
+            "game_exe_path": self.game_exe_path,
+            "savegame_path": self.savegame_path
+        }
+        with open(SETTINGS_PATH, "w") as f:
+            json.dump(data, f, indent=4)
 
 
     def reset_and_initialize_save(self):
@@ -896,9 +954,17 @@ class TeardownContext(CommonContext):
                         if i == len(parts) - 1:
                             child.set("value", val)
                         current = child
+            last_node = self.player_data.find("lastcompleted")
+            last_node.set("value", "")
 
-            tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=True)
-            print("Teardown Save: Player Data initialized and globally set.")
+            for i in range(5):  # Try 5 times
+                try:
+                    tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=True)
+                    return True
+                except PermissionError:
+                    time.sleep(0.2)
+                    print("Teardown Save: Player Data initialized and globally set.")
+            return False
 
         except Exception as e:
             print(f"Failed to initialize player_data: {e}")
@@ -923,6 +989,7 @@ class TeardownContext(CommonContext):
         # This logic already exists in your on_package[Retrieved],
         # but you can trigger a 'Get' request here to ensure it's current.
 
+
     def sync_savegame(self):
         if not self.savegame_path:
             return
@@ -930,12 +997,16 @@ class TeardownContext(CommonContext):
         # We still need to parse the tree to save it, but we use our stored node
         tree = ET.parse(self.savegame_path)
 
-        if self.player_data is not None:
-            self.check_tools()
-            self.apply_received_items()
+        self.check_tools()
+        self.apply_received_items()
 
-            tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=True)
-
+        for i in range(5):  # Try 5 times
+            try:
+                tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=True)
+                return True
+            except PermissionError:
+                time.sleep(0.2)
+        return False
 
     def check_missions(self):
         if self.player_data is None:
@@ -1013,409 +1084,42 @@ class TeardownContext(CommonContext):
 
     def apply_received_items(self):
         changed = False
-        player_data = self.player_data
 
-        # Pre-count progressive items
-        counts = {
-            "Blowtorch Fuel Upgrade": 0,
-            "Shotgun Rounds Upgrade": 0,
-            "Shotgun Range Upgrade": 0,
-            "Shotgun Damage Upgrade": 0,
-            "Plank Amount Upgrade": 0,
-            "Plank Width Upgrade": 0,
-            "Plank Max Length Upgrade": 0,
-            "Pipe Bomb Rounds Upgrade": 0,
-            "Pipe Bomb Blast Upgrade": 0,
-            "Gun Rounds Upgrade": 0,
-            "Gun Range Upgrade": 0,
-            "Gun Damage Upgrade": 0,
-            "Bomb Rounds Upgrade": 0,
-            "Bomb Blast Upgrade": 0,
-            "Rocket Launcher Rounds Upgrade": 0,
-            "Rocket Launcher Blast Upgrade": 0,
-            "Rocket Booster Rounds Upgrade": 0,
-            "Rocket Booster Power Upgrade": 0,
-            "Rocket Booster Time Upgrade": 0,
-            "Leaf Blower Power Upgrade": 0,
-            "Cable Amount Upgrade": 0,
-            "Cable Stretch Upgrade": 0,
-            "Vehicle Thruster Rounds Upgrade": 0,
-            "Vehicle Thruster Power Upgrade": 0,
-            "Nitroglycerin Rounds Upgrade": 0,
-            "Nitroglycerin Blast Upgrade": 0,
-            "Hunting Rifle Rounds Upgrade": 0,
-            "BlueTide Bottles Upgrade": 0,
-            "BlueTide Duration Upgrade": 0,
-        }
-
+        # 1. TALLY EVERYTHING
+        # This counts how many of each item you have received from Archipelago
+        received_item_counts = {}
         for network_item in self.items_received:
             item_name = self.item_names.lookup_in_game(network_item.item)
+            received_item_counts[item_name] = received_item_counts.get(item_name, 0) + 1
 
-            if item_name in Missionmap:
-                xml_path = Missionmap[item_name]
-                node = player_data.find(xml_path)
-                if node is not None and node.get("value") == "0":
-                    node.set("value", "1")
+        # 2. HANDLE MISSIONS & TOOLS (The 0 or 1 unlocks)
+        # We loop through your Missionmap and Toolmap
+        for item_name, xml_path in {**Missionmap, **Toolmap}.items():
+            if item_name in received_item_counts:
+                # If we have the item, ensure the XML is set to "1"
+                if self.update_xml_value(self.player_data, xml_path, "value", "1"):
                     changed = True
 
+        # 3. HANDLE PROGRESSIVE UPGRADES (The numeric values)
+        # We loop through your Tool_upgrade_send_map
+        for xml_path, value_dict in Tool_upgrade_send_map.items():
+            # Get all threshold numbers (e.g., [24, 36, 48]) and sort them
+            thresholds = sorted(value_dict.keys())
 
-            # Tool Unlocks
-            if item_name == "Sledge Hammer Unlock":
-                node = player_data.find("tool/sledge/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
+            # Count how many total upgrades we have for THIS specific tool path
+            # (e.g. adding up "Shotgun Rounds 1", "Shotgun Rounds 2", etc.)
+            total_upgrades = 0
+            for val_name in value_dict.values():
+                total_upgrades += received_item_counts.get(val_name, 0)
 
-            if item_name == "Spraycan Unlock":
-                node = player_data.find("tool/spraycan/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
+            if total_upgrades > 0:
+                # Find the correct threshold. If they have 2 items, pick the 2nd number.
+                # Use min() so we don't index out of range if they have extra items.
+                idx = min(total_upgrades - 1, len(thresholds) - 1)
+                target_value = thresholds[idx]
 
-            if item_name == "Extinguisher Unlock":
-                node = player_data.find("tool/extinguisher/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Blowtorch Unlock":
-                node = player_data.find("tool/blowtorch/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Shotgun Unlock":
-                node = player_data.find("tool/shotgun/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Plank Unlock":
-                node = player_data.find("tool/plank/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Pipe Unlock":
-                node = player_data.find("tool/pipebomb/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Gun Unlock":
-                node = player_data.find("tool/gun/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Bomb Unlock":
-                node = player_data.find("tool/bomb/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Rocket Launcher Unlock":
-                node = player_data.find("tool/rocket/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Rocket Booster Unlock":
-                node = player_data.find("tool/booster/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Leaf Blower Unlock":
-                node = player_data.find("tool/leafblower/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Cable Unlock":
-                node = player_data.find("tool/wire/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Vehicle Thruster Unlock":
-                node = player_data.find("tool/turbo/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Nitroglycerin Unlock":
-                node = player_data.find("tool/explosive/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "Hunting Rifle Unlock":
-                node = player_data.find("tool/rifle/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-            if item_name == "BlueTide Unlock":
-                node = player_data.find("tool/steroid/enabled")
-                if node is not None:
-                    if node.get("value") == "0":
-                        node.set("value", "1")
-                        changed = True
-
-
-            # Increment counts for upgrades
-            if item_name in counts:
-                counts[item_name] += 1
-
-        # Progressive tool upgrades
-
-        if counts["Blowtorch Fuel Upgrade"] > 0:
-            torch_node = player_data.find("tool/blowtorch/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Blowtorch Ammo"] * 10 + 20)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Shotgun Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/shotgun/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Shotgun Rounds Upgrade"] * 12 + 12)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Shotgun Range Upgrade"] > 0:
-            torch_node = player_data.find("tool/shotgun/range")
-            if torch_node is not None:
-                new_val = str(counts["Shotgun Range Upgrade"] * 20 + 20)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Shotgun Damage Upgrade"] > 0:
-            torch_node = player_data.find("tool/shotgun/damage")
-            if torch_node is not None:
-                new_val = str(counts["Shotgun Damage Upgrade"] * 8 + 8)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Plank Amount Upgrade"] > 0:
-            torch_node = player_data.find("tool/plank/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Plank Amount Upgrade"] * 1 + 3)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Plank Width Upgrade"] > 0:
-            torch_node = player_data.find("tool/plank/width")
-            if torch_node is not None:
-                new_val = str(counts["Plank Width Upgrade"] * 8 + 36)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Plank Max Length Upgrade"] > 0:
-            torch_node = player_data.find("tool/plank/length")
-            if torch_node is not None:
-                new_val = str(counts["Plank Max Length Upgrade"] * 10 + 20)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Pipe Bomb Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/pipebomb/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Pipe Bomb Rounds Upgrade"] * 6 + 6)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Pipe Bomb Blast Upgrade"] > 0:
-            torch_node = player_data.find("tool/pipebomb/damage")
-            if torch_node is not None:
-                new_val = str(counts["Pipe Bomb Blast Upgrade"] * 1 + 2)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Gun Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/gun/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Gun Rounds Upgrade"] * 6 + 6)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Gun Range Upgrade"] > 0:
-            torch_node = player_data.find("tool/gun/range")
-            if torch_node is not None:
-                new_val = str(counts["Gun Range Upgrade"] * 20 + 40)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Gun Damage Upgrade"] > 0:
-            torch_node = player_data.find("tool/gun/damage")
-            if torch_node is not None:
-                new_val = str(counts["Gun Damage Upgrade"] * 1 + 1)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Bomb Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/bomb/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Bomb Rounds Upgrade"] * 6 + 6)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Bomb Blast Upgrade"] > 0:
-            torch_node = player_data.find("tool/bomb/damage")
-            if torch_node is not None:
-                new_val = str(counts["Bomb Blast Upgrade"] * 1 + 4)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Rocket Launcher Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/rocket/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Rocket Launcher Rounds Upgrade"] * 6 + 6)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Rocket Launcher Blast Upgrade"] > 0:
-            torch_node = player_data.find("tool/rocket/damage")
-            if torch_node is not None:
-                new_val = str(counts["Rocket Launcher Blast Upgrade"] * 1 + 3)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Rocket Booster Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/booster/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Rocket Booster Rounds Upgrade"] * 6 + 6)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Rocket Booster Power Upgrade"] > 0:
-            torch_node = player_data.find("tool/booster/power")
-            if torch_node is not None:
-                new_val = str(counts["Rocket Booster Power Upgrade"] * 100 + 200)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Rocket Booster Time Upgrade"] > 0:
-            torch_node = player_data.find("tool/booster/time")
-            if torch_node is not None:
-                new_val = str(counts["Rocket Booster Time Upgrade"] * 2 + 4)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Leaf Blower Power Upgrade"] > 0:
-            torch_node = player_data.find("tool/leafblower/power")
-            if torch_node is not None:
-                new_val = str(counts["Leaf Blower Power Upgrade"] * 10 + 20)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Cable Amount Upgrade"] > 0:
-            torch_node = player_data.find("tool/wire/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Cable Amount Upgrade"] * 6 + 6)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Cable Stretch Upgrade"] > 0:
-            torch_node = player_data.find("tool/wire/stretch")
-            if torch_node is not None:
-                new_val = str(counts["Cable Stretch Upgrade"] * 1 + 3)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Vehicle Thruster Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/turbo/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Vehicle Thruster Rounds Upgrade"] * 6 + 6)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Vehicle Thruster Power Upgrade"] > 0:
-            torch_node = player_data.find("tool/turbo/power")
-            if torch_node is not None:
-                new_val = str(counts["Vehicle Thruster Power Upgrade"] * 100 + 200)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Nitroglycerin Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/explosive/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Nitroglycerin Rounds Upgrade"] * 4 + 4)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Nitroglycerin Blast Upgrade"] > 0:
-            torch_node = player_data.find("tool/explosive/damage")
-            if torch_node is not None:
-                new_val = str(counts["Nitroglycerin Blast Upgrade"] * 1 + 5)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["Hunting Rifle Rounds Upgrade"] > 0:
-            torch_node = player_data.find("tool/rifle/ammo")
-            if torch_node is not None:
-                new_val = str(counts["Hunting Rifle Rounds Upgrade"] * 6 + 6)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["BlueTide Bottles Upgrade"] > 0:
-            torch_node = player_data.find("tool/steroid/ammo")
-            if torch_node is not None:
-                new_val = str(counts["BlueTide Bottles Upgrade"] * 1 + 2)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
-                    changed = True
-
-        if counts["BlueTide Duration Upgrade"] > 0:
-            torch_node = player_data.find("tool/steroid/time")
-            if torch_node is not None:
-                new_val = str(counts["BlueTide Duration Upgrade"] * 1 + 4)
-                if torch_node.get("value") != new_val:
-                    torch_node.set("value", new_val)
+                # Update the XML (update_xml_value handles the "don't downgrade" check)
+                if self.update_xml_value(self.player_data, xml_path, "value", str(target_value)):
                     changed = True
 
         return changed
