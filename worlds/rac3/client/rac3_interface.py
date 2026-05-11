@@ -614,33 +614,36 @@ class Rac3Interface(GameInterface):
 
     def determine_weapon_vendor_items(self):
         """Determine which items should be sold by the weapon vendor on the current planet."""
-        items_to_sell: list[str] = []
-        omega_items_to_sell: list[str] = []
-        already_sold = set()
-        for location, item in WEAPON_VENDOR_LOCATION_TO_ITEM.items():
-            if item == RAC3ITEM.HOLO_SHIELD and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations:
-                continue
-            if item == RAC3ITEM.RY3N0 and not self.options.ngplus_vendors:
-                continue
-            if WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[location] in self.visited_planets and item not in already_sold:
-                if location in self.checked_locations:
-                    already_sold.add(item)
-                else:
-                    items_to_sell.append(item)
+        if self.options.weapon_vendors:
+            items_to_sell: list[str] = []
+            already_sold = set()
+            for location, item in WEAPON_VENDOR_LOCATION_TO_ITEM.items():
+                if item == RAC3ITEM.HOLO_SHIELD and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations:
+                    continue
+                if item == RAC3ITEM.RY3N0 and not self.options.ngplus_vendors:
+                    continue
+                if WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[location] in self.visited_planets and item not in already_sold:
+                    if location in self.checked_locations:
+                        already_sold.add(item)
+                    else:
+                        items_to_sell.append(item)
+            self.weapon_vendor_items = items_to_sell
 
-        v5_weapons = {name for name in non_prog_weapon_data if self.weapon_level_from_xp(name) == 5}
-        already_omega = {weapon_name for weapon_name in self.weapon_levels if self.weapon_levels[weapon_name] > 5}
-        for weapon in v5_weapons:
-            if weapon == RAC3ITEM.RY3N0:
-                continue
-            if weapon not in already_omega and weapon not in omega_items_to_sell:
-                omega_items_to_sell.append(weapon)
-
-        self.weapon_vendor_items = items_to_sell
-        self.omega_weapon_vendors_items = omega_items_to_sell
+        if self.options.ngplus_items:
+            omega_items_to_sell: list[str] = []
+            v5_weapons = {name for name in non_prog_weapon_data if self.weapon_level_from_xp(name) == 5}
+            already_omega = {weapon_name for weapon_name in self.weapon_levels if self.weapon_levels[weapon_name] > 5}
+            for weapon in v5_weapons:
+                if weapon == RAC3ITEM.RY3N0:
+                    continue
+                if weapon not in already_omega and weapon not in omega_items_to_sell:
+                    omega_items_to_sell.append(weapon)
+            self.omega_weapon_vendors_items = omega_items_to_sell
 
     def determine_armor_vendor_items(self):
         """Determine which items should be sold by the armor vendor on the Starship Phoenix."""
+        if not self.options.armor_vendor or self.planet != RAC3REGION.STARSHIP_PHOENIX:
+            return
         items_to_sell: list[str] = []
         already_sold = set()
         for location, item in ARMOR_VENDOR_LOCATION_TO_ITEM.items():
