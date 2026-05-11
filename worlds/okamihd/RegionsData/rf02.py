@@ -33,8 +33,7 @@ events = {
     },
     RegionNames.SHINSHU_FIELD: {
         "Shinshu Field - Climb on plateau": EventData(required_items_events=[BrushTechniques.CATWALK]),
-        # FIXME: Fill enemies
-        "Shinshu Field - Clear Devil gate near Dojo": EventData(mandatory_enemies=[])
+        "Shinshu Field - Clear Devil gate near Dojo": EventData(mandatory_enemies=[OkamiEnemies.YELLOW_IMP,OkamiEnemies.GREEN_IMP])
     }
 }
 locations = {

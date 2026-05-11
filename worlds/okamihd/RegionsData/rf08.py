@@ -19,8 +19,7 @@ exits={
 }
 events={
     RegionNames.TAKA_PASS:{
-        #FIXME: Add enemies
-        "Taka Pass - Clear Devil gate near waterfall": EventData(mandatory_enemies=[]),
+        "Taka Pass - Clear Devil gate near waterfall": EventData(mandatory_enemies=[OkamiEnemies.BUD_OGRE,OkamiEnemies.YELLOW_IMP]),
         "Taka Pass - Save Chun" : EventData(cherry_bomb_level=1,mandatory_enemies=[OkamiEnemies.CUTTERS])
     }
 }
