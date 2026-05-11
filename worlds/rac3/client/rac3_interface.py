@@ -1285,10 +1285,15 @@ class Rac3Interface(GameInterface):
                     # Only show gadgetron weapons, keep current inventory up to all_ammo
                     vendor_size = self._read32(
                         RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
+                    found_all_ammo = False
                     for slot_data in [self.read_weapon_vendor_slot_data(slot) for slot in range(vendor_size)]:
                         new_inventory.append(slot_data)
                         if slot_data.all_ammo.value:
+                            found_all_ammo = True
                             break
+                    # Fallback in case the all ammo is missing
+                    if not found_all_ammo:
+                        new_inventory = [RAC3WEAPONVENDORSLOTDATA(all_ammo=1)]
                     new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
                                           self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
                     if self.options.ngplus_items and not self.options.progressive_weapons:
