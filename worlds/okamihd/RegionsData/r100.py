@@ -6,9 +6,9 @@ if TYPE_CHECKING:
     pass
 
 exits = {
-    RegionNames.CURSED_KAMIKI: [ExitData("Cursed Kamiki Torii", RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
-                                ExitData("Kamiki Restoration Cutscene", RegionNames.STONE_KAMIKI,
-                                         has_events=["Cursed Kamiki - Cutting the peach"])]
+    RegionNames.CURSED_KAMIKI: [ExitData(RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
+                                ExitData(RegionNames.STONE_KAMIKI, has_events=["Cursed Kamiki - Cutting the peach"],one_way=True)
+    ]
 }
 events = {
     RegionNames.CURSED_KAMIKI: {

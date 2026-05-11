@@ -11,8 +11,8 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits={
-    RegionNames.TAKA_PASS:[ExitData("Kusa Village Entrance",RegionNames.KUSA_VILLAGE),
-                           ExitData("Sasa Sanctuary Entrance",RegionNames.SASA_SANCTUARY_ENTRANCE)]
+    RegionNames.TAKA_PASS:[ExitData(RegionNames.KUSA_VILLAGE),
+                           ExitData(RegionNames.SASA_SANCTUARY_ENTRANCE)]
 
 }
 events={

@@ -1,8 +1,9 @@
 from BaseClasses import Item, ItemClassification, Tutorial, MultiWorld
+from Utils import visualize_regions
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, get_item_name_to_id_dict, \
     karmic_transformers, \
     progressive_weapons, create_standard_item, create_static_precollected_item_list
-from .Regions import create_regions
+from .Regions import create_regions, get_region_name
 from .Locations import get_location_names, get_total_locations
 from .RegionsData import okami_events,okami_locations
 from .Rules import set_completion_rules
@@ -47,6 +48,8 @@ class OkamiWorld(World):
         # noinspection PyClassVar
 
         create_regions(self)
+        # DEBUG
+        # visualize_regions(self.multiworld.get_region("Menu", self.player),"G:\projets\OkamiAP\worlds\okamihd\docs\OkamiHD.puml")
 
     def create_items(self):
         self.multiworld.itempool += self.create_itempool()
@@ -64,7 +67,7 @@ class OkamiWorld(World):
             "SeedName": self.multiworld.seed_name,
             "TotalLocations": get_total_locations(self),
             # Client configuration
-            "supported_client_version": "0.8.0",  # Minimum client version required
+            "supported_client_version": "0.8.1",  # Minimum client version required
         }
 
         # Add game options to slot_data

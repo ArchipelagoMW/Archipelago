@@ -144,7 +144,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         rules.append(Has(BrushTechniques.POWER_SLASH, count=required_power_slash_level))
 
     if required_cherry_bomb_level > 0:
-        rules.append(Has(BrushTechniques.CHERRY_BOMB, count=required_power_slash_level))
+        rules.append(Has(BrushTechniques.CHERRY_BOMB, count=required_cherry_bomb_level))
 
     if len(data.required_items_events) > 0:
         rules.append(HasAll(*data.required_items_events))
@@ -173,6 +173,7 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
         rules.append(HasAll(*data.has_events))
 
     if len(rules) > 0:
+
         final_rule = And(*rules)
         world.set_rule(etr, final_rule)
 
