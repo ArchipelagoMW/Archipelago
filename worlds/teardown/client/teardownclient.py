@@ -866,20 +866,6 @@ class TeardownContext(CommonContext):
                     self.savesettings()
 
 
-    def sync_savegame(self):
-        if not self.savegame_path:
-            return
-
-        # We still need to parse the tree to save it, but we use our stored node
-        tree = ET.parse(self.savegame_path)
-
-        if self.player_data is not None:
-            self.check_tools()
-            self.apply_received_items()
-
-            tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=True)
-
-
     def reset_and_initialize_save(self):
         if not self.savegame_path or not os.path.exists(self.savegame_path):
             return
@@ -936,6 +922,20 @@ class TeardownContext(CommonContext):
         # Example: Syncing Missions from DataStorage (Image 4 logic)
         # This logic already exists in your on_package[Retrieved],
         # but you can trigger a 'Get' request here to ensure it's current.
+
+    def sync_savegame(self):
+        if not self.savegame_path:
+            return
+
+        # We still need to parse the tree to save it, but we use our stored node
+        tree = ET.parse(self.savegame_path)
+
+        if self.player_data is not None:
+            self.check_tools()
+            self.apply_received_items()
+
+            tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=True)
+
 
     def check_missions(self):
         if self.player_data is None:
