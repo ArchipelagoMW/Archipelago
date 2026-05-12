@@ -4,8 +4,11 @@ import random
 from unittest.mock import patch
 
 from worlds.alttp.EnemyLogicTargets import (
+    GANONS_TOWER_GAUNTLET_123_ROOM,
+    GANONS_TOWER_GAUNTLET_45_ROOM,
     GANONS_TOWER_MIMICS_BOTTOM_HALF,
     GANONS_TOWER_TILE_TORCH_PUZZLE_TOP_LEFT,
+    GANONS_TOWER_WIZZROBES_TOP_HALF,
     HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP,
     HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM,
     ICE_PALACE_COMPASS_ROOM,
@@ -23,7 +26,6 @@ from worlds.alttp.EnemyShuffle import (
     DungeonSpriteGroup,
     EnemyShuffleState,
     EnemySpriteRequirement,
-    ITEM_NAME_TO_DAMAGE_CLASS,
     OverworldEnemyArea,
     OverworldEnemySprite,
     RandomizedDungeonEnemyRoom,
@@ -57,15 +59,45 @@ from worlds.alttp.Items import item_table
 from worlds.alttp.StateHelpers import (
     can_clear_enemy_room,
     can_clear_enemy_region,
+    can_clear_enemy_regions,
     can_kill_enemy_sprite,
     can_kill_key_drop_enemy,
+    _get_available_damage_classes,
+)
+from worlds.alttp.enemizer_data.enemy_combat_data import (
+    DIRECT_KILL_DELIVERY_OVERRIDES,
+    EnemyCombatModel,
+    KEY_DROP_KILL_DAMAGE_CLASS_OVERRIDES,
+    REACHABLE_SPRITE_DAMAGE_SUBCLASS_COUNT,
+    VANILLA_COMBAT_MODEL,
+    YELLOW_SLIME_FOLLOW_UP_DELIVERY_OVERRIDES,
+    get_blob_transform_damage_classes,
+    get_yellow_slime_follow_up_delivery_override,
 )
 from worlds.alttp.test.bases import item_factory
 from worlds.alttp.test.owg.TestLightWorld import TestLightWorld
 
-KILL_ABILITY_TO_DAMAGE_CLASS = {
-    "bombs": 8,
+SUPPORTED_OVERRIDE_ITEMS = {
+    "Blue Boomerang",
+    "Red Boomerang",
+    "Fighter Sword",
+    "Master Sword",
+    "Tempered Sword",
+    "Golden Sword",
+    "Hammer",
+    "Cane of Somaria",
+    "Cane of Byrna",
+    "Bow",
+    "Silver Bow",
+    "Hookshot",
+    "Magic Powder",
+    "Fire Rod",
+    "Ice Rod",
+    "Bombos",
+    "Ether",
+    "Quake",
 }
+SUPPORTED_OVERRIDE_ABILITIES = {"bombs"}
 
 
 class TestEnemyShuffleValidation(unittest.TestCase):
@@ -160,6 +192,15 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             fighter_state = logic_test.get_state(item_factory(["Fighter Sword"], world))
             self.assertFalse(can_clear_enemy_room(fighter_state, 1, "Mini-Moldorm Cave"))
 
+            master_state = logic_test.get_state(item_factory(["Master Sword"], world))
+            self.assertFalse(can_clear_enemy_room(master_state, 1, "Mini-Moldorm Cave"))
+
+            tempered_state = logic_test.get_state(item_factory(["Tempered Sword"], world))
+            self.assertFalse(can_clear_enemy_room(tempered_state, 1, "Mini-Moldorm Cave"))
+
+            golden_state = logic_test.get_state(item_factory(["Golden Sword"], world))
+            self.assertTrue(can_clear_enemy_room(golden_state, 1, "Mini-Moldorm Cave"))
+
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
             self.assertFalse(can_clear_enemy_room(hammer_state, 1, "Mini-Moldorm Cave"))
 
@@ -214,6 +255,205 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
 
+    def test_can_clear_enemy_regions_aggregates_consumable_budget_across_targets(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            wizzrobes_room_id = get_room_id("Ganon's Tower (Wizzrobes Rooms)")
+            gauntlet_123_room_id = get_room_id("Ganon's Tower (Gauntlet 1/2/3)")
+            gauntlet_45_room_id = get_room_id("Ganon's Tower (Gauntlet 4/5)")
+            self.assertIsNotNone(wizzrobes_room_id)
+            self.assertIsNotNone(gauntlet_123_room_id)
+            self.assertIsNotNone(gauntlet_45_room_id)
+
+            mini_moldorm_bomb_pack = tuple(
+                RandomizedDungeonEnemySprite(0, 0, 0, 24, 24, False, False)
+                for _ in range(4)
+            )
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    wizzrobes_room_id: RandomizedDungeonEnemyRoom(
+                        room_id=wizzrobes_room_id,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=mini_moldorm_bomb_pack,
+                        skipped_randomization=False,
+                    ),
+                    gauntlet_123_room_id: RandomizedDungeonEnemyRoom(
+                        room_id=gauntlet_123_room_id,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=mini_moldorm_bomb_pack,
+                        skipped_randomization=False,
+                    ),
+                    gauntlet_45_room_id: RandomizedDungeonEnemyRoom(
+                        room_id=gauntlet_45_room_id,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=mini_moldorm_bomb_pack,
+                        skipped_randomization=False,
+                    ),
+                },
+            )
+
+            bomb_state = logic_test.get_state(item_factory(["Bomb Upgrade (+10)"], world))
+            self.assertTrue(can_clear_enemy_region(bomb_state, 1, GANONS_TOWER_WIZZROBES_TOP_HALF))
+            self.assertTrue(can_clear_enemy_region(bomb_state, 1, GANONS_TOWER_GAUNTLET_123_ROOM))
+            self.assertTrue(can_clear_enemy_region(bomb_state, 1, GANONS_TOWER_GAUNTLET_45_ROOM))
+            self.assertFalse(
+                can_clear_enemy_regions(
+                    bomb_state,
+                    1,
+                    GANONS_TOWER_WIZZROBES_TOP_HALF,
+                    GANONS_TOWER_GAUNTLET_123_ROOM,
+                    GANONS_TOWER_GAUNTLET_45_ROOM,
+                )
+            )
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_room_clear_uses_enemy_hit_counts_for_bomb_budget(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    291: RandomizedDungeonEnemyRoom(
+                        room_id=291,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 65, 65, False, False),
+                            RandomizedDungeonEnemySprite(0, 0, 0, 65, 65, False, False),
+                            RandomizedDungeonEnemySprite(0, 0, 0, 65, 65, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            five_bomb_state = logic_test.get_state(item_factory(["Bomb Upgrade (+5)"], world))
+            self.assertFalse(can_clear_enemy_room(five_bomb_state, 1, "Mini-Moldorm Cave"))
+
+            ten_bomb_state = logic_test.get_state(item_factory(["Bomb Upgrade (+10)"], world))
+            self.assertTrue(can_clear_enemy_room(ten_bomb_state, 1, "Mini-Moldorm Cave"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_room_clear_uses_enemy_shuffle_state_combat_model(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            custom_enemy_health = bytearray(VANILLA_COMBAT_MODEL.enemy_health_table)
+            custom_enemy_health[65] = 0x04
+            custom_combat_model = EnemyCombatModel(
+                damage_sources=VANILLA_COMBAT_MODEL.damage_sources,
+                sprite_damage_subclasses=VANILLA_COMBAT_MODEL.sprite_damage_subclasses,
+                enemy_health_table=bytes(custom_enemy_health),
+            )
+            world.enemy_shuffle_state = SimpleNamespace(
+                combat_model=custom_combat_model,
+                randomized_dungeon_rooms={
+                    291: RandomizedDungeonEnemyRoom(
+                        room_id=291,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 65, 65, False, False),
+                            RandomizedDungeonEnemySprite(0, 0, 0, 65, 65, False, False),
+                            RandomizedDungeonEnemySprite(0, 0, 0, 65, 65, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                },
+            )
+
+            five_bomb_state = logic_test.get_state(item_factory(["Bomb Upgrade (+5)"], world))
+            self.assertTrue(can_clear_enemy_room(five_bomb_state, 1, "Mini-Moldorm Cave"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_terrorpin_requires_hammer_to_flip_before_damage(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        try:
+            bow_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertFalse(can_kill_enemy_sprite(bow_state, 1, "TerrorpinSprite"))
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertTrue(can_kill_enemy_sprite(hammer_state, 1, "TerrorpinSprite"))
+
+            hammer_bow_state = logic_test.get_state(item_factory(["Hammer", "Bow"], world))
+            self.assertTrue(can_kill_enemy_sprite(hammer_bow_state, 1, "TerrorpinSprite"))
+        finally:
+            logic_test.tearDown()
+
+    def test_sword_items_enable_all_available_damage_classes(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        sword_damage_classes = {1, 2, 3, 4, 5}
+        try:
+            cases = (
+                (["Fighter Sword"], {1, 2}),
+                (["Master Sword"], {1, 2, 3}),
+                (["Tempered Sword"], {2, 3, 4}),
+                (["Golden Sword"], {3, 4, 5}),
+                (["Hammer"], {3}),
+                (["Cane of Somaria"], {1}),
+                (["Cane of Byrna"], {1}),
+            )
+            for item_names, expected_classes in cases:
+                with self.subTest(items=item_names):
+                    state = logic_test.get_state(item_factory(item_names, world))
+                    self.assertEqual(
+                        _get_available_damage_classes(state, 1, 1).intersection(sword_damage_classes),
+                        expected_classes,
+                    )
+        finally:
+            logic_test.tearDown()
+
     def test_kyameron_is_not_killable(self) -> None:
         logic_test = TestLightWorld()
         logic_test.setUp()
@@ -264,6 +504,9 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             fighter_state = logic_test.get_state(item_factory(["Fighter Sword"], world))
             self.assertFalse(can_clear_enemy_room(fighter_state, 1, "Mini-Moldorm Cave"))
+
+            master_state = logic_test.get_state(item_factory(["Master Sword"], world))
+            self.assertFalse(can_clear_enemy_room(master_state, 1, "Mini-Moldorm Cave"))
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
             self.assertFalse(can_clear_enemy_room(hammer_state, 1, "Mini-Moldorm Cave"))
@@ -1099,7 +1342,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertIsNone(get_room_name(9999))
         self.assertIsNone(get_room_id("Not A Real ALTTP Room"))
 
-    def test_merged_sprite_metadata_loads_damage_fields(self) -> None:
+    def test_merged_sprite_metadata_loads_combat_reference_and_placement_fields(self) -> None:
         requirements = {
             requirement.sprite_name: requirement
             for requirement in _load_enemy_sprite_requirements()
@@ -1115,100 +1358,64 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
         self.assertTrue(deadrock.killable)
         self.assertEqual(deadrock.combat_reference_id, 39)
-        self.assertEqual(
-            deadrock.kill_items,
-            ("Magic Powder", "Quake"),
-        )
-        self.assertEqual(deadrock.kill_abilities, tuple())
-        self.assertEqual(deadrock.yellow_slime_transform_items, ("Magic Powder", "Quake"))
-        self.assertIn("Bow", deadrock.yellow_slime_follow_up_items)
-        self.assertIn("Hammer", deadrock.yellow_slime_follow_up_items)
-        self.assertEqual(deadrock.yellow_slime_follow_up_abilities, ("bombs",))
-        self.assertIn("250 effect", deadrock.damage_notes)
+        self.assertEqual(get_blob_transform_damage_classes(deadrock.combat_reference_id), (10, 15))
+        deadrock_follow_up = get_yellow_slime_follow_up_delivery_override(deadrock.combat_reference_id)
+        self.assertIsNotNone(deadrock_follow_up)
+        self.assertIn("Bow", deadrock_follow_up.items)
+        self.assertIn("Hammer", deadrock_follow_up.items)
+        self.assertIn("Hookshot", deadrock_follow_up.items)
+        self.assertEqual(deadrock_follow_up.abilities, ("bombs",))
 
         self.assertEqual(mimic.combat_reference_id, 131)
-        self.assertEqual(mimic.mapping_confidence, "assumed_shared_green_mimic")
-        self.assertIn("green mimic", mimic.damage_notes)
-        self.assertEqual(terrorpin.kill_items, ("Hammer",))
-        self.assertEqual(terrorpin.kill_abilities, tuple())
-        self.assertIn("Only Hammer is listed in kill_items", terrorpin.damage_notes)
-        self.assertEqual(requirements["RedBariSprite"].key_drop_kill_items, ("Fire Rod", "Bombos"))
+        self.assertEqual(terrorpin.combat_reference_id, 142)
+        self.assertEqual(KEY_DROP_KILL_DAMAGE_CLASS_OVERRIDES[requirements["RedBariSprite"].sprite_name], (11, 13))
         self.assertEqual(water_tektite.dont_randomize_rooms, (40, 118))
         self.assertFalse(kyameron.killable)
         self.assertTrue(kyameron.cannot_have_key)
         self.assertEqual(kyameron.subgroup_2, (34,))
         self.assertEqual(kyameron.excluded_rooms, (268,))
         self.assertEqual(kyameron.dont_randomize_rooms, (40, 118))
-        self.assertEqual(kyameron.kill_items, tuple())
-        self.assertEqual(kyameron.kill_combo_all_of_items, tuple())
-        self.assertEqual(kyameron.kill_combo_one_of_items, tuple())
-        self.assertIn("placement constraints are preserved", kyameron.damage_notes)
+        floating_stalfos_head_override = DIRECT_KILL_DELIVERY_OVERRIDES[floating_stalfos_head.sprite_name]
         self.assertEqual(
-            floating_stalfos_head.kill_items,
+            floating_stalfos_head_override.items,
             ("Blue Boomerang", "Red Boomerang", "Cane of Somaria", "Cane of Byrna"),
         )
-        self.assertIn("without dealing damage", floating_stalfos_head.damage_notes)
+        self.assertEqual(floating_stalfos_head_override.abilities, tuple())
         self.assertFalse(spark.killable)
         self.assertTrue(spark.cannot_have_key)
-        self.assertEqual(spark.kill_items, tuple())
-        self.assertIn("cannot be killed or stunned", spark.damage_notes)
 
-    def test_kill_metadata_uses_real_items_and_explicit_abilities(self) -> None:
+    def test_killable_sprites_have_reachable_combat_reference_data(self) -> None:
         for requirement in _load_enemy_sprite_requirements():
-            if requirement.combat_reference_id is None:
+            if not requirement.killable:
                 continue
 
             with self.subTest(sprite=requirement.sprite_name):
-                for item_name in requirement.kill_items:
-                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
-                for item_name in requirement.kill_combo_all_of_items:
-                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
-                for item_name in requirement.kill_combo_one_of_items:
-                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
-                for item_name in requirement.yellow_slime_transform_items:
-                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
-                for item_name in requirement.yellow_slime_follow_up_items:
-                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
+                combat_reference_id = requirement.combat_reference_id
+                if combat_reference_id is None:
+                    combat_reference_id = requirement.sprite_id
+                self.assertLess(combat_reference_id, REACHABLE_SPRITE_DAMAGE_SUBCLASS_COUNT)
 
-                self.assertNotIn("Bomb", requirement.kill_items)
-                self.assertNotIn("Bomb", requirement.yellow_slime_follow_up_items)
+    def test_combat_delivery_overrides_only_use_real_items_and_explicit_abilities(self) -> None:
+        for override in DIRECT_KILL_DELIVERY_OVERRIDES.values():
+            for item_name in override.items:
+                self.assertIn(item_name, SUPPORTED_OVERRIDE_ITEMS)
+                self.assertNotEqual(item_name, "Bomb")
+            for ability_name in override.abilities:
+                self.assertIn(ability_name, SUPPORTED_OVERRIDE_ABILITIES)
 
-                item_classes = {
-                    ITEM_NAME_TO_DAMAGE_CLASS[item_name]
-                    for item_name in requirement.kill_items
-                }
-                ability_classes = {
-                    KILL_ABILITY_TO_DAMAGE_CLASS[ability_name]
-                    for ability_name in requirement.kill_abilities
-                }
-                if requirement.sprite_name == "TerrorpinSprite":
-                    self.assertEqual(requirement.kill_items, ("Hammer",))
-                    self.assertEqual(
-                        item_classes | ability_classes,
-                        {ITEM_NAME_TO_DAMAGE_CLASS["Hammer"]},
-                    )
-                    self.assertTrue((item_classes | ability_classes).issubset(set(requirement.kill_damage_classes)))
-                else:
-                    self.assertEqual(item_classes | ability_classes, set(requirement.kill_damage_classes))
+        for override in YELLOW_SLIME_FOLLOW_UP_DELIVERY_OVERRIDES.values():
+            for item_name in override.items:
+                self.assertIn(item_name, SUPPORTED_OVERRIDE_ITEMS)
+                self.assertNotEqual(item_name, "Bomb")
+            for ability_name in override.abilities:
+                self.assertIn(ability_name, SUPPORTED_OVERRIDE_ABILITIES)
 
-    def test_enemy_shuffle_placeable_enemies_have_kill_items_or_are_unkillable(self) -> None:
-        requirements = _load_enemy_sprite_requirements()
-        placeable_requirements = [
-            requirement
-            for requirement in requirements
-            if not requirement.npc
-            and requirement.is_enemy_sprite
-            and not requirement.boss
-            and not requirement.overlord
-            and not requirement.is_object
-            and not requirement.absorbable
-            and (not requirement.never_use_dungeon or not requirement.never_use_overworld)
-        ]
-
-        for requirement in placeable_requirements:
+    def test_runtime_enemy_requirements_do_not_carry_scraped_combat_lists(self) -> None:
+        for requirement in _load_enemy_sprite_requirements():
             with self.subTest(sprite=requirement.sprite_name):
-                if requirement.killable:
-                    self.assertTrue(requirement.kill_items)
+                self.assertFalse(hasattr(requirement, "kill_damage_classes"))
+                self.assertFalse(hasattr(requirement, "kill_items"))
+                self.assertFalse(hasattr(requirement, "kill_abilities"))
 
     def test_curated_room_sprite_addresses_exclude_hera_basement_key_slot(self) -> None:
         room_id = 135

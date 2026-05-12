@@ -49,7 +49,7 @@ from .Options import small_key_shuffle
 from .OverworldGlitchRules import overworld_glitches_rules
 from .PotShuffle import POT_KEY, POT_SWITCH, get_unique_pot_item_position
 from .Regions import LTTPRegionType, location_table
-from .StateHelpers import (can_extend_magic, can_clear_enemy_region,
+from .StateHelpers import (can_extend_magic, can_clear_enemy_region, can_clear_enemy_regions,
                            can_kill_enemy_sprite,
                            can_kill_key_drop_enemy,
                            can_lift_heavy_rocks, can_lift_rocks,
@@ -397,8 +397,12 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Agahnim 1', player),
              lambda state: has_sword(state, player)
              and state._lttp_has_key('Small Key (Agahnims Tower)', player, 4)
-             and can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_TOP_LEFT)
-             and can_clear_enemy_region(state, player, AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF))
+             and can_clear_enemy_regions(
+                 state,
+                 player,
+                 AGA_TOWER_ENTRANCE_TOP_LEFT,
+                 AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF,
+             ))
 
     set_rule(multiworld.get_location('Castle Tower - Room 03', player),
              lambda state: can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_TOP_LEFT))
@@ -409,8 +413,12 @@ def global_rules(multiworld: MultiWorld, player: int):
              lambda state: can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_TOP_LEFT)
              and state._lttp_has_key('Small Key (Agahnims Tower)', player, 2))
     set_rule(multiworld.get_location('Castle Tower - Circle of Pots Key Drop', player),
-             lambda state: can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_TOP_LEFT)
-             and can_clear_enemy_region(state, player, AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF)
+             lambda state: can_clear_enemy_regions(
+                 state,
+                 player,
+                 AGA_TOWER_ENTRANCE_TOP_LEFT,
+                 AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF,
+             )
              and state._lttp_has_key('Small Key (Agahnims Tower)', player, 3))
     set_always_allow(multiworld.get_location('Eastern Palace - Big Key Chest', player),
                      lambda state, item: item.name == 'Big Key (Eastern Palace)' and item.player == player)
@@ -552,8 +560,12 @@ def global_rules(multiworld: MultiWorld, player: int):
              lambda state: can_melt_things(state, player)
              and state._lttp_has_key('Small Key (Ice Palace)', player)
              and can_use_bombs(state, player)
-             and can_clear_enemy_region(state, player, ICE_PALACE_COMPASS_ROOM)
-             and can_clear_enemy_region(state, player, ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT))
+             and can_clear_enemy_regions(
+                 state,
+                 player,
+                 ICE_PALACE_COMPASS_ROOM,
+                 ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
+             ))
 
     set_rule(multiworld.get_entrance('Ice Palace (Main)', player),
              lambda state: state._lttp_has_key('Small Key (Ice Palace)', player, 2)
@@ -649,8 +661,12 @@ def global_rules(multiworld: MultiWorld, player: int):
              and state.has('Big Key (Palace of Darkness)', player)
              and can_shoot_arrows(state, player)
              and state.has('Hammer', player)
-             and can_clear_enemy_region(state, player, POD_NORTH_MIMICS_BOTTOM_LEFT)
-             and can_clear_enemy_region(state, player, POD_TURTLE_ROOM_BOTTOM_LEFT))
+             and can_clear_enemy_regions(
+                 state,
+                 player,
+                 POD_NORTH_MIMICS_BOTTOM_LEFT,
+                 POD_TURTLE_ROOM_BOTTOM_LEFT,
+             ))
     set_rule(multiworld.get_entrance('Palace of Darkness (North)', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 4))
     set_rule(multiworld.get_location('Palace of Darkness - Big Chest', player), lambda state: can_use_bombs(state, player) and state.has('Big Key (Palace of Darkness)', player))
     set_rule(multiworld.get_location('Palace of Darkness - The Arena - Ledge', player), lambda state: can_use_bombs(state, player))
@@ -726,9 +742,13 @@ def global_rules(multiworld: MultiWorld, player: int):
              lambda state: state.has('Big Key (Ganons Tower)', player)
              and can_clear_enemy_region(state, player, GANONS_TOWER_MIMICS_BOTTOM_HALF))
     set_rule(multiworld.get_entrance('Ganons Tower Torch Rooms', player),
-             lambda state: can_clear_enemy_region(state, player, GANONS_TOWER_WIZZROBES_TOP_HALF)
-             and can_clear_enemy_region(state, player, GANONS_TOWER_GAUNTLET_123_ROOM)
-             and can_clear_enemy_region(state, player, GANONS_TOWER_GAUNTLET_45_ROOM)
+             lambda state: can_clear_enemy_regions(
+                 state,
+                 player,
+                 GANONS_TOWER_WIZZROBES_TOP_HALF,
+                 GANONS_TOWER_GAUNTLET_123_ROOM,
+                 GANONS_TOWER_GAUNTLET_45_ROOM,
+             )
              and has_fire_source(state, player)
              and state.multiworld.get_entrance('Ganons Tower Torch Rooms', player).parent_region.dungeon.bosses['middle'].can_defeat(state))
     set_rule(multiworld.get_location('Ganons Tower - Mini Helmasaur Key Drop', player), lambda state: can_kill_key_drop_enemy(state, player, GANONS_TOWER_MINI_HELMASAUR_KEY_DROP))
@@ -1206,8 +1226,12 @@ def swordless_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Ice Palace (Second Section)', player),
              lambda state: (state.has('Fire Rod', player) or state.has('Bombos', player))
              and state._lttp_has_key('Small Key (Ice Palace)', player)
-             and can_clear_enemy_region(state, player, ICE_PALACE_COMPASS_ROOM)
-             and can_clear_enemy_region(state, player, ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT))
+             and can_clear_enemy_regions(
+                 state,
+                 player,
+                 ICE_PALACE_COMPASS_ROOM,
+                 ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
+             ))
 
     set_rule(multiworld.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
 

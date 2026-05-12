@@ -9,6 +9,7 @@ from .EnemizerPatches import apply_enemizer_base_patch
 from .Rom import LocalRom, get_base_rom_path
 from .enemizer_data.default_dungeon_room_enemies import DEFAULT_DUNGEON_ROOM_ENEMIES
 from .enemizer_data.dungeon_sprite_addresses import DUNGEON_SPRITE_ADDRESSES, KEYED_SPRITE_ID_ADDRESSES
+from .enemizer_data.enemy_combat_data import EnemyCombatModel, VANILLA_COMBAT_MODEL
 from .enemizer_data.enemy_room_metadata import (
     BOSS_ROOM_IDS,
     DONT_RANDOMIZE_ROOM_IDS,
@@ -75,39 +76,6 @@ SELECTED_BOSS_GROUP_REQUIREMENTS = {
     "Blind": (32, 206),
 }
 
-# Swords use their highest charged attack class rather than the weaker swing class.
-ITEM_NAME_TO_DAMAGE_CLASS = {
-    "Blue Boomerang": 0,
-    "Red Boomerang": 0,
-    "Fighter Sword": 2,
-    "Master Sword": 3,
-    "Tempered Sword": 4,
-    "Golden Sword": 5,
-    "Cane of Somaria": 1,
-    "Cane of Byrna": 1,
-    "Hammer": 3,
-    "Bow": 6,
-    "Silver Arrows": 9,
-    "Silver Bow": 9,
-    "Hookshot": 7,
-    "Single Bomb": 8,
-    "Bombs (3)": 8,
-    "Bombs (10)": 8,
-    "Bomb Upgrade (+5)": 8,
-    "Bomb Upgrade (+10)": 8,
-    "Bomb Upgrade (50)": 8,
-    "Magic Powder": 10,
-    "Fire Rod": 11,
-    "Ice Rod": 12,
-    "Bombos": 13,
-    "Ether": 14,
-    "Quake": 15,
-    "Bee": 1,
-    "Good Bee": 1,
-    "Bottle (Bee)": 1,
-    "Bottle (Good Bee)": 1,
-}
-
 @dataclass(frozen=True)
 class RoomGroupRequirement:
     group_id: Optional[int]
@@ -169,19 +137,6 @@ class EnemySpriteRequirement:
     dont_randomize_rooms: tuple[int, ...]
     spawnable_rooms: tuple[int, ...]
     combat_reference_id: Optional[int] = None
-    combat_reference_name: Optional[str] = None
-    mapping_confidence: Optional[str] = None
-    kill_damage_classes: tuple[int, ...] = tuple()
-    kill_items: tuple[str, ...] = tuple()
-    kill_abilities: tuple[str, ...] = tuple()
-    kill_combo_all_of_items: tuple[str, ...] = tuple()
-    kill_combo_one_of_items: tuple[str, ...] = tuple()
-    yellow_slime_transform_items: tuple[str, ...] = tuple()
-    yellow_slime_follow_up_items: tuple[str, ...] = tuple()
-    yellow_slime_follow_up_abilities: tuple[str, ...] = tuple()
-    key_drop_kill_items: tuple[str, ...] = tuple()
-    key_drop_kill_abilities: tuple[str, ...] = tuple()
-    damage_notes: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -346,6 +301,7 @@ class EnemyShuffleState:
     dont_randomize_overworld_area_ids: frozenset[int]
     randomized_dungeon_rooms: dict[int, RandomizedDungeonEnemyRoom]
     randomized_overworld_areas: dict[int, RandomizedOverworldEnemyArea]
+    combat_model: EnemyCombatModel = VANILLA_COMBAT_MODEL
 
 
 def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
@@ -975,19 +931,6 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
             dont_randomize_rooms=entry.dont_randomize_rooms,
             spawnable_rooms=entry.spawnable_rooms,
             combat_reference_id=entry.combat_reference_id,
-            combat_reference_name=entry.combat_reference_name,
-            mapping_confidence=entry.mapping_confidence,
-            kill_damage_classes=entry.kill_damage_classes,
-            kill_items=entry.kill_items,
-            kill_abilities=entry.kill_abilities,
-            kill_combo_all_of_items=entry.kill_combo_all_of_items,
-            kill_combo_one_of_items=entry.kill_combo_one_of_items,
-            yellow_slime_transform_items=entry.yellow_slime_transform_items,
-            yellow_slime_follow_up_items=entry.yellow_slime_follow_up_items,
-            yellow_slime_follow_up_abilities=entry.yellow_slime_follow_up_abilities,
-            key_drop_kill_items=entry.key_drop_kill_items,
-            key_drop_kill_abilities=entry.key_drop_kill_abilities,
-            damage_notes=entry.damage_notes,
         )
         for entry in ENEMY_SPRITE_REQUIREMENTS
     )
