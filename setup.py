@@ -201,7 +201,7 @@ if is_windows:
         icon=resolve_icon(c.icon),
     ))
 
-extra_data = ["LICENSE", "data", "EnemizerCLI", "SNI"]
+extra_data = ["LICENSE", "data", "SNI"]
 extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
@@ -456,9 +456,8 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                              for world_directory in folders_to_remove)
         else:
             # make sure extra programs are executable
-            enemizer_exe = self.buildfolder / 'EnemizerCLI/EnemizerCLI.Core'
             sni_exe = self.buildfolder / 'SNI/sni'
-            extra_exes = (enemizer_exe, sni_exe)
+            extra_exes = (sni_exe,)
             for extra_exe in extra_exes:
                 if extra_exe.is_file():
                     extra_exe.chmod(0o755)
@@ -657,7 +656,7 @@ cx_Freeze.setup(
     options={
         "build_exe": {
             "packages": ["worlds", "kivy", "cymem", "websockets", "kivymd"],
-            "includes": [],
+            "includes": ["rule_builder.cached_world"],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_includes": [],
