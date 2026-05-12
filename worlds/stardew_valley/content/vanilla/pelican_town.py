@@ -412,7 +412,7 @@ pelican_town = ContentPack(
         f"{NPC.sam} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.sam, 14),)),),
         f"{NPC.sebastian} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.sebastian, 14),)),),
         f"{NPC.shane} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.shane, 14),)),),
-        Gift.tea_set: (ShopSource(price=1_000_000, shop_region=LogicRegion.traveling_cart, other_requirements=(YearRequirement(10), SeasonRequirement(Season.winter),)),),
+        Gift.tea_set: (ShopSource(price=1_000_000, shop_region=LogicRegion.traveling_cart, other_requirements=(YearRequirement(10), RegionRequirement(LogicRegion.winter_star))),),
 
         Furniture.tub_o_flowers: (ShopSource(price=250, shop_region=LogicRegion.flower_dance),),
         f"{Furniture.tub_o_flowers} Recipe": (ShopSource(price=1000, shop_region=LogicRegion.flower_dance),),
