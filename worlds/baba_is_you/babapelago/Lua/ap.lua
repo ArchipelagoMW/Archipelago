@@ -89,6 +89,7 @@ local options = {
     goal=0,
     goal_levels=80,
     goal_blossoms=7,
+    logic_difficulty=0,
     start_with_default_words=1,
     open_map=1,
     world_keys=1,
@@ -568,6 +569,115 @@ table.insert(mod_hook_functions.keyboard_input, function(data)
         listlevels()
     end
 end)
+
+local levelToTransform = ""
+table.insert(mod_hook_functions.mouse_click, function(data)
+    if generaldata.strings[WORLD] ~= thisWorld or editor.strings[MENU] ~= "ingame" then
+        return
+    end
+    if not manualChecks then return end
+
+    local mouse_button = data[1]
+
+    local mousex,mousey = MF_mouse()
+    local overlay_tilesize = tilesize * generaldata2.values[ZOOM] * spritedata.values[TILEMULT]
+    local x = math.floor((mousex - Xoffset) / overlay_tilesize)
+    local y = math.floor((mousey - Yoffset) / overlay_tilesize)
+    local unitsHere = findallhere(x,y)
+    for a,b in ipairs(unitsHere) do
+        local unit = mmf.newObject(b)
+        if #unit.strings[U_LEVELFILE] ~= 0 and mouse_button ~= 1 then
+            local world = generaldata.strings[WORLD]
+            local currLevel = generaldata.strings[CURRLEVEL]
+            local level = unit.strings[U_LEVELFILE]
+
+            local totalTrans = tonumber(MF_read("save", world .. "_" .. currLevel .. "_" .. "convert", "converts")) or 0
+            local startText = ""
+            if totalTrans > 0 then
+                for i = 0, totalTrans - 1 do
+                    local str = MF_read("save", world .. "_" .. currLevel .. "_" .. "convert", tostring(i))
+                    if str then
+                        local transforms = split(str, ",")
+                        local otherLevel = transforms[1]
+                        if level == otherLevel then
+                            if mouse_button == 2 then
+                                startText = str:sub(#level+2)
+                                break
+                            end
+                            add_to_messages("Erased transforms for "..currLevel)
+                            MF_store("save", world .. "_" .. currLevel .. "_" .. "convert", tostring(i), level..",")
+                            return
+                        end
+                    end
+                end
+            end
+
+            if mouse_button == 2 then
+                levelToTransform = level
+                open_text_input(startText)
+            end
+        elseif unit.strings[UNITTYPE] == "text" then
+            if (mouse_button == 1) then
+                add_to_messages("Added \""..unit.strings[NAME].."\"")
+                checks[unit.strings[UNITNAME]] = 1
+            else
+                add_to_messages("Removed \""..unit.strings[NAME].."\"")
+                checks[unit.strings[UNITNAME]] = nil
+            end
+        end
+    end
+end)
+
+local disableeditor = false
+function ap_text_input_ok(data)
+    if editor.values[NAMETARGET] == 25 then
+        editor.values[NAMETARGET] = 0
+        if disableeditor then
+            MF_editor_enable(false)
+            disableeditor = false
+        end
+        
+        local newTransform = data[1]
+        local level = levelToTransform
+
+        local world = generaldata.strings[WORLD]
+        local currLevel = generaldata.strings[CURRLEVEL]
+        local totalTrans = tonumber(MF_read("save", world .. "_" .. currLevel .. "_" .. "convert", "converts")) or 0
+        local foundLevel = false
+        if totalTrans > 0 then
+            for i = 0, totalTrans - 1 do
+                local str = MF_read("save", world .. "_" .. currLevel .. "_" .. "convert", tostring(i))
+                if str then
+                    local transforms = split(str, ",")
+                    local otherLevel = transforms[1]
+                    if level == otherLevel then
+                        MF_store("save", world .. "_" .. currLevel .. "_" .. "convert", tostring(i), level..","..newTransform)
+                        foundLevel = true
+                        break
+                    end
+                end
+            end
+        end
+
+        if not foundLevel then
+            MF_store("save", world .. "_" .. currLevel .. "_" .. "convert", tostring(totalTrans), level..","..newTransform)
+            MF_store("save", world .. "_" .. currLevel .. "_" .. "convert", "converts", tostring(totalTrans+1))
+        end
+    end
+end
+table.insert(mod_hook_functions.text_input_ok, ap_text_input_ok)
+
+-- opens a text input
+function open_text_input(startingText)
+    disableeditor = (generaldata.values[MODE] ~= 5)
+    if disableeditor then
+        MF_editor_enable(true)
+    end
+    MF_setnamegiving(startingText)
+    editor.values[NAMETARGET] = 25
+    MF_loop("givename",1)
+end
+namegivingtitles[25] = {"controls_pressany","lower"} -- I have to put some message here, so I guess this works
 
 local checkTimer = 0
 local clear_goal_locations = {}

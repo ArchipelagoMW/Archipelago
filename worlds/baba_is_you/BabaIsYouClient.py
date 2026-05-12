@@ -193,7 +193,7 @@ class BabaIsYouContext(CommonContext):
             elif osName == "Darwin":
                 steam_path = os.path.expanduser("~/Library/Application Support/Steam/steamapps/libraryfolders.vdf")
             else:
-                steam_path = os.path.expanduser("~/.steam/steam/steamapps/libraryfolders.vdf") # Is this even correct?
+                steam_path = os.path.expanduser("~/.steam/steam/steamapps/libraryfolders.vdf") # Some installs might put it elsewhere, oh well
         except Exception as e:
             logger.info("Error: "+str(e)) # Happens on linux?
         

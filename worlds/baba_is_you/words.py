@@ -24,8 +24,8 @@ TOP_GATE_PROG_WORDS = ("Level", "Orb", "Hide", "Bonus")
 # List of progression words in ??? + ABC
 FLOWER_PROG_WORDS = ("Write", "A", "AB", "B", "BA", "C", "E", "G", "H", "L", "M", "N", "O", "R", "S", "T", "V", "W")
 
-# List of progression words in Depths
-DEPTHS_PROG_WORDS = ("Hedge",)
+# List of progression words in Depths (empty; there's nothing new here)
+DEPTHS_PROG_WORDS = ()
 
 # List of progression words in Meta
 META_PROG_WORDS = ("Near", "Cursor", "I")
@@ -34,7 +34,7 @@ META_PROG_WORDS = ("Near", "Cursor", "I")
 CENTER_PROG_WORDS = ("Cake", "Done", "Image")
 
 # All filler words
-ALL_FILLER_WORDS = ("Anni", "Best", "Down", "Left", "Cliff", "Line", "F", "U", "X")
+ALL_FILLER_WORDS = ("Anni", "Best", "Down", "Left", "Hedge", "Cliff", "Line", "F", "U", "X")
 
 # All progression words
 ALL_PROG_WORDS = DEFAULT_WORDS + EARLY_PROG_WORDS + TOP_GATE_PROG_WORDS + FLOWER_PROG_WORDS + DEPTHS_PROG_WORDS + META_PROG_WORDS + CENTER_PROG_WORDS

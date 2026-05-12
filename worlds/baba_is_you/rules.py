@@ -108,7 +108,7 @@ def set_all_location_rules(world: BabaIsYouWorld) -> None:
                 locationName = f"{data["name"]}: {transform} Transform"
                 rule = can_transform(name, transform, world.options.logic_difficulty)
                 
-                if world.options.transformsanity:
+                if world.options.transformsanity and transform.find("+") == -1: # combo transforms are only used for logic
                     location = world.get_location(locationName)
                     world.set_rule(location, rule)
                 

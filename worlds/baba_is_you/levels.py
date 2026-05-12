@@ -80,7 +80,8 @@ def get_level_locations(data: dict, world) -> list:
     if (world is None or world.options.transformsanity) and data.get("transforms"):
         # Add transform locations
         for transform in data["transforms"]:
-            locations.append(f"{prefix}{transform} Transform")
+            if transform.find("+") == -1: # combo transforms are only used for logic
+                locations.append(f"{prefix}{transform} Transform")
         
     # Add clear and complete locations
     if data.get("clearCount"):

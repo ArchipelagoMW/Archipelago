@@ -89,8 +89,7 @@ def create_item_with_correct_classification(world: BabaIsYouWorld, name: str) ->
     
     # Bonuses become filler items if we aren't including "Gallery"
     # End becomes filler if reaching the end isn't our goal
-    # Hedge becomes filler outside of easy logic (It's only used in Living Lands)
-    if (name == "Bonus Orb" and world.options.exclude_gallery) or (name == "End" and world.options.goal != 0) or (name == "Hedge" and world.options.logic_difficulty != 0):
+    if (name == "Bonus Orb" and world.options.exclude_gallery) or (name == "End" and world.options.goal != 0):
         classification = ItemClassification.filler
     elif ITEM_NAME_TO_ID[name] > 100 and (name in ALL_PROG_WORDS):
         # Check if name is in the current progression word list; if not, mark as filler
