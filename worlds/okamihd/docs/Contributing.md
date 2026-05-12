@@ -109,6 +109,19 @@ Locations are very similar to events, except they give an item from item pool.
 
 Merchants should be declared on their own part of the file, called shop_locations, they still use LocData.
 
+### Warps
+
+Warps are a special kind of entrances used to represent Mermaid Springs and Mist Warps.
+They use the WarpData struct:
+
+| Field             | Content                 | Notes                                                                                                                                                  | Default Value |
+|-------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| type              | WarpType                | Required. Mermaid Spring or Mist Warp                                                                                                                  | N/A           |
+| trigger_warp_to   | Rule or True_ or False_ | Rule that need to be fullfilled to be able to warp to this warp. Doens't need to include the power or items itself; It's deduced from the warp type.   | True_         |
+| trigger_warp_from | Rule or True_ or False_ | Rule that need to be fullfilled to be able to warp from this warp. Doens't need to include the power or items itself; It's deduced from the warp type. | True_         |
+
+
+
 Feel free to review the logic currently merged, or suggest changes to the structure of this.
 
 If you need help or have questions, you can contact me in
