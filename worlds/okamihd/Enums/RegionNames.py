@@ -21,7 +21,6 @@ class RegionNames(StrEnum):
 
     ## Cave of Nagi
     CAVE_OF_NAGI = "Cave of Nagi"
-    CAVE_OF_NAGI_TACHIGAMI = "Cave of Nagi (Tachigami sequence)"
 
     ## Kamiki Village
     ### Exteriors
