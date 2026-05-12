@@ -98,7 +98,7 @@ class OkamiWorld(World):
         if not world.options.ProgressiveWeapons:
             # Create normal weapons
             for (divine_instrument_data) in list(DivineInstruments):
-                if divine_instrument_data.value.item_name != DivineInstruments.DIVINE_RETRIBUTION.name:
+                if divine_instrument_data.value.item_name != DivineInstruments.DIVINE_RETRIBUTION.value.item_name:
                     itempool+=[create_item(divine_instrument_data.value.item_name,divine_instrument_data.value.code,ItemClassification.progression,world)]
         else:
         # Create progressive weapons
