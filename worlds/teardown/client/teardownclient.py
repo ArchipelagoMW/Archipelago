@@ -6,6 +6,11 @@ import time
 import xml.etree.ElementTree as ET
 from Utils import gui_enabled, open_filename, user_path
 from CommonClient import CommonContext, get_base_parser, server_loop
+from NetUtils import ClientStatus
+from typing import Any
+import typing
+import re
+import traceback
 
 
 SETTINGS_PATH = user_path("teardownsettings.json")
@@ -618,39 +623,44 @@ SAVE_TEMPLATE = {
         "bomb/damage": "4",
 
         "rocket/enabled": "0",
-        "rocket/ammo": "0",
-        "rocket/damage": "0",
+        "rocket/ammo": "6",
+        "rocket/damage": "3",
 
         "booster/enabled": "0",
-        "booster/ammo": "0",
-        "booster/power": "0",
-        "booster/time": "0",
+        "booster/ammo": "6",
+        "booster/power": "200",
+        "booster/time": "4",
 
         "leafblower/enabled": "0",
-        "leafblower/power": "0",
+        "leafblower/power": "20",
 
         "wire/enabled": "0",
-        "wire/ammo": "0",
-        "wire/stretch": "0",
+        "wire/ammo": "6",
+        "wire/stretch": "3",
 
         "turbo/enabled": "0",
-        "turbo/ammo": "0",
-        "turbo/power": "0",
+        "turbo/ammo": "6",
+        "turbo/power": "200",
 
         "explosive/enabled": "0",
-        "explosive/ammo": "0",
-        "explosive/damage": "0",
+        "explosive/ammo": "4",
+        "explosive/damage": "5",
 
         "rifle/enabled": "0",
-        "rifle/ammo": "0",
+        "rifle/ammo": "6",
 
         "steroid/enabled": "0",
-        "steroid/ammo": "0",
-        "steroid/time": "0",
+        "steroid/ammo": "2",
+        "steroid/time": "4",
 
     },
 
     "tool": {
+        "sledge/enabled": "0",
+
+        "spraycan/enabled": "0",
+
+        "extinguisher/enabled": "0",
 
         "blowtorch/enabled": "0",
         "blowtorch/ammo": "20",
@@ -679,35 +689,35 @@ SAVE_TEMPLATE = {
         "bomb/damage": "4",
 
         "rocket/enabled": "0",
-        "rocket/ammo": "0",
-        "rocket/damage": "0",
+        "rocket/ammo": "6",
+        "rocket/damage": "3",
 
         "booster/enabled": "0",
-        "booster/ammo": "0",
-        "booster/power": "0",
-        "booster/time": "0",
+        "booster/ammo": "6",
+        "booster/power": "200",
+        "booster/time": "4",
 
         "leafblower/enabled": "0",
-        "leafblower/power": "0",
+        "leafblower/power": "20",
 
         "wire/enabled": "0",
-        "wire/ammo": "0",
-        "wire/stretch": "0",
+        "wire/ammo": "6",
+        "wire/stretch": "3",
 
         "turbo/enabled": "0",
-        "turbo/ammo": "0",
-        "turbo/power": "0",
+        "turbo/ammo": "6",
+        "turbo/power": "200",
 
         "explosive/enabled": "0",
-        "explosive/ammo": "0",
-        "explosive/damage": "0",
+        "explosive/ammo": "4",
+        "explosive/damage": "5",
 
         "rifle/enabled": "0",
-        "rifle/ammo": "0",
+        "rifle/ammo": "6",
 
         "steroid/enabled": "0",
-        "steroid/ammo": "0",
-        "steroid/time": "0",
+        "steroid/ammo": "2",
+        "steroid/time": "4",
 
     },
 
@@ -854,7 +864,6 @@ SAVE_TEMPLATE = {
         "caveisland_roboclear/score": "0",
         "cullington_bomb": "0",
         "cullington_bomb/score": "0",
-        "lastcompleted": "",
 
     }
 }
@@ -870,6 +879,12 @@ class TeardownContext(CommonContext):
     tags = CommonContext.tags | {"AP"}
     items_handling = 0b111
     want_slot_data = True
+    slot_data: dict[str, Any]
+    last_connected_slot: int | None = None
+    stored_data: dict[str, typing.Any]
+    stored_data_notification_keys: set[str]
+
+
 
 
 
@@ -880,6 +895,10 @@ class TeardownContext(CommonContext):
         self.player_data = None
         self.first_sync_done = False
         self.loadsettings()
+        self.MissionAmount = 0
+        self.mission_count = 0
+        self.finished_game = False
+        self.location_name_to_id = ""
 
 
     def loadsettings(self):
@@ -928,18 +947,40 @@ class TeardownContext(CommonContext):
         if not self.savegame_path or not os.path.exists(self.savegame_path):
             return
 
+        with open(self.savegame_path, 'r', encoding='utf-8') as f:
+            text_data = f.read()
+        clean_text = re.sub(r'^\s*<\d+[^>]*/>.*\n?', '', text_data, flags=re.MULTILINE)
+
         try:
+            with open(self.savegame_path, "w", encoding='utf-8') as f:
+                f.write(clean_text)
+
             tree = ET.parse(self.savegame_path)
             root = tree.getroot()
 
             # Find or Create the player_data node
-            self.player_data = root.find("mod/steam-3708322400")
+            self.player_data = root.find("savegame/mod/steam-3708322400")
+
+
+            print(f"DEBUG: player_data found: {self.player_data is not None}")
+            if self.player_data is not None:
+                print(f"DEBUG: player_data tag: {self.player_data.tag}")
+
+
             if self.player_data is None:
                 mod_node = root.find("mod")
+                if mod_node is None:
+                    mod_node = ET.SubElement(root, "mod")
                 self.player_data = ET.SubElement(mod_node, "steam-3708322400")
 
             # Now use self.player_data to build/reset the structure
             for category, nodes in SAVE_TEMPLATE.items():
+
+                print(f"DEBUG: Processing Category: {category}")
+                cat_node = self.player_data.find(category)
+                if cat_node is None:
+                    print(f"DEBUG: Category '{category}' not found, creating new SubElement.")
+
                 cat_node = self.player_data.find(category)
                 if cat_node is None:
                     cat_node = ET.SubElement(self.player_data, category)
@@ -952,14 +993,26 @@ class TeardownContext(CommonContext):
                         if child is None:
                             child = ET.SubElement(current, part)
                         if i == len(parts) - 1:
+                            full_path = f"{category} -> {' -> '.join(parts)}"
+
+
+
+                            print(f"DEBUG: Setting [{full_path}] to value: {val}")
+                            child.set("value", str(val))  # Ensure val is a string
+
+
+
                             child.set("value", val)
                         current = child
             last_node = self.player_data.find("lastcompleted")
+            if last_node is None:
+                last_node = ET.SubElement(self.player_data, "lastcompleted")
             last_node.set("value", "")
 
             for i in range(5):  # Try 5 times
                 try:
-                    tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=True)
+                    ET.indent(tree, space="          ", level=0)
+                    tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=False)
                     return True
                 except PermissionError:
                     time.sleep(0.2)
@@ -968,6 +1021,7 @@ class TeardownContext(CommonContext):
 
         except Exception as e:
             print(f"Failed to initialize player_data: {e}")
+            traceback.print_exc()
 
 
     def apply_server_state_to_xml(self, player_data):
@@ -1002,7 +1056,8 @@ class TeardownContext(CommonContext):
 
         for i in range(5):  # Try 5 times
             try:
-                tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=True)
+                ET.indent(self.player_data.getroottree(), space="          ", level=0)
+                tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=False)
                 return True
             except PermissionError:
                 time.sleep(0.2)
@@ -1021,6 +1076,14 @@ class TeardownContext(CommonContext):
         if mission_id and mission_id in Mission_upgrade_send_map:
             # 1. Get the list of names for this mission
             location_names = Mission_upgrade_send_map[mission_id]
+
+            self.send_msgs([{
+                "cmd": "Set",
+                "key": f"Teardown-{self.auth}-Missions",
+                "default": 0,
+                "want_reply": True,  # This triggers the 'SetReply' packet we need
+                "operations": [{"operation": "add", "value": 1}]
+            }])
 
             # 2. Find the actual score path (we can assume mission/ID/score for consistency)
             score_node = self.player_data.find(f"mission/{mission_id}/score")
@@ -1055,13 +1118,24 @@ class TeardownContext(CommonContext):
                     if current_val >= threshold:
                         self.send_upgrade_check(location_name)
 
-
     def send_upgrade_check(self, location_name):
-        location_id = self.get_location_id_from_name(location_name)
-        # Only add to the queue if the server hasn't seen it yet
-        if location_id and location_id not in self.checked_locations:
-            if location_id not in self.locations_checked:
+        # 1. Use the built-in Archipelago name-to-ID mapper
+        # This replaces your 'get_location_id_from_name' which was missing
+        location_id = self.location_name_to_id.get(location_name)
+
+        if location_id is not None:
+            # 2. Check if we haven't already sent this location to the server
+            if location_id not in self.checked_locations:
+                # 3. Add to local list to prevent spamming the same check
                 self.locations_checked.append(location_id)
+
+                # 4. SEND THE DATA TO THE SERVER
+                # This is the part that actually gives the player the item!
+                asyncio.create_task(self.send_msgs([{"cmd": "LocationChecks", "checks": [location_id]}]))
+
+                print(f"Success: Sent check for {location_name} (ID: {location_id})")
+        else:
+            print(f"Error: Could not find an ID for location name: {location_name}")
 
 
     def complete_mission(self, mission_id: str):
@@ -1127,8 +1201,8 @@ class TeardownContext(CommonContext):
 
 
 
-    def update_xml_value(self, player_data, xpath, attribute, new_value, is_bool=False):
-        node = player_data.find(xpath)
+    def update_xml_value(self, player_data, xml_path, attribute, new_value, is_bool=False):
+        node = player_data.find(xml_path)
         if node is not None:
             current_val = node.get(attribute)
 
@@ -1144,35 +1218,46 @@ class TeardownContext(CommonContext):
                     return True
         return False
 
+    def on_package(self, cmd: str, args: dict):
+        if cmd == "Connected":
+            self.MissionAmount = args.get("slot_data", {}).get("MissionAmount", 20)
+            self.reset_and_initialize_save()
+            asyncio.create_task(self.send_msgs([{"cmd": "Get", "keys": [f"Teardown-{self.auth}-Missions"]}]))
+            self.last_connected_slot = self.slot
+            self.location_name_to_id = args.get("slot_info", {}).get("location_name_to_id", {})
 
 
+        elif cmd == "Retrieved":
+            count = args.get("keys", {}).get(f"Teardown-{self.auth}-Missions") or 0
+            # 2. Save it to self so the editor stops complaining
+            self.mission_count = count
+
+            # 3. Pass it into the function so it can actually check the math
+            self.handle_victory_unlock(count)
+
+        elif cmd == "SetReply":
+            if args.get("key") == f"Teardown-{self.auth}-Missions":
+                new_count = args.get("value")
+                self.mission_count = new_count
+                self.handle_victory_unlock(new_count)
 
 
-    def on_package(self, cmdname: str, args: dict):
-        if cmdname == "Connected":
-            slot_data = args.get("slot_data", {})
-            # Example: if you have a "goal" option in your apworld
-            self.required_missions = slot_data.get("MissionAmount", 40)
+    def handle_victory_unlock(self, current_count):
+        if self.player_data is None:
+            return
+        goal_required = getattr(self, 'MissionAmount', 20)
 
-            mission_key = f"Teardown_Missions_{self.team}_{self.slot}"
-            self.send_encoded_packet([{
-                "cmd": "SetNotify",
-                "keys": [mission_key]
-            }])
+        if current_count >= goal_required:
+            # 1. Unlock the Finale Message in the XML
+            if self.update_xml_value(self.player_data, "message/cullington_bomb", "value", "1"):
+                print(f"Goal Met: {current_count}/{goal_required}. Cullington Bomb Unlocked!")
 
-        elif cmdname == "Retrieved":
-            mission_key = f"Teardown_Missions_{self.team}_{self.slot}"
-            if mission_key in args["keys"]:
-                # Use 'or 0' as a fallback if the key doesn't exist yet
-                bitmask = args["keys"][mission_key] or 0
-
-                # Count the '1's in the binary string
-                completed_count = bin(bitmask).count("1")
-
-                print(f"Progress Sync: {completed_count}/{self.mission_goal} missions done.")
-
-                if completed_count >= self.mission_goal:
-                    self.handle_victory()
+        # 2. Check if Cullington Bomb is already done (The actual WIN)
+        final_mission = self.player_data.find("mission/cullington_bomb")
+        if final_mission is not None and final_mission.get("value") == "1":
+            if not self.finished_game:
+                asyncio.create_task(self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]))
+                self.finished_game = True
 
 
     def launch_game(self):
@@ -1197,10 +1282,6 @@ class TeardownContext(CommonContext):
             await super(TeardownContext, self).server_auth(password_requested)
         await self.get_username()
         await self.send_connect(game="Teardown")
-
-    def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
-                self.game = self.slot_info[self.slot].game
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.game = ""
