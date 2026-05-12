@@ -1573,7 +1573,7 @@ class Rac3Interface(GameInterface):
         """Calculate the distance from the player to the moby"""
         if not moby:
             return float("inf")
-        assert RAC3STATUS.HIDEOUT_MOBY_TABLE_START < moby < RAC3STATUS.HIDEOUT_MOBY_TABLE_START + 0x00100000, \
+        assert self.ratchet_moby < moby < self.ratchet_moby + 0x00200000, \
             "Moby not in the typical moby range"
         player_pos = self.player_pos
         moby_pos = RAC3POSITIONDATA(
