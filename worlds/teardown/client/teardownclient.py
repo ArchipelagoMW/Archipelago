@@ -58,98 +58,98 @@ Missionindex = {
 }
 
 Missionmap = {
-    "Old Building Problem Unlock": "message/mall_intro",
-    "Lee Computers Unlock": "message/lee_computers",
-    "Login Devices Unlock": "message/lee_login",
-    "Making Space Unlock": "message/marina_demolish",
-    "Classic Cars Unlock": "message/marina_cars",
-    "The GPS Devices Unlock": "message/marina_gps",
-    "The Car Wash Unlock": "message/mansion_pool",
-    "Heavy Lifting Unlock": "message/lee_safe",
-    "The Tower Unlock": "message/lee_tower",
-    "Fine Arts Unlock": "message/mansion_art",
-    "Tool Up Unlock": "message/marina_tools",
-    "Art Return Unlock": "message/marina_art_back",
-    "Covert Chaos Unlock": "message/mall_foodcourt",
-    "Insurance Fraud Unlock": "message/mansion_fraud",
-    "The BlueTide Computers Unlock": "message/caveisland_computers",
-    "The Speed Deal Unlock": "message/mansion_race",
-    "A Wet Affair Unlock": "message/mansion_safe",
-    "Power Outage Unlock": "message/lee_powerplant",
-    "Motivational Reminder Unlock": "message/caveisland_propane",
-    "An Assortment Of Dishes Unlock": "message/caveisland_dishes",
-    "Flooding Unlock": "message/lee_flooding",
-    "The Chase Unlock": "message/frustrum_chase",
-    "Roborazzi Unlock": "message/factory_espionage",
-    "The Secret Ingredients Unlock": "message/caveisland_ingredients",
-    "The BlueTide Shortage Unlock": "message/frustrum_tornado",
-    "The Shipping Logs Unlock": "message/mall_shipping",
-    "The Alarm System Unlock": "message/carib_alarm",
-    "Moving The Goods Unlock": "message/carib_barrels",
-    "Havoc In Paradise Unlock": "message/carib_destroy",
-    "Elena's Revenge Unlock": "message/carib_yacht",
-    "Truckload Of Trouble Unlock": "message/frustrum_vehicle",
-    "Ornament Ordeal Unlock": "message/mall_decorations",
-    "The Quilez Tools Unlock": "message/factory_tools",
-    "Connecting The Dots Unlock": "message/mall_radiolink",
-    "The Pawn Shop Unlock": "message/frustrum_pawnshop",
-    "The Droid Abduction Unlock": "message/factory_robot",
-    "Malice In Woonderland Unlock": "message/lee_woonderland",
-    "Handle With Care Unlock": "message/factory_explosive",
-    "Droid Dismount Unlock": "message/caveisland_roboclear",
-    "The Final Diversion Unlock": "message/cullington_bomb",
+    1: "message/mall_intro",
+    2: "message/lee_computers",
+    3: "message/lee_login",
+    4: "message/marina_demolish",
+    5: "message/marina_cars",
+    6: "message/marina_gps",
+    7: "message/mansion_pool",
+    8: "message/lee_safe",
+    9: "message/lee_tower",
+    10: "message/mansion_art",
+    11: "message/marina_tools",
+    12: "message/marina_art_back",
+    13: "message/mall_foodcourt",
+    14: "message/mansion_fraud",
+    15: "message/caveisland_computers",
+    16: "message/mansion_race",
+    17: "message/mansion_safe",
+    18: "message/lee_powerplant",
+    19: "message/caveisland_propane",
+    20: "message/caveisland_dishes",
+    21: "message/lee_flooding",
+    22: "message/frustrum_chase",
+    23: "message/factory_espionage",
+    24: "message/caveisland_ingredients",
+    25: "message/frustrum_tornado",
+    26: "message/mall_shipping",
+    27: "message/carib_alarm",
+    28: "message/carib_barrels",
+    29: "message/carib_destroy",
+    30: "message/carib_yacht",
+    31: "message/frustrum_vehicle",
+    32: "message/mall_decorations",
+    33: "message/factory_tools",
+    34: "message/mall_radiolink",
+    35: "message/frustrum_pawnshop",
+    36: "message/factory_robot",
+    37: "message/lee_woonderland",
+    38: "message/factory_explosive",
+    39: "message/caveisland_roboclear",
+    40: "message/cullington_bomb",
 }
 
 Toolmap = {
-    "Sledge Hammer Unlock": "tool/sledge/enabled",
-    "Spraycan Unlock": "tool/spraycan/enabled",
-    "Extinguisher Unlock": "tool/extinguisher/enabled",
-    "Blowtorch Unlock": "tool/blowtorch/enabled",
-    "Shotgun Unlock": "tool/shotgun/enabled",
-    "Plank Unlock": "tool/plank/enabled",
-    "Pipe Unlock": "tool/pipebomb/enabled",
-    "Gun Unlock": "tool/gun/enabled",
-    "Bomb Unlock": "tool/bomb/enabled",
-    "Rocket Launcher Unlock": "tool/rocket/enabled",
-    "Rocket Booster Unlock": "tool/booster/enabled",
-    "Leaf Blower Unlock": "tool/leafblower/enabled",
-    "Cable Unlock": "tool/wire/enabled",
-    "Vehicle Thruster Unlock": "tool/turbo/enabled",
-    "Nitroglycerin Unlock": "tool/explosive/enabled",
-    "Hunting Rifle Unlock": "tool/rifle/enabled",
-    "BlueTide Unlock": "tool/steroid/enabled",
+    41: "tool/sledge/enabled",
+    42: "tool/spraycan/enabled",
+    43: "tool/extinguisher/enabled",
+    51: "tool/blowtorch/enabled",
+    52: "tool/shotgun/enabled",
+    53: "tool/plank/enabled",
+    54: "tool/pipebomb/enabled",
+    55: "tool/gun/enabled",
+    56: "tool/bomb/enabled",
+    57: "tool/rocket/enabled",
+    58: "tool/booster/enabled",
+    59: "tool/leafblower/enabled",
+    60: "tool/wire/enabled",
+    61: "tool/turbo/enabled",
+    62: "tool/explosive/enabled",
+    63: "tool/rifle/enabled",
+    64: "tool/steroid/enabled",
 }
 
 Upgrademap = {
-    "Blowtorch Fuel Upgrade": "tool/blowtorch/ammo",
-    "Shotgun Rounds Upgrade": "tool/shotgun/ammo",
-    "Shotgun Range Upgrade": "tool/shotgun/range",
-    "Shotgun Damage Upgrade": "tool/shotgun/damage",
-    "Plank Amount Upgrade": "tool/plank/ammo",
-    "Plank Width Upgrade": "tool/plank/width",
-    "Plank Max Length Upgrade": "tool/plank/length",
-    "Pipe Bomb Rounds Upgrade": "tool/pipebomb/ammo",
-    "Pipe Bomb Blast Upgrade": "tool/pipebomb/damage",
-    "Gun Rounds Upgrade": "tool/gun/ammo",
-    "Gun Range Upgrade": "tool/gun/range",
-    "Gun Damage Upgrade": "tool/gun/damage",
-    "Bomb Rounds Upgrade": "tool/bomb/ammo",
-    "Bomb Blast Upgrade": "tool/bomb/damage",
-    "Rocket Launcher Rounds Upgrade": "tool/rocket/ammo",
-    "Rocket Launcher Blast Upgrade": "tool/rocket/damage",
-    "Rocket Booster Rounds Upgrade": "tool/booster/ammo",
-    "Rocket Booster Power Upgrade": "tool/booster/power",
-    "Rocket Booster Time Upgrade": "tool/booster/time",
-    "Leaf Blower Power Upgrade": "tool/leafblower/power",
-    "Cable Amount Upgrade": "tool/wire/ammo",
-    "Cable Stretch Upgrade": "tool/wire/stretch",
-    "Vehicle Thruster Rounds Upgrade": "tool/turbo/ammo",
-    "Vehicle Thruster Power Upgrade": "tool/turbo/power",
-    "Nitroglycerin Rounds Upgrade": "tool/explosive/ammo",
-    "Nitroglycerin Blast Upgrade": "tool/explosive/damage",
-    "Hunting Rifle Rounds Upgrade": "tool/rifle/ammo",
-    "BlueTide Bottles Upgrade": "tool/steroid/ammo",
-    "BlueTide Duration Upgrade": "tool/steroid/time",
+    71: ["tool/blowtorch/ammo", 10, 20],
+    81: ["tool/shotgun/ammo", 12, 12],
+    82: ["tool/shotgun/range", 20, 20],
+    83: ["tool/shotgun/damage", 1, 3],
+    91: ["tool/plank/ammo", 8, 8],
+    92: ["tool/plank/width", 1, 3],
+    93: ["tool/plank/length", 8, 36],
+    101: ["tool/pipebomb/ammo", 6, 6],
+    102: ["tool/pipebomb/damage", 1, 2],
+    111: ["tool/gun/ammo", 6, 6],
+    112: ["tool/gun/range", 20, 40],
+    113: ["tool/gun/damage", 1, 1],
+    121: ["tool/bomb/ammo", 6, 6],
+    122: ["tool/bomb/damage", 1, 4],
+    131: ["tool/rocket/ammo", 6, 6],
+    132: ["tool/rocket/damage", 1, 3],
+    141: ["tool/booster/ammo", 6, 6],
+    142: ["tool/booster/power", 100, 200],
+    143: ["tool/booster/time", 2, 4],
+    151: ["tool/leafblower/power", 10, 20],
+    161: ["tool/wire/ammo", 6, 6],
+    162: ["tool/wire/stretch", 1, 3],
+    171: ["tool/turbo/ammo", 6, 6],
+    172: ["tool/turbo/power", 100, 200],
+    181: ["tool/explosive/ammo", 4, 4],
+    182: ["tool/explosive/damage", 1, 5],
+    191: ["tool/rifle/ammo", 6, 6],
+    201: ["tool/steroid/ammo", 1, 2],
+    202: ["tool/steroid/time", 1, 4],
 
 }
 
@@ -883,7 +883,7 @@ class TeardownContext(CommonContext):
     last_connected_slot: int | None = None
     stored_data: dict[str, typing.Any]
     stored_data_notification_keys: set[str]
-
+    items_received: int = 0
 
 
 
@@ -899,6 +899,7 @@ class TeardownContext(CommonContext):
         self.mission_count = 0
         self.finished_game = False
         self.location_name_to_id = ""
+        self.items_received_event = asyncio.Event()
 
 
     def loadsettings(self):
@@ -943,7 +944,13 @@ class TeardownContext(CommonContext):
             json.dump(data, f, indent=4)
 
 
-    def reset_and_initialize_save(self):
+    async def reset_and_initialize_save(self):
+
+        print("DEBUG: Waiting for items to be received from server...")
+        while not self.items_received:
+            await asyncio.sleep(0.5)
+        await asyncio.sleep(1.0)
+
         if not self.savegame_path or not os.path.exists(self.savegame_path):
             return
 
@@ -995,19 +1002,20 @@ class TeardownContext(CommonContext):
                         if i == len(parts) - 1:
                             full_path = f"{category} -> {' -> '.join(parts)}"
 
-
-
                             print(f"DEBUG: Setting [{full_path}] to value: {val}")
                             child.set("value", str(val))  # Ensure val is a string
 
-
-
-                            child.set("value", val)
                         current = child
             last_node = self.player_data.find("lastcompleted")
             if last_node is None:
                 last_node = ET.SubElement(self.player_data, "lastcompleted")
             last_node.set("value", "")
+
+            for message_node in self.player_data.findall("message"):
+                self.player_data.remove(message_node)
+                print(f"DEBUG: Pruned message node: {message_node.tag}")
+
+            self.apply_server_state_to_xml(self.player_data)
 
             for i in range(5):  # Try 5 times
                 try:
@@ -1023,25 +1031,43 @@ class TeardownContext(CommonContext):
             print(f"Failed to initialize player_data: {e}")
             traceback.print_exc()
 
-
     def apply_server_state_to_xml(self, player_data):
-        """Sets game state based on locations already checked on the server."""
-        # Example: Syncing Tool Upgrades from checked locations
-        # Mapping of Threshold -> Archipelago Location ID
-        blowtorch_map = {30: 1001, 40: 1002, 50: 1003, 60: 1004}
+        received_counts = {}
+        print(f"DEBUG: Total items in self.items_received: {len(self.items_received)}")
 
-        highest_val = 20
-        for threshold, loc_id in blowtorch_map.items():
-            if loc_id in self.checked_locations:
-                highest_val = threshold
+        for item in self.items_received:
+            item_id = item.item  # This is the raw integer ID (e.g., 41, 42)
+            received_counts[item_id] = received_counts.get(item_id, 0) + 1
+            print(f"DEBUG: Counted Item ID {item_id}")
 
-        node = player_data.find("toolupgrade/blowtorch/ammo")
-        if node is not None:
-            node.set("value", str(highest_val))
+        def update_node(path, value):
+            node = player_data.find(path)
+            if node is None:
+                # Creation logic
+                curr = player_data
+                for part in path.split('/'):
+                    child = curr.find(part)
+                    if child is None: child = ET.SubElement(curr, part)
+                    curr = child
+                node = curr
+            node.set("value", str(value))
+            print(f"DEBUG: XML Update - {path} set to {value}")
 
-        # Example: Syncing Missions from DataStorage (Image 4 logic)
-        # This logic already exists in your on_package[Retrieved],
-        # but you can trigger a 'Get' request here to ensure it's current.
+        # 1. Sync Tools & Missions
+        for mapping in [Toolmap, Missionmap]:
+            for ap_id, xml_path in mapping.items():
+                count = received_counts.get(ap_id, 0)
+                if count > 0:
+                    update_node(xml_path, "1")
+
+        for ap_id, config in Upgrademap.items():
+            count = received_counts.get(ap_id, 0)
+            path, mult, base = config
+            final_val = (count * mult) + base
+            update_node(path, final_val)
+
+            print(f"DEBUG: {ap_id} -> {path} is now {final_val} (Base {base} + {count} items)")
+            update_node(path, final_val)
 
 
     def sync_savegame(self):
@@ -1218,28 +1244,7 @@ class TeardownContext(CommonContext):
                     return True
         return False
 
-    def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
-            self.MissionAmount = args.get("slot_data", {}).get("MissionAmount", 20)
-            self.reset_and_initialize_save()
-            asyncio.create_task(self.send_msgs([{"cmd": "Get", "keys": [f"Teardown-{self.auth}-Missions"]}]))
-            self.last_connected_slot = self.slot
-            self.location_name_to_id = args.get("slot_info", {}).get("location_name_to_id", {})
 
-
-        elif cmd == "Retrieved":
-            count = args.get("keys", {}).get(f"Teardown-{self.auth}-Missions") or 0
-            # 2. Save it to self so the editor stops complaining
-            self.mission_count = count
-
-            # 3. Pass it into the function so it can actually check the math
-            self.handle_victory_unlock(count)
-
-        elif cmd == "SetReply":
-            if args.get("key") == f"Teardown-{self.auth}-Missions":
-                new_count = args.get("value")
-                self.mission_count = new_count
-                self.handle_victory_unlock(new_count)
 
 
     def handle_victory_unlock(self, current_count):
@@ -1262,19 +1267,32 @@ class TeardownContext(CommonContext):
 
     def launch_game(self):
         if self.game_exe_path and os.path.exists(self.game_exe_path):
-            # shell=False is safer; it starts the game as a child process
             subprocess.Popen([self.game_exe_path])
         else:
             print("Cannot launch: Valid executable path not found.")
 
 
-    # lvl unlock sets messages from 0 to 1, 2 means completed, doesn't matter
-    # check data storage to set mission value, and sent locations to set score value IF mission is completed
-    # tool unlock sets enabled value to 1 from 0
-    # tool upgrade sets it's specific tool to x*number of upgrades
-    # delete the lastcompleted value upon connection and use it to incease data storage number
-    # save cash value in data storage
 
+
+    def on_package(self, cmd: str, args: dict):
+        if cmd == "Connected":
+            self.MissionAmount = args.get("slot_data", {}).get("MissionAmount", 20)
+            asyncio.create_task(self.send_msgs([{"cmd": "Get", "keys": [f"Teardown-{self.auth}-Missions"]}]))
+            self.location_name_to_id = args.get("slot_info", {}).get("location_name_to_id", {})
+            self.last_connected_slot = self.slot
+            asyncio.create_task(self.reset_and_initialize_save())
+
+
+        elif cmd == "Retrieved":
+            count = args.get("keys", {}).get(f"Teardown-{self.auth}-Missions") or 0
+            self.mission_count = count
+            self.handle_victory_unlock(count)
+
+        elif cmd == "SetReply":
+            if args.get("key") == f"Teardown-{self.auth}-Missions":
+                new_count = args.get("value")
+                self.mission_count = new_count
+                self.handle_victory_unlock(new_count)
 
 
     async def server_auth(self, password_requested: bool = False):

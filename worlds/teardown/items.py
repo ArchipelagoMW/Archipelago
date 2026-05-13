@@ -33,7 +33,7 @@ ITEM_NAME_TO_ID = {
     "The Chase Unlock": 22,
     "Roborazzi Unlock": 23,
     "The Secret Ingredients Unlock": 24,
-    "The BlueTide Shortage Unlock": 5,
+    "The BlueTide Shortage Unlock": 25,
     "The Shipping Logs Unlock": 26,
     "The Alarm System Unlock": 27,
     "Moving The Goods Unlock": 28,
