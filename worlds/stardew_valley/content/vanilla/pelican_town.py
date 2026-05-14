@@ -242,7 +242,7 @@ pelican_town = ContentPack(
 
         Seed.broccoli: (ShopSource(items_price=((5, Material.moss),), shop_region=LogicRegion.raccoon_shop_1),),
         Seed.carrot: (ShopSource(items_price=((1, TreeSeed.maple),), shop_region=LogicRegion.raccoon_shop_1),),
-        Seed.powdermelon: (ShopSource(items_price=((2, TreeSeed.acorn),), shop_region=LogicRegion.raccoon_shop_1),),
+        Seed.powdermelon: (ShopSource(items_price=((2, TreeSeed.pine),), shop_region=LogicRegion.raccoon_shop_1),),
         Seed.summer_squash: (ShopSource(items_price=((15, Material.sap),), shop_region=LogicRegion.raccoon_shop_1),),
 
         Seed.strawberry: (ShopSource(price=100, shop_region=LogicRegion.egg_festival, seasons=(Season.spring,)),),
