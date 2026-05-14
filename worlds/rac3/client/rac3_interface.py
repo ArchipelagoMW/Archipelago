@@ -631,7 +631,7 @@ class Rac3Interface(GameInterface):
 
         if self.options.ngplus_items:
             omega_items_to_sell: list[str] = []
-            v5_weapons = {name for name in non_prog_weapon_data if self.weapon_level_from_xp(name) == 5}
+            v5_weapons = {weapon_name for weapon_name in self.weapon_levels if self.weapon_levels[weapon_name] == 5}
             already_omega = {weapon_name for weapon_name in self.weapon_levels if self.weapon_levels[weapon_name] > 5}
             for weapon in v5_weapons:
                 if weapon == RAC3ITEM.RY3N0:
