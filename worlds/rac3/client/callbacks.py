@@ -472,8 +472,8 @@ async def handle_save(ctx: "Context") -> None:
         return
     if ctx.data_received:
         local_save = ctx.game_interface.update_save()
-        logger.debug(f"local_save : {local_save}")
-        logger.debug(f"server_save: {ctx.save_data}")
+        #logger.debug(f"local_save : {local_save}")
+        #logger.debug(f"server_save: {ctx.save_data}")
         if not (local_save == ctx.save_data):
             logger.debug("Sending new save data to server")
             ctx.data_received = False
