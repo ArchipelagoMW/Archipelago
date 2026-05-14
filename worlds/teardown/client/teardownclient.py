@@ -156,439 +156,194 @@ Upgrademap = {
 
 
 Mission_upgrade_send_map = {
-    "mall_intro": [
-        "Old Building Problem",
-    ],
-    "lee_computers": [
-        "Lee Computers Required 1",
-        "Lee Computers Required 2",
-        "Lee Computers Required 3"
-    ],
-    "lee_login": [
-        "Login Devices Required 1",
-        "Login Devices Required 2",
-        "Login Devices Required 3"
-    ],
-    "marina_demolish": [
-        "Making Space Required 1",
-        "Making Space Required 2",
-        "Making Space Optional 3",
-    ],
-    "marina_cars": [
-        "Classic Cars Required 1",
-        "Classic Cars Required 2",
-        "Classic Cars Optional 1",
-        "Classic Cars Optional 2",
-    ],
-    "mansion_pool": [
-        "The GPS Devices Required 1",
-        "The GPS Devices Required 2",
-        "The GPS Devices Required 3",
-        "The GPS Devices Optional 1",
-        "The GPS Devices Optional 2",
-    ],
-    "lee_safe": [
-        "The Car Wash Required 1",
-        "The Car Wash Required 2",
-        "The Car Wash Required 3",
-        "The Car Wash Optional 1",
-        "The Car Wash Optional 2",
-        "The Car Wash Optional 3",
-    ],
-    "marina_gps": [
-        "Heavy Lifting Required 1",
-        "Heavy Lifting Optional 1",
-        "Heavy Lifting Optional 2",
-        "Heavy Lifting Optional 3",
-        "Heavy Lifting Optional 4",
-    ],
-    "lee_tower": [
-        "The Tower",
-    ],
-    "mansion_art": [
-        "Fine Arts Required 1",
-        "Fine Arts Required 2",
-        "Fine Arts Required 3",
-        "Fine Arts Required 4",
-        "Fine Arts Optional 1",
-        "Fine Arts Optional 2",
-    ],
-    "marina_tools": [
-        "Tool Up Required 1",
-        "Tool Up Required 2",
-        "Tool Up Required 3",
-        "Tool Up Required 4",
-        "Tool Up Optional 1",
-        "Tool Up Optional 2",
-    ],
-    "marina_art_back": [
-        "Art Return Required 1",
-        "Art Return Required 2",
-        "Art Return Required 3",
-        "Art Return Required 4",
-    ],
-    "mall_foodcourt": [
-        "Covert Chaos Required 1",
-        "Covert Chaos Optional 1",
-        "Covert Chaos Optional 2",
-    ],
-    "mansion_fraud": [
-        "Insurance Fraud Required 1",
-        "Insurance Fraud Required 2",
-        "Insurance Fraud Required 3",
-        "Insurance Fraud Optional 1",
-        "Insurance Fraud Optional 2",
-        "Insurance Fraud Optional 3",
-    ],
-    "caveisland_computers": [
-        "The BlueTide Computers Required 1",
-        "The BlueTide Computers Required 2",
-        "The BlueTide Computers Required 3",
-        "The BlueTide Computers Required 4",
-        "The BlueTide Computers Optional 1",
-        "The BlueTide Computers Optional 2",
-        "The BlueTide Computers Optional 3",
-    ],
-    "mansion_race": [
-        "The Speed Deal Required 1",
-        "The Speed Deal Optional 1",
-        "The Speed Deal Optional 2",
-    ],
-    "mansion_safe": [
-        "A Wet Affair Required 1",
-        "A Wet Affair Required 2",
-        "A Wet Affair Required 3",
-        "A Wet Affair Optional 1",
-        "A Wet Affair Optional 2",
-        "A Wet Affair Optional 3",
-    ],
-    "lee_powerplant": [
-        "Power Outage Required 1",
-        "Power Outage Required 2",
-        "Power Outage Required 3",
-        "Power Outage Required 4",
-        "Power Outage Optional 1",
-        "Power Outage Optional 2",
-        "Power Outage Optional 3",
-        "Power Outage Optional 4",
-    ],
-    "caveisland_propane": [
-        "Motivational Reminder Required 1",
-        "Motivational Reminder Required 2",
-        "Motivational Reminder Required 3",
-        "Motivational Reminder Required 4",
-        "Motivational Reminder Required 5",
-        "Motivational Reminder Optional 1",
-        "Motivational Reminder Optional 2",
-        "Motivational Reminder Optional 3",
-    ],
-    "caveisland_dishes": [
-        "An Assortment Of Dishes Required 1",
-        "An Assortment Of Dishes Required 2",
-        "An Assortment Of Dishes Required 3",
-        "An Assortment Of Dishes Required 4",
-        "An Assortment Of Dishes Required 5",
-        "An Assortment Of Dishes Optional 1",
-        "An Assortment Of Dishes Optional 2",
-        "An Assortment Of Dishes Optional 3",
-        "An Assortment Of Dishes Optional 4",
-
-    ],
-    "lee_flooding": [
-        "Flooding Required 1",
-        "Flooding Required 2",
-        "Flooding Required 3",
-        "Flooding Required 4",
-        "Flooding Required 5",
-        "Flooding Optional 1",
-        "Flooding Optional 2",
-        "Flooding Optional 3",
-    ],
-    "frustrum_chase": [
-        "The Chase",
-    ],
-    "factory_espionage": [
-        "Roborazzi Required 1",
-        "Roborazzi Required 2",
-        "Roborazzi Required 3",
-        "Roborazzi Required 4",
-        "Roborazzi Required 5",
-    ],
-    "caveisland_ingredients": [
-        "The Secret Ingredients Required 1",
-        "The Secret Ingredients Required 2",
-        "The Secret Ingredients Required 3",
-        "The Secret Ingredients Required 4",
-        "The Secret Ingredients Optional 1",
-        "The Secret Ingredients Optional 2",
-    ],
-    "frustrum_tornado": [
-        "The BlueTide Shortage Required 1",
-        "The BlueTide Shortage Required 2",
-        "The BlueTide Shortage Required 3",
-        "The BlueTide Shortage Optional 1",
-        "The BlueTide Shortage Optional 2",
-        "The BlueTide Shortage Optional 3",
-    ],
-    "mall_shipping": [
-        "The Shipping Logs Required 1",
-        "The Shipping Logs Required 2",
-        "The Shipping Logs Required 3",
-        "The Shipping Logs Required 4",
-        "The Shipping Logs Required 5",
-        "The Shipping Logs Optional 1",
-        "The Shipping Logs Optional 2",
-        "The Shipping Logs Optional 3",
-    ],
-    "carib_alarm": [
-        "The Alarm System Required 1",
-        "The Alarm System Required 2",
-        "The Alarm System Required 3",
-        "The Alarm System Required 4",
-        "The Alarm System Optional 1",
-        "The Alarm System Optional 2",
-    ],
-    "carib_barrels": [
-        "Moving The Goods Required 1",
-        "Moving The Goods Required 2",
-        "Moving The Goods Required 3",
-        "Moving The Goods Optional 1",
-        "Moving The Goods Optional 2",
-    ],
-    "carib_destroy": [
-        "Havoc In Paradise Required 1",
-        "Havoc In Paradise Required 2",
-        "Havoc In Paradise Required 3",
-        "Havoc In Paradise Required 4",
-        "Havoc In Paradise Optional 1",
-        "Havoc In Paradise Optional 2",
-        "Havoc In Paradise Optional 3",
-    ],
-    "carib_yacht": [
-        "Elena's Revenge",
-    ],
-    "frustrum_vehicle": [
-        "Truckload Of Trouble Required 1",
-        "Truckload Of Trouble Required 2",
-        "Truckload Of Trouble Optional 1",
-    ],
-    "mall_decorations": [
-        "Ornament Ordeal Required 1",
-        "Ornament Ordeal Required 2",
-        "Ornament Ordeal Required 3",
-        "Ornament Ordeal Required 4",
-        "Ornament Ordeal Optional 1",
-        "Ornament Ordeal Optional 2",
-    ],
-    "factory_tools": [
-        "The Quilez Tools Required 1",
-        "The Quilez Tools Required 2",
-        "The Quilez Tools Required 3",
-        "The Quilez Tools Required 4",
-        "The Quilez Tools Optional 1",
-        "The Quilez Tools Optional 2",
-    ],
-    "mall_radiolink": [
-        "Connecting The Dots Required 1",
-        "Connecting The Dots Required 2",
-        "Connecting The Dots Required 3",
-        "Connecting The Dots Optional 1",
-        "Connecting The Dots Optional 2",
-    ],
-    "frustrum_pawnshop": [
-        "The Pawn Shop Required 1",
-        "The Pawn Shop Required 2",
-        "The Pawn Shop Required 3",
-        "The Pawn Shop Required 4",
-        "The Pawn Shop Required 5",
-        "The Pawn Shop Optional 1",
-        "The Pawn Shop Optional 2",
-    ],
-    "factory_robot": [
-        "The Droid Abduction Required 1",
-        "The Droid Abduction Optional 1",
-        "The Droid Abduction Optional 2",
-        "The Droid Abduction Optional 3",
-    ],
-    "lee_woonderland": [
-        "Malice In Woonderland Required 1",
-        "Malice In Woonderland Required 2",
-        "Malice In Woonderland Required 3",
-        "Malice In Woonderland Required 4",
-        "Malice In Woonderland Required 5",
-        "Malice In Woonderland Optional 1",
-        "Malice In Woonderland Optional 2",
-        "Malice In Woonderland Optional 3",
-    ],
-    "factory_explosive": [
-        "Handle With Care Required 1",
-        "Handle With Care Required 2",
-        "Handle With Care Required 3",
-        "Handle With Care Optional 1",
-        "Handle With Care Optional 2",
-        "Handle With Care Optional 3",
-        "Handle With Care Optional 4",
-    ],
-    "caveisland_roboclear": [
-        "Droid Dismount Required 1",
-        "Droid Dismount Required 2",
-        "Droid Dismount Required 3",
-        "Droid Dismount Required 4",
-        "Droid Dismount Required 5",
-        "Droid Dismount Optional 1",
-        "Droid Dismount Optional 2",
-    ],
-    "cullington_bomb": [
-        "The Final Diversion",
-    ],
+    "mall_intro": 1,
+    "lee_computers": 11,
+    "lee_login": 21,
+    "marina_demolish": 31,
+    "marina_cars": 41,
+    "mansion_pool": 61,
+    "lee_safe": 71,
+    "marina_gps": 51,
+    "lee_tower": 81,
+    "mansion_art": 91,
+    "marina_tools": 101,
+    "marina_art_back": 111,
+    "mall_foodcourt": 121,
+    "mansion_fraud": 131,
+    "caveisland_computers": 141,
+    "mansion_race": 151,
+    "mansion_safe": 161,
+    "lee_powerplant": 171,
+    "caveisland_propane": 181,
+    "caveisland_dishes": 191,
+    "lee_flooding": 201,
+    "frustrum_chase": 211,
+    "factory_espionage": 221,
+    "caveisland_ingredients": 231,
+    "frustrum_tornado": 241,
+    "mall_shipping": 251,
+    "carib_alarm": 261,
+    "carib_barrels": 271,
+    "carib_destroy": 281,
+    "carib_yacht": 291,
+    "frustrum_vehicle": 301,
+    "mall_decorations": 311,
+    "factory_tools": 321,
+    "mall_radiolink": 331,
+    "frustrum_pawnshop": 341,
+    "factory_robot": 351,
+    "lee_woonderland": 361,
+    "factory_explosive": 371,
+    "caveisland_roboclear": 381,
+    "cullington_bomb": 393,
 }
 
 Tool_upgrade_send_map = {
     "toolupgrade/blowtorch/ammo": {
-        30: "Blowtorch Fuel Upgrade 1",
-        40: "Blowtorch Fuel Upgrade 2",
-        50: "Blowtorch Fuel Upgrade 3",
-        60: "Blowtorch Fuel Upgrade 4",
+        30: 501,
+        40: 502,
+        50: 503,
+        60: 504,
     },
     "toolupgrade/shotgun/ammo": {
-        24: "Shotgun Rounds Upgrade 1",
-        36: "Shotgun Rounds Upgrade 2",
-        48: "Shotgun Rounds Upgrade 3",
-        60: "Shotgun Rounds Upgrade 4",
-        72: "Shotgun Rounds Upgrade 5",
-        84: "Shotgun Rounds Upgrade 6",
-        96: "Shotgun Rounds Upgrade 7",
+        24: 511,
+        36: 512,
+        48: 513,
+        60: 514,
+        72: 515,
+        84: 516,
+        96: 517,
     },
     "toolupgrade/shotgun/range": {
-        40: "Shotgun Damage Upgrade 1",
-        60: "Shotgun Damage Upgrade 1",
+        40: 521,
+        60: 521,
     },
     "toolupgrade/shotgun/damage": {
-        4: "Shotgun Rounds Upgrade 1",
-        5: "Shotgun Rounds Upgrade 2",
+        4: 531,
+        5: 532,
     },
     "toolupgrade/plank/ammo": {
-        16: "Plank Amount Upgrade 1",
-        24: "Plank Amount Upgrade 2",
-        32: "Plank Amount Upgrade 3",
-        40: "Plank Amount Upgrade 4",
-        48: "Plank Amount Upgrade 5",
-        56: "Plank Amount Upgrade 6",
-        64: "Plank Amount Upgrade 7",
+        16: 541,
+        24: 542,
+        32: 543,
+        40: 544,
+        48: 545,
+        56: 546,
+        64: 547,
     },
     "toolupgrade/plank/width": {
-        4: "Plank Width Upgrade 1",
-        5: "Plank Width Upgrade 2",
+        4: 551,
+        5: 552,
     },
     "toolupgrade/plank/length": {
-        48: "Plank Max Length Upgrade 1",
-        56: "Plank Max Length Upgrade 2",
-        64: "Plank Max Length Upgrade 3",
+        48: 561,
+        56: 562,
+        64: 563,
     },
     "toolupgrade/pipebomb/ammo": {
-        12: "Pipe Bomb Rounds Upgrade 1",
-        18: "Pipe Bomb Rounds Upgrade 2",
-        25: "Pipe Bomb Rounds Upgrade 3",
-        30: "Pipe Bomb Rounds Upgrade 4",
-        36: "Pipe Bomb Rounds Upgrade 5",
+        12: 571,
+        18: 572,
+        25: 573,
+        30: 574,
+        36: 575,
     },
     "toolupgrade/pipebomb/damage": {
-        3: "Pipe Bomb Blast Upgrade 1",
-        4: "Pipe Bomb Blast Upgrade 2",
+        3: 581,
+        4: 582,
     },
     "toolupgrade/gun/ammo": {
-        12: "Gun Rounds Upgrade 1",
-        18: "Gun Rounds Upgrade 2",
-        24: "Gun Rounds Upgrade 3",
-        30: "Gun Rounds Upgrade 4",
-        36: "Gun Rounds Upgrade 5",
+        12: 591,
+        18: 592,
+        24: 593,
+        30: 594,
+        36: 595,
     },
     "toolupgrade/gun/range": {
-        60: "Gun Range Upgrade 1",
-        80: "Gun Range Upgrade 2",
-        100: "Gun Range Upgrade 3",
+        60: 601,
+        80: 602,
+        100: 603,
     },
     "toolupgrade/gun/damage": {
-        2: "Gun Damage Upgrade 1",
-        3: "Gun Damage Upgrade 2",
+        2: 611,
+        3: 612,
     },
     "toolupgrade/bomb/ammo": {
-        12: "Bomb Rounds Upgrade 1",
-        18: "Bomb Rounds Upgrade 2",
-        24: "Bomb Rounds Upgrade 3",
-        30: "Bomb Rounds Upgrade 4",
-        36: "Bomb Rounds Upgrade 5",
+        12: 621,
+        18: 622,
+        24: 623,
+        30: 624,
+        36: 625,
     },
     "toolupgrade/bomb/damage": {
-        5: "Bomb Blast Upgrade 1",
-        6: "Bomb Blast Upgrade 2",
+        5: 631,
+        6: 632,
     },
     "toolupgrade/rocket/ammo": {
-        12: "Rocket Launcher Rounds Upgrade 1",
-        18: "Rocket Launcher Rounds Upgrade 2",
-        24: "Rocket Launcher Rounds Upgrade 3",
+        12: 641,
+        18: 642,
+        24: 643,
     },
     "toolupgrade/rocket/damage": {
-        4: "Rocket Launcher Blast Upgrade 1",
-        5: "Rocket Launcher Blast Upgrade 2",
+        4: 651,
+        5: 652,
     },
     "toolupgrade/booster/ammo": {
-        12: "Rocket Booster Rounds Upgrade 1",
-        18: "Rocket Booster Rounds Upgrade 2",
-        24: "Rocket Booster Rounds Upgrade 3",
+        12: 661,
+        18: 662,
+        24: 663,
     },
     "toolupgrade/booster/power": {
-        300: "Rocket Booster Power Upgrade 1",
-        400: "Rocket Booster Power Upgrade 2",
+        300: 671,
+        400: 672,
     },
     "toolupgrade/booster/time": {
-        6: "Rocket Booster Time Upgrade 1",
-        8: "Rocket Booster Time Upgrade 2",
+        6: 681,
+        8: 682,
     },
     "toolupgrade/leafblower/power": {
-        30: "Leaf Blower Power Upgrade 1",
-        40: "Leaf Blower Power Upgrade 2",
-        50: "Leaf Blower Power Upgrade 3",
+        30: 691,
+        40: 692,
+        50: 693,
     },
     "toolupgrade/wire/ammo": {
-        12: "Cable Amount Upgrade 1",
-        18: "Cable Amount Upgrade 2",
-        24: "Cable Amount Upgrade 3",
+        12: 701,
+        18: 702,
+        24: 703,
     },
     "toolupgrade/wire/stretch": {
-        4: "Cable Stretch Upgrade 1",
-        5: "Cable Stretch Upgrade 2",
+        4: 711,
+        5: 712,
     },
     "toolupgrade/turbo/ammo": {
-        12: "Vehicle Thruster Rounds Upgrade 1",
-        18: "Vehicle Thruster Rounds Upgrade 2",
-        36: "Vehicle Thruster Rounds Upgrade 3",
+        12: 721,
+        18: 722,
+        36: 723,
     },
     "toolupgrade/turbo/power": {
-        300: "Vehicle Thruster Power Upgrade 1",
-        400: "Vehicle Thruster Power Upgrade 2",
+        300: 731,
+        400: 732,
     },
     "toolupgrade/explosive/ammo": {
-        8: "Nitroglycerin Rounds Upgrade 1",
-        12: "Nitroglycerin Rounds Upgrade 2",
-        16: "Nitroglycerin Rounds Upgrade 3",
+        8: 741,
+        12: 742,
+        16: 743,
     },
     "toolupgrade/explosive/damage": {
-        6: "Nitroglycerin Blast Upgrade 1",
-        7: "Nitroglycerin Blast Upgrade 2",
-        8: "Nitroglycerin Blast Upgrade 3",
+        6: 751,
+        7: 752,
+        8: 753,
     },
     "toolupgrade/rifle/ammo": {
-        12: "Hunting Rifle Rounds Upgrade 1",
-        18: "Hunting Rifle Rounds Upgrade 2",
+        12: 761,
+        18: 762,
     },
     "toolupgrade/steroid/ammo": {
-        3: "BlueTide Bottles Upgrade 1",
-        4: "BlueTide Bottles Upgrade 2",
+        3: 771,
+        4: 772,
     },
     "toolupgrade/steroid/time": {
-        5: "BlueTide Duration Upgrade 1",
-        6: "BlueTide Duration Upgrade 2",
+        5: 781,
+        6: 782,
     },
 
 }
@@ -890,6 +645,8 @@ class TeardownContext(CommonContext):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.last_known_item_count = None
+        self.last_mtime = None
         self.game_exe_path = ""
         self.savegame_path = ""
         self.player_data = None
@@ -900,6 +657,8 @@ class TeardownContext(CommonContext):
         self.finished_game = False
         self.location_name_to_id = ""
         self.items_received_event = asyncio.Event()
+        self.auth_event = asyncio.Event()
+        self.locations_checked = []
 
 
     def loadsettings(self):
@@ -946,10 +705,10 @@ class TeardownContext(CommonContext):
 
     async def reset_and_initialize_save(self):
 
-        print("DEBUG: Waiting for items to be received from server...")
+        print("Initializing: Waiting for items to be received from server")
         while not self.items_received:
             await asyncio.sleep(0.5)
-        await asyncio.sleep(1.0)
+        await asyncio.sleep(0.5)
 
         if not self.savegame_path or not os.path.exists(self.savegame_path):
             return
@@ -965,14 +724,8 @@ class TeardownContext(CommonContext):
             tree = ET.parse(self.savegame_path)
             root = tree.getroot()
 
-            # Find or Create the player_data node
             self.player_data = root.find("savegame/mod/steam-3708322400")
-
-
-            print(f"DEBUG: player_data found: {self.player_data is not None}")
-            if self.player_data is not None:
-                print(f"DEBUG: player_data tag: {self.player_data.tag}")
-
+            print(f"Initializing: player_data found: {self.player_data is not None}")
 
             if self.player_data is None:
                 mod_node = root.find("mod")
@@ -980,13 +733,13 @@ class TeardownContext(CommonContext):
                     mod_node = ET.SubElement(root, "mod")
                 self.player_data = ET.SubElement(mod_node, "steam-3708322400")
 
-            # Now use self.player_data to build/reset the structure
+
             for category, nodes in SAVE_TEMPLATE.items():
 
-                print(f"DEBUG: Processing Category: {category}")
+                print(f"Initializing: Processing Category: {category}")
                 cat_node = self.player_data.find(category)
                 if cat_node is None:
-                    print(f"DEBUG: Category '{category}' not found, creating new SubElement.")
+                    print(f"Initializing: Category '{category}' not found, creating new SubElement.")
 
                 cat_node = self.player_data.find(category)
                 if cat_node is None:
@@ -1002,8 +755,8 @@ class TeardownContext(CommonContext):
                         if i == len(parts) - 1:
                             full_path = f"{category} -> {' -> '.join(parts)}"
 
-                            print(f"DEBUG: Setting [{full_path}] to value: {val}")
-                            child.set("value", str(val))  # Ensure val is a string
+                            print(f"Initializing:  [{full_path}] to value: {val}")
+                            child.set("value", str(val))
 
                         current = child
             last_node = self.player_data.find("lastcompleted")
@@ -1013,18 +766,27 @@ class TeardownContext(CommonContext):
 
             for message_node in self.player_data.findall("message"):
                 self.player_data.remove(message_node)
-                print(f"DEBUG: Pruned message node: {message_node.tag}")
+                print(f"Initializing: Pruned message node: {message_node.tag}")
 
             self.apply_server_state_to_xml(self.player_data)
 
             for i in range(5):  # Try 5 times
                 try:
+                    print(f"Initializing: Attempting initialization write {i + 1}/5")
                     ET.indent(tree, space="          ", level=0)
                     tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=False)
-                    return True
-                except PermissionError:
-                    time.sleep(0.2)
+
                     print("Teardown Save: Player Data initialized and globally set.")
+                    return True
+
+                except PermissionError:
+                    print("Initializing: File locked during init, retrying")
+                    await asyncio.sleep(0.2)
+                except Exception as e:
+                    print(f"Failed to initialize player_data: {e}")
+                    traceback.print_exc()
+                    break
+
             return False
 
         except Exception as e:
@@ -1033,12 +795,12 @@ class TeardownContext(CommonContext):
 
     def apply_server_state_to_xml(self, player_data):
         received_counts = {}
-        print(f"DEBUG: Total items in self.items_received: {len(self.items_received)}")
+        print(f"First Apply: Total items in self.items_received: {len(self.items_received)}")
 
         for item in self.items_received:
             item_id = item.item  # This is the raw integer ID (e.g., 41, 42)
             received_counts[item_id] = received_counts.get(item_id, 0) + 1
-            print(f"DEBUG: Counted Item ID {item_id}")
+            print(f"First Apply: Counted Item ID {item_id}")
 
         def update_node(path, value):
             node = player_data.find(path)
@@ -1051,7 +813,7 @@ class TeardownContext(CommonContext):
                     curr = child
                 node = curr
             node.set("value", str(value))
-            print(f"DEBUG: XML Update - {path} set to {value}")
+            print(f"First Apply: Initial XML Setting - {path} set to {value}")
 
         # 1. Sync Tools & Missions
         for mapping in [Toolmap, Missionmap]:
@@ -1066,164 +828,193 @@ class TeardownContext(CommonContext):
             final_val = (count * mult) + base
             update_node(path, final_val)
 
-            print(f"DEBUG: {ap_id} -> {path} is now {final_val} (Base {base} + {count} items)")
+            print(f"First Apply: Initial Setting {ap_id} -> {path} is now {final_val} (Base {base} + {count} items)")
             update_node(path, final_val)
 
 
-    def sync_savegame(self):
-        if not self.savegame_path:
+    async def sync_savegame(self):
+        if not self.savegame_path or not os.path.exists(self.savegame_path):
+            return False
+
+        print(f"Sync: Starting Sync")
+
+        try:
+            tree = ET.parse(self.savegame_path)
+            root = tree.getroot()
+            self.player_data = root.find("savegame/mod/steam-3708322400")
+            original_xml_string = ET.tostring(root, encoding="unicode")
+            print("Sync: Parse successful.")
+
+        except Exception as e:
+            print(f"Sync: Parse FAILED with error: {e}")
             return
 
-        # We still need to parse the tree to save it, but we use our stored node
-        tree = ET.parse(self.savegame_path)
 
+        self.check_missions()
         self.check_tools()
-        self.apply_received_items()
+        self.apply_received_items(self.player_data)
+        print("Sync: Functions ran.")
 
-        for i in range(5):  # Try 5 times
+        new_xml_string = ET.tostring(root, encoding="unicode")
+
+        if original_xml_string == new_xml_string:
+            print("Sync: No changes in XML, skipping save.")
+            return True
+
+        print("Sync: XML Differences, Now Saving.")
+        for i in range(5):
             try:
-                ET.indent(self.player_data.getroottree(), space="          ", level=0)
+                print(f"Sync: Save started, attempt {i + 1}")
+                ET.indent(tree, space="          ", level=0)
                 tree.write(self.savegame_path, encoding="UTF-8", xml_declaration=False)
-                return True
+                return True  # Exit function and return to loop
             except PermissionError:
-                time.sleep(0.2)
+                print("Sync: File locked, waiting...")
+                await asyncio.sleep(0.2)
+            except Exception as e:
+                print(f"Sync: Critical Write Error: {e}")
+                return False
+
         return False
 
+
     def check_missions(self):
+        print("Sync Mission: Entering check_missions")
         if self.player_data is None:
+            print("Sync Mission: Player Data is None")
             return
 
         last_node = self.player_data.find("lastcompleted")
         if last_node is None:
+            print("Sync Mission: Ending check_missions, node 'lastcompleted' not found in XML")
             return
 
         mission_id = last_node.get("value")
 
-        if mission_id and mission_id in Mission_upgrade_send_map:
-            # 1. Get the list of names for this mission
-            location_names = Mission_upgrade_send_map[mission_id]
+        if mission_id is None:
+            print("Sync Mission: Ending check_missions, no lastcompleted")
+            return
+        print(f"Sync Missions: Starting check_missions, lastcompleted: {mission_id}")
 
-            self.send_msgs([{
+        if mission_id and mission_id in Mission_upgrade_send_map:
+            start_id = Mission_upgrade_send_map[mission_id]
+
+            asyncio.create_task(self.send_msgs([{
                 "cmd": "Set",
                 "key": f"Teardown-{self.auth}-Missions",
                 "default": 0,
-                "want_reply": True,  # This triggers the 'SetReply' packet we need
+                "want_reply": True,
                 "operations": [{"operation": "add", "value": 1}]
-            }])
+            }]))
 
-            # 2. Find the actual score path (we can assume mission/ID/score for consistency)
-            score_node = self.player_data.find(f"mission/{mission_id}/score")
+            print("Sync Mission: Sends msgs and continues")
+            mission_container = self.player_data.find("mission")
+            if mission_container is not None:
+                score_node = mission_container.find(f"{mission_id}/score")
+                print(f"Sync Mission: Sends msgs and continues: {"mission"}")
 
-            if score_node is not None:
-                current_score = int(score_node.get("value", "0"))
+                if score_node is not None:
+                    current_score = int(score_node.get("value", "0"))
+                    print(f"Sync Mission: current score is: {current_score}")
 
-                # 3. Loop from 1 up to the current score
-                for i in range(1, current_score + 1):
-                    # We subtract 1 because lists start at 0 (Score 1 = index 0)
-                    index = i - 1
+                    # Loop through the score
+                    for i in range(current_score):
+                        # Calculate the specific ID for this check
+                        location_id = start_id + i
 
-                    # Safety check: make sure the score isn't higher than our list
-                    if index < len(location_names):
-                        loc_name = location_names[index]
-                        self.send_upgrade_check(loc_name)
+                        # Send the ID directly to your check function
+                        self.send_upgrade_check(location_id)
 
-            # 4. Clear the trigger
+            # 4. Clear the trigger in the XML data so it doesn't fire again
             last_node.set("value", "")
 
 
     def check_tools(self):
+        print("Sync Tools: Entering check_tools")
         if self.player_data is None:
             return
         for xml_path, thresholds in Tool_upgrade_send_map.items():
             node = self.player_data.find(xml_path)
+            print(f"Sync Tools: {xml_path}")
 
             if node is not None:
                 current_val = int(node.get("value", "0"))
+                print(f"Sync Tools:  {current_val}")
 
-                for threshold, location_name in thresholds.items():
+                for threshold, location_id in thresholds.items():
                     if current_val >= threshold:
-                        self.send_upgrade_check(location_name)
+                        self.send_upgrade_check(location_id)
 
-    def send_upgrade_check(self, location_name):
-        # 1. Use the built-in Archipelago name-to-ID mapper
-        # This replaces your 'get_location_id_from_name' which was missing
-        location_id = self.location_name_to_id.get(location_name)
 
-        if location_id is not None:
-            # 2. Check if we haven't already sent this location to the server
-            if location_id not in self.checked_locations:
-                # 3. Add to local list to prevent spamming the same check
-                self.locations_checked.append(location_id)
+    def send_upgrade_check(self, location_id):
+        print("Sync Check: Entering send_upgrade_check")
 
-                # 4. SEND THE DATA TO THE SERVER
-                # This is the part that actually gives the player the item!
-                asyncio.create_task(self.send_msgs([{"cmd": "LocationChecks", "checks": [location_id]}]))
+        if location_id not in self.locations_checked:
+            print("Sync Check: before append to list")
+            self.locations_checked.append(location_id)
+            print("Sync Check: appending list")
 
-                print(f"Success: Sent check for {location_name} (ID: {location_id})")
+            # Send the ID directly to the server
+            print(f"Sync Missions: Sending Location ID {location_id}")
+            asyncio.create_task(self.send_msgs([{
+                "cmd": "LocationChecks",
+                "locations": [location_id]
+            }]))
+
+            print(f"Success: Sent check for {location_id} (ID: {location_id})")
         else:
-            print(f"Error: Could not find an ID for location name: {location_name}")
+            print(f"Error: Could not find an ID for location name: {location_id}")
 
 
-    def complete_mission(self, mission_id: str):
-        # 1. Get the index (e.g., lee_login is 2)
-        index = Missionindex.get(mission_id)
+    def apply_received_items(self, player_data):
+        print("Entering Apply Received Items")
 
-        if index is not None:
-            # 1 << 2 becomes 00000100 in binary
-            new_value = 1 << index
+        current_count = len(self.items_received)
+        if not hasattr(self, 'last_received_count'):
+            self.last_received_count = 0
 
-            # Send the bitwise OR update to the server
-            self.send_encoded_packet([{
-                "cmd": "Set",
-                "key": f"Teardown_Missions_{self.team}_{self.slot}",
-                "default": 0,
-                "want_reply": True,
-                "operations": [{"operation": "or", "value": new_value}]
-            }])
-            print(f"Archipelago: Mission {mission_id} (ID {index}) marked as complete.")
+        if current_count == self.last_received_count:
+            print("No New Items")
+            return
 
-    def apply_received_items(self):
-        changed = False
-
-        # 1. TALLY EVERYTHING
-        # This counts how many of each item you have received from Archipelago
         received_item_counts = {}
-        for network_item in self.items_received:
-            item_name = self.item_names.lookup_in_game(network_item.item)
-            received_item_counts[item_name] = received_item_counts.get(item_name, 0) + 1
+        for item in self.items_received:
+            item_id = item.item
+            received_item_counts[item_id] = received_item_counts.get(item_id, 0) + 1
+            print(f"DEBUG: Counted Item ID {item_id}")
 
-        # 2. HANDLE MISSIONS & TOOLS (The 0 or 1 unlocks)
-        # We loop through your Missionmap and Toolmap
-        for item_name, xml_path in {**Missionmap, **Toolmap}.items():
-            if item_name in received_item_counts:
-                # If we have the item, ensure the XML is set to "1"
-                if self.update_xml_value(self.player_data, xml_path, "value", "1"):
-                    changed = True
 
-        # 3. HANDLE PROGRESSIVE UPGRADES (The numeric values)
-        # We loop through your Tool_upgrade_send_map
-        for xml_path, value_dict in Tool_upgrade_send_map.items():
-            # Get all threshold numbers (e.g., [24, 36, 48]) and sort them
-            thresholds = sorted(value_dict.keys())
 
-            # Count how many total upgrades we have for THIS specific tool path
-            # (e.g. adding up "Shotgun Rounds 1", "Shotgun Rounds 2", etc.)
-            total_upgrades = 0
-            for val_name in value_dict.values():
-                total_upgrades += received_item_counts.get(val_name, 0)
+        print(f"Sync Apply Items: Starting apply_received_items, total items in queue: {len(self.items_received)}")
 
-            if total_upgrades > 0:
-                # Find the correct threshold. If they have 2 items, pick the 2nd number.
-                # Use min() so we don't index out of range if they have extra items.
-                idx = min(total_upgrades - 1, len(thresholds) - 1)
-                target_value = thresholds[idx]
 
-                # Update the XML (update_xml_value handles the "don't downgrade" check)
-                if self.update_xml_value(self.player_data, xml_path, "value", str(target_value)):
-                    changed = True
+        def update_node(path2, value):
+            node = player_data.find(path2)
+            if node is None:
+                curr = player_data
+                for part in path2.split('/'):
+                    child = curr.find(part)
+                    if child is None: child = ET.SubElement(curr, part)
+                    curr = child
+                node = curr
+            node.set("value", str(value))
+            print(f"DEBUG: XML Update - {path2} set to {value}")
 
-        return changed
+        for mapping in [Toolmap, Missionmap]:
+            for ap_id, xml_path in mapping.items():
+                count = received_item_counts.get(ap_id, 0)
+                if count > 0:
+                    update_node(xml_path, "1")
 
+        for ap_id, config in Upgrademap.items():
+            count = received_item_counts.get(ap_id, 0)
+            path, mult, base = config
+            final_val = (count * mult) + base
+            update_node(path, final_val)
+
+            self.last_received_count = current_count
+            print(f"DEBUG: {ap_id} -> {path} is now {final_val} (Base {base} + {count} items)")
+            update_node(path, final_val)
 
 
 
@@ -1246,6 +1037,24 @@ class TeardownContext(CommonContext):
 
 
 
+    def complete_mission(self, mission_id: str):
+        # 1. Get the index (e.g., lee_login is 2)
+        index = Missionindex.get(mission_id)
+
+        if index is not None:
+            # 1 << 2 becomes 00000100 in binary
+            new_value = 1 << index
+
+            # Send the bitwise OR update to the server
+            self.send_encoded_packet([{
+                "cmd": "Set",
+                "key": f"Teardown_Missions_{self.team}_{self.slot}",
+                "default": 0,
+                "want_reply": True,
+                "operations": [{"operation": "or", "value": new_value}]
+            }])
+            print(f"Archipelago: Mission {mission_id} (ID {index}) marked as complete.")
+
 
     def handle_victory_unlock(self, current_count):
         if self.player_data is None:
@@ -1265,6 +1074,7 @@ class TeardownContext(CommonContext):
                 self.finished_game = True
 
 
+
     def launch_game(self):
         if self.game_exe_path and os.path.exists(self.game_exe_path):
             subprocess.Popen([self.game_exe_path])
@@ -1273,20 +1083,25 @@ class TeardownContext(CommonContext):
 
 
 
-
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.MissionAmount = args.get("slot_data", {}).get("MissionAmount", 20)
-            asyncio.create_task(self.send_msgs([{"cmd": "Get", "keys": [f"Teardown-{self.auth}-Missions"]}]))
             self.location_name_to_id = args.get("slot_info", {}).get("location_name_to_id", {})
             self.last_connected_slot = self.slot
-            asyncio.create_task(self.reset_and_initialize_save())
+
+            async def init_sequence():
+                await self.send_msgs([{"cmd": "Get", "keys": [f"Teardown-{self.auth}-Missions"]}])
+                await self.reset_and_initialize_save()
+                self.auth_event.set()
+
+            asyncio.create_task(init_sequence())
 
 
         elif cmd == "Retrieved":
             count = args.get("keys", {}).get(f"Teardown-{self.auth}-Missions") or 0
             self.mission_count = count
             self.handle_victory_unlock(count)
+
 
         elif cmd == "SetReply":
             if args.get("key") == f"Teardown-{self.auth}-Missions":
@@ -1314,9 +1129,12 @@ async def main(args):
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
     async def sync_loop():
+        await ctx.auth_event.wait()
+        print("DEBUG: Sync loop started!")
         while not ctx.exit_event.is_set():
+            print("DEBUG: Loop tick...")
             if ctx.savegame_path and os.path.exists(ctx.savegame_path):
-                ctx.sync_savegame()
+                await ctx.sync_savegame()
             await asyncio.sleep(3)
 
     ctx.sync_task = asyncio.create_task(sync_loop(), name="save sync loop")
