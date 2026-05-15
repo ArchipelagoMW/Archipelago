@@ -7,10 +7,8 @@
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
         - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
-        - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
-    - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
-      compatible hardware
+        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk), Or
+        - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms).
 - Your legally obtained Super Mario World ROM file, probably named `Super Mario World (USA).sfc`
 
 ## Optional Software
@@ -26,7 +24,7 @@
    file is located in the assets section at the bottom of the version information.**
 2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file. 
    This is your Super Mario World ROM file. This only needs to be done once.
-3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
+3. When using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
     2. Right-click on a ROM file and select **Open with...**
@@ -107,18 +105,6 @@ You only have to do these steps once. Note, RetroArch 1.9.x will not work as it 
 
 When loading a ROM, be sure to select a **bsnes-mercury** core. These are the only cores that allow external tools to
 read ROM data.
-
-#### With hardware
-
-This guide assumes you have downloaded the correct firmware for your device. If you have not done so already, please do
-this now. SD2SNES and FXPak Pro users may download the appropriate firmware on the SD2SNES releases page. SD2SNES
-releases page: [SD2SNES Releases Page](https://github.com/RedGuyyyy/sd2snes/releases)
-
-Other hardware may find helpful information on the usb2snes platforms
-page: [usb2snes Supported Platforms Page](http://usb2snes.com/#supported-platforms)
-
-1. Close your emulator, which may have auto-launched.
-2. Power on your device and load the ROM.
 
 ### Connect to the Archipelago Server
 
