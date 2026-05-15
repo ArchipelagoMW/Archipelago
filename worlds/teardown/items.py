@@ -287,6 +287,22 @@ def create_item_with_correct_classification(world: TeardownWorld, name: str) -> 
 
 def create_all_items(world: TeardownWorld) -> None:
     itempool: list[Item] = [
+
+        world.create_item("Blowtorch Unlock"),
+        world.create_item("Shotgun Unlock"),
+        world.create_item("Plank Unlock"),
+        world.create_item("Pipe Unlock"),
+        world.create_item("Gun Unlock"),
+        world.create_item("Bomb Unlock"),
+        world.create_item("Rocket Launcher Unlock"),
+        world.create_item("Rocket Booster Unlock"),
+        world.create_item("Leaf Blower Unlock"),
+        world.create_item("Cable Unlock"),
+        world.create_item("Vehicle Thruster Unlock"),
+        world.create_item("Nitroglycerin Unlock"),
+        world.create_item("Hunting Rifle Unlock"),
+        world.create_item("BlueTide Unlock"),
+
         world.create_item("Blowtorch Fuel Upgrade"),
         world.create_item("Blowtorch Fuel Upgrade"),
         world.create_item("Blowtorch Fuel Upgrade"),

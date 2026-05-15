@@ -434,6 +434,21 @@ def create_regular_locations(world: TeardownWorld) -> None:
     droiddismount = world.get_region("Droid Dismount")
     finaldiversion = world.get_region("The Final Diversion")
 
+    blowtorchupgrade = world.get_region("Blowtorch Upgrades")
+    shotgunupgrade = world.get_region("Shotgun Upgrades")
+    plankupgrade = world.get_region("Plank Upgrades")
+    pipebombupgrade = world.get_region("Pipe Bomb Upgrades")
+    gunupgrade = world.get_region("Gun Upgrades")
+    bombupgrade = world.get_region("Bomb Upgrades")
+    rocketlauncherupgrade = world.get_region("Rocket Launcher Upgrades")
+    rocketboosterupgrade = world.get_region("Rocket Booster Upgrades")
+    leafblowerupgrade = world.get_region("Leaf Blower Upgrades")
+    cableupgrade = world.get_region("Cable Upgrades")
+    vehiclethrusterupgrade = world.get_region("Vehicle Thruster Upgrades")
+    nitroglycerinupgrade = world.get_region("Nitroglycerin Upgrades")
+    huntingrifleupgrade = world.get_region("Hunting Rifle Upgrades")
+    bluetideupgrade = world.get_region("BlueTide Upgrades")
+
 
 # Sets our locations to our regions, this is easier method
     oldbuildingproblem_locations = get_location_names_with_ids(["Old Building Problem"])
@@ -555,6 +570,151 @@ def create_regular_locations(world: TeardownWorld) -> None:
 
     finaldiversion_locations = get_location_names_with_ids(["The Final Diversion"])
     finaldiversion.add_locations(finaldiversion_locations, TeardownLocation)
+
+
+    blowtorchupgrade_locations = get_location_names_with_ids([
+        "Blowtorch Fuel Upgrade 1",
+        "Blowtorch Fuel Upgrade 2",
+        "Blowtorch Fuel Upgrade 3",
+        "Blowtorch Fuel Upgrade 4"
+    ])
+    blowtorchupgrade.add_locations(blowtorchupgrade_locations, TeardownLocation)
+
+    shotgunupgrade_locations = get_location_names_with_ids([
+        "Shotgun Rounds Upgrade 1",
+        "Shotgun Rounds Upgrade 2",
+        "Shotgun Rounds Upgrade 3",
+        "Shotgun Rounds Upgrade 4",
+        "Shotgun Rounds Upgrade 5",
+        "Shotgun Rounds Upgrade 6",
+        "Shotgun Rounds Upgrade 7",
+        "Shotgun Range Upgrade 1",
+        "Shotgun Range Upgrade 2",
+        "Shotgun Damage Upgrade 1",
+        "Shotgun Damage Upgrade 2"
+    ])
+    shotgunupgrade.add_locations(shotgunupgrade_locations, TeardownLocation)
+
+    plankupgrade_locations = get_location_names_with_ids([
+        "Plank Amount Upgrade 1",
+        "Plank Amount Upgrade 2",
+        "Plank Amount Upgrade 3",
+        "Plank Amount Upgrade 4",
+        "Plank Amount Upgrade 5",
+        "Plank Amount Upgrade 6",
+        "Plank Amount Upgrade 7",
+        "Plank Width Upgrade 1",
+        "Plank Width Upgrade 2",
+        "Plank Max Length Upgrade 1",
+        "Plank Max Length Upgrade 2",
+        "Plank Max Length Upgrade 3"
+    ])
+    plankupgrade.add_locations(plankupgrade_locations, TeardownLocation)
+
+    pipebombupgrade_locations = get_location_names_with_ids([
+        "Pipe Bomb Rounds Upgrade 1",
+        "Pipe Bomb Rounds Upgrade 2",
+        "Pipe Bomb Rounds Upgrade 3",
+        "Pipe Bomb Rounds Upgrade 4",
+        "Pipe Bomb Rounds Upgrade 5",
+        "Pipe Bomb Blast Upgrade 1",
+        "Pipe Bomb Blast Upgrade 2"
+    ])
+    pipebombupgrade.add_locations(pipebombupgrade_locations, TeardownLocation)
+
+    gunupgrade_locations = get_location_names_with_ids([
+        "Gun Rounds Upgrade 1",
+        "Gun Rounds Upgrade 2",
+        "Gun Rounds Upgrade 3",
+        "Gun Rounds Upgrade 4",
+        "Gun Rounds Upgrade 5",
+        "Gun Range Upgrade 1",
+        "Gun Range Upgrade 2",
+        "Gun Range Upgrade 3",
+        "Gun Damage Upgrade 1",
+        "Gun Damage Upgrade 2"
+    ])
+    gunupgrade.add_locations(gunupgrade_locations, TeardownLocation)
+
+    bombupgrade_locations = get_location_names_with_ids([
+        "Bomb Rounds Upgrade 1",
+        "Bomb Rounds Upgrade 2",
+        "Bomb Rounds Upgrade 3",
+        "Bomb Rounds Upgrade 4",
+        "Bomb Rounds Upgrade 5",
+        "Bomb Blast Upgrade 1",
+        "Bomb Blast Upgrade 2"
+    ])
+    bombupgrade.add_locations(bombupgrade_locations, TeardownLocation)
+
+    rocketlauncherupgrade_locations = get_location_names_with_ids([
+        "Rocket Launcher Rounds Upgrade 1",
+        "Rocket Launcher Rounds Upgrade 2",
+        "Rocket Launcher Rounds Upgrade 3",
+        "Rocket Launcher Blast Upgrade 1",
+        "Rocket Launcher Blast Upgrade 2"
+    ])
+    rocketlauncherupgrade.add_locations(rocketlauncherupgrade_locations, TeardownLocation)
+
+    rocketboosterupgrade_locations = get_location_names_with_ids([
+        "Rocket Booster Rounds Upgrade 1",
+        "Rocket Booster Rounds Upgrade 2",
+        "Rocket Booster Rounds Upgrade 3",
+        "Rocket Booster Power Upgrade 1",
+        "Rocket Booster Power Upgrade 2",
+        "Rocket Booster Time Upgrade 1",
+        "Rocket Booster Time Upgrade 2"
+    ])
+    rocketboosterupgrade.add_locations(rocketboosterupgrade_locations, TeardownLocation)
+
+    leafblowerupgrade_locations = get_location_names_with_ids([
+        "Leaf Blower Power Upgrade 1",
+        "Leaf Blower Power Upgrade 2",
+        "Leaf Blower Power Upgrade 3"
+    ])
+    leafblowerupgrade.add_locations(leafblowerupgrade_locations, TeardownLocation)
+
+    cableupgrade_locations = get_location_names_with_ids([
+        "Cable Amount Upgrade 1",
+        "Cable Amount Upgrade 2",
+        "Cable Amount Upgrade 3",
+        "Cable Stretch Upgrade 1",
+        "Cable Stretch Upgrade 2"
+    ])
+    cableupgrade.add_locations(cableupgrade_locations, TeardownLocation)
+
+    vehiclethrusterupgrade_locations = get_location_names_with_ids([
+        "Vehicle Thruster Rounds Upgrade 1",
+        "Vehicle Thruster Rounds Upgrade 2",
+        "Vehicle Thruster Rounds Upgrade 3",
+        "Vehicle Thruster Power Upgrade 1",
+        "Vehicle Thruster Power Upgrade 2"
+    ])
+    vehiclethrusterupgrade.add_locations(vehiclethrusterupgrade_locations, TeardownLocation)
+
+    nitroglycerinupgrade_locations = get_location_names_with_ids([
+        "Nitroglycerin Rounds Upgrade 1",
+        "Nitroglycerin Rounds Upgrade 2",
+        "Nitroglycerin Rounds Upgrade 3",
+        "Nitroglycerin Blast Upgrade 1",
+        "Nitroglycerin Blast Upgrade 2",
+        "Nitroglycerin Blast Upgrade 3"
+    ])
+    nitroglycerinupgrade.add_locations(nitroglycerinupgrade_locations, TeardownLocation)
+
+    huntingrifleupgrade_locations = get_location_names_with_ids([
+        "Hunting Rifle Rounds Upgrade 1",
+        "Hunting Rifle Rounds Upgrade 2"
+    ])
+    huntingrifleupgrade.add_locations(huntingrifleupgrade_locations, TeardownLocation)
+
+    bluetideupgrade_locations = get_location_names_with_ids([
+        "BlueTide Bottles Upgrade 1",
+        "BlueTide Bottles Upgrade 2",
+        "BlueTide Duration Upgrade 1",
+        "BlueTide Duration Upgrade 2"
+    ])
+    bluetideupgrade.add_locations(bluetideupgrade_locations, TeardownLocation)
 
 
 

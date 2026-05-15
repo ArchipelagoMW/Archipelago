@@ -886,36 +886,29 @@ class TeardownContext(CommonContext):
 
         last_node = self.player_data.find("lastcompleted")
         if last_node is None:
-            print("Sync Mission: Ending check_missions, node 'lastcompleted' not found in XML")
+            print("Sync Mission: lastcompleted isn't found")
             return
 
         mission_id = last_node.get("value")
-
         if mission_id is None:
-            print("Sync Mission: Ending check_missions, no lastcompleted")
+            print("Sync Mission: lastcompleted is none")
             return
+
         print(f"Sync Missions: Starting check_missions, lastcompleted: {mission_id}")
 
         if mission_id and mission_id in Mission_upgrade_send_map:
             start_id = Mission_upgrade_send_map[mission_id]
 
-            asyncio.create_task(self.send_msgs([{
-                "cmd": "Set",
-                "key": f"Teardown-{self.auth}-Missions",
-                "default": 0,
-                "want_reply": True,
-                "operations": [{"operation": "add", "value": 1}]
-            }]))
+            print("Sync Mission: Trigger mission_counter")
+            self.mission_counter(mission_id)
 
-            print("Sync Mission: Sends msgs and continues")
             mission_container = self.player_data.find("mission")
             if mission_container is not None:
                 score_node = mission_container.find(f"{mission_id}/score")
-                print(f"Sync Mission: Sends msgs and continues: {"mission"}")
 
                 if score_node is not None:
                     current_score = int(score_node.get("value", "0"))
-                    print(f"Sync Mission: current score is: {current_score}")
+                    print(f"Sync Mission: Current Score is: {current_score}")
 
                     # Loop through the score
                     for i in range(current_score):
@@ -928,42 +921,43 @@ class TeardownContext(CommonContext):
             # 4. Clear the trigger in the XML data so it doesn't fire again
             last_node.set("value", "")
 
-
     def check_tools(self):
         print("Sync Tools: Entering check_tools")
         if self.player_data is None:
             return
+
         for xml_path, thresholds in Tool_upgrade_send_map.items():
             node = self.player_data.find(xml_path)
-            print(f"Sync Tools: {xml_path}")
-
             if node is not None:
-                current_val = int(node.get("value", "0"))
-                print(f"Sync Tools:  {current_val}")
+                try:
+                    current_val_str = node.get("value", "0")
+                    current_val = int(current_val_str)
 
-                for threshold, location_id in thresholds.items():
-                    if current_val >= threshold:
-                        self.send_upgrade_check(location_id)
+                    for threshold_val, location_id in thresholds.items():
+                        if location_id in self.locations_checked:
+                            continue
+                        if current_val >= threshold_val:
+                            print(f"Sync Tools: {xml_path} reached {current_val} (Target: {threshold_val}). Sending ID {location_id}")
+
+                            self.send_upgrade_check(location_id)
+
+
+                except (ValueError, TypeError) as e:
+                    print(f"Sync Tools: Error processing value at {xml_path}: {e}")
+            else:
+                pass
 
 
     def send_upgrade_check(self, location_id):
-        print("Sync Check: Entering send_upgrade_check")
+        print(f"Sync Check: Entering send_upgrade_check location {location_id}")
 
         if location_id not in self.locations_checked:
-            print("Sync Check: before append to list")
+            print(f"Sync Missions: Queuing Location ID {location_id}")
+
+            asyncio.create_task(self.check_locations({location_id}))
+
             self.locations_checked.append(location_id)
-            print("Sync Check: appending list")
-
-            # Send the ID directly to the server
-            print(f"Sync Missions: Sending Location ID {location_id}")
-            asyncio.create_task(self.send_msgs([{
-                "cmd": "LocationChecks",
-                "locations": [location_id]
-            }]))
-
-            print(f"Success: Sent check for {location_id} (ID: {location_id})")
-        else:
-            print(f"Error: Could not find an ID for location name: {location_id}")
+            print(f"Success: Task created for {location_id}")
 
 
     def apply_received_items(self, player_data):
@@ -982,8 +976,6 @@ class TeardownContext(CommonContext):
             item_id = item.item
             received_item_counts[item_id] = received_item_counts.get(item_id, 0) + 1
             print(f"DEBUG: Counted Item ID {item_id}")
-
-
 
         print(f"Sync Apply Items: Starting apply_received_items, total items in queue: {len(self.items_received)}")
 
@@ -1017,44 +1009,27 @@ class TeardownContext(CommonContext):
             update_node(path, final_val)
 
 
-
-    def update_xml_value(self, player_data, xml_path, attribute, new_value, is_bool=False):
-        node = player_data.find(xml_path)
-        if node is not None:
-            current_val = node.get(attribute)
-
-            # Handle Boolean (true/false) logic
-            if is_bool:
-                if current_val == "false" and str(new_value).lower() == "true":
-                    node.set(attribute, "true")
-                    return True
-            # Handle Numeric logic (don't downgrade if the player somehow has more)
-            else:
-                if int(current_val or 0) < int(new_value):
-                    node.set(attribute, str(new_value))
-                    return True
-        return False
-
-
-
-    def complete_mission(self, mission_id: str):
+    def mission_counter(self, mission_id: str):
         # 1. Get the index (e.g., lee_login is 2)
         index = Missionindex.get(mission_id)
 
         if index is not None:
             # 1 << 2 becomes 00000100 in binary
-            new_value = 1 << index
+            bit_to_set = 1 << index
+            current_mask = getattr(self, 'mission_bitmask', 0)
+            if current_mask & bit_to_set:
+                print(f"Archipelago: Bit at index {index} is already 1. No update needed.")
+                return
 
-            # Send the bitwise OR update to the server
-            self.send_encoded_packet([{
+            asyncio.create_task(self.send_msgs([{
                 "cmd": "Set",
-                "key": f"Teardown_Missions_{self.team}_{self.slot}",
+                "key": f"Teardown_Missions_Counter{self.team}_{self.slot}",
                 "default": 0,
                 "want_reply": True,
-                "operations": [{"operation": "or", "value": new_value}]
-            }])
-            print(f"Archipelago: Mission {mission_id} (ID {index}) marked as complete.")
-
+                "operations": [{"operation": "or", "value": bit_to_set}]
+            }]))
+            self.mission_bitmask = current_mask | bit_to_set
+            print(f"Archipelago: Flipped bit {index} to 1.")
 
     def handle_victory_unlock(self, current_count):
         if self.player_data is None:
@@ -1062,9 +1037,9 @@ class TeardownContext(CommonContext):
         goal_required = getattr(self, 'MissionAmount', 20)
 
         if current_count >= goal_required:
-            # 1. Unlock the Finale Message in the XML
-            if self.update_xml_value(self.player_data, "message/cullington_bomb", "value", "1"):
-                print(f"Goal Met: {current_count}/{goal_required}. Cullington Bomb Unlocked!")
+            message_path = self.player_data.find("message")
+            mission_path = ET.SubElement(message_path, "cullington_bomb")
+            mission_path.set("value", "1")
 
         # 2. Check if Cullington Bomb is already done (The actual WIN)
         final_mission = self.player_data.find("mission/cullington_bomb")
@@ -1072,7 +1047,6 @@ class TeardownContext(CommonContext):
             if not self.finished_game:
                 asyncio.create_task(self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]))
                 self.finished_game = True
-
 
 
     def launch_game(self):
@@ -1089,6 +1063,7 @@ class TeardownContext(CommonContext):
             self.location_name_to_id = args.get("slot_info", {}).get("location_name_to_id", {})
             self.last_connected_slot = self.slot
 
+
             async def init_sequence():
                 await self.send_msgs([{"cmd": "Get", "keys": [f"Teardown-{self.auth}-Missions"]}])
                 await self.reset_and_initialize_save()
@@ -1098,16 +1073,16 @@ class TeardownContext(CommonContext):
 
 
         elif cmd == "Retrieved":
-            count = args.get("keys", {}).get(f"Teardown-{self.auth}-Missions") or 0
-            self.mission_count = count
-            self.handle_victory_unlock(count)
-
+            keys = args.get("keys", {})
+            self.mission_count = keys.get(f"Teardown-{self.auth}-Missions") or 0
+            self.mission_bitmask = keys.get(f"Teardown_Missions_Counter{self.team}_{self.slot}") or 0
 
         elif cmd == "SetReply":
-            if args.get("key") == f"Teardown-{self.auth}-Missions":
+            if args.get("key") == f"Teardown_Missions_Counter{self.team}_{self.slot}":
                 new_count = args.get("value")
-                self.mission_count = new_count
+                self.mission_bitmask = new_count
                 self.handle_victory_unlock(new_count)
+
 
 
     async def server_auth(self, password_requested: bool = False):
