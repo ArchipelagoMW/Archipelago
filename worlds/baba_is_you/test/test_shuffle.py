@@ -25,7 +25,7 @@ class TestShuffleLogic(BabaIsYouTestBase):
     
     def test_win_events(self) -> None:
         with self.subTest("All win events have the right amount and are obtainable"):
-            state = self.multiworld.get_all_state(False)
+            state = self.multiworld.get_all_state()
             for name in LEVEL_DATA:
                 data = LEVEL_DATA[name]
                 if data.get("completeCount") is not None:

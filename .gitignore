@@ -212,3 +212,4 @@ hooks/indirect_conditions.py
 hooks/item_location_count.py
 hooks/profile.py
 hooks/with_empty.py
+/fuzz_output

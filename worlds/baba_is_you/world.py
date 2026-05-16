@@ -31,17 +31,14 @@ UT_SLOT_DATA_OPTION_NAMES = (
     "first_gate_blossoms",
     "second_gate_blossoms",
     "third_gate_blossoms",
+    "force_clear_blossoms",
     "complete_checks",
     "transformsanity",
     "level_shuffle",
 )
 
-# APQuest will go through all the parts of the world api one step at a time,
-# with many examples and comments across multiple files.
-# If you'd rather read one continuous document, or just like reading multiple sources,
-# we also have this document specifying the entire world api:
-# https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md
-
+# Max levels in each area access
+AREA_ACCESS_MAX = (160, 165, 195, 206, 229, 231)
 
 # The world class is the heart and soul of an apworld implementation.
 # It holds all the data and functions required to build the world and submit it to the multiworld generator.
@@ -178,6 +175,16 @@ class BabaIsYouWorld(World):
         slot_data = self._get_ut_slot_data()
         if slot_data:
             self._restore_ut_slot_data(slot_data)
+        
+        # Prevent currently unimplemented goals/area accesses from being used (REMOVE WHEN IMPLEMENTED)
+        if self.options.goal >= 2 and self.options.goal <= 4:
+            raise OptionError(f"Baba Is You ({self.player_name}): Selected goal option has not been implemented yet.")
+        elif self.options.area_access >= 2:
+            raise OptionError(f"Baba Is You ({self.player_name}): Selected area access option has not been implemented yet.")
+        
+        # Prevent Easy Logic + No Shuffle + No Default (won't generate)
+        if self.options.level_shuffle == 0 and self.options.logic_difficulty == 0 and not self.options.start_with_default_words:
+            raise OptionError(f"Baba Is You ({self.player_name}): Cannot play with Easy logic difficulty when both Level Shuffle and Start With Default Words are disabled.")
 
         # Validate options
         maxBlossoms = self.options.blossoms + (self.options.blossom_petals // 8)
@@ -198,10 +205,6 @@ class BabaIsYouWorld(World):
                            f"Reducing goal amount...")
             self.options.goal_blossoms.value = maxBlossoms
 
-        # Prevent Easy Logic + No Shuffle + No Default (won't generate)
-        if self.options.level_shuffle == 0 and self.options.logic_difficulty == 0 and not self.options.start_with_default_words:
-            raise OptionError(f"Baba Is You ({self.player_name}): Cannot play with Easy logic difficulty when both Level Shuffle and Start With Default Words are disabled.")
-
         # Set area access based on goal
         if self.options.goal == 1: # Reach ???
             self.options.area_access.value = 1 # Map access
@@ -211,22 +214,17 @@ class BabaIsYouWorld(World):
             self.options.area_access.value = 3 # Depths access
         if self.options.goal == 4: # Done
             self.options.area_access.value = 5 # Full access
-        
-        # Set exclusions based on area access
-        if self.options.area_access == 0: # Early access
-            self.options.exclude_whoa.value = True
-            self.options.exclude_gallery.value = True
-            self.options.exclude_maze_transform.value = True
-            self.options.transformsanity.value = False
-        elif self.options.area_access == 1: # Map access
-            self.options.exclude_whoa.value = True
-            self.options.exclude_gallery.value = True
-            self.options.exclude_maze_transform.value = True
-        elif self.options.area_access == 2 or self.options.area_access == 3: # ??? or Depths access
-            self.options.exclude_whoa.value = True
-            self.options.exclude_gallery.value = True
-        elif self.options.area_access == 4: # Meta access
-            self.options.exclude_gallery.value = True
+
+        if self.options.goal == 5:
+            maxLevels = AREA_ACCESS_MAX[self.options.area_access]
+            if self.options.exclude_whoa and self.options.area_access >= 4:
+                maxLevels -= 1
+            if self.options.exclude_gallery and self.options.area_access >= 5:
+                maxLevels -= 1
+            if self.options.goal_levels > maxLevels:
+                logger.warning(f"Baba Is You ({self.player_name}): Goal requires {self.options.goal_levels} levels, but only {maxLevels} are accessible. "
+                            f"Reducing goal amount...")
+                self.options.goal_levels.value = maxBlossoms
     
     # Mark words as early items to make generation fail less often
     def pre_fill(self):

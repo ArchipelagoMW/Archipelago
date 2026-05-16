@@ -102,6 +102,7 @@ local options = {
     first_gate_blossoms=3,
     second_gate_blossoms=5,
     third_gate_blossoms=7,
+    force_clear_blossoms=0,
     complete_checks=1,
     level_shuffle=0,
     transformsanity=0,

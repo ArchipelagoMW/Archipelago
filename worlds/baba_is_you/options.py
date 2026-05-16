@@ -16,13 +16,11 @@ class Goal(Choice):
     Determines the requirements to beat the game.
     end: Reach the normal ending in "A Way Out?".
     flower: Reach the area "???".
-    depths: Reach the area "Depths".
-    meta: Reach the area "Meta".
-    done: Reach the secret ending in "The End".
+    depths: Reach the area "Depths" (UNIMPLEMENTED).
+    meta: Reach the area "Meta" (UNIMPLEMENTED).
+    done: Reach the secret ending in "The End" (UNIMPLEMENTED).
     levels: Win a specified amount of levels.
     blossoms: Collect a specified amount of blossoms.
-
-    NOTICE: Only "end", "flower", "levels", and "blossoms" are implemented at this time. Do not select the other options.
     """
 
     display_name = "Goal"
@@ -37,14 +35,20 @@ class Goal(Choice):
 
 class GoalLevels(Range):
     """
-    Determines how many levels need to be won when the goal is set to "levels".
-    160 requires every level in the early game. 231 requires all levels.
+    Determines how many levels need to be won when the goal is set to "levels". The max for each area access setting is as follows:
+    early: 160
+    map: 165
+    flower: 195
+    depths: 206
+    meta: 229
+    full: 231
+    If Gallery or Whoa are excluded and accessible, the max is lowered by 1 for each.
     """
 
     display_name = "Goal Levels"
     range_start = 0
     range_end = 231
-    default = 80 # 160 total before top gate
+    default = 80
 
 class GoalBlossoms(Range):
     """
@@ -99,13 +103,11 @@ class AreaAccess(Choice):
     Determines which areas of the game will be accessible when the goal is set to "end", "levels", or "blossoms".
     All other goal options will override this option.
     early: The Map and its subworlds will be accessible, but the top gate will be blocked off, preventing access to Slideshow and beyond.
-    map: The Map and its subworlds will be fully accessible. ??? will be accessible, but not the levels within.
-    flower: Map, ???, and their subworlds will be accessible. Depths will be accessible, but not the levels within.
-    depths: Map, ???, Depths, and their subworlds will be accessible. Meta will be accessible, but not the levels within.
-    meta: All areas other than "Center" and its two levels will be accessible.
-    full: All areas will be accessible.
-
-    NOTICE: Only "early" and "map" are implemented at this time. Do not select the other options.
+    map: The Map and its subworlds will be fully accessible. ??? will be accessible, but not the levels within. (UNIMPLEMENTED)
+    flower: Map, ???, and their subworlds will be accessible. Depths will be accessible, but not the levels within. (UNIMPLEMENTED)
+    depths: Map, ???, Depths, and their subworlds will be accessible. Meta will be accessible, but not the levels within. (UNIMPLEMENTED)
+    meta: All areas other than "Center" and its two levels will be accessible. (UNIMPLEMENTED)
+    full: All areas will be accessible. (UNIMPLEMENTED)
     """
 
     display_name = "Accessible Areas"
@@ -119,7 +121,8 @@ class AreaAccess(Choice):
 
 class ExcludeWhoa(DefaultOnToggle):
     """
-    Excludes the level "Whoa" from logic and level shuffle.
+    Excludes the location of the level "Whoa" from logic.
+    The level itself may still appear if Level Shuffle if set to "full".
     Only applies if Meta and its levels are accessible.
     """
 
@@ -127,8 +130,9 @@ class ExcludeWhoa(DefaultOnToggle):
 
 class ExcludeGallery(DefaultOnToggle):
     """
-    Excludes the level "Gallery" from logic.
-    When disabled, the 3 Bonus items will become progression items.
+    Excludes the location of the level "Gallery" from logic.
+    The level itself may still appear if Level Shuffle if set to "full".
+    When disabled, the 3 Bonus Orb items will become progression items.
     Only applies if Center and its levels are accessible.
     """
 
@@ -199,6 +203,16 @@ class ThirdGateBlossoms(Range):
     range_end = 12
     default = 7
 
+class ForceClearBlossoms(Toggle):
+    """
+    Forces Blossoms and Blossom Petals to be placed at World Clear locations, matching vanilla.
+    Additional items will be placed into the item pool as normal, and if there are less items than available clear locations, they will be shuffled randomly among those locations.
+    Blossoms have priority over Blossom Petals when placing.
+    Note that there 10 clear locations in Map, 1 in ABC if accessible, and 1 in Center if accessible.
+    """
+
+    display_name = "Place Blossoms at World Clears"
+
 class CompleteChecks(Toggle):
     """
     Adds checks for completing a world (completing all levels within that world)
@@ -218,7 +232,7 @@ class Transformsanity(Toggle):
 class LevelShuffle(Choice):
     """
     Swaps normal levels with other normal levels.
-    Levels with transformations, as well as "A Way Out?", "The Box", "The End", and "Gallery", will never be shuffled.
+    Levels with transformations, as well as "A Way Out?", "The Box", and "The End" will never be shuffled.
     disabled: Levels will not be shuffled (default).
     limited: Only levels within accessible areas will be shuffled.
     full: All levels will be shuffled, minus the exceptions listed above.
@@ -251,6 +265,7 @@ class BabaIsYouOptions(PerGameCommonOptions):
     first_gate_blossoms: FirstGateBlossoms
     second_gate_blossoms: SecondGateBlossoms
     third_gate_blossoms: ThirdGateBlossoms
+    force_clear_blossoms: ForceClearBlossoms
     complete_checks: CompleteChecks
     transformsanity: Transformsanity
     level_shuffle: LevelShuffle

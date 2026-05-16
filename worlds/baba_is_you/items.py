@@ -123,7 +123,6 @@ item_name_groups = {
                    "ABC Key", "Depths Key", "Meta Key", "Center Key"},
 }
 
-
 # With those two helper functions defined, let's now get to actually creating and submitting our itempool.
 def create_all_items(world: BabaIsYouWorld) -> None:
     # This is the function in which we will create all the items that this world submits to the multiworld item pool.
@@ -135,8 +134,40 @@ def create_all_items(world: BabaIsYouWorld) -> None:
     itempool: list[Item] = []
 
     # Create blossoms and bonuses based on selected options
-    itempool += [world.create_item("Blossom Petal") for _ in range(world.options.blossom_petals)]
-    itempool += [world.create_item("Blossom") for _ in range(world.options.blossoms)]
+    if world.options.force_clear_blossoms:
+        # Prioritize placing where blossoms normally are
+
+        # All world clear locations that normally contain a blossom
+        clear_locations = [
+            "1. The Lake: Clear",
+            "2. Solitary Island: Clear",
+            "3. Temple Ruins: Clear",
+            "4. Forest Of Fall: Clear",
+            "5. Deep Forest: Clear",
+            "6. Rocket Trip: Clear",
+            "7. Flower Garden: Clear",
+            "8. Chasm: Clear",
+            "9. Volcanic Cavern: Clear",
+            "10. Mountaintop: Clear",
+        ]
+        if world.options.area_access >= 2:
+            clear_locations.append("ABC: Clear")
+        if world.options.area_access >= 5:
+            clear_locations.append("Center: Clear")
+        world.random.shuffle(clear_locations)
+
+        blossom_items = [world.create_item("Blossom Petal") for _ in range(world.options.blossom_petals)]
+        blossom_items += [world.create_item("Blossom") for _ in range(world.options.blossoms)]
+        world.random.shuffle(clear_locations)
+        while len(blossom_items) != 0 and len(clear_locations) != 0:
+            locationName = clear_locations.pop()
+            world.multiworld.get_location(locationName, world.player).place_locked_item(blossom_items.pop())
+        
+        itempool += blossom_items
+    else:
+        itempool += [world.create_item("Blossom Petal") for _ in range(world.options.blossom_petals)]
+        itempool += [world.create_item("Blossom") for _ in range(world.options.blossoms)]
+        
     itempool += [world.create_item("Bonus Orb") for _ in range(3)]
 
     # Create keys if enabled
