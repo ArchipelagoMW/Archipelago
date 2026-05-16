@@ -586,8 +586,7 @@ class TextChoice(Choice):
         for option_name, value in cls.options.items():
             if option_name.lower() == text.lower():
                 return cls(value)
-        if not cls.validate_text(text):
-            raise ValueError(f"'{text}' is not a valid option for '{cls.__name__}'")
+        cls.validate_text(text)
         return cls(text)
 
     @classmethod
