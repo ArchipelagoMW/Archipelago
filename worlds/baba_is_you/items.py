@@ -9,6 +9,9 @@ if TYPE_CHECKING:
 
 from .words import *
 
+import logging
+logger = logging.getLogger("Baba Is You")
+
 # Every item must have a unique integer ID associated with it.
 # We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
 # Even if an item doesn't exist on specific options, it must be present in this lookup.
@@ -150,18 +153,52 @@ def create_all_items(world: BabaIsYouWorld) -> None:
             "9. Volcanic Cavern: Clear",
             "10. Mountaintop: Clear",
         ]
+        
+        # Add ABC and Center if accessible
         if world.options.area_access >= 2:
             clear_locations.append("ABC: Clear")
         if world.options.area_access >= 5:
             clear_locations.append("Center: Clear")
-        world.random.shuffle(clear_locations)
-
+        
+        maxBlossoms = world.options.blossoms + (world.options.blossom_petals // 8)
         blossom_items = [world.create_item("Blossom Petal") for _ in range(world.options.blossom_petals)]
         blossom_items += [world.create_item("Blossom") for _ in range(world.options.blossoms)]
         world.random.shuffle(clear_locations)
+        
+        petals_behind_second = 0
+        petals_behind_third = 0
+
         while len(blossom_items) != 0 and len(clear_locations) != 0:
             locationName = clear_locations.pop()
-            world.multiworld.get_location(locationName, world.player).place_locked_item(blossom_items.pop())
+            item = blossom_items.pop()
+
+            # Prevent placing behind gate if it wouldn't be accessible
+            if locationName == "9. Volcanic Cavern: Clear" or locationName == "10. Mountaintop: Clear" or locationName == "ABC: Clear" or locationName == "Center: Clear":
+                if locationName == "9. Volcanic Cavern: Clear" or locationName == "10. Mountaintop: Clear":
+                    new_petals = petals_behind_second
+                    gate_petals = (maxBlossoms - world.options.second_gate_blossoms) * 8
+                else:
+                    new_petals = petals_behind_third
+                    gate_petals = (maxBlossoms - world.options.third_gate_blossoms) * 8
+                
+                if item.name == "Blossom":
+                    new_petals += 8
+                else:
+                    new_petals += 1
+
+                if gate_petals < new_petals:
+                    blossom_items.append(item)
+                    if item.name == "Blossom" and world.options.blossom_petals != 0:
+                        clear_locations.insert(locationName, 0) # Move to end to attempt a petal instead
+                    else:
+                        logger.warning(f"Baba Is You ({world.player_name}): Couldn't place {item.name} at {locationName} because the gate requirement was too high. This location will be randomized.")
+                    continue
+                elif locationName == "9. Volcanic Cavern: Clear" or locationName == "10. Mountaintop: Clear":
+                    petals_behind_second = new_petals
+                else:
+                    petals_behind_third = new_petals
+
+            world.multiworld.get_location(locationName, world.player).place_locked_item(item)
         
         itempool += blossom_items
     else:
@@ -191,28 +228,29 @@ def create_all_items(world: BabaIsYouWorld) -> None:
             itempool.append(world.create_item("Center Key"))
     
     # Create all word items
+    filler_words = []
     for word in ALL_WORDS:
         if world.options.start_with_default_words and word in DEFAULT_WORDS:
             # Start with the words in "Baba Is You"
             world.push_precollected(world.create_item(word))
         else:
-            itempool.append(world.create_item(word))
+            item = world.create_item(word)
+            if item.classification == ItemClassification.progression:
+                itempool.append(item)
+            else:
+                filler_words.append(item)
 
-    # Archipelago requires that each world submits as many locations as it submits items.
-    # This is where we can use our filler and trap items.
-
-    # The length of our itempool is easy to determine, since we have it as a list.
+    # Calculate needed filler items
     number_of_items = len(itempool)
-
-    # The number of locations is also easy to determine, but we have to be careful.
-    # Just calling len(world.get_locations()) would report an incorrect number, because of our *event locations*.
-    # What we actually want is the number of *unfilled* locations. Luckily, there is a helper method for this:
     number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
-
-    # Now, we just subtract the number of items from the number of locations to get the number of empty item slots.
     needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
 
-    # Finally, we create that many filler items and add them to the itempool.
+    # Create filler words until we reach the max number of filler items
+    while len(filler_words) > 0 and needed_number_of_filler_items > 0:
+        itempool.append(filler_words.pop())
+        needed_number_of_filler_items -= 1
+
+    # Create remaining specks
     itempool += [world.create_filler() for _ in range(needed_number_of_filler_items)]
 
     # With our world's itempool finalized, we now need to submit it to the multiworld itempool.
