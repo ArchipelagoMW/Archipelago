@@ -167,7 +167,7 @@ class Blossoms(Range):
     display_name = "Blossoms"
     range_start = 0
     range_end = 12
-    default = 12
+    default = 10
 
 class FirstGateBlossoms(Range):
     """
