@@ -254,11 +254,17 @@ class FreeText(Option[str]):
 
     @classmethod
     def from_text(cls, text: str) -> FreeText:
+        cls.validate_text(text)
         return cls(text)
 
     @classmethod
     def from_any(cls, data: typing.Any) -> FreeText:
         return cls.from_text(str(data))
+
+    @classmethod
+    def validate_text(cls, text: str) -> bool:
+        """Override to validate text inputs during yaml processing"""
+        return True
 
     @classmethod
     def get_option_name(cls, value: str) -> str:
@@ -591,6 +597,7 @@ class TextChoice(Choice):
 
     @classmethod
     def validate_text(cls, value: str) -> bool:
+        """Override to validate text during yaml processing"""
         return True
 
     @classmethod
