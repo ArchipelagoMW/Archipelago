@@ -74,28 +74,23 @@ class PaletteShuffle(TextChoice):
 
     @classmethod
     def validate_text(cls, value: str) -> bool:
-        try:
-            color_sets = value.split(";")
-            if len(color_sets) > 1:
+        color_sets = value.split(";")
+        if len(color_sets) > 1:
                 # can only have two cases not reach this
                 # just random gets resolved earlier, so its just 1 color singularity
-                shuffle = color_sets.pop()
-            for color_set in color_sets:
-                if "-" in color_set:
-                    character, color = color_set.split("-")
-                    if character.title() not in palette_pointers:
-                        return False
-                    colors = color.split("|")
-                    real_colors = validate_colors(*parse_color(colors), allow_match=True)
-                else:
-                    # If color is provided with no character, assume singularity
-                    colors = color_set.split("|")
-                    real_colors = validate_colors(*parse_color(colors), allow_match=True)
-            return True
-        except ValueError:
-            return False
-        except KeyError:
-            return False
+            shuffle = color_sets.pop()
+        for color_set in color_sets:
+            if "-" in color_set:
+                character, color = color_set.split("-")
+                if character.title() not in palette_pointers:
+                    raise Exception(f"Character '{character}' is not a valid character for Mega Man 3.")
+                colors = color.split("|")
+                real_colors = validate_colors(*parse_color(colors), allow_match=True)
+            else:
+                # If color is provided with no character, assume singularity
+                colors = color_set.split("|")
+                real_colors = validate_colors(*parse_color(colors), allow_match=True)
+        return True
 
 
 

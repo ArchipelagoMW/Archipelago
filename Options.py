@@ -565,7 +565,7 @@ class Choice(NumericOption):
 
 class TextChoice(Choice):
     """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string.
-    Custom text inputs should be validated by overriding 'validate_text' and returning false if invalid."""
+    Custom text inputs should be validated by overriding 'validate_text' and raising if invalid."""
     value: str | int
 
     def __init__(self, value: str | int):
