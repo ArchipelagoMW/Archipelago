@@ -23,6 +23,12 @@ class TestOptions(unittest.TestCase):
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
                         # Standard "can default generate" test
+                        if issubclass(option, TextChoice) and option.validate_text is TextChoice.validate_text:
+                            self.assertTrue(option.default in option.name_lookup,
+                                f"TextChoice option {option.__name__} in {gamename} does not define "
+                                f"'validate_text' while default value {option.default} does not resolve "
+                                f"to a listed value!"
+                            )
                         err_raised = None
                         try:
                             option.from_any(option.default)
