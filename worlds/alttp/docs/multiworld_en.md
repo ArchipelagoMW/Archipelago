@@ -45,10 +45,10 @@ client, and will also create your ROM in the same place as your patch file.
 
 ### With an emulator
 
-When patching the ROM, the client should have launched automatically, and SNI should have also automatically launched in the background. If this is its
-first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
+When patching the ROM, the client should launch automatically, and SNI should also start in the background.
+If this is the first time it runs, you may be prompted to allow it through the Windows Firewall.
 
-If the client did not launch automaticlly, use the `SNI Client` in the Archipelago Launcher to manually start the AP client.
+If the client did not launch automatically, use the `SNI Client` in the Archipelago Launcher to manually start the AP client.
 
 #### snes9x-nwa
 
