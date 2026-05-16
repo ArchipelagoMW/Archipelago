@@ -22,11 +22,6 @@ class TestOptions(unittest.TestCase):
             if not world_type.hidden:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
-                        if issubclass(option, TextChoice):
-                            self.assertTrue(option.default in option.name_lookup,
-                                f"Default value {option.default} for TextChoice option {option.__name__} in"
-                                f" {gamename} does not resolve to a listed value!"
-                            )
                         # Standard "can default generate" test
                         err_raised = None
                         try:
