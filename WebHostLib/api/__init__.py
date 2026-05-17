@@ -11,6 +11,7 @@ cors = CORS(api_endpoints, resources={
                 r"/api/datapackage/*": {"origins": "*"},
                 r"/api/datapackage": {"origins": "*"},
                 r"/api/datapackage_checksum/*": {"origins": "*"},
+                r"/api/datastorage/*": {"origins": "*"},
                 r"/api/room_status/*": {"origins": "*"},
                 r"/api/tracker/*": {"origins": "*"},
                 r"/api/static_tracker/*": {"origins": "*"},
