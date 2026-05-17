@@ -148,6 +148,8 @@ class Rac3Interface(GameInterface):
     main_menu: bool = False
     ratchet_moby: int = 0
     between_planets: bool = False
+    short_pause: bool = False
+    long_pause: bool = False
     ryno: int = 5
     death_count: int = 0
     last_death_count: int = 0
@@ -529,6 +531,8 @@ class Rac3Interface(GameInterface):
             self.between_planets = not bool(self.ratchet_moby)
         elif self.ratchet_moby:
             self.between_planets = False if self.action else True
+        self.short_pause = bool(self._read8(RAC3STATUS.SHORT_PAUSE))
+        self.long_pause = bool(self._read8(RAC3STATUS.LONG_PAUSE))
         self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
         self.inputs = RAC3INPUT(self._read16(RAC3STATUS.READ_INPUT))
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -2024,13 +2028,13 @@ class Rac3Interface(GameInterface):
 
     def shortcut_cycler(self):
         """Activates Taxis/Dropships/Teleporter shortcuts"""
-        if (self.planet != RAC3REGION.TYHRRANOSIS
-            and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations):
-            self.tyhrra_dropship = 0
-        if (self.planet != RAC3REGION.METROPOLIS
+        # if ((self.planet != RAC3REGION.TYHRRANOSIS or self.short_pause)
+        #     and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations):
+        #     self.tyhrra_dropship = 0
+        if ((self.planet != RAC3REGION.METROPOLIS or not self.short_pause)
             and RAC3LOCATION.METROPOLIS_DEFEAT_KLUNK not in self.checked_locations):
             self.metro_dropship = 0
-        if (self.planet != RAC3REGION.HOLOSTAR_STUDIOS
+        if ((self.planet != RAC3REGION.HOLOSTAR_STUDIOS or self.short_pause)
             and RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP not in self.checked_locations):
             self.holo_teleport = 0
         for name, data in RAC3_SHORTCUT_DATA_TABLE.items():
@@ -2038,22 +2042,24 @@ class Rac3Interface(GameInterface):
                 if data.ITEMS is None or any(
                     [all([self.UnlockItem[item].status for item in items]) for items in data.ITEMS]):
                     # special cases
-                    if name == RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
-                        logger.debug(f"Pause state: {self.pause_state_value}, latch state: {self.tyhrra_dropship}")
-                        if self.tyhrra_dropship == 0 and not self.between_planets:
-                            self.tyhrra_dropship += 1
-                            logger.debug("Set Tyhrranosis Dropship")
-                            self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
-                        elif self.tyhrra_dropship == 1 and self.action != RAC3PLAYERACTION.IN_CUTSCENE:
-                            self.tyhrra_dropship += 1
-                            logger.debug("UnSet Tyhrranosis Dropship")
-                            self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
+                    # if name == RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
+                    #     # logger.debug(f"Pause state: {self.pause_state_value}, latch state: {self.tyhrra_dropship}")
+                    #     if self.tyhrra_dropship < 1 and self.short_pause:
+                    #         self.tyhrra_dropship += 1
+                    #         # logger.debug("Set Tyhrranosis Dropship")
+                    #         self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
+                    #     elif self.tyhrra_dropship == 1 and self.short_pause:
+                    #         self.tyhrra_dropship += 1
+                    #         # logger.debug("UnSet Tyhrranosis Dropship")
+                    #         self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                     #     continue
                     if name == RAC3SHORTCUTS.METROPOLIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
-                        if self.metro_dropship == 0 and not self.between_planets:
+                        # logger.debug(f"Pause state: {self.pause_state_value}, latch state: {self.metro_dropship}")
+                        if self.metro_dropship < 1 and self.short_pause:
                             self.metro_dropship += 1
                             self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
-                        elif self.metro_dropship == 1 and self.action != RAC3PLAYERACTION.IN_CUTSCENE:
+                            # logger.debug("Set Metro Dropship")
+                        elif self.metro_dropship == 1 and self.short_pause:
                             self.metro_dropship += 1
                             self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                             # logger.debug("UnSet Metro Dropship")
