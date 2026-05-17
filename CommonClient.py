@@ -1069,13 +1069,17 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if "players" in args:
             ctx.consume_players_package(args["players"])
         if "hint_points" in args:
-            ctx.hint_points = args['hint_points']
+            ctx.hint_points = args["hint_points"]
         if "checked_locations" in args:
             checked = set(args["checked_locations"])
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
         if "permissions" in args:
             ctx.update_permissions(args["permissions"])
+
+        # Update hint info for local display
+        if "hint_cost" in args:
+            ctx.hint_cost = int(args["hint_cost"])
 
     elif cmd == 'Print':
         ctx.on_print(args)
