@@ -375,7 +375,7 @@ async def handle_check_goal(ctx: "Context") -> None:
         return
 
     victory_code = ctx.game_interface.get_victory_code()
-    if victory_code in ctx.checked_locations:
+    if victory_code in ctx.checked_locations and not ctx.finished_game:
         ctx.finished_game = True
         await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_GOAL)])
 
@@ -472,8 +472,8 @@ async def handle_save(ctx: "Context") -> None:
         return
     if ctx.data_received:
         local_save = ctx.game_interface.update_save()
-        #logger.debug(f"local_save : {local_save}")
-        #logger.debug(f"server_save: {ctx.save_data}")
+        # logger.debug(f"local_save : {local_save}")
+        # logger.debug(f"server_save: {ctx.save_data}")
         if not (local_save == ctx.save_data):
             logger.debug("Sending new save data to server")
             ctx.data_received = False
