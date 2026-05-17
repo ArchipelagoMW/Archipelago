@@ -617,13 +617,13 @@ class Rac3Interface(GameInterface):
         if self.options.weapon_vendors:
             items_to_sell: list[str] = []
             already_sold = set()
-            for location, item in WEAPON_VENDOR_LOCATION_TO_ITEM.items():
+            for loc, item in WEAPON_VENDOR_LOCATION_TO_ITEM.items():
                 if item == RAC3ITEM.HOLO_SHIELD and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations:
                     continue
                 if item == RAC3ITEM.RY3N0 and not self.options.ngplus_vendors:
                     continue
-                if WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[location] in self.visited_planets and item not in already_sold:
-                    if location in self.checked_locations:
+                if WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[loc] in self.visited_planets and item not in already_sold:
+                    if loc in self.checked_locations:
                         already_sold.add(item)
                     else:
                         items_to_sell.append(item)
@@ -2048,7 +2048,7 @@ class Rac3Interface(GameInterface):
                             self.tyhrra_dropship += 1
                             logger.debug("UnSet Tyhrranosis Dropship")
                             self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
-                        return
+                    #     continue
                     if name == RAC3SHORTCUTS.METROPOLIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
                         if self.metro_dropship == 0 and not self.between_planets:
                             self.metro_dropship += 1
@@ -2056,7 +2056,8 @@ class Rac3Interface(GameInterface):
                         elif self.metro_dropship == 1 and self.action != RAC3PLAYERACTION.IN_CUTSCENE:
                             self.metro_dropship += 1
                             self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
-                        return
+                            # logger.debug("UnSet Metro Dropship")
+                        continue
                     # Todo: check for the player opening the final door
                     if name == RAC3SHORTCUTS.HOLOSTAR_TELEPORTER and data.FLAG_ADDRESSES is not None:
                         if self.holo_teleport == 0:
@@ -2066,15 +2067,16 @@ class Rac3Interface(GameInterface):
                             self.holo_teleport += 1
                             self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                             self.force_respawn()
-                        return
+                        continue
                     # all other shortcuts
+                    # logger.debug(f"Process: {name}")
                     if data.FLAG_ADDRESSES is not None:
                         _write: dict[int, set[int]] = {}
                         for check in data.FLAG_ADDRESSES:
                             _write.setdefault(check[0], set()).add(check[1])
                         for address, flag in _write.items():
                             self._write_bits(address, flag)
-                    if data.VISIT_ADDRESSES is not None and self.visited_planets.issuperset(data.VISIT_ADDRESSES):
+                    if data.VISIT_ADDRESSES is not None and not self.visited_planets.issuperset(data.VISIT_ADDRESSES):
                         for address in data.VISIT_ADDRESSES:
                             self._write8(RAC3_REGION_DATA_TABLE[address].VISIT_ADDRESS, 1)
 
