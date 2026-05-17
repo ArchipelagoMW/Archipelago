@@ -418,7 +418,8 @@ class Rac3Context(CommonContext):
                         logger.debug(f"Valid Save data from Server {args['keys'][f'{self.uuid}_save_data']}")
                         for address, data in args["keys"][f"{self.uuid}_save_data"].items():
                             self.save_data.update({int(address): (CHECKTYPE(data[0]), data[1])})
-                        self.game_interface.load_save(self.save_data)
+                        if self.is_connected_to_game and not self.main_menu:
+                            self.game_interface.load_save(self.save_data)
 
         if cmd == "SetReply":
             logger.debug(f"{cmd} server packet: {args}")
