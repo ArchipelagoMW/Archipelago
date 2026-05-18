@@ -13,7 +13,7 @@ Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.
     1. Version 25.03.16.0 or greater OpenKH Mod Manager with Panacea
     2. Lua Backend from the OpenKH Mod Manager
     3. Install the mod `KH2FM-Mods-Num/GoA-ROM-Edition` using OpenKH Mod Manager
-    4. [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases)
+    4. [Archipelago Launcher](https://github.com/ArchipelagoMW/Archipelago/releases)
     5. Install the Archipelago Companion mod from `JaredWeakStrike/APCompanion` using OpenKH Mod Manager
     6. Install the mod from `TopazTK/KH2-ArchipelagoEnablers` using OpenKH Mod manager
        1. Do Note that if you have `KH2FM-Mods-equations19/auto-save` OR `KH2FM-Mods-equations19/soft-reset` you should download `TopazTK/KH2-ArchipelagoEnablersLITE` instead

@@ -45,7 +45,7 @@ def default_6_x_x():
     }
 
 
-def allsanity_no_mods_6_x_x():
+def maxsanity_no_mods_6_x_x():
     return {
         options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_full_shuffling,
         options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
@@ -88,16 +88,16 @@ def allsanity_no_mods_6_x_x():
     }
 
 
-def allsanity_mods_6_x_x_exclude_disabled():
-    allsanity = allsanity_no_mods_6_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
-    return allsanity
+def maxsanity_mods_6_x_x_exclude_disabled():
+    maxsanity = maxsanity_no_mods_6_x_x()
+    maxsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
+    return maxsanity
 
 
-def allsanity_mods_6_x_x():
-    allsanity = allsanity_no_mods_6_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
-    return allsanity
+def maxsanity_mods_6_x_x():
+    maxsanity = maxsanity_no_mods_6_x_x()
+    maxsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
+    return maxsanity
 
 
 def default_7_x_x():
@@ -143,7 +143,7 @@ def default_7_x_x():
     }
 
 
-def allsanity_no_mods_7_x_x():
+def maxsanity_no_mods_7_x_x():
     return {
         options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_full_shuffling,
         options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
@@ -188,16 +188,16 @@ def allsanity_no_mods_7_x_x():
     }
 
 
-def allsanity_mods_7_x_x():
-    allsanity = allsanity_no_mods_7_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
-    return allsanity
+def maxsanity_mods_7_x_x():
+    maxsanity = maxsanity_no_mods_7_x_x()
+    maxsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
+    return maxsanity
 
 
-def allsanity_mods_7_x_x_exclude_disabled():
-    allsanity = allsanity_no_mods_7_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
-    return allsanity
+def maxsanity_mods_7_x_x_exclude_disabled():
+    maxsanity = maxsanity_no_mods_7_x_x()
+    maxsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
+    return maxsanity
 
 
 def get_minsanity_options():
@@ -318,7 +318,7 @@ def setting_mins_and_maxes():
         options.Fishsanity.internal_name: [options.Fishsanity.option_none, options.Fishsanity.option_all],
         options.Friendsanity.internal_name: [options.Friendsanity.option_none, options.Friendsanity.option_all_with_marriage],
         options.FriendsanityHeartSize.internal_name: [1, 8],
-        options.Goal.internal_name: options.Goal.option_allsanity,
+        options.Goal.internal_name: options.Goal.option_maxsanity,
         options.IncludeEndgameLocations.internal_name: [options.IncludeEndgameLocations.option_false, options.IncludeEndgameLocations.option_true],
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: [options.Monstersanity.option_none, options.Monstersanity.option_one_per_monster],
