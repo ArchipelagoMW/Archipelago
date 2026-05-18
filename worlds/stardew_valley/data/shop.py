@@ -26,6 +26,13 @@ class ShopSource(Source):
     def __lt__(self, other):
         return self.__repr__() < other.__repr__()
 
+    # These two methods are used so we can use ShopSources as dictionary keys during DataRandomization
+    def __eq__(self, other):
+        return self is other
+
+    def __hash__(self):
+        return id(self)
+
 
 @dataclass(frozen=True, kw_only=True)
 class MysteryBoxSource(Source):

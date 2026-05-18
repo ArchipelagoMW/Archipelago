@@ -48,8 +48,8 @@ def normal_randomize(existing_values: dict[Any, Any], random: Random, *args, **k
     log_data = [math.log(x) for x in values]
 
     mean = sum(log_data) / len(log_data)
-    variance = sum((x - mean)**2 for x in log_data) / len(log_data)
-    standard_deviation = variance**0.5
+    variance = sum((x - mean) ** 2 for x in log_data) / len(log_data)
+    standard_deviation = variance ** 0.5
 
     new_values = dict()
     for i in range(len(keys)):
@@ -90,9 +90,21 @@ def range_randomize(existing_values: dict[Any, Any], random: Random, *args, **kw
         return randomize(existing_values, random, *args, **kwargs)
     if all(isinstance(val, Number) for val in existing_values.values()):
         return range_randomize_numeric(existing_values, random, *args, **kwargs)
-    if all(isinstance(val, Iterable) and not isinstance(val, str) for val in existing_values.values()):
+    if all(isinstance(val, Iterable) and
+           not isinstance(val, str) and
+           is_all_same_type(val)
+           for val in existing_values.values()):
         return range_randomize_iterable(existing_values, random, *args, **kwargs)
     return randomize(existing_values, random, *args, **kwargs)
+
+
+def is_all_same_type(iterable_val: Iterable) -> bool:
+    as_list = list(iterable_val)
+    if len(as_list) <= 1:
+        return True
+    correct_type = type(as_list[0])
+    all_correct_type = all(isinstance(val, correct_type) for val in as_list)
+    return all_correct_type
 
 
 def range_randomize_numeric(existing_values: dict[Any, Number], random: Random, *args, **kwargs) -> dict[Any, Any]:
@@ -115,7 +127,7 @@ def range_randomize_numeric(existing_values: dict[Any, Number], random: Random, 
     new_values = dict()
     for i in range(len(keys)):
         # if max_decimals == 0:
-        random_value = random.randrange(range_start, range_end+1)
+        random_value = random.randrange(range_start, range_end + 1)
         random_value = round(random_value, -round_digits)
         # else:
         #     random_value = random.random()
@@ -144,7 +156,7 @@ def range_randomize_iterable(existing_values: dict[Any, Iterable], random: Rando
 
     new_values = dict()
     for i in range(len(keys)):
-        size_value = random.randrange(smallest_value_size, biggest_value_size+1)
+        size_value = random.randrange(smallest_value_size, biggest_value_size + 1)
         entries = random.sample(possible_entries, k=size_value)
         entries = sorted(entries)
         if isinstance(value_for_type, frozenset):
