@@ -15,6 +15,7 @@ class ShopSource(Source):
     items_price: tuple[ItemPrice, ...] | None = None
     seasons: tuple[str, ...] = Season.all
     currency: str = Currency.money
+    forbidden_items: tuple[str, ...] | None = None
 
     def __post_init__(self):
         assert self.price is not None or self.items_price is not None, "At least money price or items price need to be defined."

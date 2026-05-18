@@ -33,11 +33,12 @@ from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
+from ...strings.geode_names import Geode
 from ...strings.gift_names import Gift
 from ...strings.ingredient_names import Ingredient
 from ...strings.machine_names import Machine
 from ...strings.material_names import Material
-from ...strings.metal_names import MetalBar
+from ...strings.metal_names import MetalBar, Ore
 from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
@@ -801,6 +802,7 @@ pelican_town = ContentPack(
                     price=2000,
                     items_price=((5, MetalBar.copper),),
                     other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.basic),),
+                    forbidden_items=(MetalBar.iron, Ore.iron, Geode.frozen, MetalBar.gold, Ore.gold, Geode.magma, MetalBar.iridium, Ore.iridium, Geode.omni,),
                 ),
             ),
         ),
@@ -813,6 +815,7 @@ pelican_town = ContentPack(
                     price=5000,
                     items_price=((5, MetalBar.iron),),
                     other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.copper),),
+                    forbidden_items=(MetalBar.gold, Ore.gold, Geode.magma, MetalBar.iridium, Ore.iridium, Geode.omni,),
                 ),
             ),
         ),
@@ -825,6 +828,7 @@ pelican_town = ContentPack(
                     price=10_000,
                     items_price=((5, MetalBar.gold),),
                     other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.iron),),
+                    forbidden_items=(MetalBar.iridium, Ore.iridium, Geode.omni,),
                 ),
             ),
         ),
@@ -854,6 +858,7 @@ pelican_town = ContentPack(
                     price=2000,
                     items_price=((5, MetalBar.copper),),
                     other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.basic),),
+                    forbidden_items=(Material.hardwood,),
                 ),
             ),
         ),
@@ -866,6 +871,7 @@ pelican_town = ContentPack(
                     price=5000,
                     items_price=((5, MetalBar.iron),),
                     other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.copper),),
+                    forbidden_items=(Material.hardwood,),
                 ),
             ),
         ),

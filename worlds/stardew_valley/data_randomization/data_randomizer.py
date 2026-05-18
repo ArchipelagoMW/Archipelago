@@ -430,6 +430,8 @@ def randomize_shop_extra_materials(content: StardewContent, data_to_randomize: s
 
     shop_materials_by_source = {shop_source: shop_source.items_price for shop_source in shop_sources_included}
     randomized_shop_materials = randomizers_per_behavior[behavior](shop_materials_by_source, random)
+    while any(shop_source.forbidden_items and any(item in shop_source.forbidden_items for price, item in items_price) for shop_source, items_price in randomized_shop_materials.items()):
+        randomized_shop_materials = randomizers_per_behavior[behavior](shop_materials_by_source, random)
 
     for item_name, item_data in content.game_items.items():
         new_sources = get_new_extra_material_sources(item_data, randomized_shop_materials)
