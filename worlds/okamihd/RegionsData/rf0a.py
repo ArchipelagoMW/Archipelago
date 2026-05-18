@@ -17,9 +17,9 @@ exits = {
                  has_events=["Ryoshima Coast - Climb catwalk tower"]),
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
-        ExitData(RegionNames.RYOSHIMA_COAST_WEST_PIER,one_way=True,loading_screen=False),
+        ExitData(RegionNames.RYOSHIMA_COAST_WEST_PIER, one_way=True, loading_screen=False),
         ExitData(RegionNames.ANKOKU_TEMPLE),
-        ExitData(RegionNames.FAWNS_HOUSE,has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"])
+        ExitData(RegionNames.FAWNS_HOUSE, has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"])
     ],
     RegionNames.RYOSHIMA_COAST_SEA: [
         ExitData(RegionNames.RYOSHIMA_COAST_DOJO, needs_long_swim=True, loading_screen=False),
@@ -38,15 +38,17 @@ exits = {
         ExitData(RegionNames.RYOSHIMA_COAST, loading_screen=False, one_way=True,
                  has_events=["Ryoshima Coast - Mandatory Ubume Encounter"])
     ],
-    # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
+
     RegionNames.RYOSHIMA_COAST_SEIAN: [
-        ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False)
+        # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
+        ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
+        ExitData(RegionNames.SEIAN_CITY_COMMONERS_DRY)
     ],
     RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False)
     ],
-    RegionNames.RYOSHIMA_COAST_WEST_PIER:[
-        ExitData(RegionNames.RYOSHIMA_COAST_SEA,loading_screen=False)
+    RegionNames.RYOSHIMA_COAST_WEST_PIER: [
+        ExitData(RegionNames.RYOSHIMA_COAST_SEA, loading_screen=False)
     ]
 
 }
@@ -76,9 +78,12 @@ locations = {
                                                                type=LocationType.BURIED_CHEST),
         "Ryoshima Coast - Freestanding Chest at Pier's Edge": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 31)),
         "Ryoshima Coast - Eastern Clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 49)),
-        "Ryoshima Coast - Eastern Underwater clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 51),type=LocationType.UNDERWATER_CHEST_SHALLOW),
-        "Ryoshima Coast - Center Underwater clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 52),type=LocationType.UNDERWATER_CHEST_SHALLOW),
-        "Ryoshima Coast - Western Underwater clam on Beach east of Pier": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 53),type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Ryoshima Coast - Eastern Underwater clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 51),
+                                                                     type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Ryoshima Coast - Center Underwater clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 52),
+                                                                    type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Ryoshima Coast - Western Underwater clam on Beach east of Pier": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 53), type=LocationType.UNDERWATER_CHEST_SHALLOW),
         "Ryoshima Coast - Nothern Underwater Clam west of Lunar turret": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 55), type=LocationType.UNDERWATER_CHEST_SHALLOW),
         "Ryoshima Coast - Southern Underwater Clam west of Lunar turret": LocData(
@@ -160,12 +165,12 @@ locations = {
             container_check_id(MapIds.HEALED_RYOSHIMA, 50),
             type=LocationType.BURIED_CHEST),
     },
-    RegionNames.RYOSHIMA_COAST_WEST_PIER:{
+    RegionNames.RYOSHIMA_COAST_WEST_PIER: {
         "Ryoshima Coast - Underwater clam, west of Pier": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 54),
                                                                   type=LocationType.UNDERWATER_CHEST_SHALLOW),
     },
-    RegionNames.ANKOKU_TEMPLE:{
-        "Ryoshima Coast - Chest inside Ankoku Temple": LocData(container_check_id(MapIds.HEALED_RYOSHIMA,63))
+    RegionNames.ANKOKU_TEMPLE: {
+        "Ryoshima Coast - Chest inside Ankoku Temple": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 63))
     }
 
 }

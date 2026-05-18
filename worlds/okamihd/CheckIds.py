@@ -26,7 +26,7 @@ GLOBAL_FLAG_BASE = 6_000_000_000
 GAME_PROGRESS_BASE = 7_000_000_000
 CONTAINER_BASE = 8_000_000_000
 
-
+# Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/brushes.hpp
 def brush_check_id(brush_index: int) -> int:
     return BRUSH_BASE + brush_index
 

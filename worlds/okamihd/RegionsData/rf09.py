@@ -14,9 +14,6 @@ exits = {
     ],
     RegionNames.CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE:[
         ExitData(RegionNames.RYOSHIMA_COAST,has_events=["Ryoshima Coast - Bloom the Guardian Sapling"],one_way=True)
-    ],
-    RegionNames.RYOSHIMA_COAST_SEIAN:[
-        ExitData(RegionNames.SEIAN_CITY_COMMONERS_DRY)
     ]
 }
 events = {
