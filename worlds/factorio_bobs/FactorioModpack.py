@@ -42,13 +42,16 @@ class FactorioModpack(BaseModpack):
         self._add_item("Attack Trap")
         self._add_item("Evolution Trap")
         self._add_item("Teleport Trap")
-        self._add_item("Evolution Trap")
         self._add_item("Grenade Trap")
         self._add_item("Cluster Grenade Trap")
         self._add_item("Artillery Trap")
         self._add_item("Atomic Rocket Trap")
         self._add_item("Atomic Cliff Remover Trap")
         self._add_item("Inventory Spill Trap")
+        self._add_item("Peek a Tech Trap")
+        self._add_item("Tech Reset Trap")
+        self._add_item("Reset Map Info Trap")
+        self._add_item("Energy Spiral Trap")
 
         for technology_name, tech in self.technology_table.items():
             self._add_item(technology_name, groups={"Progressive"} if tech.progressive else None)

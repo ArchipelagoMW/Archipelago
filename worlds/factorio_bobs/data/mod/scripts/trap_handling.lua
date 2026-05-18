@@ -277,7 +277,7 @@ local function energy_spiral_trap()
     local clear_effect = game.tick + general.traps.energy_pollution_duration
     repeat
         clear_effect = clear_effect + 1
-    until (storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil)
+    until (storage.on_tick[clear_effect] == nil and storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil)
 
     -- To fix
     add_action_to_tick(clear_effect, "undo-energy-spiral-trap", undo_energy_spiral)

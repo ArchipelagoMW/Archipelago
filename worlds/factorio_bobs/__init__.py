@@ -85,8 +85,6 @@ class FactorioBobs(World):
     science_locations: typing.List[FactorioScienceLocation]
     removed_technologies: typing.Set[str]
     settings: typing.ClassVar[FactorioSettings]
-    trap_names: tuple[str] = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery",
-                              "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill")
     want_progressives: dict[str, bool] = collections.defaultdict(lambda: False)
 
     seeded_random_seed: int
@@ -221,9 +219,9 @@ class FactorioBobs(World):
 
         location_count = len(self.modpack.base_technology_table) - len(self.modpack.removed_technologies) - self.skip_silo
 
-        for name in self.trap_names:
-            name = name.replace(" ", "_").lower()+"_traps"
-            location_count += getattr(self.options, name)
+        # add locations count based on amount of traps enabled.
+        for trap_name in self.options.trap_count.keys():
+            location_count += self.options.trap_count[trap_name]
 
         location_pool = []
 
@@ -285,10 +283,10 @@ class FactorioBobs(World):
 
     def create_items(self) -> None:
         self.custom_technologies = self.set_custom_technologies()
-        for trap_name in self.trap_names:
-            self.multiworld.itempool.extend(self.create_item(f"{trap_name} Trap") for _ in
-                                            range(getattr(self.options,
-                                                          f"{trap_name.lower().replace(' ', '_')}_traps")))
+
+        # add items based on traps in trap_count
+        for trap_name in self.options.trap_count.keys():
+            self.multiworld.itempool.extend(self.create_item(f"{trap_name}") for _ in range(self.options.trap_count[trap_name]))
 
         cost_sorted_locations = sorted(self.science_locations, key=lambda location: (location.complexity, location.rel_cost))
         special_index = self.modpack.forced_locations
