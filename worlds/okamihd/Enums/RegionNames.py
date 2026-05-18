@@ -147,6 +147,7 @@ class RegionNames(StrEnum):
     SEIAN_CITY_YAMA ="Sei-an City (Yama's restaurant)"
     SEIAN_CITY_FLOWERS="Sei-an City (Mr. Flower's house)"
     SEIAN_CITY_SOUTHWEST="Sei-an City (Southwest building)"
+    SEIAN_CITY_TAO="Sei-an City (Tao Troopers Headquarters)"
 
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
