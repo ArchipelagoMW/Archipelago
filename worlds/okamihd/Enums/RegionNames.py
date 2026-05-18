@@ -41,8 +41,8 @@ class RegionNames(StrEnum):
     SHINSHU_FIELD = "Shinshu Field"
     SHINSHU_FIELD_AGATA_CAVE = "Shinshu Field (Cave to Agata Forest)"
     TAMA_HOUSE = "Tama's house"
-    SHINSHU_PLATEAU="Shinshu Field Plateau"
-    SHINSHU_AGATA_SHORTCUT_LEDGE="Ledge Shortcut From Agata Forest"
+    SHINSHU_PLATEAU = "Shinshu Field Plateau"
+    SHINSHU_AGATA_SHORTCUT_LEDGE = "Ledge Shortcut From Agata Forest"
 
     ## HANA VALLEY
     CURSED_HANA_VALLEY = "Cursed Hana Valley"
@@ -119,26 +119,31 @@ class RegionNames(StrEnum):
     MOON_CAVE_OROCHI = "Moon Cave (Orochi)"
 
     ## CITY CHECKPOINT
-    CITY_CHECKPOINT_TAKA="City Checkpoint (Taka side)"
-    CITY_CHECKPOINT_DRAWBRIDGE="City Checkpoint Drawbridge"
-    CITY_CHECKPOINT_RYOSHIMA="City Checkpoint (Ryoshima side)"
-    CITY_CHECKPOINT_RIVER="City Checkpoint (River)"
+    CITY_CHECKPOINT_TAKA = "City Checkpoint (Taka side)"
+    CITY_CHECKPOINT_DRAWBRIDGE = "City Checkpoint Drawbridge"
+    CITY_CHECKPOINT_RYOSHIMA = "City Checkpoint (Ryoshima side)"
+    CITY_CHECKPOINT_RIVER = "City Checkpoint (River)"
 
     # Western Nippon
 
     ## RYOSHIMA COAST
-    CURSED_RYOSHIMA_COAST="Cursed Ryoshima Coast"
-    CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE= "Cursed Ryoshima Coast"
-    RYOSHIMA_COAST="Ryoshima Coast"
-    RYOSHIMA_COAST_SEA="Ryoshima Coast (Sea)"
-    RYOSHIMA_COAST_DOJO="Ryoshima Coast (Dojo)"
-    RYOSHIMA_COAST_SHIP_TOP="Ryoshima Coast (Top of Sunken Ship)"
-    RYOSHIMA_COAST_CATWALK_TOWER="Ryoshima Coast (Catwalk Tower)"
-    RYOSHIMA_COAST_SEIAN ="Ryoshima Coast (Near Seian City Entrance)"
-    RYOSHIMA_COAST_SEIAN_ENCOUNTER="Ryoshima Coast (Near Seian City Entrance Encounter)"
-    RYOSHIMA_COAST_LUNAR_LAGOON="Ryoshima Coast (Lunar Lagoon)"
-    RYOSHIMA_COAST_WEST_PIER="Ryoshima Coast (West of Pier)"
-    ANKOKU_TEMPLE="Ankoku Temple"
+    CURSED_RYOSHIMA_COAST = "Cursed Ryoshima Coast"
+    CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE = "Cursed Ryoshima Coast"
+    RYOSHIMA_COAST = "Ryoshima Coast"
+    RYOSHIMA_COAST_SEA = "Ryoshima Coast (Sea)"
+    RYOSHIMA_COAST_DOJO = "Ryoshima Coast (Dojo)"
+    RYOSHIMA_COAST_SHIP_TOP = "Ryoshima Coast (Top of Sunken Ship)"
+    RYOSHIMA_COAST_CATWALK_TOWER = "Ryoshima Coast (Catwalk Tower)"
+    RYOSHIMA_COAST_SEIAN = "Ryoshima Coast (Near Seian City Entrance)"
+    RYOSHIMA_COAST_SEIAN_ENCOUNTER = "Ryoshima Coast (Near Seian City Entrance Encounter)"
+    RYOSHIMA_COAST_LUNAR_LAGOON = "Ryoshima Coast (Lunar Lagoon)"
+    RYOSHIMA_COAST_WEST_PIER = "Ryoshima Coast (West of Pier)"
+    ANKOKU_TEMPLE = "Ankoku Temple"
+
+    ## SEIAN CITY
+    ### COMMONERS QUARTER
+    SEIAN_CITY_COMMONERS = "Sei-an City Commoners' Quarter"
+    SEIAN_CITY_COMMONERS_DRY = "Sei-an City Commoners' Quarter (No water)"
 
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
@@ -156,6 +161,7 @@ class MapIds(Enum):
     CALCIFIED_CAVERN = 0x10E
     MOON_CAVE = 0x110
     RIVER_OF_THE_HEAVENS = 0x122
+    SEIAN_COMMONERS = 0x201
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03
@@ -180,7 +186,9 @@ class MapIndexes(Enum):
     CALCIFIED_CAVERN = 15
     MOON_CAVE = 16
     RIVER_OF_THE_HEAVENS = 30
+    #FIXME: Ensure this is the right index
+    SEIAN_CITY_COMMONERS = 32
     SHINSHU_FIELD = 71
     AGATA_FOREST = 72
     TAKA_PASS = 74
-    RYOSHIMA_COAST= 75
+    RYOSHIMA_COAST = 75
