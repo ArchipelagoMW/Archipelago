@@ -596,9 +596,9 @@ class TextChoice(Choice):
         return cls(text)
 
     @classmethod
-    def validate_text(cls, value: str) -> bool:
+    def validate_text(cls, value: str) -> None:
         """Override to validate text during yaml processing"""
-        return True
+        return
 
     @classmethod
     def get_option_name(cls, value: str | int) -> str:

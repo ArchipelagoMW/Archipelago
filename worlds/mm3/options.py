@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, Toggle, DeathLink, TextChoice, Range, OptionDict, PerGameCommonOptions
+from Options import Choice, Toggle, DeathLink, TextChoice, Range, OptionDict, PerGameCommonOptions, OptionError
 from schema import Schema, And, Use, Optional
 from .rules import bosses, weapons_to_id
 from .color import palette_pointers, parse_color, validate_colors
@@ -73,7 +73,7 @@ class PaletteShuffle(TextChoice):
     option_singularity = 3
 
     @classmethod
-    def validate_text(cls, value: str) -> bool:
+    def validate_text(cls, value: str) -> None:
         color_sets = value.split(";")
         if len(color_sets) > 1:
                 # can only have two cases not reach this
@@ -83,14 +83,13 @@ class PaletteShuffle(TextChoice):
             if "-" in color_set:
                 character, color = color_set.split("-")
                 if character.title() not in palette_pointers:
-                    raise Exception(f"Character '{character}' is not a valid character for Mega Man 3.")
+                    raise OptionError(f"Character '{character}' is not a valid character for Mega Man 3.")
                 colors = color.split("|")
                 real_colors = validate_colors(*parse_color(colors), allow_match=True)
             else:
                 # If color is provided with no character, assume singularity
                 colors = color_set.split("|")
                 real_colors = validate_colors(*parse_color(colors), allow_match=True)
-        return True
 
 
 
