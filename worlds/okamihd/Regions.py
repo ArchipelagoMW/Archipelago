@@ -25,7 +25,9 @@ def create_regions(world: "OkamiWorld"):
     for r in RegionNames:
         reg = world.multiworld.get_region(r.value, world.player)
         create_region_exits(reg, world)
-        create_region_warps(reg, world)
+        # Only create warps entrances if we're using warp logic.
+        if world.options.AccountForWarpsLogic.value == world.options.AccountForWarpsLogic.option_true:
+            create_region_warps(reg, world)
 
 
 def create_region(world: "OkamiWorld", region_name: str):
@@ -54,29 +56,30 @@ def create_region_warps(reg: Region, world: "OkamiWorld"):
             # Partial support for Mermaid Springs
             if warp_data.type == WarpType.MIST_WARP:
                 hub = world.multiworld.get_region(RegionNames.MIST_WARP_HUB.value, world.player)
-                #Requirements for Mist Warp
+                # Requirements for Mist Warp
                 hub_access_rule = Has(BrushTechniques.MIST_WARP)
             else:
                 hub = world.multiworld.get_region(RegionNames.MERMAID_SPRING_HUB.value, world.player)
-                #Requirements to use Mermaid Spring - Figure out a way to account for mermaid coins
+                # Requirements to use Mermaid Spring - Figure out a way to account for mermaid coins
                 hub_access_rule = Has(BrushTechniques.FOUNTAIN)
 
             # If False we don't even create a way to warp from this place
-            if warp_data.trigger_warp_from!=False_:
-                from_name= reg.name + ' (' + warp_data.type.value + ') -> ' + hub.name
-                warp_from = reg.connect(hub,from_name)
-                if warp_data.trigger_warp_from!=True_:
-                    world.set_rule(warp_from,And(hub_access_rule,warp_data.trigger_warp_from))
+            if warp_data.trigger_warp_from != False_:
+                from_name = reg.name + ' (' + warp_data.type.value + ') -> ' + hub.name
+                warp_from = reg.connect(hub, from_name)
+                if warp_data.trigger_warp_from != True_:
+                    world.set_rule(warp_from, And(hub_access_rule, warp_data.trigger_warp_from))
                 else:
-                    world.set_rule(warp_from,hub_access_rule)
+                    world.set_rule(warp_from, hub_access_rule)
 
             # IF False we don't even create a way to warp to this place
             if warp_data.trigger_warp_to != False_:
-                to_name =  hub.name +' -> ' + reg.name + ' (' + warp_data.type.value+')'
+                to_name = hub.name + ' -> ' + reg.name + ' (' + warp_data.type.value + ')'
                 warp_to = hub.connect(reg, to_name)
                 if warp_data.trigger_warp_from != True_:
                     world.set_rule(warp_to, warp_data.trigger_warp_from)
                 # No need to check if we have the power/coin to get out of the hub.
+
 
 def get_region_location_count(world: "OkamiWorld", region_name: str, included_only: bool = True) -> int:
     count = 0
