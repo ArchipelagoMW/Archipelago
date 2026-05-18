@@ -6,6 +6,7 @@ import Utils
 import zipfile
 
 from datetime import datetime, UTC
+from pathlib import Path
 
 from .Items import item_dictionary_table
 from .Locations import all_locations, SoraLevels, exclusion_table
@@ -628,7 +629,7 @@ def patch_kh2(self, output_directory):
     iconbytes = bytes()
     previewbytes = bytes()
     # local build/server generating
-    apworldloc = os.path.join("worlds","kh2","data")
+    apworldloc = os.path.join(Path(__file__).parent.resolve(),"data")
     if os.path.exists(apworldloc):
         try:
             with open(os.path.join(apworldloc, "khapicon.png"),"rb") as icon, \
@@ -654,9 +655,7 @@ def patch_kh2(self, output_directory):
 
 
     # client install generating
-    apworldloc = os.path.join("lib","worlds")
-    if not os.path.isfile(Utils.user_path(apworldloc, "kh2.apworld")):
-        apworldloc = os.path.join("custom_worlds", "")
+    apworldloc = Path(__file__).resolve().parents[2]
     if os.path.exists(os.path.join(apworldloc,"kh2.apworld")):
         try:
             with zipfile.ZipFile(Utils.user_path(os.path.join(
