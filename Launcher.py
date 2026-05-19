@@ -530,7 +530,7 @@ def main(args: argparse.Namespace | dict | None = None):
             if not component:
                 logging.warning(f"Could not identify Component responsible for {path}")
     elif args['nogui']:
-        from utils.curses import curses_select
+        from utils.curses_utils import curses_select
         component_lookup = {c.display_name: c for c in components}
         component_name = curses_select(list(component_lookup.keys()))
         if component_name is not None:
@@ -549,6 +549,7 @@ def main(args: argparse.Namespace | dict | None = None):
 
 
 if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.INFO)  # force log-level to work around log level resetting to WARNING
     multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(

@@ -23,22 +23,45 @@ def curses_select(data: list[str]) -> str | None:
         DATA_COL = POINTER_COL + 1
         MAX_POINTER = len(data) - 1
         VERTICAL_OFFSET = 1
-        MAX_BOX_HEIGHT = 30
-        MAX_BOX_LENGTH = 40
-        SCROLLING_ENABLED = MAX_POINTER > MAX_BOX_HEIGHT
-        BOX_HEIGHT = min(MAX_BOX_HEIGHT, MAX_POINTER)
-        MAX_SCROLL_OFFSET = MAX_POINTER + 1 - BOX_HEIGHT
+        BASE_BOX_HEIGHT = 30
+        BASE_BOX_LENGTH = 40
+        MAX_BOX_HEIGHT: int = 0
+        MAX_BOX_LENGTH: int = 0
+        SCROLLING_ENABLED: bool = False
+        BOX_HEIGHT: int = 0
+        MAX_SCROLL_OFFSET: int = 0
 
         # shared attrs for the select
         pointer = 0
         scroll_offset = 0
+
+        def resize(self):
+            nonlocal MAX_BOX_HEIGHT
+            nonlocal MAX_BOX_LENGTH
+            nonlocal SCROLLING_ENABLED
+            nonlocal BOX_HEIGHT
+            nonlocal MAX_SCROLL_OFFSET
+            nonlocal pointer
+            nonlocal scroll_offset
+            pointer = scroll_offset = 0
+            _maxyx = self.getmaxyx()
+            MAX_BOX_HEIGHT = min(BASE_BOX_HEIGHT, _maxyx[0] - 2)
+            MAX_BOX_LENGTH = min(BASE_BOX_LENGTH, _maxyx[1] - 3)
+            # these seem to cause trouble with single digit resized terminals but i'm ok with that for now
+
+            SCROLLING_ENABLED = MAX_POINTER > MAX_BOX_HEIGHT
+            BOX_HEIGHT = min(MAX_BOX_HEIGHT, MAX_POINTER)
+            MAX_SCROLL_OFFSET = MAX_POINTER + 1 - BOX_HEIGHT
+            curses.textpad.rectangle(self, 0, 0, BOX_HEIGHT + 1, MAX_BOX_LENGTH + 1)
+            write_data(self)
+            set_pointer(self, pointer)
+            self.refresh()
 
         def write_data(self):
             for index, line in enumerate(data):
                 offset_index = index - scroll_offset
                 if 0 <= offset_index < BOX_HEIGHT:
                     self.addstr(VERTICAL_OFFSET + offset_index, DATA_COL, line + " " * (MAX_BOX_LENGTH - 1 - len(line)))
-            self.refresh()
 
         def move_pointer(self, down: bool):
             nonlocal pointer
@@ -107,7 +130,7 @@ def curses_select(data: list[str]) -> str | None:
             set_pointer(self, pointer)
 
         def poll(self) -> int | None:
-            key = self.getch()
+            key = self.getch()  # implicit .refresh()
             if key == curses.KEY_UP:
                 move_pointer(self, down=False)
             elif key == curses.KEY_DOWN:
@@ -118,13 +141,12 @@ def curses_select(data: list[str]) -> str | None:
                 page(self, down=False)
             elif key == curses.ascii.ESC:
                 raise CursesCancel("User Cancelled")
+            elif key == curses.KEY_RESIZE:
+                resize(self)
             else:
                 return pointer
 
-        curses.textpad.rectangle(stdscr, 0, 0, BOX_HEIGHT + 1, MAX_BOX_LENGTH + 1)
-        write_data(stdscr)
-        set_pointer(stdscr, 0)
-
+        resize(stdscr)
         while ret is None:
             ret = poll(stdscr)
             pass
@@ -134,6 +156,7 @@ def curses_select(data: list[str]) -> str | None:
         curses.wrapper(select_box)
     except CursesCancel:
         return None
+    assert ret < len(data), f"attempted to return {ret} - {curses.ascii.ascii(ret)} - {curses.ascii.ctrl(ret)} - {curses.ascii.alt(ret)} - {curses.ascii.unctrl(ret)}"
     return data[ret]
 
 # example usage
