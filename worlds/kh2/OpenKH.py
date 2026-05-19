@@ -642,35 +642,28 @@ def patch_kh2(self, output_directory):
     sourcefolderloc = Path(__file__).parent.resolve() / "data"
     if sourcefolderloc.exists():
         try:
-
             for mod_name, file_name in ICON_FILES.items():
                 with open(sourcefolderloc / file_name, "rb") as f:
                     openkhmod[mod_name] = f.read()
-
             if self.options.HarderAS:
                 for mod_name, file_name in SCRIPT_FILES.items():
                     with open(sourcefolderloc / file_name, "rb") as f:
                         openkhmod[mod_name] = f.read()
-
         except IOError as openerror:
             logging.warning(openerror)
-
 
     # client install generating
     apworldloc = Path(__file__).resolve().parents[1]
     if apworldloc.is_file():
         try:
             with zipfile.ZipFile(Utils.user_path(apworldloc), "r") as apworld_archive:
-
                 for mod_name, file_name in ICON_FILES.items():
                     with apworld_archive.open(f"kh2/data/{file_name}", "r") as f:
                         openkhmod[mod_name] = f.read()
-
                 if self.options.HarderAS:
                     for mod_name, file_name in SCRIPT_FILES.items():
                         with apworld_archive.open(f"kh2/data/{file_name}", "r") as f:
                             openkhmod[mod_name] = f.read()
-
         except IOError as openerror:
             logging.warning(openerror)
 

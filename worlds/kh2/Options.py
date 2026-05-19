@@ -168,7 +168,7 @@ class HarderAS(Toggle):
 
     True: The 5 fights that can be Absent Silhouettes will be the Data Version
     False: The 5 fights that can be Absent Silhouettes will be Absent Silhouettes"""
-    display_name = "Data Organization Fights Only"
+    display_name = "Harder Absent Silhouettes"
     default = False
 
 class SuperBosses(Toggle):
