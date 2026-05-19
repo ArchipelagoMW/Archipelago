@@ -30,7 +30,7 @@ def create_regions(world: "OkamiWorld"):
     for r in RegionNames:
         #Only Create Exits to warps hubs if the option is on
         if r.value.endswith("Warp Hub"):
-            if (world.options.AccountForWarpsLogic):
+            if world.options.AccountForWarpsLogic:
                 reg = world.multiworld.get_region(r.value, world.player)
             else:
                 reg = None
