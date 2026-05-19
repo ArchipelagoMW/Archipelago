@@ -30,7 +30,7 @@ def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount: in
 night_time_check_rule: Rule = Has(BrushTechniques.CRESCENT, options=[
     OptionFilter(NightTimeChecksRequireCrescent, NightTimeChecksRequireCrescent.option_true)], filtered_resolution=True)
 
-moon_cave_fire_rule: Rule = Or(has_portable_fire_source, Has("Moon Cave - 2F Push the ball"))
+moon_cave_fire_rule: Rule = Or(has_portable_fire_source, Has("Moon Cave - 3F Push the ball"))
 
 moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source, Has("Moon Cave - 4F Move Fireball"))
 
