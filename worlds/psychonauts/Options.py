@@ -64,12 +64,12 @@ class OtherItemsModel(Choice):
     """Choose what your Archipelago items for other games look like inside Psychonauts
     Archipelago: The standard Archipelago symbol.
 
-    Classic: The original PsychoRando model for Archipelago items, Bunnies!
+    Bunny: The original PsychoRando model for Archipelago items, Bunnies!
     
     Present: Open some holiday gift boxes!"""
     display_name = "Archipelago Item Model"
     option_archipelago = 0
-    option_classic = 1
+    option_bunny = 1
     option_present = 2
     default = 0
 
