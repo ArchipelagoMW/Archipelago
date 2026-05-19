@@ -156,7 +156,7 @@ shop_locations = {
 }
 
 warps={
-    RegionNames.KAMIKI_VILLAGE:[
+    RegionNames.STONE_KAMIKI:[
         WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_)
     ]
 }
