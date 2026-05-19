@@ -67,7 +67,7 @@ class OkamiWorld(World):
             "SeedName": self.multiworld.seed_name,
             "TotalLocations": get_total_locations(self),
             # Client configuration
-            "supported_client_version": "0.8.0",  # Minimum client version required
+            "supported_client_version": "0.8.1",  # Minimum client version required
         }
 
         # Add game options to slot_data
@@ -98,7 +98,7 @@ class OkamiWorld(World):
         if not world.options.ProgressiveWeapons:
             # Create normal weapons
             for (divine_instrument_data) in list(DivineInstruments):
-                if divine_instrument_data.value.item_name != DivineInstruments.DIVINE_RETRIBUTION.name:
+                if divine_instrument_data.value.item_name != DivineInstruments.DIVINE_RETRIBUTION.value.item_name:
                     itempool+=[create_item(divine_instrument_data.value.item_name,divine_instrument_data.value.code,ItemClassification.progression,world)]
         else:
         # Create progressive weapons

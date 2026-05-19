@@ -2,10 +2,11 @@ import typing
 from typing import NamedTuple, List, Callable, TYPE_CHECKING, TypeVar
 
 from BaseClasses import Location, Item, ItemClassification, LocationProgressType
-from rule_builder.rules import Rule
+from rule_builder.rules import Rule, True_, False_
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.LocationType import LocationType
 from .Enums.OkamiEnemies import OkamiEnemies
+from .Enums.WarpType import WarpType
 from .Options import OkamiOptions
 
 if TYPE_CHECKING:
@@ -66,7 +67,17 @@ class ExitData(NamedTuple):
     has_events: [str] = []
     needs_long_swim: bool = False
     one_way: bool = False
-    loading_screen:bool = True
+    loading_screen: bool = True
+
+
+class WarpData(NamedTuple):
+    # Type of warp
+    type: WarpType
+    ## Both of these don't need to specify the "common" requirements (Mist warp,Merdmaid coin or Foutanin)
+    # The logical rule to warp from this place to anywhere else
+    trigger_warp_from: Rule | True_ | False_
+    # The logical rule to warp from anywhere else to this place
+    trigger_warp_to: Rule | True_ | False_
 
 
 T = TypeVar('T', str, int, bool)

@@ -95,3 +95,12 @@ okami_shop_locations = {
     **getattr(rf08, 'shop_locations', {}),
     **getattr(rf0a, 'shop_locations', {}),
 }
+
+okami_warps={
+    **r102.warps,
+    **r108.warps,
+    **r109.warps,
+    **rf02.warps,
+    **rf04.warps,
+    **rf08.warps,
+}
