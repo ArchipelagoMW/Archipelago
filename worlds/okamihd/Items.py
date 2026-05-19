@@ -59,8 +59,8 @@ def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
     precollected_items.append(create_item(BrushTechniques.REJUVENATION,rejuvenation.code,rejuvenation.classification,world))
 
     # Temp while power slash tutorial requires this.
-    power_slash = brush_techniques_items[BrushTechniques.POWER_SLASH.value]
-    precollected_items.append(create_item(BrushTechniques.POWER_SLASH, power_slash.code, power_slash.classification, world))
+    #power_slash = brush_techniques_items[BrushTechniques.POWER_SLASH.value]
+    #precollected_items.append(create_item(BrushTechniques.POWER_SLASH, power_slash.code, power_slash.classification, world))
 
     astral_pouch = useful_items['Astral Pouch']
     precollected_items.append(create_item('Astral Pouch', astral_pouch.code, astral_pouch.classification, world))
@@ -81,8 +81,7 @@ brush_techniques_items = {
     BrushTechniques.GALESTORM.value: ItemData(0x106, ItemClassification.progression),               # bit 6
     BrushTechniques.THUNDERSTORM.value: ItemData(0x108, ItemClassification.progression),            # bit 8
     BrushTechniques.INFERNO.value: ItemData(0x10A, ItemClassification.progression),                 # bit 10
-    # 1 Less to account for the one given on Sphere 0
-    BrushTechniques.POWER_SLASH.value: ItemData(0x10C, ItemClassification.progression, count_in_pool=2),  # bit 12
+    BrushTechniques.POWER_SLASH.value: ItemData(0x10C, ItemClassification.progression, count_in_pool=3),  # bit 12
     BrushTechniques.WATERSPOUT.value: ItemData(0x10D, ItemClassification.progression),             # bit 13
     BrushTechniques.VEIL_OF_MIST.value: ItemData(0x110, ItemClassification.progression),            # bit 16
     BrushTechniques.CRESCENT.value: ItemData(0x112, ItemClassification.progression),                # bit 18

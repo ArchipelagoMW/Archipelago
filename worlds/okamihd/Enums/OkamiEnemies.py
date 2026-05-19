@@ -44,4 +44,4 @@ class OkamiEnemies(Enum):
 
     @staticmethod
     def list():
-        return list(map(lambda b: b.value, BrushTechniques))
+        return list(map(lambda o: o.value, OkamiEnemies))

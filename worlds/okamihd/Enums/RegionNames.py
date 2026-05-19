@@ -21,7 +21,6 @@ class RegionNames(StrEnum):
 
     ## Cave of Nagi
     CAVE_OF_NAGI = "Cave of Nagi"
-    CAVE_OF_NAGI_TACHIGAMI = "Cave of Nagi (Tachigami sequence)"
 
     ## Kamiki Village
     ### Exteriors
@@ -140,6 +139,12 @@ class RegionNames(StrEnum):
     RYOSHIMA_COAST_WEST_PIER="Ryoshima Coast (West of Pier)"
     ANKOKU_TEMPLE="Ankoku Temple"
 
+
+
+    # SPECIAL REGIONS
+    # Special Hub regions to handle warps
+    MIST_WARP_HUB = "Mist Warp Hub"
+    MERMAID_SPRING_HUB = "Mermaid Spring Warp Hub"
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
 class MapIds(Enum):

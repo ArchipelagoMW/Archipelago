@@ -9,7 +9,6 @@ from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
 from ..Rules import has_soup_ingerdients, moon_cave_fire_rule, moon_cave_4f_fire_rule
 from ..Types import ExitData, LocData, EventData
-from ...earthbound.modules.shopsanity import shop_locations
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
