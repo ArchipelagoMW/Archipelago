@@ -1,11 +1,13 @@
 from typing import TYPE_CHECKING
 
+from rule_builder.rules import True_, Has
 from ..CheckIds import container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Types import EventData, ExitData, LocData
+from ..Enums.WarpType import WarpType
+from ..Types import EventData, ExitData, LocData, WarpData
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -17,6 +19,7 @@ exits={
 }
 events={
     RegionNames.TAKA_PASS:{
+        "Taka Pass - Clear Devil gate near waterfall": EventData(mandatory_enemies=[OkamiEnemies.BUD_OGRE,OkamiEnemies.YELLOW_IMP]),
         "Taka Pass - Save Chun" : EventData(cherry_bomb_level=1,mandatory_enemies=[OkamiEnemies.CUTTERS])
     }
 }
@@ -63,4 +66,11 @@ shop_locations = {
         "Taka Pass - Shop Slot 11": LocData(shop_check_id(19, 10), type=LocationType.SHOP),
         "Taka Pass - Shop Slot 12": LocData(shop_check_id(19, 11), type=LocationType.SHOP),
     }
+}
+
+warps={
+    RegionNames.TAKA_PASS:[
+        WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_),
+        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Taka Pass - Clear Devil gate near waterfall"), trigger_warp_from=Has("Taka Pass - Clear Devil gate near waterfall"))
+    ]
 }

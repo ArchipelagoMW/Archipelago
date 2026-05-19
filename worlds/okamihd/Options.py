@@ -45,6 +45,18 @@ class KarmicTransformers(Choice):
     default = 1
 
 
+class AccountForWarpsLogic(Toggle):
+    """NOT YET FULLY IMPLEMENTED:
+    Will make logic will take into account warps via mermaid springs and Ultimate origin mirrors.
+    Some mermaid springs require to be unlocked to be considered "in logic".
+    All warps require respectively Fountain or Mist warp. Mermaid coins are NOT accounted for,
+    as there isn't a reliable way to obtain them at the moment.
+
+    This will probably be included by default in logic once it's stable.
+    """
+    display_name="Warps in Logic"
+    default = 0
+
 class OpenGameStart(Toggle):
     """ NOT IMPLEMENTED IN CLIENT YET - USE AT YOUR OWN RISK !!
         Remove some early events for a more open game start:
@@ -152,8 +164,9 @@ class OkamiOptions(PerGameCommonOptions):
     RandomizeContainers: RandomizeContainers
     RandomizeShops: RandomizeShops
     RandomizeBrushes: RandomizeBrushes
+    AccountForWarpsLogic: AccountForWarpsLogic
     ShopSlots: ShopSlots
-    NightTimeChecksRequireCrescent:NightTimeChecksRequireCrescent
+    NightTimeChecksRequireCrescent: NightTimeChecksRequireCrescent
     KarmicTransformers: KarmicTransformers
     OpenGameStart: OpenGameStart
     ProgressiveWeapons: ProgressiveWeapons
@@ -173,6 +186,7 @@ okami_option_groups: Dict[str, List[Any]] = {
         RandomizeShops,
         RandomizeBrushes,
         ShopSlots,
+        AccountForWarpsLogic
     ],
     "General Options": [
         NightTimeChecksRequireCrescent,
@@ -196,6 +210,7 @@ slot_data_options = {
     "RandomizeContainers",
     "RandomizeShops",
     "RandomizeBrushes",
+    "AccountForWarpsLogic",
     "ShopSlots",
     "NightTimeChecksRequireCrescent",
     "KarmicTransformers",
