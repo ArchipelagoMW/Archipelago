@@ -25,4 +25,5 @@ Currently, the items randomized are:
 - https://github.com/Axertin/okami-apclient/issues
 - Entering Hana valley Sapling tree area without bloom
 - Checking Tama's without cherry bomb, or if cherry bomb isn't vanilla will softlock you.
-- Melting the ice to exit the Moegami room in Moon Cave will solftlcok you when doing the inferno tutorial.
+- Melting the ice to exit the Moegami room in Moon Cave will solftlcoks you when doing the inferno tutorial.
+- Dragon Orb,Shell Amulet  cannot be picked up

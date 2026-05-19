@@ -52,6 +52,7 @@ class RegionNames(StrEnum):
     CURSED_AGATA_FOREST = "Cursed Agata Forest"
     AGATA_FOREST_WAKA = "Agata Forest (Pre-waka fight)"
     AGATA_FOREST = "Agata Forest"
+    AGATA_FOREST_TAKA = "Agata Forest (Behind Bridge to Taka Pass)"
     ### INTERIORS
     FAWNS_HOUSE = "Madame Fawn's House"
 
@@ -122,6 +123,7 @@ class RegionNames(StrEnum):
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
     MERMAID_SPRING_HUB = "Mermaid Spring Warp Hub"
+
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
 class MapIds(Enum):
