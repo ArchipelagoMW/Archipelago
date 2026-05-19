@@ -325,6 +325,8 @@ def randomize_shop_currencies(content: StardewContent, data_to_randomize: set[st
         return
 
     shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.price is not None and shop_source.price >= 1])
+    shop_sources_by_id = {id(source): source for source in shop_sources_included}
+
     shop_currencies = dict()
     for shop_source in shop_sources_included:
         if shop_source.shop_region not in shop_currencies:
@@ -333,8 +335,8 @@ def randomize_shop_currencies(content: StardewContent, data_to_randomize: set[st
     for shop, currencies in shop_currencies.items():
         assert all(currency == currencies[0] for currency in currencies), f"Not all items in shop [{shop}] use the same currency [{currencies[0]}]"
 
-    shop_currencies_by_source = {shop_source: (shop_source.currency, shop_source.price) for shop_source in shop_sources_included}
-    randomized_shop_currencies = randomizers_per_behavior[behavior](shop_currencies_by_source, random)
+    shop_currencies_by_source_id = {id(shop_source): (shop_source.currency, shop_source.price) for shop_source in shop_sources_included}
+    randomized_shop_currencies = randomizers_per_behavior[behavior](shop_currencies_by_source_id, random)
 
     for item_name, item_data in content.game_items.items():
         new_sources = get_new_currency_sources(item_data, randomized_shop_currencies)
@@ -355,11 +357,11 @@ def randomize_shop_currencies(content: StardewContent, data_to_randomize: set[st
 
 
 def get_new_currency_sources(data, randomized_shop_currencies):
-    shop_sources = [source for source in data.sources if isinstance(source, ShopSource) and source in randomized_shop_currencies]
+    shop_sources = [source for source in data.sources if isinstance(source, ShopSource) and id(source) in randomized_shop_currencies]
     if len(shop_sources) <= 0:
         return None
 
-    modified_shop_sources = [override(source, currency=randomized_shop_currencies[source][0], price=randomized_shop_currencies[source][1]) for source in shop_sources]
+    modified_shop_sources = [override(source, currency=randomized_shop_currencies[id(source)][0], price=randomized_shop_currencies[id(source)][1]) for source in shop_sources]
     new_sources = list(data.sources)
     new_sources = [source for source in new_sources if source not in shop_sources]
     new_sources.extend(modified_shop_sources)
@@ -371,6 +373,8 @@ def randomize_shop_prices(content: StardewContent, data_to_randomize: set[str], 
         return
 
     shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.price is not None and shop_source.price >= 1])
+    shop_sources_by_id = {id(source): source for source in shop_sources_included}
+
     shop_sources_by_currency = dict()
     for shop_source in shop_sources_included:
         if shop_source.currency not in shop_sources_by_currency:
@@ -391,8 +395,8 @@ def randomize_shop_prices(content: StardewContent, data_to_randomize: set[str], 
 
 
 def randomize_shop_prices_group(content: StardewContent, behavior: DataRandomizationBehavior, random: Random, shop_sources: list[ShopSource]):
-    prices_by_shop_sources = {shop_source: shop_source.price for shop_source in shop_sources if shop_source.price is not None and shop_source.price >= 1}
-    randomized_prices_per_shop_source = randomizers_per_behavior[behavior](prices_by_shop_sources, random)
+    prices_by_shop_source_id = {id(shop_source): shop_source.price for shop_source in shop_sources if shop_source.price is not None and shop_source.price >= 1}
+    randomized_prices_per_shop_source = randomizers_per_behavior[behavior](prices_by_shop_source_id, random)
     for item_name, item_data in content.game_items.items():
         new_sources = get_new_price_sources(item_data, randomized_prices_per_shop_source)
         if new_sources is not None:
@@ -412,10 +416,10 @@ def randomize_shop_prices_group(content: StardewContent, behavior: DataRandomiza
 
 
 def get_new_price_sources(data, randomized_prices_per_shop_source):
-    shop_sources = [source for source in data.sources if isinstance(source, ShopSource) and source in randomized_prices_per_shop_source]
+    shop_sources = [source for source in data.sources if isinstance(source, ShopSource) and id(source) in randomized_prices_per_shop_source]
     if len(shop_sources) <= 0:
         return None
-    modified_shop_sources = [override(source, price=randomized_prices_per_shop_source[source]) for source in shop_sources]
+    modified_shop_sources = [override(source, price=randomized_prices_per_shop_source[id(source)]) for source in shop_sources]
     new_sources = list(data.sources)
     new_sources = [source for source in new_sources if source not in shop_sources]
     new_sources.extend(modified_shop_sources)
@@ -427,11 +431,12 @@ def randomize_shop_extra_materials(content: StardewContent, data_to_randomize: s
         return
 
     shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.items_price is not None and len(shop_source.items_price) >= 1])
+    shop_sources_by_id = {id(source): source for source in shop_sources_included}
 
-    shop_materials_by_source = {shop_source: shop_source.items_price for shop_source in shop_sources_included}
-    randomized_shop_materials = randomizers_per_behavior[behavior](shop_materials_by_source, random)
-    while any(shop_source.forbidden_items and any(item in shop_source.forbidden_items for price, item in items_price) for shop_source, items_price in randomized_shop_materials.items()):
-        randomized_shop_materials = randomizers_per_behavior[behavior](shop_materials_by_source, random)
+    shop_materials_by_source_id = {source_id: shop_source.items_price for source_id, shop_source in shop_sources_by_id.items()}
+    randomized_shop_materials = randomizers_per_behavior[behavior](shop_materials_by_source_id, random)
+    while any(shop_sources_by_id[source_id].forbidden_items and any(item in shop_sources_by_id[source_id].forbidden_items for price, item in items_price) for source_id, items_price in randomized_shop_materials.items()):
+        randomized_shop_materials = randomizers_per_behavior[behavior](shop_materials_by_source_id, random)
 
     for item_name, item_data in content.game_items.items():
         new_sources = get_new_extra_material_sources(item_data, randomized_shop_materials)
@@ -446,15 +451,15 @@ def randomize_shop_extra_materials(content: StardewContent, data_to_randomize: s
         if new_sources is not None:
             content.tool_upgrades[tool_upgrade_name] = override(tool_upgrade_data, sources=new_sources)
     # for animal_name, animal_data in content.animals.items():
-    #     new_sources = get_new_extra_material_sources(animal_data, randomized_shop_materials)
+    #     new_sources = get_new_extra_material_sources(animal_data, randomized_shop_materials, shop_sources_by_id)
     #     if new_sources is not None:
     #         content.animals[animal_name] = override(animal_data, sources=new_sources)
 
 
 def get_new_extra_material_sources(data, randomized_shop_materials):
-    shop_sources = [source for source in data.sources if isinstance(source, ShopSource) and source in randomized_shop_materials]
+    shop_sources = [source for source in data.sources if isinstance(source, ShopSource) and id(source) in randomized_shop_materials]
 
-    modified_shop_sources = [override(source, items_price=randomized_shop_materials[source]) for source in shop_sources]
+    modified_shop_sources = [override(source, items_price=randomized_shop_materials[id(source)]) for source in shop_sources]
     original_sources = list(data.sources)
     unchanged_sources = [override(source, items_price=()) if isinstance(source, ShopSource) else source for source in original_sources if source not in shop_sources]
     new_sources = []

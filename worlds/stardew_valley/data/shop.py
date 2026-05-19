@@ -15,7 +15,7 @@ class ShopSource(Source):
     items_price: tuple[ItemPrice, ...] | None = None
     seasons: tuple[str, ...] = Season.all
     currency: str = Currency.money
-    forbidden_items: tuple[str, ...] | None = None
+    forbidden_items: tuple[str, ...] | None = tuple()
 
     def __post_init__(self):
         assert self.price is not None or self.items_price is not None, "At least money price or items price need to be defined."
@@ -26,13 +26,6 @@ class ShopSource(Source):
 
     def __lt__(self, other):
         return self.__repr__() < other.__repr__()
-
-    # These two methods are used so we can use ShopSources as dictionary keys during DataRandomization
-    def __eq__(self, other):
-        return self is other
-
-    def __hash__(self):
-        return id(self)
 
 
 @dataclass(frozen=True, kw_only=True)

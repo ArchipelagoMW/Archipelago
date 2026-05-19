@@ -18,6 +18,8 @@ class TestCraftsanityLogic(SVTestBase):
     def test_can_craft_recipe(self):
         location = "Craft Marble Brazier"
         self.collect(self.create_item("Landslide Removed"))
+        self.collect(self.create_item("Bus Repair"))
+        self.collect(self.create_item("Skull Key"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)

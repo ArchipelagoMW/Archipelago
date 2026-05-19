@@ -99,12 +99,15 @@ def range_randomize(existing_values: dict[Any, Any], random: Random, *args, **kw
 
 
 def is_all_same_type(iterable_val: Iterable) -> bool:
-    as_list = list(iterable_val)
-    if len(as_list) <= 1:
-        return True
-    correct_type = type(as_list[0])
-    all_correct_type = all(isinstance(val, correct_type) for val in as_list)
-    return all_correct_type
+    current_type = None
+    for val in iterable_val:
+        if current_type is None:
+            current_type = type(val)
+            continue
+        if current_type != type(val):
+            return False
+
+    return True
 
 
 def range_randomize_numeric(existing_values: dict[Any, Number], random: Random, *args, **kwargs) -> dict[Any, Any]:
