@@ -39,6 +39,8 @@ def create_regions(world: "OkamiWorld"):
         # Ensure we try to create exits to regions that actually do exist
         if reg is not None:
             create_region_exits(reg, world)
+            if world.options.AccountForWarpsLogic:
+                create_region_warps(reg,world)
 
 
 def create_region(world: "OkamiWorld", region_name: str):
