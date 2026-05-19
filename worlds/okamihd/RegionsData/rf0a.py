@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 
+from rule_builder.rules import Has, True_
 from ..CheckIds import container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Types import ExitData, EventData, LocData
+from ..Enums.WarpType import WarpType
+from ..Types import ExitData, EventData, LocData, WarpData
 from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:
@@ -58,7 +60,9 @@ events = {
         "Ryoshima Coast - Climb catwalk tower": EventData(required_brush_techniques=[BrushTechniques.CATWALK]),
         "Ryoshima Coast - Open Lunar Lagoon": EventData(required_items_events=["Ryoshima Coast - Buy Holy Eagle"],
                                                         required_brush_techniques=[BrushTechniques.CRESCENT]),
-        "Ryoshima Coast - Open Shortcut To Mme Fawn's": EventData()
+        "Ryoshima Coast - Open Shortcut To Mme Fawn's": EventData(),
+        # FIXME: Fill Enemies
+        "Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance": EventData(mandatory_enemies=[])
     },
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: {
         "Ryoshima Coast - Climb back to main area": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT])
@@ -190,4 +194,13 @@ shop_locations = {
         "Ryoshima Coast - Shop Slot 11": LocData(shop_check_id(14, 10), type=LocationType.SHOP),
         "Ryoshima Coast - Shop Slot 12": LocData(shop_check_id(14, 11), type=LocationType.SHOP),
     }
+}
+
+warps = {
+    RegionNames.RYOSHIMA_COAST: [
+        WarpData(type=WarpType.MERMAID_SPRING,
+                 trigger_warp_to=Has("Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance"),
+                 trigger_warp_from=Has("Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance")),
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
+    ]
 }

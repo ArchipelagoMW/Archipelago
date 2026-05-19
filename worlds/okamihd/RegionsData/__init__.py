@@ -98,9 +98,11 @@ okami_shop_locations = {
 
 okami_warps={
     **r102.warps,
+    **r105.warps,
     **r108.warps,
     **r109.warps,
     **rf02.warps,
     **rf04.warps,
     **rf08.warps,
+    **rf0a.warps,
 }
