@@ -166,15 +166,19 @@ local function undo_peekaboo_trap()
 end
 
 local function set_energy_spiral(number)
+    game.print("Spiral at "..game.tick.." is currently at "..number)
+
     for _, surface in pairs(game.surfaces) do
         surface.global_effect = {
-            consumption = 1 + (number * 2),
-            pollution = 1 + (number * 1),
+            consumption = (number * 2),
+            pollution = (number * 1),
         }
     end
 end
 
 local function undo_energy_spiral()
+    storage.trap_memory.spirals = storage.trap_memory.spirals - 1
+    set_energy_spiral(storage.trap_memory.spirals)
 end
 
 --##### ####   ###  ####        ##### #   # #   #  ###  #####  ###   ###  #   #  #### 
@@ -277,9 +281,15 @@ local function energy_spiral_trap()
     local clear_effect = game.tick + general.traps.energy_pollution_duration
     repeat
         clear_effect = clear_effect + 1
-    until (storage.on_tick[clear_effect] == nil and storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil)
+    until (storage.on_tick[clear_effect] == nil or storage.on_tick[clear_effect] ~= nil and storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil)
 
-    -- To fix
+    if storage.trap_memory.spirals == nil then
+        storage.trap_memory.spirals = 0
+    end
+    storage.trap_memory.spirals = storage.trap_memory.spirals + 1
+
+    set_energy_spiral(storage.trap_memory.spirals)
+
     add_action_to_tick(clear_effect, "undo-energy-spiral-trap", undo_energy_spiral)
 end
 
@@ -328,7 +338,7 @@ end
 
 local function on_init()
     storage.on_tick = storage.on_tick or {} --will contain a list of actions on each tick.
-    storage.trap_memory = storage.trap_memory or {} --will contain a list of actions on each tick.
+    storage.trap_memory = storage.trap_memory or {} --will information about traps that needs to be remembered.
 end
 
 commands.add_command("activate-AP-trap", "sends an AP trap", function(call)

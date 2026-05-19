@@ -335,64 +335,75 @@ class FactorioFreeSampleWhitelist(OptionSet):
     display_name = "Free Sample Whitelist"
 
 
-_default_trap_counts = {
-    "Attack Trap": 0,
-    "Evolution Trap": 0,
-    "Teleport Trap": 0,
-    "Grenade Trap": 0,
-    "Cluster Grenade Trap": 0,
-    "Artillery Trap": 0,
-    "Atomic Rocket Trap": 0,
-    "Atomic Cliff Remover Trap": 0,
-    "Inventory Spill Trap": 0,
-    "Peek a Tech Trap": 0,
-    "Tech Reset Trap": 0,
-    "Reset Map Info Trap": 0,
-    "Energy Spiral Trap": 0,
-}
-
-class TrapCount(OptionCounter):
-    """
-    Specify the counts determining how many copies of each trap item will be in your itempool.
-    If you don't want a specific type of trap, you can set the count for it to 0.
-    If you set all counts to 0, you will get no traps.
-    The cap for evolution traps is 10.
-    The cap for all other traps is 25.
-    """
-    display_name = "Trap Counts"
-    valid_keys = _default_trap_counts.keys()
-
-    min = 0
-    max = 25
-    default = _default_trap_counts
+class TrapCount(Range):
+    range_end = 25
 
 
-    # ensures my version of verify_values also runs
-    def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
-        super(TrapCount, self).verify(world, player_name, plando_options)
-
-        self.verify_values()
-
-    #verifies if evolution traps are under the limit of 10. Even though we could raise it to 25. As it always goes X% closer to 100% evolution.
-    #as this check runs separately from the other check, if the value goes to above 25. The error will tell you to put the value at 25 or under.
-    def verify_values(self):
-        range_errors = []
-
-        if self.value["Evolution Trap"] > 10 :
-            range_errors += [f"\"Evolution Trap: {self.value["Evolution Trap"]}\" is higher than maximum allowed value 10."]
-
-        if range_errors:
-            range_errors = [f"For option {getattr(self, 'display_name', self)}:"] + range_errors
-            raise OptionError("\n".join(range_errors))
+class AttackTrapCount(TrapCount):
+    """Trap items that when received trigger an attack on your base."""
+    display_name = "Attack Traps"
+    
+class EvolutionTrapCount(TrapCount):
+    """Trap items that when received increase the enemy evolution."""
+    display_name = "Evolution Traps"
+    range_end = 10
 
 class EvolutionTrapIncrease(Range):
     """How much an Evolution Trap increases the enemy evolution.
     Increases scale down proportionally to the session's current evolution factor
     (40 increase at 0.50 will add 0.20... 40 increase at 0.75 will add 0.10...)"""
-    display_name = "Evolution Trap % Effect"
+    display_name = "Evolution Trap %% Effect"
     range_start = 1
     default = 10
     range_end = 100
+
+class TeleportTrapCount(TrapCount):
+    """Trap items that when received trigger a random teleport.
+    It is ensured the player can walk back to where they got teleported from."""
+    display_name = "Teleport Traps"
+
+
+class GrenadeTrapCount(TrapCount):
+    """Trap items that when received trigger a grenade explosion on each player."""
+    display_name = "Grenade Traps"
+
+class ClusterGrenadeTrapCount(TrapCount):
+    """Trap items that when received trigger a cluster grenade explosion on each player."""
+    display_name = "Cluster Grenade Traps"
+
+class ArtilleryTrapCount(TrapCount):
+    """Trap items that when received trigger an artillery shell on each player."""
+    display_name = "Artillery Traps"
+
+class AtomicRocketTrapCount(TrapCount):
+    """Trap items that when received trigger an atomic rocket explosion on each player.
+    Warning: there is no warning. The launch is instantaneous."""
+    display_name = "Atomic Rocket Traps"
+
+class AtomicCliffRemoverTrapCount(TrapCount):
+    """Trap items that when received trigger an atomic rocket explosion on a random cliff.
+    Warning: there is no warning. The launch is instantaneous."""
+    display_name = "Atomic Cliff Remover Traps"
+
+class InventorySpillTrapCount(TrapCount):
+    """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
+    display_name = "Inventory Spill Traps"
+    
+class PeekATechTrapCount(TrapCount):
+    """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
+    display_name = "Peek a Tech Traps"
+    
+class TechResetTrapCount(TrapCount):
+    """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
+    display_name = "Tech Reset Traps"
+    
+class MapInfoResetTrapCount(TrapCount):
+    """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
+    display_name = "Reset Map Info Traps"
+    
+class EnergySpiralTrapCount(TrapCount):
+    """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
+    display_name = "Energy Spiral Traps"
 
 class WorldGen(Choice):
     """World gen settings for the factorio world
@@ -625,17 +636,23 @@ class FactorioOptions(PackOptions):
     world_gen: WorldGen
     custom_world_gen: CustomWorldGen
     progressive: Progressive
-    trap_count: TrapCount
-    #teleport_traps: TeleportTrapCount
-    #grenade_traps: GrenadeTrapCount
-    #cluster_grenade_traps: ClusterGrenadeTrapCount
-    #artillery_traps: ArtilleryTrapCount
-    #atomic_rocket_traps: AtomicRocketTrapCount
-    #atomic_cliff_remover_traps: AtomicCliffRemoverTrapCount
-    #inventory_spill_traps: InventorySpillTrapCount
-    #attack_traps: AttackTrapCount
-    #evolution_traps: EvolutionTrapCount
+    
+    # traps
+    attack_traps: AttackTrapCount
+    evolution_traps: EvolutionTrapCount
     evolution_trap_increase: EvolutionTrapIncrease
+    teleport_traps: TeleportTrapCount
+    grenade_traps: GrenadeTrapCount
+    cluster_grenade_traps: ClusterGrenadeTrapCount
+    artillery_traps: ArtilleryTrapCount
+    atomic_rocket_traps: AtomicRocketTrapCount
+    atomic_cliff_remover_traps: AtomicCliffRemoverTrapCount
+    inventory_spill_traps: InventorySpillTrapCount
+    peek_a_tech_traps: PeekATechTrapCount
+    tech_reset_traps: TechResetTrapCount
+    reset_map_info_traps: MapInfoResetTrapCount
+    energy_spiral_traps: EnergySpiralTrapCount
+
     death_link: DeathLink
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
@@ -663,8 +680,20 @@ option_groups: list[OptionGroup] = [
     OptionGroup(
         "Traps",
         [
-            TrapCount,
+            AttackTrapCount,
+            EvolutionTrapCount,
             EvolutionTrapIncrease,
+            TeleportTrapCount,
+            GrenadeTrapCount,
+            ClusterGrenadeTrapCount,
+            ArtilleryTrapCount,
+            AtomicRocketTrapCount,
+            AtomicCliffRemoverTrapCount,
+            InventorySpillTrapCount,
+            PeekATechTrapCount,
+            TechResetTrapCount,
+            MapInfoResetTrapCount,
+            EnergySpiralTrapCount,
         ],
         start_collapsed=True
     ),
