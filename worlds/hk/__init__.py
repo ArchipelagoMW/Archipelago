@@ -2,9 +2,8 @@ import itertools
 import logging
 import operator
 from collections import Counter, defaultdict
-from Utils import KeyedDefaultDict
 from copy import deepcopy
-from typing import Any, ClassVar, cast
+from typing import Any, ClassVar
 
 from BaseClasses import CollectionState, Entrance, EntranceType, ItemClassification, LocationProgressType, MultiWorld
 from Options import OptionError
@@ -28,17 +27,16 @@ from .options import (
 from .parse_data import (
     datapackage_items, datapackage_locations, datapackage_item_groups, datapackage_location_groups,
     effects_terms_by_item, effects_items_by_term, effects_non_prog, effects_prog_lookup,
-    metadata_location_areas, metadata_location_multi,
+    metadata_location_multi,
     options_logic_mappings, options_pool_mappings,
     structure_regions, structure_transition_to_region_map,
     trando_starts, trando_transitions,
     event_locations, vanilla_shop_costs, vanilla_location_costs,
     hk_regions, hk_locations,
 )
-from .resource_state_vars import ResourceStateHandler, rs_get_value
-from .resource_state_vars.cast_spell import NearbySoul
+from .resource_state_vars import ResourceStateHandler
 from .rules import cost_terms
-from .state_mixin import HKLogicMixin as HKLogicMixin, default_state, hk_collect, hk_remove
+from .state_mixin import HKLogicMixin as HKLogicMixin, hk_collect, hk_remove
 from .template_world import RandomizerCoreWorld
 logger = logging.getLogger("Hollow Knight")
 
@@ -66,7 +64,9 @@ class HKWorld(RandomizerCoreWorld, World):
     location_class = HKLocation
     region_class = HKRegion
 
-    rule_lookup: ClassVar[dict[str, str]] = {location["name"]: location["logic"] for location in hk_locations if location["logic"]}
+    rule_lookup: ClassVar[dict[str, str]] = {
+        location["name"]: location["logic"] for location in hk_locations if location["logic"]
+    }
     region_lookup: ClassVar[dict[str, str]] = {location: r["name"] for r in hk_regions for location in r["locations"]}
     entrance_by_term: dict[str, list[str]]
     entrance_pairs: dict[str, str]
@@ -140,7 +140,9 @@ class HKWorld(RandomizerCoreWorld, World):
 
         if self.options.StartLocation == StartLocation.option_kings_pass:
             # Temporarily skip location validation on default start to workaround worlds with bad logicmixins
-            self.start_location_region = structure_transition_to_region_map[trando_starts[self.options.StartLocation.current_key]["granted_transition"]]
+            self.start_location_region = structure_transition_to_region_map[
+                trando_starts[self.options.StartLocation.current_key]["granted_transition"]
+            ]
         else:
             start_location_key = self.options.StartLocation.current_key
             start_validation = self.validate_start(start_location_key)
@@ -148,7 +150,9 @@ class HKWorld(RandomizerCoreWorld, World):
                 raise OptionError(f"Start Location {start_location_key} was invalid with other Options. "
                                   f"Requirements not met are:\n{start_validation}")
                 # TODO consider warning and resetting to KP
-            self.start_location_region = structure_transition_to_region_map[trando_starts[start_location_key]["granted_transition"]]
+            self.start_location_region = structure_transition_to_region_map[
+                trando_starts[start_location_key]["granted_transition"]
+            ]
             # actually connect it later once we have regions created
 
         # defaulting so completion condition isn't incorrect before pre_fill
@@ -179,15 +183,16 @@ class HKWorld(RandomizerCoreWorld, World):
 
         def edited_connect_one_way(self, source_exit: Entrance, target_entrance: Entrance) -> None:
             if not isinstance(source_exit, HKEntrance):
-                return original_connect_one_way(self, source_exit, target_entrance)
-            else:
-                self.world._stateless_connect_one_way(source_exit, target_entrance)
-
-                self.collection_state.stale[self.world.player] = True
-                self.placements.append(source_exit)
-                self.pairings.append((source_exit.name, target_entrance.name))
-                self.entrance_lookup.remove(target_entrance)
+                original_connect_one_way(self, source_exit, target_entrance)
                 return
+
+            self.world._stateless_connect_one_way(source_exit, target_entrance)
+
+            self.collection_state.stale[self.world.player] = True
+            self.placements.append(source_exit)
+            self.pairings.append((source_exit.name, target_entrance.name))
+            self.entrance_lookup.remove(target_entrance)
+            return
 
         ERPlacementState._connect_one_way = edited_connect_one_way
 
@@ -231,7 +236,9 @@ class HKWorld(RandomizerCoreWorld, World):
             self.get_location(loc).progress_type = LocationProgressType.EXCLUDED
 
         location_to_option = {
-            location: option for option, data in options_pool_mappings.items() for location in data["randomized"]["locations"]
+            location: option
+            for option, data in options_pool_mappings.items()
+            for location in data["randomized"]["locations"]
         }
         location_to_option["Elevator_Pass"] = "RandomizeElevatorPass"
         for location, costs in vanilla_location_costs.items():
@@ -472,7 +479,8 @@ class HKWorld(RandomizerCoreWorld, World):
 
                 if len(exits) == 0:
                     assert len(er_targets) == 0
-                    logger.debug(f"returning early for group {group} as there was nothing to place after single entrance matching")
+                    logger.debug(f"returning early for group {group} "
+                                 "as there was nothing to place after single entrance matching")
                     return
 
                 # logger.debug(f"running er on {group} for {len(exits)} exits and {len(er_targets)} entrances")
@@ -481,7 +489,7 @@ class HKWorld(RandomizerCoreWorld, World):
                 exits = None
 
             try:
-                er_state = randomize_entrances(
+                randomize_entrances(
                     world=self,
                     coupled=coupled,
                     target_group_lookup=target_group_lookup,
@@ -528,13 +536,14 @@ class HKWorld(RandomizerCoreWorld, World):
                 try:
                     _connect_entrances(group, entrances)
                     logger.debug(f"Try {index} for group {group} succeeded, paired {filtered_entrances} entrances")
-                except EntranceRandomizationError as ex:
+                except EntranceRandomizationError:
                     leftovers = len([1 for e in entrances if not e._er_connected])
                     if index == RETRY_ATTEMPTS:
                         logger.info(f"GER failed for group {group}, all remaining {leftovers}/{filtered_entrances} "
                                     "entrance will be retried without group restrictions")
                     else:
-                        logger.debug(f"Try {index} for group {group} failed, {leftovers}/{filtered_entrances} unplaced.")
+                        logger.debug(f"Try {index} for group {group} failed, "
+                                     f"{leftovers}/{filtered_entrances} unplaced.")
 
         _connect_entrances("global", None)
 
@@ -550,9 +559,9 @@ class HKWorld(RandomizerCoreWorld, World):
                 )
 
     def setup_connections(self):
-        if self.options.WhitePalace < 3:  # less than option_include
+        if self.options.WhitePalace < WhitePalace.option_include:
             self.options.SkipTitledAreaInER.value.add("Path of Pain")
-        if self.options.WhitePalace < 1:  # less than option_kingfragment
+        if self.options.WhitePalace < WhitePalace.option_kingfragment:
             self.options.SkipTitledAreaInER.value.add("White Palace")
 
         one_ways = defaultdict(list)
@@ -562,16 +571,18 @@ class HKWorld(RandomizerCoreWorld, World):
             "Right": "Left",
         }
         self.entrance_groups = defaultdict(list)
+        er_type = self.options.EntranceRandoType
+        skip_area = self.options.SkipTitledAreaInER
         for name, trans_data in trando_transitions.items():
-            if self.options.EntranceRandoType.test_transition(trans_data) and self.options.SkipTitledAreaInER.test_transition(trans_data):
+            if er_type.test_transition(trans_data) and skip_area.test_transition(trans_data):
 
-                assert self.options.EntranceRandoType, f"attempted to create er entrance ({name}) without er enabled"
+                assert er_type, f"attempted to create er entrance ({name}) without er enabled"
                 # create partial entrance for GER
 
                 region1 = self.get_region(structure_transition_to_region_map[name])
                 direction = trans_data["direction"]  # Left/Right/Top/Bot/Door
                 sides = trans_data["sides"]  # Both/OneWayIn/OneWayOut
-                entrance_subgroup = self.options.EntranceRandoType.get_subgroup(trans_data)
+                entrance_subgroup = er_type.get_subgroup(trans_data)
 
                 entrance_type = EntranceType.TWO_WAY if sides == "Both" else EntranceType.ONE_WAY
                 group = direction if sides == "Both" else sides
@@ -609,7 +620,7 @@ class HKWorld(RandomizerCoreWorld, World):
 
         self.random.shuffle(one_ways["OneWayIn"])
 
-        for entrance, exit in zip(one_ways["OneWayOut"], one_ways["OneWayIn"]):
+        for entrance, exit in zip(one_ways["OneWayOut"], one_ways["OneWayIn"], strict=True):
             self._stateless_connect_one_way(exit, entrance)
 
     def add_all_events(self):
@@ -904,7 +915,7 @@ class HKWorld(RandomizerCoreWorld, World):
                 location.sort_costs()
 
     def sort_shops_by_cost(self):
-        for shop, shop_locations in self.created_multi_locations.items():
+        for _, shop_locations in self.created_multi_locations.items():
             randomized_locations = [loc for loc in shop_locations if not loc.vanilla]
             if not randomized_locations:
                 continue
@@ -912,7 +923,7 @@ class HKWorld(RandomizerCoreWorld, World):
                 (loc.costs for loc in randomized_locations),
                 key=lambda costs: (len(costs), *costs.values(),)
             )
-            for loc, costs in zip(randomized_locations, prices):
+            for loc, costs in zip(randomized_locations, prices, strict=True):
                 loc.costs = costs
 
     # pre_fill
@@ -1044,7 +1055,7 @@ class HKWorld(RandomizerCoreWorld, World):
                 ):
                     spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
             else:
-                for shop_name, locations in hk_world.created_multi_locations.items():
+                for _, locations in hk_world.created_multi_locations.items():
                     for loc in locations:
                         spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
 
@@ -1063,7 +1074,7 @@ class HKWorld(RandomizerCoreWorld, World):
                 spoiler_handle.write(f"\n{src} -> {tgt}")
 
         if two_ways:
-            spoiler_handle.write(f"\n\nTWO WAYS:")
+            spoiler_handle.write("\n\nTWO WAYS:")
             for src, tgt in two_ways:
                 spoiler_handle.write(f"\n{src} <-> {tgt}")
 
@@ -1084,9 +1095,9 @@ class HKWorld(RandomizerCoreWorld, World):
                 if loc.address is not None:
                     hint_data[self.player][loc.address] = "Unreachable"
                 continue
-            name, connection = paths[loc.parent_region]
+            _, connection = paths[loc.parent_region]
             while connection is not None:
-                entrance, (region, connection) = connection
+                entrance, (_, connection) = connection
                 if entrance in transition_names:
                     path_to_loc.append(entrance)
 

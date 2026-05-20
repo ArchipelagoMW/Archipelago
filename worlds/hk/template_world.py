@@ -1,6 +1,7 @@
-from typing import Any, Callable, ClassVar
+from typing import Any, ClassVar
 
-from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
+from BaseClasses import CollectionRule, Item, ItemClassification, Location, Region
+from rule_builder.rules import Rule
 from worlds.AutoWorld import World
 
 
@@ -17,7 +18,7 @@ class RandomizerCoreWorld(World):
         """Called at the end of create_regions() to set self.multiworld.completion_condition[self.player]"""
         pass
 
-    def create_rule(self, rule: Any) -> Callable[[CollectionState], bool]:
+    def create_rule(self, rule: Any) -> CollectionRule | Rule:
         """Used to parse the logic format into an access_rule for Entrances and Locations."""
         return staticmethod(lambda state: True)
 
@@ -78,7 +79,8 @@ class RandomizerCoreWorld(World):
                     self.set_rule(loc, self.create_rule(self.rule_lookup[location_name]))
 
                 if not location_id:
-                    loc.place_locked_item(self.item_class(location_name, ItemClassification.progression, None, self.player))
+                    loc.place_locked_item(
+                        self.item_class(location_name, ItemClassification.progression, None, self.player))
                     loc.show_in_spoiler = False
 
         self.set_victory()

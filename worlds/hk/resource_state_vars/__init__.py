@@ -116,8 +116,8 @@ def rs_leq(state1: int, state2: int) -> bool:
 def dict_to_rs(inp: dict[str, int]) -> int:
     """Helper function to convert from a dict of term: value to an int state"""
     res = 0
-    for key in inp:
-        res = rs_add_value(res, key, inp[key])
+    for k, v in inp.items():
+        res = rs_add_value(res, k, v)
     return res
 
 
@@ -189,7 +189,7 @@ class RCStateVariable(metaclass=ResourceStateHandler):
 
     @property
     def terms(self) -> list[str]:
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def modify_state(self, state_blob: rs, item_state: cs) -> Generator[rs]:
         valid, output_state = self._modify_state(state_blob, item_state)
@@ -197,7 +197,7 @@ class RCStateVariable(metaclass=ResourceStateHandler):
             yield output_state
 
     def _modify_state(self, state_blob: rs, item_state: cs) -> tuple[bool, rs]:
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def can_exclude(self, options) -> bool:
         return True

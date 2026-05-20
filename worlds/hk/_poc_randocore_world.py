@@ -1,9 +1,3 @@
-import itertools
-import logging
-import operator
-from collections import Counter, defaultdict
-from Utils import KeyedDefaultDict
-from copy import deepcopy
 from typing import Any
 
 from BaseClasses import ItemClassification
@@ -43,12 +37,11 @@ class HK2World(RandomizerCoreWorld):
         Items sould be added to the list multiple times if you need multiple copies,
         and any alterations to the items in the pool based on options should be done here as well.
         """
-        item_table = [
+        return [
             item
             for option, data in options_pool_mappings.items()
             for item in data["randomized"]["items"]
         ]
-        return item_table
 
     def get_item_classification(self, name: str) -> ItemClassification:
         """Used to get the Item Classification by name for every item added to the Multiworld"""

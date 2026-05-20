@@ -19,27 +19,27 @@ class StartsBase:
 
 
 class TestSwimRandoStarts(StartsBase, NoStepHK):
-    options = {
+    options: ClassVar[dict[str, str]] = {
         "RandomizeSwim": "true",
 
         "EnemyPogos": "true",
     }
-    valid_starts = []
-    invalid_starts = ["kingdoms_edge"]
+    valid_starts: ClassVar[list[str]] = []
+    invalid_starts: ClassVar[list[str]] = ["kingdoms_edge"]
 
 
 class TestSwimRandolessStarts(StartsBase, NoStepHK):
-    options = {
+    options: ClassVar[dict[str, str]] = {
         "RandomizeSwim": "false",
 
         "EnemyPogos": "true",
     }
-    valid_starts = ["kingdoms_edge"]
-    invalid_starts = []
+    valid_starts: ClassVar[list[str]] = ["kingdoms_edge"]
+    invalid_starts: ClassVar[list[str]] = []
 
 
 class TestEnemyPogoStarts(StartsBase, NoStepHK):
-    options = {
+    options: ClassVar[dict[str, str]] = {
         "EnemyPogos": "true",
 
         "PreciseMovement": "false",
@@ -47,12 +47,12 @@ class TestEnemyPogoStarts(StartsBase, NoStepHK):
         "DangerousSkips": "true",
         "ShadeSkips": "true",
     }
-    valid_starts = ["mantis_village", "kingdoms_edge", "queens_gardens"]
-    invalid_starts = ["west_waterways"]
+    valid_starts: ClassVar[list[str]] = ["mantis_village", "kingdoms_edge", "queens_gardens"]
+    invalid_starts: ClassVar[list[str]] = ["west_waterways"]
 
 
 class TestPreciseEnemyPogoStarts(StartsBase, NoStepHK):
-    options = {
+    options: ClassVar[dict[str, str]] = {
         "EnemyPogos": "true",
         "PreciseMovement": "true",
 
@@ -60,33 +60,33 @@ class TestPreciseEnemyPogoStarts(StartsBase, NoStepHK):
         "DangerousSkips": "true",
         "ShadeSkips": "true",
     }
-    valid_starts = ["mantis_village", "kingdoms_edge", "west_waterways", "queens_gardens"]
-    invalid_starts = []
+    valid_starts: ClassVar[list[str]] = ["mantis_village", "kingdoms_edge", "west_waterways", "queens_gardens"]
+    invalid_starts: ClassVar[list[str]] = []
 
 
 class TestEnemyPogolessStarts(StartsBase, NoStepHK):
-    options = {
+    options: ClassVar[dict[str, str]] = {
         "EnemyPogos": "false",
 
         "RandomizeSwim": "false",
         "DangerousSkips": "true",
         "ShadeSkips": "true",
     }
-    valid_starts = []
-    invalid_starts = ["mantis_village", "kingdoms_edge", "west_waterways", "queens_gardens"]
+    valid_starts: ClassVar[list[str]] = []
+    invalid_starts: ClassVar[list[str]] = ["mantis_village", "kingdoms_edge", "west_waterways", "queens_gardens"]
 
 
-class testDarkroomStarts(StartsBase, NoStepHK):
-    options = {
+class TestDarkroomOnStarts(StartsBase, NoStepHK):
+    options: ClassVar[dict[str, str]] = {
         "DarkRooms": "true",
     }
-    valid_starts = ["hallownests_crown"]
-    invalid_starts = []
+    valid_starts: ClassVar[list[str]] = ["hallownests_crown"]
+    invalid_starts: ClassVar[list[str]] = []
 
 
-class testDarkroomStarts(StartsBase, NoStepHK):
-    options = {
+class TestDarkroomOffStarts(StartsBase, NoStepHK):
+    options: ClassVar[dict[str, str]] = {
         "DarkRooms": "false",
     }
-    valid_starts = []
-    invalid_starts = ["hallownests_crown"]
+    valid_starts: ClassVar[list[str]] = []
+    invalid_starts: ClassVar[list[str]] = ["hallownests_crown"]

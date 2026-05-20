@@ -102,7 +102,8 @@ datapackage_item_groups["Dive"] = set(effects_items_by_term["QUAKE"])
 datapackage_item_groups["Fireball"] = set(effects_items_by_term["FIREBALL"])
 datapackage_item_groups["Scream"] = set(effects_items_by_term["SCREAM"])
 datapackage_item_groups["Grimmchild"] = set(effects_items_by_term["Grimmchild"])
-datapackage_item_groups["Charms"] |= datapackage_item_groups["Grimmchild"]  # Grimmchild1 isn't in the options_pool_mappings for charms
+datapackage_item_groups["Charms"] |= datapackage_item_groups["Grimmchild"]
+# Grimmchild1 isn't in the options_pool_mappings for charms
 datapackage_item_groups["WhiteFragments"] = set(effects_items_by_term["WHITEFRAGMENT"])
 datapackage_item_groups["DreamNails"] = set(effects_items_by_term["DREAMNAIL"])
 

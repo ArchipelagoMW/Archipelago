@@ -100,7 +100,8 @@ class TestEquipNotch(StateVarSetup, NoStepHK):
             charm_name: self.matrix_vars.notch_costs[i]
             for i, charm_name in zip(
                 range(self.charm_count),
-                charm_names
+                charm_names,
+                strict=False,
             )
         }}
         super().setUp()
@@ -130,7 +131,8 @@ class TestGenerateCharmCombos(StateVarSetup, NoStepHK):
     expecteds: ClassVar[list[rs]] = [
         dict_to_rs({"NOPASSEDCHARMEQUIP": 0, "noCHARM1": 1, "noCHARM2": 1}),
         dict_to_rs({"NOPASSEDCHARMEQUIP": 0, "CHARM1": 1, "noCHARM2": 1, "USEDNOTCHES": 3, "MAXNOTCHCOST": 3}),
-        dict_to_rs({"NOPASSEDCHARMEQUIP": 0, "noCHARM1": 1, "CHARM2": 1, "OVERCHARMED": 1,  "USEDNOTCHES": 6, "MAXNOTCHCOST": 6}),
+        dict_to_rs({"NOPASSEDCHARMEQUIP": 0, "noCHARM1": 1, "CHARM2": 1,
+                    "OVERCHARMED": 1,  "USEDNOTCHES": 6, "MAXNOTCHCOST": 6}),
     ]
     notch_override = 3
 
@@ -139,7 +141,8 @@ class TestGenerateCharmCombos(StateVarSetup, NoStepHK):
             charm_name: self.notch_costs[i]
             for i, charm_name in zip(
                 range(self.charm_count),
-                charm_names
+                charm_names,
+                strict=False,
             )
         }}
         super().setUp()

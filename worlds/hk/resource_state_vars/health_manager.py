@@ -1,4 +1,3 @@
-from collections import Counter
 from collections.abc import Generator, Iterable
 from typing import NamedTuple
 
@@ -226,8 +225,7 @@ class HealthManager(metaclass=ResourceStateHandler):
         if hit.wait_after_hit:
             if hit.white_hp_damage > 0 and self.hiveblood.is_equipped(ret):
                 ret = rs_add_value(ret, "SPENTHP", -1)
-        ret = rs_set_value(ret, "NOFLOWER", 1)
-        return ret
+        return rs_set_value(ret, "NOFLOWER", 1)
 
     def take_damage(self, state_blob: rs, item_state: cs, amount: int) -> Generator[rs]:
         if not self.is_hp_determined(state_blob):
@@ -273,7 +271,7 @@ class HealthManager(metaclass=ResourceStateHandler):
         # else
         rets = list(EquipCharmVariable.generate_charm_combinations(state_blob, item_state, self.before_death_charms))
         for r in rets:
-            yield from self.take_damage_desperate(state_blob, item_state, amount, True)
+            yield from self.take_damage_desperate(r, item_state, amount, True)
 
     def take_damage_desperate(self, state_blob: rs, item_state: cs, amount: int, wait_after_hit: bool) -> Generator[rs]:
         adj_amount = 2 * amount if rs_get_value(state_blob, "OVERCHARMED") else amount

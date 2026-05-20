@@ -93,7 +93,9 @@ class CastSpellVariable(RCStateVariable):
         return item_state._hk_soul_modes[self.player]
 
     def try_cast(self, state_blob: rs, item_state: cs, amount_per_cast) -> tuple[bool, rs]:
-        soul_spent, new_state = self.sp_manager.try_spend_soul_sequence(state_blob, item_state, amount_per_cast, self.casts)
+        soul_spent, new_state = self.sp_manager.try_spend_soul_sequence(
+            state_blob, item_state, amount_per_cast, self.casts
+        )
         if not soul_spent:
             return False, state_blob
         if self.nearby_soul_to_bool(item_state, self.after_soul):

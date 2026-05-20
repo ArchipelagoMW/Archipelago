@@ -249,7 +249,8 @@ class FragileCharmVariable(EquipCharmVariable):
     def has_state_requirements(self, state_blob: rs, item_state: cs) -> bool:
         return (super().has_state_requirements(state_blob, item_state)
                 and ((self.has_unbreakable_item(item_state))
-                     or (not rs_get_value(state_blob, self.break_term) and item_state.has("Can_Repair_Fragile_Charms", self.player))))
+                     or (not rs_get_value(state_blob, self.break_term)
+                         and item_state.has("Can_Repair_Fragile_Charms", self.player))))
 
     @classmethod
     def try_match(cls, term: str) -> bool:

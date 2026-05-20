@@ -205,6 +205,10 @@ class SplitCrystalHeart(Toggle):
     default = False
 
 
+def get_target_trans_data(trans_data) -> dict | None:
+    return trans_data["vanilla_target"] and trando_transitions[trans_data["vanilla_target"]]
+
+
 class EntranceRandoType(Choice):
     """
     Entrance randomizer type.
@@ -226,7 +230,7 @@ class EntranceRandoType(Choice):
     # option_connected_titled_area = 5
     option_doors = 6
     default = option_none
-    tag_lookup = {
+    tag_lookup: typing.ClassVar[dict[int, str]] = {
         option_none: "ITEMRANDO",
         option_maparea: "MAPAREARANDO",
         option_fullarea: "FULLAREARANDO",
@@ -235,7 +239,7 @@ class EntranceRandoType(Choice):
         # option_connected_titled_area: "ROOMRANDO",  # treated like room rando internally
         option_doors: "ROOMRANDO",  # treated like room rando internally
     }
-    soul_lookup = {
+    soul_lookup: typing.ClassVar[dict[int, NearbySoul]] = {
         option_none: NearbySoul.ITEMSOUL,
         option_maparea: NearbySoul.MAPAREASOUL,
         option_fullarea: NearbySoul.AREASOUL,
@@ -261,18 +265,22 @@ class EntranceRandoType(Choice):
         elif self.value == self.option_room:
             return True
         # elif self.value == self.option_connected_map_area:
-        #     target_trans_data: None | dict = trans_data["vanilla_target"] and trando_transitions[trans_data["vanilla_target"]]
-        #     ret = trans_data["sides"][:6] != "OneWay" and target_trans_data and target_trans_data["map_area"] == trans_data["map_area"]
-        #     assert ret == (trans_data["sides"][:6] != "OneWay" and not trans_data["is_map_area_transition"]), trans_data
+        #     target_trans_data = get_target_trans_data(trans_data)
+        #     ret = trans_data["sides"][:6] != "OneWay" and (
+        #         target_trans_data and target_trans_data["map_area"] == trans_data["map_area"])
+        #     assert ret == (trans_data["sides"][:6] != "OneWay"
+        #                    and not trans_data["is_map_area_transition"]), trans_data
         #     return ret
         # elif self.value == self.option_connected_titled_area:
-        #     target_trans_data: None | dict = trans_data["vanilla_target"] and trando_transitions[trans_data["vanilla_target"]]
-        #     ret = trans_data["sides"][:6] != "OneWay" and target_trans_data and target_trans_data["titled_area"] == trans_data["titled_area"]
-        #     assert ret == (trans_data["sides"][:6] != "OneWay" and not trans_data["is_titled_area_transition"]), trans_data
+        #     target_trans_data = get_target_trans_data(trans_data)
+        #     ret = trans_data["sides"][:6] != "OneWay" and (
+        #         target_trans_data and target_trans_data["titled_area"] == trans_data["titled_area"])
+        #     assert ret == (trans_data["sides"][:6] != "OneWay"
+        #                    and not trans_data["is_titled_area_transition"]), trans_data
         #     return ret
 
         elif self.value == self.option_doors:
-            target_trans_data: None | dict = trans_data["vanilla_target"] and trando_transitions[trans_data["vanilla_target"]]
+            target_trans_data = get_target_trans_data(trans_data)
             return bool(
                 trans_data["direction"] == "Door"
                 or (target_trans_data and target_trans_data["direction"] == "Door")
@@ -300,8 +308,9 @@ class SkipTitledAreaInER(OptionSet):
     valid_keys = frozenset({trans_data["titled_area"] for trans_data in trando_transitions.values()})
 
     def test_transition(self, trans_data: dict[str, typing.Any]) -> bool:
-        target_trans_data: None | dict = trans_data["vanilla_target"] and trando_transitions[trans_data["vanilla_target"]]
-        return trans_data["titled_area"] not in self.value and not (target_trans_data and target_trans_data["titled_area"] in self.value)
+        target_trans_data = get_target_trans_data(trans_data)
+        return trans_data["titled_area"] not in self.value and not (
+            target_trans_data and target_trans_data["titled_area"] in self.value)
 
 
 class ShuffleEntrancesMode(Choice):
@@ -423,7 +432,7 @@ class RandomCharmCosts(NamedRange):
             random_source.shuffle(charms)
             return charms
         charms = [0] * self.charm_count
-        for x in range(self.value):
+        for _ in range(self.value):
             index = random_source.randint(0, self.charm_count - 1)
             while charms[index] > 5:
                 index = random_source.randint(0, self.charm_count - 1)
@@ -695,7 +704,7 @@ class CostSanityHybridChance(Range):
 
 
 cost_sanity_weights: dict[str, type(Option)] = {}
-for term, cost in cost_terms.items():
+for cost in cost_terms.values():
     option_name = f"CostSanity{cost.option}Weight"
     display_name = f"Costsanity {cost.option} Weight"
     extra_data = {

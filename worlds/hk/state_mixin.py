@@ -88,19 +88,19 @@ class HKLogicMixin(LogicMixin):
             return other
         # Copy sweepable data as state can be copied when stale
         for player in players:
-            for entrance in self._hk_per_player_resource_states[player]:
-                other._hk_per_player_resource_states[player][entrance] = self._hk_per_player_resource_states[player][entrance].copy()
+            for entrance, rss in self._hk_per_player_resource_states[player].items():
+                other._hk_per_player_resource_states[player][entrance] = rss.copy()
         other._hk_entrance_clause_cache = {
             player: {
-                entrance: self._hk_entrance_clause_cache[player][entrance].copy()
-                for entrance in self._hk_entrance_clause_cache[player]
+                entrance: cache.copy()
+                for entrance, cache in self._hk_entrance_clause_cache[player].items()
             }
             for player in players
         }
         other._hk_checked_state_modifiers = {
             player: {
-                entrance: self._hk_checked_state_modifiers[player][entrance].copy()
-                for entrance in self._hk_checked_state_modifiers[player]
+                entrance: modifiers.copy()
+                for entrance, modifiers in self._hk_checked_state_modifiers[player].items()
             }
             for player in players
         }
@@ -120,7 +120,7 @@ class HKLogicMixin(LogicMixin):
         #     available_states = self._hk_per_player_resource_states[player].get(region.name, [])
 
         # unneeded?
-        available_states = [s for s in self._hk_per_player_resource_states[player][region.name]]
+        available_states = list(self._hk_per_player_resource_states[player][region.name])
         # loses the can_reach parent call, potentially re-add it?
 
         if not available_states:
