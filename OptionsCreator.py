@@ -599,7 +599,6 @@ class OptionsCreator(ThemedApp):
             expansion_box.layout.spacing = dp(3)
             expansion_box.scroll_type = ["bars"]
             expansion_box.do_scroll_x = False
-            # group_names = ["Game Options", *(group.name for group in cls.web.option_groups)]
             groups = get_option_groups(cls, Visibility.simple_ui)
 
             for group, options in groups.items():
