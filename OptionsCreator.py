@@ -30,7 +30,7 @@ import re
 from urllib.parse import urlparse
 from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList,
-                     OptionCounter, Visibility)
+                     OptionCounter, Visibility, get_option_groups)
 
 
 def validate_url(x):
@@ -599,15 +599,10 @@ class OptionsCreator(ThemedApp):
             expansion_box.layout.spacing = dp(3)
             expansion_box.scroll_type = ["bars"]
             expansion_box.do_scroll_x = False
-            group_names = ["Game Options", *(group.name for group in cls.web.option_groups)]
-            groups = {name: [] for name in group_names}
-            for name, option in cls.options_dataclass.type_hints.items():
-                group = next((group.name for group in cls.web.option_groups if option in group.options), "Game Options")
-                groups[group].append((name, option))
+            # group_names = ["Game Options", *(group.name for group in cls.web.option_groups)]
+            groups = get_option_groups(cls, Visibility.simple_ui)
 
             for group, options in groups.items():
-                options = [(name, option) for name, option in options
-                           if name and option.visibility & Visibility.simple_ui]
                 if not options:
                     continue  # Game Options can be empty if every other option is in another group
                     # Can also have an option group of options that should not render on simple ui
@@ -631,7 +626,7 @@ class OptionsCreator(ThemedApp):
                 group_box = ScrollBox()
                 group_box.layout.orientation = "vertical"
                 group_box.layout.spacing = dp(3)
-                for name, option in options:
+                for name, option in options.items():
                     group_content.add_widget(self.create_option(option, name, cls))
                 expansion_box.layout.add_widget(group_item)
             self.option_layout.add_widget(expansion_box)
