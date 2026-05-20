@@ -967,6 +967,16 @@ class HKWorld(RandomizerCoreWorld, World):
                 player = world.player
                 world.grub_player_count = {player: world.grub_count}
 
+    def pre_output(self):
+        from .data.item_data import geo_cost_caps
+        if not self.options.LimitGeoPrices:
+            return
+        for region in self.get_regions():
+            for location in region.locations:
+                if location.costs:
+                    if location.item.name in geo_cost_caps and "GEO" in location.costs:
+                        location.costs["GEO"] = min(location.costs["GEO"], geo_cost_caps[location.item.name])
+
     # fill_slot_data
     def fill_slot_data(self):
         slot_data = {}

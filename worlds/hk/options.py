@@ -662,6 +662,14 @@ class StartingGeo(Range):
     default = 0
 
 
+class LimitGeoPrices(DefaultOnToggle):
+    """
+    Adds Geo limits for Hollow Knight items placed on your locations.
+    For example, Lore will not cost more than 1 Geo. Will ignore costsanity minimums.
+    """
+    display_name = "Limit Geo Prices"
+
+
 class CostSanity(Choice):
     """If enabled, most locations with costs (like stag stations) will have randomly determined costs.
     If set to shopsonly, CostSanity will only apply to shops (including Grubfather, Seer and Egg Shop).
@@ -727,7 +735,8 @@ hollow_knight_options: dict[str, type(Option)] = {
             LegEaterShopSlots, GrubfatherRewardSlots,
             SeerRewardSlots, ExtraShopSlots,
             SplitCrystalHeart, SplitMothwingCloak, SplitMantisClaw,
-            CostSanity, CostSanityHybridChance
+            CostSanity, CostSanityHybridChance,
+            LimitGeoPrices,
         )
     },
     **cost_sanity_weights
@@ -773,6 +782,7 @@ HKOptionGroups: list[OptionGroup] = [
             ExtraShopSlots
         ], start_collapsed=True),
     OptionGroup("CostSanity", [
+            LimitGeoPrices,
             MinimumGeoPrice, MaximumGeoPrice,
             MinimumGrubPrice, MaximumGrubPrice,
             MinimumEssencePrice, MaximumEssencePrice,
