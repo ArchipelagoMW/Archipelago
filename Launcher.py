@@ -29,8 +29,8 @@ if __name__ == "__main__":
 
 import settings
 import Utils
-from Utils import (env_cleared_lib_path, init_logging, is_frozen, is_linux, is_macos, is_windows, local_path,
-                   messagebox, open_filename, user_path)
+from Utils import (env_cleared_lib_path, gui_enabled, init_logging, is_frozen, is_linux, is_macos, is_windows,
+                   local_path, messagebox, open_filename, user_path)
 
 if __name__ == "__main__":
     init_logging('Launcher')
@@ -529,7 +529,7 @@ def main(args: argparse.Namespace | dict | None = None):
                 args['component'] = component
             if not component:
                 logging.warning(f"Could not identify Component responsible for {path}")
-    elif args['nogui']:
+    elif not gui_enabled:
         from utils.curses_utils import curses_select
         component_lookup = {c.display_name: c for c in components}
         component_name = curses_select(list(component_lookup.keys()))
