@@ -183,6 +183,7 @@ class Rac3Interface(GameInterface):
     vendor_type: RAC3VENDORTYPE | None = None
     vendor_string_pointers: dict[str, int] = {}
     vendor_cursor_pos: int = 0
+    should_overwrite_vendor_item_names: bool = True
     should_restore_vendor_item_names: bool = True
     tyhrra_dropship: int = 0
     tyhrra_intro: int = 0
@@ -600,6 +601,7 @@ class Rac3Interface(GameInterface):
                     original_string_ptr += 0x11
                 self._write32(item_string_address, original_string_ptr)
         self.should_restore_vendor_item_names = False
+        self.should_overwrite_vendor_item_names = True
 
     def get_visited_planets(self):
         """Returns a set of all planets the player has visited"""
@@ -1433,7 +1435,8 @@ class Rac3Interface(GameInterface):
 
     def overwrite_vendor_item_names(self):
         """Overwrite the names of the weapons in the weapon vendor with the provided list of weapon names"""
-        if self.planet not in PLANET_VENDOR_OFFSET.keys():
+        if (not self.should_overwrite_vendor_item_names
+                or self.planet not in PLANET_VENDOR_OFFSET.keys()):
             return
         string_id_table_start = self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_STRING_TABLE_BASE)
         combined_locations = ITEM_TO_WEAPON_VENDOR_LOCATION | ITEM_TO_ARMOR_VENDOR_LOCATION
@@ -1445,6 +1448,7 @@ class Rac3Interface(GameInterface):
                 ap_item_ptr = self.vendor_string_pointers[location]
                 self._write32(item_string_address, ap_item_ptr)
         self.should_restore_vendor_item_names = True
+        self.should_overwrite_vendor_item_names = False
 
     def get_vendor_apcodes(self) -> list | None:
         """Returns a list of apcodes for the currently open vendor. Returns None if no vendor is open"""
