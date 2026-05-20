@@ -440,8 +440,11 @@ class Rac3Interface(GameInterface):
         defaults: dict[int, tuple[int, int]] = {data.ADDRESS: (data.TYPE, data.VALUE) for data in SAVE_DATA}
         logger.debug(f"Default values: {defaults}")
         for address, data in save.items():
-            if data == defaults[address]:  # Skip writing default values
+            # Skip writing default values or lingering dev testing values saved on the server
+            default = defaults.get(address)
+            if default is None or data == default:
                 continue
+
             size, value = data
             match size:
                 case CHECKTYPE.BYTE:
