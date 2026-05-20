@@ -549,7 +549,6 @@ def main(args: argparse.Namespace | dict | None = None):
 
 
 if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.INFO)  # force log-level to work around log level resetting to WARNING
     multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(
