@@ -3,9 +3,10 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from collections.abc import Generator
 from typing import ClassVar
-from ..charms import charm_name_to_id, charm_names
 
 from BaseClasses import CollectionState
+
+from ..charms import charm_name_to_id, charm_names
 
 
 attribute_list = []

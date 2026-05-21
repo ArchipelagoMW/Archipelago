@@ -3,8 +3,8 @@ from dataclasses import dataclass, field
 
 from test.param import classvar_matrix
 
-from .bases import NoStepHK, StateVarSetup
 from ..resource_state_vars import rs_get_value
+from .bases import NoStepHK, StateVarSetup
 
 
 @dataclass

@@ -6,7 +6,7 @@ from typing import ClassVar
 from test.param import classvar_matrix
 
 from ..charms import charm_name_to_id, charm_names
-from ..resource_state_vars import rs, rs_get_value, rs_set_value, dict_to_rs
+from ..resource_state_vars import dict_to_rs, rs, rs_get_value, rs_set_value
 from ..resource_state_vars.equip_charm import EquipCharmVariable
 from .bases import NoStepHK, StateVarSetup
 

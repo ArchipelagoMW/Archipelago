@@ -1,6 +1,6 @@
 from collections.abc import Generator
 
-from . import ResourceStateHandler, cs, rs, rs_get_value, rs_set_value, rs_add_value, rs_increase_if_lower
+from . import ResourceStateHandler, cs, rs, rs_add_value, rs_get_value, rs_increase_if_lower, rs_set_value
 
 
 class SoulInfo:

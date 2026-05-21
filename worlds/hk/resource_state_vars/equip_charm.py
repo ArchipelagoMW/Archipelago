@@ -7,7 +7,7 @@ from typing import ClassVar
 
 from ..charms import charm_name_to_id, charm_names
 from ..options import HKOptions
-from . import RCStateVariable, cs, rs, rs_add_value, rs_set_value, rs_increase_if_lower, rs_get_value
+from . import RCStateVariable, cs, rs, rs_add_value, rs_get_value, rs_increase_if_lower, rs_set_value
 
 
 class EquipResult(IntEnum):

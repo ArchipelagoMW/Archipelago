@@ -1,7 +1,7 @@
 from typing import ClassVar
 
-from ..resource_state_vars.health_manager import HealthManager
 from ..resource_state_vars import rs_get_value, rs_set_value
+from ..resource_state_vars.health_manager import HealthManager
 from .bases import NoStepHK, StateVarSetup
 
 

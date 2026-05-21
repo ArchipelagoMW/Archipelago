@@ -6,13 +6,13 @@ from copy import deepcopy
 from typing import Any, ClassVar
 
 from BaseClasses import CollectionState, Entrance, EntranceType, ItemClassification, LocationProgressType, MultiWorld
+from entrance_rando import EntranceRandomizationError, randomize_entrances
 from Options import OptionError
-from entrance_rando import randomize_entrances, EntranceRandomizationError
 from worlds.AutoWorld import World
 
 from .charms import charm_name_to_id, charm_names
 from .classes import HKClause, HKEntrance, HKItem, HKLocation, HKRegion, HKSettings, HKWeb
-from .constants import gamename, randomizable_starting_items, shop_cost_types, NearbySoul
+from .constants import NearbySoul, gamename, randomizable_starting_items, shop_cost_types
 from .options import (
     CostSanity,
     Goal,
@@ -25,19 +25,33 @@ from .options import (
     shop_to_option,
 )
 from .parse_data import (
-    datapackage_items, datapackage_locations, datapackage_item_groups, datapackage_location_groups,
-    effects_terms_by_item, effects_items_by_term, effects_non_prog, effects_prog_lookup,
+    datapackage_item_groups,
+    datapackage_items,
+    datapackage_location_groups,
+    datapackage_locations,
+    effects_items_by_term,
+    effects_non_prog,
+    effects_prog_lookup,
+    effects_terms_by_item,
+    event_locations,
+    hk_locations,
+    hk_regions,
     metadata_location_multi,
-    options_logic_mappings, options_pool_mappings,
-    structure_regions, structure_transition_to_region_map,
-    trando_starts, trando_transitions,
-    event_locations, vanilla_shop_costs, vanilla_location_costs,
-    hk_regions, hk_locations,
+    options_logic_mappings,
+    options_pool_mappings,
+    structure_regions,
+    structure_transition_to_region_map,
+    trando_starts,
+    trando_transitions,
+    vanilla_location_costs,
+    vanilla_shop_costs,
 )
 from .resource_state_vars import ResourceStateHandler
 from .rules import cost_terms
-from .state_mixin import HKLogicMixin as HKLogicMixin, hk_collect, hk_remove
+from .state_mixin import HKLogicMixin as HKLogicMixin
+from .state_mixin import hk_collect, hk_remove
 from .template_world import RandomizerCoreWorld
+
 logger = logging.getLogger("Hollow Knight")
 
 

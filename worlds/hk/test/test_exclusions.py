@@ -1,8 +1,7 @@
 import typing
 
-from test.param import classvar_matrix
-
 from BaseClasses import LocationProgressType
+from test.param import classvar_matrix
 
 from .bases import HKTestBase
 

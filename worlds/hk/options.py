@@ -19,8 +19,8 @@ from Options import (
     Visibility,
 )
 
-from .constants import NearbySoul
 from .charms import charm_names, vanilla_costs
+from .constants import NearbySoul
 from .parse_data import options_logic_mappings, options_pool_mappings, trando_starts, trando_transitions
 from .rules import cost_terms
 

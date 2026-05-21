@@ -2,7 +2,7 @@ from typing import Any, ClassVar
 
 from ..options import HKOptions
 from ..state_mixin import default_state
-from . import RCStateVariable, cs, rs, rs_set_value, rs_get_value
+from . import RCStateVariable, cs, rs, rs_get_value, rs_set_value
 
 
 class RCResetter:

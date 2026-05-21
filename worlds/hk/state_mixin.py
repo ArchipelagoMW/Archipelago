@@ -6,8 +6,8 @@ from Utils import KeyedDefaultDict
 from worlds.AutoWorld import LogicMixin
 
 from .constants import BASE_HEALTH, BASE_NOTCHES, BASE_SOUL, NearbySoul  # noqa: F401
-from .parse_data import effects_prog_lookup, effects_items_by_term, effects_terms_by_item
-from .resource_state_vars import rs, rs_set_value, rs_leq
+from .parse_data import effects_items_by_term, effects_prog_lookup, effects_terms_by_item
+from .resource_state_vars import rs, rs_leq, rs_set_value
 
 if TYPE_CHECKING:
     from . import HKClause

@@ -1,4 +1,4 @@
-from typing import ClassVar, NamedTuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar, NamedTuple
 
 from BaseClasses import (
     CollectionState,
