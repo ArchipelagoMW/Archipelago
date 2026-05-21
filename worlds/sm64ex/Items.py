@@ -12,7 +12,7 @@ class SM64ItemData(NamedTuple):
     classification: ItemClassification = ItemClassification.progression
 
 generic_item_data_table: dict[str, SM64ItemData] = {
-    "Power Star": SM64ItemData(sm64ex_base_id + 0, ItemClassification.progression_skip_balancing),
+    "Power Star": SM64ItemData(sm64ex_base_id + 0, ItemClassification.progression_deprioritized_skip_balancing),
     "Basement Key": SM64ItemData(sm64ex_base_id + 178),
     "Second Floor Key": SM64ItemData(sm64ex_base_id + 179),
     "Progressive Key": SM64ItemData(sm64ex_base_id + 180),
