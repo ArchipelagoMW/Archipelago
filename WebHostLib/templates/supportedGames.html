@@ -49,6 +49,9 @@
         <details data-game="{{ game_name }}">
             <summary class="h2">{{ game_name }}</summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
+            {% if "authors" in world.manifest %}
+            <p style="margin-top: 0.5em;">Authors: {{ world.manifest["authors"] | join(", ") }}</p>
+            {% endif %}
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
             {% if world.web.tutorials %}
             <span class="link-spacer">|</span>
@@ -68,9 +71,6 @@
             <a href="{{ world.web.bug_report_page }}">Report a Bug</a>
             {% endif %}
         </details>
-        {% if "authors" in world.manifest %}
-        <p>Authors: {{ world.manifest["authors"] | join(", ") }}</p>
-        {% endif %}
         {% endfor %}
     </div>
 {% endblock %}
