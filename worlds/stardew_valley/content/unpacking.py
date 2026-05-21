@@ -56,7 +56,6 @@ def register_pack(content: StardewContent, pack: ContentPack):
 
     register_sources_and_call_hook(content, pack.harvest_sources, pack.harvest_source_hook)
     register_sources_and_call_hook(content, pack.shop_sources, pack.shop_source_hook)
-    register_sources_and_call_hook(content, pack.crafting_sources, pack.crafting_hook)
     register_sources_and_call_hook(content, pack.artisan_good_sources, pack.artisan_good_hook)
 
     for fish in pack.fishes:
@@ -93,6 +92,12 @@ def register_pack(content: StardewContent, pack: ContentPack):
     for festival in pack.festivals:
         content.festivals[festival.name] = festival
     pack.festival_source_hook(content)
+
+    for cooking_recipe in pack.cooking_recipes:
+        content.festivals[cooking_recipe.name] = cooking_recipe
+    pack.cooking_recipe_source_hook(content)
+
+    register_sources_and_call_hook(content, pack.crafting_sources, pack.crafting_hook)
 
     # register_quests
 
