@@ -8,7 +8,6 @@ from BaseClasses import CollectionState
 
 from ..charms import charm_name_to_id, charm_names
 
-
 attribute_list = []
 """list of tuple(term, number of bits used)"""
 
