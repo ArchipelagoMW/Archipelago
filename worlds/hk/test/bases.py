@@ -75,16 +75,15 @@ class LinkedTestHK:
     item_link_group: list[dict[str, Any]]
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any(self.item_link_group),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Grub"],
-                        "link_replacement": False,
-                        "replacement_item": "One_Geo",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any(self.item_link_group),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Grub"],
+                "link_replacement": False,
+                "replacement_item": "One_Geo",
+            }])
+        }
         return args
 
     def world_setup(self) -> None:

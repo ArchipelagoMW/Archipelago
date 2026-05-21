@@ -68,21 +68,20 @@ class TestReplacementOnly(LinkedTestHK, HKGoalBase):
     expected_grubs = 46 + 18  # the count of grubs + skills removed from item links
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": True,
-                        "replacement_item": "Grub",
-                    }]),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": True,
-                        "replacement_item": "Grub",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": True,
+                "replacement_item": "Grub",
+            }]),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": True,
+                "replacement_item": "Grub",
+            }])
+        }
         return args
 
 
@@ -95,21 +94,20 @@ class TestReplacementOnlyUnlinked(LinkedTestHK, HKGoalBase):
     expected_grubs = 46 + 9  # Player1s replacement Grubs
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": False,
-                        "replacement_item": "Grub",
-                    }]),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": False,
-                        "replacement_item": "Grub",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": False,
+                "replacement_item": "Grub",
+            }]),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": False,
+                "replacement_item": "Grub",
+            }])
+        }
         return args
 
 
@@ -123,21 +121,20 @@ class TestIgnoreOthers(LinkedTestHK, HKGoalBase):
     expected_grubs = 46
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": False,
-                        "replacement_item": "One_Geo",
-                    }]),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": False,
-                        "replacement_item": "Grub",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": False,
+                "replacement_item": "One_Geo",
+            }]),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": False,
+                "replacement_item": "Grub",
+            }])
+        }
         return args
 
 
@@ -150,19 +147,18 @@ class TestReplacementOnlyLinked(LinkedTestHK, HKGoalBase):
     expected_grubs = 46 + 9  # Player2s linkreplacement grubs
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": True,
-                        "replacement_item": "One_Geo",
-                    }]),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": True,
-                        "replacement_item": "Grub",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": True,
+                "replacement_item": "One_Geo",
+            }]),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": True,
+                "replacement_item": "Grub",
+            }])
+        }
         return args

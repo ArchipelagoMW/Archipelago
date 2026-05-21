@@ -258,7 +258,7 @@ class EntranceRandoType(Choice):
         """Test whether a particular transition should be shuffled based on the chosen option"""
         if self.value == self.option_none:
             return False
-        elif self.value == self.option_maparea:
+        elif self.value == self.option_maparea:  # noqa: RET505
             return trans_data["is_map_area_transition"]
         elif self.value == self.option_fullarea:
             return trans_data["is_titled_area_transition"]

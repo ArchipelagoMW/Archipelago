@@ -52,7 +52,7 @@ class SoulManager(metaclass=ResourceStateHandler):
     def spend_and_rebalance(self, state_blob: rs, item_state: cs, amount: int, soul: SoulInfo) -> rs:
         state_blob = self.spend_without_rebalance(state_blob, item_state, amount, soul)
         state_blob = self.rebalance_reserve(state_blob, item_state, soul)
-        return state_blob
+        return state_blob  # noqa: RET504
 
     def spend_without_rebalance(self, state_blob: rs, item_state: cs, amount: int, soul: SoulInfo) -> rs:
         state_blob = rs_add_value(state_blob, "SPENTSOUL", amount)

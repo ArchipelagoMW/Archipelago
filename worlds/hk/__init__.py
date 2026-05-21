@@ -536,7 +536,7 @@ class HKWorld(RandomizerCoreWorld, World):
                     raise ex
                     # reraise for retry attempts if there is still unmatched Entrances
 
-        RETRY_ATTEMPTS = 3
+        RETRY_ATTEMPTS = 3  # noqa: N806
         for index in range(1, 1 + RETRY_ATTEMPTS):
             for group, entrances in self.entrance_groups.items():
                 if group == "global":
@@ -929,7 +929,7 @@ class HKWorld(RandomizerCoreWorld, World):
                 location.sort_costs()
 
     def sort_shops_by_cost(self):
-        for _, shop_locations in self.created_multi_locations.items():
+        for shop_locations in self.created_multi_locations.values():
             randomized_locations = [loc for loc in shop_locations if not loc.vanilla]
             if not randomized_locations:
                 continue
@@ -1069,7 +1069,7 @@ class HKWorld(RandomizerCoreWorld, World):
                 ):
                     spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
             else:
-                for _, locations in hk_world.created_multi_locations.items():
+                for locations in hk_world.created_multi_locations.values():
                     for loc in locations:
                         spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
 

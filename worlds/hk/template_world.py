@@ -95,9 +95,7 @@ class RandomizerCoreWorld(World):
 
     def create_items(self) -> int:
         # create all items in get_item_list()
-        itempool = []
-        for item in self.get_item_list():
-            itempool.append(self.create_item(item))
+        itempool = [self.create_item(item) for item in self.get_item_list()]
 
         # fill in any difference in itempool with filler item and submit to multiworld
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))

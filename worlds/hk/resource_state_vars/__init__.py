@@ -96,7 +96,7 @@ def rs_increase_if_lower(cur_state: int, attr: str, value: int) -> int:
     cur_value = (cur_state >> pos) & ((1 << attr_len) - 1)
     if cur_value < value:
         return cur_state + ((value - cur_value) << pos)
-    else:
+    else:  # noqa: RET505
         return cur_state
 
 

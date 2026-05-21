@@ -1,7 +1,6 @@
 import unittest
 
 from BaseClasses import CollectionState, MultiWorld
-
 from test.general import setup_solo_multiworld
 
 from .. import HKWorld
@@ -431,7 +430,6 @@ class TestBase(unittest.TestCase):
 
     def test_collect_charm(self):
         empty_state = CollectionState(self.multiworld)
-        state_under_test = CollectionState(self.multiworld)
 
         king_fragment = next(item for item in self.multiworld.itempool if item.name == "King_Fragment")
         queen_fragment = next(item for item in self.multiworld.itempool if item.name == "Queen_Fragment")
