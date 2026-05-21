@@ -13,7 +13,7 @@ class RandomizerCoreWorld(World):
     location_class = Location
     region_class = Region
 
-# # black box methods
+# black box methods
     def set_victory(self) -> None:
         """Called at the end of create_regions() to set self.multiworld.completion_condition[self.player]"""
         pass
@@ -84,11 +84,6 @@ class RandomizerCoreWorld(World):
                     loc.show_in_spoiler = False
 
         self.set_victory()
-
-    # unneeded now with rulebuilder's world.set_rule
-    # def set_rule(self, spot: Location | Entrance, rule: CollectionRule | Rule[Any]) -> None:
-    #     """override for alternative access_rule formats"""
-    #     spot.access_rule = rule
 
     def set_rules(self):
         pass

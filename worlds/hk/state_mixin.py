@@ -34,7 +34,7 @@ class HKLogicMixin(LogicMixin):
     multiworld: MultiWorld
     _hk_per_player_resource_states: dict[int, dict[str, list[rs]]]
     """resource state blob to map regions and their available resource states"""
-    # state blob is [Counter({"DAMAGE": 0, "SPENTSOUL": 0, "NOFLOWER": 0, "CHARMNOTCHESSPENT": 0})]
+    # state blob is an int bitfield
 
     _hk_per_player_sweepable_entrances: dict[int, set[str]]
     """mapping for entrances that need to be statefully swept"""
@@ -52,6 +52,7 @@ class HKLogicMixin(LogicMixin):
     """mapping for state modifiers per entrance per player to not try state modifiers which have already been tried"""
 
     _hk_processed_item_cache: dict[int, Counter]
+    """cache of Item names already processes as not all of them end up in state.prog_items due to term handling"""
 
     _hk_charm_costs: dict[int, dict[str, int]]
     """mapping for charm costs per player"""
@@ -113,15 +114,7 @@ class HKLogicMixin(LogicMixin):
 
     def _hk_apply_and_validate_state(self, clause: "HKClause", region: Region, target_region=None) -> bool:
         player = region.player
-        # available_states = self._hk_per_player_resource_states[player].get(region.name, None)
-
-        # if available_states is None:
-        #     region.can_reach(self)
-        #     available_states = self._hk_per_player_resource_states[player].get(region.name, [])
-
-        # unneeded?
         available_states = list(self._hk_per_player_resource_states[player][region.name])
-        # loses the can_reach parent call, potentially re-add it?
 
         if not available_states:
             # no valid parent states
@@ -249,17 +242,6 @@ class HKLogicMixin(LogicMixin):
                             new_region.name,
                             self.path.get(entrance, None)
                         )
-            # if entrance_name not in self._hk_entrance_clause_cache[player]:
-            #     entrance.can_reach(self)
-            #     # then we haven't done a single can_reach on it, let normal sweep handle that
-            #     continue
-            # cur_entrance_cache = self._hk_entrance_clause_cache[player][entrance_name]
-            # for index in [index for index, status in cur_entrance_cache.items() if status]:
-            #     self._hk_apply_and_validate_state(
-            #         entrance.hk_rule[index],
-            #         entrance.parent_region,
-            #         target_region=entrance.connected_region
-            #     )
         self._hk_stale[player] = False
         self._hk_sweeping[player] = False
 

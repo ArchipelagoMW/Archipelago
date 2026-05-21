@@ -55,7 +55,7 @@ from .template_world import RandomizerCoreWorld
 logger = logging.getLogger("Hollow Knight")
 
 
-class HKWorld(RandomizerCoreWorld, World):
+class HKWorld(RandomizerCoreWorld):
     """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface,
     searching for riches, or glory, or answers to old secrets.
 
@@ -190,7 +190,7 @@ class HKWorld(RandomizerCoreWorld, World):
                 # override the random value set in generate_early
                 multiworld.worlds[player].split_cloak_direction = split_cloak_direction
 
-        # initialize GER monkeypatch
+        # initialize GER monkeypatch to keep track of connections that weren't returned in case of a failure
         from entrance_rando import ERPlacementState
 
         original_connect_one_way = ERPlacementState._connect_one_way
@@ -467,7 +467,6 @@ class HKWorld(RandomizerCoreWorld, World):
         target_entrance._er_connected = True
 
         self.entrance_pairs[source_exit.name] = target_entrance.name
-        # pairings.append((source_exit.name, target_entrance.name))
         del target_entrance
 
     def connect_entrances(self):
@@ -496,8 +495,6 @@ class HKWorld(RandomizerCoreWorld, World):
                     logger.debug(f"returning early for group {group} "
                                  "as there was nothing to place after single entrance matching")
                     return
-
-                # logger.debug(f"running er on {group} for {len(exits)} exits and {len(er_targets)} entrances")
             else:
                 er_targets = None
                 exits = None
@@ -545,7 +542,6 @@ class HKWorld(RandomizerCoreWorld, World):
                 raise Exception("idk i wanna move on from connected area er")
                 filtered_entrances = len([e for e in entrances if not e._er_connected])
                 if not filtered_entrances:
-                    # logger.debug(f"Try {index} for group {group} skipped, as there were no filtered entrances")
                     continue
                 try:
                     _connect_entrances(group, entrances)
@@ -940,7 +936,6 @@ class HKWorld(RandomizerCoreWorld, World):
             for loc, costs in zip(randomized_locations, prices, strict=True):
                 loc.costs = costs
 
-    # pre_fill
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld):
         worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.Goal in ["any", "grub_hunt"]]
@@ -994,6 +989,7 @@ class HKWorld(RandomizerCoreWorld, World):
 
     def pre_output(self):
         from .data.item_data import geo_cost_caps
+        # apply Geo price limits if enabled
         if not self.options.LimitGeoPrices:
             return
         for region in self.get_regions():
@@ -1002,7 +998,6 @@ class HKWorld(RandomizerCoreWorld, World):
                     if location.item.name in geo_cost_caps and "GEO" in location.costs:
                         location.costs["GEO"] = min(location.costs["GEO"], geo_cost_caps[location.item.name])
 
-    # fill_slot_data
     def fill_slot_data(self):
         slot_data = {}
 
@@ -1018,7 +1013,6 @@ class HKWorld(RandomizerCoreWorld, World):
                 pass
 
         slot_data["options"]["StartLocationName"] = trando_starts[self.options.StartLocation.current_key]["logic_name"]
-        # slot_data["options"]["EntranceRandoTypeName"] = self.options.EntranceRandoType.current_key
 
         # 32 bit int
         slot_data["seed"] = self.random.randint(-2147483647, 2147483646)
@@ -1030,7 +1024,6 @@ class HKWorld(RandomizerCoreWorld, World):
                 if location.costs:
                     location_costs[location.name] = location.costs
         slot_data["location_costs"] = location_costs
-        # TODO apply geo caps here and spoiler
 
         slot_data["notch_costs"] = self.charm_costs
 
@@ -1042,7 +1035,6 @@ class HKWorld(RandomizerCoreWorld, World):
 
         return slot_data
 
-    # write_spoiler
     @classmethod
     def stage_write_spoiler(cls, multiworld: MultiWorld, spoiler_handle):
         hk_worlds = multiworld.get_game_worlds(cls.game)
@@ -1116,7 +1108,6 @@ class HKWorld(RandomizerCoreWorld, World):
                     path_to_loc.append(entrance)
 
             text = " => ".join(reversed(path_to_loc))
-            # self.spoiler_hints[loc.name] = text
             if loc.address is not None:
                 # we want spoiler paths to events but not hint text
                 hint_data[self.player][loc.address] = text
