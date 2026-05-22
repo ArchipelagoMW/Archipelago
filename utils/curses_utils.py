@@ -76,7 +76,7 @@ class SelectBox:
     def addstr(self, text: str, line: int):
         """Clears the given window line and replaces it with the given text"""
         self.window.addstr(self.TOP_OF_SCREEN + line, self.DATA_COL, " " * (self.computed_box_length - 1))
-        self.window.addstr(self.TOP_OF_SCREEN + line, self.DATA_COL, text)
+        self.window.addnstr(self.TOP_OF_SCREEN + line, self.DATA_COL, text, self.computed_box_length - 1)
 
     def write_data(self):
         """writes all text from data to the appropriate scrolled position in the window"""
