@@ -207,7 +207,7 @@ class VisualListSetCounter(MDDialog):
     def add_set_item(self, key: str, value: int | None = None):
         text = MDListItemSupportingText(text=key, id="value")
         if issubclass(self.option, OptionCounter):
-            value_txt = CounterItemValue(text=str(value) if value else "1")
+            value_txt = CounterItemValue(text=str(value) if value is not None else "1")
             item = MDListItem(text,
                               value_txt,
                               MDIconButton(icon="minus", on_release=self.remove_item), focus_behavior=False)
