@@ -34,10 +34,9 @@ def create_region_locations(reg: Region, world: "OkamiWorld"):
     # Create shop locations if RandomizeShops is enabled
     if world.options.RandomizeShops and reg.name in okami_shop_locations:
         shop_slots = world.options.ShopSlots.value
-        created_count = 1
+        created_count = 0
         for (location_name, location_data) in okami_shop_locations[reg.name].items():
-            # Create All Shop 1 Slots, then All Shop 2 Slots, etc.
-            if location_data.type == LocationType.SHOP and created_count <= shop_slots and location_name.endswith("Slot "+str(created_count)):
+            if location_data.type == LocationType.SHOP and created_count < shop_slots:
                 create_location(location_name, location_data, reg, world)
                 created_count += 1
 
