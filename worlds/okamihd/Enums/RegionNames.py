@@ -167,6 +167,10 @@ class RegionNames(StrEnum):
     SEIAN_CITY_TREASURE_WEST= "Sei-an City (Himiko's palace West Treasure Room)"
     SEIAN_CITY_TREASURE_EAST = "Sei-an City (Himiko's palace East Treasure Room)"
 
+
+    ## SUNKEN SHIP
+    SUNKEN_SHIP_ENTRANCE="Sunken Ship (Entrance)"
+
     ## IMPERIAL PALACE
     IMPERIAL_PALACE_ENTRANCE="Imperial Palace (Entrance)"
 
@@ -193,6 +197,7 @@ class MapIds(Enum):
     RIVER_OF_THE_HEAVENS = 0x122
     SEIAN_ARISTORATIC = 0x200
     SEIAN_COMMONERS = 0x201
+    SUNKEN_SHIP= 0x205
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03

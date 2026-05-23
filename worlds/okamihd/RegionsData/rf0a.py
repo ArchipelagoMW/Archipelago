@@ -40,14 +40,14 @@ exits = {
         ExitData(RegionNames.RYOSHIMA_COAST, loading_screen=False, one_way=True,
                  has_events=["Ryoshima Coast - Mandatory Ubume Encounter"])
     ],
-
     RegionNames.RYOSHIMA_COAST_SEIAN: [
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_COMMONERS_DRY)
     ],
     RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON: [
-        ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False)
+        ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False),
+        ExitData(RegionNames.SUNKEN_SHIP_ENTRANCE)
     ],
     RegionNames.RYOSHIMA_COAST_WEST_PIER: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEA, loading_screen=False)
