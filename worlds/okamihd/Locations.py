@@ -37,7 +37,7 @@ def create_region_locations(reg: Region, world: "OkamiWorld"):
         created_count = 1
         for (location_name, location_data) in okami_shop_locations[reg.name].items():
             # Create All Shop 1 Slots, then All Shop 2 Slots, etc.
-            if location_data.type == LocationType.SHOP and created_count < shop_slots and location_name.endswith("Slot "+str(created_count)):
+            if location_data.type == LocationType.SHOP and created_count <= shop_slots and location_name.endswith("Slot "+str(created_count)):
                 create_location(location_name, location_data, reg, world)
                 created_count += 1
 
