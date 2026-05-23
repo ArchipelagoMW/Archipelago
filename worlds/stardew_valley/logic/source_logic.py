@@ -10,9 +10,11 @@ from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource, 
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.monster_data import MonsterSource
+from ..data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource, SpecialOrderSource, MasterySource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource, HatMouseSource
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.skill_names import Skill
+from ..strings.tv_channel_names import Channel
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -149,3 +151,27 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: FishingSource):
         return self.logic.fishing.can_fish_at(source.region) & self.logic.skill.has_level(Skill.fishing, source.fishing_level) & self.logic.tool.has_fishing_rod(source.minimum_rod)
+
+    @has_access_to.register
+    def _(self, source: FriendshipSource):
+        return self.logic.relationship.has_hearts(source.friend, source.hearts)
+
+    @has_access_to.register
+    def _(self, source: QueenOfSauceSource):
+        return self.logic.action.can_watch(Channel.queen_of_sauce) & self.logic.season.has(source.season)
+
+    @has_access_to.register
+    def _(self, source: SkillSource):
+        return self.logic.skill.has_level(source.skill, source.level)
+
+    @has_access_to.register
+    def _(self, source: StarterSource):
+        return self.logic.true_
+
+    @has_access_to.register
+    def _(self, source: SpecialOrderSource):
+        return self.logic.special_order.can_complete_special_order(source.special_order)
+
+    @has_access_to.register
+    def _(self, source: MasterySource):
+        return self.logic.skill.has_mastery(source.skill)

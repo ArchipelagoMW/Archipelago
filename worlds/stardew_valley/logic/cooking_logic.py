@@ -2,16 +2,16 @@ from functools import cached_property
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, \
-    QueenOfSauceSource, CookingRecipe, ShopFriendshipSource, all_cooking_recipes
-from ..data.recipe_source import CutsceneSource, ShopTradeSource
+from ..data.cooking_recipe import CookingRecipe
+from ..data.game_item import Source
+from ..data.recipe_source import CutsceneSource, StarterSource, SkillSource, FriendshipSource, QueenOfSauceSource
+from ..data.shop import ShopSource
 from ..options import Chefsanity
-from ..stardew_rule import StardewRule, True_, False_
+from ..stardew_rule import StardewRule
 from ..strings.ap_names.ap_option_names import ChefsanityOptionName
 from ..strings.building_names import Building
 from ..strings.craftable_names import Craftable
 from ..strings.region_names import LogicRegion
-from ..strings.tv_channel_names import Channel
 
 
 class CookingLogicMixin(BaseLogicMixin):
@@ -31,19 +31,25 @@ class CookingLogic(BaseLogic):
         if recipe is None:
             return cook_rule
         if isinstance(recipe, str):
-            recipe = next(filter(lambda x: x.meal == recipe, all_cooking_recipes))
+            recipe = self.content.cooking_recipes[recipe]
 
-        recipe_rule = self.logic.cooking.knows_recipe(recipe.source, recipe.meal)
-        ingredients_rule = self.logic.has_all(*sorted(recipe.ingredients))
+        recipe_rule = self.knows_recipe(recipe)
+        items = [ingredient for ingredient, amount in recipe.ingredients]
+        ingredients_rule = self.logic.has_all(*sorted(items))
         return cook_rule & recipe_rule & ingredients_rule
 
-    # Should be cached
-    def knows_recipe(self, source: RecipeSource, meal_name: str) -> StardewRule:
+    @cache_self1
+    def knows_recipe(self, recipe: CookingRecipe) -> StardewRule:
         if self.options.chefsanity == Chefsanity.preset_none:
-            return self.logic.cooking.can_learn_recipe(source)
+            return self.logic.cooking.can_learn_recipe(recipe)
+        rules = []
+        for source in recipe.sources:
+            rules.append(self.knows_recipe_source(source, recipe.name))
+        return self.logic.or_(*rules)
+
+    # Should be cached
+    def knows_recipe_source(self, source: Source, meal_name: str) -> StardewRule:
         if isinstance(source, StarterSource):
-            return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, ShopTradeSource) and ChefsanityOptionName.purchases in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
         if isinstance(source, ShopSource) and ChefsanityOptionName.purchases in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
@@ -55,29 +61,15 @@ class CookingLogic(BaseLogic):
             return self.logic.cooking.received_recipe(meal_name)
         if isinstance(source, QueenOfSauceSource) and ChefsanityOptionName.queen_of_sauce in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, ShopFriendshipSource) and ChefsanityOptionName.purchases in self.options.chefsanity:
-            return self.logic.cooking.received_recipe(meal_name)
         return self.logic.cooking.can_learn_recipe(source)
 
     @cache_self1
-    def can_learn_recipe(self, source: RecipeSource) -> StardewRule:
-        if isinstance(source, StarterSource):
-            return True_()
-        if isinstance(source, ShopTradeSource):
-            return self.logic.money.can_trade_at(source.region, source.currency, source.price)
-        if isinstance(source, ShopSource):
-            return self.logic.money.can_spend_at(source.region, source.price)
-        if isinstance(source, SkillSource):
-            return self.logic.skill.has_level(source.skill, source.level)
-        if isinstance(source, CutsceneSource):
-            return self.logic.region.can_reach(source.region) & self.logic.relationship.has_hearts(source.friend, source.hearts)
-        if isinstance(source, FriendshipSource):
-            return self.logic.relationship.has_hearts(source.friend, source.hearts)
-        if isinstance(source, QueenOfSauceSource):
-            return self.logic.action.can_watch(Channel.queen_of_sauce) & self.logic.season.has(source.season)
-        if isinstance(source, ShopFriendshipSource):
-            return self.logic.money.can_spend_at(source.region, source.price) & self.logic.relationship.has_hearts(source.friend, source.hearts)
-        return False_()
+    def can_learn_recipe(self, recipe: CookingRecipe) -> StardewRule:
+        return self.logic.source.has_access_to_any(recipe.sources)
+
+    @cache_self1
+    def can_learn_recipe_source(self, source: Source) -> StardewRule:
+        return self.logic.source.has_access_to(source)
 
     @cache_self1
     def received_recipe(self, meal_name: str):
@@ -87,9 +79,7 @@ class CookingLogic(BaseLogic):
         if number <= 0:
             return self.logic.true_
         recipe_rules = []
-        for recipe in all_cooking_recipes:
-            if recipe.content_pack and not self.content.is_enabled(recipe.content_pack):
-                continue
+        for recipe in self.content.cooking_recipes.values():
             recipe_rules.append(self.can_cook(recipe))
         number = min(len(recipe_rules), number)
         return self.logic.count(number, *recipe_rules)

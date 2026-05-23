@@ -3,12 +3,13 @@ from ..game_content import ContentPack, StardewContent
 from ...data import villagers_data, fish_data
 from ...data.animal import Animal, AnimalName, OstrichIncubatorSource
 from ...data.cooking_recipe import CookingRecipe
+from ...data.craftable_data import CraftingRecipe
 from ...data.fish_data import FishingSource
 from ...data.game_item import ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
-from ...data.recipe_source import FriendshipSource
+from ...data.recipe_source import FriendshipSource, MasterySource, ArchipelagoSource, SpecialOrderSource, QuestSource, SkillSource
 from ...data.requirement import WalnutRequirement, CookedRecipesRequirement, \
     CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement, ToolRequirement
@@ -16,23 +17,32 @@ from ...data.shop import ShopSource, HatMouseSource
 from ...logic.tailoring_logic import TailoringSource
 from ...logic.time_logic import MAX_MONTHS
 from ...strings.animal_product_names import AnimalProduct
+from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building
+from ...strings.craftable_names import WildSeeds, Craftable, Consumable, Fishing, Ring
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
+from ...strings.fertilizer_names import SpeedGro, RetainingSoil
 from ...strings.fish_names import Fish
+from ...strings.flower_names import Flower
 from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
 from ...strings.geode_names import Geode
 from ...strings.ingredient_names import Ingredient
+from ...strings.machine_names import Machine
 from ...strings.material_names import Material
-from ...strings.metal_names import Fossil, Mineral
+from ...strings.metal_names import Fossil, Mineral, MetalBar, Ore
+from ...strings.monster_drop_names import Loot
 from ...strings.monster_names import Monster
+from ...strings.quest_names import Quest
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
+from ...strings.skill_names import Skill
+from ...strings.special_order_names import SpecialOrder
 from ...strings.tool_names import Tool
 from ...strings.villager_names import NPC
 
@@ -163,5 +173,19 @@ ginger_island_content_pack = GingerIslandContentPack(
         CookingRecipe(name=Meal.mango_sticky_rice, ingredients=((Fruit.mango, 1), (Forageable.coconut, 1), (Ingredient.rice, 1),), sources=(FriendshipSource(friend=NPC.leo, hearts=7),),),
         CookingRecipe(name=Meal.poi, ingredients=((Vegetable.taro_root, 4),), sources=(FriendshipSource(friend=NPC.leo, hearts=3),),),
         CookingRecipe(name=Meal.tropical_curry, ingredients=((Forageable.coconut, 1), (Fruit.pineapple, 1), (Fruit.hot_pepper, 1),), sources=(ShopSource(shop_region=Region.island_resort, price=2000),),),
+    ),
+    crafting_recipes=(
+        CraftingRecipe(name=SpeedGro.hyper, ingredients=((Ore.radioactive, 1), (Fossil.bone_fragment, 3), (Loot.solar_essence, 1),), sources=(ArchipelagoSource(ap_items=(f"{SpeedGro.hyper} Recipe",)),),),
+        CraftingRecipe(name=RetainingSoil.deluxe, ingredients=((Material.stone, 5), (Material.fiber, 3), (Material.clay, 1),), sources=(ShopSource(shop_region=Region.island_trader, items_price=((50, Currency.cinder_shard),)),),),
+        CraftingRecipe(name=WildSeeds.blue_grass_starter, ingredients=((Material.fiber, 25), (Material.moss, 10), (ArtisanGood.mystic_syrup, 1),), sources=(ArchipelagoSource(ap_items=(f"{WildSeeds.blue_grass_starter} Recipe",)),),),
+        CraftingRecipe(name=Fishing.magic_bait, ingredients=((Ore.radioactive, 1), (Loot.bug_meat, 3),), sources=(ArchipelagoSource(ap_items=(f"{Fishing.magic_bait} Recipe",)),),),
+        CraftingRecipe(name=Ring.thorns_ring, ingredients=((Fossil.bone_fragment, 50), (Material.stone, 50), (MetalBar.gold, 1),), sources=(SkillSource(skill=Skill.combat, level=7),),),
+        CraftingRecipe(name=Consumable.fairy_dust, ingredients=((Mineral.diamond, 1), (Flower.fairy_rose, 1),), sources=(QuestSource(quest=Quest.the_pirates_wife),),),
+        CraftingRecipe(name=Consumable.warp_totem_island, ingredients=((Material.hardwood, 5), (Forageable.dragon_tooth, 1), (Forageable.ginger, 1),), sources=(ShopSource(shop_region=Region.volcano_dwarf_shop, price=10000),),),
+        CraftingRecipe(name=Machine.heavy_tapper, ingredients=((Material.hardwood, 30), (MetalBar.radioactive, 1),), sources=(ArchipelagoSource(ap_items=(f"{Machine.heavy_tapper} Recipe",)),),),
+        CraftingRecipe(name=Machine.ostrich_incubator, ingredients=((Fossil.bone_fragment, 50), (Material.hardwood, 50), (Currency.cinder_shard, 20),), sources=(ArchipelagoSource(ap_items=(f"{Machine.ostrich_incubator} Recipe",)),),),
+        CraftingRecipe(name=Machine.solar_panel, ingredients=((MetalBar.quartz, 10), (MetalBar.iron, 5), (MetalBar.gold, 5),), sources=(SpecialOrderSource(special_order=SpecialOrder.island_ingredients),),), # #, content_pack=ginger_island_content_pack.name) # If set this as a ginger island only recipe, the rule for battery packs will fail. It does OR on lightning rod and solar panel, even when GI is off
+        CraftingRecipe(name=Craftable.hopper, ingredients=((Material.hardwood, 10), (MetalBar.iridium, 1), (MetalBar.radioactive, 1),), sources=(ArchipelagoSource(ap_items=(f"{Craftable.hopper} Recipe",)),),),
+        CraftingRecipe(name=Machine.mini_forge, ingredients=((Forageable.dragon_tooth, 5), (MetalBar.iron, 10), (MetalBar.gold, 10), (MetalBar.iridium, 5),), sources=(MasterySource(skill=Skill.combat),),),
     ),
 )

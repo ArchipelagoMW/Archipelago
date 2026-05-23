@@ -4,6 +4,7 @@ from ..override import override
 from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_content_pack
 from ...data import villagers_data, fish_data
 from ...data.cooking_recipe import CookingRecipe
+from ...data.craftable_data import CraftingRecipe
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.requirement import YearRequirement, CombatRequirement, SpecificFriendRequirement, ToolRequirement, SkillRequirement, FishingRequirement
@@ -19,6 +20,7 @@ from ...strings.food_names import SVEMeal, SVEBeverage, Meal
 from ...strings.forageable_names import Mushroom, Forageable, SVEForage
 from ...strings.gift_names import SVEGift
 from ...strings.ingredient_names import Ingredient
+from ...strings.metal_names import Fossil
 from ...strings.monster_drop_names import ModLoot, Loot
 from ...strings.performance_names import Performance
 from ...strings.region_names import Region, SVERegion
@@ -233,5 +235,10 @@ register_mod_content_pack(SVEContentPack(
         CookingRecipe(name=SVEMeal.seaweed_salad, ingredients=((SVEWaterItem.dulse_seaweed, 2), (WaterItem.seaweed, 2), (Ingredient.oil, 1),), sources=(ShopSource(shop_region=Region.fish_shop, price=1250),),),
         CookingRecipe(name=SVEMeal.void_delight, ingredients=((SVEFish.void_eel, 1), (Loot.void_essence, 50), (Loot.solar_essence, 20),), sources=(ShopSource(shop_region=Region.sewer, price=5000, other_requirements=(SpecificFriendRequirement(npc=NPC.krobus, hearts=10),)),),),
         CookingRecipe(name=SVEMeal.void_salmon_sushi, ingredients=((Fish.void_salmon, 1), (ArtisanGood.void_mayonnaise, 1), (WaterItem.seaweed, 3),), sources=(ShopSource(shop_region=Region.sewer, price=5000, other_requirements=(SpecificFriendRequirement(npc=NPC.krobus, hearts=10),)),),),
+    ),
+    crafting_recipes=(
+        CraftingRecipe(name=ModEdible.haste_elixir, ingredients=((Loot.void_essence, 35), (ModLoot.void_soul, 5), (Ingredient.sugar, 1), (Meal.spicy_eel, 1),), sources=(ShopSource(shop_region=SVERegion.alesia_shop, price=35000),),),
+        CraftingRecipe(name=ModEdible.hero_elixir, ingredients=((ModLoot.void_pebble, 3), (ModLoot.void_soul, 5), (Ingredient.oil, 1), (Loot.slime, 10),), sources=(ShopSource(shop_region=SVERegion.isaac_shop, price=65000),),),
+        CraftingRecipe(name=ModEdible.armor_elixir, ingredients=((Loot.solar_essence, 30), (ModLoot.void_soul, 5), (Ingredient.vinegar, 5), (Fossil.bone_fragment, 5),), sources=(ShopSource(shop_region=SVERegion.alesia_shop, price=50000),),),
     ),
 ))

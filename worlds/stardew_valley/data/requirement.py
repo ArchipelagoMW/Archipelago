@@ -171,6 +171,11 @@ class CraftedItemsRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class CraftedSpecificItemRequirement(Requirement):
+    item: str
+
+
+@dataclass(frozen=True)
 class HelpWantedRequirement(Requirement):
     number_of_quests: int
 

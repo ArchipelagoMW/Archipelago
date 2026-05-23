@@ -12,7 +12,6 @@ from .content import StardewContent
 from .content.feature import friendsanity
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
-from .data.craftable_data import all_crafting_recipes_by_name
 from .data.game_item import ItemTag
 from .data.harvest import HarvestCropSource, HarvestFruitTreeSource
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, \
@@ -160,9 +159,9 @@ def set_rules(world):
     set_festival_rules(all_location_names, logic, rule_collector)
     set_monstersanity_rules(all_location_names, logic, rule_collector, world_options)
     set_shipsanity_rules(all_location_names, logic, rule_collector, world_options)
-    set_cooksanity_rules(all_location_names, logic, rule_collector, world_options)
-    set_chefsanity_rules(all_location_names, logic, rule_collector, world_options)
-    set_craftsanity_rules(all_location_names, logic, rule_collector, world_options)
+    set_cooksanity_rules(all_location_names, logic, rule_collector, world_options, world_content)
+    set_chefsanity_rules(all_location_names, logic, rule_collector, world_options, world_content)
+    set_craftsanity_rules(all_location_names, logic, rule_collector, world_options, world_content)
     set_booksanity_rules(logic, rule_collector, world_content)
     set_isolated_locations_rules(logic, rule_collector, world_content, trash_bear_requests)
     set_arcade_machine_rules(logic, rule_collector, world_options)
@@ -1006,7 +1005,7 @@ def set_shipsanity_rules(all_location_names: set[str], logic: StardewLogic, rule
         rule_collector.set_location_rule(location.name, logic.has(item_to_ship))
 
 
-def set_cooksanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+def set_cooksanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions, content: StardewContent):
     cooksanity_option = world_options.cooksanity
     if cooksanity_option == Cooksanity.option_none:
         return
@@ -1016,12 +1015,12 @@ def set_cooksanity_rules(all_location_names: Set[str], logic: StardewLogic, rule
         if location.name not in all_location_names:
             continue
         recipe_name = location.name[len(cooksanity_prefix):]
-        recipe = all_cooking_recipes_by_name[recipe_name]
+        recipe = content.cooking_recipes[recipe_name]
         cook_rule = logic.cooking.can_cook(recipe)
         rule_collector.set_location_rule(location.name, cook_rule)
 
 
-def set_chefsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+def set_chefsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions, content: StardewContent):
     chefsanity_option = world_options.chefsanity
     if chefsanity_option == Chefsanity.preset_none:
         return
@@ -1031,12 +1030,12 @@ def set_chefsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule
         if location.name not in all_location_names:
             continue
         recipe_name = location.name[:-len(chefsanity_suffix)]
-        recipe = all_cooking_recipes_by_name[recipe_name]
-        learn_rule = logic.cooking.can_learn_recipe(recipe.source)
+        recipe = content.cooking_recipes[recipe_name]
+        learn_rule = logic.cooking.can_learn_recipe(recipe)
         rule_collector.set_location_rule(location.name, learn_rule)
 
 
-def set_craftsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+def set_craftsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions, content: StardewContent):
     craftsanity_option = world_options.craftsanity
     if craftsanity_option == Craftsanity.option_none:
         return
@@ -1048,11 +1047,11 @@ def set_craftsanity_rules(all_location_names: Set[str], logic: StardewLogic, rul
             continue
         if location.name.endswith(craft_suffix):
             recipe_name = location.name[:-len(craft_suffix)]
-            recipe = all_crafting_recipes_by_name[recipe_name]
+            recipe = content.crafting_recipes[recipe_name]
             craft_rule = logic.crafting.can_learn_recipe(recipe)
         else:
             recipe_name = location.name[len(craft_prefix):]
-            recipe = all_crafting_recipes_by_name[recipe_name]
+            recipe = content.crafting_recipes[recipe_name]
             craft_rule = logic.crafting.can_craft(recipe)
         rule_collector.set_location_rule(location.name, craft_rule)
 

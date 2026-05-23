@@ -2,18 +2,21 @@ from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
 from ...data.building import Building
 from ...data.cooking_recipe import CookingRecipe
+from ...data.craftable_data import CraftingRecipe
 from ...data.festival_data import all_festival_data
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource, AllRegionsSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
-from ...data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource
+from ...data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource, SpecialOrderSource, ArchipelagoSource, CutsceneSource, \
+    MasterySource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, YearRequirement, \
     GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
     ReceivedRaccoonsRequirement, \
     PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement, EndgameItemReceivedRequirement, MasteryRequirement, ReceivedRequirement, \
-    BachelorFriendRequirement, SeasonRequirement, SpeakJunimoRequirement, FestivalItemReceivedRequirement, MuseumArtifactsRequirement
+    BachelorFriendRequirement, SeasonRequirement, SpeakJunimoRequirement, FestivalItemReceivedRequirement, MuseumArtifactsRequirement, \
+    CraftedSpecificItemRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
 from ...data.tool import ToolUpgrade, StartingToolSource
@@ -25,7 +28,8 @@ from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
 from ...strings.catalogue_names import Catalogue
-from ...strings.craftable_names import Furniture, Consumable, Fishing, WildSeeds
+from ...strings.craftable_names import Furniture, Consumable, Fishing, WildSeeds, Bomb, Fence, Sprinkler, Floor, Edible, Ring, Lighting, Storage, Sign, \
+    Craftable, Statue
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
 from ...strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
@@ -41,12 +45,14 @@ from ...strings.gift_names import Gift
 from ...strings.ingredient_names import Ingredient
 from ...strings.machine_names import Machine
 from ...strings.material_names import Material
-from ...strings.metal_names import MetalBar, Ore
+from ...strings.metal_names import MetalBar, Ore, Fossil, Mineral, Artifact
+from ...strings.monster_drop_names import Loot
 from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
 from ...strings.skill_names import Skill
+from ...strings.special_order_names import SpecialOrder
 from ...strings.tool_names import Tool, ToolMaterial, FishingRod
 from ...strings.villager_names import NPC
 
@@ -1290,5 +1296,173 @@ pelican_town = ContentPack(
         CookingRecipe(name=Beverage.triple_shot_espresso, ingredients=((Beverage.coffee, 3),), sources=(ShopSource(shop_region=Region.saloon, price=5000),),),
         CookingRecipe(name=Meal.trout_soup, ingredients=((Fish.rainbow_trout, 1), (WaterItem.green_algae, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=14),),),
         CookingRecipe(name=Meal.vegetable_medley, ingredients=((Vegetable.tomato, 1), (Vegetable.beet, 1),), sources=(FriendshipSource(friend=NPC.caroline, hearts=7),),),
+    ),
+    crafting_recipes=(
+        CraftingRecipe(name=Bomb.cherry_bomb, ingredients=((Ore.copper, 4), (Material.coal, 1),), sources=(SkillSource(skill=Skill.mining, level=1),),),
+        CraftingRecipe(name=Bomb.bomb, ingredients=((Ore.iron, 4), (Material.coal, 1),), sources=(SkillSource(skill=Skill.mining, level=6),),),
+        CraftingRecipe(name=Bomb.mega_bomb, ingredients=((Ore.gold, 4), (Loot.solar_essence, 1), (Loot.void_essence, 1),), sources=(SkillSource(skill=Skill.mining, level=8),),),
+
+        CraftingRecipe(name=Fence.gate, ingredients=((Material.wood, 10),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Fence.wood, ingredients=((Material.wood, 2),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Fence.stone, ingredients=((Material.stone, 2),), sources=(SkillSource(skill=Skill.farming, level=2),),),
+        CraftingRecipe(name=Fence.iron, ingredients=((MetalBar.iron, 2),), sources=(SkillSource(skill=Skill.farming, level=4),),),
+        CraftingRecipe(name=Fence.hardwood, ingredients=((Material.hardwood, 2),), sources=(SkillSource(skill=Skill.farming, level=6),),),
+
+        CraftingRecipe(name=Sprinkler.basic, ingredients=((MetalBar.copper, 1), (MetalBar.iron, 1),), sources=(SkillSource(skill=Skill.farming, level=2),),),
+        CraftingRecipe(name=Sprinkler.quality, ingredients=((MetalBar.iron, 1), (MetalBar.gold, 1), (MetalBar.quartz, 1),), sources=(SkillSource(skill=Skill.farming, level=6),),),
+        CraftingRecipe(name=Sprinkler.iridium, ingredients=((MetalBar.gold, 1), (MetalBar.iridium, 1), (ArtisanGood.battery_pack, 1),), sources=(SkillSource(skill=Skill.farming, level=9),),),
+
+        CraftingRecipe(name=Machine.bee_house, ingredients=((Material.wood, 40), (Material.coal, 8), (MetalBar.iron, 1), (ArtisanGood.maple_syrup, 1),), sources=(SkillSource(skill=Skill.farming, level=3),),),
+        CraftingRecipe(name=Machine.cask, ingredients=((Material.wood, 40), (Material.hardwood, 1),), sources=(CutsceneSource(region=Region.cellar, friend=NPC.robin, hearts=0, other_requirements=(BuildingRequirement(BuildingNames.cellar),)),),),
+        CraftingRecipe(name=Machine.cheese_press, ingredients=((Material.wood, 45), (Material.stone, 45), (Material.hardwood, 10), (MetalBar.copper, 1),), sources=(SkillSource(skill=Skill.farming, level=6),),),
+        CraftingRecipe(name=Machine.keg, ingredients=((Material.wood, 30), (MetalBar.copper, 1), (MetalBar.iron, 1), (ArtisanGood.oak_resin, 1),), sources=(SkillSource(skill=Skill.farming, level=8),),),
+        CraftingRecipe(name=Machine.loom, ingredients=((Material.wood, 60), (Material.fiber, 30), (ArtisanGood.pine_tar, 1),), sources=(SkillSource(skill=Skill.farming, level=7),),),
+        CraftingRecipe(name=Machine.mayonnaise_machine, ingredients=((Material.wood, 15), (Material.stone, 15), (Mineral.earth_crystal, 10), (MetalBar.copper, 1),), sources=(SkillSource(skill=Skill.farming, level=2),),),
+        CraftingRecipe(name=Machine.oil_maker, ingredients=((Loot.slime, 50), (Material.hardwood, 20), (MetalBar.gold, 1),), sources=(SkillSource(skill=Skill.farming, level=8),),),
+        CraftingRecipe(name=Machine.preserves_jar, ingredients=((Material.wood, 50), (Material.stone, 40), (Material.coal, 8),), sources=(SkillSource(skill=Skill.farming, level=4),),),
+        CraftingRecipe(name=Machine.fish_smoker, ingredients=((Material.hardwood, 10), (WaterItem.sea_jelly, 1), (WaterItem.river_jelly, 1), (WaterItem.cave_jelly, 1),), sources=(ShopSource(shop_region=Region.fish_shop, price=10000),),),
+        CraftingRecipe(name=Machine.dehydrator, ingredients=((Material.wood, 30), (Material.clay, 2), (Mineral.fire_quartz, 1),), sources=(ShopSource(shop_region=Region.pierre_store, price=10000),),),
+
+        CraftingRecipe(name=Fertilizer.basic, ingredients=((Material.sap, 2),), sources=(SkillSource(skill=Skill.farming, level=1),),),
+
+        CraftingRecipe(name=Fertilizer.quality, ingredients=((Material.sap, 4), (Fish.any, 1),), sources=(SkillSource(skill=Skill.farming, level=9),),),
+        CraftingRecipe(name=Fertilizer.deluxe, ingredients=((MetalBar.iridium, 1), (Material.sap, 40),), sources=(ArchipelagoSource(ap_items=(f"{Fertilizer.deluxe} Recipe",)),),),
+
+        CraftingRecipe(name=SpeedGro.basic, ingredients=((ArtisanGood.pine_tar, 1), (Material.moss, 5),), sources=(SkillSource(skill=Skill.farming, level=3),),),
+        CraftingRecipe(name=SpeedGro.deluxe, ingredients=((ArtisanGood.oak_resin, 1), (Fossil.bone_fragment, 5),), sources=(SkillSource(skill=Skill.farming, level=8),),),
+        CraftingRecipe(name=RetainingSoil.basic, ingredients=((Material.stone, 2),), sources=(SkillSource(skill=Skill.farming, level=4),),),
+        CraftingRecipe(name=RetainingSoil.quality, ingredients=((Material.stone, 3), (Material.clay, 1),), sources=(SkillSource(skill=Skill.farming, level=7),),),
+        CraftingRecipe(name=Fertilizer.tree, ingredients=((Material.fiber, 5), (Material.stone, 5),), sources=(SkillSource(skill=Skill.foraging, level=7),),),
+
+        CraftingRecipe(name=WildSeeds.spring, ingredients=((Forageable.wild_horseradish, 1), (Forageable.daffodil, 1), (Forageable.leek, 1), (Forageable.dandelion, 1),), sources=(SkillSource(skill=Skill.foraging, level=1),),),
+        CraftingRecipe(name=WildSeeds.summer, ingredients=((Forageable.spice_berry, 1), (Fruit.grape, 1), (Forageable.sweet_pea, 1),), sources=(SkillSource(skill=Skill.foraging, level=4),),),
+        CraftingRecipe(name=WildSeeds.fall, ingredients=((Mushroom.common, 1), (Forageable.wild_plum, 1), (Forageable.hazelnut, 1), (Forageable.blackberry, 1),), sources=(SkillSource(skill=Skill.foraging, level=6),),),
+        CraftingRecipe(name=WildSeeds.winter, ingredients=((Forageable.winter_root, 1), (Forageable.crystal_fruit, 1), (Forageable.snow_yam, 1), (Forageable.crocus, 1),), sources=(SkillSource(skill=Skill.foraging, level=7),),),
+        CraftingRecipe(name=WildSeeds.ancient, ingredients=((Artifact.ancient_seed, 1),), sources=(ArchipelagoSource(ap_items=(f"{WildSeeds.ancient} Recipe",)),),),
+        CraftingRecipe(name=WildSeeds.grass_starter, ingredients=((Material.fiber, 10),), sources=(ShopSource(shop_region=Region.pierre_store, price=1000),),),
+        CraftingRecipe(name=WildSeeds.tea_sapling, ingredients=(((WildSeeds.spring, WildSeeds.summer, WildSeeds.fall, WildSeeds.winter), 2), (Material.fiber, 5), (Material.wood, 5),), sources=(CutsceneSource(region=Region.sunroom, friend=NPC.caroline, hearts=2),),),
+        CraftingRecipe(name=WildSeeds.fiber, ingredients=((Seed.mixed, 1), (Material.sap, 5), (Material.clay, 1),), sources=(SpecialOrderSource(special_order=SpecialOrder.community_cleanup),),),
+
+        CraftingRecipe(name=Floor.wood, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=100),),),
+        CraftingRecipe(name=Floor.rustic, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=200),),),
+        CraftingRecipe(name=Floor.straw, ingredients=((Material.wood, 1), (Material.fiber, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=200),),),
+        CraftingRecipe(name=Floor.weathered, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=LogicRegion.mines_dwarf_shop, price=500),),),
+        CraftingRecipe(name=Floor.crystal, ingredients=((MetalBar.quartz, 1),), sources=(ShopSource(shop_region=Region.sewer, price=500),),),
+        CraftingRecipe(name=Floor.stone, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=100),),),
+        CraftingRecipe(name=Floor.stone_walkway, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=200),),),
+        CraftingRecipe(name=Floor.brick, ingredients=((Material.clay, 2), (Material.stone, 5),), sources=(ShopSource(shop_region=Region.carpenter, price=500),),),
+        CraftingRecipe(name=Floor.wood_path, ingredients=((Material.wood, 1),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Floor.gravel_path, ingredients=((Material.stone, 1),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Floor.cobblestone_path, ingredients=((Material.stone, 1),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Floor.stepping_stone_path, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=100),),),
+        CraftingRecipe(name=Floor.crystal_path, ingredients=((MetalBar.quartz, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=200),),),
+
+        CraftingRecipe(name=Fishing.spinner, ingredients=((MetalBar.iron, 2),), sources=(SkillSource(skill=Skill.fishing, level=6),),),
+        CraftingRecipe(name=Fishing.trap_bobber, ingredients=((MetalBar.copper, 1), (Material.sap, 10),), sources=(SkillSource(skill=Skill.fishing, level=6),),),
+        CraftingRecipe(name=Fishing.sonar_bobber, ingredients=((MetalBar.iron, 1), (MetalBar.quartz, 2),), sources=(SkillSource(skill=Skill.fishing, level=6),),),
+        CraftingRecipe(name=Fishing.cork_bobber, ingredients=((Material.wood, 10), (Material.hardwood, 5), (Loot.slime, 10),), sources=(SkillSource(skill=Skill.fishing, level=7),),),
+        CraftingRecipe(name=Fishing.quality_bobber, ingredients=((MetalBar.copper, 1), (Material.sap, 20), (Loot.solar_essence, 5),), sources=(SpecialOrderSource(special_order=SpecialOrder.juicy_bugs_wanted),),),
+        CraftingRecipe(name=Fishing.treasure_hunter, ingredients=((MetalBar.gold, 2),), sources=(SkillSource(skill=Skill.fishing, level=7),),),
+        CraftingRecipe(name=Fishing.dressed_spinner, ingredients=((MetalBar.iron, 2), (ArtisanGood.cloth, 1),), sources=(SkillSource(skill=Skill.fishing, level=8),),),
+        CraftingRecipe(name=Fishing.barbed_hook, ingredients=((MetalBar.copper, 1), (MetalBar.iron, 1), (MetalBar.gold, 1),), sources=(SkillSource(skill=Skill.fishing, level=8),),),
+        CraftingRecipe(name=Fishing.magnet, ingredients=((MetalBar.iron, 1),), sources=(SkillSource(skill=Skill.fishing, level=9),),),
+        CraftingRecipe(name=Fishing.bait, ingredients=((Loot.bug_meat, 1),), sources=(SkillSource(skill=Skill.fishing, level=2),),),
+        CraftingRecipe(name=Fishing.deluxe_bait, ingredients=((Fishing.bait, 5), (Material.moss, 2),), sources=(SkillSource(skill=Skill.fishing, level=4),),),
+        CraftingRecipe(name=Fishing.wild_bait, ingredients=((Material.fiber, 10), (Loot.bug_meat, 5), (Loot.slime, 5),), sources=(CutsceneSource(region=Region.tent, friend=NPC.linus, hearts=4),),),
+        CraftingRecipe(name=Machine.crab_pot, ingredients=((Material.wood, 40), (MetalBar.iron, 3),), sources=(SkillSource(skill=Skill.fishing, level=3),),),
+
+        CraftingRecipe(name=Ring.sturdy_ring, ingredients=((MetalBar.copper, 2), (Loot.bug_meat, 25), (Loot.slime, 25),), sources=(SkillSource(skill=Skill.combat, level=1),),),
+        CraftingRecipe(name=Ring.warrior_ring, ingredients=((MetalBar.iron, 10), (Material.coal, 25), (Mineral.frozen_tear, 10),), sources=(SkillSource(skill=Skill.combat, level=4),),),
+        CraftingRecipe(name=Ring.ring_of_yoba, ingredients=((MetalBar.gold, 5), (MetalBar.iron, 5), (Mineral.diamond, 1),), sources=(SkillSource(skill=Skill.combat, level=7),),),
+        CraftingRecipe(name=Ring.glowstone_ring, ingredients=((Loot.solar_essence, 5), (MetalBar.iron, 5),), sources=(SkillSource(skill=Skill.mining, level=4),),),
+        CraftingRecipe(name=Ring.iridium_band, ingredients=((MetalBar.iridium, 5), (Loot.solar_essence, 50), (Loot.void_essence, 50),), sources=(SkillSource(skill=Skill.combat, level=9),),),
+        CraftingRecipe(name=Ring.wedding_ring, ingredients=((MetalBar.iridium, 5), (Mineral.prismatic_shard, 1),), sources=(ShopSource(shop_region=LogicRegion.traveling_cart, price=500),),),
+
+        CraftingRecipe(name=Edible.field_snack, ingredients=((TreeSeed.acorn, 1), (TreeSeed.maple, 1), (TreeSeed.pine, 1),), sources=(SkillSource(skill=Skill.foraging, level=1),),),
+        CraftingRecipe(name=Edible.bug_steak, ingredients=((Loot.bug_meat, 10),), sources=(SkillSource(skill=Skill.combat, level=1),),),
+        CraftingRecipe(name=Edible.life_elixir, ingredients=((Mushroom.red, 1), (Mushroom.purple, 1), (Mushroom.morel, 1), (Mushroom.chanterelle, 1),), sources=(SkillSource(skill=Skill.combat, level=2),),),
+        CraftingRecipe(name=Edible.oil_of_garlic, ingredients=((Vegetable.garlic, 10), (Ingredient.oil, 1),), sources=(SkillSource(skill=Skill.combat, level=6),),),
+
+        CraftingRecipe(name=Consumable.monster_musk, ingredients=((Loot.bat_wing, 30), (Loot.slime, 30),), sources=(SpecialOrderSource(special_order=SpecialOrder.prismatic_jelly),),),
+        CraftingRecipe(name=Consumable.warp_totem_beach, ingredients=((Material.hardwood, 1), (WaterItem.coral, 2), (Material.fiber, 10),), sources=(SkillSource(skill=Skill.foraging, level=6),),),
+        CraftingRecipe(name=Consumable.warp_totem_mountains, ingredients=((Material.hardwood, 1), (MetalBar.iron, 1), (Material.stone, 25),), sources=(SkillSource(skill=Skill.foraging, level=7),),),
+        CraftingRecipe(name=Consumable.warp_totem_farm, ingredients=((Material.hardwood, 1), (ArtisanGood.honey, 1), (Material.fiber, 20),), sources=(SkillSource(skill=Skill.foraging, level=8),),),
+        CraftingRecipe(name=Consumable.warp_totem_desert, ingredients=((Material.hardwood, 2), (Forageable.coconut, 1), (Ore.iridium, 4),), sources=(ShopSource(shop_region=Region.desert, items_price=((10, MetalBar.iridium),)),),),
+        CraftingRecipe(name=Consumable.rain_totem, ingredients=((Material.hardwood, 1), (ArtisanGood.truffle_oil, 1), (ArtisanGood.pine_tar, 5),), sources=(SkillSource(skill=Skill.foraging, level=9),),),
+
+        CraftingRecipe(name=Lighting.torch, ingredients=((Material.wood, 1), (Material.sap, 2),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Lighting.campfire, ingredients=((Material.stone, 10), (Material.wood, 10), (Material.fiber, 10),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Lighting.wooden_brazier, ingredients=((Material.wood, 10), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter, price=250),),),
+        CraftingRecipe(name=Lighting.stone_brazier, ingredients=((Material.stone, 10), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter, price=400),),),
+        CraftingRecipe(name=Lighting.gold_brazier, ingredients=((MetalBar.gold, 1), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter, price=1000),),),
+        CraftingRecipe(name=Lighting.carved_brazier, ingredients=((Material.hardwood, 10), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=2000),),),
+        CraftingRecipe(name=Lighting.stump_brazier, ingredients=((Material.hardwood, 5), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=800),),),
+        CraftingRecipe(name=Lighting.barrel_brazier, ingredients=((Material.wood, 50), (Loot.solar_essence, 1), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=800),),),
+        CraftingRecipe(name=Lighting.skull_brazier, ingredients=((Fossil.bone_fragment, 10),), sources=(ShopSource(shop_region=Region.carpenter, price=3000),),),
+        CraftingRecipe(name=Lighting.marble_brazier, ingredients=((Mineral.marble, 1), (Mineral.aquamarine, 1), (Material.stone, 100),), sources=(ShopSource(shop_region=Region.carpenter, price=5000),),),
+        CraftingRecipe(name=Lighting.wood_lamp_post, ingredients=((Material.wood, 50), (ArtisanGood.battery_pack, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=500),),),
+        CraftingRecipe(name=Lighting.iron_lamp_post, ingredients=((MetalBar.iron, 1), (ArtisanGood.battery_pack, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=1000),),),
+        CraftingRecipe(name=Lighting.jack_o_lantern, ingredients=((Vegetable.pumpkin, 1), (Lighting.torch, 1),), sources=(ShopSource(shop_region=LogicRegion.spirit_eve, price=2000),),),
+
+        CraftingRecipe(name=Machine.bone_mill, ingredients=((Fossil.bone_fragment, 10), (Material.clay, 3), (Material.stone, 20),), sources=(SpecialOrderSource(special_order=SpecialOrder.fragments_of_the_past),),),
+        CraftingRecipe(name=Machine.bait_maker, ingredients=((MetalBar.iron, 3), (WaterItem.coral, 3), (WaterItem.sea_urchin, 1),), sources=(SkillSource(skill=Skill.fishing, level=6),),),
+
+        CraftingRecipe(name=Machine.charcoal_kiln, ingredients=((Material.wood, 20), (MetalBar.copper, 2),), sources=(SkillSource(skill=Skill.foraging, level=2),),),
+
+        CraftingRecipe(name=Machine.crystalarium, ingredients=((Material.stone, 99), (MetalBar.gold, 5), (MetalBar.iridium, 2), (ArtisanGood.battery_pack, 1),), sources=(SkillSource(skill=Skill.mining, level=9),),),
+
+        # # In-Game, the Furnace recipe is completely unique. It is the only recipe that is obtained in a cutscene after doing a skill-related action.
+        # # So it has a custom source that needs both the craftsanity item from AP and the skill, if craftsanity is enabled.
+        CraftingRecipe(name=Machine.furnace, ingredients=((Ore.copper, 20), (Material.stone, 25),), sources=(SkillSource(skill=Skill.mining, level=1),),),
+
+        CraftingRecipe(name=Machine.geode_crusher, ingredients=((MetalBar.gold, 2), (Material.stone, 50), (Mineral.diamond, 1),), sources=(SpecialOrderSource(special_order=SpecialOrder.cave_patrol),),),
+        CraftingRecipe(name=Machine.mushroom_log, ingredients=((Material.hardwood, 10), (Material.moss, 10),), sources=(SkillSource(skill=Skill.foraging, level=4),),),
+        CraftingRecipe(name=Machine.lightning_rod, ingredients=((MetalBar.iron, 1), (MetalBar.quartz, 1), (Loot.bat_wing, 5),), sources=(SkillSource(skill=Skill.foraging, level=6),),),
+        CraftingRecipe(name=Machine.recycling_machine, ingredients=((Material.wood, 25), (Material.stone, 25), (MetalBar.iron, 1),), sources=(SkillSource(skill=Skill.fishing, level=4),),),
+        CraftingRecipe(name=Machine.seed_maker, ingredients=((Material.wood, 25), (Material.coal, 10), (MetalBar.gold, 1),), sources=(SkillSource(skill=Skill.farming, level=9),),),
+        CraftingRecipe(name=Machine.slime_egg_press, ingredients=((Material.coal, 25), (Mineral.fire_quartz, 1), (ArtisanGood.battery_pack, 1),), sources=(SkillSource(skill=Skill.combat, level=6),),),
+        CraftingRecipe(name=Machine.slime_incubator, ingredients=((MetalBar.iridium, 2), (Loot.slime, 100),), sources=(SkillSource(skill=Skill.combat, level=8),),),
+
+        CraftingRecipe(name=Machine.tapper, ingredients=((Material.wood, 40), (MetalBar.copper, 2),), sources=(SkillSource(skill=Skill.foraging, level=4),),),
+
+        CraftingRecipe(name=Machine.worm_bin, ingredients=((Material.hardwood, 25), (MetalBar.gold, 1), (MetalBar.iron, 1), (Material.fiber, 50),), sources=(SkillSource(skill=Skill.fishing, level=4),),),
+        CraftingRecipe(name=Machine.deluxe_worm_bin, ingredients=((Machine.worm_bin, 1), (Material.moss, 30),), sources=(SkillSource(skill=Skill.fishing, level=8),),),
+
+        CraftingRecipe(name=Furniture.tub_o_flowers, ingredients=((Material.wood, 25), (Seed.tulip, 1), (Seed.jazz, 1), (Seed.poppy, 1), (Seed.spangle, 1),), sources=(ShopSource(shop_region=LogicRegion.flower_dance, price=2000),),),
+        CraftingRecipe(name=Furniture.wicked_statue, ingredients=((Material.stone, 25), (Material.coal, 5),), sources=(ShopSource(shop_region=Region.sewer, price=1000),),),
+        CraftingRecipe(name=Furniture.flute_block, ingredients=((Material.wood, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter, friend=NPC.robin, hearts=6),),),
+        CraftingRecipe(name=Furniture.drum_block, ingredients=((Material.stone, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter, friend=NPC.robin, hearts=6),),),
+
+        CraftingRecipe(name=Storage.chest, ingredients=((Material.wood, 50),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Storage.stone_chest, ingredients=((Material.stone, 50),), sources=(SpecialOrderSource(special_order=SpecialOrder.robins_resource_rush),),),
+        CraftingRecipe(name=Storage.big_chest, ingredients=((Material.wood, 120), (MetalBar.copper, 2),), sources=(ShopSource(shop_region=Region.carpenter, price=5000),),),
+        CraftingRecipe(name=Storage.big_stone_chest, ingredients=((Material.stone, 250),), sources=(ShopSource(shop_region=LogicRegion.mines_dwarf_shop, price=5000, other_requirements=(CraftedSpecificItemRequirement(Storage.stone_chest),)),),),
+
+        CraftingRecipe(name=Sign.wood, ingredients=((Material.wood, 25),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Sign.stone, ingredients=((Material.stone, 25),), sources=(StarterSource(),),),
+        CraftingRecipe(name=Sign.dark, ingredients=((Loot.bat_wing, 5), (Fossil.bone_fragment, 5),), sources=(FriendshipSource(friend=NPC.krobus, hearts=3),),),
+        CraftingRecipe(name=Sign.text, ingredients=((Material.wood, 25),), sources=(StarterSource(),),),
+
+        CraftingRecipe(name=Craftable.garden_pot, ingredients=((Material.clay, 1), (Material.stone, 10), (MetalBar.quartz, 1),), sources=(ArchipelagoSource(ap_items=("Greenhouse",)),),), # $8
+        CraftingRecipe(name=Craftable.scarecrow, ingredients=((Material.wood, 50), (Material.coal, 1), (Material.fiber, 20),), sources=(SkillSource(skill=Skill.farming, level=1),),),
+        CraftingRecipe(name=Craftable.deluxe_scarecrow, ingredients=((Material.wood, 50), (Material.fiber, 40), (Ore.iridium, 1),), sources=(ArchipelagoSource(ap_items=(f"{Craftable.deluxe_scarecrow} Recipe",)),),),
+        CraftingRecipe(name=Craftable.staircase, ingredients=((Material.stone, 99),), sources=(SkillSource(skill=Skill.mining, level=2),),),
+        CraftingRecipe(name=Craftable.explosive_ammo, ingredients=((MetalBar.iron, 1), (Material.coal, 2),), sources=(SkillSource(skill=Skill.combat, level=8),),),
+        CraftingRecipe(name=Craftable.transmute_fe, ingredients=((MetalBar.copper, 3),), sources=(SkillSource(skill=Skill.mining, level=4),),),
+        CraftingRecipe(name=Craftable.transmute_au, ingredients=((MetalBar.iron, 2),), sources=(SkillSource(skill=Skill.mining, level=7),),),
+        CraftingRecipe(name=Craftable.mini_jukebox, ingredients=((MetalBar.iron, 2), (ArtisanGood.battery_pack, 1),), sources=(CutsceneSource(region=Region.saloon, friend=NPC.gus, hearts=5),),),
+        CraftingRecipe(name=Craftable.mini_obelisk, ingredients=((Material.hardwood, 30), (Loot.solar_essence, 20), (MetalBar.gold, 3),), sources=(SpecialOrderSource(special_order=SpecialOrder.a_curious_substance),),),
+        CraftingRecipe(name=Craftable.farm_computer, ingredients=((Artifact.dwarf_gadget, 1), (ArtisanGood.battery_pack, 1), (MetalBar.quartz, 10),), sources=(SpecialOrderSource(special_order=SpecialOrder.aquatic_overpopulation),),),
+
+        CraftingRecipe(name=Craftable.cookout_kit, ingredients=((Material.wood, 15), (Material.fiber, 10), (Material.coal, 3),), sources=(SkillSource(skill=Skill.foraging, level=3),),),
+        CraftingRecipe(name=Craftable.tent_kit, ingredients=((Material.hardwood, 10), (Material.fiber, 25), (ArtisanGood.cloth, 1),), sources=(SkillSource(skill=Skill.foraging, level=8),),),
+
+        CraftingRecipe(name=Statue.blessings, ingredients=((Material.sap, 999), (Material.fiber, 999), (Material.stone, 999), (Material.moss, 333),), sources=(MasterySource(skill=Skill.farming),),),
+        CraftingRecipe(name=Statue.dwarf_king, ingredients=((MetalBar.iridium, 20),), sources=(MasterySource(skill=Skill.mining),),),
+        CraftingRecipe(name=Machine.heavy_furnace, ingredients=((Machine.furnace, 2), (MetalBar.iron, 3), (Material.stone, 50),), sources=(MasterySource(skill=Skill.mining),),),
+        CraftingRecipe(name=TreeSeed.mystic, ingredients=((TreeSeed.acorn, 5), (TreeSeed.maple, 5), (TreeSeed.pine, 5), (TreeSeed.mahogany, 5),), sources=(MasterySource(skill=Skill.foraging),),),
+        CraftingRecipe(name=Consumable.treasure_totem, ingredients=((Material.hardwood, 5), (ArtisanGood.mystic_syrup, 1), (Material.moss, 10),), sources=(MasterySource(skill=Skill.foraging),),),
+        CraftingRecipe(name=Fishing.challenge_bait, ingredients=((Fossil.bone_fragment, 5), (Material.moss, 2),), sources=(MasterySource(skill=Skill.fishing),),),
+        CraftingRecipe(name=Machine.anvil, ingredients=((MetalBar.iron, 50),), sources=(MasterySource(skill=Skill.combat),),),
     ),
 )

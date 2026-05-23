@@ -1,12 +1,12 @@
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .. import options
-from ..data.craftable_data import CraftingRecipe, all_crafting_recipes, all_crafting_recipes_by_name
-from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
-    FestivalShopSource, QuestSource, StarterSource, ShopSource, SkillSource, MasterySource, FriendshipSource, SkillCraftsanitySource, ShopWithKnownRecipeSource
+from ..data.craftable_data import CraftingRecipe
+from ..data.game_item import Source
+from ..data.recipe_source import ArchipelagoSource, SpecialOrderSource, QuestSource, StarterSource, SkillCraftsanitySource
+from ..data.shop import ShopSource
 from ..options import Craftsanity, SpecialOrderLocations
-from ..stardew_rule import StardewRule, True_, False_
-from ..strings.building_names import Building
+from ..stardew_rule import StardewRule, True_
 
 
 class CraftingLogicMixin(BaseLogicMixin):
@@ -21,67 +21,55 @@ class CraftingLogic(BaseLogic):
         if recipe is None:
             return True_()
 
-        learn_rule = self.logic.crafting.knows_recipe(recipe)
-        ingredients_rule = self.logic.has_all(*recipe.ingredients)
-        return learn_rule & ingredients_rule
+        recipe_rule = self.knows_recipe(recipe)
+        items = [ingredient for ingredient, amount in recipe.ingredients]
+        if all(isinstance(item, str) for item in items):
+            ingredients_rule = self.logic.has_all(*sorted(items))
+        else:
+            item_rules = []
+            for ingredient, amount in recipe.ingredients:
+                if isinstance(ingredient, str):
+                    item_rules.append(self.logic.has(ingredient))
+                else:
+                    item_rules.append(self.logic.has_any(*ingredient))
+            ingredients_rule = self.logic.and_(*item_rules)
+        return recipe_rule & ingredients_rule
 
     @cache_self1
     def knows_recipe(self, recipe: CraftingRecipe) -> StardewRule:
-        if isinstance(recipe.source, ArchipelagoSource):
-            return self.logic.received_all(*recipe.source.ap_item)
-        if isinstance(recipe.source, FestivalShopSource):
+        rules = []
+        for source in recipe.sources:
+            rules.append(self.knows_recipe_source(source, recipe.name))
+        return self.logic.or_(*rules)
+
+    def knows_recipe_source(self, source: Source, item_name: str) -> StardewRule:
+        if isinstance(source, ArchipelagoSource):
+            return self.logic.received_all(*source.ap_items)
+        if isinstance(source, ShopSource) and source.shop_region in self.content.festivals:
             if self.options.festival_locations == options.FestivalLocations.option_disabled:
-                return self.logic.crafting.can_learn_recipe(recipe)
+                return self.logic.crafting.can_learn_recipe_source(source)
             else:
-                return self.logic.crafting.received_recipe(recipe.item)
-        if isinstance(recipe.source, QuestSource):
+                return self.logic.crafting.received_recipe(item_name)
+        if isinstance(source, QuestSource):
             if self.options.quest_locations.has_no_story_quests():
-                return self.logic.crafting.can_learn_recipe(recipe)
+                return self.logic.crafting.can_learn_recipe_source(source)
             else:
-                return self.logic.crafting.received_recipe(recipe.item)
+                return self.logic.crafting.received_recipe(item_name)
         if self.options.craftsanity == Craftsanity.option_none:
-            return self.logic.crafting.can_learn_recipe(recipe)
-        if isinstance(recipe.source, (StarterSource, ShopTradeSource, ShopSource, SkillCraftsanitySource)):
-            return self.logic.crafting.received_recipe(recipe.item)
-        if isinstance(recipe.source, SpecialOrderSource) and self.options.special_order_locations & SpecialOrderLocations.option_board:
-            return self.logic.crafting.received_recipe(recipe.item)
-        return self.logic.crafting.can_learn_recipe(recipe)
+            return self.logic.crafting.can_learn_recipe_source(source)
+        if isinstance(source, (StarterSource, ShopSource, SkillCraftsanitySource)):
+            return self.logic.crafting.received_recipe(item_name)
+        if isinstance(source, SpecialOrderSource) and self.options.special_order_locations & SpecialOrderLocations.option_board:
+            return self.logic.crafting.received_recipe(item_name)
+        return self.logic.crafting.can_learn_recipe_source(source)
 
     @cache_self1
     def can_learn_recipe(self, recipe: CraftingRecipe) -> StardewRule:
-        if isinstance(recipe.source, StarterSource):
-            return True_()
-        if isinstance(recipe.source, ArchipelagoSource):
-            return self.logic.received_all(*recipe.source.ap_item)
-        if isinstance(recipe.source, ShopTradeSource):
-            return self.logic.money.can_trade_at(recipe.source.region, recipe.source.currency, recipe.source.price)
-        if isinstance(recipe.source, ShopWithKnownRecipeSource):
-            return self.knows_recipe(all_crafting_recipes_by_name[recipe.source.recipe_required]) & self.logic.money.can_spend_at(recipe.source.region,
-                                                                                                                                  recipe.source.price)
-        if isinstance(recipe.source, ShopSource):
-            return self.logic.money.can_spend_at(recipe.source.region, recipe.source.price)
-        if isinstance(recipe.source, SkillCraftsanitySource):
-            return self.logic.skill.has_level(recipe.source.skill, recipe.source.level) & self.logic.skill.can_earn_level(recipe.source.skill,
-                                                                                                                          recipe.source.level)
-        if isinstance(recipe.source, SkillSource):
-            return self.logic.skill.has_level(recipe.source.skill, recipe.source.level)
-        if isinstance(recipe.source, MasterySource):
-            return self.logic.skill.has_mastery(recipe.source.skill)
-        if isinstance(recipe.source, CutsceneSource):
-            return self.logic.region.can_reach(recipe.source.region) & self.logic.relationship.has_hearts(recipe.source.friend, recipe.source.hearts)
-        if isinstance(recipe.source, FriendshipSource):
-            return self.logic.relationship.has_hearts(recipe.source.friend, recipe.source.hearts)
-        if isinstance(recipe.source, QuestSource):
-            return self.logic.quest.can_complete_quest(recipe.source.quest)
-        if isinstance(recipe.source, SpecialOrderSource):
-            if self.options.special_order_locations & SpecialOrderLocations.option_board:
-                return self.logic.crafting.received_recipe(recipe.item)
-            return self.logic.special_order.can_complete_special_order(recipe.source.special_order)
-        if isinstance(recipe.source, LogicSource):
-            if recipe.source.logic_rule == "Cellar":
-                return self.logic.building.has_building(Building.cellar)
+        return self.logic.source.has_access_to_any(recipe.sources)
 
-        return False_()
+    @cache_self1
+    def can_learn_recipe_source(self, source: Source) -> StardewRule:
+        return self.logic.source.has_access_to(source)
 
     @cache_self1
     def received_recipe(self, item_name: str):
@@ -91,9 +79,7 @@ class CraftingLogic(BaseLogic):
         if number <= 0:
             return self.logic.true_
         recipe_rules = []
-        for recipe in all_crafting_recipes:
-            if recipe.content_pack is not None and not self.content.are_all_enabled(recipe.content_pack):
-                continue
+        for recipe in self.content.crafting_recipes.values():
             recipe_rules.append(self.can_craft(recipe))
         number = min(len(recipe_rules), number)
         return self.logic.count(number, *recipe_rules)

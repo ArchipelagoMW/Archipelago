@@ -54,7 +54,6 @@ from .wallet_logic import WalletLogicMixin
 from .walnut_logic import WalnutLogicMixin
 from ..content.game_content import StardewContent
 from ..content.vanilla.ginger_island import ginger_island_content_pack
-from ..data.craftable_data import all_crafting_recipes
 from ..data.museum_data import all_museum_items
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
@@ -115,22 +114,17 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.registry.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in content.fishes.values()})
         self.registry.museum_rules.update({donation.item_name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
-        for recipe in all_cooking_recipes:
-            if recipe.content_pack and not self.content.is_enabled(recipe.content_pack):
-                continue
-
+        for recipe in self.content.cooking_recipes.values():
             can_cook_rule = self.cooking.can_cook(recipe)
-            if recipe.meal in self.registry.cooking_rules:
-                can_cook_rule = can_cook_rule | self.registry.cooking_rules[recipe.meal]
-            self.registry.cooking_rules[recipe.meal] = can_cook_rule
+            if recipe.name in self.registry.cooking_rules:
+                can_cook_rule = can_cook_rule | self.registry.cooking_rules[recipe.name]
+            self.registry.cooking_rules[recipe.name] = can_cook_rule
 
-        for recipe in all_crafting_recipes:
-            if recipe.content_pack is not None and not self.content.are_all_enabled(recipe.content_pack):
-                continue
+        for recipe in self.content.crafting_recipes.values():
             can_craft_rule = self.crafting.can_craft(recipe)
-            if recipe.item in self.registry.crafting_rules:
-                can_craft_rule = can_craft_rule | self.registry.crafting_rules[recipe.item]
-            self.registry.crafting_rules[recipe.item] = can_craft_rule
+            if recipe.name in self.registry.crafting_rules:
+                can_craft_rule = can_craft_rule | self.registry.crafting_rules[recipe.name]
+            self.registry.crafting_rules[recipe.name] = can_craft_rule
 
         self.registry.crop_rules.update({
             Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &

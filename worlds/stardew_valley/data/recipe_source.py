@@ -19,10 +19,10 @@ class StarterSource(RecipeSource):
 
 @dataclass(frozen=True, kw_only=True)
 class ArchipelagoSource(RecipeSource):
-    ap_item: tuple[str, ...]
+    ap_items: tuple[str, ...]
 
     def __repr__(self):
-        return f"ArchipelagoSource {self.ap_item}"
+        return f"ArchipelagoSource {self.ap_items}"
 
 
 @dataclass(frozen=True, kw_only=True)

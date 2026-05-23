@@ -1,5 +1,4 @@
 from .base_logic import BaseLogic, BaseLogicMixin
-from ..data.craftable_data import all_crafting_recipes_by_name
 from ..locations import LocationTags, locations_by_tag
 from ..mods.mod_data import ModNames
 from ..options import options
@@ -103,7 +102,7 @@ class GoalLogic(BaseLogic):
             if not self.content.are_all_enabled(location.content_packs):
                 continue
             all_recipes_names.append(location.name[len(cooksanity_prefix):])
-        all_recipes = [all_cooking_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
+        all_recipes = [self.content.cooking_recipes[recipe_name] for recipe_name in all_recipes_names]
         return self.logic.and_(*(self.logic.cooking.can_cook(recipe) for recipe in all_recipes))
 
     def can_complete_craft_master(self) -> StardewRule:
@@ -119,7 +118,7 @@ class GoalLogic(BaseLogic):
             if not self.content.are_all_enabled(location.content_packs):
                 continue
             all_recipes_names.append(location.name[len(craftsanity_prefix):])
-        all_recipes = [all_crafting_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
+        all_recipes = [self.content.crafting_recipes[recipe_name] for recipe_name in all_recipes_names]
         return self.logic.and_(*(self.logic.crafting.can_craft(recipe) for recipe in all_recipes))
 
     def can_complete_legend(self) -> StardewRule:

@@ -15,7 +15,7 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
     DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, MasteryRequirement, ReceivedRequirement, \
     BachelorFriendRequirement, SpeakJunimoRequirement, EndgameItemReceivedRequirement, FestivalItemReceivedRequirement, MuseumArtifactsRequirement, \
-    MuseumMineralsRequirement
+    MuseumMineralsRequirement, CraftedSpecificItemRequirement
 from ..options import IncludeEndgameLocations, FestivalLocations
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region, LogicRegion
@@ -170,6 +170,10 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: CraftedItemsRequirement):
         return self.logic.crafting.can_have_crafted_recipes(requirement.number_of_recipes)
+
+    @meet_requirement.register
+    def _(self, requirement: CraftedSpecificItemRequirement):
+        return self.logic.crafting.can_craft(requirement.item)
 
     @meet_requirement.register
     def _(self, requirement: HelpWantedRequirement):

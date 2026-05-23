@@ -11,6 +11,7 @@ from .feature.base import DisableSourceHook, DisableRequirementHook, FeatureBase
 from ..data.animal import Animal
 from ..data.building import Building
 from ..data.cooking_recipe import CookingRecipe
+from ..data.craftable_data import CraftingRecipe
 from ..data.festival_data import FestivalData
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, Source, ItemTag, Requirement
@@ -45,7 +46,7 @@ class StardewContent:
     hats: dict[str, HatItem] = field(default_factory=dict)
     festivals: dict[str, FestivalData] = field(default_factory=dict)
     cooking_recipes: dict[str, CookingRecipe] = field(default_factory=dict)
-    # crafting_recipes: dict[str, CraftingRecipe] = field(default_factory=dict)
+    crafting_recipes: dict[str, CraftingRecipe] = field(default_factory=dict)
 
     def find_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
         yield from find_sources_of_type_on_items(self.game_items, *types)
@@ -53,7 +54,7 @@ class StardewContent:
         yield from find_sources_of_type_on_items(self.tool_upgrades, *types)
         yield from find_sources_of_type_on_items(self.animals, *types)
         yield from find_sources_of_type_on_items(self.cooking_recipes, *types)
-        # yield from find_sources_of_type_on_items(self.crafting_recipes, *types)
+        yield from find_sources_of_type_on_items(self.crafting_recipes, *types)
 
     def find_item_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
         yield from find_sources_of_type_on_items(self.game_items, *types)
@@ -233,10 +234,10 @@ class ContentPack:
     def cooking_recipe_source_hook(self, content: StardewContent):
         ...
 
-    # crafting_recipes: Iterable[CraftingRecipe] = ()
-    #
-    # def crafting_recipe_source_hook(self, content: StardewContent):
-    #     ...
+    crafting_recipes: Iterable[CraftingRecipe] = ()
+
+    def crafting_recipe_source_hook(self, content: StardewContent):
+        ...
 
     def finalize_hook(self, content: StardewContent):
         """Last hook called on the pack, once all other content packs have been registered.

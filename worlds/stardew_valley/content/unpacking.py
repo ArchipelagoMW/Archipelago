@@ -7,7 +7,6 @@ from .game_content import StardewContent, ContentPack, StardewFeatures
 from .override import override
 from .vanilla.base import base_game as base_game_content_pack
 from .vanilla.ginger_island import ginger_island_content_pack
-from ..data.craftable_data import all_crafting_recipes_by_name
 from ..data.game_item import Source
 from ..regions.vanilla_content_packs import ginger_island_regions
 from ..regions.vanilla_data import vanilla_regions
@@ -97,9 +96,9 @@ def register_pack(content: StardewContent, pack: ContentPack):
         content.cooking_recipes[cooking_recipe.name] = cooking_recipe
     pack.cooking_recipe_source_hook(content)
 
-    # for crafting_recipe in pack.crafting_recipes:
-    #     content.crafting_recipes[crafting_recipe.name] = crafting_recipe
-    # pack.crafting_recipe_source_hook(content)
+    for crafting_recipe in pack.crafting_recipes:
+        content.crafting_recipes[crafting_recipe.name] = crafting_recipe
+    pack.crafting_recipe_source_hook(content)
 
     # register_quests
 
@@ -119,7 +118,7 @@ def register_sources_and_call_hook(content: StardewContent,
 def prune_inaccessible_items(content: StardewContent):
     for item in list(content.game_items.values()):
         # This crafting recipe stuff can be replaced once crafts are added to content packs
-        if not item.sources and item.name not in all_crafting_recipes_by_name:
+        if not item.sources and item.name not in content.crafting_recipes:
             content.game_items.pop(item.name)
 
 
