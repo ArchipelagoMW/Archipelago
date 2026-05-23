@@ -23,6 +23,8 @@ Currently, the items randomized are:
 ## Known issues and softlocks:
 - https://github.com/Ragmoa/Archipelago/issues
 - https://github.com/Axertin/okami-apclient/issues
-- Entering Hana valley Sapling tree area without bloom
+- Entering Hana valley Sapling tree area without bloom softlocks you.
 - Checking Tama's without cherry bomb, or if cherry bomb isn't vanilla will softlock you.
-- Melting the ice to exit the Moegami room in Moon Cave will solftlcok you when doing the inferno tutorial.
+- Melting the ice to exit the Moegami room in Moon Cave will solftlcoks you when doing the inferno tutorial.
+- Dragon Orb,Shell Amulet  cannot be picked up.
+- Chests avilable both in cursed and healed areas don't get randomized in cursed area.

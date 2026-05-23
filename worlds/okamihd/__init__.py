@@ -67,7 +67,7 @@ class OkamiWorld(World):
             "SeedName": self.multiworld.seed_name,
             "TotalLocations": get_total_locations(self),
             # Client configuration
-            "supported_client_version": "0.8.1",  # Minimum client version required
+            "supported_client_version": "0.8.2",  # Minimum client version required
         }
 
         # Add game options to slot_data
@@ -174,14 +174,14 @@ class OkamiWorld(World):
                                      DivineInstruments.TUNDRA_BEADS.value.item_name,
                                      DivineInstruments.THUNDER_EDGE.value.item_name],
         "canine_warriors": [
-            "Save Rei",
-            "Save Shin",
-            "Save Chi",
-            "Save Ko",
-            "Save Tei",
-            "Loyalty Orb",
-            "Justice Orb",
-            "Duty Orb"
+            "Satomi Power Orb (Rei)",
+            "Satomi Power Orb (Shin)",
+            "Satomi Power Orb (Chi)",
+            "Satomi Power Orb (Ko)",
+            "Satomi Power Orb (Tei)",
+            "Satomi Power Orb (Loyalty)",
+            "Satomi Power Orb (Justice)",
+            "Satomi Power Orb (Duty)"
         ],
 
         "soup_ingredients":[

@@ -16,12 +16,12 @@ class EnnemyData(NamedTuple):
     requires_slash: bool = False
     requires_bomb: bool = False
 
-
-# Reference for Ids https://github.com/whataboutclyde/okami-utils/blob/master/data/enemy_id.yaml
+# Reference https://github.com/whataboutclyde/okami-utils/blob/master/data/enemy_id.yaml
 class OkamiEnemies(Enum):
     GREEN_IMP = EnnemyData(0x03, "Green Imp", 0, BrushTechniques.POWER_SLASH)
     RED_IMP = EnnemyData(0x00, "Red Imp", 0, BrushTechniques.POWER_SLASH)
     YELLOW_IMP = EnnemyData(0x02, "Yellow Imp", 0, BrushTechniques.POWER_SLASH)
+    BLACK_IMP = EnnemyData(0x04, "Black Imp", 0, BrushTechniques.POWER_SLASH)
     DEAD_FISH = EnnemyData(0x56, "Dead Fish", 0, BrushTechniques.POWER_SLASH)
     # Not sure if this is the code for waka 1 or 2
     WAKA_1 = EnnemyData(0x7e, "Waka (Agata Forest)", 1)
@@ -38,9 +38,10 @@ class OkamiEnemies(Enum):
     CHIMERA = EnnemyData(0x4e, "Chimera", 1, requires_slash=True)
     # don't require slash here bc it's required in the cutscene that follows, not to beat the boss itself
     CRIMSON_HELM = EnnemyData(0x11, "Crimson Helm", 1, required_techniques=[BrushTechniques.GALESTORM])
-    FIRE_EYE = EnnemyData(0x52, "Fire Eye", 1, required_techniques=[BrushTechniques.GALESTORM])
+    FIRE_EYE = EnnemyData(0x52, "Fire Eye", 1)
     OROCHI_1 = EnnemyData(0x69, "Orochi (Moon Cave)", 1, required_techniques=[BrushTechniques.WATERSPOUT])
     UBUME = EnnemyData(0x58, "Ubume", 1, required_techniques=[BrushTechniques.GALESTORM])
+    ICE_LIPS = EnnemyData(0x53, "Ice Lips",1)
 
     @staticmethod
     def list():

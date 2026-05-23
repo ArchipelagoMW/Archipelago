@@ -1,11 +1,13 @@
 from typing import TYPE_CHECKING
 
+from rule_builder.rules import True_
 from ..CheckIds import container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Types import EventData, ExitData, LocData
+from ..Enums.WarpType import WarpType
+from ..Types import EventData, ExitData, LocData, WarpData
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -35,9 +37,14 @@ events={
 
 locations = {
     RegionNames.CURSED_TAKA_PASS_CAVE:{
-        "Taka pass - Stray bead chest in cave pond" : LocData(container_check_id(MapIds.CURSED_TAKA, 63), type=LocationType.UNDERWATER_CHEST),
-        "Taka pass - Burning chest in cave upper": LocData(container_check_id(MapIds.CURSED_TAKA, 15), type=LocationType.BURNING_CHEST),
-        "Taka pass - Second Burning chest in cave upper": LocData(container_check_id(MapIds.CURSED_TAKA, 9), type=LocationType.BURNING_CHEST_NO_WATER),
+        "Taka pass - Stray bead chest in cave pond" : LocData(container_check_id(MapIds.HEALED_TAKA, 63), type=LocationType.UNDERWATER_CHEST),
+        "Taka pass - Burning chest in cave upper": LocData(container_check_id(MapIds.HEALED_TAKA, 15), type=LocationType.BURNING_CHEST),
+        "Taka pass - Second Burning chest in cave upper": LocData(container_check_id(MapIds.HEALED_TAKA, 9), type=LocationType.BURNING_CHEST_NO_WATER),
     }
+}
 
+warps={
+    RegionNames.CURSED_TAKA_PASS:[
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_),
+    ],
 }

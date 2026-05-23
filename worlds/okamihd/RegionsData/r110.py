@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
-from MultiServer import countdown
-from rule_builder.rules import HasGroup
+from rule_builder.rules import HasGroup, And, Has
 from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -15,35 +14,66 @@ if TYPE_CHECKING:
 
 exits = {
     # Not setting this as one way on purpose since we want to be able to exit moon cave
-    RegionNames.MOON_CAVE_BROKEN_STAIRS: [ExitData(RegionNames.MOON_CAVE_UNDERGROUND_ENTRANCE)],
-    RegionNames.MOON_CAVE_UNDERGROUND_ENTRANCE: [ExitData(RegionNames.CALCIFIED_CAVERN)],
-    RegionNames.MOON_CAVE: [ExitData(RegionNames.MOON_CAVE_1F_LOCKED_CAVE,
-                                     has_events=["Moon Cave - 1F Free Ajimi from soup"], loading_screen=False),
-                            ExitData(RegionNames.MOON_CAVE_B2F_LIFT,
-                                     has_events=["Moon Cave - 1F Main room disturb lift"], loading_screen=False),
-                            ExitData(RegionNames.MOON_CAVE_KITCHEN_BACK, loading_screen=False),
-                            ExitData(RegionNames.MOON_CAVE_OROCHI,
-                                     has_events=["Moon Cave - 1F Give all ingredients to Ajimi"])],
-    RegionNames.MOON_CAVE_1F_LOCKED_CAVE: [ExitData(RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK,
-                                                    has_events=['Moon Cave - 1F Locked Cave open eye door'],
-                                                    loading_screen=False),
-                                           ExitData(RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
-                                                    has_events=["Moon Cave - 1F Locked Cave geyser"],
-                                                    loading_screen=False)],
+    RegionNames.MOON_CAVE_BROKEN_STAIRS: [
+        ExitData(RegionNames.MOON_CAVE_UNDERGROUND_ENTRANCE)
+    ],
+    RegionNames.MOON_CAVE_UNDERGROUND_ENTRANCE: [
+        ExitData(RegionNames.CALCIFIED_CAVERN)
+    ],
+    RegionNames.MOON_CAVE: [
+        ExitData(RegionNames.MOON_CAVE_1F_LOCKED_CAVE,
+                 has_events=["Moon Cave - 1F Free Ajimi from soup"], loading_screen=False,
+                 one_way=True),
+        ExitData(RegionNames.MOON_CAVE_B2F_LIFT,
+                 has_events=["Moon Cave - 1F Main room disturb lift"], loading_screen=False),
+        ExitData(RegionNames.MOON_CAVE_KITCHEN_BACK, loading_screen=False,
+                 has_events=["Moon Cave - 1F Melt Kitchen Ice"]),
+        ExitData(RegionNames.MOON_CAVE_OROCHI,
+                 has_events=["Moon Cave - 1F Give all ingredients to Ajimi"]),
+        ExitData(RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
+                 has_events=["Ogre Liver"],
+                 loading_screen=False, one_way=True),
+        ExitData(RegionNames.MOON_CAVE_B1F_UNDER_LIFT, loading_screen=False, one_way=True,
+                 has_events=["Moon Cave - B1F Lake open valve"]),
+        ExitData(RegionNames.MOON_CAVE_2F_RAFTERS_CHEST,
+                 has_events=["Moon Cave - 1F Main room geyser"], loading_screen=False, one_way=True)
+    ],
+    RegionNames.MOON_CAVE_1F_LOCKED_CAVE: [
+        ExitData(RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK,
+                 has_events=['Moon Cave - 1F Locked Cave open eye door'],
+                 loading_screen=False),
+        ExitData(RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
+                 has_events=["Moon Cave - 1F Locked Cave geyser"],
+                 loading_screen=False)
+    ],
     RegionNames.MOON_CAVE_2F_GEYSER_RAFTER: [
-        ExitData(RegionNames.MOON_CAVE_2F, has_events=["Moon cave - 2F rafter's geyser"], loading_screen=False)],
-    RegionNames.MOON_CAVE_2F: [ExitData(RegionNames.MOON_CAVE_B1F_LAKE, loading_screen=False, one_way=True),
-                               ExitData(RegionNames.MOON_CAVE_2F_FIRE_EYE,
-                                        has_events=["Moon Cave - 2F Melt Ice block after bridge"],
-                                        loading_screen=False),
-                               ExitData(RegionNames.MOON_CAVE_2F_SAND,
-                                        has_events=["Moon Cave - 2F Open door to Sand room"], loading_screen=False)
-                               ],
-    RegionNames.MOON_CAVE_B1F_LAKE: [ExitData(RegionNames.MOON_CAVE_B1F_UNDER_LIFT,
-                                              has_events=["Moon Cave - B1F Lake geyser"], loading_screen=False)],
-    RegionNames.MOON_CAVE_B1F_UNDER_LIFT: [ExitData(RegionNames.MOON_CAVE,
-                                                    has_events=["Moon Cave - B1F under lift geyser"],
-                                                    loading_screen=False)],
+        ExitData(RegionNames.MOON_CAVE_3F, has_events=["Moon cave - 2F rafter's geyser"], loading_screen=False),
+        ExitData(RegionNames.MOON_CAVE, one_way=True, loading_screen=False)
+    ],
+    RegionNames.MOON_CAVE_2F_RAFTERS_CHEST: [
+        ExitData(RegionNames.MOON_CAVE, loading_screen=False, one_way=True)
+    ],
+    RegionNames.MOON_CAVE_3F: [
+        ExitData(RegionNames.MOON_CAVE_B1F_LAKE, loading_screen=False, one_way=True),
+        # Ensure the player can repair the bridge to access this
+        ExitData(RegionNames.MOON_CAVE_3F_FIRE_EYE,
+                 has_events=["Moon Cave - 3F Melt Ice block after bridge",
+                             "Moon Cave - 3F repair Bridge"],
+                 loading_screen=False),
+        ExitData(RegionNames.MOON_CAVE_3F_SAND,
+                 has_events=["Moon Cave - 3F Open door to Sand room"], loading_screen=False,
+                 one_way=True),
+        ExitData(RegionNames.MOON_CAVE, one_way=True, loading_screen=False)
+    ],
+    RegionNames.MOON_CAVE_B1F_LAKE: [
+        ExitData(RegionNames.MOON_CAVE_B1F_UNDER_LIFT,
+                 has_events=["Moon Cave - B1F Lake geyser"], loading_screen=False)
+    ],
+    RegionNames.MOON_CAVE_B1F_UNDER_LIFT: [
+        ExitData(RegionNames.MOON_CAVE,
+                 has_events=["Moon Cave - B1F under lift geyser"],
+                 loading_screen=False, one_way=True)
+    ],
     RegionNames.MOON_CAVE_B2F_LIFT: [
         ExitData(RegionNames.MOON_CAVE_B2F_FROZEN_STATUE,
                  has_events=["Moon Cave - B2F oepn eyes door"], loading_screen=False)],
@@ -53,30 +83,52 @@ exits = {
     RegionNames.MOON_CAVE_B2F_OTHER_LIFT: [
         ExitData(RegionNames.MOON_CAVE_B2F_BOMBABLE,
                  has_events=["Moon Cave - B2F Explode wall behind lift"], loading_screen=False),
-        ExitData(RegionNames.MOON_CAVE_KITCHEN_BACK, loading_screen=False)
+        ExitData(RegionNames.MOON_CAVE_KITCHEN_BACK, loading_screen=False, one_way=True)
     ],
-    RegionNames.MOON_CAVE_2F_SAND: [ExitData(RegionNames.MOON_CAVE_2F_3F_RAFTERS,
-                                             has_events=["Moon Cave - 2F Push the ball"], loading_screen=False)],
-    RegionNames.MOON_CAVE_2F_3F_RAFTERS: [ExitData(RegionNames.MOON_CAVE_4F_RAFTERS,
-                                                   has_events=["Moon Cave - 3F Rafters use flower"],
-                                                   loading_screen=False)],
-    RegionNames.MOON_CAVE_4F_RAFTERS: [ExitData(RegionNames.MOON_CAVE_4F_CANON,
-                                                has_events=["Moon Cave - 4F Rafters cross banners"],
-                                                loading_screen=False),
-                                       ExitData(
-                                           RegionNames.MOON_CAVE_4F_AFTER_CANON,
-                                           has_events=["Moon Cave - 4F Mandatory Fight"], loading_screen=False)]
+    RegionNames.MOON_CAVE_KITCHEN_BACK: [
+        ExitData(RegionNames.MOON_CAVE_B2F_OTHER_LIFT, one_way=True, loading_screen=False,
+                 has_events=["Moon Cave - 1F Disrupt lift in kitchen back"])
+    ],
+    RegionNames.MOON_CAVE_3F_SAND: [
+        ExitData(RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND, loading_screen=False, one_way=True),
+        ExitData(RegionNames.MOON_CAVE_2F_SAND_PIT, one_way=True, loading_screen=False),
+        ExitData(RegionNames.MOON_CAVE, loading_screen=False, one_way=True)
+    ],
+    RegionNames.MOON_CAVE_2F_SAND_PIT: [
+        ExitData(RegionNames.MOON_CAVE_3F_SAND, one_way=True, loading_screen=False,
+                 has_events=["Moon Cave - 3F Blow up Sand pit wall"])
+    ],
+    RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND: [
+        ExitData(RegionNames.MOON_CAVE_4F_RAFTERS,
+                 has_events=["Moon Cave - 3F Rafters use flower"],
+                 loading_screen=False, one_way=True)
+    ],
+    RegionNames.MOON_CAVE_4F_RAFTERS: [
+        ExitData(RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND, has_events=["Moon Cave - 4F Rafters use flower"],
+                 loading_screen=False, one_way=True),
+        ExitData(RegionNames.MOON_CAVE, one_way=True, loading_screen=False),
+        ExitData(RegionNames.MOON_CAVE_4F_CANON,
+                 has_events=["Moon Cave - 4F Rafters cross banners"],
+                 loading_screen=False),
+        ExitData(
+            RegionNames.MOON_CAVE_4F_AFTER_CANON,
+            has_events=["Moon Cave - 4F Mandatory Fight"], loading_screen=False)
+    ],
+    RegionNames.MOON_CAVE_4F_CANON: [
+        ExitData(RegionNames.MOON_CAVE, one_way=True, loading_screen=False)
+    ]
+
 }
 events = {
     RegionNames.MOON_CAVE: {
         "Moon Cave - 1F Free Ajimi from soup": EventData(
             required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
         "Moon Cave - 1F Main room geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],
-                                                     special_rule=HasGroup("soup_ingredients", count=1)),
+                                                     special_rule=moon_cave_fire_rule),
         "Moon Cave - 1F Main room disturb lift": EventData(power_slash_level=1,
                                                            required_items_events=["Moon Cave - B1F Open lift hatch"]),
         "Moon Cave - 1F Melt Kitchen Ice from front": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
-                                                                event_item_name="Moon Cave - Melt Kicthen Ice"),
+                                                                event_item_name="Moon Cave - 1F Melt Kitchen Ice"),
         "Moon Cave - 1F Blue Flower to 2F accessible": EventData(
             special_rule=HasGroup("soup_ingredients", count=2)),
         "Moon Cave - 1F Give all ingredients to Ajimi": EventData(
@@ -87,39 +139,44 @@ events = {
         "Moon Cave - 1F Locked Cave Blow up wall": EventData(cherry_bomb_level=1),
         "Moon Cave - 1F Locked Cave open eye door": EventData(power_slash_level=1, required_items_events=[
             "Moon Cave - Cross 1F Locked Cave"]),
-        # Does this require Ogre Liver ?
-        "Moon Cave - 1F Locked Cave geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT]),
+        "Moon Cave - 1F Locked Cave geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],
+                                                       required_items_events=["Ogre Liver"]),
     },
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK: {
-        "Moon Cave - Mandatory Ogre Encounter": EventData(mandatory_enemies=[]),
+        "Moon Cave - Mandatory Ogre Encounter": EventData(
+            mandatory_enemies=[OkamiEnemies.RED_IMP, OkamiEnemies.BUD_OGRE]),
         "Moon Cave - Get Ogre Liver": EventData(event_item_name="Ogre Liver")
     },
     RegionNames.MOON_CAVE_2F_GEYSER_RAFTER: {
         "Moon cave - 2F rafter's geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT])
     },
-    RegionNames.MOON_CAVE_2F: {
-        "Moon Cave - 2F repair Bridge": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION]),
-        "Moon Cave - 2F Melt Ice block after bridge": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
-                                                                required_items_events=["Moon Cave - 2F repair Bridge"]),
-        "Moon Cave - 2F Open door to Sand room": EventData(
-            required_items_events=["Moon Cave - 2F Cursed Fire Eye Torii"])
+    RegionNames.MOON_CAVE_3F: {
+        "Moon Cave - 3F repair Bridge": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION]),
+        "Moon Cave - 3F Melt Ice block after bridge": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
+                                                                required_items_events=["Moon Cave - 3F repair Bridge"]),
+        "Moon Cave - 3F Open door to Sand room": EventData(
+            required_items_events=["Moon Cave - 3F Cursed Fire Eye Torii"])
     },
     RegionNames.MOON_CAVE_B1F_LAKE: {
         # FIXME: Fill ennemies
-        "Moon Cave - B1F Lake cursed Torii": EventData(mandatory_enemies=[]),
+        "Moon Cave - B1F Lake cursed Torii": EventData(
+            mandatory_enemies=[OkamiEnemies.RED_IMP, OkamiEnemies.BLACK_IMP]),
         "Moon Cave - B1F Lake open valve": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT]),
         "Moon Cave - B1F Lake geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],
                                                  required_items_events=["Moon Cave - B1F Lake open valve"]),
     },
     RegionNames.MOON_CAVE_B1F_UNDER_LIFT: {
-        "Moon Cave - B1F Open lift hatch": EventData(power_slash_level=1),
-        "Moon Cave - B1F under lift geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT])
+        "Moon Cave - B1F Mandatory Fight": EventData(mandatory_enemies=[OkamiEnemies.BLACK_IMP]),
+        "Moon Cave - B1F Open lift hatch": EventData(power_slash_level=1,
+                                                     required_items_events=["Moon Cave - B1F Mandatory Fight"]),
+        "Moon Cave - B1F under lift geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],
+                                                       required_items_events=["Moon Cave - B1F Mandatory Fight"])
     },
     RegionNames.MOON_CAVE_B2F_LIFT: {
         "Moon Cave - B2F oepn eyes door": EventData(power_slash_level=1)
     },
     RegionNames.MOON_CAVE_B2F_FROZEN_STATUE: {
-        "Moon Cave - B2F Defeat Ice Lips": EventData(mandatory_enemies=[]),
+        "Moon Cave - B2F Defeat Ice Lips": EventData(mandatory_enemies=[OkamiEnemies.ICE_LIPS]),
         "Moon Cave - B2F Melt Ice block to other lift": EventData(required_brush_techniques=[BrushTechniques.INFERNO])
     },
     RegionNames.MOON_CAVE_B2F_OTHER_LIFT: {
@@ -128,41 +185,47 @@ events = {
             "Moon Cave - B2F Melt Ice Block behind lift"])
     },
     RegionNames.MOON_CAVE_KITCHEN_BACK: {
-        "Moon Cave - 1F Cursed Door in kitchen back": EventData(mandatory_enemies=[]),
+        "Moon Cave - 1F Disrupt lift in kitchen back": EventData(power_slash_level=1),
+        "Moon Cave - 1F Cursed Door in kitchen back": EventData(mandatory_enemies=[OkamiEnemies.ICE_LIPS]),
         "Moon Cave - 1F Get Ice Lips": EventData(required_items_events=["Moon Cave - 1F Cursed Door in kitchen back"],
                                                  event_item_name="Ice Lips"),
         # Can be done from the other way too;
-        "Moon Cave - 1F Melt Ice kitchen Ice form behind": EventData(
-            required_brush_techniques=[BrushTechniques.INFERNO], event_item_name="Moon Cave - Melt Kicthen Ice")
+        "Moon Cave - 1F Melt kitchen Ice form behind": EventData(
+            required_brush_techniques=[BrushTechniques.INFERNO], event_item_name="Moon Cave - 1F Melt Kitchen Ice")
     },
-    RegionNames.MOON_CAVE_2F_FIRE_EYE: {
-        "Moon Cave - 2F Cursed Fire Eye Torii": EventData(mandatory_enemies=[OkamiEnemies.FIRE_EYE]),
-        "Moon Cave - 2F Get Fire Eye": EventData(required_items_events=["Moon Cave - 2F Cursed Fire Eye Torii"],
+    RegionNames.MOON_CAVE_3F_FIRE_EYE: {
+        "Moon Cave - 3F Cursed Fire Eye Torii": EventData(
+            mandatory_enemies=[OkamiEnemies.FIRE_EYE, OkamiEnemies.ICE_LIPS]),
+        "Moon Cave - 3F Get Fire Eye": EventData(required_items_events=["Moon Cave - 3F Cursed Fire Eye Torii"],
                                                  event_item_name="Fire Eye")
     },
-    RegionNames.MOON_CAVE_2F_SAND: {
-        # Pretty sure the invisible part of the path isn't solid when it's invisible
+    RegionNames.MOON_CAVE_3F_SAND: {
         # Lights the fireball torches in this dungeon
-        "Moon Cave - 2F Push the ball": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
+        "Moon Cave - 3F Push the ball": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
     },
-    RegionNames.MOON_CAVE_2F_3F_RAFTERS: {
+    RegionNames.MOON_CAVE_2F_SAND_PIT: {
+        "Moon Cave - 3F Blow up Sand pit wall": EventData(cherry_bomb_level=1)
+    },
+    RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND: {
         "Moon Cave - 3F Rafters use flower": EventData(required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE])
     },
     RegionNames.MOON_CAVE_4F_RAFTERS: {
-        "Moon Cave - 4F Rafters cross banners": EventData(required_brush_techniques=[BrushTechniques.GALESTORM])
+        "Moon Cave - 4F Rafters use flower": EventData(required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
+        "Moon Cave - 4F Rafters cross banners": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
+        "Moon Cave - 4F Mandatory Fight": EventData(mandatory_enemies=[OkamiEnemies.BLACK_IMP],
+                                                    required_items_events=['Moon Cave - 4F Fire the canon!']),
     },
     RegionNames.MOON_CAVE_4F_CANON: {
         "Moon Cave - 4F Fire the canon!": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
                                                     special_rule=moon_cave_fire_rule),
         # FIXME: Add enemies
-        "Moon Cave - 4F Mandatory Fight": EventData(mandatory_enemies=[],
-                                                    required_items_events=['Moon Cave - 4F Fire the canon!']),
+
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Move Fireball": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
         "Moon Cave - 4F Melt Ice Blocks": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
                                                     special_rule=moon_cave_4f_fire_rule),
-        "Moon Cave - 4F Black Demon Horn Torii": EventData(mandatory_enemies=[],
+        "Moon Cave - 4F Black Demon Horn Torii": EventData(mandatory_enemies=[OkamiEnemies.BLACK_IMP,OkamiEnemies.RED_IMP],
                                                            required_items_events=["Moon Cave - 4F Melt Ice Blocks"]),
         "Moon Cave - 4F Get Black Demon Horn": EventData(
             required_items_events=["Moon Cave - 4F Black Demon Horn Torii"], event_item_name="Black Demon Horn")
@@ -176,17 +239,20 @@ events = {
 
 locations = {
     RegionNames.MOON_CAVE: {
-        "Moon Cave - 1F Chest on ledge in the kitchen": LocData(container_check_id(MapIds.MOON_CAVE, 11)),
-        "Moon Cave - 1F Frozen Chest after 3 ingredients": LocData(container_check_id(MapIds.MOON_CAVE, 7),
-                                                                   type=LocationType.FROZEN_CHEST, special_rule=
-                                                                   HasGroup("soup_ingredients", count=3)),
-        "Moon Cave - 1F Chest after 4 ingredients": LocData(container_check_id(MapIds.MOON_CAVE, 8),
-                                                            special_rule=HasGroup("soup_ingredients", count=4)),
+        "Moon Cave - 1F Chest on ledge in the kitchen": LocData(container_check_id(MapIds.MOON_CAVE, 11),
+                                                                required_items_events=[
+                                                                    "Moon Cave - 1F Free Ajimi from soup"]),
+        "Moon Cave - 1F Frozen Chest after Black Demon Horn": LocData(container_check_id(MapIds.MOON_CAVE, 7),
+                                                                   type=LocationType.FROZEN_CHEST, special_rule=moon_cave_fire_rule,required_items_events=["Black Demon Horn"]),
+        "Moon Cave - 1F Chest after fire eye": LocData(container_check_id(MapIds.MOON_CAVE, 8),
+                                                       required_items_events=["Fire Eye"]),
     },
-    # TODO: CHECK IF THERE IS FIRE NEARBY
     RegionNames.MOON_CAVE_B1F_LAKE: {
-        "Moon Cave B1F Chest behind ice": LocData(container_check_id(MapIds.MOON_CAVE, 14),
-                                                  required_items_events=[BrushTechniques.INFERNO])
+        "Moon Cave - B1F Chest on other side of Lake": LocData(container_check_id(MapIds.MOON_CAVE, 13),
+                                                               needs_long_swim=True),
+        "Moon Cave - B1F Chest behind ice": LocData(container_check_id(MapIds.MOON_CAVE, 14),
+                                                    required_items_events=[BrushTechniques.INFERNO],
+                                                    needs_long_swim=True, special_rule=moon_cave_fire_rule)
     },
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE: {
         "Moon Cave - 1F locked cave Treasure bud behind bombable wall": LocData(
@@ -201,25 +267,29 @@ locations = {
     RegionNames.MOON_CAVE_B2F_BOMBABLE: {
         "Moon Cave - B2F Chest behind bombable wall": LocData(container_check_id(MapIds.MOON_CAVE, 4))
     },
-    RegionNames.MOON_CAVE_2F_SAND: {
-        # Made this logically require cherry bomb as it's required to exit this area.
-        "Moon Cave - 2F Chest in sand pit": LocData(container_check_id(MapIds.MOON_CAVE, 16), cherry_bomb_level=1),
-        "Moon Cave - 2F Map Chest after ball puzzle": LocData(container_check_id(MapIds.MOON_CAVE, 9))
+    RegionNames.MOON_CAVE_3F_SAND: {
+        "Moon Cave - 3F Map Chest after ball puzzle": LocData(container_check_id(MapIds.MOON_CAVE, 9))
     },
-    RegionNames.MOON_CAVE_2F_3F_RAFTERS: {
+    RegionNames.MOON_CAVE_2F_SAND_PIT: {
+        "Moon Cave - 3F Chest in sand pit": LocData(container_check_id(MapIds.MOON_CAVE, 16)),
+    },
+    RegionNames.MOON_CAVE_2F_RAFTERS_CHEST: {
+        "Moon Cave - 2F Rafters Chest": LocData(container_check_id(MapIds.MOON_CAVE, 5)),
+    },
+    RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND: {
         "Moon Cave - 3F Frozen Chest near merchant": LocData(container_check_id(MapIds.MOON_CAVE, 12),
                                                              type=LocationType.FROZEN_CHEST,
                                                              special_rule=moon_cave_fire_rule),
-        "Moon Cave - 2F Rafters Chest under 3F Rafters": LocData(container_check_id(MapIds.MOON_CAVE, 5)),
+
     },
-    RegionNames.MOON_CAVE_2F_FIRE_EYE: {
-        "Moon Cave - 2F Left Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 19),
+    RegionNames.MOON_CAVE_3F_FIRE_EYE: {
+        "Moon Cave - 3F Left Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 19),
                                                                         type=LocationType.FROZEN_CHEST,
                                                                         special_rule=moon_cave_fire_rule),
-        "Moon Cave - 2F Middle Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 17),
+        "Moon Cave - 3F Middle Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 17),
                                                                           type=LocationType.FROZEN_CHEST,
                                                                           special_rule=moon_cave_fire_rule),
-        "Moon Cave - 2F Right Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 18),
+        "Moon Cave - 3F Right Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 18),
                                                                          type=LocationType.FROZEN_CHEST,
                                                                          special_rule=moon_cave_fire_rule),
     },
@@ -234,7 +304,7 @@ locations = {
 }
 
 shop_locations = {
-    RegionNames.MOON_CAVE_2F_3F_RAFTERS: {
+    RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND: {
         "Moon Cave - 3F merchant Shop Slot 1": LocData(shop_check_id(9, 0), type=LocationType.SHOP),
         "Moon Cave - 3F merchant Shop Slot 2": LocData(shop_check_id(9, 1), type=LocationType.SHOP),
         "Moon Cave - 3F merchant Shop Slot 3": LocData(shop_check_id(9, 2), type=LocationType.SHOP),
