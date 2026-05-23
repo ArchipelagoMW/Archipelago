@@ -13,13 +13,16 @@ exits = {
     RegionNames.SEIAN_CITY_COMMONERS_DRY: [
         # FIXME - Replace later
         ExitData(RegionNames.SEIAN_CITY_COMMONERS, has_events=["Inside the Emperor - Defeat Blight"],
-                 loading_screen=False)
+                 loading_screen=False),
+        ExitData(RegionNames.SEIAN_CITY_WEAPON_SHOP,loading_screen=False),
+        ExitData(RegionNames.SEIAN_CITY_TOOL_SHOP,loading_screen=False),
+        ExitData(RegionNames.SEIAN_CITY_FLOWERS),
+        ExitData(RegionNames.SEIAN_CITY_BRIDGE_COMMONERS)
     ],
     RegionNames.SEIAN_CITY_COMMONERS: [
         ExitData(RegionNames.SEIAN_CITY_YAMA),
-        ExitData(RegionNames.SEIAN_CITY_FLOWERS),
-        ExitData(RegionNames.SEIAN_CITY_SOUTHWEST, has_events=["Sei-an City - Blow up wall to southwest building"]),
-        ExitData(RegionNames.SEIAN_CITY_TAO, has_events=["Sei-an City - Climb to Tao Troopers Headquarters"],
+        ExitData(RegionNames.SEIAN_CITY_SOUTHWEST, has_events=["Sei-an City (Commoner's Quarter) - Blow up wall to southwest building"]),
+        ExitData(RegionNames.SEIAN_CITY_TAO, has_events=["Sei-an City (Commoner's Quarter) - Climb to Tao Troopers Headquarters"],
                  one_way=True, loading_screen=False)
     ],
     RegionNames.SEIAN_CITY_TAO: [
@@ -27,13 +30,15 @@ exits = {
     ]
 }
 events = {
-    # FIXME: temporary placed here to ensure everything is accessible
+  
     RegionNames.SEIAN_CITY_COMMONERS_DRY: {
+        "Sei-an City (Commoner's Quarter) - Dig water source" :EventData(type=LocationType.DIGGING_MINIGAME_LATER),
+        # FIXME: temporary placed here to ensure everything is accessible
         "Inside the Emperor - Defeat Blight": EventData()
     },
     RegionNames.SEIAN_CITY_COMMONERS: {
-        "Sei-an City - Blow up wall to southwest building": EventData(cherry_bomb_level=1),
-        "Sei-an City - Climb to Tao Troopers Headquarters": EventData(
+        "Sei-an City (Commoner's Quarter) - Blow up wall to southwest building": EventData(cherry_bomb_level=1),
+        "Sei-an City (Commoner's Quarter) - Climb to Tao Troopers Headquarters": EventData(
             required_brush_techniques=[BrushTechniques.WATERSPOUT])
     },
     RegionNames.SEIAN_CITY_YAMA: {
@@ -42,7 +47,6 @@ events = {
     }
 }
 locations = {
-    # TODO: Make some names clearer
     # Always mark chests in Canal as underwater in case the water has been returned.
     RegionNames.SEIAN_CITY_COMMONERS_DRY: {
         "Sei-an City (Commoner's quarter) - Northern Chest in West Canal": LocData(
@@ -57,13 +61,13 @@ locations = {
             container_check_id(MapIds.SEIAN_COMMONERS, 5), type=LocationType.UNDERWATER_CHEST),
         "Sei-an City (Commoner's quarter) - Chest in western Canal between bridge and ferry spot": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 6), type=LocationType.UNDERWATER_CHEST),
-        "Sei-an City (Commoner's quarter) - Chest in western canal north of ferry spor": LocData(
+        "Sei-an City (Commoner's quarter) - Chest in western canal north of ferry spot": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 7), type=LocationType.UNDERWATER_CHEST),
         "Sei-an City (Commoner's quarter) - Southern chest in western Canal": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 8), type=LocationType.UNDERWATER_CHEST),
         "Sei-an City (Commoner's quarter) - Chest in Eastern Canal near stairs to Mr Flower's house": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 10), type=LocationType.UNDERWATER_CHEST),
-        "Sei-an City (Commoner's quarter) - Buried chest Chest near bridge": LocData(
+        "Sei-an City (Commoner's quarter) - Buried chest Chest near west ferry spot": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 11), type=LocationType.BURIED_CHEST),
         "Sei-an City (Commoner's quarter) - Buried chest near east wall": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 12), type=LocationType.BURIED_CHEST),
@@ -71,14 +75,17 @@ locations = {
             container_check_id(MapIds.SEIAN_COMMONERS, 13)),
         "Sei-an City (Commoner's quarter) - Buried Chest behind Mr. Flower's house": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 14), type=LocationType.BURIED_CHEST),
-        "Sei-an City (Commoner's quarter) - Chest in Canal near Mr. Flower's house": LocData(
+        #FIXME
+        "Sei-an City (Commoner's quarter) - NOT Chest in Canal near Mr. Flower's house": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 15), type=LocationType.BURIED_CHEST),
         "Sei-an City (Commoner's quarter) - Freestanding Chest behind building": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 16)),
-        "Sei-an City (Commoner's quarter) - Freestanding Chest near Ryoshima entrance 2": LocData(
+        "Sei-an City (Commoner's quarter) - Chest in Canal near Mr. Flower's house": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 17)),
         "Sei-an City (Commoner's quarter) - Chest in canal northeast corner": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 21)),
+        "Sei-an City (Commoner's quarter) - Chest east of Aristocratic quarters entrance": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 23)),
     },
     RegionNames.SEIAN_CITY_YAMA: {
         "Sei-an City (Commoner's quarter) - Chest after learning Fireburst": LocData(
@@ -123,7 +130,7 @@ locations = {
     }
 }
 shop_locations = {
-    RegionNames.SEIAN_CITY_COMMONERS_DRY: {
+    RegionNames.SEIAN_CITY_TOOL_SHOP: {
         "Sei-an City Tool Shop Slot 1": LocData(shop_check_id(16, 0), type=LocationType.SHOP),
         "Sei-an City Tool Shop Slot 2": LocData(shop_check_id(16, 1), type=LocationType.SHOP),
         "Sei-an City Tool Shop Slot 3": LocData(shop_check_id(16, 2), type=LocationType.SHOP),
@@ -135,7 +142,9 @@ shop_locations = {
         "Sei-an City Tool Shop Slot 9": LocData(shop_check_id(16, 8), type=LocationType.SHOP),
         "Sei-an City Tool Shop Slot 10": LocData(shop_check_id(16, 9), type=LocationType.SHOP),
         "Sei-an City Tool Shop Slot 11": LocData(shop_check_id(16, 10), type=LocationType.SHOP),
-        "Sei-an City Tool Shop Slot 12": LocData(shop_check_id(16, 11), type=LocationType.SHOP),
+        "Sei-an City Tool Shop Slot 12": LocData(shop_check_id(16, 11), type=LocationType.SHOP)
+    },
+    RegionNames.SEIAN_CITY_WEAPON_SHOP:{
         "Sei-an City Weapon Shop Slot 1": LocData(shop_check_id(17, 0), type=LocationType.SHOP),
         "Sei-an City Weapon Shop Slot 2": LocData(shop_check_id(17, 1), type=LocationType.SHOP),
         "Sei-an City Weapon Shop Slot 3": LocData(shop_check_id(17, 2), type=LocationType.SHOP),

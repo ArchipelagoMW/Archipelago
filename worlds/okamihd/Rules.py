@@ -22,6 +22,7 @@ gale_shrine_access: Rule = HasGroup("canine_warriors", count=FromOption(Required
 
 moon_cave_access: Rule = Has("Serpent Crystal")
 
+
 # Probably should be removed;Directly add it to the checks that require it.
 def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount: int) -> bool:
     return state.has_group("soup_ingredients", world.player, amount)
@@ -75,7 +76,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
     ## RULE BUILDER REWORK:
     # - FOR EACH LOCATION, BUILD AN ARRAY OF RULES THAT WILL BE ADDED TO THE world.set_rule(loc,AND(*Rules))
 
-    debug_rule=False
+    debug_rule = False
 
     rules: List[Rule] = []
 
@@ -133,6 +134,8 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
                                     BrushTechniques.GALESTORM]
         case LocationType.FROZEN_CHEST:
             required_techinques += [BrushTechniques.INFERNO]
+        case LocationType.FISHING_MINIGAME:
+            required_power_slash_level = max(required_power_slash_level, 1)
 
         case _:
             required_techinques += []
@@ -156,14 +159,15 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         # Append special rule if it's defined
         rules.append(data.special_rule)
 
-
     # Set the location to require all concatenated rule
     if len(rules) > 0:
         final_rule = And(*rules)
         world.set_rule(loc, final_rule)
         if debug_rule:
-            print("[Debug] - Rule for "+ loc.name)
+            print("[Debug] - Rule for " + loc.name)
             print(final_rule)
+
+
 # else:
 #    print("no rule for this check")
 
@@ -176,13 +180,13 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
         rules.append(HasAll(*data.has_events))
 
     if len(rules) > 0:
-
         final_rule = And(*rules)
         world.set_rule(etr, final_rule)
 
 
 def set_completion_rules(world: "OkamiWorld"):
-    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm","Tsuta Ruins - Defeat the spider queen"))
+    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm",
+                                     "Tsuta Ruins - Defeat the spider queen"))
     world.multiworld.completion_condition[world.player] = lambda state: state.has(
         "Moon Cave - Defeat Orochi", world.player)
     return

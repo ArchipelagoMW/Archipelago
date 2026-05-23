@@ -114,7 +114,7 @@ class RegionNames(StrEnum):
     MOON_CAVE_3F_SAND = "Moon Cave (3F Sand room)"
     MOON_CAVE_2F_SAND_PIT = "Moon Cave (2F Sand pit)"
     MOON_CAVE_3F_RAFTERS_AFTER_SAND = "Moon Cave (3F Rafters after sand room)"
-    MOON_CAVE_2F_RAFTERS_CHEST="Moon Cave (2F Chest Rafter)"
+    MOON_CAVE_2F_RAFTERS_CHEST = "Moon Cave (2F Chest Rafter)"
     MOON_CAVE_4F_RAFTERS = "Moon Cave (4F Rafters)"
     MOON_CAVE_4F_CANON = "Moon Cave (4F Canon)"
     MOON_CAVE_4F_AFTER_CANON = "Moon Cave (4F after canon)"
@@ -146,12 +146,29 @@ class RegionNames(StrEnum):
     ### COMMONERS QUARTER
     SEIAN_CITY_COMMONERS = "Sei-an City Commoners' Quarter"
     SEIAN_CITY_COMMONERS_DRY = "Sei-an City Commoners' Quarter (No water)"
-    SEIAN_CITY_YAMA ="Sei-an City (Yama's restaurant)"
-    SEIAN_CITY_FLOWERS="Sei-an City (Mr. Flower's house)"
-    SEIAN_CITY_SOUTHWEST="Sei-an City (Southwest building)"
-    SEIAN_CITY_TAO="Sei-an City (Tao Troopers Headquarters)"
+    SEIAN_CITY_YAMA = "Sei-an City (Yama's restaurant)"
+    SEIAN_CITY_FLOWERS = "Sei-an City (Mr. Flower's house)"
+    SEIAN_CITY_SOUTHWEST = "Sei-an City (Southwest building)"
+    SEIAN_CITY_TAO = "Sei-an City (Tao Troopers Headquarters)"
+    SEIAN_CITY_TOOL_SHOP = "Sei-an City (Tool Shop)"
+    SEIAN_CITY_WEAPON_SHOP = "Sei-an City (Weapon Shop)"
 
+    ### ARISTOCRATIC QUARTERS
+    SEIAN_CITY_BRIDGE_COMMONERS = "Sei-an City Lake Beewa Bridge (Commoner's Side)"
+    SEIAN_CITY_BRIDGE_ARISTOCRATIC = "Sei-an City Lake Beewa Bridge(Aristocratic Side)"
+    SEIAN_CITY_LECTURE_HALL = "Sei-an City (Lecture Hall)"
+    SEIAN_CITY_ARISTOCRATIC_SICK = "Sei-an City Aristocratic Quarter (Sick)"
+    # Since she's the only one in here to have a name, it's her house now.
+    SEIAN_CITY_OKUNI = "Sei-an City (Okuni's house)"
+    SEIAN_CITY_ARISTOCRATIC_NORTH_EAST = "Sei-an City Aristocratic Quarter (Northeast house)"
+    SEIAN_CITY_CLOCK_TOWER = "Sei-an City (Clock tower)"
+    SEIAN_CITY_ARISTOCRATIC = "Sei-an City Aristocratic Quarter"
+    SEIAN_CITY_HIMIKO = "Sei-an City (Himiko's palace entrance)"
+    SEIAN_CITY_TREASURE_WEST= "Sei-an City (Himiko's palace West Treasure Room)"
+    SEIAN_CITY_TREASURE_EAST = "Sei-an City (Himiko's palace East Treasure Room)"
 
+    ## IMPERIAL PALACE
+    IMPERIAL_PALACE_ENTRANCE="Imperial Palace (Entrance)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
@@ -174,6 +191,7 @@ class MapIds(Enum):
     CALCIFIED_CAVERN = 0x10E
     MOON_CAVE = 0x110
     RIVER_OF_THE_HEAVENS = 0x122
+    SEIAN_ARISTORATIC = 0x200
     SEIAN_COMMONERS = 0x201
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
@@ -199,7 +217,7 @@ class MapIndexes(Enum):
     CALCIFIED_CAVERN = 15
     MOON_CAVE = 16
     RIVER_OF_THE_HEAVENS = 30
-    #FIXME: Ensure this is the right index
+    # FIXME: Ensure this is the right index
     SEIAN_CITY_COMMONERS = 32
     SHINSHU_FIELD = 71
     AGATA_FOREST = 72
