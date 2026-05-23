@@ -158,7 +158,6 @@ events = {
             required_items_events=["Moon Cave - 3F Cursed Fire Eye Torii"])
     },
     RegionNames.MOON_CAVE_B1F_LAKE: {
-        # FIXME: Fill ennemies
         "Moon Cave - B1F Lake cursed Torii": EventData(
             mandatory_enemies=[OkamiEnemies.RED_IMP, OkamiEnemies.BLACK_IMP]),
         "Moon Cave - B1F Lake open valve": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT]),
@@ -218,7 +217,6 @@ events = {
     RegionNames.MOON_CAVE_4F_CANON: {
         "Moon Cave - 4F Fire the canon!": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
                                                     special_rule=moon_cave_fire_rule),
-        # FIXME: Add enemies
 
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
