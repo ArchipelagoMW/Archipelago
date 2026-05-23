@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from rule_builder.rules import True_
+from rule_builder.rules import True_, Has
 from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -37,6 +37,7 @@ events = {
         "Agata Forest - Defeat Waka": EventData(mandatory_enemies=[OkamiEnemies.WAKA_1])
     },
     RegionNames.AGATA_FOREST: {
+        "Agata Forest - Unlock Mermaid Spring": EventData(),
         "Agata Forest - Open Ruins Door": EventData(required_items_events=["Tsuta Ruins Key"]),
         # Probably might be changed to not reuquire beating Tsuta. Or to be open from the start.
         "Agata Forest - Repair Bridge with Kokari": EventData(
@@ -142,6 +143,6 @@ shop_locations = {
 }
 warps = {
     RegionNames.AGATA_FOREST: [
-        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=True_, trigger_warp_from=True_)
+        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Agata Forest - Unlock Mermaid Spring"), trigger_warp_from=Has("Agata Forest - Unlock Mermaid Spring"))
     ]
 }
