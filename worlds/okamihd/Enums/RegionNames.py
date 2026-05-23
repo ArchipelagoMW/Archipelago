@@ -52,6 +52,7 @@ class RegionNames(StrEnum):
     CURSED_AGATA_FOREST = "Cursed Agata Forest"
     AGATA_FOREST_WAKA = "Agata Forest (Pre-waka fight)"
     AGATA_FOREST = "Agata Forest"
+    AGATA_FOREST_TAKA = "Agata Forest (Behind Bridge to Taka Pass)"
     ### INTERIORS
     FAWNS_HOUSE = "Madame Fawn's House"
 
@@ -101,7 +102,7 @@ class RegionNames(StrEnum):
     MOON_CAVE_1F_LOCKED_CAVE = "Moon Cave (1F locked cave)"
     MOON_CAVE_1F_LOCKED_CAVE_BACK = "Moon Cave (1F locked cave back)"
     MOON_CAVE_2F_GEYSER_RAFTER = "Moon Cave (2F Geyser rafter)"
-    MOON_CAVE_2F = "Moon Cave (2F Main room)"
+    MOON_CAVE_3F = "Moon Cave (3F Main room)"
     MOON_CAVE_B1F_LAKE = "Moon Cave (B1F Underground Lake)"
     MOON_CAVE_B1F_UNDER_LIFT = "Moon Cave (B1F Under Lift)"
     MOON_CAVE_B2F_LIFT = "Moon Cave (B2F Under Lift)"
@@ -109,9 +110,11 @@ class RegionNames(StrEnum):
     MOON_CAVE_B2F_OTHER_LIFT = "Moon Cave (B2F Lift Back)"
     MOON_CAVE_B2F_BOMBABLE = "Moon Cave (B2F Behind Bombable wall)"
     MOON_CAVE_KITCHEN_BACK = "Moon Cave (1F Kitchen Back)"
-    MOON_CAVE_2F_FIRE_EYE = "Moon Cave (2F Fire Eye Room)"
-    MOON_CAVE_2F_SAND = "Moon Cave (2F Sand room)"
-    MOON_CAVE_2F_3F_RAFTERS = "Moon Cave (2F-3F Rafters)"
+    MOON_CAVE_3F_FIRE_EYE = "Moon Cave (3F Fire Eye Room)"
+    MOON_CAVE_3F_SAND = "Moon Cave (3F Sand room)"
+    MOON_CAVE_2F_SAND_PIT = "Moon Cave (2F Sand pit)"
+    MOON_CAVE_3F_RAFTERS_AFTER_SAND = "Moon Cave (3F Rafters after sand room)"
+    MOON_CAVE_2F_RAFTERS_CHEST="Moon Cave (2F Chest Rafter)"
     MOON_CAVE_4F_RAFTERS = "Moon Cave (4F Rafters)"
     MOON_CAVE_4F_CANON = "Moon Cave (4F Canon)"
     MOON_CAVE_4F_AFTER_CANON = "Moon Cave (4F after canon)"
@@ -145,6 +148,7 @@ class RegionNames(StrEnum):
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
     MERMAID_SPRING_HUB = "Mermaid Spring Warp Hub"
+
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
 class MapIds(Enum):

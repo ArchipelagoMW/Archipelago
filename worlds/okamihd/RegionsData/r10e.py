@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from ..CheckIds import container_check_id
 from ..Enums.LocationType import LocationType
+from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
 from ..Types import ExitData, LocData, EventData
 
@@ -13,8 +14,7 @@ exits={
 }
 events={
     RegionNames.CALCIFIED_CAVERN:{
-        #FIXME - Fill mandatory ennemies here
-        "Calcified Cavern - Defeat devil gate" : EventData(mandatory_enemies=[]),
+        "Calcified Cavern - Defeat devil gate" : EventData(mandatory_enemies=[OkamiEnemies.BLACK_IMP]),
         "Calcified Cavern - Get Mask": EventData(required_items_events=["Calcified Cavern - Defeat devil gate"]),
         "Calcified Cavern - Fool Yokai Guards": EventData(required_items_events=["Calcified Cavern - Get Mask"])
     }

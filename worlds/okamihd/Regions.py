@@ -19,28 +19,14 @@ def get_region_name(key: str):
 
 def create_regions(world: "OkamiWorld"):
     for r in RegionNames:
-        if r.value.endswith("Warp Hub"):
-            if (world.options.AccountForWarpsLogic):
-                reg = create_region(world, r.value)
-                world.multiworld.regions.append(reg)
-        else:
-            reg = create_region(world, r.value)
-            world.multiworld.regions.append(reg)
+        reg = create_region(world, r.value)
+        world.multiworld.regions.append(reg)
     # Second loop to create exits
     for r in RegionNames:
-        #Only Create Exits to warps hubs if the option is on
-        if r.value.endswith("Warp Hub"):
-            if world.options.AccountForWarpsLogic:
-                reg = world.multiworld.get_region(r.value, world.player)
-            else:
-                reg = None
-        else:
-            reg = world.multiworld.get_region(r.value, world.player)
-        # Ensure we try to create exits to regions that actually do exist
-        if reg is not None:
-            create_region_exits(reg, world)
-            if world.options.AccountForWarpsLogic:
-                create_region_warps(reg,world)
+        # Only Create Exits to warps hubs if the option is on
+        reg = world.multiworld.get_region(r.value, world.player)
+        create_region_exits(reg, world)
+        create_region_warps(reg, world)
 
 
 def create_region(world: "OkamiWorld", region_name: str):

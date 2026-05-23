@@ -71,7 +71,6 @@ shop_locations = {
 
 warps={
     RegionNames.TAKA_PASS:[
-        WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_),
         WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Taka Pass - Clear Devil gate near waterfall"), trigger_warp_from=Has("Taka Pass - Clear Devil gate near waterfall"))
     ]
 }

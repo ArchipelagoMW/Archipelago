@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from rule_builder.rules import True_
+from rule_builder.rules import True_, Has
 from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -14,26 +14,30 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-    # small region to force waka fight to be cleared before acessing the rest of the forest.
+    # small region to force waka fight to be cleared before accessing the rest of the forest.
     RegionNames.AGATA_FOREST_WAKA: [
         ExitData(RegionNames.AGATA_FOREST, has_events=["Agata Forest - Defeat Waka"], one_way=True,
                  loading_screen=False)],
-    RegionNames.AGATA_FOREST: [ExitData(RegionNames.CURSED_TAKA_PASS,
-                                        has_events=["Agata Forest - Repair Bridge with Kokari"]),
-                               ExitData(RegionNames.TAKA_PASS,
-                                        has_events=["Agata Forest - Repair Bridge with Kokari",
-                                                    "Taka pass - Restore Guardian Sapling"]),
-                               ExitData(RegionNames.TSUTA_RUINS_1F_MAIN_PART,
-                                        has_events=["Agata Forest - Open Ruins Door"]),
-                               ExitData(RegionNames.FAWNS_HOUSE,has_events=["Agata Forest - Restore Guardian Sapling"]),
-                               ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE,has_events=["Agata Forest - Open shortcut to Shinshu Field"])
-                               ]
+    RegionNames.AGATA_FOREST: [
+        ExitData(RegionNames.AGATA_FOREST_TAKA, has_events=["Agata Forest - Repair Bridge with Kokari"],
+                 loading_screen=False),
+        ExitData(RegionNames.TSUTA_RUINS_1F_MAIN_PART,
+                 has_events=["Agata Forest - Open Ruins Door"]),
+        ExitData(RegionNames.FAWNS_HOUSE, has_events=["Agata Forest - Restore Guardian Sapling"]),
+        ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE, has_events=["Agata Forest - Open shortcut to Shinshu Field"])
+    ],
+    RegionNames.AGATA_FOREST_TAKA: [
+        ExitData(RegionNames.CURSED_TAKA_PASS),
+        ExitData(RegionNames.TAKA_PASS,
+                 has_events=["Taka pass - Restore Guardian Sapling"]),
+    ]
 }
 events = {
     RegionNames.AGATA_FOREST_WAKA: {
         "Agata Forest - Defeat Waka": EventData(mandatory_enemies=[OkamiEnemies.WAKA_1])
     },
     RegionNames.AGATA_FOREST: {
+        "Agata Forest - Unlock Mermaid Spring": EventData(),
         "Agata Forest - Open Ruins Door": EventData(required_items_events=["Tsuta Ruins Key"]),
         # Probably might be changed to not reuquire beating Tsuta. Or to be open from the start.
         "Agata Forest - Repair Bridge with Kokari": EventData(
@@ -49,7 +53,7 @@ events = {
                                                      is_event_item=lambda o: o.CanineRewards != 0,
                                                      progress_type=lambda
                                                          o: LocationProgressType.EXCLUDED if o.CanineRewards == 2 else LocationProgressType.DEFAULT,
-                                                     event_item_name="Justice Orb",
+                                                     event_item_name="Satomi Power Orb (Justice)",
                                                      required_items_events=["Agata Forest - Fish Whopper with Kokari"]),
         "Agata Forest - Open shortcut to Shinshu Field": EventData(cherry_bomb_level=1)
     }
@@ -137,9 +141,8 @@ shop_locations = {
         "Agata Forest - Shop Slot 12": LocData(shop_check_id(0, 11), type=LocationType.SHOP),
     }
 }
-warps={
-    RegionNames.AGATA_FOREST:[
-        WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_),
-        WarpData(type=WarpType.MERMAID_SPRING,trigger_warp_to=True_,trigger_warp_from=True_)
+warps = {
+    RegionNames.AGATA_FOREST: [
+        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Agata Forest - Unlock Mermaid Spring"), trigger_warp_from=Has("Agata Forest - Unlock Mermaid Spring"))
     ]
 }

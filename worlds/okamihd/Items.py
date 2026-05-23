@@ -220,14 +220,14 @@ filler_items = {
 # All items in the sections below should have a count of 0, they're created by other means:
 event_items = {
     # CANINE WARRIORS STUFF
-    "Save Rei": ItemData(0x303, ItemClassification.progression, count_in_pool=0),
-    "Save Shin": ItemData(0x304, ItemClassification.progression, count_in_pool=0),
-    "Save Chi": ItemData(0x305, ItemClassification.progression, count_in_pool=0),
-    "Save Ko": ItemData(0x306, ItemClassification.progression, count_in_pool=0),
-    "Save Tei": ItemData(0x307, ItemClassification.progression, count_in_pool=0),
-    "Loyalty Orb": ItemData(0x4e, ItemClassification.progression, count_in_pool=0),
-    "Justice Orb": ItemData(0x4f, ItemClassification.progression, count_in_pool=0),
-    "Duty Orb": ItemData(0x50, ItemClassification.progression, count_in_pool=0),
+    "Satomi Power Orb (Rei)": ItemData(0x303, ItemClassification.progression, count_in_pool=0),
+    "Satomi Power Orb (Shin)": ItemData(0x304, ItemClassification.progression, count_in_pool=0),
+    "Satomi Power Orb (Chi)": ItemData(0x305, ItemClassification.progression, count_in_pool=0),
+    "Satomi Power Orb (Ko)": ItemData(0x306, ItemClassification.progression, count_in_pool=0),
+    "Satomi Power Orb (Tei)": ItemData(0x307, ItemClassification.progression, count_in_pool=0),
+    "Satomi Power Orb (Loyalty)": ItemData(0x4e, ItemClassification.progression, count_in_pool=0),
+    "Satomi Power Orb (Justice)": ItemData(0x4f, ItemClassification.progression, count_in_pool=0),
+    "Satomi Power Orb (Duty)": ItemData(0x50, ItemClassification.progression, count_in_pool=0),
     "Serpent Crystal": ItemData(0x308,ItemClassification.progression, count_in_pool=0),
     # MOON CAVE
     "Mask": ItemData(0x49, ItemClassification.progression, count_in_pool=0),
