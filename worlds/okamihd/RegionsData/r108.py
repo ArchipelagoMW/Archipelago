@@ -28,28 +28,28 @@ events = {
                                              is_event_item=lambda o: o.CanineRewards != 0,
                                              progress_type=lambda
                                                  o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                             else LocationProgressType.DEFAULT, event_item_name="Save Rei"),
+                                             else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Rei)"),
         "Kusa Village - Save Shin": EventData(id=129, required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM],
                                               is_event_item=lambda o: o.CanineRewards != 0,
                                               progress_type=lambda
                                                   o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                              else LocationProgressType.DEFAULT, event_item_name="Save Shin"),
+                                              else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Shin)"),
         "Kusa Village - Save Chi": EventData(id=130, power_slash_level=1,
                                              is_event_item=lambda o: o.CanineRewards != 0,
                                              progress_type=lambda
                                                  o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                             else LocationProgressType.DEFAULT, event_item_name="Save Chi"),
+                                             else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Chi)"),
         "Kusa Village - Save Ko": EventData(id=131, required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE],
                                             is_event_item=lambda o: o.CanineRewards != 0,
                                             progress_type=lambda
                                                 o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                            else LocationProgressType.DEFAULT, event_item_name="Save Ko"),
+                                            else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Ko)"),
         # Should we add more conditions to get this one ?
         "Kusa Village - Save Tei": EventData(id=132, mandatory_enemies=[OkamiEnemies.TEI],
                                              is_event_item=lambda o: o.CanineRewards != 0,
                                              progress_type=lambda
                                                  o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                             else LocationProgressType.DEFAULT, event_item_name="Save Tei")
+                                             else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Tei)")
     }
 }
 locations = {
