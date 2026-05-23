@@ -109,8 +109,6 @@ locations = {
 
         "Sei-an City (Commoner's quarter) - Chest in southwest building, 2F north central Rafters": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 22)),
-        "Sei-an City (Commoner's quarter) - Chest in southwest building, GF Freestanding Right": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 23)),
         "Sei-an City (Commoner's quarter) - Chest in southwest building, GF in Cage": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 24)),
         "Sei-an City (Commoner's quarter) - Chest in southwest building, GF near Cage": LocData(

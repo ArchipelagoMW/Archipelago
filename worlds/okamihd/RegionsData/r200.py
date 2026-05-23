@@ -64,7 +64,7 @@ events = {
 locations = {
     RegionNames.SEIAN_CITY_LECTURE_HALL: {
         "Sei-an City (Aristocratic Quarter) - West chest in lecture hall": LocData(
-            container_check_id(MapIds.SEIAN_ARISTORATIC, 9)),
+            container_check_id(MapIds.SEIAN_ARISTORATIC, 14)),
         "Sei-an City (Aristocratic Quarter) - East chest in lecture hall": LocData(
             container_check_id(MapIds.SEIAN_ARISTORATIC, 13))
     },
