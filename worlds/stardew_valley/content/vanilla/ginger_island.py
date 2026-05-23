@@ -2,11 +2,13 @@ from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack, StardewContent
 from ...data import villagers_data, fish_data
 from ...data.animal import Animal, AnimalName, OstrichIncubatorSource
+from ...data.cooking_recipe import CookingRecipe
 from ...data.fish_data import FishingSource
 from ...data.game_item import ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
+from ...data.recipe_source import FriendshipSource
 from ...data.requirement import WalnutRequirement, CookedRecipesRequirement, \
     CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement, ToolRequirement
@@ -19,11 +21,12 @@ from ...strings.building_names import Building
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
 from ...strings.fish_names import Fish
-from ...strings.food_names import Beverage
+from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
 from ...strings.geode_names import Geode
+from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
 from ...strings.metal_names import Fossil, Mineral
 from ...strings.monster_names import Monster
@@ -31,6 +34,7 @@ from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
 from ...strings.tool_names import Tool
+from ...strings.villager_names import NPC
 
 
 class GingerIslandContentPack(ContentPack):
@@ -73,11 +77,8 @@ ginger_island_content_pack = GingerIslandContentPack(
         Fruit.pineapple: (HarvestCropSource(seed=Seed.pineapple, seasons=(Season.summer,)),),
 
         # Temporary animal stuff, will be moved once animal products are properly content-packed
-        AnimalProduct.ostrich_egg_starter: (CustomRuleSource(lambda logic: logic.tool.can_forage(Generic.any, Region.island_north, True)
-                                                                           & logic.has(Forageable.journal_scrap)
-                                                                           & logic.region.can_reach(Region.volcano_floor_5)),),
-        AnimalProduct.ostrich_egg: (CustomRuleSource(lambda logic: logic.has(AnimalProduct.ostrich_egg_starter)
-                                                                   | logic.animal.has_animal(AnimalName.ostrich)),),
+        AnimalProduct.ostrich_egg_starter: (CustomRuleSource(lambda logic: logic.tool.can_forage(Generic.any, Region.island_north, True) & logic.has(Forageable.journal_scrap) & logic.region.can_reach(Region.volcano_floor_5)),),
+        AnimalProduct.ostrich_egg: (CustomRuleSource(lambda logic: logic.has(AnimalProduct.ostrich_egg_starter) | logic.animal.has_animal(AnimalName.ostrich)),),
 
     },
     shop_sources={
@@ -130,25 +131,37 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.pageboy_cap: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(ReadAllBooksRequirement(),)),),
 
         Hats.concerned_ape_mask: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
-                                                                    other_requirements=(PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
+                                                               other_requirements=(
+                                                               PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
         Hats.golden_helmet: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
-                                                               other_requirements=(RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
-        Hats.bluebird_mask: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
-        Hats.deluxe_cowboy_hat: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
-        Hats.small_cap: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
+                                                          other_requirements=(
+                                                          RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
+        Hats.bluebird_mask: (
+        Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
+        Hats.deluxe_cowboy_hat: (
+        Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
+        Hats.small_cap: (
+        Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
         Hats.mr_qis_hat: (Tag(ItemTag.HAT), ShopSource(price=5, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
         Hats.pink_bow: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=Region.volcano_dwarf_shop),),
 
         Hats.tiger_hat: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.tiger_slime,), amount_tier=MAX_MONTHS,
-                                                              other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
+                                                         other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
         Hats.deluxe_pirate_hat: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10,),
-                                                                       require_all_regions=True),),
+                                                                  require_all_regions=True),),
 
         Hats.foragers_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Forageable.ginger,)),),
         Hats.sunglasses: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Material.cinder_shard,)),),
         Hats.swashbuckler_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Forageable.dragon_tooth,)),),
         Hats.warrior_helmet: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(AnimalProduct.ostrich_egg,)),),
 
-        Hats.frog_hat: (Tag(ItemTag.HAT), FishingSource(region=Region.gourmand_frog_cave,),),
+        Hats.frog_hat: (Tag(ItemTag.HAT), FishingSource(region=Region.gourmand_frog_cave, ),),
     },
+    cooking_recipes=(
+        CookingRecipe(name=Meal.banana_pudding, ingredients=((Fruit.banana, 1), (AnimalProduct.cow_milk, 1), (Ingredient.sugar, 1),), sources=(ShopSource(shop_region=Region.island_trader, items_price=((30, Fossil.bone_fragment),)),),),
+        CookingRecipe(name=Beverage.ginger_ale, ingredients=((Forageable.ginger, 3), (Ingredient.sugar, 1),), sources=(ShopSource(shop_region=Region.volcano_dwarf_shop, price=1000),),),
+        CookingRecipe(name=Meal.mango_sticky_rice, ingredients=((Fruit.mango, 1), (Forageable.coconut, 1), (Ingredient.rice, 1),), sources=(FriendshipSource(friend=NPC.leo, hearts=7),),),
+        CookingRecipe(name=Meal.poi, ingredients=((Vegetable.taro_root, 4),), sources=(FriendshipSource(friend=NPC.leo, hearts=3),),),
+        CookingRecipe(name=Meal.tropical_curry, ingredients=((Forageable.coconut, 1), (Fruit.pineapple, 1), (Fruit.hot_pepper, 1),), sources=(ShopSource(shop_region=Region.island_resort, price=2000),),),
+    ),
 )

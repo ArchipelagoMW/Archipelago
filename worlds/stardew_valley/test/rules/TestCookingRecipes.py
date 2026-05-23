@@ -1,7 +1,6 @@
 from ..bases import SVTestBase
 from ... import options
 from ...content.content_packs import ginger_island_content_pack
-from ...data.recipe_data import all_cooking_recipes
 
 
 class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandContentPack(SVTestBase):

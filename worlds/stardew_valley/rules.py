@@ -18,7 +18,6 @@ from .data.harvest import HarvestCropSource, HarvestFruitTreeSource
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, \
     all_museum_items_by_name, all_museum_minerals, \
     all_museum_artifacts, Artifact
-from .data.recipe_data import all_cooking_recipes_by_name
 from .data.requirement import EndgameItemReceivedRequirement
 from .data.secret_note_data import gift_requirements, SecretNote
 from .data.tool import get_tool_upgrade_name

@@ -7,7 +7,7 @@ from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource, All
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
-from ...data.recipe_source import FriendshipSource, QueenOfSauceSource
+from ...data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, YearRequirement, \
     GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
@@ -31,6 +31,7 @@ from ...strings.currency_names import Currency
 from ...strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ...strings.festival_check_names import FestivalCheck
 from ...strings.fish_names import WaterItem, Fish, Trash
+from ...strings.flower_names import Flower
 from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
@@ -1211,128 +1212,83 @@ pelican_town = ContentPack(
     ),
     cooking_recipes=(
         CookingRecipe(name=Meal.algae_soup, ingredients=((WaterItem.green_algae, 4),), sources=(FriendshipSource(friend=NPC.clint, hearts=3),),),
-
-CookingRecipe(name=Meal.algae_soup, ingredients=((WaterItem.green_algae, 4),), sources=(FriendshipSource(friend=NPC.clint, hearts=3),),),
-CookingRecipe(name=Meal.artichoke_dip, ingredients=((Vegetable.artichoke, 4), (AnimalProduct.cow_milk, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=28),),),
-CookingRecipe(name=Meal.autumn_bounty, ingredients=((Vegetable.yam, 1), (Vegetable.pumpkin, 1),), sources=(FriendshipSource(friend=NPC.demetrius, hearts=7),),),
-CookingRecipe(name=Meal.baked_fish, ingredients=((Fish.sunfish, 1), (Fish.bream, 1), (Ingredient.wheat_flour, 1),), sources=(QueenOfSauceSource(year=1, season=Season.summer, day=7),),),
-# banana_pudding = shop_trade_recipe(Meal.banana_pudding, Region.island_trader, Fossil.bone_fragment, 30, {Fruit.banana: 1, AnimalProduct.cow_milk: 1, Ingredient.sugar: 1}, content_pack=ginger_island_content_pack.name)
-CookingRecipe(name=Meal.bean_hotpot, ingredients=((Vegetable.green_bean, 2),), sources=(FriendshipSource(friend=NPC.clint, hearts=7),),),
-# blackberry_cobbler_ingredients = {Forageable.blackberry: 2, Ingredient.sugar: 1, Ingredient.wheat_flour: 1}
-# blackberry_cobbler_qos = queen_of_sauce_recipe(Meal.blackberry_cobbler, 2, Season.fall, 14, blackberry_cobbler_ingredients)
-# blueberry_tart_ingredients = {Fruit.blueberry: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.any_egg: 1}
-# blueberry_tart = friendship_recipe(Meal.blueberry_tart, NPC.pierre, 3, blueberry_tart_ingredients)
-CookingRecipe(name=Meal.bread, ingredients=((Ingredient.wheat_flour, 1),), sources=(QueenOfSauceSource(year=1, season=Season.summer, day=28),),),
-CookingRecipe(name=Meal.bruschetta, ingredients=((Meal.bread, 1), (Ingredient.oil, 1), (Vegetable.tomato, 1),), sources=(QueenOfSauceSource(year=2, season=Season.winter, day=21),),),
-CookingRecipe(name=Meal.carp_surprise, ingredients=((Fish.carp, 4),), sources=(QueenOfSauceSource(year=2, season=Season.summer, day=7),),),
-CookingRecipe(name=Meal.cheese_cauliflower, ingredients=((Vegetable.cauliflower, 1), (ArtisanGood.cheese, 1),), sources=(FriendshipSource(friend=NPC.pam, hearts=3),),),
-# chocolate_cake_ingredients = {Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.chicken_egg: 1}
-# chocolate_cake_qos = queen_of_sauce_recipe(Meal.chocolate_cake, 1, Season.winter, 14, chocolate_cake_ingredients)
-CookingRecipe(name=Meal.chowder, ingredients=((Fish.clam, 1), (AnimalProduct.cow_milk, 1),), sources=(FriendshipSource(friend=NPC.willy, hearts=3),),),
-CookingRecipe(name=Meal.coleslaw, ingredients=((Vegetable.red_cabbage, 1), (Ingredient.vinegar, 1), (ArtisanGood.mayonnaise, 1),), sources=(QueenOfSauceSource(year=14, season=Season.spring, day=14),),),
-# complete_breakfast_ingredients = {Meal.fried_egg: 1, AnimalProduct.milk: 1, Meal.hashbrowns: 1, Meal.pancakes: 1}
-# complete_breakfast = queen_of_sauce_recipe(Meal.complete_breakfast, 2, Season.spring, 21, complete_breakfast_ingredients)
-CookingRecipe(name=Meal.cookie, ingredients=((Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.chicken_egg, 1),), sources=(FriendshipSource(friend=NPC.evelyn, hearts=4),),),
-# crab_cakes_ingredients = {Fish.crab: 1, Ingredient.wheat_flour: 1, AnimalProduct.chicken_egg: 1, Ingredient.oil: 1}
-# crab_cakes_qos = queen_of_sauce_recipe(Meal.crab_cakes, 2, Season.fall, 21, crab_cakes_ingredients)
-CookingRecipe(name=Meal.cranberry_candy, ingredients=((Fruit.cranberries, 1), (Fruit.apple, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=1, season=Season.winter, day=28),),),
-CookingRecipe(name=Meal.cranberry_sauce, ingredients=((Fruit.cranberries, 1), (Ingredient.sugar, 1),), sources=(FriendshipSource(friend=NPC.gus, hearts=7),),),
-CookingRecipe(name=Meal.crispy_bass, ingredients=((Fish.largemouth_bass, 1), (Ingredient.wheat_flour, 1), (Ingredient.oil, 1),), sources=(FriendshipSource(friend=NPC.kent, hearts=3),),),
-# dish_o_the_sea = skill_recipe(Meal.dish_o_the_sea, Skill.fishing, 3, {Fish.sardine: 2, Meal.hashbrowns: 1})
-CookingRecipe(name=Meal.eggplant_parmesan, ingredients=((Vegetable.eggplant, 1), (Vegetable.tomato, 1),), sources=(FriendshipSource(friend=NPC.lewis, hearts=7),),),
-CookingRecipe(name=Meal.escargot, ingredients=((Fish.snail, 1), (Vegetable.garlic, 1),), sources=(FriendshipSource(friend=NPC.willy, hearts=5),),),
-# farmer_lunch = skill_recipe(Meal.farmer_lunch, Skill.farming, 3, {Meal.omelet: 2, Vegetable.parsnip: 1})
-CookingRecipe(name=Meal.fiddlehead_risotto, ingredients=((Ingredient.oil, 1), (Forageable.fiddlehead_fern, 1), (Vegetable.garlic, 1),), sources=(QueenOfSauceSource(year=2, season=Season.fall, day=28),),),
-CookingRecipe(name=Meal.fish_stew, ingredients=((Fish.crayfish, 1), (Fish.mussel, 1), (Fish.periwinkle, 1), (Vegetable.tomato, 1),), sources=(FriendshipSource(friend=NPC.willy, hearts=7),),),
-CookingRecipe(name=Meal.fish_taco, ingredients=((Fish.tuna, 1), (Meal.tortilla, 1), (Vegetable.red_cabbage, 1), (ArtisanGood.mayonnaise, 1),), sources=(FriendshipSource(friend=NPC.linus, hearts=7),),),
-CookingRecipe(name=Meal.fried_calamari, ingredients=((Fish.squid, 1), (Ingredient.wheat_flour, 1), (Ingredient.oil, 1),), sources=(FriendshipSource(friend=NPC.jodi, hearts=3),),),
-CookingRecipe(name=Meal.fried_eel, ingredients=((Fish.eel, 1), (Ingredient.oil, 1),), sources=(FriendshipSource(friend=NPC.george, hearts=3),),),
-# fried_egg = starter_recipe(Meal.fried_egg, {AnimalProduct.chicken_egg: 1})
-CookingRecipe(name=Meal.fried_mushroom, ingredients=((Mushroom.common, 1), (Mushroom.morel, 1), (Ingredient.oil, 1),), sources=(FriendshipSource(friend=NPC.demetrius, hearts=3),),),
-CookingRecipe(name=Meal.fruit_salad, ingredients=((Fruit.blueberry, 1), (Fruit.melon, 1), (Fruit.apricot, 1),), sources=(QueenOfSauceSource(year=2, season=Season.fall, day=7),),),
-# ginger_ale = shop_recipe(Beverage.ginger_ale, Region.volcano_dwarf_shop, 1000, {Forageable.ginger: 3, Ingredient.sugar: 1}, content_pack=ginger_island_content_pack.name)
-CookingRecipe(name=Meal.glazed_yams, ingredients=((Vegetable.yam, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=21),),),
-CookingRecipe(name=Meal.hashbrowns, ingredients=((Vegetable.potato, 1), (Ingredient.oil, 1),), sources=(QueenOfSauceSource(year=2, season=Season.spring, day=14),),),
-CookingRecipe(name=Meal.ice_cream, ingredients=((AnimalProduct.cow_milk, 1), (Ingredient.sugar, 1),), sources=(FriendshipSource(friend=NPC.jodi, hearts=7),),),
-# lobster_bisque_ingredients = {Fish.lobster: 1, AnimalProduct.cow_milk: 1}
-# lobster_bisque_friend = friendship_recipe(Meal.lobster_bisque, NPC.willy, 9, lobster_bisque_ingredients)
-# lobster_bisque_qos = queen_of_sauce_recipe(Meal.lobster_bisque, 2, Season.winter, 14, lobster_bisque_ingredients)
-CookingRecipe(name=Meal.lucky_lunch, ingredients=((Fish.sea_cucumber, 1), (Meal.tortilla, 1), (Flower.blue_jazz, 1),), sources=(QueenOfSauceSource(year=2, season=Season.spring, day=28),),),
-CookingRecipe(name=Meal.maki_roll, ingredients=((Fish.any, 1), (WaterItem.seaweed, 1), (Ingredient.rice, 1),), sources=(QueenOfSauceSource(year=1, season=Season.summer, day=21),),),
-# mango_sticky_rice = friendship_recipe(Meal.mango_sticky_rice, NPC.leo, 7, {Fruit.mango: 1, Forageable.coconut: 1, Ingredient.rice: 1}, content_pack=ginger_island_content_pack.name)
-CookingRecipe(name=Meal.maple_bar, ingredients=((ArtisanGood.maple_syrup, 1), (Ingredient.sugar, 1), (Ingredient.wheat_flour, 1),), sources=(QueenOfSauceSource(year=2, season=Season.summer, day=14),),),
-# miners_treat = skill_recipe(Meal.miners_treat, Skill.mining, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.cow_milk: 1})
-# moss_soup = skill_recipe(Meal.moss_soup, Skill.foraging, 3, {Material.moss: 20})
-CookingRecipe(name=Meal.omelet, ingredients=((AnimalProduct.chicken_egg, 1), (AnimalProduct.cow_milk, 1),), sources=(QueenOfSauceSource(year=1, season=Season.spring, day=28),),),
-CookingRecipe(name=Meal.pale_broth, ingredients=((WaterItem.white_algae, 2),), sources=(FriendshipSource(friend=NPC.marnie, hearts=3),),),
-CookingRecipe(name=Meal.pancakes, ingredients=((Ingredient.wheat_flour, 1), (AnimalProduct.chicken_egg, 1),), sources=(QueenOfSauceSource(year=1, season=Season.summer, day=14),),),
-CookingRecipe(name=Meal.parsnip_soup, ingredients=((Vegetable.parsnip, 1), (AnimalProduct.cow_milk, 1), (Ingredient.vinegar, 1),), sources=(FriendshipSource(friend=NPC.caroline, hearts=3),),),
-CookingRecipe(name=Meal.pepper_poppers, ingredients=((Fruit.hot_pepper, 1), (ArtisanGood.cheese, 1),), sources=(FriendshipSource(friend=NPC.shane, hearts=3),),),
-# pink_cake_ingredients = {Fruit.melon: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.chicken_egg: 1}
-# pink_cake_qos = queen_of_sauce_recipe(Meal.pink_cake, 2, Season.summer, 21, pink_cake_ingredients)
-# pizza_ingredients = {Ingredient.wheat_flour: 1, Vegetable.tomato: 1, ArtisanGood.cheese: 1}
-# pizza_qos = queen_of_sauce_recipe(Meal.pizza, 2, Season.spring, 7, pizza_ingredients)
-# pizza_saloon = shop_recipe(Meal.pizza, Region.saloon, 150, pizza_ingredients)
-CookingRecipe(name=Meal.plum_pudding, ingredients=((Forageable.wild_plum, 2), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=1, season=Season.winter, day=7),),),
-# poi = friendship_recipe(Meal.poi, NPC.leo, 3, {Vegetable.taro_root: 4}, content_pack=ginger_island_content_pack.name)
-CookingRecipe(name=Meal.poppyseed_muffin, ingredients=((Flower.poppy, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=2, season=Season.winter, day=7),),),
-# pumpkin_pie_ingredients = {Vegetable.pumpkin: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.cow_milk: 1}
-# pumpkin_pie_qos = queen_of_sauce_recipe(Meal.pumpkin_pie, 1, Season.winter, 21, pumpkin_pie_ingredients)
-CookingRecipe(name=Meal.pumpkin_soup, ingredients=((Vegetable.pumpkin, 1), (AnimalProduct.cow_milk, 1),), sources=(FriendshipSource(friend=NPC.robin, hearts=7),),),
-CookingRecipe(name=Meal.radish_salad, ingredients=((Ingredient.oil, 1), (Ingredient.vinegar, 1), (Vegetable.radish, 1),), sources=(QueenOfSauceSource(year=1, season=Season.spring, day=21),),),
-CookingRecipe(name=Meal.red_plate, ingredients=((Vegetable.red_cabbage, 1), (Vegetable.radish, 1),), sources=(FriendshipSource(friend=NPC.emily, hearts=7),),),
-CookingRecipe(name=Meal.rhubarb_pie, ingredients=((Fruit.rhubarb, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1),), sources=(FriendshipSource(friend=NPC.marnie, hearts=7),),),
-CookingRecipe(name=Meal.rice_pudding, ingredients=((AnimalProduct.milk, 1), (Ingredient.sugar, 1), (Ingredient.rice, 1),), sources=(FriendshipSource(friend=NPC.evelyn, hearts=7),),),
-CookingRecipe(name=Meal.roasted_hazelnuts, ingredients=((Forageable.hazelnut, 3),), sources=(QueenOfSauceSource(year=2, season=Season.summer, day=28),),),
-# roots_platter = skill_recipe(Meal.roots_platter, Skill.combat, 3, {Forageable.cave_carrot: 1, Forageable.winter_root: 1})
-CookingRecipe(name=Meal.salad, ingredients=((Forageable.leek, 1), (Forageable.dandelion, 1), (Ingredient.vinegar, 1),), sources=(FriendshipSource(friend=NPC.emily, hearts=3),),),
-CookingRecipe(name=Meal.salmon_dinner, ingredients=((Fish.salmon, 1), (Vegetable.amaranth, 1), (Vegetable.kale, 1),), sources=(FriendshipSource(friend=NPC.gus, hearts=3),),),
-CookingRecipe(name=Meal.sashimi, ingredients=((Fish.any, 1),), sources=(FriendshipSource(friend=NPC.linus, hearts=3),),),
-# seafoam_pudding = skill_recipe(Meal.seafoam_pudding, Skill.fishing, 9, {Fish.flounder: 1, Fish.midnight_carp: 1, AnimalProduct.squid_ink: 1})
-CookingRecipe(name=Meal.shrimp_cocktail, ingredients=((Vegetable.tomato, 1), (Fish.shrimp, 1), (Forageable.wild_horseradish, 1),), sources=(QueenOfSauceSource(year=2, season=Season.winter, day=28),),),
-CookingRecipe(name=Meal.spaghetti, ingredients=((Vegetable.tomato, 1), (Ingredient.wheat_flour, 1),), sources=(FriendshipSource(friend=NPC.lewis, hearts=3),),),
-CookingRecipe(name=Meal.spicy_eel, ingredients=((Fish.eel, 1), (Fruit.hot_pepper, 1),), sources=(FriendshipSource(friend=NPC.george, hearts=7),),),
-# squid_ink_ravioli = skill_recipe(Meal.squid_ink_ravioli, Skill.combat, 9, {AnimalProduct.squid_ink: 1, Ingredient.wheat_flour: 1, Vegetable.tomato: 1})
-# stir_fry_ingredients = {Forageable.cave_carrot: 1, Mushroom.common: 1, Vegetable.kale: 1, Ingredient.sugar: 1}
-# stir_fry_qos = queen_of_sauce_recipe(Meal.stir_fry, 1, Season.spring, 7, stir_fry_ingredients)
-CookingRecipe(name=Meal.strange_bun, ingredients=((Ingredient.wheat_flour, 1), (Fish.periwinkle, 1), (ArtisanGood.void_mayonnaise, 1),), sources=(FriendshipSource(friend=NPC.shane, hearts=7),),),
-CookingRecipe(name=Meal.stuffing, ingredients=((Meal.bread, 1), (Fruit.cranberries, 1), (Forageable.hazelnut, 1),), sources=(FriendshipSource(friend=NPC.pam, hearts=7),),),
-CookingRecipe(name=Meal.super_meal, ingredients=((Vegetable.bok_choy, 1), (Fruit.cranberries, 1), (Vegetable.artichoke, 1),), sources=(FriendshipSource(friend=NPC.kent, hearts=7),),),
-#
-# survival_burger = skill_recipe(Meal.survival_burger, Skill.foraging, 8, {Meal.bread: 1, Forageable.cave_carrot: 1, Vegetable.eggplant: 1})
-CookingRecipe(name=Meal.tom_kha_soup, ingredients=((Forageable.coconut, 1), (Fish.shrimp, 1), (Mushroom.common, 1),), sources=(FriendshipSource(friend=NPC.sandy, hearts=7),),),
-# tortilla_ingredients = {Vegetable.corn: 1}
-# tortilla_qos = queen_of_sauce_recipe(Meal.tortilla, 1, Season.fall, 7, tortilla_ingredients)
-# tortilla_saloon = shop_recipe(Meal.tortilla, Region.saloon, 100, tortilla_ingredients)
-# triple_shot_espresso = shop_recipe(Beverage.triple_shot_espresso, Region.saloon, 5000, {Beverage.coffee: 3})
-# tropical_curry = shop_recipe(Meal.tropical_curry, Region.island_resort, 2000, {Forageable.coconut: 1, Fruit.pineapple: 1, Fruit.hot_pepper: 1}, content_pack=ginger_island_content_pack.name)
-CookingRecipe(name=Meal.trout_soup, ingredients=((Fish.rainbow_trout, 1), (WaterItem.green_algae, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=14),),),
-CookingRecipe(name=Meal.vegetable_medley, ingredients=((Vegetable.tomato, 1), (Vegetable.beet, 1),), sources=(FriendshipSource(friend=NPC.caroline, hearts=7),),),
-#
-# magic_elixir = shop_recipe(ModEdible.magic_elixir, Region.adventurer_guild, 3000, {Edible.life_elixir: 1, Mushroom.purple: 1}, content_pack=ModNames.magic)
-#
-# baked_berry_oatmeal = shop_recipe(SVEMeal.baked_berry_oatmeal, SVERegion.bear_shop, 0, {Forageable.salmonberry: 15, Forageable.blackberry: 15, Ingredient.sugar: 1, Ingredient.wheat_flour: 2}, content_pack=ModNames.sve)
-# big_bark_burger = friendship_and_shop_recipe(SVEMeal.big_bark_burger, NPC.gus, 5, Region.saloon, 5500, {SVEFish.puppyfish: 1, Meal.bread: 1, Ingredient.oil: 1}, content_pack=ModNames.sve)
-# flower_cookie = shop_recipe(SVEMeal.flower_cookie, SVERegion.bear_shop, 0, {SVEForage.ferngill_primrose: 1, SVEForage.goldenrod: 1, SVEForage.winter_star_rose: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.large_egg: 1}, content_pack=ModNames.sve)
-# frog_legs = shop_recipe(SVEMeal.frog_legs, Region.adventurer_guild, 2000, {SVEFish.frog: 1, Ingredient.oil: 1, Ingredient.wheat_flour: 1}, content_pack=ModNames.sve)
-# glazed_butterfish = friendship_and_shop_recipe(SVEMeal.glazed_butterfish, NPC.gus, 10, Region.saloon, 4000, {SVEFish.butterfish: 1, Ingredient.wheat_flour: 1, Ingredient.oil: 1}, content_pack=ModNames.sve)
-# mixed_berry_pie = shop_recipe(SVEMeal.mixed_berry_pie, Region.saloon, 3500, {Fruit.strawberry: 6, SVEFruit.salal_berry: 6, Forageable.blackberry: 6, SVEForage.bearberry: 6, Ingredient.sugar: 1, Ingredient.wheat_flour: 1}, content_pack=ModNames.sve)
-# mushroom_berry_rice = friendship_and_shop_recipe(SVEMeal.mushroom_berry_rice, ModNPC.marlon, 6, Region.adventurer_guild, 1500, {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10, Ingredient.rice: 1, Ingredient.sugar: 2}, content_pack=ModNames.sve)
-# seaweed_salad = shop_recipe(SVEMeal.seaweed_salad, Region.fish_shop, 1250, {SVEWaterItem.dulse_seaweed: 2, WaterItem.seaweed: 2, Ingredient.oil: 1}, content_pack=ModNames.sve)
-# void_delight = friendship_and_shop_recipe(SVEMeal.void_delight, NPC.krobus, 10, Region.sewer, 5000, {SVEFish.void_eel: 1, Loot.void_essence: 50, Loot.solar_essence: 20}, content_pack=ModNames.sve)
-# void_salmon_sushi = friendship_and_shop_recipe(SVEMeal.void_salmon_sushi, NPC.krobus, 10, Region.sewer, 5000, {Fish.void_salmon: 1, ArtisanGood.void_mayonnaise: 1, WaterItem.seaweed: 3}, content_pack=ModNames.sve)
-#
-# mushroom_kebab = friendship_recipe(DistantLandsMeal.mushroom_kebab, ModNPC.goblin, 2, {Mushroom.chanterelle: 1, Mushroom.common: 1, Mushroom.red: 1, Material.wood: 1}, content_pack=ModNames.distant_lands)
-# void_mint_tea = friendship_recipe(DistantLandsMeal.void_mint_tea, ModNPC.goblin, 4, {DistantLandsCrop.void_mint: 1}, content_pack=ModNames.distant_lands)
-# crayfish_soup = friendship_recipe(DistantLandsMeal.crayfish_soup, ModNPC.goblin, 6, {Forageable.cave_carrot: 1, Fish.crayfish: 1, DistantLandsFish.purple_algae: 1, WaterItem.white_algae: 1}, content_pack=ModNames.distant_lands)
-# pemmican = friendship_recipe(DistantLandsMeal.pemmican, ModNPC.goblin, 8, {Loot.bug_meat: 1, Fish.any: 1, Forageable.salmonberry: 3, Material.stone: 2}, content_pack=ModNames.distant_lands)
-#
-# special_pumpkin_soup = friendship_recipe(BoardingHouseMeal.special_pumpkin_soup, ModNPC.joel, 6, {Vegetable.pumpkin: 2, AnimalProduct.large_goat_milk: 1, Vegetable.garlic: 1}, content_pack=ModNames.boarding_house)
-# diggers_delight = skill_recipe(ArchaeologyMeal.diggers_delight, ModSkill.archaeology, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.milk: 1}, content_pack=ModNames.archaeology)
-# rocky_root = skill_recipe(ArchaeologyMeal.rocky_root, ModSkill.archaeology, 7, {Forageable.cave_carrot: 3, Seed.coffee: 1, Material.stone: 1}, content_pack=ModNames.archaeology)
-# ancient_jello = skill_recipe(ArchaeologyMeal.ancient_jello, ModSkill.archaeology, 9, {WaterItem.cave_jelly: 6, Ingredient.sugar: 5, AnimalProduct.egg: 1, AnimalProduct.milk: 1, Artifact.chipped_amphora: 1}, content_pack=ModNames.archaeology)
-#
-# grilled_cheese = skill_recipe(TrashyMeal.grilled_cheese, ModSkill.binning, 1, {Meal.bread: 1, ArtisanGood.cheese: 1}, content_pack=ModNames.binning_skill)
-# fish_casserole = skill_recipe(TrashyMeal.fish_casserole, ModSkill.binning, 8, {Fish.any: 1, AnimalProduct.milk: 1, Vegetable.carrot: 1}, content_pack=ModNames.binning_skill)
+        CookingRecipe(name=Meal.artichoke_dip, ingredients=((Vegetable.artichoke, 4), (AnimalProduct.cow_milk, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=28),),),
+        CookingRecipe(name=Meal.autumn_bounty, ingredients=((Vegetable.yam, 1), (Vegetable.pumpkin, 1),), sources=(FriendshipSource(friend=NPC.demetrius, hearts=7),),),
+        CookingRecipe(name=Meal.baked_fish, ingredients=((Fish.sunfish, 1), (Fish.bream, 1), (Ingredient.wheat_flour, 1),), sources=(QueenOfSauceSource(year=1, season=Season.summer, day=7),),),
+        CookingRecipe(name=Meal.bean_hotpot, ingredients=((Vegetable.green_bean, 2),), sources=(FriendshipSource(friend=NPC.clint, hearts=7),),),
+        CookingRecipe(name=Meal.blackberry_cobbler, ingredients=((Forageable.blackberry, 2), (Ingredient.sugar, 1), (Ingredient.wheat_flour, 1),), sources=(QueenOfSauceSource(year=2, season=Season.fall, day=14),),),
+        CookingRecipe(name=Meal.blueberry_tart, ingredients=((Fruit.blueberry, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.any_egg, 1),), sources=(FriendshipSource(friend=NPC.pierre, hearts=3),),),
+        CookingRecipe(name=Meal.bread, ingredients=((Ingredient.wheat_flour, 1),), sources=(QueenOfSauceSource(year=1, season=Season.summer, day=28),),),
+        CookingRecipe(name=Meal.bruschetta, ingredients=((Meal.bread, 1), (Ingredient.oil, 1), (Vegetable.tomato, 1),), sources=(QueenOfSauceSource(year=2, season=Season.winter, day=21),),),
+        CookingRecipe(name=Meal.carp_surprise, ingredients=((Fish.carp, 4),), sources=(QueenOfSauceSource(year=2, season=Season.summer, day=7),),),
+        CookingRecipe(name=Meal.cheese_cauliflower, ingredients=((Vegetable.cauliflower, 1), (ArtisanGood.cheese, 1),), sources=(FriendshipSource(friend=NPC.pam, hearts=3),),),
+        CookingRecipe(name=Meal.chocolate_cake, ingredients=((Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.chicken_egg, 1),), sources=(QueenOfSauceSource(year=1, season=Season.winter, day=14),),),
+        CookingRecipe(name=Meal.chowder, ingredients=((Fish.clam, 1), (AnimalProduct.cow_milk, 1),), sources=(FriendshipSource(friend=NPC.willy, hearts=3),),),
+        CookingRecipe(name=Meal.coleslaw, ingredients=((Vegetable.red_cabbage, 1), (Ingredient.vinegar, 1), (ArtisanGood.mayonnaise, 1),), sources=(QueenOfSauceSource(year=14, season=Season.spring, day=14),),),
+        CookingRecipe(name=Meal.complete_breakfast, ingredients=((Meal.fried_egg, 1), (AnimalProduct.milk, 1), (Meal.hashbrowns, 1), (Meal.pancakes, 1),), sources=(QueenOfSauceSource(year=2, season=Season.spring, day=21),),),
+        CookingRecipe(name=Meal.cookie, ingredients=((Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.chicken_egg, 1),), sources=(FriendshipSource(friend=NPC.evelyn, hearts=4),),),
+        CookingRecipe(name=Meal.crab_cakes, ingredients=((Fish.crab, 1), (Ingredient.wheat_flour, 1), (AnimalProduct.chicken_egg, 1), (Ingredient.oil, 1),), sources=(QueenOfSauceSource(year=2, season=Season.fall, day=21),),),
+        CookingRecipe(name=Meal.cranberry_candy, ingredients=((Fruit.cranberries, 1), (Fruit.apple, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=1, season=Season.winter, day=28),),),
+        CookingRecipe(name=Meal.cranberry_sauce, ingredients=((Fruit.cranberries, 1), (Ingredient.sugar, 1),), sources=(FriendshipSource(friend=NPC.gus, hearts=7),),),
+        CookingRecipe(name=Meal.crispy_bass, ingredients=((Fish.largemouth_bass, 1), (Ingredient.wheat_flour, 1), (Ingredient.oil, 1),), sources=(FriendshipSource(friend=NPC.kent, hearts=3),),),
+        CookingRecipe(name=Meal.dish_o_the_sea, ingredients=((Fish.sardine, 2), (Meal.hashbrowns, 1),), sources=(SkillSource(skill=Skill.fishing, level=3),),),
+        CookingRecipe(name=Meal.eggplant_parmesan, ingredients=((Vegetable.eggplant, 1), (Vegetable.tomato, 1),), sources=(FriendshipSource(friend=NPC.lewis, hearts=7),),),
+        CookingRecipe(name=Meal.escargot, ingredients=((Fish.snail, 1), (Vegetable.garlic, 1),), sources=(FriendshipSource(friend=NPC.willy, hearts=5),),),
+        CookingRecipe(name=Meal.farmer_lunch, ingredients=((Meal.omelet, 2), (Vegetable.parsnip, 1),), sources=(SkillSource(skill=Skill.farming, level=3),),),
+        CookingRecipe(name=Meal.fiddlehead_risotto, ingredients=((Ingredient.oil, 1), (Forageable.fiddlehead_fern, 1), (Vegetable.garlic, 1),), sources=(QueenOfSauceSource(year=2, season=Season.fall, day=28),),),
+        CookingRecipe(name=Meal.fish_stew, ingredients=((Fish.crayfish, 1), (Fish.mussel, 1), (Fish.periwinkle, 1), (Vegetable.tomato, 1),), sources=(FriendshipSource(friend=NPC.willy, hearts=7),),),
+        CookingRecipe(name=Meal.fish_taco, ingredients=((Fish.tuna, 1), (Meal.tortilla, 1), (Vegetable.red_cabbage, 1), (ArtisanGood.mayonnaise, 1),), sources=(FriendshipSource(friend=NPC.linus, hearts=7),),),
+        CookingRecipe(name=Meal.fried_calamari, ingredients=((Fish.squid, 1), (Ingredient.wheat_flour, 1), (Ingredient.oil, 1),), sources=(FriendshipSource(friend=NPC.jodi, hearts=3),),),
+        CookingRecipe(name=Meal.fried_eel, ingredients=((Fish.eel, 1), (Ingredient.oil, 1),), sources=(FriendshipSource(friend=NPC.george, hearts=3),),),
+        CookingRecipe(name=Meal.fried_egg, ingredients=((AnimalProduct.chicken_egg, 1),), sources=(StarterSource(),),),
+        CookingRecipe(name=Meal.fried_mushroom, ingredients=((Mushroom.common, 1), (Mushroom.morel, 1), (Ingredient.oil, 1),), sources=(FriendshipSource(friend=NPC.demetrius, hearts=3),),),
+        CookingRecipe(name=Meal.fruit_salad, ingredients=((Fruit.blueberry, 1), (Fruit.melon, 1), (Fruit.apricot, 1),), sources=(QueenOfSauceSource(year=2, season=Season.fall, day=7),),),
+        CookingRecipe(name=Meal.glazed_yams, ingredients=((Vegetable.yam, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=21),),),
+        CookingRecipe(name=Meal.hashbrowns, ingredients=((Vegetable.potato, 1), (Ingredient.oil, 1),), sources=(QueenOfSauceSource(year=2, season=Season.spring, day=14),),),
+        CookingRecipe(name=Meal.ice_cream, ingredients=((AnimalProduct.cow_milk, 1), (Ingredient.sugar, 1),), sources=(FriendshipSource(friend=NPC.jodi, hearts=7),),),
+        CookingRecipe(name=Meal.lobster_bisque, ingredients=((Fish.lobster, 1), (AnimalProduct.cow_milk, 1),), sources=(FriendshipSource(friend=NPC.willy, hearts=9),),),
+        CookingRecipe(name=Meal.lobster_bisque, ingredients=((Fish.lobster, 1), (AnimalProduct.cow_milk, 1),), sources=(QueenOfSauceSource(year=2, season=Season.winter, day=14),),),
+        CookingRecipe(name=Meal.lucky_lunch, ingredients=((Fish.sea_cucumber, 1), (Meal.tortilla, 1), (Flower.blue_jazz, 1),), sources=(QueenOfSauceSource(year=2, season=Season.spring, day=28),),),
+        CookingRecipe(name=Meal.maki_roll, ingredients=((Fish.any, 1), (WaterItem.seaweed, 1), (Ingredient.rice, 1),), sources=(QueenOfSauceSource(year=1, season=Season.summer, day=21),),),
+        CookingRecipe(name=Meal.maple_bar, ingredients=((ArtisanGood.maple_syrup, 1), (Ingredient.sugar, 1), (Ingredient.wheat_flour, 1),), sources=(QueenOfSauceSource(year=2, season=Season.summer, day=14),),),
+        CookingRecipe(name=Meal.miners_treat, ingredients=((Forageable.cave_carrot, 2), (Ingredient.sugar, 1), (AnimalProduct.cow_milk, 1),), sources=(SkillSource(skill=Skill.mining, level=3),),),
+        CookingRecipe(name=Meal.moss_soup, ingredients=((Material.moss, 20),), sources=(SkillSource(skill=Skill.foraging, level=3),),),
+        CookingRecipe(name=Meal.omelet, ingredients=((AnimalProduct.chicken_egg, 1), (AnimalProduct.cow_milk, 1),), sources=(QueenOfSauceSource(year=1, season=Season.spring, day=28),),),
+        CookingRecipe(name=Meal.pale_broth, ingredients=((WaterItem.white_algae, 2),), sources=(FriendshipSource(friend=NPC.marnie, hearts=3),),),
+        CookingRecipe(name=Meal.pancakes, ingredients=((Ingredient.wheat_flour, 1), (AnimalProduct.chicken_egg, 1),), sources=(QueenOfSauceSource(year=1, season=Season.summer, day=14),),),
+        CookingRecipe(name=Meal.parsnip_soup, ingredients=((Vegetable.parsnip, 1), (AnimalProduct.cow_milk, 1), (Ingredient.vinegar, 1),), sources=(FriendshipSource(friend=NPC.caroline, hearts=3),),),
+        CookingRecipe(name=Meal.pepper_poppers, ingredients=((Fruit.hot_pepper, 1), (ArtisanGood.cheese, 1),), sources=(FriendshipSource(friend=NPC.shane, hearts=3),),),
+        CookingRecipe(name=Meal.pink_cake, ingredients=((Fruit.melon, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.chicken_egg, 1),), sources=(QueenOfSauceSource(year=2, season=Season.summer, day=21),),),
+        CookingRecipe(name=Meal.pizza, ingredients=((Ingredient.wheat_flour, 1), (Vegetable.tomato, 1), (ArtisanGood.cheese, 1),), sources=(QueenOfSauceSource(year=2, season=Season.spring, day=7),),),
+        CookingRecipe(name=Meal.pizza, ingredients=((Ingredient.wheat_flour, 1), (Vegetable.tomato, 1), (ArtisanGood.cheese, 1),), sources=(ShopSource(shop_region=Region.saloon, price=150),),),
+        CookingRecipe(name=Meal.plum_pudding, ingredients=((Forageable.wild_plum, 2), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=1, season=Season.winter, day=7),),),
+        CookingRecipe(name=Meal.poppyseed_muffin, ingredients=((Flower.poppy, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=2, season=Season.winter, day=7),),),
+        CookingRecipe(name=Meal.pumpkin_pie, ingredients=((Vegetable.pumpkin, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.cow_milk, 1),), sources=(QueenOfSauceSource(year=1, season=Season.winter, day=21),),),
+        CookingRecipe(name=Meal.pumpkin_soup, ingredients=((Vegetable.pumpkin, 1), (AnimalProduct.cow_milk, 1),), sources=(FriendshipSource(friend=NPC.robin, hearts=7),),),
+        CookingRecipe(name=Meal.radish_salad, ingredients=((Ingredient.oil, 1), (Ingredient.vinegar, 1), (Vegetable.radish, 1),), sources=(QueenOfSauceSource(year=1, season=Season.spring, day=21),),),
+        CookingRecipe(name=Meal.red_plate, ingredients=((Vegetable.red_cabbage, 1), (Vegetable.radish, 1),), sources=(FriendshipSource(friend=NPC.emily, hearts=7),),),
+        CookingRecipe(name=Meal.rhubarb_pie, ingredients=((Fruit.rhubarb, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1),), sources=(FriendshipSource(friend=NPC.marnie, hearts=7),),),
+        CookingRecipe(name=Meal.rice_pudding, ingredients=((AnimalProduct.milk, 1), (Ingredient.sugar, 1), (Ingredient.rice, 1),), sources=(FriendshipSource(friend=NPC.evelyn, hearts=7),),),
+        CookingRecipe(name=Meal.roasted_hazelnuts, ingredients=((Forageable.hazelnut, 3),), sources=(QueenOfSauceSource(year=2, season=Season.summer, day=28),),),
+        CookingRecipe(name=Meal.roots_platter, ingredients=((Forageable.cave_carrot, 1), (Forageable.winter_root, 1),), sources=(SkillSource(skill=Skill.combat, level=3),),),
+        CookingRecipe(name=Meal.salad, ingredients=((Forageable.leek, 1), (Forageable.dandelion, 1), (Ingredient.vinegar, 1),), sources=(FriendshipSource(friend=NPC.emily, hearts=3),),),
+        CookingRecipe(name=Meal.salmon_dinner, ingredients=((Fish.salmon, 1), (Vegetable.amaranth, 1), (Vegetable.kale, 1),), sources=(FriendshipSource(friend=NPC.gus, hearts=3),),),
+        CookingRecipe(name=Meal.sashimi, ingredients=((Fish.any, 1),), sources=(FriendshipSource(friend=NPC.linus, hearts=3),),),
+        CookingRecipe(name=Meal.seafoam_pudding, ingredients=((Fish.flounder, 1), (Fish.midnight_carp, 1), (AnimalProduct.squid_ink, 1),), sources=(SkillSource(skill=Skill.fishing, level=9),),),
+        CookingRecipe(name=Meal.shrimp_cocktail, ingredients=((Vegetable.tomato, 1), (Fish.shrimp, 1), (Forageable.wild_horseradish, 1),), sources=(QueenOfSauceSource(year=2, season=Season.winter, day=28),),),
+        CookingRecipe(name=Meal.spaghetti, ingredients=((Vegetable.tomato, 1), (Ingredient.wheat_flour, 1),), sources=(FriendshipSource(friend=NPC.lewis, hearts=3),),),
+        CookingRecipe(name=Meal.spicy_eel, ingredients=((Fish.eel, 1), (Fruit.hot_pepper, 1),), sources=(FriendshipSource(friend=NPC.george, hearts=7),),),
+        CookingRecipe(name=Meal.squid_ink_ravioli, ingredients=((AnimalProduct.squid_ink, 1), (Ingredient.wheat_flour, 1), (Vegetable.tomato, 1),), sources=(SkillSource(skill=Skill.combat, level=9),),),
+        CookingRecipe(name=Meal.stir_fry, ingredients=((Forageable.cave_carrot, 1), (Mushroom.common, 1), (Vegetable.kale, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=1, season=Season.spring, day=7),),),
+        CookingRecipe(name=Meal.strange_bun, ingredients=((Ingredient.wheat_flour, 1), (Fish.periwinkle, 1), (ArtisanGood.void_mayonnaise, 1),), sources=(FriendshipSource(friend=NPC.shane, hearts=7),),),
+        CookingRecipe(name=Meal.stuffing, ingredients=((Meal.bread, 1), (Fruit.cranberries, 1), (Forageable.hazelnut, 1),), sources=(FriendshipSource(friend=NPC.pam, hearts=7),),),
+        CookingRecipe(name=Meal.super_meal, ingredients=((Vegetable.bok_choy, 1), (Fruit.cranberries, 1), (Vegetable.artichoke, 1),), sources=(FriendshipSource(friend=NPC.kent, hearts=7),),),
+        CookingRecipe(name=Meal.survival_burger, ingredients=((Meal.bread, 1), (Forageable.cave_carrot, 1), (Vegetable.eggplant, 1),), sources=(SkillSource(skill=Skill.foraging, level=8),),),
+        CookingRecipe(name=Meal.tom_kha_soup, ingredients=((Forageable.coconut, 1), (Fish.shrimp, 1), (Mushroom.common, 1),), sources=(FriendshipSource(friend=NPC.sandy, hearts=7),),),
+        CookingRecipe(name=Meal.tortilla, ingredients=((Vegetable.corn, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=7),),),
+        CookingRecipe(name=Meal.tortilla, ingredients=((Vegetable.corn, 1),), sources=(ShopSource(shop_region=Region.saloon, price=100),),),
+        CookingRecipe(name=Beverage.triple_shot_espresso, ingredients=((Beverage.coffee, 3),), sources=(ShopSource(shop_region=Region.saloon, price=5000),),),
+        CookingRecipe(name=Meal.trout_soup, ingredients=((Fish.rainbow_trout, 1), (WaterItem.green_algae, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=14),),),
+        CookingRecipe(name=Meal.vegetable_medley, ingredients=((Vegetable.tomato, 1), (Vegetable.beet, 1),), sources=(FriendshipSource(friend=NPC.caroline, hearts=7),),),
     ),
 )

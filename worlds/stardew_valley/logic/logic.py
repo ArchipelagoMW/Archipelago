@@ -56,7 +56,6 @@ from ..content.game_content import StardewContent
 from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..data.craftable_data import all_crafting_recipes
 from ..data.museum_data import all_museum_items
-from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..options import StardewValleyOptions, BundleRandomization, IncludeEndgameLocations

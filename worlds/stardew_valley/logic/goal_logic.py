@@ -1,6 +1,5 @@
 from .base_logic import BaseLogic, BaseLogicMixin
 from ..data.craftable_data import all_crafting_recipes_by_name
-from ..data.recipe_data import all_cooking_recipes_by_name
 from ..locations import LocationTags, locations_by_tag
 from ..mods.mod_data import ModNames
 from ..options import options

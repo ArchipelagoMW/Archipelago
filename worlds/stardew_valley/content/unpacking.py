@@ -94,10 +94,12 @@ def register_pack(content: StardewContent, pack: ContentPack):
     pack.festival_source_hook(content)
 
     for cooking_recipe in pack.cooking_recipes:
-        content.festivals[cooking_recipe.name] = cooking_recipe
+        content.cooking_recipes[cooking_recipe.name] = cooking_recipe
     pack.cooking_recipe_source_hook(content)
 
-    register_sources_and_call_hook(content, pack.crafting_sources, pack.crafting_hook)
+    # for crafting_recipe in pack.crafting_recipes:
+    #     content.crafting_recipes[crafting_recipe.name] = crafting_recipe
+    # pack.crafting_recipe_source_hook(content)
 
     # register_quests
 

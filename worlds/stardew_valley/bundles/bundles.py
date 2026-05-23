@@ -14,7 +14,6 @@ from ..data.bundles_data.meme_bundles import community_center_meme_bundles, pant
     boiler_room_meme, vault_meme
 from ..data.bundles_data.remixed_anywhere_bundles import community_center_remixed_anywhere
 from ..data.game_item import ItemTag
-from ..data.recipe_data import all_cooking_recipes
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization, StardewValleyOptions
 from ..strings.bundle_names import CCRoom
