@@ -68,7 +68,7 @@ events = {
                                                             progress_type=lambda
                                                                 o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
                                                             else LocationProgressType.DEFAULT,
-                                                            event_item_name="Loyalty Orb",
+                                                            event_item_name="Satomi Power Orb (Loyalty)",
                                                             special_rule=night_time_check_rule)
     }
 }

@@ -52,7 +52,7 @@ events = {
                                                      is_event_item=lambda o: o.CanineRewards != 0,
                                                      progress_type=lambda
                                                          o: LocationProgressType.EXCLUDED if o.CanineRewards == 2 else LocationProgressType.DEFAULT,
-                                                     event_item_name="Justice Orb",
+                                                     event_item_name="Satomi Power Orb (Justice)",
                                                      required_items_events=["Agata Forest - Fish Whopper with Kokari"]),
         "Agata Forest - Open shortcut to Shinshu Field": EventData(cherry_bomb_level=1)
     }

@@ -32,7 +32,7 @@ events = {
                                                         progress_type=lambda
                                                             o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
                                                         else LocationProgressType.DEFAULT,
-                                                        event_item_name="Duty Orb",
+                                                        event_item_name="Satomi Power Orb (Duty)",
                                                         required_items_events=["Sasa Sanctuary - Save Take"])
     }
 }
