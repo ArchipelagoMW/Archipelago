@@ -1413,7 +1413,7 @@ pelican_town = ContentPack(
 
         # # In-Game, the Furnace recipe is completely unique. It is the only recipe that is obtained in a cutscene after doing a skill-related action.
         # # So it has a custom source that needs both the craftsanity item from AP and the skill, if craftsanity is enabled.
-        CraftingRecipe(name=Machine.furnace, ingredients=((Ore.copper, 20), (Material.stone, 25),), sources=(SkillSource(skill=Skill.mining, level=1),),),
+        CraftingRecipe(name=Machine.furnace, ingredients=((Ore.copper, 20), (Material.stone, 25),), sources=(StarterSource(other_requirements=(SkillRequirement(skill=Skill.mining, level=1), RegionRequirement(region=Region.mines_floor_5),)),),),
 
         CraftingRecipe(name=Machine.geode_crusher, ingredients=((MetalBar.gold, 2), (Material.stone, 50), (Mineral.diamond, 1),), sources=(SpecialOrderSource(special_order=SpecialOrder.cave_patrol),),),
         CraftingRecipe(name=Machine.mushroom_log, ingredients=((Material.hardwood, 10), (Material.moss, 10),), sources=(SkillSource(skill=Skill.foraging, level=4),),),

@@ -37,6 +37,9 @@ class DistantLandsContentPack(ContentPack):
 
 register_mod_content_pack(DistantLandsContentPack(
     ModNames.distant_lands,
+    weak_dependencies=(
+        ginger_island_content_pack.name,
+    ),
     fishes=(
         fish_data.void_minnow,
         fish_data.purple_algae,

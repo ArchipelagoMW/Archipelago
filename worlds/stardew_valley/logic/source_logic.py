@@ -10,7 +10,7 @@ from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource, 
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.monster_data import MonsterSource
-from ..data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource, SpecialOrderSource, MasterySource
+from ..data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource, SpecialOrderSource, MasterySource, QuestSource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource, HatMouseSource
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.skill_names import Skill
@@ -175,3 +175,7 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: MasterySource):
         return self.logic.skill.has_mastery(source.skill)
+
+    @has_access_to.register
+    def _(self, source: QuestSource):
+        return self.logic.quest.can_complete_quest(source.quest)

@@ -260,6 +260,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Machine.coffee_maker: self.received(Machine.coffee_maker),
             Machine.sewing_machine: (self.region.can_reach(Region.haley_house) & self.has(ArtisanGood.cloth)) | (self.received(Machine.sewing_machine) & self.region.can_reach(Region.secret_woods)),
             Machine.statue_endless_fortune: self.has_statue_of_endless_fortune(),
+            Machine.solar_panel: self.false_,
             Material.cinder_shard: self.region.can_reach(Region.volcano_floor_5),
             Material.clay: self.region.can_reach_any(Region.farm, Region.beach, Region.quarry) & self.tool.has_tool(Tool.hoe),
             Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_pan(),

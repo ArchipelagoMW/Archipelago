@@ -1,6 +1,5 @@
 from ..bases import SVTestBase
 from ... import options
-from ...content.content_packs import ginger_island_content_pack
 
 
 class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandContentPack(SVTestBase):
@@ -15,12 +14,9 @@ class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandConten
 
         logic = self.world.logic
 
-        for recipe in all_cooking_recipes:
-            if recipe.content_pack is ginger_island_content_pack.name or recipe.content_pack not in self.world.options.mods:
-                continue
-
-            with self.subTest(recipe.meal):
-                for item in recipe.ingredients:
+        for recipe in self.world.content.cooking_recipes.values():
+            with self.subTest(recipe.name):
+                for item, amount in recipe.ingredients:
                     rule = logic.has(item)
                     self.assert_rule_true(rule, self.multiworld.state)
 

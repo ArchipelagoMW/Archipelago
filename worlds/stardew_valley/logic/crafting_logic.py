@@ -17,9 +17,12 @@ class CraftingLogicMixin(BaseLogicMixin):
 
 class CraftingLogic(BaseLogic):
     @cache_self1
-    def can_craft(self, recipe: CraftingRecipe = None) -> StardewRule:
+    def can_craft(self, recipe: CraftingRecipe | str = None) -> StardewRule:
         if recipe is None:
             return True_()
+
+        if isinstance(recipe, str):
+            recipe = self.content.crafting_recipes[recipe]
 
         recipe_rule = self.knows_recipe(recipe)
         items = [ingredient for ingredient, amount in recipe.ingredients]
