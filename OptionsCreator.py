@@ -624,10 +624,21 @@ class OptionsCreator(ThemedApp):
                                                                  self.tap_expansion_chevron(item, x)))
                 group_content = MDExpansionPanelContent(orientation="vertical", theme_bg_color="Custom",
                                                         md_bg_color=self.theme_cls.surfaceContainerLowestColor,
-                                                        padding=[dp(12), dp(100), dp(12), 0],
+                                                        padding=[dp(12), dp(12), dp(12), 0],
                                                         spacing=dp(3))
                 group_item.add_widget(group_header)
                 group_item.add_widget(group_content)
+
+                def fix_panel(instance, value, gc=group_content):
+                    if value:
+                        # yes, even if height is greater than minimum height.
+                        # height sometimes is greater than minimum when options have their visibility toggled,
+                        # which causes a ton of dead space at the bottom.
+                        # it is also sometimes less than the minimum, overlapping other parts of the UI.
+                        # the minimum height appears to always be the correctly calculated height needed.
+                        gc.height = gc.minimum_height
+
+                group_item.bind(is_open=fix_panel)
                 group_box = ScrollBox()
                 group_box.layout.orientation = "vertical"
                 group_box.layout.spacing = dp(3)
