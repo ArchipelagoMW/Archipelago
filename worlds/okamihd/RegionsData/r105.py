@@ -5,6 +5,7 @@ from ..CheckIds import shop_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.WarpType import WarpType
+from ..Rules import has_portable_fire_source_strict
 from ..Types import LocData, EventData, ExitData, WarpData
 from ..Enums.RegionNames import RegionNames, MapIds
 
@@ -29,9 +30,10 @@ exits = {
 }
 events = {
     RegionNames.CITY_CHECKPOINT_TAKA: {
-        # Not setting any more logic for this event yet, as we'll probably handle it in a specific way.
-        "City Checkpoint - Activate the Drawbridge": EventData(required_items_events=["Moon Cave - Defeat Orochi"],
-                                                               required_brush_techniques=[BrushTechniques.INFERNO])
+        # we'll probably handle it in a specific way.
+        "City Checkpoint - Activate the Drawbridge": EventData(
+            special_rule=Or(HasAll("Moon Cave - Defeat Orochi", BrushTechniques.INFERNO),
+                            has_portable_fire_source_strict))
     },
     RegionNames.CITY_CHECKPOINT_RYOSHIMA: {
         "City Checkpoint - Restore Cursed Patches on Ryoshima side": EventData(
@@ -62,9 +64,9 @@ locations = {
     },
     RegionNames.CITY_CHECKPOINT_RIVER: {
         "City Checkpoint - Southernmost buried chest on river's edge ": LocData(
-            container_check_id(MapIds.CITY_CHECKPOINT, 8),type=LocationType.BURIED_CHEST),
+            container_check_id(MapIds.CITY_CHECKPOINT, 8), type=LocationType.BURIED_CHEST),
         "City Checkpoint - Buried chest on river's edge South near waterfall ": LocData(
-            container_check_id(MapIds.CITY_CHECKPOINT, 9),type=LocationType.BURIED_CHEST),
+            container_check_id(MapIds.CITY_CHECKPOINT, 9), type=LocationType.BURIED_CHEST),
         "City Checkpoint - Burning chest on river's edge South near waterfall ": LocData(
             container_check_id(MapIds.CITY_CHECKPOINT, 12), type=LocationType.BURNING_CHEST),
         # Special Rule for the river access - You need either Water Tablet or (Waterlily and Gaelstrom)

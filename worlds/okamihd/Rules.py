@@ -12,9 +12,13 @@ from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
     from . import OkamiWorld
 
-has_portable_fire_source: Rule = Or(And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
-                                           Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO)),
-                                    Has(BrushTechniques.FIREBURST))
+
+has_portable_fire_source_strict:Rule= And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
+                                           Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
+
+
+has_portable_fire_source: Rule = Or(has_portable_fire_source_strict,Has(BrushTechniques.FIREBURST))
+
 
 has_portable_thunder_source: Rule = Or(And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
                                               Has("Progressive Sword", 5)), Has(BrushTechniques.THUNDERSTORM)),
@@ -40,9 +44,7 @@ night_time_check_rule: Rule = Has(BrushTechniques.CRESCENT, options=[
 moon_cave_fire_rule: Rule = Or(has_portable_fire_source,
                                HasAll("Moon Cave - 3F Push the ball", BrushTechniques.INFERNO))
 #Fireburst doesn't light the canons' fuse.
-moon_cave_canon_rule: Rule = And(
-    Or(HasAny(DivineInstruments.SOLAR_FLARE.value.item_name, "Moon Cave - 3F Push the ball"),
-       Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
+moon_cave_canon_rule: Rule = Or(has_portable_fire_source_strict,HasAll("Moon Cave - 3F Push the ball",BrushTechniques.INFERNO))
 
 moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source,
                                   HasAll("Moon Cave - 4F Move Fireball", BrushTechniques.INFERNO))
@@ -200,7 +202,5 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
 
 def set_completion_rules(world: "OkamiWorld"):
     world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm",
-                                     "Tsuta Ruins - Defeat the spider queen"))
-    world.multiworld.completion_condition[world.player] = lambda state: state.has(
-        "Moon Cave - Defeat Orochi", world.player)
+                                     "Tsuta Ruins - Defeat the spider queen","Himiko's Palace - Cross sea of fire","Imperial Palace - Defeat Blight"))
     return
