@@ -13,30 +13,33 @@ exits = {
     RegionNames.SEIAN_CITY_COMMONERS_DRY: [
         ExitData(RegionNames.SEIAN_CITY_COMMONERS, has_events=["Imperial Palace - Defeat Blight"],
                  loading_screen=False),
-        ExitData(RegionNames.SEIAN_CITY_WEAPON_SHOP,loading_screen=False),
-        ExitData(RegionNames.SEIAN_CITY_TOOL_SHOP,loading_screen=False),
+        ExitData(RegionNames.SEIAN_CITY_WEAPON_SHOP, loading_screen=False),
+        ExitData(RegionNames.SEIAN_CITY_TOOL_SHOP, loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_FLOWERS),
         ExitData(RegionNames.SEIAN_CITY_BRIDGE_COMMONERS)
     ],
     RegionNames.SEIAN_CITY_COMMONERS: [
         ExitData(RegionNames.SEIAN_CITY_YAMA),
-        ExitData(RegionNames.SEIAN_CITY_SOUTHWEST, has_events=["Sei-an City (Commoner's Quarter) - Blow up wall to southwest building"]),
-        ExitData(RegionNames.SEIAN_CITY_TAO, has_events=["Sei-an City (Commoner's Quarter) - Climb to Tao Troopers Headquarters"],
-                 one_way=True, loading_screen=False)
+        ExitData(RegionNames.SEIAN_CITY_SOUTHWEST,
+                 has_events=["Sei-an City (Commoner's Quarter) - Blow up wall to southwest building"]),
+        ExitData(RegionNames.SEIAN_CITY_TAO,
+                 has_events=["Sei-an City (Commoner's Quarter) - Climb to Tao Troopers Headquarters"],
+                 one_way=True, loading_screen=False),
+        ExitData(RegionNames.SEIAN_CITY_BLOSSOM)
     ],
     RegionNames.SEIAN_CITY_TAO: [
         ExitData(RegionNames.SEIAN_CITY_COMMONERS, one_way=True)
     ]
 }
 events = {
-  
+
     RegionNames.SEIAN_CITY_COMMONERS_DRY: {
-        "Sei-an City (Commoner's Quarter) - Dig water source" :EventData(type=LocationType.DIGGING_MINIGAME_LATER),
+        "Sei-an City (Commoner's Quarter) - Dig water source": EventData(type=LocationType.DIGGING_MINIGAME_LATER),
     },
     RegionNames.SEIAN_CITY_COMMONERS: {
         "Sei-an City (Commoner's Quarter) - Blow up wall to southwest building": EventData(cherry_bomb_level=1),
         "Sei-an City (Commoner's Quarter) - Climb to Tao Troopers Headquarters": EventData(
-            required_brush_techniques=[BrushTechniques.WATERSPOUT])
+            required_brush_techniques=[BrushTechniques.WATERSPOUT],required_items_events=["Sei-an City (Commoner's Quarter) - Dig water source"])
     },
     RegionNames.SEIAN_CITY_YAMA: {
         "Sei-an City (Commoner's Quarter) - Give golden mushroom to Yama": EventData(
@@ -71,16 +74,11 @@ locations = {
         "Sei-an City (Commoner's quarter) - Freestanding chest west of Ryoshima entrance": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 13)),
         "Sei-an City (Commoner's quarter) - Buried Chest behind Mr. Flower's house": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 14), type=LocationType.BURIED_CHEST),
-        #FIXME
-        "Sei-an City (Commoner's quarter) - NOT Chest in Canal near Mr. Flower's house": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 15), type=LocationType.BURIED_CHEST),
-        "Sei-an City (Commoner's quarter) - Freestanding Chest behind building": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 16)),
-        "Sei-an City (Commoner's quarter) - Chest in Canal near Mr. Flower's house": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 17)),
         "Sei-an City (Commoner's quarter) - Chest in canal northeast corner": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 21)),
+        "Sei-an City (Commoner's quarter) - Freestanding chest behind Aspiring Carpenter's house": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 22)),
         "Sei-an City (Commoner's quarter) - Chest east of Aristocratic quarters entrance": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 23)),
     },
@@ -98,30 +96,38 @@ locations = {
     },
     RegionNames.SEIAN_CITY_SOUTHWEST: {
         "Sei-an City (Commoner's quarter) - Chest in southwest building, 1F southwest Rafters": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 18)),
-        "Sei-an City (Commoner's quarter) - Chest in southwest building, GF Freestanding Left": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 19)),
-        "Sei-an City (Commoner's quarter) - Chest in southwest building, 2F northwest Rafters Left": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 20)),
-
-        "Sei-an City (Commoner's quarter) - Chest in southwest building, 2F north central Rafters": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 22)),
-        "Sei-an City (Commoner's quarter) - Chest in southwest building, GF in Cage": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 24)),
-        "Sei-an City (Commoner's quarter) - Chest in southwest building, GF near Cage": LocData(
+        "Sei-an City (Commoner's quarter) - Chest in southwest building, GF Freestanding Left": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 25)),
+        "Sei-an City (Commoner's quarter) - Chest in southwest building, GF Freestanding Right": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 29)),
+        "Sei-an City (Commoner's quarter) - Chest in southwest building, 2F northwest Rafters Left": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 26)),
+        "Sei-an City (Commoner's quarter) - Chest in southwest building, 2F northwest Rafters Right": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 27)),
+        "Sei-an City (Commoner's quarter) - Chest in southwest building, 2F north Rafters": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 28)),
+        "Sei-an City (Commoner's quarter) - Chest in southwest building, GF in Cage": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 30)),
+        "Sei-an City (Commoner's quarter) - Chest in southwest building, GF near Cage": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 31)),
     },
     RegionNames.SEIAN_CITY_COMMONERS: {
         "Sei-an City (Commoner's quarter) - Freestanding Chest behind west buildings": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 26), type=LocationType.BURIED_CHEST),
+            container_check_id(MapIds.SEIAN_COMMONERS, 32)),
         "Sei-an City (Commoner's quarter) - Buried Chest near west buildings": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 27), type=LocationType.BURIED_CHEST),
+            container_check_id(MapIds.SEIAN_COMMONERS, 33), type=LocationType.BURIED_CHEST),
         "Sei-an City (Commoner's quarter) - Buried Chest near Yama's restaurant": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 28), type=LocationType.BURIED_CHEST),
+            container_check_id(MapIds.SEIAN_COMMONERS, 34), type=LocationType.BURIED_CHEST),
+
     },
     RegionNames.SEIAN_CITY_TAO: {
         "Sei-an City (Commoner's quarter) - Freestanding chest behind Tao Troopers headquarters": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 29), type=LocationType.BURIED_CHEST),
+            container_check_id(MapIds.SEIAN_COMMONERS, 44)),
+    },
+    RegionNames.SEIAN_CITY_BLOSSOM: {
+        "Sei-an City (Commoner's quarter) - Chest in Blossom's house": LocData(
+            container_check_id(MapIds.SEIAN_COMMONERS, 45), cherry_bomb_level=1)
     }
 }
 shop_locations = {
@@ -139,7 +145,7 @@ shop_locations = {
         "Sei-an City Tool Shop Slot 11": LocData(shop_check_id(16, 10), type=LocationType.SHOP),
         "Sei-an City Tool Shop Slot 12": LocData(shop_check_id(16, 11), type=LocationType.SHOP)
     },
-    RegionNames.SEIAN_CITY_WEAPON_SHOP:{
+    RegionNames.SEIAN_CITY_WEAPON_SHOP: {
         "Sei-an City Weapon Shop Slot 1": LocData(shop_check_id(17, 0), type=LocationType.SHOP),
         "Sei-an City Weapon Shop Slot 2": LocData(shop_check_id(17, 1), type=LocationType.SHOP),
         "Sei-an City Weapon Shop Slot 3": LocData(shop_check_id(17, 2), type=LocationType.SHOP),

@@ -152,6 +152,7 @@ class RegionNames(StrEnum):
     SEIAN_CITY_TAO = "Sei-an City (Tao Troopers Headquarters)"
     SEIAN_CITY_TOOL_SHOP = "Sei-an City (Tool Shop)"
     SEIAN_CITY_WEAPON_SHOP = "Sei-an City (Weapon Shop)"
+    SEIAN_CITY_BLOSSOM = "Sei-an City (Blossom's house)"
 
     ### ARISTOCRATIC QUARTERS
     SEIAN_CITY_BRIDGE_COMMONERS = "Sei-an City Lake Beewa Bridge (Commoner's Side)"
@@ -166,6 +167,12 @@ class RegionNames(StrEnum):
     SEIAN_CITY_HIMIKO = "Sei-an City (Himiko's palace entrance)"
     SEIAN_CITY_TREASURE_WEST = "Sei-an City (Himiko's palace West Treasure Room)"
     SEIAN_CITY_TREASURE_EAST = "Sei-an City (Himiko's palace East Treasure Room)"
+    SEIAN_CITY_GUARDS = "Sei-an City (Guards house)"
+    SEIAN_CITY_LAKE = "Sei-an City (Lake Beewa)"
+
+    ## HIMIKO'S PALACE
+    HIMIKO_PALACE = "Himiko's Palace"
+    HIMIKO_CHAMBERS = "Himiko's Palace (Himiko's Chambers)"
 
     ## SUNKEN SHIP
     SUNKEN_SHIP_ENTRANCE = "Sunken Ship (Entrance)"
@@ -188,7 +195,7 @@ class RegionNames(StrEnum):
     ## IMPERIAL PALACE
     ### Regular Size
     IMPERIAL_PALACE_ENTRANCE = "Imperial Palace (Entrance)"
-    IMPERIAL_PALACE="Imperial Palace"
+    IMPERIAL_PALACE = "Imperial Palace"
 
     ### Small Size
     IMPERIAL_PALACE_SMALL_ENTRANCE = "Imperial Palace (Small Size - Entrance)"
@@ -200,8 +207,7 @@ class RegionNames(StrEnum):
     IMPERIAL_PALACE_POISON_SOZU = "Imperial Palace (Small Size - Poison Sōzu Room)"
     IMPERIAL_PALACE_EMPERORS_ROOM = "Imperial Palace (Small Size - Emperor's Bedroom)"
     IMPERIAL_PALACE_WEST_BEAM = "Imperial Palace (Small Size - West Beam)"
-    IMPERIAL_PALACE_INSIDE_EMPEROR="Imperial Palace (Small Size - Inside the Emperor's Body)"
-
+    IMPERIAL_PALACE_INSIDE_EMPEROR = "Imperial Palace (Small Size - Inside the Emperor's Body)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
@@ -226,6 +232,7 @@ class MapIds(Enum):
     RIVER_OF_THE_HEAVENS = 0x122
     SEIAN_ARISTORATIC = 0x200
     SEIAN_COMMONERS = 0x201
+    HIMIKO_PALACE = 0x202
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207
