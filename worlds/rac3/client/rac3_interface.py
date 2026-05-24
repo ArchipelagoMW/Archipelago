@@ -16,7 +16,8 @@ from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA, SAVE_DATA
 from worlds.rac3.constants.data.item import (armor_data, cheat_data, equipable_data, gadget_data, infobot_data,
                                              ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID, non_prog_weapon_data,
-                                             PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data)
+                                             PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data,
+                                             quick_selectable_data)
 from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION_TO_INFOBOT_FLAG,
                                                  RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA, REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
@@ -909,7 +910,7 @@ class Rac3Interface(GameInterface):
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write32(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
-        if name in equipable_data.keys() and self.UnlockItem[name].status == 1:
+        if name in quick_selectable_data.keys() and self.UnlockItem[name].status == 1:
             self.update_equip(name)
 
     def weapon_level_up(self, weapon_name: str):
@@ -945,14 +946,15 @@ class Rac3Interface(GameInterface):
 
     def update_equip(self, name: str):
         """Equip the most recently collected weapon/gadget, update recent uses"""
-        if equipable_data[name].ID:
-            self._write8(RAC3STATUS.LAST_USED_2, self.last_used_1)
-            self._write8(RAC3STATUS.LAST_USED_1, self.last_used_0)
-            self._write8(RAC3STATUS.LAST_USED_0, equipable_data[name].ID)
-            self._write8(RAC3STATUS.EQUIPPED, equipable_data[name].ID)
+        if quick_selectable_data[name].ID:
+            if name in equipable_data.keys():
+                self._write8(RAC3STATUS.LAST_USED_2, self.last_used_1)
+                self._write8(RAC3STATUS.LAST_USED_1, self.last_used_0)
+                self._write8(RAC3STATUS.LAST_USED_0, equipable_data[name].ID)
+                self._write8(RAC3STATUS.EQUIPPED, equipable_data[name].ID)
             for slot in QUICK_SELECT_LIST:
                 if not self._read8(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS):
-                    self._write8(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS, equipable_data[name].ID)
+                    self._write8(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS, quick_selectable_data[name].ID)
                     break
 
     ###################

@@ -20,3 +20,4 @@ class RAC3ITEMTAG:
     WEAPON_UPGRADE = "Weapon Upgrade"
     CLANK = "Clank Packs"
     CHEAT = "Cheat Codes"
+    QUICK_SELECTABLE = "Quick Selectable"
