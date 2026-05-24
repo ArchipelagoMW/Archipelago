@@ -29,3 +29,5 @@ class LocationType(Enum):
     # Shop item slot
     SHOP = 16,
     FISHING_MINIGAME = 17
+    #Chest that can only be opened by Issun in Tiny size
+    LOCKED_CHEST = 18

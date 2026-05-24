@@ -181,12 +181,27 @@ class RegionNames(StrEnum):
     SUNKEN_SHIP_SE_LOW = "Sunken Ship (Southeast Room, Low water)"
     SUNKEN_SHIP_E_HALLWAY_LOW = "Sunken Ship (East Hallway Low water)"
     SUNKEN_SHIP_HANDS_LOW = "Sunken Ship (Hands room Low water)"
-    SUNKEN_SHIP_SE_CHESTS="Sunken Ship (Southeast Room Chests)"
-    SUNKEN_SHIP_TREASURE="Sunken Ship (Treasure Room)"
-    SUNKEN_SHIP_S_LEDGE="Sunken Ship (Southern room ledge)"
+    SUNKEN_SHIP_SE_CHESTS = "Sunken Ship (Southeast Room Chests)"
+    SUNKEN_SHIP_TREASURE = "Sunken Ship (Treasure Room)"
+    SUNKEN_SHIP_S_LEDGE = "Sunken Ship (Southern room ledge)"
 
     ## IMPERIAL PALACE
+    ### Regular Size
     IMPERIAL_PALACE_ENTRANCE = "Imperial Palace (Entrance)"
+    IMPERIAL_PALACE="Imperial Palace"
+
+    ### Small Size
+    IMPERIAL_PALACE_SMALL_ENTRANCE = "Imperial Palace (Small Size - Entrance)"
+    IMPERIAL_PALACE_FEET_HELL = "Imperial Palace (Small Size - Feet Hell)"
+    IMPERIAL_PALACE_WEST_CAVE = "Imperial Palace (Small Size - West cave after lockjaw)"
+    IMPERIAL_PALACE_SPIDER_CAVE = "Imperial Palace (Small Size - Spider Cave)"
+    IMPERIAL_PALACE_SPIDER_CAVE_TOP = "Imperial Palace (Small Size - Spider Cave Top Ledges)"
+    IMPERIAL_PALACE_FLASK_ROOM = "Imperial Palace (Small Size - Mist Flask Room)"
+    IMPERIAL_PALACE_POISON_SOZU = "Imperial Palace (Small Size - Poison Sōzu Room)"
+    IMPERIAL_PALACE_EMPERORS_ROOM = "Imperial Palace (Small Size - Emperor's Bedroom)"
+    IMPERIAL_PALACE_WEST_BEAM = "Imperial Palace (Small Size - West Beam)"
+    IMPERIAL_PALACE_INSIDE_EMPEROR="Imperial Palace (Small Size - Inside the Emperor's Body)"
+
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
@@ -213,6 +228,7 @@ class MapIds(Enum):
     SEIAN_COMMONERS = 0x201
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
+    IMPERIAL_PALACE_SMALL = 0x207
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03

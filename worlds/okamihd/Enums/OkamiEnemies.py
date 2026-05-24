@@ -45,7 +45,10 @@ class OkamiEnemies(Enum):
     ICE_LIPS = EnnemyData(0x53, "Ice Lips", 1)
     JIRO = EnnemyData(0x13, "Jiro", 2)
     SABURO = EnnemyData(0x14, "Saburo", 2)
-    ICHIRO = EnnemyData(0x12, "Ichiro", 2,requires_slash=True)
+    ICHIRO = EnnemyData(0x12, "Ichiro", 2, requires_slash=True)
+    THUNDER_DOOM_MIRROR = EnnemyData(0x5d, "Thunder Doom Mirror", 2)
+    WIND_DOOM_MIRROR = EnnemyData(0x5c, "Wind Doom Mirror", 2, required_techniques=[BrushTechniques.VEIL_OF_MIST])
+    BLIGHT = EnnemyData(0x7c, "Blight", 2, requires_slash=True)
 
     @staticmethod
     def list():

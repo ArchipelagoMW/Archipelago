@@ -27,7 +27,7 @@ exits = {
         ExitData(RegionNames.SEIAN_CITY_CLOCK_TOWER, one_way=True,
                  has_events=["Sei-an City (Aristocratic Quarter) - Climb clock tower"]),
         ExitData(RegionNames.SEIAN_CITY_ARISTOCRATIC, loading_screen=False,
-                 has_events=["Inside the Emperor - Defeat Blight"]),
+                 has_events=["Imperial Palace - Defeat Blight"]),
         ExitData(RegionNames.IMPERIAL_PALACE_ENTRANCE)
     ],
     RegionNames.SEIAN_CITY_CLOCK_TOWER: [
