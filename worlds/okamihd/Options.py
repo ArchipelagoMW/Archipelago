@@ -19,7 +19,7 @@ class NightTimeChecksRequireCrescent(Toggle):
     """Makes all nighttime checks logically require Crescent.
 
     Currently included:
-    - All buried chests
+    - All buried chests except the ones under leaf piles
     - Bakigami
     - Hayabusa"""
     display_name = "Night time checks require crescent"
