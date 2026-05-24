@@ -297,7 +297,7 @@ class BlasphemousWorld(World):
             "ShuffleDash": bool(self.options.dash_shuffle.value),
             "ShuffleWallClimb": bool(self.options.wall_climb_shuffle.value),
             
-            "ShuffleSwordSkills": bool(self.options.wall_climb_shuffle.value),
+            "ShuffleSwordSkills": bool(self.options.skill_randomizer.value),
             "ShuffleThorns": thorns,
             "JunkLongQuests": bool(self.options.skip_long_quests.value),
             "StartWithWheel": bool(self.options.start_wheel.value),
