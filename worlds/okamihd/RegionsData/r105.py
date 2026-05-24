@@ -62,9 +62,9 @@ locations = {
     },
     RegionNames.CITY_CHECKPOINT_RIVER: {
         "City Checkpoint - Southernmost buried chest on river's edge ": LocData(
-            container_check_id(MapIds.CITY_CHECKPOINT, 8)),
+            container_check_id(MapIds.CITY_CHECKPOINT, 8),type=LocationType.BURIED_CHEST),
         "City Checkpoint - Buried chest on river's edge South near waterfall ": LocData(
-            container_check_id(MapIds.CITY_CHECKPOINT, 9)),
+            container_check_id(MapIds.CITY_CHECKPOINT, 9),type=LocationType.BURIED_CHEST),
         "City Checkpoint - Burning chest on river's edge South near waterfall ": LocData(
             container_check_id(MapIds.CITY_CHECKPOINT, 12), type=LocationType.BURNING_CHEST),
         # Special Rule for the river access - You need either Water Tablet or (Waterlily and Gaelstrom)
