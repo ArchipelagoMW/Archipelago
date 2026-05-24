@@ -44,7 +44,7 @@ locations = {
         #Find out which house
         "Taka Pass - Chest under leaf pile behind Gutters' house": LocData(container_check_id(MapIds.HEALED_TAKA,43), type=LocationType.BURIED_UNDER_LEAF_PILE),
         "Taka Pass - Chest under leaf pile near mermaid spring": LocData(container_check_id(MapIds.HEALED_TAKA,44), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Taka Pass - Chest under leaf pile near city checkpoint exit #2": LocData(container_check_id(MapIds.HEALED_TAKA,59), type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Taka Pass - Chest under leaf pile near agata forest entrance": LocData(container_check_id(MapIds.HEALED_TAKA,59), type=LocationType.BURIED_UNDER_LEAF_PILE),
         "Taka Pass - Chest under leaf pile near moles gang": LocData(container_check_id(MapIds.HEALED_TAKA,61),type=LocationType.BURIED_UNDER_LEAF_PILE),
     }
 

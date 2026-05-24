@@ -38,11 +38,15 @@ night_time_check_rule: Rule = Has(BrushTechniques.CRESCENT, options=[
 
 moon_cave_fire_rule: Rule = Or(has_portable_fire_source,
                                HasAll("Moon Cave - 3F Push the ball", BrushTechniques.INFERNO))
+#Fireburst doesn't light the canons' fuse.
+moon_cave_canon_rule: Rule = And(
+    Or(HasAny(DivineInstruments.SOLAR_FLARE.value.item_name, "Moon Cave - 3F Push the ball"),
+       Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
 
 moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source,
                                   HasAll("Moon Cave - 4F Move Fireball", BrushTechniques.INFERNO))
 # FIXME Once we've figured out which story trigger can spawn the thunder source here
-gen_thunder_chest_rule:Rule = has_portable_thunder_source
+gen_thunder_chest_rule: Rule = has_portable_thunder_source
 
 
 def has_divine_instrument_tier(tier: int) -> Rule:
