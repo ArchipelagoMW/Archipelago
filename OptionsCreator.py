@@ -262,12 +262,17 @@ class OptionsCreator(ThemedApp):
     game_label: MDLabel
     current_game: str
     options: typing.Dict[str, typing.Any]
+    advanced_widgets: list[Widget]
+    advanced_toggle: ToggleButton
+    advanced_visible: bool
 
     def __init__(self):
         self.title = self.base_title + " " + Utils.__version__
         self.icon = r"data/icon.png"
         self.current_game = ""
         self.options = {}
+        self.advanced_widgets = []
+        self.advanced_visible = False
         super().__init__()
 
     @staticmethod
@@ -565,6 +570,7 @@ class OptionsCreator(ThemedApp):
 
     def create_options_panel(self, world_button: WorldButton):
         self.option_layout.clear_widgets()
+        self.advanced_widgets.clear()
         self.options.clear()
         cls: typing.Type[World] = world_button.world_cls
 
@@ -607,10 +613,11 @@ class OptionsCreator(ThemedApp):
 
             for group, options in groups.items():
                 options = [(name, option) for name, option in options
-                           if name and option.visibility & Visibility.simple_ui]
+                           if name and option.visibility & (Visibility.simple_ui | Visibility.complex_ui)]
                 if not options:
                     continue  # Game Options can be empty if every other option is in another group
-                    # Can also have an option group of options that should not render on simple ui
+                    # Can also have an option group of options that should not render on simple or complex ui
+                advanced_group: bool = not any(option.visibility & Visibility.simple_ui for _, option in options)
                 group_item = MDExpansionPanel(size_hint_y=None)
                 group_header = MDExpansionPanelHeader(MDListItem(MDListItemSupportingText(text=group),
                                                                  TrailingPressedIconButton(icon="chevron-right",
@@ -642,10 +649,16 @@ class OptionsCreator(ThemedApp):
                 group_box = ScrollBox()
                 group_box.layout.orientation = "vertical"
                 group_box.layout.spacing = dp(3)
+                if advanced_group:
+                    self.advanced_widgets.append(group_item)
                 for name, option in options:
-                    group_content.add_widget(self.create_option(option, name, cls))
+                    widg = self.create_option(option, name, cls)
+                    group_content.add_widget(widg)
+                    if not (option.visibility & Visibility.simple_ui):
+                        self.advanced_widgets.append(widg)
                 expansion_box.layout.add_widget(group_item)
             self.option_layout.add_widget(expansion_box)
+        self.prepare_advanced()
         self.game_label.text = f"Game: {self.current_game}"
 
     @staticmethod
@@ -659,9 +672,29 @@ class OptionsCreator(ThemedApp):
                 chevron
             ) if not panel.is_open else panel.set_chevron_up(chevron)
 
+    def prepare_advanced(self):
+        for widg in self.advanced_widgets:
+            widg.saved_parent = widg.parent
+            widg.saved_index = widg.parent.children.index(widg)
+        if not self.advanced_visible:
+            self.update_advanced()
+
+    def update_advanced(self):
+        if self.advanced_visible:
+            for widg in self.advanced_widgets:
+                if not widg.parent:
+                    widg.saved_parent.add_widget(widg, index=widg.saved_index)
+        else:
+            for widg in self.advanced_widgets:
+                if widg.parent:
+                    widg.parent.remove_widget(widg)
+
+
     def build(self):
         self.set_colors()
         self.options = {}
+        from kivy.factory import Factory
+        Factory.register('AdvToggleButton', cls=ToggleButton)
         self.container = Builder.load_file(Utils.local_path("data/optionscreator.kv"))
         self.root = self.container
         self.main_layout = self.container.ids.main
@@ -696,6 +729,17 @@ class OptionsCreator(ThemedApp):
         self.game_label = self.container.ids.game
         self.name_input = self.container.ids.player_name
         self.option_layout = self.container.ids.options
+
+        def toggle_advanced(adv_btn: ToggleButton):
+            self.advanced_visible = not self.advanced_visible
+            if self.advanced_visible:
+                adv_btn.state = "down"
+            else:
+                adv_btn.state = "normal"
+            self.update_advanced()
+
+        self.advanced_toggle = self.container.ids.advanced_toggle
+        self.advanced_toggle.bind(on_release=toggle_advanced)
 
         def set_height(instance, value):
             instance.height = value[1]
