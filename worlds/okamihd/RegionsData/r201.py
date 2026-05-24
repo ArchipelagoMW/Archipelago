@@ -11,8 +11,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.SEIAN_CITY_COMMONERS_DRY: [
-        # FIXME - Replace later
-        ExitData(RegionNames.SEIAN_CITY_COMMONERS, has_events=["Inside the Emperor - Defeat Blight"],
+        ExitData(RegionNames.SEIAN_CITY_COMMONERS, has_events=["Imperial Palace - Defeat Blight"],
                  loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_WEAPON_SHOP,loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_TOOL_SHOP,loading_screen=False),
@@ -33,8 +32,6 @@ events = {
   
     RegionNames.SEIAN_CITY_COMMONERS_DRY: {
         "Sei-an City (Commoner's Quarter) - Dig water source" :EventData(type=LocationType.DIGGING_MINIGAME_LATER),
-        # FIXME: temporary placed here to ensure everything is accessible
-        "Inside the Emperor - Defeat Blight": EventData()
     },
     RegionNames.SEIAN_CITY_COMMONERS: {
         "Sei-an City (Commoner's Quarter) - Blow up wall to southwest building": EventData(cherry_bomb_level=1),
