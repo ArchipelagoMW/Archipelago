@@ -29,8 +29,9 @@ exits = {
 }
 events = {
     RegionNames.CITY_CHECKPOINT_TAKA: {
-        # Not setting any logic for this event yet, as we'll probably handle it in a specific way.
-        "City Checkpoint - Activate the Drawbridge": EventData()
+        # Not setting any more logic for this event yet, as we'll probably handle it in a specific way.
+        "City Checkpoint - Activate the Drawbridge": EventData(required_items_events=["Moon Cave - Defeat Orochi"],
+                                                               required_brush_techniques=[BrushTechniques.INFERNO])
     },
     RegionNames.CITY_CHECKPOINT_RYOSHIMA: {
         "City Checkpoint - Restore Cursed Patches on Ryoshima side": EventData(
