@@ -30,7 +30,7 @@ import re
 from urllib.parse import urlparse
 from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList,
-                     OptionCounter, Visibility)
+                     OptionCounter, Visibility, ItemLinks)
 
 
 def validate_url(x):
@@ -522,7 +522,10 @@ class OptionsCreator(ThemedApp):
         label_box.add_widget(label_anchor)
 
         option_base.add_widget(label_box)
-        if issubclass(option, NamedRange):
+        option_invalid = False
+        if issubclass(option, ItemLinks):
+            option_invalid = True
+        elif issubclass(option, NamedRange):
             option_base.add_widget(self.create_named_range(option, name))
         elif issubclass(option, Range):
             option_base.add_widget(self.create_range(option, name))
@@ -537,6 +540,9 @@ class OptionsCreator(ThemedApp):
         elif any(issubclass(option, cls) for cls in (OptionSet, OptionList, OptionCounter)):
             option_base.add_widget(self.create_option_set_list_counter(option, name, world))
         else:
+            option_invalid = True
+        
+        if option_invalid:
             option_base.add_widget(MDLabel(text="This option isn't supported by the option creator.\n"
                                                 "Please edit your yaml manually to set this option."))
 
