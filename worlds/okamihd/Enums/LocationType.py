@@ -28,4 +28,10 @@ class LocationType(Enum):
     FROZEN_CHEST= 15,
     # Shop item slot
     SHOP = 16,
-
+    FISHING_MINIGAME = 17
+    # Chest that can only be opened by Issun in Tiny size
+    LOCKED_CHEST = 18
+    THUNDER_CHEST = 19
+    # Chest with element Sources that depend on special rules; Don't apply any requirments except the special rule one
+    THUNDER_CHEST_SPECIAL_SOURCE = 20
+    FROZEN_CHEST_SPECIAL_SOURCE = 21
