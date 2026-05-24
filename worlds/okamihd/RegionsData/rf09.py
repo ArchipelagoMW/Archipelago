@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
 
+from rule_builder.rules import True_
 from ..Enums.BrushTechniques import BrushTechniques
-from ..Types import ExitData, EventData, LocData
+from ..Enums.WarpType import WarpType
+from ..Types import ExitData, EventData, LocData, WarpData
 from ..Enums.RegionNames import RegionNames
 
 if TYPE_CHECKING:
@@ -10,10 +12,10 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.CURSED_RYOSHIMA_COAST: [
         ExitData(RegionNames.CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE,
-                 has_events=["Ryoshima Coast - Open Guardian Sapling Cave"],loading_screen=False)
+                 has_events=["Ryoshima Coast - Open Guardian Sapling Cave"], loading_screen=False)
     ],
-    RegionNames.CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE:[
-        ExitData(RegionNames.RYOSHIMA_COAST,has_events=["Ryoshima Coast - Bloom the Guardian Sapling"],one_way=True)
+    RegionNames.CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE: [
+        ExitData(RegionNames.RYOSHIMA_COAST, has_events=["Ryoshima Coast - Bloom the Guardian Sapling"], one_way=True)
     ]
 }
 events = {
@@ -29,4 +31,9 @@ events = {
     }
 }
 locations = {
+}
+warps = {
+    RegionNames.CURSED_RYOSHIMA_COAST: [
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
+    ]
 }

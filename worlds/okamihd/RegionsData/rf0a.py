@@ -21,13 +21,14 @@ exits = {
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_WEST_PIER, one_way=True, loading_screen=False),
         ExitData(RegionNames.ANKOKU_TEMPLE),
-        ExitData(RegionNames.FAWNS_HOUSE, has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"])
+        ExitData(RegionNames.FAWNS_HOUSE, has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"]),
+        ExitData(RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON, one_way=True,
+                 has_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False)
     ],
     RegionNames.RYOSHIMA_COAST_SEA: [
         ExitData(RegionNames.RYOSHIMA_COAST_DOJO, needs_long_swim=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_SHIP_TOP, needs_long_swim=True, loading_screen=False),
-        ExitData(RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON, one_way=True,
-                 has_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False)
+
     ],
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: [
         ExitData(RegionNames.RYOSHIMA_COAST, has_events=["Ryoshima Coast - Climb back to main area"], one_way=True,
@@ -46,7 +47,7 @@ exits = {
         ExitData(RegionNames.SEIAN_CITY_COMMONERS_DRY)
     ],
     RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON: [
-        ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False),
+        ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False,needs_long_swim=True),
         ExitData(RegionNames.SUNKEN_SHIP_ENTRANCE)
     ],
     RegionNames.RYOSHIMA_COAST_WEST_PIER: [
@@ -58,7 +59,7 @@ exits = {
 events = {
     RegionNames.RYOSHIMA_COAST: {
         "Ryoshima Coast - Climb catwalk tower": EventData(required_brush_techniques=[BrushTechniques.CATWALK]),
-        "Ryoshima Coast - Open Lunar Lagoon": EventData(required_items_events=["Ryoshima Coast - Buy Holy Eagle"],
+        "Ryoshima Coast - Open Lunar Lagoon": EventData(required_items_events=["Holy Eagle"],
                                                         required_brush_techniques=[BrushTechniques.CRESCENT]),
         "Ryoshima Coast - Open Shortcut To Mme Fawn's": EventData(),
         # FIXME: Fill Enemies
@@ -69,8 +70,8 @@ events = {
     },
     RegionNames.RYOSHIMA_COAST_DOJO: {
         # Convert these to items at some point when dojos techs/shops are randomizable
-        "Ryoshima Coast - Buy Holy Eagle": EventData(),
-        "Ryoshima Coast - Buy Digging Champ": EventData()
+        "Ryoshima Coast - Buy Holy Eagle": EventData(event_item_name="Holy Eagle"),
+        "Ryoshima Coast - Buy Digging Champ": EventData(event_item_name="Digging Champ")
     },
     RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER: {
         "Ryoshima Coast - Mandatory Ubume Encounter": EventData(mandatory_enemies=[OkamiEnemies.UBUME])
@@ -143,7 +144,7 @@ locations = {
                                                                  type=LocationType.STONE_BURIED_CHEST),
         "Ryoshima Coast - Chest on top of dojo Lunar Turret": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 29),
                                                                       required_items_events=[
-                                                                          "Ryoshima Coast - Buy Holy Eagle"]),
+                                                                          "Holy Eagle"]),
         "Ryoshima Coast - Freestanding chest on bottom of dojo island": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 30))
     },
@@ -201,6 +202,5 @@ warps = {
         WarpData(type=WarpType.MERMAID_SPRING,
                  trigger_warp_to=Has("Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance"),
                  trigger_warp_from=Has("Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance")),
-        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
     ]
 }

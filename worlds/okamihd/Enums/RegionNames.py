@@ -164,15 +164,29 @@ class RegionNames(StrEnum):
     SEIAN_CITY_CLOCK_TOWER = "Sei-an City (Clock tower)"
     SEIAN_CITY_ARISTOCRATIC = "Sei-an City Aristocratic Quarter"
     SEIAN_CITY_HIMIKO = "Sei-an City (Himiko's palace entrance)"
-    SEIAN_CITY_TREASURE_WEST= "Sei-an City (Himiko's palace West Treasure Room)"
+    SEIAN_CITY_TREASURE_WEST = "Sei-an City (Himiko's palace West Treasure Room)"
     SEIAN_CITY_TREASURE_EAST = "Sei-an City (Himiko's palace East Treasure Room)"
 
-
     ## SUNKEN SHIP
-    SUNKEN_SHIP_ENTRANCE="Sunken Ship (Entrance)"
+    SUNKEN_SHIP_ENTRANCE = "Sunken Ship (Entrance)"
+    SUNKEN_SHIP_SW_LOW = "Sunken Ship (Southwest Room, Low water)"
+    SUNKEN_SHIP_BONES_LOW = "Sunken Ship (Bone Pile Room, Low water)"
+    SUNKEN_SHIP_NW_LOW = "Sunken Ship (Northwest Room, Low water)"
+    SUNKEN_SHIP_SW_HIGH = "Sunken Ship (Southwest Room, High water)"
+    SUNKEN_SHIP_BONES_HIGH = "Sunken Ship (Bone Pile Room, High water)"
+    SUNKEN_SHIP_NW_HIGH = "Sunken Ship (Northwest Room, High water)"
+    SUNKEN_SHIP_SE_HIGH = "Sunken Ship (Southeast Room, High water)"
+    SUNKEN_SHIP_E_HALLWAY_HIGH = "Sunken Ship (East Hallway High water)"
+    SUNKEN_SHIP_HANDS_HIGH = "Sunken Ship (Hands room High water)"
+    SUNKEN_SHIP_SE_LOW = "Sunken Ship (Southeast Room, Low water)"
+    SUNKEN_SHIP_E_HALLWAY_LOW = "Sunken Ship (East Hallway Low water)"
+    SUNKEN_SHIP_HANDS_LOW = "Sunken Ship (Hands room Low water)"
+    SUNKEN_SHIP_SE_CHESTS="Sunken Ship (Southeast Room Chests)"
+    SUNKEN_SHIP_TREASURE="Sunken Ship (Treasure Room)"
+    SUNKEN_SHIP_S_LEDGE="Sunken Ship (Southern room ledge)"
 
     ## IMPERIAL PALACE
-    IMPERIAL_PALACE_ENTRANCE="Imperial Palace (Entrance)"
+    IMPERIAL_PALACE_ENTRANCE = "Imperial Palace (Entrance)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
@@ -197,8 +211,8 @@ class MapIds(Enum):
     RIVER_OF_THE_HEAVENS = 0x122
     SEIAN_ARISTORATIC = 0x200
     SEIAN_COMMONERS = 0x201
-    SUNKEN_SHIP= 0x205
-    IMPERIAL_PALACE= 0x206
+    SUNKEN_SHIP = 0x205
+    IMPERIAL_PALACE = 0x206
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03
