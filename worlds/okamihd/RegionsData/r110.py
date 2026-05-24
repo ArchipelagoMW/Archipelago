@@ -6,7 +6,7 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Rules import has_soup_ingerdients, moon_cave_fire_rule, moon_cave_4f_fire_rule
+from ..Rules import has_soup_ingerdients, moon_cave_fire_rule, moon_cave_4f_fire_rule, moon_cave_canon_rule
 from ..Types import ExitData, LocData, EventData
 
 if TYPE_CHECKING:
@@ -145,7 +145,7 @@ events = {
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK: {
         "Moon Cave - Mandatory Ogre Encounter": EventData(
             mandatory_enemies=[OkamiEnemies.RED_IMP, OkamiEnemies.BUD_OGRE]),
-        "Moon Cave - Get Ogre Liver": EventData(event_item_name="Ogre Liver")
+        "Moon Cave - Get Ogre Liver": EventData(event_item_name="Ogre Liver",required_items_events=["Moon Cave - Mandatory Ogre Encounter"])
     },
     RegionNames.MOON_CAVE_2F_GEYSER_RAFTER: {
         "Moon cave - 2F rafter's geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT])
@@ -215,8 +215,7 @@ events = {
                                                     required_items_events=['Moon Cave - 4F Fire the canon!']),
     },
     RegionNames.MOON_CAVE_4F_CANON: {
-        "Moon Cave - 4F Fire the canon!": EventData(special_rule=moon_cave_fire_rule),
-
+        "Moon Cave - 4F Fire the canon!": EventData(special_rule=moon_cave_canon_rule),
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Move Fireball": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
