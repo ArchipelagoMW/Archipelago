@@ -215,14 +215,12 @@ events = {
                                                     required_items_events=['Moon Cave - 4F Fire the canon!']),
     },
     RegionNames.MOON_CAVE_4F_CANON: {
-        "Moon Cave - 4F Fire the canon!": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
-                                                    special_rule=moon_cave_fire_rule),
+        "Moon Cave - 4F Fire the canon!": EventData(special_rule=moon_cave_fire_rule),
 
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Move Fireball": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
-        "Moon Cave - 4F Melt Ice Blocks": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
-                                                    special_rule=moon_cave_4f_fire_rule),
+        "Moon Cave - 4F Melt Ice Blocks": EventData(special_rule=moon_cave_4f_fire_rule),
         "Moon Cave - 4F Black Demon Horn Torii": EventData(mandatory_enemies=[OkamiEnemies.BLACK_IMP,OkamiEnemies.RED_IMP],
                                                            required_items_events=["Moon Cave - 4F Melt Ice Blocks"]),
         "Moon Cave - 4F Get Black Demon Horn": EventData(
@@ -241,16 +239,14 @@ locations = {
                                                                 required_items_events=[
                                                                     "Moon Cave - 1F Free Ajimi from soup"]),
         "Moon Cave - 1F Frozen Chest after Black Demon Horn": LocData(container_check_id(MapIds.MOON_CAVE, 7),
-                                                                   type=LocationType.FROZEN_CHEST, special_rule=moon_cave_fire_rule,required_items_events=["Black Demon Horn"]),
+                                                                   type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE, special_rule=moon_cave_fire_rule,required_items_events=["Black Demon Horn"]),
         "Moon Cave - 1F Chest after fire eye": LocData(container_check_id(MapIds.MOON_CAVE, 8),
                                                        required_items_events=["Fire Eye"]),
     },
     RegionNames.MOON_CAVE_B1F_LAKE: {
         "Moon Cave - B1F Chest on other side of Lake": LocData(container_check_id(MapIds.MOON_CAVE, 13),
                                                                needs_long_swim=True),
-        "Moon Cave - B1F Chest behind ice": LocData(container_check_id(MapIds.MOON_CAVE, 14),
-                                                    required_items_events=[BrushTechniques.INFERNO],
-                                                    needs_long_swim=True, special_rule=moon_cave_fire_rule)
+        "Moon Cave - B1F Chest behind ice": LocData(container_check_id(MapIds.MOON_CAVE, 14),needs_long_swim=True, special_rule=moon_cave_fire_rule)
     },
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE: {
         "Moon Cave - 1F locked cave Treasure bud behind bombable wall": LocData(
@@ -276,27 +272,27 @@ locations = {
     },
     RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND: {
         "Moon Cave - 3F Frozen Chest near merchant": LocData(container_check_id(MapIds.MOON_CAVE, 12),
-                                                             type=LocationType.FROZEN_CHEST,
+                                                             type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
                                                              special_rule=moon_cave_fire_rule),
 
     },
     RegionNames.MOON_CAVE_3F_FIRE_EYE: {
         "Moon Cave - 3F Left Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 19),
-                                                                        type=LocationType.FROZEN_CHEST,
+                                                                        type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
                                                                         special_rule=moon_cave_fire_rule),
         "Moon Cave - 3F Middle Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 17),
-                                                                          type=LocationType.FROZEN_CHEST,
+                                                                          type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
                                                                           special_rule=moon_cave_fire_rule),
         "Moon Cave - 3F Right Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 18),
-                                                                         type=LocationType.FROZEN_CHEST,
+                                                                         type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
                                                                          special_rule=moon_cave_fire_rule),
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Lower ledge Frozen Chest": LocData(container_check_id(MapIds.MOON_CAVE, 20),
-                                                           type=LocationType.FROZEN_CHEST,
+                                                           type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
                                                            special_rule=moon_cave_4f_fire_rule),
         "Moon Cave - 4F Upper ledge Frozen Chest": LocData(container_check_id(MapIds.MOON_CAVE, 21),
-                                                           type=LocationType.FROZEN_CHEST,
+                                                           type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
                                                            special_rule=moon_cave_4f_fire_rule)
     }
 }
