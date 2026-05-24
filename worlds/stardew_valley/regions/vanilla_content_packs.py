@@ -406,7 +406,7 @@ ginger_island_connections = [
     ConnectionData(
         Entrance.volcano_5_to_island_north,
         Region.island_north,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.IS_ONE_WAY | GroupFlag.DOOR | GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(Entrance.climb_to_volcano_10, Region.volcano_floor_10),
     ConnectionData(
