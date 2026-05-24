@@ -277,6 +277,7 @@ item_table = {
     **bitable_items,
     **useful_items,
     **filler_items,
+    **quest_items,
     **event_items,
     **weapons_items,
     **progressive_weapons,

@@ -12,15 +12,22 @@ from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
     from . import OkamiWorld
 
-has_portable_fire_source: Rule = Has(DivineInstruments.SOLAR_FLARE.value.item_name)
+has_portable_fire_source: Rule = Or(And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
+                                           Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO)),
+                                    Has(BrushTechniques.FIREBURST))
 
-has_portable_thunder_source: Rule = Has(DivineInstruments.THUNDER_EDGE.value.item_name)
+has_portable_thunder_source: Rule = Or(And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
+                                              Has("Progressive Sword", 5)), Has(BrushTechniques.THUNDERSTORM)),
+                                       Has(BrushTechniques.THUNDERBOLT))
 
-has_portable_ice_source: Rule = Has(DivineInstruments.TUNDRA_BEADS.value.item_name)
+has_portable_ice_source: Rule = Or(And(Or(Has(DivineInstruments.TUNDRA_BEADS.value.item_name),
+                                          Has("Progressive Rosary", 5)), Has(BrushTechniques.BLIZZARD)),
+                                   Has(BrushTechniques.ICESTORM))
 
 gale_shrine_access: Rule = HasGroup("canine_warriors", count=FromOption(RequiredDoggorbs))
 
 moon_cave_access: Rule = Has("Serpent Crystal")
+
 
 # Probably should be removed;Directly add it to the checks that require it.
 def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount: int) -> bool:
@@ -30,9 +37,13 @@ def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount: in
 night_time_check_rule: Rule = Has(BrushTechniques.CRESCENT, options=[
     OptionFilter(NightTimeChecksRequireCrescent, NightTimeChecksRequireCrescent.option_true)], filtered_resolution=True)
 
-moon_cave_fire_rule: Rule = Or(has_portable_fire_source, Has("Moon Cave - 3F Push the ball"))
+moon_cave_fire_rule: Rule = Or(has_portable_fire_source,
+                               HasAll("Moon Cave - 3F Push the ball", BrushTechniques.INFERNO))
 
-moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source, Has("Moon Cave - 4F Move Fireball"))
+moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source,
+                                  HasAll("Moon Cave - 4F Move Fireball", BrushTechniques.INFERNO))
+# FIXME Once we've figured out which story trigger can spawn the thunder source here
+gen_thunder_chest_rule:Rule = has_portable_thunder_source
 
 
 def has_divine_instrument_tier(tier: int) -> Rule:
@@ -75,7 +86,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
     ## RULE BUILDER REWORK:
     # - FOR EACH LOCATION, BUILD AN ARRAY OF RULES THAT WILL BE ADDED TO THE world.set_rule(loc,AND(*Rules))
 
-    debug_rule=False
+    debug_rule = False
 
     rules: List[Rule] = []
 
@@ -111,7 +122,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.STONE_BURIED_CHEST:
             # Digging Champ Requirement
-            rules.append(Has("Ryoshima Coast - Buy Digging Champ"))
+            rules.append(Has("Digging Champ"))
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.BURNING_CHEST:
@@ -133,6 +144,10 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
                                     BrushTechniques.GALESTORM]
         case LocationType.FROZEN_CHEST:
             required_techinques += [BrushTechniques.INFERNO]
+        case LocationType.FISHING_MINIGAME:
+            required_power_slash_level = max(required_power_slash_level, 1)
+        case LocationType.THUNDER_CHEST:
+            required_techinques += [BrushTechniques.THUNDERBOLT]
 
         case _:
             required_techinques += []
@@ -156,14 +171,15 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         # Append special rule if it's defined
         rules.append(data.special_rule)
 
-
     # Set the location to require all concatenated rule
     if len(rules) > 0:
         final_rule = And(*rules)
         world.set_rule(loc, final_rule)
         if debug_rule:
-            print("[Debug] - Rule for "+ loc.name)
+            print("[Debug] - Rule for " + loc.name)
             print(final_rule)
+
+
 # else:
 #    print("no rule for this check")
 
@@ -176,13 +192,13 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
         rules.append(HasAll(*data.has_events))
 
     if len(rules) > 0:
-
         final_rule = And(*rules)
         world.set_rule(etr, final_rule)
 
 
 def set_completion_rules(world: "OkamiWorld"):
-    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm","Tsuta Ruins - Defeat the spider queen"))
+    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm",
+                                     "Tsuta Ruins - Defeat the spider queen"))
     world.multiworld.completion_condition[world.player] = lambda state: state.has(
         "Moon Cave - Defeat Orochi", world.player)
     return

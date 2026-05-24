@@ -16,6 +16,7 @@ class EnnemyData(NamedTuple):
     requires_slash: bool = False
     requires_bomb: bool = False
 
+
 # Reference https://github.com/whataboutclyde/okami-utils/blob/master/data/enemy_id.yaml
 class OkamiEnemies(Enum):
     GREEN_IMP = EnnemyData(0x03, "Green Imp", 0, BrushTechniques.POWER_SLASH)
@@ -41,7 +42,13 @@ class OkamiEnemies(Enum):
     FIRE_EYE = EnnemyData(0x52, "Fire Eye", 1)
     OROCHI_1 = EnnemyData(0x69, "Orochi (Moon Cave)", 1, required_techniques=[BrushTechniques.WATERSPOUT])
     UBUME = EnnemyData(0x58, "Ubume", 1, required_techniques=[BrushTechniques.GALESTORM])
-    ICE_LIPS = EnnemyData(0x53, "Ice Lips",1)
+    ICE_LIPS = EnnemyData(0x53, "Ice Lips", 1)
+    JIRO = EnnemyData(0x13, "Jiro", 2)
+    SABURO = EnnemyData(0x14, "Saburo", 2)
+    ICHIRO = EnnemyData(0x12, "Ichiro", 2, requires_slash=True)
+    THUNDER_DOOM_MIRROR = EnnemyData(0x5d, "Thunder Doom Mirror", 2)
+    WIND_DOOM_MIRROR = EnnemyData(0x5c, "Wind Doom Mirror", 2, required_techniques=[BrushTechniques.VEIL_OF_MIST])
+    BLIGHT = EnnemyData(0x7c, "Blight", 2, requires_slash=True)
 
     @staticmethod
     def list():

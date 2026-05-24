@@ -40,8 +40,8 @@ class RegionNames(StrEnum):
     SHINSHU_FIELD = "Shinshu Field"
     SHINSHU_FIELD_AGATA_CAVE = "Shinshu Field (Cave to Agata Forest)"
     TAMA_HOUSE = "Tama's house"
-    SHINSHU_PLATEAU="Shinshu Field Plateau"
-    SHINSHU_AGATA_SHORTCUT_LEDGE="Ledge Shortcut From Agata Forest"
+    SHINSHU_PLATEAU = "Shinshu Field Plateau"
+    SHINSHU_AGATA_SHORTCUT_LEDGE = "Ledge Shortcut From Agata Forest"
 
     ## HANA VALLEY
     CURSED_HANA_VALLEY = "Cursed Hana Valley"
@@ -114,35 +114,100 @@ class RegionNames(StrEnum):
     MOON_CAVE_3F_SAND = "Moon Cave (3F Sand room)"
     MOON_CAVE_2F_SAND_PIT = "Moon Cave (2F Sand pit)"
     MOON_CAVE_3F_RAFTERS_AFTER_SAND = "Moon Cave (3F Rafters after sand room)"
-    MOON_CAVE_2F_RAFTERS_CHEST="Moon Cave (2F Chest Rafter)"
+    MOON_CAVE_2F_RAFTERS_CHEST = "Moon Cave (2F Chest Rafter)"
     MOON_CAVE_4F_RAFTERS = "Moon Cave (4F Rafters)"
     MOON_CAVE_4F_CANON = "Moon Cave (4F Canon)"
     MOON_CAVE_4F_AFTER_CANON = "Moon Cave (4F after canon)"
     MOON_CAVE_OROCHI = "Moon Cave (Orochi)"
 
     ## CITY CHECKPOINT
-    CITY_CHECKPOINT_TAKA="City Checkpoint (Taka side)"
-    CITY_CHECKPOINT_DRAWBRIDGE="City Checkpoint Drawbridge"
-    CITY_CHECKPOINT_RYOSHIMA="City Checkpoint (Ryoshima side)"
-    CITY_CHECKPOINT_RIVER="City Checkpoint (River)"
+    CITY_CHECKPOINT_TAKA = "City Checkpoint (Taka side)"
+    CITY_CHECKPOINT_DRAWBRIDGE = "City Checkpoint Drawbridge"
+    CITY_CHECKPOINT_RYOSHIMA = "City Checkpoint (Ryoshima side)"
+    CITY_CHECKPOINT_RIVER = "City Checkpoint (River)"
 
     # Western Nippon
 
     ## RYOSHIMA COAST
-    CURSED_RYOSHIMA_COAST="Cursed Ryoshima Coast"
-    CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE= "Cursed Ryoshima Coast"
-    RYOSHIMA_COAST="Ryoshima Coast"
-    RYOSHIMA_COAST_SEA="Ryoshima Coast (Sea)"
-    RYOSHIMA_COAST_DOJO="Ryoshima Coast (Dojo)"
-    RYOSHIMA_COAST_SHIP_TOP="Ryoshima Coast (Top of Sunken Ship)"
-    RYOSHIMA_COAST_CATWALK_TOWER="Ryoshima Coast (Catwalk Tower)"
-    RYOSHIMA_COAST_SEIAN ="Ryoshima Coast (Near Seian City Entrance)"
-    RYOSHIMA_COAST_SEIAN_ENCOUNTER="Ryoshima Coast (Near Seian City Entrance Encounter)"
-    RYOSHIMA_COAST_LUNAR_LAGOON="Ryoshima Coast (Lunar Lagoon)"
-    RYOSHIMA_COAST_WEST_PIER="Ryoshima Coast (West of Pier)"
-    ANKOKU_TEMPLE="Ankoku Temple"
+    CURSED_RYOSHIMA_COAST = "Cursed Ryoshima Coast"
+    CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE = "Cursed Ryoshima Coast"
+    RYOSHIMA_COAST = "Ryoshima Coast"
+    RYOSHIMA_COAST_SEA = "Ryoshima Coast (Sea)"
+    RYOSHIMA_COAST_DOJO = "Ryoshima Coast (Dojo)"
+    RYOSHIMA_COAST_SHIP_TOP = "Ryoshima Coast (Top of Sunken Ship)"
+    RYOSHIMA_COAST_CATWALK_TOWER = "Ryoshima Coast (Catwalk Tower)"
+    RYOSHIMA_COAST_SEIAN = "Ryoshima Coast (Near Seian City Entrance)"
+    RYOSHIMA_COAST_SEIAN_ENCOUNTER = "Ryoshima Coast (Near Seian City Entrance Encounter)"
+    RYOSHIMA_COAST_LUNAR_LAGOON = "Ryoshima Coast (Lunar Lagoon)"
+    RYOSHIMA_COAST_WEST_PIER = "Ryoshima Coast (West of Pier)"
+    ANKOKU_TEMPLE = "Ankoku Temple"
 
+    ## SEIAN CITY
+    ### COMMONERS QUARTER
+    SEIAN_CITY_COMMONERS = "Sei-an City Commoners' Quarter"
+    SEIAN_CITY_COMMONERS_DRY = "Sei-an City Commoners' Quarter (No water)"
+    SEIAN_CITY_YAMA = "Sei-an City (Yama's restaurant)"
+    SEIAN_CITY_FLOWERS = "Sei-an City (Mr. Flower's house)"
+    SEIAN_CITY_SOUTHWEST = "Sei-an City (Southwest building)"
+    SEIAN_CITY_TAO = "Sei-an City (Tao Troopers Headquarters)"
+    SEIAN_CITY_TOOL_SHOP = "Sei-an City (Tool Shop)"
+    SEIAN_CITY_WEAPON_SHOP = "Sei-an City (Weapon Shop)"
+    SEIAN_CITY_BLOSSOM = "Sei-an City (Blossom's house)"
 
+    ### ARISTOCRATIC QUARTERS
+    SEIAN_CITY_BRIDGE_COMMONERS = "Sei-an City Lake Beewa Bridge (Commoner's Side)"
+    SEIAN_CITY_BRIDGE_ARISTOCRATIC = "Sei-an City Lake Beewa Bridge(Aristocratic Side)"
+    SEIAN_CITY_LECTURE_HALL = "Sei-an City (Lecture Hall)"
+    SEIAN_CITY_ARISTOCRATIC_SICK = "Sei-an City Aristocratic Quarter (Sick)"
+    # Since she's the only one in here to have a name, it's her house now.
+    SEIAN_CITY_OKUNI = "Sei-an City (Okuni's house)"
+    SEIAN_CITY_ARISTOCRATIC_NORTH_EAST = "Sei-an City Aristocratic Quarter (Northeast house)"
+    SEIAN_CITY_CLOCK_TOWER = "Sei-an City (Clock tower)"
+    SEIAN_CITY_ARISTOCRATIC = "Sei-an City Aristocratic Quarter"
+    SEIAN_CITY_HIMIKO = "Sei-an City (Himiko's palace entrance)"
+    SEIAN_CITY_TREASURE_WEST = "Sei-an City (Himiko's palace West Treasure Room)"
+    SEIAN_CITY_TREASURE_EAST = "Sei-an City (Himiko's palace East Treasure Room)"
+    SEIAN_CITY_GUARDS = "Sei-an City (Guards house)"
+    SEIAN_CITY_LAKE = "Sei-an City (Lake Beewa)"
+
+    ## HIMIKO'S PALACE
+    HIMIKO_PALACE = "Himiko's Palace"
+    HIMIKO_CHAMBERS = "Himiko's Palace (Himiko's Chambers)"
+
+    ## SUNKEN SHIP
+    SUNKEN_SHIP_ENTRANCE = "Sunken Ship (Entrance)"
+    SUNKEN_SHIP_SW_LOW = "Sunken Ship (Southwest Room, Low water)"
+    SUNKEN_SHIP_BONES_LOW = "Sunken Ship (Bone Pile Room, Low water)"
+    SUNKEN_SHIP_NW_LOW = "Sunken Ship (Northwest Room, Low water)"
+    SUNKEN_SHIP_SW_HIGH = "Sunken Ship (Southwest Room, High water)"
+    SUNKEN_SHIP_BONES_HIGH = "Sunken Ship (Bone Pile Room, High water)"
+    SUNKEN_SHIP_NW_HIGH = "Sunken Ship (Northwest Room, High water)"
+    SUNKEN_SHIP_SE_HIGH = "Sunken Ship (Southeast Room, High water)"
+    SUNKEN_SHIP_E_HALLWAY_HIGH = "Sunken Ship (East Hallway High water)"
+    SUNKEN_SHIP_HANDS_HIGH = "Sunken Ship (Hands room High water)"
+    SUNKEN_SHIP_SE_LOW = "Sunken Ship (Southeast Room, Low water)"
+    SUNKEN_SHIP_E_HALLWAY_LOW = "Sunken Ship (East Hallway Low water)"
+    SUNKEN_SHIP_HANDS_LOW = "Sunken Ship (Hands room Low water)"
+    SUNKEN_SHIP_SE_CHESTS = "Sunken Ship (Southeast Room Chests)"
+    SUNKEN_SHIP_TREASURE = "Sunken Ship (Treasure Room)"
+    SUNKEN_SHIP_S_LEDGE = "Sunken Ship (Southern room ledge)"
+
+    ## IMPERIAL PALACE
+    ### Regular Size
+    IMPERIAL_PALACE_ENTRANCE = "Imperial Palace (Entrance)"
+    IMPERIAL_PALACE = "Imperial Palace"
+
+    ### Small Size
+    IMPERIAL_PALACE_SMALL_ENTRANCE = "Imperial Palace (Small Size - Entrance)"
+    IMPERIAL_PALACE_FEET_HELL = "Imperial Palace (Small Size - Feet Hell)"
+    IMPERIAL_PALACE_WEST_CAVE = "Imperial Palace (Small Size - West cave after lockjaw)"
+    IMPERIAL_PALACE_SPIDER_CAVE = "Imperial Palace (Small Size - Spider Cave)"
+    IMPERIAL_PALACE_SPIDER_CAVE_TOP = "Imperial Palace (Small Size - Spider Cave Top Ledges)"
+    IMPERIAL_PALACE_FLASK_ROOM = "Imperial Palace (Small Size - Mist Flask Room)"
+    IMPERIAL_PALACE_POISON_SOZU = "Imperial Palace (Small Size - Poison Sōzu Room)"
+    IMPERIAL_PALACE_EMPERORS_ROOM = "Imperial Palace (Small Size - Emperor's Bedroom)"
+    IMPERIAL_PALACE_WEST_BEAM = "Imperial Palace (Small Size - West Beam)"
+    IMPERIAL_PALACE_INSIDE_EMPEROR = "Imperial Palace (Small Size - Inside the Emperor's Body)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
@@ -165,6 +230,12 @@ class MapIds(Enum):
     CALCIFIED_CAVERN = 0x10E
     MOON_CAVE = 0x110
     RIVER_OF_THE_HEAVENS = 0x122
+    SEIAN_ARISTORATIC = 0x200
+    SEIAN_COMMONERS = 0x201
+    HIMIKO_PALACE = 0x202
+    SUNKEN_SHIP = 0x205
+    IMPERIAL_PALACE = 0x206
+    IMPERIAL_PALACE_SMALL = 0x207
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03
@@ -189,7 +260,9 @@ class MapIndexes(Enum):
     CALCIFIED_CAVERN = 15
     MOON_CAVE = 16
     RIVER_OF_THE_HEAVENS = 30
+    # FIXME: Ensure this is the right index
+    SEIAN_CITY_COMMONERS = 32
     SHINSHU_FIELD = 71
     AGATA_FOREST = 72
     TAKA_PASS = 74
-    RYOSHIMA_COAST= 75
+    RYOSHIMA_COAST = 75

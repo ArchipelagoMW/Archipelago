@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING
 
-from rule_builder.rules import Or, Has, HasAll
+from rule_builder.rules import Or, Has, HasAll, True_
 from ..CheckIds import shop_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
-from ..Types import LocData, EventData, ExitData
+from ..Enums.WarpType import WarpType
+from ..Types import LocData, EventData, ExitData, WarpData
 from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:
@@ -13,23 +14,24 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.CITY_CHECKPOINT_TAKA: [
         ExitData(RegionNames.CITY_CHECKPOINT_DRAWBRIDGE,
-                 has_events=["City Checkpoint - Activate the Drawbridge"],loading_screen=False),
-        ExitData(RegionNames.CITY_CHECKPOINT_RIVER,loading_screen=False)
+                 has_events=["City Checkpoint - Activate the Drawbridge"], loading_screen=False),
+        ExitData(RegionNames.CITY_CHECKPOINT_RIVER, loading_screen=False)
     ],
     RegionNames.CITY_CHECKPOINT_DRAWBRIDGE: [
         ExitData(RegionNames.CITY_CHECKPOINT_RYOSHIMA)
     ],
-    RegionNames.CITY_CHECKPOINT_RYOSHIMA:[
-        ExitData(RegionNames.CITY_CHECKPOINT_RIVER,loading_screen=False,one_way=True),
+    RegionNames.CITY_CHECKPOINT_RYOSHIMA: [
+        ExitData(RegionNames.CITY_CHECKPOINT_RIVER, loading_screen=False, one_way=True),
         ExitData(RegionNames.CURSED_RYOSHIMA_COAST),
-        ExitData(RegionNames.RYOSHIMA_COAST,has_events=["Ryoshima Coast - Bloom the Guardian Sapling"])
+        ExitData(RegionNames.RYOSHIMA_COAST, has_events=["Ryoshima Coast - Bloom the Guardian Sapling"])
     ],
 
 }
 events = {
     RegionNames.CITY_CHECKPOINT_TAKA: {
-        # Not setting any logic for this event yet, as we'll probably handle it in a specific way.
-        "City Checkpoint - Activate the Drawbridge": EventData()
+        # Not setting any more logic for this event yet, as we'll probably handle it in a specific way.
+        "City Checkpoint - Activate the Drawbridge": EventData(required_items_events=["Moon Cave - Defeat Orochi"],
+                                                               required_brush_techniques=[BrushTechniques.INFERNO])
     },
     RegionNames.CITY_CHECKPOINT_RYOSHIMA: {
         "City Checkpoint - Restore Cursed Patches on Ryoshima side": EventData(
@@ -87,4 +89,10 @@ shop_locations = {
         "City Checkpoint - Shop Slot 11": LocData(shop_check_id(2, 10), type=LocationType.SHOP),
         "City Checkpoint - Shop Slot 12": LocData(shop_check_id(2, 11), type=LocationType.SHOP),
     }
+}
+
+warps = {
+    RegionNames.CITY_CHECKPOINT_TAKA: [
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
+    ]
 }

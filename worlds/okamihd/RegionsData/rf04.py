@@ -46,7 +46,7 @@ events = {
         "Agata Forest - Fill Kushi's Barrel": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT]),
         "Agata Forest - Fight with Susano": EventData(power_slash_level=1,
                                                       required_items_events=["Agata Forest - Fill Kushi's Barrel"]),
-        "Agata Forest - Fish Whopper with Kokari": EventData(power_slash_level=1,
+        "Agata Forest - Fish Whopper with Kokari": EventData(type=LocationType.FISHING_MINIGAME,
                                                              required_items_events=[
                                                                  "Agata Forest - Fight with Susano"]),
         "Agata Forest - Get Orb from Ume": EventData(id=127, mandatory_enemies=[OkamiEnemies.UME],
@@ -118,8 +118,8 @@ locations = {
                                                                   "Agata Forest - Repair Bridge with Kokari"]),
         "Agata Forest - Chest near Kiba": LocData(container_check_id(MapIds.HEALED_AGATA, 49)),
         "Agata Forest - Chest near Tusta ruins door": LocData(container_check_id(MapIds.HEALED_AGATA, 50)),
-        ## Special check
-        "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1),
+        ## Special check - gives Tsuta Ruins Key
+        "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, type=LocationType.FISHING_MINIGAME),
         "Agata Forest - Yumigami": LocData(brush_check_id(18), type=LocationType.CONSTELLATION,  # bit 18
                                            required_items_events=["Agata Forest - Fish Whopper with Kokari"])
     }

@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 
+from rule_builder.rules import Has, True_
 from ..CheckIds import container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Types import ExitData, EventData, LocData
+from ..Enums.WarpType import WarpType
+from ..Types import ExitData, EventData, LocData, WarpData
 from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:
@@ -17,15 +19,16 @@ exits = {
                  has_events=["Ryoshima Coast - Climb catwalk tower"]),
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
-        ExitData(RegionNames.RYOSHIMA_COAST_WEST_PIER,one_way=True,loading_screen=False),
+        ExitData(RegionNames.RYOSHIMA_COAST_WEST_PIER, one_way=True, loading_screen=False),
         ExitData(RegionNames.ANKOKU_TEMPLE),
-        ExitData(RegionNames.FAWNS_HOUSE,has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"])
+        ExitData(RegionNames.FAWNS_HOUSE, has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"]),
+        ExitData(RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON, one_way=True,
+                 has_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False)
     ],
     RegionNames.RYOSHIMA_COAST_SEA: [
         ExitData(RegionNames.RYOSHIMA_COAST_DOJO, needs_long_swim=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_SHIP_TOP, needs_long_swim=True, loading_screen=False),
-        ExitData(RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON, one_way=True,
-                 has_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False)
+
     ],
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: [
         ExitData(RegionNames.RYOSHIMA_COAST, has_events=["Ryoshima Coast - Climb back to main area"], one_way=True,
@@ -38,15 +41,17 @@ exits = {
         ExitData(RegionNames.RYOSHIMA_COAST, loading_screen=False, one_way=True,
                  has_events=["Ryoshima Coast - Mandatory Ubume Encounter"])
     ],
-    # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
     RegionNames.RYOSHIMA_COAST_SEIAN: [
-        ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False)
+        # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
+        ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
+        ExitData(RegionNames.SEIAN_CITY_COMMONERS_DRY)
     ],
     RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON: [
-        ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False)
+        ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False,needs_long_swim=True),
+        ExitData(RegionNames.SUNKEN_SHIP_ENTRANCE)
     ],
-    RegionNames.RYOSHIMA_COAST_WEST_PIER:[
-        ExitData(RegionNames.RYOSHIMA_COAST_SEA,loading_screen=False)
+    RegionNames.RYOSHIMA_COAST_WEST_PIER: [
+        ExitData(RegionNames.RYOSHIMA_COAST_SEA, loading_screen=False)
     ]
 
 }
@@ -54,17 +59,19 @@ exits = {
 events = {
     RegionNames.RYOSHIMA_COAST: {
         "Ryoshima Coast - Climb catwalk tower": EventData(required_brush_techniques=[BrushTechniques.CATWALK]),
-        "Ryoshima Coast - Open Lunar Lagoon": EventData(required_items_events=["Ryoshima Coast - Buy Holy Eagle"],
+        "Ryoshima Coast - Open Lunar Lagoon": EventData(required_items_events=["Holy Eagle"],
                                                         required_brush_techniques=[BrushTechniques.CRESCENT]),
-        "Ryoshima Coast - Open Shortcut To Mme Fawn's": EventData()
+        "Ryoshima Coast - Open Shortcut To Mme Fawn's": EventData(),
+        # FIXME: Fill Enemies
+        "Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance": EventData(mandatory_enemies=[])
     },
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: {
         "Ryoshima Coast - Climb back to main area": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT])
     },
     RegionNames.RYOSHIMA_COAST_DOJO: {
         # Convert these to items at some point when dojos techs/shops are randomizable
-        "Ryoshima Coast - Buy Holy Eagle": EventData(),
-        "Ryoshima Coast - Buy Digging Champ": EventData()
+        "Ryoshima Coast - Buy Holy Eagle": EventData(event_item_name="Holy Eagle"),
+        "Ryoshima Coast - Buy Digging Champ": EventData(event_item_name="Digging Champ")
     },
     RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER: {
         "Ryoshima Coast - Mandatory Ubume Encounter": EventData(mandatory_enemies=[OkamiEnemies.UBUME])
@@ -76,9 +83,12 @@ locations = {
                                                                type=LocationType.BURIED_CHEST),
         "Ryoshima Coast - Freestanding Chest at Pier's Edge": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 31)),
         "Ryoshima Coast - Eastern Clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 49)),
-        "Ryoshima Coast - Eastern Underwater clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 51),type=LocationType.UNDERWATER_CHEST_SHALLOW),
-        "Ryoshima Coast - Center Underwater clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 52),type=LocationType.UNDERWATER_CHEST_SHALLOW),
-        "Ryoshima Coast - Western Underwater clam on Beach east of Pier": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 53),type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Ryoshima Coast - Eastern Underwater clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 51),
+                                                                     type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Ryoshima Coast - Center Underwater clam on Beach": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 52),
+                                                                    type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Ryoshima Coast - Western Underwater clam on Beach east of Pier": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 53), type=LocationType.UNDERWATER_CHEST_SHALLOW),
         "Ryoshima Coast - Nothern Underwater Clam west of Lunar turret": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 55), type=LocationType.UNDERWATER_CHEST_SHALLOW),
         "Ryoshima Coast - Southern Underwater Clam west of Lunar turret": LocData(
@@ -134,7 +144,7 @@ locations = {
                                                                  type=LocationType.STONE_BURIED_CHEST),
         "Ryoshima Coast - Chest on top of dojo Lunar Turret": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 29),
                                                                       required_items_events=[
-                                                                          "Ryoshima Coast - Buy Holy Eagle"]),
+                                                                          "Holy Eagle"]),
         "Ryoshima Coast - Freestanding chest on bottom of dojo island": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 30))
     },
@@ -160,12 +170,12 @@ locations = {
             container_check_id(MapIds.HEALED_RYOSHIMA, 50),
             type=LocationType.BURIED_CHEST),
     },
-    RegionNames.RYOSHIMA_COAST_WEST_PIER:{
+    RegionNames.RYOSHIMA_COAST_WEST_PIER: {
         "Ryoshima Coast - Underwater clam, west of Pier": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 54),
                                                                   type=LocationType.UNDERWATER_CHEST_SHALLOW),
     },
-    RegionNames.ANKOKU_TEMPLE:{
-        "Ryoshima Coast - Chest inside Ankoku Temple": LocData(container_check_id(MapIds.HEALED_RYOSHIMA,63))
+    RegionNames.ANKOKU_TEMPLE: {
+        "Ryoshima Coast - Chest inside Ankoku Temple": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 63))
     }
 
 }
@@ -185,4 +195,12 @@ shop_locations = {
         "Ryoshima Coast - Shop Slot 11": LocData(shop_check_id(14, 10), type=LocationType.SHOP),
         "Ryoshima Coast - Shop Slot 12": LocData(shop_check_id(14, 11), type=LocationType.SHOP),
     }
+}
+
+warps = {
+    RegionNames.RYOSHIMA_COAST: [
+        WarpData(type=WarpType.MERMAID_SPRING,
+                 trigger_warp_to=Has("Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance"),
+                 trigger_warp_from=Has("Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance")),
+    ]
 }
