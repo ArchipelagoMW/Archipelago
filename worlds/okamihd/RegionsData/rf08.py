@@ -21,7 +21,7 @@ exits={
 events={
     RegionNames.TAKA_PASS:{
         "Taka Pass - Clear Devil gate near waterfall": EventData(mandatory_enemies=[OkamiEnemies.BUD_OGRE,OkamiEnemies.YELLOW_IMP]),
-        "Taka Pass - Save Chun" : EventData(cherry_bomb_level=1,mandatory_enemies=[OkamiEnemies.CUTTERS])
+        "Taka Pass - Save Chun" : EventData(cherry_bomb_level=1,mandatory_enemies=[OkamiEnemies.CUTTERS],required_items_events=["Satomi Power Orb (Tei)"])
     }
 }
 

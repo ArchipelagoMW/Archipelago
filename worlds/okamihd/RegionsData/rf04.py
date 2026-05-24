@@ -43,7 +43,7 @@ events = {
         "Agata Forest - Repair Bridge with Kokari": EventData(
             required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE],
             required_items_events=["Tsuta Ruins - Defeat the spider queen"]),
-        "Agata Forest - Fill Kushi's Barrel": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT]),
+        "Agata Forest - Fill Kushi's Barrel": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],required_items_events=["Satomi Power Orb (Tei)"]),
         "Agata Forest - Fight with Susano": EventData(power_slash_level=1,
                                                       required_items_events=["Agata Forest - Fill Kushi's Barrel"]),
         "Agata Forest - Fish Whopper with Kokari": EventData(type=LocationType.FISHING_MINIGAME,

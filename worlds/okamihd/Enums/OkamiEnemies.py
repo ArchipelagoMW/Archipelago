@@ -21,6 +21,7 @@ class EnnemyData(NamedTuple):
 class OkamiEnemies(Enum):
     GREEN_IMP = EnnemyData(0x03, "Green Imp", 0, BrushTechniques.POWER_SLASH)
     RED_IMP = EnnemyData(0x00, "Red Imp", 0, BrushTechniques.POWER_SLASH)
+    BLUE_IMP = EnnemyData(0x01, "Blue Imp", 0, BrushTechniques.POWER_SLASH)
     YELLOW_IMP = EnnemyData(0x02, "Yellow Imp", 0, BrushTechniques.POWER_SLASH)
     BLACK_IMP = EnnemyData(0x04, "Black Imp", 0, BrushTechniques.POWER_SLASH)
     DEAD_FISH = EnnemyData(0x56, "Dead Fish", 0, BrushTechniques.POWER_SLASH)
