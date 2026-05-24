@@ -75,10 +75,10 @@ class RemoveBlockHead(Toggle):
 
 
 class RequiredDoggorbs(Range):
-    """Number of Required Canine Warriors/Orbs to open Gale Shrine"""
+    """Number of Required Canine Warriors/Orbs to open Gale Shrine - Not yet implemented"""
     display_name = "Number of Required Satomi Power Orbs to open Gale Shrine"
     default = 8
-    range_start = 1
+    range_start = 0
     range_end = 8
 
 
@@ -105,7 +105,7 @@ class MoonCaveAccess(Choice):
     option_serpent_crystal = 0
     option_crimson_helm = 1
     option_open = 2
-    default = 0
+    default = 2
 
 
 class RandomizeContainers(Toggle):
