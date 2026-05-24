@@ -61,7 +61,7 @@ class CookingLogic(BaseLogic):
             return self.logic.cooking.received_recipe(meal_name)
         if isinstance(source, QueenOfSauceSource) and ChefsanityOptionName.queen_of_sauce in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
-        return self.logic.cooking.can_learn_recipe(source)
+        return self.logic.cooking.can_learn_recipe_source(source)
 
     @cache_self1
     def can_learn_recipe(self, recipe: CookingRecipe) -> StardewRule:
