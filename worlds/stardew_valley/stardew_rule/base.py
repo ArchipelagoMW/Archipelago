@@ -466,7 +466,7 @@ class Has(BaseStardewRule):
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         item_rule = self.other_rules[self.item]
-        print(self.item)
+        # print(self.item)
         result = item_rule.evaluate_while_simplifying(state)
         return result
 
