@@ -545,7 +545,8 @@ pelican_town = ContentPack(
                 ShopSource(
                     shop_region=Region.carpenter,
                     price=6000,
-                    items_price=((350, Material.wood), (150, Material.stone))
+                    items_price=((350, Material.wood), (150, Material.stone)),
+                    forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
                 ),
             ),
         ),
@@ -555,7 +556,8 @@ pelican_town = ContentPack(
                 ShopSource(
                     shop_region=Region.carpenter,
                     price=12_000,
-                    items_price=((450, Material.wood), (200, Material.stone))
+                    items_price=((450, Material.wood), (200, Material.stone)),
+                    forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
                 ),
             ),
             upgrade_from=BuildingNames.barn,
@@ -566,7 +568,8 @@ pelican_town = ContentPack(
                 ShopSource(
                     shop_region=Region.carpenter,
                     price=25_000,
-                    items_price=((550, Material.wood), (300, Material.stone))
+                    items_price=((550, Material.wood), (300, Material.stone)),
+                    forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
                 ),
             ),
             upgrade_from=BuildingNames.big_barn,
@@ -577,7 +580,8 @@ pelican_town = ContentPack(
                 ShopSource(
                     shop_region=Region.carpenter,
                     price=4000,
-                    items_price=((300, Material.wood), (100, Material.stone))
+                    items_price=((300, Material.wood), (100, Material.stone)),
+                    forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
                 ),
             ),
         ),
@@ -587,7 +591,8 @@ pelican_town = ContentPack(
                 ShopSource(
                     shop_region=Region.carpenter,
                     price=10_000,
-                    items_price=((400, Material.wood), (150, Material.stone))
+                    items_price=((400, Material.wood), (150, Material.stone)),
+                    forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
                 ),
             ),
             upgrade_from=BuildingNames.coop,
@@ -598,7 +603,8 @@ pelican_town = ContentPack(
                 ShopSource(
                     shop_region=Region.carpenter,
                     price=20_000,
-                    items_price=((500, Material.wood), (200, Material.stone))
+                    items_price=((500, Material.wood), (200, Material.stone)),
+                    forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
                 ),
             ),
             upgrade_from=BuildingNames.big_coop,
