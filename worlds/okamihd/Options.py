@@ -76,8 +76,8 @@ class RemoveBlockHead(Toggle):
 
 class RequiredDoggorbs(Range):
     """Number of Required Canine Warriors/Orbs to open Gale Shrine"""
-    display_name = "Number of Required Canine Warriors/Orbs to open Gale Shrine"
-    default = 1
+    display_name = "Number of Required Satomi Power Orbs to open Gale Shrine"
+    default = 8
     range_start = 1
     range_end = 8
 
@@ -86,13 +86,13 @@ class CanineRewards(Choice):
     """Rewards given by the 8 Canine Warriors checks:
 
     Vanilla: Won't randomise their quest rewards.
-    Randomized: they will give random rewards, Dogs and orbs will be placed in the item pool.
-    Junk: They won't give anything useful, Dogs and orbs will be placed in the item pool."""
+    Randomized: they will give random rewards, Dogs and orbs will be placed in the item pool. - Not yet implemented
+    Junk: They won't give anything useful, Dogs and orbs will be placed in the item pool. - Not yet implemented"""
     display_name = "Rewards given by the 8 Canine Warriors checks"
     option_vanilla = 0
     option_randomized = 1
     option_junk = 2
-    default = 1
+    default = 0
 
 
 class MoonCaveAccess(Choice):
