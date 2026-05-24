@@ -112,7 +112,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.STONE_BURIED_CHEST:
             # Digging Champ Requirement
-            rules.append(Has("Ryoshima Coast - Buy Digging Champ"))
+            rules.append(Has("Digging Champ"))
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.BURNING_CHEST:
