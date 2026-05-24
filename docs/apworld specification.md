@@ -108,3 +108,5 @@ Imports from other files inside the APWorld have to use relative imports. e.g. `
 
 Imports from AP base have to use absolute imports, e.g. `from Options import Toggle` or
 `from worlds.AutoWorld import World`
+
+Any imported subfolders inside the APWorld must contain an `__init__.py`. This file can be empty.
