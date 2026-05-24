@@ -24,7 +24,8 @@ exits = {
                                  ExitData(RegionNames.CURSED_SHINSHU_FIELD,
                                           has_events=["Kamiki Village - Help Susano Train/Break the boulder"]),
                                  ExitData(RegionNames.SHINSHU_FIELD,
-                                          has_events=["Kamiki Village - Help Susano Train/Break the boulder","Shinshu Field - Restore Guardian Sapling"]),
+                                          has_events=["Kamiki Village - Help Susano Train/Break the boulder",
+                                                      "Shinshu Field - Restore Guardian Sapling"]),
                                  # One way bc this is not a logical access.
                                  ExitData(RegionNames.KAMIKI_MERCHANT,
                                           has_events=["Kamiki Village - Help Susano Train/Break the boulder"],
@@ -69,7 +70,8 @@ events = {
                                                                 o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
                                                             else LocationProgressType.DEFAULT,
                                                             event_item_name="Satomi Power Orb (Loyalty)",
-                                                            special_rule=night_time_check_rule)
+                                                            special_rule=night_time_check_rule,
+                                                            required_items_events=["Satomi Power Orb (Tei)"])
     }
 }
 locations = {
@@ -155,8 +157,8 @@ shop_locations = {
     }
 }
 
-warps={
-    RegionNames.STONE_KAMIKI:[
-        WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_)
+warps = {
+    RegionNames.STONE_KAMIKI: [
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
     ]
 }

@@ -22,34 +22,48 @@ exits = {
                                ExitData(RegionNames.GALE_SHRINE_ENTRANCE)]
 }
 events = {
+
     RegionNames.KUSA_VILLAGE: {
+        "Kusa Village - Save Fuse": EventData(mandatory_enemies=[OkamiEnemies.RED_IMP, OkamiEnemies.BLUE_IMP]),
         "Kusa Village - Defeat Blockhead": EventData(precollected=lambda o: o.RemoveBlockHead),
         "Kusa Village - Save Rei": EventData(id=128, cherry_bomb_level=1,
                                              is_event_item=lambda o: o.CanineRewards != 0,
                                              progress_type=lambda
                                                  o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                             else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Rei)"),
+                                             else LocationProgressType.DEFAULT,
+                                             event_item_name="Satomi Power Orb (Rei)",
+                                             required_items_events=["Kusa Village - Save Fuse"]),
         "Kusa Village - Save Shin": EventData(id=129, required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM],
                                               is_event_item=lambda o: o.CanineRewards != 0,
                                               progress_type=lambda
                                                   o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                              else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Shin)"),
+                                              else LocationProgressType.DEFAULT,
+                                              event_item_name="Satomi Power Orb (Shin)",
+                                              required_items_events=["Kusa Village - Save Fuse"]),
         "Kusa Village - Save Chi": EventData(id=130, power_slash_level=1,
                                              is_event_item=lambda o: o.CanineRewards != 0,
                                              progress_type=lambda
                                                  o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                             else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Chi)"),
+                                             else LocationProgressType.DEFAULT,
+                                             event_item_name="Satomi Power Orb (Chi)",
+                                             required_items_events=["Kusa Village - Save Fuse"]),
         "Kusa Village - Save Ko": EventData(id=131, required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE],
                                             is_event_item=lambda o: o.CanineRewards != 0,
                                             progress_type=lambda
                                                 o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                            else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Ko)"),
+                                            else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Ko)",
+                                            required_items_events=["Kusa Village - Save Fuse"]),
         # Should we add more conditions to get this one ?
         "Kusa Village - Save Tei": EventData(id=132, mandatory_enemies=[OkamiEnemies.TEI],
                                              is_event_item=lambda o: o.CanineRewards != 0,
                                              progress_type=lambda
                                                  o: LocationProgressType.EXCLUDED if o.CanineRewards == 2
-                                             else LocationProgressType.DEFAULT, event_item_name="Satomi Power Orb (Tei)")
+                                             else LocationProgressType.DEFAULT,
+                                             event_item_name="Satomi Power Orb (Tei)",
+                                             required_items_events=["Satomi Power Orb (Rei)",
+                                                                    "Satomi Power Orb (Shin)",
+                                                                    "Satomi Power Orb (Chi)",
+                                                                    "Satomi Power Orb (Ko)"])
     }
 }
 locations = {
@@ -103,8 +117,8 @@ shop_locations = {
     }
 }
 
-warps={
-    RegionNames.KUSA_VILLAGE:[
-        WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_)
+warps = {
+    RegionNames.KUSA_VILLAGE: [
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
     ]
 }
