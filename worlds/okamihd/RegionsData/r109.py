@@ -81,7 +81,9 @@ shop_locations={
 
 warps={
     RegionNames.SASA_SANCTUARY:[
-        WarpData(type=WarpType.MIST_WARP,trigger_warp_to=True_,trigger_warp_from=True_),
         WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has( "Sasa Sanctuary - Dig with Mr. Bamboo."), trigger_warp_from=Has( "Sasa Sanctuary - Dig with Mr. Bamboo."))
+    ],
+    RegionNames.SASA_SANCTUARY_ENTRANCE:[
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_),
     ]
 }
