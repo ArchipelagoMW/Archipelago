@@ -116,8 +116,6 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
         case LocationType.BURIED_UNDER_LEAF_PILE:
             required_techinques += [BrushTechniques.GALESTORM]
-            if world.options.NightTimeChecksRequireCrescent:
-                required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.BURIED_CHEST:
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
