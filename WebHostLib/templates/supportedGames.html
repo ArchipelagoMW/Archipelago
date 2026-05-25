@@ -47,7 +47,13 @@
         {% for game_name in worlds | title_sorted %}
         {% set world = worlds[game_name] %}
         <details data-game="{{ game_name }}">
-            <summary class="h2">{{ game_name }}</summary>
+            <summary class="h2">
+                {{ game_name }}
+                {% if "authors" in world.manifest %}
+                <h5>Author{% if world.manifest["authors"] | length != 1%}s{% endif %}: 
+                    {{ world.manifest["authors"] | join(", ") }}</h5>
+                {% endif %}
+            </summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
             {% if world.web.tutorials %}
@@ -68,9 +74,6 @@
             <a href="{{ world.web.bug_report_page }}">Report a Bug</a>
             {% endif %}
         </details>
-        {% if "authors" in world.manifest %}
-        <p>Authors: {{ world.manifest["authors"] | join(", ") }}</p>
-        {% endif %}
         {% endfor %}
     </div>
 {% endblock %}
