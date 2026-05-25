@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from rule_builder.rules import True_
+from rule_builder.rules import True_, Has
 from ..CheckIds import container_check_id, brush_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -160,6 +160,6 @@ locations = {
 }
 warps = {
     RegionNames.SEIAN_CITY_ARISTOCRATIC: [
-        WarpData(WarpType.MERMAID_SPRING, True_, True_)
+        WarpData(WarpType.MERMAID_SPRING, Has("Imperial Palace - Defeat Blight"), Has("Imperial Palace - Defeat Blight"))
     ]
 }
