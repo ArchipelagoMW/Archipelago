@@ -50,7 +50,11 @@
             <summary class="h2">{{ game_name }}</summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
             {% if "authors" in world.manifest %}
+            {% if world.manifest["authors"]|length == 1 %}
+            <p style="margin-top: 0.5em;">Author: {{ world.manifest["authors"][0] }}</p>
+            {% else %}
             <p style="margin-top: 0.5em;">Authors: {{ world.manifest["authors"] | join(", ") }}</p>
+            {% endif %}
             {% endif %}
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
             {% if world.web.tutorials %}
