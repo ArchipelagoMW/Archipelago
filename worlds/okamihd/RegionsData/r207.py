@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from BaseClasses import LocationProgressType
 from ..CheckIds import container_check_id, brush_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -110,7 +111,7 @@ locations = {
     RegionNames.IMPERIAL_PALACE_FLASK_ROOM: {
         "Imperial Palace - Kasugami": LocData(brush_check_id(16), type=LocationType.CONSTELLATION,
                                               required_brush_techniques=[BrushTechniques.GALESTORM],
-                                              power_slash_level=1)
+                                              power_slash_level=1,progress_type=LocationProgressType.EXCLUDED)
     },
     RegionNames.IMPERIAL_PALACE_POISON_SOZU: {
         "Imperial Palace - Locked chest near poison Sozu": LocData(container_check_id(MapIds.IMPERIAL_PALACE_SMALL, 15),
@@ -134,7 +135,7 @@ locations = {
             container_check_id(MapIds.IMPERIAL_PALACE_SMALL, 13))
     },
     RegionNames.IMPERIAL_PALACE_INSIDE_EMPEROR:{
-        "Imperial Palace - Defeat Blight Reward":LocData(999,required_items_events=["Imperial Palace - Defeat Blight"])
+        "Imperial Palace - Blight Reward":LocData(999,required_items_events=["Imperial Palace - Defeat Blight"],progress_type=LocationProgressType.EXCLUDED)
     }
 
 }
