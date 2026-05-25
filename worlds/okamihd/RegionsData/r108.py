@@ -26,6 +26,7 @@ events = {
     RegionNames.KUSA_VILLAGE: {
         "Kusa Village - Save Fuse": EventData(mandatory_enemies=[OkamiEnemies.GREEN_IMP, OkamiEnemies.BLUE_IMP]),
         "Kusa Village - Defeat Blockhead": EventData(precollected=lambda o: o.RemoveBlockHead),
+        "Kusa Village - Access Blockhead": EventData(required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
         "Kusa Village - Save Rei": EventData(id=128, cherry_bomb_level=1,
                                              is_event_item=lambda o: o.CanineRewards != 0,
                                              progress_type=lambda

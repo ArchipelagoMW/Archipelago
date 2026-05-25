@@ -118,9 +118,9 @@ locations = {
         "Agata Forest - Chest near Kiba": LocData(container_check_id(MapIds.HEALED_AGATA, 49)),
         "Agata Forest - Chest near Tusta ruins door": LocData(container_check_id(MapIds.HEALED_AGATA, 50)),
         ## Special check
-        "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1),
+        "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1,progress_type=LocationProgressType.EXCLUDED),
         "Agata Forest - Yumigami": LocData(brush_check_id(18), type=LocationType.CONSTELLATION,  # bit 18
-                                           required_items_events=["Agata Forest - Fish Whopper with Kokari"])
+                                           required_items_events=["Agata Forest - Fish Whopper with Kokari"],progress_type=LocationProgressType.EXCLUDED)
     }
 }
 

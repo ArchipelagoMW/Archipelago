@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from BaseClasses import LocationProgressType
 from rule_builder.rules import True_, Has
 from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
@@ -82,8 +83,8 @@ locations = {
     },
 
     RegionNames.TAMA_HOUSE: {
-        "Shinshu Field - Bakigami": LocData(brush_check_id(25), type=LocationType.CONSTELLATION,
-                                            special_rule=night_time_check_rule)  # bit 25
+        "Shinshu Field - Bakugami": LocData(brush_check_id(25), type=LocationType.CONSTELLATION,
+                                            special_rule=night_time_check_rule,progress_type=LocationProgressType.EXCLUDED)  # bit 25
     },
 
     RegionNames.SHINSHU_PLATEAU: {

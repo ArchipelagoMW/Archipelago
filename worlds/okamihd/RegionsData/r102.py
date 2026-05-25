@@ -76,7 +76,7 @@ events = {
 }
 locations = {
     RegionNames.STONE_KAMIKI: {
-        "Kamiki Village - Sunrise": LocData(brush_check_id(27), type=LocationType.CONSTELLATION),
+        "Kamiki Village - Sunrise": LocData(brush_check_id(27), type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED),
         # Brush acquisition (bit 27)
     },
     RegionNames.KAMIKI_VILLAGE: {
@@ -125,7 +125,7 @@ locations = {
         # Kushi's Gift is not a container - it's an event/NPC reward. Keep old ID for now.
         "Kamiki Village - Kushi's Gift": LocData(collected_object_check_id(MapIndexes.KAMIKI_VILLAGE, 11),
                                                  # mapId=3 (KamikiVillage enum index)
-                                                 required_items_events=["Kamiki Village - Repair Kushi's Watermill"]),
+                                                 required_items_events=["Kamiki Village - Repair Kushi's Watermill"],progress_type=LocationProgressType.EXCLUDED),
     },
     RegionNames.KAMIKI_ISLANDS: {
         "Kamiki Village - East Islands Sun fragment chest": LocData(container_check_id(MapIds.KAMIKI_VILLAGE, 42)),
