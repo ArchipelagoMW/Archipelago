@@ -15,38 +15,63 @@ if TYPE_CHECKING:
 exits={
     RegionNames.TAKA_PASS:[ExitData(RegionNames.KUSA_VILLAGE),
                            ExitData(RegionNames.SASA_SANCTUARY_ENTRANCE),
-                           ExitData(RegionNames.CITY_CHECKPOINT_TAKA)]
+                           ExitData(RegionNames.CITY_CHECKPOINT_TAKA),
+                           ExitData(RegionNames.TAKA_COMMON_LOGIC, one_way=True, loading_screen=False)
+                           ]
 
 }
-events={
-    RegionNames.TAKA_PASS:{
-        "Taka Pass - Clear Devil gate near waterfall": EventData(mandatory_enemies=[OkamiEnemies.BUD_OGRE,OkamiEnemies.YELLOW_IMP]),
-        "Taka Pass - Save Chun" : EventData(cherry_bomb_level=1,mandatory_enemies=[OkamiEnemies.CUTTERS],required_items_events=["Satomi Power Orb (Tei)"])
+events = {
+    RegionNames.TAKA_PASS: {
+        "Taka Pass - Clear Devil gate near waterfall": EventData(
+            mandatory_enemies=[OkamiEnemies.BUD_OGRE, OkamiEnemies.YELLOW_IMP]),
+        "Taka Pass - Save Chun": EventData(cherry_bomb_level=1, mandatory_enemies=[OkamiEnemies.CUTTERS],
+                                           required_items_events=["Satomi Power Orb (Tei)"])
     }
 }
 
 locations = {
-    RegionNames.TAKA_PASS:{
-        "Taka Pass - Chest under leaf pile near Guardian Sapling" : LocData(container_check_id(MapIds.HEALED_TAKA,42), type=LocationType.BURIED_UNDER_LEAF_PILE,required_items_events=["Taka pass - Restore Bridge to Guardian Sapling"]),
-        "Taka Pass - Chest on top of big rock above ledge": LocData(container_check_id(MapIds.HEALED_TAKA, 0),required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
+    RegionNames.TAKA_PASS: {
+        "Taka Pass - Chest under leaf pile near Guardian Sapling": LocData(container_check_id(MapIds.HEALED_TAKA, 42),
+                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE,
+                                                                           required_items_events=[
+                                                                               "Taka pass - Restore Bridge to Guardian Sapling"]),
+        "Taka Pass - Chest on top of big rock above ledge": LocData(container_check_id(MapIds.HEALED_TAKA, 0),
+                                                                    required_brush_techniques=[
+                                                                        BrushTechniques.GREENSPROUT_VINE]),
         # Find better names for those 2 a
-        "Taka Pass - Chest under leaf pile after cave": LocData(container_check_id(MapIds.HEALED_TAKA,41),type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Taka Pass - Chest under leaf pile near cave west": LocData(container_check_id(MapIds.HEALED_TAKA,62), type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Taka Pass - Chest under leaf pile after cave": LocData(container_check_id(MapIds.HEALED_TAKA, 41),
+                                                                type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Taka Pass - Chest under leaf pile near cave west": LocData(container_check_id(MapIds.HEALED_TAKA, 62),
+                                                                    type=LocationType.BURIED_UNDER_LEAF_PILE),
 
-        "Taka Pass - Chest under leaf pile near Ultimate Origin mirror": LocData(container_check_id(MapIds.HEALED_TAKA,60), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Taka Pass - Chest on top of Gutters' House":LocData(container_check_id(MapIds.HEALED_TAKA, 1),required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
-        "Taka Pass - Chest across banners": LocData(container_check_id(MapIds.HEALED_TAKA, 3), required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE, BrushTechniques.GALESTORM]),
-        "Taka Pass - Buried chest near Gutters' house":LocData(container_check_id(MapIds.HEALED_TAKA,25),type=LocationType.BURIED_CHEST),
-        "Taka Pass - Buried chest near mermaid spring": LocData(container_check_id(MapIds.HEALED_TAKA,32), type=LocationType.BURIED_CHEST),
-        "Taka Pass - Buried chest near tea house": LocData(container_check_id(MapIds.HEALED_TAKA,36), type=LocationType.BURIED_CHEST),
-        "Taka Pass - Buried chest near treasure hunter": LocData(container_check_id(MapIds.HEALED_TAKA,37), type=LocationType.BURIED_CHEST),
-        #Find a better name
-        "Taka Pass - Buried under leaf pile near city checkpoint exit": LocData(container_check_id(MapIds.HEALED_TAKA,38), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        #Find out which house
-        "Taka Pass - Chest under leaf pile behind Gutters' house": LocData(container_check_id(MapIds.HEALED_TAKA,43), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Taka Pass - Chest under leaf pile near mermaid spring": LocData(container_check_id(MapIds.HEALED_TAKA,44), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Taka Pass - Chest under leaf pile near agata forest entrance": LocData(container_check_id(MapIds.HEALED_TAKA,59), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Taka Pass - Chest under leaf pile near moles gang": LocData(container_check_id(MapIds.HEALED_TAKA,61),type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Taka Pass - Chest under leaf pile near Ultimate Origin mirror": LocData(
+            container_check_id(MapIds.HEALED_TAKA, 60), type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Taka Pass - Chest on top of Gutters' House": LocData(container_check_id(MapIds.HEALED_TAKA, 1),
+                                                              required_brush_techniques=[
+                                                                  BrushTechniques.GREENSPROUT_VINE]),
+        "Taka Pass - Chest across banners": LocData(container_check_id(MapIds.HEALED_TAKA, 3),
+                                                    required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE,
+                                                                               BrushTechniques.GALESTORM]),
+        "Taka Pass - Buried chest near Gutters' house": LocData(container_check_id(MapIds.HEALED_TAKA, 25),
+                                                                type=LocationType.BURIED_CHEST),
+        "Taka Pass - Buried chest near mermaid spring": LocData(container_check_id(MapIds.HEALED_TAKA, 32),
+                                                                type=LocationType.BURIED_CHEST),
+        "Taka Pass - Buried chest near tea house": LocData(container_check_id(MapIds.HEALED_TAKA, 36),
+                                                           type=LocationType.BURIED_CHEST),
+        "Taka Pass - Buried chest near treasure hunter": LocData(container_check_id(MapIds.HEALED_TAKA, 37),
+                                                                 type=LocationType.BURIED_CHEST),
+        # Find a better name
+        "Taka Pass - Buried under leaf pile near city checkpoint exit": LocData(
+            container_check_id(MapIds.HEALED_TAKA, 38), type=LocationType.BURIED_UNDER_LEAF_PILE),
+        # Find out which house
+        "Taka Pass - Chest under leaf pile behind Gutters' house": LocData(container_check_id(MapIds.HEALED_TAKA, 43),
+                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Taka Pass - Chest under leaf pile near mermaid spring": LocData(container_check_id(MapIds.HEALED_TAKA, 44),
+                                                                         type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Taka Pass - Chest under leaf pile near agata forest entrance": LocData(
+            container_check_id(MapIds.HEALED_TAKA, 59), type=LocationType.BURIED_UNDER_LEAF_PILE),
+        "Taka Pass - Chest under leaf pile near moles gang": LocData(container_check_id(MapIds.HEALED_TAKA, 61),
+                                                                     type=LocationType.BURIED_UNDER_LEAF_PILE),
     }
 
 }
@@ -69,8 +94,9 @@ shop_locations = {
     }
 }
 
-warps={
-    RegionNames.TAKA_PASS:[
-        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Taka Pass - Clear Devil gate near waterfall"), trigger_warp_from=Has("Taka Pass - Clear Devil gate near waterfall"))
+warps = {
+    RegionNames.TAKA_PASS: [
+        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Taka Pass - Clear Devil gate near waterfall"),
+                 trigger_warp_from=Has("Taka Pass - Clear Devil gate near waterfall"))
     ]
 }

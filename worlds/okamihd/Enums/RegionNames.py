@@ -37,6 +37,8 @@ class RegionNames(StrEnum):
 
     ## Shinshu Field
     CURSED_SHINSHU_FIELD = "Cursed Shinshu Field"
+    # Exits, locations, events etc... Common to both states of Shinshu
+    SHINSHU_LOGIC_COMMON = "Shinshu Field (Common)"
     SHINSHU_FIELD = "Shinshu Field"
     SHINSHU_FIELD_AGATA_CAVE = "Shinshu Field (Cave to Agata Forest)"
     TAMA_HOUSE = "Tama's house"
@@ -50,6 +52,7 @@ class RegionNames(StrEnum):
 
     ## AGATA FOREST
     CURSED_AGATA_FOREST = "Cursed Agata Forest"
+    AGATA_COMMON_LOGIC= "Agata Forest (Common)"
     AGATA_FOREST_WAKA = "Agata Forest (Pre-waka fight)"
     AGATA_FOREST = "Agata Forest"
     AGATA_FOREST_TAKA = "Agata Forest (Behind Bridge to Taka Pass)"
@@ -66,6 +69,7 @@ class RegionNames(StrEnum):
 
     ## TAKA PASS
     CURSED_TAKA_PASS = "Curesd Taka Pass"
+    TAKA_COMMON_LOGIC="Taka Pass (Common)"
     CURSED_TAKA_PASS_WAKA = "Cursed Taka Pass (Waka Fight)"
     CURSED_TAKA_PASS_CAVE = "Cursed Taka Pass (Cave)"
     CURSED_TAKA_PASS_GUARDIAN_SAPLING = "Cursed Taka Pass (Guardian Sapling)"
