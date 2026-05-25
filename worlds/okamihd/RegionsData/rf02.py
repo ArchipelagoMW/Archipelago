@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.SHINSHU_FIELD: [
+        ExitData(RegionNames.SHINSHU_LOGIC_COMMON,one_way=True,loading_screen=False),
         ExitData(RegionNames.SHINSHU_FIELD_AGATA_CAVE, needs_long_swim=True, loading_screen=False),
         ExitData(RegionNames.TAMA_HOUSE),
         ExitData(RegionNames.MOON_CAVE_OUTSIDE),

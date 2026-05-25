@@ -19,11 +19,11 @@ exits = {
         ExitData(RegionNames.AGATA_FOREST, has_events=["Agata Forest - Defeat Waka"], one_way=True,
                  loading_screen=False)],
     RegionNames.AGATA_FOREST: [
+        ExitData(RegionNames.AGATA_COMMON_LOGIC,one_way=True,loading_screen=False),
         ExitData(RegionNames.AGATA_FOREST_TAKA, has_events=["Agata Forest - Repair Bridge with Kokari"],
                  loading_screen=False),
         ExitData(RegionNames.TSUTA_RUINS_1F_MAIN_PART,
                  has_events=["Agata Forest - Open Ruins Door"]),
-        ExitData(RegionNames.FAWNS_HOUSE, has_events=["Agata Forest - Restore Guardian Sapling"]),
         ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE, has_events=["Agata Forest - Open shortcut to Shinshu Field"])
     ],
     RegionNames.AGATA_FOREST_TAKA: [
