@@ -86,8 +86,8 @@ class CanineRewards(Choice):
     """Rewards given by the 8 Canine Warriors checks:
 
     Vanilla: Won't randomise their quest rewards.
-    Randomized: they will give random rewards, Dogs and orbs will be placed in the item pool. - Not yet implemented
-    Junk: They won't give anything useful, Dogs and orbs will be placed in the item pool. - Not yet implemented"""
+    Randomized: they will give random rewards, orbs will be placed in the item pool. - Not yet implemented
+    Junk: They won't give anything useful,orbs will be placed in the item pool. - Not yet implemented"""
     display_name = "Rewards given by the 8 Canine Warriors checks"
     option_vanilla = 0
     option_randomized = 1
@@ -98,14 +98,14 @@ class CanineRewards(Choice):
 class MoonCaveAccess(Choice):
     """What does trigger access to moon cave ?
 
-    Serpent Crystal: You need to find the Serpent Crystal item to open Moon cave
+    Serpent Crystal: You need to find the Serpent Crystal item to open Moon cave - Not yet Implemented
     Crimson Helm: You need to defeat Crimson Helm to open moon cave.
-    Open: Moon Cave is open from start"""
+    Open: Moon Cave is open from start - Not yet Implemented """
     display_name = "What does trigger access to moon cave ?"
     option_serpent_crystal = 0
     option_crimson_helm = 1
     option_open = 2
-    default = 2
+    default = 1
 
 
 class RandomizeContainers(Toggle):
