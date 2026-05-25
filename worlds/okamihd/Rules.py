@@ -170,7 +170,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
 
     if len(data.required_items_events) > 0:
         rules.append(HasAll(*data.required_items_events))
-    # TODO: Fix special rules
+
     if data.special_rule is not None:
         # Append special rule if it's defined
         rules.append(data.special_rule)
