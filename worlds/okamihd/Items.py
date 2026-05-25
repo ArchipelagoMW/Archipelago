@@ -103,7 +103,6 @@ brush_techniques_items = {
     BrushTechniques.ICESTORM.value: ItemData(0x118, ItemClassification.useful),                     # bit 24
 }
 equips = {
-
     # Equips
     "Water Tablet": ItemData(0x9c, ItemClassification.progression),
     "Peace Bell": ItemData(0x0b, ItemClassification.useful),
@@ -149,16 +148,16 @@ bitable_items = {
     # "Oddly Shaped Turnip": ItemData(0x41, ItemClassification.progression)
 }
 useful_items = {
-    # Useful items
-    "Sun Fragment": ItemData(0x05, ItemClassification.useful),
-    "Astral Pouch": ItemData(0x06, ItemClassification.useful,count_in_pool=0),
-    "Stray Bead": ItemData(0xCC, ItemClassification.useful),
+    # Useful items - Counts here are invalid, it's intended, to not fille the item pool with these
+    "Sun Fragment": ItemData(0x05, ItemClassification.useful,count_in_pool=4), # Should be 12
+    "Astral Pouch": ItemData(0x06, ItemClassification.useful,count_in_pool=0),# Intended
+    "Stray Bead": ItemData(0xCC, ItemClassification.useful,count_in_pool=33),# Should be 99
     # probably will have to be changed to progession_skip balancing once DF shops get randomized
-    "Demon Fang": ItemData(0x1F, ItemClassification.useful),
+    "Demon Fang": ItemData(0x1F, ItemClassification.useful,count_in_pool=0),# to see when DF shops get randomized
     # Technically a filler item, but useful feels more appropriate. Warping with those without Fountain will probably be out of logic.
-    "Mermaid Coin": ItemData(0x0e, ItemClassification.useful),
-    "Golden Peach": ItemData(0x0f, ItemClassification.useful),
-    "Gold Dust": ItemData(0x9e, ItemClassification.useful)
+    "Mermaid Coin": ItemData(0x0e, ItemClassification.useful,count_in_pool=5),#Accurate count, kept it since it isn't too much
+    "Golden Peach": ItemData(0x0f, ItemClassification.useful,count_in_pool=5), # 14 in total... Probably not useful to have THAT many?,
+    "Gold Dust": ItemData(0x9e, ItemClassification.useful,count_in_pool=5) # 15 if we count the ones sold by merchants, which we may randomize, only 1 in a chest if we don't count those...
 }
 
 filler_items = {
@@ -259,17 +258,18 @@ progressive_weapons = {
     "Progressive Rosary": ItemData(0x301, ItemClassification.progression, count_in_pool=0),
     "Progressive Sword": ItemData(0x302, ItemClassification.progression, count_in_pool=0)
 }
+#classified as useful so they're ignored for junk fill
 karmic_transformers = {
-    "Karmic Returner": ItemData(0xc8, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 1": ItemData(0x5b, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 2": ItemData(0xc9, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 3": ItemData(0x79, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 4": ItemData(0xcf, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 5": ItemData(0xcb, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 6": ItemData(0xca, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 7": ItemData(0x7b, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 8": ItemData(0x7a, ItemClassification.filler, count_in_pool=0),
-    "Karmic Transformer 9": ItemData(0x7c, ItemClassification.filler, count_in_pool=0)
+    "Karmic Returner": ItemData(0xc8, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 1": ItemData(0x5b, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 2": ItemData(0xc9, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 3": ItemData(0x79, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 4": ItemData(0xcf, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 5": ItemData(0xcb, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 6": ItemData(0xca, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 7": ItemData(0x7b, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 8": ItemData(0x7a, ItemClassification.useful, count_in_pool=0),
+    "Karmic Transformer 9": ItemData(0x7c, ItemClassification.useful, count_in_pool=0)
 }
 
 item_table = {
@@ -284,38 +284,38 @@ item_table = {
     **karmic_transformers,
 }
 junk_weights = {
-    # TODO: Junk items weight
-    "Exorcism Slip L": 1,
-    "Exorcism Slip M": 1,
-    "Exorcism Slip S": 1,
-    "Vengeance Slip": 1,
-    "Inkfinity Stone": 1,
-    "Holy Bone L": 1,
-    "Holy Bone S": 1,
-    "White porcelain pot": 1,
-    "Traveler's Charm": 1,
-    "Holy Bone M": 1,
-    "Feedbag (Meat)": 1,
-    "Feedbag (Herbs)": 1,
-    "Feedbag (Seeds)": 1,
-    "Feedbag (Fish)": 1,
-    "Steel Fist Sake": 1,
-    "Steel Soul Sake": 1,
-    "Godly Charm": 1,
-    "Kutani Pottery": 1,
-    "Incense Burner": 1,
-    "Vase": 1,
-    "Silver Pocket Watch": 1,
+    # TODO: Junk items weight - Based of the number of times it appears in chests in vanilla
+    "Exorcism Slip L": 9,
+    "Exorcism Slip M": 10,
+    "Exorcism Slip S": 22,
+    "Vengeance Slip": 19,
+    "Inkfinity Stone": 15,
+    "Holy Bone L": 1, # Never found in chests,so it should be 0, buuut...
+    "Holy Bone S": 23,
+    "White porcelain pot": 8,
+    "Traveler's Charm": 13,
+    "Holy Bone M": 9,
+    "Feedbag (Meat)": 9,
+    "Feedbag (Herbs)": 22,
+    "Feedbag (Seeds)": 26,
+    "Feedbag (Fish)": 8,
+    "Steel Fist Sake": 12,
+    "Steel Soul Sake": 12,
+    "Godly Charm": 11,
+    "Kutani Pottery": 11,
+    "Incense Burner": 14,
+    "Vase": 9,
+    "Silver Pocket Watch": 4,
     "Rat Statue": 1,
-    "Bull Horn": 1,
-    "Etched Glass": 1,
-    "Lacquerware Set": 1,
-    "Wooden Bear": 1,
-    "Glass Beads": 1,
-    "Dragonfly Bead": 1,
-    "Coral Fragment": 1,
-    "Crystal": 1,
-    "Pearl": 1,
+    "Bull Horn": 24,
+    "Etched Glass": 9,
+    "Lacquerware Set": 18,
+    "Wooden Bear": 8,
+    "Glass Beads": 15,
+    "Dragonfly Bead": 12,
+    "Coral Fragment": 16,
+    "Crystal": 38,
+    "Pearl": 33,
     "Ruby Tassels": 1,
     "Bull Statue": 1,
     "Tiger Statue": 1,
@@ -337,15 +337,4 @@ junk_weights = {
     "Cat's Eye Tassels": 1,
     "Amethyst Tassels": 1,
     "Jade Tassels": 1,
-    # Set junk_weight to 0 so additional copies won't be placed if there's space for them
-    "Karmic Returner": 0,
-    "Karmic Transformer 2": 0,
-    "Karmic Transformer 6": 0,
-    "Karmic Transformer 5": 0,
-    "Karmic Transformer 4": 0,
-    "Karmic Transformer 3": 0,
-    "Karmic Transformer 8": 0,
-    "Karmic Transformer 7": 0,
-    "Karmic Transformer 9": 0,
-    "Karmic Transformer 1": 0
 }
