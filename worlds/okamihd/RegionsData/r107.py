@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from BaseClasses import LocationProgressType
 from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -83,7 +84,7 @@ locations = {
                                                   type=LocationType.BURNING_CHEST_NO_WATER)
     },
     RegionNames.GALE_SHRINE_3F: {
-        "Gale Shrine - Kazegami": LocData(brush_check_id(6), type=LocationType.CONSTELLATION),  # bit 6
+        "Gale Shrine - Kazegami": LocData(brush_check_id(6), type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED),  # bit 6
         "Gale Shrine - 3F Sun Fragment chest near Kazegami": LocData(container_check_id(MapIds.GALE_SHRINE, 0)),
         "Gale Shrine - 3F Burning Chest": LocData(container_check_id(MapIds.GALE_SHRINE, 1),
                                                   type=LocationType.BURNING_CHEST_NO_WATER)
@@ -113,6 +114,6 @@ locations = {
                                                                            BrushTechniques.GALESTORM])
     },
     RegionNames.GALE_SHRINE_BOSS: {
-        "Gale Shrine - Crimson Helm Reward": LocData(29, required_items_events=["Gale Shrine - Defeat Crimson Helm"])
+        "Gale Shrine - Crimson Helm Reward": LocData(29, required_items_events=["Gale Shrine - Defeat Crimson Helm"],progress_type=LocationProgressType.EXCLUDED)
     }
 }

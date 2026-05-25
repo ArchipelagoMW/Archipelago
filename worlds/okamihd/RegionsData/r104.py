@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from BaseClasses import LocationProgressType
 from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -112,11 +113,11 @@ locations = {
     },
     RegionNames.TSUTA_RUINS_CENTRAL_STATUE: {
         "Tsuta Ruins - Tsutagami": LocData(brush_check_id(19), required_items_events=[
-            "Tsuta Ruins - Bloom every cursed patch inside statue"], type=LocationType.CONSTELLATION),  # Brush acquisition (Vine, bit 19)
+            "Tsuta Ruins - Bloom every cursed patch inside statue"], type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED),  # Brush acquisition (Vine, bit 19)
     },
     RegionNames.TSUTA_RUINS_SPIDER: {
         "Tsuta Ruins - Left Chest before Spider queen": LocData(container_check_id(MapIds.TSUTA_RUINS, 21)),  # spawn_idx=21, Travel Guide: Godhood Tips
         "Tsuta Ruins - Right Chest before Spider queen": LocData(container_check_id(MapIds.TSUTA_RUINS, 22)),  # spawn_idx=22, Holy Bone S
-        "Tsuta Ruins - Boss reward": LocData(container_check_id(MapIds.TSUTA_RUINS, 36), required_items_events=["Tsuta Ruins - Defeat the spider queen"]),  # spawn_idx=35, Bull Horn
+        "Tsuta Ruins - Boss reward": LocData(container_check_id(MapIds.TSUTA_RUINS, 36), required_items_events=["Tsuta Ruins - Defeat the spider queen"],progress_type=LocationProgressType.EXCLUDED),  # spawn_idx=35, Bull Horn
     }
 }

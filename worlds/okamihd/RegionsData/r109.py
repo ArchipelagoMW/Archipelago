@@ -52,7 +52,7 @@ locations = {
         "Sasa Sanctuary - 3rd West side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 23), type=LocationType.NORMAL_CHEST),
         "Sasa Sanctuary - 1st West side chest near Papa Jamba": LocData(container_check_id(MapIds.SASA_SANCTUARY, 24), type=LocationType.NORMAL_CHEST),
         "Sasa Sanctuary - Buried Chest near hot springs": LocData(container_check_id(MapIds.SASA_SANCTUARY, 41), type=LocationType.BURIED_CHEST),
-        "Sasa Sanctuary - Nuregami": LocData(brush_check_id(13), type=LocationType.CONSTELLATION),  # bit 13
+        "Sasa Sanctuary - Nuregami": LocData(brush_check_id(13), type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED),  # bit 13
         "Sasa Sanctuary - Daruma Doll": LocData(container_check_id(MapIds.SASA_SANCTUARY, 43), type=LocationType.DARUMA)
     },
     RegionNames.SASA_SANCTUARY_BAMBOO: {

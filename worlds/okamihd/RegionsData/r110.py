@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from BaseClasses import LocationProgressType
 from rule_builder.rules import HasGroup, And, Has
 from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
@@ -255,7 +256,7 @@ locations = {
         "Moon Cave - B2F Chest on ledge near eyes door": LocData(container_check_id(MapIds.MOON_CAVE, 15))
     },
     RegionNames.MOON_CAVE_B2F_FROZEN_STATUE: {
-        "Moon Cave - Moegami": LocData(brush_check_id(10), type=LocationType.CONSTELLATION)  # bit 10
+        "Moon Cave - Moegami": LocData(brush_check_id(10), type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED)  # bit 10
     },
     RegionNames.MOON_CAVE_B2F_BOMBABLE: {
         "Moon Cave - B2F Chest behind bombable wall": LocData(container_check_id(MapIds.MOON_CAVE, 4))
@@ -293,6 +294,10 @@ locations = {
         "Moon Cave - 4F Upper ledge Frozen Chest": LocData(container_check_id(MapIds.MOON_CAVE, 21),
                                                            type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
                                                            special_rule=moon_cave_4f_fire_rule)
+    },
+    RegionNames.MOON_CAVE_OROCHI:{
+        ## Cutscene
+        "Moon Cave - Orochi Reward":LocData(container_check_id(MapIds.MOON_CAVE,22),progress_type=LocationProgressType.EXCLUDED)
     }
 }
 
