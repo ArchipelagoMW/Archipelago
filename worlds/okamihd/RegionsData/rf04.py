@@ -27,9 +27,8 @@ exits = {
         ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE, has_events=["Agata Forest - Open shortcut to Shinshu Field"])
     ],
     RegionNames.AGATA_FOREST_TAKA: [
-        ExitData(RegionNames.CURSED_TAKA_PASS),
-        ExitData(RegionNames.TAKA_PASS,
-                 has_events=["Taka pass - Restore Guardian Sapling"]),
+        ExitData(RegionNames.CURSED_TAKA_PASS,one_way=True),
+        ExitData(RegionNames.TAKA_PASS,has_events=["Taka pass - Restore Guardian Sapling"],one_way=True),
     ]
 }
 events = {

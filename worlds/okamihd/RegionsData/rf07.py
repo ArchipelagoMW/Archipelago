@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
+    RegionNames.TAKA_COMMON_LOGIC:[
+        ExitData(RegionNames.AGATA_FOREST_TAKA,one_way=True)
+    ],
     RegionNames.CURSED_TAKA_PASS: [
         ExitData(RegionNames.CURSED_TAKA_PASS_WAKA, has_events=["Taka Pass - Blow up boulder to cave"],
                  loading_screen=False)],
