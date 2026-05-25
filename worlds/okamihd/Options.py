@@ -105,7 +105,7 @@ class MoonCaveAccess(Choice):
     option_serpent_crystal = 0
     option_crimson_helm = 1
     option_open = 2
-    default = 2
+    default = 1
 
 
 class RandomizeContainers(Toggle):
