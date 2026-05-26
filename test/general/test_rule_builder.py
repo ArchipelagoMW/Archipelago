@@ -160,6 +160,10 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
 @classvar_matrix(
     rules=(
         (
+            Has("A", 0),
+            True_.Resolved(player=1)
+        ),
+        (
             And(Has("A", 1), Has("A", 2)),
             Has.Resolved("A", 2, player=1),
         ),
