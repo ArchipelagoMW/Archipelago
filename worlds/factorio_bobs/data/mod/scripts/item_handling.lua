@@ -5,6 +5,48 @@ local library = require("libs/lib")
 local traps = require("trap_handling")
 local util = require("util")
 
+local function receive_item(item_name, source)
+    for _, force in pairs(library.get_all_ap_forces()) do
+        if general.technologies.progressive()[item_name] ~= nil then
+            local tech_stack = general.technologies.progressive()[item_name]
+                for _, item_name in ipairs(tech_stack) do
+                    local tech = force.technologies[item_name]
+                    if tech.researched ~= true then
+                        force.print({"archipelago.receive-ap-item", "[technology=" .. tech.name .. "]", source})
+                        force.play_sound({path="utility/research_completed"})
+                        tech.researched = true
+                        return
+                    end
+                end
+        elseif force.technologies[item_name] ~= nil then
+            for _, force in pairs(library.get_all_ap_forces()) do
+                local tech = force.technologies[item_name]
+                if tech.researched ~= true then --if not true, so it only tells you about new technologies.
+                    force.print({"archipelago.receive-ap-item", "[technology=" .. tech.name .. "]", source})
+                    force.play_sound({path="utility/research_completed"})
+                    tech.researched = true
+                end
+            end
+        elseif traps.is_trap(item_name) then
+            force.print({"archipelago.receive-ap-item", item_name, source})
+            traps.run_trap(item_name)
+        else
+            force.print("Unknown Item " .. item_name)
+        end
+    end
+end
+
+local function remote_unlock(item_name, index, source)
+    if storage.index_sync[index] ~= item_name then -- not yet received prog item
+        storage.index_sync[index] = item_name
+        receive_item(item_name, source)
+    end
+end
+
+local function local_unlock(item_name)
+    receive_item(item_name, general.slot_name)
+end
+
 local function update_player(index)
     local player = game.players[index]
     if not player or not player.valid then     -- Do nothing if we reference an invalid player somehow
@@ -35,7 +77,7 @@ local function update_player(index)
                 sent = 0
             end
             if sent > 0 then
-                player.print({"archipelago.recieve-sample-item", sent, "[item=" .. name .. ",quality="..general.free_samples.quality.."]"})
+                player.print({"archipelago.receive-sample-item", sent, "[item=" .. name .. ",quality="..general.free_samples.quality.."]"})
                 data.suppress_full_inventory_message = false
             end
             if sent ~= count then               -- Couldn't full send.

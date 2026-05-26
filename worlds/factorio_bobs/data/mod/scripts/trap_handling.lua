@@ -1,5 +1,3 @@
-
-
 local general = require("Archipelago/general")
 local library = require("libs/lib")
 
@@ -38,9 +36,9 @@ local function fire_entity_at_players (entity_name, speed)
     if not prototypes.entity[entity_name] then return end
     if not prototypes.entity[entity_name].valid then return end
     local entities = {}
-    for _, force in pairs(game.forces) do
+    for force_name, force in pairs(game.forces) do
         if library.is_valid_ap_force(force) then
-            for _, player in ipairs(game.forces[force].players) do
+            for _, player in ipairs(game.forces[force_name].players) do
                 if player.character ~= nil then
                     table.insert(entities, player.character)
                 end
@@ -166,7 +164,19 @@ local function undo_peekaboo_trap()
 end
 
 local function set_energy_spiral(number)
-    game.print("Spiral at "..game.tick.." is currently at "..number)
+    if number == 0 then
+        game.print({"spiral-0"})
+    elseif number == 1 then
+        game.print({"spiral-1"})
+    elseif number == 2 then
+        game.print({"spiral-2"})
+    elseif number == 3 then
+        game.print({"spiral-3"})
+    elseif number == 4 then
+        game.print({"spiral-4"})
+    else
+        game.print({"spiral-last"})
+    end
 
     for _, surface in pairs(game.surfaces) do
         surface.global_effect = {
@@ -244,7 +254,7 @@ local function hide_technology_trap()
         storage.trap_memory.peekaboo.reveal_tech_tick = storage.trap_memory.peekaboo.reveal_tech_tick + general.traps.hide_tech_time / 2
         add_action_to_tick(storage.trap_memory.peekaboo.reveal_tech_tick, "undo-peekaboo-trap", undo_peekaboo_trap)
     else
-        for _, force in pairs(library.all_valid_ap_forces()) do
+        for _, force in pairs(library.get_all_ap_forces()) do
             storage.trap_memory.peekaboo.force[force.name] = storage.trap_memory.peekaboo.force[force.name] or {}
             storage.trap_memory.peekaboo.force[force.name].temp_hidden_tech = {}
             storage.trap_memory.peekaboo.force[force.name].temp_hidden_queue = force.research_queue
@@ -263,7 +273,7 @@ local function hide_technology_trap()
 end
 
 local function reset_technology_progress_trap()
-    for _, force in pairs(library.all_valid_ap_forces()) do
+    for _, force in pairs(library.get_all_ap_forces()) do
         force.research_progress = 0
         for _, tech in pairs(force.technologies) do
             tech.saved_progress = 0
@@ -272,7 +282,7 @@ local function reset_technology_progress_trap()
 end
 
 local function clear_map_trap()
-    for _, force in pairs(library.all_valid_ap_forces()) do
+    for _, force in pairs(library.get_all_ap_forces()) do
         force.clear_chart()
     end
 end
