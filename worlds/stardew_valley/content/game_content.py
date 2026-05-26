@@ -56,6 +56,16 @@ class StardewContent:
         yield from find_sources_of_type_on_items(self.cooking_recipes, *types)
         yield from find_sources_of_type_on_items(self.crafting_recipes, *types)
 
+    def find_sources_of_type_filtered_by_feature(self, *types: type[Source]) -> Iterable[Source]:
+        yield from find_sources_of_type_on_items(self.game_items, *types)
+        if self.features.building_progression.is_progressive:
+            yield from find_sources_of_type_on_items(self.farm_buildings, *types)
+        if self.features.tool_progression.is_progressive:
+            yield from find_sources_of_type_on_items(self.tool_upgrades, *types)
+        yield from find_sources_of_type_on_items(self.animals, *types)
+        yield from find_sources_of_type_on_items(self.cooking_recipes, *types)
+        yield from find_sources_of_type_on_items(self.crafting_recipes, *types)
+
     def find_item_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
         yield from find_sources_of_type_on_items(self.game_items, *types)
 

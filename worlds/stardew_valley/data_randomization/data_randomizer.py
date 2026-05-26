@@ -433,7 +433,7 @@ def randomize_shop_extra_materials(content: StardewContent, data_to_randomize: s
     if DataRandomizationOptionName.shop_extra_materials not in data_to_randomize:
         return
 
-    shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.items_price is not None and len(shop_source.items_price) >= 1])
+    shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type_filtered_by_feature(ShopSource) if shop_source.items_price is not None and len(shop_source.items_price) >= 1])
 
     shop_materials_by_source_index = {source_index: shop_source.items_price for source_index, shop_source in enumerate(shop_sources_included)}
     randomized_shop_materials = randomizers_per_behavior[behavior](shop_materials_by_source_index, random)
