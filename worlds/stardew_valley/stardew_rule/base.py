@@ -15,6 +15,25 @@ from .protocol import StardewRule
 MISSING_ITEM = "THIS ITEM IS MISSING"
 
 
+def stack_size2a(size=2):
+    """
+    Get stack size for caller's frame.
+    This is used to debug infinite recursions that might happen in the rules below.
+    Example of a way to debug an infinite recursion:
+        stack = stack_size2a()
+        if stack > 200: # 200 is arbitrary. Just put a high value there. This is the stack size at which you want to breakpoint
+            a = 5 # <---- Place a break point on this line here
+    """
+    import sys
+    from itertools import count
+    frame = sys._getframe(size)
+
+    for size in count(size):
+        frame = frame.f_back
+        if not frame:
+            return size
+
+
 class BaseStardewRule(StardewRule, ABC):
 
     def __or__(self, other) -> StardewRule:
