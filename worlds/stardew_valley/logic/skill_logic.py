@@ -46,6 +46,10 @@ class SkillLogic(BaseLogic):
         elif skill == Skill.foraging:
             xp_rule = (self.can_get_foraging_xp & self.logic.tool.has_tool(Tool.axe, tool_material)) | \
                       self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
+            if level > 5:
+                stump_rule = self.logic.region.can_reach(Region.secret_woods)
+                xp_rule = xp_rule & stump_rule
+
         elif skill == Skill.mining:
             xp_rule = self.logic.tool.has_tool(Tool.pickaxe, tool_material) | \
                       self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
@@ -175,8 +179,7 @@ class SkillLogic(BaseLogic):
     def can_get_foraging_xp(self) -> StardewRule:
         tool_rule = self.logic.tool.has_tool(Tool.axe)
         tree_rule = self.logic.region.can_reach(Region.forest) & self.logic.season.has_any_not_winter()
-        stump_rule = self.logic.region.can_reach(Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
-        return tool_rule & (tree_rule | stump_rule)
+        return tool_rule & tree_rule
 
     @cached_property
     def can_get_mining_xp(self) -> StardewRule:
