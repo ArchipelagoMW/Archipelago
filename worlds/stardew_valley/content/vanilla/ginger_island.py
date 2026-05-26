@@ -92,7 +92,7 @@ ginger_island_content_pack = GingerIslandContentPack(
 
     },
     shop_sources={
-        Seed.taro: (ShopSource(price=0, currency=Currency.money, items_price=((2, Fossil.bone_fragment),), shop_region=Region.island_trader),),
+        Seed.taro: (ShopSource(price=0, currency=Currency.money, items_price=((2, Fossil.bone_fragment),), shop_region=Region.island_trader, forbidden_items=(Vegetable.taro_root,)),),
         Seed.pineapple: (ShopSource(price=0, currency=Currency.money, items_price=((1, Mushroom.magma_cap),), shop_region=Region.island_trader),),
         Sapling.banana: (ShopSource(price=0, currency=Currency.money, items_price=((5, Forageable.dragon_tooth),), shop_region=Region.island_trader),),
         Sapling.mango: (ShopSource(price=0, currency=Currency.money, items_price=((75, Fish.mussel_node),), shop_region=Region.island_trader),),
