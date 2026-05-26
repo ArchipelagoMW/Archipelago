@@ -355,6 +355,14 @@ def randomize_shop_currencies(content: StardewContent, data_to_randomize: set[st
     #     new_sources = get_new_currency_sources(animal_data, randomized_shop_currencies_by_id)
     #     if new_sources is not None:
     #         content.animals[animal_name] = override(animal_data, sources=new_sources)
+    for cooking_recipe_name, cooking_recipe_data in content.cooking_recipes.items():
+        new_sources = get_new_currency_sources(cooking_recipe_data, randomized_shop_currencies_by_id)
+        if new_sources is not None:
+            content.cooking_recipes[cooking_recipe_name] = override(cooking_recipe_data, sources=new_sources)
+    for crafting_recipe_name, crafting_recipe_data in content.crafting_recipes.items():
+        new_sources = get_new_currency_sources(crafting_recipe_data, randomized_shop_currencies_by_id)
+        if new_sources is not None:
+            content.crafting_recipes[crafting_recipe_name] = override(crafting_recipe_data, sources=new_sources)
 
 
 def get_new_currency_sources(data, randomized_shop_currencies):
@@ -366,7 +374,7 @@ def get_new_currency_sources(data, randomized_shop_currencies):
     new_sources = list(data.sources)
     new_sources = [source for source in new_sources if source not in shop_sources]
     new_sources.extend(modified_shop_sources)
-    return new_sources
+    return tuple(new_sources)
 
 
 def randomize_shop_prices(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
@@ -416,6 +424,14 @@ def randomize_shop_prices_group(content: StardewContent, behavior: DataRandomiza
         new_sources = get_new_price_sources(animal_data, randomized_shop_prices_by_id)
         if new_sources is not None:
             content.animals[animal_name] = override(animal_data, sources=new_sources)
+    for cooking_recipe_name, cooking_recipe_data in content.cooking_recipes.items():
+        new_sources = get_new_price_sources(cooking_recipe_data, randomized_shop_prices_by_id)
+        if new_sources is not None:
+            content.cooking_recipes[cooking_recipe_name] = override(cooking_recipe_data, sources=new_sources)
+    for crafting_recipe_name, crafting_recipe_data in content.crafting_recipes.items():
+        new_sources = get_new_price_sources(crafting_recipe_data, randomized_shop_prices_by_id)
+        if new_sources is not None:
+            content.crafting_recipes[crafting_recipe_name] = override(crafting_recipe_data, sources=new_sources)
 
 
 def get_new_price_sources(data, randomized_prices_per_shop_source):
@@ -426,7 +442,7 @@ def get_new_price_sources(data, randomized_prices_per_shop_source):
     new_sources = list(data.sources)
     new_sources = [source for source in new_sources if source not in shop_sources]
     new_sources.extend(modified_shop_sources)
-    return new_sources
+    return tuple(new_sources)
 
 
 def randomize_shop_extra_materials(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
@@ -458,6 +474,14 @@ def randomize_shop_extra_materials(content: StardewContent, data_to_randomize: s
     #     new_sources = get_new_extra_material_sources(animal_data, randomized_shop_materials_by_id, shop_sources_by_id)
     #     if new_sources is not None:
     #         content.animals[animal_name] = override(animal_data, sources=new_sources)
+    for cooking_recipe_name, cooking_recipe_data in content.cooking_recipes.items():
+        new_sources = get_new_extra_material_sources(cooking_recipe_data, randomized_shop_materials_by_id)
+        if new_sources is not None:
+            content.cooking_recipes[cooking_recipe_name] = override(cooking_recipe_data, sources=new_sources)
+    for crafting_recipe_name, crafting_recipe_data in content.crafting_recipes.items():
+        new_sources = get_new_extra_material_sources(crafting_recipe_data, randomized_shop_materials_by_id)
+        if new_sources is not None:
+            content.crafting_recipes[crafting_recipe_name] = override(crafting_recipe_data, sources=new_sources)
 
 
 def get_new_extra_material_sources(data, randomized_shop_materials):
@@ -472,4 +496,4 @@ def get_new_extra_material_sources(data, randomized_shop_materials):
     new_sources = []
     new_sources.extend(unchanged_sources)
     new_sources.extend(modified_shop_sources)
-    return new_sources
+    return tuple(new_sources)
