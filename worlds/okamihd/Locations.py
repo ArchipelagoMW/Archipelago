@@ -95,3 +95,6 @@ def get_total_locations(world: "OkamiWorld") -> int:
         num_shops = len(okami_shop_locations)  # Number of regions with shops
         location_count += num_shops * shop_slots
     return location_count
+
+
+

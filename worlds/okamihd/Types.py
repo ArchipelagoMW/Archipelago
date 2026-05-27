@@ -3,6 +3,7 @@ from typing import NamedTuple, List, Callable, TYPE_CHECKING, TypeVar
 
 from BaseClasses import Location, Item, ItemClassification, LocationProgressType
 from rule_builder.rules import Rule, True_, False_
+from .Enums import RegionNames
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.LocationType import LocationType
 from .Enums.OkamiEnemies import OkamiEnemies
@@ -78,6 +79,15 @@ class WarpData(NamedTuple):
     trigger_warp_from: Rule | True_ | False_
     # The logical rule to warp from anywhere else to this place
     trigger_warp_to: Rule | True_ | False_
+
+# Defines the way an item should be ranomized locally ("To a limited set of locations")
+class LocalItem(NamedTuple):
+    allowed_regions: List[RegionNames]
+    is_biteable: bool
+    exclude_locations: List[str] = []
+    additional_locations: List[str] = []
+    # Is this a "bitable" item ? (will exclude location types that directly put the item in the players inventory)
+
 
 
 T = TypeVar('T', str, int, bool)

@@ -1,19 +1,20 @@
-from BaseClasses import Item, ItemClassification, Tutorial, MultiWorld
+import Fill
+from BaseClasses import Item, ItemClassification, Tutorial, MultiWorld, Location
 from Utils import visualize_regions
+from .Enums.LocationType import excluded_biteable_location_types
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, get_item_name_to_id_dict, \
     karmic_transformers, \
-    progressive_weapons, create_standard_item, create_static_precollected_item_list
+    progressive_weapons, create_standard_item, create_static_precollected_item_list, local_items
 from .Regions import create_regions, get_region_name
 from .Locations import get_location_names, get_total_locations
-from .RegionsData import okami_events,okami_locations
+from .RegionsData import okami_events, okami_locations, okami_shop_locations
 from .Rules import set_completion_rules
 from .Options import create_option_groups, OkamiOptions, slot_data_options, KarmicTransformers
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from typing import List
-from .Types import OkamiItem, resolve_option_callable
+from .Types import OkamiItem, resolve_option_callable, LocalItem
 from .Enums.DivineInstruments import DivineInstruments
 from .Enums.RegionNames import RegionNames
-
 
 
 class OkamiWebWolrd(WebWorld):
@@ -25,7 +26,7 @@ class OkamiWebWolrd(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Axertin","Ragmoa"]
+        ["Axertin", "Ragmoa"]
     )]
 
 
@@ -76,6 +77,22 @@ class OkamiWorld(World):
 
         return slot_data
 
+    def pre_fill(self) -> None:
+        from Fill import fill_restrictive, FillError
+        # local items randomization
+        prefilled_locations = []
+        for local_item_name, local_item_data in local_items.items():
+            valid_locations = self.get_valid_local_item_locations(local_item_data, prefilled_locations)
+            # Important - Archipelago will try to place on every location in the list by order, so we shuffle it to not always get the same result.
+            self.multiworld.random.shuffle(valid_locations)
+            item_data = item_table.get(local_item_name)
+            item_pool = [create_item(local_item_name, item_data.code, item_data.classification, self)]
+            try:
+                fill_restrictive(self.multiworld, self.multiworld.get_all_state(), valid_locations, item_pool)
+            except FillError as f:
+                Fill.inaccessible_location_rules(self.multiworld,self.multiworld.state,valid_locations)
+                raise f
+
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         old_count: int = state.count(item.name, self.player)
         change = super().collect(state, item)
@@ -88,28 +105,29 @@ class OkamiWorld(World):
 
     def create_itempool(world: "OkamiWorld") -> List[Item]:
         itempool: List[Item] = []
-        precollected_items: List [Item] = []
+        precollected_items: List[Item] = []
 
         # Static Precollected Items
         precollected_items = create_static_precollected_item_list(world)
-
-
 
         if not world.options.ProgressiveWeapons:
             # Create normal weapons
             for (divine_instrument_data) in list(DivineInstruments):
                 if divine_instrument_data.value.item_name != DivineInstruments.DIVINE_RETRIBUTION.value.item_name:
-                    itempool+=[create_item(divine_instrument_data.value.item_name,divine_instrument_data.value.code,ItemClassification.progression,world)]
+                    itempool += [create_item(divine_instrument_data.value.item_name, divine_instrument_data.value.code,
+                                             ItemClassification.progression, world)]
         else:
-        # Create progressive weapons
+            # Create progressive weapons
             for (progressive_weapon_name, progressive_weapon) in progressive_weapons.items():
-        # Only Randomize 4 Progressive Mirrors since we start with Divine Retribution
+                # Only Randomize 4 Progressive Mirrors since we start with Divine Retribution
                 if progressive_weapon_name == 'Progressive Mirror':
-                    count= 4
+                    count = 4
                 else:
                     count = 5
                 for i in range(count):
-                    itempool += [create_item(progressive_weapon_name, progressive_weapon.code, progressive_weapon.classification, world)]
+                    itempool += [
+                        create_item(progressive_weapon_name, progressive_weapon.code, progressive_weapon.classification,
+                                    world)]
 
         match world.options.KarmicTransformers:
             case KarmicTransformers.option_precollected:
@@ -139,11 +157,11 @@ class OkamiWorld(World):
 
                         if is_event_item_state:
                             # With the current options this event becomes its own item, so we need to add it to the item pool
-                            itempool += [create_standard_item(world,event_data.event_item_name)]
+                            itempool += [create_standard_item(world, event_data.event_item_name)]
 
         for name in item_table.keys():
             item_type: ItemClassification = item_table.get(name).classification
-            item_count:int = resolve_option_callable(item_table.get(name).count_in_pool,world)
+            item_count: int = resolve_option_callable(item_table.get(name).count_in_pool, world)
             if item_count > 0:
                 itempool += create_multiple_items(world, name, item_count, item_type)
 
@@ -154,7 +172,25 @@ class OkamiWorld(World):
 
         return itempool
 
+    def get_valid_local_item_locations(self, local_item_data: LocalItem, prefilled_locations: List[str], ) -> \
+    List[Location]:
+        list = []
+        for r in local_item_data.allowed_regions:
+            # Check we don't try to place this on a region that doesn't exist.
+            if r in okami_locations.keys():
+                for loc_name, loc_data in okami_locations[r].items():
+                    # Check this isn't a location we've excluded or that we have already prefilled
+                    if loc_name not in local_item_data.exclude_locations and loc_name not in prefilled_locations:
+                        # If this is a biteable item, exclude places that place it directly in your inventory
+                        if not local_item_data.is_biteable or loc_data.type not in excluded_biteable_location_types:
+                            list.append(self.get_location(loc_name))
+            # Second loop for shops, only if the item is not biteable
+            if not local_item_data.is_biteable and r in okami_shop_locations.keys():
+                for shop_loc_name in okami_locations[r].keys():
+                    if shop_loc_name not in prefilled_locations:
+                        list.append(self.get_location(shop_loc_name))
 
+        return list
 
     # Probably has to be a better way to do this.
     item_name_groups = {
@@ -184,7 +220,7 @@ class OkamiWorld(World):
             "Satomi Power Orb (Duty)"
         ],
 
-        "soup_ingredients":[
+        "soup_ingredients": [
             "Ogre Liver",
             "Ice Lips",
             "Fire Eye",

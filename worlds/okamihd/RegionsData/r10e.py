@@ -16,8 +16,8 @@ exits = {
 events = {
     RegionNames.CALCIFIED_CAVERN: {
         "Calcified Cavern - Defeat devil gate": EventData(mandatory_enemies=[OkamiEnemies.BLACK_IMP]),
-        "Calcified Cavern - Get Mask": EventData(required_items_events=["Calcified Cavern - Defeat devil gate"]),
-        "Calcified Cavern - Fool Yokai Guards": EventData(required_items_events=["Calcified Cavern - Get Mask"])
+
+        "Calcified Cavern - Fool Yokai Guards": EventData(required_items_events=["Mask"])
     }
 }
 locations = {
@@ -25,7 +25,7 @@ locations = {
         "Calcified Cavern - Freestanding item": LocData(container_check_id(MapIds.CALCIFIED_CAVERN, 0),
                                                         type=LocationType.FREESTANDING_ITEM),
         # For now this is treated like a key, so not randomized.
-        # "Calcified Cavern - Chest after devil gate": LocData(container_check_id(0x10E, 1), required_items_events=["Calcified Cavern - Defeat devil gate"]),
+        "Calcified Cavern - Chest after devil gate": LocData(container_check_id(MapIds.CALCIFIED_CAVERN, 1), required_items_events=["Calcified Cavern - Defeat devil gate"]),
         "Calcified Cavern - Left Side chest": LocData(container_check_id(MapIds.CALCIFIED_CAVERN, 2)),
         "Calcified Cavern - Frozen Chest": LocData(container_check_id(MapIds.CALCIFIED_CAVERN, 3),
                                                    type=LocationType.FROZEN_CHEST,
