@@ -156,7 +156,7 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
         
         self.output(f"Set save slot to {slotNum}")
         if self.ctx.is_connected:
-            self._cmd_resync(self) # Also run resync
+            self._cmd_resync() # Also run resync
         return True
     
     def _cmd_install_pack(self) -> bool:
