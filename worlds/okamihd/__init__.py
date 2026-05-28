@@ -4,7 +4,7 @@ from Utils import visualize_regions
 from .Enums.LocationType import excluded_biteable_location_types
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, get_item_name_to_id_dict, \
     karmic_transformers, \
-    progressive_weapons, create_standard_item, create_static_precollected_item_list, local_items
+    progressive_weapons, create_standard_item, create_static_precollected_item_list, local_items, get_local_items_name
 from .Regions import create_regions, get_region_name
 from .Locations import get_location_names, get_total_locations
 from .RegionsData import okami_events, okami_locations, okami_shop_locations
@@ -80,21 +80,24 @@ class OkamiWorld(World):
     def pre_fill(self) -> None:
         from Fill import fill_restrictive, FillError
         # local items randomization
-        for local_item_name, local_item_data in local_items.items():
+        for local_item_data in local_items:
             valid_locations = self.get_valid_local_item_locations(local_item_data)
             # Important - Archipelago will try to place on every location in the list by order, so we shuffle it to not always get the same result.
             self.multiworld.random.shuffle(valid_locations)
+            local_item_pool=[]
             state=self.multiworld.get_all_state(collect_pre_fill_items=True,perform_sweep=False)
-            local_item = self.create_item(local_item_name)
-            state.remove(local_item)
+            for i in local_item_data.items:
+                local_item = self.create_item(i)
+                state.remove(local_item)
+                local_item_pool.append(local_item)
             state.sweep_for_advancements()
 
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(collect_pre_fill_items=True,perform_sweep=True), valid_locations, [local_item])
+            fill_restrictive(self.multiworld, state, valid_locations, local_item_pool)
 
     def get_pre_fill_items(self) -> List["Item"]:
         res=[]
-        for local_item_name in local_items.keys():
-            res.append(self.create_item(local_item_name))
+        for i in get_local_items_name():
+            res.append(self.create_item(i))
         return res
 
 
@@ -167,10 +170,13 @@ class OkamiWorld(World):
         for name in item_table.keys():
             item_type: ItemClassification = item_table.get(name).classification
             item_count: int = resolve_option_callable(item_table.get(name).count_in_pool, world)
+            # If the item is locally randomized we have to put one less
+            if name in get_local_items_name():
+                item_count-=1
             if item_count > 0:
                 itempool += create_multiple_items(world, name, item_count, item_type)
         #Create a number of junk items equal to the locations remaining, minus items that have a fixed count in the item pool, and the locally placed ones.
-        itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(local_items))
+        itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(get_local_items_name()))
 
         for pi in precollected_items:
             world.push_precollected(pi)

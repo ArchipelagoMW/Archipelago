@@ -39,4 +39,4 @@ class LocationType(Enum):
 
 excluded_biteable_location_types = [LocationType.CONSTELLATION, LocationType.EVENT, LocationType.DIGGING_MINIGAME_EARLY,
                                     LocationType.DIGGING_MINIGAME_LATER, LocationType.SHOP,
-                                    LocationType.FISHING_MINIGAME]
+                                    LocationType.FISHING_MINIGAME,LocationType.UNDERWATER_CHEST_SHALLOW,LocationType.UNDERWATER_CHEST]

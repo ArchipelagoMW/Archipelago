@@ -74,6 +74,13 @@ def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
     return precollected_items
 
 
+def get_local_items_name() -> List[str]:
+    local_items_names:List[str] = []
+    for l in local_items:
+        local_items_names += l.items
+    return local_items_names
+
+
 brush_techniques_items = {
     # Brush Techniques — item codes = 0x100 + game bitfield index (from BrushOverlay enum)
     BrushTechniques.GREENSPROUT_BLOOM.value: ItemData(0x104, ItemClassification.progression),  # bit 4
@@ -123,6 +130,7 @@ quest_items = {
     "Thunder Brew": ItemData(0x47, ItemClassification.progression),
     "Shell Amulet": ItemData(0x48, ItemClassification.progression),
 
+    "Mask": ItemData(0x49, ItemClassification.progression),
     "Golden Mushroom": ItemData(0x5f, ItemClassification.progression),
     "Gimmick Gear": ItemData(0x60, ItemClassification.progression),
     "8 Purification Sake": ItemData(0x62, ItemClassification.progression),
@@ -143,13 +151,12 @@ bitable_items = {
     ### at a potential place where they can't use them.
     ### Edit: So this Sake only resets if you go outside Kamiki village or on of its interiors;
     ### I'm not sure how that's going to work with ER.
-    ### NOTE: Manually created bc of local_items handling, count hast to be 0 here.
-    "Vista of the Gods": ItemData(0x5C, ItemClassification.progression,count_in_pool=0),
-    "Tsuta Ruins Key": ItemData(0x40, ItemClassification.progression,count_in_pool=0),
+    "Vista of the Gods": ItemData(0x5C, ItemClassification.progression),
+    "Tsuta Ruins Key": ItemData(0x40, ItemClassification.progression),
     # "Oddly Shaped Turnip": ItemData(0x41, ItemClassification.progression)
 }
 useful_items = {
-    # Useful items - Counts here are invalid, it's intended, to not fille the item pool with these
+    # Useful items - Counts here are invalid, it's intended, to not fill the item pool with these
     "Sun Fragment": ItemData(0x05, ItemClassification.useful, count_in_pool=4),  # Should be 12
     "Astral Pouch": ItemData(0x06, ItemClassification.useful, count_in_pool=0),  # Intended
     "Stray Bead": ItemData(0xCC, ItemClassification.useful, count_in_pool=0),
@@ -235,7 +242,7 @@ event_items = {
     "Satomi Power Orb (Duty)": ItemData(0x50, ItemClassification.progression, count_in_pool=0),
     "Serpent Crystal": ItemData(0x308, ItemClassification.progression, count_in_pool=0),
     # MOON CAVE
-    "Mask": ItemData(0x49, ItemClassification.progression, count_in_pool=0),
+
     "Ogre Liver": ItemData(0x4a, ItemClassification.progression, count_in_pool=0),
     "Ice Lips": ItemData(0x4b, ItemClassification.progression, count_in_pool=0),
     "Fire Eye": ItemData(0x4c, ItemClassification.progression, count_in_pool=0),
@@ -282,6 +289,7 @@ item_table = {
     **equips,
     **bitable_items,
     **useful_items,
+    **quest_items,
     **filler_items,
     **event_items,
     **weapons_items,
@@ -344,14 +352,38 @@ junk_weights = {
     "Jade Tassels": 1,
 }
 
-local_items = {
-    "Vista of the Gods": LocalItem(
-        [RegionNames.KAMIKI_VILLAGE, RegionNames.KAMIKI_ISLANDS, RegionNames.KUSHIS_HOUSE, RegionNames.ORANGES_HOUSE],
-        is_biteable=True
-    ),
-    "Tsuta Ruins Key": LocalItem(
-        [RegionNames.AGATA_COMMON_LOGIC, RegionNames.AGATA_FOREST],
-        is_biteable=True
-    ),
-    "Mask": LocalItem([RegionNames.CALCIFIED_CAVERN],is_biteable=False),
-}
+local_items = [
+    LocalItem(["Vista of the Gods"],
+              [RegionNames.KAMIKI_VILLAGE, RegionNames.KAMIKI_ISLANDS, RegionNames.KUSHIS_HOUSE,
+               RegionNames.ORANGES_HOUSE],
+              is_biteable=True
+              ),
+    LocalItem(["Tsuta Ruins Key"],
+              [RegionNames.AGATA_COMMON_LOGIC, RegionNames.AGATA_FOREST],
+              is_biteable=True
+              ),
+    LocalItem(["Mask"], [RegionNames.CALCIFIED_CAVERN], is_biteable=False),
+    LocalItem(["Ogre Liver",
+               "Ice Lips",
+               "Fire Eye",
+               "Black Demon Horn"], [RegionNames.MOON_CAVE,
+                                     RegionNames.MOON_CAVE_1F_LOCKED_CAVE,
+                                     RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK,
+                                     RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
+                                     RegionNames.MOON_CAVE_3F,
+                                     RegionNames.MOON_CAVE_B1F_LAKE,
+                                     RegionNames.MOON_CAVE_B1F_UNDER_LIFT,
+                                     RegionNames.MOON_CAVE_B2F_LIFT,
+                                     RegionNames.MOON_CAVE_B2F_FROZEN_STATUE,
+                                     RegionNames.MOON_CAVE_B2F_OTHER_LIFT,
+                                     RegionNames.MOON_CAVE_B2F_BOMBABLE,
+                                     RegionNames.MOON_CAVE_KITCHEN_BACK,
+                                     RegionNames.MOON_CAVE_3F_FIRE_EYE,
+                                     RegionNames.MOON_CAVE_3F_SAND,
+                                     RegionNames.MOON_CAVE_2F_SAND_PIT,
+                                     RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND,
+                                     RegionNames.MOON_CAVE_2F_RAFTERS_CHEST,
+                                     RegionNames.MOON_CAVE_4F_RAFTERS,
+                                     RegionNames.MOON_CAVE_4F_CANON,
+                                     RegionNames.MOON_CAVE_4F_AFTER_CANON], is_biteable=False)
+]

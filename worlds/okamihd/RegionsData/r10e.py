@@ -17,7 +17,7 @@ events = {
     RegionNames.CALCIFIED_CAVERN: {
         "Calcified Cavern - Defeat devil gate": EventData(mandatory_enemies=[OkamiEnemies.BLACK_IMP]),
 
-        "Calcified Cavern - Fool Yokai Guards": EventData(required_items_events=["Mask"])
+        "Calcified Cavern - Fool Yokai Guards": EventData(required_items_events=["Mask","Thunder Brew"])
     }
 }
 locations = {

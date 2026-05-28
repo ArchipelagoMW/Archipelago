@@ -82,6 +82,7 @@ class WarpData(NamedTuple):
 
 # Defines the way an item should be ranomized locally ("To a limited set of locations")
 class LocalItem(NamedTuple):
+    items:List[str]
     allowed_regions: List[RegionNames]
     is_biteable: bool
     exclude_locations: List[str] = []
