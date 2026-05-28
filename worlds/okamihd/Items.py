@@ -362,7 +362,7 @@ local_items = [
               [RegionNames.AGATA_COMMON_LOGIC, RegionNames.AGATA_FOREST],
               is_biteable=True
               ),
-    LocalItem(["Mask"], [RegionNames.CALCIFIED_CAVERN], is_biteable=False),
+    LocalItem(["Mask"], [RegionNames.CALCIFIED_CAVERN], is_biteable=False,exclude_locations=["Calcified Cavern - Freestanding item"]),
     LocalItem(["Ogre Liver",
                "Ice Lips",
                "Fire Eye",

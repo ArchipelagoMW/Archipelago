@@ -84,8 +84,8 @@ class OkamiWorld(World):
             valid_locations = self.get_valid_local_item_locations(local_item_data)
             # Important - Archipelago will try to place on every location in the list by order, so we shuffle it to not always get the same result.
             self.multiworld.random.shuffle(valid_locations)
-            local_item_pool=[]
-            state=self.multiworld.get_all_state(collect_pre_fill_items=True,perform_sweep=False)
+            local_item_pool = []
+            state = self.multiworld.get_all_state(collect_pre_fill_items=True, perform_sweep=False)
             for i in local_item_data.items:
                 local_item = self.create_item(i)
                 state.remove(local_item)
@@ -95,11 +95,10 @@ class OkamiWorld(World):
             fill_restrictive(self.multiworld, state, valid_locations, local_item_pool)
 
     def get_pre_fill_items(self) -> List["Item"]:
-        res=[]
+        res = []
         for i in get_local_items_name():
             res.append(self.create_item(i))
         return res
-
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         old_count: int = state.count(item.name, self.player)
@@ -172,10 +171,10 @@ class OkamiWorld(World):
             item_count: int = resolve_option_callable(item_table.get(name).count_in_pool, world)
             # If the item is locally randomized we have to put one less
             if name in get_local_items_name():
-                item_count-=1
+                item_count -= 1
             if item_count > 0:
                 itempool += create_multiple_items(world, name, item_count, item_type)
-        #Create a number of junk items equal to the locations remaining, minus items that have a fixed count in the item pool, and the locally placed ones.
+        # Create a number of junk items equal to the locations remaining, minus items that have a fixed count in the item pool, and the locally placed ones.
         itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(get_local_items_name()))
 
         for pi in precollected_items:
@@ -183,8 +182,8 @@ class OkamiWorld(World):
 
         return itempool
 
-    def get_valid_local_item_locations(self, local_item_data: LocalItem ) -> \
-    List[Location]:
+    def get_valid_local_item_locations(self, local_item_data: LocalItem) -> \
+            List[Location]:
         list = []
         for r in local_item_data.allowed_regions:
             # Check we don't try to place this on a region that doesn't exist.
