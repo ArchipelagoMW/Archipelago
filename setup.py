@@ -379,47 +379,65 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
-        from worlds.Files import APWorldContainer
+        from worlds.Files import APWorldContainer, get_apworld_manifest_games
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: list[str] = []
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
+        grouped_worlds: dict[str, list[tuple[str, object]]] = {}
         for worldname, worldtype in AutoWorldRegister.world_types.items():
-            if worldname not in non_apworlds:
-                file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
-                world_directory = self.libfolder / "worlds" / file_name
-                if os.path.isfile(world_directory / "archipelago.json"):
-                    with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
-                        manifest = json.load(manifest_file)
+            file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
+            grouped_worlds.setdefault(file_name, []).append((worldname, worldtype))
 
-                    assert "game" in manifest, (
-                        f"World directory {world_directory} has an archipelago.json manifest file, but it "
-                        "does not define a \"game\"."
-                    )
-                    assert manifest["game"] == worldtype.game, (
-                        f"World directory {world_directory} has an archipelago.json manifest file, but value of the "
-                        f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
-                    )
-                else:
-                    manifest = {}
-                # this method creates an apworld that cannot be moved to a different OS or minor python version,
-                # which should be ok
-                zip_path = self.libfolder / "worlds" / (file_name + ".apworld")
-                apworld = APWorldContainer(str(zip_path))
-                apworld.minimum_ap_version = version_tuple
-                apworld.maximum_ap_version = version_tuple
-                apworld.game = worldtype.game
-                manifest.update(apworld.get_manifest())
-                apworld.manifest_path = f"{file_name}/archipelago.json"
-                with zipfile.ZipFile(zip_path, "x", zipfile.ZIP_DEFLATED,
-                                     compresslevel=9) as zf:
-                    for path in world_directory.rglob("*.*"):
-                        relative_path = os.path.join(*path.parts[path.parts.index("worlds")+1:])
-                        if not relative_path.endswith("archipelago.json"):
-                            zf.write(path, relative_path)
-                    zf.writestr(apworld.manifest_path, json.dumps(manifest))
-                    folders_to_remove.append(file_name)
-                shutil.rmtree(world_directory)
+        for file_name, grouped_types in grouped_worlds.items():
+            package_games = sorted(worldname for worldname, _ in grouped_types)
+            included_games = [worldname for worldname in package_games if worldname not in non_apworlds]
+            if not included_games:
+                continue
+            assert len(included_games) == len(package_games), (
+                f"World folder {file_name} mixes apworld and non-apworld games, which is not supported: "
+                f"{', '.join(package_games)}"
+            )
+
+            world_directory = self.libfolder / "worlds" / file_name
+            if os.path.isfile(world_directory / "archipelago.json"):
+                with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
+                    source_manifest = json.load(manifest_file)
+                source_games = get_apworld_manifest_games(source_manifest)
+                assert source_games, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but it "
+                    "does not define a \"game\" or \"games\"."
+                )
+                assert set(source_games) == set(package_games), (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but its declared games "
+                    f"({', '.join(sorted(source_games))}) do not match the folder's World classes "
+                    f"({', '.join(package_games)})."
+                )
+            else:
+                source_manifest = {}
+                source_games = []
+
+            manifest = dict(source_manifest)
+
+            # this method creates an apworld that cannot be moved to a different OS or minor python version,
+            # which should be ok
+            zip_path = self.libfolder / "worlds" / (file_name + ".apworld")
+            apworld = APWorldContainer(str(zip_path))
+            apworld.minimum_ap_version = version_tuple
+            apworld.maximum_ap_version = version_tuple
+            apworld.games = tuple(package_games)
+            apworld.game = package_games[0] if len(package_games) == 1 else None
+            manifest.update(apworld.get_manifest())
+            apworld.manifest_path = f"{file_name}/archipelago.json"
+            with zipfile.ZipFile(zip_path, "x", zipfile.ZIP_DEFLATED,
+                                 compresslevel=9) as zf:
+                for path in world_directory.rglob("*.*"):
+                    relative_path = os.path.join(*path.parts[path.parts.index("worlds")+1:])
+                    if not relative_path.endswith("archipelago.json"):
+                        zf.write(path, relative_path)
+                zf.writestr(apworld.manifest_path, json.dumps(manifest))
+                folders_to_remove.append(file_name)
+            shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
         try:
             from maseya import z3pr  # type: ignore[import-untyped]

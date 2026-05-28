@@ -56,22 +56,31 @@ class TestWorldManifest(unittest.TestCase):
             cls.manifest = json.load(f)
 
     def test_game(self) -> None:
-        """Test that 'game' will be correctly defined when generating APWorld manifest from source."""
+        """Test that the manifest correctly declares the current game's source metadata."""
+        if "game" in self.manifest:
+            self.assertEqual(
+                self.manifest["game"],
+                self.game,
+                f"archipelago.json manifest for {self.game} specifies wrong game '{self.manifest['game']}'",
+            )
+            return
+
         self.assertIn(
-            "game",
+            "games",
             self.manifest,
-            f"archipelago.json manifest exists for {self.game} but does not contain 'game'",
+            f"archipelago.json manifest exists for {self.game} but does not contain 'game' or 'games'",
         )
-        self.assertEqual(
-            self.manifest["game"],
+        self.assertIn(
             self.game,
-            f"archipelago.json manifest for {self.game} specifies wrong game '{self.manifest['game']}'",
+            self.manifest["games"],
+            f"archipelago.json manifest does not contain entry for '{self.game}' in 'games'",
         )
 
     def test_world_version(self) -> None:
         """Test that world_version matches the requirements in apworld specification.md""" 
-        if "world_version" in self.manifest:
-            world_version: str = self.manifest["world_version"]
+        world_version = self.manifest.get("world_version")
+
+        if world_version is not None:
             self.assertIsInstance(
                 world_version,
                 str,

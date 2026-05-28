@@ -22,10 +22,16 @@ otherwise they raise a bogus Exception when trying to import in frozen python 3.
 
 Metadata about the APWorld is defined in an `archipelago.json` file.
 
-If the APWorld is a folder, the only required field is "game":
+If the APWorld is a folder, it must define either a single `"game"` or a `"games"` list:
 ```json
 {
   "game": "Game Name"
+}
+```
+
+```json
+{
+  "games": ["Game A", "Game B"]
 }
 ```
 
@@ -80,6 +86,28 @@ will be packaged into an `.apworld` with a manifest file inside of it that looks
 ```
 
 This is the recommended workflow for packaging your world to an `.apworld`.
+
+For multi-game world folders, the manifest may instead look like this:
+
+```json
+{
+    "games": ["Game A", "Game B"],
+    "world_version": "1.0.0",
+    "authors": ["Example Author"]
+}
+```
+
+and it will be packaged into an `.apworld` manifest that also includes the container metadata:
+
+```json
+{
+    "games": ["Game A", "Game B"],
+    "world_version": "1.0.0",
+    "authors": ["Example Author"],
+    "version": 7,
+    "compatible_version": 7
+}
+```
 
 ### .apignore Exclusions
 
