@@ -80,18 +80,23 @@ class OkamiWorld(World):
     def pre_fill(self) -> None:
         from Fill import fill_restrictive, FillError
         # local items randomization
-        prefilled_locations = []
         for local_item_name, local_item_data in local_items.items():
-            valid_locations = self.get_valid_local_item_locations(local_item_data, prefilled_locations)
+            valid_locations = self.get_valid_local_item_locations(local_item_data)
             # Important - Archipelago will try to place on every location in the list by order, so we shuffle it to not always get the same result.
             self.multiworld.random.shuffle(valid_locations)
-            item_data = item_table.get(local_item_name)
-            item_pool = [create_item(local_item_name, item_data.code, item_data.classification, self)]
-            try:
-                fill_restrictive(self.multiworld, self.multiworld.get_all_state(), valid_locations, item_pool)
-            except FillError as f:
-                Fill.inaccessible_location_rules(self.multiworld,self.multiworld.state,valid_locations)
-                raise f
+            state=self.multiworld.get_all_state(collect_pre_fill_items=True,perform_sweep=False)
+            local_item = self.create_item(local_item_name)
+            state.remove(local_item)
+            state.sweep_for_advancements()
+
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(collect_pre_fill_items=True,perform_sweep=True), valid_locations, [local_item])
+
+    def get_pre_fill_items(self) -> List["Item"]:
+        res=[]
+        for local_item_name in local_items.keys():
+            res.append(self.create_item(local_item_name))
+        return res
+
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         old_count: int = state.count(item.name, self.player)
@@ -164,15 +169,15 @@ class OkamiWorld(World):
             item_count: int = resolve_option_callable(item_table.get(name).count_in_pool, world)
             if item_count > 0:
                 itempool += create_multiple_items(world, name, item_count, item_type)
-
-        itempool += create_junk_items(world, get_total_locations(world) - len(itempool))
+        #Create a number of junk items equal to the locations remaining, minus items that have a fixed count in the item pool, and the locally placed ones.
+        itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(local_items))
 
         for pi in precollected_items:
             world.push_precollected(pi)
 
         return itempool
 
-    def get_valid_local_item_locations(self, local_item_data: LocalItem, prefilled_locations: List[str], ) -> \
+    def get_valid_local_item_locations(self, local_item_data: LocalItem ) -> \
     List[Location]:
         list = []
         for r in local_item_data.allowed_regions:
@@ -180,15 +185,14 @@ class OkamiWorld(World):
             if r in okami_locations.keys():
                 for loc_name, loc_data in okami_locations[r].items():
                     # Check this isn't a location we've excluded or that we have already prefilled
-                    if loc_name not in local_item_data.exclude_locations and loc_name not in prefilled_locations:
+                    if loc_name not in local_item_data.exclude_locations:
                         # If this is a biteable item, exclude places that place it directly in your inventory
                         if not local_item_data.is_biteable or loc_data.type not in excluded_biteable_location_types:
                             list.append(self.get_location(loc_name))
             # Second loop for shops, only if the item is not biteable
             if not local_item_data.is_biteable and r in okami_shop_locations.keys():
                 for shop_loc_name in okami_locations[r].keys():
-                    if shop_loc_name not in prefilled_locations:
-                        list.append(self.get_location(shop_loc_name))
+                    list.append(self.get_location(shop_loc_name))
 
         return list
 
