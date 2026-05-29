@@ -165,17 +165,17 @@ end
 
 local function set_energy_spiral(number)
     if number == 0 then
-        game.print({"spiral-0"})
+        game.print({"traps.spiral-0"})
     elseif number == 1 then
-        game.print({"spiral-1"})
+        game.print({"traps.spiral-1"})
     elseif number == 2 then
-        game.print({"spiral-2"})
+        game.print({"traps.spiral-2"})
     elseif number == 3 then
-        game.print({"spiral-3"})
+        game.print({"traps.spiral-3"})
     elseif number == 4 then
-        game.print({"spiral-4"})
+        game.print({"traps.spiral-4"})
     else
-        game.print({"spiral-last"})
+        game.print({"traps.spiral-last"})
     end
 
     for _, surface in pairs(game.surfaces) do
@@ -205,7 +205,7 @@ local function evolution_trap ()
     local new_factor = game.forces["enemy"].get_evolution_factor("nauvis") +
         (general.traps.evo_increase * (1 - game.forces["enemy"].get_evolution_factor("nauvis")))
     game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
-    game.print({"", "New evolution factor:", new_factor})
+    game.print({"traps.new-evolution-factor", new_factor})
 end
 
 local function teleport_trap()
