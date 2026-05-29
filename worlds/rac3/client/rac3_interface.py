@@ -1282,19 +1282,19 @@ class Rac3Interface(GameInterface):
         new_inventory = []
         match self.vendor_type:
             case RAC3VENDORTYPE.WEAPON:
-                if not self.options.weapon_vendors:
+                should_add_ngplus_items = self.options.ngplus_items and not self.options.progressive_weapons
+                if not self.options.weapon_vendors and not should_add_ngplus_items:
                     return
                 is_slimcognito = (self.planet == RAC3REGION.AQUATOS
                                   and bool(self._read8(RAC3WEAPONVENDOR.get_vendor_property_address(
                         self.planet, RAC3WEAPONVENDOR.VENDOR_WEAPON_TYPE_OFFSET))))
+
                 # Slim Cognito does not have a max ammo item, so we just replace the entire inventory
                 if is_slimcognito:
                     # Only show megacorp weapons
                     megacorp_weapons = [item for item in self.weapon_vendor_items if item in MEGACORP_WEAPONS]
                     new_inventory.extend(
                         [RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in megacorp_weapons])
-                    # Add the memory card item
-                    new_inventory.append(RAC3WEAPONVENDORSLOTDATA(memcard=1))
                 else:
                     # Only show gadgetron weapons, keep current inventory up to all_ammo
                     vendor_size = self._read32(
@@ -1308,15 +1308,17 @@ class Rac3Interface(GameInterface):
                     # Fallback in case the all ammo is missing
                     if not found_all_ammo:
                         new_inventory = [RAC3WEAPONVENDORSLOTDATA(all_ammo=1)]
-                    new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
-                                          self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
-                    if self.options.ngplus_items and not self.options.progressive_weapons:
+                    if self.options.weapon_vendors:
+                        new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
+                                              self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
+                    if should_add_ngplus_items:
                         new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID, mega=1)
                                               for item in self.omega_weapon_vendors_items])
-                    if self.planet == RAC3REGION.STARSHIP_PHOENIX:
-                        # add memory card item
-                        new_inventory.append(RAC3WEAPONVENDORSLOTDATA(memcard=1))
-                self.overwrite_vendor_item_names()
+                if self.planet == RAC3REGION.STARSHIP_PHOENIX or is_slimcognito:
+                    # add memory card item
+                    new_inventory.append(RAC3WEAPONVENDORSLOTDATA(memcard=1))
+                if self.options.weapon_vendors:
+                    self.overwrite_vendor_item_names()
             case RAC3VENDORTYPE.ARMOR:
                 if not self.options.armor_vendor:
                     return
