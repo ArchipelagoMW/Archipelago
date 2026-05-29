@@ -724,6 +724,6 @@ SONG_DATA: Dict[str, SongData] = {
     "dynamite": SongData(2900848, "98-1", "Touhou Mugakudan -V-", False, 5, 7, 9),
     "Matsuyoi Nightbug": SongData(2900849, "98-2", "Touhou Mugakudan -V-", False, 5, 7, 10),
     "Coooonsultant!": SongData(2900850, "98-3", "Touhou Mugakudan -V-", False, 6, 8, 10),
-    "Stop at the affected part and melt quickly ~ Madness Udine Quarter": SongData(2900851, "98-4", "Touhou Mugakudan -V-", False, 4, 6, 10),
+    "Stop at the affected part and melt quickly - Madness Udine Quarter": SongData(2900851, "98-4", "Touhou Mugakudan -V-", False, 4, 6, 10),
     "Ultimate taste": SongData(2900852, "98-5", "Touhou Mugakudan -V-", False, 6, 8, 11),
 }
