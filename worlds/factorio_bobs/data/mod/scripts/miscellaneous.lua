@@ -109,7 +109,7 @@ local function spawn_entity(surface, force, name, x, y, radius, randomize, avoid
         end
     end
     if new_entity == nil then
-        force.print("Failed to place " .. args.name .. " in " .. serpent.line({x = x, y = y, radius = radius}))
+        force.print({"fail-to-place",args.name, serpent.line({x = x, y = y, radius = radius})})
     end
 end
 
