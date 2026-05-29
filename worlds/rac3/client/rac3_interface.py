@@ -2018,15 +2018,9 @@ class Rac3Interface(GameInterface):
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
             health_addr = self._read32(self._read32(self.vehicle + 0x68))
-            # TODO: Find a better way to determine target health for different vehicles rather than hardcoding based
-            #  on planet, maybe by checking max health value if that can be found in memory
-            target_health = 5.0
-            if self.planet in [RAC3REGION.TYHRRANOSIS_RANGERS, RAC3REGION.MARCADIA]:
-                target_health = 1.0  # For some reason these vehicles have 100 max health instead of 500
-            elif self.planet == RAC3REGION.TYHRRANOSIS:
-                target_health = 0.6  # For some reason the turboslider on Tyhrranosis has 60 max health
+            max_health =  self._read32(self._read32(self.vehicle + 0x68) + 0x34)
+            target_health = max_health * 0.01
             if self._read_float(health_addr) > target_health:
-                # This displays as 1 HP in-game for vehicles with 500 max health
                 self._write_float(health_addr, target_health)
 
         # If loading from the main menu we delay fixing the current health until the load is complete
