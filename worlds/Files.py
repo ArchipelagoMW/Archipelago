@@ -96,26 +96,6 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
 container_version: int = 7
 
 
-def get_apworld_manifest_games(manifest: Dict[str, Any]) -> List[str]:
-    """Return the game names declared by a single-game or multi-game apworld manifest."""
-    assert "game" not in manifest or "games" not in manifest, \
-        "Manifest must not define both 'game' and 'games'."
-    if "games" in manifest:
-        raw_games = manifest["games"]
-        if not isinstance(raw_games, list):
-            raise ValueError("Manifest 'games' must be a list of strings.")
-        if not all(isinstance(game, str) for game in raw_games):
-            raise ValueError("Manifest 'games' list entries must be strings.")
-        return list(raw_games)
-
-    if "game" in manifest:
-        if not isinstance(manifest["game"], str):
-            raise ValueError("Manifest 'game' must be a string.")
-        return [manifest["game"]]
-
-    return []
-
-
 def is_ap_player_container(game: str, data: bytes, player: int):
     if not zipfile.is_zipfile(BytesIO(data)):
         return False
@@ -213,8 +193,7 @@ class APContainer:
 
 class APWorldContainer(APContainer):
     """A zipfile containing a world implementation."""
-    game: str | None = None
-    games: Sequence[str] = ()
+    game: str | list[str] | None = None
     world_version: "Version | None" = None
     minimum_ap_version: "Version | None" = None
     maximum_ap_version: "Version | None" = None
@@ -222,11 +201,7 @@ class APWorldContainer(APContainer):
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
         from Utils import tuplize_version
         manifest = super().read_contents(opened_zipfile)
-        self.games = tuple(get_apworld_manifest_games(manifest))
-        if not self.games:
-            raise ValueError("Manifest must define either 'game' or 'games'.")
-        self.game = self.games[0] if len(self.games) == 1 else None
-
+        self.game = manifest["game"]
         for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
             if version_key in manifest:
                 setattr(self, version_key, tuplize_version(manifest[version_key]))
@@ -234,15 +209,9 @@ class APWorldContainer(APContainer):
 
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super().get_manifest()
+        manifest["game"] = self.game
         manifest["compatible_version"] = 7
-        games = tuple(self.games) if self.games else ((self.game,) if self.game else ())
-        if len(games) == 1:
-            manifest["game"] = games[0]
-        elif games:
-            manifest["games"] = list(games)
-        if self.world_version:
-            manifest["world_version"] = self.world_version.as_simple_string()
-        for version_key in ("minimum_ap_version", "maximum_ap_version"):
+        for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
             version = getattr(self, version_key)
             if version:
                 manifest[version_key] = version.as_simple_string()

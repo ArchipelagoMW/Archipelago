@@ -379,22 +379,25 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
-        from worlds.Files import APWorldContainer, get_apworld_manifest_games
+        from worlds.Files import APWorldContainer
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: list[str] = []
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
-        grouped_worlds: dict[str, list[tuple[str, object]]] = {}
+        grouped_worlds = set()
         for worldname, worldtype in AutoWorldRegister.world_types.items():
-            file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
-            grouped_worlds.setdefault(file_name, []).append((worldname, worldtype))
-
-        for file_name, grouped_types in grouped_worlds.items():
-            package_games = sorted(worldname for worldname, _ in grouped_types)
-            included_games = [worldname for worldname in package_games if worldname not in non_apworlds]
-            if not included_games:
+            if worldname in non_apworlds:
                 continue
-            assert len(included_games) == len(package_games), (
+            file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
+            if file_name in grouped_worlds:
+                continue
+            grouped_worlds.add(file_name)
+            package_games = sorted(
+                other_name
+                for other_name, other_type in AutoWorldRegister.world_types.items()
+                if os.path.split(os.path.dirname(other_type.__file__))[1] == file_name
+            )
+            assert not any(game in non_apworlds for game in package_games), (
                 f"World folder {file_name} mixes apworld and non-apworld games, which is not supported: "
                 f"{', '.join(package_games)}"
             )
@@ -403,19 +406,16 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
             if os.path.isfile(world_directory / "archipelago.json"):
                 with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
                     source_manifest = json.load(manifest_file)
-                source_games = get_apworld_manifest_games(source_manifest)
-                assert source_games, (
-                    f"World directory {world_directory} has an archipelago.json manifest file, but it "
-                    "does not define a \"game\" or \"games\"."
-                )
+                source_games = source_manifest.get("game")
+                if not isinstance(source_games, list):
+                    source_games = [source_games]
                 assert set(source_games) == set(package_games), (
-                    f"World directory {world_directory} has an archipelago.json manifest file, but its declared games "
-                    f"({', '.join(sorted(source_games))}) do not match the folder's World classes "
+                    f"World directory {world_directory} has an archipelago.json manifest file, but its game field "
+                    f"({source_manifest.get('game')}) does not match the folder's World classes "
                     f"({', '.join(package_games)})."
                 )
             else:
                 source_manifest = {}
-                source_games = []
 
             manifest = dict(source_manifest)
 
@@ -425,8 +425,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
             apworld = APWorldContainer(str(zip_path))
             apworld.minimum_ap_version = version_tuple
             apworld.maximum_ap_version = version_tuple
-            apworld.games = tuple(package_games)
-            apworld.game = package_games[0] if len(package_games) == 1 else None
+            apworld.game = package_games[0] if len(package_games) == 1 else package_games
             manifest.update(apworld.get_manifest())
             apworld.manifest_path = f"{file_name}/archipelago.json"
             with zipfile.ZipFile(zip_path, "x", zipfile.ZIP_DEFLATED,

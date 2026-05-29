@@ -15,7 +15,6 @@ from zipfile import ZipFile, BadZipFile
 
 from NetUtils import DataPackage
 from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
-from .Files import get_apworld_manifest_games
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -117,10 +116,10 @@ for world_source in world_sources:
                     break
             if manifest:
                 break
-        for game in get_apworld_manifest_games(manifest):
+        games = manifest.get("game")
+        for game in games if isinstance(games, list) else [games] if games else ():
             if game in AutoWorldRegister.world_types:
-                if "world_version" in manifest:
-                    AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest["world_version"])
+                AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
                 AutoWorldRegister.world_types[game].manifest = manifest
 
 if apworlds:
@@ -160,13 +159,14 @@ if apworlds:
                     messagebox("Couldn't load worlds", err_message, error=True)
                     sys.exit(1)
 
+            games = apworld.game if isinstance(apworld.game, list) else [apworld.game] if apworld.game else []
             if apworld.minimum_ap_version and apworld.minimum_ap_version > version_tuple:
-                fail_worlds(apworld.games,
+                fail_worlds(games,
                             f"Did not load {apworld_source.path} "
                             f"as its minimum core version {apworld.minimum_ap_version} "
                             f"is higher than current core version {version_tuple}.")
             elif apworld.maximum_ap_version and apworld.maximum_ap_version < version_tuple:
-                fail_worlds(apworld.games,
+                fail_worlds(games,
                             f"Did not load {apworld_source.path} "
                             f"as its maximum core version {apworld.maximum_ap_version} "
                             f"is lower than current core version {version_tuple}.")
@@ -187,7 +187,8 @@ if apworlds:
         sys.meta_path.insert(0, APWorldModuleFinder())
 
         for apworld_source, apworld in core_compatible:
-            duplicate_games = [game for game in apworld.games if game in AutoWorldRegister.world_types]
+            games = apworld.game if isinstance(apworld.game, list) else [apworld.game] if apworld.game else []
+            duplicate_games = [game for game in games if game in AutoWorldRegister.world_types]
             if duplicate_games:
                 fail_worlds(duplicate_games,
                             f"Did not load {apworld_source.path} "
@@ -201,7 +202,7 @@ if apworlds:
                 apworld_module_specs[f"worlds.{world_name}"] = spec
 
                 apworld_source.load()
-                missing_games = [game for game in apworld.games if game not in AutoWorldRegister.world_types]
+                missing_games = [game for game in games if game not in AutoWorldRegister.world_types]
                 if missing_games:
                     fail_worlds(missing_games,
                                 f"Loaded {apworld_source.path}, but it did not register expected game(s): "
@@ -209,7 +210,7 @@ if apworlds:
                     continue
 
                 if apworld.world_version:
-                    for game in apworld.games:
+                    for game in games:
                         AutoWorldRegister.world_types[game].world_version = apworld.world_version
 
                 assert apworld.path
@@ -218,7 +219,7 @@ if apworlds:
                 # version/compatible_version shouldn't be needed by world, makes it consistent with folder world
                 manifest.pop("version", None)
                 manifest.pop("compatible_version", None)
-                for game in apworld.games:
+                for game in games:
                     AutoWorldRegister.world_types[game].manifest = manifest
     load_apworlds()
     del load_apworlds

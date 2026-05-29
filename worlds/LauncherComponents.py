@@ -265,7 +265,7 @@ if not is_frozen():
         import zipfile
 
         from worlds import AutoWorldRegister
-        from worlds.Files import APWorldContainer, get_apworld_manifest_games
+        from worlds.Files import APWorldContainer
         from Launcher import open_folder
 
         import argparse
@@ -286,49 +286,41 @@ if not is_frozen():
 
         apworlds_folder = os.path.join("build", "apworlds")
         os.makedirs(apworlds_folder, exist_ok=True)
-
-        all_grouped_worlds = {}
-        for all_worldname, all_worldtype in AutoWorldRegister.world_types.items():
-            if all_worldtype.zip_path:
-                continue
-            folder_name = os.path.split(os.path.dirname(all_worldtype.__file__))[1]
-            all_grouped_worlds.setdefault(folder_name, []).append((all_worldname, all_worldtype))
-
         selected_folders = set()
         for worldname, worldtype in games:
             if not worldtype:
                 logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
                 continue
-            selected_folders.add(os.path.split(os.path.dirname(worldtype.__file__))[1])
-
-        for file_name in sorted(selected_folders):
-            grouped_types = all_grouped_worlds[file_name]
-            package_games = sorted(worldname for worldname, _ in grouped_types)
+            file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
+            if file_name in selected_folders:
+                continue
+            selected_folders.add(file_name)
+            package_games = sorted(
+                other_name
+                for other_name, other_type in AutoWorldRegister.world_types.items()
+                if not other_type.zip_path and os.path.split(os.path.dirname(other_type.__file__))[1] == file_name
+            )
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
                 with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
                     source_manifest = json.load(manifest_file)
 
-                source_games = get_apworld_manifest_games(source_manifest)
-                assert source_games, (
-                    f"World directory {world_directory} has an archipelago.json manifest file, but it "
-                    "does not define a \"game\" or \"games\"."
-                )
+                source_games = source_manifest.get("game")
+                if not isinstance(source_games, list):
+                    source_games = [source_games]
                 assert set(source_games) == set(package_games), (
-                    f"World directory {world_directory} has an archipelago.json manifest file, but its declared games "
-                    f"({', '.join(sorted(source_games))}) do not match the folder's World classes "
+                    f"World directory {world_directory} has an archipelago.json manifest file, but its game field "
+                    f"({source_manifest.get('game')}) does not match the folder's World classes "
                     f"({', '.join(package_games)})."
                 )
             else:
                 source_manifest = {}
-                source_games = []
 
             manifest = dict(source_manifest)
 
             zip_path = os.path.join(apworlds_folder, file_name + ".apworld")
             apworld = APWorldContainer(str(zip_path))
-            apworld.games = tuple(package_games)
-            apworld.game = package_games[0] if len(package_games) == 1 else None
+            apworld.game = package_games[0] if len(package_games) == 1 else package_games
             manifest.update(apworld.get_manifest())
             apworld.manifest_path = os.path.join(file_name, "archipelago.json")
 
