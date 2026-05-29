@@ -94,7 +94,7 @@ For multi-game world folders, the manifest may instead look like this:
 {
     "game": ["Game A", "Game B"],
     "world_version": "1.0.0",
-    "authors": ["Example Author"]
+    "authors": ["NewSoupVi"]
 }
 ```
 
@@ -104,7 +104,7 @@ and it will be packaged into an `.apworld` manifest that also includes the conta
 {
     "game": ["Game A", "Game B"],
     "world_version": "1.0.0",
-    "authors": ["Example Author"],
+    "authors": ["NewSoupVi"],
     "version": 7,
     "compatible_version": 7
 }
