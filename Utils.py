@@ -18,6 +18,7 @@ import logging
 import warnings
 
 from argparse import Namespace
+from collections.abc import Collection, Iterable
 from datetime import datetime, timezone
 
 from settings import Settings, get_settings
@@ -1274,7 +1275,7 @@ _T_co = TypeVar("_T_co", covariant=True)
 
 
 class RepeatableChain(Generic[_T_co]):
-    def __init__(self, iterable: typing.Iterable[typing.Collection[_T_co]]):
+    def __init__(self, iterable: Iterable[Collection[_T_co]]):
         self.iterable = iterable
 
     def __iter__(self):

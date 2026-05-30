@@ -27,7 +27,7 @@ def _log_fill_progress(name: str, placed: int, total_items: int) -> None:
 
 def sweep_from_pool(base_state: CollectionState,
                     itempool: Sequence[Item] = (),
-                    locations: list[Location] | None = None) -> CollectionState:
+                    locations: Iterable[Location] | None = None) -> CollectionState:
     new_state = base_state.copy()
     for item in itempool:
         new_state.collect(item, True)
