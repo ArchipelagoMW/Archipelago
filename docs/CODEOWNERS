@@ -15,8 +15,10 @@
 # A Link to the Past
 /worlds/alttp/ @Berserker66
 
-# Sudoku (APSudoku)
-/worlds/apsudoku/ @EmilyV99
+# APQuest
+# NewSoupVi is acting maintainer, but world belongs to core with the exception of the music
+/worlds/apquest/ @NewSoupVi
+
 
 # Aquaria
 /worlds/aquaria/ @tioui
@@ -54,9 +56,6 @@
 # Dark Souls III
 /worlds/dark_souls_3/ @Marechal-L @nex3
 
-# Donkey Kong Country 3
-/worlds/dkc3/ @PoryGone
-
 # DLCQuest
 /worlds/dlcquest/ @axe-y @agilbert1412
 
@@ -65,6 +64,9 @@
 
 # DOOM II
 /worlds/doom_ii/ @Daivuk @KScl
+
+# EarthBound
+/worlds/earthbound/ @PinkSwitch
 
 # Factorio
 /worlds/factorio/ @Berserker66
@@ -127,6 +129,9 @@
 # Mega Man 2
 /worlds/mm2/ @Silvris
 
+# Mega Man 3
+/worlds/mm3/ @Silvris
+
 # MegaMan Battle Network 3
 /worlds/mmbn3/ @digiholic
 
@@ -172,8 +177,12 @@
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
 
+# Satisfactory
+/worlds/satisfactory/ @Jarno458 @budak7273
+
 # Starcraft 2
-/worlds/sc2/ @Ziktofel
+# Note: @Ziktofel acts as a mentor
+/worlds/sc2/ @MatthewMarinets @Snarkie @SirChuckOfTheChuckles
 
 # Super Metroid
 /worlds/sm/ @lordlou
