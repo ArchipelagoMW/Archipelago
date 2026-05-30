@@ -12,13 +12,12 @@ from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
     from . import OkamiWorld
 
+long_swim_rule: Rule = HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY)
 
-has_portable_fire_source_strict:Rule= And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
-                                           Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
+has_portable_fire_source_strict: Rule = And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
+                                               Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
 
-
-has_portable_fire_source: Rule = Or(has_portable_fire_source_strict,Has(BrushTechniques.FIREBURST))
-
+has_portable_fire_source: Rule = Or(has_portable_fire_source_strict, Has(BrushTechniques.FIREBURST))
 
 has_portable_thunder_source: Rule = Or(And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
                                               Has("Progressive Sword", 5)), Has(BrushTechniques.THUNDERSTORM)),
@@ -31,6 +30,11 @@ has_portable_ice_source: Rule = Or(And(Or(Has(DivineInstruments.TUNDRA_BEADS.val
 gale_shrine_access: Rule = HasGroup("canine_warriors", count=FromOption(RequiredDoggorbs))
 
 moon_cave_access: Rule = Has("Serpent Crystal")
+# FIXME: Set correct event name for dragon
+n_ryoshima_islands_dragon_rule: Rule = Or(Has("Orca"), HasAll("Water Tablet", "Defeat the Dragon"))
+
+n_ryoshima_guardian_sapling_rule:Rule= Or(long_swim_rule,Has("Orca"))
+
 
 
 # Probably should be removed;Directly add it to the checks that require it.
@@ -43,8 +47,9 @@ night_time_check_rule: Rule = Has(BrushTechniques.CRESCENT, options=[
 
 moon_cave_fire_rule: Rule = Or(has_portable_fire_source,
                                HasAll("Moon Cave - 3F Push the ball", BrushTechniques.INFERNO))
-#Fireburst doesn't light the canons' fuse.
-moon_cave_canon_rule: Rule = Or(has_portable_fire_source_strict,HasAll("Moon Cave - 3F Push the ball",BrushTechniques.INFERNO))
+# Fireburst doesn't light the canons' fuse.
+moon_cave_canon_rule: Rule = Or(has_portable_fire_source_strict,
+                                HasAll("Moon Cave - 3F Push the ball", BrushTechniques.INFERNO))
 
 moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source,
                                   HasAll("Moon Cave - 4F Move Fireball", BrushTechniques.INFERNO))
@@ -157,7 +162,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             required_techinques += []
 
     if data.needs_long_swim:
-        rules.append(HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY))
+        rules.append(long_swim_rule)
 
     if len(required_techinques) > 0:
         rules.append(HasAll(*required_techinques))
@@ -190,10 +195,14 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
     rules: List[Rule] = []
     if data.needs_long_swim:
-        rules.append(HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY))
+        rules.append(long_swim_rule)
 
     if len(data.has_events) > 0:
         rules.append(HasAll(*data.has_events))
+
+    if data.special_rule is not None:
+        # Append special rule if it's defined
+        rules.append(data.special_rule)
 
     if len(rules) > 0:
         final_rule = And(*rules)
@@ -202,5 +211,6 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
 
 def set_completion_rules(world: "OkamiWorld"):
     world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm",
-                                     "Tsuta Ruins - Defeat the spider queen","Himiko's Palace - Cross sea of fire","Imperial Palace - Defeat Blight"))
+                                     "Tsuta Ruins - Defeat the spider queen", "Himiko's Palace - Cross sea of fire",
+                                     "Imperial Palace - Defeat Blight"))
     return

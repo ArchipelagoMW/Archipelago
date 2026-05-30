@@ -68,6 +68,7 @@ class ExitData(NamedTuple):
     needs_long_swim: bool = False
     one_way: bool = False
     loading_screen: bool = True
+    special_rule:Rule | None = None
 
 
 class WarpData(NamedTuple):

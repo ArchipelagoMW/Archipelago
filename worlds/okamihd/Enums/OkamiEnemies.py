@@ -50,6 +50,9 @@ class OkamiEnemies(Enum):
     THUNDER_DOOM_MIRROR = EnnemyData(0x5d, "Thunder Doom Mirror", 2)
     WIND_DOOM_MIRROR = EnnemyData(0x5c, "Wind Doom Mirror", 2, required_techniques=[BrushTechniques.VEIL_OF_MIST])
     BLIGHT = EnnemyData(0x7c, "Blight", 2, requires_slash=True)
+    THUNDER_EAR=EnnemyData(0x55,"Thunder Ear",2)
+    EARTH_NOSE = EnnemyData(0x54, "Earth Nose", 2,required_techniques=[BrushTechniques.VEIL_OF_MIST])
+    BLUE_CYCLOPS = EnnemyData(0x29,"Blue Cyclops",2)
 
     @staticmethod
     def list():

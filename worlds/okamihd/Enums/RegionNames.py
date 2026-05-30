@@ -52,7 +52,7 @@ class RegionNames(StrEnum):
 
     ## AGATA FOREST
     CURSED_AGATA_FOREST = "Cursed Agata Forest"
-    AGATA_COMMON_LOGIC= "Agata Forest (Common)"
+    AGATA_COMMON_LOGIC = "Agata Forest (Common)"
     AGATA_FOREST_WAKA = "Agata Forest (Pre-waka fight)"
     AGATA_FOREST = "Agata Forest"
     AGATA_FOREST_TAKA = "Agata Forest (Behind Bridge to Taka Pass)"
@@ -69,7 +69,7 @@ class RegionNames(StrEnum):
 
     ## TAKA PASS
     CURSED_TAKA_PASS = "Curesd Taka Pass"
-    TAKA_COMMON_LOGIC="Taka Pass (Common)"
+    TAKA_COMMON_LOGIC = "Taka Pass (Common)"
     CURSED_TAKA_PASS_WAKA = "Cursed Taka Pass (Waka Fight)"
     CURSED_TAKA_PASS_CAVE = "Cursed Taka Pass (Cave)"
     CURSED_TAKA_PASS_GUARDIAN_SAPLING = "Cursed Taka Pass (Guardian Sapling)"
@@ -213,6 +213,15 @@ class RegionNames(StrEnum):
     IMPERIAL_PALACE_WEST_BEAM = "Imperial Palace (Small Size - West Beam)"
     IMPERIAL_PALACE_INSIDE_EMPEROR = "Imperial Palace (Small Size - Inside the Emperor's Body)"
 
+    ## Northern Ryoshima Coast
+    NORTHERN_RYOSHIMA_COAST_MANDATORY_FIGHT = "Nothern Rysohima Coast (Mandatory Fight)"
+    NORTHERN_RYOSHIMA_COAST = "Nothern Rysohima Coast"
+    NORTHERN_RYOSHIMA_COAST_MIST_WARP = "Northern Ryoshima Coast (Secret Mist Warp Area)"
+    NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER = "Northern Ryoshima Coast (Watcher's cape mandatory Encounter)"
+    NORTHERN_RYOSHIMA_COAST_WATCHERS = "Northern Ryoshima Coast (Watcher's cape)"
+    NORTHERN_RYOSHIMA_COAST_SAPLING = "Northern Ryoshima Coast (Guardian Sapling Island)"
+    NORTHERN_RYOSHIMA_COAST_TOMB = "Northern Ryoshima Coast (Tomb Cave)"
+
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
@@ -248,6 +257,7 @@ class MapIds(Enum):
     HEALED_TAKA = 0xF08
     CURSED_RYOSHIMA = 0xF09
     HEALED_RYOSHIMA = 0xF0A
+    NORTHERN_RYOSHIMA = 0xF0C
 
 
 class MapIndexes(Enum):

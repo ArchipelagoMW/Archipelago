@@ -10,7 +10,7 @@ from ..Types import ExitData, EventData, LocData, WarpData
 from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:
-    pass
+    from .. import OkamiWorld
 
 exits = {
     RegionNames.RYOSHIMA_COAST: [
@@ -44,11 +44,12 @@ exits = {
     RegionNames.RYOSHIMA_COAST_SEIAN: [
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
-        ExitData(RegionNames.SEIAN_CITY_COMMONERS_DRY)
+        ExitData(RegionNames.SEIAN_CITY_COMMONERS_DRY),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_MANDATORY_FIGHT, has_events=["Ryoshima Coast - Open Door to North Ryoshima Coast"],one_way=True)
     ],
     RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False,needs_long_swim=True),
-        ExitData(RegionNames.SUNKEN_SHIP_ENTRANCE)
+        ExitData(RegionNames.SUNKEN_SHIP_ENTRANCE,one_way=True)
     ],
     RegionNames.RYOSHIMA_COAST_WEST_PIER: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEA, loading_screen=False)
@@ -62,8 +63,8 @@ events = {
         "Ryoshima Coast - Open Lunar Lagoon": EventData(required_items_events=["Holy Eagle"],
                                                         required_brush_techniques=[BrushTechniques.CRESCENT]),
         "Ryoshima Coast - Open Shortcut To Mme Fawn's": EventData(),
-        # FIXME: Fill Enemies
-        "Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance": EventData(mandatory_enemies=[])
+        "Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance": EventData(mandatory_enemies=[OkamiEnemies.ICE_LIPS,OkamiEnemies.THUNDER_EAR]),
+
     },
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: {
         "Ryoshima Coast - Climb back to main area": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT])
@@ -75,6 +76,9 @@ events = {
     },
     RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER: {
         "Ryoshima Coast - Mandatory Ubume Encounter": EventData(mandatory_enemies=[OkamiEnemies.UBUME])
+    },
+    RegionNames.RYOSHIMA_COAST_SEIAN:{
+        "Ryoshima Coast - Open Door to North Ryoshima Coast":EventData(required_items_events=["Himiko's Palace - Hear Himiko's request"])
     }
 }
 locations = {

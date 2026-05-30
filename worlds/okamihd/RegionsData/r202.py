@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from BaseClasses import LocationProgressType
 from ..CheckIds import container_check_id, brush_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -16,7 +17,11 @@ exits = {
 }
 events = {
     RegionNames.HIMIKO_PALACE:{
-    "Himiko's Palace - Cross sea of fire": EventData(required_items_events=["Fire Tablet"])
+        "Himiko's Palace - Cross sea of fire": EventData(required_items_events=["Fire Tablet"])
+    },
+    RegionNames.HIMIKO_CHAMBERS:{
+        # Vanilla event that opens N. Ryoshima Coast - to replace with something else when needed.
+        "Himiko's Palace - Hear Himiko's request": EventData()
     }
 }
 locations = {
@@ -28,6 +33,6 @@ locations = {
     },
     # Special check
     RegionNames.HIMIKO_CHAMBERS:{
-        "Himiko's Palace - Get Border Key from Queen Himiko":LocData(1000)
+        "Himiko's Palace - Get Border Key from Queen Himiko":LocData(1000,progress_type=LocationProgressType.EXCLUDED)
     }
 }
