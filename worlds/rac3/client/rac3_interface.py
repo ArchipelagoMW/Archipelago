@@ -68,7 +68,8 @@ from worlds.rac3.constants.vendors.name import RAC3VENDORNAME
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 from worlds.rac3.constants.vendors.vendor import RAC3SHIPVENDOR, RAC3VENDOR, RAC3WEAPONVENDOR, VENDORTYPE_TO_SLOT_SIZE
 from worlds.rac3.constants.version import (GAME_ID_TO_OFFSET, GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION,
-                                           VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE, )
+                                           VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE, jp_convert_address,
+                                           jp_get_pause_physical_address, )
 
 
 class Rac3Interface(GameInterface):
@@ -306,6 +307,8 @@ class Rac3Interface(GameInterface):
             and self.planet in PAL_SHIFTED_PLANETS
             and self.current_game == RAC3VERSION.EU_ID):
             _addr += GAME_ID_TO_OFFSET[RAC3VERSION.EU_ID]
+        if self.current_game == RAC3VERSION.JP_ID:
+            _addr = jp_convert_address(_addr, self.planet)
 
         return _addr
 
@@ -660,10 +663,10 @@ class Rac3Interface(GameInterface):
         if self.pause_state_value == RAC3PAUSESTATE.VENDOR and self.planet in PLANET_VENDOR_OFFSET.keys():
             self.last_in_vendor_time = time.time()
             self.vendor_cursor_pos = self._read32(
-                RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+                RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET, self.current_game))
             try:
                 return RAC3VENDORTYPE(
-                    self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+                    self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET, self.current_game)))
             except ValueError:
                 return None
         self.restore_vendor_item_names()
@@ -781,11 +784,17 @@ class Rac3Interface(GameInterface):
         """Update the current pause data, depending on the current planet"""
         planet_data = RAC3_REGION_DATA_TABLE[self.planet]
         if planet_data:
-            self.pause_menu = bool(self._read8(planet_data.PAUSE_ADDRESS)) if planet_data.PAUSE_ADDRESS else False
+            pause_addr = planet_data.PAUSE_ADDRESS
             pause_state = self._read8(RAC3STATUS.PAUSE_STATE + planet_data.PLANET_SPECIAL_OFFSET)
             self.pause_state_value = RAC3PAUSESTATE(
                 pause_state) if pause_state <= 9 and pause_state != 1 else RAC3PAUSESTATE.INVALID
             self.pause_state = True if self.pause_state_value > RAC3PAUSESTATE.UNPAUSED else False
+            self.pause_menu = bool(self._read8(pause_addr)) if pause_addr else False
+            if self.current_game == RAC3VERSION.JP_ID:
+                if self.pause_state_value == RAC3PAUSESTATE.MINIGAME:
+                    self.pause_menu = False
+                elif pause_addr and (jp_addr := jp_get_pause_physical_address(pause_addr, self.planet)) is not None:
+                    self.pause_menu = bool(super()._read8(jp_addr))
         else:
             # Unknown planet, assume paused to be safe
             self.pause_menu = True
@@ -1499,13 +1508,13 @@ class Rac3Interface(GameInterface):
             return
 
         if self.options.armor_vendor and self.planet == RAC3REGION.STARSHIP_PHOENIX:
-            new_armor = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.NEW_ARMOR_OFFSET))
+            new_armor = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.NEW_ARMOR_OFFSET, self.current_game))
             if 0 < new_armor < 5:
                 self._write8(RAC3INSTRUCTION.CODECAVE_START + new_armor, 1)
                 if new_armor == 4:
                     self._write8(0x001D54B4, 1)  # Infernox skill point
 
-        is_pda_vendor = self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.IS_PDA_OFFSET))
+        is_pda_vendor = self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.IS_PDA_OFFSET, self.current_game))
         if is_pda_vendor:
             return
 
@@ -1531,7 +1540,7 @@ class Rac3Interface(GameInterface):
                 else:
                     # Only show gadgetron weapons, keep current inventory up to all_ammo
                     vendor_size = self._read32(
-                        RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
+                        RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET, self.current_game))
                     found_all_ammo = False
                     for slot_data in [self.read_weapon_vendor_slot_data(slot) for slot in range(vendor_size)]:
                         # Remove ammo for weapons we don't have unlocked yet
@@ -1582,32 +1591,32 @@ class Rac3Interface(GameInterface):
                 return
         self.write_vendor_inventory(new_inventory, self.vendor_type)
         if len(new_inventory) == 0:
-            self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET), 0)
+            self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET, self.current_game), 0)
         elif self.vendor_cursor_pos >= len(new_inventory):
-            self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET),
+            self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET, self.current_game),
                           len(new_inventory) - 1)
 
     def read_weapon_vendor_slot_data(self, slot: int) -> RAC3WEAPONVENDORSLOTDATA:
         """Returns the data for a given slot in the vendor inventory"""
-        self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET))
+        self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET, self.current_game))
         return RAC3WEAPONVENDORSLOTDATA(*[self.read_vendor_prop(prop, slot, RAC3VENDORTYPE.WEAPON) for prop in
                                           RAC3WEAPONVENDORSLOTDATA().get_data()])
 
     def read_armor_vendor_slot_data(self, slot: int) -> RAC3ARMORVENDORSLOTDATA:
         """Returns the data for a given slot in the vendor inventory"""
-        self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET))
+        self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET, self.current_game))
         return RAC3ARMORVENDORSLOTDATA(
             *[self.read_vendor_prop(prop, slot, RAC3VENDORTYPE.ARMOR) for prop in RAC3ARMORVENDORSLOTDATA().get_data()])
 
     def read_ship_vendor_slot_data(self, slot: int) -> RAC3SHIPVENDORSLOTDATA:
         """Returns the data for a given slot in the vendor inventory"""
-        self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET))
+        self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET, self.current_game))
         return RAC3SHIPVENDORSLOTDATA(
             *[self.read_vendor_prop(prop, slot, RAC3VENDORTYPE.SHIP) for prop in RAC3SHIPVENDORSLOTDATA().get_data()])
 
     def read_skin_vendor_slot_data(self, slot: int) -> RAC3SKINVENDORSLOTDATA:
         """Returns the data for a given slot in the vendor inventory"""
-        self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET))
+        self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET, self.current_game))
         return RAC3SKINVENDORSLOTDATA(
             *[self.read_vendor_prop(prop, slot, RAC3VENDORTYPE.SKIN) for prop in RAC3SKINVENDORSLOTDATA().get_data()])
 
@@ -1616,21 +1625,21 @@ class Rac3Interface(GameInterface):
         match prop.size:
             case 1:
                 return self._read8(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset,
-                                                                               VENDORTYPE_TO_SLOT_SIZE[vendor_type]))
+                                                                               VENDORTYPE_TO_SLOT_SIZE[vendor_type], self.current_game))
             case 2:
                 return self._read16(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset,
-                                                                                VENDORTYPE_TO_SLOT_SIZE[vendor_type]))
+                                                                                VENDORTYPE_TO_SLOT_SIZE[vendor_type], self.current_game))
             case 4:
                 return self._read32(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset,
-                                                                                VENDORTYPE_TO_SLOT_SIZE[vendor_type]))
+                                                                                VENDORTYPE_TO_SLOT_SIZE[vendor_type], self.current_game))
             case _:
                 raise ValueError(f"Invalid property size: {prop.size} Bytes")
 
     def write_vendor_inventory(self, inventory: list[RAC3VENDORSLOTDATA], vendor_type: RAC3VENDORTYPE):
         """Write a list of vendor slot data objects to the current planet's vendor inventory"""
-        self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET), len(inventory))
+        self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET, self.current_game), len(inventory))
         if len(inventory) == 0:
-            start_address = RAC3STATUS.VENDOR_BASE + PLANET_VENDOR_OFFSET[self.planet]
+            start_address = RAC3VENDOR.get_vendor_property_address(self.planet, 0, self.current_game)
             match vendor_type:
                 case RAC3VENDORTYPE.SHIP:
                     # change the string pointer to no items available message in code cave
@@ -1651,15 +1660,15 @@ class Rac3Interface(GameInterface):
                 match prop.size:
                     case 1:
                         self._write8(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset,
-                                                                                 VENDORTYPE_TO_SLOT_SIZE[vendor_type]),
+                                                                                 VENDORTYPE_TO_SLOT_SIZE[vendor_type], self.current_game),
                                      prop.value)
                     case 2:
                         self._write16(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset,
-                                                                                  VENDORTYPE_TO_SLOT_SIZE[vendor_type]),
+                                                                                  VENDORTYPE_TO_SLOT_SIZE[vendor_type], self.current_game),
                                       prop.value)
                     case 4:
                         self._write32(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset,
-                                                                                  VENDORTYPE_TO_SLOT_SIZE[vendor_type]),
+                                                                                  VENDORTYPE_TO_SLOT_SIZE[vendor_type], self.current_game),
                                       prop.value)
         logger.debug(f"Wrote {len(inventory)} items to {vendor_type.name} vendor on planet {self.planet}")
 
@@ -2845,7 +2854,7 @@ class Rac3Interface(GameInterface):
             logger.error("Vendor type is None, cannot print vendor items. This command should only be used when in a "
                          "vendor menu.")
             return
-        num_slots = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
+        num_slots = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET, self.current_game))
         logger.info(f"{self.vendor_type} has {num_slots} slots")
         match self.vendor_type:
             case RAC3VENDORTYPE.WEAPON:
