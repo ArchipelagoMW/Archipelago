@@ -36,6 +36,12 @@ __all__ = [
 failed_world_loads: dict[str, str] = {}
 
 
+def normalize_game_names(games: str | Sequence[str] | None) -> Sequence[str]:
+    if isinstance(games, str):
+        return (games,)
+    return games or ()
+
+
 @dataclasses.dataclass(order=True)
 class WorldSource:
     path: str  # typically relative path from this module
@@ -116,8 +122,7 @@ for world_source in world_sources:
                     break
             if manifest:
                 break
-        games = manifest.get("game")
-        for game in games if isinstance(games, list) else [games] if games else ():
+        for game in normalize_game_names(manifest.get("game")):
             if game in AutoWorldRegister.world_types:
                 AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
                 AutoWorldRegister.world_types[game].manifest = manifest
@@ -159,7 +164,7 @@ if apworlds:
                     messagebox("Couldn't load worlds", err_message, error=True)
                     sys.exit(1)
 
-            games = apworld.game if isinstance(apworld.game, list) else [apworld.game] if apworld.game else []
+            games = normalize_game_names(apworld.game)
             if apworld.minimum_ap_version and apworld.minimum_ap_version > version_tuple:
                 fail_worlds(games,
                             f"Did not load {apworld_source.path} "
@@ -187,7 +192,7 @@ if apworlds:
         sys.meta_path.insert(0, APWorldModuleFinder())
 
         for apworld_source, apworld in core_compatible:
-            games = apworld.game if isinstance(apworld.game, list) else [apworld.game] if apworld.game else []
+            games = normalize_game_names(apworld.game)
             duplicate_games = [game for game in games if game in AutoWorldRegister.world_types]
             if duplicate_games:
                 fail_worlds(duplicate_games,

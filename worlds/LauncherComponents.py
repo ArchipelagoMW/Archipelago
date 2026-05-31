@@ -306,7 +306,7 @@ if not is_frozen():
                     source_manifest = json.load(manifest_file)
 
                 source_games = source_manifest.get("game")
-                if not isinstance(source_games, list):
+                if isinstance(source_games, str):
                     source_games = [source_games]
                 assert set(source_games) == set(package_games), (
                     f"World directory {world_directory} has an archipelago.json manifest file, but its game field "
