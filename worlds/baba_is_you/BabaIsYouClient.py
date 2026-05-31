@@ -11,7 +11,7 @@ import Utils
 MULTI_ITEMS = ("Blossom Petal", "Blossom", "Bonus Orb")
 
 # Pack version
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 
 import typing, zipfile
 

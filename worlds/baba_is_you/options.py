@@ -16,7 +16,7 @@ class Goal(Choice):
     Determines the requirements to beat the game.
     end: Reach the normal ending in "A Way Out?".
     flower: Reach the area "???".
-    depths: Reach the area "Depths" (UNIMPLEMENTED).
+    depths: Reach the area "Depths".
     meta: Reach the area "Meta" (UNIMPLEMENTED).
     done: Reach the secret ending in "The End" (UNIMPLEMENTED).
     levels: Win a specified amount of levels.
@@ -103,8 +103,8 @@ class AreaAccess(Choice):
     Determines which areas of the game will be accessible when the goal is set to "end", "levels", or "blossoms".
     All other goal options will override this option.
     early: The Map and its subworlds will be accessible, but the top gate will be blocked off, preventing access to Slideshow and beyond.
-    map: The Map and its subworlds will be fully accessible. ??? will be accessible, but not the levels within. (UNIMPLEMENTED)
-    flower: Map, ???, and their subworlds will be accessible. Depths will be accessible, but not the levels within. (UNIMPLEMENTED)
+    map: The Map and its subworlds will be fully accessible. ??? will be accessible, but not the levels within.
+    flower: Map, ???, and their subworlds will be accessible. Depths will be accessible, but not the levels within.
     depths: Map, ???, Depths, and their subworlds will be accessible. Meta will be accessible, but not the levels within. (UNIMPLEMENTED)
     meta: All areas other than "Center" and its two levels will be accessible. (UNIMPLEMENTED)
     full: All areas will be accessible. (UNIMPLEMENTED)
@@ -141,9 +141,8 @@ class ExcludeGallery(DefaultOnToggle):
 class ExcludeMazeTransform(DefaultOnToggle):
     """
     Excludes transformations for "Ultimate Maze" from logic.
-    This removes some locations if Transformsanity is enabled.
+    This removes some locations if Transformsanity is enabled, and also allows it to be included in Level Shuffle.
     This does NOT remove the 4 "Write" levels from logic, as those can be accessed regardless.
-    Only applies if ??? and its levels are accessible.
     """
 
     display_name = "Exclude Ultimate Maze Transform"

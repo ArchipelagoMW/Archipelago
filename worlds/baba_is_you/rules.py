@@ -6,7 +6,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
 from . import items
-from .levels import LEVEL_DATA, can_win, can_bonus, can_transform, is_level_winnable
+from .levels import LEVEL_DATA, can_win, can_bonus, can_transform, is_level_winnable, has_any_transform
 from .locations import BabaIsYouLocation
 from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
@@ -51,8 +51,8 @@ def set_up_gates(world: BabaIsYouWorld) -> None:
     # Gate to Slideshow
     if world.options.area_access > 0:
         slideshow = world.get_region("Map-8")
-        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get("Map-8"):
-            slideshow = world.get_region(world.level_shuffle_dict.get("Map-8"))
+        if world.options.level_shuffle != 0:
+            slideshow = world.get_region(world.level_shuffle_dict.get("Map-8", "Map-8"))
         for entrance in slideshow.entrances:
             add_rule(entrance, check_third_gate)
 
@@ -66,29 +66,22 @@ def set_all_location_rules(world: BabaIsYouWorld) -> None:
     # Set up win, clear, complete, transform, and bonus location logic
     for name in LEVEL_DATA:
         data = LEVEL_DATA[name]
-        if data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+        if data.get("areaAccess", 0) > world.options.area_access or data.get("checkAreaAccess", 0) > world.options.area_access:
             continue # skip non-accessible areas
 
-        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(name) is not None:
-            name = world.level_shuffle_dict.get(name)
+        parent = data.get("parent") # Get parent of old level
+        if world.options.level_shuffle != 0:
+            name = world.level_shuffle_dict.get(name, name)
             data = LEVEL_DATA[name]
 
         # Win rule
-        if is_level_winnable(data, world.options.area_access):
+        if is_level_winnable(data):
             locationName = data["name"] + ": Win"
             location = world.get_location(locationName)
 
             rule = can_win(name, world.options.logic_difficulty)
             world.set_rule(location, rule)
 
-            # Get parent based where the level is placed
-            parent = data.get("parent")
-            if world.options.level_shuffle != 0 and not (data.get("map") or data.get("noShuffle") or data.get("transforms")):
-                for oldName in world.level_shuffle_dict:
-                    name2 = world.level_shuffle_dict[oldName]
-                    if name == name2: # This level got shuffled into the other one, get the old parent
-                        parent = LEVEL_DATA[oldName].get("parent")
-                        break
             # Create win event with same logic as winning using parent
             if parent is not None:
                 region = world.get_region(name)
@@ -103,7 +96,7 @@ def set_all_location_rules(world: BabaIsYouWorld) -> None:
             world.set_rule(location, rule)
         
         # Transform rules
-        if data.get("transforms"):
+        if has_any_transform(data, world):
             for transform in data["transforms"]:
                 locationName = f"{data["name"]}: {transform} Transform"
                 rule = can_transform(name, transform, world.options.logic_difficulty)
@@ -161,4 +154,9 @@ def get_win_count(state: CollectionState, world: BabaIsYouWorld):
     wins += state.count("Cavern Win", world.player)
     wins += state.count("Mountain Win", world.player)
     wins += state.count("??? Win", world.player)
+    wins += state.count("ABC Win", world.player)
+    wins += state.count("Null Win", world.player)
+    wins += state.count("Depths Win", world.player)
+    wins += state.count("Meta Win", world.player)
+    wins += state.count("Center Win", world.player)
     return wins

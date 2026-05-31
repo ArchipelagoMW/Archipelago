@@ -74,11 +74,11 @@ def create_locations(world: BabaIsYouWorld) -> None:
     # Also add transforms if transformsanity is enabled
     for name in LEVEL_DATA:
         data = LEVEL_DATA[name]
-        if data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+        if data.get("areaAccess", 0) > world.options.area_access or data.get("checkAreaAccess", 0) > world.options.area_access:
             continue
 
-        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(name) is not None:
-            name = world.level_shuffle_dict.get(name)
+        if world.options.level_shuffle != 0:
+            name = world.level_shuffle_dict.get(name, name)
             data = LEVEL_DATA[name]
         
         level = world.get_region(name)

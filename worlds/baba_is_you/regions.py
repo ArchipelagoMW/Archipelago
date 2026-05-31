@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Iterable
 from BaseClasses import Entrance, Region, CollectionState
 from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
-from .levels import LEVEL_DATA, can_win
+from .levels import LEVEL_DATA, can_win, has_any_transform
 
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
@@ -43,21 +43,21 @@ def connect_regions(world: BabaIsYouWorld) -> None:
     for orgName in LEVEL_DATA:
         name = orgName
         data = LEVEL_DATA[orgName]
-        if data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+        if data.get("areaAccess", 0) > world.options.area_access:
             continue # skip non-accessible areas
 
         parent = data.get("parent")
         connections = data.get("connects")
-        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(name) is not None:
-            name = world.level_shuffle_dict.get(name)
+        if world.options.level_shuffle != 0:
+            name = world.level_shuffle_dict.get(name, name)
             data = LEVEL_DATA[name]
 
         level = world.get_region(name)
         if connections is not None:
             for orgOtherRegion in connections:
                 otherRegion = orgOtherRegion
-                if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(otherRegion) is not None:
-                    otherRegion = world.level_shuffle_dict.get(otherRegion)
+                if world.options.level_shuffle != 0:
+                    otherRegion = world.level_shuffle_dict.get(otherRegion, otherRegion)
                 
                 entranceName = name + " -> " + otherRegion
                 subLevel = world.get_region(otherRegion)
@@ -110,10 +110,10 @@ def handle_level_shuffle(world: BabaIsYouWorld) -> None:
     for name in LEVEL_DATA:
         data = LEVEL_DATA[name]
         # Skip non-accessible areas unless level shuffle is set to Full
-        if world.options.level_shuffle != 2 and data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+        if world.options.level_shuffle != 2 and data.get("areaAccess", 0) > world.options.area_access:
             continue
         # Don't shuffle maps, levels with transformations, or levels with the noShuffle flag set
-        if (data.get("map") or data.get("noShuffle") or data.get("transforms")):
+        if (data.get("map") or data.get("noShuffle") or has_any_transform(data, world)):
             continue
 
         if data.get("starting"):
@@ -125,9 +125,7 @@ def handle_level_shuffle(world: BabaIsYouWorld) -> None:
 
         # When default words is on, include levels that only require those words as clearable
         if (not clearable) and (world.options.start_with_default_words):
-            difficulty = data.get("defaultWordOnlyDiff")
-            if difficulty is None:
-                difficulty = 99
+            difficulty = data.get("defaultWordOnlyDiff", 99)
             clearable = (difficulty <= world.options.logic_difficulty)
         
         if clearable:

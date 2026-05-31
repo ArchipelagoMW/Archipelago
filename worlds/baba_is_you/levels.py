@@ -4,11 +4,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
 
-from .options import LogicDifficulty, OpenMap
+from .options import LogicDifficulty, OpenMap, ExcludeMazeTransform
 from rule_builder.rules import And, False_, CanReachRegion, Has, HasAny, HasAll, OptionFilter, Or, Rule, True_
 
 hard_logic_filter = [OptionFilter(LogicDifficulty, LogicDifficulty.option_hard)]
 open_map_filter = [OptionFilter(OpenMap, 1)]
+maze_transform_filter = [OptionFilter(ExcludeMazeTransform, 0)]
 
 # Gets the rule to win a level
 def can_win(level : str, logic_diff : int) -> Rule:
@@ -23,7 +24,11 @@ def can_win(level : str, logic_diff : int) -> Rule:
     advRule = data.get("winLogicAdv")
     if (advRule is not None) and (logic_diff != 0):
         rule = advRule
-    if rule is None: return True_()
+    if rule is None:
+        if data.get("map"):
+            return False_()
+        else:
+            return True_()
     return rule
 
 # Gets the rule to get the bonus in a level
@@ -40,10 +45,10 @@ def can_bonus(level : str, logic_diff : int) -> Rule:
 # Gets the rule to get the specified transformation in a level
 def can_transform(level : str, transform: str, logic_diff : int) -> Rule:
     data = LEVEL_DATA.get(level)
-
+    
     transforms = data.get("transforms")
     if transforms is None: return False_()
-    
+
     rule = transforms.get(transform)
     if rule is None: return False_()
 
@@ -53,13 +58,22 @@ def can_transform(level : str, transform: str, logic_diff : int) -> Rule:
     
     return rule
 
-# Checks if a level has a valid win location
-def is_level_winnable(data: dict, area_access: int) -> bool:
-    if data.get("map"):
-        if (data.get("winLogic") is not None and (data.get("winAreaAccess") is None or data.get("winAreaAccess") <= area_access)):
-            return True
-        return False
+# Checks if a level has any valid transformations
+def has_any_transform(data: dict, world) -> bool:
+    if data.get("transforms") is None: return False
+    if world is None: return True
+
+    # If we can't get checks here, there's no transformations
+    if (data.get("checkAreaAccess", 0) > world.options.area_access): return False
+
+    # Exclude maze transform setting
+    if world.options.exclude_maze_transform and data["name"] == "Ultimate Maze": return False
+
     return True
+
+# Checks if a level has a valid win location
+def is_level_winnable(data: dict) -> bool:
+    return (data.get("map") is None) or (data.get("winLogic") is not None)
 
 # Gets all valid locations associated with a level
 def get_level_locations(data: dict, world) -> list:
@@ -68,8 +82,11 @@ def get_level_locations(data: dict, world) -> list:
         area_access = world.options.area_access
     
     locations = []
+    if (data.get("checkAreaAccess", 0) > area_access):
+        return [] # return no locations
+    
     prefix = f"{data["name"]}: "
-    if is_level_winnable(data, area_access):
+    if is_level_winnable(data):
         # Add win location
         locations.append(prefix + "Win")
     
@@ -77,7 +94,7 @@ def get_level_locations(data: dict, world) -> list:
         # Add bonus location
         locations.append(prefix + "Bonus")
     
-    if (world is None or world.options.transformsanity) and data.get("transforms"):
+    if (world is None or world.options.transformsanity) and has_any_transform(data, world):
         # Add transform locations
         for transform in data["transforms"]:
             if transform.find("+") == -1: # combo transforms are only used for logic
@@ -97,7 +114,7 @@ LEVEL_DATA = {
         "parent": "???",
         "map": True,
         "winLogic": HasAll("Fragile Existence -> Baba", "Hostile Environment -> Flag"),
-        "winAreaAccess": 1,
+        "checkAreaAccess": 1,
         "connects": {
             "Map-0": None,
             "Map-?": Has("Fragile Existence -> Baba"),
@@ -212,7 +229,6 @@ LEVEL_DATA = {
     "Map-8": {
         "name": "Slideshow",
         "parent": "Map",
-        "defaultWordOnlyDiff": 0,
         "areaAccess": 1,
         "connects": {
             "Map-9": can_win,
@@ -2030,14 +2046,366 @@ LEVEL_DATA = {
         "parent": "Null", # Doesn't exist as a region, as it contains no levels. This is so winning this level counts as a "Null Win" event
         "map": True,
         "areaAccess": 1,
-        "winLogic": HasAll("Written Instructions -> Baba", "Turn The Corner -> Baba", "Level", "Is", "Win"),
-        "winLogicAdv": HasAll("Written Instructions -> Baba", "Turn The Corner -> Baba") & ((Has("Win") & (HasAny("Rock", "Is", "And") | HasAll("Level", "Ultimate Maze -> Text"))) | (Has("Is") & (Has("Rock") | HasAll("Level", "Ultimate Maze -> Text")))),
-        "winAreaAccess": 2,
+        "winLogic": HasAll("Written Instructions -> Win Text", "Turn The Corner -> Baba", "Level", "Is", "Win"),
+        "winLogicAdv": HasAll("Written Instructions -> Win Text", "Turn The Corner -> Baba") & ((Has("Win") & (HasAny("Rock", "Is", "And") | (maze_transform_filter & HasAll("Level", "Ultimate Maze -> Text")))) | (Has("Is") & (Has("Rock") | (maze_transform_filter & HasAll("Level", "Ultimate Maze -> Text"))))),
+        "checkAreaAccess": 2,
         "connects": {
             "Map": None,
-            # "???-1": None,
-            # "Depths": None,
-            # more...
+            "???-1": None,
+            "???-A": Has("Turn The Corner -> Baba") & ((maze_transform_filter & HasAll("Ultimate Maze -> Text", "Level") & HasAny("Is", "And")) | HasAll("Is", "Rock", "And")),
+            "Depths": Has("Turn The Corner -> Baba"),
+            "???-Extra 6": Has("Turn The Corner -> Baba") & (Has("Is") | (maze_transform_filter & HasAll("Rock", "Level", "Ultimate Maze -> Text"))),
+            "???-Extra 7": Has("Turn The Corner -> Baba") & ((HasAll("Water", "Is", "Sink") & HasAny("And", "Rock")) | (maze_transform_filter & HasAll("And", "Level", "Ultimate Maze -> Text"))),
         },
     },
+    "???-1": {
+        "name": "Glitch",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Baba", "Is", "You", "Love", "W", "E", "L", "C", "O", "M"),
+        "winLogicAdv": HasAll("Baba", "Is", "You") & (Has("Love") | HasAll("M", "E")),
+        "connects": {
+            "???": None,
+            "???-2": can_win,
+        },
+    },
+    "???-2": {
+        "name": "Error",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Baba", "Is", "You", "Love", "V", "E", "L", "C", "O", "M"),
+        "winLogicAdv": HasAll("Baba", "Is", "You", "E") & ((Has("M") & (HasAll("O", "V", "C") | HasAll("L", "V", "C") | HasAll("L", "O"))) | HasAll("L", "O", "V")),
+        "connects": {
+            "???-1": can_win,
+            "???-3": can_win,
+        },
+    },
+    "???-3": {
+        "name": "Whoops",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Ice", "Flag", "Is", "You", "Win", "Push", "Move", "Keke"),
+        "winLogicAdv": HasAll("Ice", "Flag", "Is", "You", "Win", "Push", "Move"),
+        "connects": {
+            "???-2": can_win,
+            "???-4": can_win,
+        },
+    },
+    "???-4": {
+        "name": "Mean Fence",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Flag", "Is", "Win"),
+        "winLogicAdv": HasAll("Win"),
+        "connects": {
+            "???-3": can_win,
+            "???-5": can_win,
+            "???-6": can_win,
+            "???-7": can_win,
+        },
+    },
+    "???-5": {
+        "name": "Scale",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Rock", "Is", "Push", "Baba", "Not", "You"),
+        "winLogicAdv": True_(), # requires nothing
+        "connects": {
+            "???-4": can_win,
+            "???-Extra 1": can_win,
+            "ABC": can_win,
+        },
+    },
+    "???-6": {
+        "name": "Fireplace",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Keke", "Is", "Push", "Skull", "Win"),
+        "winLogicAdv": Has("Win") & ((Has("Keke") & HasAny("Skull", "Is")) | HasAll("Skull", "Is", "Push")),
+        "connects": {
+            "???-4": can_win,
+            "???-8": can_win,
+        },
+    },
+    "???-7": {
+        "name": "Turn The Corner",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Rock", "Is", "And", "Push", "Sink", "Shut", "Open", "Win", "Flag", "Baba", "You"),
+        "winLogicAdv": HasAll("Rock", "Is", "And", "Push", "Sink", "Shut", "Open", "Win"),
+        "transforms": {
+            "Baba": HasAll("Rock", "Is", "And", "Push", "Sink", "Shut", "Open", "Baba", "You") & HasAny("Flag", "Win"),
+        },
+        "connects": {
+            "???-4": can_win,
+            "???-12": can_win,
+        },
+    },
+    "???-8": {
+        "name": "VIP Area",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Keke", "Is", "Stop", "Not", "Flag", "Baba", "You"),
+        "winLogicAdv": HasAll("Keke", "Is", "Stop", "Not", "Flag"),
+        "connects": {
+            "???-6": can_win,
+            "???-9": can_win,
+        },
+    },
+    "???-9": {
+        "name": "Tense Atmosphere",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Wall", "Is", "Not", "Rock", "And", "Stop", "Sink", "Push"),
+        "winLogicAdv": HasAll("Wall", "Is", "Not"),
+        "connects": {
+            "???-8": can_win,
+            "???-10": can_win,
+        },
+    },
+    "???-10": {
+        "name": "Tag Team",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Skull", "Is", "Not", "Stop", "Baba", "You"), # minimum logic
+        "connects": {
+            "???-9": can_win,
+            "???-11": can_win,
+        },
+    },
+    "???-11": {
+        "name": "Security Check",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Baba", "Is", "You", "Keke", "Not", "Stop", "Flag"), # minimum logic
+        "connects": {
+            "???-10": can_win,
+        },
+    },
+    "???-12": {
+        "name": "Ultimate Maze",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Is", "Win"), # You can technically avoid win with the multitransform solution, but that's too much
+        "defaultWordOnlyDiff": 0,
+        "transforms": {
+            "Flag": maze_transform_filter & HasAll("Is", "Flag"),
+            "Text": maze_transform_filter & HasAll("Is", "Flag", "Weak", "Level"), # the only useful one
+            "Key": maze_transform_filter & HasAll("Is", "Flag"),
+            "Hedge": maze_transform_filter & HasAll("Is", "Flag", "Weak", "Level"),
+            "Wall": maze_transform_filter & HasAll("Is", "Flag", "Weak", "Level"),
+            "Keke": maze_transform_filter & HasAll("Is", "Flag", "Weak", "Level", "On", "Text", "You"),
+            "Tile": maze_transform_filter & HasAll("Is", "Flag", "Weak", "Level", "On", "Text", "You"),
+        },
+        "connects": {
+            "???-7": can_win,
+        },
+    },
+    "???-A": {
+        "name": "Do It Yourself",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Baba", "Is", "You", "Flag", "Write", "Win"),
+        "winLogicAdv": HasAll("Flag", "Write", "Win") & HasAny("Baba", "You"),
+        "connects": {
+            "???-B": can_win,
+            "???-D": can_win,
+        },
+    },
+    "???-B": {
+        "name": "Write The Rules",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Write", "Is", "Rock", "Push"), # minimum logic
+        "connects": {
+            "???-A": can_win,
+            "???-C": can_win,
+        },
+    },
+    "???-C": {
+        "name": "Rewrite The Rules",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Write", "Is", "Rock", "Push", "Open"), # minimum logic
+        "connects": {
+            "???-B": can_win,
+            "???-D": can_win,
+        },
+    },
+    "???-D": {
+        "name": "Written Instructions",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win", "Write"), # minimum logic
+        "transforms": {
+            "Win Text": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win", "Write", "Level"), # one useful one
+            "Push Text": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win") & HasAny("Level", "Write"),
+            "Keke Text": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win") & HasAny("Level", "Write"),
+            "Wall Text": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win", "Write", "Level"),
+            "Stop Text": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win", "Write", "Level"),
+            "Baba Text": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win", "Write", "Level"),
+            "You Text": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win", "Write", "Level"),
+            "Keke": HasAll("Keke", "Is", "Push", "Baba", "You", "Wall", "Stop", "Win", "Level"),
+        },
+        "connects": {
+            "???-B": can_win,
+            "???-D": can_win,
+        },
+    },
+    "???-Extra 1": {
+        "name": "Across",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Baba", "Is", "You", "Keke", "Move", "Push"), # minimum logic
+        "connects": {
+            "???-5": can_win,
+            "???-Extra 2": can_win,
+            "???-Extra 3": can_win,
+        },
+    },
+    "???-Extra 2": {
+        "name": "Castle Disaster",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Wall", "Baba", "Is", "You", "Win"),
+        "winLogicAdv": HasAll("Wall", "Baba") & (HasAll("Is", "You") | Has("Win")),
+        "defaultWordOnlyDiff": 0,
+        "connects": {
+            "???-Extra 1": can_win,
+            "???-Extra 4": can_win,
+        },
+    },
+    "???-Extra 3": {
+        "name": "Hazel Den",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Flag", "Is", "Rock", "Skull"), # mimimum logic
+        "connects": {
+            "???-Extra 1": can_win,
+            "???-Extra 4": can_win,
+        },
+    },
+    "???-Extra 4": {
+        "name": "Baba Has Keke",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Baba", "Has", "Keke", "Push", "Shift"), # mimimum logic
+        "connects": {
+            "???-Extra 2": can_win,
+            "???-Extra 3": can_win,
+        },
+    },
+    "???-Extra 5": {
+        "name": "Orb",
+        "parent": "???",
+        "areaAccess": 3, # requires winning Depths
+        "connects": {
+            "Depths": can_win,
+        },
+    },
+    "???-Extra 6": {
+        "name": "Huh?",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Flag", "Is", "Win"), # minimum logic
+        "defaultWordOnlyDiff": 0,
+    },
+    "???-Extra 7": {
+        "name": "Getting Together",
+        "parent": "???",
+        "areaAccess": 2,
+        "winLogic": HasAll("Wall", "Rock", "Baba", "Is", "On", "Shift"),
+        "winLogicAdv": (Has("Wall") & ((HasAll("Rock", "Baba") & HasAny("Is", "On")) | (HasAll("Is", "On") & HasAny("Baba", "Rock", "Push")))) | HasAll("Rock", "On", "Baba", "Is", "Shift"),
+        "defaultWordOnlyDiff": 1,
+    },
+    "ABC": {
+        "name": "ABC",
+        "parent": "???",
+        "areaAccess": 2,
+        "key": "ABC Key",
+        "map": True,
+        "connects": {
+            "???": None,
+            "ABC-1": None,
+        },
+        "clearCount": 4,
+        "completeCount": 6,
+    },
+    "ABC-1": {
+        "name": "Lunar Gallery",
+        "parent": "ABC",
+        "areaAccess": 2,
+        "winLogic": HasAll("Baba", "Is", "Push", "H", "M", "O", "N", "T"),
+        "winLogicAdv": HasAll("Baba", "Is", "Push", "M", "O", "N", "T"),
+        "connects": {
+            "ABC-2": can_win,
+            "ABC-3": can_win,
+        },
+    },
+    "ABC-2": {
+        "name": "Ba",
+        "parent": "ABC",
+        "areaAccess": 2,
+        "winLogic": HasAll("BA", "Is", "You", "Float", "Hot"), # minimum logic
+        "connects": {
+            "ABC-1": can_win,
+            "ABC-4": can_win,
+        },
+    },
+    "ABC-3": {
+        "name": "Ab",
+        "parent": "ABC",
+        "areaAccess": 2,
+        "winLogic": HasAll("B", "A", "AB", "Is", "You", "Belt", "Push", "Hot"),
+        "winLogicAdv": HasAll("B", "A", "AB", "Is", "You", "Hot") & HasAny("Belt", "Push"),
+        "connects": {
+            "ABC-1": can_win,
+            "ABC-4": can_win,
+        },
+    },
+    "ABC-4": {
+        "name": "Wall",
+        "parent": "ABC",
+        "areaAccess": 2,
+        "winLogic": HasAll("Door", "Is", "Shut", "Key", "Open", "Push", "W", "A", "L"),
+        "winLogicAdv": Has("Is") & (HasAll("Push", "Open") | (HasAll("A", "L") & HasAny("Shut", "Push") & HasAny("Door", "Open", "Key"))),
+        "connects": {
+            "ABC-2": can_win,
+            "ABC-3": can_win,
+            "ABC-5": can_win,
+        },
+    },
+    "ABC-5": {
+        "name": "Stardrop",
+        "parent": "ABC",
+        "areaAccess": 2,
+        "winLogic": HasAll("Belt", "Is", "Melt", "Flag", "G", "R", "A", "S", "H", "O", "T"),
+        "winLogicAdv": Has("Is") & (HasAll("O", "H") | Has("T")) & Has("Flag") & (HasAll("S", "A") | HasAll("S", "R") | HasAll("A", "R")) & (Has("Belt") | HasAll("S", "T", "A", "R", "G", "H", "O")),
+        "connects": {
+            "ABC-4": can_win,
+            "ABC-Extra 1": can_win,
+        },
+    },
+    "ABC-Extra 1": {
+        "name": "Meteor Strike",
+        "parent": "ABC",
+        "areaAccess": 2,
+        "winLogic": HasAll("Belt", "Is", "Melt", "Flag", "Love", "G", "R", "A", "S", "H", "O", "T"),
+        "winLogicAdv": HasAll("Flag", "Is", "Love", "T", "S") & ((Has("Belt") & (Has("A") | HasAll("G", "H", "O", "R"))) | HasAll("A", "H", "O")),
+        "connects": {
+            "ABC-5": can_win,
+        },
+    },
+    "Depths": {
+        "name": "Depths",
+        "parent": "???",
+        "areaAccess": 2,
+        "key": "Depths Key",
+        "map": True,
+        # "winLogic": ???,
+        "checkAreaAccess": 3,
+        "connects": {
+            "???-5": can_win,
+        },
+    }
 }

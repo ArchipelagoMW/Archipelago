@@ -126,6 +126,11 @@ table.insert(mod_hook_functions.rule_baserules, function()
     addbaserule("text", "is", "grey", { { "unchecked", {} } })
     addbaserule("text", "is", "phantom", { { "unchecked", {} } })
     addbaserule("text", "is", "missing", { { "unchecked", {} } })
+
+    -- Prevent ultimate maze transform
+    if options.exclude_maze_transform ~= 0 and generaldata.strings[CURRLEVEL] == "168level" then
+        addbaserule("level", "is", "level")
+    end
 end)
 
 -- Unchecked particle effect
@@ -266,15 +271,16 @@ function loadlevelcompletion()
     return result
 end
 
--- handles level randomization
+-- handles level shuffle
 orig_addunit = addunit
 function addunit(id,undoing_,levelstart_)
     local result = orig_addunit(id,undoing_,levelstart_)
 
     local unit = mmf.newObject(id)
     local levelfile = unit.strings[U_LEVELFILE]
-    if string.len(levelfile) > 1 then
-        -- randomization
+    -- Only run at start (transforms might behave strangely though, keep in mind if we decide to shuffle those)
+    if string.len(levelfile) > 0 and #undobuffer <= 1 then
+        -- shuffle
         local newFile = level_mapping[levelfile] or levelfile
         if levelfile ~= newFile then
             levelfile = newFile
@@ -282,11 +288,23 @@ function addunit(id,undoing_,levelstart_)
             MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. levelfile .. ".ld")
             local levelname = MF_read("level","general","name")
             MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
+            --add_to_messages(unit.strings[U_LEVELNAME] .. " -> " .. levelname)
             unit.strings[U_LEVELNAME] = levelname
         end
     end
 
     return result
+end
+
+-- handles level shuffle for object levels
+orig_handlespecial = handlespecial
+function handlespecial(unitid,type,data)
+    if (type == "level") and data[1] then
+        local levelfile = data[1]
+        data[1] = level_mapping[levelfile] or levelfile
+    end
+
+    orig_handlespecial(unitid,type,data)
 end
 
 -- prevent entering worlds we don't have the key for, or that are outside of our area access
@@ -847,7 +865,12 @@ function update_checks()
                         levelname = capitalize(levelname)
                         for a, b in ipairs(transforms) do
                             if b ~= "" and b ~= level then
-                                transform_locations[capitalize(levelname)..": "..capitalize(b).." Transform"] = 1
+                                local name = b
+                                if name:sub(1, 5) == "text_" then
+                                    name = name:sub(6) .. " Text"
+                                end
+                                name = capitalize(name)
+                                transform_locations[levelname..": "..name.." Transform"] = 1
                             end
                         end
                     end
@@ -967,7 +990,7 @@ function split(s, delimiter)
 end
 
 function capitalize_word(word)
-    if word:upper() == "VIP" or word:upper() == "UFO" then return word:upper() end -- exception for acronyms
+    if word:upper() == "VIP" or word:upper() == "UFO" or word:upper() == "ABC" then return word:upper() end -- exception for acronyms
     return word:sub(1,1):upper()..word:sub(2)
 end
 function capitalize(str)

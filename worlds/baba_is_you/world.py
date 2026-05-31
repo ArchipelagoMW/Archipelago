@@ -177,10 +177,23 @@ class BabaIsYouWorld(World):
             self._restore_ut_slot_data(slot_data)
         
         # Prevent currently unimplemented goals/area accesses from being used (REMOVE WHEN IMPLEMENTED)
-        if self.options.goal >= 2 and self.options.goal <= 4:
+        if self.options.goal >= 3 and self.options.goal <= 4:
             raise OptionError(f"Baba Is You ({self.player_name}): Selected goal option has not been implemented yet.")
-        elif self.options.area_access >= 2:
+        elif self.options.area_access > 2:
             raise OptionError(f"Baba Is You ({self.player_name}): Selected area access option has not been implemented yet.")
+    
+        # DEBUG: Print area access and goal
+        # print(self.options.area_access, self.options.goal)
+
+        # Set area access based on goal
+        if self.options.goal == 1: # Reach ???
+            self.options.area_access.value = 1 # Map access
+        if self.options.goal == 2: # Reach Depths
+            self.options.area_access.value = 2 # ??? access
+        if self.options.goal == 3: # Reach Meta
+            self.options.area_access.value = 3 # Depths access
+        if self.options.goal == 4: # Done
+            self.options.area_access.value = 5 # Full access
         
         # Prevent Easy Logic + No Shuffle + No Default (won't generate)
         if self.options.level_shuffle == 0 and self.options.logic_difficulty == 0 and not self.options.start_with_default_words:
@@ -204,16 +217,6 @@ class BabaIsYouWorld(World):
             logger.warning(f"Baba Is You ({self.player_name}): Goal requires {self.options.goal_blossoms} blossoms, but only {maxBlossoms} are in the pool. "
                            f"Reducing goal amount...")
             self.options.goal_blossoms.value = maxBlossoms
-
-        # Set area access based on goal
-        if self.options.goal == 1: # Reach ???
-            self.options.area_access.value = 1 # Map access
-        if self.options.goal == 2: # Reach Depths
-            self.options.area_access.value = 2 # ??? access
-        if self.options.goal == 3: # Reach Meta
-            self.options.area_access.value = 3 # Depths access
-        if self.options.goal == 4: # Done
-            self.options.area_access.value = 5 # Full access
 
         if self.options.goal == 5:
             maxLevels = AREA_ACCESS_MAX[self.options.area_access]
@@ -282,24 +285,15 @@ class BabaIsYouWorld(World):
             if data.get("areaAccess") and data.get("areaAccess") > self.options.area_access:
                 continue
             
+            mapName = name # Use map name of original level for hints
             if self.options.level_shuffle != 0 and self.level_shuffle_dict.get(name) is not None:
                 name = self.level_shuffle_dict.get(name)
                 data = LEVEL_DATA[name]
             
-            # Get parent based where the level is placed
-            mapName = name
-            if self.options.level_shuffle != 0:
-                for oldName in self.level_shuffle_dict:
-                    name2 = self.level_shuffle_dict[oldName]
-                    if name == name2: # This level got shuffled into the other one, get the old parent
-                        mapName = oldName
-                        break
-            
             for locationName in get_level_locations(data, self):
                 location = self.multiworld.get_location(locationName, self.player)
                 level_hint_data[location.address] = mapName
-                            
-            hint_data[self.player] = level_hint_data
+        hint_data[self.player] = level_hint_data
 
     # Our world class must have certain functions ("steps") that get called during generation.
     # The main ones are: create_regions, set_rules, create_items.
