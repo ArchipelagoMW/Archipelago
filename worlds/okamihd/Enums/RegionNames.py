@@ -221,6 +221,13 @@ class RegionNames(StrEnum):
     NORTHERN_RYOSHIMA_COAST_WATCHERS = "Northern Ryoshima Coast (Watcher's cape)"
     NORTHERN_RYOSHIMA_COAST_SAPLING = "Northern Ryoshima Coast (Guardian Sapling Island)"
     NORTHERN_RYOSHIMA_COAST_TOMB = "Northern Ryoshima Coast (Tomb Cave)"
+    NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND = "Northern Ryoshima Coast (Westernmost Island)"
+    NORTHERN_RYOSHIMA_COAST_UMI = "Northern Ryoshima Coast (Umi's Restaurant)"
+    NORTHERN_RYOSHIMA_COAST_CATCALL_NORTH = "Northern Ryoshima Coast (Island North of Catcall Tower)"
+    NORTHERN_RYOSHIMA_COAST_CB2_ISLAND = "Northern Ryoshima Coast (Cherry Bomb 2 Island)"
+    NORTHERN_RYOSHIMA_COAST_PS2_ISLAND = "Northern Ryoshima Coast (Power Slash 2 Island)"
+    NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND = "Northern Ryoshima Coast (Bandit Spider Island)"
+    NORTHERN_RYOSHIMA_COAST_SEA = "Northern Ryoshima Coast (Sea)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps

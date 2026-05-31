@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
 
 from rule_builder.rules import True_, Has, HasAny, Or
-from ..CheckIds import shop_check_id, container_check_id
+from ..CheckIds import shop_check_id, container_check_id, brush_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.WarpType import WarpType
-from ..Rules import long_swim_rule, n_ryoshima_guardian_sapling_rule
+from ..Rules import long_swim_rule, n_ryoshima_guardian_sapling_rule, n_ryoshima_islands_dragon_rule
 from ..Types import ExitData, EventData, LocData, WarpData
 from ..Enums.RegionNames import RegionNames, MapIds
 
@@ -27,7 +27,20 @@ exits = {
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_SAPLING, loading_screen=False,
                  special_rule=n_ryoshima_guardian_sapling_rule),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_TOMB, loading_screen=False, one_way=True,
-                 has_events=["Northern Ryoshima Coast - Climb to Tomb Cave"])
+                 has_events=["Northern Ryoshima Coast - Climb to Tomb Cave"]),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND, loading_screen=False,
+                 special_rule=n_ryoshima_islands_dragon_rule),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_CATCALL_NORTH, loading_screen=False,
+                 special_rule=n_ryoshima_islands_dragon_rule),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_UMI),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_CB2_ISLAND, loading_screen=False,
+                 special_rule=n_ryoshima_islands_dragon_rule),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_PS2_ISLAND, loading_screen=False,
+                 special_rule=n_ryoshima_islands_dragon_rule),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND, loading_screen=False,
+                 special_rule=n_ryoshima_islands_dragon_rule),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_SEA, loading_screen=False,
+                 special_rule=n_ryoshima_islands_dragon_rule)
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS, one_way=True, loading_screen=False,
@@ -50,15 +63,30 @@ events = {
         "Northern Ryoshima Coast - Climb to Watcher's Cape": EventData(
             required_brush_techniques=[BrushTechniques.CATWALK], special_rule=Or(long_swim_rule, Has("Holy Eagle"))),
         "Northern Ryoshima Coast - Climb to Tomb Cave": EventData(required_brush_techniques=[BrushTechniques.CATWALK]),
-        "Northern Ryoshima Coast - Meet Orca": EventData(required_brush_techniques=[BrushTechniques.SUNRISE],event_item_name="Orca"),
+        "Northern Ryoshima Coast - Meet Orca": EventData(required_brush_techniques=[BrushTechniques.SUNRISE],
+                                                         event_item_name="Orca"),
     },
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER: {
         "Northern Ryoshima Coast - Mandatory encounter in Watcher's Cape": EventData(
             mandatory_enemies=[OkamiEnemies.BLUE_CYCLOPS]),
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND: {
+        "Northern Ryoshima Coast - Fish Marlin": EventData(
+            type=LocationType.FISHING_MINIGAME,
+            required_items_events=["Marlin Rod"])
     }
 }
 locations = {
+    RegionNames.NORTHERN_RYOSHIMA_COAST_UMI: {
+        "Northern Ryoshima Coast - Kazegami (Whirlwind)": LocData(
+            brush_check_id(24), required_items_events=["Northern Ryoshima Coast - Fish Marlin"],
+            type=LocationType.CONSTELLATION),
+        "Northern Ryoshima Coast - Chest after Whirlwind": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 0),
+            required_items_events=["Northern Ryoshima Coast - Fish Marlin"]),
+    },
     RegionNames.NORTHERN_RYOSHIMA_COAST: {
+
         "Northern Ryoshima Coast - Buried Chest southwest on mainland": LocData(
             container_check_id(MapIds.NORTHERN_RYOSHIMA, 3), type=LocationType.BURIED_CHEST),
         "Northern Ryoshima Coast - Buried Chest southwest of Umi's restaurant": LocData(
@@ -115,6 +143,53 @@ locations = {
     RegionNames.NORTHERN_RYOSHIMA_COAST_MIST_WARP: {
         "Northern Ryoshima Coast - Chest in secret Mist Warp Area": LocData(
             container_check_id(MapIds.NORTHERN_RYOSHIMA, 33))
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_CATCALL_NORTH: {
+        "Northern Ryoshima Coast - Southern Buried Chest on island north of catcall tower": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 11), type=LocationType.BURIED_CHEST),
+        "Northern Ryoshima Coast - Northern Buried Chest on island north of catcall tower": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 91), type=LocationType.BURIED_CHEST),
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_CB2_ISLAND: {
+        "Northern Ryoshima Coast - Burning Chest on Cherry Bomb 2 Island": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 12), type=LocationType.BURNING_CHEST),
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND: {
+        "Northern Ryoshima Coast - Buried Chest on Westernmost island beach": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 17), type=LocationType.BURIED_CHEST),
+        "Northern Ryoshima Coast - Freestanding Chest on Westernmost island": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 24)),
+        "Northern Ryoshima Coast - Underwater Clam on Westernmost island beach 2": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 75), type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Northern Ryoshima Coast - Underwater Clam on Westernmost island beach 3": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 76), type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Northern Ryoshima Coast - Underwater Clam on Westernmost island beach 1": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 77), type=LocationType.UNDERWATER_CHEST_SHALLOW),
+        "Northern Ryoshima Coast - Buried Chest on Westernmost island": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 83), type=LocationType.BURIED_CHEST),
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND: {
+        "Northern Ryoshima Coast - Buried Chest on bandit spider island": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 25), type=LocationType.BURIED_CHEST),
+    },
+    # All of these require Orca, even though you can get some without - This is for bot my and the player's sanity
+    RegionNames.NORTHERN_RYOSHIMA_COAST_SEA: {
+        "Northern Ryoshima Coast - Underwater Clam on rocks west of watcher's cape": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 95), type=LocationType.UNDERWATER_CHEST),
+        "Northern Ryoshima Coast - Underwater Clam on rocks north of Guardian Sapling": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 96), type=LocationType.UNDERWATER_CHEST),
+        "Northern Ryoshima Coast - Underwater Clam on rocks southwest of watcher's cape": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 97), type=LocationType.UNDERWATER_CHEST),
+        "Northern Ryoshima Coast - Underwater Clam on rocks north of bandit spider island": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 98), type=LocationType.UNDERWATER_CHEST),
+        "Northern Ryoshima Coast - Underwater Clam on rocks west of watcher's cape 2": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 99), type=LocationType.UNDERWATER_CHEST),
+        "Northern Ryoshima Coast - Underwater Clam on rocks between Power Slash 2 and Cherry Bomb 2 Island 1": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 100), type=LocationType.UNDERWATER_CHEST),
+        "Northern Ryoshima Coast - Underwater Clam on rocks between Power Slash 2 and Cherry Bomb 2 Island 2": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 101), type=LocationType.UNDERWATER_CHEST),
+        "Northern Ryoshima Coast - Underwater Clam on rocks north of Catcall Tower": LocData(
+            container_check_id(MapIds.NORTHERN_RYOSHIMA, 102), type=LocationType.UNDERWATER_CHEST)
     }
 }
 warps = {
