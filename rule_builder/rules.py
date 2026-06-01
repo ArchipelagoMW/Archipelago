@@ -593,7 +593,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
                 clauses.append(child)
 
         if not clauses and not items:
-            return true_rule or False_().resolve(world)
+            return true_rule or True_().resolve(world)
 
         if len(items) == 1:
             item, count = next(iter(items.items()))
