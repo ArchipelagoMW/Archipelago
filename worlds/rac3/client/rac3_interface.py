@@ -358,7 +358,7 @@ class Rac3Interface(GameInterface):
 
     def check_main_menu(self):
         """Check if the player is on the main menu, before starting the game"""
-        if self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF:
+        if self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF or self._read32(RAC3STATUS.GAME_LAUNCHED) == 0:
             return True
         return False
 
