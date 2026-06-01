@@ -2521,8 +2521,8 @@ async def test_receive_notification_reconnect_replay_dedupes_on_rewind(mock_bizh
 
 
 @pytest.mark.asyncio
-async def test_deliver_items_replays_already_acked_trap_when_rom_counter_not_advanced(mock_bizhawk_context):
-    """If ROM rewinds and slot is unfilled, replay session-ACKed trap so ROM counter can advance."""
+async def test_deliver_items_skips_already_acked_trap_when_rom_counter_not_advanced(mock_bizhawk_context):
+    """Regression guard (Issue #753): do not redeliver trap after reload when ROM counter rewinds."""
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -2543,8 +2543,8 @@ async def test_deliver_items_replays_already_acked_trap_when_rom_counter_not_adv
 
         await client._deliver_items(mock_bizhawk_context)
 
-    assert client._delivered_item_index == 0
-    assert client._delivery_pending is True
+    assert client._delivered_item_index == 1
+    assert client._delivery_pending is False
     mock_display.assert_not_awaited()
     assert mock_write.await_args_list == [
         call(
@@ -2553,18 +2553,14 @@ async def test_deliver_items_replays_already_acked_trap_when_rom_counter_not_adv
         ),
         call(
             mock_bizhawk_context.bizhawk_ctx,
-            [
-                (data.transport_ram_addresses["incoming_item_id"], int(3860032).to_bytes(4, 'little'), 'System Bus'),
-                (data.transport_ram_addresses["incoming_item_player"], int(2).to_bytes(4, 'little'), 'System Bus'),
-                (data.transport_ram_addresses["incoming_item_flag"], (1).to_bytes(4, 'little'), 'System Bus'),
-            ],
+            [(data.transport_ram_addresses["delivered_item_index"], (1).to_bytes(4, 'little'), 'System Bus')],
         ),
     ]
 
 
 @pytest.mark.asyncio
 async def test_deliver_items_skips_already_acked_trap_when_rom_counter_already_applied(mock_bizhawk_context):
-    """Skip trap replay only when ROM counter confirms this item slot was already applied."""
+    """Still skip trap replay when ROM counter already indicates slot applied."""
     client = KirbyAmClient()
     client.initialize_client()
 

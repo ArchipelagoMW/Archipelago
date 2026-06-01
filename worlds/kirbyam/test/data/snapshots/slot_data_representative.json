@@ -705,7 +705,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_10_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 2-19 (Report This)",
+      "label": "Uncertain Minor Chest 2-19 B (Report This)",
       "location_id": 3960529,
       "tags": [
         "ReportLocation",
