@@ -363,6 +363,19 @@ __attribute__((used)) void ap_on_boss_defeat_collect_shard(uint32_t boss_index) 
     }
 }
 
+typedef void (*KirbyBossAlreadyOwnedRewardFn)(void *obj2, int16_t x, int16_t y, uint32_t boss_index);
+#define KIRBY_BOSS_ALREADY_OWNED_REWARD_FN ((KirbyBossAlreadyOwnedRewardFn)0x08088A39u)
+
+// Hook target for native HasShard==true boss reward path (Issue #754).
+// In this branch, the game does not run CollectShard(), so the existing
+// CollectShard hook source alone can miss boss-defeat transport signaling.
+// Record boss defeat and preserve native behavior by chaining into the
+// original reward function.
+__attribute__((used)) void ap_on_boss_defeat_already_owned_reward(void *obj2, int16_t x, int16_t y, uint32_t boss_index) {
+    ap_set_boss_defeat_flag(boss_index);
+    KIRBY_BOSS_ALREADY_OWNED_REWARD_FN(obj2, x, y, boss_index);
+}
+
 // Hook target for native big chest reward collection. The game passes the area ID
 // in r0; record the major chest AP check and intentionally do not unlock the
 // native map here. Native maps are granted only when the corresponding AP map

@@ -20,6 +20,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 ### Bug Fixes
 
 - Fixed a redelivery regression where session-ACKed traps and filler could replay after reload/reconnect mailbox rewinds; acknowledged traps and filler are now treated as non-redeliverable one-time deliveries, while all other item classes remain replayable for rewind recovery (Issue #753, regression after v0.2.2 behavior).
+- Fixed remaining missed boss-defeat AP checks when a shard was already AP-owned before the fight by making `boss_defeat_flags` authoritative from both native boss outcomes (CollectShard path and already-owned reward path) and removing the client's room/probe fallback staging dependency (Issue #754).
 
 ### Internal Changes
 

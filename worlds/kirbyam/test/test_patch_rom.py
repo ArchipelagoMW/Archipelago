@@ -83,6 +83,14 @@ def test_boss_collect_shard_call_offset_matches_verified_hook_site() -> None:
     assert patch_rom.BOSS_COLLECT_SHARD_CALL_OFFSET == 0x001D952
 
 
+def test_boss_already_owned_reward_target_matches_verified_symbol() -> None:
+    assert patch_rom.ORIGINAL_BOSS_ALREADY_OWNED_REWARD_FN_ADDR == 0x08088A38
+
+
+def test_boss_already_owned_expected_callsite_count_matches_design_contract() -> None:
+    assert patch_rom.EXPECTED_BOSS_ALREADY_OWNED_REWARD_CALLSITES == 8
+
+
 def test_minor_chest_collect_call_offset_matches_verified_hook_site() -> None:
     # sub_0800AFC8 at ROM addr 0x0800AFC8 (file offset 0xAFC8); BL CollectChest
     # follows the `ldrb r0, [r0]` setup and starts at +0x24 → 0xAFC8 + 0x24.
@@ -194,19 +202,13 @@ def test_ability_transition_callsite_scan_finds_exactly_expected_callsites() -> 
     rom[off_b:off_b + 4] = patch_rom.thumb_bl_bytes(ROM_BASE + off_b, target)
     rom[off_c:off_c + 4] = patch_rom.thumb_bl_bytes(ROM_BASE + off_c, 0x08001000)
 
-    found: list[int] = []
-    scan_end = min(patch_rom.PAYLOAD_OFFSET, len(rom) - 3)
-    for offset in range(_GBA_ROM_CODE_START, scan_end, 2):
-        opcode = bytes(rom[offset:offset + 4])
-        if not patch_rom.is_thumb_bl_instruction(opcode):
-            continue
-        src_addr = ROM_BASE + offset
-        try:
-            dst_addr = patch_rom.decode_thumb_bl_target(src_addr, opcode)
-        except ValueError:
-            continue
-        if dst_addr in target_candidates:
-            found.append(offset)
+    found = patch_rom.discover_thumb_bl_callsites_to_targets(
+        rom,
+        target_candidates,
+        rom_base=ROM_BASE,
+        scan_start=_GBA_ROM_CODE_START,
+        scan_end=patch_rom.PAYLOAD_OFFSET,
+    )
 
     assert found == [off_a, off_b]
 
@@ -223,18 +225,38 @@ def test_ability_transition_callsite_scan_skips_gba_header_region() -> None:
     off_in_header = 0x10
     rom[off_in_header:off_in_header + 4] = patch_rom.thumb_bl_bytes(ROM_BASE + off_in_header, target)
 
-    found: list[int] = []
-    scan_end = min(patch_rom.PAYLOAD_OFFSET, len(rom) - 3)
-    for offset in range(_GBA_ROM_CODE_START, scan_end, 2):
-        opcode = bytes(rom[offset:offset + 4])
-        if not patch_rom.is_thumb_bl_instruction(opcode):
-            continue
-        src_addr = ROM_BASE + offset
-        try:
-            dst_addr = patch_rom.decode_thumb_bl_target(src_addr, opcode)
-        except ValueError:
-            continue
-        if dst_addr in target_candidates:
-            found.append(offset)
+    found = patch_rom.discover_thumb_bl_callsites_to_targets(
+        rom,
+        target_candidates,
+        rom_base=ROM_BASE,
+        scan_start=_GBA_ROM_CODE_START,
+        scan_end=patch_rom.PAYLOAD_OFFSET,
+    )
 
     assert found == []  # BL in header region must not be picked up by the code-region scan
+
+
+def test_boss_already_owned_callsite_scan_finds_expected_synthetic_callsites() -> None:
+    rom_base = 0x08000000
+    scan_start = 0xC0
+    target = patch_rom.ORIGINAL_BOSS_ALREADY_OWNED_REWARD_FN_ADDR
+    target_candidates = {target, target | 1}
+
+    rom = bytearray(scan_start + 16)
+    off_a = scan_start
+    off_b = scan_start + 4
+    off_c = scan_start + 8
+
+    rom[off_a:off_a + 4] = patch_rom.thumb_bl_bytes(rom_base + off_a, target)
+    rom[off_b:off_b + 4] = patch_rom.thumb_bl_bytes(rom_base + off_b, target)
+    rom[off_c:off_c + 4] = patch_rom.thumb_bl_bytes(rom_base + off_c, 0x08001000)
+
+    found = patch_rom.discover_thumb_bl_callsites_to_targets(
+        rom,
+        target_candidates,
+        rom_base=rom_base,
+        scan_start=scan_start,
+        scan_end=patch_rom.PAYLOAD_OFFSET,
+    )
+
+    assert found == [off_a, off_b]

@@ -47,6 +47,8 @@ VITALITY_CHEST_COLLECT_CALL_OFFSET = 0x0000B0CC
 SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET = 0x0000B264
 BIG_SWITCH_UNLOCK_CALL_OFFSET = 0x00039EEE
 ORIGINAL_ABILITY_TRANSITION_FN_ADDR = 0x080547C4
+ORIGINAL_BOSS_ALREADY_OWNED_REWARD_FN_ADDR = 0x08088A38
+EXPECTED_BOSS_ALREADY_OWNED_REWARD_CALLSITES = 8
 
 
 ROM_PATH_TMP = "rom_path.tmp"
@@ -246,6 +248,31 @@ def validate_thumb_bl_callsite(rom: bytes | bytearray, offset: int, label: str) 
             f"Found bytes: {original.hex(' ')}. Refusing to patch unknown site."
         )
     return original
+
+
+def discover_thumb_bl_callsites_to_targets(
+    rom: bytes | bytearray,
+    target_addrs: set[int],
+    *,
+    rom_base: int,
+    scan_start: int,
+    scan_end: int,
+) -> list[int]:
+    """Find Thumb BL callsites in [scan_start, scan_end) whose decoded target is in target_addrs."""
+    callsites: list[int] = []
+    bounded_end = min(scan_end, len(rom) - 3)
+    for offset in range(scan_start, bounded_end, 2):
+        opcode = bytes(rom[offset:offset + 4])
+        if not is_thumb_bl_instruction(opcode):
+            continue
+        src_addr = rom_base + offset
+        try:
+            dst_addr = decode_thumb_bl_target(src_addr, opcode)
+        except ValueError:
+            continue
+        if dst_addr in target_addrs:
+            callsites.append(offset)
+    return callsites
 
 
 def resolve_elf_symbol_address(elf_path: str | Path, symbol_name: str) -> int:
@@ -718,6 +745,7 @@ def main():
 
         main_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_hook_entry")
         boss_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_boss_defeat_collect_shard")
+        boss_already_owned_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_boss_defeat_already_owned_reward")
         minor_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_small_chest")
         big_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_big_chest")
         vitality_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_vitality_chest")
@@ -729,6 +757,7 @@ def main():
         # requires a halfword-aligned target address.
         main_hook_target &= ~1
         boss_hook_target &= ~1
+        boss_already_owned_hook_target &= ~1
         minor_chest_hook_target &= ~1
         big_chest_hook_target &= ~1
         vitality_chest_hook_target &= ~1
@@ -749,6 +778,13 @@ def main():
             raise SystemExit(
                 "Error: boss hook target address out of expected payload range.\n"
                 f"Resolved address: 0x{boss_hook_target:08X}, expected within "
+                f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
+                "Check your payload.elf link address and PAYLOAD_OFFSET."
+            )
+        if not (payload_rom_start <= boss_already_owned_hook_target < payload_rom_end):
+            raise SystemExit(
+                "Error: boss already-owned hook target address out of expected payload range.\n"
+                f"Resolved address: 0x{boss_already_owned_hook_target:08X}, expected within "
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
             )
@@ -812,6 +848,7 @@ def main():
         warning = get_rom_size_warning(len(rom))
         if warning is not None:
             print(warning)
+        is_standard_rom_size = warning is None
 
         original_boss_hook = validate_thumb_bl_callsite(rom, BOSS_COLLECT_SHARD_CALL_OFFSET, "boss shard")
         original_minor_chest_hook = validate_thumb_bl_callsite(rom, MINOR_CHEST_COLLECT_CALL_OFFSET, "minor chest")
@@ -827,6 +864,40 @@ def main():
         print(f"  sound player chest @ {SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:#x}: {original_sound_player_hook.hex(' ')}")
         print(f"  hub switch unlock @ {BIG_SWITCH_UNLOCK_CALL_OFFSET:#x}: {original_hub_switch_hook.hex(' ')}")
 
+        _GBA_ROM_CODE_START = 0xC0
+        scan_end = min(PAYLOAD_OFFSET, len(rom) - 3)
+
+        boss_already_owned_target_candidates = {
+            ORIGINAL_BOSS_ALREADY_OWNED_REWARD_FN_ADDR,
+            ORIGINAL_BOSS_ALREADY_OWNED_REWARD_FN_ADDR | 1,
+        }
+        boss_already_owned_callsites = discover_thumb_bl_callsites_to_targets(
+            rom,
+            boss_already_owned_target_candidates,
+            rom_base=rom_base,
+            scan_start=_GBA_ROM_CODE_START,
+            scan_end=scan_end,
+        )
+        if len(boss_already_owned_callsites) != EXPECTED_BOSS_ALREADY_OWNED_REWARD_CALLSITES:
+            if is_standard_rom_size:
+                raise SystemExit(
+                    "Error: expected exactly "
+                    f"{EXPECTED_BOSS_ALREADY_OWNED_REWARD_CALLSITES} callsites to 0x{ORIGINAL_BOSS_ALREADY_OWNED_REWARD_FN_ADDR:08X}, "
+                    f"found {len(boss_already_owned_callsites)} at {', '.join(hex(x) for x in boss_already_owned_callsites)}."
+                )
+
+            print(
+                "Warning: expected exactly "
+                f"{EXPECTED_BOSS_ALREADY_OWNED_REWARD_CALLSITES} callsites to 0x{ORIGINAL_BOSS_ALREADY_OWNED_REWARD_FN_ADDR:08X}, "
+                f"found {len(boss_already_owned_callsites)} at {', '.join(hex(x) for x in boss_already_owned_callsites) or '<none>'}. "
+                "Continuing because ROM size is non-standard; already-owned reward hook patching may be incomplete."
+            )
+
+        boss_already_owned_hook_bl_by_offset = {
+            offset: thumb_bl_bytes(rom_base + offset, boss_already_owned_hook_target)
+            for offset in boss_already_owned_callsites
+        }
+
         # Find and patch all Thumb BL callsites targeting Kirby's ability-transition function.
         # The ability-transition function is called from many sites throughout the game code,
         # so auto-discovery is used instead of a single hardcoded offset.
@@ -834,24 +905,17 @@ def main():
         # vectors and the Nintendo logo bitmap, never game code callsites); end at
         # PAYLOAD_OFFSET, which was chosen to be a zero/free-space region of the original
         # ROM so no game callsites appear at or after that offset.
-        _GBA_ROM_CODE_START = 0xC0
         ability_transition_target_candidates = {
             ORIGINAL_ABILITY_TRANSITION_FN_ADDR,
             ORIGINAL_ABILITY_TRANSITION_FN_ADDR | 1,
         }
-        ability_transition_callsites: list[int] = []
-        scan_end = min(PAYLOAD_OFFSET, len(rom) - 3)
-        for offset in range(_GBA_ROM_CODE_START, scan_end, 2):
-            opcode = bytes(rom[offset:offset + 4])
-            if not is_thumb_bl_instruction(opcode):
-                continue
-            src_addr = rom_base + offset
-            try:
-                dst_addr = decode_thumb_bl_target(src_addr, opcode)
-            except ValueError:
-                continue
-            if dst_addr in ability_transition_target_candidates:
-                ability_transition_callsites.append(offset)
+        ability_transition_callsites = discover_thumb_bl_callsites_to_targets(
+            rom,
+            ability_transition_target_candidates,
+            rom_base=rom_base,
+            scan_start=_GBA_ROM_CODE_START,
+            scan_end=scan_end,
+        )
 
         if not ability_transition_callsites:
             raise SystemExit(
@@ -871,6 +935,8 @@ def main():
         rom[VITALITY_CHEST_COLLECT_CALL_OFFSET:VITALITY_CHEST_COLLECT_CALL_OFFSET + 4] = vitality_chest_hook_bl_bytes
         rom[SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET + 4] = sound_player_chest_hook_bl_bytes
         rom[BIG_SWITCH_UNLOCK_CALL_OFFSET:BIG_SWITCH_UNLOCK_CALL_OFFSET + 4] = hub_switch_hook_bl_bytes
+        for offset, hook_bl in boss_already_owned_hook_bl_by_offset.items():
+            rom[offset:offset + 4] = hook_bl
         for offset in ability_transition_callsites:
             rom[offset:offset + 4] = thumb_bl_bytes(rom_base + offset, ability_transition_hook_target)
 
@@ -909,6 +975,12 @@ def main():
             boss_hook_bl_bytes.hex(" "),
             "target=",
             hex(boss_hook_target),
+        )
+        print(
+            "Boss already-owned reward callsites patched:",
+            ", ".join(hex(x) for x in boss_already_owned_callsites),
+            "target=",
+            hex(boss_already_owned_hook_target),
         )
         print(
             "Minor chest call patched at file offset:",
