@@ -64,6 +64,10 @@ Use exact item/location names from this world (or the item groups listed above) 
 
 - There is an optional setting to enable one-life mode (no_extra_lives). If you die you are instantly sent back to the Hub, and any 1Ups you receive will be immediately removed.
 - There is an optional setting to enable one-hit mode. Kirby's HP cap is clamped to 1 plus collected Vitality Counters. In `exclude_vitality_counters` mode, Vitality Counter items are removed from the item pool and health-restoring filler (Small Food, Energy Drink, Hunk of Meat, and Max Tomato) is also removed from filler selection so randomized filler cannot counteract the 1 HP challenge.
+- Goal modes:
+  - `dark_mind`: Defeat Dark Mind to complete the seed.
+  - `defeat_any_area_boss`: Defeat any one `* - Boss Defeat` location (Mustard Mountain, Moonlight Mansion, Candy Constellation, Olive Ocean, Peppermint Palace, Cabbage Cavern, Carrot Castle, or Radish Ruins). In this mode, collecting all Mirror Shards is not required by the goal mode itself.
+    - Candy Constellation's Master Hand + Crazy Hand fight is treated as one pooled boss target (`BOSS_DEFEAT_3`).
 
 
 
@@ -87,7 +91,7 @@ You will not see an indicator in the game, instead you'll see you received an it
 
 
 
-Currently a tracker is not available, however with the current version the only logic is that you need all 8 mirror shards to goal the game. Everything else is considered to always be in logic.
+Currently a tracker is not available. Goal logic depends on the selected mode: either defeat Dark Mind, or defeat any one area boss in `defeat_any_area_boss` mode.
 
 
 

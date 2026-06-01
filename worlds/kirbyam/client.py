@@ -282,6 +282,8 @@ class KirbyAmClient(BizHawkClient):
             if loc.category.name == "GOAL":
                 if loc.name == "GOAL_DARK_MIND":
                     self._goal_location_ids_by_option[Goal.option_dark_mind] = loc.location_id
+                elif loc.name == "GOAL_ANY_AREA_BOSS":
+                    self._goal_location_ids_by_option[Goal.option_defeat_any_area_boss] = loc.location_id
             else:
                 self._non_goal_location_ids_sorted.append(loc.location_id)
         # Boss defeat bitfield → location IDs (BOSS_DEFEAT category; polled from boss_defeat_flags)
@@ -290,6 +292,11 @@ class KirbyAmClient(BizHawkClient):
             if loc.bit_index is None or loc.category != LocationCategory.BOSS_DEFEAT:
                 continue
             self._boss_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
+        self._boss_location_ids_all: set[int] = {
+            location_id
+            for location_ids in self._boss_location_ids_by_bit.values()
+            for location_id in location_ids
+        }
 
         # Major chest bitfield → location IDs (MAJOR_CHEST category; polled from major_chest_flags)
         # Bit N corresponds to area ID N in enum AreaId (e.g. bit 3 = AREA_CABBAGE_CAVERN).
@@ -3514,6 +3521,13 @@ class KirbyAmClient(BizHawkClient):
         # transient state and only see the subsequent post-clear 10000 signal.
         return ai_state in (_GOAL_STATE_DARK_MIND_CLEAR, _GOAL_STATE_FULL_CLEAR)
 
+    def _any_area_boss_goal_signal_active(self, ctx: KirbyAmBizHawkClientContext) -> bool:
+        """Return whether at least one boss-defeat location has already been acknowledged by the server."""
+        checked_locations = getattr(ctx, "checked_locations", None)
+        if not isinstance(checked_locations, set):
+            return False
+        return any(location_id in checked_locations for location_id in self._boss_location_ids_all)
+
     async def _maybe_report_goal(
         self,
         ctx: KirbyAmBizHawkClientContext,
@@ -3542,7 +3556,7 @@ class KirbyAmClient(BizHawkClient):
         except (TypeError, ValueError):
             clamped_goal = True
 
-        if parsed_slot_goal == Goal.option_dark_mind:
+        if parsed_slot_goal in (Goal.option_dark_mind, Goal.option_defeat_any_area_boss):
             slot_goal = parsed_slot_goal
         else:
             slot_goal = Goal.option_dark_mind
@@ -3566,11 +3580,14 @@ class KirbyAmClient(BizHawkClient):
         )
 
         if not self._native_goal_signal_seen:
-            self._native_goal_signal_seen = await self._native_goal_signal_active(
-                ctx,
-                slot_goal,
-                ai_state_override=ai_state_override,
-            )
+            if slot_goal == Goal.option_defeat_any_area_boss:
+                self._native_goal_signal_seen = self._any_area_boss_goal_signal_active(ctx)
+            else:
+                self._native_goal_signal_seen = await self._native_goal_signal_active(
+                    ctx,
+                    slot_goal,
+                    ai_state_override=ai_state_override,
+                )
             if self._native_goal_signal_seen:
                 self._log_verbose(
                     "info",

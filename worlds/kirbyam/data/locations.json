@@ -6,6 +6,17 @@
       "Goal",
       "MAP_DIMENSION_MIRROR"
     ],
+    "location_id": 3960008,
+    "category": "GOAL"
+  },
+  "GOAL_ANY_AREA_BOSS": {
+    "label": "Defeat Any Area Boss",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "Goal",
+      "MAP_RAINBOW_ROUTE"
+    ],
+    "location_id": 3960009,
     "category": "GOAL"
   },
   "BOSS_DEFEAT_1": {
@@ -16,6 +27,7 @@
       "Boss"
     ],
     "bit_index": 0,
+    "location_id": 3960000,
     "category": "BOSS_DEFEAT"
   },
   "BOSS_DEFEAT_2": {
@@ -26,6 +38,7 @@
       "Boss"
     ],
     "bit_index": 1,
+    "location_id": 3960001,
     "category": "BOSS_DEFEAT"
   },
   "BOSS_DEFEAT_3": {
@@ -36,6 +49,7 @@
       "Boss"
     ],
     "bit_index": 2,
+    "location_id": 3960002,
     "category": "BOSS_DEFEAT"
   },
   "BOSS_DEFEAT_4": {
@@ -46,6 +60,7 @@
       "Boss"
     ],
     "bit_index": 3,
+    "location_id": 3960003,
     "category": "BOSS_DEFEAT"
   },
   "BOSS_DEFEAT_5": {
@@ -56,6 +71,7 @@
       "Boss"
     ],
     "bit_index": 4,
+    "location_id": 3960004,
     "category": "BOSS_DEFEAT"
   },
   "BOSS_DEFEAT_6": {
@@ -66,6 +82,7 @@
       "Boss"
     ],
     "bit_index": 5,
+    "location_id": 3960005,
     "category": "BOSS_DEFEAT"
   },
   "BOSS_DEFEAT_7": {
@@ -76,6 +93,7 @@
       "Boss"
     ],
     "bit_index": 6,
+    "location_id": 3960006,
     "category": "BOSS_DEFEAT"
   },
   "BOSS_DEFEAT_8": {
@@ -86,6 +104,7 @@
       "Boss"
     ],
     "bit_index": 7,
+    "location_id": 3960007,
     "category": "BOSS_DEFEAT"
   },
   "AREA_VISIT_1_RAINBOW_ROUTE": {

@@ -20,12 +20,12 @@ class Goal(Choice):
     Determines what your goal is to consider the game beaten.
 
     - Dark Mind: Defeat Dark Mind and beat the game.
-
-    NOTE: Dark Mind is the only supported value. This option is here for the future.
+    - Defeat Any Area Boss: Defeat any one eligible area boss.
     """
     display_name = "Goal"
     default = 0
     option_dark_mind = 0
+    option_defeat_any_area_boss = 1
 
 
 class RandomizeShards(Choice):

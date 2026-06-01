@@ -11,7 +11,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### New Features
 
-- None.
+- Added a new `goal` mode, `defeat_any_area_boss`, which completes the seed after the first acknowledged area-boss defeat check (`BOSS_DEFEAT_1 .. BOSS_DEFEAT_8`) while preserving goal-location acknowledgement before `CLIENT_GOAL` when the server exposes a numeric goal location (Issue #205).
 
 ### Improvements
 

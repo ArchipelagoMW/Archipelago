@@ -18,6 +18,7 @@ Current rules:
             * Defeat Dark Mind goal location requires: all 8 shards + DMK event.
         - Completion conditions:
             * Dark Mind: collect Defeat Dark Mind.
+            * Defeat Any Area Boss: collect Defeat Any Area Boss.
 
 NOTE: Dark Mind is modeled as an explicit AP goal location.
 The client reports this goal location from native AI-state signals and sends
@@ -54,7 +55,21 @@ _SHARD_ITEM_LABELS = [
 
 _GOAL_LOCATION_LABELS = {
     Goal.option_dark_mind: "Defeat Dark Mind",
+    Goal.option_defeat_any_area_boss: "Defeat Any Area Boss",
 }
+_DARK_MIND_GOAL_LABEL = _GOAL_LOCATION_LABELS[Goal.option_dark_mind]
+_ANY_AREA_BOSS_GOAL_LABEL = _GOAL_LOCATION_LABELS[Goal.option_defeat_any_area_boss]
+
+_BOSS_DEFEAT_LOCATION_LABELS = [
+    "Mustard Mountain - Boss Defeat",
+    "Moonlight Mansion - Boss Defeat",
+    "Candy Constellation - Boss Defeat",
+    "Olive Ocean - Boss Defeat",
+    "Peppermint Palace - Boss Defeat",
+    "Cabbage Cavern - Boss Defeat",
+    "Carrot Castle - Boss Defeat",
+    "Radish Ruins - Boss Defeat",
+]
 
 _DMK_DIMENSION_MIRROR_EVENT = "Defeat Dark Meta Knight (Dimension Mirror)"
 _ABILITY_GATE_STATUS_VALUES = frozenset({"confirmed", "semantic_candidate", "unconfirmed"})
@@ -237,17 +252,25 @@ def set_rules(world: KirbyAmWorld) -> None:  # noqa: C901
     for goal_location_name in _GOAL_LOCATION_LABELS.values():
         try:
             goal_location = world.multiworld.get_location(goal_location_name, world.player)
-            # Sequenced after Dark Meta Knight within the Dimension Mirror.
 
-            def dmk_rule(state):
-                return (
-                    _has_all_shards(state, world.player)
-                    and state.has(_DMK_DIMENSION_MIRROR_EVENT, world.player)
-                )
-            set_rule(goal_location, dmk_rule)
+            if goal_location_name == _DARK_MIND_GOAL_LABEL:
+                # Sequenced after Dark Meta Knight within the Dimension Mirror.
+                def dmk_rule(state):
+                    return (
+                        _has_all_shards(state, world.player)
+                        and state.has(_DMK_DIMENSION_MIRROR_EVENT, world.player)
+                    )
+                set_rule(goal_location, dmk_rule)
+            elif goal_location_name == _ANY_AREA_BOSS_GOAL_LABEL:
+                def any_area_boss_rule(state):
+                    return any(
+                        state.can_reach_location(location_name, world.player)
+                        for location_name in _BOSS_DEFEAT_LOCATION_LABELS
+                    )
+                set_rule(goal_location, any_area_boss_rule)
         except KeyError:
             logger.warning(
-                "[P%s] Goal location %s not found; Dark Meta Knight requirement not applied to this goal",
+                "[P%s] Goal location %s not found; goal-specific rule was not applied",
                 world.player,
                 goal_location_name,
             )

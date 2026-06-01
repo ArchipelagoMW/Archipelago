@@ -51,7 +51,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x18   | 0x0203B018 | 4B | debug_last_from       | u32  | ROM → Client | Last player ID (debug only) |
 | 0x1C   | 0x0203B01C | 4B | frame_counter         | u32  | ROM → Client | Monotonic frame count (incremented every hook call) |
 | 0x20   | 0x0203B020 | 4B | delivered_item_index  | u32  | Client ↔ ROM | Next item to deliver index (persisted in RAM) |
-| 0x24   | 0x0203B024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated (same bit ordering as shard_bitfield). Transport is set by both native boss outcomes: (1) CollectShard call path and (2) HasShard==true already-owned reward path. |
+| 0x24   | 0x0203B024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated (same bit ordering as shard_bitfield). Bit 2 represents the Candy Constellation boss pair (Master Hand + Crazy Hand) as one pooled boss-defeat target. Transport is set by both native boss outcomes: (1) CollectShard call path and (2) HasShard==true already-owned reward path. |
 | 0x28   | 0x0203B028 | 4B | major_chest_flags     | u32  | ROM → Client | Bits set when a native big chest is opened; bit N = area ID N. This drives AP major-chest checks independently of native map ownership. |
 | 0x2C   | 0x0203B02C | 4B | vitality_chest_flags  | u32  | ROM → Client | Bits set when a native vitality big chest is opened; bits 0..3 map to the four vitality chest room IDs (Carrot 5-23, Olive 6-21, Radish 8-4, Candy 9-8). |
 | 0x30   | 0x0203B030 | 4B | sound_player_chest_flags | u32 | ROM → Client | Bits set when the native Sound Player chest is opened; bit 0 maps to `SOUND_PLAYER_CHEST`. Native Sound Player unlock is intentionally deferred until AP item receipt. |
@@ -137,7 +137,8 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 
 | Location Type | ID Range | Description |
 |---------------|----------|-------------|
-| GOAL_DARK_MIND | auto-assigned | Internal goal metadata entry. Current shipped worlds convert this to an addressless runtime event, so the client reports `CLIENT_GOAL` directly instead of sending a numeric `LocationChecks` entry. |
+| GOAL_DARK_MIND | auto-assigned | Internal goal metadata entry for Dark Mind completion. Current shipped worlds convert goal locations to runtime events, so the client may report `CLIENT_GOAL` directly when no numeric goal location is exposed by the server. |
+| GOAL_ANY_AREA_BOSS | auto-assigned | Internal goal metadata entry for the "Defeat Any Area Boss" mode. Trigger source is acknowledged `BOSS_DEFEAT_1 .. BOSS_DEFEAT_8` checks; Candy Constellation's Master Hand + Crazy Hand pair counts as one pooled target (`BOSS_DEFEAT_3`). |
 | BOSS_DEFEAT_1 .. BOSS_DEFEAT_8 | auto-assigned | Area boss defeat locations (8 locations) |
 | MAJOR_CHEST_CABBAGE_CAVERN | 3960200 | Cabbage Cavern big chest (bit 3, gTreasures.bigChestField) |
 | MAJOR_CHEST_OLIVE_OCEAN | 3960201 | Olive Ocean big chest (bit 6, gTreasures.bigChestField) |
@@ -195,7 +196,7 @@ Server → Client: ConnectionRefused | Connected
                  (with items_received, checked_locations, slot_data)
 
 `slot_data` currently includes:
-- `goal` (int): selected goal option.
+- `goal` (int): selected goal option (`0=Dark Mind`, `1=Defeat Any Area Boss`).
 - `shards` (int): shard randomization mode.
 - `start_with_all_maps` (bool): when true, all map items are precollected and removed from randomized placement, and the BizHawk client reasserts all native area-map bits during gameplay reconciliation.
 - `starting_kirby_color` (int): resolved Kirby starting color ID (`0..13`) after generation-time random resolution. Non-Pink colors become visible after the next room/area transition or after an enemy-hit runtime refresh.

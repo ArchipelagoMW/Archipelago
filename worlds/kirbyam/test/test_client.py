@@ -2159,6 +2159,59 @@ async def test_goal_dark_mind_reports_client_goal_after_10000_fallback_ack(mock_
 
 
 @pytest.mark.asyncio
+async def test_goal_any_area_boss_server_exposed_goal_reports_location_then_goal_status(mock_bizhawk_context):
+    """Any-area-boss goal should wait for goal-location acknowledgement before sending CLIENT_GOAL."""
+    from NetUtils import ClientStatus
+
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    any_boss_goal_id = data.locations["GOAL_ANY_AREA_BOSS"].location_id
+    first_boss_id = data.locations["BOSS_DEFEAT_1"].location_id
+
+    mock_bizhawk_context.slot_data["goal"] = 1
+    mock_bizhawk_context.checked_locations = {first_boss_id}
+    mock_bizhawk_context.server_locations = {any_boss_goal_id}
+    mock_bizhawk_context.finished_game = False
+
+    await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [any_boss_goal_id]}
+    ])
+
+    mock_bizhawk_context.send_msgs.reset_mock()
+    mock_bizhawk_context.checked_locations.add(any_boss_goal_id)
+
+    await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
+    ])
+    assert mock_bizhawk_context.finished_game is True
+    assert client._goal_reported is True
+
+
+@pytest.mark.asyncio
+async def test_goal_any_area_boss_does_not_trigger_without_acknowledged_boss_check(mock_bizhawk_context):
+    """Any-area-boss goal should not report until at least one boss-defeat check is acknowledged."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    any_boss_goal_id = data.locations["GOAL_ANY_AREA_BOSS"].location_id
+    mock_bizhawk_context.slot_data["goal"] = 1
+    mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = {any_boss_goal_id}
+    mock_bizhawk_context.finished_game = False
+
+    await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_not_awaited()
+    assert mock_bizhawk_context.finished_game is False
+    assert client._goal_reported is False
+
+
+@pytest.mark.asyncio
 async def test_goal_native_signal_missing_falls_back_to_noop(mock_bizhawk_context):
     """If native goal signal address is unavailable, goal reporting should no-op safely."""
     client = KirbyAmClient()
