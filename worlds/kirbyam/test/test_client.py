@@ -2593,6 +2593,96 @@ async def test_deliver_items_skips_already_acked_trap_when_rom_counter_already_a
 
 
 @pytest.mark.asyncio
+async def test_deliver_items_skips_already_acked_filler_when_rom_counter_not_advanced(mock_bizhawk_context):
+    """Do not redeliver filler after reload when ROM counter rewinds."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    filler_item_id = next(
+        item.item_id
+        for item in data.items.values()
+        if item.item_id is not None and type(item.classification).filler in item.classification
+    )
+    mock_bizhawk_context.items_received = [
+        Mock(item=filler_item_id, player=2),
+    ]
+
+    client._acknowledged_trap_indices.add(0)
+    client._delivered_item_index = 1
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write, \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    assert client._delivered_item_index == 1
+    assert client._delivery_pending is False
+    mock_display.assert_not_awaited()
+    assert mock_write.await_args_list == [
+        call(
+            mock_bizhawk_context.bizhawk_ctx,
+            [(data.transport_ram_addresses["delivered_item_index"], (0).to_bytes(4, 'little'), 'System Bus')],
+        ),
+        call(
+            mock_bizhawk_context.bizhawk_ctx,
+            [(data.transport_ram_addresses["delivered_item_index"], (1).to_bytes(4, 'little'), 'System Bus')],
+        ),
+    ]
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_replays_progression_when_rom_counter_not_advanced(mock_bizhawk_context):
+    """Non-filler/non-trap items remain replayable after rewind."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    replayable_item_id = next(
+        item.item_id
+        for item in data.items.values()
+        if item.item_id is not None and not client._is_non_redeliverable_item(item.item_id)
+    )
+    mock_bizhawk_context.items_received = [
+        Mock(item=replayable_item_id, player=2),
+    ]
+
+    client._acknowledged_trap_indices.add(0)
+    client._delivered_item_index = 1
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write, \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    assert client._delivered_item_index == 0
+    assert client._delivery_pending is True
+    mock_display.assert_not_awaited()
+    assert mock_write.await_args_list == [
+        call(
+            mock_bizhawk_context.bizhawk_ctx,
+            [(data.transport_ram_addresses["delivered_item_index"], (0).to_bytes(4, 'little'), 'System Bus')],
+        ),
+        call(
+            mock_bizhawk_context.bizhawk_ctx,
+            [
+                (data.transport_ram_addresses["incoming_item_id"], int(replayable_item_id).to_bytes(4, 'little'), 'System Bus'),
+                (data.transport_ram_addresses["incoming_item_player"], int(2).to_bytes(4, 'little'), 'System Bus'),
+                (data.transport_ram_addresses["incoming_item_flag"], (1).to_bytes(4, 'little'), 'System Bus'),
+            ],
+        ),
+    ]
+
+
+@pytest.mark.asyncio
 async def test_receive_notification_not_emitted_on_fast_forward_only(mock_bizhawk_context):
     """Fast-forward cursor reconciliation without ACK should not emit receive notifications."""
     client = KirbyAmClient()

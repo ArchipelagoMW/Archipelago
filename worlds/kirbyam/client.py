@@ -10,12 +10,14 @@ from struct import unpack_from
 from typing import TYPE_CHECKING, Optional
 
 import Utils
+from BaseClasses import ItemClassification
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import LocationCategory, data, format_room_region_label, load_json_data
 from .enemy_ability_data import ABILITY_SOURCES
 from .enemy_ability_data import ABILITY_NAME_TO_ID
+from .items import get_item_classification
 from .kirby_ap_payload.thumb_branch import is_thumb_bl_instruction
 from .options import Goal, OneHitMode
 from .types import KirbyAmBizHawkClientContext
@@ -121,6 +123,11 @@ _TRAP_ITEM_IDS: frozenset[int] = frozenset(
     item.item_id
     for item in data.items.values()
     if type(item.classification).trap in item.classification and item.item_id is not None
+)
+_NON_REDELIVERABLE_ITEM_IDS: frozenset[int] = frozenset(
+    item_id
+    for item_id in data.items
+    if get_item_classification(item_id) in (ItemClassification.filler, ItemClassification.trap)
 )
 _ROOM_PROPS_ROM_BASE = 0x009331AC  # gRoomProps[] — ROM domain offset (GBA ROM 0x089331AC)
 _ROOM_PROPS_STRIDE = 0x28  # sizeof(struct RoomProps)
@@ -429,7 +436,10 @@ class KirbyAmClient(BizHawkClient):
         self._receive_notifications_enabled: bool = True
         self._send_notifications_enabled: bool = True
         self._notified_receive_indices: set[int] = set()
-        self._acknowledged_trap_indices: set[int] = set()
+        # Session ACK tracking for items that should never replay after reload.
+        self._acknowledged_non_redeliverable_indices: set[int] = set()
+        # Compatibility alias retained for tests and diagnostics that still use old naming.
+        self._acknowledged_trap_indices: set[int] = self._acknowledged_non_redeliverable_indices
         self._notified_send_keys: set[tuple[int, int, int, int]] = set()
         self._self_send_fallback_keys: set[tuple[int, int, int, int]] = set()
         self._send_notify_window_start: float = 0.0
@@ -780,7 +790,12 @@ class KirbyAmClient(BizHawkClient):
         """Return True if item_id is a trap item."""
         return item_id in _TRAP_ITEM_IDS
 
-    def _record_acknowledged_trap_index(self, ctx: "BizHawkClientContext", delivered_index: int) -> None:
+    @staticmethod
+    def _is_non_redeliverable_item(item_id: int) -> bool:
+        """Return True for items that should never be replayed after reload."""
+        return item_id in _NON_REDELIVERABLE_ITEM_IDS
+
+    def _record_acknowledged_non_redeliverable_index(self, ctx: "BizHawkClientContext", delivered_index: int) -> None:
         if delivered_index < 0 or delivered_index >= len(ctx.items_received):
             return
 
@@ -789,21 +804,29 @@ class KirbyAmClient(BizHawkClient):
             return
 
         item_id, _player_id = item_fields
-        if self._is_trap_item(item_id):
-            self._acknowledged_trap_indices.add(delivered_index)
+        if self._is_non_redeliverable_item(item_id):
+            self._acknowledged_non_redeliverable_indices.add(delivered_index)
+
+    def _record_acknowledged_trap_index(self, ctx: "BizHawkClientContext", delivered_index: int) -> None:
+        """Compatibility wrapper for historical trap-only naming."""
+        self._record_acknowledged_non_redeliverable_index(ctx, delivered_index)
+
+    def _is_acknowledged_non_redeliverable_index(self, ctx: "BizHawkClientContext", delivered_index: int) -> bool:
+        if delivered_index not in self._acknowledged_non_redeliverable_indices:
+            return False
+        if delivered_index < 0 or delivered_index >= len(ctx.items_received):
+            return False
+
+        item_fields = self._extract_delivery_item_fields(ctx.items_received[delivered_index])
+        if item_fields is None:
+            return False
+
+        item_id, _player_id = item_fields
+        return self._is_non_redeliverable_item(item_id)
 
     def _is_acknowledged_trap_index(self, ctx: "BizHawkClientContext", delivered_index: int) -> bool:
-        if delivered_index not in self._acknowledged_trap_indices:
-            return False
-        if delivered_index < 0 or delivered_index >= len(ctx.items_received):
-            return False
-
-        item_fields = self._extract_delivery_item_fields(ctx.items_received[delivered_index])
-        if item_fields is None:
-            return False
-
-        item_id, _player_id = item_fields
-        return self._is_trap_item(item_id)
+        """Compatibility wrapper for historical trap-only naming."""
+        return self._is_acknowledged_non_redeliverable_index(ctx, delivered_index)
 
     def _start_with_all_maps_enabled(self, ctx: "BizHawkClientContext") -> bool:
         slot_data = getattr(ctx, "slot_data", None)
@@ -2371,7 +2394,7 @@ class KirbyAmClient(BizHawkClient):
                 self._max_delivered_item_index_seen = max(self._max_delivered_item_index_seen, val)
                 delivered_count = min(val, len(ctx.items_received))
                 for delivered_index in range(delivered_count):
-                    self._record_acknowledged_trap_index(ctx, delivered_index)
+                    self._record_acknowledged_non_redeliverable_index(ctx, delivered_index)
 
     # --------------------------
     # Location checking
@@ -3365,7 +3388,7 @@ class KirbyAmClient(BizHawkClient):
                 _notify_index = _ff_pending_item_index
                 if _notify_index is None:
                     _notify_index = self._delivered_item_index - 1
-                self._record_acknowledged_trap_index(ctx, _notify_index)
+                self._record_acknowledged_non_redeliverable_index(ctx, _notify_index)
                 await self._emit_receive_notification(ctx, _notify_index)
 
         # If an item is pending, wait for ROM to clear the flag (ACK)
@@ -3389,7 +3412,7 @@ class KirbyAmClient(BizHawkClient):
                     self._delivered_item_index += 1
                 self._max_delivered_item_index_seen = max(self._max_delivered_item_index_seen, self._delivered_item_index)
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
-                self._record_acknowledged_trap_index(ctx, delivered_index)
+                self._record_acknowledged_non_redeliverable_index(ctx, delivered_index)
                 await self._emit_receive_notification(ctx, delivered_index)
                 return
 
@@ -3495,13 +3518,13 @@ class KirbyAmClient(BizHawkClient):
 
             item_id, player_id = item_fields
 
-            if self._is_acknowledged_trap_index(ctx, self._delivered_item_index):
-                # Issue #753: trap items are one-time effects and must not replay on
-                # reconnect/reload once their mailbox ACK has been observed.
+            if self._is_acknowledged_non_redeliverable_index(ctx, self._delivered_item_index):
+                # Issue #753: non-redeliverable items (traps/filler) are one-time
+                # effects and must not replay on reconnect/reload after mailbox ACK.
                 if rom_received_count is None:
                     self._log_verbose(
                         "info",
-                        "KirbyAM: skipping session-ACKed trap replay at item index %s (%s from %s); ROM counter unavailable",
+                        "KirbyAM: skipping session-ACKed non-redeliverable replay at item index %s (%s from %s); ROM counter unavailable",
                         self._delivered_item_index,
                         self._item_name(ctx, item_id, player_id),
                         self._player_name(ctx, player_id),
@@ -3509,7 +3532,7 @@ class KirbyAmClient(BizHawkClient):
                 elif self._delivery_counter_ahead_fallback_active or rom_received_count > len(ctx.items_received):
                     self._log_verbose(
                         "info",
-                        "KirbyAM: skipping session-ACKed trap replay at item index %s (%s from %s); ROM counter=%s unreliable/out-of-range",
+                        "KirbyAM: skipping session-ACKed non-redeliverable replay at item index %s (%s from %s); ROM counter=%s unreliable/out-of-range",
                         self._delivered_item_index,
                         self._item_name(ctx, item_id, player_id),
                         self._player_name(ctx, player_id),
@@ -3518,7 +3541,7 @@ class KirbyAmClient(BizHawkClient):
                 else:
                     self._log_verbose(
                         "info",
-                        "KirbyAM: skipping session-ACKed trap replay at item index %s (%s from %s); ROM counter=%s",
+                        "KirbyAM: skipping session-ACKed non-redeliverable replay at item index %s (%s from %s); ROM counter=%s",
                         self._delivered_item_index,
                         self._item_name(ctx, item_id, player_id),
                         self._player_name(ctx, player_id),

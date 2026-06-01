@@ -19,7 +19,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### Bug Fixes
 
-- Fixed a trap redelivery regression where session-ACKed traps could replay after reload/reconnect mailbox rewinds; acknowledged traps are now always treated as one-time deliveries again (Issue #753, regression after v0.2.2 behavior).
+- Fixed a redelivery regression where session-ACKed traps and filler could replay after reload/reconnect mailbox rewinds; acknowledged traps and filler are now treated as non-redeliverable one-time deliveries, while all other item classes remain replayable for rewind recovery (Issue #753, regression after v0.2.2 behavior).
 
 ### Internal Changes
 
