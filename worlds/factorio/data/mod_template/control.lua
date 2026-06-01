@@ -434,7 +434,7 @@ function update_player(index)
                 samples[name] = nil             -- Remove from the list
             end
         else
-            player.print({"archipelago.sample-inventory-full", count, name})
+            player.print({"archipelago.sample-error", count, name})
             samples[name] = nil
         end
     end
