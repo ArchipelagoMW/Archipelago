@@ -5,6 +5,8 @@ local library = require("libs/lib")
 local traps = require("trap_handling")
 local util = require("util")
 
+general.technologies.progressive = general.technologies.progressive()
+
 local function receive_item(item_name, source)
     for _, force in pairs(library.get_all_ap_forces()) do
         if general.technologies.progressive()[item_name] ~= nil then
