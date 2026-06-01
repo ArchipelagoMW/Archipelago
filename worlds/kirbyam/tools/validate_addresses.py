@@ -21,13 +21,13 @@ from typing import Dict, Tuple, List, Optional
 
 class AddressValidator:
     """Validates address definitions and usage."""
-    
+
     def __init__(self, repo_root: Optional[Path] = None, strict_native_usage: bool = False):
         """Initialize validator with paths."""
         if repo_root is None:
             # worlds/kirbyam/tools/validate_addresses.py -> go up 2 levels to kirbyam
             repo_root = Path(__file__).parent.parent
-        
+
         self.repo_root = repo_root
         self.addresses_file = repo_root / "data" / "addresses.json"
         self.client_file = repo_root / "client.py"
@@ -35,7 +35,7 @@ class AddressValidator:
         self.grouped_ram_sections: Dict[str, Dict[str, str]] = {}
         self.client_code: str = ""
         self.strict_native_usage = strict_native_usage
-        
+
     def load_addresses(self) -> bool:
         """Load addresses.json."""
         try:
@@ -66,7 +66,7 @@ class AddressValidator:
         except Exception as e:
             print(f"✗ Failed to load addresses: {e}")
             return False
-    
+
     def load_client_code(self) -> bool:
         """Load client.py source."""
         try:
@@ -77,7 +77,7 @@ class AddressValidator:
         except Exception as e:
             print(f"✗ Failed to load client.py: {e}")
             return False
-    
+
     def validate_usage(self) -> List[str]:
         """Check that addresses are used in client code."""
         issues = []
@@ -92,9 +92,9 @@ class AddressValidator:
             "shard_scrub_delay_frames",
             "mailbox_init_cookie",
         }
-        
+
         print("\n--- Address Usage Validation ---")
-        
+
         sections: Dict[str, Dict[str, str]] = {}
         sections.update(self.grouped_ram_sections)
         rom = self.addresses.get("rom", {}) if isinstance(self.addresses, dict) else {}
@@ -116,18 +116,18 @@ class AddressValidator:
                         issue = f"Address '{name}' ({section}) not used in client.py"
                         issues.append(issue)
                         print(f"  ⚠ {name:30s} = {addr} (NOT USED)")
-        
+
         return issues
-    
+
     def validate_ranges(self) -> List[str]:
         """Check that address ranges don't overlap."""
         issues = []
-        
+
         print("\n--- Address Range Validation ---")
-        
+
         # Extract numeric values and check for overlap
         ranges: List[Tuple[str, int, int]] = []
-        
+
         sections: Dict[str, Dict[str, str]] = {}
         sections.update(self.grouped_ram_sections)
         rom = self.addresses.get("rom", {}) if isinstance(self.addresses, dict) else {}
@@ -143,28 +143,31 @@ class AddressValidator:
                     ranges.append((name, addr, addr + size))
                 except ValueError:
                     issues.append(f"Invalid address format: {name} = {addr_str}")
-        
+
         # Check overlaps
         ranges.sort(key=lambda x: x[1])
         for i, (name1, start1, end1) in enumerate(ranges):
             for name2, start2, end2 in ranges[i+1:]:
                 if start1 < start2 < end1 or start2 < start1 < end2:
                     overlap_addr = max(start1, start2)
-                    issue = f"Overlap: {name1} (${start1:08X}-${end1:08X}) overlaps {name2} (${start2:08X}-${end2:08X}) at ${overlap_addr:08X}"
+                    issue = (
+                        f"Overlap: {name1} (${start1:08X}-${end1:08X}) overlaps "
+                        f"{name2} (${start2:08X}-${end2:08X}) at ${overlap_addr:08X}"
+                    )
                     issues.append(issue)
                     print(f"  ⚠ {issue}")
-        
+
         if not issues:
             print("  ✓ No overlapping ranges detected")
-        
+
         return issues
-    
+
     def print_summary(self, all_issues: List[str]) -> int:
         """Print validation summary."""
         print("\n" + "="*70)
         print("VALIDATION SUMMARY")
         print("="*70)
-        
+
         if not all_issues:
             print("✓ All validations passed!")
             return 0
@@ -173,22 +176,22 @@ class AddressValidator:
             for i, issue in enumerate(all_issues, 1):
                 print(f"  {i}. {issue}")
             return 1
-    
+
     def run(self) -> int:
         """Execute all validations."""
         print("Kirby AM Address Validator")
         print("="*70)
-        
+
         if not self.load_addresses():
             return 1
-        
+
         if not self.load_client_code():
             return 1
-        
+
         all_issues = []
         all_issues.extend(self.validate_usage())
         all_issues.extend(self.validate_ranges())
-        
+
         return self.print_summary(all_issues)
 
 

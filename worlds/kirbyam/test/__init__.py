@@ -5,6 +5,6 @@ from .. import KirbyAmWorld
 
 class KirbyAmTestBase(WorldTestBase):
     """Base class for Kirby AM world tests."""
-    
+
     game = "Kirby & The Amazing Mirror"
     world: KirbyAmWorld

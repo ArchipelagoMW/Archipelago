@@ -75,11 +75,19 @@ def test_validate_thumb_bl_callsite_rejects_odd_offset() -> None:
     with pytest.raises(SystemExit, match="not halfword aligned"):
         patch_rom.validate_thumb_bl_callsite(rom, 5, "boss shard")
 
+
 def test_boss_collect_shard_call_offset_matches_verified_hook_site() -> None:
     # sub_0801D948 at ROM addr 0x0801D948 (file offset 0x1D948); BL CollectShard
     # follows the `ldr r0, [r0]` setup and starts at +0xA → 0x1D948 + 0xA.
     # Source: d:\kirbyam-extras\katam\src\code_0801C6F8.c line 703-705.
     assert patch_rom.BOSS_COLLECT_SHARD_CALL_OFFSET == 0x001D952
+
+
+def test_minor_chest_collect_call_offset_matches_verified_hook_site() -> None:
+    # sub_0800AFC8 at ROM addr 0x0800AFC8 (file offset 0xAFC8); BL CollectChest
+    # follows the `ldrb r0, [r0]` setup and starts at +0x24 → 0xAFC8 + 0x24.
+    # Source: katam/asm/chest.s (CollectChest callsite sequence).
+    assert patch_rom.MINOR_CHEST_COLLECT_CALL_OFFSET == 0x0000AFEC
 
 
 def test_big_chest_collect_call_offset_matches_verified_hook_site() -> None:

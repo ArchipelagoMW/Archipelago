@@ -52,6 +52,9 @@
 #define AP_ABILITY_REROLL_SOURCE_KIND (*(volatile uint32_t*)(AP_BASE + 0x5Cu))
 #define AP_ABILITY_REROLL_CALLSITE_PC (*(volatile uint32_t*)(AP_BASE + 0x60u))
 #define AP_ABILITY_REROLL_KIRBY_INDEX (*(volatile uint32_t*)(AP_BASE + 0x88u))
+#define AP_MINOR_CHEST_EVENT_COUNTER (*(volatile uint32_t*)(AP_BASE + 0x8Cu))
+#define AP_MINOR_CHEST_EVENT_RING_BASE (AP_BASE + 0x90u)
+#define AP_MINOR_CHEST_EVENT_RING_SLOT_COUNT 8u
 // Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
 // Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
 // Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
@@ -82,6 +85,7 @@
 #define AI_STATE_NORMAL         300u
 #define AI_STATE_DARK_MIND_CLEAR 9999u
 #define AI_STATE_FULL_CLEAR     10000u
+#define KIRBY_SMALL_CHEST_FLAGS_ADDR 0x02038960u
 #define KIRBY_BIG_CHEST_FLAGS_ADDR 0x0203897Cu
 #define KIRBY_BIG_CHEST_FLAGS   (*(volatile uint32_t*)(KIRBY_BIG_CHEST_FLAGS_ADDR))
 #define KIRBY_VITALITY_COUNTER_ADDR 0x02038980u
@@ -176,6 +180,22 @@ static void ap_set_sound_player_chest_flag(uint32_t chest_index) {
     if (chest_index < 32u) {
         AP_SOUND_PLAYER_CHEST_FLAGS |= (1u << chest_index);
     }
+}
+
+static void ap_record_minor_chest_source_ptr(uint32_t source_ptr) {
+    uint32_t event_counter = AP_MINOR_CHEST_EVENT_COUNTER;
+    uint32_t slot_offset = (event_counter & (AP_MINOR_CHEST_EVENT_RING_SLOT_COUNT - 1u)) << 2;
+    *(volatile uint32_t*)(AP_MINOR_CHEST_EVENT_RING_BASE + slot_offset) = source_ptr;
+    AP_MINOR_CHEST_EVENT_COUNTER = event_counter + 1u;
+}
+
+static void ap_collect_small_chest_native(uint32_t chest_index) {
+    if (chest_index >= 80u) {
+        return;
+    }
+
+    *(volatile uint8_t*)(KIRBY_SMALL_CHEST_FLAGS_ADDR + (chest_index >> 3)) |=
+        (uint8_t)(1u << (chest_index & 7u));
 }
 
 static void ap_set_hub_switch_flag(uint32_t door_index) {
@@ -358,6 +378,18 @@ __attribute__((used)) void ap_on_collect_vitality_chest(void) {
     register uint32_t chest_obj_ptr asm("r5");
     uint16_t room_id = *(volatile uint16_t*)(chest_obj_ptr + 0x60u);
     ap_set_vitality_chest_flag_for_room(room_id);
+}
+
+// Hook target for native small chest reward collection. The live chest object remains in r5,
+// allowing the payload to record the exact ROM source pointer for later client disambiguation
+// while preserving the native small-chest persistence write.
+__attribute__((used)) void ap_on_collect_small_chest(void) {
+    register uint32_t chest_obj_ptr asm("r5");
+    uint32_t source_ptr = *(volatile uint32_t*)(chest_obj_ptr + 0xB0u);
+    uint32_t chest_index = (uint32_t)(*(volatile uint8_t*)(chest_obj_ptr + 0xE2u));
+
+    ap_record_minor_chest_source_ptr(source_ptr);
+    ap_collect_small_chest_native(chest_index);
 }
 
 typedef void (*KirbyCollectSoundPlayerFn)(uint32_t reward_index);
@@ -880,6 +912,13 @@ void ap_poll_mailbox_c(void) {
         AP_ABILITY_REROLL_CALLSITE_PC = 0u;
         AP_ABILITY_REROLL_KIRBY_INDEX = 0u;
         AP_ABILITY_REROLL_ABILITY_ID = 0u;
+        AP_MINOR_CHEST_EVENT_COUNTER = 0u;
+        {
+            uint32_t i;
+            for (i = 0u; i < AP_MINOR_CHEST_EVENT_RING_SLOT_COUNT; i++) {
+                *(volatile uint32_t*)(AP_MINOR_CHEST_EVENT_RING_BASE + (i << 2)) = 0u;
+            }
+        }
         AP_MAILBOX_INIT_COOKIE = AP_MAILBOX_INIT_COOKIE_VALUE;
     }
 

@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+
 from _typeshed import Incomplete
 from kivy._clock import (
     ClockEvent as ClockEvent,

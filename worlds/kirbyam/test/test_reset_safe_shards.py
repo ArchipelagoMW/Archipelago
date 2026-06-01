@@ -77,6 +77,24 @@ def test_payload_tracks_vitality_chest_checks_and_ap_vitality_apply():
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 18u" in content, "Vitality AP item IDs should be handled"
 
 
+def test_payload_tracks_exact_minor_chest_events() -> None:
+    """Verify small chest collection records exact source pointers before native persistence."""
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, 'r') as f:
+        content = f.read()
+
+    assert "AP_MINOR_CHEST_EVENT_COUNTER" in content, "Minor chest event counter should be defined"
+    assert "AP_MINOR_CHEST_EVENT_RING_BASE" in content, "Minor chest event ring base should be defined"
+    assert "ap_on_collect_small_chest" in content, "Minor chest hook target should exist"
+    assert "ap_record_minor_chest_source_ptr(source_ptr);" in content, (
+        "Minor chest hook should record the exact source pointer before sending checks"
+    )
+    assert "ap_collect_small_chest_native(chest_index);" in content, (
+        "Minor chest hook must preserve the native small-chest persistence write"
+    )
+
+
 def test_payload_vitality_items_are_replay_guarded_per_unique_item() -> None:
     """Vitality AP item IDs should be idempotent so reconnect/reset replay does not grant duplicates."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")

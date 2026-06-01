@@ -31,7 +31,7 @@ def test_extract_failed_tests_from_junit(tmp_path: Path) -> None:
     xml_path = tmp_path / "run.xml"
     xml_path.write_text(
         """
-<testsuite tests=\"2\" failures=\"1\"> 
+<testsuite tests=\"2\" failures=\"1\">
   <testcase classname=\"worlds.kirbyam.test.test_reconnect_chaos\" name=\"test_a\">
     <failure message=\"boom\">trace</failure>
   </testcase>

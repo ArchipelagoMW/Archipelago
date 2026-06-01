@@ -6,7 +6,7 @@
 
 
 
-- As this is a custom AP world you will need to first install Kirby & The Amazing Mirror's apworld, then run the Archipelago launcher and open Options Creator. Select Kirby & The Amazing Mirror and your options and then choose your save destination. 
+- As this is a custom AP world you will need to first install Kirby & The Amazing Mirror's apworld, then run the Archipelago launcher and open Options Creator. Select Kirby & The Amazing Mirror and your options and then choose your save destination.
 - If you prefer to setup your options via a standard yaml file, you will need to first install Kirby & The Amazing Mirror's apworld, run the Archipelago launcher, and select the Generate Template Options. A file explorer will open which you can then locate the Kirby & The Amazing Mirror yaml file to edit.
 
 
@@ -106,4 +106,3 @@ you're playing a multiworld game, the client will sync your game with the server
 
 
 \[jiangzhengwenjz](https://github.com/jiangzhengwenjz) and other contributors — creators of the \[Kirby \& The Amazing Mirror disassembly](https://github.com/jiangzhengwenjz/katam), which was instrumental in understanding ROM internals for this integration.
-

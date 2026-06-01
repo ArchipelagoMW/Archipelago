@@ -69,4 +69,3 @@ def test_kirbyam_template_surface_options_visibility() -> None:
             assert "plando_items" in game_block
     finally:
         worlds.AutoWorld.AutoWorldRegister.world_types = old_world_types
-

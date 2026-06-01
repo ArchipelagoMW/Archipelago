@@ -113,20 +113,25 @@ class AbilityRandomizationNoAbilityWeight(Range):
 
     - 0: Included randomized enemies always grant a copy ability.
     - 55: 55% of included randomized enemies grant no ability, 45% grant a copy ability.
-            Default. This matches the in-game percentage when enemies that normally grant no ability are included in the randomization pool.
+            Default. This matches the in-game percentage when enemies that normally
+            grant no ability are included in the randomization pool.
     - 100: Included randomized enemies always grant no ability.
 
     This only affects enemies already included by the ability randomization mode and
     the boss/miniboss/passive-enemy toggles.
 
-        You can set a custom percentage by adding a custom number as the subkey and then supply the "percentage" chance for generation to roll that value.
+        You can set a custom percentage by adding a custom number as the subkey,
+        then supply the "percentage" chance for generation to roll that value.
       For example:
         25: 50
-      The above says you want 25% of ability granting enemies to provide no ability instead of a copy ability, and 75% to provide a copy ability. Further,
+    The above says you want 25% of ability granting enemies to provide no ability
+    instead of a copy ability, and 75% to provide a copy ability. Further,
         25: 10
         50: 10
         75: 10
-            The above says you want generation to have equal chances of creating worlds where 25%, 50%, and 75% of ability granting enemies provide no ability instead of a copy ability.
+            The above says you want generation to have equal chances of creating
+            worlds where 25%, 50%, and 75% of ability granting enemies provide no
+            ability instead of a copy ability.
     """
     display_name = "Ability Randomization: No Ability Weight"
     range_start = 0
@@ -180,7 +185,8 @@ class OneHitMode(Choice):
       Starts after the tutorial. Off by default.
       Yes, you can combine this with No Extra Lives for an extra challenge.
 
-    - Off: Kirby's maximum health is unmodified (native 6 HP base, plus 1 per Vitality Counter found).
+    - Off: Kirby's maximum health is unmodified (native 6 HP base, plus 1 per
+        Vitality Counter found).
     - Exclude Vitality Counters: Kirby starts with a maximum of 1 HP. All four Vitality Counter items are
         removed from the item pool and replaced with filler. Kirby's HP cap stays at 1 for the entire run.
     - Include Vitality Counters: Kirby starts with a maximum of 1 HP. Vitality Counter items remain in the
@@ -209,7 +215,8 @@ def _build_starting_kirby_color_option() -> type[Choice]:
         """
     Choose Kirby's default starting color palette.
       Pink is the in-game default and requires no native color override.
-      Non-Pink colors become visible after the first room transition or after an enemy hit refreshes Kirby's runtime color state.
+    Non-Pink colors become visible after the first room transition or after an
+    enemy hit refreshes Kirby's runtime color state.
 
     Supported color names (as listed on Kirby Wiki Spray Paint):
       %s
@@ -243,7 +250,7 @@ class RoomSanity(Toggle):
 class UnmappedMinorChestReportLocations(Toggle):
     """
     Include provisional minor-chest report locations with labels like
-    `Unmapped Minor Chest X-N (Report Location)`.
+    `Uncertain Minor Chest 1-40 (Report This)`.
 
     Experimental: these locations are intended for mapping/discovery runs and
     can share native chest bits while mappings are unresolved.
@@ -269,7 +276,7 @@ class KirbyAmOptions(PerGameCommonOptions):
 
     start_with_all_maps: StartWithAllMaps
 
-    starting_kirby_color: StartingKirbyColor
+    starting_kirby_color: StartingKirbyColor  # type: ignore[valid-type]
 
     no_extra_lives: NoExtraLives
 

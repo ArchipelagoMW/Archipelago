@@ -107,4 +107,3 @@ def test_no_duplicate_flag_indices_in_same_room() -> None:
         assert len(flags) == len(set(flags)), (
             f"Duplicate native_chest_flag_index values in room {room_key!r}: {flags}"
         )
-

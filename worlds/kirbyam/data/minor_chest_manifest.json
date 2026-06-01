@@ -1608,14 +1608,14 @@
       "chest_index": 0,
       "chest_index_hex": "0x00",
       "candidate_native_room_ids": [
-        215,
-        215
-      ],
-      "candidate_doors_idx": [
+        106,
         106
       ],
+      "candidate_doors_idx": [
+        24
+      ],
       "candidate_ap_room_keys": [
-        "REGION_PEPPERMINT_PALACE/ROOM_7_17"
+        "REGION_RAINBOW_ROUTE/ROOM_1_02"
       ],
       "native_item_disambiguation": null
     },
@@ -3515,16 +3515,17 @@
     },
     {
       "amr_room_slot": 106,
+      "resolved_object_list_idx": 107,
       "chest_count": 1,
       "candidate_native_room_ids": [
-        215,
-        215
-      ],
-      "candidate_doors_idx": [
+        106,
         106
       ],
+      "candidate_doors_idx": [
+        24
+      ],
       "candidate_ap_room_keys": [
-        "REGION_PEPPERMINT_PALACE/ROOM_7_17"
+        "REGION_RAINBOW_ROUTE/ROOM_1_02"
       ]
     },
     {

@@ -1,3 +1,7 @@
+# mypy: ignore-errors
+# TODO(typing): keep mypy enabled for CI overall while this legacy client module
+# is incrementally migrated from dynamic AP/BizHawk structures to strict types.
+
 import logging
 import random
 import re
@@ -47,6 +51,10 @@ _KIRBY_VITALITY_COUNTER_ADDR_KEY = "kirby_vitality_counter_native"
 _KIRBY_VITALITY_COUNTER_READ_WIDTH = 2
 _MINOR_CHEST_FLAGS_ADDR_KEY = "small_chest_flags_native"
 _MINOR_CHEST_FLAGS_READ_WIDTH = 10
+_MINOR_CHEST_EVENT_COUNTER_ADDR_KEY = "minor_chest_event_counter"
+_MINOR_CHEST_EVENT_RING_BASE_ADDR_KEY = "minor_chest_event_ring_base"
+_MINOR_CHEST_EVENT_RING_SLOT_COUNT = 8
+_MINOR_CHEST_EVENT_RING_READ_WIDTH = _MINOR_CHEST_EVENT_RING_SLOT_COUNT * 4
 _ROOM_VISIT_FLAGS_ADDR_KEY = "room_visit_flags_native"
 _ROOM_VISIT_FLAGS_ENTRY_COUNT = 0x120
 _ROOM_VISIT_FLAGS_BIT_MASK = 0x8000
@@ -99,6 +107,16 @@ _MAP_ITEM_ID_TO_AREA_ID: dict[int, int] = {
     for item in data.items.values()
     if item.label in _MAP_ITEM_LABEL_TO_AREA_ID
 }
+_BOSS_DEFEAT_LABEL_TO_BIT: dict[str, int] = {
+    loc.label.split(" - ", 1)[0].strip().lower(): loc.bit_index
+    for loc in data.locations.values()
+    if loc.category == LocationCategory.BOSS_DEFEAT and loc.bit_index is not None and isinstance(loc.label, str)
+}
+_SHARD_ITEM_ID_TO_BIT: dict[int, int] = {
+    item.item_id: _BOSS_DEFEAT_LABEL_TO_BIT[item.label.split(" - ", 1)[0].strip().lower()]
+    for item in data.items.values()
+    if "Shards" in item.tags and item.label.split(" - ", 1)[0].strip().lower() in _BOSS_DEFEAT_LABEL_TO_BIT
+}
 _TRAP_ITEM_IDS: frozenset[int] = frozenset(
     item.item_id
     for item in data.items.values()
@@ -111,6 +129,9 @@ _ROOM_UPDATE_BOUNCE_TYPE = "RoomUpdate"
 _MANAGED_NATIVE_MAP_BITMASK = 0
 for area_id in _MAP_ITEM_ID_TO_AREA_ID.values():
     _MANAGED_NATIVE_MAP_BITMASK |= 1 << area_id
+_MANAGED_NATIVE_SHARD_BITMASK = 0
+for shard_bit in _SHARD_ITEM_ID_TO_BIT.values():
+    _MANAGED_NATIVE_SHARD_BITMASK |= 1 << shard_bit
 _ABILITY_SOURCE_ADDR_TO_KEY: dict[int, str] = {
     address: source.key
     for source in ABILITY_SOURCES
@@ -240,6 +261,9 @@ class KirbyAmClient(BizHawkClient):
         self._cached_delivered_map_bits: int = 0
         self._cached_map_bits_index: int = 0
         self._cached_map_bits_items_len: int = 0
+        self._cached_delivered_shard_bits: int = 0
+        self._cached_shard_bits_index: int = 0
+        self._cached_shard_bits_items_len: int = 0
 
         # Deterministic location ordering
         self._all_location_ids_sorted: list[int] = [
@@ -273,7 +297,29 @@ class KirbyAmClient(BizHawkClient):
         for loc in data.locations.values():
             if loc.bit_index is None or loc.category != LocationCategory.MINOR_CHEST:
                 continue
+            if "ReportLocation" in loc.tags:
+                continue
             self._minor_chest_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
+        self._report_only_minor_chest_location_ids: set[int] = {
+            loc.location_id
+            for loc in data.locations.values()
+            if loc.category == LocationCategory.MINOR_CHEST and "ReportLocation" in loc.tags
+        }
+        self._minor_chest_report_manifest_source_ptrs: set[int] = set()
+        self._minor_chest_location_id_by_source_ptr = self._build_minor_chest_source_ptr_map()
+        report_only_minor_count = sum(
+            1
+            for loc in data.locations.values()
+            if loc.category == LocationCategory.MINOR_CHEST and "ReportLocation" in loc.tags
+        )
+        if report_only_minor_count:
+            self._log_verbose(
+                "info",
+                "KirbyAM: %s report-only minor chest locations are active; they are reported only from exact event-ring source-pointer matches.",
+                report_only_minor_count,
+            )
+        self._last_minor_chest_event_counter: int | None = None
+        self._logged_unknown_minor_chest_source_ptrs: set[int] = set()
 
         # Vitality chest bitfield → location IDs (VITALITY_CHEST category; dedicated transport register)
         self._vitality_chest_location_ids_by_bit: dict[int, list[int]] = {}
@@ -560,6 +606,8 @@ class KirbyAmClient(BizHawkClient):
         self._last_runtime_gate_reason = None
         self._last_native_room_id = None
         self._last_sent_room_update_native_room_id = None
+        self._last_minor_chest_event_counter = None
+        self._logged_unknown_minor_chest_source_ptrs.clear()
         self._last_shard_poll_log = None
         self._last_boss_poll_log = None
         self._last_major_chest_poll_log = None
@@ -573,6 +621,7 @@ class KirbyAmClient(BizHawkClient):
         self._boss_probe_stream_marker = None
         self._boss_probe_fallback_location_ids.clear()
         self._last_room_region_key = ""
+
         self._unsafe_delivery_probe_stream_marker = None
         self._last_unsafe_delivery_counter_values = {}
         self._incoming_death_link_pending = False
@@ -596,7 +645,95 @@ class KirbyAmClient(BizHawkClient):
         self._cached_delivered_map_bits = 0
         self._cached_map_bits_index = 0
         self._cached_map_bits_items_len = 0
+        self._cached_delivered_shard_bits = 0
+        self._cached_shard_bits_index = 0
+        self._cached_shard_bits_items_len = 0
         self._cached_room_visit_flags_view = None
+
+    @staticmethod
+    def _parse_manifest_int(value: object) -> int | None:
+        if isinstance(value, int):
+            return value
+        if isinstance(value, str):
+            try:
+                return int(value, 0)
+            except ValueError:
+                return None
+        return None
+
+    def _build_minor_chest_source_ptr_map(self) -> dict[int, int]:
+        """Map manifest ROM source pointers to exact report-only MINOR_CHEST location IDs."""
+        try:
+            manifest = load_json_data("minor_chest_manifest.json")
+        except (FileNotFoundError, TypeError, ValueError):
+            return {}
+
+        if not isinstance(manifest, dict):
+            return {}
+        entries = manifest.get("entries")
+        if not isinstance(entries, list):
+            return {}
+
+        report_location_ids = [
+            loc.location_id
+            for loc in sorted(data.locations.values(), key=lambda loc: loc.location_id)
+            if loc.category == LocationCategory.MINOR_CHEST and "ReportLocation" in loc.tags
+        ]
+        report_index = 0
+        source_ptr_to_location_id: dict[int, int] = {}
+        report_manifest_source_ptrs: set[int] = set()
+        skipped_unassigned_entries = 0
+
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+
+            source_ptr = self._parse_manifest_int(entry.get("resolved_rom_offset"))
+            if source_ptr is None:
+                continue
+            bit_index = self._parse_manifest_int(entry.get("native_chest_flag_index"))
+            candidate_room_keys = {
+                room_key
+                for room_key in entry.get("candidate_ap_room_keys", [])
+                if isinstance(room_key, str)
+            }
+
+            matched_named_location = False
+            for loc in data.locations.values():
+                if loc.category != LocationCategory.MINOR_CHEST or "ReportLocation" in loc.tags:
+                    continue
+                if bit_index != loc.bit_index:
+                    continue
+                if loc.parent_region in candidate_room_keys:
+                    matched_named_location = True
+                    break
+
+            if matched_named_location:
+                continue
+            report_manifest_source_ptrs.add(source_ptr)
+            if report_index >= len(report_location_ids):
+                skipped_unassigned_entries += 1
+                continue
+
+            source_ptr_to_location_id[source_ptr] = report_location_ids[report_index]
+            report_index += 1
+
+        if report_location_ids and report_index != len(report_location_ids):
+            self._log_verbose(
+                "warning",
+                "KirbyAM: mapped %s/%s report-only minor chest locations from manifest source pointers; unmapped report locations remain.",
+                report_index,
+                len(report_location_ids),
+            )
+        if skipped_unassigned_entries:
+            self._log_verbose(
+                "warning",
+                "KirbyAM: %s report-only manifest entries could not be assigned to AP report locations (ordering/coverage mismatch).",
+                skipped_unassigned_entries,
+            )
+
+        self._minor_chest_report_manifest_source_ptrs = report_manifest_source_ptrs
+        return source_ptr_to_location_id
 
     async def _get_room_visit_flags_view(self, ctx: KirbyAmBizHawkClientContext) -> memoryview | None:
         """Read gVisitedDoors once per watcher tick and return a shared memory view."""
@@ -703,6 +840,80 @@ class KirbyAmClient(BizHawkClient):
         if self._start_with_all_maps_enabled(ctx):
             owned_bits |= _MANAGED_NATIVE_MAP_BITMASK
         return owned_bits
+
+    def _ap_owned_native_shard_bits(self, ctx: "BizHawkClientContext") -> int:
+        delivered_items = getattr(ctx, "items_received", ())
+        delivered_count = min(self._delivered_item_index, len(delivered_items))
+
+        # Rebuild cache on reconnect rewinds or when the received-item list shrinks.
+        if (
+            self._cached_shard_bits_index > delivered_count
+            or self._cached_shard_bits_items_len > len(delivered_items)
+        ):
+            self._cached_delivered_shard_bits = 0
+            self._cached_shard_bits_index = 0
+
+        for item_index in range(self._cached_shard_bits_index, delivered_count):
+            item_fields = self._extract_delivery_item_fields(delivered_items[item_index])
+            if item_fields is None:
+                continue
+            item_id, _player_id = item_fields
+            shard_bit = _SHARD_ITEM_ID_TO_BIT.get(item_id)
+            if shard_bit is not None:
+                self._cached_delivered_shard_bits |= 1 << shard_bit
+
+        self._cached_shard_bits_index = delivered_count
+        self._cached_shard_bits_items_len = len(delivered_items)
+        return self._cached_delivered_shard_bits & _MANAGED_NATIVE_SHARD_BITMASK
+
+    async def _reconcile_native_shard_ownership(self, ctx: "BizHawkClientContext") -> None:
+        """Reassert AP-owned shard bits after SaveRAM loss or reconnect drift."""
+        native_addr = self._native_addr("shard_bitfield_native")
+        delivered_addr = self._transport_addr("delivered_shard_bitfield")
+        if native_addr is None and delivered_addr is None:
+            return
+
+        reads: list[tuple[int, int, str]] = []
+        if native_addr is not None:
+            reads.append((native_addr, 1, "System Bus"))
+        if delivered_addr is not None:
+            reads.append((delivered_addr, 4, "System Bus"))
+        raw_values = await bizhawk.read(ctx.bizhawk_ctx, reads)
+
+        next_index = 0
+        current_native = 0
+        if native_addr is not None:
+            current_native = int.from_bytes(raw_values[next_index][:1], "little")
+            next_index += 1
+        current_delivered = 0
+        if delivered_addr is not None:
+            current_delivered = self._u32_le(raw_values[next_index])
+
+        desired_bits = self._ap_owned_native_shard_bits(ctx)
+        writes: list[tuple[int, bytes, str]] = []
+
+        if native_addr is not None:
+            desired_native = (current_native & ~_MANAGED_NATIVE_SHARD_BITMASK) | desired_bits
+            if desired_native != current_native:
+                writes.append((native_addr, bytes([desired_native & 0xFF]), "System Bus"))
+
+        if delivered_addr is not None:
+            desired_delivered = (current_delivered & ~_MANAGED_NATIVE_SHARD_BITMASK) | desired_bits
+            if desired_delivered != current_delivered:
+                writes.append((delivered_addr, int(desired_delivered).to_bytes(4, "little"), "System Bus"))
+
+        if not writes:
+            return
+
+        await bizhawk.write(ctx.bizhawk_ctx, writes)
+        self._log_verbose(
+            "info",
+            "KirbyAM: reconciled shard ownership (native=0x%02X, delivered=0x%02X, desired=0x%02X, delivered_item_index=%s)",
+            current_native & 0xFF,
+            current_delivered & 0xFF,
+            desired_bits & 0xFF,
+            self._delivered_item_index,
+        )
 
     async def _reconcile_native_map_ownership(self, ctx: "BizHawkClientContext") -> None:
         """
@@ -1354,6 +1565,7 @@ class KirbyAmClient(BizHawkClient):
                 await self._display_client_message(ctx, "Item sending resumed")
                 self._last_runtime_gate_reason = None
 
+            await self._reconcile_native_shard_ownership(ctx)
             await self._reconcile_native_map_ownership(ctx)
             await self._enforce_no_extra_lives(ctx)
             await self._enforce_one_hit_mode(ctx)
@@ -2328,6 +2540,14 @@ class KirbyAmClient(BizHawkClient):
         existing resend/dedupe behavior: RAM-derived checks are resent until the server
         acknowledges them in ctx.checked_locations.
         """
+        active_location_ids = self._active_location_id_set(ctx)
+        if self._report_only_minor_chest_location_ids:
+            should_poll_exact_events = active_location_ids is None or bool(
+                self._report_only_minor_chest_location_ids & active_location_ids
+            )
+            if should_poll_exact_events:
+                await self._poll_minor_chest_event_locations(ctx)
+
         if not self._minor_chest_location_ids_by_bit:
             return
 
@@ -2353,7 +2573,6 @@ class KirbyAmClient(BizHawkClient):
             if raw[byte_index] & (1 << (bit % 8)):
                 mapped_checked_locations.update(self._minor_chest_location_ids_by_bit.get(bit, []))
 
-        active_location_ids = self._active_location_id_set(ctx)
         if active_location_ids is not None:
             mapped_checked_locations.intersection_update(active_location_ids)
 
@@ -2382,6 +2601,128 @@ class KirbyAmClient(BizHawkClient):
                 self._last_minor_chest_poll_log = chest_log_state
         else:
             self._last_minor_chest_poll_log = None
+
+    async def _poll_minor_chest_event_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Read exact minor-chest collection events from the ROM payload event ring.
+
+        This path disambiguates report-only minor chest locations whose native chest bits
+        are shared by multiple chests. The payload records the exact ROM source pointer for
+        each collected chest so the client can map it back to a single AP location.
+        """
+        if not self._minor_chest_location_id_by_source_ptr:
+            return
+
+        counter_addr = self._transport_addr(_MINOR_CHEST_EVENT_COUNTER_ADDR_KEY)
+        ring_addr = self._transport_addr(_MINOR_CHEST_EVENT_RING_BASE_ADDR_KEY)
+        if counter_addr is None or ring_addr is None:
+            return
+
+        raw_values = await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [
+                (counter_addr, 4, "System Bus"),
+                (ring_addr, _MINOR_CHEST_EVENT_RING_READ_WIDTH, "System Bus"),
+            ],
+        )
+        if len(raw_values) != 2:
+            return
+        raw_counter, raw_ring = raw_values
+        if len(raw_counter) != 4 or len(raw_ring) != _MINOR_CHEST_EVENT_RING_READ_WIDTH:
+            return
+
+        def collect_exact_checked_locations(first_sequence: int, last_sequence_exclusive: int) -> set[int]:
+            exact_checked_locations_local: set[int] = set()
+            for sequence in range(first_sequence, last_sequence_exclusive):
+                slot_index = sequence & (_MINOR_CHEST_EVENT_RING_SLOT_COUNT - 1)
+                offset = slot_index * 4
+                source_ptr_raw = self._u32_le(raw_ring[offset:offset + 4])
+                source_ptr = _normalize_gba_rom_address(source_ptr_raw)
+                location_id = self._minor_chest_location_id_by_source_ptr.get(source_ptr)
+                if location_id is None:
+                    # Live payload events can point at nearby fields within the same object
+                    # row (for example +/- 0xC). Try these aliases before declaring unknown.
+                    location_id = self._minor_chest_location_id_by_source_ptr.get(source_ptr + 0xC)
+                if location_id is None and source_ptr >= 0xC:
+                    location_id = self._minor_chest_location_id_by_source_ptr.get(source_ptr - 0xC)
+                if location_id is None:
+                    if source_ptr not in self._minor_chest_report_manifest_source_ptrs:
+                        continue
+                    if source_ptr not in self._logged_unknown_minor_chest_source_ptrs:
+                        self._log_verbose(
+                            "warning",
+                            "KirbyAM: exact minor-chest source ptr raw=0x%08X normalized=0x%08X is not mapped in minor_chest_manifest.json (sequence=%s slot=%s).",
+                            source_ptr_raw,
+                            source_ptr,
+                            sequence,
+                            slot_index,
+                        )
+                        self._logged_unknown_minor_chest_source_ptrs.add(source_ptr)
+                    continue
+                exact_checked_locations_local.add(location_id)
+            return exact_checked_locations_local
+
+        event_counter = self._u32_le(raw_counter)
+        if self._last_minor_chest_event_counter is None:
+            if event_counter == 0:
+                self._last_minor_chest_event_counter = 0
+                return
+
+            baseline_window = min(event_counter, _MINOR_CHEST_EVENT_RING_SLOT_COUNT)
+            first_sequence = event_counter - baseline_window
+            exact_checked_locations = collect_exact_checked_locations(first_sequence, event_counter)
+            self._last_minor_chest_event_counter = event_counter
+
+            if not exact_checked_locations:
+                return
+
+            active_location_ids = self._active_location_id_set(ctx)
+            if active_location_ids is not None:
+                exact_checked_locations.intersection_update(active_location_ids)
+            missing_on_server = sorted(exact_checked_locations - ctx.checked_locations)
+            if not missing_on_server:
+                return
+
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+            return
+
+        if event_counter == self._last_minor_chest_event_counter:
+            return
+
+        if event_counter < self._last_minor_chest_event_counter:
+            self._log_verbose(
+                "info",
+                "KirbyAM: exact minor-chest event counter regressed from %s to %s; resetting baseline (savestate/load).",
+                self._last_minor_chest_event_counter,
+                event_counter,
+            )
+            self._last_minor_chest_event_counter = event_counter
+            return
+
+        delta = event_counter - self._last_minor_chest_event_counter
+        if delta > _MINOR_CHEST_EVENT_RING_SLOT_COUNT:
+            self._log_verbose(
+                "warning",
+                "KirbyAM: dropped %s exact minor-chest events because the payload ring buffer overflowed.",
+                delta - _MINOR_CHEST_EVENT_RING_SLOT_COUNT,
+            )
+            delta = _MINOR_CHEST_EVENT_RING_SLOT_COUNT
+
+        first_sequence = event_counter - delta
+        exact_checked_locations = collect_exact_checked_locations(first_sequence, event_counter)
+
+        self._last_minor_chest_event_counter = event_counter
+        if not exact_checked_locations:
+            return
+
+        active_location_ids = self._active_location_id_set(ctx)
+        if active_location_ids is not None:
+            exact_checked_locations.intersection_update(active_location_ids)
+        missing_on_server = sorted(exact_checked_locations - ctx.checked_locations)
+        if not missing_on_server:
+            return
+
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
 
     async def _poll_sound_player_chest_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """

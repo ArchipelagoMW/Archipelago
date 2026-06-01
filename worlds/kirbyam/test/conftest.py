@@ -99,7 +99,7 @@ def kirbyam_test_log_file(kirbyam_test_log_dir: Path) -> Path:
 def mock_bizhawk_context() -> Mock:
     """
     Create a mock BizHawkClientContext with typical properties.
-    
+
     Provides:
     - bizhawk_ctx: mock connection context
     - server: mock AP server connection
@@ -151,7 +151,7 @@ def mock_bizhawk_context() -> Mock:
 def mock_ram_read_write() -> Generator[Dict[int, bytes], None, None]:
     """
     Create a mock RAM state for reads/writes during tests.
-    
+
     Simulates EWRAM layout with AP mailbox and game state addresses.
     Returns dict mapping address (int) -> bytes value.
     """
@@ -166,7 +166,7 @@ def mock_ram_read_write() -> Generator[Dict[int, bytes], None, None]:
         if not isinstance(value, int):
             continue
         ram_state[int(addr_text, 16)] = int(value).to_bytes(4, "little", signed=False)
-    
+
     yield ram_state
 
 
@@ -174,7 +174,7 @@ def mock_ram_read_write() -> Generator[Dict[int, bytes], None, None]:
 def mock_bizhawk_read(mock_ram_read_write: Dict[int, bytes]):
     """
     Create an async mock for bizhawk.read() that returns RAM values.
-    
+
     Usage:
         with patch('worlds.kirbyam.client.bizhawk.read', mock_bizhawk_read):
             result = await bizhawk.read(ctx, reads)
@@ -190,7 +190,7 @@ def mock_bizhawk_read(mock_ram_read_write: Dict[int, bytes]):
             results.append(value[:size].ljust(size, b'\x00'))
         TEST_LOGGER.debug("bizhawk.read[%s] response=%s", request_id, _format_payload(results))
         return results
-    
+
     return read_func
 
 
@@ -198,7 +198,7 @@ def mock_bizhawk_read(mock_ram_read_write: Dict[int, bytes]):
 def mock_bizhawk_write(mock_ram_read_write: Dict[int, bytes]):
     """
     Create an async mock for bizhawk.write() that updates RAM state.
-    
+
     Simulates writing to RAM addresses and stores values for later reads.
     """
     async def write_func(bizhawk_ctx, writes):
@@ -209,7 +209,7 @@ def mock_bizhawk_write(mock_ram_read_write: Dict[int, bytes]):
             mock_ram_read_write[addr] = value
         TEST_LOGGER.debug("bizhawk.write[%s] response=stored", request_id)
         return None
-    
+
     return write_func
 
 
@@ -217,7 +217,7 @@ def mock_bizhawk_write(mock_ram_read_write: Dict[int, bytes]):
 def shard_bitfield_fixtures() -> Dict[str, int]:
     """
     Pre-generated shard bitfield values for testing location polling.
-    
+
     Each fixture represents a different game state:
     - empty: no shards collected (0x00)
     - shard_1: first shard only (0x01)
@@ -242,7 +242,7 @@ def shard_bitfield_fixtures() -> Dict[str, int]:
 def item_delivery_fixtures() -> Dict[str, Dict[str, Any]]:
     """
     Pre-generated item delivery sequences for testing item handling.
-    
+
     Each fixture contains:
     - item_id: AP item ID to deliver
     - player_id: slot ID to credit
@@ -271,7 +271,7 @@ def item_delivery_fixtures() -> Dict[str, Dict[str, Any]]:
 def location_check_fixtures() -> Dict[str, int]:
     """
     Pre-generated location ID mappings for testing.
-    
+
     Maps friendly names to location IDs used in LocationChecks commands.
     """
     payload = _load_fixture_json("location_check_transitions.json")

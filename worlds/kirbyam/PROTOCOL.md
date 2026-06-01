@@ -78,8 +78,10 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x80   | 0x0203B080 | 4B | ability_reroll_source_addr_runtime | u32 | ROM → Client | ROM address of the ability-source byte for the **most recent** per-swallow reroll event only. This is a single-slot mailbox field; if multiple rerolls happen between client polls, earlier source addresses are overwritten and cannot be reconstructed. Used by the client to map the most recent source to an enemy name in telemetry (best-effort). |
 | 0x84   | 0x0203B084 | 4B | ability_reroll_ability_id_runtime | u32 | ROM → Client | Ability ID selected by the **most recent** per-swallow reroll event only. Pairs with `ability_reroll_source_addr_runtime` as a best-effort snapshot; if multiple rerolls happen between polls, intermediate ability IDs are overwritten. The client logs how many events were missed when `ability_reroll_event_counter_runtime` advances by more than 1. |
 | 0x88   | 0x0203B088 | 4B | ability_reroll_kirby_index_runtime | u32 | ROM → Client | Current player/Kirby slot index (`0..3`) for the **most recent** reroll event. The payload writes the active player index directly to this field and initializes it to `0`. |
+| 0x8C   | 0x0203B08C | 4B | minor_chest_event_counter | u32 | ROM → Client | Monotonic counter for exact small-chest collection events. Increments every time the native small-chest collect call fires. |
+| 0x90   | 0x0203B090 | 32B | minor_chest_event_ring | u32[8] | ROM → Client | Ring buffer of exact small-chest source pointers. Slot `N = event_counter & 7` stores the live chest object's source pointer from `object+0xB0`, allowing the client to disambiguate report-only minor chest locations that share native chest bits. |
 
-**Total: 140 bytes (0x0203B000 - 0x0203B08B)**
+**Total: 176 bytes (0x0203B000 - 0x0203B0AF)**
 
 ### Native Game State (Referenced by AP; some fields are client-reconciled)
 
@@ -87,7 +89,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 |----------|------|-------------------------|-----------|
 | 0x02038970 | 1B | KIRBY_SHARD_FLAGS       | Native mirror shard bitfield (bits 0-7) |
 | 0x0203897C | 4B | big_chest_bitfield_native | gTreasures.bigChestField; bit N = area ID N (enum AreaId): bit 1=Rainbow Route, 2=Moonlight Mansion, 3=Cabbage Cavern, 4=Mustard Mountain, 5=Carrot Castle, 6=Olive Ocean, 7=Peppermint Palace, 8=Radish Ruins, 9=Candy Constellation. This is the native map-ownership field. AP major-chest checks use `major_chest_flags` in the transport block, and the BizHawk client may reassert AP-owned map bits here from `start_with_all_maps` plus confirmed delivered map items to recover from reconnect/save-state drift. |
-| 0x02038960 - 0x02038969 | 10B | small_chest_flags_native | Native small-chest/switch bitfield block. Enabled MINOR_CHEST AP checks read this block directly and map `bit_index` to location IDs. |
+| 0x02038960 - 0x02038969 | 10B | small_chest_flags_native | Native small-chest/switch bitfield block. Unique MINOR_CHEST AP checks still use this bitfield as a resend/fallback signal, while report-only ambiguous minor chest locations use `minor_chest_event_ring` for exact disambiguation. |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped). The BizHawk client probes rising edges here, but only stages a boss-defeat fallback when the current resolved room explicitly carries a boss-defeat location in `rooms.json`. |
 | 0x02028CA0 | 576B | gVisitedDoors (`room_visit_flags_native`) | Native room-visit array (`u16[0x120]`); bit 15 marks visited state by `doorsIdx` |
 | 0x02023B28 | 2B | current_room_native | Current native room ID (`gCurLevelInfo[0].currentRoom`) used for room-entry diagnostics |
@@ -178,6 +180,7 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 
 Minor chest status (Issue #540):
 - Expanded MINOR_CHEST AP checks are active for unique native chest-bit mappings in Rainbow Route, Cabbage Cavern, Mustard Mountain, Carrot Castle, Olive Ocean, Peppermint Palace, Radish Ruins, Moonlight Mansion, and Candy Constellation.
+- Report-only `Unmapped Minor Chest X-N` locations are no longer inferred from shared native chest bits. They are reported only from the exact `minor_chest_event_ring` source-pointer hook, which preserves one-to-one chest identity for ambiguous rooms.
 - Active MINOR_CHEST checks are polled from native `small_chest_flags_native` and use direct native chest bit semantics.
 - Respawn/reopen policy is documented as non-repeatable (single-fire chest state) based on decomp evidence in `katam/src/treasures.c` and `katam/asm/chest.s`.
 - Multi-chest room index disambiguation remains deferred (tracked in Issue #542).

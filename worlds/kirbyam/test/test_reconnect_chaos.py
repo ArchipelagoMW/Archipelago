@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import ExitStack
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
@@ -123,26 +124,30 @@ async def test_reconnect_chaos_goal_reporting_is_idempotent_across_cycles(mock_b
     mock_bizhawk_context.server_locations = set()
     mock_bizhawk_context.finished_game = False
 
-    with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
-         patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
-            patch.object(client, '_log_boss_shard_debug_window', new_callable=AsyncMock), \
-         patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock), \
-         patch.object(client, '_reconcile_native_map_ownership', new_callable=AsyncMock), \
-         patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
-         patch.object(client, '_poll_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_room_sanity_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_room_entry_logging', new_callable=AsyncMock), \
-         patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
-         patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
-         patch.object(client, '_deliver_items', new_callable=AsyncMock), \
-         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock):
+    with ExitStack() as stack:
+        mock_gate = stack.enter_context(
+            patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock)
+        )
+        stack.enter_context(patch.object(client, '_load_persistent_state', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_log_boss_shard_debug_window', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_reconcile_native_map_ownership', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_reconcile_native_shard_ownership', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_room_sanity_locations', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_poll_room_entry_logging', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock))
+        stack.enter_context(patch.object(client, '_deliver_items', new_callable=AsyncMock))
+        stack.enter_context(patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock))
         # Use ai_state override for deterministic goal signal without RAM reads.
         mock_gate.return_value = (True, "gameplay_active", 9999)
 

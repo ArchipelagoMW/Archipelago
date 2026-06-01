@@ -561,6 +561,18 @@
     "category": "MINOR_CHEST",
     "location_id": 3960502
   },
+  "MINOR_CHEST_RAINBOW_ROUTE_1_02": {
+    "label": "Rainbow Route 1-02 - Small Chest",
+    "parent_region": "REGION_RAINBOW_ROUTE/ROOM_1_02",
+    "default_item": "1_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_RAINBOW_ROUTE"
+    ],
+    "bit_index": 0,
+    "category": "MINOR_CHEST",
+    "location_id": 3960521
+  },
   "MINOR_CHEST_PEPPERMINT_PALACE_7_BOSS": {
     "label": "Peppermint Palace 7-Boss - Small Chest",
     "parent_region": "REGION_PEPPERMINT_PALACE/ROOM_7_BOSS",

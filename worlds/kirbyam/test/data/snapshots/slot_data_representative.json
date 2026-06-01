@@ -587,6 +587,15 @@
         "SmallChest"
       ]
     },
+    "MINOR_CHEST_RAINBOW_ROUTE_1_02": {
+      "category": "MINOR_CHEST",
+      "label": "Rainbow Route 1-02 - Small Chest",
+      "location_id": 3960521,
+      "tags": [
+        "MAP_RAINBOW_ROUTE",
+        "SmallChest"
+      ]
+    },
     "MINOR_CHEST_RAINBOW_ROUTE_1_22": {
       "category": "MINOR_CHEST",
       "label": "Rainbow Route 1-22 - Small Chest",
@@ -616,18 +625,8 @@
     },
     "MINOR_CHEST_UNMAPPED_X_01_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-1 (Report Location)",
+      "label": "Uncertain Minor Chest 1-40 (Report This)",
       "location_id": 3960520,
-      "tags": [
-        "ReportLocation",
-        "SmallChest",
-        "UnmappedMinorChest"
-      ]
-    },
-    "MINOR_CHEST_UNMAPPED_X_02_REPORT": {
-      "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-2 (Report Location)",
-      "location_id": 3960521,
       "tags": [
         "ReportLocation",
         "SmallChest",
@@ -636,7 +635,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_03_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-3 (Report Location)",
+      "label": "Uncertain Minor Chest 1-04 (Report This)",
       "location_id": 3960522,
       "tags": [
         "ReportLocation",
@@ -646,7 +645,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_04_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-4 (Report Location)",
+      "label": "Uncertain Minor Chest 1-03 (Report This)",
       "location_id": 3960523,
       "tags": [
         "ReportLocation",
@@ -656,7 +655,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_05_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-5 (Report Location)",
+      "label": "Uncertain Minor Chest 1-11 (Report This)",
       "location_id": 3960524,
       "tags": [
         "ReportLocation",
@@ -666,7 +665,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_06_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-6 (Report Location)",
+      "label": "Uncertain Minor Chest 1-20 (Report This)",
       "location_id": 3960525,
       "tags": [
         "ReportLocation",
@@ -676,7 +675,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_07_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-7 (Report Location)",
+      "label": "Uncertain Minor Chest 1-19 (Report This)",
       "location_id": 3960526,
       "tags": [
         "ReportLocation",
@@ -686,7 +685,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_08_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-8 (Report Location)",
+      "label": "Uncertain Minor Chest 1-GOAL-2 (Report This)",
       "location_id": 3960527,
       "tags": [
         "ReportLocation",
@@ -696,7 +695,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_09_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-9 (Report Location)",
+      "label": "Uncertain Minor Chest 2-19 (Report This)",
       "location_id": 3960528,
       "tags": [
         "ReportLocation",
@@ -706,7 +705,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_10_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-10 (Report Location)",
+      "label": "Uncertain Minor Chest 2-19 (Report This)",
       "location_id": 3960529,
       "tags": [
         "ReportLocation",
@@ -716,7 +715,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_11_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-11 (Report Location)",
+      "label": "Uncertain Minor Chest 2-GOAL-2 (Report This)",
       "location_id": 3960530,
       "tags": [
         "ReportLocation",
@@ -726,7 +725,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_12_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-12 (Report Location)",
+      "label": "Uncertain Minor Chest 2-14 (Report This)",
       "location_id": 3960531,
       "tags": [
         "ReportLocation",
@@ -736,7 +735,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_13_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-13 (Report Location)",
+      "label": "Uncertain Minor Chest 7-24 (Report This)",
       "location_id": 3960532,
       "tags": [
         "ReportLocation",
@@ -746,7 +745,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_14_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-14 (Report Location)",
+      "label": "Uncertain Minor Chest 7-24 (Report This)",
       "location_id": 3960533,
       "tags": [
         "ReportLocation",
@@ -756,7 +755,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_15_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-15 (Report Location)",
+      "label": "Uncertain Minor Chest 7-03 (Report This)",
       "location_id": 3960534,
       "tags": [
         "ReportLocation",
@@ -766,7 +765,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_16_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-16 (Report Location)",
+      "label": "Uncertain Minor Chest 7-03 (Report This)",
       "location_id": 3960535,
       "tags": [
         "ReportLocation",
@@ -776,7 +775,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_17_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-17 (Report Location)",
+      "label": "Uncertain Minor Chest 7-GOAL-1 (Report This)",
       "location_id": 3960536,
       "tags": [
         "ReportLocation",
@@ -786,7 +785,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_18_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-18 (Report Location)",
+      "label": "Uncertain Minor Chest 5-04 (Report This)",
       "location_id": 3960537,
       "tags": [
         "ReportLocation",
@@ -796,7 +795,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_19_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-19 (Report Location)",
+      "label": "Uncertain Minor Chest 5-04 (Report This)",
       "location_id": 3960538,
       "tags": [
         "ReportLocation",
@@ -806,7 +805,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_20_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-20 (Report Location)",
+      "label": "Uncertain Minor Chest 5-04 (Report This)",
       "location_id": 3960539,
       "tags": [
         "ReportLocation",
@@ -816,7 +815,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_21_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-21 (Report Location)",
+      "label": "Uncertain Minor Chest 7-06 (Report This)",
       "location_id": 3960540,
       "tags": [
         "ReportLocation",
@@ -826,7 +825,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_22_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-22 (Report Location)",
+      "label": "Uncertain Minor Chest 7-06 (Report This)",
       "location_id": 3960541,
       "tags": [
         "ReportLocation",
@@ -836,7 +835,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_23_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-23 (Report Location)",
+      "label": "Uncertain Minor Chest 7-09 (Report This)",
       "location_id": 3960542,
       "tags": [
         "ReportLocation",
@@ -846,7 +845,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_24_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-24 (Report Location)",
+      "label": "Uncertain Minor Chest 7-09 (Report This)",
       "location_id": 3960543,
       "tags": [
         "ReportLocation",
@@ -856,7 +855,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_25_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-25 (Report Location)",
+      "label": "Uncertain Minor Chest 7-09 (Report This)",
       "location_id": 3960544,
       "tags": [
         "ReportLocation",
@@ -866,7 +865,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_26_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-26 (Report Location)",
+      "label": "Uncertain Minor Chest 7-16 (Report This)",
       "location_id": 3960545,
       "tags": [
         "ReportLocation",
@@ -876,7 +875,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_27_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-27 (Report Location)",
+      "label": "Uncertain Minor Chest 7-21 (Report This)",
       "location_id": 3960546,
       "tags": [
         "ReportLocation",
@@ -886,7 +885,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_28_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-28 (Report Location)",
+      "label": "Uncertain Minor Chest 4-12 (Report This)",
       "location_id": 3960547,
       "tags": [
         "ReportLocation",
@@ -896,7 +895,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_29_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-29 (Report Location)",
+      "label": "Uncertain Minor Chest 4-WARP (Report This)",
       "location_id": 3960548,
       "tags": [
         "ReportLocation",
@@ -906,7 +905,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_30_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-30 (Report Location)",
+      "label": "Uncertain Minor Chest 4-05 (Report This)",
       "location_id": 3960549,
       "tags": [
         "ReportLocation",
@@ -916,7 +915,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_31_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-31 (Report Location)",
+      "label": "Uncertain Minor Chest 9-06 (Report This)",
       "location_id": 3960550,
       "tags": [
         "ReportLocation",
@@ -926,7 +925,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_32_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-32 (Report Location)",
+      "label": "Uncertain Minor Chest 9-BOSS (Report This)",
       "location_id": 3960551,
       "tags": [
         "ReportLocation",
@@ -936,7 +935,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_33_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-33 (Report Location)",
+      "label": "Uncertain Minor Chest 9-16 (Report This)",
       "location_id": 3960552,
       "tags": [
         "ReportLocation",
@@ -946,7 +945,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_34_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-34 (Report Location)",
+      "label": "Uncertain Minor Chest 3-10 (Report This)",
       "location_id": 3960553,
       "tags": [
         "ReportLocation",
@@ -956,7 +955,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_35_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-35 (Report Location)",
+      "label": "Uncertain Minor Chest 3-07 (Report This)",
       "location_id": 3960554,
       "tags": [
         "ReportLocation",
@@ -966,7 +965,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_36_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-36 (Report Location)",
+      "label": "Uncertain Minor Chest 3-01 (Report This)",
       "location_id": 3960555,
       "tags": [
         "ReportLocation",
@@ -976,7 +975,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_37_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-37 (Report Location)",
+      "label": "Uncertain Minor Chest 3-02 (Report This)",
       "location_id": 3960556,
       "tags": [
         "ReportLocation",
@@ -986,7 +985,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_38_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-38 (Report Location)",
+      "label": "Uncertain Minor Chest 6-15 (Report This)",
       "location_id": 3960557,
       "tags": [
         "ReportLocation",
@@ -996,7 +995,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_39_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-39 (Report Location)",
+      "label": "Uncertain Minor Chest 6-CHEST-1 (Report This)",
       "location_id": 3960558,
       "tags": [
         "ReportLocation",
@@ -1006,7 +1005,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_40_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-40 (Report Location)",
+      "label": "Uncertain Minor Chest 6-GOAL-2 (Report This)",
       "location_id": 3960559,
       "tags": [
         "ReportLocation",
@@ -1016,7 +1015,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_41_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-41 (Report Location)",
+      "label": "Uncertain Minor Chest 8-GOAL-1 (Report This)",
       "location_id": 3960560,
       "tags": [
         "ReportLocation",
@@ -1026,7 +1025,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_42_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-42 (Report Location)",
+      "label": "Uncertain Minor Chest 8-07 (Report This)",
       "location_id": 3960561,
       "tags": [
         "ReportLocation",
@@ -1036,7 +1035,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_43_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-43 (Report Location)",
+      "label": "Uncertain Minor Chest 8-GOAL-2 (Report This)",
       "location_id": 3960562,
       "tags": [
         "ReportLocation",
@@ -1046,7 +1045,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_44_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-44 (Report Location)",
+      "label": "Uncertain Minor Chest 8-GOAL-2 (Report This)",
       "location_id": 3960563,
       "tags": [
         "ReportLocation",
@@ -1056,7 +1055,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_45_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-45 (Report Location)",
+      "label": "Uncertain Minor Chest 5-17 (Report This)",
       "location_id": 3960564,
       "tags": [
         "ReportLocation",
@@ -1066,7 +1065,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_46_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Unmapped Minor Chest X-46 (Report Location)",
+      "label": "Uncertain Minor Chest 5-16 (Report This)",
       "location_id": 3960565,
       "tags": [
         "ReportLocation",

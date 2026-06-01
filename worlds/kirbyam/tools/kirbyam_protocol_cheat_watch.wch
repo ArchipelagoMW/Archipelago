@@ -23,6 +23,15 @@ SystemID GBA
 0203B050	d	u	0	System Bus	starting_kirby_color_id (Client->ROM; 0=Pink no-op, 1-13=color; 0xFFFFFFFF=not synced)
 0203B054	d	u	0	System Bus	one_hit_mode_runtime (Client->ROM; 0=off, 1=excl_vitality, 2=incl_vitality; 0xFFFFFFFF=not synced)
 0203B058	d	u	0	System Bus	no_extra_lives_runtime (Client->ROM; 0=off, 1=on; 0xFFFFFFFF=not synced)
+0203B08C	d	u	0	System Bus	minor_chest_event_counter
+0203B090	d	h	0	System Bus	minor_chest_event_ring[0] source ptr
+0203B094	d	h	0	System Bus	minor_chest_event_ring[1] source ptr
+0203B098	d	h	0	System Bus	minor_chest_event_ring[2] source ptr
+0203B09C	d	h	0	System Bus	minor_chest_event_ring[3] source ptr
+0203B0A0	d	h	0	System Bus	minor_chest_event_ring[4] source ptr
+0203B0A4	d	h	0	System Bus	minor_chest_event_ring[5] source ptr
+0203B0A8	d	h	0	System Bus	minor_chest_event_ring[6] source ptr
+0203B0AC	d	h	0	System Bus	minor_chest_event_ring[7] source ptr
 0	S	_	1		=== Native Gameplay Addresses (from worlds/kirbyam/data/addresses.json) ===
 02038960	d	h	0	System Bus	small_chest_flags_native[0:31] (native chest/switch state block)
 02038964	d	h	0	System Bus	small_chest_flags_native[32:63]
@@ -48,6 +57,7 @@ SystemID GBA
 0203B02C	d	h	0	System Bus	CHEAT: force vitality_chest_flags bits for AP checks
 0203B030	d	h	0	System Bus	CHEAT: force sound_player_chest_flags bit0
 0203B04C	d	h	0	System Bus	CHEAT: force hub_switch_flags bits (bit0=PeppermintW, bit10=Moonlight, bit11=PeppermintE, bits0-15; bit15=RRNorth compatibility)
+0203B08C	d	u	0	System Bus	CHEAT: bump minor_chest_event_counter for event-debugging
 0	S	_	1		=== Internet Cheat Notes (USA Gameshark source: almarsguides.com) ===
 0	S	_	1		GS Master: 34165F72 B08D117B / 25982608 B17B6C25
 0	S	_	1		GS Invulnerability: 771681C5 6954AFCA
@@ -56,4 +66,3 @@ SystemID GBA
 0	S	_	1		GS Unlimited Energy: EEDEF930 E6D64031
 0	S	_	1		NOTE: Internet GS/CB codes are region/version dependent (USA listed). Verify against your ROM build.
 0	S	_	1		WARNING: Freezing AP transport fields can desync server/client/ROM state; use in offline testing only.
-

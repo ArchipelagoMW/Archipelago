@@ -35,7 +35,9 @@
       "ability_reroll_event_counter_runtime": "0x0203B07C",
       "ability_reroll_source_addr_runtime": "0x0203B080",
       "ability_reroll_ability_id_runtime": "0x0203B084",
-      "ability_reroll_kirby_index_runtime": "0x0203B088"
+      "ability_reroll_kirby_index_runtime": "0x0203B088",
+      "minor_chest_event_counter": "0x0203B08C",
+      "minor_chest_event_ring_base": "0x0203B090"
     },
     "native": {
       "small_chest_flags_native": "0x02038960",

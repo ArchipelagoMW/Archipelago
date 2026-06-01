@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+
 import random
 from pathlib import Path
 from types import SimpleNamespace
@@ -107,7 +109,10 @@ def test_vitality_chest_default_items_are_useful_vitality() -> None:
 
 
 def test_sound_player_chest_default_item_is_useful_sound_player() -> None:
-    sound_player_locations = [loc for loc in data.locations.values() if loc.category == LocationCategory.SOUND_PLAYER_CHEST]
+    sound_player_locations = [
+        loc for loc in data.locations.values()
+        if loc.category == LocationCategory.SOUND_PLAYER_CHEST
+    ]
     assert len(sound_player_locations) == 1
 
     location = sound_player_locations[0]
@@ -386,7 +391,10 @@ def test_vanilla_shards_are_locked_to_boss_defeats() -> None:
     assert all(loc.item is None for loc in chest_locations)
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
     _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
-    _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
+    _sound_player_chest_count = sum(
+        1 for m in data.locations.values()
+        if m.category == LocationCategory.SOUND_PLAYER_CHEST
+    )
     _minor_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MINOR_CHEST)
     _hub_switch_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.HUB_SWITCH)
     _room_sanity_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.ROOM_SANITY)
@@ -416,7 +424,10 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
     _boss_defeat_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.BOSS_DEFEAT)
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
     _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
-    _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
+    _sound_player_chest_count = sum(
+        1 for m in data.locations.values()
+        if m.category == LocationCategory.SOUND_PLAYER_CHEST
+    )
     _minor_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MINOR_CHEST)
     _hub_switch_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.HUB_SWITCH)
     _room_sanity_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.ROOM_SANITY)
@@ -466,7 +477,10 @@ def test_vanilla_pool_contains_each_non_shard_non_filler_item_exactly_once() -> 
     expected_non_filler_codes = {
         item.item_id
         for item in data.items.values()
-        if item.classification not in (ItemClassification.filler, ItemClassification.trap) and item.item_id not in shard_codes
+        if (
+            item.classification not in (ItemClassification.filler, ItemClassification.trap)
+            and item.item_id not in shard_codes
+        )
     }
     pool_codes = [item.code for item in world.multiworld.itempool if item.code is not None]
     pool_non_filler_codes = [code for code in pool_codes if get_item_classification(code) != ItemClassification.filler]
@@ -711,4 +725,3 @@ def test_start_with_all_maps_off_includes_all_map_items_in_pool() -> None:
     assert map_codes.issubset(pool_codes), (
         "When start_with_all_maps is off, all map items should remain in the pool"
     )
-

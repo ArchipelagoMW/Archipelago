@@ -95,6 +95,11 @@ def read_u16(data: bytes, offset: int) -> int:
     return int.from_bytes(data[offset:offset + 2], "little")
 
 
+def resolve_amr_room_slot_object_list_idx(amr_room_slot: int) -> int:
+    """Translate AMR's compact room slot to the native gRoomProps object-list index."""
+    return amr_room_slot + 1 if amr_room_slot >= 4 else amr_room_slot
+
+
 def parse_groomprops(rom_bytes: bytes) -> list[dict[str, int]]:
     room_props_end = ROOM_PROPS_ROM_BASE + ROOM_PROPS_SIZE
     if room_props_end > len(rom_bytes):
@@ -533,7 +538,8 @@ def main() -> int:
         )
         item_name, item_id_is_direct_reward = item_field_semantics(item_id, reward_path, native_item_name_by_id)
 
-        native_candidates = native_by_object_list_idx.get(int(amr_room_slot), [])
+        resolved_object_list_idx = resolve_amr_room_slot_object_list_idx(int(amr_room_slot))
+        native_candidates = native_by_object_list_idx.get(resolved_object_list_idx, [])
         native_room_ids = [candidate["native_room_id"] for candidate in native_candidates]
         doors_idx_candidates = sorted({candidate["doors_idx"] for candidate in native_candidates})
 
@@ -609,7 +615,8 @@ def main() -> int:
 
     slot_resolution_summary = []
     for slot in sorted(slot_counts.keys()):
-        native_candidates = native_by_object_list_idx.get(slot, [])
+        resolved_object_list_idx = resolve_amr_room_slot_object_list_idx(slot)
+        native_candidates = native_by_object_list_idx.get(resolved_object_list_idx, [])
         native_room_ids = [candidate["native_room_id"] for candidate in native_candidates]
         doors_idx_candidates = sorted({candidate["doors_idx"] for candidate in native_candidates})
         ap_room_key_candidates: list[str] = []
@@ -618,6 +625,7 @@ def main() -> int:
         slot_resolution_summary.append(
             {
                 "amr_room_slot": slot,
+                "resolved_object_list_idx": resolved_object_list_idx,
                 "chest_count": slot_counts[slot],
                 "candidate_native_room_ids": native_room_ids,
                 "candidate_doors_idx": doors_idx_candidates,

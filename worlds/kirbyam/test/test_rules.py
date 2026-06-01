@@ -221,10 +221,10 @@ def test_room_subareas_pure_topology_with_all_rooms() -> None:
             assert loc_key in known_locations, (
                 f"Room {room_key} claims unknown location key {loc_key!r}"
             )
-    # Exactly 39 rooms now carry AP location entries after MINOR_CHEST expansion.
+    # Exactly 40 rooms now carry AP location entries after MINOR_CHEST expansion.
     room_keys = list(rooms_with_locations.keys())
-    assert len(rooms_with_locations) == 39, (
-        f"Expected 39 rooms with locations, got {len(rooms_with_locations)}: {room_keys}"
+    assert len(rooms_with_locations) == 40, (
+        f"Expected 40 rooms with locations, got {len(rooms_with_locations)}: {room_keys}"
     )
 
     # Topology includes all rooms, but Room Sanity remains optional metadata.

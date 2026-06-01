@@ -41,6 +41,7 @@ except ImportError:
 PAYLOAD_OFFSET = 0x0015E000
 MAIN_HOOK_OFFSET = 0x00152696
 BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D952
+MINOR_CHEST_COLLECT_CALL_OFFSET = 0x0000AFEC
 BIG_CHEST_COLLECT_CALL_OFFSET = 0x0000B144
 VITALITY_CHEST_COLLECT_CALL_OFFSET = 0x0000B0CC
 SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET = 0x0000B264
@@ -717,6 +718,7 @@ def main():
 
         main_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_hook_entry")
         boss_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_boss_defeat_collect_shard")
+        minor_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_small_chest")
         big_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_big_chest")
         vitality_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_vitality_chest")
         sound_player_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_sound_player_chest")
@@ -727,6 +729,7 @@ def main():
         # requires a halfword-aligned target address.
         main_hook_target &= ~1
         boss_hook_target &= ~1
+        minor_chest_hook_target &= ~1
         big_chest_hook_target &= ~1
         vitality_chest_hook_target &= ~1
         sound_player_chest_hook_target &= ~1
@@ -746,6 +749,13 @@ def main():
             raise SystemExit(
                 "Error: boss hook target address out of expected payload range.\n"
                 f"Resolved address: 0x{boss_hook_target:08X}, expected within "
+                f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
+                "Check your payload.elf link address and PAYLOAD_OFFSET."
+            )
+        if not (payload_rom_start <= minor_chest_hook_target < payload_rom_end):
+            raise SystemExit(
+                "Error: minor chest hook target address out of expected payload range.\n"
+                f"Resolved address: 0x{minor_chest_hook_target:08X}, expected within "
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
             )
@@ -786,6 +796,7 @@ def main():
             )
         main_hook_bl_bytes = thumb_bl_bytes(rom_base + MAIN_HOOK_OFFSET, main_hook_target)
         boss_hook_bl_bytes = thumb_bl_bytes(rom_base + BOSS_COLLECT_SHARD_CALL_OFFSET, boss_hook_target)
+        minor_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + MINOR_CHEST_COLLECT_CALL_OFFSET, minor_chest_hook_target)
         big_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_CHEST_COLLECT_CALL_OFFSET, big_chest_hook_target)
         vitality_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + VITALITY_CHEST_COLLECT_CALL_OFFSET, vitality_chest_hook_target)
         sound_player_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET, sound_player_chest_hook_target)
@@ -803,12 +814,14 @@ def main():
             print(warning)
 
         original_boss_hook = validate_thumb_bl_callsite(rom, BOSS_COLLECT_SHARD_CALL_OFFSET, "boss shard")
+        original_minor_chest_hook = validate_thumb_bl_callsite(rom, MINOR_CHEST_COLLECT_CALL_OFFSET, "minor chest")
         original_big_chest_hook = validate_thumb_bl_callsite(rom, BIG_CHEST_COLLECT_CALL_OFFSET, "big chest")
         original_vitality_hook = validate_thumb_bl_callsite(rom, VITALITY_CHEST_COLLECT_CALL_OFFSET, "vitality chest")
         original_sound_player_hook = validate_thumb_bl_callsite(rom, SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET, "sound player chest")
         original_hub_switch_hook = validate_thumb_bl_callsite(rom, BIG_SWITCH_UNLOCK_CALL_OFFSET, "hub switch unlock")
         print("Validated hook callsite instruction shape (Thumb BL):")
         print(f"  boss shard @ {BOSS_COLLECT_SHARD_CALL_OFFSET:#x}: {original_boss_hook.hex(' ')}")
+        print(f"  minor chest @ {MINOR_CHEST_COLLECT_CALL_OFFSET:#x}: {original_minor_chest_hook.hex(' ')}")
         print(f"  big chest @ {BIG_CHEST_COLLECT_CALL_OFFSET:#x}: {original_big_chest_hook.hex(' ')}")
         print(f"  vitality chest @ {VITALITY_CHEST_COLLECT_CALL_OFFSET:#x}: {original_vitality_hook.hex(' ')}")
         print(f"  sound player chest @ {SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:#x}: {original_sound_player_hook.hex(' ')}")
@@ -853,6 +866,7 @@ def main():
         # 5) Patch hook sites with BL
         rom[MAIN_HOOK_OFFSET:MAIN_HOOK_OFFSET + 4] = main_hook_bl_bytes
         rom[BOSS_COLLECT_SHARD_CALL_OFFSET:BOSS_COLLECT_SHARD_CALL_OFFSET + 4] = boss_hook_bl_bytes
+        rom[MINOR_CHEST_COLLECT_CALL_OFFSET:MINOR_CHEST_COLLECT_CALL_OFFSET + 4] = minor_chest_hook_bl_bytes
         rom[BIG_CHEST_COLLECT_CALL_OFFSET:BIG_CHEST_COLLECT_CALL_OFFSET + 4] = big_chest_hook_bl_bytes
         rom[VITALITY_CHEST_COLLECT_CALL_OFFSET:VITALITY_CHEST_COLLECT_CALL_OFFSET + 4] = vitality_chest_hook_bl_bytes
         rom[SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET + 4] = sound_player_chest_hook_bl_bytes
@@ -895,6 +909,14 @@ def main():
             boss_hook_bl_bytes.hex(" "),
             "target=",
             hex(boss_hook_target),
+        )
+        print(
+            "Minor chest call patched at file offset:",
+            hex(MINOR_CHEST_COLLECT_CALL_OFFSET),
+            "with bytes:",
+            minor_chest_hook_bl_bytes.hex(" "),
+            "target=",
+            hex(minor_chest_hook_target),
         )
         print(
             "Big chest call patched at file offset:",
