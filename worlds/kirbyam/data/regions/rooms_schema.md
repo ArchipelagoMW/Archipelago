@@ -83,6 +83,33 @@ Each room object contains:
   - Meaning: directional transition details for exits from this room.
   - Rule: this contains per-path metadata such as coordinates, transport type, and optional gates.
 
+- `logical_subregions` (optional):
+  - Type: `dict[str, logical_subregion_object]`
+  - Meaning: defines synthetic logic-only sections for this room while preserving a single room-sanity location on the canonical room key.
+  - Use when one in-game room has disconnected internal segments that should not imply full traversal access.
+
+- `logical_exit_overrides` (optional):
+  - Type: `dict[str, str]`
+  - Meaning: per-exit routing override from this room to a destination room's logical subregion.
+  - Key: canonical destination room key from `exits`.
+  - Value: logical subregion key declared under the destination room's `logical_subregions`.
+
+### Logical Subregion Object Keys
+
+Each logical subregion object contains:
+
+- `exits`:
+  - Type: `list[str]`
+  - Meaning: adjacency list for the synthetic logic-only region.
+
+- `locations`:
+  - Type: `list[str]`
+  - Meaning: optional location keys claimed by this logical subregion.
+
+- `events`:
+  - Type: `list[str]`
+  - Meaning: optional event names claimed by this logical subregion.
+
 ## Transition Object Keys
 
 Each transition object contains:
@@ -137,6 +164,8 @@ Recommended invariants for data integrity:
 - No duplicate transition entries for the same source->destination pair.
 - `transitions` can be empty for rooms with no directional metadata.
 - `exits` remains the authoritative adjacency list.
+- `logical_exit_overrides` keys reference destinations already present in `exits`.
+- `logical_exit_overrides` values reference logical subregion keys defined on the destination room.
 
 ## Notes
 

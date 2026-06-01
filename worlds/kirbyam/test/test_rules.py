@@ -221,10 +221,11 @@ def test_room_subareas_pure_topology_with_all_rooms() -> None:
             assert loc_key in known_locations, (
                 f"Room {room_key} claims unknown location key {loc_key!r}"
             )
-    # Exactly 40 rooms now carry AP location entries after MINOR_CHEST expansion.
+    # Canonical room entries carry 38 AP locations; additional location ownership
+    # can live in logical_subregions for disconnected chamber modeling.
     room_keys = list(rooms_with_locations.keys())
-    assert len(rooms_with_locations) == 40, (
-        f"Expected 40 rooms with locations, got {len(rooms_with_locations)}: {room_keys}"
+    assert len(rooms_with_locations) == 38, (
+        f"Expected 38 canonical rooms with locations, got {len(rooms_with_locations)}: {room_keys}"
     )
 
     # Topology includes all rooms, but Room Sanity remains optional metadata.
@@ -371,6 +372,217 @@ def test_room_transition_overrides_are_room_local_only() -> None:
         assert "transitions" not in area_def, (
             f"Area {area_name} should not have room transitions (belongs in rooms.json)"
         )
+
+
+def test_logical_exit_overrides_reference_declared_exits() -> None:
+    from ..data import load_json_data
+
+    rooms = load_json_data("regions/rooms.json")
+
+    for room_name, room_def in rooms.items():
+        exits = room_def.get("exits", [])
+        assert isinstance(exits, list), f"Room {room_name} exits must be a list"
+        exit_set = {exit_name for exit_name in exits if isinstance(exit_name, str)}
+
+        logical_exit_overrides = room_def.get("logical_exit_overrides", {})
+        if logical_exit_overrides is None:
+            logical_exit_overrides = {}
+        assert isinstance(logical_exit_overrides, dict), (
+            f"Room {room_name} logical_exit_overrides must be a dict when present"
+        )
+
+        missing = sorted(str(destination) for destination in logical_exit_overrides if destination not in exit_set)
+        assert not missing, (
+            f"Room {room_name} logical_exit_overrides includes destinations missing from exits: {missing}"
+        )
+
+
+def test_split_rooms_define_logical_subregion_metadata() -> None:
+    from ..data import load_json_data
+
+    rooms = load_json_data("regions/rooms.json")
+
+    room_2_07 = rooms["REGION_MOONLIGHT_MANSION/ROOM_2_07"]
+    assert room_2_07["logical_subregions"]["ENTRY_FROM_2_04"]["exits"] == [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_04"
+    ]
+    assert rooms["REGION_MOONLIGHT_MANSION/ROOM_2_04"]["logical_exit_overrides"] == {
+        "REGION_MOONLIGHT_MANSION/ROOM_2_07": "ENTRY_FROM_2_04"
+    }
+
+    room_2_17 = rooms["REGION_MOONLIGHT_MANSION/ROOM_2_17"]
+    assert set(room_2_17["logical_subregions"]["UPPER_HALL"]["exits"]) == {
+        "REGION_MOONLIGHT_MANSION/ROOM_2_16",
+        "REGION_MOONLIGHT_MANSION/ROOM_2_18",
+    }
+    assert set(room_2_17["logical_subregions"]["LOWER_HALL"]["exits"]) == {
+        "REGION_MOONLIGHT_MANSION/ROOM_2_12",
+        "REGION_MOONLIGHT_MANSION/ROOM_2_19",
+    }
+
+    room_2_goal_2 = rooms["REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_2"]
+    assert room_2_goal_2["logical_subregions"]["ENTRY_FROM_2_ENTRY"]["exits"] == [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_ENTRY"
+    ]
+    assert rooms["REGION_MOONLIGHT_MANSION/ROOM_2_ENTRY"]["logical_exit_overrides"] == {
+        "REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_2": "ENTRY_FROM_2_ENTRY"
+    }
+
+    room_9_chest_2 = rooms["REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_2"]
+    assert room_9_chest_2["logical_subregions"]["ENTRY_FROM_9_01"]["exits"] == [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_01"
+    ]
+    assert room_9_chest_2["logical_subregions"]["ENTRY_FROM_9_09"]["exits"] == [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_09"
+    ]
+    assert room_9_chest_2["logical_subregions"]["ENTRY_FROM_9_09"]["locations"] == [
+        "SOUND_PLAYER_CHEST"
+    ]
+    assert rooms["REGION_CANDY_CONSTELLATION/ROOM_9_01"]["logical_exit_overrides"] == {
+        "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_2": "ENTRY_FROM_9_01"
+    }
+    assert rooms["REGION_CANDY_CONSTELLATION/ROOM_9_09"]["logical_exit_overrides"] == {
+        "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_2": "ENTRY_FROM_9_09"
+    }
+
+    room_8_07 = rooms["REGION_RADISH_RUINS/ROOM_8_07"]
+    assert room_8_07["logical_subregions"]["ENTRY_FROM_8_GOAL_1"]["exits"] == [
+        "REGION_RADISH_RUINS/ROOM_8_GOAL_1"
+    ]
+    assert set(room_8_07["logical_subregions"]["ENTRY_FROM_8_18_OR_8_21_OR_8_23"]["exits"]) == {
+        "REGION_RADISH_RUINS/ROOM_8_18",
+        "REGION_RADISH_RUINS/ROOM_8_21",
+        "REGION_RADISH_RUINS/ROOM_8_23",
+    }
+    assert rooms["REGION_RADISH_RUINS/ROOM_8_GOAL_1"]["logical_exit_overrides"] == {
+        "REGION_RADISH_RUINS/ROOM_8_07": "ENTRY_FROM_8_GOAL_1"
+    }
+
+    room_8_09 = rooms["REGION_RADISH_RUINS/ROOM_8_09"]
+    assert room_8_09["logical_subregions"]["ENTRY_FROM_8_03"]["exits"] == [
+        "REGION_RADISH_RUINS/ROOM_8_04"
+    ]
+    assert room_8_09["logical_subregions"]["ENTRY_FROM_8_04"]["exits"] == [
+        "REGION_RADISH_RUINS/ROOM_8_03"
+    ]
+    assert rooms["REGION_RADISH_RUINS/ROOM_8_03"]["logical_exit_overrides"] == {
+        "REGION_RADISH_RUINS/ROOM_8_09": "ENTRY_FROM_8_03"
+    }
+    assert rooms["REGION_RADISH_RUINS/ROOM_8_04"]["logical_exit_overrides"] == {
+        "REGION_RADISH_RUINS/ROOM_8_09": "ENTRY_FROM_8_04"
+    }
+
+    room_5_13 = rooms["REGION_CARROT_CASTLE/ROOM_5_13"]
+    assert room_5_13["logical_subregions"]["ENTRY_FROM_5_12"]["exits"] == [
+        "REGION_CARROT_CASTLE/ROOM_5_12"
+    ]
+    assert set(room_5_13["logical_subregions"]["ENTRY_FROM_5_18_OR_5_WARP"]["exits"]) == {
+        "REGION_CARROT_CASTLE/ROOM_5_18",
+        "REGION_CARROT_CASTLE/ROOM_5_WARP",
+    }
+    assert rooms["REGION_CARROT_CASTLE/ROOM_5_12"]["logical_exit_overrides"] == {
+        "REGION_CARROT_CASTLE/ROOM_5_13": "ENTRY_FROM_5_12"
+    }
+    assert rooms["REGION_CARROT_CASTLE/ROOM_5_18"]["logical_exit_overrides"] == {
+        "REGION_CARROT_CASTLE/ROOM_5_13": "ENTRY_FROM_5_18_OR_5_WARP"
+    }
+    assert rooms["REGION_CARROT_CASTLE/ROOM_5_WARP"]["logical_exit_overrides"] == {
+        "REGION_CARROT_CASTLE/ROOM_5_13": "ENTRY_FROM_5_18_OR_5_WARP"
+    }
+
+    room_6_05 = rooms["REGION_OLIVE_OCEAN/ROOM_6_05"]
+    assert set(room_6_05["logical_subregions"]["ENTRY_FROM_6_04_OR_6_06"]["exits"]) == {
+        "REGION_OLIVE_OCEAN/ROOM_6_04",
+        "REGION_OLIVE_OCEAN/ROOM_6_06",
+    }
+    assert room_6_05["logical_subregions"]["ENTRY_FROM_6_04_OR_6_06"]["locations"] == [
+        "MINOR_CHEST_OLIVE_OCEAN_6_05"
+    ]
+    assert room_6_05["logical_subregions"]["ENTRY_FROM_6_23"]["exits"] == [
+        "REGION_OLIVE_OCEAN/ROOM_6_23"
+    ]
+    assert rooms["REGION_OLIVE_OCEAN/ROOM_6_04"]["logical_exit_overrides"] == {
+        "REGION_OLIVE_OCEAN/ROOM_6_05": "ENTRY_FROM_6_04_OR_6_06"
+    }
+    assert rooms["REGION_OLIVE_OCEAN/ROOM_6_06"]["logical_exit_overrides"] == {
+        "REGION_OLIVE_OCEAN/ROOM_6_05": "ENTRY_FROM_6_04_OR_6_06"
+    }
+    assert rooms["REGION_OLIVE_OCEAN/ROOM_6_23"]["logical_exit_overrides"] == {
+        "REGION_OLIVE_OCEAN/ROOM_6_05": "ENTRY_FROM_6_23"
+    }
+
+
+def test_logical_exit_overrides_route_to_synthetic_subregions() -> None:
+    from ..data import data as kirby_data
+
+    room_2_07_from_2_04 = "REGION_MOONLIGHT_MANSION/ROOM_2_07__LOGIC__ENTRY_FROM_2_04"
+    room_2_17_upper = "REGION_MOONLIGHT_MANSION/ROOM_2_17__LOGIC__UPPER_HALL"
+    room_2_17_lower = "REGION_MOONLIGHT_MANSION/ROOM_2_17__LOGIC__LOWER_HALL"
+    room_2_goal_2_from_entry = "REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_2__LOGIC__ENTRY_FROM_2_ENTRY"
+    room_9_chest_2_from_9_01 = "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_2__LOGIC__ENTRY_FROM_9_01"
+    room_9_chest_2_from_9_09 = "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_2__LOGIC__ENTRY_FROM_9_09"
+    room_8_07_from_goal_1 = "REGION_RADISH_RUINS/ROOM_8_07__LOGIC__ENTRY_FROM_8_GOAL_1"
+    room_8_07_from_8_18_8_21_8_23 = "REGION_RADISH_RUINS/ROOM_8_07__LOGIC__ENTRY_FROM_8_18_OR_8_21_OR_8_23"
+    room_8_09_from_8_03 = "REGION_RADISH_RUINS/ROOM_8_09__LOGIC__ENTRY_FROM_8_03"
+    room_8_09_from_8_04 = "REGION_RADISH_RUINS/ROOM_8_09__LOGIC__ENTRY_FROM_8_04"
+    room_5_13_from_5_12 = "REGION_CARROT_CASTLE/ROOM_5_13__LOGIC__ENTRY_FROM_5_12"
+    room_5_13_from_5_18_or_5_warp = "REGION_CARROT_CASTLE/ROOM_5_13__LOGIC__ENTRY_FROM_5_18_OR_5_WARP"
+    room_6_05_from_6_04_or_6_06 = "REGION_OLIVE_OCEAN/ROOM_6_05__LOGIC__ENTRY_FROM_6_04_OR_6_06"
+    room_6_05_from_6_23 = "REGION_OLIVE_OCEAN/ROOM_6_05__LOGIC__ENTRY_FROM_6_23"
+
+    assert room_2_07_from_2_04 in kirby_data.regions["REGION_MOONLIGHT_MANSION/ROOM_2_04"].exits
+    assert kirby_data.regions[room_2_07_from_2_04].exits == ["REGION_MOONLIGHT_MANSION/ROOM_2_04"]
+
+    assert room_2_17_lower in kirby_data.regions["REGION_MOONLIGHT_MANSION/ROOM_2_12"].exits
+    assert room_2_17_upper in kirby_data.regions["REGION_MOONLIGHT_MANSION/ROOM_2_16"].exits
+    assert room_2_17_lower in kirby_data.regions["REGION_MOONLIGHT_MANSION/ROOM_2_19"].exits
+    assert room_2_goal_2_from_entry in kirby_data.regions["REGION_MOONLIGHT_MANSION/ROOM_2_ENTRY"].exits
+    assert room_9_chest_2_from_9_01 in kirby_data.regions["REGION_CANDY_CONSTELLATION/ROOM_9_01"].exits
+    assert room_9_chest_2_from_9_09 in kirby_data.regions["REGION_CANDY_CONSTELLATION/ROOM_9_09"].exits
+    assert room_8_07_from_goal_1 in kirby_data.regions["REGION_RADISH_RUINS/ROOM_8_GOAL_1"].exits
+    assert room_8_07_from_8_18_8_21_8_23 in kirby_data.regions["REGION_RADISH_RUINS/ROOM_8_18"].exits
+    assert room_8_07_from_8_18_8_21_8_23 in kirby_data.regions["REGION_RADISH_RUINS/ROOM_8_21"].exits
+    assert room_8_07_from_8_18_8_21_8_23 in kirby_data.regions["REGION_RADISH_RUINS/ROOM_8_23"].exits
+    assert room_8_09_from_8_03 in kirby_data.regions["REGION_RADISH_RUINS/ROOM_8_03"].exits
+    assert room_8_09_from_8_04 in kirby_data.regions["REGION_RADISH_RUINS/ROOM_8_04"].exits
+    assert room_5_13_from_5_12 in kirby_data.regions["REGION_CARROT_CASTLE/ROOM_5_12"].exits
+    assert room_5_13_from_5_18_or_5_warp in kirby_data.regions["REGION_CARROT_CASTLE/ROOM_5_18"].exits
+    assert room_5_13_from_5_18_or_5_warp in kirby_data.regions["REGION_CARROT_CASTLE/ROOM_5_WARP"].exits
+    assert room_6_05_from_6_04_or_6_06 in kirby_data.regions["REGION_OLIVE_OCEAN/ROOM_6_04"].exits
+    assert room_6_05_from_6_04_or_6_06 in kirby_data.regions["REGION_OLIVE_OCEAN/ROOM_6_06"].exits
+    assert room_6_05_from_6_23 in kirby_data.regions["REGION_OLIVE_OCEAN/ROOM_6_23"].exits
+
+    assert set(kirby_data.regions[room_2_17_upper].exits) == {
+        "REGION_MOONLIGHT_MANSION/ROOM_2_16",
+        "REGION_MOONLIGHT_MANSION/ROOM_2_18",
+    }
+    assert set(kirby_data.regions[room_2_17_lower].exits) == {
+        "REGION_MOONLIGHT_MANSION/ROOM_2_12",
+        "REGION_MOONLIGHT_MANSION/ROOM_2_19",
+    }
+    assert kirby_data.regions[room_2_goal_2_from_entry].exits == ["REGION_MOONLIGHT_MANSION/ROOM_2_ENTRY"]
+    assert kirby_data.regions[room_9_chest_2_from_9_01].exits == ["REGION_CANDY_CONSTELLATION/ROOM_9_01"]
+    assert kirby_data.regions[room_9_chest_2_from_9_09].exits == ["REGION_CANDY_CONSTELLATION/ROOM_9_09"]
+    assert kirby_data.regions[room_9_chest_2_from_9_09].locations == ["SOUND_PLAYER_CHEST"]
+    assert kirby_data.regions[room_8_07_from_goal_1].exits == ["REGION_RADISH_RUINS/ROOM_8_GOAL_1"]
+    assert set(kirby_data.regions[room_8_07_from_8_18_8_21_8_23].exits) == {
+        "REGION_RADISH_RUINS/ROOM_8_18",
+        "REGION_RADISH_RUINS/ROOM_8_21",
+        "REGION_RADISH_RUINS/ROOM_8_23",
+    }
+    assert kirby_data.regions[room_8_09_from_8_03].exits == ["REGION_RADISH_RUINS/ROOM_8_04"]
+    assert kirby_data.regions[room_8_09_from_8_04].exits == ["REGION_RADISH_RUINS/ROOM_8_03"]
+    assert kirby_data.regions[room_5_13_from_5_12].exits == ["REGION_CARROT_CASTLE/ROOM_5_12"]
+    assert set(kirby_data.regions[room_5_13_from_5_18_or_5_warp].exits) == {
+        "REGION_CARROT_CASTLE/ROOM_5_18",
+        "REGION_CARROT_CASTLE/ROOM_5_WARP",
+    }
+    assert set(kirby_data.regions[room_6_05_from_6_04_or_6_06].exits) == {
+        "REGION_OLIVE_OCEAN/ROOM_6_04",
+        "REGION_OLIVE_OCEAN/ROOM_6_06",
+    }
+    assert kirby_data.regions[room_6_05_from_6_04_or_6_06].locations == ["MINOR_CHEST_OLIVE_OCEAN_6_05"]
+    assert kirby_data.regions[room_6_05_from_6_23].exits == ["REGION_OLIVE_OCEAN/ROOM_6_23"]
 
 
 def test_stake_breaking_abilities_are_shared_and_expected() -> None:

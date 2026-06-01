@@ -5283,6 +5283,9 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_2",
       "REGION_MOONLIGHT_MANSION/ROOM_2_07"
     ],
+    "logical_exit_overrides": {
+      "REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_2": "ENTRY_FROM_2_ENTRY"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961057,
@@ -5530,6 +5533,15 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_19",
       "REGION_MOONLIGHT_MANSION/ROOM_2_ENTRY"
     ],
+    "logical_subregions": {
+      "ENTRY_FROM_2_ENTRY": {
+        "exits": [
+          "REGION_MOONLIGHT_MANSION/ROOM_2_ENTRY"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961055,
@@ -6028,6 +6040,9 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_07",
       "REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_1"
     ],
+    "logical_exit_overrides": {
+      "REGION_MOONLIGHT_MANSION/ROOM_2_07": "ENTRY_FROM_2_04"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961061,
@@ -6354,6 +6369,15 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_14",
       "REGION_MOONLIGHT_MANSION/ROOM_2_05"
     ],
+    "logical_subregions": {
+      "ENTRY_FROM_2_04": {
+        "exits": [
+          "REGION_MOONLIGHT_MANSION/ROOM_2_04"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961063,
@@ -6837,6 +6861,9 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_18",
       "REGION_RAINBOW_ROUTE/ROOM_1_08"
     ],
+    "logical_exit_overrides": {
+      "REGION_MOONLIGHT_MANSION/ROOM_2_17": "LOWER_HALL"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961050,
@@ -7179,6 +7206,9 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_17",
       "REGION_RAINBOW_ROUTE/ROOM_1_07"
     ],
+    "logical_exit_overrides": {
+      "REGION_MOONLIGHT_MANSION/ROOM_2_17": "UPPER_HALL"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961051,
@@ -7271,6 +7301,24 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_18",
       "REGION_MOONLIGHT_MANSION/ROOM_2_19"
     ],
+    "logical_subregions": {
+      "UPPER_HALL": {
+        "exits": [
+          "REGION_MOONLIGHT_MANSION/ROOM_2_16",
+          "REGION_MOONLIGHT_MANSION/ROOM_2_18"
+        ],
+        "locations": [],
+        "events": []
+      },
+      "LOWER_HALL": {
+        "exits": [
+          "REGION_MOONLIGHT_MANSION/ROOM_2_12",
+          "REGION_MOONLIGHT_MANSION/ROOM_2_19"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961052,
@@ -7453,6 +7501,9 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_18",
       "REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_2"
     ],
+    "logical_exit_overrides": {
+      "REGION_MOONLIGHT_MANSION/ROOM_2_17": "LOWER_HALL"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961054,
@@ -12024,6 +12075,9 @@
     "exits": [
       "REGION_CARROT_CASTLE/ROOM_5_13"
     ],
+    "logical_exit_overrides": {
+      "REGION_CARROT_CASTLE/ROOM_5_13": "ENTRY_FROM_5_18_OR_5_WARP"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961260,
@@ -13343,6 +13397,9 @@
       "REGION_CARROT_CASTLE/ROOM_5_CHEST_1",
       "REGION_CARROT_CASTLE/ROOM_5_14"
     ],
+    "logical_exit_overrides": {
+      "REGION_CARROT_CASTLE/ROOM_5_13": "ENTRY_FROM_5_12"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961127,
@@ -13434,6 +13491,23 @@
       "REGION_CARROT_CASTLE/ROOM_5_18",
       "REGION_CARROT_CASTLE/ROOM_5_WARP"
     ],
+    "logical_subregions": {
+      "ENTRY_FROM_5_12": {
+        "exits": [
+          "REGION_CARROT_CASTLE/ROOM_5_12"
+        ],
+        "locations": [],
+        "events": []
+      },
+      "ENTRY_FROM_5_18_OR_5_WARP": {
+        "exits": [
+          "REGION_CARROT_CASTLE/ROOM_5_18",
+          "REGION_CARROT_CASTLE/ROOM_5_WARP"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961134,
@@ -13866,6 +13940,9 @@
       "REGION_CARROT_CASTLE/ROOM_5_CHEST_1",
       "REGION_CARROT_CASTLE/ROOM_5_WARP"
     ],
+    "logical_exit_overrides": {
+      "REGION_CARROT_CASTLE/ROOM_5_13": "ENTRY_FROM_5_18_OR_5_WARP"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961129,
@@ -14778,6 +14855,9 @@
       "REGION_OLIVE_OCEAN/ROOM_6_04",
       "REGION_OLIVE_OCEAN/ROOM_6_05"
     ],
+    "logical_exit_overrides": {
+      "REGION_OLIVE_OCEAN/ROOM_6_05": "ENTRY_FROM_6_04_OR_6_06"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961144,
@@ -14862,15 +14942,32 @@
     ]
   },
   "REGION_OLIVE_OCEAN/ROOM_6_05": {
-    "locations": [
-      "MINOR_CHEST_OLIVE_OCEAN_6_05"
-    ],
+    "locations": [],
     "events": [],
     "exits": [
       "REGION_OLIVE_OCEAN/ROOM_6_04",
       "REGION_OLIVE_OCEAN/ROOM_6_06",
       "REGION_OLIVE_OCEAN/ROOM_6_23"
     ],
+    "logical_subregions": {
+      "ENTRY_FROM_6_04_OR_6_06": {
+        "exits": [
+          "REGION_OLIVE_OCEAN/ROOM_6_04",
+          "REGION_OLIVE_OCEAN/ROOM_6_06"
+        ],
+        "locations": [
+          "MINOR_CHEST_OLIVE_OCEAN_6_05"
+        ],
+        "events": []
+      },
+      "ENTRY_FROM_6_23": {
+        "exits": [
+          "REGION_OLIVE_OCEAN/ROOM_6_23"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961145,
@@ -14962,6 +15059,9 @@
       "REGION_OLIVE_OCEAN/ROOM_6_GOAL_1",
       "REGION_OLIVE_OCEAN/ROOM_6_20"
     ],
+    "logical_exit_overrides": {
+      "REGION_OLIVE_OCEAN/ROOM_6_05": "ENTRY_FROM_6_04_OR_6_06"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961146,
@@ -16387,6 +16487,9 @@
       "REGION_OLIVE_OCEAN/ROOM_6_HUB",
       "REGION_OLIVE_OCEAN/ROOM_6_20"
     ],
+    "logical_exit_overrides": {
+      "REGION_OLIVE_OCEAN/ROOM_6_05": "ENTRY_FROM_6_23"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961164,
@@ -19478,6 +19581,9 @@
       "REGION_RADISH_RUINS/ROOM_8_17",
       "REGION_RADISH_RUINS/ROOM_8_23"
     ],
+    "logical_exit_overrides": {
+      "REGION_RADISH_RUINS/ROOM_8_07": "ENTRY_FROM_8_GOAL_1"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961210,
@@ -19959,6 +20065,9 @@
     "exits": [
       "REGION_RADISH_RUINS/ROOM_8_09"
     ],
+    "logical_exit_overrides": {
+      "REGION_RADISH_RUINS/ROOM_8_09": "ENTRY_FROM_8_03"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961204,
@@ -19999,6 +20108,9 @@
       "REGION_RADISH_RUINS/ROOM_8_06",
       "REGION_RADISH_RUINS/ROOM_8_09"
     ],
+    "logical_exit_overrides": {
+      "REGION_RADISH_RUINS/ROOM_8_09": "ENTRY_FROM_8_04"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961201,
@@ -20222,6 +20334,24 @@
       "REGION_RADISH_RUINS/ROOM_8_21",
       "REGION_RADISH_RUINS/ROOM_8_23"
     ],
+    "logical_subregions": {
+      "ENTRY_FROM_8_GOAL_1": {
+        "exits": [
+          "REGION_RADISH_RUINS/ROOM_8_GOAL_1"
+        ],
+        "locations": [],
+        "events": []
+      },
+      "ENTRY_FROM_8_18_OR_8_21_OR_8_23": {
+        "exits": [
+          "REGION_RADISH_RUINS/ROOM_8_18",
+          "REGION_RADISH_RUINS/ROOM_8_21",
+          "REGION_RADISH_RUINS/ROOM_8_23"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961211,
@@ -20428,6 +20558,22 @@
       "REGION_RADISH_RUINS/ROOM_8_04",
       "REGION_RADISH_RUINS/ROOM_8_03"
     ],
+    "logical_subregions": {
+      "ENTRY_FROM_8_03": {
+        "exits": [
+          "REGION_RADISH_RUINS/ROOM_8_04"
+        ],
+        "locations": [],
+        "events": []
+      },
+      "ENTRY_FROM_8_04": {
+        "exits": [
+          "REGION_RADISH_RUINS/ROOM_8_03"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961203,
@@ -21281,6 +21427,9 @@
       "REGION_RADISH_RUINS/ROOM_8_21",
       "REGION_RADISH_RUINS/ROOM_8_23"
     ],
+    "logical_exit_overrides": {
+      "REGION_RADISH_RUINS/ROOM_8_07": "ENTRY_FROM_8_18_OR_8_21_OR_8_23"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961213,
@@ -21579,6 +21728,9 @@
       "REGION_RADISH_RUINS/ROOM_8_07",
       "REGION_RADISH_RUINS/ROOM_8_18"
     ],
+    "logical_exit_overrides": {
+      "REGION_RADISH_RUINS/ROOM_8_07": "ENTRY_FROM_8_18_OR_8_21_OR_8_23"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961227,
@@ -21736,6 +21888,9 @@
       "REGION_RADISH_RUINS/ROOM_8_07",
       "REGION_RADISH_RUINS/ROOM_8_18"
     ],
+    "logical_exit_overrides": {
+      "REGION_RADISH_RUINS/ROOM_8_07": "ENTRY_FROM_8_18_OR_8_21_OR_8_23"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961228,
@@ -22083,14 +22238,30 @@
     ]
   },
   "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_2": {
-    "locations": [
-      "SOUND_PLAYER_CHEST"
-    ],
+    "locations": [],
     "events": [],
     "exits": [
       "REGION_CANDY_CONSTELLATION/ROOM_9_01",
       "REGION_CANDY_CONSTELLATION/ROOM_9_09"
     ],
+    "logical_subregions": {
+      "ENTRY_FROM_9_01": {
+        "exits": [
+          "REGION_CANDY_CONSTELLATION/ROOM_9_01"
+        ],
+        "locations": [],
+        "events": []
+      },
+      "ENTRY_FROM_9_09": {
+        "exits": [
+          "REGION_CANDY_CONSTELLATION/ROOM_9_09"
+        ],
+        "locations": [
+          "SOUND_PLAYER_CHEST"
+        ],
+        "events": []
+      }
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961233,
@@ -22563,6 +22734,9 @@
       "REGION_CANDY_CONSTELLATION/ROOM_9_07",
       "REGION_CANDY_CONSTELLATION/ROOM_9_02"
     ],
+    "logical_exit_overrides": {
+      "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_2": "ENTRY_FROM_9_01"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961234,
@@ -23270,6 +23444,9 @@
       "REGION_CANDY_CONSTELLATION/ROOM_9_11",
       "REGION_CANDY_CONSTELLATION/ROOM_9_HUB"
     ],
+    "logical_exit_overrides": {
+      "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_2": "ENTRY_FROM_9_09"
+    },
     "room_sanity": {
       "included": true,
       "location_id": 3961235,

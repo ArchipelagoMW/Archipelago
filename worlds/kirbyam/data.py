@@ -158,6 +158,10 @@ def _parse_int(value: Any) -> int:
     raise TypeError(f"Expected int/str for integer field, got {type(value)}")
 
 
+def _logical_subregion_region_name(parent_room_region: str, logical_key: str) -> str:
+    return f"{parent_room_region}__LOGIC__{logical_key}"
+
+
 def _normalize_gba_rom_address(value: int) -> int:
     """
     Convert a GBA cartridge bus address to a ROM file/domain offset.
@@ -544,6 +548,38 @@ def _init() -> None:
                 raise ValueError(f"Region [{region_name}] was defined multiple times")
             merged_regions[region_name] = region_def
 
+    # Build reusable logical room-subregion metadata so room-sanity can stay bound
+    # to the canonical room while transition logic can target split sections.
+    logical_subregions_by_parent: dict[str, dict[str, dict[str, Any]]] = {}
+    logical_region_names: dict[tuple[str, str], str] = {}
+
+    for region_name, region_def in merged_regions.items():
+        if not isinstance(region_name, str) or not isinstance(region_def, dict):
+            continue
+        logical_subregions_raw = region_def.get("logical_subregions")
+        if logical_subregions_raw is None:
+            continue
+        if not isinstance(logical_subregions_raw, dict):
+            raise TypeError(
+                f"Region [{region_name}] logical_subregions must be an object mapping keys to definitions"
+            )
+
+        parent_subregions: dict[str, dict[str, Any]] = {}
+        for logical_key, logical_def in logical_subregions_raw.items():
+            if not isinstance(logical_key, str) or not logical_key:
+                raise TypeError(
+                    f"Region [{region_name}] logical_subregions keys must be non-empty strings"
+                )
+            if not isinstance(logical_def, dict):
+                raise TypeError(
+                    f"Region [{region_name}] logical_subregion [{logical_key}] must be an object"
+                )
+
+            parent_subregions[logical_key] = logical_def
+            logical_region_names[(region_name, logical_key)] = _logical_subregion_region_name(region_name, logical_key)
+
+        logical_subregions_by_parent[region_name] = parent_subregions
+
     # Create region objects, and claim locations
     claimed_locations: set[str] = set()
 
@@ -554,9 +590,50 @@ def _init() -> None:
         region = RegionData(region_name)
 
         # Exits
-        for exit_name in region_def.get("exits", []):
-            if isinstance(exit_name, str):
-                region.exits.append(exit_name)
+        logical_exit_overrides = region_def.get("logical_exit_overrides", {})
+        if not isinstance(logical_exit_overrides, dict):
+            raise TypeError(
+                f"Region [{region_name}] logical_exit_overrides must be an object mapping destination rooms to logical subregion keys"
+            )
+
+        exits_raw = region_def.get("exits", [])
+        if not isinstance(exits_raw, list):
+            raise TypeError(f"Region [{region_name}] exits must be a list")
+
+        exit_destinations: set[str] = set()
+        for exit_name in exits_raw:
+            if not isinstance(exit_name, str):
+                continue
+            exit_destinations.add(exit_name)
+
+            overridden_exit = exit_name
+            override_target = logical_exit_overrides.get(exit_name)
+            if override_target is not None:
+                if not isinstance(override_target, str) or not override_target:
+                    raise TypeError(
+                        "logical_exit_overrides values must be non-empty strings "
+                        f"(region={region_name}, destination={exit_name})"
+                    )
+                logical_region_name = logical_region_names.get((exit_name, override_target))
+                if logical_region_name is None:
+                    raise ValueError(
+                        "logical_exit_overrides references undefined logical subregion "
+                        f"[{override_target}] on destination room [{exit_name}]"
+                    )
+                overridden_exit = logical_region_name
+
+            region.exits.append(overridden_exit)
+
+        for override_destination in logical_exit_overrides:
+            if not isinstance(override_destination, str) or not override_destination:
+                raise TypeError(
+                    f"Region [{region_name}] logical_exit_overrides keys must be non-empty strings"
+                )
+            if override_destination not in exit_destinations:
+                raise ValueError(
+                    "logical_exit_overrides references destination not present in exits "
+                    f"(region={region_name}, destination={override_destination})"
+                )
 
         # Locations
         for loc_key in region_def.get("locations", []):
@@ -577,6 +654,54 @@ def _init() -> None:
                 region.events.append(EventData(ev, region_name))
 
         data.regions[region_name] = region
+
+    # Create synthetic logical room-subregions referenced by logical_exit_overrides.
+    for parent_region_name, logical_subregions in logical_subregions_by_parent.items():
+        for logical_key, logical_def in logical_subregions.items():
+            logical_region_name = logical_region_names[(parent_region_name, logical_key)]
+            logical_region = RegionData(logical_region_name)
+
+            exits_raw = logical_def.get("exits", [])
+            if not isinstance(exits_raw, list):
+                raise TypeError(
+                    f"Logical subregion [{logical_key}] on [{parent_region_name}] exits must be a list"
+                )
+
+            for exit_name in exits_raw:
+                if isinstance(exit_name, str):
+                    logical_region.exits.append(exit_name)
+
+            locations_raw = logical_def.get("locations", [])
+            if not isinstance(locations_raw, list):
+                raise TypeError(
+                    f"Logical subregion [{logical_key}] on [{parent_region_name}] locations must be a list"
+                )
+
+            for loc_key in locations_raw:
+                if not isinstance(loc_key, str):
+                    continue
+                if loc_key in claimed_locations:
+                    raise ValueError(f"Location [{loc_key}] was claimed by multiple regions")
+                if loc_key not in data.locations:
+                    raise ValueError(
+                        f"Logical subregion [{logical_region_name}] references unknown location key [{loc_key}]"
+                    )
+                logical_region.locations.append(loc_key)
+                claimed_locations.add(loc_key)
+
+            logical_region.locations.sort()
+
+            events_raw = logical_def.get("events", [])
+            if not isinstance(events_raw, list):
+                raise TypeError(
+                    f"Logical subregion [{logical_key}] on [{parent_region_name}] events must be a list"
+                )
+
+            for ev in events_raw:
+                if isinstance(ev, str):
+                    logical_region.events.append(EventData(ev, logical_region_name))
+
+            data.regions[logical_region_name] = logical_region
 
     # Auto-claim generated room-sanity locations by their parent region.
     # This keeps data integrity checks complete while runtime region creation can
