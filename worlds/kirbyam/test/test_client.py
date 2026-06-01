@@ -1428,6 +1428,78 @@ async def test_poll_room_entry_logging_is_always_file_only(mock_bizhawk_context)
     assert mock_logger.info.call_args.kwargs.get("extra", {}).get("NoStream") is True
 
 
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_sends_tracker_room_storage_update(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._room_label_by_doors_idx = {14: "REGION_TRACKER_ROOM"}
+    client._room_region_key_by_doors_idx = {14: "ROOM_SANITY_6_01"}
+    mock_bizhawk_context.stored_data = {}
+    mock_bizhawk_context.set_notify = Mock()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [(0x0017).to_bytes(2, 'little')],
+            [(14).to_bytes(2, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    room_key = f"KirbyAM{mock_bizhawk_context.team}_{mock_bizhawk_context.slot}"
+    assert client._current_room_key == room_key
+    mock_bizhawk_context.set_notify.assert_called_once_with(room_key)
+    assert mock_bizhawk_context.send_msgs.await_count == 2
+
+    first_payload = mock_bizhawk_context.send_msgs.await_args_list[0].args[0][0]
+    second_payload = mock_bizhawk_context.send_msgs.await_args_list[1].args[0][0]
+    assert first_payload["cmd"] == "Bounce"
+    assert first_payload["data"]["nativeRoomId"] == 0x0017
+    assert second_payload == {
+        "cmd": "Set",
+        "key": room_key,
+        "default": "0_S",
+        "want_reply": False,
+        "operations": [{"operation": "replace", "value": 0x0017}],
+    }
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_retries_tracker_storage_until_stored_data_matches(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._room_label_by_doors_idx = {15: "REGION_TRACKER_RETRY_ROOM"}
+    client._room_region_key_by_doors_idx = {15: "ROOM_SANITY_6_02"}
+    room_key = f"KirbyAM{mock_bizhawk_context.team}_{mock_bizhawk_context.slot}"
+    mock_bizhawk_context.stored_data = {}
+    mock_bizhawk_context.set_notify = Mock()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [(0x0018).to_bytes(2, 'little')],
+            [(15).to_bytes(2, 'little')],
+            [(0x0018).to_bytes(2, 'little')],
+            [(15).to_bytes(2, 'little')],
+            [(0x0018).to_bytes(2, 'little')],
+            [(15).to_bytes(2, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+        mock_bizhawk_context.stored_data[room_key] = 0x0018
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    assert mock_bizhawk_context.send_msgs.await_count == 3
+    first_payload = mock_bizhawk_context.send_msgs.await_args_list[0].args[0][0]
+    second_payload = mock_bizhawk_context.send_msgs.await_args_list[1].args[0][0]
+    third_payload = mock_bizhawk_context.send_msgs.await_args_list[2].args[0][0]
+
+    assert first_payload["cmd"] == "Bounce"
+    assert second_payload["cmd"] == "Set"
+    assert second_payload["key"] == room_key
+    assert third_payload["cmd"] == "Set"
+    assert third_payload["key"] == room_key
+
+
 def test_major_chest_data_sanity():
     """Major-chest entries should have explicit unique IDs and unique mapped bits."""
     major_chests = [

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import random
 from types import SimpleNamespace
+from typing import Any, cast
 
 import pytest
 import worlds.kirbyam.rom as rom_module
@@ -34,7 +35,8 @@ def _make_world(mode: int) -> SimpleNamespace:
     return SimpleNamespace(
         auth=b"0123456789ABCDEF",
         options=SimpleNamespace(
-            ability_randomization_mode=SimpleNamespace(value=mode)
+            ability_randomization_mode=SimpleNamespace(value=mode),
+            ability_randomization_statues=SimpleNamespace(value=False),
         ),
     )
 
@@ -44,7 +46,7 @@ def test_write_tokens_rejects_missing_policy_for_non_vanilla_mode() -> None:
     patch = _DummyPatch()
 
     with pytest.raises(ValueError, match="enemy_copy_ability_policy must be initialized"):
-        write_tokens(world, patch)
+        write_tokens(cast(Any, world), cast(Any, patch))
 
 
 def test_write_tokens_emits_runtime_enemy_writes_for_non_vanilla_mode() -> None:
@@ -57,7 +59,7 @@ def test_write_tokens_emits_runtime_enemy_writes_for_non_vanilla_mode() -> None:
     )
 
     patch = _DummyPatch()
-    write_tokens(world, patch)
+    write_tokens(cast(Any, world), cast(Any, patch))
 
     # Auth token write + many single-byte ability remap writes.
     single_byte_writes = [
@@ -68,7 +70,7 @@ def test_write_tokens_emits_runtime_enemy_writes_for_non_vanilla_mode() -> None:
     assert "token_data.bin" in patch.files
 
 
-def test_write_tokens_allows_non_vanilla_mode_with_no_runtime_writes(monkeypatch) -> None:
+def test_write_tokens_allows_non_vanilla_mode_with_no_runtime_writes(monkeypatch: pytest.MonkeyPatch) -> None:
     world = _make_world(AbilityRandomizationMode.option_shuffled)
     world._enemy_copy_ability_policy = build_enemy_copy_ability_policy(
         random.Random(20260324),
@@ -76,10 +78,14 @@ def test_write_tokens_allows_non_vanilla_mode_with_no_runtime_writes(monkeypatch
         include_boss_spawns=True,
         include_minibosses=True,
     )
-    monkeypatch.setattr(rom_module, "build_enemy_copy_runtime_patch_writes", lambda policy: {})
+    monkeypatch.setattr(
+        rom_module,
+        "build_enemy_copy_runtime_patch_writes",
+        lambda policy, include_statues=False: {},
+    )
 
     patch = _DummyPatch()
-    write_tokens(world, patch)
+    write_tokens(cast(Any, world), cast(Any, patch))
 
     single_byte_writes = [
         w for w in patch.token_writes

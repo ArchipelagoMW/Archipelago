@@ -84,6 +84,7 @@ _OPTIONAL_UNSAFE_DELIVERY_COUNTERS = (
 )
 _SEND_NOTIFY_WINDOW_SECONDS = 2.0
 _SEND_NOTIFY_MAX_PER_WINDOW = 5
+_TRACKER_ROOM_KEY_PREFIX = "KirbyAM"
 _LOCATION_ID_TO_LABEL: dict[int, str] = {
     loc.location_id: loc.label
     for loc in data.locations.values()
@@ -421,6 +422,7 @@ class KirbyAmClient(BizHawkClient):
         # Room entry logging (always file-only via NoStream=True).
         self._last_native_room_id: int | None = None
         self._last_sent_room_update_native_room_id: int | None = None
+        self._current_room_key: str = ""
         self._last_room_region_key: str = ""
         room_label_lookup, room_region_key_lookup, room_area_lookup, boss_room_lookup = self._build_room_metadata_maps()
         self._room_label_by_doors_idx: dict[int, str] = room_label_lookup
@@ -614,6 +616,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_runtime_gate_reason = None
         self._last_native_room_id = None
         self._last_sent_room_update_native_room_id = None
+        self._current_room_key = ""
         self._last_minor_chest_event_counter = None
         self._logged_unknown_minor_chest_source_ptrs.clear()
         self._last_shard_poll_log = None
@@ -2886,10 +2889,12 @@ class KirbyAmClient(BizHawkClient):
             return
 
         native_room_id = unpack_from("<H", raw)[0]
+        room_key = self._get_current_room_key(ctx)
+        tracker_room_pending = self._is_tracker_room_update_pending(ctx, room_key, native_room_id)
         room_changed = native_room_id != self._last_native_room_id
         send_pending = native_room_id != self._last_sent_room_update_native_room_id
 
-        if not room_changed and not send_pending:
+        if not room_changed and not send_pending and not tracker_room_pending:
             return
 
         if room_changed:
@@ -2950,6 +2955,54 @@ class KirbyAmClient(BizHawkClient):
                 )
                 return
             self._last_sent_room_update_native_room_id = native_room_id
+
+        if tracker_room_pending and room_key:
+            try:
+                await ctx.send_msgs([{
+                    "cmd": "Set",
+                    "key": room_key,
+                    "default": "0_S",
+                    "want_reply": False,
+                    "operations": [
+                        {"operation": "replace", "value": native_room_id},
+                    ],
+                }])
+            except Exception as exc:
+                # Tracker room storage updates are best-effort and must not break watcher progression.
+                self._log_verbose(
+                    "warning",
+                    "KirbyAM: failed to send tracker room storage update (key=%s, native=0x%04x): %s",
+                    room_key,
+                    native_room_id,
+                    exc,
+                )
+
+    def _get_current_room_key(self, ctx: KirbyAmBizHawkClientContext) -> str:
+        team = getattr(ctx, "team", None)
+        slot = getattr(ctx, "slot", None)
+        if team is None or slot is None:
+            return ""
+
+        room_key = f"{_TRACKER_ROOM_KEY_PREFIX}{team}_{slot}"
+        if room_key != self._current_room_key:
+            self._current_room_key = room_key
+            set_notify = getattr(ctx, "set_notify", None)
+            if callable(set_notify):
+                set_notify(room_key)
+        return room_key
+
+    @staticmethod
+    def _is_tracker_room_update_pending(
+        ctx: KirbyAmBizHawkClientContext,
+        room_key: str,
+        native_room_id: int,
+    ) -> bool:
+        if not room_key:
+            return False
+        stored_data = getattr(ctx, "stored_data", None)
+        if not isinstance(stored_data, dict):
+            return False
+        return stored_data.get(room_key, "") != native_room_id
 
     async def _poll_room_sanity_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
