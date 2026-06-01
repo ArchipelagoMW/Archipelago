@@ -229,6 +229,11 @@ local function update_trigger_tech_tree(force, technology)
     send_hint(reveal, force)
 end
 
+local function update_all_sciences(force)
+    update_science_tech_tree(force)
+    update_trigger_tech_tree(force, false)
+end
+
 local function setup_storage(force)
     --setup all the information needed for later
     storage.forces = storage.forces or {}
@@ -290,19 +295,12 @@ local function on_research_finished(event)
     for _, pack_name in pairs(general.science_packs.ordered) do
         if event.research.name == "achipellago-trigger-"..pack_name then
             storage.forces[event.research.force.name].science_packs_name[pack_name].crafted  = true
-            --if constants.GOAL == 1 and constants.goal_science_pack == pack_name then --the goal is to craft the "goal_science_pack" which is not implemented.
-            --    game.set_game_state
-            --    {
-            --        game_finished = true,
-            --        player_won = true,
-            --        can_continue = true,
-            --        victorious_force = event.research.force
-            --    }
-            --end
         end
     end
-    update_science_tech_tree(event.research.force)
-    update_trigger_tech_tree(event.research.force, event.research)
+    if storage.trap_memory.peekaboo == nil or storage.trap_memory.peekaboo.active == false then
+        update_science_tech_tree(event.research.force)
+        update_trigger_tech_tree(event.research.force, event.research)
+    end
 end
 
 local function on_force_created(event)
@@ -404,8 +402,7 @@ commands.add_command("ap-resend-all-hints", "Used by the Archipelago client to m
         storage.hinted_techs[name] = tech.hidden
     end
     for _, force in pairs(game.forces) do
-        update_science_tech_tree(force)
-        update_trigger_tech_tree(force, false)
+        update_all_sciences(force)
     end
     for _, surface in pairs(game.surfaces) do
         update_surface_based_techs(surface, true)
@@ -425,5 +422,7 @@ lib.events = {
 }
 lib.on_init = on_init
 lib.on_configuration_changed = on_configuration_changed
+
+lib.update_all_sciences = update_all_sciences
 
 return lib

@@ -1,5 +1,6 @@
 local general = require("Archipelago/general")
 local library = require("libs/lib")
+local tech_obscurity = require("scripts/tech_obscurity")
 
 local function add_action_to_tick (tick, action_name, action)
     storage.on_tick[tick] = storage.on_tick[tick] or {}
@@ -158,6 +159,7 @@ local function undo_peekaboo_trap()
         for _, tech in pairs(data.temp_hidden_tech) do
             game.forces[name].technologies[tech].enabled = true
         end
+        tech_obscurity.update_all_sciences(game.forces[name])
         game.forces[name].research_queue = data.temp_hidden_queue
     end
     storage.trap_memory.peekaboo.active = false
@@ -247,7 +249,6 @@ local function inventory_spill_trap()
 end
 
 local function hide_technology_trap()
-    -- TODO: Make this compatiable with tech obscurity.
     storage.trap_memory.peekaboo = storage.trap_memory.peekaboo or {reveal_tech_tick = 0, force = {}}
     if storage.trap_memory.peekaboo.reveal_tech_tick > game.tick then
         remove_action_from_tick(storage.trap_memory.peekaboo.reveal_tech_tick, "undo-peekaboo-trap")
@@ -274,7 +275,9 @@ end
 
 local function reset_technology_progress_trap()
     for _, force in pairs(library.get_all_ap_forces()) do
-        force.research_progress = 0
+        if force.current_research then
+            force.research_progress = 0
+        end
         for _, tech in pairs(force.technologies) do
             tech.saved_progress = 0
         end
