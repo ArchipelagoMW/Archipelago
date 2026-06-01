@@ -335,12 +335,15 @@ class KirbyAmWorld(World):
                     randomize_statues,
                     no_ability_weight,
                 )
-                spoiler_rows = build_enemy_copy_spoiler_rows(self._enemy_copy_ability_policy)
+                spoiler_rows = build_enemy_copy_spoiler_rows(
+                    self._enemy_copy_ability_policy,
+                    include_statues=randomize_statues,
+                )
                 if spoiler_rows:
-                    logger.info(
-                        "[P%s] Enemy copy-ability shuffled assignments (kind | source -> ability):",
-                        self.player,
-                    )
+                    spoiler_header = "Enemy copy-ability shuffled assignments"
+                    if randomize_statues:
+                        spoiler_header = "Enemy and statue copy-ability shuffled assignments"
+                    logger.info("[P%s] %s (kind | source -> ability):", self.player, spoiler_header)
                     for source_kind, source_key, ability_name in spoiler_rows:
                         logger.info(
                             "[P%s]   %s | %s -> %s",
@@ -783,11 +786,15 @@ class KirbyAmWorld(World):
         if not isinstance(policy, dict):
             return
 
-        spoiler_rows = build_enemy_copy_spoiler_rows(policy)
+        randomize_statues = bool(self.options.ability_randomization_statues.value)
+        spoiler_rows = build_enemy_copy_spoiler_rows(policy, include_statues=randomize_statues)
         if not spoiler_rows:
             return
 
-        spoiler_handle.write(f"\n\n{self.player_name}'s Enemy Copy Ability Shuffle:\n\n")
+        spoiler_title = "Enemy Copy Ability Shuffle"
+        if randomize_statues:
+            spoiler_title = "Enemy and Statue Copy Ability Shuffle"
+        spoiler_handle.write(f"\n\n{self.player_name}'s {spoiler_title}:\n\n")
         for source_kind, source_key, ability_name in spoiler_rows:
             spoiler_handle.write(f"{source_kind:12s} | {source_key:28s} -> {ability_name}\n")
 

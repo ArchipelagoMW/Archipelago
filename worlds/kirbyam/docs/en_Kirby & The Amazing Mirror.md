@@ -16,13 +16,12 @@
 
 
 - Progression & useful items which the player would normally acquire throughout the game have been moved around. (Mirror Shards, Maps, Vitality, Sound Player)
-- Normal copy ability enemies can be randomized to give a different copy ability.
+- Normal copy ability enemies can be randomized to give a different copy ability. When using `shuffled` mode, a spoiler log includes the enemy to ability assignments.
 - Enemies which typically do not give abilities can be randomized to give abilities.
 - Minny can be kept vanilla with the `ability_randomization_minny` toggle while still randomizing other enemy ability sources.
 - Enemies that cannot be swallowed are excluded from the enemy copy-ability randomization pool.
 - The chance for an enemy to not have a copy ability can be controlled via the `ability_randomization_no_ability_weight`
-- Ability statues (sometimes called ability trophies or ability stands) have a dedicated boolean toggle (`ability_randomization_statues`) that controls inclusion only. When enabled, included statues inherit the selected `ability_randomization_mode` (`off`, `shuffled`, or `completely_random`).
-- Randomized ability statues always grant an ability. They are not affected by `ability_randomization_no_ability_weight` or `ability_randomization_passive_enemies`, but they do respect `ability_randomization_minny`.
+- Ability statues (sometimes called ability trophies or ability stands) have a dedicated boolean toggle (`ability_randomization_statues`) that controls inclusion only; when enabled, included statues inherit the selected `ability_randomization_mode` (`off`, `shuffled`, or `completely_random`). They will always grant an ability and are not affected by `ability_randomization_no_ability_weight` or `ability_randomization_passive_enemies`. They do respect `ability_randomization_minny`. When using `shuffled` mode, a spoiler log includes the statue to ability assignments.
 
 
 

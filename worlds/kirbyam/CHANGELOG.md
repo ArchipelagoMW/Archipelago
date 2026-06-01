@@ -30,6 +30,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### Bug Fixes
 
+- Fixed the shuffled copy-ability spoiler output so enabled ability statues are listed alongside enemy assignments instead of only showing the enemy-side source, keeping the spoiler log aligned with statue randomization behavior (Issue #804).
 - Enemy Ability Randomization: Completely random now rerolls abilities per swallow, not per room (Issue #420).
 - Warp rooms that were missing Room Sanity checks now have them again (Issue #605).
 - Fixed delivery synchronization and logging issues that could skip items when client and game counters drifted, while ensuring debug-only delivery diagnostics still go to the log file even when hidden from the live client output (Issue #601).

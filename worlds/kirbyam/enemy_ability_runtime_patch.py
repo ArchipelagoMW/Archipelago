@@ -139,7 +139,10 @@ def _included_randomizable_sources(policy: dict[str, Any]) -> tuple[list[Ability
     return included_sources, excluded_unswallowable_sources
 
 
-def build_enemy_copy_spoiler_rows(policy: dict[str, Any]) -> list[tuple[str, str, str]]:
+def build_enemy_copy_spoiler_rows(
+    policy: dict[str, Any],
+    include_statues: bool = False,
+) -> list[tuple[str, str, str]]:
     """Return deterministic spoiler rows: (source_kind, source_key, assigned_ability)."""
     mode = int(policy.get("mode", AbilityRandomizationMode.option_off))
     if mode == AbilityRandomizationMode.option_off:
@@ -163,6 +166,13 @@ def build_enemy_copy_spoiler_rows(policy: dict[str, Any]) -> list[tuple[str, str
         else:
             raise ValueError(f"unsupported enemy ability randomization mode: {mode}")
         rows.append((source.kind, source.key, ability_name))
+
+    if include_statues:
+        statue_assignments = _build_statue_assignments(policy, mode)
+        for base_address, default_abilities in _STATUE_TABLES:
+            for index, _ in enumerate(default_abilities):
+                slot_key = f"STATUE:{base_address + index:06X}"
+                rows.append(("statue", slot_key, statue_assignments[slot_key]))
 
     rows.sort(key=lambda row: (row[0], row[1]))
     return rows

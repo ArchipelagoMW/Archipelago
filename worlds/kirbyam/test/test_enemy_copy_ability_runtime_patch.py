@@ -435,6 +435,26 @@ def test_shuffled_spoiler_rows_include_expected_known_sources() -> None:
     assert ("boss_spawned", "MASTER_CRAZY_HAND_BULLET") in row_keys
 
 
+def test_shuffled_spoiler_rows_include_statues_when_enabled() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260412),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+        no_ability_weight=0,
+    )
+
+    rows = build_enemy_copy_spoiler_rows(policy, include_statues=True)
+    row_map = {(kind, key): ability_name for kind, key, ability_name in rows}
+    writes = build_enemy_copy_runtime_patch_writes(policy, include_statues=True)
+    reverse_ability_names = {ability_id: ability_name for ability_name, ability_id in ABILITY_NAME_TO_ID.items()}
+
+    assert ("statue", "STATUE:3538FC") in row_map
+    assert row_map[("statue", "STATUE:3538FC")] == reverse_ability_names[writes[0x3538FC]]
+    assert ("enemy", "GOLEM") in row_map
+
+
 def test_shuffled_spoiler_rows_cover_all_allowed_abilities_when_possible() -> None:
     policy = build_enemy_copy_ability_policy(
         random.Random(20260407),
