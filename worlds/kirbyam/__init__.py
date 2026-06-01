@@ -119,7 +119,6 @@ class KirbyAmWorld(World):
 
     # Generation stages
     # Active filler pool for random selection.
-    # Issue #295 ships the life-up plus consumable filler set as uniform choices.
     ACTIVE_FILLER_POOL: ClassVar[tuple[str, ...]] = (
         "1 Up",
         "Small Food",
@@ -129,6 +128,17 @@ class KirbyAmWorld(World):
         "Max Tomato",
         "Invincibility Candy",
     )
+    # Issue #688: weighted filler distribution tuned from native frequency research,
+    # with whole-number percentages for easier balancing.
+    ACTIVE_FILLER_WEIGHTS: ClassVar[dict[str, int]] = {
+        "1 Up": 15,
+        "Small Food": 14,
+        "Energy Drink": 17,
+        "Hunk of Meat": 9,
+        "Cell Phone Battery": 25,
+        "Max Tomato": 15,
+        "Invincibility Candy": 5,
+    }
     ACTIVE_FILLER_POOL_NO_HEALING: ClassVar[tuple[str, ...]] = tuple(
         item_name
         for item_name in ACTIVE_FILLER_POOL
@@ -171,6 +181,7 @@ class KirbyAmWorld(World):
         "Carrot Castle - Mirror Shard",
         "Radish Ruins - Mirror Shard",
     )
+
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         # If you don't have sanity_check.py yet, comment these out for now.
@@ -238,9 +249,16 @@ class KirbyAmWorld(World):
             pool = tuple(item_name for item_name in pool if item_name != "1 Up")
         return pool
 
+    def _active_filler_weighted_pool(self) -> tuple[tuple[str, ...], tuple[int, ...]]:
+        pool = self._active_filler_pool()
+        if not pool:
+            raise ValueError("KirbyAM active filler pool resolved empty")
+        return pool, tuple(self.ACTIVE_FILLER_WEIGHTS[item_name] for item_name in pool)
+
     # Filler item name
     def get_filler_item_name(self) -> str:
-        return self.random.choice(self._active_filler_pool())
+        filler_labels, filler_weights = self._active_filler_weighted_pool()
+        return self.random.choices(filler_labels, weights=filler_weights, k=1)[0]
 
     def get_trap_item_name(self) -> str:
         if not kirby_data.available_trap_item_labels:
@@ -554,6 +572,7 @@ class KirbyAmWorld(World):
                 if self._traps_enabled() and eligible_filler_slots > 0:
                     trap_count = (eligible_filler_slots * self._trap_fill_percentage()) // 100
                 filler_needed = eligible_filler_slots - trap_count
+                active_filler_labels, active_filler_weights = self._active_filler_weighted_pool()
                 randomized_item_codes.extend(non_filler_item_codes)
                 randomized_item_codes.extend(
                     self.item_name_to_id[self.get_trap_item_name()]
@@ -617,6 +636,14 @@ class KirbyAmWorld(World):
                     eligible_filler_slots,
                     trap_count,
                     filler_needed,
+                )
+                logger.info(
+                    "[P%s] Filler weights (active pool): %s",
+                    self.player,
+                    {
+                        label: weight
+                        for label, weight in zip(active_filler_labels, active_filler_weights)
+                    },
                 )
 
                 if self._start_with_all_maps_enabled():

@@ -64,6 +64,7 @@ Use exact item/location names from this world (or the item groups listed above) 
 
 - There is an optional setting to enable one-life mode (no_extra_lives). If you die you are instantly sent back to the Hub, and any 1Ups you receive will be immediately removed.
 - There is an optional setting to enable one-hit mode. Kirby's HP cap is clamped to 1 plus collected Vitality Counters. In `exclude_vitality_counters` mode, Vitality Counter items are removed from the item pool and health-restoring filler (Small Food, Energy Drink, Hunk of Meat, and Max Tomato) is also removed from filler selection so randomized filler cannot counteract the 1 HP challenge.
+- Filler items use weighted generation rather than equal odds. Current whole-number weights are: Cell Phone Battery 25, Energy Drink 17, 1 Up 15, Max Tomato 15, Small Food 14, Hunk of Meat 9, Invincibility Candy 5.
 - Goal modes:
   - `dark_mind`: Defeat Dark Mind to complete the seed.
   - `defeat_any_area_boss`: Defeat any one `* - Boss Defeat` location (Mustard Mountain, Moonlight Mansion, Candy Constellation, Olive Ocean, Peppermint Palace, Cabbage Cavern, Carrot Castle, or Radish Ruins). In this mode, collecting all Mirror Shards is not required by the goal mode itself.

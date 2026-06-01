@@ -119,7 +119,21 @@ All item IDs use **BASE_OFFSET = 3860000** for safety (avoids collision with Arc
 
 ### Current filler effect contract
 
-Current shipped filler generation uses a uniform active filler pool:
+Current shipped filler generation uses a weighted active filler pool.
+Configured whole-number weights (sum = 100):
+
+| Item | Weight |
+|------|--------|
+| `Cell Phone Battery` | 25 |
+| `Energy Drink` | 17 |
+| `1 Up` | 15 |
+| `Max Tomato` | 15 |
+| `Small Food` | 14 |
+| `Hunk of Meat` | 9 |
+| `Invincibility Candy` | 5 |
+
+When one-hit/no-extra-lives filters remove filler labels from the active pool,
+generation preserves these relative weights across the remaining labels.
 
 | Item | Effect |
 |------|--------|

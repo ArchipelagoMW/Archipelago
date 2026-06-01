@@ -12,6 +12,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 ### New Features
 
 - Added a new `goal` mode, `defeat_any_area_boss`, which completes the seed after the first acknowledged area-boss defeat check (`BOSS_DEFEAT_1 .. BOSS_DEFEAT_8`) while preserving goal-location acknowledgement before `CLIENT_GOAL` when the server exposes a numeric goal location (Issue #205).
+- Implemented weighted filler generation so filler items are no longer equally likely. Base whole-number weights are: Cell Phone Battery 25, Energy Drink 17, 1 Up 15, Max Tomato 15, Small Food 14, Hunk of Meat 9, Invincibility Candy 5. In one-hit mode (`exclude_vitality_counters`), healing filler (`Small Food`, `Energy Drink`, `Hunk of Meat`, `Max Tomato`) is removed and the remaining weights (`Cell Phone Battery`, `1 Up`, `Invincibility Candy`) are preserved proportionally. In no-lives mode, `1 Up` is removed and remaining filler keeps configured relative weights. When both modes are enabled together, only `Cell Phone Battery` and `Invincibility Candy` remain in weighted selection (Issue #688).
 
 ### Improvements
 

@@ -238,6 +238,18 @@ def test_active_filler_pool_contents() -> None:
     )
 
 
+def test_active_filler_weights_match_whole_number_policy() -> None:
+    assert KirbyAmWorld.ACTIVE_FILLER_WEIGHTS == {
+        "1 Up": 15,
+        "Small Food": 14,
+        "Energy Drink": 17,
+        "Hunk of Meat": 9,
+        "Cell Phone Battery": 25,
+        "Max Tomato": 15,
+        "Invincibility Candy": 5,
+    }
+
+
 def test_no_extra_lives_excludes_1_up_from_active_filler_pool() -> None:
     world = KirbyAmWorld.__new__(KirbyAmWorld)
     world.options = SimpleNamespace(
@@ -253,6 +265,26 @@ def test_no_extra_lives_excludes_1_up_from_active_filler_pool() -> None:
         "Max Tomato",
         "Invincibility Candy",
     )
+
+
+def test_no_extra_lives_excludes_1_up_from_weighted_pool() -> None:
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.options = SimpleNamespace(
+        no_extra_lives=SimpleNamespace(value=True),
+        one_hit_mode=SimpleNamespace(value=OneHitMode.option_off),
+    )
+
+    labels, weights = world._active_filler_weighted_pool()
+
+    assert labels == (
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Cell Phone Battery",
+        "Max Tomato",
+        "Invincibility Candy",
+    )
+    assert weights == (14, 17, 9, 25, 15, 5)
 
 
 def test_no_extra_lives_filler_selection_never_picks_1_up() -> None:
@@ -294,6 +326,22 @@ def test_one_hit_mode_exclude_vitality_counters_and_no_extra_lives_stack_filler_
         "Cell Phone Battery",
         "Invincibility Candy",
     )
+
+
+def test_one_hit_and_no_extra_lives_stack_weighted_pool_exclusions() -> None:
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.options = SimpleNamespace(
+        no_extra_lives=SimpleNamespace(value=True),
+        one_hit_mode=SimpleNamespace(value=OneHitMode.option_exclude_vitality_counters),
+    )
+
+    labels, weights = world._active_filler_weighted_pool()
+
+    assert labels == (
+        "Cell Phone Battery",
+        "Invincibility Candy",
+    )
+    assert weights == (25, 5)
 
 
 def test_one_hit_mode_exclude_vitality_counters_filler_selection_never_picks_healing_fillers() -> None:
