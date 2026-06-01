@@ -21,11 +21,13 @@ class Goal(Choice):
 
     - Dark Mind: Defeat Dark Mind and beat the game.
     - Defeat Any Area Boss: Defeat any one eligible area boss.
+    - Defeat Random Hidden Area Boss: Defeat one hidden, seed-selected area boss.
     """
     display_name = "Goal"
     default = 0
     option_dark_mind = 0
     option_defeat_any_area_boss = 1
+    option_defeat_random_hidden_area_boss = 2
 
 
 class RandomizeShards(Choice):

@@ -73,6 +73,7 @@
     "Wheel"
   ],
   "goal": 0,
+  "goal_hidden_area_boss_key": null,
   "locations": {
     "AREA_VISIT_1_RAINBOW_ROUTE": {
       "category": "AREA_VISIT",

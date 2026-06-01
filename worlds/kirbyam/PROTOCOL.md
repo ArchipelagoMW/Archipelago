@@ -211,6 +211,7 @@ Server → Client: ConnectionRefused | Connected
 
 `slot_data` currently includes:
 - `goal` (int): selected goal option (`0=Dark Mind`, `1=Defeat Any Area Boss`).
+- `goal_hidden_area_boss_key` (str | null): internal boss-defeat key selected for `defeat_random_hidden_area_boss` (`BOSS_DEFEAT_1 .. BOSS_DEFEAT_8`). Normal player-facing output does not reveal the boss name; spoiler output may resolve the key to the hidden target.
 - `shards` (int): shard randomization mode.
 - `start_with_all_maps` (bool): when true, all map items are precollected and removed from randomized placement, and the BizHawk client reasserts all native area-map bits during gameplay reconciliation.
 - `starting_kirby_color` (int): resolved Kirby starting color ID (`0..13`) after generation-time random resolution. Non-Pink colors become visible after the next room/area transition or after an enemy-hit runtime refresh.
@@ -240,6 +241,11 @@ Compatibility note (Issue #398 option-key reorganization):
 - Legacy keys `enemy_copy_ability_randomization`, `randomize_boss_spawned_ability_grants`, and `randomize_miniboss_ability_grants` are intentionally not emitted in `slot_data` during the pre-public (`< v0.1.0`) phase.
 - Canonical keys are `ability_randomization_mode`, `ability_randomization_boss_spawns`, `ability_randomization_minibosses`, `ability_randomization_minny`, `ability_randomization_passive_enemies`, `ability_randomization_no_ability_weight`, and `ability_randomization_statues`.
 - If compatibility aliases are needed after public release, this section will be updated with an explicit deprecation/removal timeline.
+
+Goal runtime behavior contract:
+- Goal mode `dark_mind` reports completion after the native Dark Mind clear signal.
+- Goal mode `defeat_any_area_boss` reports completion after the first acknowledged area-boss defeat check in `BOSS_DEFEAT_1 .. BOSS_DEFEAT_8`.
+- Goal mode `defeat_random_hidden_area_boss` reports completion after the seed-selected hidden boss-defeat target is acknowledged by the server; the client resolves the target from `goal_hidden_area_boss_key`.
 
 DeathLink runtime behavior contract:
 - Incoming DeathLink packets (`Bounced` with `DeathLink` tag) are queued and only applied when gameplay-active gate is true.

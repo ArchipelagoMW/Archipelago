@@ -3581,6 +3581,17 @@ class KirbyAmClient(BizHawkClient):
             return False
         return any(location_id in checked_locations for location_id in self._boss_location_ids_all)
 
+    def _hidden_area_boss_goal_signal_active(self, ctx: KirbyAmBizHawkClientContext, hidden_goal_key: str) -> bool:
+        """Return whether the selected hidden area boss has been acknowledged by the server."""
+        hidden_goal = data.locations.get(hidden_goal_key)
+        if hidden_goal is None or hidden_goal.location_id is None:
+            return False
+
+        checked_locations = getattr(ctx, "checked_locations", None)
+        if not isinstance(checked_locations, set):
+            return False
+        return hidden_goal.location_id in checked_locations
+
     async def _maybe_report_goal(
         self,
         ctx: KirbyAmBizHawkClientContext,
@@ -3609,7 +3620,11 @@ class KirbyAmClient(BizHawkClient):
         except (TypeError, ValueError):
             clamped_goal = True
 
-        if parsed_slot_goal in (Goal.option_dark_mind, Goal.option_defeat_any_area_boss):
+        if parsed_slot_goal in (
+            Goal.option_dark_mind,
+            Goal.option_defeat_any_area_boss,
+            Goal.option_defeat_random_hidden_area_boss,
+        ):
             slot_goal = parsed_slot_goal
         else:
             slot_goal = Goal.option_dark_mind
@@ -3623,7 +3638,21 @@ class KirbyAmClient(BizHawkClient):
                 parsed_slot_goal,
             )
 
+        hidden_goal_key: str | None = None
         goal_location_id = self._goal_location_ids_by_option.get(slot_goal)
+        if slot_goal == Goal.option_defeat_random_hidden_area_boss:
+            hidden_goal_key_raw = ctx.slot_data.get("goal_hidden_area_boss_key")
+            if isinstance(hidden_goal_key_raw, str):
+                hidden_goal = data.locations.get(hidden_goal_key_raw)
+                if hidden_goal is not None and hidden_goal.location_id is not None:
+                    hidden_goal_key = hidden_goal_key_raw
+                    goal_location_id = self._goal_location_ids_by_option.get(Goal.option_defeat_any_area_boss)
+            if goal_location_id is None or hidden_goal_key is None:
+                self._log_client(
+                    "warning",
+                    "KirbyAM: hidden goal target missing or invalid; goal reporting disabled.",
+                )
+                return
         if goal_location_id is None:
             return
 
@@ -3635,6 +3664,8 @@ class KirbyAmClient(BizHawkClient):
         if not self._native_goal_signal_seen:
             if slot_goal == Goal.option_defeat_any_area_boss:
                 self._native_goal_signal_seen = self._any_area_boss_goal_signal_active(ctx)
+            elif slot_goal == Goal.option_defeat_random_hidden_area_boss:
+                self._native_goal_signal_seen = self._hidden_area_boss_goal_signal_active(ctx, hidden_goal_key)
             else:
                 self._native_goal_signal_seen = await self._native_goal_signal_active(
                     ctx,

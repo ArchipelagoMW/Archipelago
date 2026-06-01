@@ -100,6 +100,9 @@ def test_starting_kirby_color_contract_fields_present_with_expected_shapes() -> 
     assert isinstance(slot_data["starting_kirby_color_name"], str)
     assert slot_data["starting_kirby_color_name"]
 
+    assert "goal_hidden_area_boss_key" in slot_data
+    assert slot_data["goal_hidden_area_boss_key"] is None or isinstance(slot_data["goal_hidden_area_boss_key"], str)
+
 
 def test_tracker_surface_contract_fields_present_with_expected_shapes() -> None:
     slot_data = _emit_slot_data_for_contract_test()
