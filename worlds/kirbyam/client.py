@@ -3155,35 +3155,12 @@ class KirbyAmClient(BizHawkClient):
             item_id, player_id = item_fields
 
             if self._is_acknowledged_trap_index(ctx, self._delivered_item_index):
-                # Safe skip only when ROM has already applied this item slot.
-                # After ROM reset/rewind, replay the slot so ROM counter can advance.
-                if (
-                    not self._delivery_counter_ahead_fallback_active
-                    and rom_received_count is not None
-                    and rom_received_count <= len(ctx.items_received)
-                    and rom_received_count >= (self._delivered_item_index + 1)
-                ):
-                    self._log_verbose(
-                        "info",
-                        "KirbyAM: skipping already-ACKed trap replay at item index %s (%s from %s)",
-                        self._delivered_item_index,
-                        self._item_name(ctx, item_id, player_id),
-                        self._player_name(ctx, player_id),
-                    )
-                    self._delivered_item_index += 1
-                    self._delivery_pending = False
-                    self._delivery_pending_time = None
-                    self._delivery_pending_item_index = None
-                    self._delivery_timeout_streak = 0
-                    self._delivery_retry_not_before = 0.0
-                    self._delivery_payload_stall_warned = False
-                    await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
-                    continue
-
+                # Issue #753: trap items are one-time effects and must not replay on
+                # reconnect/reload once their mailbox ACK has been observed.
                 if rom_received_count is None:
                     self._log_verbose(
                         "info",
-                        "KirbyAM: replaying session-ACKed trap at item index %s (%s from %s) because ROM counter is unavailable",
+                        "KirbyAM: skipping session-ACKed trap replay at item index %s (%s from %s); ROM counter unavailable",
                         self._delivered_item_index,
                         self._item_name(ctx, item_id, player_id),
                         self._player_name(ctx, player_id),
@@ -3191,7 +3168,7 @@ class KirbyAmClient(BizHawkClient):
                 elif self._delivery_counter_ahead_fallback_active or rom_received_count > len(ctx.items_received):
                     self._log_verbose(
                         "info",
-                        "KirbyAM: replaying session-ACKed trap at item index %s (%s from %s) because ROM counter=%s is unreliable/out-of-range",
+                        "KirbyAM: skipping session-ACKed trap replay at item index %s (%s from %s); ROM counter=%s unreliable/out-of-range",
                         self._delivered_item_index,
                         self._item_name(ctx, item_id, player_id),
                         self._player_name(ctx, player_id),
@@ -3200,12 +3177,22 @@ class KirbyAmClient(BizHawkClient):
                 else:
                     self._log_verbose(
                         "info",
-                        "KirbyAM: replaying session-ACKed trap at item index %s (%s from %s) because ROM counter=%s indicates slot is not applied",
+                        "KirbyAM: skipping session-ACKed trap replay at item index %s (%s from %s); ROM counter=%s",
                         self._delivered_item_index,
                         self._item_name(ctx, item_id, player_id),
                         self._player_name(ctx, player_id),
                         rom_received_count,
                     )
+
+                self._delivered_item_index += 1
+                self._delivery_pending = False
+                self._delivery_pending_time = None
+                self._delivery_pending_item_index = None
+                self._delivery_timeout_streak = 0
+                self._delivery_retry_not_before = 0.0
+                self._delivery_payload_stall_warned = False
+                await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
+                continue
 
             if self._delivery_counter_ahead_fallback_active and not self._delivery_counter_ahead_resume_logged:
                 self._log_verbose(

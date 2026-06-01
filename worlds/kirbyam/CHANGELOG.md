@@ -19,7 +19,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### Bug Fixes
 
-- None.
+- Fixed a trap redelivery regression where session-ACKed traps could replay after reload/reconnect mailbox rewinds; acknowledged traps are now always treated as one-time deliveries again (Issue #753, regression after v0.2.2 behavior).
 
 ### Internal Changes
 
