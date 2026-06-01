@@ -28,6 +28,8 @@ jobs:
       release_tag: ${{ steps.meta.outputs.release_tag }}
       release_enabled: ${{ steps.meta.outputs.release_enabled }}
       version: ${{ steps.meta.outputs.version }}
+      manifest_version: ${{ steps.meta.outputs.manifest_version }}
+      prerelease: ${{ steps.meta.outputs.prerelease }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -101,22 +103,28 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ needs.build-apworld.outputs.release_tag }}
           RELEASE_NAME: ${{ needs.build-apworld.outputs.release_name }}
+          RELEASE_PRERELEASE: ${{ needs.build-apworld.outputs.prerelease }}
         run: |
           if gh release view "${RELEASE_TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
             echo "Release ${RELEASE_TAG} already exists; preserving existing body/state."
           else
-            gh api \
-              -X POST \
-              "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
-              -f tag_name="${RELEASE_TAG}" \
-              -f target_commitish="${GITHUB_SHA}" \
-              --jq '.body' > release_notes.md
+            release_notes_path="release_notes.md"
+            python .github/scripts/kirbyam_release_metadata.py \
+              --github-ref "refs/tags/${RELEASE_TAG}" \
+              --changelog "worlds/kirbyam/CHANGELOG.md" \
+              --release-notes "${release_notes_path}"
+
+            prerelease_flag=()
+            if [ "${RELEASE_PRERELEASE}" = "true" ]; then
+              prerelease_flag=(--prerelease)
+            fi
 
             gh release create "${RELEASE_TAG}" \
               --repo "${GITHUB_REPOSITORY}" \
               --title "${RELEASE_NAME}" \
               --draft \
-              --notes-file release_notes.md
+              "${prerelease_flag[@]}" \
+              --notes-file "${release_notes_path}"
           fi
 
       - name: Prune non-APWorld assets from tagged release
@@ -176,23 +184,24 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ needs.build-apworld.outputs.release_tag }}
           RELEASE_VERSION: ${{ needs.build-apworld.outputs.version }}
+          RELEASE_MANIFEST_VERSION: ${{ needs.build-apworld.outputs.manifest_version }}
         run: |
           python .github/scripts/kirbyam_release_metadata.py \
             --github-ref "refs/tags/${RELEASE_TAG}" \
             --world-manifest "worlds/kirbyam/archipelago.json"
 
           if git diff --quiet -- worlds/kirbyam/archipelago.json; then
-            echo "worlds/kirbyam/archipelago.json already has world_version ${RELEASE_VERSION}; no sync commit needed"
+            echo "worlds/kirbyam/archipelago.json already has world_version ${RELEASE_MANIFEST_VERSION}; no sync commit needed"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          sync_branch="automation/kirbyam-world-version-${RELEASE_VERSION}"
+          sync_branch="automation/kirbyam-world-version-${RELEASE_MANIFEST_VERSION}"
 
           git checkout -B "${sync_branch}"
           git add worlds/kirbyam/archipelago.json
-          git commit -m "KirbyAM: sync world_version to ${RELEASE_VERSION}"
+          git commit -m "KirbyAM: sync world_version to ${RELEASE_MANIFEST_VERSION}"
           git push --force-with-lease origin "${sync_branch}:${sync_branch}"
 
           existing_pr_number="$(gh pr list \
@@ -210,6 +219,6 @@ jobs:
               --repo "${GITHUB_REPOSITORY}" \
               --base main \
               --head "${sync_branch}" \
-              --title "KirbyAM: sync world_version to ${RELEASE_VERSION}" \
+              --title "KirbyAM: sync world_version to ${RELEASE_MANIFEST_VERSION}" \
               --body "Automated sync after tag ${RELEASE_TAG} to keep worlds/kirbyam/archipelago.json world_version current."
           fi

@@ -33,7 +33,7 @@ jobs:
         uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
         with:
           draft: true  # don't publish right away, especially since windows build is added by hand
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, '-rc') }}
           name: Archipelago ${{ env.RELEASE_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -101,7 +101,7 @@ jobs:
         uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
         with:
           draft: true  # see above
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, '-rc') }}
           name: Archipelago ${{ env.RELEASE_VERSION }}
           files: |
             setups/*
@@ -169,7 +169,7 @@ jobs:
         uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
         with:
           draft: true  # see above
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, '-rc') }}
           name: Archipelago ${{ env.RELEASE_VERSION }}
           files: |
             dist/*

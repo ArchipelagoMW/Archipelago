@@ -10,7 +10,9 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-TAG_PATTERN = re.compile(r"^kirbyam-v(?P<version>(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*))$")
+TAG_PATTERN = re.compile(
+    r"^kirbyam-v(?P<version>(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-rc[1-9]\d*)?)$"
+)
 
 
 @dataclass(frozen=True)
@@ -19,7 +21,9 @@ class ReleaseMetadata:
     release_name: str
     release_tag: str
     version: str
+    manifest_version: str
     release_enabled: bool
+    prerelease: bool
 
 
 def _tag_name_from_ref(github_ref: str) -> str:
@@ -35,19 +39,24 @@ def build_release_metadata(github_ref: str) -> ReleaseMetadata:
             release_name="",
             release_tag="",
             version="",
+            manifest_version="",
             release_enabled=False,
+            prerelease=False,
         )
 
     ref_name = _tag_name_from_ref(github_ref)
     match = TAG_PATTERN.fullmatch(ref_name)
     if match:
         version = match.group("version")
+        manifest_version = version.split("-rc", 1)[0]
         return ReleaseMetadata(
             apworld_name="kirbyam.apworld",
             release_name=f"KirbyAM APWorld v{version}",
             release_tag=ref_name,
             version=version,
+            manifest_version=manifest_version,
             release_enabled=True,
+            prerelease="-rc" in version,
         )
 
     if ref_name.startswith("kirbyam-v"):
@@ -60,7 +69,9 @@ def build_release_metadata(github_ref: str) -> ReleaseMetadata:
         release_name="",
         release_tag="",
         version="",
+        manifest_version="",
         release_enabled=False,
+        prerelease=False,
     )
 
 
@@ -79,6 +90,33 @@ def check_changelog_has_version(changelog_path: Path, version: str) -> None:
         f"CHANGELOG.md does not contain a section for v{version}. "
         f"Add a '## v{version}' heading before tagging the release."
     )
+
+
+def extract_changelog_section(changelog_path: Path, version: str) -> str:
+    """Extract the markdown section for a single changelog version."""
+    text = changelog_path.read_text(encoding="utf-8")
+    heading = f"## v{version}"
+    lines = text.splitlines()
+    start_index = None
+
+    for index, line in enumerate(lines):
+        if line.strip() == heading:
+            start_index = index
+            break
+
+    if start_index is None:
+        raise ValueError(
+            f"CHANGELOG.md does not contain a section for v{version}. "
+            f"Add a '## v{version}' heading before tagging the release."
+        )
+
+    end_index = len(lines)
+    for index in range(start_index + 1, len(lines)):
+        if lines[index].startswith("## "):
+            end_index = index
+            break
+
+    return "\n".join(lines[start_index:end_index]).rstrip() + "\n"
 
 
 def inject_world_version(manifest_path: Path, world_version: str) -> bool:
@@ -105,7 +143,9 @@ def write_github_output(metadata: ReleaseMetadata, output_path: Path) -> None:
         f"release_name={metadata.release_name}",
         f"release_tag={metadata.release_tag}",
         f"version={metadata.version}",
+        f"manifest_version={metadata.manifest_version}",
         f"release_enabled={'true' if metadata.release_enabled else 'false'}",
+        f"prerelease={'true' if metadata.prerelease else 'false'}",
     ]
     with output_path.open("a", encoding="utf-8", newline="\n") as output_file:
         for line in lines:
@@ -130,6 +170,11 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Optional path to CHANGELOG.md; on release builds, verified to contain a section for the release version.",
     )
+    parser.add_argument(
+        "--release-notes",
+        type=Path,
+        help="Optional path to write the markdown release notes extracted from CHANGELOG.md.",
+    )
     return parser.parse_args()
 
 
@@ -141,15 +186,22 @@ def main() -> int:
         check_changelog_has_version(args.changelog, metadata.version)
         print(f"CHANGELOG.md contains section for v{metadata.version}")
 
+    if args.release_notes and args.changelog and metadata.release_enabled:
+        args.release_notes.write_text(
+            extract_changelog_section(args.changelog, metadata.version),
+            encoding="utf-8",
+            newline="\n",
+        )
+
     if args.world_manifest and metadata.release_enabled:
-        updated = inject_world_version(args.world_manifest, metadata.version)
+        updated = inject_world_version(args.world_manifest, metadata.manifest_version)
         if updated:
             print(
-                f"Injected world_version={metadata.version} into {args.world_manifest}",
+                f"Injected world_version={metadata.manifest_version} into {args.world_manifest}",
             )
         else:
             print(
-                f"world_version already set to {metadata.version} in {args.world_manifest}",
+                f"world_version already set to {metadata.manifest_version} in {args.world_manifest}",
             )
 
     if args.github_output:

@@ -22,9 +22,23 @@ def test_build_release_metadata_for_valid_tag_ref() -> None:
 
     assert metadata.release_enabled is True
     assert metadata.version == "0.0.1"
+    assert metadata.manifest_version == "0.0.1"
     assert metadata.release_tag == "kirbyam-v0.0.1"
     assert metadata.release_name == "KirbyAM APWorld v0.0.1"
     assert metadata.apworld_name == "kirbyam.apworld"
+    assert metadata.prerelease is False
+
+
+def test_build_release_metadata_for_rc_tag_ref() -> None:
+    metadata = MODULE.build_release_metadata("refs/tags/kirbyam-v0.2.0-rc5")
+
+    assert metadata.release_enabled is True
+    assert metadata.version == "0.2.0-rc5"
+    assert metadata.manifest_version == "0.2.0"
+    assert metadata.release_tag == "kirbyam-v0.2.0-rc5"
+    assert metadata.release_name == "KirbyAM APWorld v0.2.0-rc5"
+    assert metadata.apworld_name == "kirbyam.apworld"
+    assert metadata.prerelease is True
 
 
 def test_build_release_metadata_for_branch_ref_disables_release() -> None:
@@ -32,9 +46,11 @@ def test_build_release_metadata_for_branch_ref_disables_release() -> None:
 
     assert metadata.release_enabled is False
     assert metadata.version == ""
+    assert metadata.manifest_version == ""
     assert metadata.release_tag == ""
     assert metadata.release_name == ""
     assert metadata.apworld_name == "kirbyam.apworld"
+    assert metadata.prerelease is False
 
 
 def test_build_release_metadata_for_branch_ref_matching_tag_pattern_disables_release() -> None:
@@ -42,14 +58,28 @@ def test_build_release_metadata_for_branch_ref_matching_tag_pattern_disables_rel
 
     assert metadata.release_enabled is False
     assert metadata.version == ""
+    assert metadata.manifest_version == ""
     assert metadata.release_tag == ""
     assert metadata.release_name == ""
     assert metadata.apworld_name == "kirbyam.apworld"
+    assert metadata.prerelease is False
 
 
 def test_build_release_metadata_rejects_malformed_release_tag() -> None:
     with pytest.raises(ValueError, match="Malformed KirbyAM release tag"):
         MODULE.build_release_metadata("refs/tags/kirbyam-v0.0")
+
+
+def test_write_github_output_includes_prerelease(tmp_path: Path) -> None:
+    output_path = tmp_path / "github_output.txt"
+    metadata = MODULE.build_release_metadata("refs/tags/kirbyam-v0.2.0-rc5")
+
+    MODULE.write_github_output(metadata, output_path)
+
+    output_text = output_path.read_text(encoding="utf-8")
+
+    assert "prerelease=true" in output_text
+    assert "manifest_version=0.2.0" in output_text
 
 
 def test_inject_world_version_updates_manifest(tmp_path: Path) -> None:
@@ -110,6 +140,39 @@ def test_main_injects_world_version_for_release_tag(tmp_path: Path, monkeypatch:
     assert manifest["world_version"] == "0.0.2"
     assert "version=0.0.2" in output_text
     assert "release_enabled=true" in output_text
+
+
+def test_main_injects_manifest_version_for_rc_tag(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    manifest_path = tmp_path / "archipelago.json"
+    manifest_path.write_text(
+        json.dumps({"game": "Kirby & The Amazing Mirror", "world_version": "0.1.2"}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    output_path = tmp_path / "github_output.txt"
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "kirbyam_release_metadata.py",
+            "--github-ref",
+            "refs/tags/kirbyam-v0.2.0-rc5",
+            "--github-output",
+            str(output_path),
+            "--world-manifest",
+            str(manifest_path),
+        ],
+    )
+
+    assert MODULE.main() == 0
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    output_text = output_path.read_text(encoding="utf-8")
+
+    assert manifest["world_version"] == "0.2.0"
+    assert "version=0.2.0-rc5" in output_text
+    assert "manifest_version=0.2.0" in output_text
+    assert "prerelease=true" in output_text
 
 
 def test_main_does_not_inject_world_version_for_branch_ref(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -260,6 +323,46 @@ def test_main_checks_changelog_on_release_tag(tmp_path: Path, monkeypatch: pytes
     # version was injected and changelog passed without raising
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["world_version"] == "0.1.1"
+
+
+def test_main_writes_release_notes_for_rc_tag(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    manifest_path = tmp_path / "archipelago.json"
+    manifest_path.write_text(
+        json.dumps({"game": "Kirby & The Amazing Mirror", "world_version": "0.1.2"}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    changelog_path = tmp_path / "CHANGELOG.md"
+    changelog_path.write_text(
+        (
+            "# KirbyAM APWorld Changelog\n\n## v0.2.0-rc5\n\n### New Features\n\n"
+            "- RC notes.\n\n## v0.1.2\n\n### New Features\n\n- Older notes.\n"
+        ),
+        encoding="utf-8",
+    )
+    notes_path = tmp_path / "release_notes.md"
+    output_path = tmp_path / "github_output.txt"
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "kirbyam_release_metadata.py",
+            "--github-ref",
+            "refs/tags/kirbyam-v0.2.0-rc5",
+            "--github-output",
+            str(output_path),
+            "--world-manifest",
+            str(manifest_path),
+            "--changelog",
+            str(changelog_path),
+            "--release-notes",
+            str(notes_path),
+        ],
+    )
+
+    assert MODULE.main() == 0
+
+    assert notes_path.read_text(encoding="utf-8") == "## v0.2.0-rc5\n\n### New Features\n\n- RC notes.\n"
 
 
 def test_main_fails_when_changelog_missing_release_version(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
