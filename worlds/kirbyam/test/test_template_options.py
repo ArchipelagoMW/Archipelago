@@ -47,6 +47,7 @@ def test_kirbyam_template_surface_options_visibility() -> None:
             assert "completely_random" not in ability_weights
             assert "no_extra_lives" in game_block
             assert "ability_randomization_no_ability_weight" in game_block
+            assert "ability_randomization_statues" in game_block
             assert "starting_kirby_color" in game_block
             assert "pink" in color_weights
             assert "random_color" in color_weights

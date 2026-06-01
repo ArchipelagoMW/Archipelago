@@ -5,7 +5,10 @@ Issue #111 defines three enemy randomization modes:
 - shuffled (enemy type deterministic)
 - completely random (deterministic per source/event key)
 
-Enemy statues are intentionally out of scope (issue #209).
+Ability statue/stand randomization is intentionally out of scope for this
+module (issue #209); this module covers enemy-granted copy abilities only.
+The shared `ability_randomization_minny` policy flag is emitted here and can be
+consumed by statue randomization logic when that feature is enabled.
 """
 
 from __future__ import annotations
@@ -56,6 +59,10 @@ def build_enemy_copy_ability_policy(
     For shuffled mode, enemy types can be mapped with `ability_for_enemy_type`.
     For completely random mode, source/event keys can be mapped with
     `ability_for_enemy_grant_event`.
+
+    Note: `ability_randomization_minny` is kept in the shared policy payload so
+    both enemy and statue randomization can honor one Minny include/exclude
+    source of truth.
     """
     ordered = _normalize_whitelist(whitelist)
     normalized_no_ability_weight = _normalize_no_ability_weight(no_ability_weight)

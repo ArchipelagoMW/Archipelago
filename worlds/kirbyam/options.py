@@ -43,14 +43,14 @@ class RandomizeShards(Choice):
 
 class AbilityRandomizationMode(Choice):
     """
-    Controls randomization of enemy-granted copy abilities. Does not affect ability statues.
+    Controls randomization of enemy-granted copy abilities.
+    If statue randomization is enabled, statues inherit this same mode.
 
     - Off: Enemy copy abilities stay at native defaults. Default.
-    - Shuffled: Experimental. Enemy types are remapped deterministically so
-        all enemies of the same type grant the same ability. Bugs are expected.
-    - Completely Random: Experimental. Eligible enemy ability sources are remapped
-        independently (deterministic per source entry). Hidden from the
-        generated player template for the first public build. Bugs are expected.
+    - Shuffled: Enemy types are remapped deterministically so all enemies of the
+        same type grant the same ability.
+    - Completely Random: Eligible enemy ability grants are remapped independently
+        (deterministic per grant event).
     """
     display_name = "Ability Randomization Mode"
     default = 0
@@ -87,9 +87,10 @@ class AbilityRandomizationMinibosses(Toggle):
 
 class AbilityRandomizationMinny(Toggle):
     """
-    Include Minny in enemy copy-ability randomization.
-      Only applies when Ability Randomization Mode is not Off.
-      Off by Default.
+    Include Minny in copy-ability randomization.
+            Only applies when Ability Randomization Mode is not Off.
+            If ability statue randomization is enabled, statues also respect this toggle.
+            Off by Default.
     """
     display_name = "Ability Randomization: Minny"
     default = 0
@@ -100,6 +101,8 @@ class AbilityRandomizationPassiveEnemies(Toggle):
     When enabled, enemies that normally do not grant a copy ability can receive a
     randomized ability.
       Only applies when Ability Randomization Mode is not Off.
+      Enemy sources only. Ability statues are not affected by this toggle.
+
       On by Default, but ability_randomization_mode is Off by Default.
     """
     display_name = "Ability Randomization: Passive Enemies"
@@ -119,6 +122,7 @@ class AbilityRandomizationNoAbilityWeight(Range):
 
     This only affects enemies already included by the ability randomization mode and
     the boss/miniboss/passive-enemy toggles.
+    Ability statues are not affected; randomized statues always grant an ability.
 
         You can set a custom percentage by adding a custom number as the subkey,
         then supply the "percentage" chance for generation to roll that value.
@@ -139,6 +143,26 @@ class AbilityRandomizationNoAbilityWeight(Range):
     # 55% is rounded from 827 / 1510 = 54.77% vanilla no-ability regular-enemy placements
     # in the USA ROM across the current randomized-enemy dataset.
     default = 55
+
+
+class AbilityRandomizationStatues(Toggle):
+    """
+    Include ability statues (sometimes called ability trophies or ability stands)
+    in copy-ability randomization.
+
+    This toggle only controls whether statues participate at all.
+    Only applies when Ability Randomization Mode is not Off.
+    Participating statues use the currently selected Ability Randomization Mode
+    (Off, Shuffled, or Completely Random).
+    Randomized statues always grant an ability and do not use
+    `ability_randomization_no_ability_weight` or
+    `ability_randomization_passive_enemies`.
+    Randomized statues do respect `ability_randomization_minny`.
+
+    Off by default.
+    """
+    display_name = "Ability Randomization: Statues"
+    default = 0
 
 
 class NoExtraLives(Toggle):
@@ -298,6 +322,8 @@ class KirbyAmOptions(PerGameCommonOptions):
 
     ability_randomization_no_ability_weight: AbilityRandomizationNoAbilityWeight
 
+    ability_randomization_statues: AbilityRandomizationStatues
+
     room_sanity: RoomSanity
 
     unmapped_minor_chest_report_locations: UnmappedMinorChestReportLocations
@@ -327,6 +353,7 @@ OPTION_GROUPS = [
         AbilityRandomizationMinny,
         AbilityRandomizationPassiveEnemies,
         AbilityRandomizationNoAbilityWeight,
+        AbilityRandomizationStatues,
     ]),
     OptionGroup("Cosmetics", [
         StartingKirbyColor,

@@ -5,6 +5,7 @@
   "ability_randomization_mode": 1,
   "ability_randomization_no_ability_weight": 55,
   "ability_randomization_passive_enemies": false,
+  "ability_randomization_statues": false,
   "death_link": true,
   "enable_traps": false,
   "enemy_copy_ability_policy": {

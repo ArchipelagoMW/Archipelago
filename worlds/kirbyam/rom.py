@@ -8,7 +8,6 @@ Issue #338 adds deterministic enemy copy-ability remap token writes for
 non-off enemy randomization modes.
 """
 
-import os
 from typing import TYPE_CHECKING
 
 from settings import get_settings
@@ -24,8 +23,9 @@ if TYPE_CHECKING:
 
 class KirbyAmProcedurePatch(APProcedurePatch, APTokenMixin):
     game = "Kirby & The Amazing Mirror"
-    hash = "DF5EFE075B35859529EBF82A4D824458" # md5 hash of base USA rom
-        # Calculated with PowerShell Command: Get-FileHash "D:\...\Kirby & The Amazing Mirror (USA).gba" -Algorithm MD5
+    # Calculated with PowerShell Command:
+    # Get-FileHash "D:\...\Kirby & The Amazing Mirror (USA).gba" -Algorithm MD5
+    hash = "DF5EFE075B35859529EBF82A4D824458"  # md5 hash of base USA rom
     patch_file_ending = ".apkirbyam"
     result_file_ending = ".gba"
 
@@ -58,7 +58,11 @@ def write_tokens(world: "KirbyAmWorld", patch: KirbyAmProcedurePatch) -> None:
         )
 
     if isinstance(policy, dict):
-        ability_writes = build_enemy_copy_runtime_patch_writes(policy)
+        include_statues = bool(world.options.ability_randomization_statues.value)
+        ability_writes = build_enemy_copy_runtime_patch_writes(
+            policy,
+            include_statues=include_statues,
+        )
         for rom_offset, ability_id in sorted(ability_writes.items()):
             patch.write_token(APTokenTypes.WRITE, rom_offset, bytes([ability_id]))
 

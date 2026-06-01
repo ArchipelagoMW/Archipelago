@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import random
+from typing import Any, cast
 
 import worlds.kirbyam.enemy_ability_runtime_patch as runtime_patch_module
 
@@ -233,7 +234,7 @@ def test_minny_toggle_excludes_minny_runtime_writes_only() -> None:
     assert 0x3518BE in writes
 
 
-def test_completely_random_mapping_is_stable_when_skipped_zero_id_sources_are_added(monkeypatch) -> None:
+def test_completely_random_mapping_is_stable_when_skipped_zero_id_sources_are_added(monkeypatch: Any) -> None:
     baseline_policy = build_enemy_copy_ability_policy(
         random.Random(20260324),
         AbilityRandomizationMode.option_completely_random,
@@ -251,10 +252,14 @@ def test_completely_random_mapping_is_stable_when_skipped_zero_id_sources_are_ad
         kind="enemy",
         can_be_swallowed=True,
     )
+    existing_sources = cast(
+        tuple[AbilitySource, ...],
+        getattr(runtime_patch_module, "ABILITY_SOURCES"),
+    )
     monkeypatch.setattr(
         runtime_patch_module,
         "ABILITY_SOURCES",
-        (injected_source,) + runtime_patch_module.ABILITY_SOURCES,
+        (injected_source,) + existing_sources,
     )
 
     shifted_policy = build_enemy_copy_ability_policy(
@@ -322,7 +327,7 @@ def test_unswallowable_enemy_sources_are_excluded_from_runtime_pool() -> None:
     assert 0x3516AE not in writes  # SQUISHY
 
 
-def test_unswallowable_enemy_exclusion_is_logged(caplog) -> None:
+def test_unswallowable_enemy_exclusion_is_logged(caplog: Any) -> None:
     policy = build_enemy_copy_ability_policy(
         random.Random(20260404),
         AbilityRandomizationMode.option_completely_random,
@@ -344,7 +349,7 @@ def test_unswallowable_enemy_exclusion_is_logged(caplog) -> None:
     )
 
 
-def test_unswallowable_enemy_exclusion_uses_source_metadata(monkeypatch) -> None:
+def test_unswallowable_enemy_exclusion_uses_source_metadata(monkeypatch: Any) -> None:
     policy = build_enemy_copy_ability_policy(
         random.Random(20260404),
         AbilityRandomizationMode.option_shuffled,
@@ -363,10 +368,14 @@ def test_unswallowable_enemy_exclusion_uses_source_metadata(monkeypatch) -> None
         can_be_swallowed=False,
     )
 
+    existing_sources = cast(
+        tuple[AbilitySource, ...],
+        getattr(runtime_patch_module, "ABILITY_SOURCES"),
+    )
     monkeypatch.setattr(
         runtime_patch_module,
         "ABILITY_SOURCES",
-        (injected_source,) + runtime_patch_module.ABILITY_SOURCES,
+        (injected_source,) + existing_sources,
     )
 
     writes = build_enemy_copy_runtime_patch_writes(policy)
@@ -440,3 +449,69 @@ def test_shuffled_spoiler_rows_cover_all_allowed_abilities_when_possible() -> No
     assigned_abilities = {ability_name for _, _, ability_name in rows}
 
     assert set(VALID_ENEMY_COPY_ABILITIES).issubset(assigned_abilities)
+
+
+def test_statue_toggle_off_emits_no_statue_runtime_writes() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260412),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_minny=True,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy, include_statues=False)
+
+    assert 0x3538FC not in writes
+    assert 0x35390E not in writes
+
+
+def test_statue_toggle_on_emits_statue_runtime_writes() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260412),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_minny=True,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy, include_statues=True)
+
+    # First and last known entries from the four statue lookup tables.
+    assert 0x3538FC in writes
+    assert 0x35390E in writes
+
+
+def test_statues_always_grant_ability_even_with_full_no_ability_weight() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260412),
+        AbilityRandomizationMode.option_completely_random,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_minny=True,
+        include_passive_enemies=False,
+        no_ability_weight=100,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy, include_statues=True)
+
+    statue_values = [writes[address] for address in range(0x3538FC, 0x35390F)]
+    assert all(value != ABILITY_NAME_TO_ID["Normal"] for value in statue_values)
+
+
+def test_statues_respect_minny_toggle() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260412),
+        AbilityRandomizationMode.option_completely_random,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_minny=False,
+        include_passive_enemies=False,
+        no_ability_weight=0,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy, include_statues=True)
+
+    mini_id = ABILITY_NAME_TO_ID["Mini"]
+    statue_values = [writes[address] for address in range(0x3538FC, 0x35390F)]
+    assert all(value != mini_id for value in statue_values)

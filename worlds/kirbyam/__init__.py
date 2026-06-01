@@ -304,6 +304,7 @@ class KirbyAmWorld(World):
             randomize_miniboss = bool(self.options.ability_randomization_minibosses.value)
             randomize_minny = bool(self.options.ability_randomization_minny.value)
             randomize_non_ability = bool(self.options.ability_randomization_passive_enemies.value)
+            randomize_statues = bool(self.options.ability_randomization_statues.value)
             no_ability_weight = int(self.options.ability_randomization_no_ability_weight.value)
             self._enemy_copy_ability_policy = build_enemy_copy_ability_policy(
                 self.random,
@@ -316,20 +317,22 @@ class KirbyAmWorld(World):
             )
             if mode == AbilityRandomizationMode.option_off:
                 logger.info(
-                    "[P%s] Enemy copy-ability randomization: off (%s whitelist entries, minny=%s, no_ability_weight=%s)",
+                    "[P%s] Enemy copy-ability randomization: off (%s whitelist entries, minny=%s, statues=%s, no_ability_weight=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
                     randomize_minny,
+                    randomize_statues,
                     no_ability_weight,
                 )
             elif mode == AbilityRandomizationMode.option_shuffled:
                 logger.info(
                     "[P%s] Enemy copy-ability randomization: shuffled "
-                    "(%s whitelist entries, minny=%s, passive_enemies=%s, no_ability_weight=%s)",
+                    "(%s whitelist entries, minny=%s, passive_enemies=%s, statues=%s, no_ability_weight=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
                     randomize_minny,
                     randomize_non_ability,
+                    randomize_statues,
                     no_ability_weight,
                 )
                 spoiler_rows = build_enemy_copy_spoiler_rows(self._enemy_copy_ability_policy)
@@ -349,17 +352,30 @@ class KirbyAmWorld(World):
             else:
                 logger.info(
                     "[P%s] Enemy copy-ability randomization: completely_random "
-                    "(%s whitelist entries, minny=%s, passive_enemies=%s, no_ability_weight=%s)",
+                    "(%s whitelist entries, minny=%s, passive_enemies=%s, statues=%s, no_ability_weight=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
                     randomize_minny,
                     randomize_non_ability,
+                    randomize_statues,
                     no_ability_weight,
                 )
                 logger.debug(
                     "[P%s] Enemy copy-ability policy: %s",
                     self.player,
                     self._enemy_copy_ability_policy,
+                )
+
+            if randomize_statues and mode != AbilityRandomizationMode.option_off:
+                logger.info(
+                    "[P%s] Statue copy-ability randomization enabled (inherits mode=%s; always grants ability; ignores passive/no-ability enemy toggles; respects Minny toggle)",
+                    self.player,
+                    self.options.ability_randomization_mode.current_key,
+                )
+            elif randomize_statues:
+                logger.info(
+                    "[P%s] Statue copy-ability toggle enabled, but Ability Randomization Mode is off so statue randomization is inactive.",
+                    self.player,
                 )
 
             if self._start_with_all_maps_enabled():
@@ -796,6 +812,7 @@ class KirbyAmWorld(World):
             "ability_randomization_minny",
             "ability_randomization_passive_enemies",
             "ability_randomization_no_ability_weight",
+            "ability_randomization_statues",
             "room_sanity",
             toggles_as_bools=True,
         )

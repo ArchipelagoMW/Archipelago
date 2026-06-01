@@ -51,6 +51,7 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
         "ability_randomization_minny": False,
         "ability_randomization_passive_enemies": False,
         "ability_randomization_no_ability_weight": 55,
+        "ability_randomization_statues": False,
         "room_sanity": False,
     }
 
@@ -66,6 +67,7 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
         "ability_randomization_minny": False,
         "ability_randomization_passive_enemies": False,
         "ability_randomization_no_ability_weight": 55,
+        "ability_randomization_statues": False,
     }
 
     return KirbyAmWorld.fill_slot_data(world)
@@ -85,6 +87,7 @@ def test_enemy_randomization_contract_fields_present_with_expected_shapes() -> N
     slot_data = _emit_slot_data_for_contract_test()
 
     assert isinstance(slot_data["ability_randomization_mode"], int)
+    assert isinstance(slot_data["ability_randomization_statues"], bool)
     assert isinstance(slot_data["enemy_copy_ability_whitelist"], list)
     assert slot_data["enemy_copy_ability_whitelist"]
     assert isinstance(slot_data["enemy_copy_ability_policy"], dict)

@@ -60,6 +60,7 @@ def _build_representative_slot_data() -> dict[str, object]:
         "ability_randomization_minny": False,
         "ability_randomization_passive_enemies": False,
         "ability_randomization_no_ability_weight": 55,
+        "ability_randomization_statues": False,
         "room_sanity": False,
     }
 

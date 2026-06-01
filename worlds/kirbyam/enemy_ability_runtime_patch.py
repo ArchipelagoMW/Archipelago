@@ -1,15 +1,19 @@
-"""Runtime ROM patch generation for enemy copy-ability randomization (Issue #338).
+"""Runtime ROM patch generation for copy-ability randomization.
 
 This module converts slot-data policy into deterministic byte writes against
-known enemy/object ability table addresses in the Kirby AM ROM.
+known enemy/object/statue ability table addresses in the Kirby AM ROM.
 
-Address evidence source:
+Address evidence sources:
 - kamrandomizer enemy/object ability tables (kamrandomizer.py)
+- ability statue lookup tables in katam/src/ability_objects.c
 
 Notes:
 - We patch entries that natively grant a non-zero ability, plus zero-id
     sources when `ability_randomization_passive_enemies` is enabled.
 - Wait remains excluded via the existing policy whitelist.
+- Statue writes are gated by the `ability_randomization_statues` option, inherit
+    selected mode, always grant an ability, ignore passive/no-ability toggles,
+    and respect the Minny toggle.
 """
 
 from __future__ import annotations
@@ -34,6 +38,21 @@ _MISSING_RUNTIME_ABILITY_NAMES = set(VALID_ENEMY_COPY_ABILITIES) - set(ABILITY_N
 logger = logging.getLogger(__name__)
 
 
+# Ability statue tables from katam/src/ability_objects.c:
+# - gUnk_083538FC at ROM offset 0x3538FC (8 entries)
+# - gUnk_08353904 at ROM offset 0x353904 (7 entries)
+# - gUnk_0835390B at ROM offset 0x35390B (1 entry)
+# - gUnk_0835390C at ROM offset 0x35390C (3 entries)
+_STATUE_TABLES: tuple[tuple[int, tuple[str, ...]], ...] = (
+    (0x3538FC, ("Beam", "Burning", "Laser", "Fire", "Stone", "Fighter", "Bomb", "Tornado")),
+    (0x353904, ("Wheel", "Ice", "Spark", "Missile", "Smash", "Throw", "Hammer")),
+    (0x35390B, ("Parasol",)),
+    (0x35390C, ("Sword", "Cutter", "Cupid")),
+)
+
+_MINI_ABILITY_NAME = "Mini"
+
+
 def _validate_runtime_ability_ids() -> None:
     if _MISSING_RUNTIME_ABILITY_NAMES:
         raise ValueError(
@@ -46,6 +65,42 @@ def _ability_name_to_id(name: str) -> int:
     if name not in ABILITY_NAME_TO_ID:
         raise ValueError(f"unsupported runtime enemy ability name in policy: {name}")
     return ABILITY_NAME_TO_ID[name]
+
+
+def _normalized_statue_pool(policy: dict[str, Any]) -> list[str]:
+    # Statue randomization always grants an ability and uses the current mode.
+    pool = [str(name) for name in policy.get("allowed_abilities", [])]
+    if not bool(policy.get("ability_randomization_minny", True)):
+        pool = [name for name in pool if name != _MINI_ABILITY_NAME]
+    if not pool:
+        raise ValueError("statue ability pool cannot be empty after Minny filtering")
+    return pool
+
+
+def _build_statue_assignments(policy: dict[str, Any], mode: int) -> dict[str, str]:
+    pool = _normalized_statue_pool(policy)
+    normalized_policy = dict(policy)
+    normalized_policy["allowed_abilities"] = pool
+    normalized_policy["ability_randomization_no_ability_weight"] = 0
+
+    slot_keys = [
+        f"STATUE:{base_address + index:06X}"
+        for base_address, abilities in _STATUE_TABLES
+        for index in range(len(abilities))
+    ]
+
+    if mode == AbilityRandomizationMode.option_shuffled:
+        return build_shuffled_enemy_type_assignments(normalized_policy, slot_keys)
+    if mode == AbilityRandomizationMode.option_completely_random:
+        return {
+            slot_key: ability_for_enemy_grant_event(
+                normalized_policy,
+                f"statue:{slot_key}",
+                slot_key,
+            )
+            for slot_key in slot_keys
+        }
+    raise ValueError(f"unsupported enemy copy-ability randomization mode: {mode}")
 
 
 def _is_source_enabled(source: AbilitySource, policy: dict[str, Any]) -> bool:
@@ -113,7 +168,10 @@ def build_enemy_copy_spoiler_rows(policy: dict[str, Any]) -> list[tuple[str, str
     return rows
 
 
-def build_enemy_copy_runtime_patch_writes(policy: dict[str, Any]) -> dict[int, int]:
+def build_enemy_copy_runtime_patch_writes(
+    policy: dict[str, Any],
+    include_statues: bool = False,
+) -> dict[int, int]:
     """Return deterministic ROM writes for enemy copy-ability randomization.
 
     Returns a dict of ROM file offsets -> byte value (ability id).
@@ -166,6 +224,15 @@ def build_enemy_copy_runtime_patch_writes(policy: dict[str, Any]) -> dict[int, i
                     f"conflicting runtime patch writes for address 0x{address:06X}: {existing} vs {ability_id}"
                 )
             writes[address] = ability_id
+
+    if include_statues:
+        statue_assignments = _build_statue_assignments(policy, mode)
+        for base_address, default_abilities in _STATUE_TABLES:
+            for index, _ in enumerate(default_abilities):
+                slot_key = f"STATUE:{base_address + index:06X}"
+                ability_name = statue_assignments[slot_key]
+                ability_id = _ability_name_to_id(ability_name)
+                writes[base_address + index] = ability_id
 
     if excluded_unswallowable_sources:
         logger.info(

@@ -223,9 +223,10 @@ Server → Client: ConnectionRefused | Connected
 - `ability_randomization_mode` (int): enemy copy-ability mode (`0=off`, `1=shuffled`, `2=completely_random`).
 - `ability_randomization_boss_spawns` (bool): include/exclude ability-granting boss-spawned objects.
 - `ability_randomization_minibosses` (bool): include/exclude mini-boss ability grants.
-- `ability_randomization_minny` (bool): include/exclude Minny from enemy copy-ability randomization.
+- `ability_randomization_minny` (bool): include/exclude Minny from copy-ability randomization. Enemy and statue randomization both respect this toggle when enabled.
 - `ability_randomization_passive_enemies` (bool): when true, enemies that natively grant no ability participate in copy-ability randomization. Default: `true`.
 - `ability_randomization_no_ability_weight` (int): percentage chance from `0` to `100` that an included randomized enemy grant resolves to no ability instead of a copy ability. Default: `55`.
+- `ability_randomization_statues` (bool): include/exclude ability statues (sometimes called ability trophies or ability stands) from copy-ability randomization. This option controls inclusion only; included statues inherit `ability_randomization_mode` (`off`, `shuffled`, `completely_random`) and always grant an ability (statues ignore `ability_randomization_no_ability_weight` and `ability_randomization_passive_enemies`, but do respect `ability_randomization_minny`).
 - `room_sanity` (bool): enables/disables room-visit locations (`Room X-<room code>`, 263 checks).
 - `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Wait`).
 - `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.
@@ -237,7 +238,7 @@ Server → Client: ConnectionRefused | Connected
 
 Compatibility note (Issue #398 option-key reorganization):
 - Legacy keys `enemy_copy_ability_randomization`, `randomize_boss_spawned_ability_grants`, and `randomize_miniboss_ability_grants` are intentionally not emitted in `slot_data` during the pre-public (`< v0.1.0`) phase.
-- Canonical keys are `ability_randomization_mode`, `ability_randomization_boss_spawns`, `ability_randomization_minibosses`, `ability_randomization_minny`, `ability_randomization_passive_enemies`, and `ability_randomization_no_ability_weight`.
+- Canonical keys are `ability_randomization_mode`, `ability_randomization_boss_spawns`, `ability_randomization_minibosses`, `ability_randomization_minny`, `ability_randomization_passive_enemies`, `ability_randomization_no_ability_weight`, and `ability_randomization_statues`.
 - If compatibility aliases are needed after public release, this section will be updated with an explicit deprecation/removal timeline.
 
 DeathLink runtime behavior contract:
