@@ -2368,7 +2368,7 @@ LEVEL_DATA = {
         "parent": "ABC",
         "areaAccess": 2,
         "winLogic": HasAll("Door", "Is", "Shut", "Key", "Open", "Push", "W", "A", "L"),
-        "winLogicAdv": Has("Is") & (HasAll("Push", "Open") | (HasAll("A", "L") & HasAny("Shut", "Push") & HasAny("Door", "Open", "Key"))),
+        "winLogicAdv": Has("Is") & ((Has("Push") & (Has("Open") | HasAll("Door", "Shut"))) | (HasAll("A", "L") & HasAny("Shut", "Push") & HasAny("Door", "Open", "Key"))),
         "connects": {
             "ABC-2": can_win,
             "ABC-3": can_win,
