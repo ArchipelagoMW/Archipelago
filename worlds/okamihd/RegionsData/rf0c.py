@@ -40,7 +40,9 @@ exits = {
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND, loading_screen=False,
                  special_rule=n_ryoshima_islands_dragon_rule),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_SEA, loading_screen=False,
-                 special_rule=n_ryoshima_islands_dragon_rule)
+                 special_rule=n_ryoshima_islands_dragon_rule),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_TREASURE_CAVE,
+                 has_events=["Northern Ryoshima Coast - Open Treasure Cave"])
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS, one_way=True, loading_screen=False,
@@ -51,6 +53,19 @@ exits = {
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_TOMB: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST, one_way=True, loading_screen=False)
+    ],
+    RegionNames.NORTHERN_RYOSHIMA_COAST_PS2_ISLAND: [
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_PS2_CAVE,
+                 has_events=["Northern Ryoshima Coast - Open Power Slash 2 Cave"])
+    ],
+    RegionNames.NORTHERN_RYOSHIMA_COAST_CB2_ISLAND: [
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_CB2_CAVE,
+                 has_events=["Northern Ryoshima Coast - Open Cherry Bomb 2 Cave"])
+    ],
+    RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND: [
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_CAVE,
+                 has_events=["Northern Ryoshima Coast - Open Bandit Spider Cave"],
+                 one_way=True)
     ]
 }
 events = {
@@ -65,6 +80,7 @@ events = {
         "Northern Ryoshima Coast - Climb to Tomb Cave": EventData(required_brush_techniques=[BrushTechniques.CATWALK]),
         "Northern Ryoshima Coast - Meet Orca": EventData(required_brush_techniques=[BrushTechniques.SUNRISE],
                                                          event_item_name="Orca"),
+        "Northern Ryoshima Coast - Open Treasure Cave": EventData(required_items_events=["Digging Champ"]),
     },
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER: {
         "Northern Ryoshima Coast - Mandatory encounter in Watcher's Cape": EventData(
@@ -74,6 +90,15 @@ events = {
         "Northern Ryoshima Coast - Fish Marlin": EventData(
             type=LocationType.FISHING_MINIGAME,
             required_items_events=["Marlin Rod"])
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_PS2_ISLAND: {
+        "Northern Ryoshima Coast - Open Power Slash 2 Cave": EventData(power_slash_level=1)
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_CB2_ISLAND: {
+        "Northern Ryoshima Coast - Open Cherry Bomb 2 Cave": EventData(cherry_bomb_level=1)
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND: {
+        "Northern Ryoshima Coast - Open Bandit Spider Cave": EventData(required_items_events=["Digging Champ"])
     }
 }
 locations = {
