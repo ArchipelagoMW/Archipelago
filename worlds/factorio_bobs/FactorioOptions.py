@@ -5,8 +5,8 @@ from dataclasses import dataclass
 
 from schema import Schema, Optional, And, Or, SchemaError
 
-from Options import Choice, OptionDict, OptionSet, OptionCounter, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool, OptionGroup, Visibility, OptionError
+from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
+    StartInventoryPool, OptionGroup, Visibility
 from .APModpackManager.PackLoader import modpacks
 from .APModpackManager.PackOptions import PackOptions
 
