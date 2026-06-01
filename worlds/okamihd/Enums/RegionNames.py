@@ -74,6 +74,7 @@ class RegionNames(StrEnum):
     CURSED_TAKA_PASS_CAVE = "Cursed Taka Pass (Cave)"
     CURSED_TAKA_PASS_GUARDIAN_SAPLING = "Cursed Taka Pass (Guardian Sapling)"
     TAKA_PASS = "Taka Pass"
+    TAKA_PASS_CAVE = "Taka Pass Cave"
 
     ## KUSA VILLAGE
     KUSA_VILLAGE = "Kusa Village"
@@ -145,6 +146,7 @@ class RegionNames(StrEnum):
     RYOSHIMA_COAST_LUNAR_LAGOON = "Ryoshima Coast (Lunar Lagoon)"
     RYOSHIMA_COAST_WEST_PIER = "Ryoshima Coast (West of Pier)"
     ANKOKU_TEMPLE = "Ankoku Temple"
+    RYOSHIMA_COAST_BANDIT_SPIDER = "Ryoshima Coast (Bandit spider cave)"
 
     ## SEIAN CITY
     ### COMMONERS QUARTER
@@ -228,6 +230,10 @@ class RegionNames(StrEnum):
     NORTHERN_RYOSHIMA_COAST_PS2_ISLAND = "Northern Ryoshima Coast (Power Slash 2 Island)"
     NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND = "Northern Ryoshima Coast (Bandit Spider Island)"
     NORTHERN_RYOSHIMA_COAST_SEA = "Northern Ryoshima Coast (Sea)"
+    NORTHERN_RYOSHIMA_COAST_PS2_CAVE = "Northern Ryoshima Coast (Power Slash 2 Cave)"
+    NORTHERN_RYOSHIMA_COAST_CB2_CAVE = "Northern Ryoshima Coast (Cherry Bomb 2 Cave)"
+    NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_CAVE = "Northern Ryoshima Coast (Bandit spider cave)"
+    NORTHERN_RYOSHIMA_COAST_TREASURE_CAVE = "Northern Ryoshima Coast (Treasure cave)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
@@ -249,6 +255,12 @@ class MapIds(Enum):
     AGATA_FOREST_MME_FAWN = 0x10A
     CALCIFIED_CAVERN = 0x10E
     MOON_CAVE = 0x110
+    RYOSHIMA_BANDIT_SPIDER = 0x113
+    TAKA_PASS_CAVE = 0x114
+    POWER_SLASH_2_CAVE=0x116
+    CHERRY_BOMB_2_CAVE = 0x117
+    NORTHERN_RYOSHIMA_BANDIT_SPIDER = 0x11A
+    NORTHERN_RYOSHIMA_TREASURE = 0x11D
     RIVER_OF_THE_HEAVENS = 0x122
     SEIAN_ARISTORATIC = 0x200
     SEIAN_COMMONERS = 0x201

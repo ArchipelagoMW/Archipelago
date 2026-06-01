@@ -23,7 +23,8 @@ exits = {
         ExitData(RegionNames.ANKOKU_TEMPLE),
         ExitData(RegionNames.FAWNS_HOUSE, has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"]),
         ExitData(RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON, one_way=True,
-                 has_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False)
+                 has_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False),
+        ExitData(RegionNames.RYOSHIMA_COAST_BANDIT_SPIDER,has_events=["Ryoshima Coast - Open Bandit Spider Cave"],one_way=True)
     ],
     RegionNames.RYOSHIMA_COAST_SEA: [
         ExitData(RegionNames.RYOSHIMA_COAST_DOJO, needs_long_swim=True, loading_screen=False),
@@ -64,6 +65,7 @@ events = {
                                                         required_brush_techniques=[BrushTechniques.CRESCENT]),
         "Ryoshima Coast - Open Shortcut To Mme Fawn's": EventData(),
         "Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance": EventData(mandatory_enemies=[OkamiEnemies.ICE_LIPS,OkamiEnemies.THUNDER_EAR]),
+        "Ryoshima Coast - Open Bandit Spider Cave": EventData(required_items_events=["Digging Champ"]),
 
     },
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: {
