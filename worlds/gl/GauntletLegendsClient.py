@@ -39,13 +39,13 @@ LOCATIONS_BASE_ADDRESS = 0x64A68
 ZONE_ID = 0x6CA58
 LEVEL_ID = 0x6CA5C
 
-MOD_ITEM_ID = 0xD0800
-MOD_QUANTITY = 0xD0804
-MOD_PLAYER_ID = 0xD0808
-MOD_OBELISK_QUANTITY = 0xD07E4
-MOD_BOSS_GOAL = 0xD07E5
-MOD_PLAYERS_LIST = 0xD07D0
-MOD_COMPASS_COUNT = 0xD07D4
+MOD_ITEM_ID = 0x3FC800
+MOD_QUANTITY = 0x3FC804
+MOD_PLAYER_ID = 0x3FC808
+MOD_OBELISK_QUANTITY = 0x3FC7E4
+MOD_BOSS_GOAL = 0x3FC7E5
+MOD_PLAYERS_LIST = 0x3FC7D0
+MOD_COMPASS_COUNT = 0x3FC7D4
 
 
 class RetroSocket:
@@ -149,6 +149,7 @@ class GauntletLegendsContext(CommonContext):
         self.location_scouts: list[NetworkItem] = []
         self.players: list[int] = []
         self.queued_traps: list[tuple[str, int, bool]] = []
+        self.spawned_traps: int = 0
         self.item_ram_indices: dict[int, int] = {}
         self.chest_ram_indices: dict[int, int] = {}
 
@@ -214,7 +215,12 @@ class GauntletLegendsContext(CommonContext):
     async def handle_items(self):
         self.players = list(await self._read_ram(MOD_PLAYERS_LIST, 4))
         self.players = [player for player in self.players if player != 0]
+        if not self.players:
+            return
         for player in self.players:
+            active = await self._read_ram_int(PLAYER_KILL + (0x1F0 * (player - 1)), 1)
+            if active != 0x4:
+                continue
             compass = await self._read_ram_int(MOD_COMPASS_COUNT + (2 * player_compass_index[player]), 2)
             if compass - 1 < len(self.items_received):
                 for index in range(compass - 1, len(self.items_received)):
@@ -261,7 +267,7 @@ class GauntletLegendsContext(CommonContext):
         return (val & 0xF) == 0x8 or (val & 0xF) == 0x1
 
     async def get_seed_name(self) -> str:
-        seed_name = await self._read_ram(0xD07F0, 0x10)
+        seed_name = await self._read_ram(0x3FC7F0, 0x10)
         return seed_name.decode("utf-8").strip()
 
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
@@ -295,10 +301,6 @@ class GauntletLegendsContext(CommonContext):
             # Build lookup for scouted items by location
             scouted_by_location = {item.location: item for item in self.location_scouts}
 
-            # Build RAM array index maps over ALL raw_locations (including dif-variant slots not
-            # in the multiworld). Spawners occupy a separate array and are excluded. Every other
-            # location takes a fixed slot in either the item or chest array regardless of whether
-            # it's in the multiworld, so all must be counted to get correct offsets.
             item_slots: list[int] = []
             chest_slots: list[int] = []
             appended_items: list[int] = []
@@ -437,6 +439,7 @@ class GauntletLegendsContext(CommonContext):
             self.current_level = self.level
             self.level_id = (self.current_zone << 4) + self.current_level
             self.scouted = False
+            self.spawned_traps = 0
             await asyncio.sleep(2)
 
         if self.current_zone in (0x8, 0xE):
@@ -449,14 +452,15 @@ class GauntletLegendsContext(CommonContext):
         if active != 0x4:
             return []
 
-        if len(self.queued_traps) > 0:
+        if len(self.queued_traps) > 0 and self.spawned_traps == 0:
             for i, trap in enumerate(self.queued_traps):
                 trap_name, index, given = trap
                 if not given:
+                    self.spawned_traps += 1
                     await self.give_item(trap_name, self.players[0])
                     self.queued_traps[i] = (trap_name, index, True)
-
-            self.queued_traps = []
+                    if self.spawned_traps >= 5:
+                        break
 
         locations_address = await self._read_ram_int(LOCATIONS_BASE_ADDRESS, 4) & 0xFFFFFF
         self.item_address = await self._read_ram_int(locations_address + 0x14, 4)
