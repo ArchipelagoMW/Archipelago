@@ -65,7 +65,7 @@ jobs:
           # name the DMG like the AppImage: Archipelago_<version>_<arch>
           VERSION="$(python -c 'import Utils; print(Utils.__version__)')"
           ARCH="$(python -c 'import platform; print(platform.machine())')"
-          echo "DMG_BASE=Archipelago_${VERSION}_${ARCH}" >> $GITHUB_ENV
+          echo "DMG_BASE=Archipelago_${VERSION}_macos-${ARCH}" >> $GITHUB_ENV
       - name: Ad-hoc sign app
         run: |
           codesign --force --deep --sign - "$APP_PATH"
