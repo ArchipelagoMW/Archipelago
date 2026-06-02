@@ -603,6 +603,7 @@
       "label": "Rainbow Route 1-02 - Small Chest",
       "location_id": 3960521,
       "tags": [
+        "ExactEventLocation",
         "MAP_RAINBOW_ROUTE",
         "SmallChest"
       ]

@@ -3,17 +3,19 @@ Looks through data object to double-check it makes sense. Will fail for missing 
 duplicate claims and give warnings for unused and unignored locations.
 """
 import logging
+from collections.abc import Callable
+from typing import Any
 
 
-def _validate_unique_bit_indices(data, error) -> None:
+def _validate_unique_bit_indices(data: Any, error: Callable[[str], None]) -> None:
     """Validate bit-index uniqueness within each location category."""
     bit_to_loc_by_category: dict[str, dict[int, str]] = {}
     for loc_key, loc in data.locations.items():
         if loc.bit_index is None:
             continue
         tags = getattr(loc, "tags", ()) or ()
-        if "ReportLocation" in tags:
-            # Provisional report-only locations intentionally reuse native bits.
+        if "ReportLocation" in tags or "ExactEventLocation" in tags:
+            # Event-driven minor chest locations intentionally reuse native bits.
             continue
         category_name = getattr(loc.category, "name", str(loc.category))
         category_bit_map = bit_to_loc_by_category.setdefault(category_name, {})

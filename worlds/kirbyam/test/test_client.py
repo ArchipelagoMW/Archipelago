@@ -14,6 +14,7 @@ from ..data import LocationCategory, data
 from ..client import (
     KirbyAmClient,
     _build_kirbyam_command_processor,
+    _is_exact_minor_chest_location,
     _MAP_ITEM_ID_TO_AREA_ID,
     _ROOM_PROPS_DOORS_IDX_OFFSET,
     _ROOM_PROPS_ROM_BASE,
@@ -677,7 +678,7 @@ async def test_poll_minor_chest_sends_location_checks_for_set_bits(mock_bizhawk_
     minor_with_bits = [
         loc for loc in data.locations.values()
         if getattr(loc, "category", None) == LocationCategory.MINOR_CHEST and loc.bit_index is not None
-        and "ReportLocation" not in getattr(loc, "tags", frozenset())
+        and not _is_exact_minor_chest_location(loc)
     ]
     expected_locations = sorted(loc.location_id for loc in minor_with_bits)
     bits = 0
@@ -769,8 +770,8 @@ async def test_poll_minor_chest_respects_active_slot_locations(mock_bizhawk_cont
 
 
 @pytest.mark.asyncio
-async def test_poll_minor_chest_excludes_unmapped_report_locations(mock_bizhawk_context):
-    """Native minor-chest polling should include named checks but exclude unresolved report-only siblings."""
+async def test_poll_minor_chest_excludes_exact_event_locations_from_bit_poll(mock_bizhawk_context):
+    """Native minor-chest polling should exclude exact-event chests that share a native bit."""
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -782,13 +783,44 @@ async def test_poll_minor_chest_excludes_unmapped_report_locations(mock_bizhawk_
     with patch.dict(data.native_ram_addresses, {"small_chest_flags_native": 0x02038960}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
-        # Bits 0 and 1 set; keep named locations on bit 0, but exclude report-only siblings that share it.
+        # Bits 0 and 1 set; exclude the exact-event 1-02 location from the shared bit-0 poll path.
         mock_read.return_value = [((1 << 0) | (1 << 1)).to_bytes(10, 'little')]
 
         await client._poll_minor_chest_locations(mock_bizhawk_context)
 
     mock_send.assert_awaited_once_with([
-        {"cmd": "LocationChecks", "locations": [room_1_39, room_1_02_named]}
+        {"cmd": "LocationChecks", "locations": [room_1_39]}
+    ])
+    assert room_1_02_named not in mock_send.await_args.args[0][0]["locations"]
+
+
+@pytest.mark.asyncio
+async def test_poll_minor_chest_event_sends_named_exact_location(mock_bizhawk_context):
+    """Exact minor chest events should also support named locations moved off shared native bits."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    room_1_02_named = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_02"].location_id
+    source_ptr = next(
+        source
+        for source, location_id in client._minor_chest_location_id_by_source_ptr.items()
+        if location_id == room_1_02_named
+    )
+    ring = bytearray(32)
+    ring[0:4] = source_ptr.to_bytes(4, 'little')
+
+    client._last_minor_chest_event_counter = 0
+    mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = {room_1_02_named}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        mock_read.return_value = [(1).to_bytes(4, 'little'), bytes(ring)]
+
+        await client._poll_minor_chest_event_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [room_1_02_named]}
     ])
 
 
@@ -827,7 +859,7 @@ async def test_poll_minor_chest_event_sends_exact_report_location(mock_bizhawk_c
         assert sibling_location not in mock_send.await_args.args[0][0]["locations"]
 
 
-def test_minor_chest_source_ptr_map_targets_report_only_minor_chests():
+def test_minor_chest_source_ptr_map_targets_exact_event_minor_chests():
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -837,7 +869,7 @@ def test_minor_chest_source_ptr_map_targets_report_only_minor_chests():
     for location_id in client._minor_chest_location_id_by_source_ptr.values():
         loc = id_to_location[location_id]
         assert loc.category == LocationCategory.MINOR_CHEST
-        assert "ReportLocation" in loc.tags
+        assert _is_exact_minor_chest_location(loc)
 
 
 @pytest.mark.asyncio
@@ -5044,7 +5076,7 @@ def test_minor_chest_locations_have_unique_bit_indices_when_present():
         loc for loc in data.locations.values()
         if getattr(loc, "category", None) == LocationCategory.MINOR_CHEST
         and getattr(loc, "bit_index", None) is not None
-        and "ReportLocation" not in getattr(loc, "tags", frozenset())
+        and not _is_exact_minor_chest_location(loc)
     ]
     if not minor_chest_with_bits:
         return
