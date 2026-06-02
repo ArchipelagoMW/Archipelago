@@ -53,9 +53,8 @@ jobs:
       - name: Build
         run: |
           python -m pip install --upgrade pip
-          # first run installs the bonus build dependencies (and is expected to fail), second run builds
-          python setup.py --yes bdist_mac || echo "Installed bonus dependencies (first run failure is expected)"
-          python setup.py bdist_mac
+          # build_exe --yes bootstraps the build deps, bdist_mac reuses that build to assemble the .app
+          python setup.py build_exe --yes bdist_mac
           if ( ! ls build/*.app >/dev/null 2>&1 ); then
             echo "No .app found in build/"
             exit 1
