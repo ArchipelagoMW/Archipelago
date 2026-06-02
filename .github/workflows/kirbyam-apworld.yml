@@ -91,6 +91,9 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
       - name: Download built artifact
         uses: actions/download-artifact@v4
         with:
