@@ -35,7 +35,86 @@ permissions:  # permissions required for attestation
   attestations: 'write'
 
 jobs:
-  # build-release-macos: # LF volunteer
+  build-release-macos:
+    runs-on: macos-latest
+    steps:
+      # - copy code below to release.yml -
+      - uses: actions/checkout@v6.0.2
+      - name: Install python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: '~3.12.7'
+          check-latest: true
+      - name: Build
+        run: |
+          python -m pip install --upgrade pip
+          # first run installs the bonus build dependencies (and is expected to fail), second run builds
+          python setup.py --yes bdist_mac || echo "Installed bonus dependencies (first run failure is expected)"
+          python setup.py bdist_mac
+          if ( ! ls build/*.app >/dev/null 2>&1 ); then
+            echo "No .app found in build/"
+            exit 1
+          fi
+          APP_PATH="$(ls -1dt build/*.app | head -n1)"
+          echo "Found $APP_PATH"
+          echo "APP_PATH=$APP_PATH" >> $GITHUB_ENV
+          # name the DMG like the AppImage: Archipelago_<version>_<arch>
+          VERSION="$(python -c 'import Utils; print(Utils.__version__)')"
+          ARCH="$(python -c 'import platform; print(platform.machine())')"
+          echo "DMG_BASE=Archipelago_${VERSION}_${ARCH}" >> $GITHUB_ENV
+      - name: Ad-hoc sign app
+        run: |
+          codesign --force --deep --sign - "$APP_PATH"
+          codesign --verify --deep --strict --verbose=2 "$APP_PATH"
+      - name: Create DMG
+        uses: L-Super/create-dmg-actions@v1
+        with:
+          dmg_name: ${{ env.DMG_BASE }}
+          src_dir: ${{ env.APP_PATH }}
+      - name: Find DMG
+        run: |
+          DMG_NAME="$(ls -1 *.dmg | head -n1)"
+          echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
+      # - copy code above to release.yml -
+      - name: Attest Build
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/attest@v4.1.0
+        with:
+          subject-path: |
+            build/*.app/Contents/MacOS/ArchipelagoLauncher
+            build/*.app/Contents/MacOS/ArchipelagoGenerate
+            build/*.app/Contents/MacOS/ArchipelagoServer
+            ${{ env.DMG_NAME }}
+      - name: Check build loads expected worlds
+        run: |
+          cd build/*.app/Contents/MacOS
+          mv Players/Templates/meta.yaml .
+          ls -1 Players/Templates | sort > setup-player-templates.txt
+          rm -R Players/Templates
+          timeout 30 ./ArchipelagoLauncher "Generate Template Options" || true
+          ls -1 Players/Templates | sort > generated-player-templates.txt
+          cmp setup-player-templates.txt generated-player-templates.txt \
+            || diff setup-player-templates.txt generated-player-templates.txt
+          mv meta.yaml Players/Templates/
+      - name: Test Generate
+        run: |
+          cd build/*.app/Contents/MacOS
+          cp Players/Templates/VVVVVV.yaml Players/
+          timeout 30 ./ArchipelagoGenerate
+      - name: Store App
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          path: ${{ env.APP_PATH }}
+          archive: false
+          if-no-files-found: error
+          retention-days: 7
+      - name: Store DMG
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          path: ${{ env.DMG_NAME }}
+          archive: false
+          if-no-files-found: error
+          retention-days: 7
 
   build-win: # RCs and releases may still be built and signed by hand
     runs-on: windows-latest
