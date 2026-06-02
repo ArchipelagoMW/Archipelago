@@ -590,7 +590,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 ctx.deathlink_pending = False
                 ctx.deathlink_triggered = True
                 await ctx.die()
-            else:
+            elif len(ctx.players) > 0:
                 player_state = await ctx._read_ram_int(PLAYER_KILL + (0x1F0 * (ctx.players[0] - 1)), 1)
                 dead = (player_state & 0xF) == 0x8
                 alive = (player_state & 0xF) == 0x4
