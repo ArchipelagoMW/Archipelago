@@ -28,13 +28,40 @@ def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionSt
     else:
         expected = None
 
-    possible_answers = logic.registry.item_rules.keys() if is_item_explain else world.get_all_location_names()
-    result, usable, response = Utils.get_intended_text(target_name, possible_answers)
+    class TrackerGameContextMixin:
+        """Expecting the TrackerGameContext to have these methods."""
+        tracker_core: TrackerCore
+
+        def make_gui(self, manager):
+            ...
+
+        def run_generator(self):
+            ...
+
+
+    class TrackerGameContext(CommonContext, TrackerGameContextMixin):
+        pass
+
+
+    tracker_loaded = False
+    UT_VERSION = "Not found"
+
+
+def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
+    logic = world.logic
+
+    if target_name.startswith("missing "):
+        expected = True
+        target_name = target_name[len("missing "):]
+    elif target_name.startswith("how "):
+        expected = False
+        target_name = target_name[len("how "):]
+    else:
+        expected = None
+
+    result, usable, response = Utils.get_intended_text(target_name, world.get_all_location_names())
     if usable:
-        if is_item_explain:
-            rule = logic.has(result)
-        else:
-            rule = logic.region.can_reach_location(result)
+        rule = logic.region.can_reach_location(result)
         expl = explain(rule, state, expected=expected, mode=ExplainMode.CLIENT)
         world.previous_explanation = expl
         return parse_explanation(expl)
@@ -57,7 +84,7 @@ def cmd_more(world: StardewValleyWorld, index: str, state: CollectionState) -> l
     return parse_explanation(expl)
 
 
-def parse_explanation(explanation: RuleExplanation) -> list[list[JSONMessagePart]]:
+def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
     # Split the explanation in parts, by isolating all the delimiters, being \(, \), & , -> , | , \d+x , \[ , \] , \(\w+\), \n\s*
     result_regex = r"\s*(\(|\)| & | -> | \| |\d+x | \[|\](?: ->)?\s*| \(\w+\)|\n)"
     splits = re.split(result_regex, str(explanation).strip())
@@ -108,7 +135,3 @@ def parse_explanation(explanation: RuleExplanation) -> list[list[JSONMessagePart
             messages.append(contents)
             contents = []
             content_length = 0
-
-    messages.append(contents)
-
-    return messages

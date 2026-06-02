@@ -1,3 +1,4 @@
+from NetUtils import JSONMessagePart
 import logging
 import math
 import typing
@@ -39,6 +40,7 @@ from .regions.entrance_rando import get_target_groups
 from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
 from .strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
+from .stardew_rule.rule_explain import RuleExplanation
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceNames
@@ -95,26 +97,6 @@ class StardewWebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_fr]
-
-
-if TRACKER_ENABLED:
-    import os
-
-    from .. import user_folder
-
-    # Best effort to detect if universal tracker is installed
-    if any("tracker.apworld" in f.name for f in os.scandir(user_folder)):
-        def launch_client(*args):
-            from worlds.LauncherComponents import launch
-
-            from .client import launch as client_main
-
-            launch(client_main, name="Stardew Valley Tracker", args=args)
-
-
-        components.append(Component("Stardew Valley Tracker", func=launch_client, component_type=Type.CLIENT, icon="stardew"))
-
-        icon_paths["stardew"] = f"ap:{__name__}/stardew.png"
 
 
 class StardewValleyWorld(World):
@@ -643,8 +625,6 @@ class StardewValleyWorld(World):
             # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = (received_progression_count * 100 // self.total_progression_items)
-
-
 
     previous_explanation: RuleExplanation | None = None
 
