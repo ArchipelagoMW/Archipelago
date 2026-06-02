@@ -7,48 +7,45 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - `### Bug Fixes`
 - `### Internal Changes`
 
-## v0.2.0-rc6
-
-### Bug Fixes
-
-- Fixed ability statues not appearing in spoiler logs when ability randomization includes statue sources; spoiler output now correctly lists enabled statues alongside enemy assignments for full transparency (Issue #805).
-- Fixed big switch timing to ensure area big switches are properly recognized for zone completion checks (Issue #806).
-- Fixed Rainbow Route 1-02 exact chest checks to correctly register minor chest locations (Issue #812).
-
-### Internal Changes
-
-- Tracker support now receives room key updates through dedicated storage channels, providing trackers with more complete room-discovery state information.
-
-## v0.2.0-rc5
+## v0.2.0
 
 ### New Features
 
-- Added several player-facing quality-of-life features: `Starting Kirby Color` lets players begin with a chosen Kirby color instead of always starting as Pink, including a random option for surprise runs; `Start With All Maps` lets players begin with every area map already unlocked for a more guided playthrough; and room names now match familiar Wikirby names, making the game easier to navigate and discuss (Issues #597, #584, #587).
-- Hub big switches are now full Archipelago checks (Issue #481).
-- Spoiler output and generation logs now show shuffled enemy ability assignments, making seeds easier to review (Issue #586).
-- Expanded the filler and hazard pool with both new trap controls and weighted filler generation: `Enable Traps` and `Trap Fill Percentage` let players include trap items in the randomized item pool, added two new filler consumables with tiered healing (`Energy Drink` (HP +2) and `Hunk of Meat` (HP +3), alongside existing `Small Food` (HP +1)), and made filler items no longer equally likely. Base whole-number weights are Cell Phone Battery 25, Energy Drink 17, 1 Up 15, Max Tomato 15, Small Food 14, Hunk of Meat 9, Invincibility Candy 5. In one-hit mode (`exclude_vitality_counters`), healing filler (`Small Food`, `Energy Drink`, `Hunk of Meat`, `Max Tomato`) is removed and the remaining weights (`Cell Phone Battery`, `1 Up`, `Invincibility Candy`) are preserved proportionally. In no-lives mode, `1 Up` is removed and remaining filler keeps configured relative weights. When both modes are enabled together, only `Cell Phone Battery` and `Invincibility Candy` remain in weighted selection (Issue #688).
-  - `Health Down Trap`: reduces Kirby's current HP by 2 (but won't kill).
+- Expanded exploration location check coverage:
+  - Minor chests are now implemented as location checks (Issue #129). We expect some bug with this that we haven't found. The chests' content are planned to be implemented as AP items later.
+  - Hub switches are now full Archipelago location checks (Issue #481). Using the connection itself as an AP item is planned for later.
+  - The first item you visit each area is now a location check (Issue #606). These types of location check checks give us room to add progression gating items later.
+- Added several player-facing quality-of-life features:
+  - `Starting Kirby Color` lets players begin with a chosen Kirby color instead of always starting as Pink, including a random option for surprise runs (Issue #597).
+  - `Start With All Maps` lets players begin with every area map already unlocked for a more guided playthrough (Issue #584).
+  - Room names now match Wikirby names, making the game easier to navigate and discuss (Issue #587).
+- Added trap items (Issue #81), which are disabled by default. They are controlled by the options `Enable Traps` and `Trap Fill Percentage`:
+  - `Health Down Trap`: reduces Kirby's current HP by 2 (but won't kill Kirby).
   - `Life Down Trap`: removes one extra life (if any remain).
   - `Bomb Trap`: sets Kirby's current HP to 0.
   - `Battery Drain Trap`: empties the cell phone battery to 0.
-  - Trap receive notifications are prefixed with "Received trap:" to distinguish them from regular items.
-- Added a new `goal` mode, `defeat_any_area_boss`, which completes the seed after the first acknowledged area-boss defeat check (`BOSS_DEFEAT_1 .. BOSS_DEFEAT_8`) while preserving goal-location acknowledgement before `CLIENT_GOAL` when the server exposes a numeric goal location (Issue #205).
-- Added a new `goal` mode, `defeat_random_hidden_area_boss`, which selects one eligible area boss per seed, stores only an internal hidden boss-defeat key in slot data, and completes the seed when that exact boss is defeated while keeping the target out of normal player-facing output (Issue #206).
-- Added a dedicated boolean option surface for ability statues (sometimes called ability trophies or ability stands) via `ability_randomization_statues`; it controls inclusion only, enabled statues inherit the selected enemy copy-ability mode (`off`, `shuffled`, `completely_random`), and statues always grant an ability (ignoring `ability_randomization_no_ability_weight` and `ability_randomization_passive_enemies`, while respecting `ability_randomization_minny` just like enemy randomization) (Issue #209).
-- Expanded exploration check coverage with the first concrete `MINOR_CHEST` AP checks (Rainbow Route 1-20, 1-22, 1-38), area-first-visit checks for all nine gameplay areas, and provisional unmapped minor chest report locations (`Unmapped Minor Chest X-N (Report Location)`) gated behind a new `Unmapped Minor Chest Report Locations` option so standard seeds remain unchanged by default (Issue #606).
+  - Trap item receive notifications are prefixed with "Received trap:" to distinguish them from regular items.
+- Added two new goal modes:
+  - `defeat_any_area_boss` completes the seed after the first acknowledged area-boss defeat check (Issue #205).
+  - `defeat_random_hidden_area_boss` selects one eligible area boss per seed, stores only an internal hidden boss-defeat key in slot data, and completes the seed when that exact boss is defeated while keeping the target out of normal player-facing output (Issue #206).
+- Made improvements to non-trap filler items:
+  - Added two new filler consumables with tiered healing (`Energy Drink` (HP +2) and `Hunk of Meat` (HP +3), alongside existing `Small Food` (HP +1) which was renamed) (Issues #684, #685, #686).
+  - Made filler items no longer equally likely. They each has preset weight loosely based on their likelihood in the original game. Base whole-number weights are Cell Phone Battery 25, Energy Drink 17, 1 Up 15, Max Tomato 15, Small Food 14, Hunk of Meat 9, Invincibility Candy 5. In one-hit mode (`exclude_vitality_counters`), healing filler (`Small Food`, `Energy Drink`, `Hunk of Meat`, `Max Tomato`) is removed and the remaining weights (`Cell Phone Battery`, `1 Up`, `Invincibility Candy`) are preserved proportionally. In no-lives mode, `1 Up` is removed and remaining filler keeps configured relative weights. When both modes are enabled together, only `Cell Phone Battery` and `Invincibility Candy` remain in weighted selection (Issue #688).
+- Added the option to randomize Ability Statues with `ability_randomization_statues`. Defaults to off. It controls inclusion only: enabled statues inherit the selected copy-ability mode (`off`, `shuffled`, `completely_random`), and statues always grant an ability (ignoring `ability_randomization_no_ability_weight` and `ability_randomization_passive_enemies`, while respecting `ability_randomization_minny` just like enemy randomization) (Issue #209).
 
 ### Improvements
 
 - Enemy Ability Shuffle now covers more enemies, spreads allowed abilities more evenly across enemies when possible while still respecting settings that force no ability, and keeps `Ability Randomization: Minny` off by default unless players opt in (Issues #420, #583).
+- DeathLink got flavor text (Issue #409).
+- Spoiler output and generation logs now show shuffled enemy ability assignments, making seeds easier to review (Issue #586). This includes ability statues (Issue #804).
 
 ### Bug Fixes
 
-- Fixed the shuffled copy-ability spoiler output so enabled ability statues are listed alongside enemy assignments instead of only showing the enemy-side source, keeping the spoiler log aligned with statue randomization behavior (Issue #804).
 - Enemy Ability Randomization: Completely random now rerolls abilities per swallow, not per room (Issue #420).
-- Warp rooms that were missing Room Sanity checks now have them again (Issue #605).
+- Warp rooms that were missing Room Sanity checks now have them (Issue #605).
 - Fixed delivery synchronization and logging issues that could skip items when client and game counters drifted, while ensuring debug-only delivery diagnostics still go to the log file even when hidden from the live client output (Issue #601).
 - Fixed vitality counter replays caused by transitions or resets, and prevented vitality counters from lingering in `One-Hit Mode` when that mode excludes them (Issue #571).
-- Fixed extra reconnect and resend diagnostics showing up in the live client when they should have remained file-only (Issue #582).
+- Fixed extra logging showing up in the live client when they should have remained file-only (Issue #582).
 
 ### Internal Changes
 
