@@ -13,8 +13,8 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 - Expanded exploration location check coverage:
   - Minor chests are now implemented as location checks (Issue #129). We expect some bug with this that we haven't found. The chests' content are planned to be implemented as AP items later.
-  - Hub switches are now full Archipelago location checks (Issue #481). Using the connection itself as an AP item is planned for later.
-  - The first item you visit each area is now a location check (Issue #606). These types of location check checks give us room to add progression gating items later.
+  - Hub switches are now implemented as location checks (Issue #481). Using the connection itself as an AP item is planned for later.
+  - The first time you visit each area is now a location check (Issue #606). These types of location check checks give us room to add progression gating items later.
 - Added several player-facing quality-of-life features:
   - `Starting Kirby Color` lets players begin with a chosen Kirby color instead of always starting as Pink, including a random option for surprise runs (Issue #597).
   - `Start With All Maps` lets players begin with every area map already unlocked for a more guided playthrough (Issue #584).
