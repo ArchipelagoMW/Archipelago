@@ -50,6 +50,12 @@ def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionSt
 def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
     logic = world.logic
 
+    if target_name.startswith("item "):
+        is_item_explain = True
+        target_name = target_name[len("item "):]
+    else:
+        is_item_explain = False
+
     if target_name.startswith("missing "):
         expected = True
         target_name = target_name[len("missing "):]
@@ -59,9 +65,13 @@ def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionSt
     else:
         expected = None
 
-    result, usable, response = Utils.get_intended_text(target_name, world.get_all_location_names())
+    possible_answers = logic.registry.item_rules.keys() if is_item_explain else world.get_all_location_names()
+    result, usable, response = Utils.get_intended_text(target_name, possible_answers)
     if usable:
-        rule = logic.region.can_reach_location(result)
+        if is_item_explain:
+            rule = logic.has(result)
+        else:
+            rule = logic.region.can_reach_location(result)
         expl = explain(rule, state, expected=expected, mode=ExplainMode.CLIENT)
         world.previous_explanation = expl
         return parse_explanation(expl)
