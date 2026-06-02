@@ -142,7 +142,8 @@ def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
     Decomp reference (katam): `sub_08039ED4` dispatches unlock callbacks from
     `gUnk_0834BD94` using `ldrh [task, #8]`. The AP hook must read the same
     halfword and map enum WorldMapDoor values to AP hub-switch bit order while
-    ignoring non-unlock values (e.g., `WORLDMAP_NO_UNLOCK` = 0).
+    ignoring non-unlock values (e.g., `WORLDMAP_NO_UNLOCK` = 0). The AP flag
+    should be raised only after the native unlock callback returns.
     """
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -170,6 +171,8 @@ def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
     assert "ap_try_map_worldmap_door_to_hub_switch_bit(door_index, &ap_hub_switch_bit)" in hook_body, (
         "Hook should translate world-map door index before setting AP hub-switch bit"
     )
+    assert "unlock_fn();" in hook_body, "Hook should call the native unlock callback"
+    assert hook_body.index("unlock_fn();") < hook_body.index("ap_set_hub_switch_flag(ap_hub_switch_bit);")
     assert "if (ap_try_map_worldmap_door_to_hub_switch_bit(door_index, &ap_hub_switch_bit) != 0u)" in hook_body, (
         "Hook should ignore NO_UNLOCK/unknown world-map door indices"
     )

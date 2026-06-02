@@ -550,10 +550,11 @@ __attribute__((used)) void ap_on_world_map_unlock_call(WorldMapUnlockFn unlock_f
     uint16_t door_index = *(volatile uint16_t*)(task_ptr + 0x08u);
     uint32_t ap_hub_switch_bit;
 
+    unlock_fn();
+
     if (ap_try_map_worldmap_door_to_hub_switch_bit(door_index, &ap_hub_switch_bit) != 0u) {
         ap_set_hub_switch_flag(ap_hub_switch_bit);
     }
-    unlock_fn();
 }
 
 static void ap_sync_active_kirby_health_from_vitality(void) {
