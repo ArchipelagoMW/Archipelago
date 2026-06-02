@@ -994,7 +994,7 @@ class HKWorld(RandomizerCoreWorld):
             return
         for region in self.get_regions():
             for location in region.locations:
-                if location.costs:
+                if not location.vanilla and location.costs:
                     if location.item.name in geo_cost_caps and "GEO" in location.costs:
                         location.costs["GEO"] = min(location.costs["GEO"], geo_cost_caps[location.item.name])
 
