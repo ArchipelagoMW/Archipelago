@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import logging
 import re
 from enum import IntFlag, auto
 from pathlib import Path
@@ -15,6 +16,12 @@ __all__ = [
     "EntranceToPickupRegionInfo",
     "entrance_to_pickup_region_info_collection",
     "lookup_pickup_region_requirement",
+    "EntranceToEnemyRegionInfo",
+    "entrance_to_enemy_region_info_collection",
+    "by_enemy_name_for_enemy_regions",
+    "by_enemy_number_for_enemy_regions",
+    "enemy_meta_by_number",
+    "resolve_enemy_number",
     "TransdoorConnection",
     "transdoor_connection_collection",
     "by_from_entrance_for_transdoor",
@@ -529,3 +536,143 @@ entrance_to_pickup_region_info_collection = list(pickup_region_rows)
 
 def lookup_pickup_region_requirement(entrance_identifier: str, pickup_number: int) -> EntranceToPickupRegionInfo:
     return by_entrance_and_pickup[(entrance_identifier, pickup_number)]
+
+
+class EntranceToEnemyRegionInfo(BaseModel):
+    """
+    Requirements for reaching an enemy *instance* from a specific entrance.
+
+    Mirrors :class:`EntranceToPickupRegionInfo`, but for enemy regions — used to put
+    enemy-drop souls (e.g. Flame Demon, Succubus) into logic, since those souls are not
+    ground pickups and never enter the item pool. Requirements are symmetric (they apply
+    both to reaching the enemy and returning).
+
+    ``enemy_number`` is globally unique (one per CSV instance). ``enemy_name`` +
+    ``specifier`` is unique only *within a room* (e.g. "Succubus_a" exists in both room
+    90D and 90E), so use ``enemy_number`` to identify a single instance.
+    """
+
+    model_config = ConfigDict(extra="allow", frozen=True)
+
+    enemy_number: int
+    enemy_room: str
+    enemy_name: str
+    specifier: str
+    entrance_identifier: str
+
+    abilities: frozenset[str]
+    combo_texts: tuple[str, ...] = ()
+
+    @classmethod
+    def from_row(
+        cls,
+        row: dict,
+        ability_headers: Iterable[str],
+        combo_headers: Iterable[str],
+        entrance_identifier: str,
+    ) -> "EntranceToEnemyRegionInfo":
+        abilities, combo_texts = _extract_abilities_and_combo_texts(
+            row, ability_headers, combo_headers
+        )
+        return cls(
+            enemy_number=int(row["enemy_number"]),
+            enemy_room=(row.get("room_id") or "").strip(),
+            enemy_name=(row.get("Enemy Name") or "").strip(),
+            specifier=(row.get("Specifier") or "").strip(),
+            entrance_identifier=entrance_identifier,
+            abilities=abilities,
+            combo_texts=combo_texts,
+        )
+
+    @property
+    def key(self) -> tuple[str, int]:
+        return (self.entrance_identifier, self.enemy_number)
+
+    @property
+    def identifier_key(self) -> str:
+        """Human-readable enemy id, e.g. "Succubus_a". NOT globally unique across rooms."""
+        return f"{self.enemy_name}{self.specifier}"
+
+    def get_requirement_bitmasks(
+        self,
+        *,
+        include_combos: bool = True,
+        minimize: bool = True,
+        strict_combo_tokens: bool = True,
+    ) -> tuple[int, ...]:
+        return _requirement_bitmasks_from(
+            self.abilities,
+            self.combo_texts,
+            include_combos=include_combos,
+            minimize=minimize,
+            strict_combo_tokens=strict_combo_tokens,
+        )
+
+
+def _load_enemy_region_requirements() -> tuple[EntranceToEnemyRegionInfo, ...]:
+    csv_path = Path(__file__).with_name("symmetric_entrance_to_enemy_region_requirements.csv")
+    skipped_unresolved = 0
+    with csv_path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        ability_headers, combo_headers = _ability_and_combo_headers(reader.fieldnames or [])
+
+        seen_keys: set[tuple[str, int]] = set()
+        out: list[EntranceToEnemyRegionInfo] = []
+        for row in reader:
+            if not any((v or "").strip() for v in row.values()):
+                continue
+
+            room_id = (row.get("room_id") or "").strip()
+            entrances = _entrance_identifiers_from_cell(room_id, row.get("dest_room_identifier"))
+            if not entrances:
+                # Unlike pickups (which raise), enemy rows are bulk data; a blank or
+                # unresolved dest_room_identifier just means we can't place this instance
+                # in the region graph, so skip it.
+                skipped_unresolved += 1
+                continue
+
+            for entrance_identifier in sorted(entrances):
+                key = (entrance_identifier, int(row["enemy_number"]))
+                if key in seen_keys:
+                    continue
+                seen_keys.add(key)
+                out.append(
+                    EntranceToEnemyRegionInfo.from_row(
+                        row, ability_headers, combo_headers, entrance_identifier
+                    )
+                )
+
+    if skipped_unresolved:
+        logging.info(
+            "cvaos: skipped %d enemy routing rows with unresolved dest_room_identifier",
+            skipped_unresolved,
+        )
+    return tuple(out)
+
+
+enemy_region_rows: tuple[EntranceToEnemyRegionInfo, ...] = _load_enemy_region_requirements()
+entrance_to_enemy_region_info_collection = list(enemy_region_rows)
+
+# enemy_number -> its per-entrance routing rows
+by_enemy_number_for_enemy_regions: dict[int, list[EntranceToEnemyRegionInfo]] = {}
+# enemy_name -> set of enemy_numbers of that type (drives "reach ANY instance")
+by_enemy_name_for_enemy_regions: dict[str, set[int]] = {}
+# enemy_number -> (enemy_name, specifier, room) for region naming / reverse lookup
+enemy_meta_by_number: dict[int, tuple[str, str, str]] = {}
+# (room, enemy_name, specifier) -> enemy_number (unique within a room)
+_enemy_number_by_room_name_spec: dict[tuple[str, str, str], int] = {}
+
+for _enemy_row in enemy_region_rows:
+    by_enemy_number_for_enemy_regions.setdefault(_enemy_row.enemy_number, []).append(_enemy_row)
+    by_enemy_name_for_enemy_regions.setdefault(_enemy_row.enemy_name, set()).add(_enemy_row.enemy_number)
+    enemy_meta_by_number[_enemy_row.enemy_number] = (
+        _enemy_row.enemy_name, _enemy_row.specifier, _enemy_row.enemy_room,
+    )
+    _enemy_number_by_room_name_spec[
+        (_enemy_row.enemy_room, _enemy_row.enemy_name, _enemy_row.specifier)
+    ] = _enemy_row.enemy_number
+
+
+def resolve_enemy_number(room_id: str, enemy_name: str, specifier: str = "") -> int:
+    """Map the human form ``(room, name, specifier)`` to the unique ``enemy_number``."""
+    return _enemy_number_by_room_name_spec[(room_id, enemy_name, specifier)]

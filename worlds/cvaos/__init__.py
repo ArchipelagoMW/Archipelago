@@ -8,8 +8,8 @@ import settings
 from .constants import USA_ROM_HASH
 from .items import CVAOSItem, item_name_to_id, create_item, create_itempool
 from .locations import location_name_to_id
-from .options import CVAOSOptions
-from .regions import create_regions
+from .options import CVAOSOptions, Goal
+from .regions import create_regions, can_reach_room
 
 
 class CVAOSSettings(settings.Group):
@@ -57,11 +57,25 @@ class CVAOSWorld(World):
     topology_present = True
     origin_region_name = "Menu"
 
+    # Both set in create_regions: enemy_number -> region name, and room id -> its door
+    # region names. Used by the goal's reachability checks (regions.can_reach_*).
+    enemy_region_name_by_number: dict[int, str]
+    entrance_region_names_by_room: dict[str, list[str]]
+
     def create_regions(self) -> None:
         create_regions(self)
-        # Goal: reach the first pickup in room 900 (Dracula's Tunic location)
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.can_reach_location("Dracula's Tunic", self.player)
+        player = self.player
+        if self.options.goal == Goal.option_graham:
+            # Bad ending: defeat Graham — reach his room (904).
+            self.multiworld.completion_condition[player] = \
+                lambda state: can_reach_room(state, self, "904")
+        else:
+            # True ending: reach the Chaos arena (room B14). The Chaotic Realm is reachable
+            # only through the gated 507 -> 506 door, which already requires the Flame Demon,
+            # Succubus, and Giant Bat souls plus beating Graham, so reaching B14 encodes the
+            # whole true-ending requirement (see regions._chaotic_realm_gate).
+            self.multiworld.completion_condition[player] = \
+                lambda state: can_reach_room(state, self, "B14")
 
     def create_items(self) -> None:
         itempool = create_itempool(self)
@@ -86,4 +100,7 @@ class CVAOSWorld(World):
         patch.write(rom_path)
 
     def fill_slot_data(self) -> dict:
-        return {"randomize_pickups": self.options.randomize_pickups.value}
+        return {
+            "randomize_pickups": self.options.randomize_pickups.value,
+            "goal": self.options.goal.value,
+        }
