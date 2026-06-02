@@ -7,6 +7,18 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - `### Bug Fixes`
 - `### Internal Changes`
 
+## v0.2.0-rc6
+
+### Bug Fixes
+
+- Fixed ability statues not appearing in spoiler logs when ability randomization includes statue sources; spoiler output now correctly lists enabled statues alongside enemy assignments for full transparency (Issue #805).
+- Fixed big switch timing to ensure area big switches are properly recognized for zone completion checks (Issue #806).
+- Fixed Rainbow Route 1-02 exact chest checks to correctly register minor chest locations (Issue #812).
+
+### Internal Changes
+
+- Tracker support now receives room key updates through dedicated storage channels, providing trackers with more complete room-discovery state information.
+
 ## v0.2.0-rc5
 
 ### New Features
