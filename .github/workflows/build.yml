@@ -70,7 +70,7 @@ jobs:
           codesign --force --deep --sign - "$APP_PATH"
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
       - name: Create DMG
-        uses: L-Super/create-dmg-actions@v1
+        uses: L-Super/create-dmg-actions@7609ed1777bb1d43972a36bf57853dc1f2f7909a  # v1.1.0
         with:
           dmg_name: ${{ env.DMG_BASE }}
           src_dir: ${{ env.APP_PATH }}
