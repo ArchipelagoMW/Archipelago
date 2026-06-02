@@ -115,13 +115,6 @@ jobs:
           cp "$USER_DIR/Players/Templates/VVVVVV.yaml" "$USER_DIR/Players/"
           cd "$APP_PATH/Contents/MacOS"
           timeout 30 ./ArchipelagoGenerate
-      - name: Store App
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          path: ${{ env.APP_PATH }}
-          archive: false
-          if-no-files-found: error
-          retention-days: 7
       - name: Store DMG
         uses: actions/upload-artifact@v7.0.0
         with:
