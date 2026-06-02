@@ -1,89 +1,117 @@
 {
   "Beam": {
-    "runtime_ability_id": 7
+    "runtime_ability_id": 7,
+    "safe_to_gate": false
   },
   "Bomb": {
-    "runtime_ability_id": 9
+    "runtime_ability_id": 9,
+    "safe_to_gate": false
   },
   "Burning": {
-    "runtime_ability_id": 3
+    "runtime_ability_id": 3,
+    "safe_to_gate": false
   },
   "Cook": {
-    "runtime_ability_id": 12
+    "runtime_ability_id": 12,
+    "safe_to_gate": false
   },
   "Crash": {
-    "runtime_ability_id": 24
+    "runtime_ability_id": 24,
+    "safe_to_gate": false
   },
   "Cutter": {
-    "runtime_ability_id": 6
+    "runtime_ability_id": 6,
+    "safe_to_gate": false
   },
   "Cupid": {
-    "runtime_ability_id": 19
+    "runtime_ability_id": 19,
+    "safe_to_gate": false
   },
   "Fighter": {
-    "runtime_ability_id": 20
+    "runtime_ability_id": 20,
+    "safe_to_gate": false
   },
   "Fire": {
-    "runtime_ability_id": 1
+    "runtime_ability_id": 1,
+    "safe_to_gate": false
   },
   "Hammer": {
-    "runtime_ability_id": 17
+    "runtime_ability_id": 17,
+    "safe_to_gate": false
   },
   "Ice": {
-    "runtime_ability_id": 2
+    "runtime_ability_id": 2,
+    "safe_to_gate": false
   },
   "Laser": {
-    "runtime_ability_id": 13
+    "runtime_ability_id": 13,
+    "safe_to_gate": false
   },
   "Magic": {
-    "runtime_ability_id": 21
+    "runtime_ability_id": 21,
+    "safe_to_gate": false
   },
   "Master": {
     "runtime_ability_id": 26,
-    "enemy_copy_allowed": false
+    "enemy_copy_allowed": false,
+    "safe_to_gate": false
   },
   "Mini": {
-    "runtime_ability_id": 23
+    "runtime_ability_id": 23,
+    "safe_to_gate": false
   },
   "Missile": {
-    "runtime_ability_id": 25
+    "runtime_ability_id": 25,
+    "safe_to_gate": false
   },
   "Normal": {
     "runtime_ability_id": 0,
-    "enemy_copy_allowed": false
+    "enemy_copy_allowed": false,
+    "safe_to_gate": false
   },
   "Parasol": {
-    "runtime_ability_id": 5
+    "runtime_ability_id": 5,
+    "safe_to_gate": false
   },
   "Smash": {
-    "runtime_ability_id": 22
+    "runtime_ability_id": 22,
+    "safe_to_gate": false
   },
   "Sleep": {
-    "runtime_ability_id": 11
+    "runtime_ability_id": 11,
+    "safe_to_gate": false
   },
   "Spark": {
-    "runtime_ability_id": 15
+    "runtime_ability_id": 15,
+    "safe_to_gate": false
   },
   "Stone": {
-    "runtime_ability_id": 8
+    "runtime_ability_id": 8,
+    "safe_to_gate": false
   },
   "Sword": {
-    "runtime_ability_id": 18
+    "runtime_ability_id": 18,
+    "safe_to_gate": false
   },
   "Throw": {
-    "runtime_ability_id": 10
+    "runtime_ability_id": 10,
+    "safe_to_gate": false
   },
   "Tornado": {
-    "runtime_ability_id": 16
+    "runtime_ability_id": 16,
+    "safe_to_gate": false
   },
   "UFO": {
-    "runtime_ability_id": 14
+    "runtime_ability_id": 14,
+    "safe_to_gate": false
   },
   "Wheel": {
-    "runtime_ability_id": 4
+    "runtime_ability_id": 4,
+    "safe_to_gate": false
   },
   "Wait": {
     "runtime_ability_id": 27,
-    "enemy_copy_allowed": false
+    "enemy_copy_allowed": false,
+    "safe_to_gate": false
   }
 }
