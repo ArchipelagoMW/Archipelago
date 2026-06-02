@@ -35,7 +35,7 @@ class ChestBarrels(Choice):
 class Obelisks(DefaultOnToggle):
     """
     Obelisks will be added to the random pool as items.
-    Activating all of the obelisks in an area will unlock access to the next.
+    Activating all the obelisks in an area will unlock access to the next.
     Disabling this will lock obelisks in their original locations.
     """
 
@@ -70,7 +70,7 @@ class Goal(Choice):
 
     display_name = "Goal"
     option_defeat_skorne = 1
-    option_defeat_x_bosses =2
+    option_defeat_x_bosses = 2
     default = 1
 
 
@@ -83,14 +83,13 @@ class BossGoalCount(Range):
     display_name = "Boss Goal Count"
     range_start = 1
     range_end = 6
-    default = 6
+    default = 4
 
 
 class MaxDifficulty(Range):
     """
     Select the difficulty value you want to be the maximum.
-    This will affect the ammount of checks in each level as well as enemy strength and number of spawners.
-
+    This will affect the amount of checks in each level as well as enemy strength and number of spawners.
     """
 
     display_name = "Max Difficulty Value"
@@ -119,7 +118,7 @@ class PermaSpeed(Toggle):
 
 class InfiniteKeys(Toggle):
     """
-    You will be given an absurd amount of keys.
+    You will be given more keys than you could ever use.
     """
 
     display_name = "Infinite Keys"
