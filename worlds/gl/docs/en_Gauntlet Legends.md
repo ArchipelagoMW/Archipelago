@@ -18,6 +18,8 @@ Defeat Skorne in the Underworld. This requires gathering all 13 Runestones to ga
 Along the way, players will need to activate Obelisks to unlock new areas for them to explore.
 They may also need to collect Mirror Shards, which will unlock a 5th area to explore as well as the Cathedral level.
 
+An alternate goal is to defeat a certain number of unique bosses at the end of each area, which can be configured in the options.
+
 ## What items and locations can get shuffled?
 
 Locations in which items can be found:
@@ -37,10 +39,15 @@ Items that can be placed into locations:
 - Mirror Shards
 - Level Portals
 - Death
+- Golems
+- Goblin Shooters, Bomb Throwers, and Bomb Runners
+
+The randomizer also includes new portal items, which can be used as an alternate way to unlock new levels, 
+and add an extra layer of progression to the game.
 
 ## What does another world's item look like in Gauntlet Legends?
 
-Items will show up as as the Archipelago Logo, both as items and in chests or barrels.
+Items will show up as the Archipelago Logo, both as items and in chests or barrels.
 
 ## When the player receives an item, what happens?
 
