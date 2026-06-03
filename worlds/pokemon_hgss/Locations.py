@@ -9,10 +9,14 @@ class PokemonHGSSLocation(Location):
 
 
 LOCATION_TABLE = {
-    "New Bark Town - Receive Starter": 835001001,
-    "Violet City - Defeat Falkner": 835001002,
-    "Azalea Town - Defeat Bugsy": 835001003,
-    "Goldenrod City - Defeat Whitney": 835001004,
+    "Violet City - Defeat Falkner": 835001001,
+    "Azalea Town - Defeat Bugsy": 835001002,
+    "Goldenrod City - Defeat Whitney": 835001003,
+    "Ecruteak City - Defeat Morty": 835001004,
+    "Cianwood City - Defeat Chuck": 835001005,
+    "Olivine City - Defeat Jasmine": 835001006,
+    "Mahogany Town - Defeat Pryce": 835001007,
+    "Blackthorn City - Defeat Clair": 835001008,
 }
 
 

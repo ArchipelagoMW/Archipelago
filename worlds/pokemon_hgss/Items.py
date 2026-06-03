@@ -21,8 +21,24 @@ ITEM_TABLE = {
         "id": 835000003,
         "classification": ItemClassification.progression,
     },
-    "Rising Badge": {
+    "Fog Badge": {
         "id": 835000004,
+        "classification": ItemClassification.progression,
+    },
+    "Storm Badge": {
+        "id": 835000005,
+        "classification": ItemClassification.progression,
+    },
+    "Mineral Badge": {
+        "id": 835000006,
+        "classification": ItemClassification.progression,
+    },
+    "Glacier Badge": {
+        "id": 835000007,
+        "classification": ItemClassification.progression,
+    },
+    "Rising Badge": {
+        "id": 835000008,
         "classification": ItemClassification.progression,
     },
 }

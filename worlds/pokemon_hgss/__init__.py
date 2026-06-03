@@ -26,12 +26,13 @@ class PokemonHGSSWorld(World):
     """
     Experimental Archipelago support for Pokemon HeartGold and SoulSilver.
 
-    This is currently a tiny proof-of-concept world used to test generation,
-    regions, locations, progression items, and basic completion logic.
+    This is currently a Johto badge progression prototype used to test
+    generation, regions, locations, progression items, and basic completion
+    logic.
     """
 
     game = GAME_NAME
-    author = "EyeballSweat"
+    author = "prcecilio02"
     options_dataclass = PokemonHGSSOptions
     options: PokemonHGSSOptions
 
@@ -42,15 +43,6 @@ class PokemonHGSSWorld(World):
 
     def create_regions(self) -> None:
         menu = create_region(self, "Menu")
-
-        new_bark = create_region(
-            self,
-            "New Bark Town",
-            {
-                "New Bark Town - Receive Starter":
-                    LOCATION_TABLE["New Bark Town - Receive Starter"],
-            },
-        )
 
         violet = create_region(
             self,
@@ -79,6 +71,51 @@ class PokemonHGSSWorld(World):
             },
         )
 
+        ecruteak = create_region(
+            self,
+            "Ecruteak City",
+            {
+                "Ecruteak City - Defeat Morty":
+                    LOCATION_TABLE["Ecruteak City - Defeat Morty"],
+            },
+        )
+
+        cianwood = create_region(
+            self,
+            "Cianwood City",
+            {
+                "Cianwood City - Defeat Chuck":
+                    LOCATION_TABLE["Cianwood City - Defeat Chuck"],
+            },
+        )
+
+        olivine = create_region(
+            self,
+            "Olivine City",
+            {
+                "Olivine City - Defeat Jasmine":
+                    LOCATION_TABLE["Olivine City - Defeat Jasmine"],
+            },
+        )
+
+        mahogany = create_region(
+            self,
+            "Mahogany Town",
+            {
+                "Mahogany Town - Defeat Pryce":
+                    LOCATION_TABLE["Mahogany Town - Defeat Pryce"],
+            },
+        )
+
+        blackthorn = create_region(
+            self,
+            "Blackthorn City",
+            {
+                "Blackthorn City - Defeat Clair":
+                    LOCATION_TABLE["Blackthorn City - Defeat Clair"],
+            },
+        )
+
         pokemon_league = create_region(self, "Pokemon League")
 
         victory_location = PokemonHGSSLocation(
@@ -101,18 +138,26 @@ class PokemonHGSSWorld(World):
 
         self.multiworld.regions += [
             menu,
-            new_bark,
             violet,
             azalea,
             goldenrod,
+            ecruteak,
+            cianwood,
+            olivine,
+            mahogany,
+            blackthorn,
             pokemon_league,
         ]
 
-        menu.connect(new_bark)
-        new_bark.connect(violet)
+        menu.connect(violet)
         violet.connect(azalea)
         azalea.connect(goldenrod)
-        goldenrod.connect(pokemon_league)
+        goldenrod.connect(ecruteak)
+        ecruteak.connect(cianwood)
+        cianwood.connect(olivine)
+        olivine.connect(mahogany)
+        mahogany.connect(blackthorn)
+        blackthorn.connect(pokemon_league)
 
     def create_items(self) -> None:
         for item_name in self.item_name_to_id:
