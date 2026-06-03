@@ -9,7 +9,7 @@ This version can generate an Archipelago seed with:
 - Johto badge items
 - early HM progression items
 - key story progression items
-- early Johto story checks
+- expanded Johto story checks
 - a Lance victory event
 - basic progression logic
 - basic world options
