@@ -199,3 +199,30 @@ _speedups.html
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+
+# ROMs and copyrighted game files
+*.nds
+*.gba
+*.gb
+*.gbc
+*.sfc
+*.smc
+*.z64
+*.n64
+*.iso
+*.bin
+*.cue
+
+# Save files
+*.sav
+*.dsv
+*.state
+*.State
+
+# Patch output
+*.bps
+*.xdelta
+*.ips
+
+# HGSS AP output
+*.aphgss
