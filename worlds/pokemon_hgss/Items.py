@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from BaseClasses import Item, ItemClassification
 
 
@@ -8,45 +10,33 @@ class PokemonHGSSItem(Item):
     game = GAME_NAME
 
 
+@dataclass(frozen=True)
+class ItemData:
+    code: int | None
+    classification: ItemClassification
+
+
 ITEM_TABLE = {
-    "Zephyr Badge": {
-        "id": 835000001,
-        "classification": ItemClassification.progression,
-    },
-    "Hive Badge": {
-        "id": 835000002,
-        "classification": ItemClassification.progression,
-    },
-    "Plain Badge": {
-        "id": 835000003,
-        "classification": ItemClassification.progression,
-    },
-    "Fog Badge": {
-        "id": 835000004,
-        "classification": ItemClassification.progression,
-    },
-    "Storm Badge": {
-        "id": 835000005,
-        "classification": ItemClassification.progression,
-    },
-    "Mineral Badge": {
-        "id": 835000006,
-        "classification": ItemClassification.progression,
-    },
-    "Glacier Badge": {
-        "id": 835000007,
-        "classification": ItemClassification.progression,
-    },
-    "Rising Badge": {
-        "id": 835000008,
-        "classification": ItemClassification.progression,
-    },
+    "Zephyr Badge": ItemData(835000001, ItemClassification.progression),
+    "Hive Badge": ItemData(835000002, ItemClassification.progression),
+    "Plain Badge": ItemData(835000003, ItemClassification.progression),
+    "Fog Badge": ItemData(835000004, ItemClassification.progression),
+    "Storm Badge": ItemData(835000005, ItemClassification.progression),
+    "Mineral Badge": ItemData(835000006, ItemClassification.progression),
+    "Glacier Badge": ItemData(835000007, ItemClassification.progression),
+    "Rising Badge": ItemData(835000008, ItemClassification.progression),
+
+    # Event item.
+    # This is not placed in the random item pool.
+    # It is locked to "Pokemon League - Defeat Lance".
+    "Victory": ItemData(None, ItemClassification.progression),
 }
 
 
 item_name_to_id = {
-    item_name: item_data["id"]
+    item_name: item_data.code
     for item_name, item_data in ITEM_TABLE.items()
+    if item_data.code is not None
 }
 
 
@@ -55,7 +45,7 @@ def create_item(player: int, item_name: str) -> PokemonHGSSItem:
 
     return PokemonHGSSItem(
         item_name,
-        item_data["classification"],
-        item_data["id"],
+        item_data.classification,
+        item_data.code,
         player,
     )
