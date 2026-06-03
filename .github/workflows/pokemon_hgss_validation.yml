@@ -10,6 +10,9 @@ on:
       - "worlds/pokemon_hgss/**"
       - ".github/workflows/pokemon_hgss_validation.yml"
 
+permissions:
+  contents: read
+
 jobs:
   validate-hgss-data:
     runs-on: windows-latest
