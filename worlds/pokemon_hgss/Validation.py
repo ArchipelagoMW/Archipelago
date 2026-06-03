@@ -43,6 +43,49 @@ def raise_validation_errors(errors: list[str]) -> None:
         )
 
 
+def get_normal_location_count() -> int:
+    return sum(
+        1
+        for location_data in LOCATION_TABLE
+        if location_data.code is not None
+    )
+
+
+def get_required_item_count() -> int:
+    return sum(
+        item_data.pool_count
+        for item_data in ITEM_TABLE.values()
+        if (
+            item_data.code is not None
+            and item_data.classification != ItemClassification.filler
+        )
+    )
+
+
+def get_filler_item_count() -> int:
+    return sum(
+        1
+        for item_data in ITEM_TABLE.values()
+        if item_data.classification == ItemClassification.filler
+    )
+
+
+def get_event_location_count() -> int:
+    return sum(
+        1
+        for location_data in LOCATION_TABLE
+        if location_data.code is None
+    )
+
+
+def get_event_item_count() -> int:
+    return sum(
+        1
+        for item_data in ITEM_TABLE.values()
+        if item_data.code is None
+    )
+
+
 def validate_item_data(errors: list[str]) -> None:
     item_codes = [
         item_data.code
@@ -168,20 +211,8 @@ def validate_rule_data(errors: list[str]) -> None:
 
 
 def validate_item_pool_size(errors: list[str]) -> None:
-    normal_location_count = sum(
-        1
-        for location_data in LOCATION_TABLE
-        if location_data.code is not None
-    )
-
-    required_item_count = sum(
-        item_data.pool_count
-        for item_data in ITEM_TABLE.values()
-        if (
-            item_data.code is not None
-            and item_data.classification != ItemClassification.filler
-        )
-    )
+    normal_location_count = get_normal_location_count()
+    required_item_count = get_required_item_count()
 
     filler_item_names = [
         item_name
@@ -213,3 +244,25 @@ def validate_hgss_data() -> None:
     validate_item_pool_size(errors)
 
     raise_validation_errors(errors)
+
+
+def print_validation_summary() -> None:
+    print("Pokemon HGSS world data validation passed.")
+    print(f"Normal locations: {get_normal_location_count()}")
+    print(f"Event locations: {get_event_location_count()}")
+    print(f"Required item placements: {get_required_item_count()}")
+    print(f"Filler item types: {get_filler_item_count()}")
+    print(f"Event item types: {get_event_item_count()}")
+    print(f"Regions: {len(REGION_ORDER)}")
+    print(f"Entrances: {len(REGION_CONNECTIONS)}")
+    print(f"Location rules: {len(LOCATION_RULES)}")
+    print(f"Entrance rules: {len(ENTRANCE_RULES)}")
+
+
+def main() -> None:
+    validate_hgss_data()
+    print_validation_summary()
+
+
+if __name__ == "__main__":
+    main()
