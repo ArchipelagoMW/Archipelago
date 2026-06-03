@@ -59,7 +59,9 @@ class PokemonHGSSWorld(World):
         )
 
     def create_items(self) -> None:
-        for item_name in get_item_pool_names():
+        location_count = len(self.location_name_to_id)
+
+        for item_name in get_item_pool_names(self.random, location_count):
             self.multiworld.itempool.append(
                 self.create_item(item_name)
             )
