@@ -196,6 +196,7 @@ class Rac3Interface(GameInterface):
     opened_the_tyhrranoid_doors: bool = False
     opened_the_refractor_doors: bool = False
     weapon_levels: dict[str, int] = {}
+    delayed_weapon_levelups: list[str] = []
     last_hovered_weapon: str = ""
     equipped_item: int = 0
     last_used_0: int = 0
@@ -838,24 +839,13 @@ class Rac3Interface(GameInterface):
                     self.nanotech_exp = 0x7FFFFFFF
                 self._write32(RAC3STATUS.NANOTECH_EXP, self.nanotech_exp)
             case RAC3ITEM.WEAPON_XP:
-                valid_weapons = []
-                for weapon_name, weapon_data in non_prog_weapon_data.items():
-                    if self.UnlockItem[weapon_name].status:
-                        level = max(
-                            RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL,
-                            self.weapon_levels.get(weapon_name, 1))
-                        if level == 5:
-                            continue  # people should buy NG+ mega variant instead of getting them for free
-                        if self.options.ngplus_items:
-                            max_level = 8
-                        else:
-                            max_level = 5
-                        if ((weapon_name != RAC3ITEM.RY3N0 and level < max_level) or
-                            (weapon_name == RAC3ITEM.RY3N0 and level < self.ryno)):
-                            valid_weapons.append(weapon_name)
-
+                valid_weapons = self.get_valid_weapon_level_ups()
                 if valid_weapons:
-                    self.weapon_level_up(choice(valid_weapons))
+                    selected_weapon = choice(valid_weapons)
+                    if self.pause_state_value == RAC3PAUSESTATE.WEAPON_UPGRADE:
+                        self.delayed_weapon_levelups.append(selected_weapon)
+                    else:
+                        self.weapon_level_up(selected_weapon)
             case RAC3ITEM.OHKO_TRAP:
                 self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
                 self._write8(RAC3STATUS.HEALTH, 1)
@@ -913,6 +903,25 @@ class Rac3Interface(GameInterface):
                 self._write32(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
         if name in quick_selectable_data.keys() and self.UnlockItem[name].status == 1:
             self.update_equip(name)
+
+    def get_valid_weapon_level_ups(self) -> list[str]:
+        """Returns a list of valid weapons that can be leveled up from an xp reward, used for notifications"""
+        valid_weapons = []
+        for weapon_name, weapon_data in non_prog_weapon_data.items():
+            if self.UnlockItem[weapon_name].status:
+                level = max(
+                    RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL,
+                    self.weapon_levels.get(weapon_name, 1))
+                if level == 5:
+                    continue  # people should buy NG+ mega variant instead of getting them for free
+                if self.options.ngplus_items:
+                    max_level = 8
+                else:
+                    max_level = 5
+                if ((weapon_name != RAC3ITEM.RY3N0 and level < max_level) or
+                    (weapon_name == RAC3ITEM.RY3N0 and level < self.ryno)):
+                    valid_weapons.append(weapon_name)
+        return valid_weapons
 
     def weapon_level_up(self, weapon_name: str):
         """Level up a weapon from xp reward"""
@@ -1857,6 +1866,13 @@ class Rac3Interface(GameInterface):
                 self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
                 self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
         else:
+            if self.delayed_weapon_levelups and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE:
+                for weapon_name in self.delayed_weapon_levelups:
+                    valid_weapons = self.get_valid_weapon_level_ups()
+                    if weapon_name in valid_weapons:
+                        logger.debug(f"Applying delayed level up for {weapon_name}")
+                        self.weapon_level_up(weapon_name)
+                self.delayed_weapon_levelups = []
             for weapon_name, weapon_data in non_prog_weapon_data.items():
                 if not self.UnlockItem[weapon_name].status:
                     continue
