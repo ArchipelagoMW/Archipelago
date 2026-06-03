@@ -8,9 +8,13 @@ from .Items import (
     GAME_NAME,
     create_item,
     get_item_pool_names,
+    item_name_groups,
     item_name_to_id,
 )
-from .Locations import location_name_to_id
+from .Locations import (
+    location_name_groups,
+    location_name_to_id,
+)
 from .Options import PokemonHGSSOptions
 from .Output import write_hgss_output
 from .Regions import create_hgss_regions
@@ -36,6 +40,9 @@ class PokemonHGSSWorld(World):
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
+
+    item_name_groups = item_name_groups
+    location_name_groups = location_name_groups
 
     web = PokemonHGSSWebWorld()
 

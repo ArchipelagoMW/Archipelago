@@ -17,6 +17,47 @@ class ItemData:
     count: int = 1
 
 
+BADGE_ITEMS = {
+    "Zephyr Badge",
+    "Hive Badge",
+    "Plain Badge",
+    "Fog Badge",
+    "Storm Badge",
+    "Mineral Badge",
+    "Glacier Badge",
+    "Rising Badge",
+}
+
+
+HM_ITEMS = {
+    "HM01 Cut",
+    "HM03 Surf",
+    "HM04 Strength",
+    "HM05 Whirlpool",
+    "HM07 Waterfall",
+}
+
+
+KEY_ITEMS = {
+    "SquirtBottle",
+    "SecretPotion",
+    "Radio Card",
+    "Basement Key",
+    "Card Key",
+    "Machine Part",
+}
+
+
+FILLER_ITEMS = {
+    "Rare Candy",
+}
+
+
+EVENT_ITEMS = {
+    "Victory",
+}
+
+
 ITEM_TABLE = {
     # Johto badges
     "Zephyr Badge": ItemData(835000001, ItemClassification.progression),
@@ -57,6 +98,16 @@ item_name_to_id = {
     item_name: item_data.code
     for item_name, item_data in ITEM_TABLE.items()
     if item_data.code is not None
+}
+
+
+item_name_groups = {
+    "Badges": BADGE_ITEMS,
+    "HMs": HM_ITEMS,
+    "Key Items": KEY_ITEMS,
+    "Filler": FILLER_ITEMS,
+    "Events": EVENT_ITEMS,
+    "Progression": BADGE_ITEMS | HM_ITEMS | KEY_ITEMS,
 }
 
 
