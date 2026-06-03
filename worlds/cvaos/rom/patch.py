@@ -62,7 +62,7 @@ def get_location_data(world: CVAOSWorld, active_locations: List[Location]) -> Di
 # Patch classes
 
 def get_base_rom_bytes() -> bytes:
-    file_name = get_settings().cvaos_settings.rom_file
+    file_name = get_settings().cvaos_options.rom_file
     with open(file_name, "rb") as fh:
         return fh.read()
 
