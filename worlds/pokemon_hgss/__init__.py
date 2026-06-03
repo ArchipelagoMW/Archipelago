@@ -19,6 +19,7 @@ from .Options import PokemonHGSSOptions
 from .Output import write_hgss_output
 from .Regions import create_hgss_regions
 from .Rules import set_hgss_rules
+from .Validation import validate_hgss_data
 
 
 class PokemonHGSSWebWorld(WebWorld):
@@ -47,6 +48,8 @@ class PokemonHGSSWorld(World):
     web = PokemonHGSSWebWorld()
 
     def create_regions(self) -> None:
+        validate_hgss_data()
+
         create_hgss_regions(self)
 
         victory_location = self.multiworld.get_location(
