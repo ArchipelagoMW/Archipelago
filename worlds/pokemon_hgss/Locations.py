@@ -17,6 +17,55 @@ class LocationData:
     region: str
 
 
+GYM_LEADER_LOCATIONS = {
+    "Violet City - Defeat Falkner",
+    "Azalea Town - Defeat Bugsy",
+    "Goldenrod City - Defeat Whitney",
+    "Ecruteak City - Defeat Morty",
+    "Cianwood City - Defeat Chuck",
+    "Olivine City - Defeat Jasmine",
+    "Mahogany Town - Defeat Pryce",
+    "Blackthorn City - Defeat Clair",
+}
+
+
+EARLY_JOHTO_LOCATIONS = {
+    "New Bark Town - Receive Starter",
+    "Route 30 - Visit Mr. Pokemon",
+    "Violet City - Defeat Falkner",
+    "Violet City - Receive Togepi Egg",
+    "Azalea Town - Clear Slowpoke Well",
+    "Azalea Town - Defeat Bugsy",
+    "Ilex Forest - Clear Farfetch'd Puzzle",
+}
+
+
+RADIO_TOWER_LOCATIONS = {
+    "Goldenrod Radio Tower - Receive Radio Card",
+    "Goldenrod Underground - Receive Basement Key",
+    "Goldenrod Radio Tower - Receive Card Key",
+    "Goldenrod Radio Tower - Clear Radio Tower",
+}
+
+
+STORY_LOCATIONS = {
+    "New Bark Town - Receive Starter",
+    "Route 30 - Visit Mr. Pokemon",
+    "Violet City - Receive Togepi Egg",
+    "Azalea Town - Clear Slowpoke Well",
+    "Ilex Forest - Clear Farfetch'd Puzzle",
+    "Goldenrod Radio Tower - Receive Radio Card",
+    "Ecruteak City - Defeat Rival in Burned Tower",
+    "Ecruteak City - Defeat Kimono Girls",
+    "Olivine Lighthouse - Reach Amphy",
+    "Cianwood City - Receive SecretPotion",
+    "Mahogany Town - Clear Team Rocket HQ",
+    "Goldenrod Underground - Receive Basement Key",
+    "Goldenrod Radio Tower - Receive Card Key",
+    "Goldenrod Radio Tower - Clear Radio Tower",
+}
+
+
 LOCATION_TABLE = (
     LocationData(
         "New Bark Town - Receive Starter",
@@ -143,6 +192,14 @@ location_name_to_id = {
     location_data.name: location_data.code
     for location_data in LOCATION_TABLE
     if location_data.code is not None
+}
+
+
+location_name_groups = {
+    "Gym Leaders": GYM_LEADER_LOCATIONS,
+    "Early Johto": EARLY_JOHTO_LOCATIONS,
+    "Radio Tower": RADIO_TOWER_LOCATIONS,
+    "Story": STORY_LOCATIONS,
 }
 
 
