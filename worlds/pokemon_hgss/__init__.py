@@ -12,6 +12,7 @@ from .Items import (
 )
 from .Locations import location_name_to_id
 from .Options import PokemonHGSSOptions
+from .Output import write_hgss_output
 from .Regions import create_hgss_regions
 from .Rules import set_hgss_rules
 
@@ -71,3 +72,6 @@ class PokemonHGSSWorld(World):
             "item_name_to_id": self.item_name_to_id,
             "location_name_to_id": self.location_name_to_id,
         }
+
+    def generate_output(self, output_directory: str) -> None:
+        write_hgss_output(self, output_directory)

@@ -14,5 +14,6 @@ This version can generate an Archipelago seed with:
 - basic progression logic
 - basic world options
 - basic slot data for a future client
+- a placeholder `.aphgss` output file
 
 It does not yet modify a ROM, connect to an emulator, or interact with the actual game.
