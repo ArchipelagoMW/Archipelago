@@ -10,39 +10,8 @@ from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 
-def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
-    logic = world.logic
-
-    if target_name.startswith("item "):
-        is_item_explain = True
-        target_name = target_name[len("item "):]
-    else:
-        is_item_explain = False
-
-    if target_name.startswith("missing "):
-        expected = True
-        target_name = target_name[len("missing "):]
-    elif target_name.startswith("how "):
-        expected = False
-        target_name = target_name[len("how "):]
-    else:
-        expected = None
-
-    class TrackerGameContextMixin:
-        """Expecting the TrackerGameContext to have these methods."""
-        tracker_core: TrackerCore
-
-        def make_gui(self, manager):
-            ...
-
-        def run_generator(self):
-            ...
-
-
-    class TrackerGameContext(CommonContext, TrackerGameContextMixin):
-        pass
-
-
+    tracker_loaded = True
+except ImportError as e:
     tracker_loaded = False
     UT_VERSION = "Not found"
 
