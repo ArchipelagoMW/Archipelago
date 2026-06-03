@@ -15,27 +15,6 @@ try:
 
     tracker_loaded = True
 except ImportError as e:
-    logger.error(e)
-    from CommonClient import CommonContext, ClientCommandProcessor
-
-    TrackerCore = object
-
-
-    class TrackerGameContextMixin:
-        """Expecting the TrackerGameContext to have these methods."""
-        tracker_core: TrackerCore
-
-        def make_gui(self, manager):
-            ...
-
-        def run_generator(self):
-            ...
-
-
-    class TrackerGameContext(CommonContext, TrackerGameContextMixin):
-        pass
-
-
     tracker_loaded = False
     UT_VERSION = "Not found"
 
