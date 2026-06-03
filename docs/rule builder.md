@@ -41,6 +41,7 @@ The rule builder comes with a number of rules by default:
 - `False_`: Always returns false
 - `And`: Checks that all child rules are true (also provided by `&` operator)
 - `Or`: Checks that at least one child rule is true (also provided by `|` operator)
+- `AtLeast`: Checks that at least some count of rules is true
 - `Has`: Checks that the player has the given item with the given count (default 1)
 - `HasAll`: Checks that the player has all given items
 - `HasAny`: Checks that the player has at least one of the given items
