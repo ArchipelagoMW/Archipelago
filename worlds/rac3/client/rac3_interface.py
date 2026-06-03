@@ -13,6 +13,7 @@ from worlds.rac3.client.texthelper import (ITEM_TO_ORIGINAL_STRING_POINTER_OFFSE
                                            remove_accents, TEXT_BYTE_TO_EXPECTED_WIDTH)
 from worlds.rac3.constants.action_type import RAC3ACTIONTYPE
 from worlds.rac3.constants.check_type import CHECKTYPE
+from worlds.rac3.constants.cutscene_flag import RAC3CUTSCENEFLAG
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA, SAVE_DATA
 from worlds.rac3.constants.data.item import (armor_data, cheat_data, equipable_data, gadget_data, infobot_data,
                                              ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID, non_prog_weapon_data,
