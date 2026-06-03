@@ -77,8 +77,12 @@ def can_waterfall(state, world: Any) -> bool:
 # Region access logic
 # -------------------------
 
-def can_reach_azalea(state, world: Any) -> bool:
+def can_reach_route_32(state, world: Any) -> bool:
     return has_item(state, world, "Zephyr Badge")
+
+
+def can_reach_azalea(state, world: Any) -> bool:
+    return can_reach_route_32(state, world)
 
 
 def can_reach_ilex_forest(state, world: Any) -> bool:
@@ -87,6 +91,10 @@ def can_reach_ilex_forest(state, world: Any) -> bool:
 
 def can_reach_goldenrod(state, world: Any) -> bool:
     return can_reach_ilex_forest(state, world)
+
+
+def can_reach_national_park(state, world: Any) -> bool:
+    return can_reach_goldenrod(state, world)
 
 
 def can_reach_ecruteak(state, world: Any) -> bool:
@@ -112,6 +120,10 @@ def can_reach_mahogany(state, world: Any) -> bool:
     return can_reach_ecruteak(state, world)
 
 
+def can_reach_lake_of_rage(state, world: Any) -> bool:
+    return can_reach_mahogany(state, world)
+
+
 def can_reach_goldenrod_underground(state, world: Any) -> bool:
     return has_all_items(
         state,
@@ -121,25 +133,6 @@ def can_reach_goldenrod_underground(state, world: Any) -> bool:
             "Radio Card",
         ),
     )
-
-
-def can_reach_blackthorn(state, world: Any) -> bool:
-    return (
-        has_item(state, world, "Glacier Badge")
-        and can_strength(state, world)
-    )
-
-
-def can_reach_pokemon_league(state, world: Any) -> bool:
-    return can_waterfall(state, world)
-
-
-# -------------------------
-# Story logic
-# -------------------------
-
-def can_heal_amphy(state, world: Any) -> bool:
-    return has_item(state, world, "SecretPotion")
 
 
 def can_clear_radio_tower(state, world: Any) -> bool:
@@ -152,6 +145,30 @@ def can_clear_radio_tower(state, world: Any) -> bool:
             "Card Key",
         ),
     )
+
+
+def can_reach_blackthorn(state, world: Any) -> bool:
+    return (
+        can_clear_radio_tower(state, world)
+        and has_item(state, world, "Glacier Badge")
+        and can_strength(state, world)
+    )
+
+
+def can_reach_victory_road(state, world: Any) -> bool:
+    return can_waterfall(state, world)
+
+
+def can_reach_pokemon_league(state, world: Any) -> bool:
+    return can_reach_victory_road(state, world)
+
+
+# -------------------------
+# Story logic
+# -------------------------
+
+def can_heal_amphy(state, world: Any) -> bool:
+    return has_item(state, world, "SecretPotion")
 
 
 def can_defeat_clair(state, world: Any) -> bool:
@@ -168,10 +185,17 @@ EntranceRule = Callable[[object, Any], bool]
 ENTRANCE_RULES: dict[str, EntranceRule] = {
     # Early route connections are open by default:
     # Menu to New Bark Town
-    # New Bark Town to Route 30
+    # New Bark Town to Cherrygrove City
+    # Cherrygrove City to Route 30
     # Route 30 to Violet City
 
-    "Violet City to Azalea Town":
+    "Violet City to Route 32":
+        can_reach_route_32,
+
+    "Route 32 to Union Cave":
+        can_reach_route_32,
+
+    "Union Cave to Azalea Town":
         can_reach_azalea,
 
     "Azalea Town to Ilex Forest":
@@ -183,7 +207,13 @@ ENTRANCE_RULES: dict[str, EntranceRule] = {
     "Goldenrod City to Goldenrod Radio Tower":
         can_reach_goldenrod,
 
-    "Goldenrod City to Ecruteak City":
+    "Goldenrod City to Route 35":
+        can_reach_goldenrod,
+
+    "Route 35 to National Park":
+        can_reach_national_park,
+
+    "National Park to Ecruteak City":
         can_reach_ecruteak,
 
     "Ecruteak City to Olivine City":
@@ -195,13 +225,19 @@ ENTRANCE_RULES: dict[str, EntranceRule] = {
     "Ecruteak City to Mahogany Town":
         can_reach_mahogany,
 
+    "Mahogany Town to Lake of Rage":
+        can_reach_lake_of_rage,
+
     "Goldenrod City to Goldenrod Underground":
         can_reach_goldenrod_underground,
 
     "Mahogany Town to Blackthorn City":
         can_reach_blackthorn,
 
-    "Blackthorn City to Pokemon League":
+    "Blackthorn City to Victory Road":
+        can_reach_victory_road,
+
+    "Victory Road to Pokemon League":
         can_reach_pokemon_league,
 }
 
@@ -214,10 +250,15 @@ LocationRule = Callable[[object, Any], bool]
 
 
 LOCATION_RULES: dict[str, LocationRule] = {
-    # Early game checks:
-    # New Bark Town - Receive Starter is available from the start.
-    # Route 30 - Visit Mr. Pokemon is available from the start.
-    # Violet City - Defeat Falkner is available from the start.
+    # Early game checks are available from their regions:
+    # New Bark Town - Receive Starter
+    # New Bark Town - Receive Pokegear
+    # Cherrygrove City - Receive Running Shoes
+    # Cherrygrove City - Receive Map Card
+    # Route 30 - Visit Mr. Pokemon
+    # Route 30 - Receive Apricorn Box
+    # Violet City - Clear Sprout Tower
+    # Violet City - Defeat Falkner
 
     "Violet City - Receive Togepi Egg":
         lambda state, world: has_item(state, world, "Zephyr Badge"),
