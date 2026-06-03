@@ -82,30 +82,31 @@ class Pine:
         # self._init_socket()
 
     def _init_socket(self) -> bool:
+        socket_file_name = "pcsx2.sock" if self._slot == 28011 else f"pcsx2.sock.{self._slot}"
         if system() == "Windows":
             socket_family = socket.AF_INET
-            socket_name = ("127.0.0.1", self._slot)
+            socket_path = ("127.0.0.1", self._slot)
         elif system() == "Linux":
             socket_family = socket.AF_UNIX
-            base_socket = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
-            socket_file = "/pcsx2.sock"
+            base_path = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+
             # Flatpak Socket Path
-            socket_name = base_socket + "/.flatpak/net.pcsx2.PCSX2/xdg-run" + socket_file
+            socket_path = os.path.join(base_path, ".flatpak/net.pcsx2.PCSX2/xdg-run", socket_file_name)
+
             # Use default XDG_RUNTIME_DIR or /tmp if Flatpak socket is not detected
-            if not os.access(socket_name, os.W_OK):
-                socket_name = base_socket + socket_file
+            if not os.access(socket_path, os.W_OK):
+                socket_path = os.path.join(base_path, socket_file_name)
         elif system() == "Darwin":
             socket_family = socket.AF_UNIX
-            socket_name = os.environ.get("TMPDIR", "/tmp")
-            socket_name += "/pcsx2.sock"
+            socket_path = os.path.join(os.environ.get("TMPDIR", "/tmp"), socket_file_name)
         else:
             socket_family = socket.AF_UNIX
-            socket_name = "/tmp/pcsx2.sock"
+            socket_path = os.path.join("/tmp", socket_file_name)
 
         try:
             self._sock = socket.socket(socket_family, socket.SOCK_STREAM)
             self._sock.settimeout(5.0)
-            self._sock.connect(socket_name)
+            self._sock.connect(socket_path)
         except socket.error:
             self._sock.close()
             self._sock_state = False
@@ -198,20 +199,17 @@ class Pine:
         bytes_written = 0
         while bytes_written < len(data):
             if len(data) - bytes_written >= 8:
-                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written,
-                                               9 + Pine.DataSize.INT64)
+                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written, 9 + Pine.DataSize.INT64)
                 request += data[bytes_written:bytes_written + 8]
                 self._send_request(request)
                 bytes_written += 8
             elif len(data) - bytes_written >= 4:
-                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written,
-                                               9 + Pine.DataSize.INT32)
+                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written, 9 + Pine.DataSize.INT32)
                 request += data[bytes_written:bytes_written + 4]
                 self._send_request(request)
                 bytes_written += 4
             elif len(data) - bytes_written >= 2:
-                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written,
-                                               9 + Pine.DataSize.INT16)
+                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written, 9 + Pine.DataSize.INT16)
                 request += data[bytes_written:bytes_written + 2]
                 self._send_request(request)
                 bytes_written += 2
