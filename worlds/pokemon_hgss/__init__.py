@@ -1,3 +1,5 @@
+from typing import Any
+
 from BaseClasses import Item
 
 from worlds.AutoWorld import World, WebWorld
@@ -59,3 +61,13 @@ class PokemonHGSSWorld(World):
 
     def set_rules(self) -> None:
         set_hgss_rules(self)
+
+    def fill_slot_data(self) -> dict[str, Any]:
+        return {
+            "goal": int(self.options.goal.value),
+            "hm_badge_requirements": bool(
+                self.options.hm_badge_requirements.value
+            ),
+            "item_name_to_id": self.item_name_to_id,
+            "location_name_to_id": self.location_name_to_id,
+        }
