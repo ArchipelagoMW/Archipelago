@@ -19,6 +19,15 @@ if TYPE_CHECKING:
 
 CVAOS_USA_HASH = "e7470df4d241f73060d14437011b90ce"
 
+# Archipelago metadata written into clean ROM free space (CLIENT_PLAN sec. 4B/5c). These are
+# *file offsets* — both APProcedurePatch tokens and the BizHawk ROM domain the client reads
+# are file-offset based. The region at file 0x660000+ (GBA 0x08660000) is well clear of the
+# last real data at 0x651163. ARCHIPELAGO_IDENTIFIER doubles as the client/patch compatibility
+# gate; bump it whenever the patch/client contract changes.
+ARCHIPELAGO_IDENTIFIER_START = 0x660000   # 13 bytes
+ARCHIPELAGO_IDENTIFIER = "CVAOS_AP_V0.1"
+AUTH_NUMBER_START = 0x660010              # 16 bytes
+
 
 # Item encoding lookup:  identifier_key -> (type_num, subtype_num, item_offset)
 
@@ -90,5 +99,11 @@ def patch_rom(world: CVAOSWorld, patch: CVAOSProcedurePatch, offset_data: Dict[i
     """Write all item placement tokens into the patch."""
     for offset, data in offset_data.items():
         patch.write_token(APTokenTypes.WRITE, offset, data)
+
+    # AP metadata in ROM free space: the identifier the client validates, and the
+    # slot auth it reads to connect.
+    patch.write_token(APTokenTypes.WRITE, ARCHIPELAGO_IDENTIFIER_START,
+                      ARCHIPELAGO_IDENTIFIER.encode("ascii"))
+    patch.write_token(APTokenTypes.WRITE, AUTH_NUMBER_START, bytes(world.auth))
 
     patch.write_file("token_data.bin", patch.get_token_binary())
