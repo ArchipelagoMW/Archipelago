@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from random import Random
 
 from BaseClasses import Item, ItemClassification
 
@@ -14,7 +15,7 @@ class PokemonHGSSItem(Item):
 class ItemData:
     code: int | None
     classification: ItemClassification
-    count: int = 1
+    pool_count: int = 1
 
 
 BADGE_ITEMS = {
@@ -49,7 +50,16 @@ KEY_ITEMS = {
 
 
 FILLER_ITEMS = {
+    "Potion",
+    "Super Potion",
+    "Hyper Potion",
+    "Full Heal",
+    "Escape Rope",
+    "Repel",
+    "Max Repel",
+    "Nugget",
     "Rare Candy",
+    "PP Up",
 }
 
 
@@ -85,12 +95,22 @@ ITEM_TABLE = {
     "Machine Part": ItemData(835000045, ItemClassification.progression),
 
     # Filler items
-    "Rare Candy": ItemData(835000100, ItemClassification.filler, count=3),
+    # These are available as filler, but are not all placed every seed.
+    "Potion": ItemData(835000100, ItemClassification.filler, pool_count=0),
+    "Super Potion": ItemData(835000101, ItemClassification.filler, pool_count=0),
+    "Hyper Potion": ItemData(835000102, ItemClassification.filler, pool_count=0),
+    "Full Heal": ItemData(835000103, ItemClassification.filler, pool_count=0),
+    "Escape Rope": ItemData(835000104, ItemClassification.filler, pool_count=0),
+    "Repel": ItemData(835000105, ItemClassification.filler, pool_count=0),
+    "Max Repel": ItemData(835000106, ItemClassification.filler, pool_count=0),
+    "Nugget": ItemData(835000107, ItemClassification.filler, pool_count=0),
+    "Rare Candy": ItemData(835000108, ItemClassification.filler, pool_count=0),
+    "PP Up": ItemData(835000109, ItemClassification.filler, pool_count=0),
 
     # Event item
     # This is not placed in the random item pool.
     # It is locked to "Pokemon League - Defeat Lance".
-    "Victory": ItemData(None, ItemClassification.progression, count=0),
+    "Victory": ItemData(None, ItemClassification.progression, pool_count=0),
 }
 
 
@@ -111,15 +131,46 @@ item_name_groups = {
 }
 
 
-def get_item_pool_names() -> list[str]:
+def get_required_item_pool_names() -> list[str]:
     item_pool_names: list[str] = []
 
     for item_name, item_data in ITEM_TABLE.items():
         if item_data.code is None:
             continue
 
-        for _ in range(item_data.count):
+        if item_data.classification == ItemClassification.filler:
+            continue
+
+        for _ in range(item_data.pool_count):
             item_pool_names.append(item_name)
+
+    return item_pool_names
+
+
+def get_random_filler_items(random: Random, filler_count: int) -> list[str]:
+    filler_item_names = sorted(FILLER_ITEMS)
+
+    return [
+        random.choice(filler_item_names)
+        for _ in range(filler_count)
+    ]
+
+
+def get_item_pool_names(random: Random, location_count: int) -> list[str]:
+    item_pool_names = get_required_item_pool_names()
+
+    filler_count = location_count - len(item_pool_names)
+
+    if filler_count < 0:
+        raise ValueError(
+            "HGSS item pool has more required items than available locations. "
+            f"Required items: {len(item_pool_names)}, "
+            f"Locations: {location_count}."
+        )
+
+    item_pool_names.extend(
+        get_random_filler_items(random, filler_count)
+    )
 
     return item_pool_names
 
