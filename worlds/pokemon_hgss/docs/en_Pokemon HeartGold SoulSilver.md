@@ -12,5 +12,7 @@ This version can generate an Archipelago seed with:
 - early Johto story checks
 - a Lance victory event
 - basic progression logic
+- basic world options
+- basic slot data for a future client
 
 It does not yet modify a ROM, connect to an emulator, or interact with the actual game.
