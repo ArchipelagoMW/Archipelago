@@ -24,6 +24,9 @@ local function create_technology(location_data)
             new_location.localised_description  = {"technology-description.ap-technology-hidden", {"technology-description.ap-technology-item-" .. location_data.information.type}}
         end
     end
+    if location_data.information.type == "advancement" then
+        new_location.essential = true
+    end
     new_location.icons = library.get_icons(location_data.information)
     new_location.prerequisites = location_data.prerequisites
     data:extend({new_location})
