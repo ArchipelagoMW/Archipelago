@@ -1,98 +1,98 @@
 from collections.abc import Callable
+from typing import Any
 
 from worlds.generic.Rules import set_rule
 
 
-def has_item(state, player: int, item_name: str) -> bool:
-    return state.has(item_name, player)
+def has_item(state, world: Any, item_name: str) -> bool:
+    return state.has(item_name, world.player)
 
 
-def has_all_items(state, player: int, required_items: tuple[str, ...]) -> bool:
+def has_all_items(state, world: Any, required_items: tuple[str, ...]) -> bool:
     return all(
-        has_item(state, player, item_name)
+        has_item(state, world, item_name)
         for item_name in required_items
     )
+
+
+def hm_badge_requirements_enabled(world: Any) -> bool:
+    return bool(world.options.hm_badge_requirements.value)
 
 
 # -------------------------
 # HM logic
 # -------------------------
 
-def can_cut(state, player: int) -> bool:
-    return has_all_items(
-        state,
-        player,
-        (
-            "HM01 Cut",
-            "Hive Badge",
-        ),
-    )
+def can_cut(state, world: Any) -> bool:
+    if not has_item(state, world, "HM01 Cut"):
+        return False
+
+    if not hm_badge_requirements_enabled(world):
+        return True
+
+    return has_item(state, world, "Hive Badge")
 
 
-def can_surf(state, player: int) -> bool:
-    return has_all_items(
-        state,
-        player,
-        (
-            "HM03 Surf",
-            "Fog Badge",
-        ),
-    )
+def can_surf(state, world: Any) -> bool:
+    if not has_item(state, world, "HM03 Surf"):
+        return False
+
+    if not hm_badge_requirements_enabled(world):
+        return True
+
+    return has_item(state, world, "Fog Badge")
 
 
-def can_strength(state, player: int) -> bool:
-    return has_all_items(
-        state,
-        player,
-        (
-            "HM04 Strength",
-            "Plain Badge",
-        ),
-    )
+def can_strength(state, world: Any) -> bool:
+    if not has_item(state, world, "HM04 Strength"):
+        return False
+
+    if not hm_badge_requirements_enabled(world):
+        return True
+
+    return has_item(state, world, "Plain Badge")
 
 
-def can_whirlpool(state, player: int) -> bool:
-    return has_all_items(
-        state,
-        player,
-        (
-            "HM05 Whirlpool",
-            "Glacier Badge",
-        ),
-    )
+def can_whirlpool(state, world: Any) -> bool:
+    if not has_item(state, world, "HM05 Whirlpool"):
+        return False
+
+    if not hm_badge_requirements_enabled(world):
+        return True
+
+    return has_item(state, world, "Glacier Badge")
 
 
-def can_waterfall(state, player: int) -> bool:
-    return has_all_items(
-        state,
-        player,
-        (
-            "HM07 Waterfall",
-            "Rising Badge",
-        ),
-    )
+def can_waterfall(state, world: Any) -> bool:
+    if not has_item(state, world, "HM07 Waterfall"):
+        return False
+
+    if not hm_badge_requirements_enabled(world):
+        return True
+
+    return has_item(state, world, "Rising Badge")
 
 
 # -------------------------
 # Region access logic
 # -------------------------
 
-def can_reach_azalea(state, player: int) -> bool:
-    return has_item(state, player, "Zephyr Badge")
+def can_reach_azalea(state, world: Any) -> bool:
+    return has_item(state, world, "Zephyr Badge")
 
 
-def can_reach_ilex_forest(state, player: int) -> bool:
-    return has_item(state, player, "Hive Badge")
+def can_reach_ilex_forest(state, world: Any) -> bool:
+    return has_item(state, world, "Hive Badge")
 
 
-def can_reach_goldenrod(state, player: int) -> bool:
-    return can_reach_ilex_forest(state, player)
+def can_reach_goldenrod(state, world: Any) -> bool:
+    return can_reach_ilex_forest(state, world)
 
 
-def can_reach_ecruteak(state, player: int) -> bool:
+def can_reach_ecruteak(state, world: Any) -> bool:
     return has_all_items(
         state,
-        player,
+        world,
         (
             "Plain Badge",
             "SquirtBottle",
@@ -100,22 +100,22 @@ def can_reach_ecruteak(state, player: int) -> bool:
     )
 
 
-def can_reach_olivine(state, player: int) -> bool:
-    return can_reach_ecruteak(state, player)
+def can_reach_olivine(state, world: Any) -> bool:
+    return can_reach_ecruteak(state, world)
 
 
-def can_reach_cianwood(state, player: int) -> bool:
-    return can_surf(state, player)
+def can_reach_cianwood(state, world: Any) -> bool:
+    return can_surf(state, world)
 
 
-def can_reach_mahogany(state, player: int) -> bool:
-    return can_reach_ecruteak(state, player)
+def can_reach_mahogany(state, world: Any) -> bool:
+    return can_reach_ecruteak(state, world)
 
 
-def can_reach_goldenrod_underground(state, player: int) -> bool:
+def can_reach_goldenrod_underground(state, world: Any) -> bool:
     return has_all_items(
         state,
-        player,
+        world,
         (
             "Glacier Badge",
             "Radio Card",
@@ -123,29 +123,29 @@ def can_reach_goldenrod_underground(state, player: int) -> bool:
     )
 
 
-def can_reach_blackthorn(state, player: int) -> bool:
+def can_reach_blackthorn(state, world: Any) -> bool:
     return (
-        has_item(state, player, "Glacier Badge")
-        and can_strength(state, player)
+        has_item(state, world, "Glacier Badge")
+        and can_strength(state, world)
     )
 
 
-def can_reach_pokemon_league(state, player: int) -> bool:
-    return can_waterfall(state, player)
+def can_reach_pokemon_league(state, world: Any) -> bool:
+    return can_waterfall(state, world)
 
 
 # -------------------------
 # Story logic
 # -------------------------
 
-def can_heal_amphy(state, player: int) -> bool:
-    return has_item(state, player, "SecretPotion")
+def can_heal_amphy(state, world: Any) -> bool:
+    return has_item(state, world, "SecretPotion")
 
 
-def can_clear_radio_tower(state, player: int) -> bool:
+def can_clear_radio_tower(state, world: Any) -> bool:
     return has_all_items(
         state,
-        player,
+        world,
         (
             "Radio Card",
             "Basement Key",
@@ -154,15 +154,15 @@ def can_clear_radio_tower(state, player: int) -> bool:
     )
 
 
-def can_defeat_clair(state, player: int) -> bool:
-    return can_whirlpool(state, player)
+def can_defeat_clair(state, world: Any) -> bool:
+    return can_whirlpool(state, world)
 
 
 # -------------------------
 # Entrance rules
 # -------------------------
 
-EntranceRule = Callable[[object, int], bool]
+EntranceRule = Callable[[object, Any], bool]
 
 
 ENTRANCE_RULES: dict[str, EntranceRule] = {
@@ -210,7 +210,7 @@ ENTRANCE_RULES: dict[str, EntranceRule] = {
 # Location rules
 # -------------------------
 
-LocationRule = Callable[[object, int], bool]
+LocationRule = Callable[[object, Any], bool]
 
 
 LOCATION_RULES: dict[str, LocationRule] = {
@@ -220,16 +220,16 @@ LOCATION_RULES: dict[str, LocationRule] = {
     # Violet City - Defeat Falkner is available from the start.
 
     "Violet City - Receive Togepi Egg":
-        lambda state, player: has_item(state, player, "Zephyr Badge"),
+        lambda state, world: has_item(state, world, "Zephyr Badge"),
 
     "Ecruteak City - Defeat Kimono Girls":
-        lambda state, player: has_item(state, player, "Fog Badge"),
+        lambda state, world: has_item(state, world, "Fog Badge"),
 
     "Olivine City - Defeat Jasmine":
         can_heal_amphy,
 
     "Goldenrod Radio Tower - Receive Card Key":
-        lambda state, player: has_item(state, player, "Basement Key"),
+        lambda state, world: has_item(state, world, "Basement Key"),
 
     "Goldenrod Radio Tower - Clear Radio Tower":
         can_clear_radio_tower,
@@ -238,20 +238,20 @@ LOCATION_RULES: dict[str, LocationRule] = {
         can_defeat_clair,
 
     "Pokemon League - Defeat Lance":
-        lambda state, player: has_item(state, player, "Rising Badge"),
+        lambda state, world: has_item(state, world, "Rising Badge"),
 }
 
 
 def set_hgss_rules(world) -> None:
-    player = world.player
     multiworld = world.multiworld
+    player = world.player
 
     for entrance_name, access_rule in ENTRANCE_RULES.items():
         set_rule(
             multiworld.get_entrance(entrance_name, player),
             lambda state, access_rule=access_rule: access_rule(
                 state,
-                player,
+                world,
             ),
         )
 
@@ -260,7 +260,7 @@ def set_hgss_rules(world) -> None:
             multiworld.get_location(location_name, player),
             lambda state, access_rule=access_rule: access_rule(
                 state,
-                player,
+                world,
             ),
         )
 
