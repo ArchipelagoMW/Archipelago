@@ -5,6 +5,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Items import (
     GAME_NAME,
     create_item,
+    get_item_pool_names,
     item_name_to_id,
 )
 from .Locations import location_name_to_id
@@ -21,9 +22,8 @@ class PokemonHGSSWorld(World):
     """
     Experimental Archipelago support for Pokemon HeartGold and SoulSilver.
 
-    This is currently a Johto badge progression prototype used to test
-    generation, regions, locations, progression items, and basic completion
-    logic.
+    This is currently a Johto progression prototype used to test
+    generation, locations, progression items, and basic completion logic.
     """
 
     game = GAME_NAME
@@ -49,7 +49,7 @@ class PokemonHGSSWorld(World):
         )
 
     def create_items(self) -> None:
-        for item_name in self.item_name_to_id:
+        for item_name in get_item_pool_names():
             self.multiworld.itempool.append(
                 self.create_item(item_name)
             )

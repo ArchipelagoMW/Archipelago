@@ -2,31 +2,93 @@ from worlds.generic.Rules import set_rule
 
 
 LOCATION_RULES = {
-    # Falkner is available from the start.
+    # Early checks:
+    # New Bark Town - Receive Starter is available from the start.
+    # Route 30 - Visit Mr. Pokemon is available from the start.
+    # Violet City - Defeat Falkner is available from the start.
 
+    "Violet City - Receive Togepi Egg": (
+        "Zephyr Badge",
+    ),
+
+    "Azalea Town - Clear Slowpoke Well": (
+        "Zephyr Badge",
+    ),
     "Azalea Town - Defeat Bugsy": (
         "Zephyr Badge",
     ),
+
+    "Ilex Forest - Clear Farfetch'd Puzzle": (
+        "Hive Badge",
+    ),
+
     "Goldenrod City - Defeat Whitney": (
         "Hive Badge",
     ),
+    "Goldenrod Radio Tower - Receive Radio Card": (
+        "Hive Badge",
+    ),
+
+    "Ecruteak City - Defeat Rival in Burned Tower": (
+        "Plain Badge",
+        "SquirtBottle",
+    ),
     "Ecruteak City - Defeat Morty": (
         "Plain Badge",
+        "SquirtBottle",
     ),
-    "Cianwood City - Defeat Chuck": (
+
+    "Ecruteak City - Defeat Kimono Girls": (
+        "Fog Badge",
+        "SquirtBottle",
+    ),
+
+    "Olivine Lighthouse - Reach Amphy": (
+        "Plain Badge",
+        "SquirtBottle",
+    ),
+
+    "Cianwood City - Receive SecretPotion": (
+        "HM03 Surf",
         "Fog Badge",
     ),
+    "Cianwood City - Defeat Chuck": (
+        "HM03 Surf",
+        "Fog Badge",
+    ),
+
     "Olivine City - Defeat Jasmine": (
-        "Storm Badge",
+        "SecretPotion",
+    ),
+
+    "Mahogany Town - Clear Team Rocket HQ": (
+        "Fog Badge",
+        "SquirtBottle",
     ),
     "Mahogany Town - Defeat Pryce": (
-        "Mineral Badge",
+        "Fog Badge",
+        "SquirtBottle",
     ),
+
+    "Goldenrod Underground - Receive Basement Key": (
+        "Glacier Badge",
+        "Radio Card",
+    ),
+    "Goldenrod Radio Tower - Receive Card Key": (
+        "Basement Key",
+    ),
+    "Goldenrod Radio Tower - Clear Radio Tower": (
+        "Card Key",
+    ),
+
     "Blackthorn City - Defeat Clair": (
         "Glacier Badge",
+        "HM04 Strength",
     ),
+
     "Pokemon League - Defeat Lance": (
         "Rising Badge",
+        "HM07 Waterfall",
     ),
 }
 
