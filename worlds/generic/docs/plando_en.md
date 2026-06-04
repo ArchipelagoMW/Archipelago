@@ -11,7 +11,7 @@ certain games. Currently, only A Link to the Past supports text plando. Support 
 
 ### Enabling Plando
 
-Boss, text, and connection plando are enabled by default, but item plando must be separatenly enabled to be used
+Boss, text, and connection plando are enabled by default, but item plando must be separately enabled to be used
 (opt-in).
 
 * To enable or disable plando types when generating on the website, you can edit the Plando Options toggles on the
