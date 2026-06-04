@@ -34,3 +34,7 @@ jobs:
       - name: Validate Pokemon HGSS world data
         run: |
           python -m worlds.pokemon_hgss.Validation
+
+      - name: Check Pokemon HGSS client imports
+        run: |
+          python -m worlds.pokemon_hgss.Client --help
