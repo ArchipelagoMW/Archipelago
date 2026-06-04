@@ -21,6 +21,7 @@ from .Items import GAME_NAME
 from .LocationTracker import LocationTracker
 from .ReceivedItemTracker import ReceivedItemTracker
 from .GameInterface import SimulatedHGSSInterface
+from .GameChecks import get_event_key_for_location_name, get_location_name_for_event_key
 
 
 EXPECTED_FORMAT_VERSION = 1
@@ -181,11 +182,11 @@ class PokemonHGSSContext(CommonContext):
         self.test_checks_sent = False
 
         self.game_interface = SimulatedHGSSInterface(
-            simulated_location_names=simulated_location_names or [],
+            simulated_event_keys=simulated_location_names or [],
             delay_seconds=simulation_delay,
         )
 
-        self.watcher_seen_location_names: set[str] = set()
+        self.watcher_seen_event_keys: set[str] = set()
 
         if self.aphgss_data:
             self.auth = str(self.aphgss_data["player_name"])
@@ -305,7 +306,7 @@ async def game_watcher(ctx: PokemonHGSSContext) -> None:
     Temporary game watcher.
 
     Later this will read HGSS emulator memory.
-    For now, it reads from SimulatedHGSSInterface.
+    For now, it reads simulated HGSS event keys from SimulatedHGSSInterface.
     """
 
     while not ctx.exit_event.is_set():
@@ -313,18 +314,31 @@ async def game_watcher(ctx: PokemonHGSSContext) -> None:
             await asyncio.sleep(1)
             continue
 
-        completed_location_names = (
-            ctx.game_interface.get_completed_location_names()
+        completed_event_keys = (
+            ctx.game_interface.get_completed_event_keys()
         )
 
-        for location_name in completed_location_names:
-            if location_name in ctx.watcher_seen_location_names:
+        for event_key in completed_event_keys:
+            if event_key in ctx.watcher_seen_event_keys:
                 continue
 
-            ctx.watcher_seen_location_names.add(location_name)
+            ctx.watcher_seen_event_keys.add(event_key)
+
+            location_name = get_location_name_for_event_key(event_key)
+
+            if location_name is None:
+                print(
+                    "Watcher detected unknown HGSS event key: "
+                    f"{event_key}"
+                )
+                continue
 
             print(
-                "Watcher detected completed HGSS location: "
+                "Watcher detected completed HGSS event: "
+                f"{event_key}"
+            )
+            print(
+                "Mapped event to AP location: "
                 f"{location_name}"
             )
 
@@ -351,7 +365,7 @@ async def run_client(args) -> None:
         args.password,
         aphgss_data,
         args.test_check,
-        args.simulate_check,
+        args.simulate_event,
         args.simulation_delay,
     )
 
@@ -419,11 +433,11 @@ def main() -> None:
     )
 
     parser.add_argument(
-        "--simulate-check",
+        "--simulate-event",
         action="append",
         default=[],
         help=(
-            "Development only: simulate an HGSS location becoming completed. "
+            "Development only: simulate an HGSS event key becoming completed. "
             "Can be used multiple times."
         ),
     )
