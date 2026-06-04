@@ -7,6 +7,22 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - `### Bug Fixes`
 - `### Internal Changes`
 
+## v0.2.0-rc7
+
+### New Features
+
+- None.
+
+### Bug Fixes
+
+- Fix missing AP checks for spray-paint and music small chests so these checks now send reliably (Issue #807).
+- Fix hub-switch check handling by moving to a single-source mapping pipeline so check labels and sent checks stay aligned (Issue #806).
+- Fix statue naming in enemy-ability spoiler output so statue entries use the expected display names (Issue #821).
+
+### Internal Changes
+
+- Refine the `v0.2.0` changelog section wording to match shipped behavior and issue scope without changing runtime game behavior (Issue #817, Issue #818).
+
 ## v0.2.0
 
 ### New Features
