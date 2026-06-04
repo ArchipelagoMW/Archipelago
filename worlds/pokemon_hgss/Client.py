@@ -16,6 +16,8 @@ from CommonClient import (
     server_loop,
 )
 
+from Utils import async_start
+
 from .Items import GAME_NAME
 
 
@@ -150,15 +152,18 @@ class PokemonHGSSContext(CommonContext):
     items_handling = 0b111
 
     def __init__(
-        self,
-        server_address: str | None,
-        password: str | None,
-        aphgss_data: dict[str, Any] | None = None,
+            self,
+            server_address: str | None,
+            password: str | None,
+            aphgss_data: dict[str, Any] | None = None,
+            test_check_name: str | None = None,
     ) -> None:
         super().__init__(server_address, password)
 
         self.aphgss_data = aphgss_data
         self.slot_data: dict[str, Any] = {}
+        self.test_check_name = test_check_name
+        self.test_check_sent = False
 
         if self.aphgss_data:
             self.auth = str(self.aphgss_data["player_name"])
@@ -169,6 +174,49 @@ class PokemonHGSSContext(CommonContext):
 
         await self.get_username()
         await self.send_connect()
+
+    def get_location_id_by_name(self, location_name: str) -> int | None:
+        location_name_to_id = {}
+
+        if self.slot_data:
+            location_name_to_id.update(
+                self.slot_data.get("location_name_to_id", {})
+            )
+
+        if self.aphgss_data:
+            location_name_to_id.update(
+                self.aphgss_data.get("location_name_to_id", {})
+            )
+
+        location_id = location_name_to_id.get(location_name)
+
+        if location_id is None:
+            return None
+
+        return int(location_id)
+
+    async def send_test_location_check(self, location_name: str) -> None:
+        location_id = self.get_location_id_by_name(location_name)
+
+        if location_id is None:
+            print(f"Could not find HGSS location: {location_name}")
+            return
+
+        self.locations_checked.add(location_id)
+
+        await self.send_msgs(
+            [
+                {
+                    "cmd": "LocationChecks",
+                    "locations": [location_id],
+                }
+            ]
+        )
+
+        print(
+            "Sent test location check: "
+            f"{location_name} ({location_id})"
+        )
 
     def on_package(self, cmd: str, args: dict[str, Any]) -> None:
         if cmd == "Connected":
@@ -192,6 +240,14 @@ class PokemonHGSSContext(CommonContext):
                     "Known HGSS items: "
                     f"{len(self.slot_data.get('item_name_to_id', {}))}"
                 )
+
+            if self.test_check_name and not self.test_check_sent:
+                self.test_check_sent = True
+                async_start(
+                    self.send_test_location_check(self.test_check_name),
+                    name="HGSS test location check",
+                )
+
             else:
                 print("No slot data was received.")
 
@@ -233,6 +289,7 @@ async def run_client(args) -> None:
         args.connect,
         args.password,
         aphgss_data,
+        args.test_check,
     )
 
     if not args.connect:
@@ -286,6 +343,16 @@ def main() -> None:
         type=Path,
         default=None,
         help="Path to a generated PokemonHGSS_PlayerX.aphgss file.",
+    )
+
+    parser.add_argument(
+        "--test-check",
+        type=str,
+        default=None,
+        help=(
+            "Development only: send one HGSS location check by name "
+            "after connecting."
+        ),
     )
 
     args, _ = parser.parse_known_args()
