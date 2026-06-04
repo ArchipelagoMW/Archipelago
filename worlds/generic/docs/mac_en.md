@@ -1,5 +1,53 @@
-# Guide to Run Archipelago from Source Code on macOS
-Archipelago does not have a compiled release on macOS. However, it is possible to run from source code on macOS. This guide expects you to have some experience with running software from the terminal.
+# Guide to Run Archipelago on macOS
+
+There are two ways to run Archipelago on macOS: install the prebuilt App from the
+`.dmg` released on GitHub (easiest), or run from source code (described later in this
+guide).
+
+## Installing the Prebuilt App (.dmg)
+The prebuilt App is currently only available for Apple Silicon (M1 and newer). On an
+Intel Mac, run from source code instead (see below).
+1. Download the `Archipelago_<version>_macos-arm64.dmg` asset from the
+   [Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases).
+2. Double-click the `.dmg` to open it, then drag `Archipelago.app` into your
+   `Applications` folder.
+
+### "Apple could not verify Archipelago is free of malware"
+The App is signed, but not notarized by Apple, so the first launch is blocked by
+Gatekeeper. This is expected for an open-source app distributed without a paid Apple
+Developer ID, and it is safe to open anyway. On macOS Sequoia (15) and newer, follow
+these steps once; afterwards the App launches normally.
+
+1. Double-click the App. You'll see a dialog saying it could not be verified to be free
+   of malware. Click **Done** (do **not** click *Move to Trash*).
+
+   ![Gatekeeper blocks the first launch](mac_gatekeeper_blocked.png)
+
+2. Open **System Settings → Privacy & Security** and scroll down to the **Security**
+   section. You'll see a message that the App "was blocked to protect your Mac" with an
+   **Open Anyway** button next to it. Click **Open Anyway**.
+
+   ![Open Anyway button in Privacy & Security settings](mac_open_anyway.png)
+
+3. Confirm with Touch ID or your administrator password when prompted.
+
+   ![Authorize opening the app with Touch ID or password](mac_authorize.png)
+
+The App now opens, and from then on you can launch it normally by double-clicking.
+
+Apple documents this same override flow in the
+[Mac User Guide](https://support.apple.com/guide/mac-help/mh40616/mac); you can also
+reach it from the **?** button on the first dialog.
+
+![Apple's Mac User Guide page describing the override](mac_gatekeeper_help.png)
+
+> **Terminal alternative:** instead of the steps above, you can clear the quarantine
+> flag directly: `xattr -dr com.apple.quarantine /Applications/Archipelago.app`
+
+# Running Archipelago from Source Code on macOS
+If you prefer not to use the prebuilt App, or you are on an Intel Mac, you can run from
+source code instead. This section expects you to have some experience with running
+software from the terminal.
 ## Prerequisite Software
 Here is a list of software to install and source code to download.
 1. Python 3.11.9 "universal2" or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
