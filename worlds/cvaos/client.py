@@ -1,9 +1,9 @@
 """
 BizHawk client for Castlevania: Aria of Sorrow.
 
-Phase 1 scope (see worlds/cvaos/ROADMAP.md): validate the patched ROM, authenticate, and
-connect. Reading game state, sending location checks, receiving items, DeathLink, and goal
-detection are added in later phases; ``game_watcher`` is intentionally idle for now.
+This client validates the patched ROM, authenticates, connects, and sends location checks for
+collected pickups (``game_watcher``). Receiving items, DeathLink, and goal detection are added
+in later phases (see worlds/cvaos/ROADMAP.md).
 """
 from __future__ import annotations
 
@@ -13,6 +13,8 @@ from typing import TYPE_CHECKING
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
+from .locations import flag_offset_to_location_id
+from .ram import AoSRAM
 from .rom import ARCHIPELAGO_IDENTIFIER, ARCHIPELAGO_IDENTIFIER_START, AUTH_NUMBER_START
 
 if TYPE_CHECKING:
@@ -30,6 +32,7 @@ class CVAOSClient(BizHawkClient):
 
     # Per-session state, (re)initialized in set_auth.
     death_causes: list[str]
+    local_checked_locations: set[int]
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -67,6 +70,7 @@ class CVAOSClient(BizHawkClient):
         # Reset per-session state so swapping ROMs without restarting the client can't carry
         # anything stale over.
         self.death_causes = []
+        self.local_checked_locations = set()
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         # Queue an incoming DeathLink's cause; game_watcher applies the kill (Phase 4).
@@ -78,6 +82,31 @@ class CVAOSClient(BizHawkClient):
             self.death_causes.append(data.get("cause") or f"{source} killed you without a word!")
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        # Phase 1: connectable only. Location-sending, item-receiving, DeathLink, and goal
-        # detection arrive in later phases (ROADMAP §2-5). Intentionally idle for now.
-        return
+        if ctx.server is None or ctx.slot is None:
+            return
+        try:
+            ram = AoSRAM(ctx.bizhawk_ctx)
+            # Only read/act in normal in-room gameplay (not paused, transitioning, in a menu,
+            # or game-over), so we never read garbage or act at an unsafe time.
+            if not await ram.is_in_gameplay():
+                return
+
+            # Collected-pickup save flags -> AP location checks. Each set bit's index is a
+            # pickup's flag_offset. We map it to the AP location id and send it if the server
+            # tracks that location for this slot.
+            flag_bytes = await ram.read_pickup_flags()
+            checked: set[int] = set()
+            for flag_offset in AoSRAM.pickup_flag_ids(flag_bytes):
+                location_id = flag_offset_to_location_id.get(flag_offset)
+                if location_id is not None and location_id in ctx.server_locations:
+                    checked.add(location_id)
+
+            new_checks = checked - self.local_checked_locations
+            if new_checks:
+                self.local_checked_locations |= new_checks
+                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sorted(new_checks)}])
+
+            # Receiving items, DeathLink, and goal detection arrive in later phases (ROADMAP).
+        except bizhawk.RequestFailedError:
+            # Emulator/connection hiccup; retry next tick.
+            return
