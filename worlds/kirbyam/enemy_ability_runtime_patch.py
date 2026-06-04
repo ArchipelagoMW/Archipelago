@@ -50,6 +50,12 @@ _STATUE_TABLES: tuple[tuple[int, tuple[str, ...]], ...] = (
     (0x35390C, ("Sword", "Cutter", "Cupid")),
 )
 
+_STATUE_SLOT_LABELS: dict[str, str] = {
+    f"STATUE:{base_address + index:06X}": f"{default_ability} Statue"
+    for base_address, default_abilities in _STATUE_TABLES
+    for index, default_ability in enumerate(default_abilities)
+}
+
 _MINI_ABILITY_NAME = "Mini"
 
 
@@ -172,7 +178,7 @@ def build_enemy_copy_spoiler_rows(
         for base_address, default_abilities in _STATUE_TABLES:
             for index, _ in enumerate(default_abilities):
                 slot_key = f"STATUE:{base_address + index:06X}"
-                rows.append(("statue", slot_key, statue_assignments[slot_key]))
+                rows.append(("statue", _STATUE_SLOT_LABELS.get(slot_key, slot_key), statue_assignments[slot_key]))
 
     rows.sort(key=lambda row: (row[0], row[1]))
     return rows

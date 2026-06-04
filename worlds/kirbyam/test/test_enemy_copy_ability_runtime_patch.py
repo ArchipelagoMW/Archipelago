@@ -450,8 +450,9 @@ def test_shuffled_spoiler_rows_include_statues_when_enabled() -> None:
     writes = build_enemy_copy_runtime_patch_writes(policy, include_statues=True)
     reverse_ability_names = {ability_id: ability_name for ability_name, ability_id in ABILITY_NAME_TO_ID.items()}
 
-    assert ("statue", "STATUE:3538FC") in row_map
-    assert row_map[("statue", "STATUE:3538FC")] == reverse_ability_names[writes[0x3538FC]]
+    assert ("statue", "Beam Statue") in row_map
+    assert row_map[("statue", "Beam Statue")] == reverse_ability_names[writes[0x3538FC]]
+    assert all(not key.startswith("STATUE:") for kind, key in row_map if kind == "statue")
     assert ("enemy", "GOLEM") in row_map
 
 
