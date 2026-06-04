@@ -2,6 +2,10 @@ from collections import Counter
 
 from BaseClasses import ItemClassification
 
+from .GameChecks import (
+    GAME_CHECKS,
+    event_key_to_location_name,
+)
 from .Items import (
     ITEM_TABLE,
     item_name_groups,
@@ -84,6 +88,10 @@ def get_event_item_count() -> int:
         for item_data in ITEM_TABLE.values()
         if item_data.code is None
     )
+
+
+def get_game_check_count() -> int:
+    return len(GAME_CHECKS)
 
 
 def validate_item_data(errors: list[str]) -> None:
@@ -210,6 +218,60 @@ def validate_rule_data(errors: list[str]) -> None:
             )
 
 
+def validate_game_check_data(errors: list[str]) -> None:
+    event_keys = [
+        game_check.event_key
+        for game_check in GAME_CHECKS
+    ]
+
+    mapped_location_names = [
+        game_check.location_name
+        for game_check in GAME_CHECKS
+    ]
+
+    duplicate_event_keys = get_duplicates(event_keys)
+    duplicate_mapped_locations = get_duplicates(mapped_location_names)
+
+    for event_key in duplicate_event_keys:
+        errors.append(f"Duplicate game event key found: {event_key}")
+
+    for location_name in duplicate_mapped_locations:
+        errors.append(
+            "Multiple game event keys map to the same AP location: "
+            f"{location_name}"
+        )
+
+    normal_location_names = {
+        location_data.name
+        for location_data in LOCATION_TABLE
+        if location_data.code is not None
+    }
+
+    mapped_location_name_set = set(mapped_location_names)
+
+    unknown_mapped_locations = mapped_location_name_set - normal_location_names
+
+    for location_name in sorted(unknown_mapped_locations):
+        errors.append(
+            "Game check maps to unknown or non-normal AP location: "
+            f"{location_name}"
+        )
+
+    missing_game_checks = normal_location_names - mapped_location_name_set
+
+    for location_name in sorted(missing_game_checks):
+        errors.append(
+            "Normal AP location has no game check mapping: "
+            f"{location_name}"
+        )
+
+    if len(event_key_to_location_name) != len(GAME_CHECKS):
+        errors.append(
+            "event_key_to_location_name has fewer entries than GAME_CHECKS. "
+            "This usually means duplicate event keys exist."
+        )
+
+
 def validate_item_pool_size(errors: list[str]) -> None:
     normal_location_count = get_normal_location_count()
     required_item_count = get_required_item_count()
@@ -241,6 +303,7 @@ def validate_hgss_data() -> None:
     validate_location_data(errors)
     validate_region_data(errors)
     validate_rule_data(errors)
+    validate_game_check_data(errors)
     validate_item_pool_size(errors)
 
     raise_validation_errors(errors)
@@ -253,6 +316,7 @@ def print_validation_summary() -> None:
     print(f"Required item placements: {get_required_item_count()}")
     print(f"Filler item types: {get_filler_item_count()}")
     print(f"Event item types: {get_event_item_count()}")
+    print(f"Game checks: {get_game_check_count()}")
     print(f"Regions: {len(REGION_ORDER)}")
     print(f"Entrances: {len(REGION_CONNECTIONS)}")
     print(f"Location rules: {len(LOCATION_RULES)}")
