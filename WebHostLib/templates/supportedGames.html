@@ -68,6 +68,9 @@
             <a href="{{ world.web.bug_report_page }}">Report a Bug</a>
             {% endif %}
         </details>
+        {% if "authors" in world.manifest %}
+        <p>Authors: {{ world.manifest["authors"] | join(", ") }}</p>
+        {% endif %}
         {% endfor %}
     </div>
 {% endblock %}
