@@ -24,6 +24,8 @@ data:extend({
         type = "bool-setting",
         name = constants.setting_names.death_link,
         setting_type = "runtime-global",
+        localised_name = {"mod-setting-name.archipelago-death-link"},
+        localised_description = {"mod-setting-description.archipelago-death-link"},
         {% if death_link %}
             default_value = true
         {% else %}

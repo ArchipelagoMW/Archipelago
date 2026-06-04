@@ -351,7 +351,7 @@ local function spawn_entity(surface, force, name, x, y, radius, randomize, avoid
         end
     end
     if new_entity == nil then
-        force.print("Failed to place " .. args.name .. " in " .. serpent.line({x = x, y = y, radius = radius}))
+        force.print({"archipelago.fail-to-place", args.name, serpent.line({x = x, y = y, radius = radius})})
     end
 end
 
@@ -739,7 +739,7 @@ end,
     local new_factor = game.forces["enemy"].get_evolution_factor("nauvis") +
         (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].get_evolution_factor("nauvis")))
     game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
-    game.print({"", "New evolution factor:", new_factor})
+    game.print({"traps.new-evolution-factor", new_factor})
 end,
 ["Teleport Trap"] = function()
     for _, player in ipairs(game.forces["player"].players) do
@@ -791,10 +791,10 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     if index == nil then
         game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
         return
-    elseif index == -1 then -- for coop sync and restoring from an older savegame
+    elseif index == "-1" then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
-            game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
+            game.print({"archipelago.receive-ap-catchup", "[technology=" .. tech.name .. "]"})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true
         end
@@ -806,7 +806,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
             for _, item_name in ipairs(tech_stack) do
                 tech = force.technologies[item_name]
                 if tech.researched ~= true then
-                    game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+                    game.print({"archipelago.receive-ap-item", "[technology=" .. tech.name .. "]", source})
                     game.play_sound({path="utility/research_completed"})
                     tech.researched = true
                     return
@@ -818,7 +818,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         if tech ~= nil then
             storage.index_sync[index] = tech
             if tech.researched ~= true then
-                game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+                game.print({"archipelago.receive-ap-item", "[technology=" .. tech.name .. "]", source})
                 game.play_sound({path="utility/research_completed"})
                 tech.researched = true
             end
@@ -826,7 +826,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif TRAP_TABLE[item_name] ~= nil then
         if storage.index_sync[index] ~= item_name then -- not yet received trap
             storage.index_sync[index] = item_name
-            game.print({"", "Received ", item_name, " from ", source})
+            game.print({"archipelago.receive-ap-item", item_name, source})
             TRAP_TABLE[item_name]()
         end
     else

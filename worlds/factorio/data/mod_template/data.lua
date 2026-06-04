@@ -15,7 +15,6 @@ end
 local energy_bridge = table.deepcopy(data.raw["accumulator"]["accumulator"])
 energy_bridge.name = "ap-energy-bridge"
 energy_bridge.minable.result = "ap-energy-bridge"
-energy_bridge.localised_name = "Archipelago EnergyLink Bridge"
 energy_bridge.energy_source.buffer_capacity = "50MJ"
 energy_bridge.energy_source.input_flow_limit = "10MW"
 energy_bridge.energy_source.output_flow_limit = "10MW"
@@ -27,7 +26,6 @@ data.raw["accumulator"]["ap-energy-bridge"] = energy_bridge
 
 local energy_bridge_item = table.deepcopy(data.raw["item"]["accumulator"])
 energy_bridge_item.name = "ap-energy-bridge"
-energy_bridge_item.localised_name = "Archipelago EnergyLink Bridge"
 energy_bridge_item.place_result = energy_bridge.name
 tint_icon(energy_bridge_item, energy_bridge_tint())
 data.raw["item"]["ap-energy-bridge"] = energy_bridge_item
@@ -37,7 +35,6 @@ energy_bridge_recipe.name = "ap-energy-bridge"
 energy_bridge_recipe.results = { {type = "item", name = energy_bridge_item.name, amount = 1} }
 energy_bridge_recipe.energy_required = 1
 energy_bridge_recipe.enabled = {% if energy_link %}true{% else %}false{% endif %}
-energy_bridge_recipe.localised_name = "Archipelago EnergyLink Bridge"
 data.raw["recipe"]["ap-energy-bridge"] = energy_bridge_recipe
 
 local function create_trigger_science_pack(pack)

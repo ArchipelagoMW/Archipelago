@@ -376,10 +376,10 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
 
             # Actually create the new list of slots and encounter table
             new_slots: List[int] = []
-            if encounter_type in enabled_encounters:
-                world.allowed_dexsanity_species.update(table.slots)
             for species_id in table.slots:
                 new_slots.append(species_old_to_new_map[species_id])
+            if encounter_type in enabled_encounters:
+                world.allowed_dexsanity_species.update(new_slots)
 
             new_encounters[encounter_type] = EncounterTableData(new_slots, table.address)
 
@@ -502,7 +502,7 @@ def randomize_learnsets(world: "PokemonEmeraldWorld") -> None:
 
         species.learnset = new_learnset
 
-        
+
 def randomize_starters(world: "PokemonEmeraldWorld") -> None:
     if world.options.starters == RandomizeStarters.option_vanilla:
         return
@@ -682,7 +682,7 @@ def randomize_misc_pokemon(world: "PokemonEmeraldWorld") -> None:
                 ]
             if should_match_bst:
                 candidates = filter_species_by_nearby_bst(candidates, sum(original_species.base_stats))
-            
+
             player_filtered_candidates = [
                 species
                 for species in candidates
