@@ -8,6 +8,7 @@ from typing import Dict, List, Any, ClassVar, TextIO, Optional
 
 import entrance_rando
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import components, Component, icon_paths, Type
@@ -189,6 +190,38 @@ class StardewValleyWorld(World):
                                f"Parsed Value: {parsed_option_value}"
                                f"Yaml Value: {self.options.__getattribute__(option_name)}")
         return seed
+
+    def explain_rule(self, target_name: str, state: CollectionState) -> Optional[List[JSONMessagePart]]:
+        """Stardew Valley explain syntax:
+          /explain <Location>          show the rule tree for a location
+          /explain item:<Item>         show what's required to receive an item
+          /explain missing:<Location>  show only the unsatisfied parts of the rule
+          /explain how:<Location>      show only the satisfied parts of the rule
+        Drill into a sub-rule of the previous explanation with:
+          /explain_more                list the available sub-rule indices
+          /explain_more <index>        expand the indexed sub-rule
+        """
+        # Deferred to avoid the circular import (client.py does
+        # `from . import StardewValleyWorld` at module top, which would fail
+        # if this file imported client.py before defining the class).  Same
+        # pattern as the existing `launch_client` above.
+        from .client import StardewUTCommandProcessor
+        proc = StardewUTCommandProcessor(self, state)
+        if target_name.startswith("item:"):
+            proc._cmd_explain_item(target_name[len("item:"):].strip())
+        elif target_name.startswith("missing:"):
+            proc._cmd_explain_missing(target_name[len("missing:"):].strip())
+        elif target_name.startswith("how:"):
+            proc._cmd_explain_how(target_name[len("how:"):].strip())
+        else:
+            proc._cmd_explain(target_name)
+        return proc.buffered_parts or None
+
+    def explain_more(self, target_name: str, state: CollectionState) -> Optional[List[JSONMessagePart]]:
+        from .client import StardewUTCommandProcessor
+        proc = StardewUTCommandProcessor(self, state)
+        proc._cmd_more(target_name)
+        return proc.buffered_parts or None
 
     def generate_early(self):
         force_change_options_if_banned(self.options, self.settings, self.player, self.player_name)

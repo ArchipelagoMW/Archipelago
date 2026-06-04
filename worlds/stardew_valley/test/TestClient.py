@@ -316,3 +316,150 @@ class TestParseExplanation(unittest.TestCase):
         shape = [(p.get("type"), p.get("text"), p.get("color")) for p in parts]
         self.assertIn(("text", "Has ", None), shape)
         self.assertIn(("color", "3", "cyan"), shape)
+
+
+class TestUTWorldHooks(SVTestBase):
+    """Pins behavior of explain_rule + explain_more on StardewValleyWorld --
+    the Universal Tracker integration surface.
+
+    Cross-equivalence tests confirm that running each hook produces the same
+    JSONMessagePart payload as invoking the equivalent _cmd_* method on the
+    custom command processor, modulo the documented /more -> /explain_more
+    label swap.
+    """
+
+    def setUp(self) -> None:
+        super().setUp()
+        # Reset cross-test drill-down state on the world.
+        if hasattr(self.world, "_ut_previous_explanation"):
+            del self.world._ut_previous_explanation
+
+    def _capture_custom_output(self, run) -> list:
+        """Run a function with a StardewCommandProcessor + stub ctx, return
+        the captured output normalized to match the UT-hook label scheme."""
+        ctx = _StubCtx(self.world, self.multiworld, self.player)
+        proc = StardewCommandProcessor(ctx)
+        proc.output = ctx.outputs.append
+        run(proc)
+        if ctx.ui.printed:
+            parts = ctx.ui.printed[-1]
+        else:
+            parts = [{"type": "text", "text": line} for line in ctx.outputs]
+        # The custom processor renders /more N in drill-down hints; the UT
+        # processor renders /explain_more N. Normalize so the rest of the
+        # comparison checks content, not label.
+        for p in parts:
+            if "text" in p and isinstance(p["text"], str):
+                p["text"] = p["text"].replace("/more ", "/explain_more ")
+        return parts
+
+    def _a_location(self) -> str:
+        return sorted(loc.name for loc in self.multiworld.get_locations(self.player))[0]
+
+    def _an_item(self) -> str:
+        return sorted(self.world.logic.registry.item_rules.keys())[0]
+
+    def test_explain_rule_default_matches_custom_explain(self):
+        loc = self._a_location()
+        ut_parts = self.world.explain_rule(loc, self.multiworld.state)
+        custom_parts = self._capture_custom_output(lambda p: p._cmd_explain(loc))
+        self.assertEqual(ut_parts, custom_parts)
+
+    def test_explain_rule_item_subcommand_matches_custom_explain_item(self):
+        item = self._an_item()
+        ut_parts = self.world.explain_rule(f"item:{item}", self.multiworld.state)
+        custom_parts = self._capture_custom_output(lambda p: p._cmd_explain_item(item))
+        self.assertEqual(ut_parts, custom_parts)
+
+    def test_explain_rule_missing_subcommand_matches_custom_explain_missing(self):
+        loc = self._a_location()
+        ut_parts = self.world.explain_rule(f"missing:{loc}", self.multiworld.state)
+        custom_parts = self._capture_custom_output(lambda p: p._cmd_explain_missing(loc))
+        self.assertEqual(ut_parts, custom_parts)
+
+    def test_explain_rule_how_subcommand_matches_custom_explain_how(self):
+        loc = self._a_location()
+        ut_parts = self.world.explain_rule(f"how:{loc}", self.multiworld.state)
+        custom_parts = self._capture_custom_output(lambda p: p._cmd_explain_how(loc))
+        self.assertEqual(ut_parts, custom_parts)
+
+    def test_explain_more_with_no_previous_explanation(self):
+        parts = self.world.explain_more("", self.multiworld.state)
+        self.assertEqual(parts, [{"type": "text", "text": "No previous explanation found."}])
+
+    def test_explain_more_drill_down_persists_state_across_calls(self):
+        # Walk locations until /explain produces drill-down candidates.
+        seeded = None
+        for loc_name in sorted(loc.name for loc in self.multiworld.get_locations(self.player)):
+            self.world._ut_previous_explanation = None
+            self.world.explain_rule(loc_name, self.multiworld.state)
+            prev = getattr(self.world, "_ut_previous_explanation", None)
+            if prev is None:
+                continue
+            _ = prev.explained_sub_rules  # populate lazy more_explanations
+            if prev.more_explanations:
+                seeded = prev
+                break
+        if seeded is None:
+            self.skipTest("no location in this seed produces drill-down candidates")
+
+        # Drill in by index. State must update on the world instance so a
+        # follow-up call sees the new previous_explanation.
+        parts = self.world.explain_more("0", self.multiworld.state)
+        self.assertIsNotNone(parts)
+        self.assertGreater(len(parts), 0)
+        self.assertIsNot(self.world._ut_previous_explanation, seeded)
+
+    def test_explain_rule_renders_explain_more_label_in_drill_down_hints(self):
+        # Find a location whose rule tree includes drill-down candidates.
+        joined = ""
+        for loc_name in sorted(loc.name for loc in self.multiworld.get_locations(self.player)):
+            self.world._ut_previous_explanation = None
+            parts = self.world.explain_rule(loc_name, self.multiworld.state)
+            if parts is None:
+                continue
+            joined = "".join(p.get("text", "") for p in parts if "text" in p)
+            if "to explain" in joined:
+                break
+        else:
+            self.skipTest("no location in this seed renders drill-down hints")
+
+        # All drill-down hints must reference /explain_more, never bare /more.
+        self.assertIn("/explain_more ", joined)
+        # Strip out /explain_more substrings first so the negative match doesn't
+        # mistake the inner "/more " of "/explain_more " for a bare /more.
+        non_label = joined.replace("/explain_more ", "")
+        self.assertNotIn("/more ", non_label)
+
+    def test_explain_more_listing_uses_explain_more_label(self):
+        # Seed a previous_explanation with drill-down candidates.
+        seeded = None
+        for loc_name in sorted(loc.name for loc in self.multiworld.get_locations(self.player)):
+            self.world._ut_previous_explanation = None
+            self.world.explain_rule(loc_name, self.multiworld.state)
+            prev = getattr(self.world, "_ut_previous_explanation", None)
+            if prev is None:
+                continue
+            _ = prev.explained_sub_rules
+            if prev.more_explanations:
+                seeded = prev
+                break
+        if seeded is None:
+            self.skipTest("no location in this seed produces drill-down candidates")
+
+        # No index -> listing path. Each enumerated line should be prefixed
+        # with /explain_more, not /more.
+        parts = self.world.explain_more("", self.multiworld.state)
+        joined = "".join(p.get("text", "") for p in parts if "text" in p)
+        self.assertIn("/explain_more 0", joined)
+        self.assertNotIn("/more 0", joined.replace("/explain_more 0", ""))
+
+    def test_explain_rule_docstring_documents_subcommand_syntax(self):
+        # UT propagates this docstring into /help via inspect.getdoc, so the
+        # four sub-command prefixes plus /explain_more must be discoverable.
+        doc = self.world.explain_rule.__doc__ or ""
+        self.assertIn("/explain", doc)
+        self.assertIn("item:", doc)
+        self.assertIn("missing:", doc)
+        self.assertIn("how:", doc)
+        self.assertIn("/explain_more", doc)

@@ -21,6 +21,7 @@ class MoreExplanation:
     state: CollectionState
     more_index: int
     mode: ExplainMode
+    more_command: str = "/more"
 
     @cached_property
     def result(self) -> bool:
@@ -34,7 +35,7 @@ class MoreExplanation:
             depth *= 2
 
         line = "  " * depth + f"{str(self.rule)} -> {self.result}"
-        line += f" [use `/more {self.more_index}` to explain]"
+        line += f" [use `{self.more_command} {self.more_index}` to explain]"
 
         return line
 
@@ -52,6 +53,7 @@ class RuleExplanation:
     more_explanations: List[StardewRule] = field(default_factory=list, repr=False, hash=False)
     explored_rules_key: Set[Tuple[str, str]] = field(default_factory=set, repr=False, hash=False)
     current_rule_explored: bool = False
+    more_command: str = "/more"
 
     def __post_init__(self):
         checkpoint = _rule_key(self.rule)
@@ -77,7 +79,7 @@ class RuleExplanation:
                                                       for i in sorted(self.explained_sub_rules, key=lambda x: x.result))
 
     def more(self, more_index: int) -> RuleExplanation:
-        return explain(self.more_explanations[more_index], self.state, self.expected, self.mode)
+        return explain(self.more_explanations[more_index], self.state, self.expected, self.mode, self.more_command)
 
     @cached_property
     def result(self) -> bool:
@@ -96,17 +98,17 @@ class RuleExplanation:
             sub_explanations = []
             for sub_rule in self.sub_rules:
                 if isinstance(sub_rule, Reach) and sub_rule.resolution_hint == 'Entrance':
-                    sub_explanations.append(MoreExplanation(sub_rule, self.state, len(self.more_explanations), self.mode))
+                    sub_explanations.append(MoreExplanation(sub_rule, self.state, len(self.more_explanations), self.mode, self.more_command))
                     self.more_explanations.append(sub_rule)
                 elif isinstance(sub_rule, Reach) and sub_rule.resolution_hint == 'Location':
-                    sub_explanations.append(MoreExplanation(sub_rule, self.state, len(self.more_explanations), self.mode))
+                    sub_explanations.append(MoreExplanation(sub_rule, self.state, len(self.more_explanations), self.mode, self.more_command))
                     self.more_explanations.append(sub_rule)
                 else:
-                    sub_explanations.append(_explain(sub_rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key))
+                    sub_explanations.append(_explain(sub_rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key, self.more_command))
 
             return sub_explanations
 
-        return [_explain(sub_rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key) for sub_rule in self.sub_rules]
+        return [_explain(sub_rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key, self.more_command) for sub_rule in self.sub_rules]
 
 
 @dataclass
@@ -116,7 +118,8 @@ class CountSubRuleExplanation(RuleExplanation):
     @staticmethod
     def from_explanation(expl: RuleExplanation, count: int) -> CountSubRuleExplanation:
         return CountSubRuleExplanation(expl.rule, expl.state, expl.expected, expl.mode, expl.sub_rules, more_explanations=expl.more_explanations,
-                                       explored_rules_key=expl.explored_rules_key, current_rule_explored=expl.current_rule_explored, count=count)
+                                       explored_rules_key=expl.explored_rules_key, current_rule_explored=expl.current_rule_explored,
+                                       more_command=expl.more_command, count=count)
 
     def summary(self, depth=0) -> str:
         if self.mode is ExplainMode.CLIENT:
@@ -138,57 +141,63 @@ class CountExplanation(RuleExplanation):
             return super().explained_sub_rules
 
         return [
-            CountSubRuleExplanation.from_explanation(_explain(rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key),
+            CountSubRuleExplanation.from_explanation(_explain(rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key,
+                                                              self.more_command),
                                                      count)
             for rule, count in self.rule.counter.items()
         ]
 
 
-def explain(rule: CollectionRule, state: CollectionState, expected: bool | None = True, mode: ExplainMode = ExplainMode.VERBOSE) -> RuleExplanation:
+def explain(rule: CollectionRule, state: CollectionState, expected: bool | None = True, mode: ExplainMode = ExplainMode.VERBOSE,
+            more_command: str = "/more") -> RuleExplanation:
     if isinstance(rule, StardewRule):
-        return _explain(rule, state, expected, mode, more_explanations=list(), explored_spots=set())
+        return _explain(rule, state, expected, mode, more_explanations=list(), explored_spots=set(), more_command=more_command)
     else:
         return f"Value of rule {str(rule)} was not {str(expected)} in {str(state)}"  # noqa
 
 
 @singledispatch
 def _explain(rule: StardewRule, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
-             explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
-    return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots)
+             explored_spots: Set[Tuple[str, str]], more_command: str = "/more") -> RuleExplanation:
+    return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots,
+                           more_command=more_command)
 
 
 @_explain.register
 def _(rule: AggregatingStardewRule, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
-      explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
-    return RuleExplanation(rule, state, expected, mode, rule.original_rules, more_explanations=more_explanations, explored_rules_key=explored_spots)
+      explored_spots: Set[Tuple[str, str]], more_command: str = "/more") -> RuleExplanation:
+    return RuleExplanation(rule, state, expected, mode, rule.original_rules, more_explanations=more_explanations, explored_rules_key=explored_spots,
+                           more_command=more_command)
 
 
 @_explain.register
 def _(rule: Count, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
-      explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
-    return CountExplanation(rule, state, expected, mode, rule.rules, more_explanations=more_explanations, explored_rules_key=explored_spots)
+      explored_spots: Set[Tuple[str, str]], more_command: str = "/more") -> RuleExplanation:
+    return CountExplanation(rule, state, expected, mode, rule.rules, more_explanations=more_explanations, explored_rules_key=explored_spots,
+                            more_command=more_command)
 
 
 @_explain.register
 def _(rule: Has, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
-      explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
+      explored_spots: Set[Tuple[str, str]], more_command: str = "/more") -> RuleExplanation:
     try:
         return RuleExplanation(rule, state, expected, mode, [rule.other_rules[rule.item]], more_explanations=more_explanations,
-                               explored_rules_key=explored_spots)
+                               explored_rules_key=explored_spots, more_command=more_command)
     except KeyError:
-        return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots)
+        return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots,
+                               more_command=more_command)
 
 
 @_explain.register
 def _(rule: TotalReceived, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
-      explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
+      explored_spots: Set[Tuple[str, str]], more_command: str = "/more") -> RuleExplanation:
     return RuleExplanation(rule, state, expected, mode, [Received(i, rule.player, 1) for i in rule.items], more_explanations=more_explanations,
-                           explored_rules_key=explored_spots)
+                           explored_rules_key=explored_spots, more_command=more_command)
 
 
 @_explain.register
 def _(rule: Reach, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
-      explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
+      explored_spots: Set[Tuple[str, str]], more_command: str = "/more") -> RuleExplanation:
     access_rules = None
     if rule.resolution_hint == 'Location':
         spot = state.multiworld.get_location(rule.spot, rule.player)
@@ -224,14 +233,16 @@ def _(rule: Reach, state: CollectionState, expected: bool | None, mode: ExplainM
         access_rules = [*(Reach(e.name, "Entrance", rule.player) for e in spot.entrances)]
 
     if not access_rules:
-        return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots)
+        return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots,
+                               more_command=more_command)
 
-    return RuleExplanation(rule, state, expected, mode, access_rules, more_explanations=more_explanations, explored_rules_key=explored_spots)
+    return RuleExplanation(rule, state, expected, mode, access_rules, more_explanations=more_explanations, explored_rules_key=explored_spots,
+                           more_command=more_command)
 
 
 @_explain.register
 def _(rule: Received, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
-      explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
+      explored_spots: Set[Tuple[str, str]], more_command: str = "/more") -> RuleExplanation:
     access_rules = None
     if rule.event:
         try:
@@ -244,9 +255,11 @@ def _(rule: Received, state: CollectionState, expected: bool | None, mode: Expla
             pass
 
     if not access_rules:
-        return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots)
+        return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots,
+                               more_command=more_command)
 
-    return RuleExplanation(rule, state, expected, mode, access_rules, more_explanations=more_explanations, explored_rules_key=explored_spots)
+    return RuleExplanation(rule, state, expected, mode, access_rules, more_explanations=more_explanations, explored_rules_key=explored_spots,
+                           more_command=more_command)
 
 
 @singledispatch
