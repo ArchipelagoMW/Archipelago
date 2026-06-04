@@ -19,6 +19,7 @@ from Utils import async_start
 
 from .Items import GAME_NAME
 from .LocationTracker import LocationTracker
+from .ReceivedItemTracker import ReceivedItemTracker
 
 
 EXPECTED_FORMAT_VERSION = 1
@@ -168,6 +169,11 @@ class PokemonHGSSContext(CommonContext):
             aphgss_data=self.aphgss_data,
         )
 
+        self.received_item_tracker = ReceivedItemTracker.from_seed_data(
+            slot_data=None,
+            aphgss_data=self.aphgss_data,
+        )
+
         self.test_check_names = test_check_names or []
         self.test_checks_sent = False
 
@@ -181,13 +187,18 @@ class PokemonHGSSContext(CommonContext):
         await self.get_username()
         await self.send_connect()
 
-    def rebuild_location_tracker(self) -> None:
+    def rebuild_seed_trackers(self) -> None:
         self.location_tracker = LocationTracker.from_seed_data(
             slot_data=self.slot_data,
             aphgss_data=self.aphgss_data,
         )
 
         self.location_tracker.update_checked_locations(self.locations_checked)
+
+        self.received_item_tracker.update_seed_data(
+            slot_data=self.slot_data,
+            aphgss_data=self.aphgss_data,
+        )
 
     async def send_location_check_by_name(self, location_name: str) -> None:
         location_id, should_send = self.location_tracker.mark_location_checked(
@@ -229,7 +240,7 @@ class PokemonHGSSContext(CommonContext):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
 
-            self.rebuild_location_tracker()
+            self.rebuild_seed_trackers()
 
             print()
             print("Connected to Pokemon HeartGold SoulSilver slot.")
@@ -266,10 +277,17 @@ class PokemonHGSSContext(CommonContext):
                 )
 
         if cmd == "ReceivedItems":
+            new_item_names = self.received_item_tracker.get_new_received_items(
+                self.items_received
+            )
+
             print(
                 "ReceivedItems packet received. "
                 f"Total received items: {len(self.items_received)}"
             )
+
+            for item_name in new_item_names:
+                print(f"New HGSS item received: {item_name}")
 
 
 async def game_watcher(ctx: PokemonHGSSContext) -> None:
