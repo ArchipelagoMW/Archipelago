@@ -1,6 +1,6 @@
 {
   "MINOR_CHEST_UNMAPPED_X_01_REPORT": {
-    "label": "Uncertain Minor Chest 1-40 (Report This)",
+    "label": "Uncertain Minor Chest 1-40 - Expected Music Sheet #2 (Report This)",
     "parent_region": "REGION_RAINBOW_ROUTE/ROOM_1_40",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -130,7 +130,7 @@
     "location_id": 3960530
   },
   "MINOR_CHEST_UNMAPPED_X_12_REPORT": {
-    "label": "Uncertain Minor Chest 2-14 (Report This)",
+    "label": "Uncertain Minor Chest 2-14 - Expected Music Sheet #2 (Report This)",
     "parent_region": "REGION_MOONLIGHT_MANSION/ROOM_2_14",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -208,7 +208,7 @@
     "location_id": 3960536
   },
   "MINOR_CHEST_UNMAPPED_X_18_REPORT": {
-    "label": "Uncertain Minor Chest 5-04 (Report This)",
+    "label": "Uncertain Minor Chest 5-04 - Expected Music Sheet #7 (Report This)",
     "parent_region": "REGION_CARROT_CASTLE/ROOM_5_04",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -221,7 +221,7 @@
     "location_id": 3960537
   },
   "MINOR_CHEST_UNMAPPED_X_19_REPORT": {
-    "label": "Uncertain Minor Chest 5-04 (Report This)",
+    "label": "Uncertain Minor Chest 5-04 B - Expected Music Sheet #7 (Report This)",
     "parent_region": "REGION_CARROT_CASTLE/ROOM_5_04",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -273,7 +273,7 @@
     "location_id": 3960541
   },
   "MINOR_CHEST_UNMAPPED_X_23_REPORT": {
-    "label": "Uncertain Minor Chest 7-09 (Report This)",
+    "label": "Uncertain Minor Chest 7-09 - Expected Spray Paint #8 (Report This)",
     "parent_region": "REGION_PEPPERMINT_PALACE/ROOM_7_09",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -286,7 +286,7 @@
     "location_id": 3960542
   },
   "MINOR_CHEST_UNMAPPED_X_24_REPORT": {
-    "label": "Uncertain Minor Chest 7-09 (Report This)",
+    "label": "Uncertain Minor Chest 7-09 B - Expected Spray Paint #8 (Report This)",
     "parent_region": "REGION_PEPPERMINT_PALACE/ROOM_7_09",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -299,7 +299,7 @@
     "location_id": 3960543
   },
   "MINOR_CHEST_UNMAPPED_X_25_REPORT": {
-    "label": "Uncertain Minor Chest 7-09 (Report This)",
+    "label": "Uncertain Minor Chest 7-09 C - Expected Spray Paint #8 (Report This)",
     "parent_region": "REGION_PEPPERMINT_PALACE/ROOM_7_09",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -494,7 +494,7 @@
     "location_id": 3960558
   },
   "MINOR_CHEST_UNMAPPED_X_40_REPORT": {
-    "label": "Uncertain Minor Chest 6-GOAL-2 (Report This)",
+    "label": "Uncertain Minor Chest 6-GOAL-2 - Expected Music Sheet #1 (Report This)",
     "parent_region": "REGION_OLIVE_OCEAN/ROOM_6_GOAL_2",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -533,7 +533,7 @@
     "location_id": 3960561
   },
   "MINOR_CHEST_UNMAPPED_X_43_REPORT": {
-    "label": "Uncertain Minor Chest 8-GOAL-2 (Report This)",
+    "label": "Uncertain Minor Chest 8-GOAL-2 - Expected Music Sheet #2 (Report This)",
     "parent_region": "REGION_RADISH_RUINS/ROOM_8_GOAL_2",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -546,7 +546,7 @@
     "location_id": 3960562
   },
   "MINOR_CHEST_UNMAPPED_X_44_REPORT": {
-    "label": "Uncertain Minor Chest 8-GOAL-2 (Report This)",
+    "label": "Uncertain Minor Chest 8-GOAL-2 B - Expected Music Sheet #2 (Report This)",
     "parent_region": "REGION_RADISH_RUINS/ROOM_8_GOAL_2",
     "default_item": "SMALL_FOOD",
     "tags": [
@@ -572,7 +572,7 @@
     "location_id": 3960564
   },
   "MINOR_CHEST_UNMAPPED_X_46_REPORT": {
-    "label": "Uncertain Minor Chest 5-16 (Report This)",
+    "label": "Uncertain Minor Chest 5-16 - Expected Music Sheet #9 (Report This)",
     "parent_region": "REGION_CARROT_CASTLE/ROOM_5_16",
     "default_item": "SMALL_FOOD",
     "tags": [

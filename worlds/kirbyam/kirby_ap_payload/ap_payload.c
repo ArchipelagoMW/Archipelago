@@ -198,6 +198,14 @@ static void ap_collect_small_chest_native(uint32_t chest_index) {
         (uint8_t)(1u << (chest_index & 7u));
 }
 
+static void ap_record_minor_chest_collection_from_obj_ptr(uint32_t chest_obj_ptr) {
+    uint32_t source_ptr = *(volatile uint32_t*)(chest_obj_ptr + 0xB0u);
+    uint32_t chest_index = (uint32_t)(*(volatile uint8_t*)(chest_obj_ptr + 0xE2u));
+
+    ap_record_minor_chest_source_ptr(source_ptr);
+    ap_collect_small_chest_native(chest_index);
+}
+
 static void ap_set_hub_switch_flag(uint32_t door_index) {
     if (door_index < 16u) {
         AP_HUB_SWITCH_FLAGS |= (1u << door_index);
@@ -398,11 +406,7 @@ __attribute__((used)) void ap_on_collect_vitality_chest(void) {
 // while preserving the native small-chest persistence write.
 __attribute__((used)) void ap_on_collect_small_chest(void) {
     register uint32_t chest_obj_ptr asm("r5");
-    uint32_t source_ptr = *(volatile uint32_t*)(chest_obj_ptr + 0xB0u);
-    uint32_t chest_index = (uint32_t)(*(volatile uint8_t*)(chest_obj_ptr + 0xE2u));
-
-    ap_record_minor_chest_source_ptr(source_ptr);
-    ap_collect_small_chest_native(chest_index);
+    ap_record_minor_chest_collection_from_obj_ptr(chest_obj_ptr);
 }
 
 typedef void (*KirbyCollectSoundPlayerFn)(uint32_t reward_index);
@@ -530,14 +534,24 @@ __attribute__((used)) void ap_on_request_copy_ability_transition(void *kirby, ui
 
 // Hook target for native Sound Player chest reward collection. Reward index 0 is
 // the Sound Player unlock and should become AP-owned; all other native rewards on
-// this call path should keep vanilla behavior.
+// this call path are small chest collection rewards that should also become AP-owned.
 __attribute__((used)) void ap_on_collect_sound_player_chest(uint32_t reward_index) {
     if (reward_index == 0u) {
         ap_set_sound_player_chest_flag(0u);
         return;
     }
 
-    KIRBY_COLLECT_SOUND_PLAYER_FN(reward_index);
+    register uint32_t chest_obj_ptr asm("r5");
+    ap_record_minor_chest_collection_from_obj_ptr(chest_obj_ptr);
+}
+
+// Hook target for native spray paint chest reward collection.
+// Spray paint chests are AP-owned minor chest checks, so suppress native reward
+// grant and only record transport + native small-chest persistence bits.
+__attribute__((used)) void ap_on_collect_spray_paint_chest(uint32_t reward_index) {
+    register uint32_t chest_obj_ptr asm("r5");
+    (void)reward_index;
+    ap_record_minor_chest_collection_from_obj_ptr(chest_obj_ptr);
 }
 
 typedef void (*WorldMapUnlockFn)(void);

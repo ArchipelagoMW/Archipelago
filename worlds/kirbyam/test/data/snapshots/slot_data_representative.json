@@ -637,7 +637,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_01_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 1-40 (Report This)",
+      "label": "Uncertain Minor Chest 1-40 - Expected Music Sheet #2 (Report This)",
       "location_id": 3960520,
       "tags": [
         "ReportLocation",
@@ -737,7 +737,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_12_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 2-14 (Report This)",
+      "label": "Uncertain Minor Chest 2-14 - Expected Music Sheet #2 (Report This)",
       "location_id": 3960531,
       "tags": [
         "ReportLocation",
@@ -797,7 +797,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_18_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 5-04 (Report This)",
+      "label": "Uncertain Minor Chest 5-04 - Expected Music Sheet #7 (Report This)",
       "location_id": 3960537,
       "tags": [
         "ReportLocation",
@@ -807,7 +807,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_19_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 5-04 (Report This)",
+      "label": "Uncertain Minor Chest 5-04 B - Expected Music Sheet #7 (Report This)",
       "location_id": 3960538,
       "tags": [
         "ReportLocation",
@@ -847,7 +847,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_23_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 7-09 (Report This)",
+      "label": "Uncertain Minor Chest 7-09 - Expected Spray Paint #8 (Report This)",
       "location_id": 3960542,
       "tags": [
         "ReportLocation",
@@ -857,7 +857,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_24_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 7-09 (Report This)",
+      "label": "Uncertain Minor Chest 7-09 B - Expected Spray Paint #8 (Report This)",
       "location_id": 3960543,
       "tags": [
         "ReportLocation",
@@ -867,7 +867,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_25_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 7-09 (Report This)",
+      "label": "Uncertain Minor Chest 7-09 C - Expected Spray Paint #8 (Report This)",
       "location_id": 3960544,
       "tags": [
         "ReportLocation",
@@ -1017,7 +1017,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_40_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 6-GOAL-2 (Report This)",
+      "label": "Uncertain Minor Chest 6-GOAL-2 - Expected Music Sheet #1 (Report This)",
       "location_id": 3960559,
       "tags": [
         "ReportLocation",
@@ -1047,7 +1047,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_43_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 8-GOAL-2 (Report This)",
+      "label": "Uncertain Minor Chest 8-GOAL-2 - Expected Music Sheet #2 (Report This)",
       "location_id": 3960562,
       "tags": [
         "ReportLocation",
@@ -1057,7 +1057,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_44_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 8-GOAL-2 (Report This)",
+      "label": "Uncertain Minor Chest 8-GOAL-2 B - Expected Music Sheet #2 (Report This)",
       "location_id": 3960563,
       "tags": [
         "ReportLocation",
@@ -1077,7 +1077,7 @@
     },
     "MINOR_CHEST_UNMAPPED_X_46_REPORT": {
       "category": "MINOR_CHEST",
-      "label": "Uncertain Minor Chest 5-16 (Report This)",
+      "label": "Uncertain Minor Chest 5-16 - Expected Music Sheet #9 (Report This)",
       "location_id": 3960565,
       "tags": [
         "ReportLocation",

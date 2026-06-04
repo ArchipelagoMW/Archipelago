@@ -48,7 +48,7 @@ jobs:
           rom_path.parent.mkdir(parents=True, exist_ok=True)
           rom = bytearray(0x200000)
           thumb_bl = bytes.fromhex("00 f0 00 f8")
-          for offset in (0x001D952, 0x0000B144, 0x0000B0CC, 0x0000B264, 0x00039EEE, 0x0000AFEC):
+          for offset in (0x001D952, 0x0000B144, 0x0000B0CC, 0x0000B1D0, 0x0000B264, 0x00039EEE, 0x0000AFEC):
             rom[offset:offset + 4] = thumb_bl
 
           # Generate a valid Thumb BL at ROM file offset 0x20000 targeting the ability

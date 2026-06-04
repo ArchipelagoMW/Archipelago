@@ -106,6 +106,10 @@ def test_vitality_chest_collect_call_offset_matches_verified_hook_site() -> None
     assert patch_rom.VITALITY_CHEST_COLLECT_CALL_OFFSET == 0x0000B0CC
 
 
+def test_spray_paint_chest_collect_call_offset_matches_verified_hook_site() -> None:
+    assert patch_rom.SPRAY_PAINT_CHEST_COLLECT_CALL_OFFSET == 0x0000B1D0
+
+
 def test_sound_player_chest_collect_call_offset_matches_verified_hook_site() -> None:
     assert patch_rom.SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET == 0x0000B264
 

@@ -44,6 +44,9 @@ BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D952
 MINOR_CHEST_COLLECT_CALL_OFFSET = 0x0000AFEC
 BIG_CHEST_COLLECT_CALL_OFFSET = 0x0000B144
 VITALITY_CHEST_COLLECT_CALL_OFFSET = 0x0000B0CC
+SPRAY_PAINT_CHEST_COLLECT_CALL_OFFSET = 0x0000B1D0
+# This native callsite handles reward-index 0 (Sound Player unlock) and
+# reward-index > 0 (Music Sheet collection rewards).
 SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET = 0x0000B264
 BIG_SWITCH_UNLOCK_CALL_OFFSET = 0x00039EEE
 ORIGINAL_ABILITY_TRANSITION_FN_ADDR = 0x080547C4
@@ -749,6 +752,7 @@ def main():
         minor_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_small_chest")
         big_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_big_chest")
         vitality_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_vitality_chest")
+        spray_paint_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_spray_paint_chest")
         sound_player_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_sound_player_chest")
         hub_switch_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_world_map_unlock_call")
         ability_transition_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_request_copy_ability_transition")
@@ -761,6 +765,7 @@ def main():
         minor_chest_hook_target &= ~1
         big_chest_hook_target &= ~1
         vitality_chest_hook_target &= ~1
+        spray_paint_chest_hook_target &= ~1
         sound_player_chest_hook_target &= ~1
         hub_switch_hook_target &= ~1
         ability_transition_hook_target &= ~1
@@ -809,9 +814,16 @@ def main():
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
             )
+        if not (payload_rom_start <= spray_paint_chest_hook_target < payload_rom_end):
+            raise SystemExit(
+                "Error: spray paint chest hook target address out of expected payload range.\n"
+                f"Resolved address: 0x{spray_paint_chest_hook_target:08X}, expected within "
+                f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
+                "Check your payload.elf link address and PAYLOAD_OFFSET."
+            )
         if not (payload_rom_start <= sound_player_chest_hook_target < payload_rom_end):
             raise SystemExit(
-                "Error: sound player chest hook target address out of expected payload range.\n"
+                "Error: sound player/music-sheet chest hook target address out of expected payload range.\n"
                 f"Resolved address: 0x{sound_player_chest_hook_target:08X}, expected within "
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
@@ -835,6 +847,7 @@ def main():
         minor_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + MINOR_CHEST_COLLECT_CALL_OFFSET, minor_chest_hook_target)
         big_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_CHEST_COLLECT_CALL_OFFSET, big_chest_hook_target)
         vitality_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + VITALITY_CHEST_COLLECT_CALL_OFFSET, vitality_chest_hook_target)
+        spray_paint_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + SPRAY_PAINT_CHEST_COLLECT_CALL_OFFSET, spray_paint_chest_hook_target)
         sound_player_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET, sound_player_chest_hook_target)
         hub_switch_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_SWITCH_UNLOCK_CALL_OFFSET, hub_switch_hook_target)
 
@@ -854,14 +867,23 @@ def main():
         original_minor_chest_hook = validate_thumb_bl_callsite(rom, MINOR_CHEST_COLLECT_CALL_OFFSET, "minor chest")
         original_big_chest_hook = validate_thumb_bl_callsite(rom, BIG_CHEST_COLLECT_CALL_OFFSET, "big chest")
         original_vitality_hook = validate_thumb_bl_callsite(rom, VITALITY_CHEST_COLLECT_CALL_OFFSET, "vitality chest")
-        original_sound_player_hook = validate_thumb_bl_callsite(rom, SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET, "sound player chest")
+        original_spray_paint_hook = validate_thumb_bl_callsite(rom, SPRAY_PAINT_CHEST_COLLECT_CALL_OFFSET, "spray paint chest")
+        original_sound_player_hook = validate_thumb_bl_callsite(
+            rom,
+            SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET,
+            "sound player/music-sheet chest",
+        )
         original_hub_switch_hook = validate_thumb_bl_callsite(rom, BIG_SWITCH_UNLOCK_CALL_OFFSET, "hub switch unlock")
         print("Validated hook callsite instruction shape (Thumb BL):")
         print(f"  boss shard @ {BOSS_COLLECT_SHARD_CALL_OFFSET:#x}: {original_boss_hook.hex(' ')}")
         print(f"  minor chest @ {MINOR_CHEST_COLLECT_CALL_OFFSET:#x}: {original_minor_chest_hook.hex(' ')}")
         print(f"  big chest @ {BIG_CHEST_COLLECT_CALL_OFFSET:#x}: {original_big_chest_hook.hex(' ')}")
         print(f"  vitality chest @ {VITALITY_CHEST_COLLECT_CALL_OFFSET:#x}: {original_vitality_hook.hex(' ')}")
-        print(f"  sound player chest @ {SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:#x}: {original_sound_player_hook.hex(' ')}")
+        print(f"  spray paint chest @ {SPRAY_PAINT_CHEST_COLLECT_CALL_OFFSET:#x}: {original_spray_paint_hook.hex(' ')}")
+        print(
+            f"  sound player/music-sheet chest @ {SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:#x}: "
+            f"{original_sound_player_hook.hex(' ')}"
+        )
         print(f"  hub switch unlock @ {BIG_SWITCH_UNLOCK_CALL_OFFSET:#x}: {original_hub_switch_hook.hex(' ')}")
 
         _GBA_ROM_CODE_START = 0xC0
@@ -933,6 +955,7 @@ def main():
         rom[MINOR_CHEST_COLLECT_CALL_OFFSET:MINOR_CHEST_COLLECT_CALL_OFFSET + 4] = minor_chest_hook_bl_bytes
         rom[BIG_CHEST_COLLECT_CALL_OFFSET:BIG_CHEST_COLLECT_CALL_OFFSET + 4] = big_chest_hook_bl_bytes
         rom[VITALITY_CHEST_COLLECT_CALL_OFFSET:VITALITY_CHEST_COLLECT_CALL_OFFSET + 4] = vitality_chest_hook_bl_bytes
+        rom[SPRAY_PAINT_CHEST_COLLECT_CALL_OFFSET:SPRAY_PAINT_CHEST_COLLECT_CALL_OFFSET + 4] = spray_paint_chest_hook_bl_bytes
         rom[SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET + 4] = sound_player_chest_hook_bl_bytes
         rom[BIG_SWITCH_UNLOCK_CALL_OFFSET:BIG_SWITCH_UNLOCK_CALL_OFFSET + 4] = hub_switch_hook_bl_bytes
         for offset, hook_bl in boss_already_owned_hook_bl_by_offset.items():
@@ -1007,7 +1030,15 @@ def main():
             hex(vitality_chest_hook_target),
         )
         print(
-            "Sound Player chest call patched at file offset:",
+            "Spray paint chest call patched at file offset:",
+            hex(SPRAY_PAINT_CHEST_COLLECT_CALL_OFFSET),
+            "with bytes:",
+            spray_paint_chest_hook_bl_bytes.hex(" "),
+            "target=",
+            hex(spray_paint_chest_hook_target),
+        )
+        print(
+            "Sound Player/Music Sheet chest call patched at file offset:",
             hex(SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET),
             "with bytes:",
             sound_player_chest_hook_bl_bytes.hex(" "),

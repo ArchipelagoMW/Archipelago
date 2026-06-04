@@ -132,6 +132,10 @@ def test_payload_tracks_sound_player_chest_checks_and_ap_unlock_apply():
     assert "AP_SOUND_PLAYER_CHEST_FLAGS" in content, "Sound Player chest transport register should be defined"
     assert "ap_on_collect_sound_player_chest" in content, "Sound Player chest hook target should exist"
     assert "ap_set_sound_player_chest_flag(0u)" in content, "Sound Player chest hook should set AP check bit"
+    assert "ap_record_minor_chest_collection_from_obj_ptr(chest_obj_ptr);" in content, (
+        "Music sheet chest path should be AP-owned via minor chest transport signaling"
+    )
+    assert "ap_on_collect_spray_paint_chest" in content, "Spray paint chest hook target should exist"
     assert "KIRBY_COLLECT_SOUND_PLAYER_FN(0u)" in content, "AP Sound Player item should apply native unlock"
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 25u" in content, "Sound Player AP item ID should be handled"
 
