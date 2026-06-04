@@ -10,12 +10,6 @@ from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 
-    tracker_loaded = True
-except ImportError as e:
-    tracker_loaded = False
-    UT_VERSION = "Not found"
-
-
 def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
     logic = world.logic
 
