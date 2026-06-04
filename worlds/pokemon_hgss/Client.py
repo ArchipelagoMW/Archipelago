@@ -1,13 +1,30 @@
 from __future__ import annotations
 
+import asyncio
 import json
-import sys
 from pathlib import Path
 from typing import Any
+
+import colorama
+
+from CommonClient import (
+    ClientCommandProcessor,
+    CommonContext,
+    get_base_parser,
+    gui_enabled,
+    logger,
+    server_loop,
+)
+
+from .Items import GAME_NAME
 
 
 EXPECTED_FORMAT_VERSION = 1
 
+
+# -------------------------
+# .aphgss file loading
+# -------------------------
 
 def load_aphgss_file(file_path: Path) -> dict[str, Any]:
     if not file_path.exists():
@@ -97,17 +114,168 @@ def print_aphgss_summary(data: dict[str, Any]) -> None:
         )
 
 
+# -------------------------
+# Archipelago client skeleton
+# -------------------------
+
+class PokemonHGSSCommandProcessor(ClientCommandProcessor):
+    def _cmd_hgss(self) -> None:
+        """Show basic Pokemon HGSS client status."""
+
+        ctx = self.ctx
+
+        self.output("Pokemon HGSS client status:")
+        self.output(f"Game: {ctx.game}")
+        self.output(f"Server address: {ctx.server_address or 'not connected'}")
+        self.output(f"Authenticated slot: {ctx.auth or 'not authenticated'}")
+        self.output(f"Received items: {len(ctx.items_received)}")
+
+        if isinstance(ctx, PokemonHGSSContext):
+            self.output(
+                "Loaded .aphgss file: "
+                f"{'yes' if ctx.aphgss_data else 'no'}"
+            )
+            self.output(
+                "Received slot data: "
+                f"{'yes' if ctx.slot_data else 'no'}"
+            )
+
+
+class PokemonHGSSContext(CommonContext):
+    command_processor = PokemonHGSSCommandProcessor
+    game = GAME_NAME
+
+    # For this early client skeleton, receive all items the server sends for
+    # this slot. We can adjust this later if HGSS needs different behaviour.
+    items_handling = 0b111
+
+    def __init__(
+        self,
+        server_address: str | None,
+        password: str | None,
+        aphgss_data: dict[str, Any] | None = None,
+    ) -> None:
+        super().__init__(server_address, password)
+
+        self.aphgss_data = aphgss_data
+        self.slot_data: dict[str, Any] = {}
+
+    async def server_auth(self, password_requested: bool = False) -> None:
+        if password_requested and not self.password:
+            await super().server_auth(password_requested)
+
+        await self.get_username()
+        await self.send_connect()
+
+    def on_package(self, cmd: str, args: dict[str, Any]) -> None:
+        if cmd == "Connected":
+            self.slot_data = args.get("slot_data", {})
+
+            logger.info("Connected to Pokemon HeartGold SoulSilver slot.")
+
+            if self.slot_data:
+                logger.info("Received HGSS slot data from server.")
+                logger.info(
+                    "HM badge requirements: "
+                    f"{self.slot_data.get('hm_badge_requirements')}"
+                )
+            else:
+                logger.warning("No slot data was received.")
+
+        if cmd == "ReceivedItems":
+            logger.info(
+                "ReceivedItems packet received. "
+                f"Total received items: {len(self.items_received)}"
+            )
+
+
+async def game_watcher(ctx: PokemonHGSSContext) -> None:
+    """
+    Placeholder watcher.
+
+    Later this is where emulator memory reading will happen.
+    For now, it simply keeps the client alive while connected.
+    """
+
+    while not ctx.exit_event.is_set():
+        await asyncio.sleep(1)
+
+
+async def run_client(args) -> None:
+    aphgss_data = None
+
+    if args.aphgss:
+        aphgss_data = load_aphgss_file(args.aphgss)
+        validate_aphgss_data(aphgss_data)
+        print_aphgss_summary(aphgss_data)
+
+    ctx = PokemonHGSSContext(
+        args.connect,
+        args.password,
+        aphgss_data,
+    )
+
+    if not args.connect:
+        logger.info(
+            "No server address supplied. "
+            "Client skeleton loaded successfully."
+        )
+        logger.info(
+            "To connect later, use something like: "
+            "py -3.13 -m worlds.pokemon_hgss.Client --connect localhost:38281"
+        )
+        return
+
+    ctx.server_task = asyncio.create_task(
+        server_loop(ctx),
+        name="server loop",
+    )
+
+    if gui_enabled:
+        ctx.run_gui()
+
+    ctx.run_cli()
+
+    watcher_task = asyncio.create_task(
+        game_watcher(ctx),
+        name="PokemonHGSSGameWatcher",
+    )
+
+    try:
+        await ctx.exit_event.wait()
+    finally:
+        ctx.server_address = None
+
+        watcher_task.cancel()
+
+        try:
+            await watcher_task
+        except asyncio.CancelledError:
+            pass
+
+        await ctx.shutdown()
+
+
 def main() -> None:
-    if len(sys.argv) != 2:
-        print("Usage:")
-        print("  py -3.13 -m worlds.pokemon_hgss.Client path\\to\\file.aphgss")
-        raise SystemExit(1)
+    parser = get_base_parser(
+        description="Pokemon HeartGold SoulSilver Archipelago Client"
+    )
 
-    file_path = Path(sys.argv[1])
+    parser.add_argument(
+        "--aphgss",
+        type=Path,
+        default=None,
+        help="Path to a generated PokemonHGSS_PlayerX.aphgss file.",
+    )
 
-    data = load_aphgss_file(file_path)
-    validate_aphgss_data(data)
-    print_aphgss_summary(data)
+    args, _ = parser.parse_known_args()
+
+    colorama.init()
+
+    try:
+        asyncio.run(run_client(args))
+    finally:
+        colorama.deinit()
 
 
 if __name__ == "__main__":
