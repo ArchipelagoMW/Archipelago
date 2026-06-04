@@ -44,7 +44,6 @@ from .parse_data import (
     trando_starts,
     trando_transitions,
     vanilla_location_costs,
-    vanilla_shop_costs,
 )
 from .resource_state_vars import ResourceStateHandler
 from .rules import cost_terms
@@ -108,7 +107,6 @@ class HKWorld(RandomizerCoreWorld):
         }
         self.ranges = {}
         self.created_shop_items = 0
-        self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
         self.cached_filler_items = []
         self.event_locations = deepcopy(event_locations)
         self.entrance_by_term = defaultdict(list)
@@ -257,7 +255,7 @@ class HKWorld(RandomizerCoreWorld):
         location_to_option["Elevator_Pass"] = "RandomizeElevatorPass"
         for location, costs in vanilla_location_costs.items():
             if self.options.AddUnshuffledLocations or getattr(self.options, location_to_option[location]):
-                self.get_location(location).costs = costs
+                self.get_location(location).costs = costs.copy()
 
         self.get_region("Menu").connect(self.get_region(self.start_location_region))
 
@@ -674,6 +672,7 @@ class HKWorld(RandomizerCoreWorld):
                     self.item_class(item, ItemClassification.progression, item_id, self.player)
                 )
                 loc.show_in_spoiler = False
+            loc.costs = {i["term"]: i["amount"] for i in costs}
             return loc
 
         for option, option_data in options_pool_mappings.items():

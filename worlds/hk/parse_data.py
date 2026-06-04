@@ -26,7 +26,6 @@ __all__ = [
     "trando_starts",
     "trando_transitions",
     "vanilla_location_costs",
-    "vanilla_shop_costs",
 ]
 
 datapackage_items = ids.item_name_to_id
@@ -62,12 +61,6 @@ vanilla_location_costs = {
     for pair in vanilla_cost_data
     if pair["location"] not in metadata_location_multi
     }
-vanilla_shop_costs = defaultdict(list)
-for i in vanilla_cost_data:
-    if i["location"] not in metadata_location_multi:
-        continue
-    costs = {cost["term"]: cost["amount"] for cost in i["costs"]}
-    vanilla_shop_costs[(i["location"], i["item"])].append(costs)
 
 hk_regions = [
     region for region in cast(list[dict[str, Any]], structure_regions)
