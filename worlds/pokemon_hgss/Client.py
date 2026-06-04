@@ -20,6 +20,7 @@ from Utils import async_start
 from .Items import GAME_NAME
 from .LocationTracker import LocationTracker
 from .ReceivedItemTracker import ReceivedItemTracker
+from .GameInterface import SimulatedHGSSInterface
 
 
 EXPECTED_FORMAT_VERSION = 1
@@ -159,6 +160,8 @@ class PokemonHGSSContext(CommonContext):
         password: str | None,
         aphgss_data: dict[str, Any] | None = None,
         test_check_names: list[str] | None = None,
+        simulated_location_names: list[str] | None = None,
+        simulation_delay: float = 2.0,
     ) -> None:
         super().__init__(server_address, password)
 
@@ -176,6 +179,13 @@ class PokemonHGSSContext(CommonContext):
 
         self.test_check_names = test_check_names or []
         self.test_checks_sent = False
+
+        self.game_interface = SimulatedHGSSInterface(
+            simulated_location_names=simulated_location_names or [],
+            delay_seconds=simulation_delay,
+        )
+
+        self.watcher_seen_location_names: set[str] = set()
 
         if self.aphgss_data:
             self.auth = str(self.aphgss_data["player_name"])
@@ -292,13 +302,34 @@ class PokemonHGSSContext(CommonContext):
 
 async def game_watcher(ctx: PokemonHGSSContext) -> None:
     """
-    Placeholder watcher.
+    Temporary game watcher.
 
-    Later this is where emulator memory reading will happen.
-    For now, it simply keeps the client alive while connected.
+    Later this will read HGSS emulator memory.
+    For now, it reads from SimulatedHGSSInterface.
     """
 
     while not ctx.exit_event.is_set():
+        if not ctx.slot_data:
+            await asyncio.sleep(1)
+            continue
+
+        completed_location_names = (
+            ctx.game_interface.get_completed_location_names()
+        )
+
+        for location_name in completed_location_names:
+            if location_name in ctx.watcher_seen_location_names:
+                continue
+
+            ctx.watcher_seen_location_names.add(location_name)
+
+            print(
+                "Watcher detected completed HGSS location: "
+                f"{location_name}"
+            )
+
+            await ctx.send_location_check_by_name(location_name)
+
         await asyncio.sleep(1)
 
 
@@ -320,6 +351,8 @@ async def run_client(args) -> None:
         args.password,
         aphgss_data,
         args.test_check,
+        args.simulate_check,
+        args.simulation_delay,
     )
 
     if not args.connect:
@@ -382,6 +415,26 @@ def main() -> None:
         help=(
             "Development only: send one HGSS location check by name "
             "after connecting. Can be used multiple times."
+        ),
+    )
+
+    parser.add_argument(
+        "--simulate-check",
+        action="append",
+        default=[],
+        help=(
+            "Development only: simulate an HGSS location becoming completed. "
+            "Can be used multiple times."
+        ),
+    )
+
+    parser.add_argument(
+        "--simulation-delay",
+        type=float,
+        default=2.0,
+        help=(
+            "Seconds between simulated completed locations. "
+            "Only used with --simulate-check."
         ),
     )
 
