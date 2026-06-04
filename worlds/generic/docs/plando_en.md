@@ -5,26 +5,29 @@
 The purpose of randomizers is to randomize the items in a game to give a new experience. Plando takes this concept and
 changes it up by allowing you to plan out certain aspects of the game by placing certain items in certain locations,
 certain bosses in certain rooms, edit text for certain NPCs/signs, or even force certain region connections. Each of
-these options are going to be detailed separately as `item plando`, `boss plando`, `text plando`,
-and `connection plando`. Every game in Archipelago supports item plando but the other plando options are only supported
-by certain games. Currently, only A Link to the Past supports text and boss plando. Support for connection plando may
-vary.
+these options are going to be detailed separately as `item plando`, `boss plando`, `text plando`, and
+`connection plando`. Every game in Archipelago supports item plando but the other plando options are only supported by
+certain games. Currently, only A Link to the Past supports text plando. Support for connection or boss plando may vary.
 
 ### Enabling Plando
 
-On the website, plando will already be enabled. If you will be generating the game locally, plando features must be
-enabled (opt-in).
+Boss, text, and connection plando are enabled by default, but item plando must be separatenly enabled to be used
+(opt-in).
 
-* To opt-in go to the Archipelago installation (default: `C:\ProgramData\Archipelago`), open `host.yaml` with a text
-  editor and find the `plando_options` key. The available plando modules can be enabled by adding them after this such
-  as
-  `plando_options: bosses, items, texts, connections`.
-* You can add the necessary plando modules for your settings to the `requires` section of your YAML. Doing so will throw an error if the options that you need to generate properly are not enabled to ensure you will get the results you desire. Only enter in the plando modules that you are using here but it should look like:
+* To enable or disable plando types when generating on the website, you can edit the Plando Options toggles on the
+  [generation page](/generate).
+* To edit plando types when generating from a local Archipelago install, open the `host.yaml` file with the Launcher
+  or directly with a text editor by going to the installation folder (default: `C:\ProgramData\Archipelago`), then find
+  and edit the `plando_options` key. For example, setting it to `plando_options: items, bosses, texts, connections` will
+  make all plando modules available.
+* You can add the necessary plando modules for your options to the `requires` section of your YAML. Doing so will throw
+  an error if the moudles that you need to generate properly are not enabled to ensure you will get the results you
+  desire. Only enter in the plando modules that you are using. For example:
 
 ```yaml
 requires: 
   version: current.version.number
-  plando: bosses, items, texts, connections
+  plando: items, bosses, texts, connections
 ``` 
 
 For a basic understanding of YAML files, refer to 
@@ -93,9 +96,12 @@ Each block can have several different options to tailor it the way you like.
 
 ### Available Items and Locations
 
-A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and 
-locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. Names are 
-case-sensitive. You can also use item groups and location groups that are defined in the datapackage.
+A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and
+locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You can also
+get the datapackage for games in your local installation by using the Export Datapackage component in the Launcher.
+
+Location/item names are case-sensitive. You can also use item groups and location groups that are defined in the
+datapackage.
 
 ## Item Plando Examples
 ```yaml
@@ -240,9 +246,9 @@ using only the items from the item group that are already present in the item po
 
 ## Boss Plando
 
-This is currently only supported by A Link to the Past and Kirby's Dream Land 3. Boss plando allows a player to place a 
-given boss within an arena. More specific information for boss plando in A Link to the Past can be found in 
-its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en).
+This is currently only supported by a few games, including A Link to the Past and Kirby's Dream Land 3. Boss plando
+allows a player to place a given boss within an arena. More specific information for boss plando in A Link to the Past
+can be found in its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en).
 
 Boss plando takes in a list of instructions for placing bosses, separated by a semicolon `;`.
 There are three types of placement: direct, full, and shuffle.
@@ -310,7 +316,6 @@ its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
     - entrance: Agahnims Tower
       exit: Old Man Cave Exit (West)
       direction: exit
-
 ```
 
 1. These connections are decoupled, so going into the Lake Hylia Cave Shop will take you to the inside of Cave 45, and
