@@ -1,3 +1,4 @@
+import base64
 import os
 from typing import ClassVar
 
@@ -10,6 +11,7 @@ from .items import CVAOSItem, item_name_to_id, create_item, create_itempool
 from .locations import location_name_to_id
 from .options import CVAOSOptions, Goal
 from .regions import create_regions, can_reach_room
+from .client import CVAOSClient  # noqa: F401  (imported for its registration side effect)
 
 
 class CVAOSSettings(settings.Group):
@@ -62,6 +64,13 @@ class CVAOSWorld(World):
     enemy_region_name_by_number: dict[int, str]
     entrance_region_names_by_room: dict[str, list[str]]
 
+    # Per-slot authentication: baked into the ROM (rom/patch.py) and registered under
+    # connect_names (modify_multidata) so the client can connect by reading it from the ROM.
+    auth: bytearray
+
+    def generate_early(self) -> None:
+        self.auth = bytearray(self.random.getrandbits(8) for _ in range(16))
+
     def create_regions(self) -> None:
         create_regions(self)
         player = self.player
@@ -103,4 +112,10 @@ class CVAOSWorld(World):
         return {
             "randomize_pickups": self.options.randomize_pickups.value,
             "goal": self.options.goal.value,
+            "death_link": self.options.death_link.value,
         }
+
+    def modify_multidata(self, multidata: dict) -> None:
+        # Register the slot's auth so the client can connect by it (read from the ROM).
+        new_name = base64.b64encode(self.auth).decode("ascii")
+        multidata["connect_names"][new_name] = multidata["connect_names"][self.player_name]
