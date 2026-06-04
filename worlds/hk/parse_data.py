@@ -22,6 +22,7 @@ __all__ = [
     "structure_locations",
     "structure_regions",
     "structure_transition_to_region_map",
+    "structure_transitions",
     "trando_starts",
     "trando_transitions",
     "vanilla_location_costs",
@@ -45,6 +46,7 @@ options_pool_mappings = option_data.pool_options
 structure_locations = region_structure.locations
 structure_regions = region_structure.regions
 structure_transition_to_region_map = region_structure.transition_to_region_map
+structure_transitions = region_structure.transitions
 
 trando_starts = trando_data.starts
 trando_transitions = trando_data.transitions

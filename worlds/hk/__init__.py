@@ -8,7 +8,6 @@ from typing import Any, ClassVar
 from BaseClasses import CollectionState, Entrance, EntranceType, ItemClassification, LocationProgressType, MultiWorld
 from entrance_rando import EntranceRandomizationError, randomize_entrances
 from Options import OptionError
-from worlds.AutoWorld import World
 
 from .charms import charm_name_to_id, charm_names
 from .classes import HKClause, HKEntrance, HKItem, HKLocation, HKRegion, HKSettings, HKWeb
@@ -41,6 +40,7 @@ from .parse_data import (
     options_pool_mappings,
     structure_regions,
     structure_transition_to_region_map,
+    structure_transitions,
     trando_starts,
     trando_transitions,
     vanilla_location_costs,
@@ -574,6 +574,11 @@ class HKWorld(RandomizerCoreWorld):
         if self.options.WhitePalace < WhitePalace.option_kingfragment:
             self.options.SkipTitledAreaInER.value.add("White Palace")
 
+        exit_to_rules = {
+            transition["name"]: transition["logic"]
+            for transition in structure_transitions
+        }
+
         one_ways = defaultdict(list)
         reverse_lookup = {
             # to map doors to the opposite direction of their vanilla target
@@ -603,6 +608,9 @@ class HKWorld(RandomizerCoreWorld):
 
                 if sides != "OneWayOut":
                     exit_obj = region1.create_exit(name)
+                    rule = exit_to_rules.get(name)
+                    if rule:
+                        self.set_rule(exit_obj, self.create_rule(rule))
                     exit_obj.randomization_type = entrance_type
                     exit_obj.randomization_group = group
                     self.entrance_groups[entrance_subgroup].append(exit_obj)
@@ -623,7 +631,8 @@ class HKWorld(RandomizerCoreWorld):
 
                 region1 = self.get_region(structure_transition_to_region_map[name])
                 region2 = self.get_region(structure_transition_to_region_map[trans_data["vanilla_target"]])
-                region1.connect(region2, name)
+                rule = self.create_rule(exit_to_rules[name]) if exit_to_rules.get(name) else None
+                region1.connect(region2, name, rule)
 
         if not one_ways:
             return
