@@ -9,15 +9,6 @@ from . import StardewValleyWorld
 from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
-try:
-    from worlds.tracker.TrackerClient import TrackerGameContext, TrackerCommandProcessor as ClientCommandProcessor, UT_VERSION  # noqa
-    from worlds.tracker.TrackerCore import TrackerCore
-
-    tracker_loaded = True
-except ImportError as e:
-    tracker_loaded = False
-    UT_VERSION = "Not found"
-
 
 def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
     logic = world.logic
