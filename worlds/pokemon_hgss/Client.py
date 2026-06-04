@@ -15,10 +15,10 @@ from CommonClient import (
     logger,
     server_loop,
 )
-
 from Utils import async_start
 
 from .Items import GAME_NAME
+from .LocationTracker import LocationTracker
 
 
 EXPECTED_FORMAT_VERSION = 1
@@ -117,7 +117,7 @@ def print_aphgss_summary(data: dict[str, Any]) -> None:
 
 
 # -------------------------
-# Archipelago client skeleton
+# Archipelago client
 # -------------------------
 
 class PokemonHGSSCommandProcessor(ClientCommandProcessor):
@@ -141,29 +141,35 @@ class PokemonHGSSCommandProcessor(ClientCommandProcessor):
                 "Received slot data: "
                 f"{'yes' if ctx.slot_data else 'no'}"
             )
+            self.output(
+                "Tracked checked locations: "
+                f"{len(ctx.location_tracker.checked_location_ids)}"
+            )
 
 
 class PokemonHGSSContext(CommonContext):
     command_processor = PokemonHGSSCommandProcessor
     game = GAME_NAME
-
-    # For this early client skeleton, receive all items the server sends for
-    # this slot. We can adjust this later if HGSS needs different behaviour.
     items_handling = 0b111
 
     def __init__(
-            self,
-            server_address: str | None,
-            password: str | None,
-            aphgss_data: dict[str, Any] | None = None,
-            test_check_name: str | None = None,
+        self,
+        server_address: str | None,
+        password: str | None,
+        aphgss_data: dict[str, Any] | None = None,
+        test_check_names: list[str] | None = None,
     ) -> None:
         super().__init__(server_address, password)
 
         self.aphgss_data = aphgss_data
         self.slot_data: dict[str, Any] = {}
-        self.test_check_name = test_check_name
-        self.test_check_sent = False
+        self.location_tracker = LocationTracker.from_seed_data(
+            slot_data=None,
+            aphgss_data=self.aphgss_data,
+        )
+
+        self.test_check_names = test_check_names or []
+        self.test_checks_sent = False
 
         if self.aphgss_data:
             self.auth = str(self.aphgss_data["player_name"])
@@ -175,31 +181,28 @@ class PokemonHGSSContext(CommonContext):
         await self.get_username()
         await self.send_connect()
 
-    def get_location_id_by_name(self, location_name: str) -> int | None:
-        location_name_to_id = {}
+    def rebuild_location_tracker(self) -> None:
+        self.location_tracker = LocationTracker.from_seed_data(
+            slot_data=self.slot_data,
+            aphgss_data=self.aphgss_data,
+        )
 
-        if self.slot_data:
-            location_name_to_id.update(
-                self.slot_data.get("location_name_to_id", {})
-            )
+        self.location_tracker.update_checked_locations(self.locations_checked)
 
-        if self.aphgss_data:
-            location_name_to_id.update(
-                self.aphgss_data.get("location_name_to_id", {})
-            )
-
-        location_id = location_name_to_id.get(location_name)
-
-        if location_id is None:
-            return None
-
-        return int(location_id)
-
-    async def send_test_location_check(self, location_name: str) -> None:
-        location_id = self.get_location_id_by_name(location_name)
+    async def send_location_check_by_name(self, location_name: str) -> None:
+        location_id, should_send = self.location_tracker.mark_location_checked(
+            location_name
+        )
 
         if location_id is None:
             print(f"Could not find HGSS location: {location_name}")
+            return
+
+        if not should_send:
+            print(
+                "Skipping already checked HGSS location: "
+                f"{location_name} ({location_id})"
+            )
             return
 
         self.locations_checked.add(location_id)
@@ -214,13 +217,19 @@ class PokemonHGSSContext(CommonContext):
         )
 
         print(
-            "Sent test location check: "
+            "Sent HGSS location check: "
             f"{location_name} ({location_id})"
         )
+
+    async def send_test_location_checks(self) -> None:
+        for location_name in self.test_check_names:
+            await self.send_location_check_by_name(location_name)
 
     def on_package(self, cmd: str, args: dict[str, Any]) -> None:
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
+
+            self.rebuild_location_tracker()
 
             print()
             print("Connected to Pokemon HeartGold SoulSilver slot.")
@@ -240,18 +249,21 @@ class PokemonHGSSContext(CommonContext):
                     "Known HGSS items: "
                     f"{len(self.slot_data.get('item_name_to_id', {}))}"
                 )
-
-            if self.test_check_name and not self.test_check_sent:
-                self.test_check_sent = True
-                async_start(
-                    self.send_test_location_check(self.test_check_name),
-                    name="HGSS test location check",
-                )
-
             else:
                 print("No slot data was received.")
 
+            print(
+                "Already checked locations from server/context: "
+                f"{len(self.location_tracker.checked_location_ids)}"
+            )
             print()
+
+            if self.test_check_names and not self.test_checks_sent:
+                self.test_checks_sent = True
+                async_start(
+                    self.send_test_location_checks(),
+                    name="HGSS test location checks",
+                )
 
         if cmd == "ReceivedItems":
             print(
@@ -347,11 +359,11 @@ def main() -> None:
 
     parser.add_argument(
         "--test-check",
-        type=str,
-        default=None,
+        action="append",
+        default=[],
         help=(
             "Development only: send one HGSS location check by name "
-            "after connecting."
+            "after connecting. Can be used multiple times."
         ),
     )
 
