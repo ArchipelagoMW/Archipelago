@@ -9,7 +9,7 @@ from typing import Iterable, List, Optional, Set, Tuple
 from BaseClasses import CollectionState, MultiWorld, Region
 from worlds.generic.Rules import CollectionRule
 from . import (AggregatingStardewRule, Count, Has, Reach, Received,
-               StardewRule, TotalReceived, true_)
+               StardewRule, TotalReceived, true_, false_)
 
 
 class ExplainMode(enum.Enum):
@@ -34,7 +34,8 @@ def access_graph(multiworld: MultiWorld, player: int):
         checking_region = to_check.popleft()
 
         for exit in checking_region.exits:
-            assert exit.connected_region is not None, f"All exits should be connected, error at {exit}"
+            if exit.connected_region is None:
+                continue
             neighbor = exit.connected_region
 
             # Always record the directed edge
@@ -469,14 +470,18 @@ def _(
         spot = state.multiworld.get_region(rule.spot, rule.player)
 
         global region_graph
-        if region_graph is None:
+        if region_graph is None or state.multiworld.worlds[rule.player].entrance_cache_invalid:
             valid_parent_cache.clear()
             region_graph = access_graph(state.multiworld, rule.player)
+            state.multiworld.worlds[rule.player].entrance_cache_invalid = False
 
         valid_parent_regions = set(valid_parents_to_origin(spot.name))
         valid_parent_regions -= blocked_regions
 
         for entrance in spot.entrances:
+            if entrance.parent_region is None:
+                access_rules.append(false_)
+                continue
             assert isinstance(
                 entrance.parent_region, Region
             ), f"Entrance to region should have a parent region, problem is {entrance.name}"

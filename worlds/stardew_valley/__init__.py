@@ -456,6 +456,7 @@ class StardewValleyWorld(World):
         set_rules(self)
 
     def connect_entrances(self) -> None:
+        self.entrance_cache_invalid = True
         is_chaos = self.options.entrance_randomization_behavior.is_chaos()
         # when the cutscene-relevant entrances aren't randomized, connect them manually
         if self.options.entrance_randomization.value < EntranceRandomization.option_overworld or is_chaos:
@@ -635,6 +636,7 @@ class StardewValleyWorld(World):
 
     # UT support
     found_entrances_datastorage_key = "found_entrances"
+    entrance_cache_invalid: bool
     previous_explanation: RuleExplanation | None = None
 
     def explain_rule(self, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
@@ -658,6 +660,7 @@ class StardewValleyWorld(World):
             this_iter = new_bits & 0b1
             new_bits = new_bits >> 1
             if this_iter:
+                entrance_cache_invalid = True
                 print(f"new bit {index}, entrance {self.entrance_data_map[index]}")
 
             index += 1
