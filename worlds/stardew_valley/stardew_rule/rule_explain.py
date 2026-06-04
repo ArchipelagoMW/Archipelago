@@ -9,7 +9,7 @@ from typing import Iterable, List, Optional, Set, Tuple
 from BaseClasses import CollectionState, MultiWorld, Region
 from worlds.generic.Rules import CollectionRule
 from . import (AggregatingStardewRule, Count, Has, Reach, Received,
-               StardewRule, TotalReceived, true_, false_)
+               StardewRule, TotalReceived, true_, undiscovered_)
 
 
 class ExplainMode(enum.Enum):
@@ -480,7 +480,7 @@ def _(
 
         for entrance in spot.entrances:
             if entrance.parent_region is None:
-                access_rules.append(false_)
+                access_rules.append(undiscovered_)
                 continue
             assert isinstance(
                 entrance.parent_region, Region

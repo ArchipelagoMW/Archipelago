@@ -76,6 +76,8 @@ def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
             messages.append({"type": "color", "color": "green", "text": s})
         elif s == "False":
             messages.append({"type": "color", "color": "salmon", "text": s})
+        elif s == "Undiscovered":
+            messages.append({"type": "color", "color": "salmon", "text": s})
         elif s.startswith("Reach Location "):
             messages.append({"type": "text", "text": "Reach Location "})
             messages.append({"type": "location_name", "text": s[15:]})
@@ -119,4 +121,6 @@ def setup_ut_deferred_entrances(randomized_entrances: dict[str, str], entrances:
 
         entrance_data.append((ex, entr))
 
+    for i, ed in enumerate(entrance_data):
+        print(f"{i}: {ed}")
     return entrance_data
