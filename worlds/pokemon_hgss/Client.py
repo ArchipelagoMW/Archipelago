@@ -160,6 +160,9 @@ class PokemonHGSSContext(CommonContext):
         self.aphgss_data = aphgss_data
         self.slot_data: dict[str, Any] = {}
 
+        if self.aphgss_data:
+            self.auth = str(self.aphgss_data["player_name"])
+
     async def server_auth(self, password_requested: bool = False) -> None:
         if password_requested and not self.password:
             await super().server_auth(password_requested)
@@ -171,19 +174,31 @@ class PokemonHGSSContext(CommonContext):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
 
-            logger.info("Connected to Pokemon HeartGold SoulSilver slot.")
+            print()
+            print("Connected to Pokemon HeartGold SoulSilver slot.")
 
             if self.slot_data:
-                logger.info("Received HGSS slot data from server.")
-                logger.info(
+                print("Received HGSS slot data from server.")
+                print(
                     "HM badge requirements: "
                     f"{self.slot_data.get('hm_badge_requirements')}"
                 )
+                print(f"Goal: {self.slot_data.get('goal')}")
+                print(
+                    "Known HGSS locations: "
+                    f"{len(self.slot_data.get('location_name_to_id', {}))}"
+                )
+                print(
+                    "Known HGSS items: "
+                    f"{len(self.slot_data.get('item_name_to_id', {}))}"
+                )
             else:
-                logger.warning("No slot data was received.")
+                print("No slot data was received.")
+
+            print()
 
         if cmd == "ReceivedItems":
-            logger.info(
+            print(
                 "ReceivedItems packet received. "
                 f"Total received items: {len(self.items_received)}"
             )
@@ -208,6 +223,11 @@ async def run_client(args) -> None:
         aphgss_data = load_aphgss_file(args.aphgss)
         validate_aphgss_data(aphgss_data)
         print_aphgss_summary(aphgss_data)
+
+        logger.info(
+            "Using player name from .aphgss file: "
+            f"{aphgss_data['player_name']}"
+        )
 
     ctx = PokemonHGSSContext(
         args.connect,
