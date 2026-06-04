@@ -12,7 +12,6 @@ from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, icon_paths
-from worlds.stardew_valley.regions.model import reverse_connection_name
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
@@ -36,6 +35,7 @@ from .options.settings import StardewSettings
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
 from .regions.entrance_rando import get_target_groups
+from .regions.model import reverse_connection_name
 from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
 from .strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
@@ -494,9 +494,17 @@ class StardewValleyWorld(World):
             )
             self.randomized_entrances = prepare_mod_data(placement, self.forced_entrances)
         elif not is_chaos:
+
             # randomized_entrances were in the slot_data, connecting them as entered
             entrances = {entrance.name: entrance for region in self.get_regions() for entrance in region.entrances if entrance.parent_region is None}
             exits = {exit_.name: exit_ for region in self.get_regions() for exit_ in region.exits if exit_.connected_region is None}
+
+            is_ut = getattr(self.multiworld, "generation_is_fake", False)
+            if is_ut and self.multiworld.enforce_deferred_connections in ("on", "default"):
+                from .client import setup_ut_deferred_entrances
+                self.entrance_data_map = setup_ut_deferred_entrances(self.randomized_entrances, entrances, exits)
+                self.visited_entrances = 0
+                return
 
             for original, random in self.randomized_entrances.items():
                 rev_random = reverse_connection_name(random) or random
@@ -625,6 +633,8 @@ class StardewValleyWorld(World):
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = (received_progression_count * 100 // self.total_progression_items)
 
+    # UT support
+    found_entrances_datastorage_key = "found_entrances"
     previous_explanation: RuleExplanation | None = None
 
     def explain_rule(self, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
@@ -634,3 +644,20 @@ class StardewValleyWorld(World):
     def explain_more(self, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
         from .client import cmd_more
         return cmd_more(self, target_name, state)
+
+    def reconnect_found_entrances(self, key: str, value: Any) -> None:
+        if value is None or key is None or self.multiworld.enforce_deferred_connections == "off":
+            return
+        if key != self.found_entrances_datastorage_key:
+            return
+
+        new_bits: int = value & (~self.visited_entrances)
+        index = 0
+        self.visited_entrances |= new_bits
+        while new_bits != 0:
+            this_iter = new_bits & 0b1
+            new_bits = new_bits >> 1
+            if this_iter:
+                print(f"new bit {index}, entrance {self.entrance_data_map[index]}")
+
+            index += 1

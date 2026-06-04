@@ -3,10 +3,11 @@ from __future__ import annotations
 import re
 
 import Utils
-from BaseClasses import CollectionState, Location
+from BaseClasses import CollectionState, Location, Entrance
 from NetUtils import JSONMessagePart
 from . import StardewValleyWorld
 from .logic.logic import StardewLogic
+from .regions.entrance_rando import reverse_connection_name
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 
@@ -103,8 +104,19 @@ def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
         else:
             messages.append({"text": s, "type": "text"})
 
-        if content_length > 5000 and s.endswith("\n"):
-            contents[-1]["text"] = contents[-1]["text"][:-1]
-            messages.append(contents)
-            contents = []
-            content_length = 0
+    return messages
+
+
+def setup_ut_deferred_entrances(randomized_entrances: dict[str, str], entrances: dict[str, Entrance], exits: dict[str, Entrance]):
+    sorted_entrance_names = sorted(randomized_entrances.items())
+
+    entrance_data = []
+
+    for original, randomized in sorted_entrance_names:
+        rev_random = reverse_connection_name(randomized) or randomized
+        ex = exits[original]
+        entr = entrances[rev_random]
+
+        entrance_data.append((ex, entr))
+
+    return entrance_data
