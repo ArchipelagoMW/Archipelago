@@ -7,22 +7,6 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - `### Bug Fixes`
 - `### Internal Changes`
 
-## v0.2.0-rc7
-
-### New Features
-
-- None.
-
-### Bug Fixes
-
-- Fix missing AP checks for spray-paint and music small chests so these checks now send reliably (Issue #807).
-- Fix hub-switch check handling by moving to a single-source mapping pipeline so check labels and sent checks stay aligned (Issue #806).
-- Fix statue naming in enemy-ability spoiler output so statue entries use the expected display names (Issue #821).
-
-### Internal Changes
-
-- Refine the `v0.2.0` changelog section wording to match shipped behavior and issue scope without changing runtime game behavior (Issue #817, Issue #818).
-
 ## v0.2.0
 
 ### New Features
@@ -44,7 +28,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - Added two new goal modes:
   - `defeat_any_area_boss` completes the seed after the first acknowledged area-boss defeat check (Issue #205).
   - `defeat_random_hidden_area_boss` selects one eligible area boss per seed, stores only an internal hidden boss-defeat key in slot data, and completes the seed when that exact boss is defeated while keeping the target out of normal player-facing output (Issue #206).
-- Made improvements to non-trap filler items:
+- Made changes to non-trap filler items:
   - Added two new filler consumables with tiered healing (`Energy Drink` (HP +2) and `Hunk of Meat` (HP +3), alongside existing `Small Food` (HP +1) which was renamed) (Issues #684, #685, #686).
   - Made filler items no longer equally likely. They each has preset weight loosely based on their likelihood in the original game. Base whole-number weights are Cell Phone Battery 25, Energy Drink 17, 1 Up 15, Max Tomato 15, Small Food 14, Hunk of Meat 9, Invincibility Candy 5. In one-hit mode (`exclude_vitality_counters`), healing filler (`Small Food`, `Energy Drink`, `Hunk of Meat`, `Max Tomato`) is removed and the remaining weights (`Cell Phone Battery`, `1 Up`, `Invincibility Candy`) are preserved proportionally. In no-lives mode, `1 Up` is removed and remaining filler keeps configured relative weights. When both modes are enabled together, only `Cell Phone Battery` and `Invincibility Candy` remain in weighted selection (Issue #688).
 - Added the option to randomize Ability Statues with `ability_randomization_statues`. Defaults to off. It controls inclusion only: enabled statues inherit the selected copy-ability mode (`off`, `shuffled`, `completely_random`), and statues always grant an ability (ignoring `ability_randomization_no_ability_weight` and `ability_randomization_passive_enemies`, while respecting `ability_randomization_minny` just like enemy randomization) (Issue #209).
@@ -56,6 +40,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - Spoiler output and generation logs now show shuffled enemy ability assignments, making seeds easier to review (Issue #586). This includes ability statues (Issue #804).
 
 ### Known Limitations
+- Localization: Only the North American ROM is supported. All AP notifications are in English.
 - Progression: The entire game is still only two spheres. This means you can complete almost the entirety of Kirby and the Amazing Mirror without ever having to receive an item, except open the Dimension Mirror. In other words, you can do everything in the game except defeat Dark Mind without ever receiving an item from another player. This is a consequence of the original game design. We have plans to gate your progression in other ways, but they all require coding/hacking in intentional blockers.
 - Chests:
   - Minor (small) chests are labelled very poorly right now. We need the community to help us label them correctly because no mapping currently exists for which "bit" maps to which chest and which item is inside.
@@ -65,6 +50,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### Bug Fixes
 
+- Fixed an issue where having both Pokemon FRLG and KirbyAM installed as custom worlds at the same time caused issues.
 - Enemy Ability Randomization: Completely random now rerolls abilities per swallow, not per room (Issue #420).
 - Warp rooms that were missing Room Sanity checks now have them (Issue #605).
 - Fixed delivery synchronization and logging issues that could skip items when client and game counters drifted, while ensuring debug-only delivery diagnostics still go to the log file even when hidden from the live client output (Issue #601).
