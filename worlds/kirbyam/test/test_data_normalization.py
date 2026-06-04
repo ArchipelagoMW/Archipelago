@@ -1,6 +1,12 @@
+import json
+from pathlib import Path
+
 import pytest
 
-from ..data import _normalize_gba_rom_address, data as kirby_data, format_room_region_label
+from ..data import LocationCategory, _normalize_gba_rom_address, data as kirby_data, format_room_region_label
+from ..generated_hub_switch_contract import (
+    HUB_SWITCH_COMPATIBILITY_AP_BITS_BY_LOCATION_KEY,
+)
 
 
 @pytest.mark.parametrize(
@@ -95,3 +101,32 @@ def test_all_hub_switches_have_expected_unique_transport_mapping() -> None:
     assert len({location.bit_index for location in hub_switches.values()}) == len(hub_switches)
     assert {location.location_id for location in hub_switches.values()} == set(range(3960400, 3960415))
     assert {location.bit_index for location in hub_switches.values()} == set(range(15))
+
+
+def test_generated_hub_switch_contract_matches_locations_data() -> None:
+    world_dir = Path(__file__).resolve().parents[1]
+    contract_path = world_dir / "data" / "hub_switch_contract.json"
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+
+    entries = contract["entries"]
+    assert len(entries) == 15
+    assert {int(entry["native_world_map_door_index"]) for entry in entries} == set(range(1, 16))
+    assert {int(entry["ap_bit_index"]) for entry in entries} == set(range(15))
+    assert {int(entry["world_props_unlock_index"]) for entry in entries} == set(range(1, 16))
+
+    for entry in entries:
+        location_key = str(entry["location_key"])
+        location = kirby_data.locations[location_key]
+        assert location.bit_index == int(entry["ap_bit_index"])
+
+
+def test_generated_hub_switch_contract_compatibility_aliases_are_disjoint() -> None:
+    canonical_bits = {
+        location.bit_index
+        for location in kirby_data.locations.values()
+        if location.category == LocationCategory.HUB_SWITCH and location.bit_index is not None
+    }
+    for location_key, compatibility_bits in HUB_SWITCH_COMPATIBILITY_AP_BITS_BY_LOCATION_KEY.items():
+        assert location_key in kirby_data.locations
+        for bit in compatibility_bits:
+            assert bit not in canonical_bits

@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "location_key": "HUB_SWITCH_MOONLIGHT",
+      "native_world_map_door_index": 1,
+      "native_world_map_door_name": "WORLDMAP_MOONLIGHT_MANSION",
+      "ap_bit_index": 11,
+      "world_props_unlock_index": 2
+    },
+    {
+      "location_key": "HUB_SWITCH_RAINBOW_ROUTE_EAST",
+      "native_world_map_door_index": 2,
+      "native_world_map_door_name": "WORLDMAP_RAINBOW_ROUTE_EAST",
+      "ap_bit_index": 1,
+      "world_props_unlock_index": 1
+    },
+    {
+      "location_key": "HUB_SWITCH_RAINBOW_ROUTE_SOUTH",
+      "native_world_map_door_index": 3,
+      "native_world_map_door_name": "WORLDMAP_RAINBOW_ROUTE_SOUTH",
+      "ap_bit_index": 2,
+      "world_props_unlock_index": 6
+    },
+    {
+      "location_key": "HUB_SWITCH_CABBAGE_CAVERN_CENTER",
+      "native_world_map_door_index": 4,
+      "native_world_map_door_name": "WORLDMAP_CABBAGE_CAVERN_CENTER",
+      "ap_bit_index": 3,
+      "world_props_unlock_index": 5
+    },
+    {
+      "location_key": "HUB_SWITCH_RAINBOW_ROUTE_WEST",
+      "native_world_map_door_index": 5,
+      "native_world_map_door_name": "WORLDMAP_RAINBOW_ROUTE_WEST",
+      "ap_bit_index": 4,
+      "world_props_unlock_index": 9
+    },
+    {
+      "location_key": "HUB_SWITCH_CARROT",
+      "native_world_map_door_index": 6,
+      "native_world_map_door_name": "WORLDMAP_CARROT_CASTLE",
+      "ap_bit_index": 5,
+      "world_props_unlock_index": 10
+    },
+    {
+      "location_key": "HUB_SWITCH_RAINBOW_ROUTE_NORTH",
+      "native_world_map_door_index": 7,
+      "native_world_map_door_name": "WORLDMAP_RAINBOW_ROUTE_NORTH",
+      "ap_bit_index": 6,
+      "world_props_unlock_index": 13,
+      "compatibility_ap_bits": [15]
+    },
+    {
+      "location_key": "HUB_SWITCH_MUSTARD",
+      "native_world_map_door_index": 8,
+      "native_world_map_door_name": "WORLDMAP_MUSTARD_MOUNTAIN",
+      "ap_bit_index": 7,
+      "world_props_unlock_index": 15
+    },
+    {
+      "location_key": "HUB_SWITCH_CABBAGE_CAVERN_WEST",
+      "native_world_map_door_index": 9,
+      "native_world_map_door_name": "WORLDMAP_CABBAGE_CAVERN_WEST",
+      "ap_bit_index": 8,
+      "world_props_unlock_index": 7
+    },
+    {
+      "location_key": "HUB_SWITCH_RADISH",
+      "native_world_map_door_index": 10,
+      "native_world_map_door_name": "WORLDMAP_RADISH_RUINS",
+      "ap_bit_index": 9,
+      "world_props_unlock_index": 8
+    },
+    {
+      "location_key": "HUB_SWITCH_PEPPERMINT_EAST",
+      "native_world_map_door_index": 11,
+      "native_world_map_door_name": "WORLDMAP_PEPPERMINT_PALACE_EAST",
+      "ap_bit_index": 10,
+      "world_props_unlock_index": 11
+    },
+    {
+      "location_key": "HUB_SWITCH_PEPPERMINT_WEST",
+      "native_world_map_door_index": 12,
+      "native_world_map_door_name": "WORLDMAP_PEPPERMINT_PALACE_WEST",
+      "ap_bit_index": 0,
+      "world_props_unlock_index": 12
+    },
+    {
+      "location_key": "HUB_SWITCH_CABBAGE_CAVERN_EAST",
+      "native_world_map_door_index": 13,
+      "native_world_map_door_name": "WORLDMAP_CABBAGE_CAVERN_EAST",
+      "ap_bit_index": 12,
+      "world_props_unlock_index": 3
+    },
+    {
+      "location_key": "HUB_SWITCH_OLIVE",
+      "native_world_map_door_index": 14,
+      "native_world_map_door_name": "WORLDMAP_OLIVE_OCEAN",
+      "ap_bit_index": 13,
+      "world_props_unlock_index": 4
+    },
+    {
+      "location_key": "HUB_SWITCH_CANDY",
+      "native_world_map_door_index": 15,
+      "native_world_map_door_name": "WORLDMAP_CANDY_CONSTELLATION",
+      "ap_bit_index": 14,
+      "world_props_unlock_index": 14
+    }
+  ]
+}

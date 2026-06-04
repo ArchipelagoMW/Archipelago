@@ -17,6 +17,7 @@ from worlds._bizhawk.client import BizHawkClient
 from .data import LocationCategory, data, format_room_region_label, load_json_data
 from .enemy_ability_data import ABILITY_SOURCES
 from .enemy_ability_data import ABILITY_NAME_TO_ID
+from .generated_hub_switch_contract import HUB_SWITCH_COMPATIBILITY_AP_BITS_BY_LOCATION_KEY
 from .items import get_item_classification
 from .kirby_ap_payload.thumb_branch import is_thumb_bl_instruction
 from .options import Goal, OneHitMode
@@ -362,15 +363,22 @@ class KirbyAmClient(BizHawkClient):
                 continue
             self._hub_switch_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
 
-        # Compatibility fallback for Issue #733:
-        # Some payload builds can emit Rainbow Route North on bit 15 instead of
-        # the canonical bit from locations.json. Mirror that bit to the same AP
-        # location id so the check is still reported.
-        rr_north = data.locations.get("HUB_SWITCH_RAINBOW_ROUTE_NORTH")
-        if rr_north is not None:
-            fallback_ids = self._hub_switch_location_ids_by_bit.setdefault(15, [])
-            if rr_north.location_id not in fallback_ids:
-                fallback_ids.append(rr_north.location_id)
+        # Compatibility aliases sourced from the generated hub-switch contract.
+        # This keeps fallback bits synchronized with payload/client mapping rules.
+        for location_key, compatibility_bits in HUB_SWITCH_COMPATIBILITY_AP_BITS_BY_LOCATION_KEY.items():
+            location = data.locations.get(location_key)
+            if location is None:
+                self._log_verbose(
+                    "warning",
+                    "KirbyAM: hub-switch compatibility mapping references unknown location key '%s'; alias bits=%s",
+                    location_key,
+                    list(compatibility_bits),
+                )
+                continue
+            for compatibility_bit in compatibility_bits:
+                fallback_ids = self._hub_switch_location_ids_by_bit.setdefault(compatibility_bit, [])
+                if location.location_id not in fallback_ids:
+                    fallback_ids.append(location.location_id)
         self._hub_switch_location_ids_all: set[int] = {
             location_id
             for location_ids in self._hub_switch_location_ids_by_bit.values()

@@ -15,7 +15,7 @@ for path_entry in list(sys.path):
 import pytest  # noqa: E402
 
 
-def test_shard_persistence_addresses_defined():
+def test_shard_persistence_addresses_defined() -> None:
     """Verify that SRAM addresses for shard persistence are correctly defined in payload."""
     # Payload should define:
     # - SRAM_BASE (0x0E000000)
@@ -37,7 +37,7 @@ def test_shard_persistence_addresses_defined():
     assert "SRAM_CHECKSUM" in content, "Checksum fields should be defined"
 
 
-def test_shard_persistence_function_exists():
+def test_shard_persistence_function_exists() -> None:
     """Verify persist_shard_to_sram function is called when granting shards."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -49,7 +49,7 @@ def test_shard_persistence_function_exists():
         "persist_shard_to_sram should be called when granting shards"
 
 
-def test_payload_tracks_major_chest_checks_separately_from_native_maps():
+def test_payload_tracks_major_chest_checks_separately_from_native_maps() -> None:
     """Verify big chest openings feed transport checks while AP map items unlock native maps."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -63,7 +63,7 @@ def test_payload_tracks_major_chest_checks_separately_from_native_maps():
     assert "KIRBY_BIG_CHEST_FLAGS" in content, "Native big chest map bitfield should still be addressable"
 
 
-def test_payload_tracks_vitality_chest_checks_and_ap_vitality_apply():
+def test_payload_tracks_vitality_chest_checks_and_ap_vitality_apply() -> None:
     """Verify vitality chest checks and AP vitality grants use dedicated payload paths."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -122,7 +122,7 @@ def test_payload_vitality_items_are_replay_guarded_per_unique_item() -> None:
     )
 
 
-def test_payload_tracks_sound_player_chest_checks_and_ap_unlock_apply():
+def test_payload_tracks_sound_player_chest_checks_and_ap_unlock_apply() -> None:
     """Verify Sound Player chest checks are AP-owned and unlock only on AP item receipt."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -141,13 +141,14 @@ def test_payload_tracks_sound_player_chest_checks_and_ap_unlock_apply():
 
 
 def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
-    """Verify world-map unlock hook translates world-map door indices into AP bits.
+    """Verify hub-switch transport is driven by persisted world-props unlock bits.
 
     Decomp reference (katam): `sub_08039ED4` dispatches unlock callbacks from
     `gUnk_0834BD94` using `ldrh [task, #8]`. The AP hook must read the same
     halfword and map enum WorldMapDoor values to AP hub-switch bit order while
-    ignoring non-unlock values (e.g., `WORLDMAP_NO_UNLOCK` = 0). The AP flag
-    should be raised only after the native unlock callback returns.
+    ignoring non-unlock values (e.g., `WORLDMAP_NO_UNLOCK` = 0). Canonical state
+    must come from persisted world-props unlock bits (`sub_08002888(..., 2, ...)`) as
+    written by WorldMapUnlockSave, not from callback dispatch timing alone.
     """
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -157,9 +158,17 @@ def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
     assert "AP_HUB_SWITCH_FLAGS" in content, "Hub switch transport register should be defined"
     assert "ap_set_hub_switch_flag" in content, "Hub switch flag helper should exist"
     assert "ap_try_map_worldmap_door_to_hub_switch_bit" in content, "Hub switch door-to-bit mapper should exist"
+    assert "ap_is_hub_unlock_persisted" in content, "Payload should probe persisted world-props unlock state"
+    assert "ap_sync_hub_switch_flags_from_world_props" in content, (
+        "Payload should continuously sync hub-switch flags from persisted world-props unlock bits"
+    )
     assert "ap_on_world_map_unlock_call" in content, "World-map unlock hook target should exist"
     assert "task_ptr + 0x08u" in content, "Hook should read the world-map unlock task index at +0x08"
     assert "unlock_fn();" in content, "Hook should preserve native unlock callback behavior"
+    assert "KIRBY_WORLD_PROPS_ENTRY_FN" in content, "Payload should reference sub_08002888 world-props accessor"
+    assert "#include \"generated_hub_switch_worldmap_cases.inc\"" in content, (
+        "Hub switch world-map mapping should come from generated contract include"
+    )
 
     hook_match = re.search(
         r"void\s+ap_on_world_map_unlock_call[^{]*\{(?P<body>.*?)^}",
@@ -172,41 +181,58 @@ def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
     assert "door_index = *(volatile uint16_t*)(task_ptr + 0x08u);" in hook_body, (
         "Hook should read world-map unlock index from task +0x08"
     )
-    assert "ap_try_map_worldmap_door_to_hub_switch_bit(door_index, &ap_hub_switch_bit)" in hook_body, (
+    assert "ap_try_map_worldmap_door_to_hub_switch_bit(" in hook_body, (
         "Hook should translate world-map door index before setting AP hub-switch bit"
     )
     assert "unlock_fn();" in hook_body, "Hook should call the native unlock callback"
     assert hook_body.index("unlock_fn();") < hook_body.index("ap_set_hub_switch_flag(ap_hub_switch_bit);")
-    assert "if (ap_try_map_worldmap_door_to_hub_switch_bit(door_index, &ap_hub_switch_bit) != 0u)" in hook_body, (
+    assert "ap_is_hub_unlock_persisted(world_props_unlock_index)" in hook_body, (
+        "Hook should only fast-path set AP hub-switch bit when persisted world-props state is visible"
+    )
+    assert "if (ap_try_map_worldmap_door_to_hub_switch_bit(" in hook_body, (
         "Hook should ignore NO_UNLOCK/unknown world-map door indices"
     )
     assert "ap_set_hub_switch_flag(ap_hub_switch_bit);" in hook_body, (
         "Hook should set AP hub-switch bit only after successful door-index translation"
     )
 
-    mapper_match = re.search(
-        r"uint8_t\s+ap_try_map_worldmap_door_to_hub_switch_bit[^{]*\{(?P<body>.*?)^}",
-        content,
-        flags=re.DOTALL | re.MULTILINE,
-    )
-    assert mapper_match is not None, "ap_try_map_worldmap_door_to_hub_switch_bit definition must exist"
-    mapper_body = mapper_match.group("body")
+    include_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "generated_hub_switch_worldmap_cases.inc")
+    assert os.path.exists(include_path), "Generated hub-switch include should exist"
 
-    assert "case 1u:  // WORLDMAP_MOONLIGHT_MANSION" in mapper_body, (
-        "Mapper should include Moonlight world-map door case"
+    with open(include_path, "r") as f:
+        include_content = f.read()
+
+    assert "case 1u: /* WORLDMAP_MOONLIGHT_MANSION */" in include_content, (
+        "Generated include should include Moonlight world-map door case"
     )
-    assert "*out_bit = 11u;" in mapper_body, (
-        "Moonlight world-map door should map to AP hub-switch bit 11"
+    assert "*out_bit = 11u;" in include_content, (
+        "Generated include should map Moonlight world-map door to AP bit 11"
     )
-    assert "case 11u: // WORLDMAP_PEPPERMINT_PALACE_EAST" in mapper_body, (
-        "Mapper should include Peppermint East world-map door case"
+    assert "*out_world_props_unlock_index = 2u;" in include_content, (
+        "Generated include should map Moonlight world-map door to persisted world-props unlock index 2"
     )
-    assert "*out_bit = 10u;" in mapper_body, (
-        "Peppermint East world-map door should map to AP hub-switch bit 10"
+    assert "case 11u: /* WORLDMAP_PEPPERMINT_PALACE_EAST */" in include_content, (
+        "Generated include should include Peppermint East world-map door case"
+    )
+    assert "*out_bit = 10u;" in include_content, (
+        "Generated include should map Peppermint East world-map door to AP bit 10"
     )
 
 
-def test_sram_checksum_fields_updated():
+def test_hub_switch_contract_generator_uses_canonical_source() -> None:
+    generator_path = os.path.join(_WORLD_DIR, "tools", "generate_hub_switch_contract.py")
+    contract_path = os.path.join(_WORLD_DIR, "data", "hub_switch_contract.json")
+
+    with open(generator_path, "r") as f:
+        generator_content = f.read()
+
+    assert "hub_switch_contract.json" in generator_content, (
+        "Hub-switch generator must source mappings from canonical hub_switch_contract.json"
+    )
+    assert os.path.exists(contract_path), "Canonical hub_switch_contract.json should exist"
+
+
+def test_sram_checksum_fields_updated() -> None:
     """Verify that checksum fields are updated alongside shard persistence."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -222,7 +248,7 @@ def test_sram_checksum_fields_updated():
     assert "new_shard_bitfield" in content, "Checksums should be derived from shard bitfield"
 
 
-def test_issue_109_addresses_documented():
+def test_issue_109_addresses_documented() -> None:
     """Verify Issue #109 addresses are documented in the payload."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
 
@@ -240,7 +266,7 @@ def test_issue_109_addresses_documented():
     assert "0x1C" in content or "28" in content, "SRAM offset 0x1C should be defined"
 
 
-def test_boss_defeat_hook_preserves_native_shard_state():
+def test_boss_defeat_hook_preserves_native_shard_state() -> None:
     """Verify ap_on_boss_defeat_collect_shard records AP flag AND updates native shard state.
 
     Issue #380: suppressing native CollectShard left gTreasures.shardField stale,
@@ -278,7 +304,7 @@ def test_boss_defeat_hook_preserves_native_shard_state():
         "Boss hook must persist shard flags to SRAM for reset-safe behaviour"
 
 
-def test_boss_defeat_hook_sets_scrub_delay():
+def test_boss_defeat_hook_sets_scrub_delay() -> None:
     """Verify ap_on_boss_defeat_collect_shard sets AP_SHARD_SCRUB_DELAY (Issue #478).
 
     The scrub delay holds off the per-frame KIRBY_SHARD_FLAGS clamp so the
@@ -306,7 +332,7 @@ def test_boss_defeat_hook_sets_scrub_delay():
         "Boss hook must mark temporary boss shard bits for state-driven scrub"
 
 
-def test_ap_apply_item_shard_path_writes_delivered_bitfield():
+def test_ap_apply_item_shard_path_writes_delivered_bitfield() -> None:
     """Verify ap_apply_item shard path writes AP_DELIVERED_SHARD_BITFIELD (Issue #478).
 
     AP_DELIVERED_SHARD_BITFIELD is the authority for which shard bits are
@@ -340,7 +366,7 @@ def test_ap_apply_item_shard_path_writes_delivered_bitfield():
         "Boss hook must NOT write AP_DELIVERED_SHARD_BITFIELD; it is AP-delivery-only"
 
 
-def test_ap_poll_mailbox_contains_shard_scrub_logic():
+def test_ap_poll_mailbox_contains_shard_scrub_logic() -> None:
     """Verify ap_poll_mailbox_c contains the per-frame KIRBY_SHARD_FLAGS scrub (Issue #478).
 
     Once AP_SHARD_SCRUB_DELAY reaches 0, the scrub clamps KIRBY_SHARD_FLAGS to
@@ -386,7 +412,7 @@ def test_ap_poll_mailbox_contains_shard_scrub_logic():
         "ap_poll_mailbox_c scrub must persist the clamped state to SRAM"
 
 
-def test_ap_hook_preserves_register_context_without_r4_temp_restore():
+def test_ap_hook_preserves_register_context_without_r4_temp_restore() -> None:
     """Verify the hook preserves full context and does not rebuild LR through r4."""
     hook_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_hook.s")
     assert os.path.exists(hook_path), "ap_hook.s should exist in kirby_ap_payload"
