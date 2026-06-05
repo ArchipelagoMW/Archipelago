@@ -151,6 +151,12 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
             required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
                                     BrushTechniques.GALESTORM]
+        case LocationType.DIGGING_MINIGAME_HARD:
+            required_power_slash_level = max(required_power_slash_level, 1)
+            required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
+            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
+                                    BrushTechniques.GALESTORM]
+            rules.append(HasAll("Holy Eagle","Golden Ink Pot"))
         case LocationType.FROZEN_CHEST:
             required_techinques += [BrushTechniques.INFERNO]
         case LocationType.FISHING_MINIGAME:
