@@ -41,6 +41,8 @@ exits = {
                  special_rule=n_ryoshima_islands_dragon_rule),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_SEA, loading_screen=False,
                  special_rule=n_ryoshima_islands_dragon_rule),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_CATCALL_ISLAND, loading_screen=False,
+                 special_rule=n_ryoshima_islands_dragon_rule),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_TREASURE_CAVE,
                  has_events=["Northern Ryoshima Coast - Open Treasure Cave"])
     ],
@@ -66,6 +68,9 @@ exits = {
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_CAVE,
                  has_events=["Northern Ryoshima Coast - Open Bandit Spider Cave"],
                  one_way=True)
+    ],
+    RegionNames.NORTHERN_RYOSHIMA_COAST_CATCALL_ISLAND:[
+        ExitData(RegionNames.CATCALL_TOWER_BOTTOM)
     ]
 }
 events = {
