@@ -24,7 +24,8 @@ exits = {
         ExitData(RegionNames.DRAGON_PALACE, one_way=True)
     ],
     RegionNames.DRAGON_PALACE_GARDEN: [
-        ExitData(RegionNames.DRAGON_PALACE, one_way=True)
+        ExitData(RegionNames.DRAGON_PALACE, one_way=True),
+        ExitData(RegionNames.INSIDE_THE_DRAGON)
     ]
 }
 events = {
@@ -32,7 +33,8 @@ events = {
         "Dragon Palace - Open Treasure Cave behind stairs": EventData(cherry_bomb_level=1),
         # FIXME: This should give shell amulet, and it should be removed from pool since it can't be picked up rn
         # FIXME: Change this to a location later
-        "Dragon Palace - Get Shell Amulet from Otohime": EventData()
+        "Dragon Palace - Get Shell Amulet from Otohime": EventData(),
+        "Dragon Palace - Give Dragon Orb to Otohime": EventData(required_items_events=["Inside the dragon - Get Dragon Orb"])
     },
     RegionNames.DRAGON_PALACE_SPRING: {
         "Dragon Palace - Restore the soothing spring": EventData(type=LocationType.DIGGING_MINIGAME_HARD,
@@ -54,7 +56,7 @@ locations = {
                                                    required_items_events=["Holy Eagle"]),
         "Dragon Palace - Nuregami (Fountain)": LocData(brush_check_id(16), required_items_events=[
             "Dragon Palace - Restore the soothing spring"]),
-        # FIXME: This chest doesn't have a cotnainer id !
+        # FIXME: This chest doesn't have a container id !
         "Dragon Palace - Chest after fountain": LocData(1001, required_items_events=[
             "Dragon Palace - Restore the soothing spring"], progress_type=LocationProgressType.EXCLUDED)
     },
@@ -63,7 +65,8 @@ locations = {
         "Dragon Palace - North Clam in garden": LocData(container_check_id(MapIds.DRAGON_PALACE, 7)),
         "Dragon Palace - North Clam on ledge in garden": LocData(container_check_id(MapIds.DRAGON_PALACE, 6)),
         "Dragon Palace - Chest after blooming the dragon's remains": LocData(
-            container_check_id(MapIds.DRAGON_PALACE, 0), required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM])
+            container_check_id(MapIds.DRAGON_PALACE, 0), required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM],
+            required_items_events=["Inside the dragon - Get Dragon Orb"])
     }
 }
 shop_locations = {
