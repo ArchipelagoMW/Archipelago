@@ -247,6 +247,11 @@ class RegionNames(StrEnum):
     DRAGON_PALACE_CAVE = "Dragon Palace (Treasure Cave)"
     DRAGON_PALACE_GARDEN = "Dragon Palace (Water Dragon's Garden)"
 
+    ## INSIDE THE DRAGON
+    INSIDE_THE_DRAGON = "Inside the dragon"
+    INSIDE_THE_DRAGON_DEEP = "Inside the dragon (Deeper part)"
+    INSIDE_THE_DRAGON_ORB = "Inside the dragon (Orb area)"
+
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
@@ -279,6 +284,7 @@ class MapIds(Enum):
     SEIAN_COMMONERS = 0x201
     HIMIKO_PALACE = 0x202
     DRAGON_PALACE = 0x203
+    INSIDE_THE_DRAGON = 0x204
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207

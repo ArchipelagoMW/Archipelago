@@ -36,7 +36,7 @@ class OkamiEnemies(Enum):
     UME = EnnemyData(0x22, "Ume", 1)
     TAKE = EnnemyData(0x23, "Take", 1)
     CUTTERS = EnnemyData(0x57, "Mr and Ms.Cutter", 1)
-    CROW_TENGU = EnnemyData(0x57, "Crow Tengu", 1,requires_slash=True)
+    CROW_TENGU = EnnemyData(0x57, "Crow Tengu", 1, requires_slash=True)
     CHIMERA = EnnemyData(0x4e, "Chimera", 1, requires_slash=True)
     # don't require slash here bc it's required in the cutscene that follows, not to beat the boss itself
     CRIMSON_HELM = EnnemyData(0x11, "Crimson Helm", 1, required_techniques=[BrushTechniques.GALESTORM])
@@ -54,6 +54,7 @@ class OkamiEnemies(Enum):
     EARTH_NOSE = EnnemyData(0x54, "Earth Nose", 2, required_techniques=[BrushTechniques.VEIL_OF_MIST])
     BLUE_CYCLOPS = EnnemyData(0x29, "Blue Cyclops", 2)
     BANDIT_SPIDER = EnnemyData(0x0b, "Bandit Spider", 2, required_techniques=[BrushTechniques.GREENSPROUT_VINE])
+    TUBE_FOX = EnnemyData(0x0e, "Tube Fox", 3)
 
     @staticmethod
     def list():
