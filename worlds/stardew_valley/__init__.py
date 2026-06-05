@@ -635,22 +635,24 @@ class StardewValleyWorld(World):
             player_state[Event.received_progression_percent] = (received_progression_count * 100 // self.total_progression_items)
 
     # UT support
-    found_entrances_datastorage_key = "found_entrances"
+    found_entrances_datastorage_key = "Slot:{player}:found_entrances"
     entrance_cache_invalid: bool
     previous_explanation: RuleExplanation | None = None
 
     def explain_rule(self, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
         from .client import cmd_explain
+
         return cmd_explain(self, target_name, state)
 
     def explain_more(self, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
         from .client import cmd_more
+
         return cmd_more(self, target_name, state)
 
     def reconnect_found_entrances(self, key: str, value: Any) -> None:
         if value is None or key is None or self.multiworld.enforce_deferred_connections == "off":
             return
-        if key != self.found_entrances_datastorage_key:
+        if key != self.found_entrances_datastorage_key.replace("{player}", str(self.player)):
             return
 
         new_bits: int = value & (~self.visited_entrances)
@@ -662,5 +664,10 @@ class StardewValleyWorld(World):
             if this_iter:
                 entrance_cache_invalid = True
                 print(f"new bit {index}, entrance {self.entrance_data_map[index]}")
+
+                entr, exit = self.entrance_data_map[index]
+                target = exit.connected_region
+                entr.connect(target)
+                target.entrances.remove(exit)
 
             index += 1
