@@ -94,7 +94,8 @@ events = {
             mandatory_enemies=[OkamiEnemies.BLUE_CYCLOPS]),
     },
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS:{
-        "Northern Ryoshima Coast - Open Whirlpool":EventData(required_brush_techniques=[BrushTechniques.GALESTORM])
+        "Northern Ryoshima Coast - Open Whirlpool":EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
+        "Northern Ryoshima Coast - Open Bridge to Oni Island":EventData(required_items_events=["Himiko's Palace - Get Oni Island Location"])
     },
     RegionNames.NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND: {
         "Northern Ryoshima Coast - Fish Marlin": EventData(

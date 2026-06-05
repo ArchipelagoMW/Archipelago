@@ -30,8 +30,7 @@ has_portable_ice_source: Rule = Or(And(Or(Has(DivineInstruments.TUNDRA_BEADS.val
 gale_shrine_access: Rule = HasGroup("canine_warriors", count=FromOption(RequiredDoggorbs))
 
 moon_cave_access: Rule = Has("Serpent Crystal")
-# FIXME: Set correct event name for dragon
-n_ryoshima_islands_dragon_rule: Rule = Or(Has("Orca"), HasAll("Water Tablet", "Defeat the Dragon"))
+n_ryoshima_islands_dragon_rule: Rule = Or(Has("Orca"), HasAll("Water Tablet", "Inside the dragon - Get Dragon Orb"))
 
 n_ryoshima_guardian_sapling_rule:Rule= Or(long_swim_rule,Has("Orca"))
 
