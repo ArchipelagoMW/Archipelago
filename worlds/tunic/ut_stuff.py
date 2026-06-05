@@ -82,18 +82,21 @@ def get_entrance_name_from_sdt(portal_sdt: str) -> str:
         if portal.scene_destination() == portal_sdt:
             return portal.name
     else:
-        raise Exception("Portal SDT not found for some reason.")
+        raise Exception(f"Portal SDT {portal_sdt} not found for some reason.")
 
 
 def reconnect_found_entrance(world: "TunicWorld", portal_sdt: str) -> None:
     portal_name = get_entrance_name_from_sdt(portal_sdt)
+    # zig skip exit only ever acts as an exit, never an entrance
+    if portal_name == "Ziggurat Lower Falling Entrance":
+        return
     entrance_connected = False
     for entrance, region in world.disconnected_entrances.items():
         if entrance.name.startswith(portal_name):
             entrance.connect(region)
             entrance_connected = True
     if not entrance_connected:
-        raise Exception("Portal name not found in reconnect_found_entrance")
+        raise Exception(f"Portal name {portal_name} not found in reconnect_found_entrance")
 
 
 # for UT poptracker integration map tab switching
