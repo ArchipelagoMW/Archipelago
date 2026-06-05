@@ -244,6 +244,8 @@ class RegionNames(StrEnum):
     ## DRAGON PALACE
     DRAGON_PALACE = "Dragon Palace"
     DRAGON_PALACE_SPRING = "Dragon Palace (Soothing Spring)"
+    DRAGON_PALACE_CAVE = "Dragon Palace (Treasure Cave)"
+    DRAGON_PALACE_GARDEN = "Dragon Palace (Water Dragon's Garden)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
@@ -270,12 +272,13 @@ class MapIds(Enum):
     POWER_SLASH_2_CAVE = 0x116
     CHERRY_BOMB_2_CAVE = 0x117
     NORTHERN_RYOSHIMA_BANDIT_SPIDER = 0x11A
+    DRAGON_PALACE_TREASURE = 0x11C
     NORTHERN_RYOSHIMA_TREASURE = 0x11D
     RIVER_OF_THE_HEAVENS = 0x122
     SEIAN_ARISTORATIC = 0x200
     SEIAN_COMMONERS = 0x201
     HIMIKO_PALACE = 0x202
-    DRAGON_PALACE=0x203
+    DRAGON_PALACE = 0x203
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207

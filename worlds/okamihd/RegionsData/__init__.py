@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from . import menu, r100, r122, r101, r102, r103, r104, rf01, rf02, rf03, rf04, rf07, rf08, r108, r109, r107, r10e, \
     r110, rf06, r105, rf09, rf0a, r201, r205, r200, r206, r207, r202, r10a, rf0c, r113, r114, r116, r117, r11a, r11d, \
-    r20a, r203
+    r20a, r203, r11c
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -26,6 +26,7 @@ okami_exits = {
     **r116.exits,
     **r117.exits,
     **r11a.exits,
+    **r11c.exits,
     **r11d.exits,
     **r122.exits,
     **r200.exits,
@@ -66,6 +67,7 @@ okami_locations = {
     **r116.locations,
     **r117.locations,
     **r11a.locations,
+    **r11c.locations,
     **r11d.locations,
     **r122.locations,
     **r200.locations,
@@ -106,6 +108,7 @@ okami_events = {
     **r116.events,
     **r117.events,
     **r11a.events,
+    **r11c.events,
     **r11d.events,
     **r122.events,
     **r200.events,
