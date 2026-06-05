@@ -95,6 +95,7 @@ class TestRule(Rule[World], game=GAME_NAME):
     def __init__(self, name: str):
         self.name = name
 
+    @override
     def _instantiate(self, world: World) -> Rule.Resolved:
         return self.Resolved(
             self.name, player=world.player, caching_enabled=getattr(world, "rule_caching_enabled", False)
