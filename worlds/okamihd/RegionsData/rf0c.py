@@ -44,7 +44,9 @@ exits = {
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_CATCALL_ISLAND, loading_screen=False,
                  special_rule=n_ryoshima_islands_dragon_rule),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_TREASURE_CAVE,
-                 has_events=["Northern Ryoshima Coast - Open Treasure Cave"])
+                 has_events=["Northern Ryoshima Coast - Open Treasure Cave"]),
+        ExitData(RegionNames.DRAGON_PALACE, loading_screen=False,
+                 special_rule=n_ryoshima_islands_dragon_rule,has_events=["Northern Ryoshima Coast - Open Whirlpool"]),
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS, one_way=True, loading_screen=False,
@@ -90,6 +92,9 @@ events = {
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER: {
         "Northern Ryoshima Coast - Mandatory encounter in Watcher's Cape": EventData(
             mandatory_enemies=[OkamiEnemies.BLUE_CYCLOPS]),
+    },
+    RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS:{
+        "Northern Ryoshima Coast - Open Whirlpool":EventData(required_brush_techniques=[BrushTechniques.GALESTORM])
     },
     RegionNames.NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND: {
         "Northern Ryoshima Coast - Fish Marlin": EventData(

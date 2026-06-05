@@ -35,3 +35,5 @@ class LocationType(Enum):
     # Chest with element Sources that depend on special rules; Don't apply any requirments except the special rule one
     THUNDER_CHEST_SPECIAL_SOURCE = 20
     FROZEN_CHEST_SPECIAL_SOURCE = 21
+    # + Holy Eagle + Golden Ink Pot
+    DIGGING_MINIGAME_HARD = 22
