@@ -234,6 +234,12 @@ class RegionNames(StrEnum):
     NORTHERN_RYOSHIMA_COAST_CB2_CAVE = "Northern Ryoshima Coast (Cherry Bomb 2 Cave)"
     NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_CAVE = "Northern Ryoshima Coast (Bandit spider cave)"
     NORTHERN_RYOSHIMA_COAST_TREASURE_CAVE = "Northern Ryoshima Coast (Treasure cave)"
+    NORTHERN_RYOSHIMA_COAST_CATCALL_ISLAND = "Northern Ryoshima Coast (Catcall Tower Island)"
+
+    ## Catcall Tower
+    CATCALL_TOWER_BOTTOM = "Catcall Tower (Bottom)"
+    CATCALL_TOWER = "Catcall Tower"
+    CATCALL_TOWER_TOP = "Catcall Tower(Top)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
@@ -257,7 +263,7 @@ class MapIds(Enum):
     MOON_CAVE = 0x110
     RYOSHIMA_BANDIT_SPIDER = 0x113
     TAKA_PASS_CAVE = 0x114
-    POWER_SLASH_2_CAVE=0x116
+    POWER_SLASH_2_CAVE = 0x116
     CHERRY_BOMB_2_CAVE = 0x117
     NORTHERN_RYOSHIMA_BANDIT_SPIDER = 0x11A
     NORTHERN_RYOSHIMA_TREASURE = 0x11D
@@ -268,6 +274,7 @@ class MapIds(Enum):
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207
+    CATCALL_TOWER = 0x20A
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03
