@@ -241,6 +241,10 @@ class RegionNames(StrEnum):
     CATCALL_TOWER = "Catcall Tower"
     CATCALL_TOWER_TOP = "Catcall Tower(Top)"
 
+    ## DRAGON PALACE
+    DRAGON_PALACE = "Dragon Palace"
+    DRAGON_PALACE_SPRING = "Dragon Palace (Soothing Spring)"
+
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
@@ -271,6 +275,7 @@ class MapIds(Enum):
     SEIAN_ARISTORATIC = 0x200
     SEIAN_COMMONERS = 0x201
     HIMIKO_PALACE = 0x202
+    DRAGON_PALACE=0x203
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207
