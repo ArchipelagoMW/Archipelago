@@ -12,7 +12,7 @@ pickup_number,ptr_address,simple_name,specifier,flag_offset (varA),item_offset (
 11,0x8511038,Leather Plate,,50,9,4,PICKUP,4
 12,0x8511140,Flying Armor,,2,1,4,PICKUP,6
 13,0x85114c4,Yasutsuna,,39,32,4,PICKUP,3
-14,0x8511560,Castle Map 1,,81,29,4,PICKUP,2
+14,0x8511560,CASTLE MAP 1,,81,29,4,PICKUP,2
 15,0x8511614,Armor of Fire,,62,21,4,PICKUP,4
 16,0x8511638,Potion,_c,93,0,4,PICKUP,2
 17,0x8511710,Copper Plate,,51,10,4,PICKUP,4
@@ -59,7 +59,7 @@ pickup_number,ptr_address,simple_name,specifier,flag_offset (varA),item_offset (
 58,0x8516d04,Hrunting,,26,9,4,PICKUP,3
 59,0x8516d10,Undine,,6,1,4,PICKUP,7
 60,0x8517148,Mind Up,_c,97,5,4,PICKUP,2
-61,0x8517d8c,Castle Map 3,,82,31,4,PICKUP,2
+61,0x8517d8c,CASTLE MAP 3,,82,31,4,PICKUP,2
 62,0x8517e28,1000,_b,155,5,4,PICKUP,1
 63,0x8517f18,1000,_c,156,5,4,PICKUP,1
 64,0x8518170,500,_b,152,4,4,PICKUP,1
@@ -77,7 +77,7 @@ pickup_number,ptr_address,simple_name,specifier,flag_offset (varA),item_offset (
 76,0x851cd58,Elfin Robe,,59,18,4,PICKUP,4
 77,0x851ce00,Rahab's Sword,,27,11,4,PICKUP,3
 78,0x851d010,High Mind Up,_c,107,6,4,PICKUP,2
-79,0x851d04c,Spoiled Milk,,134,18,4,PICKUP,2
+79,0x851d04c,Pudding,,134,18,4,PICKUP,2
 80,0x851d1e4,Mana Prism,_b,118,7,4,PICKUP,2
 81,0x851d328,Super Potion,_a,111,2,4,PICKUP,2
 82,0x851d400,Super Potion,_b,110,2,4,PICKUP,2
@@ -100,7 +100,7 @@ pickup_number,ptr_address,simple_name,specifier,flag_offset (varA),item_offset (
 99,0x851f280,Laevatain,,29,13,4,PICKUP,3
 100,0x851f5f8,Black Cloak,,65,27,4,PICKUP,4
 101,0x851f8b0,Olrox's Suit,,54,7,4,PICKUP,4
-102,0x851f8d4,Silver Handgun,,49,56,5,HARD_PICKUP,3
+102,0x851f8d4,Silver Gun,,49,56,5,HARD_PICKUP,3
 103,0x851f8e0,Balmung,,24,17,4,PICKUP,3
 104,0x851f904,Rare Ring,,72,39,4,PICKUP,4
 105,0x851f940,High Potion,_e,103,1,4,PICKUP,2
