@@ -187,7 +187,7 @@ class Rac3Interface(GameInterface):
     vendor_cursor_pos: int = 0
     should_overwrite_vendor_item_names: bool = True
     should_restore_vendor_item_names: bool = True
-    tyhrra_dropship: int = 0
+    tyhrra_dropship: bool = False
     tyhrra_intro: int = 0
     metro_dropship: int = 0
     holo_teleport: int = 0
@@ -1183,6 +1183,8 @@ class Rac3Interface(GameInterface):
         """Prevent a Crash on Tyhrranosis by disabling the robot tyhrranoids"""
         if self.planet == RAC3REGION.TYHRRANOSIS:
             self._write8(RAC3STATUS.ROBONOIDS, 0)
+            if self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP, False):
+                self.tyhrra_dropship = bool(self._read8(RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[0]) & (1 << RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[1]))
 
     def softlock_warning(self):
         """Checks if the player is on a planet with a potential softlock and informs them on how to escape"""
@@ -2064,17 +2066,23 @@ class Rac3Interface(GameInterface):
                 if data.ITEMS is None or any(
                     [all([self.UnlockItem[item].status for item in items]) for items in data.ITEMS]):
                     # special cases
-                    # if name == RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
-                    #     # logger.debug(f"Pause state: {self.pause_state_value}, latch state: {self.tyhrra_dropship}")
-                    #     if self.tyhrra_dropship < 1 and self.short_pause:
-                    #         self.tyhrra_dropship += 1
-                    #         # logger.debug("Set Tyhrranosis Dropship")
-                    #         self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
-                    #     elif self.tyhrra_dropship == 1 and self.short_pause:
-                    #         self.tyhrra_dropship += 1
-                    #         # logger.debug("UnSet Tyhrranosis Dropship")
-                    #         self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
-                    #     continue
+                    if name == RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
+                        if not self.tyhrra_dropship:
+                            has_seen_cutscene = bool(self._read8(RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[0]) & (1 << RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[1]))
+                            if has_seen_cutscene:
+                                self.tyhrra_dropship = True
+                                self.force_respawn()
+
+                        # logger.debug(f"Pause state: {self.pause_state_value}, latch state: {self.tyhrra_dropship}")
+                        # if self.tyhrra_dropship < 1 and self.short_pause:
+                        #     self.tyhrra_dropship += 1
+                        #     # logger.debug("Set Tyhrranosis Dropship")
+                        #     self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
+                        # elif self.tyhrra_dropship == 1 and self.short_pause:
+                        #     self.tyhrra_dropship += 1
+                        #     # logger.debug("UnSet Tyhrranosis Dropship")
+                        #     self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
+                        # continue
                     if name == RAC3SHORTCUTS.METROPOLIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
                         # logger.debug(f"Pause state: {self.pause_state_value}, latch state: {self.metro_dropship}")
                         if self.metro_dropship < 1 and self.short_pause:
