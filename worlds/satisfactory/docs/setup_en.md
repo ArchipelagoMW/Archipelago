@@ -119,9 +119,9 @@ and different players in the same multiworld can all have different options.
 
 #### Where do I get a config file?
 
-The Player Settings page on the website
-allows you to configure your personal settings and export a config file from them.
-Satisfactory player settings page: [Satisfactory Settings Page](/games/Satisfactory/player-options)
+The Player Options page on the website
+allows you to configure your personal options and export a config file from them.
+Satisfactory player options page: [Satisfactory Options Page](/games/Satisfactory/player-options)
 
 #### Verifying Your Config File
 
@@ -131,7 +131,7 @@ YAML Validator page: [Yaml Validation Page](/mysterycheck)
 
 #### Starting Inventory
 
-The Player Settings page provides a few options for controlling what materials you start with
+The Player Options page provides a few options for controlling what materials you start with
 and when certain key technologies are unlocked.
 Any Resource Bundle type items added to your starting inventory will be delivered to your player inventory when you initally spawn,
 unless they can't fit, in which case they can be collected by building an Archipelago Portal.
