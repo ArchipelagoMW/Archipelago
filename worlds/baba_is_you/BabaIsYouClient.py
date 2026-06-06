@@ -53,10 +53,10 @@ def auto_install_pack(path: str, world: str, forceInstall: bool = False):
 
                 for line in lines:
                     if line[0:8] == "version=":
-                        testVersion = line[8:]
+                        testVersion = line[8:].rstrip()
                         if testVersion != VERSION:
                             valid = True
-                            print("Out of date version: ",testVersion)
+                            print(f"Out of date version!\nYour version: {testVersion}, client version: {VERSION}")
                         break
 
         if valid:
@@ -95,8 +95,15 @@ if __name__ == "__main__":
 
 from .locations import LOCATION_NAME_TO_ID as baba_loc_name_to_id
 from NetUtils import NetworkItem, ClientStatus
-from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
-    CommonContext, server_loop
+from CommonClient import gui_enabled, logger, get_base_parser, server_loop
+
+tracker_loaded = False
+try:
+    from worlds.tracker.TrackerClient import (TrackerCommandProcessor as ClientCommandProcessor,
+                                              TrackerGameContext as CommonContext, UT_VERSION)
+    tracker_loaded = True
+except ModuleNotFoundError:
+    from CommonClient import ClientCommandProcessor, CommonContext
 
 class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
     def _cmd_resync(self):
@@ -275,6 +282,9 @@ class BabaIsYouContext(CommonContext):
                     os.remove(root+"/"+file)
 
     def on_package(self, cmd: str, args: dict):
+        # Relay packages to the tracker
+        super().on_package(cmd, args)
+
         if cmd in {"Connected"}:
             self.is_connected = True
             if not os.path.exists(self.game_communication_path):
@@ -329,9 +339,13 @@ class BabaIsYouContext(CommonContext):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
-            base_title = "Archipelago BabaIsYou Client"
+            base_title = "Baba Is You Archipelago Client"
+            if tracker_loaded:
+                base_title += f" | Universal Tracker {UT_VERSION}"
 
         self.ui = BabaIsYouManager(self)
+        if tracker_loaded:
+            self.load_kv()
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
     
     def create_options_files(self):  
@@ -425,9 +439,16 @@ def launch_baba_is_you_client():
     async def main(args):
         ctx = BabaIsYouContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+
+        # Runs Universal Tracker's internal generator
+        if tracker_loaded:
+            ctx.run_generator()
+            ctx.tags.remove("Tracker")
+
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
+
         progression_watcher = asyncio.create_task(
             game_watcher(ctx), name="BabaIsYouProgressionWatcher")
 
