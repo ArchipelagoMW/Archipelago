@@ -83,8 +83,8 @@ ginger_island_content_pack = GingerIslandContentPack(
         Fruit.mango: (HarvestFruitTreeSource(sapling=Sapling.mango, seasons=(Season.summer,)),),
 
         # Crop
-        Vegetable.taro_root: (HarvestCropSource(seed=Seed.taro, seasons=(Season.summer,)),),
-        Fruit.pineapple: (HarvestCropSource(seed=Seed.pineapple, seasons=(Season.summer,)),),
+        Vegetable.taro_root: (HarvestCropSource(seed=Seed.taro, seasons=(Season.summer,), growth_time=10),),
+        Fruit.pineapple: (HarvestCropSource(seed=Seed.pineapple, seasons=(Season.summer,), growth_time=14),),
 
         # Temporary animal stuff, will be moved once animal products are properly content-packed
         AnimalProduct.ostrich_egg_starter: (CustomRuleSource(lambda logic: logic.tool.can_forage(Generic.any, Region.island_north, True) & logic.has(Forageable.journal_scrap) & logic.region.can_reach(Region.volcano_floor_5)),),

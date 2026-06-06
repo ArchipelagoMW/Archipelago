@@ -9,7 +9,6 @@ from ..data.fish_data import FishItem, crab_pot_difficulty
 from ..data.harvest import HarvestCropSource
 from ..data.mod_only_data.crops_prices import all_crop_sell_prices
 from ..data.mod_only_data.fish_prices import all_fish_sell_prices
-from ..data.mod_only_data.growth_times import all_growth_times
 from ..data.shop import ShopSource
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
@@ -205,8 +204,8 @@ def randomize_crop_growth_times(content: StardewContent, data_to_randomize: set[
         return
 
     harvest_sources_included = list(content.find_sources_of_type(HarvestCropSource))
-    seeds_included = [source.seed for source in harvest_sources_included]
-    growth_times_by_seed = {seed_name: growth_time for seed_name, growth_time in all_growth_times.items() if seed_name in seeds_included and growth_time > 0}
+    sources_included = [source for source in harvest_sources_included]
+    growth_times_by_seed = {source.seed: source.growth_time for source in sources_included if source.growth_time > 0}
     randomized_growth_times_per_seed = randomizers_per_behavior[behavior](growth_times_by_seed, random)
 
     for item_name, item in content.game_items.items():
