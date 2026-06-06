@@ -138,7 +138,7 @@ unless they can't fit, in which case they can be collected by building an Archip
 
 Advanced users can use Plando, Weighted Options, and manual yaml editing to further configure the starting inventory.
 If you don't wish to use these techniques, consider using Satisfactory's
-[Advanced Game Settings (Satisfactory Wiki)](https://satisfactory.wiki.gg/wiki/Advanced_Game_Settings)
+[Creative Mode (Satisfactory Wiki)](https://satisfactory.wiki.gg/wiki/Creative_Mode)
 to spawn the items you desire.
 
 #### Advanced Configuration
