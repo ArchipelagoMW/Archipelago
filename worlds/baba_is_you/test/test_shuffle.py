@@ -8,6 +8,7 @@ class TestShuffleLogic(BabaIsYouTestBase):
     options = {
         "goal": 0,
         "level_shuffle": 2,
+        "area_access": 2,
         "start_with_default_words": True,
         #"accessibility": "minimal",
     }

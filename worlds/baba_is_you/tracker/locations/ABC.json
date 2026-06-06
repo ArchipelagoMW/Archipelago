@@ -1,1 +1,159 @@
-[]
+[
+  {
+    "name": "ABC",
+    "children": [
+      {
+        "name": "ABC",
+        "short_name": "ABC",
+        "map_locations": [
+          {
+            "map": "ABC",
+            "x": 48,
+            "y": 48
+          },
+          {
+            "map": "???",
+            "x": 1584,
+            "y": 336
+          }
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "item_count": 1
+          },
+          {
+            "name": "Complete",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "ABC-1",
+        "short_name": "ABC-1",
+        "map_locations": [
+          {
+            "map": "ABC",
+            "x": 1488,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "ABC-2",
+        "short_name": "ABC-2",
+        "map_locations": [
+          {
+            "map": "ABC",
+            "x": 1584,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "ABC-3",
+        "short_name": "ABC-3",
+        "map_locations": [
+          {
+            "map": "ABC",
+            "x": 1488,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "ABC-4",
+        "short_name": "ABC-4",
+        "map_locations": [
+          {
+            "map": "ABC",
+            "x": 1584,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "ABC-5",
+        "short_name": "ABC-5",
+        "map_locations": [
+          {
+            "map": "ABC",
+            "x": 1584,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "ABC-Extra 1",
+        "short_name": "ABC-Extra 1",
+        "map_locations": [
+          {
+            "map": "ABC",
+            "x": 1776,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

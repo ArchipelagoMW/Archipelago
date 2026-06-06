@@ -3,6 +3,32 @@
     "name": "Garden",
     "children": [
       {
+        "name": "Garden",
+        "short_name": "Garden",
+        "map_locations": [
+          {
+            "map": "Flower Garden",
+            "x": 48,
+            "y": 48
+          },
+          {
+            "map": "Map",
+            "x": 1200,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "item_count": 1
+          },
+          {
+            "name": "Complete",
+            "item_count": 1
+          }
+        ]
+      },
+      {
         "name": "Garden-1",
         "short_name": "Garden-1",
         "map_locations": [
@@ -14,7 +40,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-1",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -31,7 +61,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-2",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -48,7 +82,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-3",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -65,7 +103,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-4",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -82,7 +124,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-5",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -99,7 +145,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-6",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -116,7 +166,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-7",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -133,7 +187,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-8",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -150,7 +208,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-9",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -167,7 +229,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-10",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -184,7 +250,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-Extra 1",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -201,7 +271,11 @@
         ],
         "sections": [
           {
-            "name": "Garden-Extra 2",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]

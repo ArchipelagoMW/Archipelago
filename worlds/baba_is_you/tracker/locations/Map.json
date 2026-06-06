@@ -3,6 +3,28 @@
     "name": "Map",
     "children": [
       {
+        "name": "Map",
+        "short_name": "Map",
+        "map_locations": [
+          {
+            "map": "Map",
+            "x": 48,
+            "y": 48
+          },
+          {
+            "map": "???",
+            "x": 2160,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          }
+        ]
+      },
+      {
         "name": "Map-0",
         "short_name": "Map-0",
         "map_locations": [
@@ -14,7 +36,11 @@
         ],
         "sections": [
           {
-            "name": "Map-0",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -31,7 +57,11 @@
         ],
         "sections": [
           {
-            "name": "Map-1",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -48,7 +78,11 @@
         ],
         "sections": [
           {
-            "name": "Map-2",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -65,7 +99,11 @@
         ],
         "sections": [
           {
-            "name": "Map-3",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -82,7 +120,11 @@
         ],
         "sections": [
           {
-            "name": "Map-4",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -99,7 +141,11 @@
         ],
         "sections": [
           {
-            "name": "Map-5",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -116,7 +162,11 @@
         ],
         "sections": [
           {
-            "name": "Map-6",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -133,7 +183,11 @@
         ],
         "sections": [
           {
-            "name": "Map-7",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -150,7 +204,11 @@
         ],
         "sections": [
           {
-            "name": "Map-8",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -167,7 +225,23 @@
         ],
         "sections": [
           {
-            "name": "Map-9",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Baba Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Key Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Wall Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Door Transform",
             "item_count": 1
           }
         ]
@@ -184,7 +258,15 @@
         ],
         "sections": [
           {
-            "name": "Map-10",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Flag Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Keke Transform",
             "item_count": 1
           }
         ]
@@ -201,7 +283,11 @@
         ],
         "sections": [
           {
-            "name": "Map-Finale",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -218,7 +304,11 @@
         ],
         "sections": [
           {
-            "name": "Map-?",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]

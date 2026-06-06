@@ -3,6 +3,32 @@
     "name": "Mountain",
     "children": [
       {
+        "name": "Mountain",
+        "short_name": "Mountain",
+        "map_locations": [
+          {
+            "map": "Mountaintop",
+            "x": 48,
+            "y": 48
+          },
+          {
+            "map": "Map",
+            "x": 912,
+            "y": 240
+          }
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "item_count": 1
+          },
+          {
+            "name": "Complete",
+            "item_count": 1
+          }
+        ]
+      },
+      {
         "name": "Mountain-1",
         "short_name": "Mountain-1",
         "map_locations": [
@@ -14,7 +40,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-1",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -31,7 +61,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-2",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -48,7 +82,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-3",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -65,7 +103,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-4",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -82,7 +124,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-5",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -99,7 +145,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-6",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -116,7 +166,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-7",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -133,7 +187,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-8",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -150,7 +208,11 @@
         ],
         "sections": [
           {
-            "name": "Mountain-Extra 1",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]

@@ -1,1 +1,568 @@
-[]
+[
+  {
+    "name": "???",
+    "children": [
+      {
+        "name": "???",
+        "short_name": "???",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 48,
+            "y": 48
+          },
+          {
+            "map": "ABC",
+            "x": 1488,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-1",
+        "short_name": "???-1",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1968,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-2",
+        "short_name": "???-2",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1872,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-3",
+        "short_name": "???-3",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1680,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-4",
+        "short_name": "???-4",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1584,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-5",
+        "short_name": "???-5",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1584,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-6",
+        "short_name": "???-6",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1584,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-7",
+        "short_name": "???-7",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1488,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Baba Transform",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-8",
+        "short_name": "???-8",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1584,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-9",
+        "short_name": "???-9",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1584,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-10",
+        "short_name": "???-10",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1584,
+            "y": 1296
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-11",
+        "short_name": "???-11",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1584,
+            "y": 1392
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-12",
+        "short_name": "???-12",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1200,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          },
+          {
+            "name": "Flag Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Text Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Key Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Hedge Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Wall Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Keke Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Tile Transform",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-A",
+        "short_name": "???-A",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1872,
+            "y": 528
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-B",
+        "short_name": "???-B",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1968,
+            "y": 528
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-C",
+        "short_name": "???-C",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1968,
+            "y": 432
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-D",
+        "short_name": "???-D",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1872,
+            "y": 432
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Win Text Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Push Text Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Keke Text Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Wall Text Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Stop Text Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Baba Text Transform",
+            "item_count": 1
+          },
+          {
+            "name": "You Text Transform",
+            "item_count": 1
+          },
+          {
+            "name": "Keke Transform",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-Extra 1",
+        "short_name": "???-Extra 1",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1392,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-Extra 2",
+        "short_name": "???-Extra 2",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1392,
+            "y": 528
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-Extra 3",
+        "short_name": "???-Extra 3",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1296,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-Extra 4",
+        "short_name": "???-Extra 4",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1296,
+            "y": 528
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-Extra 5",
+        "short_name": "???-Extra 5",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1968,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-Extra 6",
+        "short_name": "???-Extra 6",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1296,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "???-Extra 7",
+        "short_name": "???-Extra 7",
+        "map_locations": [
+          {
+            "map": "???",
+            "x": 1776,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

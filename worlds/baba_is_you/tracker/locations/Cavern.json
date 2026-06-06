@@ -3,6 +3,32 @@
     "name": "Cavern",
     "children": [
       {
+        "name": "Cavern",
+        "short_name": "Cavern",
+        "map_locations": [
+          {
+            "map": "Volcanic Cavern",
+            "x": 48,
+            "y": 48
+          },
+          {
+            "map": "Map",
+            "x": 1008,
+            "y": 432
+          }
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "item_count": 1
+          },
+          {
+            "name": "Complete",
+            "item_count": 1
+          }
+        ]
+      },
+      {
         "name": "Cavern-1",
         "short_name": "Cavern-1",
         "map_locations": [
@@ -14,7 +40,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-1",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -31,7 +61,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-2",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -48,7 +82,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-3",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -65,7 +103,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-4",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -82,7 +124,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-5",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -99,7 +145,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-6",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -116,7 +166,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-7",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -133,7 +187,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-8",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -150,7 +208,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-9",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -167,7 +229,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-10",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -184,7 +250,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-11",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -201,7 +271,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-12",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -218,7 +292,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-13",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -235,7 +313,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-14",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]
@@ -252,7 +334,11 @@
         ],
         "sections": [
           {
-            "name": "Cavern-Extra 1",
+            "name": "Win",
+            "item_count": 1
+          },
+          {
+            "name": "Bonus",
             "item_count": 1
           }
         ]

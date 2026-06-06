@@ -86,7 +86,7 @@ class BabaIsYouWorld(World):
         "map_page_folder": "tracker",
         "map_page_maps": "maps/maps.json",
         "map_page_locations": [
-            "locations/flower.json",
+            "locations/Flower.json",
             "locations/ABC.json",
             "locations/Cavern.json",
             "locations/Center.json",
@@ -150,6 +150,7 @@ class BabaIsYouWorld(World):
                 )
                 continue
 
+            prefix = f"{level_data.get("name")}: "
             for locationName in get_level_locations(level_data, self):
                 location_id = locations.LOCATION_NAME_TO_ID.get(locationName)
                 if location_id is None:
@@ -160,8 +161,8 @@ class BabaIsYouWorld(World):
                     )
                     continue
 
-                mapping[f"{slot_name}/{slot_name}"] = location_id
-                break # We can only put one location here as of now
+                shortLocName = locationName[len(prefix):]
+                mapping[f"{slot_name}/{shortLocName}"] = location_id
 
         return mapping
 

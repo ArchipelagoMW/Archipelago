@@ -109,8 +109,8 @@ class TestUniversalTrackerRegeneration(unittest.TestCase):
             regenerated_world._build_poptracker_name_mapping(),
         )
 
-        map_zero_target = regenerated_world.level_shuffle_dict.get("Map-0", "Map-0")
+        map_zero_target = regenerated_world.level_shuffle_dict.get("Map-0", "Win")
         self.assertEqual(
-            BabaIsYouWorld.tracker_world["poptracker_name_mapping"]["Map-0/Map-0"],
+            BabaIsYouWorld.tracker_world["poptracker_name_mapping"]["Map-0/Win"],
             LOCATION_NAME_TO_ID[f"{LEVEL_DATA[map_zero_target]['name']}: Win"],
         )
