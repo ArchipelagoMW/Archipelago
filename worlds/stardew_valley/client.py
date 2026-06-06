@@ -121,6 +121,4 @@ def setup_ut_deferred_entrances(randomized_entrances: dict[str, str], entrances:
 
         entrance_data.append((ex, entr))
 
-    for i, ed in enumerate(entrance_data):
-        print(f"{i}: {ed}")
     return entrance_data
