@@ -330,36 +330,15 @@ class BabaIsYouContext(CommonContext):
                         f.write(f"player={clean(self.player_names[networkItem.player])}\n")
                         f.write(f"location={clean(self.location_names.lookup_in_slot(networkItem.location, networkItem.player))}\n")
                         f.close()
-    
+
     def make_gui(self):
         ui = super().make_gui()
         ui.base_title = "Baba Is You Archipelago Client"
-        return ui
-
-    def run_gui(self):
-        """Import kivy UI system and start running it as self.ui_task."""
-        from kvui import GameManager
-
-        class BabaIsYouManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = "Baba Is You Archipelago Client"
-            iconSource = ""
-            if tracker_loaded:
-                base_title += f" | Universal Tracker {UT_VERSION}"
-            
-            def build(self):
-                container = super().build()
-                if tracker_loaded:
-                    self.ctx.build_gui(self)
-
-                return container
-
-        self.ui = BabaIsYouManager(self)
+        ui.logging_pairs = [("Client", "Archipelago")]
         if tracker_loaded:
-            self.load_kv()
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+            ui.base_title += f" | Universal Tracker {UT_VERSION}"
+
+        return ui
     
     def create_options_files(self):  
         currPath = os.path.join(self.game_communication_path,"AP_OPTIONS.data")
