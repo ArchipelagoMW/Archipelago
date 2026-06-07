@@ -1,10 +1,13 @@
+import os
 import typing
 import unittest
 
 from .bases import HKTestBase
 
+run_tests = os.environ.get("RUN_HK_TESTS") != "True"
 
-@unittest.skip("too inconsistent for main")
+
+@unittest.skipIf(run_tests, "too inconsistent for main")
 class TestErMapAllShuffled(HKTestBase):
     options: typing.ClassVar[dict[str, str]] = {
         "Goal": "any",
@@ -80,7 +83,7 @@ class TestErMapAllShuffled(HKTestBase):
 #     }
 
 
-@unittest.skip("too inconsistent for main")
+@unittest.skipIf(run_tests, "too inconsistent for main")
 class TestErFullAllShuffled(HKTestBase):
     options: typing.ClassVar[dict[str, str]] = {
         "Goal": "any",
@@ -156,7 +159,7 @@ class TestErFullAllShuffled(HKTestBase):
 #     }
 
 
-@unittest.skip("too inconsistent for main")
+@unittest.skipIf(run_tests, "too inconsistent for main")
 class TestErRoomAllShuffled(HKTestBase):
     options: typing.ClassVar[dict[str, str]] = {
         "Goal": "any",
@@ -231,7 +234,7 @@ class TestErRoomAllShuffled(HKTestBase):
 #         "RandomizeElevatorPass": False,
 #     }
 
-@unittest.skip("too inconsistent for main")
+@unittest.skipIf(run_tests, "too inconsistent for main")
 class TestErDoorsAllShuffled(HKTestBase):
     options: typing.ClassVar[dict[str, str]] = {
         "Goal": "any",
