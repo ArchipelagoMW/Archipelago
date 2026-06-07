@@ -191,6 +191,7 @@ class Rac3Interface(GameInterface):
     tyhrra_intro: int = 0
     metro_dropship: int = 0
     holo_teleport: int = 0
+    holo_final_door: int = 0
     hacker_door_addresses: dict[int, int] = {}
     opened_the_hacker_doors: bool = False
     opened_the_tyhrranoid_doors: bool = False
@@ -234,7 +235,7 @@ class Rac3Interface(GameInterface):
 
     def _read_bits(self, address: int) -> set[int]:
         bits: set[int] = set()
-        value = self._read8(self.address_convert(address))
+        value = self._read8(address)
         for i in range(8):
             if value & (1 << i):
                 bits.add(i)
