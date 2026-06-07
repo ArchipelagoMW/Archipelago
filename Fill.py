@@ -343,6 +343,8 @@ def remaining_fill(multiworld: MultiWorld,
                 last_batch.append(multiworld.worlds[item.player].create_filler())
             remaining_fill(multiworld, locations, last_batch, name + " Start Inventory Retry")
             itempool.extend(last_batch)
+            # remaining_fill removes the items from the batch when they're placed.
+            # This will only add to the pool the new fillers that were not placed, hopefully none.
             return
         else:
             raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
