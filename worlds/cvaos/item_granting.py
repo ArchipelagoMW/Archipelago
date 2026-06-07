@@ -108,12 +108,16 @@ async def grant(ram: "AoSRAM", action: ReceiveAction) -> bool:
     """Apply a resolved action through the RAM accessors. Returns ``False`` only if a guarded
     write lost a race, so the caller retries next tick without advancing the received-counter.
     """
-    ok = await _grant_transfer(ram, action)
-    # NOTE: when a future item both transfers AND sets a flag, a lost flag write here re-runs
-    # the transfer on retry. Fine today (no item sets a flag yet — maps are TODO in items.py).
-    if ok and action.set_flag:
-        ok = await ram.set_flag_bit(action.flag_offset, action.flag_bit, action.flag_value)
-    return ok
+    # ORDER MATTERS: run the idempotent op (set_flag_bit -- a no-op when the bit is already at the
+    # target value) FIRST, and the non-idempotent transfer (give_item/add_gold, a real increment)
+    # LAST, so on a retry only the last committed op can re-run. If the flag write loses its guarded
+    # race we return before any transfer (clean retry); if the transfer loses its race, re-setting the
+    # flag next tick is harmless. This preserves "at most one non-idempotent op per grant" and becomes
+    # load-bearing once maps pack set_flag=1 (TODO in items.py) -- do not reorder back.
+    if action.set_flag:
+        if not await ram.set_flag_bit(action.flag_offset, action.flag_bit, action.flag_value):
+            return False
+    return await _grant_transfer(ram, action)
 
 
 async def _grant_transfer(ram: "AoSRAM", action: ReceiveAction) -> bool:
