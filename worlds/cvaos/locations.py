@@ -36,7 +36,7 @@ def _build_location_tables() -> tuple[dict[str, int], dict[int, str]]:
     id_to_name: dict[int, str] = {}
 
     for pickup in pickup_info_collection:
-        location_name = pickup.identifier_key
+        location_name = pickup.display_name
         # Use ptr_address as the unique location ID
         location_id = pickup.ptr_address
 

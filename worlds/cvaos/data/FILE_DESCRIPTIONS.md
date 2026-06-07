@@ -52,7 +52,7 @@ Merges `item_info.csv` and `item_importance.csv` by `name` into `ItemInfo` Pydan
 ## `pickup_info/`
 
 **`pickup_identifiers.csv`**
-ROM-level pickup data. Columns: `pickup_number` (sequential int), `ptr_address` (ROM pointer to this pickup's entry), `simple_name`, `specifier` (disambiguates duplicate names), `flag_offset (varA)` (ROM flag byte offset), `item_offset (varB)` (ROM item byte offset), `type_num`, `type_name`, `subtype_num`.
+ROM-level pickup data. Columns: `pickup_number` (sequential int), `ptr_address` (ROM pointer to this pickup's entry), `simple_name`, `specifier` (disambiguates duplicate names), `flag_offset (varA)` (save-flag bit index into the `0x02000360` collected-pickup bitfield, not a byte offset), `item_offset (varB)` (ROM item byte offset), `type_num`, `type_name`, `subtype_num`.
 
 **`pickup_rooms.csv`**
 Spatial and room data for each pickup. Columns: `pickup_number`, `ptr_address`, `room_identifier`, `room_address`, `pickup_number_within_room` (1-based index among pickups in the same room), `x`, `y`.

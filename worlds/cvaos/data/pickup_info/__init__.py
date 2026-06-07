@@ -86,6 +86,24 @@ class PickupInfo(BaseModel):
     def identifier_key(self) -> str:
         return f"{self.simple_name}{self.specifier or ''}"
 
+    @property
+    def display_name(self) -> str:
+        """
+        Human-readable AP item/location name. Money (subtype 1) renders its gold value
+        (``500 Gold``) instead of the bare number; a duplicate-suffix like ``_a`` becomes `` (A)``.
+        ``identifier_key`` stays the internal key; this is display-only (codes/ids are unaffected).\
+        """
+        spec = (self.specifier or "").lstrip("_")
+        if not spec:
+            suffix = ""
+        elif len(spec) == 1 and spec.isalpha():
+            suffix = f" ({spec.upper()})"
+        else:
+            suffix = f" ({spec})"
+        if self.subtype_num == 1:  # money: simple_name is the gold value
+            return f"{int(self.simple_name)} Gold{suffix}"
+        return f"{self.simple_name}{suffix}"
+
     @classmethod
     def find(cls, key: int | str) -> "PickupInfo":
         return find(key)

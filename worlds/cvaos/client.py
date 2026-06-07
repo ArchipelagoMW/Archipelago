@@ -1,9 +1,9 @@
 """
 BizHawk client for Castlevania: Aria of Sorrow.
 
-This client validates the patched ROM, authenticates, connects, and sends location checks for
-collected pickups (``game_watcher``). Receiving items, DeathLink, and goal detection are added
-in later phases (see worlds/cvaos/ROADMAP.md).
+This client validates the patched ROM, authenticates, connects, sends location checks for
+collected pickups, and grants received items (``game_watcher``). DeathLink and goal detection
+are added in later phases (see worlds/cvaos/ROADMAP.md).
 """
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
+from . import item_granting
 from .locations import flag_offset_to_location_id
 from .ram import AoSRAM
 from .rom import ARCHIPELAGO_IDENTIFIER, ARCHIPELAGO_IDENTIFIER_START, AUTH_NUMBER_START
@@ -23,6 +24,10 @@ if TYPE_CHECKING:
 # GBA header: 12-byte internal game title at 0xA0 (CLIENT_PLAN sec. 5a).
 ROM_NAME_START = 0xA0
 ROM_NAME = "CASTLEVANIA2"
+
+# Max items to grant per game_watcher tick, so a large backlog on connect can't stall the watcher
+# (each grant is a few BizHawk round-trips). Leftovers are picked up on the following ticks.
+MAX_ITEMS_PER_TICK = 10
 
 
 class CVAOSClient(BizHawkClient):
@@ -106,7 +111,31 @@ class CVAOSClient(BizHawkClient):
                 self.local_checked_locations |= new_checks
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sorted(new_checks)}])
 
-            # Receiving items, DeathLink, and goal detection arrive in later phases (ROADMAP).
+            # Receive items from the server: grant each not-yet-given item, then advance the saved
+            # received-counter (guarded) so a reload doesn't re-give them. Stop on a lost guarded
+            # write (a race with the game's writes, or the counter changing underneath us) and retry.
+            received = await ram.get_received_count()
+            # Defensive: a counter ahead of everything the server has ever sent could only come from a
+            # corrupt save; clamp so we never index past items_received (a real grant rewrites it).
+            received = min(received, len(ctx.items_received))
+            granted_this_tick = 0
+            while received < len(ctx.items_received) and granted_this_tick < MAX_ITEMS_PER_TICK:
+                code = ctx.items_received[received].item
+                action = item_granting.resolve(code)
+                if action is None:
+                    # Unreachable today (every item is a pickup); log instead of silently
+                    # dropping a received item if a non-pickup item is ever added to the pool.
+                    from CommonClient import logger
+                    logger.warning("CVAoS: received item code %s has no grant mapping; skipping.", code)
+                elif not await item_granting.grant(ram, action):
+                    break  # lost a guarded write on the grant; retry next tick without advancing
+                # Advance the saved counter, guarded on its prior value so we never blind-stomp it.
+                if not await ram.set_received_count(received + 1, expected=received):
+                    break  # counter changed underneath us; re-read and retry next tick
+                received += 1
+                granted_this_tick += 1
+
+            # DeathLink and goal detection arrive in later phases (ROADMAP).
         except bizhawk.RequestFailedError:
             # Emulator/connection hiccup; retry next tick.
             return
