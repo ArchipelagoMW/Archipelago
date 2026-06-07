@@ -396,6 +396,9 @@ class HKWorld(RandomizerCoreWorld):
 
     def set_rule(self, spot, rule):
         # set hk_rule instead of access_rule because our Location class defines a custom access_rule
+        if rule == []:
+            return
+            # treat this as a noop to stay True
         if isinstance(spot, HKEntrance):
             relevant_terms = {term for clause in rule for term in clause.hk_item_requirements.keys()}
             tried_modifiers = set()
@@ -576,6 +579,19 @@ class HKWorld(RandomizerCoreWorld):
             transition["name"]: transition["logic"]
             for transition in structure_transitions
         }
+        exit_to_rules.update({
+            f"{region['name']} -> {exit['target']}": exit["logic"]
+            for region in structure_regions
+            for exit in region["exits"]
+        })
+        empty_rule = [
+            {
+                "item_requirements": [],
+                "location_requirements": [],
+                "region_requirements": [],
+                "state_modifiers": []
+            }
+        ]
 
         one_ways = defaultdict(list)
         reverse_lookup = {
@@ -607,7 +623,7 @@ class HKWorld(RandomizerCoreWorld):
                 if sides != "OneWayOut":
                     exit_obj = region1.create_exit(name)
                     rule = exit_to_rules.get(name)
-                    if rule:
+                    if rule and rule != empty_rule:
                         self.set_rule(exit_obj, self.create_rule(rule))
                     exit_obj.randomization_type = entrance_type
                     exit_obj.randomization_group = group
@@ -629,7 +645,8 @@ class HKWorld(RandomizerCoreWorld):
 
                 region1 = self.get_region(structure_transition_to_region_map[name])
                 region2 = self.get_region(structure_transition_to_region_map[trans_data["vanilla_target"]])
-                rule = self.create_rule(exit_to_rules[name]) if exit_to_rules.get(name) else None
+                rule_data = exit_to_rules.get(name)
+                rule = self.create_rule(rule_data) if rule_data and rule_data != empty_rule else None
                 region1.connect(region2, name, rule)
 
         if not one_ways:

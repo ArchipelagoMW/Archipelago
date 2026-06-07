@@ -91,7 +91,12 @@ def cacheless_hk_access_rule(spot: Location | Entrance, state: CollectionState) 
             if not state.can_reach_region(region, spot.player):
                 return False
         if state.has_all_counts(clause.hk_item_requirements, spot.player):
-            if state._hk_apply_and_validate_state(clause, spot.parent_region):
+            if not state._hk_per_player_resource_states[spot.player][spot.parent_region.name]:
+                # cutout for er for when test_speculative_connection adds it to the graph without a can_reach
+                if state._hk_test_fake_state(clause, state.multiworld.worlds[spot.player].get_region("Menu")):
+                    return True
+
+            elif state._hk_apply_and_validate_state(clause, spot.parent_region):
                 return True
     # no clause was True,
     return False
@@ -180,6 +185,9 @@ class HKEntrance(Entrance):
         self.access_rule = self.hk_access_rule
 
     def access_rule(self, state: CollectionState) -> bool:
+        if not state._hk_per_player_resource_states[self.player][self.parent_region.name]:
+            # cutout for er for when test_speculative_connection adds it to the graph without a can_reach
+            return True
         state._hk_entrance_clause_cache[self.player][self.name] = {0: True}
         state._hk_apply_and_validate_state(default_hk_rule[0], self.parent_region, target_region=self.connected_region)
         return True
@@ -198,20 +206,31 @@ class HKEntrance(Entrance):
         if self.name not in state._hk_checked_state_modifiers[self.player]:
             state._hk_checked_state_modifiers[self.player][self.name] = set()
         terms = state._hk_checked_state_modifiers[self.player][self.name]
+
+        test_fake_state = not bool(state._hk_per_player_resource_states[self.player][self.parent_region.name])
         for index, clause in enumerate(self.hk_rule):
             if cache[index] or state.has_all_counts(clause.hk_item_requirements, self.player):
-                cache[index] = True
-                cur_term = "; ".join(handler.term_name for handler in clause.hk_state_requirements)
-                if cur_term in terms:
-                    continue
+                if self.connected_region is not None:
+                    # skip caching for ER tests on disconnected entrances
+
+                    cache[index] = True
+                    cur_term = "; ".join(handler.term_name for handler in clause.hk_state_requirements)
+                    if cur_term in terms:
+                        continue
                 # region sweep might not be done, so checking items is likely faster
                 reachable = True
                 for region in clause.hk_region_requirements:
                     if not state.can_reach_region(region, self.player):
                         reachable = False
                 if reachable:
-                    terms.add(cur_term)
-                    if state._hk_apply_and_validate_state(
+                    if self.connected_region is not None:
+                        # skip caching for ER tests on disconnected entrances
+                        terms.add(cur_term)
+                    if test_fake_state:
+                        # cutout for er for when test_speculative_connection adds it to the graph without a can_reach
+                        if state._hk_test_fake_state(clause, state.multiworld.worlds[self.player].get_region("Menu")):
+                            valid_clauses = True
+                    elif state._hk_apply_and_validate_state(
                             clause,
                             self.parent_region,
                             target_region=self.connected_region):

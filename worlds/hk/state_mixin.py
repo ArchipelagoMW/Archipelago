@@ -112,12 +112,25 @@ class HKLogicMixin(LogicMixin):
         }
         return other
 
+    def _hk_test_fake_state(self, clause: "HKClause", faux_parent: Region) -> bool:
+        player = faux_parent.player
+        available_states = list(self._hk_per_player_resource_states[player][faux_parent.name])
+
+        for handler in clause.hk_state_requirements:
+            available_states = [
+                s
+                for input_state in available_states
+                for s in handler.modify_state(input_state, self)
+            ]
+        return bool(available_states)
+
     def _hk_apply_and_validate_state(self, clause: "HKClause", region: Region, target_region=None) -> bool:
         player = region.player
         available_states = list(self._hk_per_player_resource_states[player][region.name])
 
         if not available_states:
             # no valid parent states
+            raise Exception("no parent state to apply")
             return False
 
         for handler in clause.hk_state_requirements:
