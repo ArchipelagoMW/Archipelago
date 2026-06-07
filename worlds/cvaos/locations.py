@@ -13,6 +13,7 @@ __all__ = [
     "CVAOSLocation",
     "location_name_to_id",
     "location_id_to_name",
+    "flag_offset_to_location_id",
 ]
 
 
@@ -51,3 +52,25 @@ def _build_location_tables() -> tuple[dict[str, int], dict[int, str]]:
 
 
 location_name_to_id, location_id_to_name = _build_location_tables()
+
+
+def _build_flag_offset_map() -> dict[int, int]:
+    """
+    Map each pickup's ``flag_offset`` (its bit index in the collected-pickup
+    bitfield) to its AP location id (``ptr_address``). The client reads that
+    bitfield and turns each set bit back into a location check. A given
+    flag offset is unique over all pickups.
+    """
+    flag_to_id: dict[int, int] = {}
+    for pickup in pickup_info_collection:
+        if pickup.flag_offset <= 0:
+            continue  # no tracked save flag
+        if pickup.flag_offset in flag_to_id:
+            raise ValueError(
+                f"Duplicate pickup flag_offset {pickup.flag_offset} "
+                f"({flag_to_id[pickup.flag_offset]:#x} vs {pickup.ptr_address:#x})")
+        flag_to_id[pickup.flag_offset] = pickup.ptr_address
+    return flag_to_id
+
+
+flag_offset_to_location_id = _build_flag_offset_map()
