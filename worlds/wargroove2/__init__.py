@@ -102,6 +102,7 @@ class Wargroove2World(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
+    item_name_groups = Items.item_name_groups
 
     def generate_early(self) -> None:
         early_level_slots = 4
