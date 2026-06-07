@@ -11,6 +11,7 @@ from settings import get_settings
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin, APTokenTypes
 
 from ..data.pickup_info import rows as pickup_infos
+from ..items import item_table
 from .entity import GBA_ROM_BASE
 
 if TYPE_CHECKING:
@@ -29,22 +30,30 @@ ARCHIPELAGO_IDENTIFIER = "CVAOS_AP_V0.1"
 AUTH_NUMBER_START = 0x660010              # 16 bytes
 
 
-# Item encoding lookup:  identifier_key -> (type_num, subtype_num, item_offset)
+# Item encoding lookup: AP item *code* -> (type_num, subtype_num, item_offset). Keyed by the stable
+# packed code (not the display name) so renaming AP items can never desync ROM item placement.
 
-_item_encoding: Dict[str, tuple[int, int, int]] = {
-    p.identifier_key: (p.type_num, p.subtype_num, p.item_offset)
+_item_encoding: Dict[int, tuple[int, int, int]] = {
+    item_table[p.display_name].code: (p.type_num, p.subtype_num, p.item_offset)
     for p in pickup_infos
 }
 
 
-def get_item_encoding(item_name: str) -> tuple[int, int, int]:
-    """Return (type_num, subtype_num, item_offset) for a CVAoS item name."""
-    return _item_encoding[item_name]
+def get_item_encoding(item_code: int) -> tuple[int, int, int]:
+    """Return (type_num, subtype_num, item_offset) for a CVAoS item by its packed AP code."""
+    return _item_encoding[item_code]
 
 
-# Placeholder appearance for items belonging to other games.
-# Uses consumable subtype (2) with Potion appearance (item_offset 0).
-_AP_PLACEHOLDER = (4, 2, 0)
+# Placeholder appearance for locations holding another world's item. AoS must physically give the
+# collector *something* when a pickup is collected, and the data has no "null item", so we use a
+# Skull Key (PICKUP type 4, consumable subtype 2, item_offset 25): an item not available in the game
+# (and therefore an item that is *not* a placed)
+# pickup anywhere, so it reads as an obvious "this was someone else's item" token.\
+# This is intentional: the AP location check is driven by the collected-pickup save flag (the client reads
+# PICKUP_FLAGS), NOT by what the pickup grants, so the substitute never affects check-sending. The
+# real behaviour -- grant nothing locally and show a "sent X to Player Y" multiworld textbox -- needs
+# the Phase 6 Strategy B ASM hook (see ROADMAP). Keep type=4 so the entity still sets its save flag.
+_AP_PLACEHOLDER = (4, 2, 25)  # Skull Key
 
 # Location data lookup: Location number -> ROM bytes
 
@@ -56,7 +65,7 @@ def get_location_data(world: CVAOSWorld, active_locations: List[Location]) -> Di
         rom_offset = loc.address - GBA_ROM_BASE
 
         if loc.item.game == world.game:
-            type_num, subtype_num, item_offset = get_item_encoding(loc.item.name)
+            type_num, subtype_num, item_offset = get_item_encoding(loc.item.code)
         else:
             type_num, subtype_num, item_offset = _AP_PLACEHOLDER
 
