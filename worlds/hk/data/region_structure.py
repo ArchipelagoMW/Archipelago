@@ -106473,25 +106473,11 @@ locations = [
 transitions = [
     {
         "name": "Room_temple[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Tutorial_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Tutorial_01[top1]",
@@ -106499,47 +106485,19 @@ transitions = [
     },
     {
         "name": "Tutorial_01[top2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[top1]",
@@ -106547,828 +106505,303 @@ transitions = [
     },
     {
         "name": "Town[door_station]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[door_sly]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[door_mapper]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[door_jiji]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[door_bretta]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[room_divine]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Town[room_grimm]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_shop[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Town_Stag_Station[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_mapper[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Bretta[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Ouiji[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Grimm_Divine[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Grimm_Main_Tent[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_01[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_02[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_03[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_03[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_03[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_03[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_04[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_04[door_Mender_House]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_04[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_04[door_charmshop]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_06[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_06[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_07[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_07[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_07[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_07[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_07[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_07[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_08[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_08[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_08[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_08[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_09[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_10[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_10[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_11_alt[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_11_alt[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_12[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_12[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_13[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_13[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_14[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_14[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_14[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_14[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_15[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_15[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_16[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_16[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_16[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_18[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_18[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_18[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_19[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_19[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_19[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_19[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_21[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_21[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_21[top1]",
@@ -107410,2269 +106843,827 @@ transitions = [
     },
     {
         "name": "Crossroads_22[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_25[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_25[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_27[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_27[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_27[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_27[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_30[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_31[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_33[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_33[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_33[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_33[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_33[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_35[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_35[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_36[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_36[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_37[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_38[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_39[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_39[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_40[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_40[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_42[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_42[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_43[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_43[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_45[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_45[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_46[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_46b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_ShamanTemple[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_47[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_48[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_49[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_49[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_49b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_50[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_50[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Crossroads_52[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_ruinhouse[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Charm_Shop[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Mender_House[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_01b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_01b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_02[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_03[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_05[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_05[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_06[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_07[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_07[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_07[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_08[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_09[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_10[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_10[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_10[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_11[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_11[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_11[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_11[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_11[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_12[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_12[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_13[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_13[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_14[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_15[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_15[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_16_alt[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_17[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_17[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_19[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_19[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_19[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_20_v02[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_20_v02[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_20_v02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_21[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_21[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_21[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_21[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_22[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_22[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_22[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_23[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_23[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_24[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_25[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_25[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_26[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_26[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_26[door_SlugShrine]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_28[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_28[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_29[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_29[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_30[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_30[top3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_30[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_30[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_31[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_31[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_31[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_32[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_32[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_32[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_34[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_34[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_35[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_35[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_36[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_37[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus1_Slug[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Slug_Shrine[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_nailmaster_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_01[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_01[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_02[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_02[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_02[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_24[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_24[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_24[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_25[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_25[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_25b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_25b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_26[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_26[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_26[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_26[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_26[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_27[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_27[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_28[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_30[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_35[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_44[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_44[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_44[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_47[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_47[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_47[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Fungus_Shaman[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_archive[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_archive[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_archive_02[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_01[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_01[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_34[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_03[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_04[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_04[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_05[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_06[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_06[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_06[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_06[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_07[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_07[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_08[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_08[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_08[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_09[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_10[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_10[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_10[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_11[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_11[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_11[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_11[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_12[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_12[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_13[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_13[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_13[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_14[top1]",
@@ -109706,278 +107697,103 @@ transitions = [
     },
     {
         "name": "Fungus2_14[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_14[bot3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_15[top3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_15[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_15[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_17[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_17[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_17[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_18[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_18[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_18[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_19[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_19[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_20[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_20[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_21[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_21[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_23[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_23[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_26[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_28[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_28[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_29[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_29[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_30[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_30[top1]",
@@ -110011,91 +107827,35 @@ transitions = [
     },
     {
         "name": "Fungus2_31[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_32[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_33[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_33[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_01[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_01[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_01b[top1]",
@@ -110141,91 +107901,35 @@ transitions = [
     },
     {
         "name": "Deepnest_01b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_01b[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_01b[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_02[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_03[top1]",
@@ -110258,212 +107962,79 @@ transitions = [
     },
     {
         "name": "Deepnest_03[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_10[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_10[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_10[right3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_10[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_10[door2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_spider_small[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_Spider_Town[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_14[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_14[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_14[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_14[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_16[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_16[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_17[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_17[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_17[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_17[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus2_25[top1]",
@@ -110500,201 +108071,75 @@ transitions = [
     },
     {
         "name": "Fungus2_25[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_26[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_26[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_26[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_26[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_26b[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_26b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_30[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_30[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_30[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_31[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_31[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_32[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_33[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_33[top2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_33[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_34[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_34[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_34[top1]",
@@ -110719,14 +108164,7 @@ transitions = [
     },
     {
         "name": "Deepnest_35[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_35[top1]",
@@ -110759,91 +108197,35 @@ transitions = [
     },
     {
         "name": "Deepnest_35[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_36[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_37[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_37[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_37[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_37[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_38[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_39[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_39[top1]",
@@ -110868,223 +108250,83 @@ transitions = [
     },
     {
         "name": "Deepnest_39[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_39[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_40[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_41[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_41[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_41[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_42[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_42[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_42[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_43[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_43[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_43[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_44[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_45_v02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Mask_Maker[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_01[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_01[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_02[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_02[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_02[top1]",
@@ -111137,36 +108379,15 @@ transitions = [
     },
     {
         "name": "Deepnest_East_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_03[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_03[top1]",
@@ -111195,69 +108416,27 @@ transitions = [
     },
     {
         "name": "Deepnest_East_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_03[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_04[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_04[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_06[top1]",
@@ -111283,113 +108462,43 @@ transitions = [
     },
     {
         "name": "Deepnest_East_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_06[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_06[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_06[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_07[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_07[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_07[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_07[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_07[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_08[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_08[top1]",
@@ -111422,69 +108531,27 @@ transitions = [
     },
     {
         "name": "Deepnest_East_09[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_09[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_10[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_11[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_11[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_11[top1]",
@@ -111511,47 +108578,19 @@ transitions = [
     },
     {
         "name": "Deepnest_East_11[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_12[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_12[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_13[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_14[top2]",
@@ -111585,36 +108624,15 @@ transitions = [
     },
     {
         "name": "Deepnest_East_14[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_14[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_14b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_14b[top1]",
@@ -111655,344 +108673,127 @@ transitions = [
     },
     {
         "name": "Deepnest_East_15[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_16[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_16[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_17[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_18[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_18[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_18[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_nailmaster_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_Hornet[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Deepnest_East_Hornet[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Wyrm[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "GG_Lurker[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_01[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_02[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_02[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_03_c[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_03_c[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_03_c[right3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_03_c[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_03[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_03[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_04[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Hive_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Colosseum_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Colosseum_01[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Colosseum_02[top1]",
@@ -112056,234 +108857,87 @@ transitions = [
     },
     {
         "name": "Room_Colosseum_Spectate[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Colosseum_Spectate[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_01[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_01[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_01[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_02[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_03[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_03[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_03[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_03_b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_03_c[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_03_c[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_04[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_04[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_06_Core[top1]",
@@ -112318,135 +108972,51 @@ transitions = [
     },
     {
         "name": "Abyss_06_Core[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_06_Core[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_06_Core[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_06_Core[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_08[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_09[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_09[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_09[right3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_10[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_10[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_12[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_15[top1]",
@@ -112480,25 +109050,11 @@ transitions = [
     },
     {
         "name": "Abyss_16[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_16[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_17[top1]",
@@ -112523,124 +109079,47 @@ transitions = [
     },
     {
         "name": "Abyss_18[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_18[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_19[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_19[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_19[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_19[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_20[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_20[top2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_21[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_22[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Abyss_Lighthouse_room[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_01[top1]",
@@ -112674,36 +109153,15 @@ transitions = [
     },
     {
         "name": "Waterways_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_01[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_02[top1]",
@@ -112796,157 +109254,59 @@ transitions = [
     },
     {
         "name": "Waterways_02[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_02[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_04[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_04[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_04b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_04b[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_04b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_05[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_05[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_06[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_06[top1]",
@@ -112988,47 +109348,19 @@ transitions = [
     },
     {
         "name": "Waterways_07[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_07[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_07[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_07[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_07[top1]",
@@ -113090,102 +109422,39 @@ transitions = [
     },
     {
         "name": "Waterways_08[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_08[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_09[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_12[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_13[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_13[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_14[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_14[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Waterways_15[top1]",
@@ -113219,58 +109488,23 @@ transitions = [
     },
     {
         "name": "GG_Pipeway[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "GG_Pipeway[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "GG_Waterways[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "GG_Waterways[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_GG_Shortcut[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_GG_Shortcut[top1]",
@@ -113295,58 +109529,23 @@ transitions = [
     },
     {
         "name": "Ruins1_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_01[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_01[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_02[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_02[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_03[top1]",
@@ -113379,80 +109578,31 @@ transitions = [
     },
     {
         "name": "Ruins1_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_03[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_04[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_04[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05b[top1]",
@@ -113486,47 +109636,19 @@ transitions = [
     },
     {
         "name": "Ruins1_05b[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05c[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05c[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05c[top1]",
@@ -113610,58 +109732,23 @@ transitions = [
     },
     {
         "name": "Ruins1_05[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05[bot3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_05[top1]",
@@ -113696,25 +109783,11 @@ transitions = [
     },
     {
         "name": "Ruins1_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_06[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_09[top1]",
@@ -113747,80 +109820,31 @@ transitions = [
     },
     {
         "name": "Ruins1_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_17[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_17[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_17[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_18[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_18[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_18[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_23[top1]",
@@ -113887,410 +109911,151 @@ transitions = [
     },
     {
         "name": "Ruins1_23[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_23[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_23[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_23[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_24[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_24[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_24[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_24[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_25[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_25[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_25[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_27[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_27[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_28[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_28[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_28[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_29[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_30[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_30[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_30[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_30[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_31[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_31[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_31[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_31[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_31[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_31b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_31b[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_32[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins1_32[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_nailsmith[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_01[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_01[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_01[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_01_b[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_01_b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_01_b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_03b[top1]",
@@ -114344,256 +110109,95 @@ transitions = [
     },
     {
         "name": "Ruins2_03b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_03b[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_03[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_03[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_03[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_04[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_04[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_04[door_Ruin_House_01]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_04[door_Ruin_House_02]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_04[door_Ruin_House_03]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_04[door_Ruin_Elevator]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_05[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_05[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_06[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_06[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_06[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_06[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_07[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_07[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_07[top1]",
@@ -114626,256 +110230,95 @@ transitions = [
     },
     {
         "name": "Ruins2_08[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_09[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_10[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_10[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_10b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_10b[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_10b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_11_b[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_11_b[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_11_b[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_11[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins2_Watcher_Room[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins_House_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins_House_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins_House_03[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins_House_03[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins_Elevator[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins_Elevator[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins_Bathhouse[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Ruins_Bathhouse[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_02[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_02[top1]",
@@ -114883,168 +110326,63 @@ transitions = [
     },
     {
         "name": "RestingGrounds_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_05[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_05[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_05[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_05[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_06[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_06[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_07[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_08[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_09[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_10[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_10[top1]",
@@ -115109,69 +110447,27 @@ transitions = [
     },
     {
         "name": "RestingGrounds_12[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_12[door_Mansion]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "RestingGrounds_17[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Mansion[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_01[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_02[top1]",
@@ -115208,69 +110504,27 @@ transitions = [
     },
     {
         "name": "Mines_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_03[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_03[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_04[top1]",
@@ -115303,212 +110557,79 @@ transitions = [
     },
     {
         "name": "Mines_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_04[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_04[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_05[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_05[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_05[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_06[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_07[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_07[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_10[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_10[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_10[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_11[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_11[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_11[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_13[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_13[top1]",
@@ -115516,47 +110637,19 @@ transitions = [
     },
     {
         "name": "Mines_13[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_16[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_17[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_17[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_18[top1]",
@@ -115589,146 +110682,55 @@ transitions = [
     },
     {
         "name": "Mines_18[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_18[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_19[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_19[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_20[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_20[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_20[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_20[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_20[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_20[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_23[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_23[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_23[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_23[top1]",
@@ -115736,25 +110738,11 @@ transitions = [
     },
     {
         "name": "Mines_24[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_25[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_25[top1]",
@@ -115810,311 +110798,115 @@ transitions = [
     },
     {
         "name": "Mines_28[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_28[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_28[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_29[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_29[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_29[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_30[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_30[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_31[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_32[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_33[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_33[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_34[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_34[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_34[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_35[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_36[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_37[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Mines_37[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_04[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_04[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_05[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_08[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_08[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_08[top1]",
@@ -116149,212 +110941,79 @@ transitions = [
     },
     {
         "name": "Fungus3_10[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_10[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_11[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_11[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_11[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_13[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_13[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_13[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_13[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_13[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_21[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_21[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_22[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_22[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_22[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_23[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_23[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_34[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_34[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_34[top1]",
@@ -116387,377 +111046,139 @@ transitions = [
     },
     {
         "name": "Fungus3_39[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_39[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_40[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_40[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_48[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_48[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_48[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_48[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_49[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Fungus3_50[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_Queen[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_01[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_01[right3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_01[right4]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_02[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_02[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_02[bot2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_02[door1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_02[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_03[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_04[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_04[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Cliffs_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "Room_nailmaster[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_01[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_01[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_01[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_02[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_03_hub[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_03_hub[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_03_hub[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_03_hub[top1]",
@@ -116790,14 +111211,7 @@ transitions = [
     },
     {
         "name": "White_Palace_03_hub[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_04[top1]",
@@ -116830,146 +111244,55 @@ transitions = [
     },
     {
         "name": "White_Palace_04[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_05[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_05[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_05[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_05[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_06[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_06[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_06[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_07[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_07[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_08[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_08[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_09[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_11[door2]",
@@ -117034,168 +111357,63 @@ transitions = [
     },
     {
         "name": "White_Palace_12[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_12[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_13[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_13[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_13[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_13[left3]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_14[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_14[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_15[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_15[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_15[right2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_16[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_16[left2]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_17[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_17[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_18[top1]",
@@ -117220,47 +111438,19 @@ transitions = [
     },
     {
         "name": "White_Palace_18[right1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_19[top1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_19[left1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "White_Palace_20[bot1]",
-        "logic": [
-            {
-                "item_requirements": [],
-                "location_requirements": [],
-                "region_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     }
 ]
 transition_to_region_map = {

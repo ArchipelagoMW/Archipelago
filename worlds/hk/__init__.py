@@ -623,7 +623,8 @@ class HKWorld(RandomizerCoreWorld):
                 if sides != "OneWayOut":
                     exit_obj = region1.create_exit(name)
                     rule = exit_to_rules.get(name)
-                    if rule and rule != empty_rule:
+                    assert rule != empty_rule, f"bad data {name}"
+                    if rule:
                         self.set_rule(exit_obj, self.create_rule(rule))
                     exit_obj.randomization_type = entrance_type
                     exit_obj.randomization_group = group
@@ -646,7 +647,8 @@ class HKWorld(RandomizerCoreWorld):
                 region1 = self.get_region(structure_transition_to_region_map[name])
                 region2 = self.get_region(structure_transition_to_region_map[trans_data["vanilla_target"]])
                 rule_data = exit_to_rules.get(name)
-                rule = self.create_rule(rule_data) if rule_data and rule_data != empty_rule else None
+                assert rule_data != empty_rule, f"bad data {name}"
+                rule = self.create_rule(rule_data) if rule_data else None
                 region1.connect(region2, name, rule)
 
         if not one_ways:
