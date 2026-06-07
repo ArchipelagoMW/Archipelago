@@ -73,6 +73,7 @@ class WargrooveWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
+    item_name_groups = Items.item_name_groups
 
     def _get_slot_data(self):
         return {

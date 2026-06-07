@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import Item, ItemClassification
-from typing import Dict, List
+from typing import Dict, List, Set
 
 PROGRESSION = ItemClassification.progression
 PROGRESSION_SKIP_BALANCING = ItemClassification.progression_skip_balancing
@@ -102,3 +102,18 @@ faction_table: Dict[str, List[CommanderData]] = {
         CommanderData('Vesper', 'commander_vesper')
     ]
 }
+
+item_name_groups: Dict[str, Set[str]] = {}
+for name, item in item_table.items():
+    group = item.type
+    if not group or group == 'Goal':
+        continue
+    if group == "Trigger":
+        # Split triggers since they serve very different purposes.
+        if "Final" in name:
+            group = "Final"
+        else:
+            group = "Event"
+    if group not in item_name_groups:
+        item_name_groups[group] = set()
+    item_name_groups[group].add(name)
