@@ -105,15 +105,15 @@ faction_table: Dict[str, List[CommanderData]] = {
 
 item_name_groups: Dict[str, Set[str]] = {}
 for name, item in item_table.items():
-    group = item.type
-    if not group or group == 'Goal':
+    group = f'{item.type}s'
+    if not group or group == 'Goals':
         continue
-    if group == "Trigger":
+    if group == "Triggers":
         # Split triggers since they serve very different purposes.
         if "Final" in name:
-            group = "Final"
+            group = "Final Items"
         else:
-            group = "Event"
+            group = "Events"
     if group not in item_name_groups:
         item_name_groups[group] = set()
     item_name_groups[group].add(name)
