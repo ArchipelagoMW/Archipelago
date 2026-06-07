@@ -57,7 +57,7 @@ A pop-up will show, which item(s) were received, with additional information on 
 
 Here's a cheat sheet:
 
-![image](/static/generated/docs/shapez/shapesanity_full.png)
+![image](shapesanity_full.png)
 
 ## Can I use other mods alongside the AP client?
 

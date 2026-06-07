@@ -7,7 +7,6 @@ from Options import PlandoConnection
 if TYPE_CHECKING:
     from . import MessengerWorld
 
-
 PORTALS: list[str] = [
     "Autumn Hills",
     "Riviere Turquoise",
@@ -16,7 +15,6 @@ PORTALS: list[str] = [
     "Searing Crags",
     "Glacial Peak",
 ]
-
 
 SHOP_POINTS: dict[str, list[str]] = {
     "Autumn Hills": [
@@ -112,7 +110,6 @@ SHOP_POINTS: dict[str, list[str]] = {
     ]
 }
 
-
 CHECKPOINTS: dict[str, list[str]] = {
     "Autumn Hills": [
         "Hope Latch",
@@ -184,7 +181,6 @@ CHECKPOINTS: dict[str, list[str]] = {
         "Moon Crest",
     ]
 }
-
 
 REGION_ORDER: list[str] = [
     "Autumn Hills",
@@ -306,4 +302,4 @@ def add_closed_portal_reqs(world: "MessengerWorld") -> None:
     closed_portals = [entrance for entrance in PORTALS if f"{entrance} Portal" not in world.starting_portals]
     for portal in closed_portals:
         tower_exit = world.multiworld.get_entrance(f"ToTHQ {portal} Portal", world.player)
-        tower_exit.access_rule = lambda state: state.has(portal, world.player)
+        tower_exit.access_rule = lambda state, portal_item=portal: state.has(f"{portal_item} Portal", world.player)

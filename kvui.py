@@ -19,6 +19,7 @@ os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
+os.environ["SDL_MOUSE_FOCUS_CLICKTHROUGH"] = "1"
 
 import Utils
 
@@ -362,15 +363,16 @@ class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
                     text += "\nPermissions:"
                     for permission_name, permission_data in ctx.permissions.items():
                         text += f"\n    {permission_name}: {permission_data}"
-                if ctx.hint_cost is not None and ctx.total_locations:
-                    min_cost = int(ctx.server_version >= (0, 3, 9))
-                    text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
-                            f"For you this means every " \
-                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
-                            "location checks." \
-                            f"\nYou currently have {ctx.hint_points} points."
-                elif ctx.hint_cost == 0:
-                    text += "\n!hint is free to use."
+                if ctx.total_locations and ctx.hint_cost is not None:
+                    if ctx.hint_cost == 0:
+                        text += "\n!hint is free to use."
+                    else:
+                        min_cost = int(ctx.server_version >= (0, 3, 9))
+                        text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
+                                f"For you this means every " \
+                                f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
+                                "location checks." \
+                                f"\nYou currently have {ctx.hint_points} points."
                 if ctx.stored_data and "_read_race_mode" in ctx.stored_data:
                     text += "\nRace mode is enabled." \
                         if ctx.stored_data["_read_race_mode"] else "\nRace mode is disabled."

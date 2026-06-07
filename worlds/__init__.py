@@ -1,7 +1,6 @@
 import importlib
 import importlib.abc
 import importlib.machinery
-import importlib.util
 import logging
 import os
 import sys
@@ -12,9 +11,10 @@ import json
 from pathlib import Path
 from types import ModuleType
 from typing import List, Sequence
+from zipfile import ZipFile, BadZipFile
 
 from NetUtils import DataPackage
-from Utils import local_path, user_path, Version, version_tuple, tuplize_version
+from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -23,17 +23,17 @@ try:
 except OSError:  # can't access/write?
     user_folder = None
 
-__all__ = {
+__all__ = [
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
     "local_folder",
     "user_folder",
     "failed_world_loads",
-}
+]
 
 
-failed_world_loads: List[str] = []
+failed_world_loads: dict[str, str] = {}
 
 
 @dataclasses.dataclass(order=True)
@@ -68,8 +68,9 @@ class WorldSource:
             print(f"Could not load world {self}:", file=file_like)
             traceback.print_exc(file=file_like)
             file_like.seek(0)
-            logging.exception(file_like.read())
-            failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
+            reason = file_like.read()
+            logging.exception(reason)
+            failed_world_loads[os.path.basename(self.path).rsplit(".", 1)[0]] = reason
             return False
 
 
@@ -118,6 +119,7 @@ for world_source in world_sources:
         game = manifest.get("game")
         if game in AutoWorldRegister.world_types:
             AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
+            AutoWorldRegister.world_types[game].manifest = manifest
 
 if apworlds:
     # encapsulation for namespace / gc purposes
@@ -128,7 +130,7 @@ if apworlds:
 
         def fail_world(game_name: str, reason: str, add_as_failed_to_load: bool = True) -> None:
             if add_as_failed_to_load:
-                failed_world_loads.append(game_name)
+                failed_world_loads[game_name] = reason
             logging.warning(reason)
 
         for apworld_source in apworlds:
@@ -145,6 +147,15 @@ if apworlds:
                     logging.error(e)
                 else:
                     raise e
+            except BadZipFile as e:
+                err_message = (f"The world source {apworld_source.resolved_path} is not a valid zip. "
+                               "It is likely either corrupted, or was packaged incorrectly.")
+
+                if sys.stdout:
+                    raise RuntimeError(err_message) from e
+                else:
+                    messagebox("Couldn't load worlds", err_message, error=True)
+                    sys.exit(1)
 
             if apworld.minimum_ap_version and apworld.minimum_ap_version > version_tuple:
                 fail_world(apworld.game,
@@ -190,6 +201,15 @@ if apworlds:
                     # world could fail to load at this point
                     if apworld.world_version:
                         AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
+
+                    assert apworld.path
+                    with ZipFile(apworld.path, "r") as zf:
+                        manifest = apworld.read_contents(zf)
+                    # version/compatible_version shouldn't be needed by world, makes it consistent with folder world
+                    manifest.pop("version", None)
+                    manifest.pop("compatible_version", None)
+                    AutoWorldRegister.world_types[apworld.game].manifest = manifest
+
     load_apworlds()
     del load_apworlds
 
