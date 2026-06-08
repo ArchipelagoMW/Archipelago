@@ -126,7 +126,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         case LocationType.BURNING_CHEST:
             rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WATERSPOUT,BrushTechniques.WHIRLWIND,BrushTechniques.DELUGE))
         case LocationType.BURNING_CHEST_NO_WATER:
-            rules.append(HasAny(BrushTechniques.GALESTORM,BrushTechniques.WHIRLWIND))
+            rules.append(HasAny(BrushTechniques.GALESTORM,BrushTechniques.WHIRLWIND,BrushTechniques.DELUGE))
         case LocationType.UNDERWATER_CHEST:
             required_power_slash_level = max(required_power_slash_level, 1)
         case LocationType.UNDERWATER_CHEST_SHALLOW:
