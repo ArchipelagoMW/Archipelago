@@ -24,8 +24,8 @@ exits = {
         ExitData(RegionNames.FAWNS_HOUSE, required_items_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"]),
         ExitData(RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON, one_way=True,
                  required_items_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False),
-        ExitData(RegionNames.RYOSHIMA_COAST_BANDIT_SPIDER,has_events=["Ryoshima Coast - Open Bandit Spider Cave"],one_way=True),
-        ExitData(RegionNames.SEIAN_CITY_TREASURE_EAST,has_events=["Ryoshima Coast - Open shortcut to Sei-an City"])
+        ExitData(RegionNames.RYOSHIMA_COAST_BANDIT_SPIDER,required_items_events=["Ryoshima Coast - Open Bandit Spider Cave"],one_way=True),
+        ExitData(RegionNames.SEIAN_CITY_TREASURE_EAST,required_items_events=["Ryoshima Coast - Open shortcut to Sei-an City"])
 
     ],
     RegionNames.RYOSHIMA_COAST_SEA: [
@@ -48,7 +48,7 @@ exits = {
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_COMMONERS_DRY),
-        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_MANDATORY_FIGHT, has_events=["Ryoshima Coast - Open Door to North Ryoshima Coast"],one_way=True)
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_MANDATORY_FIGHT, required_items_events=["Ryoshima Coast - Open Door to North Ryoshima Coast"],one_way=True)
     ],
     RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEA, one_way=True, loading_screen=False,needs_long_swim=True),

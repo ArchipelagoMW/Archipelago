@@ -16,9 +16,9 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.NORTHERN_RYOSHIMA_COAST_MANDATORY_FIGHT: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN, one_way=True, loading_screen=False,
-                 has_events=["Northern Ryoshima Coast - Mandatory Earth Nose Fight"]),
+                 required_items_events=["Northern Ryoshima Coast - Mandatory Earth Nose Fight"]),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST, one_way=True, loading_screen=False,
-                 has_events=["Northern Ryoshima Coast - Mandatory Earth Nose Fight"])
+                 required_items_events=["Northern Ryoshima Coast - Mandatory Earth Nose Fight"])
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_MANDATORY_FIGHT, one_way=True, loading_screen=False),
@@ -27,7 +27,7 @@ exits = {
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_SAPLING, loading_screen=False,
                  special_rule=n_ryoshima_guardian_sapling_rule),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_TOMB, loading_screen=False, one_way=True,
-                 has_events=["Northern Ryoshima Coast - Climb to Tomb Cave"]),
+                 required_items_events=["Northern Ryoshima Coast - Climb to Tomb Cave"]),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND, loading_screen=False,
                  special_rule=n_ryoshima_islands_dragon_rule),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_CATCALL_NORTH, loading_screen=False,
@@ -44,13 +44,13 @@ exits = {
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_CATCALL_ISLAND, loading_screen=False,
                  special_rule=n_ryoshima_islands_dragon_rule),
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_TREASURE_CAVE,
-                 has_events=["Northern Ryoshima Coast - Open Treasure Cave"]),
+                 required_items_events=["Northern Ryoshima Coast - Open Treasure Cave"]),
         ExitData(RegionNames.DRAGON_PALACE, loading_screen=False,
-                 special_rule=n_ryoshima_islands_dragon_rule,has_events=["Northern Ryoshima Coast - Open Whirlpool"]),
+                 special_rule=n_ryoshima_islands_dragon_rule,required_items_events=["Northern Ryoshima Coast - Open Whirlpool"]),
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS, one_way=True, loading_screen=False,
-                 has_events=["Northern Ryoshima Coast - Mandatory encounter in Watcher's Cape"])
+                 required_items_events=["Northern Ryoshima Coast - Mandatory encounter in Watcher's Cape"])
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST, one_way=True, loading_screen=False)
@@ -60,15 +60,15 @@ exits = {
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_PS2_ISLAND: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_PS2_CAVE,
-                 has_events=["Northern Ryoshima Coast - Open Power Slash 2 Cave"])
+                 required_items_events=["Northern Ryoshima Coast - Open Power Slash 2 Cave"])
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_CB2_ISLAND: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_CB2_CAVE,
-                 has_events=["Northern Ryoshima Coast - Open Cherry Bomb 2 Cave"])
+                 required_items_events=["Northern Ryoshima Coast - Open Cherry Bomb 2 Cave"])
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_CAVE,
-                 has_events=["Northern Ryoshima Coast - Open Bandit Spider Cave"],
+                 required_items_events=["Northern Ryoshima Coast - Open Bandit Spider Cave"],
                  one_way=True)
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_CATCALL_ISLAND:[

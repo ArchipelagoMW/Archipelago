@@ -15,10 +15,10 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.INSIDE_THE_DRAGON: [
-        ExitData(RegionNames.INSIDE_THE_DRAGON_DEEP, has_events=["Inside the dragon - Cross to deeper part"])
+        ExitData(RegionNames.INSIDE_THE_DRAGON_DEEP, required_items_events=["Inside the dragon - Cross to deeper part"])
     ],
     RegionNames.INSIDE_THE_DRAGON_DEEP: [
-        ExitData(RegionNames.INSIDE_THE_DRAGON_ORB, has_events=["Inside the dragon - Open door to dragon orb"])
+        ExitData(RegionNames.INSIDE_THE_DRAGON_ORB, required_items_events=["Inside the dragon - Open door to dragon orb"])
     ]
 }
 events = {

@@ -17,7 +17,7 @@ exits = {
                             ExitData(RegionNames.SASA_SANCTUARY_ENTRANCE),
                             ExitData(RegionNames.CITY_CHECKPOINT_TAKA),
                             ExitData(RegionNames.TAKA_COMMON_LOGIC, one_way=True, loading_screen=False),
-                            ExitData(RegionNames.TAKA_PASS_CAVE,has_events=["Taka Pass - Open Digging Cave"])
+                            ExitData(RegionNames.TAKA_PASS_CAVE,required_items_events=["Taka Pass - Open Digging Cave"])
     ]
 
 }

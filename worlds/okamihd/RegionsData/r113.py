@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.RYOSHIMA_COAST_BANDIT_SPIDER: [
-        ExitData(RegionNames.RYOSHIMA_COAST, one_way=True, has_events=["Ryoshima Coast - Defeat Bandit Spider in cave"])
+        ExitData(RegionNames.RYOSHIMA_COAST, one_way=True, required_items_events=["Ryoshima Coast - Defeat Bandit Spider in cave"])
     ]
 }
 events = {

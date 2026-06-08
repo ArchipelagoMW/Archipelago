@@ -15,10 +15,10 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.DRAGON_PALACE: [
         ExitData(RegionNames.DRAGON_PALACE_SPRING, one_way=True,
-                 has_events=["Dragon Palace - Get Shell Amulet from Otohime"]),
+                 required_items_events=["Dragon Palace - Get Shell Amulet from Otohime"]),
         ExitData(RegionNames.DRAGON_PALACE_GARDEN, one_way=True,
-                 has_events=["Dragon Palace - Get Shell Amulet from Otohime"]),
-        ExitData(RegionNames.DRAGON_PALACE_CAVE, has_events=["Dragon Palace - Open Treasure Cave behind stairs"])
+                 required_items_events=["Dragon Palace - Get Shell Amulet from Otohime"]),
+        ExitData(RegionNames.DRAGON_PALACE_CAVE, required_items_events=["Dragon Palace - Open Treasure Cave behind stairs"])
     ],
     RegionNames.DRAGON_PALACE_SPRING: [
         ExitData(RegionNames.DRAGON_PALACE, one_way=True)
