@@ -12,10 +12,10 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.CURSED_RYOSHIMA_COAST: [
         ExitData(RegionNames.CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE,
-                 has_events=["Ryoshima Coast - Open Guardian Sapling Cave"], loading_screen=False)
+                 required_items_events=["Ryoshima Coast - Open Guardian Sapling Cave"], loading_screen=False)
     ],
     RegionNames.CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE: [
-        ExitData(RegionNames.RYOSHIMA_COAST, has_events=["Ryoshima Coast - Bloom the Guardian Sapling"], one_way=True)
+        ExitData(RegionNames.RYOSHIMA_COAST, required_items_events=["Ryoshima Coast - Bloom the Guardian Sapling"], one_way=True)
     ]
 }
 events = {

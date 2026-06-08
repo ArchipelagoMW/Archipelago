@@ -16,14 +16,14 @@ exits = {
     RegionNames.RYOSHIMA_COAST: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEA, needs_long_swim=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_CATWALK_TOWER, loading_screen=False, one_way=True,
-                 has_events=["Ryoshima Coast - Climb catwalk tower"]),
+                 required_items_events=["Ryoshima Coast - Climb catwalk tower"]),
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_WEST_PIER, one_way=True, loading_screen=False),
         ExitData(RegionNames.ANKOKU_TEMPLE),
-        ExitData(RegionNames.FAWNS_HOUSE, has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"]),
+        ExitData(RegionNames.FAWNS_HOUSE, required_items_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"]),
         ExitData(RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON, one_way=True,
-                 has_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False)
+                 required_items_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False)
     ],
     RegionNames.RYOSHIMA_COAST_SEA: [
         ExitData(RegionNames.RYOSHIMA_COAST_DOJO, needs_long_swim=True, loading_screen=False),
@@ -31,15 +31,15 @@ exits = {
 
     ],
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: [
-        ExitData(RegionNames.RYOSHIMA_COAST, has_events=["Ryoshima Coast - Climb back to main area"], one_way=True,
+        ExitData(RegionNames.RYOSHIMA_COAST, required_items_events=["Ryoshima Coast - Climb back to main area"], one_way=True,
                  loading_screen=False)
     ],
     # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
     RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN, loading_screen=False, one_way=True,
-                 has_events=["Ryoshima Coast - Mandatory Ubume Encounter"]),
+                 required_items_events=["Ryoshima Coast - Mandatory Ubume Encounter"]),
         ExitData(RegionNames.RYOSHIMA_COAST, loading_screen=False, one_way=True,
-                 has_events=["Ryoshima Coast - Mandatory Ubume Encounter"])
+                 required_items_events=["Ryoshima Coast - Mandatory Ubume Encounter"])
     ],
     RegionNames.RYOSHIMA_COAST_SEIAN: [
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.

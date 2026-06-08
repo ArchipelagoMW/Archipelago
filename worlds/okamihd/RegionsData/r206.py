@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.IMPERIAL_PALACE_ENTRANCE: [
-        ExitData(RegionNames.IMPERIAL_PALACE_SMALL_ENTRANCE, has_events=["Imperial Palace - Become Smol"]),
-        ExitData(RegionNames.IMPERIAL_PALACE, has_events=["Imperial Palace - Defeat Blight"])
+        ExitData(RegionNames.IMPERIAL_PALACE_SMALL_ENTRANCE, required_items_events=["Imperial Palace - Become Smol"]),
+        ExitData(RegionNames.IMPERIAL_PALACE, required_items_events=["Imperial Palace - Defeat Blight"])
     ],
 
 }

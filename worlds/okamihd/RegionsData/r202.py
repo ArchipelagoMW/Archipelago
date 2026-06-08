@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.HIMIKO_PALACE:[
-        ExitData(RegionNames.HIMIKO_CHAMBERS,has_events=["Himiko's Palace - Cross sea of fire"],loading_screen=False)
+        ExitData(RegionNames.HIMIKO_CHAMBERS,required_items_events=["Himiko's Palace - Cross sea of fire"],loading_screen=False)
     ]
 }
 events = {

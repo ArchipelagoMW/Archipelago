@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.SUNKEN_SHIP_ENTRANCE: [
-        ExitData(RegionNames.SUNKEN_SHIP_SW_LOW, has_events=["Sunken Ship - Open entrance Door"]
+        ExitData(RegionNames.SUNKEN_SHIP_SW_LOW, required_items_events=["Sunken Ship - Open entrance Door"]
                  , loading_screen=False),
     ],
     RegionNames.SUNKEN_SHIP_SW_LOW: [
@@ -20,22 +20,22 @@ exits = {
     ],
     RegionNames.SUNKEN_SHIP_BONES_LOW: [
         ExitData(RegionNames.SUNKEN_SHIP_NW_LOW, loading_screen=False,
-                 has_events=["Sunken Ship - Open Northwest cursed door"])
+                 required_items_events=["Sunken Ship - Open Northwest cursed door"])
     ],
     RegionNames.SUNKEN_SHIP_NW_LOW: [
         ExitData(RegionNames.SUNKEN_SHIP_NW_HIGH, one_way=True, loading_screen=False,
-                 has_events=["Sunken Ship - Raise water level"]),
+                 required_items_events=["Sunken Ship - Raise water level"]),
         ExitData(RegionNames.SUNKEN_SHIP_HANDS_LOW, one_way=True, loading_screen=False,
-                 has_events=["Sunken Ship - Set barrel on Scales"])
+                 required_items_events=["Sunken Ship - Set barrel on Scales"])
     ],
     RegionNames.SUNKEN_SHIP_NW_HIGH: [
         ExitData(RegionNames.SUNKEN_SHIP_NW_LOW, one_way=True, loading_screen=False,
-                 has_events=["Sunken Ship - Drain water level"]),
+                 required_items_events=["Sunken Ship - Drain water level"]),
         ExitData(RegionNames.SUNKEN_SHIP_BONES_HIGH, loading_screen=False,
-                 has_events=["Sunken Ship - Open Northwest cursed door"])
+                 required_items_events=["Sunken Ship - Open Northwest cursed door"])
     ],
     RegionNames.SUNKEN_SHIP_BONES_HIGH: [
-        ExitData(RegionNames.SUNKEN_SHIP_SW_HIGH, has_events=["Sunken Ship - Mandatory Ichiro fight"])
+        ExitData(RegionNames.SUNKEN_SHIP_SW_HIGH, required_items_events=["Sunken Ship - Mandatory Ichiro fight"])
     ],
     RegionNames.SUNKEN_SHIP_SW_HIGH: [
         ExitData(RegionNames.SUNKEN_SHIP_SE_HIGH, loading_screen=False, one_way=True),
@@ -50,11 +50,11 @@ exits = {
     RegionNames.SUNKEN_SHIP_SE_LOW: [
         ExitData(RegionNames.SUNKEN_SHIP_SE_CHESTS, one_way=True, loading_screen=False),
         ExitData(RegionNames.SUNKEN_SHIP_SW_LOW, one_way=True, loading_screen=False,
-                 has_events=["Sunken Ship - climb Waterspout pillar to southwest room"]),
+                 required_items_events=["Sunken Ship - climb Waterspout pillar to southwest room"]),
         ExitData(RegionNames.SUNKEN_SHIP_S_LEDGE, loading_screen=False, one_way=True,
-                 has_events=["Sunken Ship - climb Waterspout pillar to southwest room"]),
+                 required_items_events=["Sunken Ship - climb Waterspout pillar to southwest room"]),
         ExitData(RegionNames.SUNKEN_SHIP_TREASURE, loading_screen=False,
-                 has_events=["Sunken Ship - Open final cursed door"])
+                 required_items_events=["Sunken Ship - Open final cursed door"])
     ],
     RegionNames.SUNKEN_SHIP_E_HALLWAY_HIGH: [
         ExitData(RegionNames.SUNKEN_SHIP_HANDS_HIGH, loading_screen=False)
