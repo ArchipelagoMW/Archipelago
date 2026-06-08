@@ -138,6 +138,7 @@ class RegionNames(StrEnum):
     CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE = "Cursed Ryoshima Coast"
     RYOSHIMA_COAST = "Ryoshima Coast"
     RYOSHIMA_COAST_SEA = "Ryoshima Coast (Sea)"
+    RYOSHIMA_COAST_SEA_FAR = "Ryoshima Coast (Sea, far away)"
     RYOSHIMA_COAST_DOJO = "Ryoshima Coast (Dojo)"
     RYOSHIMA_COAST_SHIP_TOP = "Ryoshima Coast (Top of Sunken Ship)"
     RYOSHIMA_COAST_CATWALK_TOWER = "Ryoshima Coast (Catwalk Tower)"

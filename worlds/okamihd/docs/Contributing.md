@@ -40,23 +40,22 @@ Each of these files is split in three parts:
 For each Region described in the file, you need to contribute all exits that connect to another Region.
 The ExitData struc works as follows:
 
-| Field           | Content      | Notes                                                                                                      | Default Value |
-|-----------------|--------------|------------------------------------------------------------------------------------------------------------|---------------|
-| destination     | string       | Required. The Region this exits leads to. Please make sure you use a element of the RegionNames enum.      | N/A           |
-| has_events      | string array | List of events that need to be cleared before being able to use this exit.                                 | []            |
-| needs_long_swim | boolean      | Is it needed to swim a long distance to use this exit ? (eg. waterlily, orca, or water tablet)             | False         |
-| one_way         | boolean      |                                                                                                            | False         |
-| loading_screen  | boolean      | (very baldly named property) Stuff for later when we want to do ER; Should that transition be randomized ? | True          |
+| Field                        | Content      | Notes                                                                                                      | Default Value |
+|------------------------------|--------------|------------------------------------------------------------------------------------------------------------|---------------|
+| destination                  | string       | Required. The Region this exits leads to. Please make sure you use a element of the RegionNames enum.      | N/A           |
+| required_items_events        | string array | List of items or events that need to be cleared/collected before being able to use this exit.              | []            |
+| needs_long_swim              | boolean      | Is it needed to swim a long distance to use this exit ? (eg. waterlily, orca, or water tablet)             | False         |
+| one_way                      | boolean      |                                                                                                            | False         |
+| loading_screen               | boolean      | (very baldly named property) Stuff for later when we want to do ER; Should that transition be randomized ? | True          |
 
 Note that a Region can be a part of a map or a sequence, it's basically a way to share access rules between some
 locations or events;
 
 Exits:
 
-- should only require events to be traversable, **techically**, you could put item names in *has_events* and it should
-  work. But I'd rather have an event that represents blowing up a boulder that allows an exit, than an exit requiring
+- should preferably require events to be traversable. I'd rather have an event that represents blowing up a boulder that allows an exit, than an exit requiring
   cherry bomb. That way, if we ever want to introduce a setting where the boulder is removed, we'd juste have to set the
-  event as precolleted.
+  event as precolleted. Items should be used in that field when they're required to use that exit every time, unlike when you need to blow up a wall, which is just a one time thing.
 
 When connecting a cursed region, the cursed part should be connected only to places that can be accessed when the region
 is in cursed state.

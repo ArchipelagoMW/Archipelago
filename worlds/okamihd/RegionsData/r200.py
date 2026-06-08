@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.SEIAN_CITY_BRIDGE_COMMONERS: [
         ExitData(RegionNames.SEIAN_CITY_BRIDGE_ARISTOCRATIC,
-                 has_events=["Sei-an City (Aristocratic Quarter) - Fish The Living Sword with Benkei"],
+                 required_items_events=["Sei-an City (Aristocratic Quarter) - Fish The Living Sword with Benkei"],
                  loading_screen=False)
     ],
     RegionNames.SEIAN_CITY_BRIDGE_ARISTOCRATIC: [
@@ -28,9 +28,9 @@ exits = {
         ExitData(RegionNames.SEIAN_CITY_OKUNI),
         ExitData(RegionNames.SEIAN_CITY_ARISTOCRATIC_NORTH_EAST),
         ExitData(RegionNames.SEIAN_CITY_CLOCK_TOWER, one_way=True,
-                 has_events=["Sei-an City (Aristocratic Quarter) - Climb clock tower"]),
+                 required_items_events=["Sei-an City (Aristocratic Quarter) - Climb clock tower"]),
         ExitData(RegionNames.SEIAN_CITY_ARISTOCRATIC, loading_screen=False,
-                 has_events=["Imperial Palace - Defeat Blight"]),
+                 required_items_events=["Imperial Palace - Defeat Blight"]),
         ExitData(RegionNames.IMPERIAL_PALACE_ENTRANCE)
     ],
     RegionNames.SEIAN_CITY_CLOCK_TOWER: [

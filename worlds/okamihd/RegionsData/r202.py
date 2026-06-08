@@ -11,8 +11,8 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-    RegionNames.HIMIKO_PALACE: [
-        ExitData(RegionNames.HIMIKO_CHAMBERS, has_events=["Himiko's Palace - Cross sea of fire"], loading_screen=False)
+    RegionNames.HIMIKO_PALACE:[
+        ExitData(RegionNames.HIMIKO_CHAMBERS,required_items_events=["Himiko's Palace - Cross sea of fire"],loading_screen=False)
     ]
 }
 events = {

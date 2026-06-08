@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.SEIAN_CITY_COMMONERS_DRY: [
-        ExitData(RegionNames.SEIAN_CITY_COMMONERS, has_events=["Imperial Palace - Defeat Blight"],
+        ExitData(RegionNames.SEIAN_CITY_COMMONERS, required_items_events=["Imperial Palace - Defeat Blight"],
                  loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_WEAPON_SHOP, loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_TOOL_SHOP, loading_screen=False),
@@ -21,9 +21,9 @@ exits = {
     RegionNames.SEIAN_CITY_COMMONERS: [
         ExitData(RegionNames.SEIAN_CITY_YAMA),
         ExitData(RegionNames.SEIAN_CITY_SOUTHWEST,
-                 has_events=["Sei-an City (Commoner's Quarter) - Blow up wall to southwest building"]),
+                 required_items_events=["Sei-an City (Commoner's Quarter) - Blow up wall to southwest building"]),
         ExitData(RegionNames.SEIAN_CITY_TAO,
-                 has_events=["Sei-an City (Commoner's Quarter) - Climb to Tao Troopers Headquarters"],
+                 required_items_events=["Sei-an City (Commoner's Quarter) - Climb to Tao Troopers Headquarters"],
                  one_way=True, loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_BLOSSOM)
     ],

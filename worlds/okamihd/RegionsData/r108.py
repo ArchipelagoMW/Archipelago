@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.KUSA_VILLAGE: [ExitData(RegionNames.KUSA_VILLAGE_BLOCKHEAD,
-                                        has_events=['Kusa Village - Defeat Blockhead'], loading_screen=False),
+                                        required_items_events=['Kusa Village - Defeat Blockhead'], loading_screen=False),
                                ExitData(RegionNames.BAMBOO_HOUSE),
                                ExitData(RegionNames.KUSA_INN),
                                ExitData(RegionNames.GALE_SHRINE_ENTRANCE)]

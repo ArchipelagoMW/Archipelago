@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI: [ExitData(
                                                        RegionNames.RIVER_OF_THE_HEAVENS_NAGI,
-                                                       has_events=["River of the Heavens - Restoring the River"],loading_screen=False)],
+                                                       required_items_events=["River of the Heavens - Restoring the River"],loading_screen=False)],
     RegionNames.RIVER_OF_THE_HEAVENS_NAGI: [ExitData(RegionNames.CAVE_OF_NAGI)]
 }
 events = {

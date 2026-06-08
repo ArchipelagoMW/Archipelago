@@ -124,7 +124,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         case LocationType.TREASURE_BUD:
             required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
         case LocationType.BURIED_UNDER_LEAF_PILE:
-            required_techinques += [BrushTechniques.GALESTORM]
+            rules.append(HasAny(BrushTechniques.GALESTORM,BrushTechniques.WHIRLWIND))
         case LocationType.BURIED_CHEST:
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
@@ -134,9 +134,9 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.BURNING_CHEST:
-            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WATERSPOUT))
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WATERSPOUT,BrushTechniques.WHIRLWIND,BrushTechniques.DELUGE))
         case LocationType.BURNING_CHEST_NO_WATER:
-            required_techinques += [BrushTechniques.GALESTORM]
+            rules.append(HasAny(BrushTechniques.GALESTORM,BrushTechniques.WHIRLWIND,BrushTechniques.DELUGE))
         case LocationType.UNDERWATER_CHEST:
             required_power_slash_level = max(required_power_slash_level, 1)
         case LocationType.UNDERWATER_CHEST_SHALLOW:
@@ -157,11 +157,11 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
                                     BrushTechniques.GALESTORM]
             rules.append(HasAll("Holy Eagle","Golden Ink Pot"))
         case LocationType.FROZEN_CHEST:
-            required_techinques += [BrushTechniques.INFERNO]
+            rules.append(HasAny(BrushTechniques.INFERNO,BrushTechniques.FIREBURST))
         case LocationType.FISHING_MINIGAME:
             required_power_slash_level = max(required_power_slash_level, 1)
         case LocationType.THUNDER_CHEST:
-            required_techinques += [BrushTechniques.THUNDERBOLT]
+           rules.append(HasAny(BrushTechniques.THUNDERBOLT,BrushTechniques.THUNDERSTORM))
 
         case _:
             required_techinques += []
@@ -202,8 +202,8 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
     if data.needs_long_swim:
         rules.append(long_swim_rule)
 
-    if len(data.has_events) > 0:
-        rules.append(HasAll(*data.has_events))
+    if len(data.required_items_events) > 0:
+        rules.append(HasAll(*data.required_items_events))
 
     if data.special_rule is not None:
         # Append special rule if it's defined

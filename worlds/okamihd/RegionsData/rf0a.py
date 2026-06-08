@@ -16,14 +16,14 @@ exits = {
     RegionNames.RYOSHIMA_COAST: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEA, needs_long_swim=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_CATWALK_TOWER, loading_screen=False, one_way=True,
-                 has_events=["Ryoshima Coast - Climb catwalk tower"]),
+                 required_items_events=["Ryoshima Coast - Climb catwalk tower"]),
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER, one_way=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_WEST_PIER, one_way=True, loading_screen=False),
         ExitData(RegionNames.ANKOKU_TEMPLE),
-        ExitData(RegionNames.FAWNS_HOUSE, has_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"]),
+        ExitData(RegionNames.FAWNS_HOUSE, required_items_events=["Ryoshima Coast - Open Shortcut To Mme Fawn's"]),
         ExitData(RegionNames.RYOSHIMA_COAST_LUNAR_LAGOON, one_way=True,
-                 has_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False),
+                 required_items_events=["Ryoshima Coast - Open Lunar Lagoon"], loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_BANDIT_SPIDER,has_events=["Ryoshima Coast - Open Bandit Spider Cave"],one_way=True),
         ExitData(RegionNames.SEIAN_CITY_TREASURE_EAST,has_events=["Ryoshima Coast - Open shortcut to Sei-an City"])
 
@@ -31,18 +31,18 @@ exits = {
     RegionNames.RYOSHIMA_COAST_SEA: [
         ExitData(RegionNames.RYOSHIMA_COAST_DOJO, needs_long_swim=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_SHIP_TOP, needs_long_swim=True, loading_screen=False),
-
+        ExitData(RegionNames.RYOSHIMA_COAST_SEA_FAR,loading_screen=False,required_items_events=["Water Tablet"])
     ],
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: [
-        ExitData(RegionNames.RYOSHIMA_COAST, has_events=["Ryoshima Coast - Climb back to main area"], one_way=True,
+        ExitData(RegionNames.RYOSHIMA_COAST, required_items_events=["Ryoshima Coast - Climb back to main area"], one_way=True,
                  loading_screen=False)
     ],
     # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
     RegionNames.RYOSHIMA_COAST_SEIAN_ENCOUNTER: [
         ExitData(RegionNames.RYOSHIMA_COAST_SEIAN, loading_screen=False, one_way=True,
-                 has_events=["Ryoshima Coast - Mandatory Ubume Encounter"]),
+                 required_items_events=["Ryoshima Coast - Mandatory Ubume Encounter"]),
         ExitData(RegionNames.RYOSHIMA_COAST, loading_screen=False, one_way=True,
-                 has_events=["Ryoshima Coast - Mandatory Ubume Encounter"])
+                 required_items_events=["Ryoshima Coast - Mandatory Ubume Encounter"])
     ],
     RegionNames.RYOSHIMA_COAST_SEIAN: [
         # Special Handling for the encounter around Seian, city entrance as the enemies inside require galestrom to be beaten.
@@ -111,6 +111,14 @@ locations = {
         "Ryoshima Coast - Underwater Clam in dojo island bombable room": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 2), type=LocationType.UNDERWATER_CHEST_SHALLOW,
             cherry_bomb_level=1),
+        "Ryoshima Coast - Underwater Clam southwest of ultimate origin mirror": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 57), type=LocationType.UNDERWATER_CHEST),
+        "Ryoshima Coast - Eastmost Underwater Clam, south of city checkpoint warp": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 58), type=LocationType.UNDERWATER_CHEST),
+        "Ryoshima Coast - Underwater Clam southeast of ultimate origin mirror": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 59), type=LocationType.UNDERWATER_CHEST),
+    },
+    RegionNames.RYOSHIMA_COAST_SEA_FAR:{
         "Ryoshima Coast - Clam on southernmost rocks": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 5)),
         "Ryoshima Coast - Clam between shimenawa rocks": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 24)),
@@ -140,14 +148,7 @@ locations = {
             container_check_id(MapIds.HEALED_RYOSHIMA, 46), type=LocationType.UNDERWATER_CHEST_SHALLOW),
         "Ryoshima Coast - West Underwater Clam on rocks south of Sunken Ship": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 47), type=LocationType.UNDERWATER_CHEST_SHALLOW),
-        "Ryoshima Coast - Underwater Clam southwest of ultimate origin mirror": LocData(
-            container_check_id(MapIds.HEALED_RYOSHIMA, 57), type=LocationType.UNDERWATER_CHEST),
-        "Ryoshima Coast - Eastmost Underwater Clam, south of city checkpoint warp": LocData(
-            container_check_id(MapIds.HEALED_RYOSHIMA, 58), type=LocationType.UNDERWATER_CHEST),
-        "Ryoshima Coast - Underwater Clam southeast of ultimate origin mirror": LocData(
-            container_check_id(MapIds.HEALED_RYOSHIMA, 59), type=LocationType.UNDERWATER_CHEST),
     },
-
     RegionNames.RYOSHIMA_COAST_DOJO: {
         "Ryoshima Coast - Stone Buried Chest near Dojo": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 6),
                                                                  type=LocationType.STONE_BURIED_CHEST),

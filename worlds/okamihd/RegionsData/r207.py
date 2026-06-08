@@ -14,43 +14,43 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.IMPERIAL_PALACE_SMALL_ENTRANCE: [
         ExitData(RegionNames.IMPERIAL_PALACE_FEET_HELL,
-                 has_events=["Imperial Palace - Mandatory Thunder Doom Mirror Encounter"]),
+                 required_items_events=["Imperial Palace - Mandatory Thunder Doom Mirror Encounter"]),
         ExitData(RegionNames.IMPERIAL_PALACE_WEST_CAVE,
-                 has_events=["Imperial Palace - Open west side lockjaw"])
+                 required_items_events=["Imperial Palace - Open west side lockjaw"])
     ],
     RegionNames.IMPERIAL_PALACE_WEST_CAVE: [
-        ExitData(RegionNames.IMPERIAL_PALACE_SPIDER_CAVE, has_events=["Imperial Palace - Blow up west cave floor"])
+        ExitData(RegionNames.IMPERIAL_PALACE_SPIDER_CAVE, required_items_events=["Imperial Palace - Blow up west cave floor"])
     ],
     RegionNames.IMPERIAL_PALACE_SPIDER_CAVE: [
-        ExitData(RegionNames.IMPERIAL_PALACE_SPIDER_CAVE_TOP, has_events=["Holy Eagle"], one_way=True,
+        ExitData(RegionNames.IMPERIAL_PALACE_SPIDER_CAVE_TOP, required_items_events=["Holy Eagle"], one_way=True,
                  loading_screen=False),
         ExitData(RegionNames.IMPERIAL_PALACE_FLASK_ROOM,
-                 has_events=["Imperial Palace - Blow up wall to mist flask room"], one_way=True)
+                 required_items_events=["Imperial Palace - Blow up wall to mist flask room"], one_way=True)
     ],
     RegionNames.IMPERIAL_PALACE_SPIDER_CAVE_TOP: [
         ExitData(RegionNames.IMPERIAL_PALACE_SPIDER_CAVE, one_way=True, loading_screen=False)
     ],
     RegionNames.IMPERIAL_PALACE_FLASK_ROOM: [
         ExitData(RegionNames.IMPERIAL_PALACE_SPIDER_CAVE, one_way=True,
-                 has_events=["Imperial Palace - Outspeed the spider"])
+                 required_items_events=["Imperial Palace - Outspeed the spider"])
     ],
     RegionNames.IMPERIAL_PALACE_FEET_HELL: [
-        ExitData(RegionNames.IMPERIAL_PALACE_POISON_SOZU, has_events=["Imperial Palace - Outspeed the Brooms"])
+        ExitData(RegionNames.IMPERIAL_PALACE_POISON_SOZU, required_items_events=["Imperial Palace - Outspeed the Brooms"])
     ],
     RegionNames.IMPERIAL_PALACE_POISON_SOZU: [
-        ExitData(RegionNames.IMPERIAL_PALACE_EMPERORS_ROOM, has_events=["Imperial Palace - Cross the Sozu"])
+        ExitData(RegionNames.IMPERIAL_PALACE_EMPERORS_ROOM, required_items_events=["Imperial Palace - Cross the Sozu"])
     ],
     RegionNames.IMPERIAL_PALACE_EMPERORS_ROOM:[
         # Also should require Veil of Mist:
-        # TODO: After changing entrances has_events.
-        ExitData(RegionNames.IMPERIAL_PALACE_WEST_BEAM,has_events=["Holy Eagle"],loading_screen=False),
+        # TODO: After changing entrances required_items_events.
+        ExitData(RegionNames.IMPERIAL_PALACE_WEST_BEAM,required_items_events=["Holy Eagle"],loading_screen=False),
         # Also should require Veil of Mist:
-        # TODO: After changing entrances has_events.
+        # TODO: After changing entrances required_items_events.
         ExitData(RegionNames.IMPERIAL_PALACE_INSIDE_EMPEROR,one_way=True)
     ],
     RegionNames.IMPERIAL_PALACE_INSIDE_EMPEROR:[
         ExitData(RegionNames.IMPERIAL_PALACE_EMPERORS_ROOM, one_way=True),
-        ExitData(RegionNames.IMPERIAL_PALACE, one_way=True,has_events=["Imperial Palace - Defeat Blight"])
+        ExitData(RegionNames.IMPERIAL_PALACE, one_way=True,required_items_events=["Imperial Palace - Defeat Blight"])
     ]
 }
 events = {

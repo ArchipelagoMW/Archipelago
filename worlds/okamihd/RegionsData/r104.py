@@ -14,24 +14,24 @@ if TYPE_CHECKING:
 exits = {
     RegionNames.TSUTA_RUINS_1F_MAIN_PART: [
         ExitData(RegionNames.TSUTA_RUINS_MUSHROOMS,
-                 has_events=["Tsuta Ruins - Mandatory Single Ogre Fight"]
+                 required_items_events=["Tsuta Ruins - Mandatory Single Ogre Fight"]
                  ,loading_screen=False),
         ExitData(RegionNames.TSUTA_RUINS_LEFT_SIDE,
-                 has_events=["Tsuta Ruins - Defeat Blockhead"],loading_screen=False),
+                 required_items_events=["Tsuta Ruins - Defeat Blockhead"],loading_screen=False),
         ExitData(RegionNames.TSUTA_RUINS_CENTRAL_STATUE,
-                 has_events=["Tsuta Ruins - Destroy Poison Pots"])
+                 required_items_events=["Tsuta Ruins - Destroy Poison Pots"])
     ],
     RegionNames.TSUTA_RUINS_MUSHROOMS: [
         ExitData(RegionNames.TSUTA_RUINS_LEFT_SIDE,
-                 has_events=["Tsuta Ruins - Blow up weakened wall above Mushrooms"],one_way=True,loading_screen=False)
+                 required_items_events=["Tsuta Ruins - Blow up weakened wall above Mushrooms"],one_way=True,loading_screen=False)
     ],
     RegionNames.TSUTA_RUINS_LEFT_SIDE: [
         ExitData(RegionNames.TSUTA_RUINS_DEVIL_GATES,
-                 has_events=["Tsuta Ruins - Restore Bridge to Devil Gates' room"],loading_screen=False)
+                 required_items_events=["Tsuta Ruins - Restore Bridge to Devil Gates' room"],loading_screen=False)
     ],
     RegionNames.TSUTA_RUINS_CENTRAL_STATUE: [
         ExitData(RegionNames.TSUTA_RUINS_SPIDER,
-                 has_events=["Tsuta Ruins - Open the top of the statue"])
+                 required_items_events=["Tsuta Ruins - Open the top of the statue"])
     ]
 }
 events = {

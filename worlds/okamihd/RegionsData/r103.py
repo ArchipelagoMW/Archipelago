@@ -12,8 +12,8 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-   RegionNames.CURSED_HANA_VALLEY:[ExitData(RegionNames.HANA_VALLEY_SAKIGAMI,has_events=["Hana Valley - Grow Guardian Sapling"],one_way=True,loading_screen=False)],
-   RegionNames.HANA_VALLEY_SAKIGAMI:[ExitData(RegionNames.HANA_VALLEY,has_events=["Hana Valley - Guardian Sapling Restoration"],one_way=True)],
+   RegionNames.CURSED_HANA_VALLEY:[ExitData(RegionNames.HANA_VALLEY_SAKIGAMI,required_items_events=["Hana Valley - Grow Guardian Sapling"],one_way=True,loading_screen=False)],
+   RegionNames.HANA_VALLEY_SAKIGAMI:[ExitData(RegionNames.HANA_VALLEY,required_items_events=["Hana Valley - Guardian Sapling Restoration"],one_way=True)],
 }
 events = {
     RegionNames.CURSED_HANA_VALLEY:{
