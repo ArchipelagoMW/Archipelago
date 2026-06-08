@@ -28,7 +28,7 @@ exits = {
     RegionNames.RYOSHIMA_COAST_SEA: [
         ExitData(RegionNames.RYOSHIMA_COAST_DOJO, needs_long_swim=True, loading_screen=False),
         ExitData(RegionNames.RYOSHIMA_COAST_SHIP_TOP, needs_long_swim=True, loading_screen=False),
-
+        ExitData(RegionNames.RYOSHIMA_COAST_SEA_FAR,loading_screen=False,required_items_events=["Water Tablet"])
     ],
     RegionNames.RYOSHIMA_COAST_CATWALK_TOWER: [
         ExitData(RegionNames.RYOSHIMA_COAST, required_items_events=["Ryoshima Coast - Climb back to main area"], one_way=True,
@@ -102,6 +102,14 @@ locations = {
         "Ryoshima Coast - Underwater Clam in dojo island bombable room": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 2), type=LocationType.UNDERWATER_CHEST_SHALLOW,
             cherry_bomb_level=1),
+        "Ryoshima Coast - Underwater Clam southwest of ultimate origin mirror": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 57), type=LocationType.UNDERWATER_CHEST),
+        "Ryoshima Coast - Eastmost Underwater Clam, south of city checkpoint warp": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 58), type=LocationType.UNDERWATER_CHEST),
+        "Ryoshima Coast - Underwater Clam southeast of ultimate origin mirror": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 59), type=LocationType.UNDERWATER_CHEST),
+    },
+    RegionNames.RYOSHIMA_COAST_SEA_FAR:{
         "Ryoshima Coast - Clam on southernmost rocks": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 5)),
         "Ryoshima Coast - Clam between shimenawa rocks": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 24)),
@@ -131,14 +139,7 @@ locations = {
             container_check_id(MapIds.HEALED_RYOSHIMA, 46), type=LocationType.UNDERWATER_CHEST_SHALLOW),
         "Ryoshima Coast - West Underwater Clam on rocks south of Sunken Ship": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 47), type=LocationType.UNDERWATER_CHEST_SHALLOW),
-        "Ryoshima Coast - Underwater Clam southwest of ultimate origin mirror": LocData(
-            container_check_id(MapIds.HEALED_RYOSHIMA, 57), type=LocationType.UNDERWATER_CHEST),
-        "Ryoshima Coast - Eastmost Underwater Clam, south of city checkpoint warp": LocData(
-            container_check_id(MapIds.HEALED_RYOSHIMA, 58), type=LocationType.UNDERWATER_CHEST),
-        "Ryoshima Coast - Underwater Clam southeast of ultimate origin mirror": LocData(
-            container_check_id(MapIds.HEALED_RYOSHIMA, 59), type=LocationType.UNDERWATER_CHEST),
     },
-
     RegionNames.RYOSHIMA_COAST_DOJO: {
         "Ryoshima Coast - Stone Buried Chest near Dojo": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 6),
                                                                  type=LocationType.STONE_BURIED_CHEST),

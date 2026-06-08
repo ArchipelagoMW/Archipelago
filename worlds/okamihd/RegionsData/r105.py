@@ -4,13 +4,13 @@ from rule_builder.rules import Or, Has, HasAll, True_
 from ..CheckIds import shop_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
+from ..Enums.RegionNames import RegionNames, MapIds
 from ..Enums.WarpType import WarpType
 from ..Rules import has_portable_fire_source_strict
 from ..Types import LocData, EventData, ExitData, WarpData
-from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:
-    from .. import OkamiWorld
+    pass
 
 exits = {
     RegionNames.CITY_CHECKPOINT_TAKA: [
@@ -53,7 +53,7 @@ locations = {
     RegionNames.CITY_CHECKPOINT_DRAWBRIDGE: {
         "City Checkpoint - Chest inside torches circle": LocData(container_check_id(MapIds.CITY_CHECKPOINT, 1),
                                                                  required_brush_techniques=[
-                                                                     BrushTechniques.GREENSPROUT_VINE]),
+                                                                     BrushTechniques.GREENSPROUT_VINE],required_items_events=["Golden Ink Pot"]),
         "City Checkpoint - Chest on top of rock": LocData(container_check_id(MapIds.CITY_CHECKPOINT, 2),
                                                           required_brush_techniques=[
                                                               BrushTechniques.GREENSPROUT_VINE]),
