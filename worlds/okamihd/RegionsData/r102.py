@@ -16,19 +16,19 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.STONE_KAMIKI: [
-        ExitData(RegionNames.KAMIKI_VILLAGE, has_events=["Kamiki Village - Fight with Mr.Orange"], one_way=True)],
+        ExitData(RegionNames.KAMIKI_VILLAGE, required_items_events=["Kamiki Village - Fight with Mr.Orange"], one_way=True)],
     RegionNames.KAMIKI_VILLAGE: [ExitData(RegionNames.KAMIKI_ISLANDS, needs_long_swim=True, loading_screen=False),
                                  ExitData(RegionNames.SUSANOS_HOUSE),
                                  ExitData(RegionNames.KUSHIS_HOUSE),
                                  ExitData(RegionNames.ORANGES_HOUSE),
                                  ExitData(RegionNames.CURSED_SHINSHU_FIELD,
-                                          has_events=["Kamiki Village - Help Susano Train/Break the boulder"]),
+                                          required_items_events=["Kamiki Village - Help Susano Train/Break the boulder"]),
                                  ExitData(RegionNames.SHINSHU_FIELD,
-                                          has_events=["Kamiki Village - Help Susano Train/Break the boulder",
+                                          required_items_events=["Kamiki Village - Help Susano Train/Break the boulder",
                                                       "Shinshu Field - Restore Guardian Sapling"]),
                                  # One way bc this is not a logical access.
                                  ExitData(RegionNames.KAMIKI_MERCHANT,
-                                          has_events=["Kamiki Village - Help Susano Train/Break the boulder"],
+                                          required_items_events=["Kamiki Village - Help Susano Train/Break the boulder"],
                                           one_way=True, loading_screen=False)],
     RegionNames.SUSANOS_HOUSE: [ExitData(RegionNames.SUSANOS_UNDERGROUD)]
 }

@@ -15,10 +15,10 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.SASA_SANCTUARY_ENTRANCE: [
-        ExitData(RegionNames.SASA_SANCTUARY, has_events=["Taka Pass - Save Chun"],loading_screen=False)],
+        ExitData(RegionNames.SASA_SANCTUARY, required_items_events=["Taka Pass - Save Chun"],loading_screen=False)],
 
     RegionNames.SASA_SANCTUARY: [ExitData( RegionNames.SASA_SANCTUARY_BAMBOO,
-                                          has_events=["Sasa Sanctuary - Open Bamboo grove Door"],loading_screen=False)]
+                                          required_items_events=["Sasa Sanctuary - Open Bamboo grove Door"],loading_screen=False)]
 }
 events = {
     RegionNames.SASA_SANCTUARY: {

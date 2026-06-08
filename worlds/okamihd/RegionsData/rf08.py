@@ -46,13 +46,13 @@ locations = {
 
         "Taka Pass - Chest under leaf pile near Ultimate Origin mirror": LocData(
             container_check_id(MapIds.HEALED_TAKA, 60), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Taka Pass - Chest on top of Gutters' House": LocData(container_check_id(MapIds.HEALED_TAKA, 1),
+        "Taka Pass - Chest on top of Cutters' House": LocData(container_check_id(MapIds.HEALED_TAKA, 1),
                                                               required_brush_techniques=[
                                                                   BrushTechniques.GREENSPROUT_VINE]),
         "Taka Pass - Chest across banners": LocData(container_check_id(MapIds.HEALED_TAKA, 3),
                                                     required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE,
                                                                                BrushTechniques.GALESTORM]),
-        "Taka Pass - Buried chest near Gutters' house": LocData(container_check_id(MapIds.HEALED_TAKA, 25),
+        "Taka Pass - Buried chest near Cutters' House": LocData(container_check_id(MapIds.HEALED_TAKA, 25),
                                                                 type=LocationType.BURIED_CHEST),
         "Taka Pass - Buried chest near mermaid spring": LocData(container_check_id(MapIds.HEALED_TAKA, 32),
                                                                 type=LocationType.BURIED_CHEST),
@@ -64,7 +64,7 @@ locations = {
         "Taka Pass - Buried under leaf pile near city checkpoint exit": LocData(
             container_check_id(MapIds.HEALED_TAKA, 38), type=LocationType.BURIED_UNDER_LEAF_PILE),
         # Find out which house
-        "Taka Pass - Chest under leaf pile behind Gutters' house": LocData(container_check_id(MapIds.HEALED_TAKA, 43),
+        "Taka Pass - Chest under leaf pile behind Cutters' House": LocData(container_check_id(MapIds.HEALED_TAKA, 43),
                                                                            type=LocationType.BURIED_UNDER_LEAF_PILE),
         "Taka Pass - Chest under leaf pile near mermaid spring": LocData(container_check_id(MapIds.HEALED_TAKA, 44),
                                                                          type=LocationType.BURIED_UNDER_LEAF_PILE),

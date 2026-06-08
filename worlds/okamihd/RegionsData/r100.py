@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.CURSED_KAMIKI: [ExitData(RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
-                                ExitData(RegionNames.STONE_KAMIKI, has_events=["Cursed Kamiki - Cutting the peach"],one_way=True)
+                                ExitData(RegionNames.STONE_KAMIKI, required_items_events=["Cursed Kamiki - Cutting the peach"],one_way=True)
     ]
 }
 events = {

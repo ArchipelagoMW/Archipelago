@@ -16,19 +16,19 @@ if TYPE_CHECKING:
 exits = {
     # small region to force waka fight to be cleared before accessing the rest of the forest.
     RegionNames.AGATA_FOREST_WAKA: [
-        ExitData(RegionNames.AGATA_FOREST, has_events=["Agata Forest - Defeat Waka"], one_way=True,
+        ExitData(RegionNames.AGATA_FOREST, required_items_events=["Agata Forest - Defeat Waka"], one_way=True,
                  loading_screen=False)],
     RegionNames.AGATA_FOREST: [
         ExitData(RegionNames.AGATA_COMMON_LOGIC,one_way=True,loading_screen=False),
-        ExitData(RegionNames.AGATA_FOREST_TAKA, has_events=["Agata Forest - Repair Bridge with Kokari"],
+        ExitData(RegionNames.AGATA_FOREST_TAKA, required_items_events=["Agata Forest - Repair Bridge with Kokari"],
                  loading_screen=False),
         ExitData(RegionNames.TSUTA_RUINS_1F_MAIN_PART,
-                 has_events=["Agata Forest - Open Ruins Door"]),
-        ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE, has_events=["Agata Forest - Open shortcut to Shinshu Field"])
+                 required_items_events=["Agata Forest - Open Ruins Door"]),
+        ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE, required_items_events=["Agata Forest - Open shortcut to Shinshu Field"])
     ],
     RegionNames.AGATA_FOREST_TAKA: [
         ExitData(RegionNames.CURSED_TAKA_PASS,one_way=True),
-        ExitData(RegionNames.TAKA_PASS,has_events=["Taka pass - Restore Guardian Sapling"],one_way=True),
+        ExitData(RegionNames.TAKA_PASS,required_items_events=["Taka pass - Restore Guardian Sapling"],one_way=True),
     ]
 }
 events = {
