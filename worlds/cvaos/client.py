@@ -12,10 +12,12 @@ from typing import TYPE_CHECKING
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
+from NetUtils import ClientStatus
 
 from . import item_granting
 from .locations import flag_offset_to_location_id
-from .ram import AoSRAM
+from .options import Goal
+from .ram import AoSRAM, addresses as addr
 from .rom import ARCHIPELAGO_IDENTIFIER, ARCHIPELAGO_IDENTIFIER_START, AUTH_NUMBER_START
 
 if TYPE_CHECKING:
@@ -40,6 +42,7 @@ class CVAOSClient(BizHawkClient):
     local_checked_locations: set[int]
     currently_dead: bool
     time_of_sent_death: float | None
+    goaled: bool
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -83,6 +86,8 @@ class CVAOSClient(BizHawkClient):
         self.currently_dead = False
         # AP's timestamp on the death we last sent, so on_package can recognize our own echo.
         self.time_of_sent_death = None
+        # Goal: latched True once we've reported completion, so we report it only once.
+        self.goaled = False
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         # Queue an incoming DeathLink's cause; game_watcher applies the kill. Skip the echo of our
@@ -146,7 +151,7 @@ class CVAOSClient(BizHawkClient):
                 received += 1
                 granted_this_tick += 1
 
-            # --- DeathLink (Strategy A: RAM poke) -----------------------------------------------
+            # DeathLink (Strategy A: RAM poke)
             # Enable DeathLink once if the seed wants it; update_death_link adds the "DeathLink"
             # tag, so this won't re-fire on later ticks.
             if ctx.slot_data.get("death_link") and "DeathLink" not in ctx.tags:
@@ -173,7 +178,28 @@ class CVAOSClient(BizHawkClient):
                 # Alive again (respawn or reload) — re-arm for the next death in either direction.
                 self.currently_dead = False
 
-            # Goal detection arrives in a later phase (ROADMAP).
+            # Goal / win condition
+            # Report completion once, when the player wins per their Goal: graham -> Graham defeated
+            # (BOSS_FLAGS & 0x01); chaos -> the good-ending flag (GLOBAL_FLAGS & 0x4000). Hardware-
+            # verified: on the Chaos win the good-ending bit (and the Chaos boss bit BOSS_FLAGS &
+            # 0x80, which the decomp's C only shows being cleared) both flip during the post-kill
+            # "castle swallowed" cutscene while GAME_STATE is still INGAME and MENU_STATE NORMAL --
+            # so this in-gameplay-gated read catches it. We use 0x4000 because it persists (saved),
+            # so the goal still registers if that live window is ever missed (e.g. a reconnect after
+            # the win). BOSS_FLAG_CHAOS (0x80) is the symmetric alternative -- it flips at the same
+            # instant; swap to it, or OR it in, if 0x4000 ever gives trouble. Its only caveat is that
+            # it's transient (cleared at the credits transition, and not saved).
+            if not ctx.finished_game and not self.goaled:
+                goal = ctx.slot_data.get("goal", Goal.option_chaos)
+                if goal == Goal.option_graham:
+                    won = await ram.has_defeated(addr.BOSS_FLAG_GRAHAM)
+                else:  # chaos -> the good ending
+                    won = await ram.has_good_ending()
+                if won:
+                    self.goaled = True
+                    ctx.finished_game = True
+                    await ctx.send_msgs([{"cmd": "StatusUpdate",
+                                          "status": ClientStatus.CLIENT_GOAL}])
         except bizhawk.RequestFailedError:
             # Emulator/connection hiccup; retry next tick.
             return
