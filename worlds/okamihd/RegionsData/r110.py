@@ -23,32 +23,32 @@ exits = {
     ],
     RegionNames.MOON_CAVE: [
         ExitData(RegionNames.MOON_CAVE_1F_LOCKED_CAVE,
-                 has_events=["Moon Cave - 1F Free Ajimi from soup"], loading_screen=False,
+                 required_items_events=["Moon Cave - 1F Free Ajimi from soup"], loading_screen=False,
                  one_way=True),
         ExitData(RegionNames.MOON_CAVE_B2F_LIFT,
-                 has_events=["Moon Cave - 1F Main room disturb lift"], loading_screen=False),
+                 required_items_events=["Moon Cave - 1F Main room disturb lift"], loading_screen=False),
         ExitData(RegionNames.MOON_CAVE_KITCHEN_BACK, loading_screen=False,
-                 has_events=["Moon Cave - 1F Melt Kitchen Ice"]),
+                 required_items_events=["Moon Cave - 1F Melt Kitchen Ice"]),
         ExitData(RegionNames.MOON_CAVE_OROCHI,
-                 has_events=["Moon Cave - 1F Give all ingredients to Ajimi"]),
+                 required_items_events=["Moon Cave - 1F Give all ingredients to Ajimi"]),
         ExitData(RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
-                 has_events=["Moon Cave - 1F Blue Flower to 2F accessible"],
+                 required_items_events=["Moon Cave - 1F Blue Flower to 2F accessible"],
                  loading_screen=False, one_way=True),
         ExitData(RegionNames.MOON_CAVE_B1F_UNDER_LIFT, loading_screen=False, one_way=True,
-                 has_events=["Moon Cave - B1F Lake open valve"]),
+                 required_items_events=["Moon Cave - B1F Lake open valve"]),
         ExitData(RegionNames.MOON_CAVE_2F_RAFTERS_CHEST,
-                 has_events=["Moon Cave - 1F Main room geyser"], loading_screen=False, one_way=True)
+                 required_items_events=["Moon Cave - 1F Main room geyser"], loading_screen=False, one_way=True)
     ],
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE: [
         ExitData(RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK,
-                 has_events=['Moon Cave - 1F Locked Cave open eye door'],
+                 required_items_events=['Moon Cave - 1F Locked Cave open eye door'],
                  loading_screen=False),
         ExitData(RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
-                 has_events=["Moon Cave - 1F Locked Cave geyser"],
+                 required_items_events=["Moon Cave - 1F Locked Cave geyser"],
                  loading_screen=False)
     ],
     RegionNames.MOON_CAVE_2F_GEYSER_RAFTER: [
-        ExitData(RegionNames.MOON_CAVE_3F, has_events=["Moon cave - 2F rafter's geyser"], loading_screen=False),
+        ExitData(RegionNames.MOON_CAVE_3F, required_items_events=["Moon cave - 2F rafter's geyser"], loading_screen=False),
         ExitData(RegionNames.MOON_CAVE, one_way=True, loading_screen=False)
     ],
     RegionNames.MOON_CAVE_2F_RAFTERS_CHEST: [
@@ -58,37 +58,37 @@ exits = {
         ExitData(RegionNames.MOON_CAVE_B1F_LAKE, loading_screen=False, one_way=True),
         # Ensure the player can repair the bridge to access this
         ExitData(RegionNames.MOON_CAVE_3F_FIRE_EYE,
-                 has_events=["Moon Cave - 3F Melt Ice block after bridge",
+                 required_items_events=["Moon Cave - 3F Melt Ice block after bridge",
                              "Moon Cave - 3F repair Bridge"],
                  loading_screen=False),
         ExitData(RegionNames.MOON_CAVE_3F_SAND,
-                 has_events=["Moon Cave - 3F Open door to Sand room"], loading_screen=False,
+                 required_items_events=["Moon Cave - 3F Open door to Sand room"], loading_screen=False,
                  one_way=True),
         ExitData(RegionNames.MOON_CAVE, one_way=True, loading_screen=False)
     ],
     RegionNames.MOON_CAVE_B1F_LAKE: [
         ExitData(RegionNames.MOON_CAVE_B1F_UNDER_LIFT,
-                 has_events=["Moon Cave - B1F Lake geyser"], loading_screen=False)
+                 required_items_events=["Moon Cave - B1F Lake geyser"], loading_screen=False)
     ],
     RegionNames.MOON_CAVE_B1F_UNDER_LIFT: [
         ExitData(RegionNames.MOON_CAVE,
-                 has_events=["Moon Cave - B1F under lift geyser"],
+                 required_items_events=["Moon Cave - B1F under lift geyser"],
                  loading_screen=False, one_way=True)
     ],
     RegionNames.MOON_CAVE_B2F_LIFT: [
         ExitData(RegionNames.MOON_CAVE_B2F_FROZEN_STATUE,
-                 has_events=["Moon Cave - B2F oepn eyes door"], loading_screen=False)],
+                 required_items_events=["Moon Cave - B2F oepn eyes door"], loading_screen=False)],
     RegionNames.MOON_CAVE_B2F_FROZEN_STATUE: [
         ExitData(RegionNames.MOON_CAVE_B2F_OTHER_LIFT,
-                 has_events=["Moon Cave - B2F Melt Ice block to other lift"], loading_screen=False)],
+                 required_items_events=["Moon Cave - B2F Melt Ice block to other lift"], loading_screen=False)],
     RegionNames.MOON_CAVE_B2F_OTHER_LIFT: [
         ExitData(RegionNames.MOON_CAVE_B2F_BOMBABLE,
-                 has_events=["Moon Cave - B2F Explode wall behind lift"], loading_screen=False),
+                 required_items_events=["Moon Cave - B2F Explode wall behind lift"], loading_screen=False),
         ExitData(RegionNames.MOON_CAVE_KITCHEN_BACK, loading_screen=False, one_way=True)
     ],
     RegionNames.MOON_CAVE_KITCHEN_BACK: [
         ExitData(RegionNames.MOON_CAVE_B2F_OTHER_LIFT, one_way=True, loading_screen=False,
-                 has_events=["Moon Cave - 1F Disrupt lift in kitchen back"])
+                 required_items_events=["Moon Cave - 1F Disrupt lift in kitchen back"])
     ],
     RegionNames.MOON_CAVE_3F_SAND: [
         ExitData(RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND, loading_screen=False, one_way=True),
@@ -97,23 +97,23 @@ exits = {
     ],
     RegionNames.MOON_CAVE_2F_SAND_PIT: [
         ExitData(RegionNames.MOON_CAVE_3F_SAND, one_way=True, loading_screen=False,
-                 has_events=["Moon Cave - 3F Blow up Sand pit wall"])
+                 required_items_events=["Moon Cave - 3F Blow up Sand pit wall"])
     ],
     RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND: [
         ExitData(RegionNames.MOON_CAVE_4F_RAFTERS,
-                 has_events=["Moon Cave - 3F Rafters use flower"],
+                 required_items_events=["Moon Cave - 3F Rafters use flower"],
                  loading_screen=False, one_way=True)
     ],
     RegionNames.MOON_CAVE_4F_RAFTERS: [
-        ExitData(RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND, has_events=["Moon Cave - 4F Rafters use flower"],
+        ExitData(RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND, required_items_events=["Moon Cave - 4F Rafters use flower"],
                  loading_screen=False, one_way=True),
         ExitData(RegionNames.MOON_CAVE, one_way=True, loading_screen=False),
         ExitData(RegionNames.MOON_CAVE_4F_CANON,
-                 has_events=["Moon Cave - 4F Rafters cross banners"],
+                 required_items_events=["Moon Cave - 4F Rafters cross banners"],
                  loading_screen=False),
         ExitData(
             RegionNames.MOON_CAVE_4F_AFTER_CANON,
-            has_events=["Moon Cave - 4F Mandatory Fight"], loading_screen=False)
+            required_items_events=["Moon Cave - 4F Mandatory Fight"], loading_screen=False)
     ],
     RegionNames.MOON_CAVE_4F_CANON: [
         ExitData(RegionNames.MOON_CAVE, one_way=True, loading_screen=False)

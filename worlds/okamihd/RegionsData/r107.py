@@ -14,17 +14,17 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.GALE_SHRINE_ENTRANCE: [
-        ExitData(RegionNames.GALE_SHRINE, has_events=["Gale Shrine - Open Door"], loading_screen=False)],
+        ExitData(RegionNames.GALE_SHRINE, required_items_events=["Gale Shrine - Open Door"], loading_screen=False)],
     RegionNames.GALE_SHRINE: [ExitData(RegionNames.GALE_SHRINE_LIFT, loading_screen=False),
                               ExitData(RegionNames.GALE_SHRINE_BACK,
-                                       has_events=["Gale Shrine - Move the Windmill Bridges"], loading_screen=False)
+                                       required_items_events=["Gale Shrine - Move the Windmill Bridges"], loading_screen=False)
                               ],
     RegionNames.GALE_SHRINE_LIFT: [
-        ExitData(RegionNames.GALE_SHRINE_2F, has_events=["Gale Shrine - Use Lift"], loading_screen=False),
+        ExitData(RegionNames.GALE_SHRINE_2F, required_items_events=["Gale Shrine - Use Lift"], loading_screen=False),
         ExitData(RegionNames.GALE_SHRINE_3F,
-                 has_events=["Gale Shrine - Use Lift", "Gale Shrine - 2F Cursed Scroll"], loading_screen=False)],
+                 required_items_events=["Gale Shrine - Use Lift", "Gale Shrine - 2F Cursed Scroll"], loading_screen=False)],
     RegionNames.GALE_SHRINE_BACK: [ExitData(RegionNames.GALE_SHRINE_BOSS,
-                                            has_events=["Gale Shrine - Cross flame Hallway"])]
+                                            required_items_events=["Gale Shrine - Cross flame Hallway"])]
 }
 events = {
     RegionNames.GALE_SHRINE_ENTRANCE: {

@@ -65,7 +65,7 @@ class EventData(NamedTuple):
 
 class ExitData(NamedTuple):
     destination: str
-    has_events: [str] = []
+    required_items_events: [str] = []
     needs_long_swim: bool = False
     one_way: bool = False
     loading_screen: bool = True

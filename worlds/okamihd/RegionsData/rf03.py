@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.CURSED_AGATA_FOREST: [
-        ExitData(RegionNames.AGATA_FOREST_WAKA, has_events=["Agata Forest - Restore Guardian Sapling"], one_way=True),
+        ExitData(RegionNames.AGATA_FOREST_WAKA, required_items_events=["Agata Forest - Restore Guardian Sapling"], one_way=True),
         ExitData(RegionNames.AGATA_COMMON_LOGIC, one_way=True,loading_screen=False),
     ],
     RegionNames.AGATA_COMMON_LOGIC: [
