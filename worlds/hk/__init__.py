@@ -392,6 +392,12 @@ class HKWorld(RandomizerCoreWorld):
                 hk_state_requirements=state_requirements,
                 ))
 
+        if skip_clause and not hk_rule:
+            # if we skipped anything then we have impossible logic not empty (default=True) logic
+            return [HKClause(hk_item_requirements={"FALSE": 1},
+                             hk_region_requirements=[],
+                             hk_state_requirements=[],
+                             )]
         return hk_rule
 
     def set_rule(self, spot, rule):
