@@ -2,8 +2,8 @@
 BizHawk client for Castlevania: Aria of Sorrow.
 
 This client validates the patched ROM, authenticates, connects, sends location checks for
-collected pickups, and grants received items (``game_watcher``). DeathLink and goal detection
-are added in later phases (see worlds/cvaos/ROADMAP.md).
+collected pickups, grants received items, and relays DeathLink (``game_watcher``). Goal
+detection is added in a later phase (see worlds/cvaos/ROADMAP.md).
 """
 from __future__ import annotations
 
@@ -38,6 +38,8 @@ class CVAOSClient(BizHawkClient):
     # Per-session state, (re)initialized in set_auth.
     death_causes: list[str]
     local_checked_locations: set[int]
+    currently_dead: bool
+    time_of_sent_death: float | None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -76,13 +78,22 @@ class CVAOSClient(BizHawkClient):
         # anything stale over.
         self.death_causes = []
         self.local_checked_locations = set()
+        # DeathLink: whether we currently consider Soma dead — guards re-sending our own death and
+        # re-applying an incoming one until HP recovers.
+        self.currently_dead = False
+        # AP's timestamp on the death we last sent, so on_package can recognize our own echo.
+        self.time_of_sent_death = None
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
-        # Queue an incoming DeathLink's cause; game_watcher applies the kill (Phase 4).
+        # Queue an incoming DeathLink's cause; game_watcher applies the kill. Skip the echo of our
+        # own death (it carries the timestamp we recorded when we sent it) so we never re-kill Soma
+        # from our own death after he respawns.
         if cmd != "Bounced" or "tags" not in args or ctx.slot is None:
             return
         if "DeathLink" in args["tags"]:
             data = args.get("data", {})
+            if data.get("time") == self.time_of_sent_death:
+                return  # our own death, bounced back to us
             source = data.get("source", "Another world")
             self.death_causes.append(data.get("cause") or f"{source} killed you without a word!")
 
@@ -135,7 +146,34 @@ class CVAOSClient(BizHawkClient):
                 received += 1
                 granted_this_tick += 1
 
-            # DeathLink and goal detection arrive in later phases (ROADMAP).
+            # --- DeathLink (Strategy A: RAM poke) -----------------------------------------------
+            # Enable DeathLink once if the seed wants it; update_death_link adds the "DeathLink"
+            # tag, so this won't re-fire on later ticks.
+            if ctx.slot_data.get("death_link") and "DeathLink" not in ctx.tags:
+                await ctx.update_death_link(True)
+
+            # One HP read drives both directions: broadcast when we hit 0, re-arm when alive again.
+            hp = await ram.get_current_hp()
+            if "DeathLink" in ctx.tags and hp == 0 and not self.currently_dead:
+                # Died on our own. Mark dead BEFORE awaiting so a same-tick re-entry can't double-send.
+                self.currently_dead = True
+                await ctx.send_death(f"{ctx.player_names[ctx.slot]} was slain. Dracula has won!")
+                # Record AP's timestamp so on_package can filter our own echo (overwritten later).
+                self.time_of_sent_death = ctx.last_death_link
+
+            if self.death_causes and not self.currently_dead:
+                # Apply an incoming death (on_package queued the cause). The currently_dead gate
+                # keeps us from re-killing Soma for a death already in progress.
+                from CommonClient import logger
+                cause = self.death_causes.pop(0)
+                await ram.kill_player()
+                self.currently_dead = True
+                logger.info("CVAoS DeathLink: %s", cause)
+            elif hp > 0 and self.currently_dead:
+                # Alive again (respawn or reload) — re-arm for the next death in either direction.
+                self.currently_dead = False
+
+            # Goal detection arrives in a later phase (ROADMAP).
         except bizhawk.RequestFailedError:
             # Emulator/connection hiccup; retry next tick.
             return
