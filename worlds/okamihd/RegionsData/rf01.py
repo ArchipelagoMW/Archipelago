@@ -10,13 +10,13 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.CURSED_SHINSHU_FIELD: [
-        ExitData(RegionNames.SHINSHU_FIELD, has_events=["Shinshu Field - Restore Guardian Sapling"], one_way=True),
+        ExitData(RegionNames.SHINSHU_FIELD, required_items_events=["Shinshu Field - Restore Guardian Sapling"], one_way=True),
         ExitData(RegionNames.SHINSHU_LOGIC_COMMON,one_way=True,loading_screen=False)
     ],
 
     RegionNames.SHINSHU_LOGIC_COMMON: [
         ExitData(RegionNames.CURSED_HANA_VALLEY),
-        ExitData(RegionNames.HANA_VALLEY, has_events=["Hana Valley - Guardian Sapling Restoration"]),
+        ExitData(RegionNames.HANA_VALLEY, required_items_events=["Hana Valley - Guardian Sapling Restoration"]),
     ]
 
 }

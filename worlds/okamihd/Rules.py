@@ -185,8 +185,8 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
     if data.needs_long_swim:
         rules.append(HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY))
 
-    if len(data.has_events) > 0:
-        rules.append(HasAll(*data.has_events))
+    if len(data.required_items_events) > 0:
+        rules.append(HasAll(*data.required_items_events))
 
     if len(rules) > 0:
 

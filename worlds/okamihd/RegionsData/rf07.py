@@ -17,18 +17,18 @@ exits = {
         ExitData(RegionNames.AGATA_FOREST_TAKA,one_way=True)
     ],
     RegionNames.CURSED_TAKA_PASS: [
-        ExitData(RegionNames.CURSED_TAKA_PASS_WAKA, has_events=["Taka Pass - Blow up boulder to cave"],
+        ExitData(RegionNames.CURSED_TAKA_PASS_WAKA, required_items_events=["Taka Pass - Blow up boulder to cave"],
                  loading_screen=False)],
     # Region for mandatory waka encounter
     RegionNames.CURSED_TAKA_PASS_WAKA: [
-        ExitData(RegionNames.CURSED_TAKA_PASS_CAVE, has_events=["Taka Pass - Rematch with Waka"], loading_screen=False),
+        ExitData(RegionNames.CURSED_TAKA_PASS_CAVE, required_items_events=["Taka Pass - Rematch with Waka"], loading_screen=False),
         ExitData(RegionNames.TAKA_COMMON_LOGIC, one_way=True, loading_screen=False)
         ],
     RegionNames.CURSED_TAKA_PASS_CAVE: [ExitData(RegionNames.CURSED_TAKA_PASS_GUARDIAN_SAPLING,
-                                                 has_events=["Taka pass - Restore Bridge to Guardian Sapling"],
+                                                 required_items_events=["Taka pass - Restore Bridge to Guardian Sapling"],
                                                  loading_screen=False)],
     RegionNames.CURSED_TAKA_PASS_GUARDIAN_SAPLING: [
-        ExitData(RegionNames.TAKA_PASS, has_events=["Taka pass - Restore Guardian Sapling"], one_way=True)]
+        ExitData(RegionNames.TAKA_PASS, required_items_events=["Taka pass - Restore Guardian Sapling"], one_way=True)]
 }
 events = {
     RegionNames.CURSED_TAKA_PASS: {
