@@ -1,12 +1,12 @@
 import Fill
-from BaseClasses import Item, ItemClassification, Tutorial, MultiWorld, Location
+from BaseClasses import Item, ItemClassification, Tutorial, MultiWorld, Location, LocationProgressType
 from Utils import visualize_regions
 from .Enums.LocationType import excluded_biteable_location_types
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, get_item_name_to_id_dict, \
     karmic_transformers, \
     progressive_weapons, create_standard_item, create_static_precollected_item_list, local_items, get_local_items_name
 from .Regions import create_regions, get_region_name
-from .Locations import get_location_names, get_total_locations
+from .Locations import get_location_names, get_total_locations, get_unfilled_locations_count
 from .RegionsData import okami_events, okami_locations, okami_shop_locations
 from .Rules import set_completion_rules
 from .Options import create_option_groups, OkamiOptions, slot_data_options, KarmicTransformers
@@ -41,6 +41,7 @@ class OkamiWorld(World):
     options_dataclass = OkamiOptions
     options: OkamiOptions
     web = OkamiWebWolrd()
+    global_item_count=0
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -51,7 +52,6 @@ class OkamiWorld(World):
         create_regions(self)
         # DEBUG
         # visualize_regions(self.multiworld.get_region("Menu", self.player),"G:\projets\OkamiAP\worlds\okamihd\docs\OkamiHD.puml")
-
     def create_items(self):
         self.multiworld.itempool += self.create_itempool()
 
@@ -60,6 +60,7 @@ class OkamiWorld(World):
         set_completion_rules(self)
 
     def create_item(self, name: str) -> Item:
+        self.global_item_count+=1
         return create_standard_item(self, name)
 
     def fill_slot_data(self) -> dict:
@@ -80,10 +81,9 @@ class OkamiWorld(World):
     def pre_fill(self) -> None:
         from Fill import fill_restrictive, FillError
         # local items randomization
+        attempts = 5
         for local_item_data in local_items:
             valid_locations = self.get_valid_local_item_locations(local_item_data)
-            # Important - Archipelago will try to place on every location in the list by order, so we shuffle it to not always get the same result.
-            self.multiworld.random.shuffle(valid_locations)
             local_item_pool = []
             state = self.multiworld.get_all_state(collect_pre_fill_items=True, perform_sweep=False)
             for i in local_item_data.items:
@@ -91,8 +91,16 @@ class OkamiWorld(World):
                 state.remove(local_item)
                 local_item_pool.append(local_item)
             state.sweep_for_advancements()
-
-            fill_restrictive(self.multiworld, state, valid_locations, local_item_pool)
+            for a in range(attempts):
+                try:
+                    locations = valid_locations.copy()
+                    item_pool= local_item_pool.copy()
+                    # Important - Archipelago will try to place on every location in the list by order, so we shuffle it to not always get the same result.
+                    self.multiworld.random.shuffle(locations)
+                    fill_restrictive(self.multiworld, state, locations, item_pool)
+                except FillError:
+                    continue
+                break
 
     def get_pre_fill_items(self) -> List["Item"]:
         res = []
@@ -123,6 +131,7 @@ class OkamiWorld(World):
                 if divine_instrument_data.value.item_name != DivineInstruments.DIVINE_RETRIBUTION.value.item_name:
                     itempool += [create_item(divine_instrument_data.value.item_name, divine_instrument_data.value.code,
                                              ItemClassification.progression, world)]
+
         else:
             # Create progressive weapons
             for (progressive_weapon_name, progressive_weapon) in progressive_weapons.items():
@@ -146,6 +155,7 @@ class OkamiWorld(World):
                         precollected_items.append(create_item(k_name, k.code, k.classification, world))
                     else:
                         itempool += [create_item(k_name, k.code, k.classification, world)]
+
 
         # Event Items Creation
         for name in RegionNames:
@@ -172,14 +182,14 @@ class OkamiWorld(World):
             # If the item is locally randomized we have to put one less
             if name in get_local_items_name():
                 item_count -= 1
-            if item_count > 0:
+            if item_type != ItemClassification.filler and item_count > 0:
                 itempool += create_multiple_items(world, name, item_count, item_type)
         # Create a number of junk items equal to the locations remaining, minus items that have a fixed count in the item pool, and the locally placed ones.
-        itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(get_local_items_name()))
+        junk_fill_count= get_unfilled_locations_count(world) - len(itempool) - len(get_local_items_name())
+        itempool += create_junk_items(world, junk_fill_count)
 
         for pi in precollected_items:
             world.push_precollected(pi)
-
         return itempool
 
     def get_valid_local_item_locations(self, local_item_data: LocalItem) -> \
@@ -190,7 +200,7 @@ class OkamiWorld(World):
             if r in okami_locations.keys():
                 for loc_name, loc_data in okami_locations[r].items():
                     # Check this isn't a location we've excluded or that we have already prefilled
-                    if loc_name not in local_item_data.exclude_locations:
+                    if loc_name not in local_item_data.exclude_locations and resolve_option_callable(loc_data.progress_type,self) != LocationProgressType.EXCLUDED:
                         # If this is a biteable item, exclude places that place it directly in your inventory
                         if not local_item_data.is_biteable or loc_data.type not in excluded_biteable_location_types:
                             list.append(self.get_location(loc_name))

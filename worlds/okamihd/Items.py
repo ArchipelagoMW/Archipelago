@@ -39,8 +39,8 @@ def create_junk_items(world: "OkamiWorld", count: int) -> List[Item]:
             junk_list[name] = junk_weights.get(name)
 
     for i in range(count):
-        junk_pool.append(
-            world.create_item(world.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0]))
+        item = world.create_item(world.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0])
+        junk_pool.append(item)
     return junk_pool
 
 
@@ -243,10 +243,10 @@ event_items = {
     "Serpent Crystal": ItemData(0x308, ItemClassification.progression, count_in_pool=0),
     # MOON CAVE
 
-    "Ogre Liver": ItemData(0x4a, ItemClassification.progression, count_in_pool=0),
-    "Ice Lips": ItemData(0x4b, ItemClassification.progression, count_in_pool=0),
-    "Fire Eye": ItemData(0x4c, ItemClassification.progression, count_in_pool=0),
-    "Black Demon Horn": ItemData(0x4d, ItemClassification.progression, count_in_pool=0),
+    "Ogre Liver": ItemData(0x4a, ItemClassification.progression),
+    "Ice Lips": ItemData(0x4b, ItemClassification.progression),
+    "Fire Eye": ItemData(0x4c, ItemClassification.progression),
+    "Black Demon Horn": ItemData(0x4d, ItemClassification.progression),
 }
 weapons_items = {
     "Divine Retribution": ItemData(0x10, ItemClassification.progression, count_in_pool=0),
