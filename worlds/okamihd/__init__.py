@@ -41,7 +41,6 @@ class OkamiWorld(World):
     options_dataclass = OkamiOptions
     options: OkamiOptions
     web = OkamiWebWolrd()
-    global_item_count=0
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -60,7 +59,6 @@ class OkamiWorld(World):
         set_completion_rules(self)
 
     def create_item(self, name: str) -> Item:
-        self.global_item_count+=1
         return create_standard_item(self, name)
 
     def fill_slot_data(self) -> dict:
@@ -75,7 +73,6 @@ class OkamiWorld(World):
         # Add game options to slot_data
         for name, value in self.options.as_dict(*slot_data_options).items():
             slot_data[name] = value
-
         return slot_data
 
     def pre_fill(self) -> None:
@@ -97,7 +94,7 @@ class OkamiWorld(World):
                     item_pool= local_item_pool.copy()
                     # Important - Archipelago will try to place on every location in the list by order, so we shuffle it to not always get the same result.
                     self.multiworld.random.shuffle(locations)
-                    fill_restrictive(self.multiworld, state, locations, item_pool)
+                    fill_restrictive(self.multiworld, state, locations, item_pool,single_player_placement=True)
                 except FillError:
                     continue
                 break
