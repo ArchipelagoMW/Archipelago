@@ -185,6 +185,7 @@ async def _handle_game_ready(ctx: "Context") -> None:
             logger.info("Updating save data...")
             ctx.game_interface.load_save(ctx.save_data)
             ctx.game_interface.reset_death_count()
+            ctx.game_interface.setup_challenge_mode()
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()
             logger.info("Load the latest autosave or enter the Armor Vendor to apply cosmetics")

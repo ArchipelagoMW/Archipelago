@@ -14,6 +14,7 @@ from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
 from worlds.rac3.options.ngplus_item_options import NGPlusItems
+from worlds.rac3.options.ngplus_start_options import NGPlusStart
 from worlds.rac3.options.ngplus_vendor_options import NGPlusVendor
 from worlds.rac3.options.one_hp_options import OneHpChallenge
 from worlds.rac3.options.prog_weapons_options import ProgressiveWeapons
@@ -86,6 +87,7 @@ class RaC3Options(PerGameCommonOptions):
     speedups: Speedups
     ngplus_items: NGPlusItems
     ngplus_vendors: NGPlusVendor
+    ngplus_start: NGPlusStart
 
 
 rac3_option_groups = [
@@ -99,6 +101,7 @@ rac3_option_groups = [
         Speedups,
         BoltAndXPMultiplier,
         OneHpChallenge,
+        NGPlusStart,
     ]),
     OptionGroup("RAC3 Item Options", [
         StartingWeapons,
@@ -146,6 +149,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.BOLT_AND_XP_MULTIPLIER,
     RAC3OPTION.PROGRESSIVE_WEAPONS,
     RAC3OPTION.NGPLUS_ITEMS,
+    RAC3OPTION.NGPLUS_START,
     RAC3OPTION.ARMOR_UPGRADE,
     RAC3OPTION.SKILL_POINTS,
     RAC3OPTION.TROPHIES,

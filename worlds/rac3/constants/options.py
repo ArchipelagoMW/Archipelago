@@ -45,3 +45,4 @@ class RAC3OPTION:
     SPEEDUPS = "Speedups"
     NGPLUS_VENDOR = "NG+ Vendor"
     NGPLUS_ITEMS = "NG+ Items"
+    NGPLUS_START = "NG+ Start"

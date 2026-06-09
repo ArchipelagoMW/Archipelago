@@ -52,6 +52,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.speedups.value = world.passthrough[RAC3OPTION.SPEEDUPS]
             world.options.ngplus_items.value = world.passthrough[RAC3OPTION.NGPLUS_ITEMS]
             world.options.ngplus_vendors.value = world.passthrough[RAC3OPTION.NGPLUS_VENDOR]
+            world.options.ngplus_start.value = world.passthrough[RAC3OPTION.NGPLUS_START]
         else:
             world.using_ut = False
     else:

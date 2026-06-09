@@ -125,6 +125,7 @@ class Rac3Interface(GameInterface):
         speedups: dict[str, int]
         ngplus_items: int
         ngplus_vendors: int
+        ngplus_start: int
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
@@ -342,6 +343,7 @@ class Rac3Interface(GameInterface):
         self.options.speedups = slot_data[RAC3OPTION.SPEEDUPS]
         self.options.ngplus_items = slot_data[RAC3OPTION.NGPLUS_ITEMS]
         self.options.ngplus_vendors = slot_data[RAC3OPTION.NGPLUS_VENDOR]
+        self.options.ngplus_start = slot_data[RAC3OPTION.NGPLUS_START]
 
     ########################################
     # Called on Game and Server Connection #
@@ -469,6 +471,11 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.SHIP_SKIN, self.options.ship_skin)
         self._write8(RAC3STATUS.PLAYER_SKIN, self.options.player_skin)
         self._write8(RAC3STATUS.PLAYER_SKIN_2, self.options.player_skin)
+
+    def setup_challenge_mode(self):
+        """Make the challenge mode popup not appear if starting in challenge mode"""
+        if self.options.ngplus_start:
+            self._write8(RAC3STATUS.SEEN_NGPLUS_POPUP, 1)
 
     def setup_code_cave(self, location_data):
         """Write item data to the code cave in order to be used later by vendors"""
@@ -1550,6 +1557,7 @@ class Rac3Interface(GameInterface):
         self.verify_quick_select_and_last_used()
         self.clank_cycler()
         self.multiplier_cycler()
+        self.challenge_mode_cycler()
         self.patch_cycler()
         self.overflow_fix()
         self.health_cycler()
@@ -1949,6 +1957,13 @@ class Rac3Interface(GameInterface):
         """Update the Bolt+EXP multiplier based on settings"""
         self._write32(RAC3STATUS.JACKPOT_TIMER, 0x7FFFFFFF)
         self._write8(RAC3STATUS.JACKPOT, self.bolt_and_xp_multiplier_value)
+
+    def challenge_mode_cycler(self):
+        """Update challenge mode related values based on settings"""
+        if self.options.ngplus_start:
+            self._write8(RAC3STATUS.CHALLENGE_MODE, 1)
+            if self.options.ngplus_start < 2:
+                self._write8(RAC3STATUS.MULTIPLIER, 0)
 
     def cheat_cycler(self):
         """Handles unlocking cheats such as the lightsaber wrench cheat"""
