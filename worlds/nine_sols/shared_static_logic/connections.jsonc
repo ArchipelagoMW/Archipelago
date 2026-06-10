@@ -2218,12 +2218,12 @@
     {
         "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Root Node",
         "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
-        "medium_requires": [{ "item": "Charged Strike" }] // CS-dash
+        "medium_requires": [] // Swift Runner
     },
     {
         "from": "ED (Sanctum) - Root Node", "to": "ED (Sanctum) - Right Exit",
         "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
-        "medium_requires": [{ "item": "Charged Strike" }] // CS-dash
+        "medium_requires": [] // Swift Runner
     },
     { "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Monitoring Panel", "requires": [
         { "item": "Tai-Chi Kick" },
