@@ -64,7 +64,7 @@ def get_location_data(world: CVAOSWorld, active_locations: List[Location]) -> Di
     for loc in active_locations:
         rom_offset = loc.address - GBA_ROM_BASE
 
-        if loc.item.game == world.game:
+        if loc.item.player == world.player:
             type_num, subtype_num, item_offset = get_item_encoding(loc.item.code)
         else:
             type_num, subtype_num, item_offset = _AP_PLACEHOLDER
