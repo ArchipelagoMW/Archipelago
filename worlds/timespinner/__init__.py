@@ -3,7 +3,7 @@ from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import get_item_names_per_category
 from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items, pyramid_start_starter_progression_items
 from .Locations import get_location_datas, EventId
-from .Options import BackwardsCompatiableTimespinnerOptions, Toggle
+from .Options import BackwardsCompatiableTimespinnerOptions, Toggle, BossRandoType
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions_and_locations
 from worlds.AutoWorld import World, WebWorld
@@ -104,6 +104,8 @@ class TimespinnerWorld(World):
             "Cantoran": self.options.cantoran.value,
             "LoreChecks": self.options.lore_checks.value,
             "BossRando": self.options.boss_rando.value,
+            "BossRandoType": self.options.boss_rando_type.value,
+            "BossRandoOverrides": self.precalculated_weights.boss_rando_overrides,
             "EnemyRando": self.options.enemy_rando.value,
             "DamageRando": self.options.damage_rando.value,
             "DamageRandoOverrides": self.options.damage_rando_overrides.value,
@@ -132,6 +134,8 @@ class TimespinnerWorld(World):
             "PyramidStart": self.options.pyramid_start.value,
             "GateKeep": self.options.gate_keep.value,
             "RoyalRoadblock": self.options.royal_roadblock.value,
+            "PureTorcher": self.options.pure_torcher.value,
+            "FindTheFlame": self.options.find_the_flame.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
@@ -179,6 +183,8 @@ class TimespinnerWorld(World):
         self.options.cantoran.value = slot_data["Cantoran"]
         self.options.lore_checks.value = slot_data["LoreChecks"]
         self.options.boss_rando.value = slot_data["BossRando"]
+        self.options.boss_rando_type.value = slot_data["BossRandoType"]
+        self.precalculated_weights.boss_rando_overrides = slot_data["BossRandoOverrides"]
         self.options.damage_rando.value = slot_data["DamageRando"]
         self.options.damage_rando_overrides.value = slot_data["DamageRandoOverrides"]
         self.options.hp_cap.value = slot_data["HpCap"]
@@ -199,6 +205,7 @@ class TimespinnerWorld(World):
         self.options.rising_tides.value = slot_data["RisingTides"]
         self.options.unchained_keys.value = slot_data["UnchainedKeys"]
         self.options.back_to_the_future.value = slot_data["PresentAccessWithWheelAndSpindle"]
+        self.options.prism_break.value = slot_data["PrismBreak"]
         self.options.traps.value = slot_data["Traps"]
         self.options.death_link.value = slot_data["DeathLink"]
         # Readonly slot_data["StinkyMaw"]
@@ -235,7 +242,10 @@ class TimespinnerWorld(World):
                 spoiler_handle.write(f'Mysterious Warp Beacon unlock:   {self.precalculated_weights.time_key_unlock}\n')
         else:
             spoiler_handle.write(f'Twin Pyramid Keys unlock:        {self.precalculated_weights.pyramid_keys_unlock}\n')
-       
+
+        if self.options.boss_rando.value and self.options.boss_rando_type.value == BossRandoType.option_manual:
+            spoiler_handle.write(f'Selected bosses:                 {self.precalculated_weights.boss_rando_overrides}\n')
+
         if self.options.rising_tides:
             flooded_areas: List[str] = []
 
@@ -298,7 +308,9 @@ class TimespinnerWorld(World):
         if not item.advancement:
             return item
 
-        if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
+        if name == 'Tablet' and not self.options.downloadable_items:
+            item.classification = ItemClassification.filler
+        elif name == 'Library Keycard V' and not (self.options.downloadable_items or self.options.pure_torcher):
             item.classification = ItemClassification.filler
         elif name == 'Oculus Ring' and not self.options.eye_spy:
             item.classification = ItemClassification.filler
@@ -314,6 +326,8 @@ class TimespinnerWorld(World):
                 and not self.options.lock_key_amadeus:
             item.classification = ItemClassification.filler
         elif name == "Drawbridge Key" and not self.options.gate_keep: 
+            item.classification = ItemClassification.filler
+        elif name == "Cube of Bodie" and not self.options.find_the_flame: 
             item.classification = ItemClassification.filler
 
         return item
@@ -360,6 +374,9 @@ class TimespinnerWorld(World):
 
         if not self.options.gate_keep:
             excluded_items.add('Drawbridge Key')
+
+        if not self.options.find_the_flame:
+            excluded_items.add('Cube of Bodie')
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in self.item_name_groups['UseItem']:

@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import ClassVar, Optional, Iterable
+from collections.abc import Iterable
+from typing import ClassVar
 
+from .base import FeatureBase
 from ...data.game_item import GameItem, ItemTag
 from ...strings.book_names import ordered_lost_books
 
@@ -16,14 +18,14 @@ def to_location_name(book: str) -> str:
     return location_prefix + book
 
 
-def extract_book_from_location_name(location_name: str) -> Optional[str]:
+def extract_book_from_location_name(location_name: str) -> str | None:
     if not location_name.startswith(location_prefix):
         return None
 
     return location_name[len(location_prefix):]
 
 
-class BooksanityFeature(ABC):
+class BooksanityFeature(FeatureBase, ABC):
     is_enabled: ClassVar[bool]
 
     to_item_name = staticmethod(to_item_name)

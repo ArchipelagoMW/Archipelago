@@ -5,27 +5,27 @@ import logging
 import os
 import subprocess
 import sys
+import shlex
 
 from asyncio import Task
 from datetime import datetime
 from logging import Logger
+from shutil import which
 from typing import Awaitable
 
 # Misc imports
 import colorama
-import pymem
-
-from pymem.exception import ProcessNotFound
+from psutil import NoSuchProcess
 
 # Archipelago imports
 import ModuleUpdate
 import Utils
-
 from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
 from NetUtils import ClientStatus
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError
 
 # Jak imports
-from .game_id import jak1_name
+from .game_id import jak1_name, jak1_gk, jak1_goalc
 from .options import EnableOrbsanity
 from .agents.memory_reader import JakAndDaxterMemoryReader
 from .agents.repl_client import JakAndDaxterReplClient
@@ -57,9 +57,9 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
     # (which takes 10-15 seconds to compile the game) have to be requested with user-initiated flags.
     # The flags are checked by the agents every main_tick.
     def _cmd_repl(self, *arguments: str):
-        """Sends a command to the OpenGOAL REPL. Arguments:
-        - connect : connect the client to the REPL (goalc).
-        - status : check internal status of the REPL."""
+        """Sends a command to the OpenGOAL Compiler. Arguments:
+        - connect : connect the client to the compiler (goalc).
+        - status : check internal status of the Compiler."""
         if arguments:
             if arguments[0] == "connect":
                 self.ctx.on_log_info(logger, "This may take a bit... Wait for the success audio cue before continuing!")
@@ -135,6 +135,16 @@ class JakAndDaxterContext(CommonContext):
         self.tags = set()
         await self.send_connect()
 
+    async def connect(self, address: str | None = None) -> None:
+        if not self.repl.connected or not self.memr.connected:
+            self.on_log_warn(logger, "Please wait for the Compiler and Memory Reader to connect to the game!")
+            return
+        await super(JakAndDaxterContext, self).connect(address)
+
+    async def disconnect(self, allow_autoreconnect: bool = False):
+        self.locations_checked = set()  # Clear this set to gracefully handle server disconnects.
+        await super(JakAndDaxterContext, self).disconnect(allow_autoreconnect)
+
     def on_package(self, cmd: str, args: dict):
 
         if cmd == "RoomInfo":
@@ -176,6 +186,10 @@ class JakAndDaxterContext(CommonContext):
                     await self.send_msgs([{"cmd": "Get", "keys": [f"jakanddaxter_{self.auth}_orbs_paid"]}])
 
                 create_task_log_exception(get_orb_balance())
+
+            # If there were any locations checked while the client wasn't connected, we want to make sure the server
+            # knows about them. To do that, replay the whole location_outbox (no duplicates will be sent).
+            self.memr.outbox_index = 0
 
             # Tell the server if Deathlink is enabled or disabled in the in-game options.
             # This allows us to "remember" the user's choice.
@@ -254,6 +268,7 @@ class JakAndDaxterContext(CommonContext):
 
     # We don't need an ap_inform function because check_locations solves that need.
     def on_location_check(self, location_ids: list[int]):
+        self.locations_checked.update(location_ids)  # Populate this set to gracefully handle server disconnects.
         create_task_log_exception(self.check_locations(location_ids))
 
     # CommonClient has no finished_game function, so we will have to craft our own. TODO - Update if that changes.
@@ -327,13 +342,21 @@ class JakAndDaxterContext(CommonContext):
 
     async def run_repl_loop(self):
         while True:
-            await self.repl.main_tick()
-            await asyncio.sleep(0.1)
+            try:
+                await self.repl.main_tick()
+                await asyncio.sleep(0.1)
+            # This catch re-engages the memr loop, enabling the client to re-connect on losing the process
+            except NoSuchProcess:
+                self.on_log_info(logger, "Compiler process lost. Restarting Compiler loop.")
 
     async def run_memr_loop(self):
         while True:
-            await self.memr.main_tick()
-            await asyncio.sleep(0.1)
+            try:
+                await self.memr.main_tick()
+                await asyncio.sleep(0.1)
+            # This catch re-engages the memr loop, enabling the client to re-connect on losing the process
+            except NoSuchProcess:
+                self.on_log_info(logger, "Memory reader process lost. Restarting Memory reader loop.")
 
 
 def find_root_directory(ctx: JakAndDaxterContext):
@@ -445,21 +468,19 @@ def find_root_directory(ctx: JakAndDaxterContext):
 
 
 async def run_game(ctx: JakAndDaxterContext):
-
     # These may already be running. If they are not running, try to start them.
-    # TODO - Support other OS's. 1: Pymem is Windows-only. 2: on Linux, there's no ".exe."
     gk_running = False
     try:
-        pymem.Pymem("gk.exe")  # The GOAL Kernel
+        OpenProcess(process_name=jak1_gk)  # The GOAL Kernel
         gk_running = True
-    except ProcessNotFound:
+    except ProcessNotFoundError:
         ctx.on_log_warn(logger, "Game not running, attempting to start.")
 
     goalc_running = False
     try:
-        pymem.Pymem("goalc.exe")  # The GOAL Compiler and REPL
+        OpenProcess(process_name=jak1_goalc)  # The GOAL Compiler and REPL
         goalc_running = True
-    except ProcessNotFound:
+    except ProcessNotFoundError:
         ctx.on_log_warn(logger, "Compiler not running, attempting to start.")
 
     try:
@@ -492,8 +513,8 @@ async def run_game(ctx: JakAndDaxterContext):
             return
 
         # Now double-check the existence of the two executables we need.
-        gk_path = os.path.join(root_path, "gk.exe")
-        goalc_path = os.path.join(root_path, "goalc.exe")
+        gk_path = os.path.join(root_path, jak1_gk)
+        goalc_path = os.path.join(root_path, jak1_goalc)
         if not os.path.exists(gk_path) or not os.path.exists(goalc_path):
             msg = (f"The Game and Compiler could not be found in the ArchipelaGOAL root directory.\n"
                    f"Please check your host.yaml file.\n"
@@ -521,13 +542,26 @@ async def run_game(ctx: JakAndDaxterContext):
             log_path = os.path.join(Utils.user_path("logs"), f"JakAndDaxterGame_{timestamp}.txt")
             log_path = os.path.normpath(log_path)
             with open(log_path, "w") as log_file:
-                gk_process = subprocess.Popen(
-                    [gk_path, "--game", "jak1",
-                     "--config-path", config_path,
-                     "--", "-v", "-boot", "-fakeiso", "-debug"],
-                    stdout=log_file,
-                    stderr=log_file,
-                    creationflags=subprocess.CREATE_NO_WINDOW)
+                gk_args = [
+                    gk_path,
+                    "--game", "jak1",
+                    "--config-path", config_path,
+                    "--", "-v", "-boot", "-fakeiso", "-debug"
+                ]
+                
+                if Utils.is_windows:
+                    gk_process = subprocess.Popen(
+                        gk_args,
+                        stdout=log_file,
+                        stderr=log_file,
+                        creationflags=subprocess.CREATE_NO_WINDOW
+                    )
+                else:
+                    gk_process = subprocess.Popen(
+                        gk_args,
+                        stdout=log_file,
+                        stderr=log_file
+                    )
 
         if not goalc_running:
             # For the OpenGOAL Compiler, the existence of the "data" subfolder indicates you are running it from
@@ -577,7 +611,36 @@ async def run_game(ctx: JakAndDaxterContext):
                 goalc_args = [goalc_path, "--game", "jak1"]
 
             # This needs to be a new console. The REPL console cannot share a window with any other process.
-            goalc_process = subprocess.Popen(goalc_args, creationflags=subprocess.CREATE_NEW_CONSOLE)
+            # We make similar decisions as Launcher.launch for terminals on Linux and Mac (despite not supporting Mac).
+            if Utils.is_windows:
+                goalc_process = subprocess.Popen(goalc_args, creationflags=subprocess.CREATE_NEW_CONSOLE)
+
+            elif Utils.is_linux:
+                terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('konsole') or which('xterm')
+
+                # Don't allow the terminal application to attempt loading system libraries, this can cause OpenSSL
+                # errors when launching the REPL due to version mismatches between system vs shipped libraries.
+                env = os.environ
+                if "LD_LIBRARY_PATH" in env:
+                    env = env.copy()
+                    del env["LD_LIBRARY_PATH"]
+
+                if terminal:
+                    goalc_process = subprocess.Popen([terminal, '-e', shlex.join(goalc_args)], env=env)
+                else:
+                    msg = (f"Your Linux installation does not have a supported terminal application.\n"
+                           f"We support the following options:\n"
+                           f"   x-terminal-emulator\n"
+                           f"   gnome-terminal\n"
+                           f"   konsole\n"
+                           f"   xterm\n"
+                           f"Please install one of these and try again.")
+                    ctx.on_log_error(logger, msg)
+                    return
+
+            elif Utils.is_macos:
+                terminal = [which('open'), '-W', '-a', 'Terminal.app']
+                goalc_process = subprocess.Popen([*terminal, *goalc_args])
 
     except AttributeError as e:
         if " " in e.args[0]:
@@ -592,7 +655,7 @@ async def run_game(ctx: JakAndDaxterContext):
                f"Please check your host.yaml file.\n"
                f"If the value of 'jakanddaxter_options > auto_detect_root_directory' is true, verify that OpenGOAL "
                f"is installed properly.\n"
-               f"If it is false, check the value of 'jakanddaxter_options > root_directory'."
+               f"If it is false, check the value of 'jakanddaxter_options > root_directory'. "
                f"Verify it is a valid existing path, and all backslashes have been replaced with forward slashes.")
         ctx.on_log_error(logger, msg)
         return

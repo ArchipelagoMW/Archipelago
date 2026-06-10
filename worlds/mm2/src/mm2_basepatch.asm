@@ -58,6 +58,10 @@ FlashFixTarget1:
 %org($808D, $0B)
 FlashFixTarget2:
 
+%org($A65C, $0B)
+HeatFix:
+    CMP #$FF
+
 %org($8015, $0D)
 ClearRefreshHook:
     ; if we're already doing a fresh load of the stage select

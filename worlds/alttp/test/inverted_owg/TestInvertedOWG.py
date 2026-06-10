@@ -1,14 +1,13 @@
-from worlds.alttp.Dungeons import get_dungeon_item_pool
-from worlds.alttp.EntranceShuffle import link_inverted_entrances
-from worlds.alttp.InvertedRegions import create_inverted_regions
-from worlds.alttp.ItemPool import difficulties
-from worlds.alttp.Items import item_factory
-from worlds.alttp.Options import GlitchesRequired
-from worlds.alttp.Regions import mark_light_world_regions
-from worlds.alttp.Shops import create_shops
-from test.bases import TestBase
+from ...Dungeons import get_dungeon_item_pool
+from ...EntranceShuffle import link_inverted_entrances
+from ...InvertedRegions import create_inverted_regions
+from ...ItemPool import difficulties
+from ...Items import item_factory
+from ...Options import GlitchesRequired
+from ...Regions import mark_light_world_regions
+from ...Shops import create_shops
 
-from worlds.alttp.test import LTTPTestBase
+from ..bases import LTTPTestBase, TestBase
 
 
 class TestInvertedOWG(TestBase, LTTPTestBase):

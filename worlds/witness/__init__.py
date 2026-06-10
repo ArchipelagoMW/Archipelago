@@ -2,10 +2,10 @@
 Archipelago init file for The Witness
 """
 import dataclasses
-from logging import error, warning
+from logging import error, info, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, Location, LocationProgressType, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -18,6 +18,7 @@ from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
 from .options import TheWitnessOptions, witness_option_groups
+from .place_early_item import place_early_items
 from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
@@ -81,7 +82,7 @@ class WitnessWorld(World):
     item_name_groups = static_witness_items.ITEM_GROUPS
     location_name_groups = static_witness_locations.AREA_LOCATION_GROUPS
 
-    required_client_version = (0, 6, 0)
+    required_client_version = (0, 6, 8)
 
     player_logic: WitnessPlayerLogic
     player_locations: WitnessPlayerLocations
@@ -94,6 +95,7 @@ class WitnessWorld(World):
     items_placed_early: List[str]
     own_itempool: List[WitnessItem]
 
+    reachable_early_locations: List[str]
     panel_hunt_required_count: int
 
     def _get_slot_data(self) -> Dict[str, Any]:
@@ -104,15 +106,13 @@ class WitnessWorld(World):
             "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
             "door_items_in_the_pool": self.player_items.get_door_item_ids_in_pool(),
             "doors_that_shouldnt_be_locked": [int(h, 16) for h in self.player_logic.FORBIDDEN_DOORS],
-            "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
             "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
             "log_ids_to_hints": self.log_ids_to_hints,
             "laser_ids_to_hints": self.laser_ids_to_hints,
-            "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
+            "progressive_item_lists": self.player_items.get_progressive_item_ids(),
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
             "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
-            "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
             "panel_hunt_required_absolute": self.panel_hunt_required_count
         }
 
@@ -220,25 +220,6 @@ class WitnessWorld(World):
             self.own_itempool.append(dog_puzzle_skip)
             self.items_placed_early.append("Puzzle Skip")
 
-        if self.options.early_symbol_item:
-            # Pick an early item to place on the tutorial gate.
-            early_items = [
-                item for item in self.player_items.get_early_items() if item in self.player_items.get_mandatory_items()
-            ]
-            if early_items:
-                random_early_item = self.random.choice(early_items)
-                mode = self.options.puzzle_randomization
-                if mode == "sigma_expert" or mode == "umbra_variety" or self.options.victory_condition == "panel_hunt":
-                    # In Expert and Variety, only tag the item as early, rather than forcing it onto the gate.
-                    # Same with panel hunt, since the Tutorial Gate Open panel is used for something else
-                    self.multiworld.local_early_items[self.player][random_early_item] = 1
-                else:
-                    # Force the item onto the tutorial gate check and remove it from our random pool.
-                    gate_item = self.create_item(random_early_item)
-                    self.get_location("Tutorial Gate Open").place_locked_item(gate_item)
-                    self.own_itempool.append(gate_item)
-                    self.items_placed_early.append(random_early_item)
-
         # There are some really restrictive options in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
@@ -247,19 +228,38 @@ class WitnessWorld(World):
         state = CollectionState(self.multiworld)
         state.sweep_for_advancements(locations=event_locations)
 
-        num_early_locs = sum(
-            1 for loc in self.multiworld.get_reachable_locations(state, self.player)
-            if loc.address and not loc.item
+        # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
+
+        early_locations = [
+            location for location in self.multiworld.get_reachable_locations(state, self.player)
+            if not location.is_event and not location.item
+        ]
+        self.reachable_early_locations = [location.name for location in early_locations]
+
+        num_reachable_tutorial_locations = sum(
+            static_witness_logic.ALL_REGIONS_BY_NAME[
+                cast(Region, location.parent_region).name
+            ].area.name == "Tutorial (Inside)"
+            for location in early_locations
         )
 
         # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
 
-        needed_size = 2
-        needed_size += self.options.puzzle_randomization == "sigma_expert"
-        needed_size += self.options.shuffle_symbols
-        needed_size += self.options.shuffle_doors != "off"
+        needed_size_overall = 2
+        needed_size_overall += self.options.puzzle_randomization == "sigma_expert"
+        needed_size_overall += self.options.shuffle_symbols
+        needed_size_overall += self.options.shuffle_doors != "off"
+
+        needed_size_to_hold_tutorial_items = len(
+            self.player_items.get_early_items(set(self.player_items.get_mandatory_items()))
+        )
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.
+
+        extra_tutorial_checks = [
+            ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
+            ("Tutorial First Hallway", "Tutorial First Hallway Straight")
+        ]
 
         extra_checks = [
             ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
@@ -268,13 +268,30 @@ class WitnessWorld(World):
             ("Desert Outside", "Desert Surface 2"),
         ]
 
-        for i in range(num_early_locs, needed_size):
+        for _ in range(num_reachable_tutorial_locations, needed_size_to_hold_tutorial_items):
+            if not extra_tutorial_checks:
+                break
+
+            region, loc = extra_tutorial_checks.pop(0)
+            extra_checks.pop(0)
+            self.player_locations.add_location_late(loc)
+            self.get_region(region).add_locations({loc: self.location_name_to_id[loc]}, WitnessLocation)
+            self.reachable_early_locations.append(loc)
+
+            player = self.player_name
+
+            info(
+                f"""Location "{loc}" had to be added to {player}'s world to hold the requested early good items."""
+            )
+
+        for _ in range(len(self.reachable_early_locations), needed_size_overall):
             if not extra_checks:
                 break
 
             region, loc = extra_checks.pop(0)
             self.player_locations.add_location_late(loc)
-            self.get_region(region).add_locations({loc: self.location_name_to_id[loc]})
+            self.get_region(region).add_locations({loc: self.location_name_to_id[loc]}, WitnessLocation)
+            self.reachable_early_locations.append(loc)
 
             warning(
                 f"""Location "{loc}" had to be added to {self.player_name}'s world
@@ -343,6 +360,10 @@ class WitnessWorld(World):
             self.own_itempool += new_items
             self.multiworld.itempool += new_items
 
+    def fill_hook(self, progitempool: List[Item], _: List[Item], _2: List[Item],
+                  fill_locations: List[Location]) -> None:
+        place_early_items(self, progitempool, fill_locations)
+
     def fill_slot_data(self) -> Dict[str, Any]:
         already_hinted_locations = set()
 
@@ -408,19 +429,47 @@ class WitnessWorld(World):
         else:
             item_data = static_witness_items.ITEM_DATA[item_name]
 
-        return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
+        item = WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
 
-    def collect(self, state: "CollectionState", item: WitnessItem) -> bool:
-        changed = super().collect(state, item)
-        if changed and item.eggs:
+        item.is_alias_for = static_witness_items.ALL_ITEM_ALIASES.get(item_name, None)
+        if hasattr(self, "player_items") and self.player_items:
+            item.progressive_chain = self.player_items.all_progressive_item_lists.get(item_name, None)
+
+        return item
+
+    def collect(self, state: CollectionState, item: WitnessItem) -> bool:
+        if not super().collect(state, item):
+            return False
+
+        if item.eggs:
             state.prog_items[self.player]["Egg"] += item.eggs
-        return changed
 
-    def remove(self, state: "CollectionState", item: WitnessItem) -> bool:
-        changed = super().remove(state, item)
-        if changed and item.eggs:
+        elif item.is_alias_for:
+            state.prog_items[self.player][item.is_alias_for] += 1
+
+        elif item.progressive_chain:
+            index = state.prog_items[self.player][item.name] - 1
+            if index < len(item.progressive_chain):
+                state.prog_items[self.player][item.progressive_chain[index]] += 1
+
+        return True
+
+    def remove(self, state: CollectionState, item: WitnessItem) -> bool:
+        if not super().remove(state, item):
+            return False
+
+        if item.eggs:
             state.prog_items[self.player]["Egg"] -= item.eggs
-        return changed
+
+        elif item.is_alias_for:
+            state.prog_items[self.player][item.is_alias_for] -= 1
+
+        elif item.progressive_chain:
+            index = state.prog_items[self.player][item.name]
+            if index < len(item.progressive_chain):
+                state.prog_items[self.player][item.progressive_chain[index]] -= 1
+
+        return True
 
     def get_filler_item_name(self) -> str:
         return "Speed Boost"

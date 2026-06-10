@@ -16,6 +16,7 @@ logger = logging.getLogger("Client")
 
 
 rom_name_location = 0x07FFE3
+player_name_location = 0x07BCC0
 locations_array_start = 0x200
 locations_array_length = 0x100
 items_obtained = 0x03
@@ -89,11 +90,15 @@ class FF1Client(BizHawkClient):
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
+            if (await bizhawk.get_memory_size(ctx.bizhawk_ctx, self.rom)) < rom_name_location + 0x0D:
+                return False  # ROM is not large enough to be a Final Fantasy 1 ROM
             # Check ROM name/patch version
             rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(rom_name_location, 0x0D, self.rom)]))[0])
             rom_name = rom_name.decode("ascii")
             if rom_name != "FINAL FANTASY":
                 return False  # Not a Final Fantasy 1 ROM
+        except UnicodeDecodeError:
+            return False  # rom_name returned invalid text
         except bizhawk.RequestFailedError:
             return False  # Not able to get a response, say no for now
 
@@ -106,6 +111,12 @@ class FF1Client(BizHawkClient):
         self.armor_queue = deque()
 
         return True
+
+    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
+        auth_raw = (await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [(player_name_location, 0x40, self.rom)]))[0]
+        ctx.auth = str(auth_raw, "utf-8").replace("\x00", "").strip()
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if ctx.server is None:
@@ -200,7 +211,7 @@ class FF1Client(BizHawkClient):
                     write_list.append((location, [0], self.sram))
             elif current_item_name in no_overworld_items:
                 if current_item_name == "Sigil":
-                    location = 0x28
+                    location = 0x2B
                 else:
                     location = 0x12
                 write_list.append((location, [1], self.sram))
