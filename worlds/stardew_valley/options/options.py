@@ -922,7 +922,8 @@ class TrapDifficulty(Choice):
     Trap items are negative items that cause problems or annoyances for the player.
     This setting is for choosing how punishing traps will be.
     Lower difficulties will be on the funny annoyance side, higher difficulty will be on the extreme problems side.
-    Only play Nightmare at your own risk.
+    If you pick Nightmare... good luck.
+    If you pick Eldritch... you will be missed.
     """
     internal_name = "trap_difficulty"
     display_name = "Trap Difficulty"
@@ -933,6 +934,7 @@ class TrapDifficulty(Choice):
     option_hard = 3
     option_hell = 4
     option_nightmare = 5
+    option_eldritch = 6
 
     def include_traps(self) -> bool:
         return self.value > 0
