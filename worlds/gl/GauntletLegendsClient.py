@@ -224,6 +224,9 @@ class GauntletLegendsContext(CommonContext):
             compass = await self._read_ram_int(MOD_COMPASS_COUNT + (2 * player_compass_index[player]), 2)
             if compass - 1 < len(self.items_received):
                 for index in range(compass - 1, len(self.items_received)):
+                    active = await self._read_ram_int(PLAYER_KILL + (0x1F0 * (player - 1)), 1)
+                    if active != 0x4:
+                        break
                     item = self.items_received[index].item
                     if player != self.players[0] and item in spawner_trap_ids:
                         continue

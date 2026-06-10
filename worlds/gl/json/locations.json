@@ -188,7 +188,8 @@
     "tags": [
       "valley_of_fire",
       "obelisk",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -658,7 +659,8 @@
     "tags": [
       "dagger_peak",
       "obelisk",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -1219,7 +1221,8 @@
     "tags": [
       "cliffs_of_desolation",
       "obelisk",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -3015,7 +3018,8 @@
     "difficulty": 2,
     "tags": [
       "dragons_lair",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -3024,7 +3028,8 @@
     "difficulty": 2,
     "tags": [
       "dragons_lair",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -3033,7 +3038,8 @@
     "difficulty": 4,
     "tags": [
       "dragons_lair",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -3042,7 +3048,8 @@
     "difficulty": 3,
     "tags": [
       "dragons_lair",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -3051,7 +3058,8 @@
     "difficulty": 1,
     "tags": [
       "dragons_lair",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -3060,7 +3068,8 @@
     "difficulty": 1,
     "tags": [
       "dragons_lair",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -3070,7 +3079,8 @@
     "tags": [
       "dragons_lair",
       "no_obelisks",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -3383,7 +3393,8 @@
     "tags": [
       "castle_courtyard",
       "obelisk",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -4032,7 +4043,8 @@
     "tags": [
       "dungeon_of_torment",
       "obelisk",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -5604,7 +5616,8 @@
     "difficulty": 1,
     "tags": [
       "chimeras_keep",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -5613,7 +5626,8 @@
     "difficulty": 4,
     "tags": [
       "chimeras_keep",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -5622,7 +5636,8 @@
     "difficulty": 2,
     "tags": [
       "chimeras_keep",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -5631,7 +5646,8 @@
     "difficulty": 3,
     "tags": [
       "chimeras_keep",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -5640,7 +5656,8 @@
     "difficulty": 2,
     "tags": [
       "chimeras_keep",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -5649,7 +5666,8 @@
     "difficulty": 1,
     "tags": [
       "chimeras_keep",
-      "no_obelisks"
+      "no_obelisks",
+      "no_spawner"
     ]
   },
   {
@@ -5659,7 +5677,8 @@
     "tags": [
       "chimeras_keep",
       "no_obelisks",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -6046,7 +6065,8 @@
     "tags": [
       "poisoned_fields",
       "obelisk",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -6885,7 +6905,8 @@
     "tags": [
       "haunted_cemetery",
       "obelisk",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -8415,7 +8436,8 @@
     "tags": [
       "plague_fiend",
       "no_obelisks",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {
@@ -11530,7 +11552,8 @@
     "tags": [
       "yeti",
       "no_obelisks",
-      "skipped_local"
+      "skipped_local",
+      "no_spawner"
     ]
   },
   {

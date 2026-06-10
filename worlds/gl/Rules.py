@@ -2,18 +2,25 @@ import typing
 
 from worlds.generic.Rules import add_rule, forbid_item
 
-from .Data import difficulty_lambda, level_locations, obelisks, boss_regions, excluded_levels
+from .Data import difficulty_lambda, level_locations, obelisks, boss_regions, excluded_levels, spawner_trap_ids
+from .Items import items_by_id
 from .Locations import get_locations_by_tags
 from .Options import Goal
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
 
+
 def set_rules(world: "GauntletLegendsWorld"):
     for location in get_locations_by_tags("no_obelisks") + (get_locations_by_tags("obelisk") if world.options.obelisks else []):
         for item in obelisks:
             if location.name not in world.disabled_locations:
                 forbid_item(world.get_location(location.name), item, world.player)
+
+    for location in get_locations_by_tags("no_spawner"):
+        for item in spawner_trap_ids:
+            if location.name not in world.disabled_locations:
+                forbid_item(world.get_location(location.name), items_by_id[item].item_name, world.player)
 
     if not world.options.instant_max:
         for level_id, locations in level_locations.items():
