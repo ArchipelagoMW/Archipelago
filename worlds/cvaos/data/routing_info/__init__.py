@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-import csv
 import logging
 import re
 from enum import IntFlag, auto
-from pathlib import Path
 from typing import Iterable
 
 from ..._pydantic_compat import BaseModel
+from .._csv_resources import open_csv, open_csv_if_exists
 
 __all__ = [
     "AbilityCombo",
@@ -208,33 +207,30 @@ class TransdoorConnection(BaseModel):
 
 
 def _load_transdoor_connections() -> tuple[TransdoorConnection, ...]:
-    csv_path = Path(__file__).with_name("default_transdoor_entrance_connections.csv")
-    with csv_path.open("r", encoding="utf-8", newline="") as handle:
-        out: list[TransdoorConnection] = []
-        for row in csv.DictReader(handle):
-            if not any((v or "").strip() for v in row.values()):
-                continue
-            out.append(TransdoorConnection(
-                from_entrance=row["from_entrance"].strip(),
-                to_entrance=row["to_entrance"].strip(),
-            ))
+    out: list[TransdoorConnection] = []
+    for row in open_csv(__name__, "default_transdoor_entrance_connections.csv"):
+        if not any((v or "").strip() for v in row.values()):
+            continue
+        out.append(TransdoorConnection(
+            from_entrance=row["from_entrance"].strip(),
+            to_entrance=row["to_entrance"].strip(),
+        ))
 
     # Apply overrides: rows with does_exist=FALSE are removed, rows with
     # is_override=TRUE are added in their place.
-    override_path = Path(__file__).with_name("override_transdoor_entrance_connections.csv")
-    if override_path.exists():
+    override_reader = open_csv_if_exists(__name__, "override_transdoor_entrance_connections.csv")
+    if override_reader is not None:
         removals: set[tuple[str, str]] = set()
         additions: list[TransdoorConnection] = []
-        with override_path.open("r", encoding="utf-8", newline="") as handle:
-            for row in csv.DictReader(handle):
-                if not any((v or "").strip() for v in row.values()):
-                    continue
-                from_e = row["from_entrance"].strip()
-                to_e = row["to_entrance"].strip()
-                if not _truthy(row.get("does_exist")):
-                    removals.add((from_e, to_e))
-                if _truthy(row.get("is_override")):
-                    additions.append(TransdoorConnection(from_entrance=from_e, to_entrance=to_e))
+        for row in override_reader:
+            if not any((v or "").strip() for v in row.values()):
+                continue
+            from_e = row["from_entrance"].strip()
+            to_e = row["to_entrance"].strip()
+            if not _truthy(row.get("does_exist")):
+                removals.add((from_e, to_e))
+            if _truthy(row.get("is_override")):
+                additions.append(TransdoorConnection(from_entrance=from_e, to_entrance=to_e))
         out = [c for c in out if (c.from_entrance, c.to_entrance) not in removals]
         out.extend(additions)
 
@@ -389,16 +385,14 @@ class RoutingInfo(BaseModel):
 
 
 def _load() -> tuple[RoutingInfo, ...]:
-    csv_path = Path(__file__).with_name("entrance_to_entrance_requirements.csv")
-    with csv_path.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        ability_headers, combo_headers = _ability_and_combo_headers(reader.fieldnames or [])
+    reader = open_csv(__name__, "entrance_to_entrance_requirements.csv")
+    ability_headers, combo_headers = _ability_and_combo_headers(reader.fieldnames or [])
 
-        out: list[RoutingInfo] = []
-        for row in reader:
-            if not any((v or "").strip() for v in row.values()):
-                continue
-            out.append(RoutingInfo.from_row(row, ability_headers, combo_headers))
+    out: list[RoutingInfo] = []
+    for row in reader:
+        if not any((v or "").strip() for v in row.values()):
+            continue
+        out.append(RoutingInfo.from_row(row, ability_headers, combo_headers))
 
     return tuple(out)
 
@@ -483,32 +477,30 @@ class EntranceToPickupRegionInfo(BaseModel):
 
 
 def _load_pickup_region_requirements() -> tuple[EntranceToPickupRegionInfo, ...]:
-    csv_path = Path(__file__).with_name("symmetric_entrance_to_pickup_region_requirements.csv")
-    with csv_path.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        ability_headers, combo_headers = _ability_and_combo_headers(reader.fieldnames or [])
+    reader = open_csv(__name__, "symmetric_entrance_to_pickup_region_requirements.csv")
+    ability_headers, combo_headers = _ability_and_combo_headers(reader.fieldnames or [])
 
-        seen_keys: set[tuple[str, int]] = set()
-        out: list[EntranceToPickupRegionInfo] = []
-        for row in reader:
-            if not any((v or "").strip() for v in row.values()):
+    seen_keys: set[tuple[str, int]] = set()
+    out: list[EntranceToPickupRegionInfo] = []
+    for row in reader:
+        if not any((v or "").strip() for v in row.values()):
+            continue
+
+        room_id = row.get("Room", "").strip()
+        entrances = _entrance_identifiers_from_cell(room_id, row.get("dest_room_identifier"))
+        if not entrances:
+            raise ValueError(f"No entrance identifiers resolved for pickup_number {row.get('pickup_number')} in room {room_id!r}")
+
+        for entrance_identifier in sorted(entrances):
+            key = (entrance_identifier, int(row["pickup_number"]))
+            if key in seen_keys:
                 continue
-
-            room_id = row.get("Room", "").strip()
-            entrances = _entrance_identifiers_from_cell(room_id, row.get("dest_room_identifier"))
-            if not entrances:
-                raise ValueError(f"No entrance identifiers resolved for pickup_number {row.get('pickup_number')} in room {room_id!r}")
-
-            for entrance_identifier in sorted(entrances):
-                key = (entrance_identifier, int(row["pickup_number"]))
-                if key in seen_keys:
-                    continue
-                seen_keys.add(key)
-                out.append(
-                    EntranceToPickupRegionInfo.from_row(
-                        row, ability_headers, combo_headers, entrance_identifier
-                    )
+            seen_keys.add(key)
+            out.append(
+                EntranceToPickupRegionInfo.from_row(
+                    row, ability_headers, combo_headers, entrance_identifier
                 )
+            )
 
     return tuple(out)
 
@@ -617,37 +609,35 @@ class EntranceToEnemyRegionInfo(BaseModel):
 
 
 def _load_enemy_region_requirements() -> tuple[EntranceToEnemyRegionInfo, ...]:
-    csv_path = Path(__file__).with_name("symmetric_entrance_to_enemy_region_requirements.csv")
     skipped_unresolved = 0
-    with csv_path.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        ability_headers, combo_headers = _ability_and_combo_headers(reader.fieldnames or [])
+    reader = open_csv(__name__, "symmetric_entrance_to_enemy_region_requirements.csv")
+    ability_headers, combo_headers = _ability_and_combo_headers(reader.fieldnames or [])
 
-        seen_keys: set[tuple[str, int]] = set()
-        out: list[EntranceToEnemyRegionInfo] = []
-        for row in reader:
-            if not any((v or "").strip() for v in row.values()):
+    seen_keys: set[tuple[str, int]] = set()
+    out: list[EntranceToEnemyRegionInfo] = []
+    for row in reader:
+        if not any((v or "").strip() for v in row.values()):
+            continue
+
+        room_id = (row.get("room_id") or "").strip()
+        entrances = _entrance_identifiers_from_cell(room_id, row.get("dest_room_identifier"))
+        if not entrances:
+            # Unlike pickups (which raise), enemy rows are bulk data; a blank or
+            # unresolved dest_room_identifier just means we can't place this instance
+            # in the region graph, so skip it.
+            skipped_unresolved += 1
+            continue
+
+        for entrance_identifier in sorted(entrances):
+            key = (entrance_identifier, int(row["enemy_number"]))
+            if key in seen_keys:
                 continue
-
-            room_id = (row.get("room_id") or "").strip()
-            entrances = _entrance_identifiers_from_cell(room_id, row.get("dest_room_identifier"))
-            if not entrances:
-                # Unlike pickups (which raise), enemy rows are bulk data; a blank or
-                # unresolved dest_room_identifier just means we can't place this instance
-                # in the region graph, so skip it.
-                skipped_unresolved += 1
-                continue
-
-            for entrance_identifier in sorted(entrances):
-                key = (entrance_identifier, int(row["enemy_number"]))
-                if key in seen_keys:
-                    continue
-                seen_keys.add(key)
-                out.append(
-                    EntranceToEnemyRegionInfo.from_row(
-                        row, ability_headers, combo_headers, entrance_identifier
-                    )
+            seen_keys.add(key)
+            out.append(
+                EntranceToEnemyRegionInfo.from_row(
+                    row, ability_headers, combo_headers, entrance_identifier
                 )
+            )
 
     if skipped_unresolved:
         logging.info(

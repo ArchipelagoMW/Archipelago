@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import csv
-from pathlib import Path
-
 from ..._pydantic_compat import BaseModel, parse_obj_as, validator
+from .._csv_resources import open_csv
 from ..parse_int import parse_hex
 
 __all__ = [
@@ -130,14 +128,12 @@ class EntranceInfo(BaseModel):
 
 
 def _load() -> tuple[EntranceInfo, ...]:
-    csv_path = Path(__file__).with_name("entrance_info.csv")
-    with csv_path.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        cleaned = [
-            row
-            for row in reader
-            if any((v or "").strip() for v in row.values())
-        ]
+    reader = open_csv(__name__, "entrance_info.csv")
+    cleaned = [
+        row
+        for row in reader
+        if any((v or "").strip() for v in row.values())
+    ]
 
     # Track how many times we've seen each door_identifier
     # Only the 2nd+ occurrence gets the suffix

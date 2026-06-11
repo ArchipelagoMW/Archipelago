@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import csv
-from pathlib import Path
-
 from ..._pydantic_compat import BaseModel, parse_obj_as, validator
+from .._csv_resources import open_csv
 from ..parse_int import parse_hex
 
 __all__ = [
@@ -109,21 +107,19 @@ class PickupInfo(BaseModel):
         return find(key)
 
 
-def _load_csv(path: Path) -> list[dict[str, str]]:
-    with path.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        rows = []
-        for row in reader:
-            # Skip completely empty lines
-            if not any((v or "").strip() for v in row.values()):
-                continue
-            rows.append(row)
-        return rows
+def _load_csv(filename: str) -> list[dict[str, str]]:
+    rows = []
+    for row in open_csv(__name__, filename):
+        # Skip completely empty lines
+        if not any((v or "").strip() for v in row.values()):
+            continue
+        rows.append(row)
+    return rows
 
 
 def _merge_rows() -> list[PickupInfo]:
-    ident_rows = _load_csv(Path(__file__).with_name("pickup_identifiers.csv"))
-    room_rows = _load_csv(Path(__file__).with_name("pickup_rooms.csv"))
+    ident_rows = _load_csv("pickup_identifiers.csv")
+    room_rows = _load_csv("pickup_rooms.csv")
 
     by_pickup_number_ident = {int(r["pickup_number"]): r for r in ident_rows}
     by_pickup_number_room = {int(r["pickup_number"]): r for r in room_rows}

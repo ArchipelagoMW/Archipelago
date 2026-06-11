@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import csv
-from pathlib import Path
-
 from ..._pydantic_compat import BaseModel, parse_obj_as
+from .._csv_resources import open_csv
 
 __all__ = [
     "ItemInfo",
@@ -55,38 +53,32 @@ def _parse_bool(value: str | None) -> bool:
 
 
 def _load() -> list[ItemInfo]:
-    csv_path = Path(__file__).with_name("item_info.csv")
-    importance_path = Path(__file__).with_name("item_importance.csv")
-
-    with importance_path.open("r", encoding="utf-8", newline="") as handle:
-        importance_rows = {
-            row["name"]: row
-            for row in csv.DictReader(handle)
-            if any((v or "").strip() for v in row.values())
-        }
+    importance_rows = {
+        row["name"]: row
+        for row in open_csv(__name__, "item_importance.csv")
+        if any((v or "").strip() for v in row.values())
+    }
 
     merged: list[dict] = []
-    with csv_path.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        for row in reader:
-            if not any((v or "").strip() for v in row.values()):
-                continue
+    for row in open_csv(__name__, "item_info.csv"):
+        if not any((v or "").strip() for v in row.values()):
+            continue
 
-            importance = importance_rows.get(row["name"])
-            if importance is None:
-                raise ValueError(f"item_importance.csv missing entry for item '{row['name']}'")
+        importance = importance_rows.get(row["name"])
+        if importance is None:
+            raise ValueError(f"item_importance.csv missing entry for item '{row['name']}'")
 
-            merged.append(
-                {
-                    "item_category": row["item_category"],
-                    "id": int(row["id"]),
-                    "name": row["name"],
-                    "item_number": int(importance["item_number"]),
-                    "progression": _parse_bool(importance.get("progression")),
-                    "useful": _parse_bool(importance.get("useful")),
-                    "filler": _parse_bool(importance.get("filler")),
-                }
-            )
+        merged.append(
+            {
+                "item_category": row["item_category"],
+                "id": int(row["id"]),
+                "name": row["name"],
+                "item_number": int(importance["item_number"]),
+                "progression": _parse_bool(importance.get("progression")),
+                "useful": _parse_bool(importance.get("useful")),
+                "filler": _parse_bool(importance.get("filler")),
+            }
+        )
 
     return parse_obj_as(list[ItemInfo], merged)
 
