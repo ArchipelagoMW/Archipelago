@@ -7,8 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from bytemaker.bittypes import SInt16, UInt8, UInt16
-from bytemaker.conversions.aggregate_types import from_bytes_aggregate, to_bytes_aggregate
+from .._bytemaker_compat import SInt16, UInt8, UInt16, from_bytes_aggregate, to_bytes_aggregate
 
 # Byte sizes of each struct, for the read that precedes a parse.
 VITALS_SIZE = 8

@@ -1,1 +1,2 @@
 pydantic>=2.6.0
+bytemaker>=0.11.0
