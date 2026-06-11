@@ -2,11 +2,9 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
-from typing import Annotated
 
+from ..._pydantic_compat import BaseModel, parse_obj_as, validator
 from ..parse_int import parse_hex
-
-from pydantic import BaseModel, BeforeValidator, ConfigDict, TypeAdapter
 
 __all__ = [
     "RoomInfo",
@@ -14,12 +12,16 @@ __all__ = [
 ]
 
 class RoomInfo(BaseModel):
-    model_config = ConfigDict(extra="allow", frozen=True)
+    class Config:
+        extra = "allow"
+        frozen = True
 
     room_number: int
     room_identifier: str
-    room_address: Annotated[int, BeforeValidator(parse_hex)]
+    room_address: int
     room_index: int
+
+    _parse_hex_addresses = validator("room_address", pre=True, allow_reuse=True)(parse_hex)
 
     def _as_tuple(self) -> tuple[int, str, int, int]:
         return (self.room_number, self.room_identifier, self.room_address, self.room_index)
@@ -94,7 +96,7 @@ def _load_room_info(ident_index: dict[str, dict]) -> list[RoomInfo]:
             }
             merged_rows.append(merged)
 
-    return TypeAdapter(list[RoomInfo]).validate_python(merged_rows)
+    return parse_obj_as(list[RoomInfo], merged_rows)
 
 
 _ident_index = _load_identifiers()

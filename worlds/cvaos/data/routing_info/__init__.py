@@ -7,7 +7,7 @@ from enum import IntFlag, auto
 from pathlib import Path
 from typing import Iterable
 
-from pydantic import BaseModel, ConfigDict
+from ..._pydantic_compat import BaseModel
 
 __all__ = [
     "AbilityCombo",
@@ -200,7 +200,8 @@ class TransdoorConnection(BaseModel):
     :param to_entrance: Entrance node on the opposite side of the same door.
     """
 
-    model_config = ConfigDict(frozen=True)
+    class Config:
+        frozen = True
 
     from_entrance: str
     to_entrance: str
@@ -304,7 +305,9 @@ def _requirement_bitmasks_from(
 
 
 class RoutingInfo(BaseModel):
-    model_config = ConfigDict(extra="allow", frozen=True)
+    class Config:
+        extra = "allow"
+        frozen = True
 
     connection_number: int
     room_id: str
@@ -419,7 +422,9 @@ class EntranceToPickupRegionInfo(BaseModel):
     and returning from it.
     """
 
-    model_config = ConfigDict(extra="allow", frozen=True)
+    class Config:
+        extra = "allow"
+        frozen = True
 
     pickup_number: int
     pickup_room: str
@@ -552,7 +557,9 @@ class EntranceToEnemyRegionInfo(BaseModel):
     90D and 90E), so use ``enemy_number`` to identify a single instance.
     """
 
-    model_config = ConfigDict(extra="allow", frozen=True)
+    class Config:
+        extra = "allow"
+        frozen = True
 
     enemy_number: int
     enemy_room: str

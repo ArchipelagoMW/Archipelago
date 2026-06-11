@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
-from pydantic import BaseModel, TypeAdapter
+
+from ..._pydantic_compat import BaseModel, parse_obj_as
 
 __all__ = [
     "ItemInfo",
@@ -87,7 +88,7 @@ def _load() -> list[ItemInfo]:
                 }
             )
 
-    return TypeAdapter(list[ItemInfo]).validate_python(merged)
+    return parse_obj_as(list[ItemInfo], merged)
 
 
 rows: tuple[ItemInfo, ...] = tuple(_load())

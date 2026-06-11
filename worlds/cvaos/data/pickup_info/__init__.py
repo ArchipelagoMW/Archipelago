@@ -2,11 +2,9 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
-from typing import Annotated
 
+from ..._pydantic_compat import BaseModel, parse_obj_as, validator
 from ..parse_int import parse_hex
-
-from pydantic import BaseModel, BeforeValidator, TypeAdapter
 
 __all__ = [
     "PickupInfo",
@@ -15,7 +13,7 @@ __all__ = [
 
 class PickupInfo(BaseModel):
     pickup_number: int
-    ptr_address: Annotated[int, BeforeValidator(parse_hex)]
+    ptr_address: int
     simple_name: str
     specifier: str | None = None
     flag_offset: int
@@ -24,10 +22,12 @@ class PickupInfo(BaseModel):
     type_name: str
     subtype_num: int
     room_identifier: str
-    room_address: Annotated[int, BeforeValidator(parse_hex)]
+    room_address: int
     pickup_number_within_room: int
     x: int
     y: int
+
+    _parse_hex_addresses = validator("ptr_address", "room_address", pre=True, allow_reuse=True)(parse_hex)
 
     def _as_tuple(
         self,
@@ -165,7 +165,7 @@ def _merge_rows() -> list[PickupInfo]:
             }
         )
 
-    return TypeAdapter(list[PickupInfo]).validate_python(merged)
+    return parse_obj_as(list[PickupInfo], merged)
 
 
 rows: tuple[PickupInfo, ...] = tuple(_merge_rows())

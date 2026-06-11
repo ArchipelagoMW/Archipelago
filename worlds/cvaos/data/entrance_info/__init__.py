@@ -2,11 +2,9 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
-from typing import Annotated
 
+from ..._pydantic_compat import BaseModel, parse_obj_as, validator
 from ..parse_int import parse_hex
-
-from pydantic import BaseModel, BeforeValidator, TypeAdapter
 
 __all__ = [
     "EntranceInfo",
@@ -51,7 +49,7 @@ class EntranceInfo(BaseModel):
     Example: "003", "002", "005"
     """
 
-    door_address: Annotated[int, BeforeValidator(parse_hex)]
+    door_address: int
     """Memory address of the door data structure in the game ROM.
 
     Example: 0x0850EF8C, 0x0850F00C
@@ -63,7 +61,7 @@ class EntranceInfo(BaseModel):
     Example: 0, 1, 2, 3
     """
 
-    room_address: Annotated[int, BeforeValidator(parse_hex)]
+    room_address: int
     """Memory address of the source room data structure in the game ROM.
 
     Example: 0x0850EF9C, 0x0850F01C
@@ -76,7 +74,7 @@ class EntranceInfo(BaseModel):
     Example: 0 (first door in room), 1 (second door), 2 (third door)
     """
 
-    dest_room_address: Annotated[int, BeforeValidator(parse_hex)]
+    dest_room_address: int
     """Memory address of the destination room data structure in the game ROM.
 
     Example: 0x0850F15C, 0x0850F0B4
@@ -113,6 +111,10 @@ class EntranceInfo(BaseModel):
     dest_y_offset_door: int
     """Y-coordinate offset applied to the spawn position in the destination room.
     """
+
+    _parse_hex_addresses = validator(
+        "door_address", "room_address", "dest_room_address", pre=True, allow_reuse=True
+    )(parse_hex)
 
     @property
     def key(self) -> str:
@@ -159,7 +161,7 @@ def _load() -> tuple[EntranceInfo, ...]:
 
         del row["door_identifier"]
 
-    return tuple(TypeAdapter(list[EntranceInfo]).validate_python(cleaned))
+    return tuple(parse_obj_as(list[EntranceInfo], cleaned))
 
 
 rows: tuple[EntranceInfo, ...] = _load()
