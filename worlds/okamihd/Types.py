@@ -85,6 +85,8 @@ class LocalItem(NamedTuple):
     items:List[str]
     allowed_regions: List[RegionNames]
     is_biteable: bool
+    # For debug; name of the prefill phase. Will default to the first item name if set to None.
+    prefill_name:str|None = None
     exclude_locations: List[str] = []
     additional_locations: List[str] = []
     # Is this a "bitable" item ? (will exclude location types that directly put the item in the players inventory)

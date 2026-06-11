@@ -74,12 +74,6 @@ def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
     return precollected_items
 
 
-def get_local_items_name() -> List[str]:
-    local_items_names:List[str] = []
-    for l in local_items:
-        local_items_names += l.items
-    return local_items_names
-
 
 brush_techniques_items = {
     # Brush Techniques — item codes = 0x100 + game bitfield index (from BrushOverlay enum)
@@ -352,7 +346,7 @@ junk_weights = {
     "Jade Tassels": 1,
 }
 
-local_items = [
+global_local_items = [
     LocalItem(["Vista of the Gods"],
               [RegionNames.KAMIKI_VILLAGE, RegionNames.KAMIKI_ISLANDS, RegionNames.KUSHIS_HOUSE,
                RegionNames.ORANGES_HOUSE],
@@ -362,28 +356,30 @@ local_items = [
               [RegionNames.AGATA_COMMON_LOGIC, RegionNames.AGATA_FOREST],
               is_biteable=True
               ),
-    LocalItem(["Mask"], [RegionNames.CALCIFIED_CAVERN], is_biteable=False,exclude_locations=["Calcified Cavern - Freestanding item"]),
-    LocalItem(["Ogre Liver",
-               "Ice Lips",
-               "Fire Eye",
-               "Black Demon Horn"], [RegionNames.MOON_CAVE,
-                                     RegionNames.MOON_CAVE_1F_LOCKED_CAVE,
-                                     RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK,
-                                     RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
-                                     RegionNames.MOON_CAVE_3F,
-                                     RegionNames.MOON_CAVE_B1F_LAKE,
-                                     RegionNames.MOON_CAVE_B1F_UNDER_LIFT,
-                                     RegionNames.MOON_CAVE_B2F_LIFT,
-                                     RegionNames.MOON_CAVE_B2F_FROZEN_STATUE,
-                                     RegionNames.MOON_CAVE_B2F_OTHER_LIFT,
-                                     RegionNames.MOON_CAVE_B2F_BOMBABLE,
-                                     RegionNames.MOON_CAVE_KITCHEN_BACK,
-                                     RegionNames.MOON_CAVE_3F_FIRE_EYE,
-                                     RegionNames.MOON_CAVE_3F_SAND,
-                                     RegionNames.MOON_CAVE_2F_SAND_PIT,
-                                     RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND,
-                                     RegionNames.MOON_CAVE_2F_RAFTERS_CHEST,
-                                     RegionNames.MOON_CAVE_4F_RAFTERS,
-                                     RegionNames.MOON_CAVE_4F_CANON,
-                                     RegionNames.MOON_CAVE_4F_AFTER_CANON], is_biteable=False)
+    LocalItem(["Mask"], [RegionNames.CALCIFIED_CAVERN], is_biteable=False,
+              exclude_locations=["Calcified Cavern - Freestanding item"]),
 ]
+soup_ingredient_local_items = LocalItem(["Ogre Liver",
+                                         "Ice Lips",
+                                         "Fire Eye",
+                                         "Black Demon Horn"], [RegionNames.MOON_CAVE,
+                                                               RegionNames.MOON_CAVE_1F_LOCKED_CAVE,
+                                                               RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK,
+                                                               RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
+                                                               RegionNames.MOON_CAVE_3F,
+                                                               RegionNames.MOON_CAVE_B1F_LAKE,
+                                                               RegionNames.MOON_CAVE_B1F_UNDER_LIFT,
+                                                               RegionNames.MOON_CAVE_B2F_LIFT,
+                                                               RegionNames.MOON_CAVE_B2F_FROZEN_STATUE,
+                                                               RegionNames.MOON_CAVE_B2F_OTHER_LIFT,
+                                                               RegionNames.MOON_CAVE_B2F_BOMBABLE,
+                                                               RegionNames.MOON_CAVE_KITCHEN_BACK,
+                                                               RegionNames.MOON_CAVE_3F_FIRE_EYE,
+                                                               RegionNames.MOON_CAVE_3F_SAND,
+                                                               RegionNames.MOON_CAVE_2F_SAND_PIT,
+                                                               RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND,
+                                                               RegionNames.MOON_CAVE_2F_RAFTERS_CHEST,
+                                                               RegionNames.MOON_CAVE_4F_RAFTERS,
+                                                               RegionNames.MOON_CAVE_4F_CANON,
+                                                               RegionNames.MOON_CAVE_4F_AFTER_CANON], is_biteable=False,
+                                        prefill_name="Soup Ingredients")
