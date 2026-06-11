@@ -1,4 +1,4 @@
-from BaseClasses import Region, Location, ItemClassification
+from BaseClasses import Region, Location, ItemClassification, LocationProgressType
 from .Enums.LocationType import LocationType
 from .Rules import apply_event_or_location_rules
 from .Types import LocData, OkamiLocation, OkamiItem, resolve_option_callable, EventData
@@ -83,15 +83,31 @@ def create_event(location_name: str, item_name: str, code: int | None, region: R
 # Remember to update me when adding locations that aren't always randomized.
 def get_total_locations(world: "OkamiWorld") -> int:
     location_count = 0
+    event_item_location_count = 0
     for _, region_locations in okami_locations.items():
         location_count += len(region_locations)
     for region_key, region_events in okami_events.items():
         for _, event_data in region_events.items():
             if resolve_option_callable(event_data.is_event_item, world):
                 location_count += 1
+                event_item_location_count += 1
     # Count shop locations if RandomizeShops is enabled
     if world.options.RandomizeShops:
         shop_slots = world.options.ShopSlots.value
         num_shops = len(okami_shop_locations)  # Number of regions with shops
         location_count += num_shops * shop_slots
     return location_count
+
+
+def get_unfilled_locations_count(world: "OkamiWorld"):
+    count = 0
+    count_events = 0
+    count_excluded = 0
+    for l in world.get_locations():
+        if l.item is None and l.progress_type != LocationProgressType.EXCLUDED:
+            count += 1
+        elif l.item is not None:
+            count_events += 1
+        else:
+            count_excluded += 1
+    return count + count_excluded
