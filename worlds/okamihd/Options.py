@@ -133,6 +133,10 @@ class ShopSlots(Range):
     range_end = 12
     default = 6
 
+class IngredientsInMoonCave(Toggle):
+    """Place the 4 ingredients for Orochi's Soup in Moon Cave"""
+    display_name="Randomize Ingredients in Moon Cave"
+    default = 1
 
 #
 # class PraiseSanity(Choice):
@@ -161,6 +165,7 @@ class OkamiOptions(PerGameCommonOptions):
     CanineRewards: CanineRewards
     MoonCaveAccess: MoonCaveAccess
     BloomGuardianSaplings: BloomGuardianSaplings
+    IngredientsInMoonCave:IngredientsInMoonCave
 
 
 #    PraiseSanity:PraiseSanity
@@ -186,7 +191,8 @@ okami_option_groups: Dict[str, List[Any]] = {
     "Orochi Arc Options": [
         RequiredDoggorbs,
         CanineRewards,
-        MoonCaveAccess
+        MoonCaveAccess,
+        IngredientsInMoonCave
     ]
 
 }
@@ -204,6 +210,7 @@ slot_data_options = {
     "RequiredDoggorbs",
     "CanineRewards",
     "MoonCaveAccess",
-    "BloomGuardianSaplings"
+    "BloomGuardianSaplings",
+    "IngredientsInMoonCave"
     #    "PraiseSanity"
 }

@@ -32,7 +32,7 @@ exits = {
         ExitData(RegionNames.MOON_CAVE_OROCHI,
                  required_items_events=["Moon Cave - 1F Give all ingredients to Ajimi"]),
         ExitData(RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
-                 required_items_events=["Ogre Liver"],
+                 required_items_events=["Moon Cave - 1F Blue Flower to 2F accessible"],
                  loading_screen=False, one_way=True),
         ExitData(RegionNames.MOON_CAVE_B1F_UNDER_LIFT, loading_screen=False, one_way=True,
                  required_items_events=["Moon Cave - B1F Lake open valve"]),
@@ -131,7 +131,7 @@ events = {
         "Moon Cave - 1F Melt Kitchen Ice from front": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
                                                                 event_item_name="Moon Cave - 1F Melt Kitchen Ice"),
         "Moon Cave - 1F Blue Flower to 2F accessible": EventData(
-            special_rule=HasGroup("soup_ingredients", count=2)),
+            required_items_events=["Moon Cave - Mandatory Ogre Encounter"]),
         "Moon Cave - 1F Give all ingredients to Ajimi": EventData(
             special_rule=HasGroup("soup_ingredients", count=4))
     },
@@ -141,12 +141,11 @@ events = {
         "Moon Cave - 1F Locked Cave open eye door": EventData(power_slash_level=1, required_items_events=[
             "Moon Cave - Cross 1F Locked Cave"]),
         "Moon Cave - 1F Locked Cave geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],
-                                                       required_items_events=["Ogre Liver"]),
+                                                       required_items_events=["Moon Cave - Mandatory Ogre Encounter"]),
     },
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK: {
         "Moon Cave - Mandatory Ogre Encounter": EventData(
             mandatory_enemies=[OkamiEnemies.RED_IMP, OkamiEnemies.BUD_OGRE]),
-        "Moon Cave - Get Ogre Liver": EventData(event_item_name="Ogre Liver",required_items_events=["Moon Cave - Mandatory Ogre Encounter"])
     },
     RegionNames.MOON_CAVE_2F_GEYSER_RAFTER: {
         "Moon cave - 2F rafter's geyser": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT])
@@ -155,6 +154,7 @@ events = {
         "Moon Cave - 3F repair Bridge": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION]),
         "Moon Cave - 3F Melt Ice block after bridge": EventData(required_brush_techniques=[BrushTechniques.INFERNO],
                                                                 required_items_events=["Moon Cave - 3F repair Bridge"]),
+        # FIXME: Pretty sure this is wrong and you don't need to do the torii to grab the key
         "Moon Cave - 3F Open door to Sand room": EventData(
             required_items_events=["Moon Cave - 3F Cursed Fire Eye Torii"])
     },
@@ -187,8 +187,7 @@ events = {
     RegionNames.MOON_CAVE_KITCHEN_BACK: {
         "Moon Cave - 1F Disrupt lift in kitchen back": EventData(power_slash_level=1),
         "Moon Cave - 1F Cursed Door in kitchen back": EventData(mandatory_enemies=[OkamiEnemies.ICE_LIPS]),
-        "Moon Cave - 1F Get Ice Lips": EventData(required_items_events=["Moon Cave - 1F Cursed Door in kitchen back"],
-                                                 event_item_name="Ice Lips"),
+
         # Can be done from the other way too;
         "Moon Cave - 1F Melt kitchen Ice form behind": EventData(
             required_brush_techniques=[BrushTechniques.INFERNO], event_item_name="Moon Cave - 1F Melt Kitchen Ice")
@@ -196,8 +195,7 @@ events = {
     RegionNames.MOON_CAVE_3F_FIRE_EYE: {
         "Moon Cave - 3F Cursed Fire Eye Torii": EventData(
             mandatory_enemies=[OkamiEnemies.FIRE_EYE, OkamiEnemies.ICE_LIPS]),
-        "Moon Cave - 3F Get Fire Eye": EventData(required_items_events=["Moon Cave - 3F Cursed Fire Eye Torii"],
-                                                 event_item_name="Fire Eye")
+
     },
     RegionNames.MOON_CAVE_3F_SAND: {
         # Lights the fireball torches in this dungeon
@@ -221,10 +219,10 @@ events = {
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Move Fireball": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
         "Moon Cave - 4F Melt Ice Blocks": EventData(special_rule=moon_cave_4f_fire_rule),
-        "Moon Cave - 4F Black Demon Horn Torii": EventData(mandatory_enemies=[OkamiEnemies.BLACK_IMP,OkamiEnemies.RED_IMP],
-                                                           required_items_events=["Moon Cave - 4F Melt Ice Blocks"]),
-        "Moon Cave - 4F Get Black Demon Horn": EventData(
-            required_items_events=["Moon Cave - 4F Black Demon Horn Torii"], event_item_name="Black Demon Horn")
+        "Moon Cave - 4F Black Demon Horn Torii": EventData(
+            mandatory_enemies=[OkamiEnemies.BLACK_IMP, OkamiEnemies.RED_IMP],
+            required_items_events=["Moon Cave - 4F Melt Ice Blocks"]),
+
     },
     RegionNames.MOON_CAVE_OROCHI: {
         "Moon Cave - Defeat Orochi": EventData(mandatory_enemies=[OkamiEnemies.OROCHI_1],
@@ -239,24 +237,38 @@ locations = {
                                                                 required_items_events=[
                                                                     "Moon Cave - 1F Free Ajimi from soup"]),
         "Moon Cave - 1F Frozen Chest after Black Demon Horn": LocData(container_check_id(MapIds.MOON_CAVE, 7),
-                                                                   type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE, special_rule=moon_cave_fire_rule,required_items_events=["Black Demon Horn"]),
+                                                                      type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
+                                                                      special_rule=moon_cave_fire_rule,
+                                                                      required_items_events=[
+                                                                          "Moon Cave - 4F Black Demon Horn Torii"]),
         "Moon Cave - 1F Chest after fire eye": LocData(container_check_id(MapIds.MOON_CAVE, 8),
-                                                       required_items_events=["Fire Eye"]),
+                                                       required_items_events=["Moon Cave - 3F Cursed Fire Eye Torii"]),
     },
     RegionNames.MOON_CAVE_B1F_LAKE: {
         "Moon Cave - B1F Chest on other side of Lake": LocData(container_check_id(MapIds.MOON_CAVE, 13),
                                                                needs_long_swim=True),
-        "Moon Cave - B1F Chest behind ice": LocData(container_check_id(MapIds.MOON_CAVE, 14),needs_long_swim=True, special_rule=moon_cave_fire_rule)
+        "Moon Cave - B1F Chest behind ice": LocData(container_check_id(MapIds.MOON_CAVE, 14), needs_long_swim=True,
+                                                    special_rule=moon_cave_fire_rule)
     },
     RegionNames.MOON_CAVE_1F_LOCKED_CAVE: {
         "Moon Cave - 1F locked cave Treasure bud behind bombable wall": LocData(
             container_check_id(MapIds.MOON_CAVE, 10), type=LocationType.TREASURE_BUD)
     },
+    RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK: {
+        "Moon Cave - Ogre Liver Chest": LocData(container_check_id(MapIds.MOON_CAVE, 0),
+                                                required_items_events=["Moon Cave - Mandatory Ogre Encounter"])
+
+    },
     RegionNames.MOON_CAVE_B2F_LIFT: {
         "Moon Cave - B2F Chest on ledge near eyes door": LocData(container_check_id(MapIds.MOON_CAVE, 15))
     },
+    RegionNames.MOON_CAVE_KITCHEN_BACK: {
+        "Moon Cave - Ice Lips Chest": LocData(container_check_id(MapIds.MOON_CAVE, 2),
+                                              required_items_events=["Moon Cave - 1F Cursed Door in kitchen back"]),
+    },
     RegionNames.MOON_CAVE_B2F_FROZEN_STATUE: {
-        "Moon Cave - Moegami": LocData(brush_check_id(10), type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED)  # bit 10
+        "Moon Cave - Moegami": LocData(brush_check_id(10), type=LocationType.CONSTELLATION,
+                                       progress_type=LocationProgressType.EXCLUDED)  # bit 10
     },
     RegionNames.MOON_CAVE_B2F_BOMBABLE: {
         "Moon Cave - B2F Chest behind bombable wall": LocData(container_check_id(MapIds.MOON_CAVE, 4))
@@ -286,6 +298,8 @@ locations = {
         "Moon Cave - 3F Right Frozen Chest after Fire eye room": LocData(container_check_id(MapIds.MOON_CAVE, 18),
                                                                          type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
                                                                          special_rule=moon_cave_fire_rule),
+        "Moon Cave - 3F Fire Eye Chest": LocData(container_check_id(MapIds.MOON_CAVE, 3),
+                                                 required_items_events=["Moon Cave - 3F Cursed Fire Eye Torii"])
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Lower ledge Frozen Chest": LocData(container_check_id(MapIds.MOON_CAVE, 20),
@@ -293,11 +307,15 @@ locations = {
                                                            special_rule=moon_cave_4f_fire_rule),
         "Moon Cave - 4F Upper ledge Frozen Chest": LocData(container_check_id(MapIds.MOON_CAVE, 21),
                                                            type=LocationType.FROZEN_CHEST_SPECIAL_SOURCE,
-                                                           special_rule=moon_cave_4f_fire_rule)
+                                                           special_rule=moon_cave_4f_fire_rule),
+        "Moon Cave - 4F Black Demon Horn Chest": LocData(container_check_id(MapIds.MOON_CAVE, 1),
+                                                         required_items_events=[
+                                                             "Moon Cave - 4F Black Demon Horn Torii"])
     },
-    RegionNames.MOON_CAVE_OROCHI:{
+    RegionNames.MOON_CAVE_OROCHI: {
         ## Cutscene
-        "Moon Cave - Orochi Reward":LocData(container_check_id(MapIds.MOON_CAVE,22),progress_type=LocationProgressType.EXCLUDED)
+        "Moon Cave - Orochi Reward": LocData(container_check_id(MapIds.MOON_CAVE, 22),
+                                             progress_type=LocationProgressType.EXCLUDED)
     }
 }
 
