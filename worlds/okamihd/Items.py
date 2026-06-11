@@ -1,7 +1,6 @@
 from BaseClasses import Item, ItemClassification
-from .CheckIds import world_state_check_id
-from .Enums.RegionNames import MapIds
-from .Types import OkamiItem, ItemData
+from .Enums.RegionNames import RegionNames
+from .Types import OkamiItem, ItemData, LocalItem
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.DivineInstruments import DivineInstruments
 from typing import List, Dict, TYPE_CHECKING
@@ -40,8 +39,8 @@ def create_junk_items(world: "OkamiWorld", count: int) -> List[Item]:
             junk_list[name] = junk_weights.get(name)
 
     for i in range(count):
-        junk_pool.append(
-            world.create_item(world.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0]))
+        item = world.create_item(world.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0])
+        junk_pool.append(item)
     return junk_pool
 
 
@@ -51,56 +50,58 @@ def get_item_name_to_id_dict() -> dict:
         item_dict[d.item_name] = d.code
     return item_dict
 
+
 def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
     # TODO: Refacto this
-    precollected_items :List[Item] =[]
+    precollected_items: List[Item] = []
 
     rejuvenation = brush_techniques_items[BrushTechniques.REJUVENATION.value]
-    precollected_items.append(create_item(BrushTechniques.REJUVENATION,rejuvenation.code,rejuvenation.classification,world))
+    precollected_items.append(
+        create_item(BrushTechniques.REJUVENATION, rejuvenation.code, rejuvenation.classification, world))
 
     # Temp while power slash tutorial requires this.
-    #power_slash = brush_techniques_items[BrushTechniques.POWER_SLASH.value]
-    #precollected_items.append(create_item(BrushTechniques.POWER_SLASH, power_slash.code, power_slash.classification, world))
+    # power_slash = brush_techniques_items[BrushTechniques.POWER_SLASH.value]
+    # precollected_items.append(create_item(BrushTechniques.POWER_SLASH, power_slash.code, power_slash.classification, world))
 
     astral_pouch = useful_items['Astral Pouch']
     precollected_items.append(create_item('Astral Pouch', astral_pouch.code, astral_pouch.classification, world))
 
     # We always start with Divine Retribution:
     divine_retribution = DivineInstruments.DIVINE_RETRIBUTION.value
-    precollected_items.append(create_item(divine_retribution.item_name, divine_retribution.code, ItemClassification.progression, world))
+    precollected_items.append(
+        create_item(divine_retribution.item_name, divine_retribution.code, ItemClassification.progression, world))
 
     return precollected_items
 
 
 
-
 brush_techniques_items = {
     # Brush Techniques — item codes = 0x100 + game bitfield index (from BrushOverlay enum)
-    BrushTechniques.GREENSPROUT_BLOOM.value: ItemData(0x104, ItemClassification.progression),       # bit 4
-    BrushTechniques.GREENSPROUT_WATERLILY.value: ItemData(0x105, ItemClassification.progression),    # bit 5
-    BrushTechniques.GALESTORM.value: ItemData(0x106, ItemClassification.progression),               # bit 6
-    BrushTechniques.THUNDERSTORM.value: ItemData(0x108, ItemClassification.progression),            # bit 8
-    BrushTechniques.INFERNO.value: ItemData(0x10A, ItemClassification.progression),                 # bit 10
+    BrushTechniques.GREENSPROUT_BLOOM.value: ItemData(0x104, ItemClassification.progression),  # bit 4
+    BrushTechniques.GREENSPROUT_WATERLILY.value: ItemData(0x105, ItemClassification.progression),  # bit 5
+    BrushTechniques.GALESTORM.value: ItemData(0x106, ItemClassification.progression),  # bit 6
+    BrushTechniques.THUNDERSTORM.value: ItemData(0x108, ItemClassification.progression),  # bit 8
+    BrushTechniques.INFERNO.value: ItemData(0x10A, ItemClassification.progression),  # bit 10
     BrushTechniques.POWER_SLASH.value: ItemData(0x10C, ItemClassification.progression, count_in_pool=3),  # bit 12
-    BrushTechniques.WATERSPOUT.value: ItemData(0x10D, ItemClassification.progression),             # bit 13
-    BrushTechniques.VEIL_OF_MIST.value: ItemData(0x110, ItemClassification.progression),            # bit 16
-    BrushTechniques.CRESCENT.value: ItemData(0x112, ItemClassification.progression),                # bit 18
-    BrushTechniques.GREENSPROUT_VINE.value: ItemData(0x113, ItemClassification.progression),        # bit 19
+    BrushTechniques.WATERSPOUT.value: ItemData(0x10D, ItemClassification.progression),  # bit 13
+    BrushTechniques.VEIL_OF_MIST.value: ItemData(0x110, ItemClassification.progression),  # bit 16
+    BrushTechniques.CRESCENT.value: ItemData(0x112, ItemClassification.progression),  # bit 18
+    BrushTechniques.GREENSPROUT_VINE.value: ItemData(0x113, ItemClassification.progression),  # bit 19
     # You always start with that one
-    BrushTechniques.REJUVENATION.value: ItemData(0x116, ItemClassification.progression,count_in_pool=0),            # bit 22
-    BrushTechniques.BLIZZARD.value: ItemData(0x117, ItemClassification.progression),                # bit 23
+    BrushTechniques.REJUVENATION.value: ItemData(0x116, ItemClassification.progression, count_in_pool=0),  # bit 22
+    BrushTechniques.BLIZZARD.value: ItemData(0x117, ItemClassification.progression),  # bit 23
     BrushTechniques.CHERRY_BOMB.value: ItemData(0x119, ItemClassification.progression, count_in_pool=3),  # bit 25
-    BrushTechniques.SUNRISE.value: ItemData(0x11B, ItemClassification.progression),                 # bit 27
-    BrushTechniques.CATWALK.value: ItemData(0x11E, ItemClassification.progression),                 # bit 30
+    BrushTechniques.SUNRISE.value: ItemData(0x11B, ItemClassification.progression),  # bit 27
+    BrushTechniques.CATWALK.value: ItemData(0x11E, ItemClassification.progression),  # bit 30
     ## UPGRADES/SECRET
-    BrushTechniques.WHIRLWIND.value: ItemData(0x107, ItemClassification.progression),               # bit 7
-    BrushTechniques.THUNDERBOLT.value: ItemData(0x109, ItemClassification.progression),             # bit 9
-    BrushTechniques.FIREBURST.value: ItemData(0x10B, ItemClassification.progression),               # bit 11
-    BrushTechniques.DELUGE.value: ItemData(0x10E, ItemClassification.progression),                  # bit 14
-    BrushTechniques.FOUNTAIN.value: ItemData(0x10F, ItemClassification.progression),                # bit 15
-    BrushTechniques.MIST_WARP.value: ItemData(0x111, ItemClassification.progression),               # bit 17
+    BrushTechniques.WHIRLWIND.value: ItemData(0x107, ItemClassification.progression),  # bit 7
+    BrushTechniques.THUNDERBOLT.value: ItemData(0x109, ItemClassification.progression),  # bit 9
+    BrushTechniques.FIREBURST.value: ItemData(0x10B, ItemClassification.progression),  # bit 11
+    BrushTechniques.DELUGE.value: ItemData(0x10E, ItemClassification.progression),  # bit 14
+    BrushTechniques.FOUNTAIN.value: ItemData(0x10F, ItemClassification.progression),  # bit 15
+    BrushTechniques.MIST_WARP.value: ItemData(0x111, ItemClassification.progression),  # bit 17
     ## VERY SECRET ONE
-    BrushTechniques.ICESTORM.value: ItemData(0x118, ItemClassification.useful),                     # bit 24
+    BrushTechniques.ICESTORM.value: ItemData(0x118, ItemClassification.useful),  # bit 24
 }
 equips = {
     # Equips
@@ -123,6 +124,7 @@ quest_items = {
     "Thunder Brew": ItemData(0x47, ItemClassification.progression),
     "Shell Amulet": ItemData(0x48, ItemClassification.progression),
 
+    "Mask": ItemData(0x49, ItemClassification.progression),
     "Golden Mushroom": ItemData(0x5f, ItemClassification.progression),
     "Gimmick Gear": ItemData(0x60, ItemClassification.progression),
     "8 Purification Sake": ItemData(0x62, ItemClassification.progression),
@@ -144,7 +146,7 @@ bitable_items = {
     ### Edit: So this Sake only resets if you go outside Kamiki village or on of its interiors;
     ### I'm not sure how that's going to work with ER.
     "Vista of the Gods": ItemData(0x5C, ItemClassification.progression),
-    "Tsuta Ruins Key": ItemData(world_state_check_id(MapIds.HEALED_AGATA,16), ItemClassification.progression),
+    "Tsuta Ruins Key": ItemData(0x40, ItemClassification.progression),
     # "Oddly Shaped Turnip": ItemData(0x41, ItemClassification.progression)
 }
 useful_items = {
@@ -153,7 +155,7 @@ useful_items = {
     "Astral Pouch": ItemData(0x06, ItemClassification.useful,count_in_pool=0),# Intended
     "Stray Bead": ItemData(0xCC, ItemClassification.useful,count_in_pool=0),# Should be 99, set to 0 for now cause they mess with container collection states
     # probably will have to be changed to progession_skip balancing once DF shops get randomized
-    "Demon Fang": ItemData(0x1F, ItemClassification.useful,count_in_pool=0),# to see when DF shops get randomized
+    "Demon Fang": ItemData(0x1F, ItemClassification.useful, count_in_pool=0),  # to see when DF shops get randomized
     # Technically a filler item, but useful feels more appropriate. Warping with those without Fountain will probably be out of logic.
     "Mermaid Coin": ItemData(0x0e, ItemClassification.useful,count_in_pool=5),#Accurate count, kept it since it isn't too much
     "Golden Peach": ItemData(0x0f, ItemClassification.useful,count_in_pool=7), # 14 in total... Probably not useful to have THAT many?,
@@ -228,13 +230,13 @@ event_items = {
     "Satomi Power Orb (Loyalty)": ItemData(0x4e, ItemClassification.progression, count_in_pool=0),
     "Satomi Power Orb (Justice)": ItemData(0x4f, ItemClassification.progression, count_in_pool=0),
     "Satomi Power Orb (Duty)": ItemData(0x50, ItemClassification.progression, count_in_pool=0),
-    "Serpent Crystal": ItemData(0x308,ItemClassification.progression, count_in_pool=0),
+    "Serpent Crystal": ItemData(0x308, ItemClassification.progression, count_in_pool=0),
     # MOON CAVE
-    "Mask": ItemData(0x49, ItemClassification.progression, count_in_pool=0),
-    "Ogre Liver": ItemData(0x4a, ItemClassification.progression, count_in_pool=0),
-    "Ice Lips": ItemData(0x4b, ItemClassification.progression, count_in_pool=0),
-    "Fire Eye": ItemData(0x4c, ItemClassification.progression, count_in_pool=0),
-    "Black Demon Horn": ItemData(0x4d, ItemClassification.progression, count_in_pool=0),
+
+    "Ogre Liver": ItemData(0x4a, ItemClassification.progression),
+    "Ice Lips": ItemData(0x4b, ItemClassification.progression),
+    "Fire Eye": ItemData(0x4c, ItemClassification.progression),
+    "Black Demon Horn": ItemData(0x4d, ItemClassification.progression),
 }
 weapons_items = {
     "Divine Retribution": ItemData(0x10, ItemClassification.progression, count_in_pool=0),
@@ -258,7 +260,7 @@ progressive_weapons = {
     "Progressive Rosary": ItemData(0x301, ItemClassification.progression, count_in_pool=0),
     "Progressive Sword": ItemData(0x302, ItemClassification.progression, count_in_pool=0)
 }
-#classified as useful so they're ignored for junk fill
+# classified as useful so they're ignored for junk fill
 karmic_transformers = {
     "Karmic Returner": ItemData(0xc8, ItemClassification.useful, count_in_pool=0),
     "Karmic Transformer 1": ItemData(0x5b, ItemClassification.useful, count_in_pool=0),
@@ -277,6 +279,7 @@ item_table = {
     **equips,
     **bitable_items,
     **useful_items,
+    **quest_items,
     **filler_items,
     **quest_items,
     **event_items,
@@ -291,7 +294,7 @@ junk_weights = {
     "Exorcism Slip S": 22,
     "Vengeance Slip": 19,
     "Inkfinity Stone": 15,
-    "Holy Bone L": 1, # Never found in chests,so it should be 0, buuut...
+    "Holy Bone L": 1,  # Never found in chests,so it should be 0, buuut...
     "Holy Bone S": 23,
     "White porcelain pot": 8,
     "Traveler's Charm": 13,
@@ -339,3 +342,41 @@ junk_weights = {
     "Amethyst Tassels": 1,
     "Jade Tassels": 1,
 }
+
+global_local_items = [
+    LocalItem(["Vista of the Gods"],
+              [RegionNames.KAMIKI_VILLAGE, RegionNames.KAMIKI_ISLANDS, RegionNames.KUSHIS_HOUSE,
+               RegionNames.ORANGES_HOUSE],
+              is_biteable=True
+              ),
+    LocalItem(["Tsuta Ruins Key"],
+              [RegionNames.AGATA_COMMON_LOGIC, RegionNames.AGATA_FOREST],
+              is_biteable=True
+              ),
+    LocalItem(["Mask"], [RegionNames.CALCIFIED_CAVERN], is_biteable=False,
+              exclude_locations=["Calcified Cavern - Freestanding item"]),
+]
+soup_ingredient_local_items = LocalItem(["Ogre Liver",
+                                         "Ice Lips",
+                                         "Fire Eye",
+                                         "Black Demon Horn"], [RegionNames.MOON_CAVE,
+                                                               RegionNames.MOON_CAVE_1F_LOCKED_CAVE,
+                                                               RegionNames.MOON_CAVE_1F_LOCKED_CAVE_BACK,
+                                                               RegionNames.MOON_CAVE_2F_GEYSER_RAFTER,
+                                                               RegionNames.MOON_CAVE_3F,
+                                                               RegionNames.MOON_CAVE_B1F_LAKE,
+                                                               RegionNames.MOON_CAVE_B1F_UNDER_LIFT,
+                                                               RegionNames.MOON_CAVE_B2F_LIFT,
+                                                               RegionNames.MOON_CAVE_B2F_FROZEN_STATUE,
+                                                               RegionNames.MOON_CAVE_B2F_OTHER_LIFT,
+                                                               RegionNames.MOON_CAVE_B2F_BOMBABLE,
+                                                               RegionNames.MOON_CAVE_KITCHEN_BACK,
+                                                               RegionNames.MOON_CAVE_3F_FIRE_EYE,
+                                                               RegionNames.MOON_CAVE_3F_SAND,
+                                                               RegionNames.MOON_CAVE_2F_SAND_PIT,
+                                                               RegionNames.MOON_CAVE_3F_RAFTERS_AFTER_SAND,
+                                                               RegionNames.MOON_CAVE_2F_RAFTERS_CHEST,
+                                                               RegionNames.MOON_CAVE_4F_RAFTERS,
+                                                               RegionNames.MOON_CAVE_4F_CANON,
+                                                               RegionNames.MOON_CAVE_4F_AFTER_CANON], is_biteable=False,
+                                        prefill_name="Soup Ingredients")

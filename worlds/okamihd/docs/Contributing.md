@@ -40,22 +40,24 @@ Each of these files is split in three parts:
 For each Region described in the file, you need to contribute all exits that connect to another Region.
 The ExitData struc works as follows:
 
-| Field                        | Content      | Notes                                                                                                      | Default Value |
-|------------------------------|--------------|------------------------------------------------------------------------------------------------------------|---------------|
-| destination                  | string       | Required. The Region this exits leads to. Please make sure you use a element of the RegionNames enum.      | N/A           |
-| required_items_events        | string array | List of items or events that need to be cleared/collected before being able to use this exit.              | []            |
-| needs_long_swim              | boolean      | Is it needed to swim a long distance to use this exit ? (eg. waterlily, orca, or water tablet)             | False         |
-| one_way                      | boolean      |                                                                                                            | False         |
-| loading_screen               | boolean      | (very baldly named property) Stuff for later when we want to do ER; Should that transition be randomized ? | True          |
+| Field                 | Content      | Notes                                                                                                      | Default Value |
+|-----------------------|--------------|------------------------------------------------------------------------------------------------------------|---------------|
+| destination           | string       | Required. The Region this exits leads to. Please make sure you use a element of the RegionNames enum.      | N/A           |
+| required_items_events | string array | List of items or events that need to be cleared/collected before being able to use this exit.              | []            |
+| needs_long_swim       | boolean      | Is it needed to swim a long distance to use this exit ? (eg. waterlily, orca, or water tablet)             | False         |
+| one_way               | boolean      |                                                                                                            | False         |
+| loading_screen        | boolean      | (very baldly named property) Stuff for later when we want to do ER; Should that transition be randomized ? | True          |
 
 Note that a Region can be a part of a map or a sequence, it's basically a way to share access rules between some
 locations or events;
 
 Exits:
 
-- should preferably require events to be traversable. I'd rather have an event that represents blowing up a boulder that allows an exit, than an exit requiring
+- should preferably require events to be traversable. I'd rather have an event that represents blowing up a boulder that
+  allows an exit, than an exit requiring
   cherry bomb. That way, if we ever want to introduce a setting where the boulder is removed, we'd juste have to set the
-  event as precolleted. Items should be used in that field when they're required to use that exit every time, unlike when you need to blow up a wall, which is just a one time thing.
+  event as precolleted. Items should be used in that field when they're required to use that exit every time, unlike
+  when you need to blow up a wall, which is just a one time thing.
 
 When connecting a cursed region, the cursed part should be connected only to places that can be accessed when the region
 is in cursed state.
@@ -119,6 +121,20 @@ They use the WarpData struct:
 | trigger_warp_to   | Rule or True_ or False_ | Rule that need to be fullfilled to be able to warp to this warp. Doens't need to include the power or items itself; It's deduced from the warp type.   | True_         |
 | trigger_warp_from | Rule or True_ or False_ | Rule that need to be fullfilled to be able to warp from this warp. Doens't need to include the power or items itself; It's deduced from the warp type. | True_         |
 
+### Local Items:
+
+Local Items are items that should be randomized to a defined subset of locations.
+
+They're defined with the LocalItem Struct, and will be placed in prefill before main fill.
+
+| Field                | Content           | Notes                                                                                                                                  | Default |
+|----------------------|-------------------|----------------------------------------------------------------------------------------------------------------------------------------|---------|
+| items                | str Array         | The items names that should be randomized. Will substract the count defined in item table by any amount present in here automatically. | N/A     |
+| allowed_regions      | RegionNames Array | The Regions where the item can be placed. All locations from those will be included.                                                   | N/A     |
+| is_biteable          | bool              | Wether the item(s) are biteable or not. This will exclude location types that place the item in the player's inventory.                | N/A     |
+| prefill_name         | str or None       | Name of the prefill step that will be displayed for debug. Defaults to the first item name if None                                     | None    | 
+| exclude_locations    | str Array         | List of locations to exclude                                                                                                           | []      |
+| additional_locations | str Array         | List of additional location to include                                                                                                 | []      |
 
 
 Feel free to review the logic currently merged, or suggest changes to the structure of this.

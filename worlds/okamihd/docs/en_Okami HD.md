@@ -27,4 +27,11 @@ Currently, the items randomized are:
 - Checking Tama's without cherry bomb, or if cherry bomb isn't vanilla will softlock you.
 - Melting the ice to exit the Moegami room in Moon Cave will solftlcoks you when doing the inferno tutorial.
 - Dragon Orb,Shell Amulet  cannot be picked up.
-- Chests avilable both in cursed and healed areas don't get randomized in cursed area.
+- Chests available both in cursed and healed areas don't get randomized in cursed area.
+
+## Other info
+- Vista of the gods will always be found in Kamiki Village. You can also get it from its vanilla source.
+- Tsuta Ruins Key will always be found in Agata Forest. You can also get it from its vanilla source. Unfortunately just having the key doesn't open the dungeon yet.
+- Mask will always be found in Calcified Cavern (Except in the freestanding item spot, it breaks the cutscene.)
+- Moon Cave ingredients will be randomized in Moon Cave. (You can bypass this with the settings.)
+

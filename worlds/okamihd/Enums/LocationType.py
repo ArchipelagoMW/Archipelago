@@ -35,3 +35,8 @@ class LocationType(Enum):
     # Chest with element Sources that depend on special rules; Don't apply any requirments except the special rule one
     THUNDER_CHEST_SPECIAL_SOURCE = 20
     FROZEN_CHEST_SPECIAL_SOURCE = 21
+
+
+excluded_biteable_location_types = [LocationType.CONSTELLATION, LocationType.EVENT, LocationType.DIGGING_MINIGAME_EARLY,
+                                    LocationType.DIGGING_MINIGAME_LATER, LocationType.SHOP,
+                                    LocationType.FISHING_MINIGAME,LocationType.UNDERWATER_CHEST_SHALLOW,LocationType.UNDERWATER_CHEST]
