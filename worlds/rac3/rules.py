@@ -37,6 +37,9 @@ def all_locations(state: CollectionState, world: "RaC3World", tag: str, skip: st
 
 def calc_nanotech_requirement(world: "RaC3World", default_infobot_count: int) -> int:
     """Calculate the amount of infobots required for a given nanotech level based on the world options"""
+    ngplus_enabled = world.options.ngplus_start.value
+    if ngplus_enabled:
+        return 1
     multiplier_option = world.options.bolt_and_xp_multiplier.value
     multiplier_value = MULTIPLIERS.get(multiplier_option, 1)
     intro_skip_enabled = world.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False)
