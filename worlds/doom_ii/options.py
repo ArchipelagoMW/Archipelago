@@ -14,7 +14,8 @@ from worlds._id1common import options as id1Options  # noqa: N812
 
 class GoalNumLevels(BaseOptions.Range):
     """
-    If 'Complete Some Levels' or 'Complete Random Levels' are chosen as the goal, this is how many levels must be completed.
+    If the goal is 'Complete Some Levels', 'Complete Random Levels', or 'Complete Some And Specific Levels',
+    this is how many levels must be completed.
     """
     display_name = "Goal: Number of Levels"
     range_start = 1
@@ -24,7 +25,8 @@ class GoalNumLevels(BaseOptions.Range):
 
 class GoalSpecificLevels(BaseOptions.OptionSet):
     """
-    If 'Complete Specific Levels' is chosen as the goal, all levels chosen here must be completed.
+    If the goal is 'Complete Specific Levels', or 'Complete Some And Specific Levels',
+    all levels chosen here must be completed.
     """
     display_name = "Goal: Specific Levels"
     valid_keys = (

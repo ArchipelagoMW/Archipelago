@@ -11,11 +11,11 @@
 		"Unholy Cathedral (E3M5) - BFG9000 (Teleporter Trap Closet)",
 		"Mt. Erebus (E3M6) - Chainsaw (Red Pillar Dias)"
 	],
-	"filler_item_weight": 
+	"helpful_item_weight": 
 	{
 		"Armor": 41,
-		"Berserk": 12,
-		"Invulnerability": 10,
+		"Berserk": 13,
+		"Invulnerability": 9,
 		"Mega Armor": 25,
 		"Partial invisibility": 18,
 		"Supercharge": 28
@@ -479,6 +479,14 @@
 			"Rocket launcher",
 			"Shotgun"
 		]
+	},
+	"item_pool_ratio": 
+	{
+		"1": [ 42, 8 ],
+		"2": [ 39, 6 ],
+		"3": [ 33, 3 ],
+		"4": [ 29, 1 ],
+		"5": [ 29, 1 ]
 	},
 	"item_table": 
 	{
@@ -3991,7 +3999,7 @@
 			"_name": "Spawning Vats (E2M7) - Exit",
 			"doom_type": -2,
 			"exmx": [ 2, 7 ],
-			"region": "Spawning Vats (E2M7) @ Red"
+			"region": "Spawning Vats (E2M7) @ Red Exit"
 		},
 		"207001": 
 		{
@@ -4047,7 +4055,7 @@
 			"_name": "Spawning Vats (E2M7) - Yellow keycard (Display Peninsula)",
 			"doom_type": 6,
 			"exmx": [ 2, 7 ],
-			"region": "Spawning Vats (E2M7) @ Blue"
+			"region": "Spawning Vats (E2M7) @ Blue Platform"
 		},
 		"207009": 
 		{
@@ -7493,6 +7501,10 @@
 							"and": [ "Rocket launcher" ]
 						}
 					]
+				},
+				{
+					"_target": "Spawning Vats (E2M7) @ Blue Platform",
+					"requires": [ "trick_pro" ]
 				}
 			],
 			"exmx": [ 2, 7 ]
@@ -7503,6 +7515,9 @@
 			[
 				{
 					"_target": "Spawning Vats (E2M7) @ Main"
+				},
+				{
+					"_target": "Spawning Vats (E2M7) @ Blue Platform"
 				}
 			],
 			"exmx": [ 2, 7 ]
@@ -7565,6 +7580,16 @@
 		{
 			"_name": "Spawning Vats (E2M7) @ Red Exit",
 			"connections": [],
+			"exmx": [ 2, 7 ]
+		},
+		{
+			"_name": "Spawning Vats (E2M7) @ Blue Platform",
+			"connections": 
+			[
+				{
+					"_target": "Spawning Vats (E2M7) @ Main"
+				}
+			],
 			"exmx": [ 2, 7 ]
 		},
 		{

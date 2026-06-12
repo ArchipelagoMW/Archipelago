@@ -1,18 +1,10 @@
 {
-	"custom_pool_ratio": 
-	{
-		"0": [ 31, 9 ],
-		"1": [ 25, 5 ],
-		"2": [ 22, 3 ],
-		"3": [ 18, 2 ],
-		"4": [ 18, 2 ]
-	},
 	"death_logic_excluded_locations": 
 	[
 		"Ramparts of Perdition (E4M7) - Ring of Invincibility",
 		"Ramparts of Perdition (E4M7) - Ethereal Crossbow 2"
 	],
-	"filler_item_weight": 
+	"helpful_item_weight": 
 	{
 		"Chaos Device": 6,
 		"Enchanted Shield": 12,
@@ -687,6 +679,14 @@
 			"Hellstaff",
 			"Phoenix Rod"
 		]
+	},
+	"item_pool_ratio": 
+	{
+		"1": [ 31, 9 ],
+		"2": [ 25, 5 ],
+		"3": [ 22, 3 ],
+		"4": [ 18, 2 ],
+		"5": [ 18, 2 ]
 	},
 	"item_table": 
 	{

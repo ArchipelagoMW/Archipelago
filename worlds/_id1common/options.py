@@ -74,12 +74,14 @@ class Goal(Choice):
     - **Complete Some Levels**: Complete some number of total levels to win.
     - **Complete Random Levels**: Complete a set of randomly chosen levels to win.
     - **Complete Specific Levels**: Complete a specific set of levels to win.
+    - **Complete Some And Specific Levels**: Complete some number of total levels, as well as specifically chosen ones, to win.
     """
     display_name = "Goal"
     option_complete_all_levels = 0
     option_complete_some_levels = 1
     option_complete_random_levels = 2
     option_complete_specific_levels = 3
+    option_complete_some_and_specific_levels = 4
     default = 0
 
 

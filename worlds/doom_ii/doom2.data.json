@@ -1,12 +1,12 @@
 {
 	"death_logic_excluded_locations": [ "Entryway (MAP01) - Armor (Tech Room Switches)" ],
-	"filler_item_weight": 
+	"helpful_item_weight": 
 	{
 		"Armor": 39,
 		"Berserk": 11,
-		"Invulnerability": 10,
+		"Invulnerability": 9,
 		"Mega Armor": 23,
-		"Megasphere": 7,
+		"Megasphere": 8,
 		"Partial invisibility": 18,
 		"Supercharge": 26
 	},
@@ -426,6 +426,14 @@
 			"Shotgun",
 			"Super Shotgun"
 		]
+	},
+	"item_pool_ratio": 
+	{
+		"1": [ 42, 8 ],
+		"2": [ 39, 6 ],
+		"3": [ 33, 3 ],
+		"4": [ 29, 1 ],
+		"5": [ 29, 1 ]
 	},
 	"item_table": 
 	{
@@ -1960,7 +1968,6 @@
 			"Icon of Sin (MAP30) - Shotgun (Spawn)",
 			"Icon of Sin (MAP30) - Super Shotgun (Spawn)",
 			"Icon of Sin (MAP30) - Backpack (Spawn)",
-			"Icon of Sin (MAP30) - Megasphere (Spawn)",
 			"Icon of Sin (MAP30) - Megasphere (Arena, Icon's Platform)",
 			"Icon of Sin (MAP30) - Berserk (Arena, Icon's Platform)"
 		],
@@ -2161,7 +2168,7 @@
 			"The Citadel (MAP19) - Invulnerability (Red Brick Building)",
 			"The Citadel (MAP19) - Blue skull key (Citadel Northeast Turret)",
 			"The Citadel (MAP19) - Partial invisibility (Citadel West Window)",
-			"The Citadel (MAP19) - Red skull key (Citadel Courtyard, Balcony )",
+			"The Citadel (MAP19) - Red skull key (Citadel Courtyard, Balcony)",
 			"The Citadel (MAP19) - Yellow skull key (Citadel Southwest Turret)",
 			"The Citadel (MAP19) - Computer area map (Red Brick Building)",
 			"The Citadel (MAP19) - Rocket launcher (Citadel Courtyard, Teleport In)",
@@ -4347,7 +4354,7 @@
 		},
 		"208011": 
 		{
-			"_name": "The Citadel (MAP19) - Red skull key (Citadel Courtyard, Balcony )",
+			"_name": "The Citadel (MAP19) - Red skull key (Citadel Courtyard, Balcony)",
 			"doom_type": 38,
 			"exmx": [ 2, 8 ],
 			"region": "The Citadel (MAP19) @ Main"
@@ -5544,19 +5551,12 @@
 		},
 		"310016": 
 		{
-			"_name": "Icon of Sin (MAP30) - Megasphere (Spawn)",
-			"doom_type": 83,
-			"exmx": [ 3, 10 ],
-			"region": "Icon of Sin (MAP30) @ Start"
-		},
-		"310017": 
-		{
 			"_name": "Icon of Sin (MAP30) - Megasphere (Arena, Icon's Platform)",
 			"doom_type": 83,
 			"exmx": [ 3, 10 ],
 			"region": "Icon of Sin (MAP30) @ Main"
 		},
-		"310018": 
+		"310017": 
 		{
 			"_name": "Icon of Sin (MAP30) - Berserk (Arena, Icon's Platform)",
 			"doom_type": 2023,
