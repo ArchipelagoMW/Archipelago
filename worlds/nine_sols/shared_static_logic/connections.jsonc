@@ -1644,6 +1644,7 @@
     { "from": "GoS (Entry) - Elevator", "to": "GoS (Entry) - Greenhouse", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
+    { "from": "GoS (Entry) - Greenhouse", "to": "GoS (Entry) - Elevator", "requires": [] }, // walk through the portal and fall
     { "from": "GoS (Entry) - Elevator", "to": "GoS (Entry) - Upper Right Exit", "requires": [ { "item": "Cloud Leap" } ] },
     { "from": "GoS (Entry) - Upper Right Exit", "to": "GoS (Entry) - Elevator", "requires": [] }, // fall
 
