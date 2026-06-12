@@ -15,7 +15,6 @@ import logging
 import os
 import random
 import struct
-import subprocess
 import threading
 import concurrent.futures
 import bsdiff4
@@ -52,9 +51,6 @@ try:
     import xxtea
 except:
     xxtea = None
-
-enemizer_logger = logging.getLogger("Enemizer")
-
 
 class LocalRom:
 
@@ -179,43 +175,6 @@ class LocalRom:
             self.write_int32(startaddress + (i * 4), value)
 
 
-check_lock = threading.Lock()
-
-
-def check_enemizer(enemizercli):
-    if getattr(check_enemizer, "done", None):
-        return
-    if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
-        raise Exception(f"Enemizer not found at {enemizercli}, please install it. "
-                        f"Such as https://github.com/Ijwu/Enemizer/releases")
-
-    with check_lock:
-        # some time may have passed since the lock was acquired, as such a quick re-check doesn't hurt
-        if getattr(check_enemizer, "done", None):
-            return
-        wanted_version = (7, 1, 0)
-        # version info is saved on the lib, for some reason
-        library_info = os.path.join(os.path.dirname(enemizercli), "EnemizerCLI.Core.deps.json")
-        with open(library_info) as f:
-            info = json.load(f)
-
-        for lib in info["libraries"]:
-            if lib.startswith("EnemizerLibrary/"):
-                version = lib.split("/")[-1]
-                version = tuple(int(element) for element in version.split("."))
-                enemizer_logger.debug(f"Found Enemizer version {version}")
-                if version < wanted_version:
-                    raise Exception(
-                        f"Enemizer found at {enemizercli} is outdated ({version}) < ({wanted_version}), "
-                        f"please update your Enemizer. "
-                        f"Such as from https://github.com/Ijwu/Enemizer/releases")
-                break
-        else:
-            raise Exception(f"Could not find Enemizer library version information in {library_info}")
-
-    check_enemizer.done = True
-
-
 def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_random_on_event, sprite_pool):
     userandomsprites = False
     if sprite and not isinstance(sprite, Sprite):
@@ -281,174 +240,6 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
                 rom.write_bytes(0x300000 + (i * 0x8000), sprite.sprite)
                 rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
-
-
-def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
-    player = world.player
-    check_enemizer(enemizercli)
-    randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
-    options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))
-    enemizer_output_path = os.path.abspath(os.path.join(output_directory, f'enemizer_output_{player}.sfc'))
-
-    # write options file for enemizer
-    options = {
-        'RandomizeEnemies': world.options.enemy_shuffle.value,
-        'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': world.options.bush_shuffle.value,
-        'RandomizeEnemyHealthRange': world.options.enemy_health != 'default',
-        'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
-            world.options.enemy_health.current_key],
-        'OHKO': False,
-        'RandomizeEnemyDamage': world.options.enemy_damage != 'default',
-        'AllowEnemyZeroDamage': True,
-        'ShuffleEnemyDamageGroups': world.options.enemy_damage != 'default',
-        'EnemyDamageChaosMode': world.options.enemy_damage == 'chaos',
-        'EasyModeEscape': world.options.mode == "standard",
-        'EnemiesAbsorbable': False,
-        'AbsorbableSpawnRate': 10,
-        'AbsorbableTypes': {
-            'FullMagic': True, 'SmallMagic': True, 'Bomb_1': True, 'BlueRupee': True, 'Heart': True, 'BigKey': True,
-            'Key': True,
-            'Fairy': True, 'Arrow_10': True, 'Arrow_5': True, 'Bomb_8': True, 'Bomb_4': True, 'GreenRupee': True,
-            'RedRupee': True
-        },
-        'BossMadness': False,
-        'RandomizeBosses': True,
-        'RandomizeBossesType': 0,
-        'RandomizeBossHealth': False,
-        'RandomizeBossHealthMinAmount': 0,
-        'RandomizeBossHealthMaxAmount': 300,
-        'RandomizeBossDamage': False,
-        'RandomizeBossDamageMinAmount': 0,
-        'RandomizeBossDamageMaxAmount': 200,
-        'RandomizeBossBehavior': False,
-        'RandomizeDungeonPalettes': False,
-        'SetBlackoutMode': False,
-        'RandomizeOverworldPalettes': False,
-        'RandomizeSpritePalettes': False,
-        'SetAdvancedSpritePalettes': False,
-        'PukeMode': False,
-        'NegativeMode': False,
-        'GrayscaleMode': False,
-        'GenerateSpoilers': False,
-        'RandomizeLinkSpritePalette': False,
-        'RandomizePots': world.options.pot_shuffle.value,
-        'ShuffleMusic': False,
-        'BootlegMagic': True,
-        'CustomBosses': False,
-        'AndyMode': False,
-        'HeartBeepSpeed': 0,
-        'AlternateGfx': False,
-        'ShieldGraphics': "shield_gfx/normal.gfx",
-        'SwordGraphics': "sword_gfx/normal.gfx",
-        'BeeMizer': False,
-        'BeesLevel': 0,
-        'RandomizeTileTrapPattern': False,
-        'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': world.options.killable_thieves.value,
-        'RandomizeSpriteOnHit': False,
-        'DebugMode': False,
-        'DebugForceEnemy': False,
-        'DebugForceEnemyId': 0,
-        'DebugForceBoss': False,
-        'DebugForceBossId': 0,
-        'DebugOpenShutterDoors': False,
-        'DebugForceEnemyDamageZero': False,
-        'DebugShowRoomIdInRupeeCounter': False,
-        'UseManualBosses': True,
-        'ManualBosses': {
-            'EasternPalace': world.dungeons["Eastern Palace"].boss.enemizer_name,
-            'DesertPalace': world.dungeons["Desert Palace"].boss.enemizer_name,
-            'TowerOfHera': world.dungeons["Tower of Hera"].boss.enemizer_name,
-            'AgahnimsTower': 'Agahnim',
-            'PalaceOfDarkness': world.dungeons["Palace of Darkness"].boss.enemizer_name,
-            'SwampPalace': world.dungeons["Swamp Palace"].boss.enemizer_name,
-            'SkullWoods': world.dungeons["Skull Woods"].boss.enemizer_name,
-            'ThievesTown': world.dungeons["Thieves Town"].boss.enemizer_name,
-            'IcePalace': world.dungeons["Ice Palace"].boss.enemizer_name,
-            'MiseryMire': world.dungeons["Misery Mire"].boss.enemizer_name,
-            'TurtleRock': world.dungeons["Turtle Rock"].boss.enemizer_name,
-            'GanonsTower1':
-                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
-                               "Inverted Ganons Tower"].bosses['bottom'].enemizer_name,
-            'GanonsTower2':
-                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
-                               "Inverted Ganons Tower"].bosses['middle'].enemizer_name,
-            'GanonsTower3':
-                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
-                               "Inverted Ganons Tower"].bosses['top'].enemizer_name,
-            'GanonsTower4': 'Agahnim2',
-            'Ganon': 'Ganon',
-        }
-    }
-
-    rom.write_to_file(randopatch_path)
-
-    with open(options_path, 'w') as f:
-        json.dump(options, f)
-
-    max_enemizer_tries = 5
-    for i in range(max_enemizer_tries):
-        enemizer_seed = str(world.random.randint(0, 999999999))
-        enemizer_command = [os.path.abspath(enemizercli),
-                            '--rom', randopatch_path,
-                            '--seed', enemizer_seed,
-                            '--binary',
-                            '--enemizer', options_path,
-                            '--output', enemizer_output_path]
-
-        p_open = subprocess.Popen(enemizer_command,
-                                  cwd=os.path.dirname(enemizercli),
-                                  stdout=subprocess.PIPE,
-                                  stderr=subprocess.STDOUT,
-                                  universal_newlines=True)
-
-        enemizer_logger.debug(
-            f"Enemizer attempt {i + 1} of {max_enemizer_tries} for player {player} using enemizer seed {enemizer_seed}")
-        for stdout_line in iter(p_open.stdout.readline, ""):
-            if i == max_enemizer_tries - 1:
-                enemizer_logger.warning(stdout_line.rstrip())
-            else:
-                enemizer_logger.debug(stdout_line.rstrip())
-        p_open.stdout.close()
-
-        return_code = p_open.wait()
-        if return_code:
-            if i == max_enemizer_tries - 1:
-                raise subprocess.CalledProcessError(return_code, enemizer_command)
-            continue
-
-        for j in range(i + 1, max_enemizer_tries):
-            world.random.randint(0, 999999999)
-            # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
-            # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
-        break
-
-    rom.read_from_file(enemizer_output_path)
-    os.remove(enemizer_output_path)
-
-    if world.dungeons["Thieves Town"].boss.enemizer_name == "Blind":
-        rom.write_byte(0x04DE81, 6)
-        rom.write_byte(0x1B0101, 0)  # Do not close boss room door on entry.
-
-    # Moblins attached to "key drop" locations crash the game when dropping their item when Key Drop Shuffle is on.
-    # Replace them with a Slime enemy if they are placed.
-    if world.options.key_drop_shuffle:
-        key_drop_enemies = {
-            0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
-            0x4E20A, 0x4E326, 0x4E4F7, 0x4E687, 0x4E70C, 0x4E7C8, 0x4E7FA
-        }
-        for enemy in key_drop_enemies:
-            if rom.read_byte(enemy) == 0x12:
-                logging.debug(f"Moblin found and replaced at {enemy} in world {player}")
-                rom.write_byte(enemy, 0x8F)
-
-    for used in (randopatch_path, options_path):
-        try:
-            os.remove(used)
-        except OSError:
-            pass
-
 
 tile_list_lock = threading.Lock()
 _tile_collection_table = []
@@ -795,9 +586,13 @@ def get_nonnative_item_sprite(code: int) -> int:
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
-def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool):
+def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int):
     local_random = multiworld.worlds[player].random
     local_world = multiworld.worlds[player]
+    enemized = bool(local_world.options.boss_shuffle or local_world.options.enemy_shuffle
+                    or local_world.options.enemy_health != 'default' or local_world.options.enemy_damage != 'default'
+                    or local_world.options.pot_shuffle or local_world.options.bush_shuffle
+                    or local_world.options.killable_thieves)
 
     # patch items
 
@@ -1331,6 +1126,13 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
     starting_max_arrows = 30
 
     startingstate = CollectionState(multiworld)
+    has_blue_shield = False
+    has_red_shield = False
+    has_mirror_shield = False
+    progressive_shields = 0
+    has_blue_mail = False
+    has_red_mail = False
+    progressive_mail = 0
 
     if startingstate.has('Silver Bow', player):
         equip[0x340] = 1
@@ -1359,18 +1161,6 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
     elif startingstate.has('Fighter Sword', player):
         equip[0x359] = 1
 
-    if startingstate.has('Mirror Shield', player):
-        equip[0x35A] = 3
-    elif startingstate.has('Red Shield', player):
-        equip[0x35A] = 2
-    elif startingstate.has('Blue Shield', player):
-        equip[0x35A] = 1
-
-    if startingstate.has('Red Mail', player):
-        equip[0x35B] = 2
-    elif startingstate.has('Blue Mail', player):
-        equip[0x35B] = 1
-
     if startingstate.has('Magic Upgrade (1/4)', player):
         equip[0x37B] = 2
         equip[0x36E] = 0x80
@@ -1383,8 +1173,6 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
         if item.name in {'Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
                          'Titans Mitts', 'Power Glove', 'Progressive Glove',
                          'Golden Sword', 'Tempered Sword', 'Master Sword', 'Fighter Sword', 'Progressive Sword',
-                         'Mirror Shield', 'Red Shield', 'Blue Shield', 'Progressive Shield',
-                         'Red Mail', 'Blue Mail', 'Progressive Mail',
                          'Magic Upgrade (1/4)', 'Magic Upgrade (1/2)', 'Triforce Piece'}:
             continue
 
@@ -1489,8 +1277,62 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
             if item.name != 'Piece of Heart' or equip[0x36B] == 0:
                 equip[0x36C] = min(equip[0x36C] + 0x08, 0xA0)
                 equip[0x36D] = min(equip[0x36D] + 0x08, 0xA0)
+        elif item.name == 'Blue Shield':
+            has_blue_shield = True
+            continue
+        elif item.name == 'Red Shield':
+            has_red_shield = True
+            continue
+        elif item.name == 'Mirror Shield':
+            has_mirror_shield = True
+            continue
+        elif item.name == 'Progressive Shield':
+            progressive_shields += 1
+            continue
+        elif item.name == 'Blue Mail':
+            has_blue_mail = True
+            continue
+        elif item.name == 'Red Mail':
+            has_red_mail = True
+            continue
+        elif item.name == 'Progressive Mail':
+            progressive_mail += 1
+            continue
         else:
             raise RuntimeError(f'Unsupported item in starting equipment: {item.name}')
+
+    for _ in range(progressive_shields):
+        if has_mirror_shield:
+            continue
+        if has_red_shield and local_world.difficulty_requirements.progressive_shield_limit >= 3:
+            has_mirror_shield = True
+            continue
+        if has_blue_shield and local_world.difficulty_requirements.progressive_shield_limit >= 2:
+            has_red_shield = True
+            continue
+        if local_world.difficulty_requirements.progressive_shield_limit >= 1:
+            has_blue_shield = True
+
+    for _ in range(progressive_mail):
+        if has_red_mail:
+            continue
+        if has_blue_mail and local_world.difficulty_requirements.progressive_armor_limit >= 2:
+            has_red_mail = True
+            continue
+        if local_world.difficulty_requirements.progressive_armor_limit >= 1:
+            has_blue_mail = True
+
+    if has_mirror_shield:
+        equip[0x35A] = 3
+    elif has_red_shield:
+        equip[0x35A] = 2
+    elif has_blue_shield:
+        equip[0x35A] = 1
+
+    if has_red_mail:
+        equip[0x35B] = 2
+    elif has_blue_mail:
+        equip[0x35B] = 1
 
     equip[0x343] = min(equip[0x343], starting_max_bombs)
     rom.write_byte(0x180034, starting_max_bombs)
@@ -1710,6 +1552,71 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
     if encoded_players > ROM_PLAYER_LIMIT:
         rom.write_bytes(0x195FFC + ((ROM_PLAYER_LIMIT - 1) * 32), hud_format_text("Archipelago"))
 
+    if enemized:
+        from . import EnemizerPatches as enemizer_patches
+        from .EnemyShuffle import apply_enemy_shuffle
+        from .PotShuffle import apply_pot_shuffle
+
+        enemizer_patches.apply_enemizer_base_patch(rom)
+
+        enemy_shuffle_enabled = bool(local_world.options.enemy_shuffle)
+        bush_shuffle_enabled = bool(local_world.options.bush_shuffle)
+        enemy_health_key = enemizer_patches._option_key(local_world.options.enemy_health)
+        enemy_damage_key = enemizer_patches._option_key(local_world.options.enemy_damage)
+
+        if enemy_shuffle_enabled or bush_shuffle_enabled:
+            enemizer_patches._set_enemizer_flag(rom, "EnemizerFlags_randomize_bushes", True)
+            hidden_enemy_chance_pool = (
+                enemizer_patches.RANDOMIZED_HIDDEN_ENEMY_CHANCE_POOL
+                if bush_shuffle_enabled
+                else enemizer_patches.VANILLA_HIDDEN_ENEMY_CHANCE_POOL
+            )
+            rom.write_bytes(enemizer_patches.HIDDEN_ENEMY_CHANCE_POOL_ADDRESS, hidden_enemy_chance_pool)
+            enemizer_patches._update_hidden_enemy_item_table_for_retro_mode(rom)
+
+        if enemy_shuffle_enabled:
+            enemizer_patches._set_enemizer_flag(rom, "EnemizerFlags_randomize_sprites", True)
+            enemizer_patches._set_enemizer_flag(rom, "EnemizerFlags_enable_mimic_override", True)
+            enemizer_patches._set_enemizer_flag(rom, "EnemizerFlags_enable_terrorpin_ai_fix", True)
+            rom.write_bytes(0x1F2D5, (0x54, 0x9C))
+            rom.write_byte(0x1F2E5, 0xB0)
+            rom.write_byte(0x1F2EB, 0xD0)
+
+        if local_world.options.killable_thieves:
+            enemizer_patches._apply_killable_thief(rom)
+
+        if enemy_health_key != "default" or enemy_damage_key != "default":
+            rng = enemizer_patches._make_native_enemizer_rng(local_world)
+        else:
+            rng = None
+
+        if enemy_health_key != "default":
+            assert rng is not None
+            enemizer_patches._randomize_enemy_health(rom, rng, enemy_health_key)
+
+        if enemy_damage_key != "default":
+            assert rng is not None
+            enemizer_patches._randomize_enemy_damage(rom, rng, allow_zero_damage=True)
+            enemizer_patches._shuffle_damage_groups(
+                rom,
+                rng,
+                chaos_mode=enemy_damage_key == "chaos",
+                allow_zero_damage=True,
+            )
+
+        enemy_shuffle_state = getattr(local_world, "enemy_shuffle_state", None)
+        if local_world.options.enemy_shuffle and enemy_shuffle_state is not None:
+            apply_enemy_shuffle(rom, enemy_shuffle_state)
+
+        if local_world.options.boss_shuffle:
+            # Boss shuffle must run after enemy shuffle so boss room sprite pointers
+            # and graphics block IDs are not restored to the enemy-shuffled room values.
+            enemizer_patches.patch_bosses(local_world, rom)
+
+        pot_shuffle_state = getattr(local_world, "pot_shuffle_state", None)
+        if local_world.options.pot_shuffle and pot_shuffle_state is not None:
+            apply_pot_shuffle(rom, pot_shuffle_state)
+
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
     code = [
@@ -1860,7 +1767,7 @@ def apply_oof_sfx(rom: LocalRom, oof: str):
     rom.write_bytes(0x12803A, oof_bytes)
     rom.write_bytes(0x12803A + len(oof_bytes), [0xEB, 0xEB])
 
-    # Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
+    # Preserve SPC $3188 instead of writing the unused "WHAT" sound effect there.
     rom.write_bytes(0x13000D, [0x00, 0x00, 0x00, 0x08])
 
 
