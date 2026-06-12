@@ -1102,6 +1102,41 @@ id,region,name,tags,content_packs
 1726,Town,Friendsanity: Spouse 12 <3,FRIENDSANITY,
 1727,Town,Friendsanity: Spouse 13 <3,FRIENDSANITY,
 1728,Town,Friendsanity: Spouse 14 <3,FRIENDSANITY,
+1750,Alex's House,Meet Alex,MEET_VILLAGER,
+1751,Elliott's House,Meet Elliott,MEET_VILLAGER,
+1752,Hospital,Meet Harvey,MEET_VILLAGER,
+1753,Sam's House,Meet Sam,MEET_VILLAGER,
+1754,Carpenter Shop,Meet Sebastian,MEET_VILLAGER,
+1755,Marnie's Ranch,Meet Shane,MEET_VILLAGER,
+1756,Pierre's General Store,Meet Abigail,MEET_VILLAGER,
+1757,Haley's House,Meet Emily,MEET_VILLAGER,
+1758,Haley's House,Meet Haley,MEET_VILLAGER,
+1759,Leah's Cottage,Meet Leah,MEET_VILLAGER,
+1760,Carpenter Shop,Meet Maru,MEET_VILLAGER,
+1761,Trailer,Meet Penny,MEET_VILLAGER,
+1762,Pierre's General Store,Meet Caroline ,MEET_VILLAGER,
+1763,Clint's Blacksmith,Meet Clint,MEET_VILLAGER,
+1764,Carpenter Shop,Meet Demetrius,MEET_VILLAGER,
+1765,Mines Dwarf Cave,Meet Dwarf,MEET_VILLAGER,
+1766,Alex's House,Meet Evelyn,MEET_VILLAGER,
+1767,Alex's House,Meet George,MEET_VILLAGER,
+1768,Saloon,Meet Gus,MEET_VILLAGER,
+1769,Marnie's Ranch,Meet Jas,MEET_VILLAGER,
+1770,Sam's House,Meet Jodi,MEET_VILLAGER,
+1771,Marnie's Ranch,Meet Kent,MEET_VILLAGER_ALWAYS,
+1772,Sewer,Meet Krobus,MEET_VILLAGER,
+1773,Leo's Hut,Meet Leo,MEET_VILLAGER,
+1774,Mayor's Manor,Meet Lewis,MEET_VILLAGER,
+1775,Tent,Meet Linus,MEET_VILLAGER,
+1776,Marnie's Ranch,Meet Marnie,MEET_VILLAGER,
+1777,Trailer,Meet Pam,MEET_VILLAGER,
+1778,Pierre's General Store,Meet Pierre,MEET_VILLAGER,
+1779,Carpenter Shop,Meet Robin,MEET_VILLAGER,
+1780,Oasis,Meet Sandy,MEET_VILLAGER,
+1781,Marnie's Ranch,Meet Vincent,MEET_VILLAGER,
+1782,Willy's Fish Shop,Meet Willy,MEET_VILLAGER,
+1783,Wizard Tower,Meet Wizard,MEET_VILLAGER,
+1784,Farm,Meet Pet,MEET_VILLAGER_ALWAYS,
 2001,Egg Festival,Egg Hunt Victory,FESTIVAL,
 2002,Egg Festival,Egg Festival: Strawberry Seeds,FESTIVAL,
 2003,Flower Dance,Dance with someone,FESTIVAL,
@@ -3611,6 +3646,37 @@ id,region,name,tags,content_packs
 56372,The Lost Valley,Friendsanity: Gregory 12 <3,FRIENDSANITY,Boarding House and Bus Stop Extension
 56373,The Lost Valley,Friendsanity: Gregory 13 <3,FRIENDSANITY,Boarding House and Bus Stop Extension
 56374,The Lost Valley,Friendsanity: Gregory 14 <3,FRIENDSANITY,Boarding House and Bus Stop Extension
+56401,Museum,Meet Jasper,MEET_VILLAGER,Professor Jasper Thomas
+56402,Yoba's Clearing,Meet Yoba,MEET_VILLAGER,Custom NPC - Yoba
+56403,Marnie's Ranch,Meet Mr. Ginger,MEET_VILLAGER,Mister Ginger (cat npc)
+56404,Town,Meet Ayeisha,MEET_VILLAGER,Ayeisha - The Postal Worker (Custom NPC)
+56405,Saloon,Meet Shiko,MEET_VILLAGER,Shiko - New Custom NPC
+56406,Wizard Tower,Meet Wellwick,MEET_VILLAGER,'Prophet' Wellwick
+56407,Forest,Meet Delores,MEET_VILLAGER,Delores - Custom NPC
+56408,Alec's Pet Shop,Meet Alec,MEET_VILLAGER,Alec Revisited
+56409,Eugene's Garden,Meet Eugene,MEET_VILLAGER,Custom NPC Eugene
+56410,Forest,Meet Juna,MEET_VILLAGER,Juna - Roommate NPC
+56411,Riley's House,Meet Riley,MEET_VILLAGER,Custom NPC - Riley
+56412,JojaMart,Meet Claire,MEET_VILLAGER,Stardew Valley Expanded
+56413,Galmoran Outpost,Meet Lance,"MEET_VILLAGER,GINGER_ISLAND",Stardew Valley Expanded
+56414,Jenkins' Residence,Meet Olivia,MEET_VILLAGER,Stardew Valley Expanded
+56415,Blue Moon Vineyard,Meet Sophia,MEET_VILLAGER,Stardew Valley Expanded
+56416,Jenkins' Residence,Meet Victor,MEET_VILLAGER,Stardew Valley Expanded
+56417,Fairhaven Farm,Meet Andy,MEET_VILLAGER,Stardew Valley Expanded
+56418,Aurora Vineyard,Meet Apples,MEET_VILLAGER,Stardew Valley Expanded
+56419,Museum,Meet Gunther,MEET_VILLAGER,Stardew Valley Expanded
+56420,JojaMart,Meet Martin,MEET_VILLAGER,Stardew Valley Expanded
+56421,Adventurer's Guild,Meet Marlon,MEET_VILLAGER,Stardew Valley Expanded
+56422,Wizard Tower,Meet Morgan,MEET_VILLAGER,Stardew Valley Expanded
+56423,Scarlett's House,Meet Scarlett,MEET_VILLAGER,Stardew Valley Expanded
+56424,Susan's House,Meet Susan,MEET_VILLAGER,Stardew Valley Expanded
+56425,JojaMart,Meet Morris,MEET_VILLAGER,Stardew Valley Expanded
+56426,Witch's Swamp,Meet Zic,MEET_VILLAGER,Distant Lands - Witch Swamp Overhaul
+56427,Witch's Attic,Meet Alecto,MEET_VILLAGER,Alecto the Witch
+56428,Mouse House,Meet Lacey,MEET_VILLAGER,Hat Mouse Lacey
+56429,Boarding House - First Floor,Meet Joel,MEET_VILLAGER,Boarding House and Bus Stop Extension
+56430,Boarding House - First Floor,Meet Sheila,MEET_VILLAGER,Boarding House and Bus Stop Extension
+56431,The Lost Valley,Meet Gregory,MEET_VILLAGER,Boarding House and Bus Stop Extension
 57001,Pierre's General Store,Premium Pack,"BACKPACK,BACKPACK_TIER",Bigger Backpack
 57002,Carpenter Shop,Tractor Garage Blueprint,BUILDING_BLUEPRINT,Tractor Mod
 57003,The Deep Woods Depth 100,Pet the Deep Woods Unicorn,MANDATORY,DeepWoods

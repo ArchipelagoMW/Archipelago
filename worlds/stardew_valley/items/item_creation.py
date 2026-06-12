@@ -125,6 +125,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_secrets_items(item_factory, content, options, items)
     create_eatsanity_enzyme_items(item_factory, options, items)
     create_endgame_locations_items(item_factory, options, items)
+    create_villager_items(item_factory, content, options, items)
 
     create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
@@ -614,6 +615,16 @@ def create_endgame_locations_items(item_factory: StardewItemFactory, options: St
         for portrait in items_by_group[Group.REQUIRES_FRIENDSANITY_MARRIAGE]:
             items_to_add.remove(portrait)
     items.extend(item_factory(item) for item in items_to_add)
+
+
+def create_villager_items(item_factory: StardewItemFactory, content: StardewContent, options: StardewValleyOptions, items: List[Item]):
+    items_to_add = []
+    items_to_add.extend(items_by_group[Group.VILLAGER_ALWAYS])
+
+    if StartWithoutOptionName.villagers in options.start_without:
+        items_to_add.extend(items_by_group[Group.VILLAGER])
+    filtered_items = remove_excluded(list(items_to_add), content, options)
+    items.extend(item_factory(item) for item in filtered_items)
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

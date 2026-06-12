@@ -599,6 +599,41 @@ id,name,classification,groups,content_packs
 676,Bookseller Stock: Permanent Books,progression,"BOOKSELLER",
 677,Men's Locker Key,progression,,
 678,Women's Locker Key,progression,,
+679,Alex Arrival,progression,VILLAGER,
+680,Elliott Arrival,progression,VILLAGER,
+681,Harvey Arrival,progression,VILLAGER,
+682,Sam Arrival,progression,VILLAGER,
+683,Sebastian Arrival,progression,VILLAGER,
+684,Shane Arrival,progression,VILLAGER,
+685,Abigail Arrival,progression,VILLAGER,
+686,Emily Arrival,progression,VILLAGER,
+687,Haley Arrival,progression,VILLAGER,
+688,Leah Arrival,progression,VILLAGER,
+689,Maru Arrival,progression,VILLAGER,
+690,Penny Arrival,progression,VILLAGER,
+691,Caroline Arrival,progression,VILLAGER,
+692,Clint Arrival,progression,VILLAGER,
+693,Demetrius Arrival,progression,VILLAGER,
+694,Dwarf Arrival,progression,VILLAGER,
+695,Evelyn Arrival,progression,VILLAGER,
+696,George Arrival,progression,VILLAGER,
+697,Gus Arrival,progression,VILLAGER,
+698,Jas Arrival,progression,VILLAGER,
+699,Jodi Arrival,progression,VILLAGER,
+700,Kent Arrival,progression,VILLAGER_ALWAYS,
+701,Krobus Arrival,progression,VILLAGER,
+702,Leo Arrival,progression,"VILLAGER,GINGER_ISLAND",
+703,Lewis Arrival,progression,VILLAGER,
+704,Linus Arrival,progression,VILLAGER,
+705,Marnie Arrival,progression,VILLAGER,
+706,Pam Arrival,progression,VILLAGER,
+707,Pierre Arrival,progression,VILLAGER,
+708,Robin Arrival,progression,VILLAGER,
+709,Sandy Arrival,progression,VILLAGER,
+710,Vincent Arrival,progression,VILLAGER,
+711,Willy Arrival,progression,VILLAGER,
+712,Wizard Arrival,progression,VILLAGER,
+713,Pet Arrival,progression,VILLAGER_ALWAYS,
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,
@@ -999,6 +1034,37 @@ id,name,classification,groups,content_packs
 10129,Gregory <3,progression,FRIENDSANITY,Boarding House and Bus Stop Extension
 10130,Sheila <3,progression,FRIENDSANITY,Boarding House and Bus Stop Extension
 10131,Joel <3,progression,FRIENDSANITY,Boarding House and Bus Stop Extension
+10141,Juna Arrival,progression,VILLAGER,Juna - Roommate NPC
+10142,Jasper Arrival,progression,VILLAGER,Professor Jasper Thomas
+10143,Alec Arrival,progression,VILLAGER,Alec Revisited
+10144,Yoba Arrival,progression,VILLAGER,Custom NPC - Yoba
+10145,Eugene Arrival,progression,VILLAGER,Custom NPC Eugene
+10146,Wellwick Arrival,progression,VILLAGER,'Prophet' Wellwick
+10147,Mr. Ginger Arrival,progression,VILLAGER,Mister Ginger (cat npc)
+10148,Shiko Arrival,progression,VILLAGER,Shiko - New Custom NPC
+10149,Delores Arrival,progression,VILLAGER,Delores - Custom NPC
+10150,Ayeisha Arrival,progression,VILLAGER,Ayeisha - The Postal Worker (Custom NPC)
+10151,Riley Arrival,progression,VILLAGER,Custom NPC - Riley
+10152,Claire Arrival,progression,VILLAGER,Stardew Valley Expanded
+10153,Lance Arrival,progression,"VILLAGER,GINGER_ISLAND",Stardew Valley Expanded
+10154,Olivia Arrival,progression,VILLAGER,Stardew Valley Expanded
+10155,Sophia Arrival,progression,VILLAGER,Stardew Valley Expanded
+10156,Victor Arrival,progression,VILLAGER,Stardew Valley Expanded
+10157,Andy Arrival,progression,VILLAGER,Stardew Valley Expanded
+10158,Apples Arrival,progression,VILLAGER,Stardew Valley Expanded
+10159,Gunther Arrival,progression,VILLAGER,Stardew Valley Expanded
+10160,Martin Arrival,progression,VILLAGER,Stardew Valley Expanded
+10161,Marlon Arrival,progression,VILLAGER,Stardew Valley Expanded
+10162,Morgan Arrival,progression,VILLAGER,Stardew Valley Expanded
+10163,Scarlett Arrival,progression,VILLAGER,Stardew Valley Expanded
+10164,Susan Arrival,progression,VILLAGER,Stardew Valley Expanded
+10165,Morris Arrival,progression,VILLAGER,Stardew Valley Expanded
+10166,Alecto Arrival,progression,VILLAGER,Alecto the Witch
+10167,Zic Arrival,progression,VILLAGER,Distant Lands - Witch Swamp Overhaul
+10168,Lacey Arrival,progression,VILLAGER,Hat Mouse Lacey
+10169,Gregory Arrival,progression,VILLAGER,Boarding House and Bus Stop Extension
+10170,Sheila Arrival,progression,VILLAGER,Boarding House and Bus Stop Extension
+10171,Joel Arrival,progression,VILLAGER,Boarding House and Bus Stop Extension
 10301,Progressive Woods Obelisk Sigils,progression,,DeepWoods
 10302,Progressive Skull Cavern Elevator,progression,,Skull Cavern Elevator
 10401,Baked Berry Oatmeal Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded

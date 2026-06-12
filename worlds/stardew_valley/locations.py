@@ -146,6 +146,8 @@ class LocationTags(enum.Enum):
     ENDGAME_LOCATIONS = enum.auto()
     REQUIRES_FRIENDSANITY = enum.auto()
     REQUIRES_FRIENDSANITY_MARRIAGE = enum.auto()
+    MEET_VILLAGER = enum.auto()
+    MEET_VILLAGER_ALWAYS = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
@@ -664,6 +666,17 @@ def extend_endgame_locations(randomized_locations: List[LocationData], options: 
     randomized_locations.extend(endgame_locations)
 
 
+def extend_villager_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    villager_locations = []
+    villager_locations.extend(locations_by_tag[LocationTags.MEET_VILLAGER_ALWAYS])
+
+    if StartWithoutOptionName.villagers in options.start_without:
+        villager_locations.extend(locations_by_tag[LocationTags.MEET_VILLAGER])
+
+    endgame_locations = filter_disabled_locations(options, content, villager_locations)
+    randomized_locations.extend(villager_locations)
+
+
 def extend_filler_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     number_locations_to_add_per_day = 0
@@ -763,6 +776,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_hats_locations(randomized_locations, content)
     extend_eatsanity_locations(randomized_locations, options, content)
     extend_endgame_locations(randomized_locations, options, content)
+    extend_villager_locations(randomized_locations, options, content)
 
     # Mods
     extend_situational_quest_locations(randomized_locations, options, content)
