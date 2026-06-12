@@ -1519,19 +1519,27 @@
         ],
         "ls_requires": [
             { "item": "Ledge Grab" }, // T-dash setup is viable here
-            { "anyOf": [ // then get onto the rope without the Grapple/zipline/slider by using
-                { "item": "Cloud Leap" }, // parry hover into Cloud Leap
-                { "item": "Trick - Bow Hover" } // into LS vault (that's why this isn't in medium)
-            ] },
-            // we can't get another LS up here, so the rest is similar to vanilla
-            { "item": "Tai-Chi Kick" },
             { "anyOf": [
-                { "item": "Cloud Leap" },
-                [
-                    // already required LG above
-                    { "item": "Wall Climb" },
-                    { "item": "Air Dash" } // no T-dash substitute since we already spent it on LS setup
-                ]
+                [ // this is the only way to completely avoid TCK:
+                    { "item": "Trick - Bow Hover" }, // hover over to the rope
+                    { "item": "Cloud Leap" } // jump to grab the rope
+                    // then wall slide up to the chest, using LS you got before the hover
+                ],
+                [ // various ways of using LS to get onto the rope, then using TCK at the end as usual
+                    { "anyOf": [ // then get onto the rope without the Grapple/zipline/slider by using
+                        { "item": "Cloud Leap" }, // parry hover into Cloud Leap
+                        { "item": "Trick - Bow Hover" } // into LS vault (that's why this isn't in medium)
+                    ] },
+                    { "item": "Tai-Chi Kick" },
+                    { "anyOf": [
+                        { "item": "Cloud Leap" },
+                        [
+                            // already required LG above
+                            { "item": "Wall Climb" },
+                            { "item": "Air Dash" } // no T-dash substitute since we already spent it on LS setup
+                        ]
+                    ] }
+                ],
             ] }
         ]
     },

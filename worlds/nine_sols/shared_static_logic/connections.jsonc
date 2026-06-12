@@ -1088,14 +1088,25 @@
     { "from": "OW - Lower Right Exit", "to": "Factory (U) - Left Exit", "requires": [] },
 
     // Outer Warehouse
-    { "from": "OW - Lower Right Exit", "to": "OW - Activate Crates And Return", "requires": [
-        { "item": "Wall Climb" }, // climbing up to the hack point hard requires this
-        { "item": "Mystic Nymph: Scout Mode" }, // and the crushers on the return trip need Nymph to disable
-        // The lasers on the return trip hard require AD AND TCK, unless we expect players to figure out you can
-        // ground dash through the lasers from tiny ledges. All other platforming gets absorbed by that requirement.
-        { "item": "Air Dash" },
-        { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Tai-Chi Kick" } ] }
-    ] },
+    {
+        "from": "OW - Lower Right Exit", "to": "OW - Activate Crates And Return",
+        "requires": [
+            { "item": "Wall Climb" }, // climbing up to the hack point hard requires this
+            { "item": "Mystic Nymph: Scout Mode" }, // and the crushers on the return trip need Nymph to disable
+            // The lasers on the return trip hard require AD AND TCK, unless we expect players to figure out you can
+            // ground dash through the lasers from tiny ledges. All other platforming gets absorbed by that requirement.
+            { "item": "Air Dash" },
+            { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Tai-Chi Kick" } ] }
+        ],
+        "ls_requires": [
+            { "item": "Ledge Grab" },
+            { "item": "Cloud Leap" }, // triple jump replaces wall climb
+            // the rest is the same
+            { "item": "Mystic Nymph: Scout Mode" },
+            { "item": "Air Dash" }
+            // except no LG or TCK since we already require LG for the triple jump
+        ]
+    },
     { "from": "OW - Lower Right Exit", "to": "OW - Root Node & Middle Exits", "requires": [
         { "region": "OW - Activate Crates And Return" },
         { "anyOf": [ // to jump from the lower crate track to the upper one
@@ -2286,9 +2297,11 @@
             { "item": "Cloud Leap" } // then triple jump from Ground Floor Bookshelf to the mutant node platform above
         ]
     },
-    { "from": "TRC - Lower Sickbay", "to": "TRC - Upper Levels", "requires": [
-        { "item": "Wall Climb" }
-    ] },
+    {
+        "from": "TRC - Lower Sickbay", "to": "TRC - Upper Levels",
+        "requires": [{ "item": "Wall Climb" }],
+        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // triple jump past the broken stairs
+    },
     { "from": "TRC - Lower Sickbay", "to": "TRC - Chest Above Sol Statue", "requires": [ { "item": "Cloud Leap" } ] },
     { "from": "TRC - Upper Levels", "to": "TRC - Chest Above Sol Statue", "medium_requires": [
         { "item": "Air Dash" } // and T-dash. Probably T-dash first since you need to slash the spikes before landing.
