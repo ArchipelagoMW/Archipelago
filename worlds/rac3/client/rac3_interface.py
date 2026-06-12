@@ -837,7 +837,7 @@ class Rac3Interface(GameInterface):
             case RAC3ITEM.JACKPOT:
                 # Limit multiplier to 128x
                 if self.bolt_and_xp_multiplier_value <= 6:
-                    _time = round(time.time() + 20.0, 4)
+                    _time = round(time.time() + 30.0, 4)
                     self.timers[name + str(_time)] = _time
                     self.bolt_and_xp_multiplier_value += 1
             case RAC3ITEM.NANOTECH_XP:
@@ -1955,8 +1955,9 @@ class Rac3Interface(GameInterface):
 
     def multiplier_cycler(self):
         """Update the Bolt+EXP multiplier based on settings"""
-        self._write32(RAC3STATUS.JACKPOT_TIMER, 0x7FFFFFFF)
-        self._write8(RAC3STATUS.JACKPOT, self.bolt_and_xp_multiplier_value)
+        if self.options.bolt_and_xp_multiplier:
+            self._write32(RAC3STATUS.JACKPOT_TIMER, 0x7FFFFFFF)
+            self._write8(RAC3STATUS.JACKPOT, self.bolt_and_xp_multiplier_value)
 
     def challenge_mode_cycler(self):
         """Update challenge mode related values based on settings"""
