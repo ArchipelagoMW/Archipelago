@@ -8,7 +8,7 @@ from ..items import Group, ItemData, item_data
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
     Booksanity, Walnutsanity, Secretsanity, Moviesanity
-from ..options.options import IncludeEndgameLocations, Eatsanity
+from ..options.options import IncludeEndgameLocations, Eatsanity, StartWithout
 from ..strings.ap_names.transport_names import Transportation
 from ..strings.region_names import Region
 
@@ -32,6 +32,7 @@ def get_all_permanent_progression_items() -> List[ItemData]:
 
 class TestBaseItemGeneration(SVTestBase):
     options = {
+        StartWithout.internal_name: StartWithout.preset_all,
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
@@ -83,6 +84,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
+        StartWithout.internal_name: StartWithout.preset_all,
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         Shipsanity.internal_name: Shipsanity.option_everything,
         Chefsanity.internal_name: Chefsanity.preset_all,
