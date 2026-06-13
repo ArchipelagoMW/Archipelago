@@ -2,10 +2,10 @@ from .mod_data import ModNames
 from ..content.mods.sve import SVE_GINGER_ISLAND_PACK
 from ..regions.model import RegionData, ConnectionData, GroupFlag, MergeFlag, RandomizationFlag, ModRegionsData
 from ..regions.vanilla_content_packs import ginger_island_connections, ginger_island_regions
-from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, LaceyEntrance, LogicEntrance, BoardingHouseEntrance, \
+from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, LaceyEntrance, BoardingHouseEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance, SVEEntrance, AlectoEntrance
 from ..strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, BoardingHouseRegion, \
-    AlecRegion, YobaRegion, JunaRegion, MagicRegion, AyeishaRegion, RileyRegion, SVERegion, AlectoRegion, LaceyRegion, LogicRegion
+    AlecRegion, YobaRegion, JunaRegion, MagicRegion, AyeishaRegion, RileyRegion, SVERegion, AlectoRegion, LaceyRegion
 
 deep_woods_regions = [
     RegionData(Region.farm, (DeepWoodsEntrance.use_woods_obelisk,)),
@@ -87,7 +87,7 @@ eugene_entrances = [
         group=GroupFlag.IN_TO_OUT,
     )]
 
-magic_regions = [RegionData(Region.pierre_store, (MagicEntrance.store_to_altar,)), RegionData(MagicRegion.altar)]
+magic_regions = [RegionData(Region.pierre_house, (MagicEntrance.store_to_altar,)), RegionData(MagicRegion.altar)]
 
 magic_entrances = [ConnectionData(MagicEntrance.store_to_altar, MagicRegion.altar, flag=RandomizationFlag.NOT_RANDOMIZED)]
 
@@ -223,7 +223,7 @@ sve_main_land_regions = [
     RegionData(SVERegion.shearwater),
     RegionData(Region.museum, (SVEEntrance.museum_to_gunther_bedroom,)),
     RegionData(SVERegion.gunther_bedroom),
-    RegionData(Region.fish_shop, (SVEEntrance.fish_shop_to_willy_bedroom,)),
+    RegionData(Region.fish_cabin, (SVEEntrance.fish_cabin_to_willy_bedroom,)),
     RegionData(SVERegion.willy_bedroom),
     RegionData(Region.mountain, (SVEEntrance.mountain_to_guild_summit,)),
     # These entrances are removed from the mountain region when SVE is enabled
@@ -350,7 +350,7 @@ sve_main_land_connections = [
     ConnectionData(SVEEntrance.scarlett_house_to_grampleton_suburbs, SVERegion.grampleton_suburbs, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.sprite_spring_to_cave, SVERegion.sprite_spring_cave, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.cave_to_sprite_spring, SVERegion.sprite_spring, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(SVEEntrance.fish_shop_to_willy_bedroom, SVERegion.willy_bedroom),
+    ConnectionData(SVEEntrance.fish_cabin_to_willy_bedroom, SVERegion.willy_bedroom),
     ConnectionData(SVEEntrance.museum_to_gunther_bedroom, SVERegion.gunther_bedroom),
     ConnectionData(SVEEntrance.highlands_to_pond, SVERegion.highlands_pond)]
 

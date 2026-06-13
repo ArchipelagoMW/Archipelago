@@ -70,7 +70,7 @@ class ModQuestLogic(BaseLogic):
 
         return {
             ModQuest.RailroadBoulder: self.logic.received(Wallet.skull_key) & self.logic.has_all(*(Ore.iridium, Material.coal)) &
-                                      self.logic.region.can_reach(Region.blacksmith) & self.logic.region.can_reach(Region.railroad),
+                                      self.logic.region.can_reach(Region.blacksmith_shop) & self.logic.region.can_reach(Region.railroad),
             ModQuest.GrandpasShed: self.logic.has_all(*(Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone)) &
                                    self.logic.region.can_reach(SVERegion.grandpas_shed),
             ModQuest.MarlonsBoat: self.logic.has_all(*(Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
@@ -98,9 +98,9 @@ class ModQuestLogic(BaseLogic):
                                          self.logic.quest.can_complete_quest(Quest.magic_ink),
             ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.deluxe) &
                                  self.logic.quest.can_complete_quest(Quest.magic_ink),
-            ModQuest.ANewPot: self.logic.region.can_reach(Region.saloon) &
-                              self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_store) &
-                              self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin,
+            ModQuest.ANewPot: self.logic.region.can_reach(Region.saloon_shop) &
+                              self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_house) &
+                              self.logic.region.can_reach(Region.blacksmith_shop) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin,
                                                                                                                                                   6),
             ModQuest.FancyBlanketTask: self.logic.region.can_reach(Region.haley_house) & self.logic.has(AnimalProduct.wool) &
                                        self.logic.has(ArtisanGood.cloth) & self.logic.relationship.has_hearts(ModNPC.goblin, 10) &

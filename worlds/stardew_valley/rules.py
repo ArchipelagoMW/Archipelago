@@ -303,8 +303,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.enter_movie_theater, movie_theater_rule & logic.has(Gift.movie_ticket))
     rule_collector.set_entrance_rule(Entrance.take_bus_to_desert, logic.received(Transportation.bus_repair) & logic.money.can_spend(500))
     rule_collector.set_entrance_rule(Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
-    rule_collector.set_entrance_rule(LogicEntrance.talk_to_mines_dwarf,
-                                     logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
+    rule_collector.set_entrance_rule(LogicEntrance.break_dwarf_rocks, logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days() & logic.money.can_spend(1200))
     set_raccoon_rules(logic, rule_collector, bundle_rooms, world_options)
 
@@ -409,6 +408,21 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_many_entrances_rule([Entrance.minecart_town_to_quarry, Entrance.minecart_mines_to_quarry, Entrance.minecart_bus_stop_to_quarry],
                                            logic.received_all("Minecarts Repair", "Bridge Repair"))
 
+    rule_collector.set_entrance_rule(Entrance.purchase_from_pierre, logic.relationship.can_meet(NPC.pierre))
+    rule_collector.set_entrance_rule(Entrance.purchase_from_robin, logic.relationship.can_meet(NPC.robin))
+    rule_collector.set_entrance_rule(Entrance.purchase_from_clint, logic.relationship.can_meet(NPC.clint))
+    rule_collector.set_entrance_rule(Entrance.purchase_from_marnie, logic.relationship.can_meet(NPC.marnie))
+    rule_collector.set_entrance_rule(Entrance.purchase_from_gus, logic.relationship.can_meet(NPC.gus))
+    rule_collector.set_entrance_rule(Entrance.purchase_from_willy, logic.relationship.can_meet(NPC.willy))
+    rule_collector.set_entrance_rule(Entrance.purchase_from_dwarf, logic.relationship.can_meet(NPC.dwarf) & logic.wallet.can_speak_dwarf())
+    rule_collector.set_entrance_rule(Entrance.purchase_from_sandy, logic.relationship.can_meet(NPC.sandy))
+    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_egg_festival, logic.relationship.can_meet(NPC.pierre))
+    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_flower_dance, logic.relationship.can_meet(NPC.pierre))
+    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_luau, logic.relationship.can_meet(NPC.pierre))
+    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_moonlight_jellies, logic.relationship.can_meet(NPC.pierre))
+    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_spirit_eve, logic.relationship.can_meet(NPC.pierre))
+    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_winter_star, logic.relationship.can_meet(NPC.pierre))
+
 
 def set_bookseller_rules(logic, rule_collector):
     rule_collector.set_entrance_rule(LogicEntrance.buy_books, logic.received(Bookseller.days))
@@ -497,8 +511,8 @@ def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, cont
     rule_collector.set_entrance_rule(Entrance.hospital_back_to_hospital, logic.relationship.has_hearts(NPC.harvey, 2))
     rule_collector.set_entrance_rule(Entrance.hospital_to_hospital_back, logic.relationship.has_hearts(NPC.harvey, 2))
     rule_collector.set_entrance_rule(Entrance.mountain_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
-    rule_collector.set_entrance_rule(Entrance.carpenter_shop_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
-    rule_collector.set_entrance_rule(Entrance.maru_room_to_carpenter_shop, logic.relationship.has_hearts(NPC.maru, 2))
+    rule_collector.set_entrance_rule(Entrance.carpenter_house_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
+    rule_collector.set_entrance_rule(Entrance.maru_room_to_carpenter_house, logic.relationship.has_hearts(NPC.maru, 2))
     rule_collector.set_entrance_rule(Entrance.enter_sebastian_room, (logic.relationship.has_hearts(NPC.sebastian, 2) | logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(Entrance.forest_to_leah_cottage, logic.relationship.has_hearts(NPC.leah, 2))
     rule_collector.set_entrance_rule(Entrance.enter_elliott_house, logic.relationship.has_hearts(NPC.elliott, 2))
@@ -597,7 +611,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.use_island_obelisk: logic.can_use_obelisk(Transportation.island_obelisk),
         Entrance.use_farm_obelisk: logic.can_use_obelisk(Transportation.farm_obelisk),
         Entrance.use_island_totem: logic.has("Warp Totem: Island"),
-        Entrance.fish_shop_to_boat_tunnel: boat_repaired,
+        Entrance.fish_cabin_to_boat_tunnel: boat_repaired,
         Entrance.boat_to_ginger_island: boat_repaired & logic.money.can_spend(1000),
         Entrance.island_south_to_west: logic.received("Island West Turtle"),
         Entrance.island_south_to_north: logic.received("Island North Turtle"),
@@ -1266,11 +1280,11 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
     rule_collector.set_location_rule("Gold Clock Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.gold_clock))
     set_rule_from_purchased_content(logic, rule_collector, content, Tool.return_scepter, [EndgameItemReceivedRequirement])
     rule_collector.set_location_rule("Pam House Blueprint",
-                                     logic.money.can_spend_at(Region.carpenter, 500_000) & logic.grind.can_grind_item(950, Material.wood))
-    rule_collector.set_location_rule("Forest To Beach Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
-    rule_collector.set_location_rule("Mountain Shortcuts Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
-    rule_collector.set_location_rule("Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
-    rule_collector.set_location_rule("Tunnel To Backwoods Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
+                                     logic.money.can_spend_at(Region.carpenter_shop, 500_000) & logic.grind.can_grind_item(950, Material.wood))
+    rule_collector.set_location_rule("Forest To Beach Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter_shop, 75_000))
+    rule_collector.set_location_rule("Mountain Shortcuts Blueprint", logic.money.can_spend_at(Region.carpenter_shop, 75_000))
+    rule_collector.set_location_rule("Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter_shop, 75_000))
+    rule_collector.set_location_rule("Tunnel To Backwoods Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter_shop, 75_000))
     rule_collector.set_location_rule("Purchase Statue Of Endless Fortune", logic.can_purchase_statue_of_endless_fortune())
     set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.catalogue, [EndgameItemReceivedRequirement])
     set_rule_from_purchased_content(logic, rule_collector, content, Catalogue.furniture, [EndgameItemReceivedRequirement])

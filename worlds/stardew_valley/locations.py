@@ -673,8 +673,8 @@ def extend_villager_locations(randomized_locations: List[LocationData], options:
     if StartWithoutOptionName.villagers in options.start_without:
         villager_locations.extend(locations_by_tag[LocationTags.MEET_VILLAGER])
 
-    endgame_locations = filter_disabled_locations(options, content, villager_locations)
-    randomized_locations.extend(villager_locations)
+    filtered_villager_locations = filter_disabled_locations(options, content, villager_locations)
+    randomized_locations.extend(filtered_villager_locations)
 
 
 def extend_filler_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):

@@ -161,7 +161,7 @@ class FestivalLogic(BaseLogic):
         artisan_rule = self.logic.artisan.can_keg(Generic.any) | self.logic.artisan.can_preserves_jar(Generic.any)
 
         # Salads at the bar are good enough
-        cooking_rule = self.logic.money.can_spend_at(Region.saloon, 220)
+        cooking_rule = self.logic.money.can_spend_at(Region.saloon_shop, 220)
 
         fish_rule = self.logic.fishing.can_fish_anywhere(50)
 

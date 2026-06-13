@@ -6,7 +6,7 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from ..content.feature import friendsanity
 from ..data.villagers_data import Villager
 from ..stardew_rule import StardewRule, True_, false_, true_
-from ..strings.ap_names.ap_option_names import CustomLogicOptionName
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName, StartWithoutOptionName
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.building_names import Building
 from ..strings.generic_names import Generic
@@ -119,17 +119,26 @@ class RelationshipLogic(BaseLogic):
         return self.logic.received(heart_item, number_required) & self.can_meet(villager.name)
 
     @cache_self1
+    def exists(self, npc: str) -> StardewRule:
+        villager = self.content.villagers.get(npc)
+        if villager is None:
+            return false_
+
+        if StartWithoutOptionName.villagers in self.options.start_without or npc == NPC.kent or npc == NPC.pet:
+            return self.logic.received(f"{npc} Arrival")
+
+        return self.logic.true_
+
+    @cache_self1
     def can_meet(self, npc: str) -> StardewRule:
         villager = self.content.villagers.get(npc)
         if villager is None:
             return false_
 
         rules = [self.logic.region.can_reach_any(*villager.locations)]
+        rules.append(self.logic.relationship.exists(npc))
 
-        if npc == NPC.kent:
-            rules.append(self.logic.time.has_year_two)
-
-        elif npc == NPC.leo:
+        if npc == NPC.leo:
             rules.append(self.logic.received("Island North Turtle"))
             rules.append(self.logic.region.can_reach(Region.leo_hut))
 

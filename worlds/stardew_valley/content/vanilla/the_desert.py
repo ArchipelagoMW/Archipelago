@@ -51,17 +51,17 @@ the_desert = ContentPack(
         Vegetable.beet: (HarvestCropSource(seed=Seed.beet, seasons=(Season.fall,)),),
     },
     shop_sources={
-        Seed.cactus: (ShopSource(price=150, shop_region=Region.oasis),),
-        Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis, seasons=(Season.spring,)),),
-        Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis, seasons=(Season.summer,)),),
-        Seed.beet: (ShopSource(price=20, shop_region=Region.oasis, seasons=(Season.fall,)),),
+        Seed.cactus: (ShopSource(price=150, shop_region=Region.oasis_shop),),
+        Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis_shop, seasons=(Season.spring,)),),
+        Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis_shop, seasons=(Season.summer,)),),
+        Seed.beet: (ShopSource(price=20, shop_region=Region.oasis_shop, seasons=(Season.fall,)),),
 
         FestivalCheck.rarecrow_3: (ShopSource(price=10_000, currency=Currency.qi_coin, shop_region=Region.casino),),
         Gift.void_ghost_pendant: (ShopSource(price=0, items_price=((200, Loot.void_essence),), shop_region=Region.desert,
                                              other_requirements=(SpecificFriendRequirement(NPC.krobus, 10),)),),
 
-        Meal.ice_cream: (ShopSource(price=240, currency=Currency.money, shop_region=Region.oasis),),
-        ArtisanGood.honey: (ShopSource(price=200, currency=Currency.money, shop_region=Region.oasis),),
+        Meal.ice_cream: (ShopSource(price=240, currency=Currency.money, shop_region=Region.oasis_shop),),
+        ArtisanGood.honey: (ShopSource(price=200, currency=Currency.money, shop_region=Region.oasis_shop),),
 
         FestivalCheck.calico_statue: (ShopSource(price=30, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
     },

@@ -58,7 +58,7 @@ class BuildingLogic(BaseLogic):
 
     @cached_property
     def can_construct_buildings(self) -> StardewRule:
-        return self.logic.region.can_reach(Region.carpenter)
+        return self.logic.region.can_reach(Region.carpenter_shop)
 
     def can_purchase_wizard_blueprint(self, building_name: str) -> StardewRule:
         # This rule is part of the region, so not needed here

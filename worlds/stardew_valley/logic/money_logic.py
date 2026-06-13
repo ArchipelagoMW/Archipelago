@@ -44,10 +44,10 @@ class MoneyLogic(BaseLogic):
             return self.logic.true_
 
         shipping_rule = self.logic.shipping.can_use_any_shipping_bin
-        pierre_rule = self.logic.region.can_reach_all(Region.pierre_store, Region.forest)
+        pierre_rule = self.logic.region.can_reach_all(Region.pierre_shop, Region.forest)
         willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
-        clint_rule = self.logic.region.can_reach_all(Region.blacksmith, Region.mines_floor_5) & self.logic.tool.has_tool(Tool.pickaxe)
-        robin_rule = self.logic.region.can_reach_all(Region.carpenter, Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
+        clint_rule = self.logic.region.can_reach_all(Region.blacksmith_shop, Region.mines_floor_5) & self.logic.tool.has_tool(Tool.pickaxe)
+        robin_rule = self.logic.region.can_reach_all(Region.carpenter_shop, Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
         farming_rule = self.logic.farming.can_plant_and_grow_item(Season.not_winter)
 
         if amount <= 2000:
@@ -65,7 +65,7 @@ class MoneyLogic(BaseLogic):
         if amount <= 10000:
             return shipping_rule & farming_rule
 
-        seed_rules = self.logic.region.can_reach(Region.pierre_store)
+        seed_rules = self.logic.region.can_reach(Region.pierre_shop)
         if amount <= 40000:
             return shipping_rule & seed_rules & farming_rule
 
@@ -120,7 +120,7 @@ class MoneyLogic(BaseLogic):
         if currency == Currency.qi_gem:
             if self.content.is_enabled(qi_board_content_pack):
                 return self.logic.received(Event.received_qi_gems, amount * 3)
-            return self.logic.region.can_reach_all(Region.qi_walnut_room, Region.saloon) & self.can_have_earned_total(5000)
+            return self.logic.region.can_reach_all(Region.qi_walnut_room, Region.saloon_shop) & self.can_have_earned_total(5000)
         if currency == Currency.golden_walnut:
             return self.can_spend_walnut(amount)
 

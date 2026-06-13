@@ -118,7 +118,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_to_backwoods,
             Entrance.mountain_to_railroad,
             Entrance.mountain_to_tent,
-            Entrance.mountain_to_carpenter_shop,
+            Entrance.mountain_to_carpenter_house,
             Entrance.mountain_to_town,
             Entrance.mountain_to_maru_room,
             Entrance.mountain_to_outside_adventure_guild,  # can't randomize
@@ -140,7 +140,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.mountain_cutscenes_from_guild
         ),
     ),
-    RegionData(RegionName.maru_room, (Entrance.maru_room_to_carpenter_shop, Entrance.maru_room_to_mountain)),
+    RegionData(RegionName.maru_room, (Entrance.maru_room_to_carpenter_house, Entrance.maru_room_to_mountain)),
     RegionData(
         RegionName.tunnel_entrance,
         (
@@ -168,7 +168,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.town_to_sam_house,
             Entrance.town_to_haley_house,
             Entrance.town_to_sewer,
-            Entrance.town_to_clint_blacksmith,
+            Entrance.town_to_blacksmith,
             Entrance.town_to_museum,
             Entrance.town_to_jojamart,
             Entrance.town_tidepools_shortcut,
@@ -203,7 +203,7 @@ vanilla_regions: tuple[RegionData, ...] = (
         (
             Entrance.beach_forest_shortcut,
             Entrance.beach_to_town,
-            Entrance.beach_to_willy_fish_shop,
+            Entrance.beach_to_willy_fish_cabin,
             Entrance.enter_elliott_house,
             Entrance.enter_tide_pools,  # can't randomize
             LogicEntrance.attend_night_market,
@@ -225,7 +225,8 @@ vanilla_regions: tuple[RegionData, ...] = (
         LogicRegion.railroad_part_behind_chicken_stone,
         (Entrance.enter_witch_warp_cave, LogicEntrance.part_behind_chicken_stone_to_railroad, LogicEntrance.railroad_cutscenes_from_statue),
     ),
-    RegionData(RegionName.ranch, (Entrance.marnie_ranch_to_forest,)),
+    RegionData(RegionName.ranch, (Entrance.marnie_ranch_to_forest, Entrance.purchase_from_marnie)),
+    RegionData(RegionName.ranch_shop),
     RegionData(RegionName.leah_house, (Entrance.leah_cottage_to_forest,)),
     RegionData(RegionName.mastery_cave, (Entrance.mastery_cave_to_forest,)),
     RegionData(
@@ -248,13 +249,15 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.wizard_blueprints),
     RegionData(RegionName.tent, (Entrance.tent_to_mountain,)),
     RegionData(
-        RegionName.carpenter,
+        RegionName.carpenter_house,
         (
-            Entrance.carpenter_shop_to_mountain,
-            Entrance.carpenter_shop_to_maru_room,  # can't randomize
+            Entrance.carpenter_house_to_mountain,
+            Entrance.carpenter_house_to_maru_room,  # can't randomize
             Entrance.enter_sebastian_room_stairwell,
+            Entrance.purchase_from_robin,
         ),
     ),
+    RegionData(RegionName.carpenter_shop),
     RegionData(RegionName.sebastian_room_stairwell, (Entrance.leave_sebastian_room_stairwell, Entrance.enter_sebastian_room)),
     RegionData(RegionName.sebastian_room),
     RegionData(
@@ -283,7 +286,8 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.hospital, (Entrance.hospital_to_town, Entrance.hospital_to_hospital_back)),
     RegionData(RegionName.hospital_back, (Entrance.hospital_back_to_hospital, Entrance.enter_harvey_room)),
     RegionData(RegionName.harvey_room, (Entrance.leave_harvey_room,)),
-    RegionData(RegionName.pierre_store, (Entrance.pierre_general_store_to_town, Entrance.enter_sunroom)),
+    RegionData(RegionName.pierre_house, (Entrance.pierre_general_store_to_town, Entrance.purchase_from_pierre, Entrance.enter_sunroom)),
+    RegionData(RegionName.pierre_shop),
     RegionData(RegionName.sunroom, (Entrance.leave_sunroom,)),
     RegionData(
         RegionName.saloon,
@@ -291,8 +295,10 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.saloon_to_town,
             Entrance.play_journey_of_the_prairie_king,  # can't randomize
             Entrance.play_junimo_kart,  # can't randomize
+            Entrance.purchase_from_gus,
         ),
     ),
+    RegionData(RegionName.saloon_shop),
     RegionData(RegionName.jotpk_world_1, (Entrance.reach_jotpk_world_2,)),
     RegionData(RegionName.jotpk_world_2, (Entrance.reach_jotpk_world_3,)),
     RegionData(RegionName.jotpk_world_3),
@@ -307,13 +313,15 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.purple_shorts_maze, (Entrance.leave_shorts_maze,)),
     RegionData(RegionName.sam_house, (Entrance.sam_house_to_town,)),
     RegionData(RegionName.haley_house, (Entrance.haley_house_to_town,)),
-    RegionData(RegionName.blacksmith, (Entrance.clint_blacksmith_to_town,)),
+    RegionData(RegionName.blacksmith_house, (Entrance.blacksmith_to_town, Entrance.purchase_from_clint)),
+    RegionData(RegionName.blacksmith_shop),
     RegionData(RegionName.museum, (Entrance.museum_to_town,)),
     RegionData(RegionName.jojamart, (Entrance.jojamart_to_town, Entrance.enter_abandoned_jojamart)),  # can't randomize
     RegionData(RegionName.abandoned_jojamart, (Entrance.enter_movie_theater,)),  # can't randomize
     RegionData(RegionName.movie_ticket_stand),
     RegionData(RegionName.movie_theater),
-    RegionData(RegionName.fish_shop, (Entrance.willy_fish_shop_to_beach,)),
+    RegionData(RegionName.fish_cabin, (Entrance.willy_fish_cabin_to_beach, Entrance.purchase_from_willy)),
+    RegionData(RegionName.fish_shop),
     RegionData(RegionName.elliott_house, (Entrance.leave_elliott_house,)),
     RegionData(RegionName.tide_pools, (Entrance.enter_tide_pools_shortcut, Entrance.leave_tide_pools)),
     RegionData(RegionName.tide_pools_shortcut,
@@ -368,7 +376,8 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.attend_desert_festival,
         ),
     ),
-    RegionData(RegionName.oasis, (Entrance.leave_oasis, Entrance.enter_casino)),
+    RegionData(RegionName.oasis, (Entrance.leave_oasis, Entrance.enter_casino, Entrance.purchase_from_sandy)),
+    RegionData(RegionName.oasis_shop),
     RegionData(RegionName.casino, (Entrance.leave_casino,)),
     RegionData(RegionName.skull_cavern_entrance, (Entrance.leave_skull_cavern_entrance, Entrance.enter_skull_cavern)),
     RegionData(RegionName.skull_cavern, (Entrance.mine_in_skull_cavern, Entrance.mine_to_skull_cavern_floor_25)),
@@ -389,7 +398,7 @@ vanilla_regions: tuple[RegionData, ...] = (
         RegionName.mines,
         (
             Entrance.the_mines_to_mountain,
-            LogicEntrance.talk_to_mines_dwarf,
+            LogicEntrance.break_dwarf_rocks,
             Entrance.dig_to_mines_floor_5,
             Entrance.minecart_mines_to_bus_stop,
             Entrance.minecart_mines_to_quarry,
@@ -420,6 +429,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.mines_floor_110, (Entrance.dig_to_mines_floor_115,)),
     RegionData(RegionName.mines_floor_115, (Entrance.dig_to_mines_floor_120,)),
     RegionData(RegionName.mines_floor_120),
+    RegionData(LogicRegion.mines_dwarf_cave, (Entrance.purchase_from_dwarf,)),
     RegionData(LogicRegion.mines_dwarf_shop),
     RegionData(LogicRegion.kitchen),
     RegionData(LogicRegion.queen_of_sauce),
@@ -822,6 +832,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.purchase_from_marnie, RegionName.ranch_shop,),
     ConnectionData(
         Entrance.forest_to_leah_cottage,
         RegionName.leah_house,
@@ -922,17 +933,18 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.mountain_to_carpenter_shop,
-        RegionName.carpenter,
+        Entrance.mountain_to_carpenter_house,
+        RegionName.carpenter_house,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.carpenter_shop_to_mountain,
+        Entrance.carpenter_house_to_mountain,
         RegionName.mountain,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.purchase_from_robin, RegionName.carpenter_shop,),
     ConnectionData(
         Entrance.mountain_to_maru_room,
         RegionName.maru_room,
@@ -953,13 +965,13 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.leave_sebastian_room_stairwell,
-        RegionName.carpenter,
+        RegionName.carpenter_house,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(Entrance.enter_sebastian_room, RegionName.sebastian_room),
-    ConnectionData(Entrance.carpenter_shop_to_maru_room, RegionName.maru_room),
-    ConnectionData(Entrance.maru_room_to_carpenter_shop, RegionName.carpenter),
+    ConnectionData(Entrance.carpenter_house_to_maru_room, RegionName.maru_room),
+    ConnectionData(Entrance.maru_room_to_carpenter_house, RegionName.carpenter_house),
     ConnectionData(Entrance.mountain_to_outside_adventure_guild, RegionName.outside_adventure_guild),
     ConnectionData(Entrance.outside_adventure_guild_to_mountain, RegionName.mountain),
     ConnectionData(
@@ -1048,7 +1060,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.town_to_pierre_general_store,
-        RegionName.pierre_store,
+        RegionName.pierre_house,
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
@@ -1058,6 +1070,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.purchase_from_pierre, RegionName.pierre_shop),
     ConnectionData(
         Entrance.enter_sunroom,
         RegionName.sunroom,
@@ -1066,18 +1079,19 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.leave_sunroom,
-        RegionName.pierre_store,
+        RegionName.pierre_house,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.town_to_clint_blacksmith,
-        RegionName.blacksmith,
+        Entrance.town_to_blacksmith,
+        RegionName.blacksmith_house,
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
+    ConnectionData(Entrance.purchase_from_clint, RegionName.blacksmith_shop),
     ConnectionData(
-        Entrance.clint_blacksmith_to_town,
+        Entrance.blacksmith_to_town,
         RegionName.town,
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
@@ -1094,6 +1108,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.purchase_from_gus, RegionName.saloon_shop),
     ConnectionData(Entrance.play_journey_of_the_prairie_king, RegionName.jotpk_world_1),
     ConnectionData(Entrance.reach_jotpk_world_2, RegionName.jotpk_world_2),
     ConnectionData(Entrance.reach_jotpk_world_3, RegionName.jotpk_world_3),
@@ -1227,17 +1242,18 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.beach_to_willy_fish_shop,
-        RegionName.fish_shop,
+        Entrance.beach_to_willy_fish_cabin,
+        RegionName.fish_cabin,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.willy_fish_shop_to_beach,
+        Entrance.willy_fish_cabin_to_beach,
         RegionName.beach,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.purchase_from_willy, RegionName.fish_shop),
     ConnectionData(Entrance.enter_tide_pools, RegionName.tide_pools),
     ConnectionData(Entrance.leave_tide_pools, RegionName.beach),
     ConnectionData(
@@ -1300,6 +1316,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.purchase_from_sandy, RegionName.oasis_shop),
     ConnectionData(
         Entrance.enter_casino,
         RegionName.casino,
@@ -1490,7 +1507,8 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(Entrance.mountain_lake_to_outside_adventure_guild_shortcut, RegionName.outside_adventure_guild),
     ConnectionData(Entrance.outside_adventure_guild_to_mountain_lake_shortcut, RegionName.mountain),
-    ConnectionData(LogicEntrance.talk_to_mines_dwarf, LogicRegion.mines_dwarf_shop),
+    ConnectionData(LogicEntrance.break_dwarf_rocks, LogicRegion.mines_dwarf_cave),
+    ConnectionData(Entrance.purchase_from_dwarf, LogicRegion.mines_dwarf_shop),
     ConnectionData(LogicEntrance.buy_from_traveling_merchant, LogicRegion.traveling_cart),
     ConnectionData(LogicEntrance.buy_from_traveling_merchant_sunday, LogicRegion.traveling_cart_sunday),
     ConnectionData(LogicEntrance.buy_from_traveling_merchant_monday, LogicRegion.traveling_cart_monday),

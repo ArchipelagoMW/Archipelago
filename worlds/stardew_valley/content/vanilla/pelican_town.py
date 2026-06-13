@@ -209,46 +209,46 @@ pelican_town = ContentPack(
     },
     shop_sources={
         # Saplings
-        Sapling.apple: (ShopSource(price=4000, shop_region=Region.pierre_store),),
-        Sapling.apricot: (ShopSource(price=2000, shop_region=Region.pierre_store),),
-        Sapling.cherry: (ShopSource(price=3400, shop_region=Region.pierre_store),),
-        Sapling.orange: (ShopSource(price=4000, shop_region=Region.pierre_store),),
-        Sapling.peach: (ShopSource(price=6000, shop_region=Region.pierre_store),),
-        Sapling.pomegranate: (ShopSource(price=6000, shop_region=Region.pierre_store),),
+        Sapling.apple: (ShopSource(price=4000, shop_region=Region.pierre_shop),),
+        Sapling.apricot: (ShopSource(price=2000, shop_region=Region.pierre_shop),),
+        Sapling.cherry: (ShopSource(price=3400, shop_region=Region.pierre_shop),),
+        Sapling.orange: (ShopSource(price=4000, shop_region=Region.pierre_shop),),
+        Sapling.peach: (ShopSource(price=6000, shop_region=Region.pierre_shop),),
+        Sapling.pomegranate: (ShopSource(price=6000, shop_region=Region.pierre_shop),),
 
         # Crop seeds, assuming they are bought in season, otherwise price is different with missing stock list.
-        Seed.parsnip: (ShopSource(price=20, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
-        Seed.bean: (ShopSource(price=60, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
-        Seed.cauliflower: (ShopSource(price=80, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
-        Seed.potato: (ShopSource(price=50, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
-        Seed.tulip: (ShopSource(price=20, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
-        Seed.kale: (ShopSource(price=70, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
-        Seed.jazz: (ShopSource(price=30, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
-        Seed.garlic: (ShopSource(price=40, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
-        Seed.rice: (ShopSource(price=40, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.parsnip: (ShopSource(price=20, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
+        Seed.bean: (ShopSource(price=60, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
+        Seed.cauliflower: (ShopSource(price=80, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
+        Seed.potato: (ShopSource(price=50, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
+        Seed.tulip: (ShopSource(price=20, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
+        Seed.kale: (ShopSource(price=70, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
+        Seed.jazz: (ShopSource(price=30, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
+        Seed.garlic: (ShopSource(price=40, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
+        Seed.rice: (ShopSource(price=40, shop_region=Region.pierre_shop, seasons=(Season.spring,)),),
 
-        Seed.melon: (ShopSource(price=80, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
-        Seed.tomato: (ShopSource(price=50, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
-        Seed.blueberry: (ShopSource(price=80, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
-        Seed.pepper: (ShopSource(price=40, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
-        Seed.wheat: (ShopSource(price=10, shop_region=Region.pierre_store, seasons=(Season.summer, Season.fall)),),
-        Seed.radish: (ShopSource(price=40, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
-        Seed.poppy: (ShopSource(price=100, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
-        Seed.spangle: (ShopSource(price=50, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
-        Seed.hops: (ShopSource(price=60, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
-        Seed.corn: (ShopSource(price=150, shop_region=Region.pierre_store, seasons=(Season.summer, Season.fall)),),
-        Seed.sunflower: (ShopSource(price=200, shop_region=Region.pierre_store, seasons=(Season.summer, Season.fall)),),
-        Seed.red_cabbage: (ShopSource(price=100, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.melon: (ShopSource(price=80, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
+        Seed.tomato: (ShopSource(price=50, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
+        Seed.blueberry: (ShopSource(price=80, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
+        Seed.pepper: (ShopSource(price=40, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
+        Seed.wheat: (ShopSource(price=10, shop_region=Region.pierre_shop, seasons=(Season.summer, Season.fall)),),
+        Seed.radish: (ShopSource(price=40, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
+        Seed.poppy: (ShopSource(price=100, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
+        Seed.spangle: (ShopSource(price=50, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
+        Seed.hops: (ShopSource(price=60, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
+        Seed.corn: (ShopSource(price=150, shop_region=Region.pierre_shop, seasons=(Season.summer, Season.fall)),),
+        Seed.sunflower: (ShopSource(price=200, shop_region=Region.pierre_shop, seasons=(Season.summer, Season.fall)),),
+        Seed.red_cabbage: (ShopSource(price=100, shop_region=Region.pierre_shop, seasons=(Season.summer,)),),
 
-        Seed.eggplant: (ShopSource(price=20, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
-        Seed.pumpkin: (ShopSource(price=100, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
-        Seed.bok_choy: (ShopSource(price=50, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
-        Seed.yam: (ShopSource(price=60, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
-        Seed.cranberry: (ShopSource(price=240, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
-        Seed.fairy: (ShopSource(price=200, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
-        Seed.amaranth: (ShopSource(price=70, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
-        Seed.grape: (ShopSource(price=60, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
-        Seed.artichoke: (ShopSource(price=30, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.eggplant: (ShopSource(price=20, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
+        Seed.pumpkin: (ShopSource(price=100, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
+        Seed.bok_choy: (ShopSource(price=50, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
+        Seed.yam: (ShopSource(price=60, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
+        Seed.cranberry: (ShopSource(price=240, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
+        Seed.fairy: (ShopSource(price=200, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
+        Seed.amaranth: (ShopSource(price=70, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
+        Seed.grape: (ShopSource(price=60, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
+        Seed.artichoke: (ShopSource(price=30, shop_region=Region.pierre_shop, seasons=(Season.fall,)),),
 
         Seed.broccoli: (ShopSource(items_price=((5, Material.moss),), shop_region=LogicRegion.raccoon_shop_1),),
         Seed.carrot: (ShopSource(items_price=((1, TreeSeed.maple),), shop_region=LogicRegion.raccoon_shop_1),),
@@ -259,17 +259,17 @@ pelican_town = ContentPack(
         Seed.rare_seed: (ShopSource(price=1000, shop_region=LogicRegion.traveling_cart, seasons=(Season.spring, Season.summer)),),
 
         # Saloon
-        Beverage.beer: (ShopSource(price=400, shop_region=Region.saloon),),
-        Meal.salad: (ShopSource(price=220, shop_region=Region.saloon),),
-        Meal.bread: (ShopSource(price=100, shop_region=Region.saloon),),
-        Meal.spaghetti: (ShopSource(price=240, shop_region=Region.saloon),),
-        Meal.pizza: (ShopSource(price=600, shop_region=Region.saloon),),
-        Beverage.coffee: (ShopSource(price=300, shop_region=Region.saloon),),
+        Beverage.beer: (ShopSource(price=400, shop_region=Region.saloon_shop),),
+        Meal.salad: (ShopSource(price=220, shop_region=Region.saloon_shop),),
+        Meal.bread: (ShopSource(price=100, shop_region=Region.saloon_shop),),
+        Meal.spaghetti: (ShopSource(price=240, shop_region=Region.saloon_shop),),
+        Meal.pizza: (ShopSource(price=600, shop_region=Region.saloon_shop),),
+        Beverage.coffee: (ShopSource(price=300, shop_region=Region.saloon_shop),),
 
         # Books
         Book.animal_catalogue: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            ShopSource(price=5000, shop_region=Region.ranch, other_requirements=(YearRequirement(2),)),),
+            ShopSource(price=5000, shop_region=Region.ranch_shop, other_requirements=(YearRequirement(2),)),),
         Book.book_of_mysteries: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             MysteryBoxSource(amount=50),),  # After 38 boxes, there are 49.99% chances player received the book.
@@ -355,35 +355,35 @@ pelican_town = ContentPack(
             ShopSource(price=5000, shop_region=LogicRegion.bookseller_experience),),
 
         # Catalogues
-        Catalogue.catalogue: (ShopSource(price=30_000, shop_region=Region.pierre_store, other_requirements=(EndgameItemReceivedRequirement(Catalogue.catalogue),)),),
-        Catalogue.furniture: (ShopSource(price=200_000, shop_region=Region.carpenter, other_requirements=(EndgameItemReceivedRequirement(Catalogue.furniture), BuildingRequirement(BuildingNames.kitchen),)),),
+        Catalogue.catalogue: (ShopSource(price=30_000, shop_region=Region.pierre_shop, other_requirements=(EndgameItemReceivedRequirement(Catalogue.catalogue),)),),
+        Catalogue.furniture: (ShopSource(price=200_000, shop_region=Region.carpenter_shop, other_requirements=(EndgameItemReceivedRequirement(Catalogue.furniture), BuildingRequirement(BuildingNames.kitchen),)),),
         Catalogue.joja: (ShopSource(price=25_000, shop_region=Region.movie_theater, other_requirements=(SpeakJunimoRequirement(), EndgameItemReceivedRequirement(Catalogue.joja),)),),
         Catalogue.junimo: (ShopSource(price=70_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpeakJunimoRequirement(), EndgameItemReceivedRequirement(Catalogue.junimo),)),),
         Catalogue.retro: (ShopSource(price=110_000, shop_region=LogicRegion.traveling_cart, other_requirements=(EndgameItemReceivedRequirement(Catalogue.retro),)),),
         Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer, other_requirements=(EndgameItemReceivedRequirement(Catalogue.wizard),)),),
 
         # Furniture
-        Furniture.single_bed: (ShopSource(price=500, shop_region=Region.carpenter),),
+        Furniture.single_bed: (ShopSource(price=500, shop_region=Region.carpenter_shop),),
         Furniture.crane_game_house_plant: (ShopSource(price=500, shop_region=Region.movie_theater),),
         Furniture.cursed_mannequin: (MonsterSource(monsters=(Monster.haunted_skull,), amount_tier=MAX_MONTHS),),
 
         # Other shop stuff
-        Fertilizer.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
-        Fertilizer.quality: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_store,
+        Fertilizer.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_shop),),
+        Fertilizer.quality: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_shop,
                                         other_requirements=(YearRequirement(2),)),),
-        Ingredient.oil: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_store),),
-        Ingredient.rice: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_store),),
-        Ingredient.sugar: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
-        Ingredient.vinegar: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_store),),
-        Ingredient.wheat_flour: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
-        RetainingSoil.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
-        RetainingSoil.quality: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_store,
+        Ingredient.oil: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_shop),),
+        Ingredient.rice: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_shop),),
+        Ingredient.sugar: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_shop),),
+        Ingredient.vinegar: (ShopSource(price=200, currency=Currency.money, shop_region=Region.pierre_shop),),
+        Ingredient.wheat_flour: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_shop),),
+        RetainingSoil.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_shop),),
+        RetainingSoil.quality: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_shop,
                                            other_requirements=(YearRequirement(2),)),),
-        SpeedGro.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
-        SpeedGro.deluxe: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_store,
+        SpeedGro.basic: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_shop),),
+        SpeedGro.deluxe: (ShopSource(price=150, currency=Currency.money, shop_region=Region.pierre_shop,
                                      other_requirements=(YearRequirement(2),)),),
-        WildSeeds.grass_starter: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store),),
-        Gift.bouquet: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_store,
+        WildSeeds.grass_starter: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_shop),),
+        Gift.bouquet: (ShopSource(price=100, currency=Currency.money, shop_region=Region.pierre_shop,
                                   other_requirements=(BachelorFriendRequirement(8),)),),
 
         Machine.crab_pot: (ShopSource(price=1500, currency=Currency.money, shop_region=Region.fish_shop,
@@ -394,14 +394,14 @@ pelican_town = ContentPack(
         "Energy Tonic": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital),),
         "Muscle Remedy": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital),),
 
-        Trash.joja_cola: (ShopSource(price=75, currency=Currency.money, shop_region=Region.saloon),),
+        Trash.joja_cola: (ShopSource(price=75, currency=Currency.money, shop_region=Region.saloon_shop),),
 
         AnimalProduct.void_egg_starter: (ShopSource(price=5000, currency=Currency.money, shop_region=Region.sewer),),
         Consumable.butterfly_powder: (ShopSource(price=20000, currency=Currency.money, shop_region=Region.sewer),),
         ShopLocation.krobus_stardrop: (ShopSource(price=20000, currency=Currency.money, shop_region=Region.sewer),),
         Tool.return_scepter: (ShopSource(price=2_000_000, currency=Currency.money, shop_region=Region.sewer),),
 
-        AnimalProduct.golden_egg_starter:  (ShopSource(price=100000, currency=Currency.money, shop_region=Region.ranch,
+        AnimalProduct.golden_egg_starter:  (ShopSource(price=100000, currency=Currency.money, shop_region=Region.ranch_shop,
                                                        other_requirements=(ReceivedRequirement(AnimalProduct.golden_egg),)),),
 
         Gift.movie_ticket: (ShopSource(price=1000, currency=Currency.money, shop_region=Region.movie_ticket_stand),),
@@ -543,7 +543,7 @@ pelican_town = ContentPack(
             BuildingNames.barn,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=6000,
                     items_price=((350, Material.wood), (150, Material.stone)),
                     forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
@@ -554,7 +554,7 @@ pelican_town = ContentPack(
             BuildingNames.big_barn,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=12_000,
                     items_price=((450, Material.wood), (200, Material.stone)),
                     forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
@@ -566,7 +566,7 @@ pelican_town = ContentPack(
             BuildingNames.deluxe_barn,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=25_000,
                     items_price=((550, Material.wood), (300, Material.stone)),
                     forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
@@ -578,7 +578,7 @@ pelican_town = ContentPack(
             BuildingNames.coop,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=4000,
                     items_price=((300, Material.wood), (100, Material.stone)),
                     forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
@@ -589,7 +589,7 @@ pelican_town = ContentPack(
             BuildingNames.big_coop,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=10_000,
                     items_price=((400, Material.wood), (150, Material.stone)),
                     forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
@@ -601,7 +601,7 @@ pelican_town = ContentPack(
             BuildingNames.deluxe_coop,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=20_000,
                     items_price=((500, Material.wood), (200, Material.stone)),
                     forbidden_items=(AnimalProduct.wool, ArtisanGood.cloth),
@@ -613,7 +613,7 @@ pelican_town = ContentPack(
             BuildingNames.fish_pond,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=5000,
                     items_price=((200, Material.stone), (5, WaterItem.seaweed), (5, WaterItem.green_algae))
                 ),
@@ -623,7 +623,7 @@ pelican_town = ContentPack(
             BuildingNames.mill,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=2500,
                     items_price=((50, Material.stone), (150, Material.wood), (4, ArtisanGood.cloth))
                 ),
@@ -633,7 +633,7 @@ pelican_town = ContentPack(
             BuildingNames.shed,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=15_000,
                     items_price=((300, Material.wood),)
                 ),
@@ -643,7 +643,7 @@ pelican_town = ContentPack(
             BuildingNames.big_shed,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=20_000,
                     items_price=((550, Material.wood), (300, Material.stone))
                 ),
@@ -654,7 +654,7 @@ pelican_town = ContentPack(
             BuildingNames.silo,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=100,
                     items_price=((100, Material.stone), (10, Material.clay), (5, MetalBar.copper))
                 ),
@@ -664,7 +664,7 @@ pelican_town = ContentPack(
             BuildingNames.slime_hutch,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=10_000,
                     items_price=((500, Material.stone), (10, MetalBar.quartz), (1, MetalBar.iridium))
                 ),
@@ -674,7 +674,7 @@ pelican_town = ContentPack(
             BuildingNames.stable,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=10_000,
                     items_price=((100, Material.hardwood), (5, MetalBar.iron))
                 ),
@@ -684,7 +684,7 @@ pelican_town = ContentPack(
             BuildingNames.well,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=1000,
                     items_price=((75, Material.stone),)
                 ),
@@ -694,7 +694,7 @@ pelican_town = ContentPack(
             BuildingNames.shipping_bin,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=250,
                     items_price=((150, Material.wood),)
                 ),
@@ -704,7 +704,7 @@ pelican_town = ContentPack(
             BuildingNames.pet_bowl,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=5000,
                     items_price=((25, Material.hardwood),)
                 ),
@@ -714,7 +714,7 @@ pelican_town = ContentPack(
             BuildingNames.kitchen,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=10_000,
                     items_price=((450, Material.wood),)
                 ),
@@ -725,7 +725,7 @@ pelican_town = ContentPack(
             BuildingNames.kids_room,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=65_000,
                     items_price=((100, Material.hardwood),)
                 ),
@@ -736,7 +736,7 @@ pelican_town = ContentPack(
             BuildingNames.cellar,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=100_000,
                 ),
             ),
@@ -813,7 +813,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.copper,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=2000,
                     items_price=((5, MetalBar.copper),),
                     other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.basic),),
@@ -826,7 +826,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iron,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=5000,
                     items_price=((5, MetalBar.iron),),
                     other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.copper),),
@@ -839,7 +839,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.gold,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=10_000,
                     items_price=((5, MetalBar.gold),),
                     other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.iron),),
@@ -852,7 +852,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iridium,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=25_000,
                     items_price=((5, MetalBar.iridium),),
                     other_requirements=(ToolRequirement(Tool.pickaxe, ToolMaterial.gold),),
@@ -869,7 +869,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.copper,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=2000,
                     items_price=((5, MetalBar.copper),),
                     other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.basic),),
@@ -882,7 +882,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iron,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=5000,
                     items_price=((5, MetalBar.iron),),
                     other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.copper),),
@@ -895,7 +895,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.gold,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=10_000,
                     items_price=((5, MetalBar.gold),),
                     other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron),),
@@ -908,7 +908,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iridium,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=25_000,
                     items_price=((5, MetalBar.iridium),),
                     other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.gold),),
@@ -926,7 +926,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.copper,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=2000,
                     items_price=((5, MetalBar.copper),),
                     other_requirements=(ToolRequirement(Tool.watering_can, ToolMaterial.basic),),
@@ -938,7 +938,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iron,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=5000,
                     items_price=((5, MetalBar.iron),),
                     other_requirements=(ToolRequirement(Tool.watering_can, ToolMaterial.copper),),
@@ -950,7 +950,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.gold,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=10_000,
                     items_price=((5, MetalBar.gold),),
                     other_requirements=(ToolRequirement(Tool.watering_can, ToolMaterial.iron),),
@@ -962,7 +962,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iridium,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=25_000,
                     items_price=((5, MetalBar.iridium),),
                     other_requirements=(ToolRequirement(Tool.watering_can, ToolMaterial.gold),),
@@ -979,7 +979,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.copper,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=2000,
                     items_price=((5, MetalBar.copper),),
                     other_requirements=(ToolRequirement(Tool.hoe, ToolMaterial.basic),),
@@ -991,7 +991,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iron,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=5000,
                     items_price=((5, MetalBar.iron),),
                     other_requirements=(ToolRequirement(Tool.hoe, ToolMaterial.copper),),
@@ -1003,7 +1003,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.gold,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=10_000,
                     items_price=((5, MetalBar.gold),),
                     other_requirements=(ToolRequirement(Tool.hoe, ToolMaterial.iron),),
@@ -1015,7 +1015,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iridium,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=25_000,
                     items_price=((5, MetalBar.iridium),),
                     other_requirements=(ToolRequirement(Tool.hoe, ToolMaterial.gold),),
@@ -1032,7 +1032,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.copper,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=1000,
                     items_price=((5, MetalBar.copper),),
                     other_requirements=(ToolRequirement(Tool.trash_can, ToolMaterial.basic),),
@@ -1044,7 +1044,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iron,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=2500,
                     items_price=((5, MetalBar.iron),),
                     other_requirements=(ToolRequirement(Tool.trash_can, ToolMaterial.copper),),
@@ -1056,7 +1056,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.gold,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=5_000,
                     items_price=((5, MetalBar.gold),),
                     other_requirements=(ToolRequirement(Tool.trash_can, ToolMaterial.iron),),
@@ -1068,7 +1068,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iridium,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=12_500,
                     items_price=((5, MetalBar.iridium),),
                     other_requirements=(ToolRequirement(Tool.trash_can, ToolMaterial.gold),),
@@ -1080,7 +1080,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iron,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=5000,
                     items_price=((5, MetalBar.iron),),
                     other_requirements=(ToolRequirement(Tool.pan, ToolMaterial.copper),),
@@ -1092,7 +1092,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.gold,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=10_000,
                     items_price=((5, MetalBar.gold),),
                     other_requirements=(ToolRequirement(Tool.pan, ToolMaterial.iron),),
@@ -1104,7 +1104,7 @@ pelican_town = ContentPack(
             tool_material=ToolMaterial.iridium,
             sources=(
                 ShopSource(
-                    shop_region=Region.blacksmith,
+                    shop_region=Region.blacksmith_shop,
                     price=25_000,
                     items_price=((5, MetalBar.iridium),),
                     other_requirements=(ToolRequirement(Tool.pan, ToolMaterial.gold),),
@@ -1274,7 +1274,7 @@ pelican_town = ContentPack(
         CookingRecipe(name=Meal.pepper_poppers, ingredients=((Fruit.hot_pepper, 1), (ArtisanGood.cheese, 1),), sources=(FriendshipSource(friend=NPC.shane, hearts=3),),),
         CookingRecipe(name=Meal.pink_cake, ingredients=((Fruit.melon, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.chicken_egg, 1),), sources=(QueenOfSauceSource(year=2, season=Season.summer, day=21),),),
         CookingRecipe(name=Meal.pizza, ingredients=((Ingredient.wheat_flour, 1), (Vegetable.tomato, 1), (ArtisanGood.cheese, 1),), sources=(QueenOfSauceSource(year=2, season=Season.spring, day=7),),),
-        CookingRecipe(name=Meal.pizza, ingredients=((Ingredient.wheat_flour, 1), (Vegetable.tomato, 1), (ArtisanGood.cheese, 1),), sources=(ShopSource(shop_region=Region.saloon, price=150),),),
+        CookingRecipe(name=Meal.pizza, ingredients=((Ingredient.wheat_flour, 1), (Vegetable.tomato, 1), (ArtisanGood.cheese, 1),), sources=(ShopSource(shop_region=Region.saloon_shop, price=150),),),
         CookingRecipe(name=Meal.plum_pudding, ingredients=((Forageable.wild_plum, 2), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=1, season=Season.winter, day=7),),),
         CookingRecipe(name=Meal.poppyseed_muffin, ingredients=((Flower.poppy, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1),), sources=(QueenOfSauceSource(year=2, season=Season.winter, day=7),),),
         CookingRecipe(name=Meal.pumpkin_pie, ingredients=((Vegetable.pumpkin, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.cow_milk, 1),), sources=(QueenOfSauceSource(year=1, season=Season.winter, day=21),),),
@@ -1300,8 +1300,8 @@ pelican_town = ContentPack(
         CookingRecipe(name=Meal.survival_burger, ingredients=((Meal.bread, 1), (Forageable.cave_carrot, 1), (Vegetable.eggplant, 1),), sources=(SkillSource(skill=Skill.foraging, level=8),),),
         CookingRecipe(name=Meal.tom_kha_soup, ingredients=((Forageable.coconut, 1), (Fish.shrimp, 1), (Mushroom.common, 1),), sources=(FriendshipSource(friend=NPC.sandy, hearts=7),),),
         CookingRecipe(name=Meal.tortilla, ingredients=((Vegetable.corn, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=7),),),
-        CookingRecipe(name=Meal.tortilla, ingredients=((Vegetable.corn, 1),), sources=(ShopSource(shop_region=Region.saloon, price=100),),),
-        CookingRecipe(name=Beverage.triple_shot_espresso, ingredients=((Beverage.coffee, 3),), sources=(ShopSource(shop_region=Region.saloon, price=5000),),),
+        CookingRecipe(name=Meal.tortilla, ingredients=((Vegetable.corn, 1),), sources=(ShopSource(shop_region=Region.saloon_shop, price=100),),),
+        CookingRecipe(name=Beverage.triple_shot_espresso, ingredients=((Beverage.coffee, 3),), sources=(ShopSource(shop_region=Region.saloon_shop, price=5000),),),
         CookingRecipe(name=Meal.trout_soup, ingredients=((Fish.rainbow_trout, 1), (WaterItem.green_algae, 1),), sources=(QueenOfSauceSource(year=1, season=Season.fall, day=14),),),
         CookingRecipe(name=Meal.vegetable_medley, ingredients=((Vegetable.tomato, 1), (Vegetable.beet, 1),), sources=(FriendshipSource(friend=NPC.caroline, hearts=7),),),
     ),
@@ -1329,7 +1329,7 @@ pelican_town = ContentPack(
         CraftingRecipe(name=Machine.oil_maker, ingredients=((Loot.slime, 50), (Material.hardwood, 20), (MetalBar.gold, 1),), sources=(SkillSource(skill=Skill.farming, level=8),),),
         CraftingRecipe(name=Machine.preserves_jar, ingredients=((Material.wood, 50), (Material.stone, 40), (Material.coal, 8),), sources=(SkillSource(skill=Skill.farming, level=4),),),
         CraftingRecipe(name=Machine.fish_smoker, ingredients=((Material.hardwood, 10), (WaterItem.sea_jelly, 1), (WaterItem.river_jelly, 1), (WaterItem.cave_jelly, 1),), sources=(ShopSource(shop_region=Region.fish_shop, price=10000),),),
-        CraftingRecipe(name=Machine.dehydrator, ingredients=((Material.wood, 30), (Material.clay, 2), (Mineral.fire_quartz, 1),), sources=(ShopSource(shop_region=Region.pierre_store, price=10000),),),
+        CraftingRecipe(name=Machine.dehydrator, ingredients=((Material.wood, 30), (Material.clay, 2), (Mineral.fire_quartz, 1),), sources=(ShopSource(shop_region=Region.pierre_shop, price=10000),),),
 
         CraftingRecipe(name=Fertilizer.basic, ingredients=((Material.sap, 2),), sources=(SkillSource(skill=Skill.farming, level=1),),),
 
@@ -1347,23 +1347,23 @@ pelican_town = ContentPack(
         CraftingRecipe(name=WildSeeds.fall, ingredients=((Mushroom.common, 1), (Forageable.wild_plum, 1), (Forageable.hazelnut, 1), (Forageable.blackberry, 1),), sources=(SkillSource(skill=Skill.foraging, level=6),),),
         CraftingRecipe(name=WildSeeds.winter, ingredients=((Forageable.winter_root, 1), (Forageable.crystal_fruit, 1), (Forageable.snow_yam, 1), (Forageable.crocus, 1),), sources=(SkillSource(skill=Skill.foraging, level=7),),),
         CraftingRecipe(name=WildSeeds.ancient, ingredients=((Artifact.ancient_seed, 1),), sources=(ArchipelagoSource(ap_items=(f"{WildSeeds.ancient} Recipe",)),),),
-        CraftingRecipe(name=WildSeeds.grass_starter, ingredients=((Material.fiber, 10),), sources=(ShopSource(shop_region=Region.pierre_store, price=1000),),),
+        CraftingRecipe(name=WildSeeds.grass_starter, ingredients=((Material.fiber, 10),), sources=(ShopSource(shop_region=Region.pierre_shop, price=1000),),),
         CraftingRecipe(name=WildSeeds.tea_sapling, ingredients=(((WildSeeds.spring, WildSeeds.summer, WildSeeds.fall, WildSeeds.winter), 2), (Material.fiber, 5), (Material.wood, 5),), sources=(CutsceneSource(region=Region.sunroom, friend=NPC.caroline, hearts=2),),),
         CraftingRecipe(name=WildSeeds.fiber, ingredients=((Seed.mixed, 1), (Material.sap, 5), (Material.clay, 1),), sources=(SpecialOrderSource(special_order=SpecialOrder.community_cleanup),),),
 
-        CraftingRecipe(name=Floor.wood, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=100),),),
-        CraftingRecipe(name=Floor.rustic, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=200),),),
-        CraftingRecipe(name=Floor.straw, ingredients=((Material.wood, 1), (Material.fiber, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=200),),),
+        CraftingRecipe(name=Floor.wood, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=100),),),
+        CraftingRecipe(name=Floor.rustic, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=200),),),
+        CraftingRecipe(name=Floor.straw, ingredients=((Material.wood, 1), (Material.fiber, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=200),),),
         CraftingRecipe(name=Floor.weathered, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=LogicRegion.mines_dwarf_shop, price=500),),),
         CraftingRecipe(name=Floor.crystal, ingredients=((MetalBar.quartz, 1),), sources=(ShopSource(shop_region=Region.sewer, price=500),),),
-        CraftingRecipe(name=Floor.stone, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=100),),),
-        CraftingRecipe(name=Floor.stone_walkway, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=200),),),
-        CraftingRecipe(name=Floor.brick, ingredients=((Material.clay, 2), (Material.stone, 5),), sources=(ShopSource(shop_region=Region.carpenter, price=500),),),
+        CraftingRecipe(name=Floor.stone, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=100),),),
+        CraftingRecipe(name=Floor.stone_walkway, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=200),),),
+        CraftingRecipe(name=Floor.brick, ingredients=((Material.clay, 2), (Material.stone, 5),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=500),),),
         CraftingRecipe(name=Floor.wood_path, ingredients=((Material.wood, 1),), sources=(StarterSource(),),),
         CraftingRecipe(name=Floor.gravel_path, ingredients=((Material.stone, 1),), sources=(StarterSource(),),),
         CraftingRecipe(name=Floor.cobblestone_path, ingredients=((Material.stone, 1),), sources=(StarterSource(),),),
-        CraftingRecipe(name=Floor.stepping_stone_path, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=100),),),
-        CraftingRecipe(name=Floor.crystal_path, ingredients=((MetalBar.quartz, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=200),),),
+        CraftingRecipe(name=Floor.stepping_stone_path, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=100),),),
+        CraftingRecipe(name=Floor.crystal_path, ingredients=((MetalBar.quartz, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=200),),),
 
         CraftingRecipe(name=Fishing.spinner, ingredients=((MetalBar.iron, 2),), sources=(SkillSource(skill=Skill.fishing, level=6),),),
         CraftingRecipe(name=Fishing.trap_bobber, ingredients=((MetalBar.copper, 1), (Material.sap, 10),), sources=(SkillSource(skill=Skill.fishing, level=6),),),
@@ -1400,16 +1400,16 @@ pelican_town = ContentPack(
 
         CraftingRecipe(name=Lighting.torch, ingredients=((Material.wood, 1), (Material.sap, 2),), sources=(StarterSource(),),),
         CraftingRecipe(name=Lighting.campfire, ingredients=((Material.stone, 10), (Material.wood, 10), (Material.fiber, 10),), sources=(StarterSource(),),),
-        CraftingRecipe(name=Lighting.wooden_brazier, ingredients=((Material.wood, 10), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter, price=250),),),
-        CraftingRecipe(name=Lighting.stone_brazier, ingredients=((Material.stone, 10), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter, price=400),),),
-        CraftingRecipe(name=Lighting.gold_brazier, ingredients=((MetalBar.gold, 1), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter, price=1000),),),
-        CraftingRecipe(name=Lighting.carved_brazier, ingredients=((Material.hardwood, 10), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=2000),),),
-        CraftingRecipe(name=Lighting.stump_brazier, ingredients=((Material.hardwood, 5), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=800),),),
-        CraftingRecipe(name=Lighting.barrel_brazier, ingredients=((Material.wood, 50), (Loot.solar_essence, 1), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=800),),),
-        CraftingRecipe(name=Lighting.skull_brazier, ingredients=((Fossil.bone_fragment, 10),), sources=(ShopSource(shop_region=Region.carpenter, price=3000),),),
-        CraftingRecipe(name=Lighting.marble_brazier, ingredients=((Mineral.marble, 1), (Mineral.aquamarine, 1), (Material.stone, 100),), sources=(ShopSource(shop_region=Region.carpenter, price=5000),),),
-        CraftingRecipe(name=Lighting.wood_lamp_post, ingredients=((Material.wood, 50), (ArtisanGood.battery_pack, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=500),),),
-        CraftingRecipe(name=Lighting.iron_lamp_post, ingredients=((MetalBar.iron, 1), (ArtisanGood.battery_pack, 1),), sources=(ShopSource(shop_region=Region.carpenter, price=1000),),),
+        CraftingRecipe(name=Lighting.wooden_brazier, ingredients=((Material.wood, 10), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=250),),),
+        CraftingRecipe(name=Lighting.stone_brazier, ingredients=((Material.stone, 10), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=400),),),
+        CraftingRecipe(name=Lighting.gold_brazier, ingredients=((MetalBar.gold, 1), (Material.coal, 1), (Material.fiber, 5),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=1000),),),
+        CraftingRecipe(name=Lighting.carved_brazier, ingredients=((Material.hardwood, 10), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=2000),),),
+        CraftingRecipe(name=Lighting.stump_brazier, ingredients=((Material.hardwood, 5), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=800),),),
+        CraftingRecipe(name=Lighting.barrel_brazier, ingredients=((Material.wood, 50), (Loot.solar_essence, 1), (Material.coal, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=800),),),
+        CraftingRecipe(name=Lighting.skull_brazier, ingredients=((Fossil.bone_fragment, 10),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=3000),),),
+        CraftingRecipe(name=Lighting.marble_brazier, ingredients=((Mineral.marble, 1), (Mineral.aquamarine, 1), (Material.stone, 100),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=5000),),),
+        CraftingRecipe(name=Lighting.wood_lamp_post, ingredients=((Material.wood, 50), (ArtisanGood.battery_pack, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=500),),),
+        CraftingRecipe(name=Lighting.iron_lamp_post, ingredients=((MetalBar.iron, 1), (ArtisanGood.battery_pack, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=1000),),),
         CraftingRecipe(name=Lighting.jack_o_lantern, ingredients=((Vegetable.pumpkin, 1), (Lighting.torch, 1),), sources=(ShopSource(shop_region=LogicRegion.spirit_eve, price=2000),),),
 
         CraftingRecipe(name=Machine.bone_mill, ingredients=((Fossil.bone_fragment, 10), (Material.clay, 3), (Material.stone, 20),), sources=(SpecialOrderSource(special_order=SpecialOrder.fragments_of_the_past),),),
@@ -1438,12 +1438,12 @@ pelican_town = ContentPack(
 
         CraftingRecipe(name=Furniture.tub_o_flowers, ingredients=((Material.wood, 25), (Seed.tulip, 1), (Seed.jazz, 1), (Seed.poppy, 1), (Seed.spangle, 1),), sources=(ShopSource(shop_region=LogicRegion.flower_dance, price=2000),),),
         CraftingRecipe(name=Furniture.wicked_statue, ingredients=((Material.stone, 25), (Material.coal, 5),), sources=(ShopSource(shop_region=Region.sewer, price=1000),),),
-        CraftingRecipe(name=Furniture.flute_block, ingredients=((Material.wood, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter, friend=NPC.robin, hearts=6),),),
-        CraftingRecipe(name=Furniture.drum_block, ingredients=((Material.stone, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter, friend=NPC.robin, hearts=6),),),
+        CraftingRecipe(name=Furniture.flute_block, ingredients=((Material.wood, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter_shop, friend=NPC.robin, hearts=6),),),
+        CraftingRecipe(name=Furniture.drum_block, ingredients=((Material.stone, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter_shop, friend=NPC.robin, hearts=6),),),
 
         CraftingRecipe(name=Storage.chest, ingredients=((Material.wood, 50),), sources=(StarterSource(),),),
         CraftingRecipe(name=Storage.stone_chest, ingredients=((Material.stone, 50),), sources=(SpecialOrderSource(special_order=SpecialOrder.robins_resource_rush),),),
-        CraftingRecipe(name=Storage.big_chest, ingredients=((Material.wood, 120), (MetalBar.copper, 2),), sources=(ShopSource(shop_region=Region.carpenter, price=5000),),),
+        CraftingRecipe(name=Storage.big_chest, ingredients=((Material.wood, 120), (MetalBar.copper, 2),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=5000),),),
         CraftingRecipe(name=Storage.big_stone_chest, ingredients=((Material.stone, 250),), sources=(ShopSource(shop_region=LogicRegion.mines_dwarf_shop, price=5000, other_requirements=(CraftedSpecificItemRequirement(Storage.stone_chest),)),),),
 
         CraftingRecipe(name=Sign.wood, ingredients=((Material.wood, 25),), sources=(StarterSource(),),),
@@ -1458,7 +1458,7 @@ pelican_town = ContentPack(
         CraftingRecipe(name=Craftable.explosive_ammo, ingredients=((MetalBar.iron, 1), (Material.coal, 2),), sources=(SkillSource(skill=Skill.combat, level=8),),),
         CraftingRecipe(name=Craftable.transmute_fe, ingredients=((MetalBar.copper, 3),), sources=(SkillSource(skill=Skill.mining, level=4),),),
         CraftingRecipe(name=Craftable.transmute_au, ingredients=((MetalBar.iron, 2),), sources=(SkillSource(skill=Skill.mining, level=7),),),
-        CraftingRecipe(name=Craftable.mini_jukebox, ingredients=((MetalBar.iron, 2), (ArtisanGood.battery_pack, 1),), sources=(CutsceneSource(region=Region.saloon, friend=NPC.gus, hearts=5),),),
+        CraftingRecipe(name=Craftable.mini_jukebox, ingredients=((MetalBar.iron, 2), (ArtisanGood.battery_pack, 1),), sources=(CutsceneSource(region=Region.saloon_shop, friend=NPC.gus, hearts=5),),),
         CraftingRecipe(name=Craftable.mini_obelisk, ingredients=((Material.hardwood, 30), (Loot.solar_essence, 20), (MetalBar.gold, 3),), sources=(SpecialOrderSource(special_order=SpecialOrder.a_curious_substance),),),
         CraftingRecipe(name=Craftable.farm_computer, ingredients=((Artifact.dwarf_gadget, 1), (ArtisanGood.battery_pack, 1), (MetalBar.quartz, 10),), sources=(SpecialOrderSource(special_order=SpecialOrder.aquatic_overpopulation),),),
 

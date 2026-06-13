@@ -1,11 +1,10 @@
 from BaseClasses import EntranceType, Region
 from entrance_rando import ERPlacementState
 from worlds.stardew_valley.options.options import EntranceRandomizationBehavior
-
+from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData, reverse_connection_name
 from ..content import StardewContent
 from ..options import EntranceRandomization
 from ..strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName
-from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData, reverse_connection_name
 
 
 def create_base_randomization_flag(entrance_randomization_choice: EntranceRandomization) -> RandomizationFlag:
@@ -27,7 +26,7 @@ def create_base_randomization_flag(entrance_randomization_choice: EntranceRandom
 
 def create_player_randomization_flag(
         entrance_randomization_choice: EntranceRandomization,
-        entrance_behavior_choice: set[EntranceRandomizationBehaviorOptionName],
+        entrance_behavior_choice: set[str],
         include_endgame: bool,
         content: StardewContent,
 ):

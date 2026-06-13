@@ -41,13 +41,13 @@ class QuestLogic(BaseLogic):
                                                                       NPC.pam, NPC.pierre, NPC.vincent, NPC.willy, NPC.wizard),
             Quest.how_to_win_friends: self.logic.quest.can_complete_quest(Quest.introductions),
             Quest.getting_started: self.logic.has(Vegetable.parsnip),
-            Quest.to_the_beach: self.logic.region.can_reach(Region.beach),
+            Quest.to_the_beach: self.logic.region.can_reach(Region.beach) & self.logic.relationship.exists(NPC.willy),
             Quest.raising_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.coop),
             Quest.feeding_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.silo),
             Quest.advancement: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.has(Craftable.scarecrow),
             Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.fishing.can_fish_chests,
-            Quest.rat_problem: self.logic.region.can_reach_all(Region.community_center, LogicRegion.town_community_center_cutscene),
-            Quest.meet_the_wizard: self.logic.region.can_reach_all(Region.community_center, Region.wizard_tower) & self.logic.received("Wizard Invitation"),
+            Quest.rat_problem: self.logic.region.can_reach_all(Region.community_center, LogicRegion.town_community_center_cutscene) & self.logic.relationship.exists(NPC.lewis),
+            Quest.meet_the_wizard: self.logic.region.can_reach_all(Region.community_center, Region.wizard_tower) & self.logic.received("Wizard Invitation") & self.logic.relationship.exists(NPC.wizard),
             Quest.forging_ahead: self.logic.has(Ore.copper) & self.logic.has(Machine.furnace),
             Quest.smelting: self.logic.has(MetalBar.copper),
             Quest.initiation: self.logic.mine.can_mine_in_the_mines_floor_1_40(),
@@ -69,7 +69,7 @@ class QuestLogic(BaseLogic):
             Quest.the_mysterious_qi: (self.logic.region.can_reach_all(Region.bus_tunnel, Region.railroad, Region.mayor_house) &
                                       self.logic.has_all(ArtisanGood.battery_pack, Forageable.rainbow_shell, Vegetable.beet, Loot.solar_essence)),
             Quest.carving_pumpkins: self.logic.season.has(Season.fall) & self.logic.has(Vegetable.pumpkin) & self.logic.relationship.can_meet(NPC.caroline),
-            Quest.a_winter_mystery: self.logic.season.has(Season.winter) & self.logic.region.can_reach_all(Region.town, LogicRegion.bus_stop_krobus_cutscene),
+            Quest.a_winter_mystery: self.logic.season.has(Season.winter) & self.logic.region.can_reach_all(Region.town, LogicRegion.bus_stop_krobus_cutscene) & self.logic.relationship.exists(NPC.krobus),
             Quest.strange_note: self.logic.region.can_reach(Region.secret_woods) & self.logic.has(Forageable.secret_note) & self.logic.has(ArtisanGood.maple_syrup),
             Quest.cryptic_note: self.logic.has(Forageable.secret_note) & self.logic.region.can_reach(Region.skull_cavern_100),
             Quest.fresh_fruit: self.logic.season.has(Season.spring) & self.logic.has(Fruit.apricot) & self.logic.relationship.can_meet(NPC.emily),
@@ -80,7 +80,7 @@ class QuestLogic(BaseLogic):
             Quest.wanted_lobster: (self.logic.season.has(Season.fall) & self.logic.season.has(Season.fall) & self.logic.has(Fish.lobster) &
                                    self.logic.relationship.can_meet(NPC.gus)),
             Quest.pam_needs_juice: self.logic.season.has(Season.fall) & self.logic.has(ArtisanGood.battery_pack) & self.logic.relationship.can_meet(NPC.pam),
-            Quest.fish_casserole: self.logic.relationship.has_hearts(NPC.jodi, 4) & self.logic.has(Fish.largemouth_bass),
+            Quest.fish_casserole: self.logic.relationship.has_hearts(NPC.jodi, 4) & self.logic.has(Fish.largemouth_bass) & self.logic.relationship.exists(NPC.vincent) & self.logic.relationship.exists(NPC.sam),
             Quest.catch_a_squid: self.logic.season.has(Season.winter) & self.logic.has(Fish.squid) & self.logic.relationship.can_meet(NPC.willy),
             Quest.fish_stew: self.logic.season.has(Season.winter) & self.logic.has(Fish.albacore) & self.logic.relationship.can_meet(NPC.gus),
             Quest.pierres_notice: self.logic.season.has(Season.spring) & self.logic.has(Meal.sashimi) & self.logic.relationship.can_meet(NPC.pierre),
@@ -91,7 +91,7 @@ class QuestLogic(BaseLogic):
             Quest.exotic_spirits: self.logic.season.has(Season.winter) & self.logic.has(Forageable.coconut) & self.logic.relationship.can_meet(NPC.gus),
             Quest.catch_a_lingcod: self.logic.season.has(Season.winter) & self.logic.has(Fish.lingcod) & self.logic.relationship.can_meet(NPC.willy),
             Quest.dark_talisman: self.logic.region.can_reach(
-                LogicRegion.railroad_cutscenes) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(NPC.krobus),
+                LogicRegion.railroad_cutscenes) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(NPC.krobus) & self.logic.relationship.exists(NPC.wizard),
             Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp)
                                   # Void mayo can be fished at 5% chance in the witch swamp while the quest is active. It drops a lot after the quest.
                                   & (self.logic.has(ArtisanGood.void_mayonnaise) | self.logic.fishing.can_fish()),

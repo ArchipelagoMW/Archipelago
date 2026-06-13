@@ -145,7 +145,7 @@ ginger_island_content_pack = GingerIslandContentPack(
                                                                PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
         Hats.golden_helmet: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                           other_requirements=(
-                                                          RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
+                                                          RegionRequirement(Region.blacksmith_shop), HasItemRequirement(Geode.golden_coconut),)),),
         Hats.bluebird_mask: (
         Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
         Hats.deluxe_cowboy_hat: (

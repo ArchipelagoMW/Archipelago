@@ -5,6 +5,7 @@ from ..content.feature.friendsanity import pet_heart_item_name
 from ..stardew_rule import StardewRule, True_
 from ..strings.building_names import Building
 from ..strings.region_names import Region
+from ..strings.villager_names import NPC
 
 
 class PetLogicMixin(BaseLogicMixin):
@@ -31,6 +32,7 @@ class PetLogic(BaseLogic):
         if hearts <= 0:
             return True_()
 
+        pet_exists = self.logic.relationship.exists(NPC.pet)
         heart_size = self.content.features.friendsanity.heart_size
         previous_heart = max(hearts - heart_size, 0)
         previous_heart_rule = self.has_pet_hearts(previous_heart)
@@ -41,4 +43,4 @@ class PetLogic(BaseLogic):
         time_with_water_rule = self.logic.tool.can_water() & self.logic.time.has_lived_months(points // points_per_water_month)
         time_without_water_rule = self.logic.time.has_lived_months(points // points_per_month)
         time_rule = time_with_water_rule | time_without_water_rule
-        return farm_rule & time_rule & self.logic.building.has_building(Building.pet_bowl) & previous_heart_rule
+        return pet_exists & farm_rule & time_rule & self.logic.building.has_building(Building.pet_bowl) & previous_heart_rule

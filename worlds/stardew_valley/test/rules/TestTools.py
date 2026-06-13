@@ -102,7 +102,7 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
 
     def test_cannot_get_any_tool_without_blacksmith_access(self):
         mens_locker_item = "Men's Locker Key"
-        place_region_at_entrance(self.multiworld, self.player, Region.blacksmith, Entrance.enter_mens_locker_room)
+        place_region_at_entrance(self.multiworld, self.player, Region.blacksmith_house, Entrance.enter_mens_locker_room)
         self.collect_all_except(mens_locker_item)
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
@@ -117,7 +117,7 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
 
     def test_cannot_get_fishing_rod_without_willy_access(self):
         mens_locker_item = "Men's Locker Key"
-        place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_mens_locker_room)
+        place_region_at_entrance(self.multiworld, self.player, Region.fish_cabin, Entrance.enter_mens_locker_room)
         self.collect_all_except(mens_locker_item)
         self.collect("Fishing Level", 10)
         self.collect("Fishing Mastery")

@@ -3,12 +3,10 @@ from typing import Protocol
 from BaseClasses import Region
 from . import vanilla_data, mods
 from .entrance_rando import create_player_randomization_flag, connect_regions
-from .model import ConnectionData, RegionData, RandomizationFlag
+from .model import ConnectionData, RegionData
 from ..content import StardewContent
-from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..mods.mod_data import ModNames
-from ..options import StardewValleyOptions
-from ..strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName
+from ..options import StardewValleyOptions, IncludeEndgameLocations
 
 
 class RegionFactory(Protocol):
@@ -29,7 +27,7 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
     }
 
     randomization_flag = create_player_randomization_flag(world_options.entrance_randomization, world_options.entrance_randomization_behavior.value,
-                                                          world_options.include_endgame_locations.value, content)
+                                                          world_options.include_endgame_locations == IncludeEndgameLocations.option_true, content)
 
     is_chaos = world_options.entrance_randomization_behavior.is_chaos()
     randomized_entrances = connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, randomization_flag,

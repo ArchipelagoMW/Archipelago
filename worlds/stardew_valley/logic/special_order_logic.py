@@ -82,19 +82,19 @@ class SpecialOrderLogic(BaseLogic):
                                                    self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_hungry_challenge: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.shipping.can_use_any_shipping_bin &
-                                          (self.logic.money.can_spend_at(Region.saloon, 205000) & self.logic.cooking.can_cook(Beverage.triple_shot_espresso)) &
-                                          (self.logic.money.can_spend_at(Region.pierre_store, 170000) & self.logic.cooking.can_cook(Meal.bread)),
+                                          (self.logic.money.can_spend_at(Region.saloon_shop, 205000) & self.logic.cooking.can_cook(Beverage.triple_shot_espresso)) &
+                                          (self.logic.money.can_spend_at(Region.pierre_shop, 170000) & self.logic.cooking.can_cook(Meal.bread)),
                 SpecialOrder.qis_kindness: self.logic.gifts.can_give_loved_gifts_to_everyone(),
                 SpecialOrder.extended_family: self.logic.ability.can_fish_perfectly() & self.logic.has(Fish.angler) & self.logic.has(Fish.glacierfish) &
                                               self.logic.has(Fish.crimsonfish) & self.logic.has(Fish.mutant_carp) & self.logic.has(Fish.legend),
                 SpecialOrder.danger_in_the_deep: self.logic.ability.can_mine_perfectly() & self.logic.mine.has_mine_elevator_to_floor(120),
                 SpecialOrder.skull_cavern_invasion: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_prismatic_grange: self.logic.has(Loot.bug_meat) &  # 100 Bug Meat
-                                                   self.logic.money.can_spend_at(Region.saloon, 24000) &  # 100 Spaghetti
-                                                   self.logic.money.can_spend_at(Region.blacksmith, 15000) &  # 100 Copper Ore
-                                                   self.logic.money.can_spend_at(Region.ranch, 5000) &  # 100 Hay
-                                                   self.logic.money.can_spend_at(Region.saloon, 22000) &  # 100 Salads
-                                                   self.logic.money.can_spend_at(Region.saloon, 7500) &  # 100 Joja Cola
+                                                   self.logic.money.can_spend_at(Region.saloon_shop, 24000) &  # 100 Spaghetti
+                                                   self.logic.money.can_spend_at(Region.blacksmith_shop, 15000) &  # 100 Copper Ore
+                                                   self.logic.money.can_spend_at(Region.ranch_shop, 5000) &  # 100 Hay
+                                                   self.logic.money.can_spend_at(Region.saloon_shop, 22000) &  # 100 Salads
+                                                   self.logic.money.can_spend_at(Region.saloon_shop, 7500) &  # 100 Joja Cola
                                                    self.logic.money.can_spend(80000),  # I need this extra rule because money rules aren't additive...)
             })
 
