@@ -25,7 +25,8 @@ class PetLogic(BaseLogic):
         return self.can_befriend_pet(hearts)
 
     def received_pet_hearts(self, hearts: int) -> StardewRule:
-        return self.logic.received(pet_heart_item_name,
+        pet_exists = self.logic.relationship.exists(NPC.pet)
+        return pet_exists & self.logic.received(pet_heart_item_name,
                                    math.ceil(hearts / self.content.features.friendsanity.heart_size))
 
     def can_befriend_pet(self, hearts: int) -> StardewRule:

@@ -120,11 +120,14 @@ class RelationshipLogic(BaseLogic):
 
     @cache_self1
     def exists(self, npc: str) -> StardewRule:
+        if npc == NPC.pet:
+            return self.logic.received(f"{npc} Arrival")
+        
         villager = self.content.villagers.get(npc)
         if villager is None:
             return false_
 
-        if StartWithoutOptionName.villagers in self.options.start_without or npc == NPC.kent or npc == NPC.pet:
+        if StartWithoutOptionName.villagers in self.options.start_without or npc == NPC.kent:
             return self.logic.received(f"{npc} Arrival")
 
         return self.logic.true_

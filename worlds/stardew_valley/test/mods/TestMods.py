@@ -49,6 +49,7 @@ class TestBaseLocationDependencies(SVTestBase):
 
 class TestBaseItemGeneration(SVTestBase):
     options = {
+        options.StartWithout.internal_name: options.StartWithout.preset_all,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
@@ -76,6 +77,7 @@ class TestBaseItemGeneration(SVTestBase):
 
 class TestNoGingerIslandModItemGeneration(SVTestBase):
     options = {
+        options.StartWithout.internal_name: options.StartWithout.preset_all,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
