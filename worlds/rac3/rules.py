@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule
-from worlds.rac3.constants.data.item import infobot_data
+from worlds.rac3.constants.data.item import infobot_data, non_prog_weapon_data, prog_weapon_data
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
@@ -257,6 +257,11 @@ def set_rules(world: "RaC3World"):
             lambda state: all_locations(state, world, RAC3TAG.ARENA, RAC3TROPHY.PHOENIX_ANNIHILATION_NATION_CHAMPION),
         RAC3TROPHY.PHOENIX_SKILL_MASTER:
             lambda state: all_locations(state, world, RAC3TAG.SKILLPOINT, RAC3TROPHY.PHOENIX_SKILL_MASTER),
+        RAC3TROPHY.PHOENIX_NANO_FINDER:
+            lambda state: state.has_from_list(infobot_data.keys(), world.player, calc_nanotech_requirement(world, 5, True)),
+        RAC3TROPHY.PHOENIX_OMEGA_ARSENAL:
+            lambda state: state.has_all(non_prog_weapon_data.keys(), world.player) 
+                       or state.has_all_counts({weapon : 5 if weapon == RAC3ITEM.PROGRESSIVE_RY3N0 else 8 for weapon in prog_weapon_data.keys()}, world.player),
 
         # RAC3VENDOR.MARCADIA_HYDRA
         # RAC3TBOLT.MARCADIA_POOL

@@ -449,6 +449,14 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if (options.skill_points.value < 2 and options.sewer_limitation < 100 and loc ==
                     RAC3TROPHY.PHOENIX_SKILL_MASTER):
                     return True
+                if options.ngplus_start.value < 1:
+                    if loc == RAC3TROPHY.PHOENIX_NANO_FINDER or loc == RAC3TROPHY.PHOENIX_OMEGA_ARSENAL:
+                        return True # Skip Phoenix Nano Master and Omega Arsenal trophies if NG+ start is not enabled
+                if options.ngplus_start.value > 0:
+                    if loc == RAC3TROPHY.PHOENIX_NANO_FINDER and options.nanotech_limitation.value < 200:
+                        return True  # Skip Phoenix Nano Master trophy if nanotech limitation is not set to include level 200
+                    if loc == RAC3TROPHY.PHOENIX_OMEGA_ARSENAL and options.ngplus_items.value == 0:
+                        return True  # Skip Phoenix Omega Arsenal trophy if NG+ items are disabled
             case RAC3TAG.SKILLPOINT:
                 if options.skill_points.value == 0:
                     return True  # Skips skill points when disabled

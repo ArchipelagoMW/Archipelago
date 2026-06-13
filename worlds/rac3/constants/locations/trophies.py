@@ -15,3 +15,5 @@ class RAC3TROPHY:
     PHOENIX_FRIEND_OF_THE_RANGERS = "Phoenix: Long Term Trophy: Friend of the Rangers"
     PHOENIX_ANNIHILATION_NATION_CHAMPION = "Phoenix: Long Term Trophy: Annihilation Nation Champion"
     PHOENIX_SKILL_MASTER = "Phoenix: Long Term Trophy: Skill Master"
+    PHOENIX_NANO_FINDER = "Phoenix: Long Term Trophy: Nanofinder"
+    PHOENIX_OMEGA_ARSENAL = "Phoenix: Long Term Trophy: Omega Arsenal"
