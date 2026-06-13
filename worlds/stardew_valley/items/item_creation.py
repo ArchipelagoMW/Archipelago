@@ -622,9 +622,11 @@ def create_villager_items(item_factory: StardewItemFactory, content: StardewCont
     items_to_add.extend(items_by_group[Group.VILLAGER_ALWAYS])
 
     if StartWithoutOptionName.villagers in options.start_without:
-        items_to_add.extend(items_by_group[Group.VILLAGER])
-    filtered_items = remove_excluded(list(items_to_add), content, options)
-    items.extend(item_factory(item) for item in filtered_items)
+        villager_arrival_items = [item for item in items_by_group[Group.VILLAGER] if item.name[:-len(" Arrival")] in content.villagers]
+        items_to_add.extend(villager_arrival_items)
+
+
+    items.extend(item_factory(item) for item in items_to_add)
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
