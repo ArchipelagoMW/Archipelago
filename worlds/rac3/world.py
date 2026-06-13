@@ -14,8 +14,7 @@ from worlds.rac3.items import (create_item, create_itempool, get_filler_selectio
                                starting_planets, starting_weapons)
 from worlds.rac3.locations import get_level_locations, get_location_names, get_total_locations, location_groups
 from worlds.rac3.rac3options import RaC3Options
-from worlds.rac3.regions import (create_regions, every_10_nanotech, every_20_nanotech, every_5_nanotech, every_nanotech,
-                                 get_regions)
+from worlds.rac3.regions import create_regions, get_nanotech_locations, get_regions
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
 from worlds.rac3.web_world import RaC3Web
@@ -120,19 +119,8 @@ class RaC3World(World):
 
     def dead_seed_check(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
         """Check for option combinations that will result in a dead seed and raise an OptionError to warn the player"""
-        nanotech_milestones = self.options.nanotech_milestones.value
-        nanotech_limitation = self.options.nanotech_limitation.value
-        nanotech_locations = []
-        if nanotech_milestones == 1:  # every 20
-            nanotech_locations = [lvl for lvl in every_20_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
-        elif nanotech_milestones == 2:  # every 10
-            nanotech_locations = [lvl for lvl in every_10_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
-        elif nanotech_milestones == 3:  # every 5
-            nanotech_locations = [lvl for lvl in every_5_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
-        elif nanotech_milestones == 4:  # all
-            nanotech_locations = every_nanotech[:nanotech_limitation - 10]
-
-        no_nanotech_locations = not nanotech_milestones or (nanotech_milestones != 0 and len(nanotech_locations) == 0)
+        nanotech_locations = get_nanotech_locations(self.options)
+        no_nanotech_locations = not nanotech_locations
 
         if (not self.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False)
             and not self.options.titanium_bolts.value

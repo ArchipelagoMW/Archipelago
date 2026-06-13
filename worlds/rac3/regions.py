@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import Location, Region
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from worlds.rac3.constants.locations.general import RAC3LOCATION
-from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
+from worlds.rac3.constants.locations.nanotech import NANOTECH_OPTION_TO_MOD, RAC3NANOTECH
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
@@ -26,136 +26,26 @@ class GameLocation(Location):
     game = RAC3OPTION.GAME_TITLE_FULL
 
 
-every_nanotech: list[str] = [
-    RAC3NANOTECH.LEVEL_11,
-    RAC3NANOTECH.LEVEL_12,
-    RAC3NANOTECH.LEVEL_13,
-    RAC3NANOTECH.LEVEL_14,
-    RAC3NANOTECH.LEVEL_15,
-    RAC3NANOTECH.LEVEL_16,
-    RAC3NANOTECH.LEVEL_17,
-    RAC3NANOTECH.LEVEL_18,
-    RAC3NANOTECH.LEVEL_19,
-    RAC3NANOTECH.LEVEL_20,
-    RAC3NANOTECH.LEVEL_21,
-    RAC3NANOTECH.LEVEL_22,
-    RAC3NANOTECH.LEVEL_23,
-    RAC3NANOTECH.LEVEL_24,
-    RAC3NANOTECH.LEVEL_25,
-    RAC3NANOTECH.LEVEL_26,
-    RAC3NANOTECH.LEVEL_27,
-    RAC3NANOTECH.LEVEL_28,
-    RAC3NANOTECH.LEVEL_29,
-    RAC3NANOTECH.LEVEL_30,
-    RAC3NANOTECH.LEVEL_31,
-    RAC3NANOTECH.LEVEL_32,
-    RAC3NANOTECH.LEVEL_33,
-    RAC3NANOTECH.LEVEL_34,
-    RAC3NANOTECH.LEVEL_35,
-    RAC3NANOTECH.LEVEL_36,
-    RAC3NANOTECH.LEVEL_37,
-    RAC3NANOTECH.LEVEL_38,
-    RAC3NANOTECH.LEVEL_39,
-    RAC3NANOTECH.LEVEL_40,
-    RAC3NANOTECH.LEVEL_41,
-    RAC3NANOTECH.LEVEL_42,
-    RAC3NANOTECH.LEVEL_43,
-    RAC3NANOTECH.LEVEL_44,
-    RAC3NANOTECH.LEVEL_45,
-    RAC3NANOTECH.LEVEL_46,
-    RAC3NANOTECH.LEVEL_47,
-    RAC3NANOTECH.LEVEL_48,
-    RAC3NANOTECH.LEVEL_49,
-    RAC3NANOTECH.LEVEL_50,
-    RAC3NANOTECH.LEVEL_51,
-    RAC3NANOTECH.LEVEL_52,
-    RAC3NANOTECH.LEVEL_53,
-    RAC3NANOTECH.LEVEL_54,
-    RAC3NANOTECH.LEVEL_55,
-    RAC3NANOTECH.LEVEL_56,
-    RAC3NANOTECH.LEVEL_57,
-    RAC3NANOTECH.LEVEL_58,
-    RAC3NANOTECH.LEVEL_59,
-    RAC3NANOTECH.LEVEL_60,
-    RAC3NANOTECH.LEVEL_61,
-    RAC3NANOTECH.LEVEL_62,
-    RAC3NANOTECH.LEVEL_63,
-    RAC3NANOTECH.LEVEL_64,
-    RAC3NANOTECH.LEVEL_65,
-    RAC3NANOTECH.LEVEL_66,
-    RAC3NANOTECH.LEVEL_67,
-    RAC3NANOTECH.LEVEL_68,
-    RAC3NANOTECH.LEVEL_69,
-    RAC3NANOTECH.LEVEL_70,
-    RAC3NANOTECH.LEVEL_71,
-    RAC3NANOTECH.LEVEL_72,
-    RAC3NANOTECH.LEVEL_73,
-    RAC3NANOTECH.LEVEL_74,
-    RAC3NANOTECH.LEVEL_75,
-    RAC3NANOTECH.LEVEL_76,
-    RAC3NANOTECH.LEVEL_77,
-    RAC3NANOTECH.LEVEL_78,
-    RAC3NANOTECH.LEVEL_79,
-    RAC3NANOTECH.LEVEL_80,
-    RAC3NANOTECH.LEVEL_81,
-    RAC3NANOTECH.LEVEL_82,
-    RAC3NANOTECH.LEVEL_83,
-    RAC3NANOTECH.LEVEL_84,
-    RAC3NANOTECH.LEVEL_85,
-    RAC3NANOTECH.LEVEL_86,
-    RAC3NANOTECH.LEVEL_87,
-    RAC3NANOTECH.LEVEL_88,
-    RAC3NANOTECH.LEVEL_89,
-    RAC3NANOTECH.LEVEL_90,
-    RAC3NANOTECH.LEVEL_91,
-    RAC3NANOTECH.LEVEL_92,
-    RAC3NANOTECH.LEVEL_93,
-    RAC3NANOTECH.LEVEL_94,
-    RAC3NANOTECH.LEVEL_95,
-    RAC3NANOTECH.LEVEL_96,
-    RAC3NANOTECH.LEVEL_97,
-    RAC3NANOTECH.LEVEL_98,
-    RAC3NANOTECH.LEVEL_99,
-    RAC3NANOTECH.LEVEL_100,
-]
-every_5_nanotech: list[str] = [
-    RAC3NANOTECH.LEVEL_15,
-    RAC3NANOTECH.LEVEL_20,
-    RAC3NANOTECH.LEVEL_25,
-    RAC3NANOTECH.LEVEL_30,
-    RAC3NANOTECH.LEVEL_35,
-    RAC3NANOTECH.LEVEL_40,
-    RAC3NANOTECH.LEVEL_45,
-    RAC3NANOTECH.LEVEL_50,
-    RAC3NANOTECH.LEVEL_55,
-    RAC3NANOTECH.LEVEL_60,
-    RAC3NANOTECH.LEVEL_65,
-    RAC3NANOTECH.LEVEL_70,
-    RAC3NANOTECH.LEVEL_75,
-    RAC3NANOTECH.LEVEL_80,
-    RAC3NANOTECH.LEVEL_85,
-    RAC3NANOTECH.LEVEL_90,
-    RAC3NANOTECH.LEVEL_95,
-    RAC3NANOTECH.LEVEL_100,
-]
-every_10_nanotech: list[str] = [
-    RAC3NANOTECH.LEVEL_20,
-    RAC3NANOTECH.LEVEL_30,
-    RAC3NANOTECH.LEVEL_40,
-    RAC3NANOTECH.LEVEL_50,
-    RAC3NANOTECH.LEVEL_60,
-    RAC3NANOTECH.LEVEL_70,
-    RAC3NANOTECH.LEVEL_80,
-    RAC3NANOTECH.LEVEL_90,
-    RAC3NANOTECH.LEVEL_100,
-]
-every_20_nanotech: list[str] = [
-    RAC3NANOTECH.LEVEL_20,
-    RAC3NANOTECH.LEVEL_40,
-    RAC3NANOTECH.LEVEL_60,
-    RAC3NANOTECH.LEVEL_80,
-    RAC3NANOTECH.LEVEL_100,
-]
+all_nanotech: list[str] = [getattr(RAC3NANOTECH, f"LEVEL_{level}") for level in range(11, 201)]
+def should_skip_nanotech_location(location: str, options: type[RaC3Options]) -> bool:
+    nanotech_level = int(location.split()[-1])
+    if options.nanotech_milestones.value == 0:
+        return True
+    if nanotech_level > 100 and not options.ngplus_start.value:
+        return True
+    if nanotech_level <= 100 and nanotech_level > options.nanotech_limitation.value:
+        return True
+
+    nanotech_step = NANOTECH_OPTION_TO_MOD.get(options.nanotech_milestones.value, 0)
+    if not nanotech_step:
+        return True
+
+    if nanotech_level > 100:
+        return (nanotech_level - 100) % nanotech_step != 0
+    return nanotech_level % nanotech_step != 0
+
+def get_nanotech_locations(options: type[RaC3Options]) -> list[str]:
+    return [location for location in all_nanotech if not should_skip_nanotech_location(location, options)]
 
 every_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_1,
@@ -568,16 +458,8 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.titanium_bolts.value == 0:
                     return True  # Skip titanium bolt locations if titanium bolt option is disabled
             case RAC3TAG.NANOTECH:
-                if loc in every_nanotech[options.nanotech_limitation.value - 10::]:
-                    return True  # Place nanotech milestone amount specified in nanotech_limitation
-                if options.nanotech_milestones.value == 0:
-                    return True  # Skip nanotech milestone locations if nanotech milestones option is disabled
-                if options.nanotech_milestones.value == 1 and loc not in every_20_nanotech:
-                    return True  # Skips nanotech milestones that are not in every 20
-                if options.nanotech_milestones.value == 2 and loc not in every_10_nanotech:
-                    return True  # Skips nanotech milestones that are not in every 10
-                if options.nanotech_milestones.value == 3 and loc not in every_5_nanotech:
-                    return True  # Skips nanotech milestones that are not in every 5
+                if should_skip_nanotech_location(loc, options):
+                    return True  # Skip nanotech milestones outside the selected interval or NG+ range
             case RAC3TAG.RANGERS:
                 if options.rangers.value == 0:
                     return True  # Skips ranger missions locations if rangers option is none
