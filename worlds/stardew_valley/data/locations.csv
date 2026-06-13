@@ -294,6 +294,7 @@ id,region,name,tags,content_packs
 417,Carpenter Shop,Kids Room Blueprint,BUILDING_BLUEPRINT,
 418,Carpenter Shop,Cellar Blueprint,BUILDING_BLUEPRINT,
 419,Carpenter Shop,Pet Bowl Blueprint,BUILDING_BLUEPRINT,
+420,Carpenter Shop,Farm House Blueprint,BUILDING_BLUEPRINT,
 501,Town,Quest: Introductions,"STORY_QUEST",
 502,Town,Quest: How To Win Friends,"STORY_QUEST",
 503,Farm,Quest: Getting Started,"STORY_QUEST",

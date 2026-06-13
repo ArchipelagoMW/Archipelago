@@ -149,6 +149,7 @@ def connect_regions(
                 create_entrance_rando_target(origin_region, destination_region, connection_data)
             else:
                 origin_region.connect(destination_region, connection_data.name)
+
     return special_randomized_entrances
 
 

@@ -45,11 +45,11 @@ class BuildingLogic(BaseLogic):
             return self.logic.building.can_build(building_name)
 
         # Those buildings are special. The mod auto-builds them when received, no need to go to Robin.
+        item, count = building_progression.to_progressive_item(building_name)
         if building_name in AUTO_BUILDING_BUILDINGS:
-            return self.logic.received(building_name)
+            return self.logic.received(item)
 
         carpenter_rule = self.logic.building.can_construct_buildings
-        item, count = building_progression.to_progressive_item(building_name)
         return self.logic.received(item, count) & carpenter_rule
 
     @cache_self1

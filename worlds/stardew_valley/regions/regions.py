@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Protocol, Dict
 
 from BaseClasses import Region
 from . import vanilla_data, mods
@@ -7,6 +7,9 @@ from .model import ConnectionData, RegionData
 from ..content import StardewContent
 from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, IncludeEndgameLocations
+from ..strings.ap_names.ap_option_names import StartWithoutOptionName
+from ..strings.entrance_names import Entrance
+from ..strings.region_names import Region as RegionName
 
 
 class RegionFactory(Protocol):
@@ -26,6 +29,8 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
         for region_name in region_data_by_name
     }
 
+    connect_starting_region(regions_by_name, world_options)
+
     randomization_flag = create_player_randomization_flag(world_options.entrance_randomization, world_options.entrance_randomization_behavior.value,
                                                           world_options.include_endgame_locations == IncludeEndgameLocations.option_true, content)
 
@@ -34,6 +39,14 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
                                            world_options.entrance_plando.value, is_chaos)
 
     return regions_by_name, randomized_entrances
+
+
+def connect_starting_region(regions_by_name: Dict[str, Region], world_options: StardewValleyOptions):
+    menu_region = regions_by_name[RegionName.stardew_valley]
+    if StartWithoutOptionName.house in world_options.start_without:
+        menu_region.connect(regions_by_name[RegionName.farm], Entrance.to_farm)
+    else:
+        menu_region.connect(regions_by_name[RegionName.farm_house], Entrance.to_farmhouse)
 
 
 def create_connections_and_regions(active_content_packs: set[str]) -> tuple[dict[str, ConnectionData], dict[str, RegionData]]:

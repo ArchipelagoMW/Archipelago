@@ -11,7 +11,6 @@ from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Loc
 from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, Type, components, icon_paths
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
@@ -38,8 +37,8 @@ from .regions.entrance_rando import get_target_groups
 from .regions.model import reverse_connection_name
 from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
-from .strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
 from .stardew_rule.rule_explain import RuleExplanation
+from .strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceNames
@@ -280,6 +279,8 @@ class StardewValleyWorld(World):
         if StartWithoutOptionName.buildings not in self.options.start_without:
             self.multiworld.push_precollected(self.create_item("Shipping Bin"))
             self.multiworld.push_precollected(self.create_item("Pet Bowl"))
+        if StartWithoutOptionName.house not in self.options.start_without:
+            self.multiworld.push_precollected(self.create_item("Progressive House"))
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:

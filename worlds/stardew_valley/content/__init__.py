@@ -80,6 +80,7 @@ def choose_building_progression(building_option: options.BuildingProgression,
 
     starting_buildings.remove(Building.shipping_bin)
     starting_buildings.remove(Building.pet_bowl)
+    starting_buildings.remove(Building.farm_house)
 
     if (building_option == options.BuildingProgression.option_progressive
             or building_option == options.BuildingProgression.option_progressive_cheap

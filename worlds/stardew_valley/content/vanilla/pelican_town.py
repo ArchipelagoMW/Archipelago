@@ -711,6 +711,16 @@ pelican_town = ContentPack(
             ),
         ),
         Building(
+            BuildingNames.farm_house,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter_shop,
+                    price=1_000,
+                    items_price=((100, Material.wood),)
+                ),
+            ),
+        ),
+        Building(
             BuildingNames.kitchen,
             sources=(
                 ShopSource(

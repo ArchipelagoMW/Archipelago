@@ -10,7 +10,6 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(
         RegionName.stardew_valley,
         (
-            Entrance.to_farmhouse,
             LogicEntrance.fishing,
             LogicEntrance.wearing_hats,
             LogicEntrance.crafting,
