@@ -96,9 +96,9 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
         options.EntranceRandomization: options.EntranceRandomization.option_buildings,
         options.ToolProgression: options.ToolProgression.option_vanilla,
     }
-    seed = 4111845104987680262
+    seed = 4111845104987680263
 
-    # Seed is hardcoded to make sure the ER is a valid roll that actually lock the blacksmith behind the Railroad Boulder Removed.
+    # Seed is hardcoded to make sure the ER is a valid roll that actually locks the doors behind the Railroad Boulder Removed.
 
     def test_cannot_get_any_tool_without_blacksmith_access(self):
         mens_locker_item = "Men's Locker Key"
@@ -117,6 +117,8 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
 
     def test_cannot_get_fishing_rod_without_willy_access(self):
         mens_locker_item = "Men's Locker Key"
+        # place_region_at_entrance(self.multiworld, self.player, Region.sunroom, Entrance.fish_cabin_to_boat_tunnel)
+        # place_region_at_entrance(self.multiworld, self.player, Region.fish_cabin, Entrance.leave_sunroom)
         place_region_at_entrance(self.multiworld, self.player, Region.fish_cabin, Entrance.enter_mens_locker_room)
         self.collect_all_except(mens_locker_item)
         self.collect("Fishing Level", 10)
