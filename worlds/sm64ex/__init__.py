@@ -1,7 +1,8 @@
 import typing
 import os
 import json
-from .Items import item_data_table, action_item_data_table, cannon_item_data_table, painting_unlock_item_data_table, item_table, SM64Item
+from .Items import item_data_table, action_item_data_table, cannon_item_data_table, painting_unlock_item_data_table, \
+    item_table, SM64Item, ut_glitch_item_name
 from .Locations import location_table, SM64Location
 from .Options import sm64_options_groups, SM64Options
 from .Rules import set_rules
@@ -39,6 +40,9 @@ class SM64World(World):
 
     required_client_version = (0, 3, 5)
 
+    ut_can_gen_without_yaml = True
+    glitches_item_name = ut_glitch_item_name
+
     area_connections: typing.Dict[int, int]
 
     options_dataclass = SM64Options
@@ -47,6 +51,29 @@ class SM64World(World):
     move_rando_bitvec: int
     filler_count: int
     star_costs: typing.Dict[str, int]
+
+    slot_option_names = (
+        "area_rando",
+        "buddy_checks",
+        "exclamation_boxes",
+        "progressive_keys",
+        "enable_coin_stars",
+        "enable_locked_paintings",
+        "enable_move_rando",
+        "move_rando_actions",
+        "strict_cap_requirements",
+        "strict_cannon_requirements",
+        "strict_move_requirements",
+        "amount_of_stars",
+        "first_bowser_star_door_cost",
+        "basement_star_door_cost",
+        "second_floor_star_door_cost",
+        "mips1_cost",
+        "mips2_cost",
+        "stars_to_finish",
+        "death_link",
+        "completion_type",
+    )
 
     # Spoiler specific variable(s)
     star_costs_spoiler_key_maxlen = len(max([
@@ -60,6 +87,15 @@ class SM64World(World):
 
 
     def generate_early(self):
+        slot_data = self.get_re_gen_slot_data()
+        self.area_connections = {}
+        if slot_data:
+            self.restore_options_from_slot_data(slot_data)
+            self.area_connections = {
+                int(entrance): int(destination)
+                for entrance, destination in slot_data.get("AreaRando", {}).items()
+            }
+
         max_stars = 120
         if (not self.options.enable_coin_stars):
             max_stars -= 15
@@ -86,13 +122,18 @@ class SM64World(World):
         # Nudge MIPS 1 to match vanilla on default percentage
         if self.number_of_stars == 120 and self.options.mips1_cost == 12:
             self.star_costs['MIPS1Cost'] = 15
+        for cost_name in ("FirstBowserDoorCost", "BasementDoorCost", "SecondFloorDoorCost",
+                          "MIPS1Cost", "MIPS2Cost", "StarsToFinish"):
+            if cost_name in slot_data:
+                self.star_costs[cost_name] = slot_data[cost_name]
+        if "MoveRandoVec" in slot_data:
+            self.move_rando_bitvec = slot_data["MoveRandoVec"]
         self.topology_present = self.options.area_rando
 
     def create_regions(self):
         create_regions(self.multiworld, self.options, self.player)
 
     def set_rules(self):
-        self.area_connections = {}
         set_rules(self.multiworld, self.options, self.player, self.area_connections, self.star_costs, self.move_rando_bitvec)
         if self.topology_present:
             # Write area_connections to spoiler log
@@ -204,6 +245,7 @@ class SM64World(World):
 
     def fill_slot_data(self):
         return {
+            "Options": self.options.as_dict(*self.slot_option_names),
             "AreaRando": self.area_connections,
             "MoveRandoVec": self.move_rando_bitvec,
             "PaintingRando": self.options.enable_locked_paintings.value,
@@ -211,6 +253,18 @@ class SM64World(World):
             "CompletionType": self.options.completion_type.value,
             **self.star_costs
         }
+
+    def get_re_gen_slot_data(self) -> typing.Dict[str, typing.Any]:
+        return getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game, {})
+
+    def restore_options_from_slot_data(self, slot_data: typing.Dict[str, typing.Any]) -> None:
+        for option_name, value in slot_data.get("Options", {}).items():
+            if hasattr(self.options, option_name):
+                getattr(self.options, option_name).value = value
+
+    @staticmethod
+    def interpret_slot_data(slot_data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
+        return slot_data
 
     def generate_output(self, output_directory: str):
         if self.multiworld.players != 1:
