@@ -3735,7 +3735,7 @@ id,region,name,tags,content_packs
 57408,Crafting,Craft Glass Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
 57409,Crafting,Craft Glass Fence,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
 57410,Crafting,Craft Bone Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
-57411,Crafting,Craft Water Sifter,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57411,Crafting,Craft Water Shifter,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
 57412,Crafting,Craft Wooden Display,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
 57413,Crafting,Craft Hardwood Display,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
 57414,Crafting,Craft Dwarf Gadget: Infinite Volcano Simulation,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",Archaeology
@@ -4070,7 +4070,7 @@ id,region,name,tags,content_packs
 58199,Shipping,Shipsanity: Hardwood Display,SHIPSANITY,Archaeology
 58200,Shipping,Shipsanity: Wooden Display,SHIPSANITY,Archaeology
 58201,Shipping,Shipsanity: Dwarf Gadget: Infinite Volcano Simulation,"SHIPSANITY,GINGER_ISLAND",Archaeology
-58202,Shipping,Shipsanity: Water Sifter,"SHIPSANITY,DEPRECATED",Archaeology
+58202,Shipping,Shipsanity: Water Shifter,"SHIPSANITY,DEPRECATED",Archaeology
 58203,Shipping,Shipsanity: Brown Amanita,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands - Witch Swamp Overhaul
 58204,Shipping,Shipsanity: Swamp Herb,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands - Witch Swamp Overhaul
 58205,Shipping,Shipsanity: Void Mint Seeds,SHIPSANITY,Distant Lands - Witch Swamp Overhaul

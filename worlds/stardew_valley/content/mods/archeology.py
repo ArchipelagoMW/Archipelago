@@ -70,7 +70,7 @@ register_mod_content_pack(ArchaeologyContentPack(
         CraftingRecipe(name=ModFloor.rusty_path, ingredients=((ModTrash.rusty_scrap, 2),), sources=(SkillSource(skill=ModSkill.archaeology, level=2),),),
         CraftingRecipe(name=ModCraftable.rusty_brazier, ingredients=((ModTrash.rusty_scrap, 10), (Material.coal, 1), (Material.fiber, 1),), sources=(SkillSource(skill=ModSkill.archaeology, level=3),),),
         CraftingRecipe(name=ModCraftable.bone_fence, ingredients=((Fossil.bone_fragment, 2),), sources=(SkillSource(skill=ModSkill.archaeology, level=8),),),
-        CraftingRecipe(name=ModCraftable.water_sifter, ingredients=((MetalBar.copper, 4), (Material.fiber, 8),), sources=(SkillSource(skill=ModSkill.archaeology, level=8),),),
+        CraftingRecipe(name=ModCraftable.water_shifter, ingredients=((MetalBar.copper, 4), (Material.fiber, 8),), sources=(SkillSource(skill=ModSkill.archaeology, level=8),),),
         CraftingRecipe(name=ModCraftable.wooden_display, ingredients=((Material.wood, 25),), sources=(SkillSource(skill=ModSkill.archaeology, level=1),),),
         CraftingRecipe(name=ModCraftable.hardwood_display, ingredients=((Material.hardwood, 10),), sources=(SkillSource(skill=ModSkill.archaeology, level=6),),),
         CraftingRecipe(name=Ring.lucky_ring, ingredients=((Artifact.elvish_jewelry, 1), (AnimalProduct.rabbit_foot, 5), (Mineral.tigerseye, 1),), sources=(SkillSource(skill=ModSkill.archaeology, level=8),),),
