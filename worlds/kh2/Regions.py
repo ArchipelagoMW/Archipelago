@@ -601,7 +601,6 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.OasisAPBoost,
         LocationName.CircleofLife,
         LocationName.Hyenas1,
-
         LocationName.GoofyHyenas1
     ],
     RegionName.Scar:               [

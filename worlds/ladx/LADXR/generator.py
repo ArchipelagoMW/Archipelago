@@ -1,11 +1,8 @@
 import binascii
 import importlib.util
 import importlib.machinery
-import os
 import random
-import pickle
 import Utils
-import settings
 from collections import defaultdict
 from typing import Dict
 
@@ -63,14 +60,56 @@ from .patches import bank34
 from .roomEditor import RoomEditor, Object
 from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
-from .. import Options
+from .logic import Logic as LADXRLogic
+from .settings import Settings as LADXRSettings
+from .worldSetup import WorldSetup as LADXRWorldSetup
+from .locations.keyLocation import KeyLocation
+
+
+class VersionError(Exception):
+    pass
 
 # Function to generate a final rom, this patches the rom with all required patches
 def generateRom(base_rom: bytes, args, patch_data: Dict):
+    from .. import LinksAwakeningWorld
+    patcher_version = LinksAwakeningWorld.world_version
+    generated_version = Utils.tuplize_version(patch_data.get("generated_world_version", "2.0.0"))
+    if generated_version.major != patcher_version.major or generated_version.minor != patcher_version.minor:
+        Utils.messagebox(
+            "Error",
+            "The apworld version that this patch was generated on is incompatible with your installed world.\n\n"
+            f"Generated on {generated_version.as_simple_string()}\n"
+            f"Installed version {patcher_version.as_simple_string()}",
+            True
+        )
+        raise VersionError(
+            f"The installed world ({patcher_version.as_simple_string()}) is incompatible with the world this patch "
+            f"was generated on ({generated_version.as_simple_string()})"
+        )
+
     random.seed(patch_data["seed"] + patch_data["player"])
     multi_key = binascii.unhexlify(patch_data["multi_key"].encode())
-    item_list = pickle.loads(binascii.unhexlify(patch_data["item_list"].encode()))
-    options = patch_data["options"]
+
+    ladxr_settings = LADXRSettings(patch_data["ladxr_settings_dict"])
+    world_setup = LADXRWorldSetup()
+    world_setup.goal = patch_data["world_setup"]["goal"]
+    world_setup.multichest = patch_data["world_setup"]["multichest"]
+    world_setup.entrance_mapping = patch_data["world_setup"]["entrance_mapping"]
+    world_setup.boss_mapping = patch_data["world_setup"]["boss_mapping"]
+    world_setup.miniboss_mapping = patch_data["world_setup"]["miniboss_mapping"]
+    ladxr_logic = LADXRLogic(configuration_options=ladxr_settings, world_setup=world_setup)
+    item_list = [item for item in ladxr_logic.iteminfo_list if not isinstance(item, KeyLocation)]
+    for spot in patch_data["rom_item_placements"]:
+        ladxr_item = next((item for item in item_list if item.nameId == spot["name_id"]), None)
+        if not ladxr_item:
+            continue
+        ladxr_item.item = spot["item"][1:] if spot["item"].startswith('*') else spot["item"]
+        ladxr_item.custom_item_name = spot["custom_item_name"]
+        mw = None
+        if patch_data["player"] != spot["item_owner"]:
+            mw = min(spot["item_owner"], 101)
+        ladxr_item.mw = mw
+
     rom_patches = []
     rom = ROMWithTables(base_rom, rom_patches)
     rom.player_names = patch_data["other_player_names"]
@@ -84,10 +123,9 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     for pymod in pymods:
         pymod.prePatch(rom)
 
-    if options["gfxmod"]:
-        user_settings = settings.get_settings()
+    if ladxr_settings.gfxmod:
         try:
-            gfx_mod_file = user_settings["ladx_options"]["gfx_mod_file"]
+            gfx_mod_file = LinksAwakeningWorld.settings.gfx_mod_file
             patches.aesthetics.gfxMod(rom, gfx_mod_file)
         except FileNotFoundError:
             pass # if user just doesnt provide gfxmod file, let patching continue
@@ -120,7 +158,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     assembler.const("wLinkSpawnDelay", 0xDE13)
 
     #assembler.const("HARDWARE_LINK", 1)
-    assembler.const("HARD_MODE", 1 if options["hard_mode"] else 0)
+    assembler.const("HARD_MODE", 1 if ladxr_settings.hardmode else 0)
 
     patches.core.cleanup(rom)
     patches.save.singleSaveSlot(rom)
@@ -143,17 +181,16 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     patches.core.alwaysAllowSecretBook(rom)
     patches.core.injectMainLoop(rom)
 
-    if options["shuffle_small_keys"] != Options.ShuffleSmallKeys.option_original_dungeon or\
-            options["shuffle_nightmare_keys"] != Options.ShuffleNightmareKeys.option_original_dungeon:
+    if ladxr_settings.shufflesmallkeys != 'originaldungeon' or ladxr_settings.shufflenightmarekeys != 'originaldungeon':
         patches.inventory.advancedInventorySubscreen(rom)
     patches.inventory.moreSlots(rom)
-    # if ladxr_settings["witch"]:
+    # if ladxr_settings.witch:
     patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
-    if not options["rooster"]:
+    if not ladxr_settings.rooster:
         patches.maptweaks.tweakMap(rom)
         patches.maptweaks.tweakBirdKeyRoom(rom)
-    if options["overworld"] == Options.Overworld.option_open_mabe:
+    if ladxr_settings.overworld == 'openmabe':
         patches.maptweaks.openMabe(rom)
     patches.chest.fixChests(rom)
     patches.shop.fixShop(rom)
@@ -165,9 +202,9 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     patches.tarin.updateTarin(rom)
     patches.fishingMinigame.updateFinishingMinigame(rom)
     patches.health.upgradeHealthContainers(rom)
-    # if ladxr_settings["owlstatues"] in ("dungeon", "both"):
+    # if ladxr_settings.owlstatues in ("dungeon", "both"):
     #    patches.owl.upgradeDungeonOwlStatues(rom)
-    # if ladxr_settings["owlstatues"] in ("overworld", "both"):
+    # if ladxr_settings.owlstatues in ("overworld", "both"):
     #    patches.owl.upgradeOverworldOwlStatues(rom)
     patches.goldenLeaf.fixGoldenLeaf(rom)
     patches.heartPiece.fixHeartPiece(rom)
@@ -178,17 +215,17 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     patches.songs.upgradeManbo(rom)
     patches.songs.upgradeMamu(rom)
 
-    patches.tradeSequence.patchTradeSequence(rom, options)
+    patches.tradeSequence.patchTradeSequence(rom, ladxr_settings)
     patches.bowwow.fixBowwow(rom, everywhere=False)
-    # if ladxr_settings["bowwow"] != 'normal':
+    # if ladxr_settings.bowwow != 'normal':
     #    patches.bowwow.bowwowMapPatches(rom)
     patches.desert.desertAccess(rom)
-    # if ladxr_settings["overworld"] == 'dungeondive':
+    # if ladxr_settings.overworld == 'dungeondive':
     #    patches.overworld.patchOverworldTilesets(rom)
     #    patches.overworld.createDungeonOnlyOverworld(rom)
-    # elif ladxr_settings["overworld"] == 'nodungeons':
+    # elif ladxr_settings.overworld == 'nodungeons':
     #    patches.dungeon.patchNoDungeons(rom)
-    #elif world.ladxr_settings["overworld"] == 'random':
+    #elif ladxr_settings.overworld == 'random':
     #    patches.overworld.patchOverworldTilesets(rom)
     #    mapgen.store_map(rom, world.ladxr_logic.world.map)
     #if settings.dungeon_items == 'keysy':
@@ -196,102 +233,94 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     # patches.reduceRNG.slowdownThreeOfAKind(rom)
     patches.reduceRNG.fixHorseHeads(rom)
     patches.bomb.onlyDropBombsWhenHaveBombs(rom)
-    if options["music_change_condition"] == Options.MusicChangeCondition.option_always:
+    if ladxr_settings.musicchange == 'always':
         patches.aesthetics.noSwordMusic(rom)
     patches.aesthetics.reduceMessageLengths(rom, random)
     patches.aesthetics.allowColorDungeonSpritesEverywhere(rom)
-    if options["music"] == Options.Music.option_shuffled:
+    if ladxr_settings.music == 'shuffled':
         patches.music.randomizeMusic(rom, random)
-    elif options["music"] == Options.Music.option_off:
+    elif ladxr_settings.music == 'off':
         patches.music.noMusic(rom)
-    if options["no_flash"]:
+    if ladxr_settings.noflash:
         patches.aesthetics.removeFlashingLights(rom)
-    if options["hard_mode"] == Options.HardMode.option_oracle:
+    if ladxr_settings.hardmode == 'oracle':
         patches.hardMode.oracleMode(rom)
-    elif options["hard_mode"] == Options.HardMode.option_hero:
+    elif ladxr_settings.hardmode == 'hero':
         patches.hardMode.heroMode(rom)
-    elif options["hard_mode"] == Options.HardMode.option_ohko:
+    elif ladxr_settings.hardmode == 'ohko':
         patches.hardMode.oneHitKO(rom)
-    #if ladxr_settings["superweapons"]:
+    #if ladxr_settings.superweapons:
     #    patches.weapons.patchSuperWeapons(rom)
-    if options["text_mode"] == Options.TextMode.option_fast:
+    if ladxr_settings.textmode == 'fast':
         patches.aesthetics.fastText(rom)
-    #if ladxr_settings["textmode"] == 'none':
+    #if ladxr_settings.textmode == 'none':
     #    patches.aesthetics.fastText(rom)
     #    patches.aesthetics.noText(rom)
-    if not options["nag_messages"]:
+    if not ladxr_settings.nagmessages:
         patches.aesthetics.removeNagMessages(rom)
-    if options["low_hp_beep"] == Options.LowHpBeep.option_slow:
+    if ladxr_settings.lowhpbeep == 'slow':
         patches.aesthetics.slowLowHPBeep(rom)
-    if options["low_hp_beep"] == Options.LowHpBeep.option_none:
+    if ladxr_settings.lowhpbeep == 'none':
         patches.aesthetics.removeLowHPBeep(rom)
-    if 0 <= options["link_palette"]:
-        patches.aesthetics.forceLinksPalette(rom, options["link_palette"])
+    if 0 <= int(ladxr_settings.linkspalette):
+        patches.aesthetics.forceLinksPalette(rom, int(ladxr_settings.linkspalette))
     if args.romdebugmode:
         # The default rom has this build in, just need to set a flag and we get this save.
         rom.patch(0, 0x0003, "00", "01")
 
     # Patch the sword check on the shopkeeper turning around.
-    if options["stealing"] == Options.Stealing.option_disabled:
+    if ladxr_settings.steal == 'disabled':
         rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
         rom.texts[0x2E] = utils.formatText("Hey!  Welcome!  Did you know that I have eyes on the back of my head?")
         rom.texts[0x2F] = utils.formatText("Nothing escapes my gaze! Your thieving ways shall never prosper!")
 
-    #if ladxr_settings["hpmode"] == 'inverted':
+    #if ladxr_settings.hpmode == 'inverted':
     #    patches.health.setStartHealth(rom, 9)
-    #elif ladxr_settings["hpmode"] == '1':
+    #elif ladxr_settings.hpmode == '1':
     #    patches.health.setStartHealth(rom, 1)
 
     patches.inventory.songSelectAfterOcarinaSelect(rom)
-    if options["quickswap"] == Options.Quickswap.option_a:
+    if ladxr_settings.quickswap == 'a':
         patches.core.quickswap(rom, 1)
-    elif options["quickswap"] == Options.Quickswap.option_b:
+    elif ladxr_settings.quickswap == 'b':
         patches.core.quickswap(rom, 0)
 
-    patches.core.addBootsControls(rom, options["boots_controls"])
+    patches.core.addBootsControls(rom, ladxr_settings.bootscontrols)
 
     random.seed(patch_data["seed"] + patch_data["player"])
     hints.addHints(rom, random, patch_data["hint_texts"])
 
-    if patch_data["world_setup"]["goal"] == "raft":
+    if world_setup.goal == "raft":
         patches.goal.setRaftGoal(rom)
-    elif patch_data["world_setup"]["goal"] in ("bingo", "bingo-full"):
-        patches.bingo.setBingoGoal(rom, patch_data["world_setup"]["bingo_goals"], patch_data["world_setup"]["goal"])
-    elif patch_data["world_setup"]["goal"] == "seashells":
+    elif world_setup.goal in ("bingo", "bingo-full"):
+        patches.bingo.setBingoGoal(rom, world_setup.bingo_goals, world_setup.goal)
+    elif world_setup.goal == "seashells":
         patches.goal.setSeashellGoal(rom, 20)
     else:
-        patches.goal.setRequiredInstrumentCount(rom, patch_data["world_setup"]["goal"])
+        patches.goal.setRequiredInstrumentCount(rom, world_setup.goal)
 
     # Patch the generated logic into the rom
-    patches.chest.setMultiChest(rom, patch_data["world_setup"]["multichest"])
-    #if ladxr_settings["overworld"] not in {"dungeondive", "random"}:
-    patches.entrances.changeEntrances(rom, patch_data["world_setup"]["entrance_mapping"])
-    for spot in item_list:
-        if spot.item and spot.item.startswith("*"):
-            spot.item = spot.item[1:]
-        mw = None
-        if spot.item_owner != spot.location_owner:
-            mw = spot.item_owner
-            if mw > 101:
-                # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
-                mw = 101
-        spot.patch(rom, spot.item, multiworld=mw)
-    patches.enemies.changeBosses(rom, patch_data["world_setup"]["boss_mapping"])
-    patches.enemies.changeMiniBosses(rom, patch_data["world_setup"]["miniboss_mapping"])
+    patches.chest.setMultiChest(rom, world_setup.multichest)
+    #if ladxr_settings.overworld not in {"dungeondive", "random"}:
+    patches.entrances.changeEntrances(rom, world_setup.entrance_mapping)
+    for ladxr_item in item_list:
+        ladxr_item.patch(rom, ladxr_item.item, multiworld=ladxr_item.mw)
+    patches.enemies.changeBosses(rom, world_setup.boss_mapping)
+    patches.enemies.changeMiniBosses(rom, world_setup.miniboss_mapping)
 
     if not args.romdebugmode:
         patches.core.addFrameCounter(rom, len(item_list))
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
     patches.titleScreen.setRomInfo(rom, patch_data)
-    if options["ap_title_screen"]:
+    if ladxr_settings.aptitlescreen:
         patches.titleScreen.setTitleGraphics(rom)
     patches.endscreen.updateEndScreen(rom)
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
 
-    if options["text_shuffle"]:
+    if ladxr_settings.textshuffle:
         excluded_ids = [
             # Overworld owl statues
             0x1B6, 0x1B7, 0x1B8, 0x1B9, 0x1BA, 0x1BB, 0x1BC, 0x1BD, 0x1BE, 0x22D,
@@ -350,14 +379,14 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
                 rom.texts[shuffled[bucket_idx][0]] = data
 
 
-    if options["trendy_game"] != Options.TrendyGame.option_normal:
+    if ladxr_settings.trendygame != 'normal':
 
         # TODO: if 0 or 4, 5, remove inaccurate conveyor tiles
 
 
         room_editor = RoomEditor(rom, 0x2A0)
 
-        if options["trendy_game"] == Options.TrendyGame.option_easy:
+        if ladxr_settings.trendygame == 'easy':
             # Set physics flag on all objects
             for i in range(0, 6):
                 rom.banks[0x4][0x6F1E + i -0x4000] = 0x4
@@ -368,7 +397,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
             # Add new conveyor to "push" yoshi (it's only a visual)
             room_editor.objects.append(Object(5, 3, 0xD0))
 
-            if options["trendy_game"] >= Options.TrendyGame.option_harder:
+            if ladxr_settings.trendygame in ('harder', 'hardest', 'impossible'):
                 """
                 Data_004_76A0::
                     db   $FC, $00, $04, $00, $00
@@ -377,18 +406,18 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
                     db   $00, $04, $00, $FC, $00
                 """
                 speeds = {
-                    Options.TrendyGame.option_harder: (3, 8),
-                    Options.TrendyGame.option_hardest: (3, 8),
-                    Options.TrendyGame.option_impossible: (3, 16),
+                    'harder': (3, 8),
+                    'hardest': (3, 8),
+                    'impossible': (3, 16),
                 }
                 def speed():
                     random.seed(patch_data["seed"] + patch_data["player"])
-                    return random.randint(*speeds[options["trendy_game"]])
+                    return random.randint(*speeds[ladxr_settings.trendygame])
                 rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()
                 rom.banks[0x4][0x76A2-0x4000] = speed()
                 rom.banks[0x4][0x76A6-0x4000] = speed()
                 rom.banks[0x4][0x76A8-0x4000] = 0xFF - speed()
-                if options["trendy_game"] >= Options.TrendyGame.option_hardest:
+                if ladxr_settings.trendygame in ('hardest', 'impossible'):
                     rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()
                     rom.banks[0x4][0x76A3-0x4000] = speed()
                     rom.banks[0x4][0x76A5-0x4000] = speed()
@@ -412,11 +441,11 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
 
-    if options["warps"] != Options.Warps.option_vanilla:
-        patches.core.addWarpImprovements(rom, options["warps"] == Options.Warps.option_improved_additional)
+    if ladxr_settings.warps != 'vanilla':
+        patches.core.addWarpImprovements(rom, ladxr_settings.warps == 'improvedadditional')
 
-    palette = options["palette"]
-    if palette != Options.Palette.option_normal:
+    palette = ladxr_settings.palette
+    if palette != 'normal':
         ranges = {
             # Object palettes
             # Overworld palettes
@@ -446,22 +475,22 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
                 r,g,b = bin_to_rgb(packed)
 
                 # 1 bit
-                if palette == Options.Palette.option_1bit:
+                if palette == '1bit':
                     r &= 0b10000
                     g &= 0b10000
                     b &= 0b10000
                 # 2 bit
-                elif palette == Options.Palette.option_1bit:
+                elif palette == '1bit':
                     r &= 0b11000
                     g &= 0b11000
                     b &= 0b11000
                 # Invert
-                elif palette == Options.Palette.option_inverted:
+                elif palette == 'inverted':
                     r = 31 - r
                     g = 31 - g
                     b = 31 - b
                 # Pink
-                elif palette == Options.Palette.option_pink:
+                elif palette == 'pink':
                     r = r // 2
                     r += 16
                     r = int(r)
@@ -470,7 +499,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
                     b += 16
                     b = int(b)
                     b = clamp(b, 0, 0x1F)
-                elif palette == Options.Palette.option_greyscale:
+                elif palette == 'greyscale':
                     # gray=int(0.299*r+0.587*g+0.114*b)
                     gray = (r + g + b) // 3
                     r = g = b = gray
