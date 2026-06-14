@@ -1774,7 +1774,7 @@ it.
 
 def get_option_groups(
     world: typing.Type[World], visibility_level: Visibility = Visibility.template
-) -> dict[str, dict[str, typing.Type[Option[typing.Any]]], str]:
+) -> dict[str, tuple[dict[str, typing.Type[Option[typing.Any]]], str]]:
     """Generates and returns a dictionary for the option groups of a specified world."""
     option_to_name = {option: option_name for option_name, option in world.options_dataclass.type_hints.items()}
 
