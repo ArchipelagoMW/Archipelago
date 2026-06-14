@@ -143,7 +143,7 @@ else:
             description=cleandoc(
                 """
                 Jojapocalypse is an overhaul of the progression of the randomizer, thematically equivalent to the Joja Route from the vanilla game.
-                It is designed as an intnetionally unsatisfying, difficult, unfun experience, to make the player experience the consequences of encouraging Joja, and regret their choice.
+                It is designed as an intentionally unsatisfying, difficult, unfun experience, to make the player experience the consequences of encouraging Joja, and regret their choice.
                 Jojapocalypse can be extremely mentally taxing and unpleasant. As a result, it can only be generated locally, not on the website, and only by having the host explicitly consent to it by modifying their `host.yaml` file to allow it.
                 These settings serve to enable and customize Jojapocalypse
                 """
