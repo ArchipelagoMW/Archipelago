@@ -49,10 +49,17 @@ requires:
 {% endmacro %}
 
 {{ yaml_dump(game) }}:
-  {%- for group_name, group_options in option_groups.items() %}
+  {%- for group_name, (group_options, description) in option_groups.items() %}
   ##{% for _ in group_name %}#{% endfor %}##
   # {{ group_name }} #
   ##{% for _ in group_name %}#{% endfor %}##
+  {%- if description: %}
+  # {{ cleandoc(description)
+      | trim
+      | replace('\n', '\n# ')
+      | indent(2, first=False)
+    }}
+  {%- endif %}
 
   {%- for option_key, option in group_options.items() %}
   {{ option_key }}:
@@ -79,7 +86,7 @@ requires:
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
     {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option_val or sub_option_name == option_val %}50{% else %}0{% endif %}
     {%- endfor -%}
-  
+
     {%- if option.name_lookup[option_val] not in option.options and option_val not in option.options %}
     {{ yaml_dump(option_val) }}: 50
     {%- endif -%}

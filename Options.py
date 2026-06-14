@@ -25,12 +25,12 @@ if typing.TYPE_CHECKING:
 
 
 _RANDOM_OPTS = [
-        "random", "random-low", "random-middle", "random-high", 
+        "random", "random-low", "random-middle", "random-high",
         "random-range-low-<min>-<max>", "random-range-middle-<min>-<max>",
         "random-range-high-<min>-<max>", "random-range-<min>-<max>",
 ]
-    
-    
+
+
 def triangular(lower: int, end: int, tri: float = 0.5) -> int:
     """
     Integer triangular distribution for `lower` inclusive to `end` inclusive.
@@ -41,7 +41,7 @@ def triangular(lower: int, end: int, tri: float = 0.5) -> int:
     # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
     # when a != b, so ensure the result is never more than `end`.
     return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
-  
+
 
 def random_weighted_range(text: str, range_start: int, range_end: int):
     if text == "random-low":
@@ -56,7 +56,7 @@ def random_weighted_range(text: str, range_start: int, range_end: int):
             raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
                             f"Acceptable values are: {', '.join(_RANDOM_OPTS)}.")
 
-        
+
 def roll_percentage(percentage: int | float) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
@@ -1759,6 +1759,8 @@ class OptionGroup(typing.NamedTuple):
     """Options to be in the defined group."""
     start_collapsed: bool = False
     """Whether the group will start collapsed on the WebHost options pages."""
+    description: str = ""
+    """A brief description or help text to appear under the option group header."""
 
 
 item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
@@ -1770,28 +1772,32 @@ it.
 """
 
 
-def get_option_groups(world: typing.Type[World], visibility_level: Visibility = Visibility.template) -> typing.Dict[
-        str, typing.Dict[str, typing.Type[Option[typing.Any]]]]:
+def get_option_groups(
+    world: typing.Type[World], visibility_level: Visibility = Visibility.template
+) -> dict[str, dict[str, typing.Type[Option[typing.Any]]], str]:
     """Generates and returns a dictionary for the option groups of a specified world."""
     option_to_name = {option: option_name for option_name, option in world.options_dataclass.type_hints.items()}
 
-    ordered_groups = {group.name: group.options for group in world.web.option_groups}
+    ordered_groups = {group.name: (group.options, group.description) for group in world.web.option_groups}
 
     # add a default option group for uncategorized options to get thrown into
     if "Game Options" not in ordered_groups:
-        grouped_options = set(option for group in ordered_groups.values() for option in group)
+        grouped_options = set(option for group, _ in ordered_groups.values() for option in group)
         ungrouped_options = [option for option in option_to_name if option not in grouped_options]
         # only add the game options group if we have ungrouped options
         if ungrouped_options:
-            ordered_groups = {**{"Game Options": ungrouped_options}, **ordered_groups}
+            ordered_groups = {**{"Game Options": (ungrouped_options, "")}, **ordered_groups}
 
     return {
-        group: {
-            option_to_name[option]: option
-            for option in group_options
-            if (visibility_level in option.visibility and option in option_to_name)
-        }
-        for group, group_options in ordered_groups.items()
+        group: (
+            {
+                option_to_name[option]: option
+                for option in group_options
+                if (visibility_level in option.visibility and option in option_to_name)
+            },
+            description
+        )
+        for group, (group_options, description) in ordered_groups.items()
     }
 
 
