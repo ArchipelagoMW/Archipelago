@@ -636,7 +636,7 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Q: Scaredy Cat": LLLocation(96, LLLocCat.QUEST, 2, "Halloween Hill"),
     "Q: Sticky Shoes": LLLocation(97, LLLocCat.QUEST, 3, "Halloween Hill"),
     "Q: Mushroom Hunt": LLLocation(98, LLLocCat.QUEST, 4, "The Witch's Cabin"),
-    "Q: Picking Daisies": LLLocation(99, LLLocCat.QUEST, 5, "Menu"),
+    "Q: Picking Daisies": LLLocation(99, LLLocCat.QUEST, 5, "The Witch's Cabin"),
     "Q: Curse The Darkness": LLLocation(100, LLLocCat.QUEST, 6, "Swamp Gas Cavern"),
     "Q: Zombie Stomp": LLLocation(101, LLLocCat.QUEST, 7, "Zombiton"),
     "Q: Smashing Pumpkins": LLLocation(102, LLLocCat.QUEST, 8, "Halloween Hill"),
