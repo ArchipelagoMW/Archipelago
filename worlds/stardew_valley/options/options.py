@@ -276,6 +276,8 @@ class StartWithout(OptionSet):
     Landslide: Start without the landslide that leads to the mines
     Community Center: Start without the key to the Community Center, and the Forest Magic to allow reading the bundles
     Buildings: Start without the Shipping Bin and Pet Bowl
+    House: Start without your farmhouse. You will spawn on the farm instead
+    Villagers: Pelican Town will start as a Ghost Town, without any villagers in it.
     """
     internal_name = "start_without"
     display_name = "Start Without"

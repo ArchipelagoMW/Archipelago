@@ -342,12 +342,6 @@ class Entrance:
     purchase_from_willy = "Purchase From Willy"
     purchase_from_dwarf = "Purchase From Dwarf"
     purchase_from_sandy = "Purchase From Sandy"
-    purchase_from_pierre_egg_festival = "Purchase From Pierre (Egg Festival)"
-    purchase_from_pierre_flower_dance = "Purchase From Pierre (Flower Dance)"
-    purchase_from_pierre_luau = "Purchase From Pierre (Luau)"
-    purchase_from_pierre_moonlight_jellies = "Purchase From Pierre (Moonlight Jellies)"
-    purchase_from_pierre_spirit_eve = "Purchase From Pierre (Spirit's Eve)"
-    purchase_from_pierre_winter_star = "Purchase From Pierre (Winter Star)"
 
 
 @final
@@ -475,6 +469,13 @@ class LogicEntrance:
     forest_cutscenes_from_secret_woods = "Watch Forest Cutscenes From Secret Woods"
     railroad_cutscenes_from_railroad = "Watch Railroad Cutscenes From Railroad"
     railroad_cutscenes_from_statue = "Watch Railroad Cutscenes From Behind Statue"
+
+    purchase_from_pierre_egg_festival = "Purchase From Pierre (Egg Festival)"
+    purchase_from_pierre_flower_dance = "Purchase From Pierre (Flower Dance)"
+    purchase_from_pierre_luau = "Purchase From Pierre (Luau)"
+    purchase_from_pierre_moonlight_jellies = "Purchase From Pierre (Moonlight Jellies)"
+    purchase_from_pierre_spirit_eve = "Purchase From Pierre (Spirit's Eve)"
+    purchase_from_pierre_winter_star = "Purchase From Pierre (Winter Star)"
 
 
 # Skull Cavern Elevator

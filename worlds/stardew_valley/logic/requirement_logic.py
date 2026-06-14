@@ -19,6 +19,7 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
 from ..options import IncludeEndgameLocations, FestivalLocations
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region, LogicRegion
+from ..strings.villager_names import NPC
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -127,7 +128,7 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: LuauDelightRequirementRequirement):
-        return self.logic.region.can_reach(LogicRegion.luau) & self.logic.festival.can_get_luau_soup_delight()
+        return self.logic.region.can_reach(LogicRegion.luau) & self.logic.festival.can_get_luau_soup_delight() & self.logic.relationship.exists(NPC.lewis)
 
     @meet_requirement.register
     def _(self, requirement: ForgeInfinityWeaponRequirement):

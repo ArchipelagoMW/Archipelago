@@ -181,7 +181,7 @@ def set_isolated_locations_rules(logic: StardewLogic, rule_collector: StardewRul
     rule_collector.set_location_rule("Grim Reaper Statue", logic.combat.can_fight_at_level(Performance.decent) & logic.tool.has_tool(Tool.pickaxe))
     rule_collector.set_location_rule("Galaxy Sword Shrine", logic.has("Prismatic Shard"))
     rule_collector.set_location_rule(ShopLocation.krobus_stardrop, logic.source.has_access_to_any(content.game_items[ShopLocation.krobus_stardrop].sources))
-    rule_collector.set_location_rule("Demetrius's Breakthrough", logic.money.can_have_earned_total(25000))
+    rule_collector.set_location_rule("Demetrius's Breakthrough", logic.relationship.exists(NPC.demetrius) & logic.money.can_have_earned_total(25000))
     for request_type in trash_bear_requests:
         location = f"Trash Bear {request_type}"
         items = trash_bear_requests[request_type]
@@ -417,12 +417,12 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.purchase_from_willy, logic.relationship.can_meet(NPC.willy))
     rule_collector.set_entrance_rule(Entrance.purchase_from_dwarf, logic.relationship.can_meet(NPC.dwarf) & logic.wallet.can_speak_dwarf())
     rule_collector.set_entrance_rule(Entrance.purchase_from_sandy, logic.relationship.can_meet(NPC.sandy))
-    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_egg_festival, logic.relationship.can_meet(NPC.pierre))
-    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_flower_dance, logic.relationship.can_meet(NPC.pierre))
-    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_luau, logic.relationship.can_meet(NPC.pierre))
-    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_moonlight_jellies, logic.relationship.can_meet(NPC.pierre))
-    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_spirit_eve, logic.relationship.can_meet(NPC.pierre))
-    # rule_collector.set_entrance_rule(Entrance.purchase_from_pierre_winter_star, logic.relationship.can_meet(NPC.pierre))
+    rule_collector.set_entrance_rule(LogicEntrance.purchase_from_pierre_egg_festival, logic.relationship.exists(NPC.pierre))
+    rule_collector.set_entrance_rule(LogicEntrance.purchase_from_pierre_flower_dance, logic.relationship.exists(NPC.pierre))
+    rule_collector.set_entrance_rule(LogicEntrance.purchase_from_pierre_luau, logic.relationship.exists(NPC.pierre))
+    rule_collector.set_entrance_rule(LogicEntrance.purchase_from_pierre_moonlight_jellies, logic.relationship.exists(NPC.pierre))
+    rule_collector.set_entrance_rule(LogicEntrance.purchase_from_pierre_spirit_eve, logic.relationship.exists(NPC.pierre))
+    rule_collector.set_entrance_rule(LogicEntrance.purchase_from_pierre_winter_star, logic.relationship.exists(NPC.pierre))
 
 
 def set_bookseller_rules(logic, rule_collector):

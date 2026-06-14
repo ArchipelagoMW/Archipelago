@@ -255,7 +255,7 @@ pelican_town = ContentPack(
         Seed.powdermelon: (ShopSource(items_price=((2, TreeSeed.pine),), shop_region=LogicRegion.raccoon_shop_1),),
         Seed.summer_squash: (ShopSource(items_price=((15, Material.sap),), shop_region=LogicRegion.raccoon_shop_1),),
 
-        Seed.strawberry: (ShopSource(price=100, shop_region=LogicRegion.egg_festival, seasons=(Season.spring,)),),
+        Seed.strawberry: (ShopSource(price=100, shop_region=LogicRegion.egg_festival_shop, seasons=(Season.spring,)),),
         Seed.rare_seed: (ShopSource(price=1000, shop_region=LogicRegion.traveling_cart, seasons=(Season.spring, Season.summer)),),
 
         # Saloon
@@ -422,17 +422,17 @@ pelican_town = ContentPack(
         f"{NPC.sam} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.sam, 14),)),),
         f"{NPC.sebastian} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.sebastian, 14),)),),
         f"{NPC.shane} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.shane, 14),)),),
-        Gift.tea_set: (ShopSource(price=1_000_000, shop_region=LogicRegion.traveling_cart, other_requirements=(YearRequirement(10), RegionRequirement(LogicRegion.winter_star))),),
+        Gift.tea_set: (ShopSource(price=1_000_000, shop_region=LogicRegion.traveling_cart, other_requirements=(YearRequirement(10), RegionRequirement(LogicRegion.winter_star_shop))),),
 
-        Furniture.tub_o_flowers: (ShopSource(price=250, shop_region=LogicRegion.flower_dance),),
-        f"{Furniture.tub_o_flowers} Recipe": (ShopSource(price=1000, shop_region=LogicRegion.flower_dance),),
-        FestivalCheck.rarecrow_5: (ShopSource(price=2500, shop_region=LogicRegion.flower_dance, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #5"),)),),
-        FestivalCheck.moonlight_jellies_banner: (ShopSource(price=800, shop_region=LogicRegion.moonlight_jellies),),
-        FestivalCheck.starport_decal: (ShopSource(price=1000, shop_region=LogicRegion.moonlight_jellies),),
+        Furniture.tub_o_flowers: (ShopSource(price=250, shop_region=LogicRegion.flower_dance_shop),),
+        f"{Furniture.tub_o_flowers} Recipe": (ShopSource(price=1000, shop_region=LogicRegion.flower_dance_shop),),
+        FestivalCheck.rarecrow_5: (ShopSource(price=2500, shop_region=LogicRegion.flower_dance_shop, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #5"),)),),
+        FestivalCheck.moonlight_jellies_banner: (ShopSource(price=800, shop_region=LogicRegion.moonlight_jellies_shop),),
+        FestivalCheck.starport_decal: (ShopSource(price=1000, shop_region=LogicRegion.moonlight_jellies_shop),),
         FestivalCheck.rarecrow_1: (ShopSource(price=800, currency=Currency.star_token, shop_region=LogicRegion.fair, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #1"),)),),
         FestivalCheck.fair_stardrop: (ShopSource(price=2000, currency=Currency.star_token, shop_region=LogicRegion.fair),),
-        FestivalCheck.jack_o_lantern: (ShopSource(price=2000, shop_region=LogicRegion.spirit_eve),),
-        FestivalCheck.rarecrow_2: (ShopSource(price=5000, shop_region=LogicRegion.spirit_eve, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #2"),)),),
+        FestivalCheck.jack_o_lantern: (ShopSource(price=2000, shop_region=LogicRegion.spirit_eve_shop),),
+        FestivalCheck.rarecrow_2: (ShopSource(price=5000, shop_region=LogicRegion.spirit_eve_shop, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #2"),)),),
         FestivalCheck.rarecrow_4: (ShopSource(price=5000, shop_region=LogicRegion.festival_of_ice, other_requirements=(FestivalItemReceivedRequirement("Rarecrow #4"),)),),
         FestivalCheck.iridium_fireplace: (ShopSource(price=15000, shop_region=LogicRegion.night_market),),
         FestivalCheck.rarecrow_7: (ShopSource(price=5000, shop_region=LogicRegion.night_market,
@@ -1420,7 +1420,7 @@ pelican_town = ContentPack(
         CraftingRecipe(name=Lighting.marble_brazier, ingredients=((Mineral.marble, 1), (Mineral.aquamarine, 1), (Material.stone, 100),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=5000),),),
         CraftingRecipe(name=Lighting.wood_lamp_post, ingredients=((Material.wood, 50), (ArtisanGood.battery_pack, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=500),),),
         CraftingRecipe(name=Lighting.iron_lamp_post, ingredients=((MetalBar.iron, 1), (ArtisanGood.battery_pack, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=1000),),),
-        CraftingRecipe(name=Lighting.jack_o_lantern, ingredients=((Vegetable.pumpkin, 1), (Lighting.torch, 1),), sources=(ShopSource(shop_region=LogicRegion.spirit_eve, price=2000),),),
+        CraftingRecipe(name=Lighting.jack_o_lantern, ingredients=((Vegetable.pumpkin, 1), (Lighting.torch, 1),), sources=(ShopSource(shop_region=LogicRegion.spirit_eve_shop, price=2000),),),
 
         CraftingRecipe(name=Machine.bone_mill, ingredients=((Fossil.bone_fragment, 10), (Material.clay, 3), (Material.stone, 20),), sources=(SpecialOrderSource(special_order=SpecialOrder.fragments_of_the_past),),),
         CraftingRecipe(name=Machine.bait_maker, ingredients=((MetalBar.iron, 3), (WaterItem.coral, 3), (WaterItem.sea_urchin, 1),), sources=(SkillSource(skill=Skill.fishing, level=6),),),
@@ -1446,7 +1446,7 @@ pelican_town = ContentPack(
         CraftingRecipe(name=Machine.worm_bin, ingredients=((Material.hardwood, 25), (MetalBar.gold, 1), (MetalBar.iron, 1), (Material.fiber, 50),), sources=(SkillSource(skill=Skill.fishing, level=4),),),
         CraftingRecipe(name=Machine.deluxe_worm_bin, ingredients=((Machine.worm_bin, 1), (Material.moss, 30),), sources=(SkillSource(skill=Skill.fishing, level=8),),),
 
-        CraftingRecipe(name=Furniture.tub_o_flowers, ingredients=((Material.wood, 25), (Seed.tulip, 1), (Seed.jazz, 1), (Seed.poppy, 1), (Seed.spangle, 1),), sources=(ShopSource(shop_region=LogicRegion.flower_dance, price=2000),),),
+        CraftingRecipe(name=Furniture.tub_o_flowers, ingredients=((Material.wood, 25), (Seed.tulip, 1), (Seed.jazz, 1), (Seed.poppy, 1), (Seed.spangle, 1),), sources=(ShopSource(shop_region=LogicRegion.flower_dance_shop, price=2000),),),
         CraftingRecipe(name=Furniture.wicked_statue, ingredients=((Material.stone, 25), (Material.coal, 5),), sources=(ShopSource(shop_region=Region.sewer, price=1000),),),
         CraftingRecipe(name=Furniture.flute_block, ingredients=((Material.wood, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter_shop, friend=NPC.robin, hearts=6),),),
         CraftingRecipe(name=Furniture.drum_block, ingredients=((Material.stone, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter_shop, friend=NPC.robin, hearts=6),),),
