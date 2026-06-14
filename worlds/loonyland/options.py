@@ -109,6 +109,14 @@ class MonsterDolls(Choice):
     option_full = 2
     default = 2
 
+class EntranceRandomization(Choice):
+    """**Enabled**: Randomize where all loading zones go, but put the opposite direction to the same place"""
+
+    display_name = "Entrance Randomization WIP"
+    option_disabled = 0
+    option_enabled = 1
+    default = 0
+
 
 @dataclass
 class LoonylandOptions(PerGameCommonOptions):
@@ -122,3 +130,5 @@ class LoonylandOptions(PerGameCommonOptions):
     badges: Badges
     dolls: MonsterDolls
     death_link: DeathLink
+    entrance_rando: EntranceRandomization
+

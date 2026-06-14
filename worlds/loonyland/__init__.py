@@ -1,6 +1,11 @@
-from BaseClasses import CollectionState, Item, ItemClassification, Region, Tutorial
+import logging
+from typing import Tuple
+
+from BaseClasses import CollectionState, Item, ItemClassification, Tutorial, EntranceType
 
 from Options import OptionError
+from Utils import visualize_regions
+from entrance_rando import randomize_entrances, disconnect_entrance_for_randomization
 from worlds.AutoWorld import WebWorld, World
 
 from .Data.game_data import (
@@ -9,16 +14,17 @@ from .Data.game_data import (
     loony_item_table,
     loonyland_location_table,
     loonyland_region_table,
-    set_entrance_rules,
-    set_rules,
+    set_rules, setup_entrances,
 )
 from .Data.game_data import (
     ll_base_id as loonyland_base_id,
 )
+from .entrances import LLEntrance
 from .flags import LLFlags
 from .items import LLItemCat, LoonylandItem
 from .locations import LLLocCat, LoonylandLocation
 from .options import LoonylandOptions, WinCondition
+from .regions import LoonylandRegion
 from .rules import have_x_badges
 
 
@@ -53,6 +59,9 @@ class LoonylandWorld(World):
     location_name_to_id = {name: data.id + loonyland_base_id for name, data in loonyland_location_table.items()}
     item_name_to_id = {name: data.id for name, data in loony_item_table.items()}
     item_name_to_id["Max Life and Gems"] = loonyland_base_id + 3000
+    loonyland_entrance_list: list[LLEntrance] = []
+    entrance_name_dict: dict[str, LLEntrance] = { }
+    er_pairing_list: list[Tuple[int, int]] = []
     badges_in_world = 0
 
     item_name_groups = {
@@ -115,7 +124,7 @@ class LoonylandWorld(World):
 
         for region_name, region_data in loonyland_region_table.items():
             if region_data.can_create(self.options):
-                region = Region(region_name, self.player, self.multiworld)
+                region = LoonylandRegion(region_name, self.player, self.multiworld, region_data)
                 self.multiworld.regions.append(region)
 
         for loc_name, loc_data in loonyland_location_table.items():
@@ -162,14 +171,55 @@ class LoonylandWorld(World):
         torch_loc = self.get_location("Q: Curse The Darkness")
         torch_loc.place_locked_item(self.create_item("Torch"))
 
+
+
+
     def set_rules(self):
         # location rules
         set_rules(self)
         # entrance rules
-        set_entrance_rules(self)
+        self.loonyland_entrance_list = setup_entrances(self)
+        self.entrance_name_dict = {entry.entrance_name: entry for entry in self.loonyland_entrance_list}
+        for region in self.multiworld.get_regions(self.player):
+            for entry in self.loonyland_entrance_list:
+                if entry.source_region==region.name and entry.can_create(self.options):
+                    target_region = entry.target_exit  # for 0 id
+                    name = entry.source_region + " -> " + entry.target_exit
+                    if entry.id!=0:
+                        name = entry.entrance_name
+                        target_region = self.entrance_name_dict.get(entry.target_exit).source_region
+                    logger = logging.getLogger("Client")
+                    logger.info(entry.entrance_name + " " + entry.source_region + " " + entry.target_exit + " " + target_region)
+                    e = region.connect(connecting_region=self.get_region(target_region), name=name, rule=entry.rule)
+                    if self.options.entrance_rando:
+                        if entry.id!=0:
+                            e.randomization_type = EntranceType.TWO_WAY
+                            disconnect_entrance_for_randomization(e)
+
+    def connect_entrances(self):
+        logger = logging.getLogger("Client")
+        #randomize entrances
+        if self.options.entrance_rando:
+            placement_state = randomize_entrances(self, True, target_group_lookup={0: [0]})
+            logger.info(msg=placement_state.pairings)
+            for er_entrance, er_exit in placement_state.pairings:
+                ent_id = self.entrance_name_dict[er_entrance].id
+                exit_id = self.entrance_name_dict[er_exit].id
+                logger.info(er_entrance + " " + str(ent_id) + " " + er_exit + " " + str(exit_id))
+                self.er_pairing_list.append((ent_id, exit_id))
+            visualize_regions(self.get_region("Menu"), f"Player{self.player}.puml", show_entrance_names=True)
+            for entrance in self.get_entrances():
+                if entrance.randomization_group == 1:
+                    logger.info(entrance.name + " "
+                                + entrance.parent_region.name + " "
+                                + str(entrance.parent_region.llregion.map_id) + " "
+                                + entrance.connected_region.name + " "
+                                + str(entrance.connected_region.llregion.map_id)
+                                )
+        # setup data package
 
     def fill_slot_data(self):
-        return self.options.as_dict(
+        options_data = self.options.as_dict(
             "win_condition",
             "badges_required",
             "difficulty",
@@ -179,8 +229,9 @@ class LoonylandWorld(World):
             "overpowered_cheats",
             "badges",
             "dolls",
-            "death_link"
-        )
+            "death_link")
+        options_data["entrance_rando_data"] = self.er_pairing_list
+        return options_data
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         value = super().collect(state, item)
@@ -191,7 +242,6 @@ class LoonylandWorld(World):
         if item.name in self.item_name_groups["power_max"]:
             state.prog_items[self.player]["total_power"] += 50
         return value
-
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         value = super().remove(state, item)
 
