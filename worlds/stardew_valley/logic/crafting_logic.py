@@ -48,11 +48,15 @@ class CraftingLogic(BaseLogic):
     def knows_recipe_source(self, source: Source, item_name: str) -> StardewRule:
         if isinstance(source, ArchipelagoSource):
             return self.logic.received_all(*source.ap_items)
-        if isinstance(source, ShopSource) and source.shop_region in self.content.festivals:
-            if self.options.festival_locations == options.FestivalLocations.option_disabled:
-                return self.logic.crafting.can_learn_recipe_source(source)
-            else:
-                return self.logic.crafting.received_recipe(item_name)
+        if isinstance(source, ShopSource):
+            shop_suffix = " - Shop"
+            shop_name = source.shop_region
+            is_festival_recipe = shop_name in self.content.festivals or (shop_name.endswith(shop_suffix) and shop_name[:-len(shop_suffix)] in self.content.festivals)
+            if is_festival_recipe:
+                if self.options.festival_locations == options.FestivalLocations.option_disabled:
+                    return self.logic.crafting.can_learn_recipe_source(source)
+                else:
+                    return self.logic.crafting.received_recipe(item_name)
         if isinstance(source, QuestSource):
             if self.options.quest_locations.has_no_story_quests():
                 return self.logic.crafting.can_learn_recipe_source(source)
