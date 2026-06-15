@@ -521,6 +521,15 @@ low_victory_checks_levels = [
             "Floran Trap: Aerial Reconnaissance": lambda player: lambda state: state.has("Harpy", player),
         }
     ),
+    Wargroove2Level(
+        name="Wargroove Warriors",
+        file_name="Wargroove_Warriors.json",
+        location_rules={
+            "Wargroove Warriors: Victory": None,
+            "Wargroove Warriors: Village Breaker": None,
+            "Wargroove Warriors: Barrack Busting": None
+        }
+    ),
 ]
 
 first_level = Wargroove2Level(

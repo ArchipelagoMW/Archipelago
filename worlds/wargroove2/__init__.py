@@ -164,15 +164,19 @@ class Wargroove2World(World):
                                           if level.name in self.options.custom_early_level_playlist.value]
         high_victory_checks_levels_copy = [level for level in high_victory_checks_levels_copy
                                           if level.name in self.options.custom_main_level_playlist.value]
+        low_victory_checks_levels_copy_length = len(low_victory_checks_levels_copy)
+        high_victory_checks_levels_copy_length = len(high_victory_checks_levels_copy)
         length_of_main_filler_levels = len(main_filler_levels)
         early_level_sample_counts = length_of_main_filler_levels * [early_level_slots // length_of_main_filler_levels]
         main_level_sample_counts = length_of_main_filler_levels * [main_level_slots // length_of_main_filler_levels]
         low_victory_checks_levels_copy.extend(random.sample(main_filler_levels,
                                                             counts=early_level_sample_counts,
-                                                            k=early_level_slots))
+                                                            k=max(early_level_slots -
+                                                                  low_victory_checks_levels_copy_length, 0)))
         high_victory_checks_levels_copy.extend(random.sample(main_filler_levels,
                                                             counts=main_level_sample_counts,
-                                                            k=main_level_slots))
+                                                            k=max(main_level_slots -
+                                                                  high_victory_checks_levels_copy_length, 0)))
 
         random.shuffle(low_victory_checks_levels_copy)
         random.shuffle(high_victory_checks_levels_copy)
@@ -183,13 +187,18 @@ class Wargroove2World(World):
         final_levels_ocean = [level for level in final_levels if level.has_ocean
                               and level.name in self.options.custom_final_level_playlist]
 
-        selected_final_levels_no_ocean = random.sample(final_filler_levels_copy, final_level_no_ocean_slots)
+        final_levels_no_ocean_length = len(final_levels_no_ocean)
+        final_levels_ocean_length = len(final_levels_ocean)
+        selected_final_levels_no_ocean = random.sample(final_filler_levels_copy, max(final_level_no_ocean_slots -
+                                                                                     final_levels_no_ocean_length, 0))
         final_filler_levels_copy = \
             list(filter(lambda x: x not in selected_final_levels_no_ocean, final_filler_levels_copy))
         final_levels_no_ocean.extend(selected_final_levels_no_ocean)
 
         selected_final_levels_ocean = random.sample(final_filler_levels_copy,
-                                                    FINAL_LEVEL_COUNT - final_level_no_ocean_slots)
+                                                    max(FINAL_LEVEL_COUNT -
+                                                        final_level_no_ocean_slots -
+                                                        final_levels_ocean_length, 0))
         final_levels_ocean.extend(selected_final_levels_ocean)
 
         random.shuffle(final_levels_no_ocean)
