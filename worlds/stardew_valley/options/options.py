@@ -475,7 +475,7 @@ class JunimoKart(Choice):
     """
     internal_name = "junimo_kart"
     display_name = "Junimo Kart"
-    default = 3
+    default = 0
     option_disabled = 0
     option_victory = 1
     option_victory_easy = 2
