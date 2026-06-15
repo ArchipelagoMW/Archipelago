@@ -253,10 +253,17 @@ class RegionNames(StrEnum):
     INSIDE_THE_DRAGON_DEEP = "Inside the dragon (Deeper part)"
     INSIDE_THE_DRAGON_ORB = "Inside the dragon (Orb area)"
 
+    ## ONI ISLAND
+    ONI_ISLAND_ENTRANCE = "Oni Island (Entrance)"
+    ONI_ISLAND_ENTRANCE_BRIDGE = "Oni Island (Entrance Bridge)"
+    ONI_ISLAND_ENTRANCE_SEA_OF_FIRE = "Oni Island (Sea of Fire)"
+    ONI_ISLAND_ENTRANCE_UPPER = "Oni Island (Sea of Fire Upper Part)"
+
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
     MERMAID_SPRING_HUB = "Mermaid Spring Warp Hub"
+
 
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
@@ -290,6 +297,7 @@ class MapIds(Enum):
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207
     CATCALL_TOWER = 0x20A
+    ONI_ISLAND_EXT= 0x20D
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03
@@ -315,7 +323,6 @@ class MapIndexes(Enum):
     CALCIFIED_CAVERN = 15
     MOON_CAVE = 16
     RIVER_OF_THE_HEAVENS = 30
-    # FIXME: Ensure this is the right index
     SEIAN_CITY_COMMONERS = 32
     SHINSHU_FIELD = 71
     AGATA_FOREST = 72
