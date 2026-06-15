@@ -32,7 +32,7 @@ class TestSpecialOrders(SVTestCase):
     def test_given_board_and_qi_then_all_orders_in_pool(self):
         world_options = {
             SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-            JunimoKart.internal_name: JunimoKart.option_victories,
+            JunimoKart.internal_name: JunimoKart.option_victory,
             ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
             Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
         }
