@@ -4,6 +4,7 @@ from rule_builder.rules import True_, Has
 from ..CheckIds import container_check_id, brush_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
+from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
 from ..Enums.WarpType import WarpType
 from ..Rules import gen_thunder_chest_rule
@@ -32,6 +33,9 @@ exits = {
 
 }
 events = {
+    RegionNames.ONI_ISLAND_ENTRANCE_UPPER:{
+        "Oni Island - Mandatory Fight before entrance":EventData(mandatory_enemies=[OkamiEnemies.RED_OGRE,OkamiEnemies.BLUE_OGRE])
+    }
 }
 locations = {
     RegionNames.ONI_ISLAND_ENTRANCE_SEA_OF_FIRE: {

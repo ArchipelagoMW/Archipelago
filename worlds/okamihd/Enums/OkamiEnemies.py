@@ -55,6 +55,8 @@ class OkamiEnemies(Enum):
     BLUE_CYCLOPS = EnnemyData(0x29, "Blue Cyclops", 2)
     BANDIT_SPIDER = EnnemyData(0x0b, "Bandit Spider", 2, required_techniques=[BrushTechniques.GREENSPROUT_VINE])
     TUBE_FOX = EnnemyData(0x0e, "Tube Fox", 3)
+    RED_OGRE = EnnemyData(0x66,"Red Ogre",3)
+    BLUE_OGRE = EnnemyData(0x67, "Blue Ogre", 3)
 
     @staticmethod
     def list():
