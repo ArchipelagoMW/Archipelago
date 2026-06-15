@@ -792,17 +792,17 @@ def extend_arcade_locations(options, randomized_locations):
 
 
 def extend_jotpk_locations(options, randomized_locations):
-    if options.journey_of_the_prairie_king != JourneyOfThePrairieKing.option_disabled:
-        randomized_locations.extend(locations_by_tag[LocationTags.JOTPK_VICTORY])
     if options.journey_of_the_prairie_king == JourneyOfThePrairieKing.option_full_shuffle:
         randomized_locations.extend(locations_by_tag[LocationTags.JOTPK])
+    elif options.journey_of_the_prairie_king != JourneyOfThePrairieKing.option_disabled:
+        randomized_locations.extend(locations_by_tag[LocationTags.JOTPK_VICTORY])
 
 
 def extend_junimo_kart_locations(options, randomized_locations):
-    if options.junimo_kart != JunimoKart.option_disabled:
-        randomized_locations.extend(locations_by_tag[LocationTags.JUNIMO_KART_VICTORY])
     if options.junimo_kart == JunimoKart.option_full_shuffle:
-        randomized_locations.extend(locations_by_tag[LocationTags.JUNIMO_KART])
+        randomized_locations.extend([loc for loc in locations_by_tag[LocationTags.JUNIMO_KART] if LocationTags.SPECIAL_ORDER_QI not in loc.tags])
+    elif options.junimo_kart != JunimoKart.option_disabled:
+        randomized_locations.extend(locations_by_tag[LocationTags.JUNIMO_KART_VICTORY])
 
 
 def filter_deprecated_locations(locations: Iterable[LocationData]) -> Iterable[LocationData]:

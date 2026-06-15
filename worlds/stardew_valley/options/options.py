@@ -1236,11 +1236,7 @@ class ArcadeMachineLocations(Removed):
     """
     internal_name = "arcade_machine_locations"
     display_name = "Arcade Machine Locations"
-    default = 3
-    option_disabled = 0
-    option_victories = 1
-    option_victories_easy = 2
-    option_full_shuffling = 3
+    default = ""
     visibility = Visibility.none
 
     def __init__(self, value: str):

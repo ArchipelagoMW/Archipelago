@@ -25,6 +25,6 @@ class ArcadeLogic(BaseLogic):
 
     def has_junimo_kart_max_level(self) -> StardewRule:
         play_rule = self.logic.region.can_reach(Region.junimo_kart_3)
-        if self.options.junimo_kart != options.JunimoKart.option_full_shuffling:
+        if self.options.junimo_kart != options.JunimoKart.option_full_shuffle:
             return play_rule
         return self.logic.arcade.has_junimo_kart_power_level(8)
