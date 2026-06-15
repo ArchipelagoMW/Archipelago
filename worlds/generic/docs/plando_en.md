@@ -21,7 +21,7 @@ Boss, text, and connection plando are enabled by default, but item plando must b
   and edit the `plando_options` key. For example, setting it to `plando_options: items, bosses, texts, connections` will
   make all plando modules available.
 * You can add the necessary plando modules for your options to the `requires` section of your YAML. Doing so will throw
-  an error if the moudles that you need to generate properly are not enabled to ensure you will get the results you
+  an error if the modules that you need to generate properly are not enabled to ensure you will get the results you
   desire. Only enter in the plando modules that you are using. For example:
 
 ```yaml
