@@ -1,5 +1,5 @@
 from ...locations import locations_by_tag, LocationTags, location_table
-from ...options import ExcludeGingerIsland, SpecialOrderLocations, ArcadeMachineLocations, Mods, all_mods_except_invalid_combinations
+from ...options import ExcludeGingerIsland, SpecialOrderLocations, Mods, all_mods_except_invalid_combinations, JunimoKart
 from ...strings.special_order_names import SpecialOrder
 from ...test.bases import SVTestCase, solo_multiworld
 
@@ -32,7 +32,7 @@ class TestSpecialOrders(SVTestCase):
     def test_given_board_and_qi_then_all_orders_in_pool(self):
         world_options = {
             SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-            ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_victories,
+            JunimoKart.internal_name: JunimoKart.option_victories,
             ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
             Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
         }
@@ -48,7 +48,7 @@ class TestSpecialOrders(SVTestCase):
     def test_given_board_and_qi_without_arcade_machines_then_lets_play_a_game_not_in_pool(self):
         world_options = {
             SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-            ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled,
+            JunimoKart.internal_name: JunimoKart.option_disabled,
             ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         }
         with solo_multiworld(world_options) as (multi_world, _):

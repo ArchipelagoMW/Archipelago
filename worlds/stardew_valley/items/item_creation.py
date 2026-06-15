@@ -13,9 +13,9 @@ from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.game_item import ItemTag
 from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, FestivalLocations, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
-    ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
+    ElevatorProgression, BackpackProgression, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, Moviesanity
-from ..options.options import IncludeEndgameLocations, Friendsanity
+from ..options.options import IncludeEndgameLocations, Friendsanity, JunimoKart, JourneyOfThePrairieKing
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
@@ -353,7 +353,7 @@ def create_babies(item_factory: StardewItemFactory, items: List[Item], random: R
 
 
 def create_arcade_machine_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.arcade_machine_locations == ArcadeMachineLocations.option_full_shuffling:
+    if options.journey_of_the_prairie_king == JourneyOfThePrairieKing.option_full_shuffle:
         items.append(item_factory("JotPK: Progressive Boots"))
         items.append(item_factory("JotPK: Progressive Boots"))
         items.append(item_factory("JotPK: Progressive Gun"))
@@ -366,6 +366,7 @@ def create_arcade_machine_items(item_factory: StardewItemFactory, options: Stard
         items.append(item_factory("JotPK: Extra Life"))
         items.append(item_factory("JotPK: Extra Life"))
         items.append(item_factory("JotPK: Increased Drop Rate"))
+    if options.junimo_kart == JunimoKart.option_full_shuffle:
         items.extend(item_factory(item) for item in ["Junimo Kart: Extra Life"] * 8)
 
 

@@ -25,9 +25,9 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
+    Monstersanity, Chefsanity, Craftsanity, Cooksanity, StardewValleyOptions, Walnutsanity
 from .options.options import FarmType, Moviesanity, Eatsanity, Friendsanity, ExcludeGingerIsland, \
-    IncludeEndgameLocations
+    IncludeEndgameLocations, JourneyOfThePrairieKing, JunimoKart
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -1094,9 +1094,24 @@ def set_traveling_merchant_day_entrance_rules(logic: StardewLogic, rule_collecto
 
 
 def set_arcade_machine_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+    set_jotpk_rules(logic, rule_collector, world_options)
+    set_junimo_kart_rules(logic, rule_collector, world_options)
+
+
+def set_jotpk_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+    if world_options.journey_of_the_prairie_king != JourneyOfThePrairieKing.option_full_shuffle:
+        return
+
+    rule_collector.set_entrance_rule(Entrance.play_journey_of_the_prairie_king, logic.has("JotPK Small Buff"))
+    rule_collector.set_entrance_rule(Entrance.reach_jotpk_world_2, logic.has("JotPK Medium Buff"))
+    rule_collector.set_entrance_rule(Entrance.reach_jotpk_world_3, logic.has("JotPK Big Buff"))
+    rule_collector.set_location_rule("Journey of the Prairie King Victory", logic.has("JotPK Max Buff"))
+
+
+def set_junimo_kart_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
     play_junimo_kart_rule = logic.received(Wallet.skull_key)
 
-    if world_options.arcade_machine_locations != ArcadeMachineLocations.option_full_shuffling:
+    if world_options.junimo_kart != JunimoKart.option_full_shuffle:
         rule_collector.set_entrance_rule(Entrance.play_junimo_kart, play_junimo_kart_rule)
         return
 
@@ -1104,10 +1119,6 @@ def set_arcade_machine_rules(logic: StardewLogic, rule_collector: StardewRuleCol
     rule_collector.set_entrance_rule(Entrance.reach_junimo_kart_2, logic.has("Junimo Kart Medium Buff"))
     rule_collector.set_entrance_rule(Entrance.reach_junimo_kart_3, logic.has("Junimo Kart Big Buff"))
     rule_collector.set_entrance_rule(Entrance.reach_junimo_kart_4, logic.has("Junimo Kart Max Buff"))
-    rule_collector.set_entrance_rule(Entrance.play_journey_of_the_prairie_king, logic.has("JotPK Small Buff"))
-    rule_collector.set_entrance_rule(Entrance.reach_jotpk_world_2, logic.has("JotPK Medium Buff"))
-    rule_collector.set_entrance_rule(Entrance.reach_jotpk_world_3, logic.has("JotPK Big Buff"))
-    rule_collector.set_location_rule("Journey of the Prairie King Victory", logic.has("JotPK Max Buff"))
 
 
 def set_movie_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions, content: StardewContent):

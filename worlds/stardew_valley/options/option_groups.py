@@ -31,7 +31,8 @@ else:
         ]),
         OptionGroup("Extra Shuffling", [
             options.FestivalLocations,
-            options.ArcadeMachineLocations,
+            options.JourneyOfThePrairieKing,
+            options.JunimoKart,
             options.SpecialOrderLocations,
             options.QuestLocations,
             options.Fishsanity,

@@ -2,7 +2,7 @@ from .options import (StardewValleyOption, Goal, FarmType, StartingMoney, Profit
                       BundleRandomization, BundlePrice, BundlesPerRoom, EntranceRandomization, EntranceRandomizationBehavior, StartWithout,
                       SeasonRandomization, Cropsanity, BackpackProgression, ToolProgression,
                       ElevatorProgression, SkillProgression, BuildingProgression, FestivalLocations,
-                      ArcadeMachineLocations, SpecialOrderLocations, QuestLocations, Fishsanity,
+                      JourneyOfThePrairieKing, JunimoKart, SpecialOrderLocations, QuestLocations, Fishsanity,
                       Museumsanity, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity,
                       Friendsanity, FriendsanityHeartSize, Eatsanity, Booksanity, Walnutsanity, Moviesanity,
                       Secretsanity, Hatsanity, IncludeEndgameLocations, NumberOfMovementBuffs, EnabledFillerBuffs, ExcludeGingerIsland,

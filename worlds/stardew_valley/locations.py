@@ -14,10 +14,11 @@ from .content.vanilla.qi_board import qi_board_content_pack
 from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
-from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
+from .options import SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity, Fishsanity, SkillProgression, Cropsanity
+from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity, Fishsanity, SkillProgression, Cropsanity, JunimoKart, \
+    JourneyOfThePrairieKing
 from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
@@ -71,7 +72,9 @@ class LocationTags(enum.Enum):
     ARCADE_MACHINE = enum.auto()
     ARCADE_MACHINE_VICTORY = enum.auto()
     JOTPK = enum.auto()
+    JOTPK_VICTORY = enum.auto()
     JUNIMO_KART = enum.auto()
+    JUNIMO_KART_VICTORY = enum.auto()
     HELP_WANTED = enum.auto()
     TRAVELING_MERCHANT = enum.auto()
     FISHSANITY = enum.auto()
@@ -374,9 +377,9 @@ def extend_special_order_locations(randomized_locations: List[LocationData], opt
         randomized_locations.extend(board_locations)
 
     if content.is_enabled(qi_board_content_pack):
-        include_arcade = options.arcade_machine_locations != ArcadeMachineLocations.option_disabled
+        include_jk = options.junimo_kart != JunimoKart.option_disabled
         qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if
-                     include_arcade or LocationTags.JUNIMO_KART not in location.tags]
+                     include_jk or LocationTags.JUNIMO_KART not in location.tags]
         randomized_locations.extend(qi_orders)
 
 
@@ -748,11 +751,7 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_building_locations(randomized_locations, content)
 
-    if options.arcade_machine_locations != ArcadeMachineLocations.option_disabled:
-        randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE_VICTORY])
-
-    if options.arcade_machine_locations == ArcadeMachineLocations.option_full_shuffling:
-        randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE])
+    extend_arcade_locations(options, randomized_locations)
 
     extend_cropsanity_locations(randomized_locations, content)
     extend_fishsanity_locations(randomized_locations, content, random)
@@ -785,6 +784,25 @@ def create_locations(location_collector: StardewLocationCollector,
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
+
+
+def extend_arcade_locations(options, randomized_locations):
+    extend_jotpk_locations(options, randomized_locations)
+    extend_junimo_kart_locations(options, randomized_locations)
+
+
+def extend_jotpk_locations(options, randomized_locations):
+    if options.journey_of_the_prairie_king != JourneyOfThePrairieKing.option_disabled:
+        randomized_locations.extend(locations_by_tag[LocationTags.JOTPK_VICTORY])
+    if options.journey_of_the_prairie_king == JourneyOfThePrairieKing.option_full_shuffle:
+        randomized_locations.extend(locations_by_tag[LocationTags.JOTPK])
+
+
+def extend_junimo_kart_locations(options, randomized_locations):
+    if options.junimo_kart != JunimoKart.option_disabled:
+        randomized_locations.extend(locations_by_tag[LocationTags.JUNIMO_KART_VICTORY])
+    if options.junimo_kart == JunimoKart.option_full_shuffle:
+        randomized_locations.extend(locations_by_tag[LocationTags.JUNIMO_KART])
 
 
 def filter_deprecated_locations(locations: Iterable[LocationData]) -> Iterable[LocationData]:

@@ -450,22 +450,36 @@ class FestivalLocations(Choice):
     option_hard = 2
 
 
-class ArcadeMachineLocations(Choice):
-    """Shuffle the arcade machines?
-    Disabled: The arcade machines are not included.
-    Victories: Each Arcade Machine will contain one check on victory
-    Victories Easy: Same as Victories, but both games are made considerably easier.
-    Full Shuffling: The arcade machines will contain multiple checks each, and different buffs that make the game
-        easier are in the item pool. Junimo Kart has one check at the end of each level.
-        Journey of the Prairie King has one check after each boss, plus one check for each vendor equipment.
+class JourneyOfThePrairieKing(Choice):
+    """Shuffle Journey of the Prairie King?
+    Disabled: JotPK is not included.
+    Victory: JotPK will contain one location on victory
+    Victory Easy: Same as Victory, but with double drop rate and start with one of each upgrade
+    Full Shuffle: JotPK will contain multiple locations. One for beating each boss, plus one for purchasing each upgrade. You will receive the upgrades as items.
     """
-    internal_name = "arcade_machine_locations"
-    display_name = "Arcade Machine Locations"
+    internal_name = "journey_of_the_prairie_king"
+    display_name = "Journey Of The Prairie King"
     default = 3
     option_disabled = 0
-    option_victories = 1
-    option_victories_easy = 2
-    option_full_shuffling = 3
+    option_victory = 1
+    option_victory_easy = 2
+    option_full_shuffle = 3
+
+
+class JunimoKart(Choice):
+    """Shuffle Junimo Kart?
+    Disabled: Junimo Kart is not included.
+    Victory: Junimo Kart will contain one location on victory
+    Victory Easy: Same as Victory, but you have 8 Extra lives on every level
+    Full Shuffle: Junimo Kart will contain a location for beating each level. You will receive extra lives as items.
+    """
+    internal_name = "junimo_kart"
+    display_name = "Junimo Kart"
+    default = 3
+    option_disabled = 0
+    option_victory = 1
+    option_victory_easy = 2
+    option_full_shuffle = 3
 
 
 class SpecialOrderLocations(Choice):
@@ -1217,6 +1231,24 @@ class BundlePlando(Removed):
         super().__init__(value)
 
 
+class ArcadeMachineLocations(Removed):
+    """Deprecated setting, replaced by JourneyOfThePrairieKing and JunimoKart
+    """
+    internal_name = "arcade_machine_locations"
+    display_name = "Arcade Machine Locations"
+    default = 3
+    option_disabled = 0
+    option_victories = 1
+    option_victories_easy = 2
+    option_full_shuffling = 3
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option arcade_machine_locations was replaced by journey_of_the_prairie_king and junimo_kart, please update your options file")
+        super().__init__(value)
+
+
 class BundleWhitelist(OptionSet):
     """If using Remixed or Meme bundles, this guarantees some of them will show up in your community center.
     If more bundles are specified than what fits in their parent room, that room will randomly pick from only the whitelist ones"""
@@ -1303,7 +1335,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     building_progression: BuildingProgression
     festival_locations: FestivalLocations
     elevator_progression: ElevatorProgression
-    arcade_machine_locations: ArcadeMachineLocations
+    journey_of_the_prairie_king: JourneyOfThePrairieKing
+    junimo_kart: JunimoKart
     special_order_locations: SpecialOrderLocations
     quest_locations: QuestLocations
     fishsanity: Fishsanity
@@ -1356,3 +1389,4 @@ class StardewValleyOptions(PerGameCommonOptions):
     # removed:
     trap_items: TrapItems
     bundle_plando: BundlePlando
+    arcade_machine_locations: ArcadeMachineLocations
