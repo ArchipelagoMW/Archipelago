@@ -165,7 +165,7 @@ local function undo_peekaboo_trap()
     storage.trap_memory.peekaboo.active = false
 end
 
-local function set_energy_spiral(number)
+local function set_energy_spiral(number, direction_up)
     if number == 0 then
         game.print({"traps.spiral-0"})
     elseif number == 1 then
@@ -180,17 +180,29 @@ local function set_energy_spiral(number)
         game.print({"traps.spiral-last"})
     end
 
+    local previous_value = number + 1
+    if direction_up then
+        previous_value = number - 1
+    end
     for _, surface in pairs(game.surfaces) do
-        surface.global_effect = {
-            consumption = (number * 2),
-            pollution = (number * 1),
-        }
+        local current_consumption = surface.global_effect.consumption - (previous_value * 2)
+        local current_pollution = surface.global_effect.pollution - (previous_value * 1)
+        local next_consumption = current_consumption + (number * 2)
+        local next_pollution = current_pollution + (number * 2)
+        if next_consumption < -1 then
+            next_consumption = 0 --prevent machines from becoming generators.
+        end
+        if next_pollution < -1 then
+            next_pollution = 0 --prevent machines from becoming generators.
+        end
+        surface.global_effect.consumption = next_consumption
+        surface.global_effect.pollution = next_pollution
     end
 end
 
 local function undo_energy_spiral()
     storage.trap_memory.spirals = storage.trap_memory.spirals - 1
-    set_energy_spiral(storage.trap_memory.spirals)
+    set_energy_spiral(storage.trap_memory.spirals, false)
 end
 
 --##### ####   ###  ####        ##### #   # #   #  ###  #####  ###   ###  #   #  #### 
@@ -291,19 +303,29 @@ local function clear_map_trap()
 end
 
 local function energy_spiral_trap()
-    local clear_effect = game.tick + general.traps.energy_pollution_duration
-    repeat
-        clear_effect = clear_effect + 1
-    until (storage.on_tick[clear_effect] == nil or storage.on_tick[clear_effect] ~= nil and storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil)
+    if general.traps.energy_spiral_type == 0 and storage.trap_memory.spirals == 1 then
+        storage.trap_memory.spiral_end = storage.trap_memory.spiral_end or 0
+        if storage.trap_memory.spiral_end > game.tick then
+            remove_action_from_tick(storage.trap_memory.spiral_end, "undo-energy-spiral-trap")
+            storage.trap_memory.spiral_end = storage.trap_memory.spiral_end + general.traps.energy_pollution_duration
+            add_action_to_tick(storage.trap_memory.spiral_end, "undo-peekaboo-trap", undo_peekaboo_trap)
+        end
+    else
+        local clear_effect = game.tick + general.traps.energy_pollution_duration
+        repeat
+            clear_effect = clear_effect + 1
+        until (storage.on_tick[clear_effect] == nil or storage.on_tick[clear_effect] ~= nil and storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil)
 
-    if storage.trap_memory.spirals == nil then
-        storage.trap_memory.spirals = 0
+        if storage.trap_memory.spirals == nil then
+            storage.trap_memory.spirals = 0
+        end
+        storage.trap_memory.spirals = storage.trap_memory.spirals + 1
+
+        set_energy_spiral(storage.trap_memory.spirals, true)
+
+        add_action_to_tick(clear_effect, "undo-energy-spiral-trap", undo_energy_spiral)
     end
-    storage.trap_memory.spirals = storage.trap_memory.spirals + 1
 
-    set_energy_spiral(storage.trap_memory.spirals)
-
-    add_action_to_tick(clear_effect, "undo-energy-spiral-trap", undo_energy_spiral)
 end
 
 local trap_table = {

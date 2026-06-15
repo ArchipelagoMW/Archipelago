@@ -175,5 +175,6 @@ general.traps = {}
 general.traps.evo_increase = {{ evolution_trap_increase }} / 100
 general.traps.hide_tech_time = 10 * 60
 general.traps.energy_pollution_duration = 120 * 60
+general.traps.energy_spiral_type = {{energy_spiral_type}} --0: intensity 1: duration.
 
 return general
