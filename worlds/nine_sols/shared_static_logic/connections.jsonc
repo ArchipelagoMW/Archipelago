@@ -1114,6 +1114,7 @@
             [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ]
         ] }
     ] },
+    { "from": "OW - Root Node & Middle Exits", "to": "OW - Lower Right Exit", "requires": [] }, // fall down
     // The crates in the middle of OW are active without hacking the panel in the bottom left.
     // The crate track you start on goes to "OW: Enemy Gauntlet Room". On the way up you'll see another track on the left
     // that goes to "OW: Crusher Gauntlet", and a third track on the right that goes to "OW - Shortcut Elevator".
