@@ -38,10 +38,7 @@ def all_locations(state: CollectionState, world: "RaC3World", tag: str, skip: st
 def calc_nanotech_requirement(world: "RaC3World", default_infobot_count: int, ngplus_levels: bool = False) -> int:
     """Calculate the amount of infobots required for a given nanotech level based on the world options"""
     ngplus_enabled = world.options.ngplus_start.value
-    if ngplus_enabled == 1 and not ngplus_levels:
-        return 1
-    # if ngplus multiplier is also enabled then everything is in logic
-    elif ngplus_enabled == 2:
+    if ngplus_enabled and not ngplus_levels:
         return 1
     multiplier_option = world.options.bolt_and_xp_multiplier.value
     multiplier_value = MULTIPLIERS.get(multiplier_option, 1)
