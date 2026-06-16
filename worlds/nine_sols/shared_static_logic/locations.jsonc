@@ -152,7 +152,10 @@
     },
     {
         "address": 505, "name": "FSP: Give Yi's Portrait to Chiyou",
-        "region": "FSP - Chiyou's Shop", "requires": [ { "item": "(Artifact) Portrait of Yi" } ]
+        "region": "FSP - Root Node", "requires": [
+            { "item": "Event - Chiyou in FSP" },
+            { "item": "(Artifact) Portrait of Yi" }
+        ]
     },
     {
         "address": 506, "name": "FSP: Receive Peach Blossom Village Quest",
