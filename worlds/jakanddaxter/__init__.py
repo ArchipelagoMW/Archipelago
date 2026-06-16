@@ -505,8 +505,7 @@ class JakAndDaxterWorld(World):
         return change
 
     def fill_slot_data(self) -> dict[str, Any]:
-        options_dict = self.options.as_dict("start_inventory_from_pool",
-                                            "enable_move_randomizer",
+        options_dict = self.options.as_dict("enable_move_randomizer",
                                             "enable_orbsanity",
                                             "global_orbsanity_bundle_size",
                                             "level_orbsanity_bundle_size",
