@@ -9,8 +9,8 @@ general.technologies.progressive = general.technologies.progressive()
 
 local function receive_item(item_name, source)
     for _, force in pairs(library.get_all_ap_forces()) do
-        if general.technologies.progressive()[item_name] ~= nil then
-            local tech_stack = general.technologies.progressive()[item_name]
+        if general.technologies.progressive[item_name] ~= nil then
+            local tech_stack = general.technologies.progressive[item_name]
                 for _, item_name in ipairs(tech_stack) do
                     local tech = force.technologies[item_name]
                     if tech.researched ~= true then
