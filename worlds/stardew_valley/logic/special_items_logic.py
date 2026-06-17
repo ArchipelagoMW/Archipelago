@@ -9,6 +9,7 @@ from ..strings.quest_names import Quest
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.special_item_names import SpecialItem
+from ..strings.special_order_names import SpecialOrder
 from ..strings.villager_names import NPC
 
 
@@ -51,3 +52,13 @@ class SpecialItemsLogic(BaseLogic):
         if ginger_island_content_pack.name in self.content.registered_packs:
             return george_rule
         return self.logic.quest.can_complete_quest(Quest.the_pirates_wife) & george_rule
+
+    def has_prismatic_jelly(self) -> StardewRule:
+        wizard_rule = self.logic.relationship.exists(NPC.wizard)
+        order_rule = self.logic.special_order.can_complete_special_order(SpecialOrder.prismatic_jelly)
+        return wizard_rule & order_rule
+
+    def has_ectoplasm(self) -> StardewRule:
+        wizard_rule = self.logic.relationship.exists(NPC.wizard)
+        order_rule = self.logic.special_order.can_complete_special_order(SpecialOrder.a_curious_substance)
+        return wizard_rule & order_rule

@@ -5,7 +5,7 @@ from ..options.presets import maxsanity_mods_7_x_x
 from ... import options
 from ...items import Group
 from ...mods.mod_data import invalid_mod_combinations
-from ...options.options import all_mods
+from ...options.options import all_mods, JourneyOfThePrairieKing, JunimoKart
 
 
 class TestCanGenerateMaxsanityWithMods(WorldAssertMixin, ModAssertMixin, SVTestCase):
@@ -60,6 +60,8 @@ class TestBaseItemGeneration(SVTestBase):
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_all,
+        options.JourneyOfThePrairieKing.internal_name: JourneyOfThePrairieKing.option_full_shuffle,
+        options.JunimoKart.internal_name: JunimoKart.option_full_shuffle,
         options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
         options.Eatsanity.internal_name: options.Eatsanity.preset_all,
         options.Secretsanity.internal_name: options.Secretsanity.preset_all,
@@ -85,6 +87,8 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         options.Chefsanity.internal_name: options.Chefsanity.preset_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
+        options.JourneyOfThePrairieKing.internal_name: JourneyOfThePrairieKing.option_full_shuffle,
+        options.JunimoKart.internal_name: JunimoKart.option_full_shuffle,
         options.Secretsanity.internal_name: options.Secretsanity.preset_all,
         options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
         options.Eatsanity.internal_name: options.Eatsanity.preset_all,

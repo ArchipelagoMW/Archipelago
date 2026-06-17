@@ -32,6 +32,7 @@ from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogicMixin
 from .movie_logic import MovieLogicMixin
 from .museum_logic import MuseumLogicMixin
+from .pants_logic import PantsLogicMixin
 from .pet_logic import PetLogicMixin
 from .quality_logic import QualityLogicMixin
 from .quest_logic import QuestLogicMixin
@@ -90,6 +91,7 @@ from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill
 from ..strings.special_item_names import SpecialItem
 from ..strings.tool_names import Tool, ToolMaterial, FishingRod
+from ..strings.weapon_names import Weapon
 
 logger = logging.getLogger(__name__)
 
@@ -101,7 +103,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
                    RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin,
-                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, ShirtLogicMixin, TailoringLogicMixin, FishPondLogicMixin):
+                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, ShirtLogicMixin, PantsLogicMixin, TailoringLogicMixin, FishPondLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -287,6 +289,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             SpecialItem.far_away_stone: self.special_items.has_far_away_stone(),
             SpecialItem.solid_gold_lewis: self.special_items.has_solid_gold_lewis(),
             SpecialItem.advanced_tv_remote: self.special_items.has_advanced_tv_remote(),
+            SpecialItem.prismatic_jelly: self.special_items.has_prismatic_jelly(),
+            SpecialItem.ectoplasm: self.special_items.has_ectoplasm(),
             Trash.broken_cd: self.fishing.can_crab_pot_anywhere,
             Trash.broken_glasses: self.fishing.can_crab_pot_anywhere,
             Trash.driftwood: self.fishing.can_crab_pot_anywhere,
@@ -305,6 +309,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WaterItem.seaweed: self.fishing.can_fish_at(Region.tide_pools),
             WaterItem.white_algae: self.fishing.can_fish_at(Region.mines_floor_20) & self.tool.has_fishing_rod(FishingRod.bamboo),
+            Weapon.slingshot: self.combat.has_slingshot,
+            Weapon.master_slingshot: self.combat.has_master_slingshot,
+
         })
         # @formatter:on
 
@@ -353,6 +360,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
 
         self.shirt.initialize_rules()
         self.registry.item_rules.update(self.registry.shirt_rules)
+        self.registry.item_rules.update(self.registry.pants_rules)
 
         for catalogue in items_by_catalogue:
             for item in items_by_catalogue[catalogue]:

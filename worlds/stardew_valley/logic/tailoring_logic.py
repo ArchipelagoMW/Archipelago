@@ -3,6 +3,7 @@ from typing import Tuple
 
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..data.game_item import Source
+from ..data.pants_data import Pant
 from ..data.shirt_data import Shirt
 from ..stardew_rule import StardewRule
 from ..strings.artisan_good_names import ArtisanGood
@@ -26,6 +27,9 @@ class TailoringLogic(BaseLogic):
 
     def can_tailor_shirt(self, shirt: Shirt) -> StardewRule:
         return self.can_tailor(*shirt.required_items)
+
+    def can_tailor_pants(self, pants: Pant) -> StardewRule:
+        return self.can_tailor(*pants.required_items)
 
     def can_tailor(self, *items: str) -> StardewRule:
         return self.has_tailoring() & self.logic.has(ArtisanGood.cloth) & self.logic.has_any(*items)

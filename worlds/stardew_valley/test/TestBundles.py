@@ -2,7 +2,7 @@ import unittest
 from typing import Dict, Optional
 
 from .bases import SVTestBase, SVTestCase
-from .. import BundleRandomization, location_table
+from .. import BundleRandomization, location_table, BundlesPerRoom
 from ..bundles.bundle import Bundle
 from ..data.bundles_data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, \
     quality_foraging_items, quality_fish_items
@@ -105,6 +105,7 @@ class TestMemeBundles(SVTestBase):
     options = {
         BundleRandomization.internal_name: BundleRandomization.option_meme,
         BundlePrice.internal_name: BundlePrice.option_maximum,
+        BundlesPerRoom.internal_name: BundlesPerRoom.option_four_extra,
     }
 
     def test_can_complete_all_bundles_with_all_state(self):

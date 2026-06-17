@@ -2,6 +2,7 @@ from Options import DeathLink
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
+from ..data.hats_data import Hats
 from ..data.shop import ShopSource, HatMouseSource
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
 from ..strings.animal_names import Animal
@@ -151,6 +152,11 @@ class MoneyLogic(BaseLogic):
             return self.logic.has(ArtisanGood.honey) & self.logic.building.has_building(Building.well)
         if currency == MemeCurrency.goat:
             return self.logic.animal.has_animal(Animal.goat)
+        if currency == MemeCurrency.yeehaw:
+            yeehaw_hats = [Hats.cowboy, Hats.cowgal_hat, Hats.cowpoke_hat, Hats.blue_cowboy_hat, Hats.red_cowboy_hat, Hats.dark_cowboy_hat, Hats.deluxe_cowboy_hat, Hats.magic_cowboy_hat]
+            return self.logic.or_(*(self.logic.hat.can_wear(hat) for hat in yeehaw_hats))
+        if currency == MemeCurrency.error:
+            return self.logic.true_
 
         if currency == MemeCurrency.sleep_days:
             if not self.options.multiple_day_sleep_enabled.value:

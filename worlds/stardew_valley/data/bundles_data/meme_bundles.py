@@ -270,6 +270,37 @@ all_fish_items = [BundleItem(item).as_amount(1).as_quality(FishQuality.basic) fo
 catch_and_release_items = [*all_fish_items]
 catch_and_release_bundle = BundleTemplate(CCRoom.fish_tank, MemeBundleName.catch_and_release, catch_and_release_items, 4, 4)
 
+lingo_normal_items = [*all_simple_items]
+lingo_homophone_items = [shorts, shirt]
+lingo_synonym_items = []
+lingo_reversed_items = []
+lingo_antonym_items = []
+lingo_add_subtract_items = [acorn, corn, coal, coral, ancient_seed, ancient_seeds, bait]
+lingo_lesser_items = [blueberry, blackberry, egg, carp, salmon, rhubarb, eel, rice, pumpkin, cranberries, shrimp]
+# [blueberry_tart, blackberry_cobbler, omelet, carp_surprise, salmon_dinner, rhubarb_pie, fried_eel, rice_pudding, pumpkin_soup, cranberry_sauce, shrimp_cocktail]
+lingo_greater_items = [copper_bar, iron_bar, gold_bar, iridium_bar, radioactive_bar]
+lingo_anagram_items = []
+lingo_items = [lingo_normal_items, lingo_homophone_items, lingo_add_subtract_items, lingo_lesser_items, lingo_greater_items]
+lingo_bundle = FixedPriceDeepBundleTemplate(CCRoom.pantry, MemeBundleName.lingo, lingo_items, 4, 4)
+
+peace_items = [ancient_sword, prehistoric_tool, master_slingshot, explosive_ammo.as_amount(100), mega_bomb.as_amount(30), iridium_band]
+peace_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.peace, peace_items, 6, 4)
+
+camping_items = [tent_kit]
+camping_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.camping, camping_items, 1, 1)
+
+finders_keeper_items = [lucky_purple_shorts, ectoplasm, prismatic_jelly, golden_bobber]  # lost_axe, blackberry_basket, war_memento,
+finders_keeper_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.finders_keepers, finders_keeper_items, 4, 4)
+
+looney_items = [anvil]
+looney_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.looney, looney_items, 1, 1)
+
+morshu_items = [oil.as_amount(3), fiber.as_amount(3), bomb.as_amount(3)]  # Should give the player Rubies? or just invert the bundle? with the voice line
+morshu_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.morshu, morshu_items, 3, 3)
+
+numbers_items = [seaweed.as_amount(420), eggplant.as_amount(69), pumpkin_pie.as_amount(314), life_elixir.as_amount(911), void_egg.as_amount(666), broken_glasses.as_amount(404), wilted_bouquet.as_amount(13), omni_geode.as_amount(42)]
+numbers_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.numbers, numbers_items, 8, 1)
+
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
@@ -304,8 +335,10 @@ hairy_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.hai
 # colored_crystals_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.boiler_room, MemeBundleName.colored_crystals, BundleItem.money_bundle(10))
 hint_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.hint, BundleItem.money_bundle(10))
 sacrifice_bundle = CurrencyBundleTemplate(CCRoom.boiler_room, MemeBundleName.sacrifice, BundleItem(MemeCurrency.goat, 1))
+yeehaw_bundle = CurrencyBundleTemplate(CCRoom.boiler_room, MemeBundleName.yeehaw, BundleItem(MemeCurrency.yeehaw, 1))
+error_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.error, BundleItem(MemeCurrency.error, 1))
 
-# Stopped at 49 responses on the form
+# Stopped at 77 responses on the form
 
 # Todo Bundles
 #   Acrostic Bundle     (Asks for a specific word, you need to donate an item for each letter)
@@ -315,6 +348,7 @@ sacrifice_bundle = CurrencyBundleTemplate(CCRoom.boiler_room, MemeBundleName.sac
 #   Doom Bundle
 #   Dragonball Bundle
 #   Empty Bundle (donate empty inventory spot)
+#   Equivalent Exchange Bundle (show items, must donate different items of the same total price)
 #   Friendship Bundle   (Show some NPCs, gotta donate a loved gift for each of them)
 #   GeoGessr Bundle
 #   Ghost Bundle (it ghosts you)
@@ -325,6 +359,7 @@ sacrifice_bundle = CurrencyBundleTemplate(CCRoom.boiler_room, MemeBundleName.sac
 #   Maguffin Bundle (Ap items)
 #   Millibelle Bundle (money, run away, find at spa)
 #   Minesweeper bundle (donate bombs on correct spots)
+#   Musical Bundle (play a song in the CC)
 #   Pico-8 Bundle
 #   Pollution Bundle
 #   QA Bundle           (Some sort of bug, not sure yet)
@@ -332,6 +367,7 @@ sacrifice_bundle = CurrencyBundleTemplate(CCRoom.boiler_room, MemeBundleName.sac
 #   Robin's Lost Axe Bundle (Give your axe, then Robin brings it back to you)
 #   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
 #   Side Quest Bundle   (Sends you on side quests to talk to random NPCs several times)
+#   Silent Bundle   (Completes if your game does zero noise for a minute)
 #   Therapy Bundle
 #   Torrent Bundle (someone must seed it for you)
 #   Witness Bundle
@@ -343,7 +379,8 @@ sacrifice_bundle = CurrencyBundleTemplate(CCRoom.boiler_room, MemeBundleName.sac
 #     None
 
 pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemonade_stand_bundle, what_the_rock_is_cooking_bundle, sunmaid_bundle,
-                       big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle, animal_well_bundle, bad_farmer_bundle]
+                       big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle, animal_well_bundle, bad_farmer_bundle,
+                       lingo_bundle]
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)
 
 crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bundle, chaos_emerald_bundle, caffeinated_bundle, reverse_bundle,
@@ -356,21 +393,21 @@ fish_tank_meme = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_meme, 6)
 
 boiler_room_bundles_meme = [amons_fall_bundle, screw_you_bundle, rick_bundle, minecraft_bundle, balls_bundle, tilesanity_bundle, obelisks_bundle,
                             honorable_bundle, sisyphus_bundle, automation_bundle, crap_pot_bundle, deathlink_bundle, pool_bundle, # colored_crystals_bundle,
-                            sacrifice_bundle]
+                            sacrifice_bundle, peace_bundle, morshu_bundle, yeehaw_bundle]
 boiler_room_meme = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_meme, 3)
 
 bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_revenge_bundle, smapi_bundle, sappy_bundle, hats_off_to_you_bundle,
                                snitch_bundle, commitment_bundle_bundle, journalist_bundle, trap_bundle, off_your_back_bundle, vocaloid_bundle, fruit_bundle,
                                celeste_bundle, cap_bundle, emmalution_bundle, joetg_bundle, honeywell_bundle, cooperation_bundle, square_hole_bundle,
                                ministry_bundle, loser_club_bundle, frazzleduck_bundle, argonmatrix_bundle, pomnut_bundle, blossom_garden_bundle, doctor_bundle,
-                               hint_bundle, algorerhythm_bundle, distracted_bundle]
+                               hint_bundle, algorerhythm_bundle, distracted_bundle, camping_bundle, finders_keeper_bundle, looney_bundle, numbers_bundle]
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
 vault_bundles_meme = [capitalist_bundle, death_bundle, permit_a38_bundle, vampire_bundle, exhaustion_bundle,
                       tick_tock_bundle, archipela_go_bundle, clique_bundle, cookie_clicker_bundle, communism_bundle,
                       flashbang_bundle, connection_bundle, reconnection_bundle, nft_bundle, firstborn_bundle, restraint_bundle, fast_bundle,
                       floor_is_lava_bundle, gacha_bundle, hibernation_bundle, crowdfunding_bundle, clickbait_bundle,
-                      humble_bundle, puzzle_bundle, asmr_bundle, investment_bundle, stanley_bundle, hairy_bundle]
+                      humble_bundle, puzzle_bundle, asmr_bundle, investment_bundle, stanley_bundle, hairy_bundle, error_bundle]
 vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 
 all_cc_meme_bundles = [*pantry_bundles_meme, *crafts_room_bundles_meme, *fish_tank_bundles_meme,
