@@ -59,6 +59,11 @@ def calc_nanotech_requirement(world: "RaC3World", default_infobot_count: int, ng
 # Todo: Rule Builder
 def set_rules(world: "RaC3World"):
     """Apply logic rules to each location"""
+    progressive_requirement = 1
+    ngplus_enabled = world.options.ngplus_start.value
+    if ngplus_enabled:
+        progressive_requirement += 5 if world.options.ngplus_items.value else 4
+
     region_rules_dict: dict[str, Callable] = {
 
         # Intro Florana
@@ -214,7 +219,8 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.PHOENIX_VR_90_SECOND:
             lambda state: state.can_reach_location(RAC3LOCATION.PHOENIX_VR_SPEED_ROUND, world.player),
         RAC3LOCATION.PHOENIX_VR_SHOCKER:
-            lambda state: state.has_any([RAC3ITEM.SHOCK_BLASTER, RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER], world.player)
+            lambda state: (state.has(RAC3ITEM.SHOCK_BLASTER, world.player)
+                           or state.has(RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER, world.player, progressive_requirement))
                           and state.can_reach_location(RAC3LOCATION.PHOENIX_VR_D_L_D, world.player),
         RAC3LOCATION.PHOENIX_VR_WRENCH:
             lambda state: state.can_reach_location(RAC3LOCATION.PHOENIX_VR_SHOCKER, world.player),
@@ -315,10 +321,12 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.NATION_CHAMPIONSHIP_BOUT:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_ONSLAUGHT, world.player),
         RAC3LOCATION.NATION_WHIP_IT_GOOD:
-            lambda state: state.has_any([RAC3ITEM.PLASMA_WHIP, RAC3ITEM.PROGRESSIVE_PLASMA_WHIP], world.player)
+            lambda state: (state.has(RAC3ITEM.PLASMA_WHIP, world.player)
+                           or state.has(RAC3ITEM.PROGRESSIVE_PLASMA_WHIP, world.player, progressive_requirement))
                           and state.can_reach_location(RAC3LOCATION.NATION_ROBOT_RAMPAGE, world.player),
         RAC3LOCATION.NATION_HYDRA_N_SEEK:
-            lambda state: state.has_any([RAC3ITEM.SPITTING_HYDRA, RAC3ITEM.PROGRESSIVE_SPITTING_HYDRA], world.player)
+            lambda state: (state.has(RAC3ITEM.SPITTING_HYDRA, world.player)
+                           or state.has(RAC3ITEM.PROGRESSIVE_SPITTING_HYDRA, world.player, progressive_requirement))
                           and state.can_reach_location(RAC3LOCATION.NATION_WHIP_IT_GOOD, world.player),
 
         RAC3SKILLPOINT.NATION_BASH:
@@ -337,7 +345,8 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, world.player),
         RAC3LOCATION.NATION_TIME_TO_SUCK:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, world.player)
-                          and state.has_any([RAC3ITEM.SUCK_CANNON, RAC3ITEM.PROGRESSIVE_SUCK_CANNON], world.player),
+                          and (state.has(RAC3ITEM.SUCK_CANNON, world.player)
+                               or state.has(RAC3ITEM.PROGRESSIVE_SUCK_CANNON, world.player, progressive_requirement)),
         RAC3LOCATION.NATION_NAPTIME:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, world.player),
         RAC3LOCATION.NATION_MORE_CYCLING_WEAPONS:
@@ -346,13 +355,16 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, world.player),
         RAC3LOCATION.NATION_CHOP_CHOP:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_TIME_TO_SUCK, world.player)
-                          and state.has_any([RAC3ITEM.DISC_BLADE, RAC3ITEM.PROGRESSIVE_DISC_BLADE], world.player),
+                         and (state.has(RAC3ITEM.DISC_BLADE, world.player)
+                             or state.has(RAC3ITEM.PROGRESSIVE_DISC_BLADE, world.player, progressive_requirement)),
         RAC3LOCATION.NATION_SLEEP_INDUCER:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_CHOP_CHOP, world.player)
-                          and state.has_any([RAC3ITEM.RIFT_INDUCER, RAC3ITEM.PROGRESSIVE_RIFT_INDUCER], world.player),
+                         and (state.has(RAC3ITEM.RIFT_INDUCER, world.player)
+                             or state.has(RAC3ITEM.PROGRESSIVE_RIFT_INDUCER, world.player, progressive_requirement)),
         RAC3LOCATION.NATION_THE_OTHER_WHITE_MEAT:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_SLEEP_INDUCER, world.player)
-                          and state.has_any([RAC3ITEM.QWACK_O_RAY, RAC3ITEM.PROGRESSIVE_QWACK_O_RAY], world.player),
+                         and (state.has(RAC3ITEM.QWACK_O_RAY, world.player)
+                             or state.has(RAC3ITEM.PROGRESSIVE_QWACK_O_RAY, world.player, progressive_requirement)),
         RAC3LOCATION.NATION_CHAMPIONSHIP_BOUT_II:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, world.player),
         RAC3LOCATION.NATION_QWARKTASTIC_BATTLE: lambda state: state.has(RAC3ITEM.VICTORY, world.player),
@@ -610,7 +622,7 @@ def set_rules(world: "RaC3World"):
         # RAC3TROPHY.CRASH_NEFARIOUS
         RAC3SKILLPOINT.CRASH_SITE_SUCK:
             lambda state: state.has(RAC3ITEM.SUCK_CANNON, world.player)
-                          or state.has(RAC3ITEM.PROGRESSIVE_SUCK_CANNON, world.player, 3),
+                          or state.has(RAC3ITEM.PROGRESSIVE_SUCK_CANNON, world.player, progressive_requirement if ngplus_enabled else 3),
         RAC3SKILLPOINT.CRASH_SITE_AIM_HIGH:
             lambda state: state.has_any([RAC3ITEM.FLUX_RIFLE, RAC3ITEM.PROGRESSIVE_FLUX_RIFLE], world.player),
         RAC3LOCATION.CRASH_SITE_NANO_PAK:
