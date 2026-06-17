@@ -1060,20 +1060,42 @@
         ],
         "medium_requires": [] // 2 T-dashes (this is okay because both ledges have an enemy you can parry)
     },
-    { "from": "Factory (U) - Left Exit", "to": "Factory (U) - Behind Moving Boxes", "requires": [
-        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // for the ledge after climbing the rope
-        { "item": "Mystic Nymph: Scout Mode" }, // to toggle the box movement
-        { "item": "Wall Climb" } // to ride the boxes
+    { "from": "Factory (U) - Left Exit", "to": "Factory (U) - Moving Boxes Left Side", "requires": [
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // for the ledge after climbing the rope
     ] },
-    { "from": "Factory (U) - Behind Moving Boxes", "to": "Factory (U) - Left Exit", "requires": [
-        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] },
-        // no need to toggle the box movement when we're going this way
-        { "item": "Wall Climb" }
+    { "from": "Factory (U) - Moving Boxes Left Side", "to": "Factory (U) - Left Exit", "requires": [
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // same ledge the other way
     ] },
-    { "from": "Factory (U) - Behind Moving Boxes", "to": "Factory (U) - Upper Elevator", "requires": [] }, // one-way debris
     {
-        "from": "Factory (U) - Upper Elevator", "to": "Factory (U) - Behind Moving Boxes",
-        "medium_requires": [{ "item": "Trick - Break One-Way Barrier With Bow" }]
+        "from": "Factory (U) - Moving Boxes Left Side", "to": "Factory (U) - Moving Boxes Right Side",
+        "requires": [
+            { "item": "Mystic Nymph: Scout Mode" }, // to toggle the box movement
+            { "item": "Wall Climb" } // to ride the boxes
+        ],
+        "medium_requires": [
+            { "item": "Mystic Nymph: Scout Mode" }, // to toggle the box movement
+            { "item": "Trick - Bow Hover" } // to hover between the boxes
+        ],
+        "ls_requires": [
+            { "item": "Mystic Nymph: Scout Mode" }, // to toggle the box movement
+            { "item": "Cloud Leap" }, // only CS setup works here
+            { "item": "Ledge Grab" } // to parry hover between the boxes
+        ]
+    },
+    {
+        "from": "Factory (U) - Moving Boxes Right Side", "to": "Factory (U) - Moving Boxes Left Side",
+        // no need to toggle the box movement with nymph when we're going this way
+        "requires": [ { "item": "Wall Climb" } ], // to ride the boxes
+        "medium_requires": [ { "item": "Trick - Bow Hover" } ], // to hover between the boxes
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // to parry hover between the boxes
+    },
+    { "from": "Factory (U) - Moving Boxes Right Side", "to": "Factory (U) - Upper Elevator", "requires": [] }, // one-way debris
+    {
+        "from": "Factory (U) - Upper Elevator", "to": "Factory (U) - Moving Boxes Right Side",
+        "medium_requires": [
+            { "item": "Trick - Break One-Way Barrier With Bow" },
+            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // the ledge is just barely too tall for a regular jump
+        ]
     },
     // I could not get spider leap/wall slide into CS to work ^here, and this would've been the only place
     // it affected logic anyway, so definitely not worth adding "spider CS" to the list of medium tricks.
@@ -1583,7 +1605,7 @@
         "requires": [ { "anyOf": [
             { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Charged Strike" }, { "item": "Ledge Grab" }
         ] } ],
-        "medium_requires": [{ "item": "Trick - Bow Hover" }]
+        "medium_requires": [] // Swift Runner, or bow hover
     }, // parry hover works but is redundant with vanilla logic
     {
         "from": "GoS (Entry) - Root Node", "to": "GoS (Entry) - Greenhouse",

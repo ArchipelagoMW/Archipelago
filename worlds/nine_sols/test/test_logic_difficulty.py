@@ -180,7 +180,7 @@ class TestMediumFGHLogic(NineSolsTestBase):
         self.assertReachableWith("Factory (U): Near Upper Right Exit", [])
         self.assertNotReachableWith("Factory (U): Behind Moving Boxes", [])
 
-        self.assertReachableWith("Factory (U): Behind Moving Boxes", ["Arrow: Thunder Buster"])
+        self.assertReachableWith("Factory (U): Behind Moving Boxes", ["Arrow: Thunder Buster", "Ledge Grab"])
 
 
 # Test the T-dashing logic around Broken Shanhai

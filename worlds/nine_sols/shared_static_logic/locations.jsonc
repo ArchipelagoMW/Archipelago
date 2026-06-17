@@ -827,7 +827,7 @@
     },
     {
         "address": 1809, "name": "Factory (U): Behind Moving Boxes",
-        "region": "Factory (U) - Behind Moving Boxes", "requires": []
+        "region": "Factory (U) - Moving Boxes Right Side", "requires": []
     },
 
     // Outer Warehouse
