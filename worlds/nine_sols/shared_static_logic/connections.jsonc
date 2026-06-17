@@ -964,7 +964,8 @@
         "from": "Factory (U) - Main Intersection", "to": "Factory (U) - Broken Shanhai (with qi)",
         "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ]
+        ] } ],
+        "medium_requires": [ { "item": "Charged Strike" } ] // and Swift Runner
     },
     {
         "from": "Factory (U) - Main Intersection", "to": "Factory (U) - Broken Shanhai",
