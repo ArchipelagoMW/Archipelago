@@ -785,6 +785,7 @@ def set_rules(world: "RaC3World"):
         RAC3NANOTECH.LEVEL_97: lambda state: state.has_from_list(infobot_data.keys(), world.player, calc_nanotech_requirement(world, 18)),
         RAC3NANOTECH.LEVEL_98: lambda state: state.has_from_list(infobot_data.keys(), world.player, calc_nanotech_requirement(world, 18)),
         RAC3NANOTECH.LEVEL_99: lambda state: state.has_from_list(infobot_data.keys(), world.player, calc_nanotech_requirement(world, 18)),
+        RAC3NANOTECH.LEVEL_100: lambda state: state.has_from_list(infobot_data.keys(), world.player, calc_nanotech_requirement(world, 18)),
         RAC3NANOTECH.LEVEL_101: lambda state: state.has_from_list(infobot_data.keys(), world.player, calc_nanotech_requirement(world, 1, True)),
         RAC3NANOTECH.LEVEL_102: lambda state: state.has_from_list(infobot_data.keys(), world.player, calc_nanotech_requirement(world, 1, True)),
         RAC3NANOTECH.LEVEL_103: lambda state: state.has_from_list(infobot_data.keys(), world.player, calc_nanotech_requirement(world, 1, True)),
