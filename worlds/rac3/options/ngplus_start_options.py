@@ -11,7 +11,7 @@ class NGPlusStart(Choice):
     **Enable**: Game starts in Challenge Mode.
     **Enable with Multiplier**: Game starts in Challenge Mode, and the NG+ multiplier is enabled.
 
-    WARNING: The NG+ multiplier stacks with the bolt and XP multiplier, which can lead to very high multipliers that can break the game.
+    WARNING: The NG+ bolt multiplier stacks with the bolt and XP multiplier, which can lead to very high multipliers that can break the game.
     Use with caution.
     """
     display_name = RAC3OPTION.NGPLUS_START

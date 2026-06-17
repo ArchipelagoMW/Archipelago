@@ -1,6 +1,7 @@
 """This module contains the logic implementation for RAC3"""
 from collections.abc import Callable
 from logging import DEBUG, getLogger
+import math
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
@@ -26,6 +27,7 @@ if TYPE_CHECKING:
 rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
 rac3_logger.setLevel(DEBUG)
 MULTIPLIERS = {0: 1, 1: 2, 2: 4, 3: 8, 4: 16}
+NGPLUS_SCALE = {1: 1.0, 2: 10/7, 4: 10/5, 8: 10/4, 16: 10/2}
 
 def all_locations(state: CollectionState, world: "RaC3World", tag: str, skip: str):
     """check if all locations with this tag can be reached"""
@@ -40,12 +42,19 @@ def calc_nanotech_requirement(world: "RaC3World", default_infobot_count: int, ng
     ngplus_enabled = world.options.ngplus_start.value
     if ngplus_enabled and not ngplus_levels:
         return 1
+
     multiplier_option = world.options.bolt_and_xp_multiplier.value
     multiplier_value = MULTIPLIERS.get(multiplier_option, 1)
+
     intro_skip_enabled = world.options.shortcuts.value.get(RAC3SHORTCUTS.VELDIN_SKIP, False)
-    # Keep original requirements at 1x, then scale down quickly at higher multipliers.
     intro_skip_offset = 1 if intro_skip_enabled and multiplier_value >= 4 else 0
-    return max(1, (default_infobot_count + multiplier_value - 1) // multiplier_value + intro_skip_offset)
+
+    if ngplus_levels:
+        requirement = math.ceil(default_infobot_count / NGPLUS_SCALE[multiplier_value])
+    else:
+        requirement = (default_infobot_count + multiplier_value - 1) // multiplier_value
+
+    return max(1, requirement + intro_skip_offset)
 
 # Todo: Rule Builder
 def set_rules(world: "RaC3World"):
