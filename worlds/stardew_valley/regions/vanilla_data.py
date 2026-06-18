@@ -170,7 +170,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.town_to_blacksmith,
             Entrance.town_to_museum,
             Entrance.town_to_jojamart,
-            Entrance.town_tidepools_shortcut,
+            Entrance.enter_town_tide_pools_shortcut,
             Entrance.minecart_town_to_bus_stop,
             Entrance.minecart_town_to_mines,
             Entrance.minecart_town_to_quarry,
@@ -182,6 +182,10 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.place_crab_pot_in_town,
             LogicEntrance.town_cutscenes_from_town,
         ),
+    ),
+    RegionData(
+        LogicRegion.town_tide_pools_shortcut,
+        (Entrance.town_tidepools_shortcut, Entrance.leave_town_tide_pools_shortcut),
     ),
     RegionData(
         LogicRegion.mountain_fence_shortcut,
@@ -1466,12 +1470,14 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.tidepools_town_shortcut,
-        RegionName.town,
+        LogicRegion.town_tide_pools_shortcut,
         flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(Entrance.enter_tide_pools_shortcut, RegionName.tide_pools_shortcut),
     ConnectionData(Entrance.leave_tide_pools_shortcut, RegionName.tide_pools),
+    ConnectionData(Entrance.enter_town_tide_pools_shortcut, LogicRegion.town_tide_pools_shortcut),
+    ConnectionData(Entrance.leave_town_tide_pools_shortcut, RegionName.town),
     ConnectionData(
         Entrance.forest_beach_shortcut,
         RegionName.beach,

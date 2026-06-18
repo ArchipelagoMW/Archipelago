@@ -249,6 +249,7 @@ class LogicRegion:
     railroad_part_behind_chicken_stone = "Part Behind Chicken Stone"
     town_cave_joja_shortcut = "Cave For Shortcut to Mountain"
     town_fence_shortcut = "Fence For Shortcut to Mountain"
+    town_tide_pools_shortcut = "Path For Shortcut to Tide Pools"
     mountain_walkway_shortcut = "Mountian Walkway to Jojamart Shortcut"
     mountain_fence_shortcut = "Mountain Behind Fence Shortcut"
     bus_stop_krobus_cutscene = "Enter Bus Stop From Farm"

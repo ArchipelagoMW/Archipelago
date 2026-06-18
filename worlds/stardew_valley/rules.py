@@ -372,7 +372,8 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
         )
         rule_collector.set_many_entrances_rule(
             [
-                Entrance.town_tidepools_shortcut,
+                Entrance.leave_town_tide_pools_shortcut,
+                Entrance.enter_town_tide_pools_shortcut,
                 Entrance.leave_tide_pools_shortcut,
                 Entrance.enter_tide_pools_shortcut
             ],

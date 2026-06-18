@@ -316,6 +316,8 @@ class Entrance:
     tidepools_town_shortcut = "Tide Pools Shortcut to Town Shortcut below Museum"
     leave_tide_pools_shortcut = "Tide Pools Shortcut to Tide Pools"
     enter_tide_pools_shortcut = "Tide Pools to Tide Pools Shortcut"
+    leave_town_tide_pools_shortcut = "Tide Pools Path to Town"
+    enter_town_tide_pools_shortcut = "Town to Tide Pools Path"
     tunnel_backwoods_shortcut = "Tunnel Shortcut to Backwoods Shortcut"
     backwoods_tunnel_shortcut = "Backwoods Shortcut to Tunnel Shortcut"
     mountain_lake_to_outside_adventure_guild_shortcut = "Mountain Lake Shortcut to Outside Adventure Guild Shortcut"
