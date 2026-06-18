@@ -1137,7 +1137,7 @@ id,region,name,tags,content_packs
 1781,Marnie's Ranch,Meet Vincent,MEET_VILLAGER,
 1782,Willy's Fish Shop,Meet Willy,MEET_VILLAGER,
 1783,Wizard Tower,Meet Wizard,MEET_VILLAGER,
-1784,Farm,Meet Pet,MEET_VILLAGER_ALWAYS,
+1784,Farmhouse,Meet Pet,MEET_VILLAGER_ALWAYS,
 2001,Egg Festival,Egg Hunt Victory,FESTIVAL,
 2002,Egg Festival - Shop,Egg Festival: Strawberry Seeds,FESTIVAL,
 2003,Flower Dance,Dance with someone,FESTIVAL,

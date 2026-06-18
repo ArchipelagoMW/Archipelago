@@ -154,6 +154,7 @@ def set_rules(world):
     set_fishsanity_rules(all_location_names, logic, rule_collector)
     set_museumsanity_rules(all_location_names, logic, rule_collector, world_options)
 
+    set_meet_rules(logic, rule_collector, world_options, world_content)
     set_friendsanity_rules(logic, rule_collector, world_content)
     set_backpack_rules(logic, rule_collector, world_options, world_content)
     set_festival_rules(all_location_names, logic, rule_collector)
@@ -1331,6 +1332,18 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
             set_rule_from_purchased_content(logic, rule_collector, content, "Mini-Shipping Bin")
             set_rule_from_purchased_content(logic, rule_collector, content, "Exotic Double Bed")
             rule_collector.set_location_rule(f"Purchase {AnimalProduct.golden_egg}", logic.source.has_access_to_any(content.game_items[AnimalProduct.golden_egg_starter].sources))
+
+
+def set_meet_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, options: StardewValleyOptions, content: StardewContent):
+    prefix = "Meet "
+    meet_locations = []
+    meet_locations.extend(locations.locations_by_tag[LocationTags.MEET_VILLAGER_ALWAYS])
+    if StartWithoutOptionName.villagers in options.start_without:
+        meet_locations.extend(locations.locations_by_tag[LocationTags.MEET_VILLAGER])
+
+    meet_location_names = [loc.name for loc in meet_locations if loc.name[len(prefix):] in content.villagers]
+    for location_name in meet_location_names:
+        rule_collector.set_location_rule(location_name, logic.relationship.exists(location_name[len(prefix):]))
 
 
 def set_friendsanity_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent):
