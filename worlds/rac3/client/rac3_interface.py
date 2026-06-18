@@ -1885,6 +1885,7 @@ class Rac3Interface(GameInterface):
                 # logger.debug(f"{target_name}, id: {target_id}, xp:{target_xp}")
                 self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
                 self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
+                self.weapon_levels[weapon_name] = target_level
         else:
             if self.delayed_weapon_levelups and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE:
                 for weapon_name in self.delayed_weapon_levelups:
