@@ -293,7 +293,7 @@ class Rac3Interface(GameInterface):
         _addr = address
         if isinstance(address, str):
             _addr = int(address, 0)
-        if (0x001d6a90 <= _addr <= 0x00300000
+        if (0x001DC7C0 <= _addr <= 0x00300000
             and self.planet in PAL_SHIFTED_PLANETS
             and self.current_game == RAC3VERSION.EU_ID):
             _addr += GAME_ID_TO_OFFSET[RAC3VERSION.EU_ID]
