@@ -14,11 +14,14 @@ from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
     logic = world.logic
 
+    is_item_explain = False
+    is_entrance_explain = False
     if target_name.startswith("item "):
         is_item_explain = True
         target_name = target_name[len("item "):]
-    else:
-        is_item_explain = False
+    elif target_name.startswith("entrance "):
+        is_entrance_explain = True
+        target_name = target_name[len("entrance "):]
 
     if target_name.startswith("missing "):
         expected = True
@@ -29,11 +32,15 @@ def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionSt
     else:
         expected = None
 
-    possible_answers = logic.registry.item_rules.keys() if is_item_explain else world.get_all_location_names()
+    possible_answers = logic.registry.item_rules.keys() if is_item_explain else [entr.name for entr in world.get_entrances()] if is_entrance_explain else world.get_all_location_names()
     result, usable, response = Utils.get_intended_text(target_name, possible_answers)
     if usable:
         if is_item_explain:
             rule = logic.has(result)
+        elif is_entrance_explain:
+            entrance = world.get_entrance(result)
+            rule = logic.region.can_reach(entrance.parent_region.name) & entrance.access_rule
+            print(f"searching for rule {rule}")
         else:
             rule = logic.region.can_reach_location(result)
         expl = explain(rule, state, expected=expected, mode=ExplainMode.CLIENT)
