@@ -89,8 +89,9 @@ ginger_island_regions = [
     RegionData(Region.island_south_ridge, (Entrance.island_south_ridge_to_island_north,)),
     RegionData(
         Region.volcano,
-        (Entrance.volcano_to_island_north, Entrance.climb_to_volcano_5, Entrance.volcano_to_volcano_side),
+        (Entrance.volcano_to_island_north, Entrance.volcano_to_volcano_mines, Entrance.volcano_to_volcano_side),
     ),
+    RegionData(Region.volcano_mines, (Entrance.climb_to_volcano_5, Entrance.volcano_mines_to_volcano)),
     RegionData(Region.volcano_river, (Entrance.volcano_to_secret_beach, Entrance.volcano_side_to_volcano)),
     RegionData(Region.volcano_secret_beach, (Entrance.secret_beach_to_volcano,)),
     RegionData(
@@ -386,6 +387,8 @@ ginger_island_connections = [
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.DOWN | GroupFlag.IN_TO_OUT,
     ),
+    ConnectionData(Entrance.volcano_to_volcano_mines, Region.volcano_mines),
+    ConnectionData(Entrance.volcano_mines_to_volcano, Region.volcano),
     ConnectionData(Entrance.volcano_side_to_volcano, Region.volcano),
     ConnectionData(Entrance.volcano_to_volcano_side, Region.volcano_river),
     ConnectionData(

@@ -57,6 +57,7 @@ class Region:
     professor_snail_cave_entrance = "Professor Snail Cave Entrance"
     field_office = "Field Office"
     volcano = "Volcano Entrance"
+    volcano_mines = "Volcano Mines"
     volcano_river = "Volcano River"
     volcano_secret_beach = "Volcano Secret Beach"
     island_trader = "Island Trader"
