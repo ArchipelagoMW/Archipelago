@@ -361,6 +361,8 @@ class Rac3Interface(GameInterface):
         self.bolt_and_xp_multiplier_value = int(self.options.bolt_and_xp_multiplier)
         # EnableWeaponLevelAsItem: if enabled, EXP disabler is running.
 
+        self.weapon_levels = {weapon: 1 for weapon in non_prog_weapon_data.keys()}
+
     def check_main_menu(self):
         """Check if the player is on the main menu, before starting the game"""
         if self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF or self._read32(RAC3STATUS.GAME_LAUNCHED) == 0:
@@ -961,6 +963,13 @@ class Rac3Interface(GameInterface):
             if current_xp >= xp_threshold:
                 level_from_xp = lvl + 1
         return level_from_xp
+
+    def has_all_weapons(self) -> bool:
+        """Returns whether the player has collected all weapons, used for endgame checks"""
+        for weapon_name in non_prog_weapon_data.keys():
+            if not self.UnlockItem[weapon_name].status:
+                return False
+        return True
 
     def update_equip(self, name: str):
         """Equip the most recently collected weapon/gadget, update recent uses"""
@@ -1967,7 +1976,7 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.MULTIPLIER, 0)
 
         # award omega arsenal trophy if all 8 weapon levels are unlocked with ng+ items on and level 5 for ry3no
-        if self.options.ngplus_items:
+        if self.options.ngplus_items and self.weapon_levels:
             for weapon_name, level in self.weapon_levels.items():
                 if weapon_name == RAC3ITEM.RY3N0 and level < 4:
                     return
