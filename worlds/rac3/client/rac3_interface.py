@@ -1966,6 +1966,15 @@ class Rac3Interface(GameInterface):
             if self.options.ngplus_start < 2:
                 self._write8(RAC3STATUS.MULTIPLIER, 0)
 
+        # award omega arsenal trophy if all 8 weapon levels are unlocked with ng+ items on and level 5 for ry3no
+        if self.options.ngplus_items:
+            for weapon_name, level in self.weapon_levels.items():
+                if weapon_name == RAC3ITEM.RY3N0 and level < 4:
+                    return
+                elif weapon_name != RAC3ITEM.RY3N0 and level < 8:
+                    return
+            self._write8(RAC3STATUS.OMEGA_ARSENAL_TROPHY, 1)
+
     def cheat_cycler(self):
         """Handles unlocking cheats such as the lightsaber wrench cheat"""
         for name in cheat_data.keys():
