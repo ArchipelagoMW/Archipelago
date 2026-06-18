@@ -663,7 +663,7 @@ class StardewValleyWorld(World):
             this_iter = new_bits & 0b1
             new_bits = new_bits >> 1
             if this_iter:
-                entrance_cache_invalid = True
+                self.entrance_cache_invalid = True
 
                 entr, exit = self.entrance_data_map[index]
                 target = exit.connected_region
