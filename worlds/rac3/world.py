@@ -114,7 +114,7 @@ class RaC3World(World):
             and not self.options.weapon_vendors.value
             and len(starting_weapon_list) > 1
             and starting_planet_list
-            and self.multiworld.players == 1):
+            and (self.multiworld.players == 1 and not self.using_ut)):
             raise OptionError("Options selected do not allow Ratchet to collect a Clank Pack and advance past Florana")
 
     def dead_seed_check(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
@@ -133,7 +133,7 @@ class RaC3World(World):
             and no_nanotech_locations
             and len(starting_weapon_list) > 1
             and starting_planet_list
-            and self.multiworld.players == 1):
+            and (self.multiworld.players == 1 and not self.using_ut)):
             raise OptionError("Options selected do not allow Ratchet to advance past Starship Phoenix")
 
     def generate_starting_items(self):
@@ -153,7 +153,7 @@ class RaC3World(World):
         item_count = len(itempool)
         excluded_count = self.get_excluded_count()
         filler_count = location_count - item_count
-        if excluded_count > filler_count and self.multiworld.players == 1:
+        if excluded_count > filler_count and (self.multiworld.players == 1 and not self.using_ut):
             self.handle_not_enough_locations(excluded_count - filler_count)
         if filler_count >= 0:
             filler = [self.create_filler() for _ in range(filler_count)]
