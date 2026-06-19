@@ -197,7 +197,10 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "refuse_button": "Don't pick this",
                 "on_refuse": "!b511",
                 "on_abort":  "!b511",
-            }
+            },
+            130: {
+                "on_accept": "b450", # removing b424 as that locks out all other non-vellos missions, which is more problematic for this use case.
+            },
         },
         "entrance_rules": {
             "min_cargo": 10,
