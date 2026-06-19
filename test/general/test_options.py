@@ -46,6 +46,44 @@ class TestOptions(unittest.TestCase):
                 self.assertFalse(hasattr(world_type, "options"),
                                  f"Unexpected assignment to {world_type.__name__}.options!")
 
+    def test_subclassed_choice_inherits_aliases(self):
+        """Regression for #5124: AssembleOptions must merge aliases from base classes (as it already does for
+        options), so a Choice subclass inherits its parent's aliases instead of silently dropping them. An
+        inherited alias is dropped only when the subclass redefines that name as a real option."""
+        from Options import Accessibility, ItemsAccessibility
+
+        # The base class keeps exactly its own aliases.
+        self.assertEqual(Accessibility.aliases, {"none": 2, "locations": 0, "items": 0})
+        # ItemsAccessibility inherits none/locations; `items` is dropped because the subclass defines it as a
+        # real option. This is the exact expected result from issue #5124.
+        self.assertEqual(ItemsAccessibility.aliases, {"none": 2, "locations": 0})
+        self.assertEqual(ItemsAccessibility.from_text("none").value, ItemsAccessibility.option_minimal)
+        self.assertEqual(ItemsAccessibility.from_text("locations").value, ItemsAccessibility.option_full)
+        self.assertEqual(ItemsAccessibility.options["items"], ItemsAccessibility.option_items)
+
+        # The mechanism is general, not specific to the option classes above.
+        class _Base(Choice):
+            option_alpha = 0
+            option_beta = 1
+            alias_a = 0
+            alias_b = 1
+            default = 0
+
+        class _Child(_Base):
+            """Plain subclass: inherits every alias unchanged."""
+            option_gamma = 2
+
+        class _ShadowChild(_Base):
+            """Redefines an inherited alias name as a real option, which must win over the alias."""
+            option_a = 3
+
+        self.assertEqual(_Child.aliases, {"a": 0, "b": 1})
+        self.assertEqual(_Child.from_text("a").value, 0)
+        self.assertEqual(_Child.from_text("b").value, 1)
+        self.assertEqual(_ShadowChild.aliases, {"b": 1})
+        self.assertEqual(_ShadowChild.options["a"], 3)
+        self.assertEqual(_ShadowChild.from_text("a").value, 3)
+
     def test_duplicate_options(self) -> None:
         """Tests that a world doesn't reuse the same option class."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
