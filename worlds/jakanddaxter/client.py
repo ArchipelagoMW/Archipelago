@@ -43,6 +43,7 @@ try:
     tracker_loaded = True
 except ImportError:
     from CommonClient import ClientCommandProcessor, CommonContext
+    UT_VERSION = 0
 
 
 ModuleUpdate.update()
