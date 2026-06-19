@@ -295,7 +295,7 @@ finders_keeper_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.fin
 looney_items = [anvil]
 looney_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.looney, looney_items, 1, 1)
 
-morshu_items = [oil.as_amount(3), fiber.as_amount(3), bomb.as_amount(3)]  # Should give the player Rubies? or just invert the bundle? with the voice line
+morshu_items = [ruby.as_amount(5), ruby.as_amount(10), ruby.as_amount(20)]  # oil.as_amount(3), fiber.as_amount(3), bomb.as_amount(3)
 morshu_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.morshu, morshu_items, 3, 3)
 
 numbers_items = [seaweed.as_amount(420), eggplant.as_amount(69), pumpkin_pie.as_amount(314), life_elixir.as_amount(911), void_egg.as_amount(666), broken_glasses.as_amount(404), wilted_bouquet.as_amount(13), omni_geode.as_amount(42)]
