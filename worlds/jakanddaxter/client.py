@@ -145,16 +145,6 @@ class JakAndDaxterContext(CommonContext):
         return ui
 
     def run_gui(self):
-        # from kvui import GameManager
-        #
-        # class JakAndDaxterManager(GameManager):
-        #     logging_pairs = [
-        #         ("Client", "Archipelago")
-        #     ]
-        #     base_title = "Jak and Daxter ArchipelaGOAL Client"
-        #
-        # self.ui = JakAndDaxterManager(self)
-
         ui_class = self.make_gui()
         self.ui = ui_class(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
