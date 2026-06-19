@@ -316,7 +316,8 @@ if not is_frozen():
             local_ignores = read_apignore(pathlib.Path(world_directory, ".apignore"))
             apignores = global_apignores + local_ignores if local_ignores else global_apignores
 
-            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9,
+                                 strict_timestamps=False) as zf:
                 for file in apignores.match_tree_files(world_directory, negate=True):
                     zf.write(pathlib.Path(world_directory, file), pathlib.Path(file_name, file))
 
