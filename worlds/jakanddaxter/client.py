@@ -130,10 +130,6 @@ class JakAndDaxterContext(CommonContext):
         # self.memr.load_data()
         super().__init__(server_address, password)
 
-    def run_generator(self):
-        if tracker_loaded:
-            super().run_generator()
-
     def make_gui(self):
         ui = super().make_gui()
         ui.base_title = f"Jak and Daxter ArchipelaGOAL Client"
@@ -143,11 +139,6 @@ class JakAndDaxterContext(CommonContext):
         # AP version is added behind this automatically
         ui.base_title += " | Archipelago"
         return ui
-
-    def run_gui(self):
-        ui_class = self.make_gui()
-        self.ui = ui_class(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
