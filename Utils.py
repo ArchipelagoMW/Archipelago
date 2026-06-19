@@ -775,6 +775,25 @@ def _run_for_stdout(*args: str):
     return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
 
 
+def _run_file_dialog(*args: str) -> typing.Tuple[bool, typing.Optional[str]]:
+    """Run a native file-dialog helper (kdialog/zenity) and interpret its exit code.
+
+    Returns ``(handled, selection)``. ``handled`` is True when the helper reached a
+    conclusive result -- either a chosen path (``selection``) or a user cancellation
+    (``None``) -- and the caller should stop. ``handled`` is False when the helper
+    errored (any exit code other than success or user-cancel), so the caller should
+    fall back to the next backend instead of treating the failure as a cancellation.
+    """
+    completed = subprocess.run(args, capture_output=True, text=True, env=env_cleared_lib_path())
+    if completed.returncode == 0:  # selection made
+        return True, completed.stdout.split("\n", 1)[0] or None
+    if completed.returncode == 1:  # user cancelled the dialog
+        return True, None
+    logging.warning(f"File dialog '{args[0]}' failed with exit code {completed.returncode}: "
+                    f"{completed.stderr.strip()}")
+    return False, None
+
+
 def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
@@ -785,12 +804,17 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return _run_for_stdout(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
+            handled, result = _run_file_dialog(kdialog, f"--title={title}", "--getopenfilename",
+                                               suggest or ".", k_filters)
+            if handled:
+                return result
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
             selection = (f"--filename={suggest}",) if suggest else ()
-            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            handled, result = _run_file_dialog(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            if handled:
+                return result
 
     # fall back to tk
     try:
@@ -833,12 +857,18 @@ def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return _run_for_stdout(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
+            handled, result = _run_file_dialog(kdialog, f"--title={title}", "--getsavefilename",
+                                               suggest or ".", k_filters)
+            if handled:
+                return result
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
             selection = (f"--filename={suggest}",) if suggest else ()
-            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
+            handled, result = _run_file_dialog(zenity, f"--title={title}", "--file-selection", "--save",
+                                               *z_filters, *selection)
+            if handled:
+                return result
 
     # fall back to tk
     try:
@@ -883,13 +913,17 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return _run_for_stdout(kdialog, f"--title={title}", "--getexistingdirectory",
-                       os.path.abspath(suggest) if suggest else ".")
+            handled, result = _run_file_dialog(kdialog, f"--title={title}", "--getexistingdirectory",
+                                               os.path.abspath(suggest) if suggest else ".")
+            if handled:
+                return result
         zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
             selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
-            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            handled, result = _run_file_dialog(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            if handled:
+                return result
 
     # fall back to tk
     try:
