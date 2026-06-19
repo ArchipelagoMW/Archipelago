@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 
 
 from worlds.AutoWorld import AutoWorldRegister, World
-from . import app, cache
+from . import app, cache, LOGS_FOLDER
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
 from Utils import title_sorted, utcnow
@@ -194,7 +194,7 @@ def display_log(room: UUID) -> Union[str, Response, Tuple[str, int]]:
     if room is None:
         return abort(404)
     if room.owner == session["_id"]:
-        file_path = os.path.join("logs", str(room.id) + ".txt")
+        file_path = os.path.join(LOGS_FOLDER, str(room.id) + ".txt")
         try:
             log = open(file_path, "rb")
             range_header = request.headers.get("Range")
@@ -254,7 +254,7 @@ def host_room(room: UUID):
         if max_size == 0:
             return "…", 0
         try:
-            with open(os.path.join("logs", str(room.id) + ".txt"), "rb") as log:
+            with open(os.path.join(LOGS_FOLDER, str(room.id) + ".txt"), "rb") as log:
                 raw_size = 0
                 fragments: List[str] = []
                 for block in _read_log(log):
