@@ -126,6 +126,7 @@ class Rac3Interface(GameInterface):
         ngplus_items: int
         ngplus_vendors: int
         ngplus_start: int
+        weapon_level_locations: int
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
@@ -344,6 +345,7 @@ class Rac3Interface(GameInterface):
         self.options.ngplus_items = slot_data[RAC3OPTION.NGPLUS_ITEMS]
         self.options.ngplus_vendors = slot_data[RAC3OPTION.NGPLUS_VENDOR]
         self.options.ngplus_start = slot_data[RAC3OPTION.NGPLUS_START]
+        self.options.weapon_level_locations = slot_data[RAC3OPTION.WEAPON_LEVEL_LOCATIONS]
 
     ########################################
     # Called on Game and Server Connection #

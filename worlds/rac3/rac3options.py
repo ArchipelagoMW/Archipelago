@@ -37,6 +37,7 @@ from worlds.rac3.options.traps_options import EnableTraps
 from worlds.rac3.options.trophies_options import Trophies
 from worlds.rac3.options.vidcomics_options import VidComics
 from worlds.rac3.options.vr_challenges_options import VRChallenges
+from worlds.rac3.options.weapon_level_options import WeaponLevels
 from worlds.rac3.options.weapon_vendors_options import WeaponVendors
 
 
@@ -88,6 +89,7 @@ class RaC3Options(PerGameCommonOptions):
     ngplus_items: NGPlusItems
     ngplus_vendors: NGPlusVendor
     ngplus_start: NGPlusStart
+    weapon_level_locations: WeaponLevels
 
 
 rac3_option_groups = [
@@ -122,6 +124,7 @@ rac3_option_groups = [
         SkillPoints,
         Trophies,
         TitaniumBolts,
+        WeaponLevels,
         Rangers,
         VidComics,
         VRChallenges,
@@ -179,4 +182,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.ARMOR_VENDOR,
     RAC3OPTION.SCOUT_VENDORS,
     RAC3OPTION.NGPLUS_VENDOR,
+    RAC3OPTION.WEAPON_LEVEL_LOCATIONS,
 ]

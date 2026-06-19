@@ -347,6 +347,8 @@ def create_regions(world: "RaC3World"):
 
     create_region_and_connect(world, RAC3REGION.NANOTECH, f"{RAC3REGION.MENU} -> {RAC3REGION.NANOTECH}", menu)
 
+    create_region_and_connect(world, RAC3REGION.UPGRADES, f"{RAC3REGION.MENU} -> {RAC3REGION.UPGRADES}", menu)
+
     # New Game Plus
 
     create_region_and_connect(world, RAC3REGION.NGPLUS, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.NGPLUS}",
@@ -515,6 +517,13 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
             case RAC3TAG.ARMOR:
                 if options.armor_vendor.value == 0:
                     return True  # Skip all armor upgrade locations if armor upgrades are disabled
+            case RAC3TAG.WEAPON_LEVEL:
+                if options.weapon_level_locations.value == 0 or options.progressive_weapons.value == 1:
+                    return True  # Skip all weapon level locations if weapon levels are disabled or if progressive weapons are enabled
+                if options.weapon_level_locations.value == 1 and "V5" not in loc:
+                    return True  # Skip all weapon level locations that are not V5 if weapon levels are set to V5 only
+                if options.ngplus_items.value == 0 and ("RY3N0" in loc or "V6" in loc or "V7" in loc or "V8" in loc):
+                    return True  # Skip all weapon level locations that are V6 or higher if NG+ items are disabled
             # Add more conditions here if needed in the future
     return False
 

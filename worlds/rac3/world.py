@@ -198,6 +198,8 @@ class RaC3World(World):
             option_list.append(RAC3OPTION.ARMOR_VENDOR)
         if self.options.ship_vendor.value == 0:
             option_list.append(RAC3OPTION.SHIP_VENDOR)
+        if self.options.weapon_level_locations.value == 0:
+            option_list.append(RAC3OPTION.WEAPON_LEVEL_LOCATIONS)
         if self.options.sewer_crystals.value < 3:
             option_list.append(RAC3OPTION.SEWER_CRYSTALS)
         if self.options.sewer_limitation.value < 20:
@@ -269,6 +271,7 @@ class RaC3World(World):
             RAC3OPTION.NGPLUS_ITEMS: self.options.ngplus_items.value,
             RAC3OPTION.NGPLUS_VENDOR: self.options.ngplus_vendors.value,
             RAC3OPTION.NGPLUS_START: self.options.ngplus_start.value,
+            RAC3OPTION.WEAPON_LEVEL_LOCATIONS: self.options.weapon_level_locations.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

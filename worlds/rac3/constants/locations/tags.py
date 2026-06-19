@@ -22,3 +22,4 @@ class RAC3TAG:
     NGPLUS = "New Game Plus"
     SHIP = "Ship"
     ARMOR = "Armor"
+    WEAPON_LEVEL = "Weapon Level"
