@@ -66,6 +66,8 @@ def can_earn_good_exp(state: CollectionState, world: "RaC3World") -> bool:
         return True
     elif state.can_reach_location(RAC3TROPHY.HIDEOUT_QWARK, world.player):
         return True
+    elif world.options.ngplus_start.value:
+        return True
     return False
 
 # Todo: Rule Builder
