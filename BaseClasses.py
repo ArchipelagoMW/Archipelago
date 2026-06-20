@@ -727,6 +727,7 @@ class CollectionState():
     advancements: Set[Location]
     path: Dict[Union[Region, Entrance], PathValue]
     locations_checked: Set[Location]
+    """Internal cache for Advancement Locations already checked by this CollectionState. Not for use in logic."""
     stale: Dict[int, bool]
     allow_partial_entrances: bool
     additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
@@ -1037,6 +1038,8 @@ class CollectionState():
 
     def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list."""
+        if count <= 0:
+            return True
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in items:
@@ -1048,6 +1051,8 @@ class CollectionState():
     def has_from_list_unique(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list.
         Ignores duplicates of the same item."""
+        if count <= 0:
+            return True
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in items:
@@ -1076,6 +1081,8 @@ class CollectionState():
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
         """Returns True if the state contains at least `count` items present in a specified item group."""
+        if count <= 0:
+            return True
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
@@ -1088,6 +1095,8 @@ class CollectionState():
         """Returns True if the state contains at least `count` items present in a specified item group.
         Ignores duplicates of the same item.
         """
+        if count <= 0:
+            return True
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
