@@ -80,11 +80,8 @@ class WebHostContext(Context):
         self.tags = ["AP", "WebHost"]
 
     def __del__(self):
-        try:
-            from Utils import format_SI_prefix
-            self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
-        except ImportError:
-            self.logger.debug("Context destroyed")
+        from Utils import format_SI_prefix
+        self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
 
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
