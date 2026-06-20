@@ -31,7 +31,6 @@ def fix_reg(entrance_map: Dict[SM64Levels, str], entrance: SM64Levels, invalid_r
         old_dest = entrance_map[entrance]
         entrance_map[entrance], entrance_map[rand_entrance] = rand_region, old_dest
         swapdict[entrance], swapdict[rand_entrance] = rand_region, old_dest
-        #print(f"{entrance_map[entrance]} fixed from {old_dest} to {rand_region}")
     if entrance in swapdict:
         swapdict.pop(entrance)
 
@@ -78,7 +77,7 @@ def validate_all_sm64_plando_connection(connections: SM64PlandoConnections, move
             return False, f"Connection from {entrance} to {exit} is too strict with Move Randomizer"
         if move_rando and entrance == "Whomp's Fortress" and exit not in valid_move_randomizer_start_courses:
             return False, f"Connection from {entrance} to {exit} is too strict with Move Randomizer"
-        if not move_rando and entrance == "Bob-omb Battlefield" and exit in sm64_secrets_to_level.keys():
+        if entrance == "Bob-omb Battlefield" and exit in sm64_secrets_to_level.keys():
             return False, f"Connection from {entrance} to {exit} is logically impossible"
         if entrance == "Cavern of the Metal Cap" and exit == "Hazy Maze Cave":
             return False, f"Connection from {entrance} to {exit} is logically impossible"
@@ -121,15 +120,9 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
                 f"Invalid connection for player {multiworld.player_name[player]} ({msg})"
             )
         for conn in options.plando_connections:
-            try:
-                plando_entrance = sm64_entrances_to_level[conn.entrance]
-                plando_exit = conn.exit
-                assign_reg(randomized_entrances, plando_entrance, plando_exit, plando_swapdict)
-            except Exception:
-                raise Exception(
-                    f"Unexpected error connecting {conn.entrance} to {conn.exit} "
-                    f"for player {multiworld.player_name[player]}"
-                )
+            plando_entrance = sm64_entrances_to_level[conn.entrance]
+            plando_exit = conn.exit
+            assign_reg(randomized_entrances, plando_entrance, plando_exit, plando_swapdict)
 
     # Now, fix assignment if necessary
     swapdict = randomized_entrances.copy()
@@ -336,9 +329,6 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
         multiworld.completion_condition[player] = lambda state: state.can_reach("Bowser in the Dark World", 'Region', player) and \
                                                            state.can_reach("BitFS: Upper", 'Region', player) and \
                                                            state.can_reach("BitS: Top", 'Region', player)
-    # (Debug) Generate graph of regions
-    #from Utils import visualize_regions
-    #visualize_regions(multiworld.get_region("Menu", player), "sm64ex.puml")
 
 
 class RuleFactory:

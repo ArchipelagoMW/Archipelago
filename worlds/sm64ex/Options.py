@@ -185,7 +185,6 @@ class SM64PlandoConnections(PlandoConnections):
         "Bowser in the Fire Sea",
         "Wing Mario over the Rainbow"
     ]
-    duplicate_exits: bool = False
 
 
 sm64_options_groups = [
