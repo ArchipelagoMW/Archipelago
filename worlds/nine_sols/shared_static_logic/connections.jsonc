@@ -1202,12 +1202,15 @@
         ],
         "ls_requires": [ // don't go down at all; CL + LS vault straight to the upper left ledge
             { "item": "Ledge Grab" },
-            { "item": "Cloud Leap" },
-            { "item": "Charged Strike" } // so you can kill the shielded beetle before attempting LS setup
-        ]
+            { "item": "Cloud Leap" }
+        ] // the shielded beetle can get obnoxious if you don't have CS yet, but not a blocker
     },
-    { "from": "IW - Upper Left", "to": "IW - Tao Fruit", "requires": [ { "item": "Wall Climb" } ] },
-    // the crusher can also barely be skipped with AD AND CL to the next crate, unsure if we want this in logic
+    {
+        "from": "IW - Upper Left", "to": "IW - Tao Fruit",
+        "requires": [ { "item": "Wall Climb" } ], // ride the crates as intended
+        // the crusher can also barely be skipped with AD AND CL to the next crate, but IMO it's too tight for vanilla
+        "ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // triple jump before the crusher hits you
+    },
 
     { "from": "IW - Root Node", "to": "BR - Upper Exit", "requires": [
         // 1st terminal is near root node, reachable with only single jumps, rope and hacking
