@@ -1340,10 +1340,17 @@
     },
     {
         "address": 3104, "name": "GoS (East): Spike Ball Hall Upper Left",
-        "region": "GoS (East) - Spike Ball Hall Platforms", "requires": [ { "anyOf": [
-            { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ] // T-dashes could help but enemies aren't reliable enough for all jumps // LS up here would need CL setup
-    },
+        "region": "GoS (East) - Spike Ball Hall Platforms",
+        "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
+        // enemies here aren't reliable enough for qi, so you usually need AD OR CL even on higher difficulties
+        "medium_requires": [ // but if you can fall down from the root node, you can bring qi from one of the archers up there
+            { "region": "GoS (East) - Root Node" }, // then T-dash from the tiny rock platforms to the middle long platform
+            { "anyOf": [
+                { "item": "Ledge Grab" }, // + Swift Runner over the final gap to the leftmost long platform
+                { "item": "Tai-Chi Kick" } // or get a 2nd qi / 2nd T-dash from the worm on this platform
+            ] }
+        ]
+    }, // LS up here would need CL setup anyway, so no LS logic
     {
         "address": 3105, "name": "GoS (East): Lurkers Under Tunnel Walkway",
         "region": "GoS (East) - Root Node", "requires": []
