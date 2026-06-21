@@ -79,6 +79,7 @@ jobs:
       - name: Create DMG
         run: |
           brew install create-dmg
+          sudo mdutil -a -i off || true
           APP_NAME="$(basename "$APP_PATH")"
           cat > bg.svg <<'EOF'
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="660" height="400" viewBox="0 0 660 400" fill="none">
@@ -86,16 +87,24 @@ jobs:
           <path fill-rule="evenodd" fill="#4E5969" d="M343.933 177.984L321.661 159.275C320.439 158.249 318.656 158.249 317.434 159.275L317.066 159.584C315.503 160.897 315.503 163.303 317.066 164.616L332.981 177.984C334.544 179.297 334.544 181.703 332.981 183.016L317.067 196.384C315.503 197.697 315.503 200.103 317.067 201.416L317.434 201.725C318.656 202.751 320.439 202.751 321.661 201.725L343.933 183.016C345.497 181.703 345.497 179.297 343.933 177.984Z"></path>
           </svg>
           EOF
-          create-dmg \
-            --volname "$DMG_BASE" \
-            --background bg.svg \
-            --window-pos 200 120 \
-            --window-size 660 400 \
-            --icon-size 100 \
-            --icon "$APP_NAME" 160 185 \
-            --app-drop-link 500 185 \
-            --no-internet-enable \
-            "${DMG_BASE}.dmg" "$APP_PATH"
+          for attempt in 1 2 3; do
+            if create-dmg \
+              --volname "$DMG_BASE" \
+              --background bg.svg \
+              --window-pos 200 120 \
+              --window-size 660 400 \
+              --icon-size 100 \
+              --icon "$APP_NAME" 160 185 \
+              --app-drop-link 500 185 \
+              --no-internet-enable \
+              "${DMG_BASE}.dmg" "$APP_PATH"; then
+              break
+            fi
+            echo "create-dmg attempt $attempt failed; cleaning up before retry"
+            for vol in /Volumes/dmg.*; do hdiutil detach "$vol" -force 2>/dev/null || true; done
+            rm -f "${DMG_BASE}.dmg" rw.*.dmg
+            if [ "$attempt" -eq 3 ]; then exit 1; fi
+          done
           echo "DMG_NAME=${DMG_BASE}.dmg" >> $GITHUB_ENV
       # - code above copied from build.yml -
       - name: Attest Build
