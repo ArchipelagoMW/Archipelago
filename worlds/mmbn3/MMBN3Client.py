@@ -2,21 +2,18 @@ import asyncio
 import hashlib
 import json
 import os
-import multiprocessing
 import subprocess
-import zipfile
 
 from asyncio import StreamReader, StreamWriter
 
-import bsdiff4
-
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
+import settings
 import Utils
 from NetUtils import ClientStatus
-from worlds.mmbn3.Items import items_by_id
-from worlds.mmbn3.Rom import get_base_rom_path
-from worlds.mmbn3.Locations import all_locations, scoutable_locations
+from .Items import items_by_id
+from .Rom import get_base_rom_path
+from .Locations import all_locations, scoutable_locations
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -291,34 +288,43 @@ async def gba_sync_task(ctx: MMBN3Context):
 
 
 async def run_game(romfile):
-    from worlds.mmbn3 import MMBN3World
-    auto_start = MMBN3World.settings.rom_start
+    auto_start = settings.get_settings().bizhawkclient_options.rom_start
+
     if auto_start is True:
-        import webbrowser
-        webbrowser.open(romfile)
-    elif os.path.isfile(auto_start):
-        subprocess.Popen([auto_start, romfile],
-                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        emuhawk_path = settings.get_settings().bizhawkclient_options.emuhawk_path
+        subprocess.Popen(
+            [
+                emuhawk_path,
+                f"--lua={Utils.local_path('data', 'lua', 'connector_mmbn3.lua')}",
+                os.path.realpath(romfile),
+            ],
+            cwd=Utils.local_path("."),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    elif isinstance(auto_start, str):
+        import shlex
+
+        subprocess.Popen(
+            [
+                *shlex.split(auto_start),
+                os.path.realpath(romfile),
+            ],
+            cwd=Utils.local_path("."),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
 
 async def patch_and_run_game(apmmbn3_file):
+    from worlds.mmbn3.Rom import MMBN3ProcedurePatch
     base_name = os.path.splitext(apmmbn3_file)[0]
-
-    with zipfile.ZipFile(apmmbn3_file, 'r') as patch_archive:
-        try:
-            with patch_archive.open("delta.bsdiff4", 'r') as stream:
-                patch_data = stream.read()
-        except KeyError:
-            raise FileNotFoundError("Patch file missing from archive.")
-    rom_file = get_base_rom_path()
-
-    with open(rom_file, 'rb') as rom:
-        rom_bytes = rom.read()
-
-    patched_bytes = bsdiff4.patch(rom_bytes, patch_data)
     patched_rom_file = base_name+".gba"
-    with open(patched_rom_file, 'wb') as patched_rom:
-        patched_rom.write(patched_bytes)
+
+    patch = MMBN3ProcedurePatch(apmmbn3_file)
+    patch.patch(patched_rom_file)
 
     asyncio.create_task(run_game(patched_rom_file))
 
@@ -336,15 +342,14 @@ def confirm_checksum():
     return CHECKSUM_BLUE == basemd5.hexdigest()
 
 
-if __name__ == "__main__":
-    Utils.init_logging("MMBN3Client")
+def launch(*launch_args):
+    Utils.init_logging("MMBN3Client", exception_logger="Client")
 
     async def main():
-        multiprocessing.freeze_support()
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?",
                             help="Path to an APMMBN3 file")
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
         checksum_matches = confirm_checksum()
         if checksum_matches:
             if args.patch_file:
@@ -369,6 +374,5 @@ if __name__ == "__main__":
     import colorama
 
     colorama.just_fix_windows_console()
-
     asyncio.run(main())
     colorama.deinit()

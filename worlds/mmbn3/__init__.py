@@ -1,4 +1,5 @@
 import os
+import json
 import settings
 import typing
 
@@ -6,8 +7,9 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, 
     LocationProgressType
 
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch as launch_component
 
-from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
+from .Rom import MMBN3ProcedurePatch
 from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType, item_groups
 from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
     secret_locations, jobs, location_groups
@@ -18,22 +20,23 @@ from .Names.LocationName import LocationName
 from worlds.generic.Rules import add_item_rule, add_rule, forbid_item
 
 
+def launch_client(*args):
+    from .MMBN3Client import launch as client_launch
+    launch_component(client_launch, name="MMBN3 Client", args=args)
+
+
+components.append(Component("MMBN3 Client", func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier(".apbn3")))
+
+
 class MMBN3Settings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the MMBN3 Blue US rom"""
         copy_to = "Mega Man Battle Network 3 - Blue Version (USA).gba"
         description = "MMBN3 ROM File"
-        md5s = [MMBN3DeltaPatch.hash]
-
-    class RomStart(str):
-        """
-        Set this to false to never autostart a rom (such as after patching),
-                    true  for operating system default program
-        Alternatively, a path to a program to open the .gba file with
-        """
+        md5s = [MMBN3ProcedurePatch.hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: RomStart | bool = True
 
 
 class MMBN3Web(WebWorld):
@@ -460,78 +463,66 @@ class MMBN3World(World):
             lambda state: state.has(ItemName.Victory, self.player)
 
     def generate_output(self, output_directory: str) -> None:
-        rompath: str = ""
+        multiworld = self.multiworld
+        player = self.player
 
-        try:
-            multiworld = self.multiworld
-            player = self.player
+        placements = []
+        for location_name in location_table.keys():
+            location = multiworld.get_location(location_name, player)
+            ap_item = location.item
+            item_id = ap_item.code
+            if item_id is None:
+                continue
 
-            rom = LocalRom(get_base_rom_path())
+            if ap_item.player != player or item_id not in items_by_id:
+                item = ItemData(item_id, ap_item.name, ap_item.classification, ItemType.External)
+                item = item._replace(recipient=self.multiworld.player_name[ap_item.player])
+                record = {"location": location_name, "external": True, "item_id": item_id,
+                          "item_name": ap_item.name, "recipient": item.recipient}
+            else:
+                item = items_by_id[item_id]
+                record = {"location": location_name, "external": False, "item_id": item_id}
 
-            for location_name in location_table.keys():
-                location = multiworld.get_location(location_name, player)
-                ap_item = location.item
-                item_id = ap_item.code
-                if item_id is not None:
-                    if ap_item.player != player or item_id not in items_by_id:
-                        item = ItemData(item_id, ap_item.name, ap_item.classification, ItemType.External)
-                        item = item._replace(recipient=self.multiworld.player_name[ap_item.player])
-                    else:
-                        item = items_by_id[item_id]
+            location_data = location_data_table[location_name]
+            if location_data.inject_name:
+                item_name_text = "Item"
+                long_item_text = ""
 
-                    location_data = location_data_table[location_name]
-                    # print("Placing item "+item.itemName+" at location "+location_data.name)
-                    rom.replace_item(location_data, item)
-                    if location_data.inject_name:
+                # No item hinting
+                if self.options.trade_quest_hinting == 0:
+                    item_name_text = "Check"
+                # Partial item hinting
+                elif self.options.trade_quest_hinting == 1:
+                    if item.progression == ItemClassification.progression \
+                            or item.progression == ItemClassification.progression_skip_balancing:
+                        item_name_text = "Progress"
+                    elif item.progression == ItemClassification.useful \
+                            or item.progression == ItemClassification.trap:
                         item_name_text = "Item"
-                        long_item_text = ""
+                    else:
+                        item_name_text = "Garbage"
 
-                        # No item hinting
-                        if self.options.trade_quest_hinting == 0:
-                            item_name_text = "Check"
-                        # Partial item hinting
-                        elif self.options.trade_quest_hinting == 1:
-                            if item.progression == ItemClassification.progression \
-                                    or item.progression == ItemClassification.progression_skip_balancing:
-                                item_name_text = "Progress"
-                            elif item.progression == ItemClassification.useful \
-                                    or item.progression == ItemClassification.trap:
-                                item_name_text = "Item"
-                            else:
-                                item_name_text = "Garbage"
+                    if item.recipient == 'Myself':
+                        item_name_text = "Your " + item_name_text
+                    else:
+                        item_name_text = item.recipient + "'s " + item_name_text
+                # Full item hinting
+                else:
+                    owners_name = "Your" if item.recipient == 'Myself' else item.recipient + "'s"
+                    long_item_text = f"It's {owners_name} \n\"{item.itemName}\"!!"
 
-                            if item.recipient == 'Myself':
-                                item_name_text = "Your " + item_name_text
-                            else:
-                                item_name_text = item.recipient + "'s " + item_name_text
-                        # Full item hinting
-                        else:
-                            owners_name = "Your" if item.recipient == 'Myself' else item.recipient + "'s"
-                            long_item_text = f"It's {owners_name} \n\"{item.itemName}\"!!"
+                record["hint_short"] = item_name_text
+                record["hint_long"] = long_item_text
 
-                        rom.insert_hint_text(location_data, item_name_text, long_item_text)
+            placements.append(record)
 
-            rom.inject_name(self.player_name)
-
-            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
-
-            rom.write_changed_rom()
-            rom.write_to_file(rompath)
-
-            patch = MMBN3DeltaPatch(os.path.splitext(rompath)[0]+MMBN3DeltaPatch.patch_file_ending, player=player,
-                                    player_name=self.player_name, patched_path=rompath)
-            patch.write()
-        except:
-            raise
-        finally:
-            if os.path.exists(rompath):
-                os.unlink(rompath)
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
+        patch_path = os.path.join(
+            output_directory,
+            f"{self.multiworld.get_out_file_name_base(self.player)}{MMBN3ProcedurePatch.patch_file_ending}")
+        patch = MMBN3ProcedurePatch(patch_path, player=player, player_name=self.player_name)
+        patch.write_file("placements.json",
+                         json.dumps({"player_name": self.player_name, "locations": placements}).encode("utf-8"))
+        patch.write()
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]
