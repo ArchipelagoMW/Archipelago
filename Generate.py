@@ -502,7 +502,7 @@ def roll_triggers(weights: dict, triggers: list[dict], valid_keys: set[str],
                 result = get_choice(key, currently_targeted_weights)
             else:
                 trigger_result = option_set["option_result"]
-                result = currently_targeted_weights[key]
+                result = currently_targeted_weights.get(key)
             currently_targeted_weights[key] = result
             if option:
                 trigger_match = option.from_any(result) == option.from_any(trigger_result)
