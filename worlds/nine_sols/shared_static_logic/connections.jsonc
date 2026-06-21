@@ -1688,7 +1688,14 @@
     { "from": "GoS (East) - Lower Exit", "to": "GoS (East) - Above Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
     { "from": "GoS (East) - Above Lower Exit", "to": "GoS (East) - Lower Exit", "requires": [] },
     { "from": "GoS (East) - Above Lower Exit", "to": "GoS (East) - Spike Ball Hall Floor", "requires": [] },
-    { "from": "GoS (East) - Spike Ball Hall Floor", "to": "GoS (East) - Above Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    {
+        "from": "GoS (East) - Spike Ball Hall Floor", "to": "GoS (East) - Above Lower Exit",
+        "requires": [ { "item": "Cloud Leap" } ],
+        "ls_requires": [ // if you started at the node instead of the lower exit, then
+            { "region": "GoS (East) - Root Node" }, // you can bring qi from the archers near the node
+            { "item": "Ledge Grab" } // do T-dash setup on the way down, then LS vault at the ledge
+        ]
+    },
     {
         "from": "GoS (East) - Spike Ball Hall Floor", "to": "GoS (East) - Spike Ball Hall Platforms",
         "requires": [
