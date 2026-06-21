@@ -1548,6 +1548,10 @@ class Rac3Interface(GameInterface):
                 # Fix can't play Qwark VidComics in some case which first event is skipped
                 self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
 
+                # Failsafe for return to phoenix after grand prize bout
+                if RAC3LOCATION.NATION_GRAND_PRIZE_BOUT in self.checked_locations:
+                    self._write8(0x0014276F, 1)
+
             if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
                 self._write8(RAC3STATUS.ZELDRIN_START_LEVIATHAN, 0)
 
