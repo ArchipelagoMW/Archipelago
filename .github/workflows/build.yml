@@ -76,14 +76,26 @@ jobs:
           codesign --force --deep --sign - "$APP_PATH"
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
       - name: Create DMG
-        uses: L-Super/create-dmg-actions@7609ed1777bb1d43972a36bf57853dc1f2f7909a  # v1.1.0
-        with:
-          dmg_name: ${{ env.DMG_BASE }}
-          src_dir: ${{ env.APP_PATH }}
-      - name: Find DMG
         run: |
-          DMG_NAME="$(ls -1 *.dmg | head -n1)"
-          echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
+          brew install create-dmg
+          APP_NAME="$(basename "$APP_PATH")"
+          cat > bg.svg <<'EOF'
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="660" height="400" viewBox="0 0 660 400" fill="none">
+          <path fill="#F1F1F5" d="M0 400L660 400L660 0L0 0L0 400Z"></path>
+          <path fill-rule="evenodd" fill="#4E5969" d="M343.933 177.984L321.661 159.275C320.439 158.249 318.656 158.249 317.434 159.275L317.066 159.584C315.503 160.897 315.503 163.303 317.066 164.616L332.981 177.984C334.544 179.297 334.544 181.703 332.981 183.016L317.067 196.384C315.503 197.697 315.503 200.103 317.067 201.416L317.434 201.725C318.656 202.751 320.439 202.751 321.661 201.725L343.933 183.016C345.497 181.703 345.497 179.297 343.933 177.984Z"></path>
+          </svg>
+          EOF
+          create-dmg \
+            --volname "$DMG_BASE" \
+            --background bg.svg \
+            --window-pos 200 120 \
+            --window-size 660 400 \
+            --icon-size 100 \
+            --icon "$APP_NAME" 160 185 \
+            --app-drop-link 500 185 \
+            --no-internet-enable \
+            "${DMG_BASE}.dmg" "$APP_PATH"
+          echo "DMG_NAME=${DMG_BASE}.dmg" >> $GITHUB_ENV
       # - copy code above to release.yml -
       - name: Attest Build
         if: ${{ github.event_name == 'workflow_dispatch' }}
