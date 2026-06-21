@@ -1947,7 +1947,9 @@
         { "item": "Air Dash" } // since you have to cross the pink waterfall from the side with no platform
     ] }, // there is a tiny foothold you can use to ground dash, but (like OW) we won't put that in logic
     { "from": "Sky Tower - Right Exit", "to": "Sky Tower - Upper Exit & Root Node", "requires": [
-        { "item": "Cloud Leap" }, { "item": "Wall Climb" } // this way you have to climb up the boxes as they move down
+        { "item": "Cloud Leap" },
+        // in this direction, you need movement items to climb up the descending boxes, instead of simply riding one
+        { "anyOf": [ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ] }
     ] }, // AD AND WC is just barely possible, but since single jump + WC isn't, that's not intuitive enough IMO
 
     { "from": "Sky Tower - Upper Exit & Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
