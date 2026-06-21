@@ -199,6 +199,11 @@
         "medium_requires": [
             { "item": "Wall Climb" },
             { "anyOf": [ { "item": "Grapple" }, { "item": "Cloud Leap" } ] } // and T-dash
+        ],
+        "ls_requires": [
+            { "item": "Ledge Grab" }, // CL setup right of the chest
+            { "item": "Cloud Leap" }, // triple jump around the crystals, with the 3rd jump moving right so
+            { "item": "Grapple" } // you can grapple the target as intended, then a 4th jump/another CL to the tiny rock ledge
         ]
     },
     { "from": "AF (Depths) - Crystal Caves", "to": "AF (Depths) - Shangui Arena", "requires": [ { "item": "Air Dash" } ] },
