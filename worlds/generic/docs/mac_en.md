@@ -5,10 +5,13 @@ There are two ways to run Archipelago on macOS: install the prebuilt App from th
 guide).
 
 ## Installing the Prebuilt App (.dmg)
-The prebuilt App is currently only available for Apple Silicon (M1 and newer). On an
-Intel Mac, run from source code instead (see below).
-1. Download the `Archipelago_<version>_macos-arm64.dmg` asset from the
-   [Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases).
+The prebuilt App is available for both Apple Silicon (M1 and newer) and Intel Macs.
+1. Download the `.dmg` asset for your Mac's processor from the
+   [Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases):
+   - Apple Silicon: `Archipelago_<version>_macos-arm64.dmg`
+   - Intel: `Archipelago_<version>_macos-x86_64.dmg`
+
+   If you're not sure which you have, check **Apple menu → About This Mac**.
 2. Double-click the `.dmg` to open it, then drag `Archipelago.app` into your
    `Applications` folder.
 
@@ -48,9 +51,8 @@ xattr -dr com.apple.quarantine /Applications/Archipelago.app
 ```
 
 ## Running from Source Code
-If you prefer not to use the prebuilt App, or you are on an Intel Mac, you can run from
-source code instead. This section expects you to have some experience with running
-software from the terminal.
+If you prefer not to use the prebuilt App, you can run from source code instead. This
+section expects you to have some experience with running software from the terminal.
 ### Prerequisite Software
 Here is a list of software to install and source code to download.
 1. Python 3.11.9 "universal2" or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).

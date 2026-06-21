@@ -36,7 +36,13 @@ permissions:  # permissions required for attestation
 
 jobs:
   build-release-macos:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest    # arm64 (Apple Silicon)
+          - macos-15-intel  # x86_64
     steps:
       # - copy code below to release.yml -
       - uses: actions/checkout@v6.0.2
@@ -118,6 +124,7 @@ jobs:
       - name: Store DMG
         uses: actions/upload-artifact@v7.0.0
         with:
+          name: ${{ env.DMG_BASE }}
           path: ${{ env.DMG_NAME }}
           archive: false
           if-no-files-found: error
