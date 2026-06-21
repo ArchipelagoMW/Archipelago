@@ -1064,7 +1064,7 @@ class Rac3Interface(GameInterface):
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
             self.died_in_vehicle = time.time() - self.last_in_vehicle_time < 1.5
-            self.died_from_softlock = self._read16(RAC3STATUS.SOFTLOCK_TIMER) >= 0xF0
+            self.died_from_softlock = self._read16(RAC3STATUS.SOFTLOCK_TIMER) >= 0xEF
             self.reloading_handled = True
             logger.debug(f"{self.player_type} is Respawning, death state: {self.last_death_state},"
                          f" death count: {self.last_death_count}, in vehicle? {self.died_in_vehicle}")
