@@ -35,7 +35,76 @@ permissions:  # permissions required for attestation
   attestations: 'write'
 
 jobs:
-  # build-release-macos: # LF volunteer
+  build-macos:
+    # Native per-arch builds: the frozen app embeds arch-specific native
+    # extensions (_speedups, cymem, ...), so a single universal2 build is not
+    # practical. Build x86_64 on the Intel runner and arm64 on Apple Silicon.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-15-intel  # x86_64
+          - macos-15        # arm64 (Apple Silicon)
+    steps:
+      # - copy code below to release.yml -
+      - uses: actions/checkout@v6.0.2
+      - name: Install python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: '~3.12.7'
+          check-latest: true
+      - name: Build
+        run: |
+          # charset-normalizer installed explicitly (as on Linux) so the frozen
+          # build bundles a working character-detection backend.
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip charset-normalizer
+          python setup.py build_exe --yes bdist_mac
+          echo -e "setup.py build output:\n `ls build`"
+          APP="$(ls -d build/*.app | head -1)"
+          VERSION="$(basename "$APP" .app | sed 's/^archipelago-//')"
+          ARCH="$(uname -m)"
+          ZIP_NAME="Archipelago_${VERSION}_macos-${ARCH}.zip"
+          echo "macos-${ARCH} app: $APP -> $ZIP_NAME"
+          echo "ARCH=$ARCH" >> $GITHUB_ENV
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          mkdir -p dist
+          # cx_Freeze ad-hoc signs the bundle but leaves an invalid seal, and a
+          # plain zip strips the signature's extended attributes; either makes a
+          # quarantined download show as "damaged" on Apple Silicon. Re-sign and
+          # package with ditto so the signature survives extraction.
+          codesign --force --deep --sign - "$APP"
+          ditto -c -k --keepParent --sequesterRsrc "$APP" "dist/$ZIP_NAME"
+      # - copy code above to release.yml -
+      - name: Attest Build
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/attest@v4.1.0
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher
+            build/exe.*/ArchipelagoGenerate
+            build/exe.*/ArchipelagoServer
+            dist/${{ env.ZIP_NAME }}
+      # NB: no "Check build loads expected worlds" step — when frozen on macOS the
+      # launcher writes templates under ~/Library/Application Support, not the CWD,
+      # so the Windows/Linux template-diff check does not apply here.
+      - name: Test Generate
+        shell: bash
+        timeout-minutes: 5  # macOS has no `timeout` binary; bound the step here
+        run: |
+          cd build/exe*
+          cp Players/Templates/VVVVVV.yaml Players/
+          ./ArchipelagoGenerate
+      - name: Store zip
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          name: Archipelago_macos-${{ env.ARCH }}
+          path: dist/${{ env.ZIP_NAME }}
+          archive: false
+          if-no-files-found: error
+          retention-days: 7  # keep for 7 days, should be enough
 
   build-win: # RCs and releases may still be built and signed by hand
     runs-on: windows-latest
