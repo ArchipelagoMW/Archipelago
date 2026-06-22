@@ -374,7 +374,10 @@
                                                    // the single-use floor will be used optimally
         ],
         "medium_requires": [
-            { "item": "Trick - Break CS Barrier With Bow" }
+            { "anyOf": [ // to break in
+                { "item": "Charged Strike" },
+                { "item": "Trick - Break CS Barrier With Bow" }
+            ] }
             // T-dash replaces the need to unlock ropes
         ]
     },
