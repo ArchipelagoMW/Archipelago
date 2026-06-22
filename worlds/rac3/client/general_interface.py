@@ -16,6 +16,7 @@ class GameInterface:
     cycle_reads_count: int = 0
     cycle_writes_count: int = 0
     cycle_times: list[float] = []
+    cycle_cache: dict[int, int] = {}
     pcsx2_interface: Pine = Pine()
 
     def __init__(self) -> None:

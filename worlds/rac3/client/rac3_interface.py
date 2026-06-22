@@ -1027,11 +1027,23 @@ class Rac3Interface(GameInterface):
                 case CHECKTYPE.BIT:
                     check_all &= check.VALUE in self._read_bits(check.ADDRESS)
                 case CHECKTYPE.BYTE:
-                    check_all &= self.compare(self._read8(check.ADDRESS), check)
+                    value_to_check = self.cycle_cache.get(check.ADDRESS, None)
+                    if value_to_check is None:
+                        value_to_check = self._read8(check.ADDRESS)
+                        self.cycle_cache[check.ADDRESS] = value_to_check
+                    check_all &= self.compare(value_to_check, check)
                 case CHECKTYPE.SHORT:
-                    check_all &= self.compare(self._read16(check.ADDRESS), check)
+                    value_to_check = self.cycle_cache.get(check.ADDRESS, None)
+                    if value_to_check is None:
+                        value_to_check = self._read16(check.ADDRESS)
+                        self.cycle_cache[check.ADDRESS] = value_to_check
+                    check_all &= self.compare(value_to_check, check)
                 case CHECKTYPE.INT:
-                    check_all &= self.compare(self._read32(check.ADDRESS), check)
+                    value_to_check = self.cycle_cache.get(check.ADDRESS, None)
+                    if value_to_check is None:
+                        value_to_check = self._read32(check.ADDRESS)
+                        self.cycle_cache[check.ADDRESS] = value_to_check
+                    check_all &= self.compare(value_to_check, check)
         if check_all:
             self.checked_locations.add(location)
         return check_all
