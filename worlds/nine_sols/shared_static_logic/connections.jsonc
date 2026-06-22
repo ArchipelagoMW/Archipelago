@@ -464,14 +464,21 @@
             { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }, // to reach the crate
             { "item": "Wall Climb" } // to ride the crate, and climb to arena afterward
         ],
-        "medium_requires": [ // skip nymph / activating the crate by platforming all the way through the tunnel with:
-            { "item": "Air Dash" },
-            { "item": "Cloud Leap" }, // and T-dash
-            { "anyOf": [
-                { "item": "Tai-Chi Kick" }, // use the TCK target so we can save CL for getting on top of the box
-                { "item": "Wall Climb" } // or climb up the side of the box instead
-            ] }
-        ],
+        "medium_requires": [ { "anyOf": [
+            [
+                { "item": "Mystic Nymph: Scout Mode" }, // to make the crate move
+                // T-dash (or CS-dash) to reach the crate without TCK
+                { "item": "Wall Climb" } // to ride the crate, and climb to arena afterward
+            ],
+            [ // skip nymph / activating the crate by platforming all the way through the tunnel with:
+                { "item": "Air Dash" },
+                { "item": "Cloud Leap" }, // and T-dash
+                { "anyOf": [
+                    { "item": "Tai-Chi Kick" }, // use the TCK target so we can save CL for getting on top of the box
+                    { "item": "Wall Climb" } // or climb up the side of the box instead
+                ] }
+            ]
+        ] } ],
         "ls_requires": [ // instead of TCK, we use CL and slash vault inside the tunnel to get a 2nd AD and CL
             { "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } // and T-dash
         ]
