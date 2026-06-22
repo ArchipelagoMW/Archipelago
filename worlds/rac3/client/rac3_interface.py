@@ -363,7 +363,7 @@ class Rac3Interface(GameInterface):
         self.bolt_and_xp_multiplier_value = int(self.options.bolt_and_xp_multiplier)
         # EnableWeaponLevelAsItem: if enabled, EXP disabler is running.
 
-        self.weapon_levels = {weapon: 1 for weapon in non_prog_weapon_data.keys()}
+        self.weapon_levels = dict.fromkeys(non_prog_weapon_data.keys(), 1)
 
     def check_main_menu(self):
         """Check if the player is on the main menu, before starting the game"""
@@ -514,7 +514,7 @@ class Rac3Interface(GameInterface):
         if self.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK, False):
             self._write8(RAC3_REGION_DATA_TABLE[RAC3REGION.HOLOSTAR_STUDIOS_CLANK].VISIT_ADDRESS, 1)
         if self.options.speedups.get(RAC3SPEEDUPS.BOLT_CRANK, False):
-            for check, _ in BOLT_CRANK_TO_REGION.items():
+            for check in BOLT_CRANK_TO_REGION.keys():
                 self._write_bits(check[0], {check[1]})
 
         if self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
@@ -1020,8 +1020,7 @@ class Rac3Interface(GameInterface):
         if location == RAC3LOCATION.ARIDIA_RANGERS_5 and self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
             if self._read8(MISSION_COUNTS[location]) > 1:  # Aridia final mission needs special checks
                 return True
-            else:
-                return False
+            return False
         check_all: bool = True
         for check in loc_data.CHECK_ADDRESS:
             match check.TYPE & CHECKTYPE.SIZE:
@@ -1987,7 +1986,7 @@ class Rac3Interface(GameInterface):
             for weapon_name, level in self.weapon_levels.items():
                 if weapon_name == RAC3ITEM.RY3N0 and level < 4:
                     return
-                elif weapon_name != RAC3ITEM.RY3N0 and level < 8:
+                if weapon_name != RAC3ITEM.RY3N0 and level < 8:
                     return
             self._write8(RAC3STATUS.OMEGA_ARSENAL_TROPHY, 1)
 
@@ -2106,7 +2105,7 @@ class Rac3Interface(GameInterface):
         for name, data in RAC3_SHORTCUT_DATA_TABLE.items():
             if self.planet == data.PLANET and self.options.shortcuts.get(name, False):
                 if data.ITEMS is None or any(
-                    [all([self.UnlockItem[item].status for item in items]) for items in data.ITEMS]):
+                    all(self.UnlockItem[item].status for item in items) for items in data.ITEMS):
                     # special cases
                     if name == RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
                         if not self.tyhrra_dropship:
@@ -2227,7 +2226,7 @@ class Rac3Interface(GameInterface):
             self.opened_the_hacker_doors = True
 
     def puzzle_cycler(self, item: str, option: str, check: str, planets: list[str], table: dict[tuple[int, int],
-    str], already: Optional[bool] = False):
+    str], already: bool | None = False):
         """General function for handling updating any puzzle type during the cycler iterations."""
         if (not self.UnlockItem[item].status and not already) or not self.options.speedups.get(option, False):
             return
