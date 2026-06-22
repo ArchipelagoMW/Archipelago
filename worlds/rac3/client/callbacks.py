@@ -199,7 +199,7 @@ async def _handle_game_ready(ctx: "Context") -> None:
         if not ctx.main_menu:
             ctx.game_interface.cycle_reads_count = 0
             ctx.game_interface.cycle_writes_count = 0
-            ctx.game_interface.cycle_cache = {}
+            ctx.game_interface.cycle_cache.clear()
             current_time = time()
             await update(ctx)
             after_time = time()
