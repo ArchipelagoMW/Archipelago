@@ -2,7 +2,7 @@
 
 from Options import OptionCounter
 from worlds.rac3.constants.options import RAC3OPTION
-from worlds.rac3.constants.shortcuts import SHORTCUTS
+from worlds.rac3.constants.shortcuts import RAC3SHORTCUTS, SHORTCUTS
 
 
 class Shortcuts(OptionCounter):
@@ -17,4 +17,5 @@ class Shortcuts(OptionCounter):
     max = 1
     display_name = RAC3OPTION.SHORTCUTS
     default = dict.fromkeys(SHORTCUTS, 0)
+    default[RAC3SHORTCUTS.VELDIN_SKIP] = 1
     valid_keys = SHORTCUTS
