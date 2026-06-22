@@ -3,6 +3,7 @@
 from struct import unpack
 
 from CommonClient import logger
+from worlds.rac3.constants.other_ratchets import GAME_ID_TO_OTHER_RATCHET
 from worlds.rac3.constants.version import RAC3VERSION
 from worlds.rac3.pcsx2_interface.pine import Pine
 
@@ -160,7 +161,12 @@ class GameInterface:
                                    "please inform apworld devs of any inconsistencies found")
                 case _:
                     self.current_game = "None"
-                    logger.info("Unknown game version detected")
+                    other_ratchet_game = GAME_ID_TO_OTHER_RATCHET.get(game_id)
+                    if other_ratchet_game is not None:
+                        logger.warning(f"Connected to {other_ratchet_game} instead of Ratchet and Clank 3!\n" + 
+                                       "This client is for Ratchet and Clank 3 only, please load the correct Ratchet game to play.")
+                    else:
+                        logger.info("Unknown game version detected")
         if self.current_game == "None" and self.game_id_error != game_id and game_id != b"\x00\x00\x00\x00\x00\x00":
             logger.warning(f"Connected to the wrong game ({game_id})")
             self.game_id_error = game_id
