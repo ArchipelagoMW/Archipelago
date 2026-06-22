@@ -1852,6 +1852,11 @@
     },
     { // since CL is all you need to reach SBR, this could be on the SBR connection instead, but this is more accurate
         "from": "GoS (West) - Root Node", "to": "GoS (West) - Luyan's Tomb",
+        "medium_requires": [
+            { "item": "Trick - Bow Hover" }, // from ground under the root node, left of the spike ball
+            { "item": "Cloud Leap" }, // at the end of the hover, jump up to the little green wall
+            { "item": "Wall Climb" }
+        ],
         "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // "triple jump": CL, LS vault, CL again
     },
     { "from": "GoS (West) - Spike Ball Release", "to": "GoS (West) - Luyan's Tomb", "requires": [
