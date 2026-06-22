@@ -25,6 +25,7 @@ exits = {
     ],
     RegionNames.ONI_ISLAND_ENTRANCE_BRIDGE: [
         ExitData(RegionNames.ONI_ISLAND_ENTRANCE, one_way=True, loading_screen=False),
+        ExitData(RegionNames.ONI_ISLAND_ENTRANCE_SEA_OF_FIRE,one_way=True,loading_screen=False,required_items_events=["Fire Tablet"])
     ],
     RegionNames.ONI_ISLAND_ENTRANCE_UPPER: [
         ExitData(RegionNames.ONI_ISLAND_ENTRANCE_SEA_OF_FIRE, one_way=True, loading_screen=False),
@@ -41,10 +42,10 @@ locations = {
     RegionNames.ONI_ISLAND_ENTRANCE_SEA_OF_FIRE: {
         "Oni Island - East Vine Island chest on sea of fire": LocData(container_check_id(MapIds.ONI_ISLAND_EXT, 0),
                                                                       required_brush_techniques=[
-                                                                          BrushTechniques.GREENSPROUT_VINE]),
+                                                                          BrushTechniques.GREENSPROUT_VINE],required_items_events=["Fire Tablet"]),
         "Oni Island - West Vine Island chest on sea of fire": LocData(container_check_id(MapIds.ONI_ISLAND_EXT, 1),
                                                                       required_brush_techniques=[
-                                                                          BrushTechniques.GREENSPROUT_VINE]),
+                                                                          BrushTechniques.GREENSPROUT_VINE],required_items_events=["Fire Tablet"]),
     },
     RegionNames.ONI_ISLAND_ENTRANCE_UPPER: {
         "Oni Island - East chest on sea upper center": LocData(container_check_id(MapIds.ONI_ISLAND_EXT, 2),
