@@ -263,5 +263,29 @@
     { "code": 813, "name": "Power Reservoir (East) Root Node", "type": "progression" },
     { "code": 814, "name": "Radiant Pagoda Root Node", "type": "progression" },
     { "code": 815, "name": "Lake Yaochi Ruins Root Node", "type": "progression" },
-    { "code": 816, "name": "Grotto of Scriptures (East) Root Node", "type": "progression" }
+    { "code": 816, "name": "Grotto of Scriptures (East) Root Node", "type": "progression" },
+
+    // skill rando items
+    { "category": "skill", "code": 901, "name": "Swift Runner", "type": "progression" },
+    { "category": "skill", "code": 902, "name": "Progressive Bullet Deflect", "count": 2, "type": "progression" },
+
+    { "category": "skill", "code": 911, "name": "Progressive Water Flow", "count": 2, "type": "useful" },
+    { "category": "skill", "code": 912, "name": "Progressive Full Control", "count": 2, "type": "useful" },
+    { "category": "skill", "code": 913, "name": "Enhanced Qi Blast", "type": "useful" },
+
+    { "category": "skill", "code": 921, "name": "Shadow Strike", "type": "useful" },
+    { "category": "skill", "code": 922, "name": "Swift Rise", "type": "useful" },
+    { "category": "skill", "code": 923, "name": "Life Recovery", "type": "useful" },
+    { "category": "skill", "code": 924, "name": "Backlash", "type": "useful" },
+    { "category": "skill", "code": 925, "name": "Skull Kick", "type": "useful" },
+    { "category": "skill", "code": 926, "name": "Breathing Exercise", "type": "useful" },
+    { "category": "skill", "code": 927, "name": "Leverage", "type": "useful" },
+    { "category": "skill", "code": 928, "name": "Azure Recovery", "type": "useful" },
+    { "category": "skill", "code": 929, "name": "Incisive Drain", "type": "useful" },
+    { "category": "skill", "code": 930, "name": "Unbounded Drain", "type": "useful" },
+    { "category": "skill", "code": 931, "name": "Unbounded Charge", "type": "useful" },
+
+    { "category": "skill", "code": 941, "name": "Qi Boost", "count": 4, "type": "useful" },
+    { "category": "skill", "code": 942, "name": "Enhanced Talisman", "count": 2, "type": "useful" },
+    { "category": "skill", "code": 943, "name": "Enhanced Blade", "count": 2, "type": "useful" }
 ]

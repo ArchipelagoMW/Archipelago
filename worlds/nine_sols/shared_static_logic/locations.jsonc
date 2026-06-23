@@ -2012,5 +2012,128 @@
     {
         "category": "shop", "address": 4207, "name": "3D Printer: 2nd High Cost Purchase",
         "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+
+    // Skill Randomization
+    // "Low Cost" means it takes <=3 total skill points to buy the node and all prerequisite nodes
+    // "Medium Cost" means >=4 && <=9 total skill points
+    // "High Cost" means >=10 total skill points
+
+    // row 2
+    { // no prereqs (Immortal Dash doesn't count), 1 sp -> total 1 sp
+        "category": "skill", "address": 5021, "name": "Skill Tree Node: Swift Runner",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { // no prereqs (Qi Blast doesn't count), 1 sp -> total 1 sp
+        "category": "skill", "address": 5022, "name": "Skill Tree Node: Qi Boost (Top Left)",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { // no prereqs (Triple Slash doesn't count), 1 sp -> total 1 sp
+        "category": "skill", "address": 5023, "name": "Skill Tree Node: Shadow Strike",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { // no prereqs (Parry doesn't count), 1 sp -> total 1 sp
+        "category": "skill", "address": 5024, "name": "Skill Tree Node: Bullet Deflect",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+
+    // row 3
+    { // Swift Runner (1 sp), 1 sp -> total 2 sp
+        "category": "skill", "address": 5031, "name": "Skill Tree Node: Swift Rise",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { // Qi Boost 1 / Top Left (1 sp), 2 sp -> total 3 sp
+        "category": "skill", "address": 5032, "name": "Skill Tree Node: Life Recovery",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { // Shadow Strike (1 sp), 2 sp -> total 3 sp
+        "category": "skill", "address": 5033, "name": "Skill Tree Node: Qi Boost (Top Right)",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { // Tai-Chi Kick, 2 sp -> total 2 sp
+        "category": "skill", "address": 5034, "name": "Skill Tree Node: Backlash",
+        "region": "Skill Tree After Tai-Chi Kick (Low Cost)", "requires": []
+    },
+    { // Tai-Chi Kick, 2 sp -> total 2 sp
+        "category": "skill", "address": 5035, "name": "Skill Tree Node: Skull Kick",
+        "region": "Skill Tree After Tai-Chi Kick (Low Cost)", "requires": []
+    },
+    { // Bullet Deflect (1 sp), 2 sp -> total 3 sp
+        "category": "skill", "address": 5036, "name": "Skill Tree Node: Breathing Exercise",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+
+    // row 4
+    { // Unbounded Counter, 2 sp
+        "category": "skill", "address": 5041, "name": "Skill Tree Node: Leverage",
+        "region": "Skill Tree After Unbounded Counter (Low Cost)", "requires": []
+    },
+    { // Swift Runner (1 sp), Life Recovery (3 sp), 2 sp -> total 6 sp
+        "category": "skill", "address": 5042, "name": "Skill Tree Node: Water Flow",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { // Qi Boost 2 / Top Right (3 sp), Life Recovery (3 sp), 2 sp -> total 8 sp
+        "category": "skill", "address": 5043, "name": "Skill Tree Node: Full Control",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { // Qi Boost 2 / Top Right (3 sp), Backlash (2 sp), 2 sp -> total 7 sp
+        "category": "skill", "address": 5044, "name": "Skill Tree Node: Incisive Drain",
+        "region": "Skill Tree After Tai-Chi Kick (Medium Cost)", "requires": []
+    },
+    { // Breathing Exercise (3 sp), 2 sp -> total 5 sp
+        "category": "skill", "address": 5045, "name": "Skill Tree Node: Enhanced Bullet Deflect",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+
+    // row 5
+    { // Leverage (2 sp), 2 sp -> total 4 sp
+        "category": "skill", "address": 5051, "name": "Skill Tree Node: Enhanced Blade (Left)",
+        "region": "Skill Tree After Unbounded Counter (Medium Cost)", "requires": []
+    },
+    { // Leverage (2 sp), 2 sp -> total 4 sp
+        "category": "skill", "address": 5052, "name": "Skill Tree Node: Unbounded Drain",
+        "region": "Skill Tree After Unbounded Counter (Medium Cost)", "requires": []
+    },
+    { // Water Flow (6 sp), 2 sp -> total 8 sp
+        "category": "skill", "address": 5053, "name": "Skill Tree Node: Enhanced Talisman (Left)",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { // Water Flow (6 sp), 2 sp -> total 8 sp
+        "category": "skill", "address": 5054, "name": "Skill Tree Node: Qi Boost (Bottom Left)",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { // Life Recovery (3 sp), 2 sp -> total 5 sp
+        "category": "skill", "address": 5055, "name": "Skill Tree Node: Azure Recovery",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { // Full Control (8 sp), 2 sp -> total 10 sp
+        "category": "skill", "address": 5056, "name": "Skill Tree Node: Qi Boost (Bottom Right)",
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+    { // Full Control (8 sp), 2 sp -> total 10 sp
+        "category": "skill", "address": 5057, "name": "Skill Tree Node: Enhanced Talisman (Right)",
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+    { // Incisive Drain (7 sp), Enhanced Bullet Deflect (5 sp), 2 sp -> total 14 sp
+        "category": "skill", "address": 5058, "name": "Skill Tree Node: Enhanced Blade (Right)",
+        "region": "Skill Tree After Tai-Chi Kick (High Cost)", "requires": []
+    },
+
+    // row 6
+    { // Unbounded Drain (4 sp), 3 sp -> total 7 sp
+        "category": "skill", "address": 5061, "name": "Skill Tree Node: Unbounded Charge",
+        "region": "Skill Tree After Unbounded Counter (Medium Cost)", "requires": []
+    },
+    { // Unbounded Drain (4 sp), Qi Boost 3/BL (8 sp), 3 sp -> total 15 sp
+        "category": "skill", "address": 5062, "name": "Skill Tree Node: Enhanced Water Flow",
+        "region": "Skill Tree After Unbounded Counter (High Cost)", "requires": []
+    },
+    { // Qi Boost 3/BL (8 sp), Qi Boost 4/BR (10 sp), 3 sp -> total 18 sp (if you avoid double counting QB1+LR)
+        "category": "skill", "address": 5063, "name": "Skill Tree Node: Enhanced Full Control",
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+    { // Qi Boost 4/BR (10 sp), Incisive Drain (7 sp), 3 sp -> total 17 sp (if you avoid double counting SS+QB2)
+        "category": "skill", "address": 5064, "name": "Skill Tree Node: Enhanced Qi Blast",
+        "region": "Skill Tree After Tai-Chi Kick (High Cost)", "requires": []
     }
 ]

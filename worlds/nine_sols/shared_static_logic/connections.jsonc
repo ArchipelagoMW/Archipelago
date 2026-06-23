@@ -2555,5 +2555,31 @@
     {
         "from": "FSP Shops & Skill Tree (High Cost)", "to": "FSP - Chiyou's Shop (High Cost)",
         "requires": [ { "item": "Event - Chiyou in FSP" } ]
+    },
+
+    // Skill tree logic
+    {
+        "from": "FSP Shops & Skill Tree (Low Cost)", "to": "Skill Tree After Tai-Chi Kick (Low Cost)",
+        "requires": [ { "item": "Tai-Chi Kick" } ]
+    },
+    {
+        "from": "FSP Shops & Skill Tree (Medium Cost)", "to": "Skill Tree After Tai-Chi Kick (Medium Cost)",
+        "requires": [ { "item": "Tai-Chi Kick" } ]
+    },
+    {
+        "from": "FSP Shops & Skill Tree (High Cost)", "to": "Skill Tree After Tai-Chi Kick (High Cost)",
+        "requires": [ { "item": "Tai-Chi Kick" } ]
+    },
+    {
+        "from": "FSP Shops & Skill Tree (Low Cost)", "to": "Skill Tree After Unbounded Counter (Low Cost)",
+        "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "from": "FSP Shops & Skill Tree (Medium Cost)", "to": "Skill Tree After Unbounded Counter (Medium Cost)",
+        "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "from": "FSP Shops & Skill Tree (High Cost)", "to": "Skill Tree After Unbounded Counter (High Cost)",
+        "requires": [ { "item": "Unbounded Counter" } ]
     }
 ]
