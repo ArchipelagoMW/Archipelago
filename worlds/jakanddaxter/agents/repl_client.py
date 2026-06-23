@@ -280,12 +280,14 @@ class JakAndDaxterReplClient:
     # - It must be a valid character from the ALLOWED_CHARACTERS list.
     # - All lowercase letters must be uppercase.
     # - It must be wrapped in double quotes (for the REPL command).
-    # - Apostrophes must be handled specially - GOAL uses invisible ASCII character 0x12.
+    # - Single quotes must be replaced - GOAL uses invisible ASCII character 0x12.
+    # - Double quotes must be prepended with a backslash to escape it.
     # I also only allotted 32 bytes to each string in OpenGOAL, so we must truncate.
     @staticmethod
     def sanitize_game_text(text: str) -> str:
         result = "".join([c if c in ALLOWED_CHARACTERS else "?" for c in text[:32]]).upper()
         result = result.replace("'", "\\c12")
+        result = result.replace("\"", "\\\"")
         return f"\"{result}\""
 
     # Like sanitize_game_text, but the settings file will NOT allow any whitespace in the slot_name or slot_seed data.
