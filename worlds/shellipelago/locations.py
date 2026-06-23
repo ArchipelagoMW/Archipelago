@@ -1,7 +1,6 @@
-import json
+# Generated from Shellipelago map data. Keep edits in the source map/generator.
 
-raw_location_table = json.loads(r'''
-[
+raw_location_table = [
   {
     "id": 200000,
     "key": "loc_200000",
@@ -14,10 +13,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "sfx",
     "drop_name": "SFX",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39,10 +38,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "progressiveRoom",
     "drop_name": "Progressive Room",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64,10 +63,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -131,10 +130,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -186,10 +185,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -241,10 +240,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -296,10 +295,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -351,10 +350,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -406,10 +405,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -461,10 +460,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -516,10 +515,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -571,10 +570,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -626,10 +625,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -681,10 +680,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -736,10 +735,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -791,10 +790,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -846,10 +845,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -901,10 +900,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -956,10 +955,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1011,10 +1010,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1066,10 +1065,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1121,10 +1120,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1176,10 +1175,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1231,10 +1230,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1286,10 +1285,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1341,10 +1340,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1396,10 +1395,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1451,10 +1450,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1506,10 +1505,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1561,10 +1560,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -1612,10 +1611,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1667,10 +1666,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1722,10 +1721,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1777,10 +1776,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1832,10 +1831,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1887,10 +1886,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1942,10 +1941,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -1997,10 +1996,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2052,10 +2051,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2107,10 +2106,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2162,10 +2161,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2217,10 +2216,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2272,10 +2271,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2327,10 +2326,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2382,10 +2381,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "graphics",
     "drop_name": "Graphics",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2407,10 +2406,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2462,10 +2461,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2517,10 +2516,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2572,10 +2571,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2627,10 +2626,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2682,10 +2681,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2737,10 +2736,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2792,10 +2791,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2847,10 +2846,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2902,10 +2901,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -2967,10 +2966,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3032,10 +3031,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3097,10 +3096,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -3132,10 +3131,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -3205,10 +3204,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3270,10 +3269,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3335,10 +3334,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3400,10 +3399,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3465,10 +3464,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3530,10 +3529,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3595,10 +3594,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3660,10 +3659,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3725,10 +3724,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3790,10 +3789,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3845,10 +3844,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3900,10 +3899,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -3955,10 +3954,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4010,10 +4009,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4065,10 +4064,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4120,10 +4119,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4175,10 +4174,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4230,10 +4229,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4285,10 +4284,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4340,10 +4339,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4395,10 +4394,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4450,10 +4449,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4505,10 +4504,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4560,10 +4559,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4615,10 +4614,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4670,10 +4669,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4725,10 +4724,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4780,10 +4779,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4835,10 +4834,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4890,10 +4889,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -4945,10 +4944,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5000,10 +4999,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5055,10 +5054,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5110,10 +5109,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5165,10 +5164,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5220,10 +5219,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5275,10 +5274,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5330,10 +5329,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5385,10 +5384,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5440,10 +5439,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5495,10 +5494,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5550,10 +5549,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5605,10 +5604,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5660,10 +5659,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5715,10 +5714,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5770,10 +5769,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5825,10 +5824,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5880,10 +5879,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5935,10 +5934,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -5990,10 +5989,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6045,10 +6044,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6100,10 +6099,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6155,10 +6154,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6210,10 +6209,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6265,10 +6264,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6320,10 +6319,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6375,10 +6374,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6430,10 +6429,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6485,10 +6484,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6540,10 +6539,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6595,10 +6594,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6650,10 +6649,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6705,10 +6704,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "sword",
     "drop_name": "Sword",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6730,10 +6729,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6809,10 +6808,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6888,10 +6887,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "bgm",
     "drop_name": "BGM",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -6939,10 +6938,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7012,10 +7011,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7085,10 +7084,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7158,10 +7157,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -7225,10 +7224,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7280,10 +7279,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7335,10 +7334,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7390,10 +7389,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7445,10 +7444,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7500,10 +7499,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7555,10 +7554,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7610,10 +7609,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7665,10 +7664,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7720,10 +7719,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7775,10 +7774,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7830,10 +7829,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7885,10 +7884,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7940,10 +7939,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -7995,10 +7994,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8050,10 +8049,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8105,10 +8104,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8160,10 +8159,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8215,10 +8214,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8270,10 +8269,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -8321,10 +8320,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8376,10 +8375,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8431,10 +8430,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8486,10 +8485,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8541,10 +8540,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8596,10 +8595,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8651,10 +8650,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8706,10 +8705,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8761,10 +8760,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8826,10 +8825,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -8891,10 +8890,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -8956,10 +8955,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9021,10 +9020,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9086,10 +9085,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9151,10 +9150,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9216,10 +9215,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9281,10 +9280,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9346,10 +9345,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9411,10 +9410,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9466,10 +9465,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9521,10 +9520,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9576,10 +9575,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9631,10 +9630,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9686,10 +9685,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9741,10 +9740,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9796,10 +9795,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9851,10 +9850,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9906,10 +9905,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -9961,10 +9960,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10016,10 +10015,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10071,10 +10070,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10126,10 +10125,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10181,10 +10180,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10236,10 +10235,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10291,10 +10290,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10346,10 +10345,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10401,10 +10400,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10456,10 +10455,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10511,10 +10510,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10566,10 +10565,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10621,10 +10620,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10676,10 +10675,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10731,10 +10730,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10786,10 +10785,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10851,10 +10850,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -10876,10 +10875,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -10941,10 +10940,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11006,10 +11005,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11071,10 +11070,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11136,10 +11135,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11201,10 +11200,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11266,10 +11265,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11331,10 +11330,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11396,10 +11395,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11461,10 +11460,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11526,10 +11525,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11591,10 +11590,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11656,10 +11655,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11721,10 +11720,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11786,10 +11785,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11851,10 +11850,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11916,10 +11915,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -11981,10 +11980,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12046,10 +12045,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12111,10 +12110,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12176,10 +12175,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12241,10 +12240,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12306,10 +12305,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12371,10 +12370,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12436,10 +12435,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12501,10 +12500,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12566,10 +12565,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12631,10 +12630,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12696,10 +12695,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12761,10 +12760,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12826,10 +12825,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12891,10 +12890,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -12956,10 +12955,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13021,10 +13020,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -13068,10 +13067,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13143,10 +13142,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13218,10 +13217,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13293,10 +13292,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13368,10 +13367,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13443,10 +13442,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13518,10 +13517,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13593,10 +13592,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13668,10 +13667,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "progressiveRoom",
     "drop_name": "Progressive Room",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13703,10 +13702,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13768,10 +13767,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13833,10 +13832,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13898,10 +13897,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -13963,10 +13962,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14028,10 +14027,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14093,10 +14092,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14158,10 +14157,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14223,10 +14222,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -14288,10 +14287,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -14313,10 +14312,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14378,10 +14377,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14443,10 +14442,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14508,10 +14507,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14573,10 +14572,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14638,10 +14637,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14703,10 +14702,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14768,10 +14767,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14833,10 +14832,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14898,10 +14897,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -14963,10 +14962,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15028,10 +15027,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15093,10 +15092,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15158,10 +15157,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15223,10 +15222,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15288,10 +15287,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15353,10 +15352,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15418,10 +15417,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15483,10 +15482,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15548,10 +15547,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15613,10 +15612,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15678,10 +15677,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15743,10 +15742,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15808,10 +15807,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15873,10 +15872,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -15938,10 +15937,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16003,10 +16002,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16068,10 +16067,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16133,10 +16132,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16198,10 +16197,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16263,10 +16262,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16328,10 +16327,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16393,10 +16392,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16458,10 +16457,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16523,10 +16522,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16588,10 +16587,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16653,10 +16652,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16718,10 +16717,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16783,10 +16782,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16848,10 +16847,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16913,10 +16912,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -16978,10 +16977,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17043,10 +17042,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17108,10 +17107,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17173,10 +17172,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17238,10 +17237,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -17309,10 +17308,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "sword",
     "drop_name": "Sword",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17372,10 +17371,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17439,10 +17438,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17506,10 +17505,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17573,10 +17572,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17640,10 +17639,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17707,10 +17706,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17774,10 +17773,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17841,10 +17840,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17908,10 +17907,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -17975,10 +17974,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18042,10 +18041,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18109,10 +18108,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18176,10 +18175,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18243,10 +18242,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18310,10 +18309,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18377,10 +18376,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18444,10 +18443,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18511,10 +18510,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18578,10 +18577,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18645,10 +18644,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18712,10 +18711,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18779,10 +18778,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18846,10 +18845,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18913,10 +18912,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -18980,10 +18979,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19047,10 +19046,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19114,10 +19113,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19181,10 +19180,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19248,10 +19247,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19315,10 +19314,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19382,10 +19381,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19449,10 +19448,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19516,10 +19515,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19583,10 +19582,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19650,10 +19649,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19717,10 +19716,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19784,10 +19783,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19851,10 +19850,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19918,10 +19917,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -19985,10 +19984,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20052,10 +20051,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20119,10 +20118,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20186,10 +20185,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20253,10 +20252,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20320,10 +20319,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20387,10 +20386,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20454,10 +20453,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20521,10 +20520,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20588,10 +20587,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20655,10 +20654,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20722,10 +20721,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20789,10 +20788,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20856,10 +20855,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20923,10 +20922,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -20990,10 +20989,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21067,10 +21066,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21144,10 +21143,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21221,10 +21220,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21298,10 +21297,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21375,10 +21374,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21452,10 +21451,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21529,10 +21528,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21606,10 +21605,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21683,10 +21682,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21760,10 +21759,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21837,10 +21836,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -21914,10 +21913,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22001,10 +22000,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22078,10 +22077,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22155,10 +22154,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22232,10 +22231,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22309,10 +22308,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22386,10 +22385,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22463,10 +22462,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22540,10 +22539,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22617,10 +22616,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22694,10 +22693,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22771,10 +22770,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22838,10 +22837,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22905,10 +22904,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -22972,10 +22971,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23039,10 +23038,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -23102,10 +23101,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23179,10 +23178,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23256,10 +23255,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23323,10 +23322,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23390,10 +23389,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23457,10 +23456,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23524,10 +23523,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23591,10 +23590,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23658,10 +23657,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23725,10 +23724,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23792,10 +23791,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23859,10 +23858,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23926,10 +23925,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -23993,10 +23992,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24060,10 +24059,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24127,10 +24126,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24194,10 +24193,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24261,10 +24260,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24328,10 +24327,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24395,10 +24394,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24462,10 +24461,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24529,10 +24528,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24596,10 +24595,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24663,10 +24662,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24730,10 +24729,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24797,10 +24796,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24864,10 +24863,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24931,10 +24930,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -24998,10 +24997,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25065,10 +25064,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25132,10 +25131,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25199,10 +25198,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25266,10 +25265,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -25329,10 +25328,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -25366,10 +25365,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25443,10 +25442,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25520,10 +25519,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25597,10 +25596,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25674,10 +25673,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25751,10 +25750,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25828,10 +25827,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25905,10 +25904,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -25982,10 +25981,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26059,10 +26058,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26126,10 +26125,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26193,10 +26192,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26260,10 +26259,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26327,10 +26326,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26394,10 +26393,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26461,10 +26460,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26528,10 +26527,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26595,10 +26594,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26662,10 +26661,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26729,10 +26728,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26796,10 +26795,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26863,10 +26862,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -26930,10 +26929,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27015,10 +27014,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "progressiveRoom",
     "drop_name": "Progressive Room",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27052,10 +27051,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27137,10 +27136,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27204,10 +27203,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27271,10 +27270,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27338,10 +27337,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27405,10 +27404,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -27442,10 +27441,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "bomb",
     "drop_name": "Bombs",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27479,10 +27478,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27546,10 +27545,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27613,10 +27612,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27680,10 +27679,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27747,10 +27746,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27814,10 +27813,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27881,10 +27880,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -27948,10 +27947,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28015,10 +28014,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28082,10 +28081,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28149,10 +28148,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28216,10 +28215,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28283,10 +28282,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28350,10 +28349,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28417,10 +28416,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28484,10 +28483,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28551,10 +28550,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28618,10 +28617,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28685,10 +28684,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28752,10 +28751,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28819,10 +28818,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28886,10 +28885,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -28953,10 +28952,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29020,10 +29019,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29087,10 +29086,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29154,10 +29153,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29221,10 +29220,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29288,10 +29287,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29355,10 +29354,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29422,10 +29421,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29489,10 +29488,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29556,10 +29555,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29623,10 +29622,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29690,10 +29689,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29757,10 +29756,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29824,10 +29823,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29891,10 +29890,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -29958,10 +29957,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30025,10 +30024,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30092,10 +30091,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30159,10 +30158,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30226,10 +30225,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30293,10 +30292,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30360,10 +30359,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30427,10 +30426,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30494,10 +30493,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30561,10 +30560,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30628,10 +30627,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30695,10 +30694,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30762,10 +30761,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30829,10 +30828,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30896,10 +30895,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -30963,10 +30962,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31030,10 +31029,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31097,10 +31096,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31164,10 +31163,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31231,10 +31230,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31298,10 +31297,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31365,10 +31364,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31432,10 +31431,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31499,10 +31498,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31566,10 +31565,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31633,10 +31632,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31700,10 +31699,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31767,10 +31766,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31834,10 +31833,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31901,10 +31900,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -31968,10 +31967,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32035,10 +32034,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32102,10 +32101,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32169,10 +32168,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32236,10 +32235,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32303,10 +32302,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32370,10 +32369,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32437,10 +32436,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32504,10 +32503,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32571,10 +32570,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32638,10 +32637,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32705,10 +32704,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32772,10 +32771,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32839,10 +32838,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32916,10 +32915,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -32993,10 +32992,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -33030,10 +33029,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33107,10 +33106,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33184,10 +33183,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33261,10 +33260,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33338,10 +33337,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33415,10 +33414,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33492,10 +33491,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33559,10 +33558,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33640,10 +33639,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33721,10 +33720,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33808,10 +33807,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33895,10 +33894,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -33982,10 +33981,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34063,10 +34062,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34144,10 +34143,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34225,10 +34224,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34316,10 +34315,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -34379,10 +34378,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34470,10 +34469,10 @@ raw_location_table = json.loads(r'''
     "category": "shop",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34513,10 +34512,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34590,10 +34589,10 @@ raw_location_table = json.loads(r'''
     "category": "shop",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34633,10 +34632,10 @@ raw_location_table = json.loads(r'''
     "category": "shop",
     "drop_key": "graphics",
     "drop_name": "Graphics",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34676,10 +34675,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34743,10 +34742,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34810,10 +34809,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34877,10 +34876,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -34944,10 +34943,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35011,10 +35010,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35078,10 +35077,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35145,10 +35144,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35212,10 +35211,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35279,10 +35278,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35346,10 +35345,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35413,10 +35412,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35480,10 +35479,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35547,10 +35546,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35614,10 +35613,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35681,10 +35680,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35748,10 +35747,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35815,10 +35814,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35882,10 +35881,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -35949,10 +35948,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36016,10 +36015,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36083,10 +36082,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36150,10 +36149,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36217,10 +36216,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36284,10 +36283,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36351,10 +36350,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36418,10 +36417,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36485,10 +36484,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36552,10 +36551,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36619,10 +36618,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36686,10 +36685,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36753,10 +36752,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36820,10 +36819,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36887,10 +36886,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -36954,10 +36953,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37021,10 +37020,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37088,10 +37087,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37155,10 +37154,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37222,10 +37221,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37289,10 +37288,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37356,10 +37355,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37423,10 +37422,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37490,10 +37489,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -37527,10 +37526,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37604,10 +37603,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37681,10 +37680,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37758,10 +37757,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37835,10 +37834,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37912,10 +37911,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -37989,10 +37988,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38066,10 +38065,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38143,10 +38142,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38220,10 +38219,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38297,10 +38296,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38374,10 +38373,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -38411,10 +38410,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38488,10 +38487,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38565,10 +38564,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38642,10 +38641,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38719,10 +38718,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38796,10 +38795,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38873,10 +38872,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -38950,10 +38949,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39027,10 +39026,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -39064,10 +39063,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39141,10 +39140,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39218,10 +39217,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39295,10 +39294,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39372,10 +39371,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "tankCannon",
     "drop_name": "Tank Cannon",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39461,10 +39460,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39528,10 +39527,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39595,10 +39594,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39662,10 +39661,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39729,10 +39728,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39796,10 +39795,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39863,10 +39862,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39930,10 +39929,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -39997,10 +39996,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40064,10 +40063,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40131,10 +40130,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40198,10 +40197,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40265,10 +40264,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40332,10 +40331,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40399,10 +40398,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40466,10 +40465,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40533,10 +40532,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40600,10 +40599,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40667,10 +40666,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40734,10 +40733,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40801,10 +40800,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40868,10 +40867,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40935,10 +40934,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -40998,10 +40997,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41061,10 +41060,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41124,10 +41123,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41187,10 +41186,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41250,10 +41249,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41313,10 +41312,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41376,10 +41375,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -41413,10 +41412,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41490,10 +41489,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41567,10 +41566,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41644,10 +41643,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41721,10 +41720,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -41758,10 +41757,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41835,10 +41834,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41912,10 +41911,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -41989,10 +41988,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42066,10 +42065,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -42103,10 +42102,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42180,10 +42179,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42257,10 +42256,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42334,10 +42333,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42411,10 +42410,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42488,10 +42487,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -42525,10 +42524,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42602,10 +42601,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42679,10 +42678,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42756,10 +42755,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42833,10 +42832,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42910,10 +42909,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -42987,10 +42986,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43064,10 +43063,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43141,10 +43140,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43218,10 +43217,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43295,10 +43294,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -43332,10 +43331,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "suddenlySnake",
     "drop_name": "Suddenly Snake",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43369,10 +43368,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43446,10 +43445,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -43483,10 +43482,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43560,10 +43559,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43637,10 +43636,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -43674,10 +43673,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43751,10 +43750,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43828,10 +43827,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43905,10 +43904,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -43982,10 +43981,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44059,10 +44058,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44136,10 +44135,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44213,10 +44212,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44290,10 +44289,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44367,10 +44366,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44444,10 +44443,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44521,10 +44520,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44598,10 +44597,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44675,10 +44674,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "trapZoom",
     "drop_name": "Zoom Trap",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44712,10 +44711,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "bomb",
     "drop_name": "Bombs",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44749,10 +44748,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -44786,10 +44785,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -44823,10 +44822,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44900,10 +44899,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -44977,10 +44976,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45054,10 +45053,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45131,10 +45130,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45208,10 +45207,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45285,10 +45284,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45362,10 +45361,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45439,10 +45438,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45516,10 +45515,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45593,10 +45592,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45670,10 +45669,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45747,10 +45746,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45824,10 +45823,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45901,10 +45900,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -45978,10 +45977,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46055,10 +46054,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46132,10 +46131,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "progressiveRoom",
     "drop_name": "Progressive Room",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46169,10 +46168,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46246,10 +46245,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46323,10 +46322,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46400,10 +46399,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46477,10 +46476,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46554,10 +46553,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46631,10 +46630,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46708,10 +46707,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -46745,10 +46744,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -46808,10 +46807,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46899,10 +46898,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -46990,10 +46989,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47081,10 +47080,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "gun",
     "drop_name": "Gun",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47144,10 +47143,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47253,10 +47252,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47362,10 +47361,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47471,10 +47470,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47580,10 +47579,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47667,10 +47666,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47754,10 +47753,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47841,10 +47840,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -47928,10 +47927,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48015,10 +48014,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48102,10 +48101,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48189,10 +48188,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48276,10 +48275,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48363,10 +48362,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48450,10 +48449,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48537,10 +48536,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48624,10 +48623,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48711,10 +48710,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48798,10 +48797,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48885,10 +48884,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -48972,10 +48971,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49059,10 +49058,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49146,10 +49145,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49233,10 +49232,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49320,10 +49319,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49407,10 +49406,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49494,10 +49493,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49581,10 +49580,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49668,10 +49667,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49755,10 +49754,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49842,10 +49841,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -49929,10 +49928,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50016,10 +50015,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50103,10 +50102,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50190,10 +50189,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50271,10 +50270,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50352,10 +50351,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50433,10 +50432,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50514,10 +50513,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50595,10 +50594,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50676,10 +50675,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50757,10 +50756,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50838,10 +50837,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -50919,10 +50918,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51000,10 +50999,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51081,10 +51080,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51162,10 +51161,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51243,10 +51242,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51324,10 +51323,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51405,10 +51404,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51486,10 +51485,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51573,10 +51572,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51660,10 +51659,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51747,10 +51746,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51834,10 +51833,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -51921,10 +51920,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52008,10 +52007,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52095,10 +52094,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52182,10 +52181,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52269,10 +52268,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52356,10 +52355,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52443,10 +52442,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52530,10 +52529,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52617,10 +52616,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52704,10 +52703,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52791,10 +52790,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52878,10 +52877,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -52965,10 +52964,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53052,10 +53051,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53139,10 +53138,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53248,10 +53247,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53325,10 +53324,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53402,10 +53401,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53479,10 +53478,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53556,10 +53555,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53633,10 +53632,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53710,10 +53709,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53787,10 +53786,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53864,10 +53863,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -53941,10 +53940,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54018,10 +54017,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54095,10 +54094,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54172,10 +54171,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54249,10 +54248,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54326,10 +54325,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54403,10 +54402,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54480,10 +54479,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54557,10 +54556,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54634,10 +54633,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54711,10 +54710,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54788,10 +54787,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54865,10 +54864,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -54942,10 +54941,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55019,10 +55018,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55096,10 +55095,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55173,10 +55172,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55250,10 +55249,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55327,10 +55326,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55404,10 +55403,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55481,10 +55480,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55558,10 +55557,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55635,10 +55634,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55712,10 +55711,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55789,10 +55788,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55866,10 +55865,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -55943,10 +55942,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56020,10 +56019,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56097,10 +56096,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "trapDeath",
     "drop_name": "Death Trap",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56134,10 +56133,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56211,10 +56210,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56288,10 +56287,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56365,10 +56364,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "trapFast",
     "drop_name": "Fast Trap",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56402,10 +56401,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "trapScreenFlip",
     "drop_name": "Screen Flip Trap",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56439,10 +56438,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -56476,10 +56475,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56553,10 +56552,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56630,10 +56629,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56707,10 +56706,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56784,10 +56783,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56861,10 +56860,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -56938,10 +56937,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57015,10 +57014,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57092,10 +57091,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57169,10 +57168,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57246,10 +57245,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57323,10 +57322,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57400,10 +57399,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57477,10 +57476,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57554,10 +57553,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57631,10 +57630,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -57668,10 +57667,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57745,10 +57744,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57822,10 +57821,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57899,10 +57898,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -57976,10 +57975,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58053,10 +58052,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58130,10 +58129,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58207,10 +58206,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58284,10 +58283,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58361,10 +58360,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58438,10 +58437,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -58475,10 +58474,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58552,10 +58551,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58629,10 +58628,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58706,10 +58705,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58783,10 +58782,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -58820,10 +58819,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -58911,10 +58910,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59002,10 +59001,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59093,10 +59092,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59184,10 +59183,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59275,10 +59274,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59366,10 +59365,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59457,10 +59456,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "trapReverse",
     "drop_name": "Reverse Trap",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59520,10 +59519,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59587,10 +59586,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59654,10 +59653,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59721,10 +59720,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59788,10 +59787,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59855,10 +59854,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59922,10 +59921,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -59989,10 +59988,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60056,10 +60055,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60123,10 +60122,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60190,10 +60189,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60257,10 +60256,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60324,10 +60323,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60391,10 +60390,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60458,10 +60457,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60525,10 +60524,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60592,10 +60591,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60659,10 +60658,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60726,10 +60725,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60793,10 +60792,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60860,10 +60859,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60927,10 +60926,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -60994,10 +60993,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61061,10 +61060,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61128,10 +61127,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61195,10 +61194,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61262,10 +61261,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61329,10 +61328,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61396,10 +61395,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61463,10 +61462,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61530,10 +61529,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61597,10 +61596,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61664,10 +61663,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61731,10 +61730,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61798,10 +61797,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61865,10 +61864,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61932,10 +61931,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -61999,10 +61998,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62066,10 +62065,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62133,10 +62132,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62200,10 +62199,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62267,10 +62266,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62334,10 +62333,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62401,10 +62400,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62468,10 +62467,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62535,10 +62534,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62602,10 +62601,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62669,10 +62668,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62736,10 +62735,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62803,10 +62802,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62870,10 +62869,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -62937,10 +62936,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63004,10 +63003,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63071,10 +63070,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63138,10 +63137,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63205,10 +63204,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63272,10 +63271,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63339,10 +63338,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63406,10 +63405,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63473,10 +63472,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63540,10 +63539,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63607,10 +63606,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63674,10 +63673,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63741,10 +63740,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63808,10 +63807,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63875,10 +63874,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -63942,10 +63941,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64009,10 +64008,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64076,10 +64075,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64143,10 +64142,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64210,10 +64209,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64277,10 +64276,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64344,10 +64343,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64411,10 +64410,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64478,10 +64477,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64545,10 +64544,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64612,10 +64611,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64679,10 +64678,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64746,10 +64745,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64813,10 +64812,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64880,10 +64879,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -64947,10 +64946,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65014,10 +65013,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65081,10 +65080,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65148,10 +65147,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65215,10 +65214,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65282,10 +65281,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65349,10 +65348,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65416,10 +65415,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65483,10 +65482,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65550,10 +65549,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65617,10 +65616,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65684,10 +65683,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65751,10 +65750,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65818,10 +65817,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65885,10 +65884,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -65952,10 +65951,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66019,10 +66018,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66086,10 +66085,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66153,10 +66152,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66220,10 +66219,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "trapInvisible",
     "drop_name": "Invisible Trap",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66257,10 +66256,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66334,10 +66333,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66411,10 +66410,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66488,10 +66487,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66565,10 +66564,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66642,10 +66641,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66719,10 +66718,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66796,10 +66795,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66873,10 +66872,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -66950,10 +66949,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67027,10 +67026,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67104,10 +67103,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67181,10 +67180,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67258,10 +67257,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67335,10 +67334,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67412,10 +67411,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67489,10 +67488,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67566,10 +67565,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -67603,10 +67602,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67670,10 +67669,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67737,10 +67736,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67804,10 +67803,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67871,10 +67870,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -67938,10 +67937,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68005,10 +68004,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68072,10 +68071,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68139,10 +68138,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68206,10 +68205,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68273,10 +68272,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68340,10 +68339,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68407,10 +68406,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -68444,10 +68443,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68521,10 +68520,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68598,10 +68597,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68675,10 +68674,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68752,10 +68751,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68829,10 +68828,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68906,10 +68905,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -68983,10 +68982,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69060,10 +69059,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69137,10 +69136,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69214,10 +69213,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69291,10 +69290,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69368,10 +69367,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69445,10 +69444,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69522,10 +69521,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69599,10 +69598,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69676,10 +69675,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69753,10 +69752,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69830,10 +69829,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69907,10 +69906,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -69984,10 +69983,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70061,10 +70060,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70138,10 +70137,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70215,10 +70214,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70292,10 +70291,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70369,10 +70368,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70446,10 +70445,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70523,10 +70522,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70600,10 +70599,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "waterWalkers",
     "drop_name": "Water Walkers",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70637,10 +70636,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70714,10 +70713,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -70751,10 +70750,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70828,10 +70827,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70905,10 +70904,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -70982,10 +70981,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71059,10 +71058,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71136,10 +71135,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71213,10 +71212,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71290,10 +71289,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71367,10 +71366,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71444,10 +71443,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71521,10 +71520,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71598,10 +71597,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71675,10 +71674,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71752,10 +71751,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71829,10 +71828,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71906,10 +71905,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -71983,10 +71982,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72060,10 +72059,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72137,10 +72136,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72214,10 +72213,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72291,10 +72290,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72368,10 +72367,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72445,10 +72444,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72522,10 +72521,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72599,10 +72598,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72676,10 +72675,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72753,10 +72752,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72830,10 +72829,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72907,10 +72906,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -72984,10 +72983,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73061,10 +73060,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73138,10 +73137,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73215,10 +73214,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73292,10 +73291,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73369,10 +73368,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73446,10 +73445,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73523,10 +73522,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73600,10 +73599,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73677,10 +73676,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73754,10 +73753,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73831,10 +73830,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73908,10 +73907,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -73985,10 +73984,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74062,10 +74061,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74139,10 +74138,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74216,10 +74215,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74293,10 +74292,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74370,10 +74369,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74447,10 +74446,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74524,10 +74523,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74601,10 +74600,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74678,10 +74677,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74755,10 +74754,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74832,10 +74831,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74909,10 +74908,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -74986,10 +74985,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75063,10 +75062,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75140,10 +75139,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75217,10 +75216,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75294,10 +75293,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75381,10 +75380,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75468,10 +75467,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75555,10 +75554,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75642,10 +75641,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75729,10 +75728,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -75776,10 +75775,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75853,10 +75852,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -75930,10 +75929,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76007,10 +76006,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76084,10 +76083,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76161,10 +76160,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76238,10 +76237,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76329,10 +76328,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76420,10 +76419,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76511,10 +76510,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "trapStun",
     "drop_name": "Stun Trap",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76574,10 +76573,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76655,10 +76654,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76736,10 +76735,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76817,10 +76816,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76898,10 +76897,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -76979,10 +76978,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77060,10 +77059,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77141,10 +77140,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77222,10 +77221,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77303,10 +77302,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77384,10 +77383,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77465,10 +77464,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77546,10 +77545,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "fire",
     "drop_name": "Fire",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77609,10 +77608,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77672,10 +77671,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77735,10 +77734,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77798,10 +77797,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77861,10 +77860,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77924,10 +77923,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -77987,10 +77986,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78050,10 +78049,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78113,10 +78112,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78176,10 +78175,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78239,10 +78238,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78302,10 +78301,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78365,10 +78364,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78428,10 +78427,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78495,10 +78494,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78562,10 +78561,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78625,10 +78624,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78688,10 +78687,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78751,10 +78750,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78814,10 +78813,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78877,10 +78876,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -78940,10 +78939,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79003,10 +79002,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79066,10 +79065,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79129,10 +79128,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79192,10 +79191,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79255,10 +79254,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79318,10 +79317,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79381,10 +79380,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79444,10 +79443,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79507,10 +79506,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79570,10 +79569,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79633,10 +79632,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79696,10 +79695,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79759,10 +79758,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79822,10 +79821,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79885,10 +79884,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -79948,10 +79947,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80011,10 +80010,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80074,10 +80073,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80137,10 +80136,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80200,10 +80199,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80263,10 +80262,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80326,10 +80325,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80389,10 +80388,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80452,10 +80451,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80515,10 +80514,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80578,10 +80577,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80641,10 +80640,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80704,10 +80703,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80767,10 +80766,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80830,10 +80829,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80893,10 +80892,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -80956,10 +80955,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81019,10 +81018,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81082,10 +81081,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81145,10 +81144,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81208,10 +81207,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -81245,10 +81244,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81322,10 +81321,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -81359,10 +81358,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -81442,10 +81441,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -81525,10 +81524,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -81608,10 +81607,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -81691,10 +81690,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81758,10 +81757,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81825,10 +81824,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81892,10 +81891,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -81959,10 +81958,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82026,10 +82025,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82093,10 +82092,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82160,10 +82159,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82227,10 +82226,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82294,10 +82293,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82361,10 +82360,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82428,10 +82427,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82495,10 +82494,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82562,10 +82561,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82629,10 +82628,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82696,10 +82695,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82763,10 +82762,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82830,10 +82829,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82897,10 +82896,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -82964,10 +82963,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83031,10 +83030,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83098,10 +83097,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83165,10 +83164,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83232,10 +83231,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83299,10 +83298,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83366,10 +83365,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83433,10 +83432,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83500,10 +83499,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83567,10 +83566,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83634,10 +83633,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83701,10 +83700,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83768,10 +83767,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83835,10 +83834,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83902,10 +83901,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -83969,10 +83968,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84036,10 +84035,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84103,10 +84102,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84170,10 +84169,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84237,10 +84236,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84304,10 +84303,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84371,10 +84370,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84438,10 +84437,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84505,10 +84504,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84572,10 +84571,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84639,10 +84638,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84706,10 +84705,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84773,10 +84772,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84840,10 +84839,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84907,10 +84906,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -84974,10 +84973,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85041,10 +85040,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85108,10 +85107,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85175,10 +85174,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85242,10 +85241,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -85279,10 +85278,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85356,10 +85355,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85433,10 +85432,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85510,10 +85509,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -85547,10 +85546,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -85614,10 +85613,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85681,10 +85680,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85748,10 +85747,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85815,10 +85814,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85882,10 +85881,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -85949,10 +85948,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86016,10 +86015,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86083,10 +86082,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86150,10 +86149,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86217,10 +86216,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86284,10 +86283,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86351,10 +86350,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86418,10 +86417,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86485,10 +86484,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86552,10 +86551,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86619,10 +86618,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86686,10 +86685,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86753,10 +86752,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86820,10 +86819,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86887,10 +86886,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -86954,10 +86953,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87021,10 +87020,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87088,10 +87087,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87155,10 +87154,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87222,10 +87221,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87289,10 +87288,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87356,10 +87355,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87423,10 +87422,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87490,10 +87489,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87557,10 +87556,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87624,10 +87623,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87691,10 +87690,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87758,10 +87757,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87825,10 +87824,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87892,10 +87891,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -87959,10 +87958,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88026,10 +88025,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88093,10 +88092,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88160,10 +88159,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88227,10 +88226,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88294,10 +88293,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88361,10 +88360,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88428,10 +88427,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88495,10 +88494,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88562,10 +88561,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88629,10 +88628,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88696,10 +88695,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88763,10 +88762,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88830,10 +88829,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88897,10 +88896,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -88964,10 +88963,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89031,10 +89030,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89098,10 +89097,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89165,10 +89164,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89232,10 +89231,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89299,10 +89298,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89366,10 +89365,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89433,10 +89432,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89500,10 +89499,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89567,10 +89566,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89634,10 +89633,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89701,10 +89700,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89768,10 +89767,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89835,10 +89834,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89902,10 +89901,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -89969,10 +89968,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90036,10 +90035,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90103,10 +90102,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90170,10 +90169,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90237,10 +90236,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90304,10 +90303,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90371,10 +90370,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90438,10 +90437,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -90475,10 +90474,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -90512,10 +90511,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90579,10 +90578,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90646,10 +90645,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90713,10 +90712,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90780,10 +90779,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90847,10 +90846,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90914,10 +90913,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -90981,10 +90980,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91048,10 +91047,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91115,10 +91114,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91182,10 +91181,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91249,10 +91248,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91316,10 +91315,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91383,10 +91382,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91450,10 +91449,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91517,10 +91516,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91584,10 +91583,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91651,10 +91650,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91718,10 +91717,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91785,10 +91784,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91852,10 +91851,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -91889,10 +91888,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -91966,10 +91965,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92043,10 +92042,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92120,10 +92119,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92197,10 +92196,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92274,10 +92273,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92351,10 +92350,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92428,10 +92427,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92505,10 +92504,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92582,10 +92581,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92659,10 +92658,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92736,10 +92735,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92813,10 +92812,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92890,10 +92889,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "gun",
     "drop_name": "Gun",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -92967,10 +92966,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93044,10 +93043,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93121,10 +93120,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93198,10 +93197,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93275,10 +93274,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93352,10 +93351,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93429,10 +93428,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -93466,10 +93465,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93543,10 +93542,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93620,10 +93619,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93697,10 +93696,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93774,10 +93773,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -93811,10 +93810,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -93848,10 +93847,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -93885,10 +93884,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -93962,10 +93961,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94039,10 +94038,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94116,10 +94115,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94193,10 +94192,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94270,10 +94269,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94347,10 +94346,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94424,10 +94423,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94501,10 +94500,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94578,10 +94577,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94655,10 +94654,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94732,10 +94731,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -94769,10 +94768,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94846,10 +94845,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -94923,10 +94922,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95000,10 +94999,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95077,10 +95076,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95154,10 +95153,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95231,10 +95230,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95308,10 +95307,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95385,10 +95384,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95462,10 +95461,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95539,10 +95538,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95616,10 +95615,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95693,10 +95692,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95770,10 +95769,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "pickaxe",
     "drop_name": "Pickaxe",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95807,10 +95806,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -95844,10 +95843,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -95921,10 +95920,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -95984,10 +95983,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96051,10 +96050,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96118,10 +96117,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96185,10 +96184,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96252,10 +96251,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96319,10 +96318,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96386,10 +96385,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96453,10 +96452,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96520,10 +96519,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96587,10 +96586,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96654,10 +96653,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96721,10 +96720,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96788,10 +96787,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96855,10 +96854,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96922,10 +96921,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -96989,10 +96988,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97056,10 +97055,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97123,10 +97122,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97190,10 +97189,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97257,10 +97256,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97324,10 +97323,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97391,10 +97390,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97458,10 +97457,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97525,10 +97524,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97592,10 +97591,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97659,10 +97658,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97726,10 +97725,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97793,10 +97792,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97860,10 +97859,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97927,10 +97926,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -97994,10 +97993,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98061,10 +98060,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98128,10 +98127,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98195,10 +98194,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98262,10 +98261,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98329,10 +98328,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98396,10 +98395,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98463,10 +98462,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98530,10 +98529,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98597,10 +98596,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98664,10 +98663,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98731,10 +98730,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98798,10 +98797,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98865,10 +98864,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98932,10 +98931,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -98999,10 +98998,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99066,10 +99065,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99143,10 +99142,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99220,10 +99219,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99297,10 +99296,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99374,10 +99373,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99451,10 +99450,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99518,10 +99517,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99585,10 +99584,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99652,10 +99651,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99719,10 +99718,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99786,10 +99785,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99853,10 +99852,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99920,10 +99919,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -99987,10 +99986,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100054,10 +100053,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -100091,10 +100090,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100158,10 +100157,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100225,10 +100224,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100292,10 +100291,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100359,10 +100358,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100426,10 +100425,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100493,10 +100492,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100560,10 +100559,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100627,10 +100626,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100694,10 +100693,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100761,10 +100760,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100828,10 +100827,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100895,10 +100894,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -100962,10 +100961,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101029,10 +101028,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101096,10 +101095,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101163,10 +101162,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101230,10 +101229,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101297,10 +101296,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101364,10 +101363,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101431,10 +101430,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101498,10 +101497,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101565,10 +101564,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101632,10 +101631,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101699,10 +101698,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101766,10 +101765,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101833,10 +101832,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "progressiveRoom",
     "drop_name": "Progressive Room",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101870,10 +101869,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -101947,10 +101946,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102024,10 +102023,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102101,10 +102100,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102178,10 +102177,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102255,10 +102254,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -102292,10 +102291,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102369,10 +102368,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102446,10 +102445,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102523,10 +102522,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102600,10 +102599,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102677,10 +102676,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102754,10 +102753,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102831,10 +102830,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102908,10 +102907,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -102985,10 +102984,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103062,10 +103061,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103139,10 +103138,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103216,10 +103215,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103293,10 +103292,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103370,10 +103369,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103447,10 +103446,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103524,10 +103523,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103601,10 +103600,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103678,10 +103677,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103755,10 +103754,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103832,10 +103831,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103909,10 +103908,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -103986,10 +103985,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104053,10 +104052,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104120,10 +104119,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104187,10 +104186,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104254,10 +104253,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104321,10 +104320,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104388,10 +104387,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104455,10 +104454,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104522,10 +104521,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104589,10 +104588,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104656,10 +104655,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104723,10 +104722,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104790,10 +104789,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104857,10 +104856,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104924,10 +104923,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -104991,10 +104990,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105058,10 +105057,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105125,10 +105124,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105192,10 +105191,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105259,10 +105258,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105326,10 +105325,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105393,10 +105392,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105460,10 +105459,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "tankTreads",
     "drop_name": "Tank Treads",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105497,10 +105496,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105564,10 +105563,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105631,10 +105630,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105698,10 +105697,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105765,10 +105764,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105832,10 +105831,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105899,10 +105898,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -105966,10 +105965,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106033,10 +106032,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106100,10 +106099,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106167,10 +106166,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106234,10 +106233,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106301,10 +106300,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106368,10 +106367,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106435,10 +106434,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106502,10 +106501,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106569,10 +106568,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106636,10 +106635,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106703,10 +106702,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106770,10 +106769,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106837,10 +106836,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106904,10 +106903,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -106971,10 +106970,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107038,10 +107037,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107105,10 +107104,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107172,10 +107171,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107239,10 +107238,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107306,10 +107305,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107373,10 +107372,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107440,10 +107439,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107507,10 +107506,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107574,10 +107573,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -107611,10 +107610,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107688,10 +107687,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107765,10 +107764,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107842,10 +107841,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107919,10 +107918,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -107996,10 +107995,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108073,10 +108072,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108150,10 +108149,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108227,10 +108226,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108304,10 +108303,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108381,10 +108380,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108458,10 +108457,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -108495,10 +108494,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "sword",
     "drop_name": "Sword",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108532,10 +108531,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -108569,10 +108568,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108646,10 +108645,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108723,10 +108722,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108800,10 +108799,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108877,10 +108876,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -108954,10 +108953,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109031,10 +109030,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109108,10 +109107,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109185,10 +109184,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109262,10 +109261,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109339,10 +109338,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109416,10 +109415,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109493,10 +109492,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109570,10 +109569,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109647,10 +109646,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109724,10 +109723,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -109761,10 +109760,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109838,10 +109837,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109915,10 +109914,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -109992,10 +109991,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110069,10 +110068,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110146,10 +110145,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -110183,10 +110182,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110260,10 +110259,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110337,10 +110336,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110414,10 +110413,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "bomb",
     "drop_name": "Bombs",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110451,10 +110450,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -110488,10 +110487,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110565,10 +110564,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110642,10 +110641,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110719,10 +110718,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110796,10 +110795,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110873,10 +110872,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -110950,10 +110949,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111027,10 +111026,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111104,10 +111103,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111181,10 +111180,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111258,10 +111257,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111335,10 +111334,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111412,10 +111411,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111489,10 +111488,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111566,10 +111565,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111643,10 +111642,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111720,10 +111719,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111797,10 +111796,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111874,10 +111873,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -111951,10 +111950,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112028,10 +112027,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112105,10 +112104,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112182,10 +112181,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112259,10 +112258,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112336,10 +112335,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112413,10 +112412,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112490,10 +112489,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112567,10 +112566,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112644,10 +112643,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112721,10 +112720,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112798,10 +112797,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -112835,10 +112834,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112912,10 +112911,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -112989,10 +112988,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113066,10 +113065,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113143,10 +113142,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113220,10 +113219,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113297,10 +113296,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113374,10 +113373,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113451,10 +113450,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113528,10 +113527,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "hp",
     "drop_name": "Max HP",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -113565,10 +113564,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "rounds",
     "drop_name": "Max Rounds",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": true,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": True,
     "requirements": [
       [
         {
@@ -113602,10 +113601,10 @@ raw_location_table = json.loads(r'''
     "category": "chest",
     "drop_key": "trapSlow",
     "drop_name": "Slow Trap",
-    "item_pool": false,
-    "trap_location": true,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": True,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113639,10 +113638,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113706,10 +113705,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113773,10 +113772,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113840,10 +113839,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113907,10 +113906,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -113974,10 +113973,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114041,10 +114040,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114126,10 +114125,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114211,10 +114210,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114278,10 +114277,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114345,10 +114344,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114412,10 +114411,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114479,10 +114478,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114562,10 +114561,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114629,10 +114628,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114696,10 +114695,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114763,10 +114762,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114830,10 +114829,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114897,10 +114896,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -114964,10 +114963,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115031,10 +115030,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115098,10 +115097,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115165,10 +115164,10 @@ raw_location_table = json.loads(r'''
     "category": "easy_destructible",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115232,10 +115231,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115315,10 +115314,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115398,10 +115397,10 @@ raw_location_table = json.loads(r'''
     "category": "shop",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115441,10 +115440,10 @@ raw_location_table = json.loads(r'''
     "category": "shop",
     "drop_key": "tankChassis",
     "drop_name": "Tank Chassis",
-    "item_pool": false,
-    "trap_location": false,
-    "essential_location": true,
-    "resource_location": false,
+    "item_pool": False,
+    "trap_location": False,
+    "essential_location": True,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115484,10 +115483,10 @@ raw_location_table = json.loads(r'''
     "category": "shop",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115527,10 +115526,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115604,10 +115603,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115681,10 +115680,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115758,10 +115757,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115835,10 +115834,10 @@ raw_location_table = json.loads(r'''
     "category": "enemy",
     "drop_key": "itemPool",
     "drop_name": "Item Pool",
-    "item_pool": true,
-    "trap_location": false,
-    "essential_location": false,
-    "resource_location": false,
+    "item_pool": True,
+    "trap_location": False,
+    "essential_location": False,
+    "resource_location": False,
     "requirements": [
       [
         {
@@ -115901,5 +115900,4 @@ raw_location_table = json.loads(r'''
     ]
   }
 ]
-''')
 location_table = {location['name']: location for location in raw_location_table}

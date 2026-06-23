@@ -1,4 +1,3 @@
-import json
 from BaseClasses import ItemClassification
 
 classification_table = {
@@ -9,14 +8,13 @@ classification_table = {
 }
 
 
-raw_item_table = json.loads(r'''
-[
+raw_item_table = [
   {
     "key": "graphics",
     "id": 100000,
     "name": "Graphics",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 3
   },
   {
@@ -24,7 +22,7 @@ raw_item_table = json.loads(r'''
     "id": 100001,
     "name": "Progressive Room",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 5
   },
   {
@@ -32,7 +30,7 @@ raw_item_table = json.loads(r'''
     "id": 100002,
     "name": "Bombs",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 3
   },
   {
@@ -40,7 +38,7 @@ raw_item_table = json.loads(r'''
     "id": 100003,
     "name": "Gun",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 2
   },
   {
@@ -48,7 +46,7 @@ raw_item_table = json.loads(r'''
     "id": 100004,
     "name": "Sword",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 3
   },
   {
@@ -56,7 +54,7 @@ raw_item_table = json.loads(r'''
     "id": 100005,
     "name": "Energy",
     "classification": "filler",
-    "trap": false,
+    "trap": False,
     "count": 9
   },
   {
@@ -64,7 +62,7 @@ raw_item_table = json.loads(r'''
     "id": 100006,
     "name": "Max HP",
     "classification": "filler",
-    "trap": false,
+    "trap": False,
     "count": 30
   },
   {
@@ -72,7 +70,7 @@ raw_item_table = json.loads(r'''
     "id": 100007,
     "name": "Max Rounds",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 40
   },
   {
@@ -80,7 +78,7 @@ raw_item_table = json.loads(r'''
     "id": 100008,
     "name": "Fire",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -88,7 +86,7 @@ raw_item_table = json.loads(r'''
     "id": 100009,
     "name": "SFX",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -96,7 +94,7 @@ raw_item_table = json.loads(r'''
     "id": 100010,
     "name": "BGM",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -104,7 +102,7 @@ raw_item_table = json.loads(r'''
     "id": 100011,
     "name": "Pickaxe",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -112,7 +110,7 @@ raw_item_table = json.loads(r'''
     "id": 100012,
     "name": "Water Walkers",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -120,7 +118,7 @@ raw_item_table = json.loads(r'''
     "id": 100013,
     "name": "Tank Treads",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -128,7 +126,7 @@ raw_item_table = json.loads(r'''
     "id": 100014,
     "name": "Tank Chassis",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -136,7 +134,7 @@ raw_item_table = json.loads(r'''
     "id": 100015,
     "name": "Tank Cannon",
     "classification": "progression",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -144,7 +142,7 @@ raw_item_table = json.loads(r'''
     "id": 100016,
     "name": "Health Potion",
     "classification": "filler",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -152,7 +150,7 @@ raw_item_table = json.loads(r'''
     "id": 100017,
     "name": "Energy Gem",
     "classification": "filler",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -160,7 +158,7 @@ raw_item_table = json.loads(r'''
     "id": 100018,
     "name": "Round Pouch",
     "classification": "filler",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -168,7 +166,7 @@ raw_item_table = json.loads(r'''
     "id": 100019,
     "name": "Item Pool",
     "classification": "filler",
-    "trap": false,
+    "trap": False,
     "count": 1
   },
   {
@@ -176,7 +174,7 @@ raw_item_table = json.loads(r'''
     "id": 100020,
     "name": "Stun Trap",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   },
   {
@@ -184,7 +182,7 @@ raw_item_table = json.loads(r'''
     "id": 100021,
     "name": "Invisible Trap",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   },
   {
@@ -192,7 +190,7 @@ raw_item_table = json.loads(r'''
     "id": 100022,
     "name": "Fast Trap",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   },
   {
@@ -200,7 +198,7 @@ raw_item_table = json.loads(r'''
     "id": 100023,
     "name": "Slow Trap",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   },
   {
@@ -208,7 +206,7 @@ raw_item_table = json.loads(r'''
     "id": 100024,
     "name": "Reverse Trap",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   },
   {
@@ -216,7 +214,7 @@ raw_item_table = json.loads(r'''
     "id": 100025,
     "name": "Screen Flip Trap",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   },
   {
@@ -224,7 +222,7 @@ raw_item_table = json.loads(r'''
     "id": 100026,
     "name": "Zoom Trap",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   },
   {
@@ -232,7 +230,7 @@ raw_item_table = json.loads(r'''
     "id": 100027,
     "name": "Death Trap",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   },
   {
@@ -240,11 +238,10 @@ raw_item_table = json.loads(r'''
     "id": 100028,
     "name": "Suddenly Snake",
     "classification": "trap",
-    "trap": true,
+    "trap": True,
     "count": 1
   }
 ]
-''')
 item_table = {
     item['name']: {
         'id': item['id'],
