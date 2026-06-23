@@ -266,7 +266,10 @@
     { "code": 816, "name": "Grotto of Scriptures (East) Root Node", "type": "progression" },
 
     // skill rando items
-    { "category": "skill", "code": 901, "name": "Swift Runner", "type": "progression" },
+    {
+        "category": "skill", "code": 901, "name": "Swift Runner",
+        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+    },
     { "category": "skill", "code": 902, "name": "Progressive Bullet Deflect", "count": 2, "type": "progression" },
 
     { "category": "skill", "code": 911, "name": "Progressive Water Flow", "count": 2, "type": "useful" },
