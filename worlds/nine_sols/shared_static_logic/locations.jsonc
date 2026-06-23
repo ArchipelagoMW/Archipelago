@@ -1415,9 +1415,12 @@
     },
     {
         "address": 3202, "name": "GoS (West): Platforms In Top Middle Room",
-        "region": "GoS (West) - Spike Ball Release", "requires": [
-            // portal next to SBR is the only way to the upper half of this room // couldn't get wall slide here
-            { "item": "Cloud Leap" } // without the collapsing platforms, AD might also work
+        "region": "GoS (West) - Spike Ball Release", // portal next to SBR is the only way to the upper half of this room
+        "requires": [ { "item": "Cloud Leap" } ], // without the collapsing platforms, AD might also work
+        "ls_requires": [
+            { "item": "Ledge Grab" }, // do T-dash setup anywhere on the way to SBR
+            { "item": "Trick - Bow Hover" } // after going through portal, hover all the way to the rightmost platform
+            // single jump onto the next platform, then LS vault onto the final platform with the chest
         ]
     },
     {
