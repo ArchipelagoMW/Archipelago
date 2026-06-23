@@ -2519,7 +2519,7 @@
     { "from": "FSP - Root Node", "to": "FSP - Kuafu's Extra Inventory", "requires": [ { "item": "Event - Kuafu Extra Shop Inventory" } ] },
 
     {
-        "from": "FSP - Root Node", "to": "FSP - Shops (Low Cost)",
+        "from": "FSP - Root Node", "to": "FSP Shops & Skill Tree (Low Cost)",
         "requires": [ { "anyOf": [
             { "region": "Factory (MR) - Root Node" },
             { "region": "ED (Passages) - Root Node" },
@@ -2527,7 +2527,7 @@
         ] } ]
     },
     {
-        "from": "FSP - Root Node", "to": "FSP - Shops (Medium Cost)",
+        "from": "FSP - Root Node", "to": "FSP Shops & Skill Tree (Medium Cost)",
         // we don't have a good way of expressing "any 2 of these 3 regions"
         "requires": [ { "anyOf": [
             [ { "region": "Factory (MR) - Root Node" }, { "region": "ED (Passages) - Root Node" } ],
@@ -2536,7 +2536,7 @@
         ] } ]
     },
     {
-        "from": "FSP - Root Node", "to": "FSP - Shops (High Cost)",
+        "from": "FSP - Root Node", "to": "FSP Shops & Skill Tree (High Cost)",
         "requires": [
             { "region": "Factory (MR) - Root Node" },
             { "region": "ED (Passages) - Root Node" },
@@ -2545,15 +2545,15 @@
     },
 
     {
-        "from": "FSP - Shops (Low Cost)", "to": "FSP - Chiyou's Shop",
+        "from": "FSP Shops & Skill Tree (Low Cost)", "to": "FSP - Chiyou's Shop",
         "requires": [ { "item": "Event - Chiyou in FSP" } ]
     },
     {
-        "from": "FSP - Shops (Medium Cost)", "to": "FSP - Chiyou's Shop (Medium Cost)",
+        "from": "FSP Shops & Skill Tree (Medium Cost)", "to": "FSP - Chiyou's Shop (Medium Cost)",
         "requires": [ { "item": "Event - Chiyou in FSP" } ]
     },
     {
-        "from": "FSP - Shops (High Cost)", "to": "FSP - Chiyou's Shop (High Cost)",
+        "from": "FSP Shops & Skill Tree (High Cost)", "to": "FSP - Chiyou's Shop (High Cost)",
         "requires": [ { "item": "Event - Chiyou in FSP" } ]
     }
 ]

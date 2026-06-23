@@ -1836,11 +1836,11 @@
     },
     {
         "category": "shop", "address": 4002, "name": "Kuafu's Shop: 2nd Normal Purchase",
-        "region": "FSP - Kuafu's Shop", "requires": [ { "region": "FSP - Shops (High Cost)" } ]
+        "region": "FSP - Kuafu's Shop", "requires": [ { "region": "FSP Shops & Skill Tree (High Cost)" } ]
     },
     {
         "category": "shop", "address": 4003, "name": "Kuafu's Extra Inventory: 1st Normal Purchase",
-        "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "region": "FSP - Shops (High Cost)" } ]
+        "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "region": "FSP Shops & Skill Tree (High Cost)" } ]
     },
     {
         "category": "shop", "address": 4004, "name": "Kuafu's Shop: 1st Dark Steel Purchase",
@@ -1858,21 +1858,21 @@
         "category": "shop", "address": 4007, "name": "Kuafu's Extra Inventory: 1st Dark Steel Purchase",
         "region": "FSP - Kuafu's Extra Inventory", "requires": [
             { "item": "Dark Steel", "count": 4 },
-            { "region": "FSP - Shops (High Cost)" }
+            { "region": "FSP Shops & Skill Tree (High Cost)" }
         ]
     },
     {
         "category": "shop", "address": 4008, "name": "Kuafu's Extra Inventory: 2nd Dark Steel Purchase",
         "region": "FSP - Kuafu's Extra Inventory", "requires": [
             { "item": "Dark Steel", "count": 5 },
-            { "region": "FSP - Shops (High Cost)" }
+            { "region": "FSP Shops & Skill Tree (High Cost)" }
         ]
     },
     {
         "category": "shop", "address": 4009, "name": "Kuafu's Extra Inventory: 3rd Dark Steel Purchase",
         "region": "FSP - Kuafu's Extra Inventory", "requires": [
             { "item": "Dark Steel", "count": 6 },
-            { "region": "FSP - Shops (High Cost)" }
+            { "region": "FSP Shops & Skill Tree (High Cost)" }
         ]
     },
     {
@@ -1917,7 +1917,7 @@
     },
     {
         "category": "shop", "address": 4020, "name": "Kuafu's Extra Inventory: 2nd Normal Purchase",
-        "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "region": "FSP - Shops (Medium Cost)" } ]
+        "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "region": "FSP Shops & Skill Tree (Medium Cost)" } ]
     },
 
     {
@@ -1987,30 +1987,30 @@
 
     {
         "category": "shop", "address": 4201, "name": "3D Printer: 1st Low Cost Purchase",
-        "region": "FSP - Shops (Low Cost)", "requires": []
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
     },
     {
         "category": "shop", "address": 4202, "name": "3D Printer: 2nd Low Cost Purchase",
-        "region": "FSP - Shops (Low Cost)", "requires": []
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
     },
     {
         "category": "shop", "address": 4203, "name": "3D Printer: 3rd Low Cost Purchase",
-        "region": "FSP - Shops (Low Cost)", "requires": []
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
     },
     {
         "category": "shop", "address": 4204, "name": "3D Printer: 4th Low Cost Purchase",
-        "region": "FSP - Shops (Low Cost)", "requires": []
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
     },
     {
         "category": "shop", "address": 4205, "name": "3D Printer: 1st Medium Cost Purchase",
-        "region": "FSP - Shops (Medium Cost)", "requires": []
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
     },
     {
         "category": "shop", "address": 4206, "name": "3D Printer: 1st High Cost Purchase",
-        "region": "FSP - Shops (High Cost)", "requires": []
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
     },
     {
         "category": "shop", "address": 4207, "name": "3D Printer: 2nd High Cost Purchase",
-        "region": "FSP - Shops (High Cost)", "requires": []
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
     }
 ]
