@@ -6,7 +6,7 @@ from .locations import location_table
 from .options import ESSENTIAL_ITEMS, MAX_RESOURCE_UPGRADES, ShellipelagoOptions
 
 
-__version__ = "1.4"
+__version__ = "1.5"
 victory_location_name = "Final Boss Defeated"
 
 

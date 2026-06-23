@@ -1,6 +1,5 @@
 import json
 
-# Generated from Shellipelago map data. Keep edits in the source map/generator.
 raw_location_table = json.loads(r'''
 [
   {
@@ -26950,6 +26949,28 @@ raw_location_table = json.loads(r'''
       ],
       [
         {
+          "item": "Bombs",
+          "amount": 1
+        },
+        {
+          "item": "Pickaxe",
+          "amount": 1
+        },
+        {
+          "item": "Tank Treads",
+          "amount": 1
+        },
+        {
+          "item": "Tank Cannon",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Bombs",
+          "amount": 1
+        },
+        {
           "item": "Pickaxe",
           "amount": 1
         },
@@ -26966,6 +26987,12 @@ raw_location_table = json.loads(r'''
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -27044,6 +27071,28 @@ raw_location_table = json.loads(r'''
       ],
       [
         {
+          "item": "Bombs",
+          "amount": 1
+        },
+        {
+          "item": "Pickaxe",
+          "amount": 1
+        },
+        {
+          "item": "Tank Treads",
+          "amount": 1
+        },
+        {
+          "item": "Tank Cannon",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Bombs",
+          "amount": 1
+        },
+        {
           "item": "Pickaxe",
           "amount": 1
         },
@@ -27060,6 +27109,12 @@ raw_location_table = json.loads(r'''
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
