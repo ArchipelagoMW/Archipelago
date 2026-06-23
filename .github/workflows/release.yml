@@ -37,7 +37,56 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # build-release-macos: # LF volunteer
+  build-release-macos:
+    runs-on: macos-14  # Apple Silicon (arm64)
+    needs: create-release
+    steps:
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      # - code below copied from build.yml -
+      - uses: actions/checkout@v6.0.2
+      - name: Install python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: '~3.12.7'
+          check-latest: true
+      - name: Download run-time dependencies
+        run: |
+          # Enemizer is x64-only (runs via Rosetta) and only needed for ALttP enemizer features; best-effort
+          curl -fL -o enemizer.zip https://github.com/Ijwu/Enemizer/releases/download/${ENEMIZER_VERSION}/osx.10.12-x64.zip \
+            && unzip -q enemizer.zip -d EnemizerCLI || echo "Enemizer download failed, continuing without it"
+      - name: Build
+        run: |
+          python -m pip install --upgrade pip
+          python setup.py build_exe --yes bdist_dmg --yes
+          if [ $? -ne 0 ]; then
+            echo "setup.py failed!"
+            exit 1
+          fi
+          DMG_NAME="$(cd dist && ls *.dmg)"
+          echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
+          echo "built $DMG_NAME"
+      # - code above copied from build.yml -
+      - name: Attest Build
+        uses: actions/attest@v4.1.0
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher
+            build/exe.*/ArchipelagoGenerate
+            build/exe.*/ArchipelagoServer
+            dist/${{ env.DMG_NAME }}
+      - name: Add to Release
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda  # v3.0.0
+        with:
+          draft: true  # see above
+          prerelease: false
+          name: Archipelago ${{ env.RELEASE_VERSION }}
+          files: |
+            dist/${{ env.DMG_NAME }}
+          fail_on_unmatched_files: true
+          overwrite_files: false  # should never happen; avoids accidentally changing a release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-release-win:
     runs-on: windows-latest

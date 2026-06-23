@@ -35,7 +35,73 @@ permissions:  # permissions required for attestation
   attestations: 'write'
 
 jobs:
-  # build-release-macos: # LF volunteer
+  build-macos:
+    runs-on: macos-14  # Apple Silicon (arm64)
+    steps:
+      # - copy code below to release.yml -
+      - uses: actions/checkout@v6.0.2
+      - name: Install python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: '~3.12.7'
+          check-latest: true
+      - name: Download run-time dependencies
+        run: |
+          # Enemizer is x64-only (runs via Rosetta) and only needed for ALttP enemizer features; best-effort
+          curl -fL -o enemizer.zip https://github.com/Ijwu/Enemizer/releases/download/${ENEMIZER_VERSION}/osx.10.12-x64.zip \
+            && unzip -q enemizer.zip -d EnemizerCLI || echo "Enemizer download failed, continuing without it"
+      - name: Build
+        run: |
+          python -m pip install --upgrade pip
+          python setup.py build_exe --yes bdist_dmg --yes
+          if [ $? -ne 0 ]; then
+            echo "setup.py failed!"
+            exit 1
+          fi
+          DMG_NAME="$(cd dist && ls *.dmg)"
+          echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
+          echo "built $DMG_NAME"
+      # - copy code above to release.yml -
+      - name: Attest Build
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/attest@v4.1.0
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher
+            build/exe.*/ArchipelagoGenerate
+            build/exe.*/ArchipelagoServer
+            dist/${{ env.DMG_NAME }}
+      - name: Check build loads expected worlds
+        shell: bash
+        run: |
+          TIMEOUT="$(command -v timeout || command -v gtimeout || true)"  # not guaranteed on macOS
+          # when frozen on macOS, writable data (templates, players, output) lives in the user data dir,
+          # not next to the executable (see Utils.user_path)
+          DATA_DIR="$HOME/Library/Application Support/Archipelago"
+          cd build/exe*
+          mv Players/Templates/meta.yaml .
+          ls -1 Players/Templates | sort > setup-player-templates.txt
+          rm -R "$DATA_DIR/Players/Templates" 2>/dev/null || true
+          ${TIMEOUT:+$TIMEOUT 30} ./ArchipelagoLauncher "Generate Template Options" || true
+          ls -1 "$DATA_DIR/Players/Templates" | sort > generated-player-templates.txt
+          cmp setup-player-templates.txt generated-player-templates.txt \
+            || diff setup-player-templates.txt generated-player-templates.txt
+          mv meta.yaml Players/Templates/
+      - name: Test Generate
+        shell: bash
+        run: |
+          TIMEOUT="$(command -v timeout || command -v gtimeout || true)"
+          DATA_DIR="$HOME/Library/Application Support/Archipelago"
+          cd build/exe*
+          cp "$DATA_DIR/Players/Templates/VVVVVV.yaml" "$DATA_DIR/Players/"
+          ${TIMEOUT:+$TIMEOUT 30} ./ArchipelagoGenerate
+      - name: Store DMG
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          path: dist/${{ env.DMG_NAME }}
+          archive: false
+          if-no-files-found: error
+          retention-days: 7
 
   build-win: # RCs and releases may still be built and signed by hand
     runs-on: windows-latest

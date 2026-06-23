@@ -58,7 +58,7 @@ if __name__ == "__main__":
     ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
 
 from worlds.LauncherComponents import components, icon_paths
-from Utils import version_tuple, is_windows, is_linux
+from Utils import version_tuple, is_windows, is_linux, is_macos
 from Cython.Build import cythonize
 
 
@@ -583,6 +583,224 @@ $APPDIR/$exe "$@"
         subprocess.call(f'ARCH={build_arch} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
 
 
+class MacAppCommand(setuptools.Command):
+    description = "wrap the build output in a macOS .app bundle"
+    user_options = [
+        ("build-folder=", None, "Folder to wrap into the .app bundle."),
+        ("app-dir=", None, "The .app bundle to create."),
+        ("app-icon=", None, "The icon to use for the bundle (png source)."),
+        ("bundle-id=", None, "CFBundleIdentifier for the bundle."),
+        ("yes", "y", 'Answer "yes" to all questions.'),
+    ]
+    build_folder: Path | None
+    app_dir: Path | None
+    app_name: str
+    app_version: str
+    app_icon: Path | None  # source png
+    main_exe: str  # CFBundleExecutable, e.g. "ArchipelagoLauncher"
+    bundle_id: str
+    yes: bool
+
+    def initialize_options(self) -> None:
+        assert self.distribution.metadata.name and self.distribution.metadata.version
+        self.build_folder = None
+        self.app_dir = None
+        self.app_name = self.distribution.metadata.name
+        self.app_version = self.distribution.metadata.version
+        self.app_icon = self.distribution.executables[0].icon
+        self.main_exe = self.distribution.executables[0].target_name
+        self.bundle_id = f"com.github.ArchipelagoMW.{self.app_name}"
+        self.yes = False
+
+    def finalize_options(self) -> None:
+        assert self.build_folder, "build-folder is required"
+        if not self.app_dir:
+            self.app_dir = Path("dist", f"{self.app_name}.app")
+
+    def write_info_plist(self, contents_dir: Path, icon_file: str) -> None:
+        plist = "\n".join((
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" '
+            '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">',
+            '<plist version="1.0">',
+            "<dict>",
+            "    <key>CFBundleName</key>",
+            f"    <string>{self.app_name}</string>",
+            "    <key>CFBundleDisplayName</key>",
+            f"    <string>{self.app_name}</string>",
+            "    <key>CFBundleExecutable</key>",
+            f"    <string>{self.main_exe}</string>",
+            "    <key>CFBundleIdentifier</key>",
+            f"    <string>{self.bundle_id}</string>",
+            "    <key>CFBundleIconFile</key>",
+            f"    <string>{icon_file}</string>",
+            "    <key>CFBundlePackageType</key>",
+            "    <string>APPL</string>",
+            "    <key>CFBundleShortVersionString</key>",
+            f"    <string>{self.app_version}</string>",
+            "    <key>CFBundleVersion</key>",
+            f"    <string>{self.app_version}</string>",
+            "    <key>NSHighResolutionCapable</key>",
+            "    <true/>",
+            "    <key>LSMinimumSystemVersion</key>",
+            "    <string>11.0</string>",
+            "</dict>",
+            "</plist>",
+            "",
+        ))
+        (contents_dir / "Info.plist").write_text(plist, encoding="utf-8")
+
+    def make_icns(self, src: Path, dest: Path) -> bool:
+        """Build an .icns from a png using macOS-native sips + iconutil. Returns success."""
+        iconset = dest.parent / f"{dest.stem}.iconset"
+        if iconset.is_dir():
+            shutil.rmtree(iconset)
+        iconset.mkdir(parents=True)
+        try:
+            for size in (16, 32, 128, 256, 512):
+                for scale, suffix in ((1, ""), (2, "@2x")):
+                    px = size * scale
+                    out = iconset / f"icon_{size}x{size}{suffix}.png"
+                    subprocess.run(["sips", "-z", str(px), str(px), str(src), "--out", str(out)],
+                                   check=True, capture_output=True)
+            subprocess.run(["iconutil", "-c", "icns", str(iconset), "-o", str(dest)], check=True)
+        except (subprocess.CalledProcessError, FileNotFoundError) as ex:
+            print(f"Warning: could not build .icns ({ex}); falling back to png icon.")
+            return False
+        finally:
+            shutil.rmtree(iconset, ignore_errors=True)
+        return True
+
+    def run(self) -> None:
+        assert self.build_folder and self.app_dir and self.app_icon, "Command not properly set up"
+        if not is_macos:
+            raise RuntimeError("bdist_mac can only be run on macOS")
+        if self.app_dir.is_dir():
+            shutil.rmtree(self.app_dir)
+        contents = self.app_dir / "Contents"
+        macos_dir = contents / "MacOS"
+        resources = contents / "Resources"
+        macos_dir.mkdir(parents=True)
+        resources.mkdir(parents=True)
+
+        # copy the full build output into Contents/MacOS so local_path() resolves as usual
+        print(f"copying {self.build_folder} -> {macos_dir}")
+        shutil.copytree(self.build_folder, macos_dir, dirs_exist_ok=True, symlinks=True)
+
+        # icon
+        icon_file = "Archipelago.icns"
+        if self.make_icns(self.app_icon, resources / icon_file):
+            pass
+        else:
+            icon_file = self.app_icon.name
+            shutil.copy(self.app_icon, resources / icon_file)
+
+        self.write_info_plist(contents, icon_file)
+
+        # ad-hoc code signing ("-" identity, no Apple ID). Required for arm64 binaries to run at all
+        # (the kernel SIGKILLs unsigned arm64 Mach-O). The user still gets the expected "unidentified
+        # developer" prompt and accepts it manually (right-click -> Open).
+        self.codesign_bundle()
+        print(f"Created {self.app_dir}")
+
+    def codesign_bundle(self) -> None:
+        """Ad-hoc sign every Mach-O binary in the bundle.
+
+        We sign each binary individually rather than sealing the whole .app: cx_Freeze uses a flat
+        layout with executables and data mixed inside Contents/MacOS (e.g. the SNI/ folder, tcl data),
+        which codesign's bundle resource-sealing refuses (`--deep` and a top-level seal both error on
+        these as malformed nested bundles). Per-binary ad-hoc signatures are what arm64 actually
+        requires to execute, and a top-level ad-hoc seal would not satisfy Gatekeeper anyway.
+        """
+        assert self.app_dir
+        app_dir = self.app_dir
+        macho_magic = {
+            b"\xfe\xed\xfa\xce", b"\xce\xfa\xed\xfe",  # 32-bit
+            b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe",  # 64-bit
+            b"\xca\xfe\xba\xbe", b"\xbe\xba\xfe\xca",  # fat/universal
+        }
+
+        def iter_macho() -> Iterable[Path]:
+            for path in app_dir.rglob("*"):
+                if not path.is_file() or path.is_symlink():
+                    continue
+                try:
+                    with open(path, "rb") as f:
+                        if f.read(4) in macho_magic:
+                            yield path
+                except OSError:
+                    continue
+
+        print(f"Ad-hoc signing Mach-O binaries in {self.app_dir}")
+        # Hide Info.plist while signing so the main executable is signed as a standalone Mach-O.
+        # With Info.plist present, codesign treats Contents/MacOS/<main> as a bundle main executable
+        # and tries (and fails) to seal the whole bundle.
+        info_plist = self.app_dir / "Contents" / "Info.plist"
+        hidden_plist = info_plist.with_suffix(".plist.signing")
+        info_plist.rename(hidden_plist)
+        try:
+            for path in iter_macho():
+                subprocess.run(["codesign", "--force", "--timestamp=none", "--sign", "-", str(path)],
+                               check=True, capture_output=True)
+            # sanity check the launcher (while Info.plist is hidden, so this verifies the Mach-O file
+            # rather than the un-sealed bundle); it must be signed or it will not run on arm64
+            main_exe = self.app_dir / "Contents" / "MacOS" / self.main_exe
+            subprocess.run(["codesign", "--verify", str(main_exe)], check=True)
+        finally:
+            hidden_plist.rename(info_plist)
+
+
+class MacDmgCommand(setuptools.Command):
+    description = "build a .dmg disk image from the macOS .app bundle"
+    user_options = [
+        ("dist-file=", None, "DMG output file."),
+        ("app-dir=", None, "The .app bundle to package."),
+        ("yes", "y", 'Answer "yes" to all questions.'),
+    ]
+    dist_file: Path | None
+    app_dir: Path | None
+    yes: bool
+
+    def initialize_options(self) -> None:
+        assert self.distribution.metadata.name and self.distribution.metadata.version
+        self.app_dir = None
+        self.dist_file = Path("dist", "{app_name}_{app_version}_{platform}.dmg".format(
+            app_name=self.distribution.metadata.name, app_version=self.distribution.metadata.version,
+            platform=sysconfig.get_platform()
+        ))
+        self.yes = False
+
+    def finalize_options(self) -> None:
+        if not self.app_dir:
+            self.app_dir = Path("dist", f"{self.distribution.metadata.name}.app")
+
+    def run(self) -> None:
+        assert self.dist_file and self.app_dir, "Command not properly set up"
+        if not is_macos:
+            raise RuntimeError("bdist_dmg can only be run on macOS")
+        # build the .app first
+        self.run_command("bdist_mac")
+        self.dist_file.parent.mkdir(parents=True, exist_ok=True)
+        if self.dist_file.exists():
+            self.dist_file.unlink()
+        # stage the app plus an /Applications symlink for drag-to-install
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            stage = Path(tmp) / "dmg"
+            stage.mkdir()
+            shutil.copytree(self.app_dir, stage / self.app_dir.name, symlinks=True)
+            (stage / "Applications").symlink_to("/Applications")
+            print(f"{stage} -> {self.dist_file}")
+            subprocess.run([
+                "hdiutil", "create",
+                "-volname", self.distribution.metadata.name,
+                "-srcfolder", str(stage),
+                "-ov", "-format", "UDZO",
+                str(self.dist_file),
+            ], check=True)
+        print(f"Created {self.dist_file}")
+
+
 def find_libs(*args: str) -> Sequence[tuple[str, str]]:
     """Try to find system libraries to be included."""
     if not args:
@@ -674,11 +892,16 @@ cx_Freeze.setup(
         "bdist_appimage": {
            "build_folder": buildfolder,
         },
+        "bdist_mac": {
+            "build_folder": buildfolder,
+        },
     },
     # override commands to get custom stuff in
     cmdclass={
         "build": BuildCommand,
         "build_exe": BuildExeCommand,
         "bdist_appimage": AppImageCommand,
+        "bdist_mac": MacAppCommand,
+        "bdist_dmg": MacDmgCommand,
     },
 )
