@@ -6,7 +6,7 @@ from .locations import location_table
 from .options import ESSENTIAL_ITEMS, MAX_RESOURCE_UPGRADES, ShellipelagoOptions
 
 
-__version__ = "1.5"
+__version__ = "1.7"
 victory_location_name = "Final Boss Defeated"
 
 
@@ -121,7 +121,7 @@ class ShellipelagoWorld(World):
             item_name for item_name, item_data in item_table.items()
             if item_data["classification_name"] == "progression"
         },
-        "Resources": {"Max HP", "Max Rounds", "Energy"},
+        "Resources": {"Max HP", "Max Rounds"},
         "Traps": set(trap_item_names),
     }
     location_name_groups = {
@@ -347,6 +347,8 @@ class ShellipelagoWorld(World):
 
         return {
             "show_essential_pickup_hints": option_enabled(self.options.show_essential_pickup_hints),
+            "add_easy_destructible_checks": option_enabled(self.options.add_easy_destructible_checks),
+            "enemies_are_checks": option_enabled(self.options.enemies_are_checks),
             "hint_triggers": self.hint_trigger_data(),
             "shop_costs": shop_costs,
             "ring_link": option_enabled(self.options.ring_link),

@@ -10,6 +10,8 @@
 
 Use the [player options page for this game](../player-options) to configure and export a Shellipelago YAML.
 
+Enabling easy destructible checks adds many locations and can significantly slow down a playthrough.
+
 ## Joining a MultiWorld
 
 1. Generate or receive a room containing a Shellipelago slot.

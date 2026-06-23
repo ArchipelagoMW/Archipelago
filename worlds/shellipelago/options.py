@@ -17,7 +17,6 @@ ESSENTIAL_ITEMS = frozenset({
     "Tank Cannon",
     "SFX",
     "BGM",
-    "Energy",
 })
 
 MAX_RESOURCE_UPGRADES = frozenset({

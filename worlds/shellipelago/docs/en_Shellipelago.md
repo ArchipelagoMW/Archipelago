@@ -8,7 +8,7 @@ The [player options page for this game](../player-options) contains all the opti
 
 Shellipelago shuffles the items needed to explore the map, fight enemies, and complete the final run.
 
-The main progression items are Graphics, Progressive Room, Bombs, Gun, Sword, Fire, Pickaxe, Water Walkers, Tank Treads, Tank Chassis, and Tank Cannon. Max HP, Max Rounds, Energy, SFX, and BGM can also be shuffled depending on options.
+The main progression items are Graphics, Progressive Room, Bombs, Gun, Sword, Fire, Pickaxe, Water Walkers, Tank Treads, Tank Chassis, and Tank Cannon. Max HP, Max Rounds, SFX, and BGM can also be shuffled depending on options.
 
 ## What is the goal of Shellipelago?
 
@@ -38,7 +38,7 @@ The browser client shows a message and applies the item immediately. Some receiv
 - `shuffle_max_resource_upgrades`: Shuffles Max HP and Max Rounds upgrades. When off, those upgrades are given at the start.
 - `max_resource_upgrades_in_my_world`: Controls which max resource upgrades may be placed in your world.
 - `max_resource_upgrades_in_other_worlds`: Controls which max resource upgrades may be placed in other players' worlds.
-- `add_easy_destructible_checks`: Adds normal destructible objects as checks.
+- `add_easy_destructible_checks`: Adds normal destructible objects as checks. This adds many locations and can significantly slow down a playthrough.
 - `enemies_are_checks`: Adds defeated enemies as checks.
 - `enemies_are_hints`: Allows selected enemy defeats to create Archipelago hints for useful or progression Shellipelago locations.
 - `shuffle_shops`: Shuffles shop item locations.

@@ -161,12 +161,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -211,12 +205,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -271,12 +259,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -321,12 +303,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -381,12 +357,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -431,12 +401,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -491,12 +455,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -541,12 +499,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -601,12 +553,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -651,12 +597,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -711,12 +651,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -761,12 +695,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -821,12 +749,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -871,12 +793,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -931,12 +847,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -981,12 +891,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -1041,12 +945,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -1091,12 +989,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -1151,12 +1043,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -1201,12 +1087,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -1261,12 +1141,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -1311,12 +1185,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -1371,12 +1239,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -1421,12 +1283,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -1481,12 +1337,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -1536,12 +1386,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -1582,12 +1426,6 @@ raw_location_table = [
         },
         {
           "item": "Fire",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -2302,12 +2140,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -2352,12 +2184,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -2437,12 +2263,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -2487,12 +2307,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -2547,12 +2361,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -2597,12 +2405,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -2657,12 +2459,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -2707,12 +2503,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -2767,12 +2557,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -2822,12 +2606,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -2872,12 +2650,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -3820,12 +3592,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -3870,12 +3636,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -3930,12 +3690,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -3980,12 +3734,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4040,12 +3788,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4090,12 +3832,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4150,12 +3886,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4200,12 +3930,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4260,12 +3984,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4310,12 +4028,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4370,12 +4082,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4420,12 +4126,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4480,12 +4180,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4530,12 +4224,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4590,12 +4278,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4640,12 +4322,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4700,12 +4376,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4750,12 +4420,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4810,12 +4474,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4860,12 +4518,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -4920,12 +4572,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -4970,12 +4616,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5030,12 +4670,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5080,12 +4714,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5140,12 +4768,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5190,12 +4812,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5250,12 +4866,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5300,12 +4910,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5360,12 +4964,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5410,12 +5008,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5470,12 +5062,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5520,12 +5106,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5580,12 +5160,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5630,12 +5204,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5690,12 +5258,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5740,12 +5302,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5800,12 +5356,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5850,12 +5400,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -5910,12 +5454,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -5960,12 +5498,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -6020,12 +5552,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -6070,12 +5596,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -6130,12 +5650,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -6180,12 +5694,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -6240,12 +5748,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -6290,12 +5792,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -6350,12 +5846,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -6400,12 +5890,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -6460,12 +5944,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -6510,12 +5988,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -6570,12 +6042,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -6625,12 +6091,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -6675,12 +6135,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -6909,12 +6363,6 @@ raw_location_table = [
         },
         {
           "item": "Fire",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -7196,12 +6644,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -8351,12 +7793,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -8401,12 +7837,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -8461,12 +7891,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -8511,12 +7935,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -8571,12 +7989,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -8621,12 +8033,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -8681,12 +8087,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -8731,12 +8131,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -9441,12 +8835,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -9491,12 +8879,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -9551,12 +8933,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -9601,12 +8977,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -9661,12 +9031,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -9711,12 +9075,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -9771,12 +9129,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -9821,12 +9173,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -9881,12 +9227,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -9931,12 +9271,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -9991,12 +9325,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -10041,12 +9369,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -10101,12 +9423,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -10151,12 +9467,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -10211,12 +9521,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -10261,12 +9565,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -10321,12 +9619,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -10371,12 +9663,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -10431,12 +9717,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -10486,12 +9766,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -10536,12 +9810,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -11111,12 +10379,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -11171,12 +10433,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -11241,12 +10497,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -11301,12 +10551,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -11371,12 +10615,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -11431,12 +10669,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -11501,12 +10733,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -11561,12 +10787,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -11631,12 +10851,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -11691,12 +10905,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -11761,12 +10969,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -11821,12 +11023,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -11891,12 +11087,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -11951,12 +11141,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -12021,12 +11205,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -12081,12 +11259,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -12151,12 +11323,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -12211,12 +11377,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -12281,12 +11441,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -12341,12 +11495,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -12411,12 +11559,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -12471,12 +11613,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -12541,12 +11677,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -12601,12 +11731,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -12671,12 +11795,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -12731,12 +11849,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -12801,12 +11913,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -12861,12 +11967,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -12931,12 +12031,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -12991,12 +12085,6 @@ raw_location_table = [
         },
         {
           "item": "Tank",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -17347,12 +16435,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -17409,12 +16491,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -17481,12 +16557,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -17543,12 +16613,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -17615,12 +16679,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -17677,12 +16735,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -17749,12 +16801,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -17811,12 +16857,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -17883,12 +16923,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -17945,12 +16979,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -18017,12 +17045,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -18079,12 +17101,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -18151,12 +17167,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -18213,12 +17223,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -18285,12 +17289,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -18347,12 +17345,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -18419,12 +17411,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -18481,12 +17467,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -18553,12 +17533,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -18615,12 +17589,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -18687,12 +17655,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -18749,12 +17711,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -18821,12 +17777,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -18883,12 +17833,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -18955,12 +17899,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -19017,12 +17955,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -19089,12 +18021,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -19151,12 +18077,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -19223,12 +18143,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -19285,12 +18199,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -19357,12 +18265,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -19419,12 +18321,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -19491,12 +18387,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -19553,12 +18443,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -19625,12 +18509,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -19687,12 +18565,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -19759,12 +18631,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -19821,12 +18687,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -19893,12 +18753,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -19955,12 +18809,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -20027,12 +18875,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -20089,12 +18931,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -20161,12 +18997,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -20223,12 +19053,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -20295,12 +19119,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -20357,12 +19175,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -20429,12 +19241,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -20491,12 +19297,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -20563,12 +19363,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -20625,12 +19419,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -20697,12 +19485,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -20759,12 +19541,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -20831,12 +19607,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -20898,12 +19668,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -20960,12 +19724,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -23298,12 +22056,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -23360,12 +22112,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -23432,12 +22178,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -23494,12 +22234,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -23566,12 +22300,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -23628,12 +22356,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -23700,12 +22422,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -23762,12 +22478,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -23834,12 +22544,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -23896,12 +22600,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -23968,12 +22666,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -24030,12 +22722,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -24102,12 +22788,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -24164,12 +22844,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -24236,12 +22910,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -24298,12 +22966,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -24370,12 +23032,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -24432,12 +23088,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -24504,12 +23154,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -24566,12 +23210,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -24638,12 +23276,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -24700,12 +23332,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -24772,12 +23398,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -24834,12 +23454,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -24906,12 +23520,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -24968,12 +23576,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -25040,12 +23642,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -25102,12 +23698,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -26101,12 +24691,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -26163,12 +24747,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -26235,12 +24813,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -26297,12 +24869,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -26369,12 +24935,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -26431,12 +24991,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -26503,12 +25057,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -26565,12 +25113,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -26637,12 +25179,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -26699,12 +25235,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -26771,12 +25301,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -26838,12 +25362,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -26900,12 +25418,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -33615,12 +32127,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -33691,12 +32197,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -33783,12 +32283,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -33866,12 +32360,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -33957,12 +32445,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -34033,12 +32515,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -34119,12 +32595,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -34195,12 +32665,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -34349,12 +32813,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -34718,12 +33176,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -34780,12 +33232,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -34852,12 +33298,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -34914,12 +33354,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -34986,12 +33420,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -35048,12 +33476,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -35120,12 +33542,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -35182,12 +33598,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -35254,12 +33664,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -35316,12 +33720,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -35388,12 +33786,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -35450,12 +33842,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -35522,12 +33908,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -35584,12 +33964,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -35656,12 +34030,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -35718,12 +34086,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -35790,12 +34152,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -35852,12 +34208,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -35924,12 +34274,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -35986,12 +34330,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -36058,12 +34396,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -36120,12 +34452,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -36192,12 +34518,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -36254,12 +34574,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -36326,12 +34640,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -36388,12 +34696,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -36460,12 +34762,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -36522,12 +34818,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -36594,12 +34884,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -36656,12 +34940,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -36728,12 +35006,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -36790,12 +35062,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -36862,12 +35128,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -36924,12 +35184,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -36996,12 +35250,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -37058,12 +35306,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -37130,12 +35372,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -37192,12 +35428,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -37264,12 +35494,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -37326,12 +35550,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -37398,12 +35616,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -37460,12 +35672,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -39396,6 +37602,38 @@ raw_location_table = [
         {
           "item": "Fire",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
@@ -39503,12 +37741,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -39565,12 +37797,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -39704,12 +37930,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -39766,12 +37986,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -39838,12 +38052,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -39900,12 +38108,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -39972,12 +38174,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -40034,12 +38230,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -40106,12 +38296,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -40168,12 +38352,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -40240,12 +38418,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -40302,12 +38474,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -40374,12 +38540,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -40436,12 +38596,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -40508,12 +38662,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -40570,12 +38718,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -40642,12 +38784,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -40704,12 +38840,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -40776,12 +38906,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -40838,12 +38962,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -40910,12 +39028,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -40963,12 +39075,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -41026,12 +39184,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -41089,12 +39293,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -41152,12 +39402,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -41215,12 +39511,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -41278,12 +39620,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -41341,12 +39729,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -46783,12 +45217,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -47114,12 +45542,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -47642,12 +46064,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -47725,12 +46141,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -47816,12 +46226,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -47899,12 +46303,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -47990,12 +46388,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -48073,12 +46465,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -48164,12 +46550,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -48247,12 +46627,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -48338,12 +46712,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -48421,12 +46789,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -48512,12 +46874,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -48595,12 +46951,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -48686,12 +47036,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -48769,12 +47113,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -48860,12 +47198,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -48943,12 +47275,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -49034,12 +47360,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -49117,12 +47437,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -49208,12 +47522,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -49291,12 +47599,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -49382,12 +47684,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -49465,12 +47761,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -49556,12 +47846,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -49639,12 +47923,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -49730,12 +48008,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -49813,12 +48085,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -49904,12 +48170,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -49987,12 +48247,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -50078,12 +48332,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -50165,12 +48413,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -50241,12 +48483,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -50327,12 +48563,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -50403,12 +48633,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -50489,12 +48713,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -50565,12 +48783,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -50651,12 +48863,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -50727,12 +48933,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -50813,12 +49013,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -50889,12 +49083,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -50975,12 +49163,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -51051,12 +49233,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -51137,12 +49313,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -51213,12 +49383,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -51299,12 +49463,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -51380,12 +49538,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -51456,12 +49608,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -51548,12 +49694,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -51631,12 +49771,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -51722,12 +49856,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -51805,12 +49933,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -51896,12 +50018,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -51979,12 +50095,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -52070,12 +50180,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -52153,12 +50257,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -52244,12 +50342,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -52327,12 +50419,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -52418,12 +50504,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -52501,12 +50581,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -52592,12 +50666,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -52675,12 +50743,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -52766,12 +50828,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -52849,12 +50905,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -52940,12 +50990,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -53027,12 +51071,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -53110,12 +51148,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -59490,12 +57522,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -67645,12 +65671,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -67707,12 +65727,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -67779,12 +65793,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -67841,12 +65849,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -67913,12 +65915,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -67975,12 +65971,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -68047,12 +66037,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -68109,12 +66093,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -68181,12 +66159,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -68243,12 +66215,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -68315,12 +66281,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -68377,12 +66337,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -76549,12 +74503,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -76625,12 +74573,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -76711,12 +74653,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -76787,12 +74723,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -76873,12 +74803,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -76949,12 +74873,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -77035,12 +74953,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -77111,12 +75023,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -77197,12 +75103,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -77273,12 +75173,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -77359,12 +75253,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -77435,12 +75323,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -77521,12 +75403,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -77587,12 +75463,6 @@ raw_location_table = [
           "item": "Graphics",
           "amount": 1
         }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
-        }
       ]
     ]
   },
@@ -77637,12 +75507,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -77700,12 +75616,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -77763,12 +75725,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -77826,12 +75834,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -77889,12 +75943,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -77952,12 +76052,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78015,12 +76161,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78078,12 +76270,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78141,12 +76379,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78204,12 +76488,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78267,12 +76597,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78330,12 +76706,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78393,12 +76815,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78470,12 +76938,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -78537,12 +76999,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -78590,12 +77046,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78653,12 +77155,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78716,12 +77264,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78779,12 +77373,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78842,12 +77482,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78905,12 +77591,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -78968,12 +77700,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79031,12 +77809,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79094,12 +77918,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79157,12 +78027,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79220,12 +78136,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79283,12 +78245,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79346,12 +78354,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79409,12 +78463,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79472,12 +78572,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79535,12 +78681,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79598,12 +78790,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79661,12 +78899,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79724,12 +79008,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79787,12 +79117,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79850,12 +79226,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79913,12 +79335,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -79976,12 +79444,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80039,12 +79553,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80102,12 +79662,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80165,12 +79771,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80228,12 +79880,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80291,12 +79989,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80354,12 +80098,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80417,12 +80207,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80480,12 +80316,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80543,12 +80425,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80606,12 +80534,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80669,12 +80643,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80732,12 +80752,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80795,12 +80861,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80858,12 +80970,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80921,12 +81079,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -80984,12 +81188,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -81047,12 +81297,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -81110,12 +81406,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -81173,12 +81515,58 @@ raw_location_table = [
         {
           "item": "Tank",
           "amount": 1
+        },
+        {
+          "item": "Sword",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Bombs",
+          "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Fire",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Tank",
+          "amount": 1
+        },
+        {
+          "item": "Gun",
+          "amount": 1
         }
       ],
       [
         {
           "item": "Graphics",
           "amount": 1
+        }
+      ],
+      [
+        {
+          "item": "Max Rounds",
+          "amount": 2
         }
       ],
       [
@@ -81417,12 +81805,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -81496,12 +81878,6 @@ raw_location_table = [
         {
           "item": "Max Rounds",
           "amount": 2
-        }
-      ],
-      [
-        {
-          "item": "Sword",
-          "amount": 1
         }
       ],
       [
@@ -81583,12 +81959,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -81666,12 +82036,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -81728,12 +82092,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -81800,12 +82158,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -81862,12 +82214,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -81934,12 +82280,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -81996,12 +82336,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -82068,12 +82402,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -82135,12 +82463,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -82197,12 +82519,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -86661,12 +86977,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -86723,12 +87033,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -86795,12 +87099,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -86857,12 +87155,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -86929,12 +87221,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -86991,12 +87277,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -87063,12 +87343,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -87125,12 +87399,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -87197,12 +87465,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -87259,12 +87521,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -87331,12 +87587,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -87393,12 +87643,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -87465,12 +87709,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -87527,12 +87765,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -87599,12 +87831,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -87661,12 +87887,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -87733,12 +87953,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -87795,12 +88009,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -87867,12 +88075,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -87929,12 +88131,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -88001,12 +88197,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -88063,12 +88253,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -88135,12 +88319,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -88197,12 +88375,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -88269,12 +88441,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -88331,12 +88497,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -88403,12 +88563,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -88465,12 +88619,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -88537,12 +88685,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -88599,12 +88741,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -88671,12 +88807,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -88733,12 +88863,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -88805,12 +88929,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -88867,12 +88985,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -88939,12 +89051,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -89001,12 +89107,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -89073,12 +89173,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -89135,12 +89229,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -89207,12 +89295,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -89269,12 +89351,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -89341,12 +89417,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -89403,12 +89473,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -89475,12 +89539,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -89537,12 +89595,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -89609,12 +89661,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -89671,12 +89717,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -89743,12 +89783,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -89805,12 +89839,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -89877,12 +89905,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -89939,12 +89961,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -90011,12 +90027,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -90073,12 +90083,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -90145,12 +90149,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -90207,12 +90205,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -90279,12 +90271,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -90346,12 +90332,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -90408,12 +90388,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -90554,12 +90528,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -90616,12 +90584,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -90688,12 +90650,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -90750,12 +90706,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -90822,12 +90772,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -90884,12 +90828,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -90956,12 +90894,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -91018,12 +90950,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -91090,12 +91016,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -91152,12 +91072,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -91224,12 +91138,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -91286,12 +91194,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -91358,12 +91260,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -91420,12 +91316,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -91492,12 +91382,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -91554,12 +91438,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -91626,12 +91504,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -91688,12 +91560,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -91760,12 +91626,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -91822,12 +91682,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -100133,12 +99987,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -100195,12 +100043,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -100267,12 +100109,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -100329,12 +100165,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -100401,12 +100231,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -100463,12 +100287,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -100535,12 +100353,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -100597,12 +100409,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -100669,12 +100475,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -100731,12 +100531,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -100803,12 +100597,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -100865,12 +100653,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -100937,12 +100719,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -100999,12 +100775,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -101071,12 +100841,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -101133,12 +100897,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -101205,12 +100963,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -101267,12 +101019,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -101339,12 +101085,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -101401,12 +101141,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -101473,12 +101207,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -101535,12 +101263,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -101607,12 +101329,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -101669,12 +101385,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -101741,12 +101451,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -101803,12 +101507,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -104028,12 +103726,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -104090,12 +103782,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -104162,12 +103848,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -104224,12 +103904,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -104296,12 +103970,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -104358,12 +104026,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -104430,12 +104092,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -104492,12 +104148,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -104564,12 +104214,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -104626,12 +104270,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -104698,12 +104336,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -104760,12 +104392,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -104832,12 +104458,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -104894,12 +104514,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -104966,12 +104580,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -105028,12 +104636,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -105100,12 +104702,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -105162,12 +104758,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -105234,12 +104824,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -105296,12 +104880,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -105368,12 +104946,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -105430,12 +105002,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -105539,12 +105105,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -105601,12 +105161,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -105673,12 +105227,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -105735,12 +105283,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -105807,12 +105349,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -105869,12 +105405,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -105941,12 +105471,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -106003,12 +105527,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -106075,12 +105593,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -106137,12 +105649,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -106209,12 +105715,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -106271,12 +105771,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -106343,12 +105837,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -106405,12 +105893,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -106477,12 +105959,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -106539,12 +106015,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -106611,12 +106081,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -106673,12 +106137,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -106745,12 +106203,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -106807,12 +106259,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -106879,12 +106325,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -106941,12 +106381,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -107013,12 +106447,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -107075,12 +106503,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -107147,12 +106569,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -107209,12 +106625,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -107281,12 +106691,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -107343,12 +106747,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
@@ -107415,12 +106813,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -107482,12 +106874,6 @@ raw_location_table = [
       ],
       [
         {
-          "item": "Sword",
-          "amount": 1
-        }
-      ],
-      [
-        {
           "item": "Graphics",
           "amount": 2
         }
@@ -107544,12 +106930,6 @@ raw_location_table = [
       [
         {
           "item": "Graphics",
-          "amount": 1
-        }
-      ],
-      [
-        {
-          "item": "Sword",
           "amount": 1
         }
       ],
