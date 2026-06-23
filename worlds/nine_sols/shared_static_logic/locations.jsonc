@@ -1383,8 +1383,13 @@
     },
     {
         "address": 3111, "name": "GoS (East): Examine Mural in Yin Jifu's Tomb",
-        "region": "GoS (East) - Yin Jifu's Tomb", "requires": [] // Bullet Deflect skill (or UC + Divine Hand Jade???)
-        // this will be the sticking point for skill tree rando
+        "region": "GoS (East) - Yin Jifu's Tomb", "requires": [
+            {
+                "option": "randomize_skill_tree",
+                "true": [{ "item": "Progressive Bullet Deflect" }], // or UC + Divine Hand Jade
+                "false": []
+            }
+        ]
     },
     {
         "address": 3112, "name": "GoS (East): Examine Stone Carvings",
@@ -1439,7 +1444,13 @@
         "address": 3205, "name": "GoS (West): Examine Mural in Luyan's Tomb",
         "region": "GoS (West) - Luyan's Tomb", "requires": [
             { "item": "Cloud Leap" }, // to get from the chest platform up to the entrance
-            { "item": "Unbounded Counter" } // for the parry challenge
+            // the parry challenge
+            { "item": "Unbounded Counter" },
+            {
+                "option": "randomize_skill_tree",
+                "true": [{ "item": "Progressive Bullet Deflect" }], // or UC + Divine Hand Jade
+                "false": []
+            }
         ] // DOES require spike ball chase, so if you spawned at GoSW node you may need to trigger it
     },
     {
