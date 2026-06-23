@@ -59,7 +59,7 @@ class NineSolsWebWorld(WebWorld):
         ]),
         OptionGroup("Additional Randomizations", [
             RandomizeShops,
-            # skill_tree_randomization
+            RandomizeSkillTree,
             # entrance_randomization
         ]),
     ]

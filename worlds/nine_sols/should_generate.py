@@ -19,4 +19,6 @@ def should_generate(category: str | None, world: "NineSolsWorld") -> bool:
         return world.options.logic_difficulty >= LogicDifficulty.option_medium or world.using_ut
     elif category == "shop":
         return world.options.randomize_shops.value == 1
+    elif category == "skill":
+        return world.options.randomize_skill_tree.value == 1
     raise ValueError(f'Invalid category: {category}')

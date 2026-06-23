@@ -321,6 +321,44 @@ class RandomizeShops(Toggle):
     """
 
 
+class RandomizeSkillTree(Toggle):
+    """
+    Randomizes the 27 skill tree nodes that you would normally spend skill points to unlock in the vanilla game
+    (i.e., excluding the nodes for starting abilities like Parry or major abilities like Air Dash).
+    Spending skill points on these tree nodes will now check AP locations,
+    and the actual skills are instead granted by 19 new AP item types.
+
+    Item details:
+    - The item and location counts differ because several unique skills become progressive items:
+    Progressive Bullet Deflect, Progressive Water Flow, Progressive Full Control, Qi Boost, Enhanced Talisman,
+    and Enhanced Blade
+    - "Enhanced Qi Blast" remains a regular unique item because basic Qi Blast is always a starting ability.
+    - On logic_difficulty: vanilla, Progressive Bullet Deflect is the only progression item added by this option,
+    because of its use in the Grotto tomb parry challenges.
+    - On logic_difficulty: medium or higher, Swift Runner is also progression.
+    NOTE: "Swift Runner logic" has not yet been implemented
+
+    Location details:
+    - The locations are named after the skills they would unlock in vanilla, e.g. "Skill Tree Node: Bullet Deflect"
+    - For skill names that appear multiple times in the tree, the exact node is disambiguated with a parenthetical, e.g.
+    "Skill Tree Node: Qi Boost (Top Left)" and "Skill Tree Node: Enhanced Talisman (Right)".
+
+    Logic details:
+    - Skill tree locations are grouped into low, medium and high cost.
+    They'll become "in logic" as you gain access to more of the game world.
+    Depending on your first_root_node, low cost locations may be in logic immediately.
+    - For now, a skill tree node is defined as low/medium/high cost if it needs
+    at most 3/9/10 skill points to unlock itself and all of its prerequisite nodes.
+    For example, Enhanced Water Flow takes 15 "total skill points" so it's "high cost",
+    while Swift Runner takes only 1 so it's "low cost".
+    - Like vanilla, some skill tree locations cannot be checked until you have Tai-Chi Kick or Unbounded Counter.
+
+    Experience can get pretty tight if enough important items land in the skill tree,
+    and the vanilla game has a hard cap on how many skill points you can earn without Tao Fruits.
+    WARNING: You may not want to enable this until I finish creating a separate mod for experience multipliers and cap raising.
+    """
+
+
 # actual Option Groups are specified in the WebWorld in __init__.py for some reason
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
@@ -361,5 +399,5 @@ class NineSolsGameOptions(PerGameCommonOptions):
 
     # Additional Randomizations
     randomize_shops: RandomizeShops
-    # skill_tree_randomization
+    randomize_skill_tree: RandomizeSkillTree
     # entrance_randomization
