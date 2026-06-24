@@ -1346,7 +1346,7 @@ def set_meet_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, op
     if StartWithoutOptionName.villagers in options.start_without:
         meet_locations.extend(locations.locations_by_tag[LocationTags.MEET_VILLAGER])
 
-    meet_location_names = [loc.name for loc in meet_locations if loc.name[len(prefix):] in content.villagers]
+    meet_location_names = [loc.name for loc in meet_locations if loc.name[len(prefix):] == "Pet" or loc.name[len(prefix):] in content.villagers]
     for location_name in meet_location_names:
         rule_collector.set_location_rule(location_name, logic.relationship.exists(location_name[len(prefix):]))
 
