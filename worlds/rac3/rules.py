@@ -62,12 +62,12 @@ def can_earn_good_exp(state: CollectionState, world: "RaC3World") -> bool:
     """Determine if the player can earn good experience based on the planets they can access"""
     if state.has_any(GOOD_EXP_PLANETS, world.player):
         return True
-    if (state.can_reach_region(RAC3REGION.COMMAND_CENTER)
+    if (state.can_reach_region(RAC3REGION.COMMAND_CENTER, world.player)
         and state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS, RAC3ITEM.TYHRRA_GUISE], world.player)
         and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK],
                               world.player)):
         return True
-    if (state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT)
+    if (state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT, world.player)
         and state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player)
         and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS],
                               world.player)):
