@@ -178,6 +178,7 @@ def set_rules(world):
 
 
 def set_isolated_locations_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent, trash_bear_requests: Dict[str, List[str]]):
+    rule_collector.set_location_rule("Rat Problem Cutscene", logic.relationship.exists(NPC.lewis))
     rule_collector.set_location_rule("Beach Bridge Repair", logic.grind.can_grind_item(300, "Wood"))
     rule_collector.set_location_rule("Grim Reaper Statue", logic.combat.can_fight_at_level(Performance.decent) & logic.tool.has_tool(Tool.pickaxe))
     rule_collector.set_location_rule("Galaxy Sword Shrine", logic.has("Prismatic Shard"))
@@ -194,6 +195,7 @@ def set_tool_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, co
     if not tool_progression.is_progressive:
         return
 
+    rule_collector.set_location_rule("Bamboo Pole Cutscene", logic.relationship.exists(NPC.willy))
     training_rule = logic.source.has_access_to_any(content.tool_upgrades["Training Rod"].sources)
     rule_collector.set_location_rule("Purchase Training Rod", training_rule)
     fiberglass_rule = logic.source.has_access_to_any(content.tool_upgrades["Fiberglass Rod"].sources)
