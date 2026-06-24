@@ -53,10 +53,10 @@ def calculate_paint_percent_available(state: CollectionState, world: "PaintWorld
     # This code calculates the total similarity in logic using the formula:
     # (expected score per pixel) * (pixels currently available) * (logic percent from options) / (total pixel count)
     # The expected score and logic percent per pixel are calculated elsewhere for efficiency.
-    return (SINGLE_PIXEL_SCORE_LOOKUP[r, g, b] *
+    return round(SINGLE_PIXEL_SCORE_LOOKUP[r, g, b] *
             min(world.final_width // 2 + w * world.options.canvas_width_increment.value, world.final_width) *
             min(world.final_height // 2 + h * world.options.canvas_height_increment.value, world.final_height) *
-            world.per_pixel_logic_percent)
+            world.per_pixel_logic_percent, ndigits=3)
 
 
 def set_completion_rules(world: "PaintWorld", player: int) -> None:
