@@ -79,6 +79,7 @@ class Region:
     skull_cavern_200 = "Skull Cavern Floor 200"
     dangerous_skull_cavern = "Dangerous Skull Cavern"
     hospital = "Hospital"
+    hospital_shop = "Hospital - Shop"
     hospital_back = "Hospital Back"
     carpenter_house = "Carpenter House"
     carpenter_shop = "Carpenter Shop"

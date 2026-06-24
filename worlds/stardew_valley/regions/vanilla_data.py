@@ -286,8 +286,9 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.boiler_room),
     RegionData(RegionName.bulletin_board),
     RegionData(RegionName.vault),
-    RegionData(RegionName.hospital, (Entrance.hospital_to_town, Entrance.hospital_to_hospital_back)),
+    RegionData(RegionName.hospital, (Entrance.hospital_to_town, Entrance.hospital_to_hospital_back, Entrance.purchase_from_hospital,)),
     RegionData(RegionName.hospital_back, (Entrance.hospital_back_to_hospital, Entrance.enter_harvey_room)),
+    RegionData(RegionName.hospital_shop),
     RegionData(RegionName.harvey_room, (Entrance.leave_harvey_room,)),
     RegionData(RegionName.pierre_house, (Entrance.pierre_general_store_to_town, Entrance.purchase_from_pierre, Entrance.enter_sunroom)),
     RegionData(RegionName.pierre_shop),
@@ -1053,6 +1054,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.purchase_from_hospital, RegionName.hospital_shop,),
     ConnectionData(Entrance.hospital_to_hospital_back, RegionName.hospital_back),
     ConnectionData(Entrance.hospital_back_to_hospital, RegionName.hospital),
     ConnectionData(

@@ -98,8 +98,8 @@ register_mod_content_pack(SVEContentPack(
                                                        other_requirements=(SpecificFriendRequirement(ModNPC.sophia, 6),)),),
         ModEdible.hero_elixir: (ShopSource(price=8000, shop_region=SVERegion.isaac_shop),),
         ModEdible.aegis_elixir: (ShopSource(price=28000, shop_region=SVERegion.galmoran_outpost),),
-        SVEBeverage.sports_drink: (ShopSource(price=750, shop_region=Region.hospital),),
-        SVEMeal.stamina_capsule: (ShopSource(price=4000, shop_region=Region.hospital),),
+        SVEBeverage.sports_drink: (ShopSource(price=750, shop_region=Region.hospital_shop),),
+        SVEMeal.stamina_capsule: (ShopSource(price=4000, shop_region=Region.hospital_shop),),
     },
     harvest_sources={
         Mushroom.red: (

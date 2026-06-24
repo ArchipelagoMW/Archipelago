@@ -391,8 +391,8 @@ pelican_town = ContentPack(
         Fishing.lead_bobber: (ShopSource(price=200, currency=Currency.money, shop_region=Region.fish_shop,
                                          other_requirements=(SkillRequirement(Skill.fishing, 6),)),),
 
-        "Energy Tonic": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital),),
-        "Muscle Remedy": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital),),
+        "Energy Tonic": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital_shop),),
+        "Muscle Remedy": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital_shop),),
 
         Trash.joja_cola: (ShopSource(price=75, currency=Currency.money, shop_region=Region.saloon_shop),),
 
