@@ -275,11 +275,12 @@ lingo_homophone_items = [shorts, shirt]
 lingo_synonym_items = []
 lingo_reversed_items = []
 lingo_antonym_items = []
-lingo_add_subtract_items = [acorn, corn, coal, coral, ancient_seed, ancient_seeds, bait]
-lingo_lesser_items = [blueberry, blackberry, egg, carp, salmon, rhubarb, eel, rice, pumpkin, cranberries, shrimp]
+lingo_add_subtract_items = [acorn, corn, coal, coral, ancient_seed, ancient_seeds]  # Could add bait here, for bat -> bait, but honestly too hard to draw a bat in the menu
+lingo_lesser_items = [blueberry, blackberry, carp, salmon, rhubarb, eel, rice, pumpkin, cranberries, shrimp]
 # [blueberry_tart, blackberry_cobbler, omelet, carp_surprise, salmon_dinner, rhubarb_pie, fried_eel, rice_pudding, pumpkin_soup, cranberry_sauce, shrimp_cocktail]
 lingo_greater_items = [copper_bar, iron_bar, gold_bar, iridium_bar, radioactive_bar]
 lingo_anagram_items = []
+lingo_normal_items = [item for item in lingo_normal_items if item not in [*lingo_homophone_items, *lingo_add_subtract_items, *lingo_lesser_items, *lingo_greater_items]]
 lingo_items = [lingo_normal_items, lingo_homophone_items, lingo_add_subtract_items, lingo_lesser_items, lingo_greater_items]
 lingo_bundle = FixedPriceDeepBundleTemplate(CCRoom.pantry, MemeBundleName.lingo, lingo_items, 4, 4)
 
@@ -296,7 +297,7 @@ looney_items = [anvil]
 looney_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.looney, looney_items, 1, 1)
 
 morshu_items = [ruby.as_amount(5), ruby.as_amount(10), ruby.as_amount(20)]  # oil.as_amount(3), fiber.as_amount(3), bomb.as_amount(3)
-morshu_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.morshu, morshu_items, 3, 3)
+morshu_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.morshu, morshu_items, 3, 3)
 
 numbers_items = [seaweed.as_amount(420), eggplant.as_amount(69), pumpkin_pie.as_amount(314), life_elixir.as_amount(911), void_egg.as_amount(666), broken_glasses.as_amount(404), wilted_bouquet.as_amount(13), omni_geode.as_amount(42)]
 numbers_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.numbers, numbers_items, 8, 1)
@@ -354,7 +355,6 @@ error_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.error, Bundle
 #   Ghost Bundle (it ghosts you)
 #   Joja/Morris Bundle
 #   Leaf Blower Bundle  (Leaf Blower Minigame, similar to the cookie clicker one)
-#   Lingo Bundle
 #   Lost Axe Bundle (Donate your axe then talk to Robin)
 #   Maguffin Bundle (Ap items)
 #   Millibelle Bundle (money, run away, find at spa)
