@@ -301,11 +301,16 @@ class FairyChessPawnUpgrades(Choice):
 
     Max: Prefer upgrades whenever possible, falling back to a regular pawn when adding another upgrade would
     prevent reaching your earned pawn count.
+
+    Super Max: As Max, but once known non-pawn pieces satisfy some board-location requirements, excess pawn material can
+    become upgrades instead of forcing every earned pawn to deploy as a separate pawn.
     """
     display_name = "Pawn Upgrades"
     option_off = 0
     option_pool = 1
     option_max = 2
+    option_super_max = 3
+    alias_supermax = option_super_max
     default = option_off
 
 

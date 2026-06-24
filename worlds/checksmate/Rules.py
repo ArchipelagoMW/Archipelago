@@ -47,7 +47,10 @@ def determine_difficulty(opts: CMOptions):
     # Pawn upgrades affect difficulty
     if opts.fairy_chess_pawn_upgrades.value == opts.fairy_chess_pawn_upgrades.option_pool:
         difficulty *= 1.05
-    elif opts.fairy_chess_pawn_upgrades.value == opts.fairy_chess_pawn_upgrades.option_max:
+    elif opts.fairy_chess_pawn_upgrades.value in [
+        opts.fairy_chess_pawn_upgrades.option_max,
+        opts.fairy_chess_pawn_upgrades.option_super_max
+    ]:
         difficulty *= 1.07
 
     fairy_pieces = len(opts.fairy_chess_pieces_configure.value)

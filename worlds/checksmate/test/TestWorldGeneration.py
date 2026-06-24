@@ -29,3 +29,11 @@ class TestWorldGenerationPawnUpgradesMax(CMTestBase):
         slot_data = self.world.fill_slot_data()
         self.assertEqual(slot_data["fairy_chess_pawn_upgrades"], 2)
 
+
+class TestWorldGenerationPawnUpgradesSuperMax(CMTestBase):
+    options = {"fairy_chess_pawn_upgrades": "super_max"}
+
+    def test_fairy_chess_pawn_upgrades_round_trip(self):
+        """Setting option to super_max (3) should round-trip through fill_slot_data."""
+        slot_data = self.world.fill_slot_data()
+        self.assertEqual(slot_data["fairy_chess_pawn_upgrades"], 3)
