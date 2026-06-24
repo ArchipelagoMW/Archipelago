@@ -29,7 +29,8 @@ exits = {
     ],
     RegionNames.ONI_ISLAND_ENTRANCE_UPPER: [
         ExitData(RegionNames.ONI_ISLAND_ENTRANCE_SEA_OF_FIRE, one_way=True, loading_screen=False),
-        ExitData(RegionNames.ONI_ISLAND_ENTRANCE_BRIDGE, one_way=True, loading_screen=False)
+        ExitData(RegionNames.ONI_ISLAND_ENTRANCE_BRIDGE, one_way=True, loading_screen=False),
+        ExitData(RegionNames.ONI_ISLAND_INTERIOR_ENTRANCE_ROOM,required_items_events=["Oni Island - Mandatory Fight before entrance"])
     ]
 
 }

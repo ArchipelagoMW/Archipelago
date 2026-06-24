@@ -254,16 +254,27 @@ class RegionNames(StrEnum):
     INSIDE_THE_DRAGON_ORB = "Inside the dragon (Orb area)"
 
     ## ONI ISLAND
+
+    ### Exterior
     ONI_ISLAND_ENTRANCE = "Oni Island (Entrance)"
     ONI_ISLAND_ENTRANCE_BRIDGE = "Oni Island (Entrance Bridge)"
     ONI_ISLAND_ENTRANCE_SEA_OF_FIRE = "Oni Island (Sea of Fire)"
     ONI_ISLAND_ENTRANCE_UPPER = "Oni Island (Sea of Fire Upper Part)"
 
+    ### Interior
+    ONI_ISLAND_INTERIOR_ENTRANCE_ROOM = "Oni Island (Interior Entrance Room)"
+    ONI_ISLAND_INTERIOR_PRE_TOBI_1 = "Oni Island (Pre tobi #1)"
+    ONI_ISLAND_INTERIOR_TOBI_1_2 = "Oni Island (between Tobi #1 and #2)"
+    ONI_ISLAND_INTERIOR_TOBI_2_3 = "Oni Island (between Tobi #2 and #3)"
+    ONI_ISLAND_INTERIOR_TOBI_3_4 = "Oni Island (between Tobi #3 and #4)"
+    ONI_ISLAND_INTERIOR_TOBI_4_5 = "Oni Island (between Tobi #4 and #5)"
+    ONI_ISLAND_INTERIOR_TOBI_5_6 = "Oni Island (between Tobi #5 and #6)"
+    ONI_ISLAND_INTERIOR_LASER_BRIDGES = "Oni Island (after tobi #6, Labyrinth of Torment)"
+
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
     MERMAID_SPRING_HUB = "Mermaid Spring Warp Hub"
-
 
 
 # Reference https://github.com/Axertin/okami-apclient/blob/master/include/okami/maps.hpp
@@ -296,8 +307,9 @@ class MapIds(Enum):
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207
+    ONI_ISLAND_LOWER_INT = 0x208
     CATCALL_TOWER = 0x20A
-    ONI_ISLAND_EXT= 0x20D
+    ONI_ISLAND_EXT = 0x20D
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03
