@@ -148,17 +148,25 @@ class RaC3World(World):
 
     def create_items(self):
         itempool = create_itempool(self)
-        self.multiworld.itempool.extend(itempool)
-        location_count = len(self.multiworld.get_unfilled_locations(self.player))
+        own_location_count = len(self.multiworld.get_unfilled_locations(self.player))
+        total_location_count = len(self.multiworld.get_unfilled_locations())
+        existing_item_count = len(self.multiworld.itempool)
         item_count = len(itempool)
+        placement_location_count = total_location_count - existing_item_count if self.multiworld.players > 1 else own_location_count
         excluded_count = self.get_excluded_count()
-        filler_count = location_count - item_count
+        filler_count = own_location_count - item_count
+        if item_count > placement_location_count:
+            self.handle_not_enough_locations(item_count - placement_location_count)
+
+        self.multiworld.itempool.extend(itempool)
+
         if excluded_count > filler_count and (self.multiworld.players == 1 and not self.using_ut):
             self.handle_not_enough_locations(excluded_count - filler_count)
+
         if filler_count >= 0:
             filler = [self.create_filler() for _ in range(filler_count)]
             self.multiworld.itempool.extend(filler)
-        else:
+        elif self.multiworld.players == 1 and not self.using_ut:
             self.handle_not_enough_locations(-filler_count)
 
     def get_excluded_count(self) -> int:
