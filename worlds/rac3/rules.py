@@ -62,10 +62,11 @@ def can_earn_good_exp(state: CollectionState, world: "RaC3World") -> bool:
     """Determine if the player can earn good experience based on the planets they can access"""
     if state.has_any(GOOD_EXP_PLANETS, world.player):
         return True
-    if state.can_reach_location(RAC3TROPHY.COMMAND_LAWRENCE, world.player):
-        return True
-    if state.can_reach_location(RAC3TROPHY.HIDEOUT_QWARK, world.player):
-        return True
+    if world.options.trophies.value:
+        if state.can_reach_location(RAC3TROPHY.COMMAND_LAWRENCE, world.player):
+            return True
+        if state.can_reach_location(RAC3TROPHY.HIDEOUT_QWARK, world.player):
+            return True
     if world.options.ngplus_start.value:
         return True
     return False
