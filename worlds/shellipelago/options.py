@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, OptionSet, PerGameCommonOptions, Toggle
+from Options import DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Toggle
 
 
 ESSENTIAL_ITEMS = frozenset({
@@ -148,31 +148,34 @@ class OtherPlayersCanFindItemPoolDrops(Toggle):
 
 
 class RingLink(Toggle):
-    """Enable Ring Link."""
+    """Sync Rounds with rings in other games that have Ring Link enabled.
+    As rounds are spent and gained, ring and round counts fluctuate for all players with this option enabled.
+    """
 
     display_name = "Ring Link"
 
 
 class EnergyLink(Toggle):
-    """Enable Energy Link."""
+    """Sync Energy with other clients that have Energy Link enabled.
+    Shellipelago energy is reset to 0 when the browser game is reloaded.
+    """
 
     display_name = "Energy Link"
 
 
-class DeathLink(Toggle):
-    """Enable Death Link."""
-
-    display_name = "Death Link"
-
-
 class TrapLink(Toggle):
-    """Enable Trap Link."""
+    """Send linked traps to other players with Trap Link enabled.
+    If another linked game supports the received trap effect, that game applies the same trap.
+    """
 
     display_name = "Trap Link"
 
 
 class ItemLink(Toggle):
-    """Enable Item Link."""
+    """Allow supported Shellipelago pickups to be shared with other linked Shellipelago players.
+    Item Links combine declared item pools for players with the same item link name and game. Linked items
+    can be forced local or non-local, and uneven item counts use the lowest count among linked players.
+    """
 
     display_name = "Item Link"
 

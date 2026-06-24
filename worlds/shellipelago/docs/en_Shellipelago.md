@@ -48,8 +48,8 @@ The browser client shows a message and applies the item immediately. Some receiv
 - `trap_pool_in_my_world`: Controls which trap items may be placed in your world.
 - `trap_pool_in_other_worlds`: Controls which trap items may be placed in other players' worlds.
 - `other_players_can_find_item_pool_drops`: Adds item-pool-only drops as checks.
-- `ring_link`: Shares ring pickups with other linked Shellipelago players.
-- `energy_link`: Shares energy pickups with other linked Shellipelago players.
-- `death_link`: Sends and receives DeathLink events.
-- `trap_link`: Sends and receives trap events with other linked Shellipelago players.
-- `item_link`: Shares supported item pickups with other linked Shellipelago players.
+- `ring_link`: Syncs Rounds with rings in other games that have Ring Link enabled.
+- `energy_link`: Syncs Energy with other clients that have Energy Link enabled. Shellipelago energy is reset to 0 when the browser game is reloaded.
+- `death_link`: Sends deaths to other players with Death Link enabled, causing those games to trigger a death or game over.
+- `trap_link`: Sends supported traps to other players with Trap Link enabled. If another linked game supports the trap effect, that game applies the same trap.
+- `item_link`: Enables Shellipelago's item-link client behavior. To link generated Archipelago items such as Sword, use an `item_links` group in the YAML.

@@ -2,7 +2,7 @@ from BaseClasses import ItemClassification
 from Fill import distribute_items_restrictive
 
 from . import ShellipelagoTestBase
-from .. import victory_location_name
+from .. import ShellipelagoWorld
 from ..locations import location_table
 
 
@@ -11,7 +11,7 @@ class TestDefaultGeneration(ShellipelagoTestBase):
         self.assertEqual(len(self.multiworld.get_locations(self.player)), 107)
 
     def test_victory_is_locked_event(self) -> None:
-        victory_location = self.world.get_location(victory_location_name)
+        victory_location = self.world.get_location(ShellipelagoWorld.victory_location_name)
 
         self.assertIsNone(victory_location.address)
         self.assertIsNotNone(victory_location.item)
@@ -20,7 +20,7 @@ class TestDefaultGeneration(ShellipelagoTestBase):
         self.assertEqual(victory_location.item.classification, ItemClassification.progression_skip_balancing)
 
     def test_completion_requires_victory(self) -> None:
-        victory_item = self.world.get_location(victory_location_name).item
+        victory_item = self.world.get_location(ShellipelagoWorld.victory_location_name).item
         completion_condition = self.multiworld.completion_condition[self.player]
 
         self.assertFalse(completion_condition(self.multiworld.state))
