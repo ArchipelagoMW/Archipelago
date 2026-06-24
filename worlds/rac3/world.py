@@ -213,11 +213,11 @@ class RaC3World(World):
         message = f"Not enough location options enabled! {count} items have nowhere to be placed."
         if count >= 50:
             message += ("\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
-                        "Crystal Trade locations, or Additional Nanotech level locations.")
+                        "Crystal Trade locations, Additional Nanotech level locations or Additional Weapon Level locations.")
         if count <= 10 and sum(self.options.start_inventory_from_pool.value.values()) <= 10:
-            message += "Consider adding some items to your starting_items_from_pool or "
+            message += "\nConsider adding some items to your starting_items_from_pool or "
         else:
-            message += "Consider "
+            message += "\nConsider "
         message += f"adjusting some of the following options: {option_list}"
         raise OptionError(message)
 
