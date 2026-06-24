@@ -98,11 +98,6 @@ class ShellipelagoWorld(World):
     def option_set_contains(option, name: str) -> bool:
         return name in getattr(option, "value", set())
 
-    def option_set_selected(self, local_option_name: str, remote_option_name: str, name: str) -> bool:
-        return self.option_set_contains(getattr(self.options, local_option_name), name) or self.option_set_contains(
-            getattr(self.options, remote_option_name), name
-        )
-
     @staticmethod
     def requirement_met(state, player: int, requirement: dict) -> bool:
         item = requirement["item"]
@@ -174,18 +169,10 @@ class ShellipelagoWorld(World):
             return bool(self.options.shuffle_essential_items)
 
         if location_data.get("resource_location"):
-            return bool(self.options.shuffle_max_resource_upgrades) and self.option_set_selected(
-                "max_resource_upgrades_in_my_world",
-                "max_resource_upgrades_in_other_worlds",
-                drop_name,
-            )
+            return bool(self.options.shuffle_max_resource_upgrades)
 
         if location_data.get("essential_location"):
-            return bool(self.options.shuffle_essential_items) and self.option_set_selected(
-                "essential_items_in_my_world",
-                "essential_items_in_other_worlds",
-                drop_name,
-            )
+            return bool(self.options.shuffle_essential_items)
 
         return True
 
@@ -193,18 +180,10 @@ class ShellipelagoWorld(World):
         drop_name = location_data.get("drop_name", "")
 
         if location_data.get("resource_location"):
-            return bool(self.options.shuffle_max_resource_upgrades) and self.option_set_selected(
-                "max_resource_upgrades_in_my_world",
-                "max_resource_upgrades_in_other_worlds",
-                drop_name,
-            )
+            return bool(self.options.shuffle_max_resource_upgrades)
 
         if location_data.get("essential_location"):
-            return bool(self.options.shuffle_essential_items) and self.option_set_selected(
-                "essential_items_in_my_world",
-                "essential_items_in_other_worlds",
-                drop_name,
-            )
+            return bool(self.options.shuffle_essential_items)
 
         return False
 
@@ -250,7 +229,6 @@ class ShellipelagoWorld(World):
         allowed_traps = [
             trap_name for trap_name in trap_item_names
             if self.option_set_contains(self.options.trap_pool_spawn, trap_name)
-            and self.option_set_selected("trap_pool_in_my_world", "trap_pool_in_other_worlds", trap_name)
         ]
 
         while allowed_traps and remaining_slots > 0:
@@ -347,5 +325,4 @@ class ShellipelagoWorld(World):
             "energy_link": bool(self.options.energy_link),
             "death_link": bool(self.options.death_link),
             "trap_link": bool(self.options.trap_link),
-            "item_link": bool(self.options.item_link),
         }

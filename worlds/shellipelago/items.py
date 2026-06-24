@@ -212,7 +212,7 @@ raw_item_table = [
   {
     "key": "trapZoom",
     "id": 100025,
-    "name": "Zoom Trap",
+    "name": "Zoom In Trap",
     "classification": "trap",
     "trap": True,
     "count": 1
@@ -220,7 +220,7 @@ raw_item_table = [
   {
     "key": "trapDeath",
     "id": 100026,
-    "name": "Death Trap",
+    "name": "Instant Death Trap",
     "classification": "trap",
     "trap": True,
     "count": 1
@@ -228,7 +228,7 @@ raw_item_table = [
   {
     "key": "suddenlySnake",
     "id": 100027,
-    "name": "Suddenly Snake",
+    "name": "Snake Trap",
     "classification": "trap",
     "trap": True,
     "count": 1
