@@ -653,8 +653,6 @@ class StardewValleyWorld(World):
     def reconnect_found_entrances(self, key: str, value: Any) -> None:
         if value is None or key is None or self.multiworld.enforce_deferred_connections == "off":
             return
-        if key != self.found_entrances_datastorage_key.replace("{player}", str(self.player)):
-            return
 
         new_bits: int = value & (~self.visited_entrances)
         index = 0
