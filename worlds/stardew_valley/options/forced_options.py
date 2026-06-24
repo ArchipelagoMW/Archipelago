@@ -185,6 +185,12 @@ def force_reverse_entrance_plando_when_not_decoupled(world_options: options.Star
             continue
         if after_rev is None and before_rev is None:  # a one-way
             continue
+        if after_rev is None: # A two-way connected to a one-way
+            logger.warning(f"A two-way {before} was connected to a one-way {after}. This might cause issues with GER if not being careful")
+            continue
+        if before_rev is None: # A one-way connected to a two-way
+            logger.warning(f"A one-way {before} was connected to a two-way {after}. This might cause issues with GER if not being careful")
+            continue
         logger.warning(f"Adding forced connection '{after_rev}: {before_rev}' due to '{before}: {after}' existing for player {player} ({player_name})")
         to_add[after_rev] = before_rev
     world_options.entrance_plando.value.update(to_add)
