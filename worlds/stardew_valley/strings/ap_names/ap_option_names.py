@@ -148,3 +148,4 @@ class DataRandomizationOptionName:
     # crafting_result = "Crafting Recipe result"
     # machine_inputs = "Machine inputs"
     # machine_outputs = "Machine outputs"
+    surprise = "Surprise"

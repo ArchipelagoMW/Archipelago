@@ -1027,6 +1027,7 @@ class DataRandomization(OptionSet):
         DataRandomizationOptionName.festival_season, DataRandomizationOptionName.festival_date,
         DataRandomizationOptionName.shop_prices, DataRandomizationOptionName.shop_prices_across_vendors, DataRandomizationOptionName.shop_currencies,
         DataRandomizationOptionName.shop_extra_materials,
+        DataRandomizationOptionName.surprise,
     })
     preset_none = frozenset()
     preset_all = valid_keys

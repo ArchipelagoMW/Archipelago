@@ -153,7 +153,7 @@ class MoneyLogic(BaseLogic):
         if currency == MemeCurrency.goat:
             return self.logic.animal.has_animal(Animal.goat)
         if currency == MemeCurrency.yeehaw:
-            yeehaw_hats = [Hats.cowboy, Hats.cowgal_hat, Hats.blue_cowboy_hat, Hats.red_cowboy_hat, Hats.dark_cowboy_hat, Hats.magic_cowboy_hat] # , Hats.cowpoke_hat, Hats.deluxe_cowboy_hat
+            yeehaw_hats = [Hats.cowgal_hat, Hats.blue_cowboy_hat, Hats.red_cowboy_hat, Hats.dark_cowboy_hat, Hats.magic_cowboy_hat] # , Hats.cowboy, Hats.cowpoke_hat, Hats.deluxe_cowboy_hat
             return self.logic.or_(*(self.logic.hat.can_wear(hat) for hat in yeehaw_hats))
         if currency == MemeCurrency.error:
             return self.logic.true_
