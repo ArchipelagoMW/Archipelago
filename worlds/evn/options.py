@@ -41,6 +41,7 @@ class ShuffleSystems(Toggle):
 class IncludeOutfits(DefaultOnToggle):
     """
     Outfits will also need to be found and unlocked in order to purchase. Does not affect outfits ships come with naturally, but you may not be able to buy more ammo.
+    NOTE: Balance was designed around this being on. Turning it off will add lots of money filler items and probably make things much easier overall.
     """
     display_name = "Include Outfits in shuffle"
 

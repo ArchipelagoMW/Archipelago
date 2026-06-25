@@ -129,7 +129,7 @@ class EVNWorld(World):
             "shuffle_systems" 
         ) # otherwise, I'll need to finish adding the options / details.
     
-    # This function is called to generate the output mod file for the player.
+    # This function is called to generate the output mod file (plugin) for the player.
     # Will present as a download link for the player on the website once generation is complete.
     def generate_output(self, output_directory: str):
         mod_name = self.multiworld.get_out_file_name_base(self.player).replace("_", "-")
@@ -177,7 +177,7 @@ class EVNWorld(World):
 
         #chosen_route = story_routes[self.options.chosen_string.value]
         chosen_route = self.get_chosen_string()
-        use_extended = chosen_route["use_extended_checks"]
+        #use_extended = chosen_route["use_extended_checks"] # handled in locations.py
 
         # first, the column headers
         for column in misns.misn_columns.keys():

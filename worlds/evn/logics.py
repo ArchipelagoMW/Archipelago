@@ -19,9 +19,13 @@ from typing import Dict, TypedDict, List, Set
 #     "Pirate" : ["Pirate"],
 # }
 
-# This should be a bit that will NEVER be set. Use it to perm block missions in the seed.
+# This should be a bit that will NEVER be set naturally by the game. Use it to perm block missions in the seed that you don't want to be reachable.
 MISSION_BLOCKING_BIT = 9955
 
+# NOTE: This is a bit of a catch-all for missions that don't fit well with the archipelago check system.
+#   Namely, this will be missions that cannot be completed. Ex: Ship asks to be refilled (afaik, the game literally doesn't have a way to trigger the on_success of the misn for this scenario.)
+#   Or, are engine drivers / not intended for gameplay / may never be used, found, or interacted with. Ex: "Link" missions
+#   Or, are highly impractical, unfun, or even impossible for a player to complete. Ex: Drop bear event (which is done as a chron based misn iirc)
 misns_to_ignore: List[int] = [
     # for our sanity, we're going to ignore "Link" missions - they do barely more than add some text and connect missions. But can *also* be branches to bring the player back to one mission.
     783, 786, 787, 788, 789, 790, 797, 798, 799, 800, 801, 804, 805, 806, 807, 811, 812,
@@ -60,6 +64,9 @@ misns_to_ignore: List[int] = [
     625, 
     # Other
     133, # derelict decoy - no completion settings
+
+    # Avoid x force or fleet misns
+    614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 626, 627, 628, 629, 
 ]
 
 # Introducing this logic caused the number of available missions to drop below the item count
@@ -986,7 +993,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312], 2: [4], 4: [5], 5: [7], 7: [9] },
         "final_mission": 887,
-        "use_extended_checks": False,
+        "use_extended_checks": True, # due to how short this path is, we'll need to utilize extended checks to make sure players don't jump into the endgame too early.
     },
     3: {    # So, there's 2 starting options, and 2 paths, for 4 combos. May implement all 4, may not.
         "id": 3,
@@ -1006,7 +1013,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312], 3: [4], 4: [6], 6: [7], 7: [8] },
         "final_mission": 887,
-        "use_extended_checks": False,
+        "use_extended_checks": True,
     },
     4: {    # Auroran options
         "id": 4,
@@ -1026,7 +1033,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312], 10: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
-        "use_extended_checks": False,
+        "use_extended_checks": True,
     },
     5: {    # Auroran options
         "id": 5,
@@ -1046,48 +1053,49 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [21, 23, 27, 300, 301, 302, 310, 311, 312], 21: [11], 11: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
-        "use_extended_checks": False,
-    },
-    6: {    # Auroran options
-        "id": 6,
-        "name": "Auroran - From Bounty Hunter",
-        "option_name": "bh_auroran",
-        "regions": [
-            # Universe
-            0, 
-            # Block other story strings
-            100, 101, 102, 103, 104, 201,
-            # our story line
-            24, 13, 12, 14, 15, 16, 
-            # side misn stuff
-            20, # WG good ending
-            300, 301, 302, # Sigma
-            310, 311, 312, # vellos ship misns
-        ],
-        "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
-        "final_mission": 686,
-        "use_extended_checks": False,
-    },
-    7: {    # Pirates
-        "id": 7,
-        "name": "Pirate",
-        "option_name": "pirate",
-        "regions": [
-            # Universe
-            0, # universe
-            # Block other story strings
-            100, 101, 102, 104, 201, # blocking other strings (don't connect)
-            # our story line
-            30, 32, 34, # Story
-            # side misn stuff
-            20, 23, 27, # WG + BH
-            300, 301, 302, # Sigma
-            310, 311, 312, # vellos ship misns
-        ],
-        "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312], 30: [32], 32: [34] },
-        "final_mission": 712,
         "use_extended_checks": True,
     },
+    # 6: {    # Auroran options
+    #     "id": 6,
+    #     "name": "Auroran - From Bounty Hunter",
+    #     "option_name": "bh_auroran",
+    #     "regions": [
+    #         # Universe
+    #         0, 
+    #         # Block other story strings
+    #         100, 101, 102, 103, 104, 201,
+    #         # our story line
+    #         24, 13, 12, 14, 15, 16, 
+    #         # side misn stuff
+    #         20, # WG good ending
+    #         300, 301, 302, # Sigma
+    #         310, 311, 312, # vellos ship misns
+    #     ],
+    #     "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
+    #     "final_mission": 686,
+    #     "use_extended_checks": True,
+    # },
+    # Once again, too short and not enough locations (even with extended checks). Removing for now, may add back in later.
+    # 7: {    # Pirates
+    #     "id": 7,
+    #     "name": "Pirate",
+    #     "option_name": "pirate",
+    #     "regions": [
+    #         # Universe
+    #         0, # universe
+    #         # Block other story strings
+    #         100, 101, 102, 104, 201, # blocking other strings (don't connect)
+    #         # our story line
+    #         30, 32, 34, # Story
+    #         # side misn stuff
+    #         20, 23, 27, # WG + BH
+    #         300, 301, 302, # Sigma
+    #         310, 311, 312, # vellos ship misns
+    #     ],
+    #     "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312], 30: [32], 32: [34] },
+    #     "final_mission": 712,
+    #     "use_extended_checks": True,
+    # },
     8: {   
         "id": 8,
         "name": "Pirates - From WG",
