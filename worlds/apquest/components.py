@@ -1,6 +1,8 @@
 from worlds.LauncherComponents import Component, Type, components, launch
 
 
+# Launcher components are an optional way to add an entry to the launcher.
+
 # The most common type of component is a client, but there are other components, such as sprite/palette adjusters.
 # (Note: Some worlds distribute their clients as separate, standalone programs,
 #  while others include them in the apworld itself. Standalone clients are not an apworld component,
