@@ -629,7 +629,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.professor_snail_cave_entrance_to_dig_site: logic.received("Open Professor Snail Cave"),
         Entrance.talk_to_island_trader: logic.received("Island Trader"),
         Entrance.island_south_to_southeast: logic.received("Island Resort"),
-        Entrance.use_island_resort: logic.received("Island Resort"),
+        Entrance.use_island_resort: logic.received("Island Resort") & logic.relationship.exists(NPC.gus),
         Entrance.island_west_to_qi_walnut_room: logic.received("Qi Walnut Room"),
         Entrance.volcano_to_volcano_mines: logic.tool.can_water(1) | logic.received("Volcano Bridge") | logic.mod.magic.can_blink(),
         Entrance.volcano_mines_to_volcano: logic.tool.can_water(1) | logic.received("Volcano Bridge") | logic.mod.magic.can_blink(),
