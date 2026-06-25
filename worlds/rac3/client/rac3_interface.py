@@ -661,7 +661,11 @@ class Rac3Interface(GameInterface):
                 if weapon == RAC3ITEM.RY3N0:
                     continue
                 if weapon not in already_omega and weapon not in omega_items_to_sell:
-                    omega_items_to_sell.append(weapon)
+                    if self.options.progressive_weapons and self.options.weapon_level_locations:
+                        if self.UnlockItem[weapon].status >= 6:
+                            omega_items_to_sell.append(weapon)
+                    else:
+                        omega_items_to_sell.append(weapon)
             self.omega_weapon_vendors_items = omega_items_to_sell
 
     def determine_armor_vendor_items(self):
@@ -1324,7 +1328,7 @@ class Rac3Interface(GameInterface):
         new_inventory = []
         match self.vendor_type:
             case RAC3VENDORTYPE.WEAPON:
-                should_add_ngplus_items = self.options.ngplus_items and not self.options.progressive_weapons
+                should_add_ngplus_items = (self.options.ngplus_items and not (self.options.progressive_weapons and not self.options.weapon_level_locations))
                 if not self.options.weapon_vendors and not should_add_ngplus_items:
                     return
                 is_slimcognito = (self.planet == RAC3REGION.AQUATOS
@@ -1353,7 +1357,7 @@ class Rac3Interface(GameInterface):
                     if self.options.weapon_vendors:
                         new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
                                               self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
-                    if should_add_ngplus_items:
+                    if should_add_ngplus_items :
                         new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID, mega=1)
                                               for item in self.omega_weapon_vendors_items])
                 if self.planet == RAC3REGION.STARSHIP_PHOENIX or is_slimcognito:
@@ -1881,28 +1885,64 @@ class Rac3Interface(GameInterface):
         """
         # TODO: Track weapon EXP
         if self.options.progressive_weapons:
-            for weapon_name in non_prog_weapon_data.keys():
-                target_level = self.UnlockItem[weapon_name].status
-                if not target_level:
-                    continue
-                if target_level > 5 and (not self.options.ngplus_items or weapon_name == RAC3ITEM.RY3N0):
-                    target_level = 5
-                if target_level > 8 and self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0:
-                    target_level = 8
-                if self.vendor_type == RAC3VENDORTYPE.WEAPON:
-                    if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
-                        weapon_name].ID and not self.hovering_over_ammo():
-                        target_level = 1
-                if weapon_name == RAC3ITEM.RY3N0 and target_level > self.ryno:
-                    target_level = self.ryno
-                # logger.debug(f"weapon: {weapon_name}, target: {target_level}")
-                target_id = UPGRADE_DICT[weapon_name][target_level - 1]
-                target_name = ITEM_NAME_FROM_ID[target_id]
-                target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
-                # logger.debug(f"{target_name}, id: {target_id}, xp:{target_xp}")
-                self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
-                self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
-                self.weapon_levels[weapon_name] = target_level
+            if self.options.weapon_level_locations:
+                for weapon_name, weapon_data in non_prog_weapon_data.items():
+                    target_level = self.UnlockItem[weapon_name].status
+                    if not target_level:
+                        continue
+                    current_id = self._read8(weapon_data.LEVEL_ADDRESS)
+                    current_level = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[current_id]].LEVEL
+                    prev_saved = self.weapon_levels.get(weapon_name, 1)
+                    if current_level > prev_saved and current_level <= target_level:
+                        self.weapon_levels[weapon_name] = current_level
+                    if self.vendor_type == RAC3VENDORTYPE.WEAPON:
+                        if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
+                            weapon_name].ID and not self.hovering_over_ammo() and not self.hovering_over_mega():
+
+                            # Temporarily set the vendor-focused weapon to its base/display id
+                            self._write8(weapon_data.LEVEL_ADDRESS,
+                                        RAC3_ITEM_DATA_TABLE[weapon_name].ID)
+                            self.last_hovered_weapon = weapon_name
+                        else:
+                            restore_level = self.weapon_levels.get(weapon_name, 1)
+                            self._write8(weapon_data.LEVEL_ADDRESS,
+                                        UPGRADE_DICT[weapon_name][restore_level - 1])
+                    else:
+                        target_id = UPGRADE_DICT[weapon_name][target_level - 1]
+                        target_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[target_id]].XP_THRESHOLD
+                        if current_level >= target_level:
+                            self._write32(weapon_data.XP_ADDRESS, target_xp)
+                            self._write8(weapon_data.LEVEL_ADDRESS, target_id)
+                # restore last hovered weapon if we closed the vendor while it was hovering over it
+                if (self.last_hovered_weapon != "" and self.vendor_type != RAC3VENDORTYPE.WEAPON
+                    and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE):
+                    restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
+                    self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS,
+                                    UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
+                    self.last_hovered_weapon = ""
+            else:
+                for weapon_name in non_prog_weapon_data.keys():
+                    target_level = self.UnlockItem[weapon_name].status
+                    if not target_level:
+                        continue
+                    if target_level > 5 and (not self.options.ngplus_items or weapon_name == RAC3ITEM.RY3N0):
+                        target_level = 5
+                    if target_level > 8 and self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0:
+                        target_level = 8
+                    if self.vendor_type == RAC3VENDORTYPE.WEAPON:
+                        if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
+                            weapon_name].ID and not self.hovering_over_ammo():
+                            target_level = 1
+                    if weapon_name == RAC3ITEM.RY3N0 and target_level > self.ryno:
+                        target_level = self.ryno
+                    # logger.debug(f"weapon: {weapon_name}, target: {target_level}")
+                    target_id = UPGRADE_DICT[weapon_name][target_level - 1]
+                    target_name = ITEM_NAME_FROM_ID[target_id]
+                    target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
+                    # logger.debug(f"{target_name}, id: {target_id}, xp:{target_xp}")
+                    self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
+                    self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
+                    self.weapon_levels[weapon_name] = target_level
         else:
             if self.delayed_weapon_levelups and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE:
                 for weapon_name in self.delayed_weapon_levelups:
@@ -1936,7 +1976,7 @@ class Rac3Interface(GameInterface):
                 and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE):
                 restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
                 self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS,
-                             UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
+                            UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
                 self.last_hovered_weapon = ""
 
     def verify_quick_select_and_last_used(self):
