@@ -2021,11 +2021,6 @@ class UniversalTrackerEnabled(Rule[TWorld], game="Archipelago"):
         ut_enabled = world.multiworld.generation_is_fake
         return True_().resolve(world) if ut_enabled else False_().resolve(world)
 
-    @override
-    def __str__(self) -> str:
-        ut_enabled = world.multiworld.generation_is_fake
-        return "True" if ut_enabled else "False"
-
 
 DEFAULT_RULES: "Final[dict[str, type[Rule[World]]]]" = {
     rule_name: cast("type[Rule[World]]", rule_class)
