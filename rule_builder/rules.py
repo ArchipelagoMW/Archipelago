@@ -2010,6 +2010,23 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
             return f"Can reach entrance {self.entrance_name}"
 
 
+@dataclasses.dataclass()
+class UniversalTrackerEnabled(Rule[TWorld], game="Archipelago"):
+    """
+    A rule to abstract away checking Universal Tracker's MultiWorld flag
+    for rules like Glitched Logic that are wasteful to include if not tracking the world instance.
+    """
+    @override
+    def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        ut_enabled = world.multiworld.generation_is_fake
+        return True_().resolve(world) if ut_enabled else False_().resolve(world)
+
+    @override
+    def __str__(self) -> str:
+        ut_enabled = world.multiworld.generation_is_fake
+        return "True" if ut_enabled else "False"
+
+
 DEFAULT_RULES: "Final[dict[str, type[Rule[World]]]]" = {
     rule_name: cast("type[Rule[World]]", rule_class)
     for rule_name, rule_class in locals().items()
