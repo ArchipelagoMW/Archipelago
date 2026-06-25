@@ -98,6 +98,8 @@ class Group:
                     self._changed = True
                     attr = new
             # resolve the path immediately when accessing it
+            if attr.exists():
+                attr.__class__.validate(attr.resolve())
             return attr.__class__(attr.resolve())
         return attr
 
@@ -633,10 +635,6 @@ class ServerOptions(Group):
 class GeneratorOptions(Group):
     """Options for Generation"""
 
-    class EnemizerPath(LocalFilePath):
-        """Location of your Enemizer CLI, available here: https://github.com/Ijwu/Enemizer/releases"""
-        is_exe = True
-
     class PlayerFilesPath(OptionalUserFolderPath):
         """Folder from which the player yaml files are pulled from"""
         # created on demand, so marked as optional
@@ -693,7 +691,6 @@ class GeneratorOptions(Group):
         start_inventory -> Move remaining items to start_inventory, generate additional filler items to fill locations.
         """
 
-    enemizer_path: EnemizerPath = EnemizerPath("EnemizerCLI/EnemizerCLI.Core")  # + ".exe" is implied on Windows
     player_files_path: PlayerFilesPath = PlayerFilesPath("Players")
     players: Players = Players(0)
     allow_quantity: AllowQuantity | bool = False
