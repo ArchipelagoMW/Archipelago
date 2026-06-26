@@ -187,6 +187,7 @@ class NineSolsWorld(World):
             'prevent_annoying_runbacks',
             'prevent_weakened_prison_state',
             'randomize_shops',
+            'randomize_skill_tree',
         )
         slot_data["first_root_node_name"] = self.options.first_root_node.current_key  # we want strings instead of ints
         slot_data["jade_costs"] = self.jade_costs
