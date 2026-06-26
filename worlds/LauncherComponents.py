@@ -272,7 +272,7 @@ if not is_frozen():
         parser = argparse.ArgumentParser(prog="Build APWorlds", description="Build script for APWorlds")
         parser.add_argument("worlds", type=str, default=(), nargs="*", help="names of APWorlds to build")
         parser.add_argument("--skip_open_folder", action="store_true", help="don't open the output build folder")
-        parser.add_argument("--output-directory", type=str, default=os.path.join("build", "apworlds"), required=False,
+        parser.add_argument("--output_directory", type=str, default=os.path.join("build", "apworlds"), required=False,
                             help="a directory in which to output the apworlds")
         args = parser.parse_args(launch_args)
 
