@@ -668,7 +668,7 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
                 new_entity = surface.create_entity(args)
                 if new_entity then
                     new_entity.destructible = false
-                    new_entity.minable = false
+                    new_entity.minable_flag = false
                     new_entity.rotatable = false
                     break
                 end
