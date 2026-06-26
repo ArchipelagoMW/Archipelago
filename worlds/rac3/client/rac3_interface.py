@@ -440,6 +440,7 @@ class Rac3Interface(GameInterface):
         logger.debug(f"Initial filler items: {self.initial_fillers} and data received: {data_received}")
         if not data_received:
             return
+        notification_message = ""
         for item, count in self.initial_fillers.items():
             stored_count = self.stored_fillers.get(item, 0)
             if count > stored_count:
@@ -447,10 +448,12 @@ class Rac3Interface(GameInterface):
                 logger.debug(f"Processing {diff} offline filler items for {item}")
                 for _ in range(diff):
                     self.item_received(RAC3_ITEM_DATA_TABLE[item].AP_CODE, None, None, None)
-                self.enqueue_notification(f'Received {RAC3TEXTFORMATSTRING.BLUE}{diff}x {RAC3TEXTFORMATSTRING.WHITE}{item} {RAC3TEXTFORMATSTRING.NORMAL}while offline', duration=5.0)
+                notification_message += f'Received {RAC3TEXTFORMATSTRING.GREEN}{diff}x {RAC3TEXTFORMATSTRING.WHITE}{item} {RAC3TEXTFORMATSTRING.NORMAL}while offline\n'
             else:
                 logger.debug(f"No new offline filler items for {item} (stored: {stored_count}, current: {count})")
         self.stored_fillers = self.initial_fillers.copy()
+        if notification_message:
+            self.enqueue_notification(notification_message.removesuffix("\n"), duration=5.0)
 
     def collect_locations(self, locations: set[str]) -> set[str]:
         """Set the in game flags for this location for it to act as if the player has already collected the item here"""
