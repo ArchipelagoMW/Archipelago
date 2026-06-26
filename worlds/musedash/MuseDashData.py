@@ -726,4 +726,11 @@ SONG_DATA: Dict[str, SongData] = {
     "Coooonsultant!": SongData(2900850, "98-3", "Touhou Mugakudan -V-", False, 6, 8, 10),
     "Stop at the affected part and melt quickly - Madness Udine Quarter": SongData(2900851, "98-4", "Touhou Mugakudan -V-", False, 4, 6, 10),
     "Ultimate taste": SongData(2900852, "98-5", "Touhou Mugakudan -V-", False, 6, 8, 11),
+    "Monophobia": SongData(2900853, "43-75", "MD Plus Project", True, 5, 7, 9),
+    "silverune melorosa": SongData(2900854, "43-76", "MD Plus Project", False, 5, 7, 10),
+    "Overjoy * OVERDOSE!!": SongData(2900855, "43-77", "MD Plus Project", True, 4, 6, 9),
+    "ABYSSAL // COSMOS": SongData(2900856, "43-78", "MD Plus Project", True, 5, 7, 10),
+    "What-If Box": SongData(2900857, "43-79", "MD Plus Project", True, 5, 8, 10),
+    "SΛTERiTE": SongData(2900858, "43-80", "MD Plus Project", True, 7, 9, 11),
+    "Shakkiiiin!!": SongData(2900859, "43-81", "MD Plus Project", False, 5, 8, 11),
 }
