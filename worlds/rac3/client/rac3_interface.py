@@ -657,12 +657,15 @@ class Rac3Interface(GameInterface):
             omega_items_to_sell: list[str] = []
             v5_weapons = {weapon_name for weapon_name in self.weapon_levels if self.weapon_levels[weapon_name] == 5}
             already_omega = {weapon_name for weapon_name in self.weapon_levels if self.weapon_levels[weapon_name] > 5}
+            progressive_weapons_mode = self.options.progressive_weapons
+            if self.options.weapon_level_locations and progressive_weapons_mode == 2:
+                progressive_weapons_mode = 1  # Force manual leveling if weapon level locations are enabled
             for weapon in v5_weapons:
                 if weapon == RAC3ITEM.RY3N0:
                     continue
                 if weapon not in already_omega and weapon not in omega_items_to_sell:
-                    if self.options.progressive_weapons and self.options.weapon_level_locations:
-                        if self.UnlockItem[weapon].status >= 6:
+                    if progressive_weapons_mode < 2:
+                        if self.UnlockItem[weapon].status > 5:
                             omega_items_to_sell.append(weapon)
                     else:
                         omega_items_to_sell.append(weapon)
@@ -1328,7 +1331,10 @@ class Rac3Interface(GameInterface):
         new_inventory = []
         match self.vendor_type:
             case RAC3VENDORTYPE.WEAPON:
-                should_add_ngplus_items = (self.options.ngplus_items and not (self.options.progressive_weapons and not self.options.weapon_level_locations))
+                progressive_weapons_mode = self.options.progressive_weapons
+                if self.options.weapon_level_locations and progressive_weapons_mode == 2:
+                    progressive_weapons_mode = 1  # Force manual leveling if weapon level locations are enabled
+                should_add_ngplus_items = (self.options.ngplus_items and progressive_weapons_mode < 2)
                 if not self.options.weapon_vendors and not should_add_ngplus_items:
                     return
                 is_slimcognito = (self.planet == RAC3REGION.AQUATOS
