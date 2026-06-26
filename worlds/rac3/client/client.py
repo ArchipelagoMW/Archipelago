@@ -420,6 +420,8 @@ class Rac3Context(CommonContext):
                             self.save_data.update({int(address): (CHECKTYPE(data[0]), data[1])})
                         if self.is_connected_to_game and not self.main_menu:
                             self.game_interface.load_save(self.save_data)
+                            self.game_interface.process_offline_fillers(self.data_received)
+
 
         if cmd == "SetReply":
             logger.debug(f"{cmd} server packet: {args}")

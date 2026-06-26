@@ -201,6 +201,8 @@ class Rac3Interface(GameInterface):
     opened_the_refractor_doors: bool = False
     weapon_levels: dict[str, int] = {}
     delayed_weapon_levelups: list[str] = []
+    stored_fillers: dict[str, int] = {}
+    initial_fillers: dict[str, int] = {}
     last_hovered_weapon: str = ""
     equipped_item: int = 0
     last_used_0: int = 0
@@ -369,7 +371,8 @@ class Rac3Interface(GameInterface):
 
     def check_main_menu(self):
         """Check if the player is on the main menu, before starting the game"""
-        if self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF or self._read32(RAC3STATUS.GAME_LAUNCHED) == 0:
+        if (self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF 
+            or (self._read32(RAC3STATUS.GAME_LAUNCHED) == 0 and self.current_game == RAC3VERSION.US_ID)):
             return True
         return False
 
@@ -426,6 +429,28 @@ class Rac3Interface(GameInterface):
             RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS):
             return
         self.item_received(item, us, None, location)
+
+    def filler_items(self, item: int, us: str, location: int):
+        """Runs when loading into game from the main menu to update the player with filler items from the server"""
+        if RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS:
+            self.initial_fillers[ITEM_FROM_AP_CODE[item]] = self.initial_fillers.get(ITEM_FROM_AP_CODE[item], 0) + 1
+
+    def process_offline_fillers(self, data_received: bool):
+        """Process any filler items received while offline"""
+        logger.debug(f"Initial filler items: {self.initial_fillers} and data received: {data_received}")
+        if not data_received:
+            return
+        for item, count in self.initial_fillers.items():
+            stored_count = self.stored_fillers.get(item, 0)
+            if count > stored_count:
+                diff = count - stored_count
+                logger.debug(f"Processing {diff} offline filler items for {item}")
+                for _ in range(diff):
+                    self.item_received(RAC3_ITEM_DATA_TABLE[item].AP_CODE, None, None, None)
+                self.enqueue_notification(f'Received {RAC3TEXTFORMATSTRING.BLUE}{diff}x {RAC3TEXTFORMATSTRING.WHITE}{item} {RAC3TEXTFORMATSTRING.NORMAL}while offline', duration=5.0)
+            else:
+                logger.debug(f"No new offline filler items for {item} (stored: {stored_count}, current: {count})")
+        self.stored_fillers = self.initial_fillers.copy()
 
     def collect_locations(self, locations: set[str]) -> set[str]:
         """Set the in game flags for this location for it to act as if the player has already collected the item here"""
@@ -532,6 +557,15 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.HELP_DESK_VOICE, self.options.helpdesk)
         self._write8(RAC3STATUS.HELP_DESK_TEXT, self.options.helpdesk)
         #TODO: Add stuff like camera speed, normal/inverted controls, subtitles, etc.
+
+    def init_stored_fillers(self):
+        """Read the stored filler items from memory and fill the stored_fillers dictionary"""
+        self.stored_fillers[RAC3ITEM.BOLTS] = self._read8(RAC3STATUS.BOLT_PACKS)
+        self.stored_fillers[RAC3ITEM.JACKPOT] = self._read8(RAC3STATUS.JACKPOT_PACKS)
+        self.stored_fillers[RAC3ITEM.NANOTECH_XP] = self._read8(RAC3STATUS.NANOTECH_EXP_PACKS)
+        self.stored_fillers[RAC3ITEM.WEAPON_XP] = self._read8(RAC3STATUS.WEAPON_LEVEL_PACKS)
+        logger.debug(f"Stored filler items: {self.stored_fillers}")
+
 
     #############################
     # Start of Main Update Loop #
@@ -847,6 +881,7 @@ class Rac3Interface(GameInterface):
                 if new_bolts > 0x7FFFFFFF:
                     new_bolts = 0x7FFFFFFF
                 self._write32(RAC3STATUS.BOLTS, new_bolts)
+                self._write8(RAC3STATUS.BOLT_PACKS, self._read8(RAC3STATUS.BOLT_PACKS) + 1)
             case RAC3ITEM.INFERNO_MODE:
                 timer = self._read32(RAC3STATUS.INFERNO_TIMER)
                 new_timer = timer + 1000 + randint(1, 100)
@@ -856,15 +891,17 @@ class Rac3Interface(GameInterface):
             case RAC3ITEM.JACKPOT:
                 # Limit multiplier to 128x
                 if self.bolt_and_xp_multiplier_value <= 6:
-                    _time = round(time.time() + 30.0, 4)
+                    _time = time.time() + 30.0
                     self.timers[name + str(_time)] = _time
                     self.bolt_and_xp_multiplier_value += 1
+                self._write8(RAC3STATUS.JACKPOT_PACKS, self._read8(RAC3STATUS.JACKPOT_PACKS) + 1)
             case RAC3ITEM.NANOTECH_XP:
                 nanotech_gain = min(200000, max(20000, int(self.nanotech_exp * 0.15)))
                 self.nanotech_exp += nanotech_gain
                 if self.nanotech_exp > 0x7FFFFFFF:
                     self.nanotech_exp = 0x7FFFFFFF
                 self._write32(RAC3STATUS.NANOTECH_EXP, self.nanotech_exp)
+                self._write8(RAC3STATUS.NANOTECH_EXP_PACKS, self._read8(RAC3STATUS.NANOTECH_EXP_PACKS) + 1)
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = self.get_valid_weapon_level_ups()
                 if valid_weapons:
@@ -873,6 +910,7 @@ class Rac3Interface(GameInterface):
                         self.delayed_weapon_levelups.append(selected_weapon)
                     else:
                         self.weapon_level_up(selected_weapon)
+                self._write8(RAC3STATUS.WEAPON_LEVEL_PACKS, self._read8(RAC3STATUS.WEAPON_LEVEL_PACKS) + 1)
             case RAC3ITEM.OHKO_TRAP:
                 self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
                 self._write8(RAC3STATUS.HEALTH, 1)
