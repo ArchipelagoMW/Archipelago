@@ -731,6 +731,6 @@ SONG_DATA: Dict[str, SongData] = {
     "Overjoy * OVERDOSE!!": SongData(2900855, "43-77", "MD Plus Project", True, 4, 6, 9),
     "ABYSSAL // COSMOS": SongData(2900856, "43-78", "MD Plus Project", True, 5, 7, 10),
     "What-If Box": SongData(2900857, "43-79", "MD Plus Project", True, 5, 8, 10),
-    "SΛTERiTE": SongData(2900858, "43-80", "MD Plus Project", True, 7, 9, 11),
+    "SATERiTE": SongData(2900858, "43-80", "MD Plus Project", True, 7, 9, 11),
     "Shakkiiiin!!": SongData(2900859, "43-81", "MD Plus Project", False, 5, 8, 11),
 }
