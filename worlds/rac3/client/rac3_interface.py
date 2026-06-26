@@ -1883,66 +1883,71 @@ class Rac3Interface(GameInterface):
         hovering over ammo, in which case set to base level.
         - Handles both progressive and non-progressive weapon logic, including syncing XP and level addresses in memory.
         """
-        # TODO: Track weapon EXP
-        if self.options.progressive_weapons:
-            if self.options.weapon_level_locations:
-                for weapon_name, weapon_data in non_prog_weapon_data.items():
-                    target_level = self.UnlockItem[weapon_name].status
-                    if not target_level:
-                        continue
-                    current_id = self._read8(weapon_data.LEVEL_ADDRESS)
-                    current_level = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[current_id]].LEVEL
-                    prev_saved = self.weapon_levels.get(weapon_name, 1)
-                    if current_level > prev_saved and current_level <= target_level:
-                        self.weapon_levels[weapon_name] = current_level
-                    if self.vendor_type == RAC3VENDORTYPE.WEAPON:
-                        if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
-                            weapon_name].ID and not self.hovering_over_ammo() and not self.hovering_over_mega():
+        progressive_weapon_mode = self.options.progressive_weapons
+        if self.options.weapon_level_locations and progressive_weapon_mode == 2:
+            progressive_weapon_mode = 1  # Force manual leveling if weapon level locations are enabled
 
-                            # Temporarily set the vendor-focused weapon to its base/display id
-                            self._write8(weapon_data.LEVEL_ADDRESS,
-                                        RAC3_ITEM_DATA_TABLE[weapon_name].ID)
-                            self.last_hovered_weapon = weapon_name
-                        else:
-                            restore_level = self.weapon_levels.get(weapon_name, 1)
-                            self._write8(weapon_data.LEVEL_ADDRESS,
-                                        UPGRADE_DICT[weapon_name][restore_level - 1])
+        # Manual weapon leveling for progressive weapons
+        if progressive_weapon_mode == 1:
+            for weapon_name, weapon_data in non_prog_weapon_data.items():
+                target_level = self.UnlockItem[weapon_name].status
+                if not target_level:
+                    continue
+                current_id = self._read8(weapon_data.LEVEL_ADDRESS)
+                current_level = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[current_id]].LEVEL
+                prev_saved = self.weapon_levels.get(weapon_name, 1)
+                if current_level > prev_saved and current_level <= target_level:
+                    self.weapon_levels[weapon_name] = current_level
+                if self.vendor_type == RAC3VENDORTYPE.WEAPON:
+                    if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
+                        weapon_name].ID and not self.hovering_over_ammo() and not self.hovering_over_mega():
+
+                        # Temporarily set the vendor-focused weapon to its base/display id
+                        self._write8(weapon_data.LEVEL_ADDRESS,
+                                    RAC3_ITEM_DATA_TABLE[weapon_name].ID)
+                        self.last_hovered_weapon = weapon_name
                     else:
-                        target_id = UPGRADE_DICT[weapon_name][target_level - 1]
-                        target_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[target_id]].XP_THRESHOLD
-                        if current_level >= target_level:
-                            self._write32(weapon_data.XP_ADDRESS, target_xp)
-                            self._write8(weapon_data.LEVEL_ADDRESS, target_id)
-                # restore last hovered weapon if we closed the vendor while it was hovering over it
-                if (self.last_hovered_weapon != "" and self.vendor_type != RAC3VENDORTYPE.WEAPON
-                    and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE):
-                    restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
-                    self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS,
-                                    UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
-                    self.last_hovered_weapon = ""
-            else:
-                for weapon_name in non_prog_weapon_data.keys():
-                    target_level = self.UnlockItem[weapon_name].status
-                    if not target_level:
-                        continue
-                    if target_level > 5 and (not self.options.ngplus_items or weapon_name == RAC3ITEM.RY3N0):
-                        target_level = 5
-                    if target_level > 8 and self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0:
-                        target_level = 8
-                    if self.vendor_type == RAC3VENDORTYPE.WEAPON:
-                        if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
-                            weapon_name].ID and not self.hovering_over_ammo():
-                            target_level = 1
-                    if weapon_name == RAC3ITEM.RY3N0 and target_level > self.ryno:
-                        target_level = self.ryno
-                    # logger.debug(f"weapon: {weapon_name}, target: {target_level}")
+                        restore_level = self.weapon_levels.get(weapon_name, 1)
+                        self._write8(weapon_data.LEVEL_ADDRESS,
+                                    UPGRADE_DICT[weapon_name][restore_level - 1])
+                else:
                     target_id = UPGRADE_DICT[weapon_name][target_level - 1]
-                    target_name = ITEM_NAME_FROM_ID[target_id]
-                    target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
-                    # logger.debug(f"{target_name}, id: {target_id}, xp:{target_xp}")
-                    self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
-                    self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
-                    self.weapon_levels[weapon_name] = target_level
+                    target_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[target_id]].XP_THRESHOLD
+                    if current_level >= target_level:
+                        self._write32(weapon_data.XP_ADDRESS, target_xp)
+                        self._write8(weapon_data.LEVEL_ADDRESS, target_id)
+            # restore last hovered weapon if we closed the vendor while it was hovering over it
+            if (self.last_hovered_weapon != "" and self.vendor_type != RAC3VENDORTYPE.WEAPON
+                and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE):
+                restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
+                self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS,
+                                UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
+                self.last_hovered_weapon = ""
+
+        # Automatic weapon leveling for progressive weapons
+        elif progressive_weapon_mode == 2:
+            for weapon_name in non_prog_weapon_data.keys():
+                target_level = self.UnlockItem[weapon_name].status
+                if not target_level:
+                    continue
+                if target_level > 5 and (not self.options.ngplus_items or weapon_name == RAC3ITEM.RY3N0):
+                    target_level = 5
+                if target_level > 8 and self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0:
+                    target_level = 8
+                if self.vendor_type == RAC3VENDORTYPE.WEAPON:
+                    if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
+                        weapon_name].ID and not self.hovering_over_ammo():
+                        target_level = 1
+                if weapon_name == RAC3ITEM.RY3N0 and target_level > self.ryno:
+                    target_level = self.ryno
+                # logger.debug(f"weapon: {weapon_name}, target: {target_level}")
+                target_id = UPGRADE_DICT[weapon_name][target_level - 1]
+                target_name = ITEM_NAME_FROM_ID[target_id]
+                target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
+                # logger.debug(f"{target_name}, id: {target_id}, xp:{target_xp}")
+                self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
+                self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
+                self.weapon_levels[weapon_name] = target_level
         else:
             if self.delayed_weapon_levelups and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE:
                 for weapon_name in self.delayed_weapon_levelups:

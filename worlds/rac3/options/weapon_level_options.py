@@ -11,7 +11,7 @@ class WeaponLevels(Choice):
     **V5**: Only V5 weapon levels are locations.
     **All**: All weapon levels are locations (including V6, V7, V8 if ngplus_items are enabled).
 
-    Note: If progressive weapons are enabled, weapons no longer level up automatically, you will need to manually upgrade them.
+    Note: If progressive weapons are enabled, leveling will be forced to manual leveling instead of automatic leveling.
     """
     display_name = RAC3OPTION.WEAPON_LEVEL_LOCATIONS
     option_disable = 0
