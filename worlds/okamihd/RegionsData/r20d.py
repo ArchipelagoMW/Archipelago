@@ -37,6 +37,9 @@ exits = {
 events = {
     RegionNames.ONI_ISLAND_ENTRANCE_UPPER:{
         "Oni Island - Mandatory Fight before entrance":EventData(mandatory_enemies=[OkamiEnemies.RED_OGRE,OkamiEnemies.BLUE_OGRE])
+    },
+    RegionNames.ONI_ISLAND_EXTERIOR_ROOF:{
+        "Oni Island - Grab Key on the roof":EventData(required_brush_techniques=[BrushTechniques.CATWALK])
     }
 }
 locations = {

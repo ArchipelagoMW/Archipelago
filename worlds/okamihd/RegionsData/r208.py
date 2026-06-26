@@ -39,6 +39,20 @@ exits = {
     RegionNames.ONI_ISLAND_INTERIOR_TOBI_5_6: [
         ExitData(RegionNames.ONI_ISLAND_INTERIOR_LASER_BRIDGES, loading_screen=False,
                  required_items_events=["Oni Island - Tobi race #6 (Chamber of Delay)"])
+    ],
+    RegionNames.ONI_ISLAND_INTERIOR_LASER_BRIDGES: [
+        ExitData(RegionNames.ONI_ISLAND_INTERIOR_POST_TOBI_7, loading_screen=False,
+                 required_items_events=["Oni Island - Tobi race #7 (Passage of Needles)"])
+    ],
+    RegionNames.ONI_ISLAND_INTERIOR_POST_TOBI_7: [
+        ExitData(RegionNames.ONI_ISLAND_EXTERIOR_ROOF,
+                 required_items_events=["Oni Island - 3F Blow up wall to exterior roof"]),
+        ExitData(RegionNames.ONI_ISLAND_INTERIOR_3F_POST_LOCKJAW, loading_screen=False,
+                 required_items_events=["Oni Island - 3F Open Lockjaw"])
+    ],
+    RegionNames.ONI_ISLAND_INTERIOR_3F_POST_LOCKJAW: [
+        ExitData(RegionNames.ONI_ISLAND_INTERIOR_3F_POST_GEKIGAMI, loading_screen=False,
+                 required_items_events=["Oni Island - Open thunder door after Gekigami"])
     ]
 
 }
@@ -68,8 +82,18 @@ events = {
         "Oni Island - Tobi race #6 (Chamber of Delay)": EventData(mandatory_enemies=[OkamiEnemies.HEADLESS_GUARDIAN])
     },
     RegionNames.ONI_ISLAND_INTERIOR_LASER_BRIDGES: {
-        "Oni Island - 3F Mandatory Blue Ogre Fight" :EventData(mandatory_enemies=[OkamiEnemies.BLUE_OGRE]),
-        "Oni Island - Tobi race #7 (Passage of Needles)": EventData(required_items_events=["Oni Island - 3F Mandatory Blue Ogre Fight"])
+        "Oni Island - 3F Mandatory Blue Ogre Fight": EventData(mandatory_enemies=[OkamiEnemies.BLUE_OGRE]),
+        "Oni Island - Tobi race #7 (Passage of Needles)": EventData(
+            required_items_events=["Oni Island - 3F Mandatory Blue Ogre Fight"])
+    },
+    RegionNames.ONI_ISLAND_INTERIOR_POST_TOBI_7: {
+        "Oni Island - 3F Blow up wall to exterior roof": EventData(cherry_bomb_level=1),
+        "Oni Island - 3F Open Lockjaw": EventData(required_items_events=["Oni Island - Grab Key on the roof"]),
+    },
+    RegionNames.ONI_ISLAND_INTERIOR_3F_POST_LOCKJAW: {
+        # Thunderstrom tutorial
+        "Oni Island - Open thunder door after Gekigami": EventData(
+            required_brush_techniques=[BrushTechniques.THUNDERSTORM])
     }
 }
 locations = {
@@ -89,8 +113,16 @@ locations = {
     },
     RegionNames.ONI_ISLAND_INTERIOR_LASER_BRIDGES: {
         "Oni Island - 2F Chest after Chamber of delay": LocData(container_check_id(MapIds.ONI_ISLAND_LOWER_INT, 20)),
-        "Oni Island - 3F Right Chest in Labyrinth of Torment": LocData(container_check_id(MapIds.ONI_ISLAND_LOWER_INT, 23)),
+        "Oni Island - 3F Right Chest in Labyrinth of Torment": LocData(
+            container_check_id(MapIds.ONI_ISLAND_LOWER_INT, 23)),
         "Oni Island - 3F Left Chest Labyrinth of Torment": LocData(container_check_id(MapIds.ONI_ISLAND_LOWER_INT, 22))
+    },
+    RegionNames.ONI_ISLAND_INTERIOR_3F_POST_LOCKJAW: {
+        "Oni Island - 3F Chest in Spike Room": LocData(container_check_id(MapIds.ONI_ISLAND_LOWER_INT, 24)),
+        "Oni Island - Gekigami": LocData(brush_check_id(8), required_brush_techniques=[BrushTechniques.REJUVENATION])
+    },
+    RegionNames.ONI_ISLAND_INTERIOR_3F_POST_GEKIGAMI: {
+        "Oni Island - 3F Thunder Chest after Gekigami" : LocData(container_check_id(MapIds.ONI_ISLAND_LOWER_INT,21),type=LocationType.THUNDER_CHEST)
     }
 }
 shop_locations = {
