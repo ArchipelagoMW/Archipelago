@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DeathLinkMixin, DefaultOnToggle, OptionSet, PerGameCommonOptions, Toggle
+from Options import DeathLinkMixin, DefaultOnToggle, OptionCounter, OptionSet, PerGameCommonOptions, Range, Toggle
 
 
 ESSENTIAL_ITEMS = frozenset({
@@ -49,15 +49,15 @@ class ShuffleMaxResourceUpgrades(DefaultOnToggle):
 
 
 class AddEasyDestructibleChecks(Toggle):
-    """Add normal destructible objects as checks."""
+    """Add destructible tiles as locations."""
 
-    display_name = "Add Easy Destructible Checks"
+    display_name = "Add Destructible Tiles to Locations"
 
 
 class EnemiesAreChecks(Toggle):
-    """Enemies grant checks when defeated."""
+    """Add defeated enemies as locations."""
 
-    display_name = "Enemies Are Checks"
+    display_name = "Add Enemies to Locations"
 
 
 class ShuffleShops(DefaultOnToggle):
@@ -84,12 +84,30 @@ class AddTrapsToPool(Toggle):
     display_name = "Add Traps To Pool"
 
 
+class TrapFillPercentage(Range):
+    """Percentage of filler item slots that will be replaced with traps."""
+
+    display_name = "Trap Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 25
+
+
 class TrapPoolSpawn(OptionSet):
     """Trap types that can spawn from the trap item pool."""
 
     display_name = "Trap Pool Spawn"
     valid_keys = TRAPS
     default = TRAPS
+
+
+class TrapWeights(OptionCounter):
+    """Relative weights for traps in the item pool. Set a trap to 0 to prevent it from appearing."""
+
+    display_name = "Trap Weights"
+    valid_keys = TRAPS
+    min = 0
+    default = {trap_name: 1 for trap_name in sorted(TRAPS)}
 
 
 class OtherPlayersCanFindItemPoolDrops(Toggle):
@@ -131,7 +149,9 @@ class ShellipelagoOptions(PerGameCommonOptions, DeathLinkMixin):
     shuffle_shops: ShuffleShops
     show_essential_pickup_hints: ShowEssentialPickupHints
     add_traps_to_pool: AddTrapsToPool
+    trap_fill_percentage: TrapFillPercentage
     trap_pool_spawn: TrapPoolSpawn
+    trap_weights: TrapWeights
     other_players_can_find_item_pool_drops: OtherPlayersCanFindItemPoolDrops
     ring_link: RingLink
     energy_link: EnergyLink

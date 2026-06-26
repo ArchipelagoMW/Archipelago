@@ -1,3 +1,5 @@
+import math
+
 from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
@@ -6,7 +8,7 @@ from .locations import location_table
 from .options import ESSENTIAL_ITEMS, MAX_RESOURCE_UPGRADES, ShellipelagoOptions
 
 
-__version__ = "1.8"
+__version__ = "1.9"
 
 
 class ShellipelagoItem(Item):
@@ -226,13 +228,20 @@ class ShellipelagoWorld(World):
         if not bool(self.options.add_traps_to_pool) or remaining_slots <= 0:
             return
 
-        allowed_traps = [
+        trap_weights = {
             trap_name for trap_name in trap_item_names
             if self.option_set_contains(self.options.trap_pool_spawn, trap_name)
+        }
+        weighted_traps = [
+            trap_name for trap_name in trap_item_names
+            for _ in range(max(0, int(self.options.trap_weights.value.get(trap_name, 0))))
+            if trap_name in trap_weights
         ]
+        trap_count = math.ceil(remaining_slots * (self.options.trap_fill_percentage.value / 100))
 
-        while allowed_traps and remaining_slots > 0:
-            item_pool.append(self.create_item(self.random.choice(allowed_traps)))
+        while weighted_traps and trap_count > 0 and remaining_slots > 0:
+            item_pool.append(self.create_item(self.random.choice(weighted_traps)))
+            trap_count -= 1
             remaining_slots -= 1
 
     def create_items(self) -> None:
@@ -316,6 +325,7 @@ class ShellipelagoWorld(World):
         }
 
         return {
+            "world_version": __version__,
             "show_essential_pickup_hints": bool(self.options.show_essential_pickup_hints),
             "add_easy_destructible_checks": bool(self.options.add_easy_destructible_checks),
             "enemies_are_checks": bool(self.options.enemies_are_checks),
