@@ -46,4 +46,5 @@ class RAC3OPTION:
     NGPLUS_VENDOR = "NG+ Vendor"
     NGPLUS_ITEMS = "NG+ Items"
     NGPLUS_START = "NG+ Start"
+    HELP_DESK = "Help Desk"
     WEAPON_LEVEL_LOCATIONS = "Weapon Level Locations"

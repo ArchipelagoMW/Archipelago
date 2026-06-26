@@ -126,6 +126,7 @@ class Rac3Interface(GameInterface):
         ngplus_items: int
         ngplus_vendors: int
         ngplus_start: int
+        helpdesk: int
         weapon_level_locations: int
 
     UnlockItem: dict[str, UnlockData] = None
@@ -345,6 +346,7 @@ class Rac3Interface(GameInterface):
         self.options.ngplus_items = slot_data[RAC3OPTION.NGPLUS_ITEMS]
         self.options.ngplus_vendors = slot_data[RAC3OPTION.NGPLUS_VENDOR]
         self.options.ngplus_start = slot_data[RAC3OPTION.NGPLUS_START]
+        self.options.helpdesk = slot_data[RAC3OPTION.HELP_DESK]
         self.options.weapon_level_locations = slot_data[RAC3OPTION.WEAPON_LEVEL_LOCATIONS]
 
     ########################################
@@ -524,6 +526,12 @@ class Rac3Interface(GameInterface):
                 if RAC3_LOCATION_DATA_TABLE[loc].REGION not in [RAC3REGION.STARSHIP_PHOENIX,
                                                                 RAC3REGION.ANNIHILATION_NATION]:
                     self._write8(addr, 1)
+
+    def setup_settings(self):
+        """Update in game settings based on the slot options"""
+        self._write8(RAC3STATUS.HELP_DESK_VOICE, self.options.helpdesk)
+        self._write8(RAC3STATUS.HELP_DESK_TEXT, self.options.helpdesk)
+        #TODO: Add stuff like camera speed, normal/inverted controls, subtitles, etc.
 
     #############################
     # Start of Main Update Loop #

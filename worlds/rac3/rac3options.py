@@ -10,6 +10,7 @@ from worlds.rac3.options.armor_vendor_options import ArmorVendors
 from worlds.rac3.options.clank_options import ClankOptions
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
+from worlds.rac3.options.helpdesk_options import HelpDesk
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
@@ -89,6 +90,7 @@ class RaC3Options(PerGameCommonOptions):
     ngplus_items: NGPlusItems
     ngplus_vendors: NGPlusVendor
     ngplus_start: NGPlusStart
+    helpdesk: HelpDesk
     weapon_level_locations: WeaponLevels
 
 
@@ -97,6 +99,7 @@ rac3_option_groups = [
         ProgressionBalancing,
         Accessibility,
         DeathLink,
+        HelpDesk,
     ]),
     OptionGroup("RAC3 Game Options", [
         Shortcuts,
@@ -182,5 +185,6 @@ slot_data_options: list[str] = [
     RAC3OPTION.ARMOR_VENDOR,
     RAC3OPTION.SCOUT_VENDORS,
     RAC3OPTION.NGPLUS_VENDOR,
+    RAC3OPTION.HELP_DESK,
     RAC3OPTION.WEAPON_LEVEL_LOCATIONS,
 ]
