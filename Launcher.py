@@ -454,8 +454,13 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 self.launch_components = None
                 self.launch_args = None
 
-            # Trigger the "All" button to show all components on startup
-            self.top_screen.ids.all.trigger_action(duration=0)
+            # Trigger the "All" button if persistent storage exists, otherwise trigger the "Setup" button
+            # This is to ensure that the user is guided to the setup process
+            # if they start the launcher for the first time.
+            if os.path.exists(Utils.local_path("_persistent_storage.yaml")):
+                self.top_screen.ids.all.trigger_action(duration=0)
+            else:
+                self.top_screen.ids.setup.trigger_action(duration=0)
 
         @staticmethod
         def component_action(button):
