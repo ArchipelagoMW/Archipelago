@@ -49,7 +49,7 @@ def get_nanotech_locations(options: type[RaC3Options]) -> list[str]:
     """Get a list of nanotech locations based on the provided options."""
     return [location for location in all_nanotech if not should_skip_nanotech_location(location, options)]
 
-def calculate_skill_master_requirement(options: type[RaC3Options]) -> bool:
+def should_skip_skill_master(options: type[RaC3Options]) -> bool:
     """Determine if the skill master trophy location should be skipped based on options."""
     if options.skill_points.value < 2:
         return True
@@ -469,7 +469,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
             case RAC3TAG.LONG_TROPHY:
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
-                if (calculate_skill_master_requirement(options) and loc == RAC3TROPHY.PHOENIX_SKILL_MASTER):
+                if (should_skip_skill_master(options) and loc == RAC3TROPHY.PHOENIX_SKILL_MASTER):
                     return True
                 if options.ngplus_start.value < 1:
                     if loc == RAC3TROPHY.PHOENIX_NANO_FINDER or loc == RAC3TROPHY.PHOENIX_OMEGA_ARSENAL:
