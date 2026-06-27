@@ -275,6 +275,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         button_layout: ScrollBox = ObjectProperty(None)
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
+        selected_filter : MDButton | None
         current_filter: Sequence[str | Type] | None
         failed_worlds: bool = bool(failed_world_loads)
 
@@ -286,7 +287,8 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.launch_components = components
             self.launch_args = args
             self.cards = []
-            self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+            self.selected_filter = None
+            self.current_filter = None
             persistent = Utils.persistent_load()
             if "launcher" in persistent:
                 if "favorites" in persistent["launcher"]:
@@ -361,6 +363,15 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
 
         def filter_clients_by_type(self, caller: MDButton):
+            # Reset previous highlighted button
+            if self.selected_filter and self.selected_filter is not caller:
+                self.selected_filter.style = "text"
+
+            # Highlight current button
+            caller.style = "filled"
+            self.selected_filter = caller
+
+            # Filter components by type
             self._refresh_components(caller.type)
             self.search_box.text = ""
 
@@ -409,6 +420,9 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 build_uri_popup(self.launch_components, self.launch_args)
                 self.launch_components = None
                 self.launch_args = None
+
+            # Trigger the "All" button to show all components on startup
+            self.top_screen.ids.all.trigger_action(duration=0)
 
         @staticmethod
         def component_action(button):
