@@ -28,6 +28,7 @@ class GameLocation(Location):
 
 all_nanotech: list[str] = [getattr(RAC3NANOTECH, f"LEVEL_{level}") for level in range(11, 201)]
 def should_skip_nanotech_location(location: str, options: type[RaC3Options]) -> bool:
+    """Determine if a nanotech location should be skipped based on options."""
     nanotech_level = int(location.split()[-1])
     if options.nanotech_milestones.value == 0:
         return True
@@ -45,7 +46,25 @@ def should_skip_nanotech_location(location: str, options: type[RaC3Options]) -> 
     return nanotech_level % nanotech_step != 0
 
 def get_nanotech_locations(options: type[RaC3Options]) -> list[str]:
+    """Get a list of nanotech locations based on the provided options."""
     return [location for location in all_nanotech if not should_skip_nanotech_location(location, options)]
+
+def calculate_skill_master_requirement(options: type[RaC3Options]) -> bool:
+    """Determine if the skill master trophy location should be skipped based on options."""
+    if options.skill_points.value < 2:
+        return True
+    if options.sewer_limitation.value < 100:
+        return True
+    if options.vidcomics.value == 0:
+        return True
+    if options.vr_challenges.value == 0:
+        return True
+    if options.arena.value < 3:
+        return True
+    if options.rangers.value == 0 or options.rangers.value == 2:
+        return True
+    return False
+
 
 every_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_1,
@@ -448,8 +467,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
             case RAC3TAG.LONG_TROPHY:
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
-                if (options.skill_points.value < 2 and options.sewer_limitation < 100 and loc ==
-                    RAC3TROPHY.PHOENIX_SKILL_MASTER):
+                if (calculate_skill_master_requirement(options) and loc == RAC3TROPHY.PHOENIX_SKILL_MASTER):
                     return True
                 if options.ngplus_start.value < 1:
                     if loc == RAC3TROPHY.PHOENIX_NANO_FINDER or loc == RAC3TROPHY.PHOENIX_OMEGA_ARSENAL:
