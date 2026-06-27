@@ -59,6 +59,8 @@ def calculate_skill_master_requirement(options: type[RaC3Options]) -> bool:
         return True
     if options.vr_challenges.value == 0:
         return True
+    if options.armor_vendor.value == 0:
+        return True
     if options.arena.value < 3:
         return True
     if options.rangers.value == 0 or options.rangers.value == 2:
