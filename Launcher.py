@@ -300,7 +300,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                     if persistent["launcher"]["filter"]:
                         filters = []
                         for filter in persistent["launcher"]["filter"].split(", "):
-                            if filter == "favorites":
+                            if filter == "favorites" or filter == "hidden":
                                 filters.append(filter)
                             else:
                                 filters.append(Type[filter])
