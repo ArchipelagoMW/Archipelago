@@ -89,7 +89,7 @@ MDFloatLayout:
             MDButton:
                 id: all
                 style: "text"
-                type: (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+                type: (Type.CLIENT, Type.TOOL, Type.MISC)
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -113,19 +113,10 @@ MDFloatLayout:
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
-                    icon: "desktop-classic"
-                MDButtonText:
-                    text: "Tool"
-            MDButton:
-                id: adjuster
-                style: "text"
-                type: (Type.ADJUSTER, )
-                on_release: app.filter_clients_by_type(self)
-
-                MDButtonIcon:
                     icon: "wrench"
                 MDButtonText:
-                    text: "Adjuster"
+                    text: "Tool"
+
             MDButton:
                 id: misc
                 style: "text"

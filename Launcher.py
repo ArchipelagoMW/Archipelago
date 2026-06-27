@@ -369,7 +369,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
 
         def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
             if not type_filter:
-                type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
+                type_filter = [Type.CLIENT, Type.TOOL, Type.MISC]
             favorites = "favorites" in type_filter
 
             # clear before repopulating

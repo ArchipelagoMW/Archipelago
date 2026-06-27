@@ -73,8 +73,7 @@ class Component:
             component_type = Type.MISC
 
         self.type = component_type or (
-            Type.CLIENT if "Client" in display_name else
-            Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
+            Type.CLIENT if "Client" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
         self.game_name = game_name
@@ -231,11 +230,11 @@ components: List[Component] = [
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
               description="Connect to a multiworld using the text client."),
-    Component('LttP Adjuster', 'LttPAdjuster'),
+    Component('LttP Adjuster', 'LttPAdjuster', component_type=Type.TOOL),
     # Ocarina of Time
     Component('OoT Client', 'OoTClient',
               file_identifier=SuffixIdentifier('.apz5')),
-    Component('OoT Adjuster', 'OoTAdjuster'),
+    Component('OoT Adjuster', 'OoTAdjuster', component_type=Type.TOOL),
     # TLoZ
     Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
