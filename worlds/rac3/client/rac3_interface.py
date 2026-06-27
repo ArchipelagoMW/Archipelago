@@ -709,7 +709,7 @@ class Rac3Interface(GameInterface):
                 if weapon == RAC3ITEM.RY3N0:
                     continue
                 if weapon not in already_omega and weapon not in omega_items_to_sell:
-                    if progressive_weapons_mode < 2:
+                    if progressive_weapons_mode == 1:
                         if self.UnlockItem[weapon].status > 5:
                             omega_items_to_sell.append(weapon)
                     else:
@@ -1412,7 +1412,7 @@ class Rac3Interface(GameInterface):
                     if self.options.weapon_vendors:
                         new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID) for item in
                                               self.weapon_vendor_items if item not in MEGACORP_WEAPONS])
-                    if should_add_ngplus_items :
+                    if should_add_ngplus_items:
                         new_inventory.extend([RAC3WEAPONVENDORSLOTDATA(RAC3_ITEM_DATA_TABLE[item].ID, mega=1)
                                               for item in self.omega_weapon_vendors_items])
                 if self.planet == RAC3REGION.STARSHIP_PHOENIX or is_slimcognito:
