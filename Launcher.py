@@ -369,7 +369,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
 
         def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
             if not type_filter:
-                type_filter = [Type.CLIENT, Type.TOOL,Type.SETUP, Type.MISC]
+                type_filter = [Type.SETUP, Type.TOOL, Type.CLIENT, Type.MISC]
             favorites = "favorites" in type_filter
 
             # clear before repopulating
@@ -381,9 +381,16 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             if "hidden" in type_filter:
                 cards = [card for card in self.cards if card.component.display_name in self.hidden]
             else:
-                cards = [card for card in self.cards if (card.component.type in type_filter
-                         or favorites and card.component.display_name in self.favorites)
-                         and (card.component.display_name not in self.hidden)]
+                cards = [
+                    card for card in self.cards
+                    if (card.component.type in type_filter
+                    or (favorites and card.component.display_name in self.favorites))
+                    and (card.component.display_name not in self.hidden)
+                ]
+
+                # sort the list by type_filter order
+                priority = {t: i for i, t in enumerate(type_filter)}
+                cards.sort(key=lambda c: priority.get(c.component.type, float("inf")))
 
             self.current_filter = type_filter
 
