@@ -432,6 +432,11 @@
                     { "item": "Ledge Grab" } // then we still need LG for the high ledges in the lower half
                 ]
             ] }
+        ],
+        "ls_requires": [ // to skip WC completely...
+            { "item": "Cloud Leap" },
+            { "item": "Ledge Grab" }, // you can triple jump
+            { "item": "Tai-Chi Kick" } // into the TCK targets
         ]
     },
     { "from": "Cortex Center - Caves Lower Left", "to": "Cortex Center - After Large Door", "requires": [] }, // one-way fall + shortcut rope
