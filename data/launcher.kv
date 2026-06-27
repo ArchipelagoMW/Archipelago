@@ -33,6 +33,16 @@
 
         MDIconButton:
             component: main.component
+            icon: "eye-off" if self.component.display_name in app.hidden else "eye-off-outline"
+            style: "standard"
+            pos_hint:{"center_x": 0.75, "center_y": 0.8}
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primaryColor
+            detect_visible: False
+            on_release: app.set_hidden(self)
+
+        MDIconButton:
+            component: main.component
             icon: "star" if self.component.display_name in app.favorites else "star-outline"
             style: "standard"
             pos_hint:{"center_x": 0.85, "center_y": 0.8}
@@ -137,6 +147,17 @@ MDFloatLayout:
                     icon: "star"
                 MDButtonText:
                     text: "Favorites"
+
+            MDButton:
+                id: hidden
+                style: "text"
+                type: ("hidden", )
+                on_release: app.filter_clients_by_type(self)
+
+                MDButtonIcon:
+                    icon: "eye-off"
+                MDButtonText:
+                    text: "Hidden"
 
             MDNavigationDrawerDivider:
 

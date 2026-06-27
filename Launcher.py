@@ -284,6 +284,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.ctx = ctx
             self.icon = r"data/icon.png"
             self.favorites = []
+            self.hidden = []
             self.launch_components = components
             self.launch_args = args
             self.cards = []
@@ -293,6 +294,8 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             if "launcher" in persistent:
                 if "favorites" in persistent["launcher"]:
                     self.favorites.extend(persistent["launcher"]["favorites"])
+                if "hidden" in persistent["launcher"]:
+                    self.hidden.extend(persistent["launcher"]["hidden"])
                 if "filter" in persistent["launcher"]:
                     if persistent["launcher"]["filter"]:
                         filters = []
@@ -304,7 +307,33 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                         self.current_filter = filters
             super().__init__()
 
-        def set_favorite(self, caller):
+        def set_hidden(self, caller: MDButton) -> None:
+            """
+            Toggle the hidden state of a launcher component.
+            Update the icon of the associated button.
+            Refresh the displayed components accordingly.
+
+            :param caller: The button associated with the launcher component.
+            :type caller: MDButton
+            """
+
+            if caller.component.display_name in self.hidden:
+                self.hidden.remove(caller.component.display_name)
+                caller.icon = "eye-off-outline"
+            else:
+                self.hidden.append(caller.component.display_name)
+                caller.icon = "eye-off"
+            #TODO: Consider optimizing this by only removing the specific card instead of refreshing all components.
+            self._refresh_components(self.current_filter)
+
+        def set_favorite(self, caller: MDButton) -> None:
+            """
+            Toggle the favorite state of a launcher component.
+            Update the icon of the associated button.
+
+            :param caller: The button associated with the launcher component.
+            :type caller: MDButton
+            """
             if caller.component.display_name in self.favorites:
                 self.favorites.remove(caller.component.display_name)
                 caller.icon = "star-outline"
@@ -349,8 +378,12 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             for child in tool_children:
                 self.button_layout.layout.remove_widget(child)
 
-            cards = [card for card in self.cards if card.component.type in type_filter
-                     or favorites and card.component.display_name in self.favorites]
+            if "hidden" in type_filter:
+                cards = [card for card in self.cards if card.component.display_name in self.hidden]
+            else:
+                cards = [card for card in self.cards if (card.component.type in type_filter
+                         or favorites and card.component.display_name in self.favorites)
+                         and (card.component.display_name not in self.hidden)]
 
             self.current_filter = type_filter
 
@@ -495,6 +528,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             super()._stop(*largs)
 
         def on_stop(self):
+            Utils.persistent_store("launcher", "hidden", self.hidden)
             Utils.persistent_store("launcher", "favorites", self.favorites)
             Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
                                                                    for filter in self.current_filter))
