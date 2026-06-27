@@ -394,7 +394,8 @@
     },
     { "from": "Cortex Center - Caves Upper Left", "to": "Cortex Center - Caves Middle Left", "requires": [] },
     { "from": "Cortex Center - Caves Middle Left", "to": "Cortex Center - Caves Upper Left", "requires": [ { "anyOf": [
-        { "item": "Wall Climb" }, { "item": "Cloud Leap" }
+        { "item": "Wall Climb" },
+        [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] },
     { "from": "Cortex Center - Caves Middle Left", "to": "Cortex Center - Caves Lower Left", "requires": [ { "anyOf": [
         { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
