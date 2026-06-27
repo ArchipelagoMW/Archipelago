@@ -368,12 +368,19 @@
             { "item": "Wall Climb" },
             { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" } ] }
         ],
-        "ls_requires": [
-            { "item": "Grapple" },
-            { "item": "Wall Climb" }, // the narrow vertical shaft is the same as before
-            { "item": "Ledge Grab" } // get qi from the flyer in the middle, T-dash setup on the ledge below it,
-            // climb normally until the final rope, and finally use LS parry vault instead of TCK or CL
-        ]
+        "ls_requires": [ { "anyOf": [
+            [
+                { "item": "Grapple" },
+                { "item": "Wall Climb" }, // the narrow vertical shaft is the same as before
+                { "item": "Ledge Grab" } // get qi from the flyer in the middle, T-dash setup on the ledge below it,
+                // climb normally until the final rope, and finally use LS parry vault instead of TCK or CL
+            ],
+            [
+                { "item": "Cloud Leap" },
+                { "item": "Ledge Grab" }, // triple jump from the rope to the WC surface, skipping grapple
+                { "item": "Wall Climb" }
+            ]
+        ] } ]
     },
     {
         "from": "Cortex Center - Caves Upper Right", "to": "Cortex Center - Caves Upper Left",
