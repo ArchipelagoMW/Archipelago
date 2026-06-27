@@ -263,6 +263,14 @@ class PokemonEmeraldWorld(World):
         if self.options.hms == RandomizeHms.option_shuffle:
             self.options.local_items.value.update(self.item_name_groups["HM"])
 
+        # Manually enable Latios as a dexsanity location if we're doing legendary hunt (which confines Latios to
+        # the roamer encounter), the player allows Latios as a valid legendary hunt target, and they didn't also
+        # blacklist Latios to remove its dexsanity location
+        if self.options.goal == Goal.option_legendary_hunt and self.options.dexsanity \
+                and "Latios" in self.options.allowed_legendary_hunt_encounters.value \
+                and emerald_data.constants["SPECIES_LATIOS"] not in self.blacklisted_wilds:
+            self.allowed_dexsanity_species.add(emerald_data.constants["SPECIES_LATIOS"])
+
     def create_regions(self) -> None:
         from .regions import create_regions
         all_regions = create_regions(self)
