@@ -12,7 +12,6 @@ class Type(Enum):
     TOOL = auto()
     MISC = auto()
     CLIENT = auto()
-    ADJUSTER = auto()
     FUNC = auto()  # do not use anymore
     HIDDEN = auto()
 
