@@ -9,7 +9,7 @@ run_tests = os.environ.get("RUN_HK_TESTS") != "True"
 
 @unittest.skipIf(run_tests, "too inconsistent for main")
 class TestErMapAllShuffled(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
         "EntranceRandoType": "maparea",
         "ShuffleEntrancesMode": "coupled",
@@ -47,7 +47,7 @@ class TestErMapAllShuffled(HKTestBase):
 
 
 # class TestErMapNoShuffled(HKTestBase):
-#     options: typing.ClassVar[dict[str, str]] = {
+#     options: typing.ClassVar[dict[str, typing.Any]] = {
 #         "Goal": "any",
 #         "EntranceRandoType": "maparea",
 
@@ -85,7 +85,7 @@ class TestErMapAllShuffled(HKTestBase):
 
 @unittest.skipIf(run_tests, "too inconsistent for main")
 class TestErFullAllShuffled(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
         "EntranceRandoType": "fullarea",
         "ShuffleEntrancesMode": "coupled",
@@ -123,7 +123,7 @@ class TestErFullAllShuffled(HKTestBase):
 
 
 # class TestErFullNoShuffled(HKTestBase):
-#     options: typing.ClassVar[dict[str, str]] = {
+#     options: typing.ClassVar[dict[str, typing.Any]] = {
 #         "Goal": "any",
 #         "EntranceRandoType": "fullarea",
 
@@ -161,7 +161,7 @@ class TestErFullAllShuffled(HKTestBase):
 
 @unittest.skipIf(run_tests, "too inconsistent for main")
 class TestErRoomAllShuffled(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
         "EntranceRandoType": "room",
         "ShuffleEntrancesMode": "coupled",
@@ -199,7 +199,7 @@ class TestErRoomAllShuffled(HKTestBase):
 
 
 # class TestErRoomNoShuffled(HKTestBase):
-#     options: typing.ClassVar[dict[str, str]] = {
+#     options: typing.ClassVar[dict[str, typing.Any]] = {
 #         "Goal": "any",
 #         "EntranceRandoType": "room",
 
@@ -236,7 +236,7 @@ class TestErRoomAllShuffled(HKTestBase):
 
 @unittest.skipIf(run_tests, "too inconsistent for main")
 class TestErDoorsAllShuffled(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
         "EntranceRandoType": "doors",
         "ShuffleEntrancesMode": "coupled",
@@ -274,7 +274,7 @@ class TestErDoorsAllShuffled(HKTestBase):
 
 
 # class TestErConnectedMapAllShuffled(HKTestBase):
-#     options: typing.ClassVar[dict[str, str]] = {
+#     options: typing.ClassVar[dict[str, typing.Any]] = {
 #         "Goal": "any",
 #         "EntranceRandoType": "connected_map_area",
 #         "ShuffleEntrancesMode": "coupled",
@@ -312,7 +312,7 @@ class TestErDoorsAllShuffled(HKTestBase):
 
 
 # class TestErConnectedTitledAllShuffled(HKTestBase):
-#     options: typing.ClassVar[dict[str, str]] = {
+#     options: typing.ClassVar[dict[str, typing.Any]] = {
 #         "Goal": "any",
 #         "EntranceRandoType": "connected_titled_area",
 #         "ShuffleEntrancesMode": "coupled",

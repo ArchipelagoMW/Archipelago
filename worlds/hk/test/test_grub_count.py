@@ -6,7 +6,7 @@ from .bases import HKGoalBase, LinkedTestHK
 
 
 class TestGrubcountLimited(LinkedTestHK, HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": 20,
         "Goal": "any",
@@ -21,7 +21,7 @@ class TestGrubcountLimited(LinkedTestHK, HKGoalBase):
 
 
 class TestGrubcountDefault(LinkedTestHK, HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "Goal": "any",
     }
@@ -35,7 +35,7 @@ class TestGrubcountDefault(LinkedTestHK, HKGoalBase):
 
 
 class TestGrubcountAllUnlinked(LinkedTestHK, HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -45,7 +45,7 @@ class TestGrubcountAllUnlinked(LinkedTestHK, HKGoalBase):
 
 
 class TestGrubcountAllLinked(LinkedTestHK, HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -60,7 +60,7 @@ class TestGrubcountAllLinked(LinkedTestHK, HKGoalBase):
 
 
 class TestReplacementOnly(LinkedTestHK, HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -86,7 +86,7 @@ class TestReplacementOnly(LinkedTestHK, HKGoalBase):
 
 
 class TestReplacementOnlyUnlinked(LinkedTestHK, HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -112,7 +112,7 @@ class TestReplacementOnlyUnlinked(LinkedTestHK, HKGoalBase):
 
 
 class TestIgnoreOthers(LinkedTestHK, HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -139,7 +139,7 @@ class TestIgnoreOthers(LinkedTestHK, HKGoalBase):
 
 
 class TestReplacementOnlyLinked(LinkedTestHK, HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",

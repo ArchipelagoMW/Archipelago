@@ -82,7 +82,7 @@ equip_notch_matrix = [
 ]
 
 
-@classvar_matrix(matrix_vars=equip_notch_matrix)
+@classvar_matrix(matrix_index=range(len(equip_notch_matrix)))
 class TestEquipNotch(StateVarSetup, NoStepHK):
     resource: ClassVar[dict[str, int]] = {"NOPASSEDCHARMEQUIP": 0}
     prep_vars = ()
@@ -95,9 +95,10 @@ class TestEquipNotch(StateVarSetup, NoStepHK):
     ended_overcharmed: bool
 
     def setUp(self):
-        self.charm_count = len(self.matrix_vars.notch_costs)
+        matrix_vars = equip_notch_matrix[self.matrix_index]
+        self.charm_count = len(matrix_vars.notch_costs)
         self.options = {"PlandoCharmCosts": {
-            charm_name: self.matrix_vars.notch_costs[i]
+            charm_name: matrix_vars.notch_costs[i]
             for i, charm_name in zip(
                 range(self.charm_count),
                 charm_names,
@@ -106,10 +107,10 @@ class TestEquipNotch(StateVarSetup, NoStepHK):
         }}
         super().setUp()
         self.cs = dict.fromkeys(charm_item_names[:self.charm_count], 1)
-        self.notch_override = self.matrix_vars.notches
+        self.notch_override = matrix_vars.notches
 
-        self.equip_results = self.matrix_vars.equip_results
-        self.ended_overcharmed = self.matrix_vars.ended_overcharmed
+        self.equip_results = matrix_vars.equip_results
+        self.ended_overcharmed = matrix_vars.ended_overcharmed
 
     def test_equip_sequence(self):
         rs, cs = self.get_initialized_args()

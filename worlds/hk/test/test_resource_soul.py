@@ -30,21 +30,22 @@ soul_spend_matrix = [
 ]
 
 
-@classvar_matrix(matrix_vars=soul_spend_matrix)
+@classvar_matrix(matrix_index=range(len(soul_spend_matrix)))
 class TestSoulSpend(StateVarSetup, NoStepHK):
     key = "$SSM"
-    matrix_vars: Inputs
+    matrix_index: int
     expecteds: Iterable[list[tuple[int, int, int, int]]]
     limit: int = 0
 
     def setUp(self):
         super().setUp()
-        self.resource = self.matrix_vars.resource
-        self.cs = self.matrix_vars.cs
-        self.prep_vars = self.matrix_vars.prep_vars
+        matrix_vars = soul_spend_matrix[self.matrix_index]
+        self.resource = matrix_vars.resource
+        self.cs = matrix_vars.cs
+        self.prep_vars = matrix_vars.prep_vars
 
-        self.expecteds = self.matrix_vars.expecteds
-        self.limit = self.matrix_vars.limit
+        self.expecteds = matrix_vars.expecteds
+        self.limit = matrix_vars.limit
 
     def test_spend_soul(self):
         rs, cs = self.get_initialized_args()
@@ -71,22 +72,23 @@ soul_restore_matrix = [
 ]
 
 
-@classvar_matrix(matrix_vars=soul_restore_matrix)
+@classvar_matrix(matrix_index=range(len(soul_restore_matrix)))
 class TestRestoreSpend(StateVarSetup, NoStepHK):
     key = "$SSM"
-    matrix_vars: Inputs
+    matrix_index: int
     expected: tuple[int, int, int, int]
     limit: int = 0
 
     def setUp(self):
         super().setUp()
-        self.resource = self.matrix_vars.resource
-        self.cs = self.matrix_vars.cs
-        self.prep_vars = self.matrix_vars.prep_vars
+        matrix_vars = soul_restore_matrix[self.matrix_index]
+        self.resource = matrix_vars.resource
+        self.cs = matrix_vars.cs
+        self.prep_vars = matrix_vars.prep_vars
 
-        assert self.matrix_vars.expected is not None
-        self.expected = self.matrix_vars.expected
-        self.limit = self.matrix_vars.limit
+        assert matrix_vars.expected is not None
+        self.expected = matrix_vars.expected
+        self.limit = matrix_vars.limit
 
     def test_restore_soul(self):
         rs, cs = self.get_initialized_args()
@@ -127,21 +129,22 @@ soul_round_matrix = [
 ]
 
 
-@classvar_matrix(matrix_vars=soul_round_matrix)
+@classvar_matrix(matrix_index=range(len(soul_round_matrix)))
 class TestRoundSpend(StateVarSetup, NoStepHK):
     key = "$SSM"
-    matrix_vars: Inputs
+    matrix_index: int
     expected: tuple[int, int, int, int] | None
     spend: int = 0
 
     def setUp(self):
         super().setUp()
-        self.resource = self.matrix_vars.resource
-        self.cs = self.matrix_vars.cs
-        self.prep_vars = self.matrix_vars.prep_vars
+        matrix_vars = soul_round_matrix[self.matrix_index]
+        self.resource = matrix_vars.resource
+        self.cs = matrix_vars.cs
+        self.prep_vars = matrix_vars.prep_vars
 
-        self.expected = self.matrix_vars.expected
-        self.spend = self.matrix_vars.spend
+        self.expected = matrix_vars.expected
+        self.spend = matrix_vars.spend
 
     def test_round_spend(self):
         rs, cs = self.get_initialized_args()

@@ -1,4 +1,4 @@
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from .bases import NoStepHK
 
@@ -19,7 +19,7 @@ class StartsBase:
 
 
 class TestSwimRandoStarts(StartsBase, NoStepHK):
-    options: ClassVar[dict[str, str]] = {
+    options: ClassVar[dict[str, Any]] = {
         "RandomizeSwim": "true",
 
         "EnemyPogos": "true",
@@ -29,7 +29,7 @@ class TestSwimRandoStarts(StartsBase, NoStepHK):
 
 
 class TestSwimRandolessStarts(StartsBase, NoStepHK):
-    options: ClassVar[dict[str, str]] = {
+    options: ClassVar[dict[str, Any]] = {
         "RandomizeSwim": "false",
 
         "EnemyPogos": "true",
@@ -39,7 +39,7 @@ class TestSwimRandolessStarts(StartsBase, NoStepHK):
 
 
 class TestEnemyPogoStarts(StartsBase, NoStepHK):
-    options: ClassVar[dict[str, str]] = {
+    options: ClassVar[dict[str, Any]] = {
         "EnemyPogos": "true",
 
         "PreciseMovement": "false",
@@ -52,7 +52,7 @@ class TestEnemyPogoStarts(StartsBase, NoStepHK):
 
 
 class TestPreciseEnemyPogoStarts(StartsBase, NoStepHK):
-    options: ClassVar[dict[str, str]] = {
+    options: ClassVar[dict[str, Any]] = {
         "EnemyPogos": "true",
         "PreciseMovement": "true",
 
@@ -65,7 +65,7 @@ class TestPreciseEnemyPogoStarts(StartsBase, NoStepHK):
 
 
 class TestEnemyPogolessStarts(StartsBase, NoStepHK):
-    options: ClassVar[dict[str, str]] = {
+    options: ClassVar[dict[str, Any]] = {
         "EnemyPogos": "false",
 
         "RandomizeSwim": "false",
@@ -77,7 +77,7 @@ class TestEnemyPogolessStarts(StartsBase, NoStepHK):
 
 
 class TestDarkroomOnStarts(StartsBase, NoStepHK):
-    options: ClassVar[dict[str, str]] = {
+    options: ClassVar[dict[str, Any]] = {
         "DarkRooms": "true",
     }
     valid_starts: ClassVar[list[str]] = ["hallownests_crown"]
@@ -85,7 +85,7 @@ class TestDarkroomOnStarts(StartsBase, NoStepHK):
 
 
 class TestDarkroomOffStarts(StartsBase, NoStepHK):
-    options: ClassVar[dict[str, str]] = {
+    options: ClassVar[dict[str, Any]] = {
         "DarkRooms": "false",
     }
     valid_starts: ClassVar[list[str]] = []

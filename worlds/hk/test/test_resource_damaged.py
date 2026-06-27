@@ -50,25 +50,26 @@ take_damage_matrix = [
 ]
 
 
-@classvar_matrix(matrix_vars=take_damage_matrix)
+@classvar_matrix(matrix_index=range(len(take_damage_matrix)))
 class TestDamagedVars(StateVarSetup, NoStepHK):
-    matrix_vars: Inputs
+    matrix_index: int
     assert_empty: bool
     damage_count: int
     damage_value: int
 
     def setUp(self):
         super().setUp()
-        self.key = self.matrix_vars.key
-        self.resource = self.matrix_vars.resource
-        self.cs = self.matrix_vars.cs
-        self.prep_vars = self.matrix_vars.prep_vars
-        self.notch_override = self.matrix_vars.notches
-        self.mask_override = self.matrix_vars.masks
+        matrix_vars = take_damage_matrix[self.matrix_index]
+        self.key = matrix_vars.key
+        self.resource = matrix_vars.resource
+        self.cs = matrix_vars.cs
+        self.prep_vars = matrix_vars.prep_vars
+        self.notch_override = matrix_vars.notches
+        self.mask_override = matrix_vars.masks
 
-        self.assert_empty = self.matrix_vars.assert_empty
-        self.damage_count = self.matrix_vars.damage_count
-        self.damage_value = self.matrix_vars.damage_value
+        self.assert_empty = matrix_vars.assert_empty
+        self.damage_count = matrix_vars.damage_count
+        self.damage_value = matrix_vars.damage_value
 
     def test_output(self):
         rs, cs = self.get_initialized_args()

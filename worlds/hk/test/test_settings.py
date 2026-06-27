@@ -4,43 +4,43 @@ from .bases import HKGoalBase, HKTestBase
 
 
 class TestGoalAny(HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
     }
 
 
 class TestGoalHollowknight(HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "hollowknight",
     }
 
 
 class TestGoalSiblings(HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "siblings",
     }
 
 
 class TestGoalRadiance(HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "radiance",
     }
 
 
 class TestGoalGodhome(HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "godhome",
     }
 
 
 class TestGoalGodhomeFlower(HKGoalBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "godhome_flower",
     }
 
 
 class TestRandomizeAll(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
 
         "RandomizeDreamers": True,
@@ -76,7 +76,7 @@ class TestRandomizeAll(HKTestBase):
 
 
 class TestRandomizeNone(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
 
         "RandomizeDreamers": False,
@@ -112,7 +112,7 @@ class TestRandomizeNone(HKTestBase):
 
 
 class TestUnshuffledRandomizeNone(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "AddUnshuffledLocations": True,
         "Goal": "any",
 
@@ -149,7 +149,7 @@ class TestUnshuffledRandomizeNone(HKTestBase):
 
 
 class TestSplitAll(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
 
         "SplitCrystalHeart": True,
@@ -159,7 +159,7 @@ class TestSplitAll(HKTestBase):
 
 
 class TestCostsAll(HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "Goal": "any",
 
         "EggShopSlots": 9,

@@ -76,7 +76,7 @@ class ExcludeBase:
 
 @classvar_matrix(exclude=("exclude", "kingfragment", "nopathofpain", "include",))
 class TestExclusions(ExcludeBase, HKTestBase):
-    options: typing.ClassVar[dict[str, str]] = {
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeCharms": "True",
         "RandomizeSoulTotems": "True",
         "RandomizeLoreTablets": "True",
