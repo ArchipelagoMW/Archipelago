@@ -12,6 +12,7 @@ class Type(Enum):
     TOOL = auto()
     MISC = auto()
     CLIENT = auto()
+    SETUP = auto()
     FUNC = auto()  # do not use anymore
     HIDDEN = auto()
 
@@ -218,14 +219,14 @@ components: List[Component] = [
     # Launcher
     Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
     # Core
-    Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
+    Component('Host', 'MultiServer', 'ArchipelagoServer', component_type=Type.SETUP, cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip'),
               description="Host a generated multiworld on your computer."),
-    Component('Generate', 'Generate', cli=True,
+    Component('Generate', 'Generate', component_type=Type.SETUP, cli=True,
               description="Generate a multiworld with the YAMLs in the players folder."),
     Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.TOOL,
               description="Visual creator for Archipelago option files."),
-    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
+    Component("Install APWorld", component_type=Type.SETUP, func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
               description="Connect to a multiworld using the text client."),

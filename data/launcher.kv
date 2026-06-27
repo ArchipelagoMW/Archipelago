@@ -89,13 +89,14 @@ MDFloatLayout:
             MDButton:
                 id: all
                 style: "text"
-                type: (Type.CLIENT, Type.TOOL, Type.MISC)
+                type: (Type.CLIENT, Type.TOOL, Type.MISC, Type.SETUP, )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "asterisk"
                 MDButtonText:
                     text: "All"
+
             MDButton:
                 id: client
                 style: "text"
@@ -106,6 +107,18 @@ MDFloatLayout:
                     icon: "controller"
                 MDButtonText:
                     text: "Client"
+
+            MDButton:
+                id: Tool
+                style: "text"
+                type: (Type.SETUP, )
+                on_release: app.filter_clients_by_type(self)
+
+                MDButtonIcon:
+                    icon: "desktop-classic"
+                MDButtonText:
+                    text: "Setup"
+
             MDButton:
                 id: Tool
                 style: "text"
