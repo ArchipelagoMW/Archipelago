@@ -17,6 +17,9 @@ long_swim_rule: Rule = HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERL
 has_portable_fire_source_strict: Rule = And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
                                                Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
 
+has_portable_thunder_source_strict:Rule=And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
+                                               Has("Progressive Sword", 4)), Has(BrushTechniques.THUNDERSTORM))
+
 has_portable_fire_source: Rule = Or(has_portable_fire_source_strict, Has(BrushTechniques.FIREBURST))
 
 has_portable_thunder_source: Rule = Or(And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
@@ -52,6 +55,8 @@ moon_cave_canon_rule: Rule = Or(has_portable_fire_source_strict,
 
 moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source,
                                   HasAll("Moon Cave - 4F Move Fireball", BrushTechniques.INFERNO))
+
+oni_island_1f_thunder_rule = Or(has_portable_thunder_source_strict,HasAll("Oni Island - 1F Grab First Thunder Key",BrushTechniques.THUNDERSTORM))
 # FIXME Once we've figured out which story trigger can spawn the thunder source here
 gen_thunder_chest_rule: Rule = has_portable_thunder_source
 

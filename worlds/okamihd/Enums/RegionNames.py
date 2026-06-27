@@ -274,6 +274,11 @@ class RegionNames(StrEnum):
     ONI_ISLAND_INTERIOR_POST_TOBI_7 = "Oni Island (after tobi #7, Passage of Needles)"
     ONI_ISLAND_INTERIOR_3F_POST_LOCKJAW = "Oni Island (3F post lockjaw)"
     ONI_ISLAND_INTERIOR_3F_POST_GEKIGAMI = "Oni Island (3F post gekigami)"
+    ONI_ISLAND_INTERIOR_1F_THUNDER_KEY = "Oni Island (1F Thunder Key Area)"
+    ONI_ISLAND_INTERIOR_1F_SLIDING_DOORS = "Oni Island (1F Sliding Doors of hell)"
+    ONI_ISLAND_INTERIOR_1F_WEST_ROOM = "Oni Island (1F West Room)"
+    ONI_ISLAND_INTERIOR_1F_STATUE = "Oni Island (1F Statue Room)"
+    ONI_ISLAND_INTERIOR_B1F_ALARM = "Oni Island (B1F Alarm Room)"
 
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
