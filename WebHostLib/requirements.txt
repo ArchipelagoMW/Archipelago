@@ -12,3 +12,4 @@ markupsafe==3.0.3
 setproctitle==1.3.7
 mistune==3.2.1
 docutils==0.22.4
+psutil==7.2.2
