@@ -395,23 +395,43 @@
     {
         "from": "Cortex Center - Caves Lower Left", "to": "Cortex Center - Caves Middle Left",
         "requires": [
-            { "anyOf": [
-                { "item": "Cloud Leap" },
-                [
-                    { "item": "Ledge Grab" },
-                    { "anyOf": [ { "item": "Grapple" }, { "item": "Air Dash" } ] }
-                ]
-            ] },
             { "item": "Wall Climb" },
-            { "item": "Tai-Chi Kick" }
+            { "anyOf": [
+                [ // use the TCK targets for the upper half of the room as intended
+                    { "item": "Tai-Chi Kick" },
+                    { "anyOf": [ // then we need either CL or LG for the high ledges in the lower half
+                        { "item": "Cloud Leap" },
+                        [
+                            { "item": "Ledge Grab" }, // and if we're using LG for the high ledges,
+                            { "anyOf": [ // the long horizontal jump over crystals becomes a problem
+                                { "item": "Grapple" },
+                                { "item": "Air Dash" }
+                            ] }
+                        ]
+                    ] }
+                ],
+                [ // or bring enough horizontal movement you can ignore the TCK targets
+                    { "item": "Cloud Leap" },
+                    { "item": "Air Dash" }
+                ]
+            ] }
         ],
         "medium_requires": [
-            { "anyOf": [
-                { "item": "Cloud Leap" },
-                { "item": "Ledge Grab" } // T-dash replaces the (G OR AD) part
-            ] },
             { "item": "Wall Climb" },
-            { "item": "Tai-Chi Kick" }
+            { "anyOf": [
+                [ // use the TCK targets for the upper half of the room as intended
+                    { "item": "Tai-Chi Kick" },
+                    { "anyOf": [ // then we need either CL or LG for the high ledges in the lower half
+                        { "item": "Cloud Leap" },
+                        { "item": "Ledge Grab" } // and T-dash replaces the (G OR AD) part
+                    ] }
+                ],
+                { "item": "Cloud Leap" }, // CL + WC + T-dash is a complete solution
+                [
+                    { "item": "Air Dash" }, // if we're using AD + T-dash for the upper half of the room,
+                    { "item": "Ledge Grab" } // then we still need LG for the high ledges in the lower half
+                ]
+            ] }
         ]
     },
     { "from": "Cortex Center - Caves Lower Left", "to": "Cortex Center - After Large Door", "requires": [] }, // one-way fall + shortcut rope
@@ -428,7 +448,7 @@
                 { "item": "Charged Strike" } // CS-dash (or bow knockback, but I took that out of logic)
             ] }
         ],
-        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // CL + LS vault
+        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // triple jump
     }, // any% NMG speedrun uses T-dash (and bow and CS and grapple) here, but there's no enemy for rando to get qi
     { "from": "Cortex Center - Caves Lower Left", "to": "Cortex Center - Left Exit", "requires": [] },
     { "from": "Cortex Center - Left Exit", "to": "Cortex Center - Caves Lower Left", "requires": [ { "item": "Grapple" } ] },
