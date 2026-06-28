@@ -2115,7 +2115,24 @@
     },
     { // Life Recovery (3 sp), 2 sp -> total 5 sp
         "category": "skill", "address": 5055, "name": "Skill Tree Node: Azure Recovery",
-        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": [
+            // Although this is the same logic as Trick - Bow Hover, it's not practical to share that logic
+            // because these two locations are conditional on different options, and a shared third location
+            // would fail unit tests when the arrow items are useful instead of progression.
+            {
+                "option": "randomize_shops",
+                "true": [ { "anyOf": [
+                    { "item": "Progressive Cloud Piercer" },
+                    { "item": "Progressive Thunder Buster" },
+                    { "item": "Progressive Shadow Hunter" }
+                ] } ],
+                "false": [ { "anyOf": [
+                    { "item": "Arrow: Cloud Piercer" },
+                    { "item": "Arrow: Thunder Buster" },
+                    { "item": "Arrow: Shadow Hunter" }
+                ] } ]
+            }
+        ]
     },
     { // Full Control (8 sp), 2 sp -> total 10 sp
         "category": "skill", "address": 5056, "name": "Skill Tree Node: Qi Boost (Bottom Right)",

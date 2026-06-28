@@ -18,27 +18,27 @@
 
     {
         "category": "!shop", "code": 21, "name": "Arrow: Cloud Piercer",
-        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
     },
     {
         "category": "!shop", "code": 22, "name": "Arrow: Thunder Buster",
-        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
     },
     {
         "category": "!shop", "code": 23, "name": "Arrow: Shadow Hunter",
-        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
     },
     {
         "category": "shop", "code": 24, "name": "Progressive Cloud Piercer", "count": 3,
-        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
     },
     {
         "category": "shop", "code": 25, "name": "Progressive Thunder Buster", "count": 3,
-        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
     },
     {
         "category": "shop", "code": 26, "name": "Progressive Shadow Hunter", "count": 3,
-        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
     },
 
     // "Material"s
