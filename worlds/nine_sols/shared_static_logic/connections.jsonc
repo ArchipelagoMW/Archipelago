@@ -1035,8 +1035,12 @@
     {
         "from": "Factory (U) - Broken Shanhai (with qi)", "to": "Factory (U) - Middle Right Exit",
         "medium_requires": [
-            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // getting onto the ledge is the same
-            // then just T-dash to get across the big crystal pit
+            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // getting onto the ledge is the same
+            { "anyOf": [ // then to get across the big crystal pit you need T-dash and...
+                { "item": "Charged Strike" },
+                { "item": "Air Dash" },
+                { "item": "Cloud Leap" }
+            ] }
         ]
     },
     // we skip the BS <- MRE connection because MRE -> MI -> BS has weaker requirements (unless we want a precise TCK-only jump)
