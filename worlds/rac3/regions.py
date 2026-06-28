@@ -34,15 +34,13 @@ def should_skip_nanotech_location(location: str, options: type[RaC3Options]) -> 
         return True
     if nanotech_level > 100 and not options.ngplus_start.value:
         return True
-    if nanotech_level <= 100 and nanotech_level > options.nanotech_limitation.value:
+    if nanotech_level > options.nanotech_limitation.value:
         return True
 
     nanotech_step = NANOTECH_OPTION_TO_MOD.get(options.nanotech_milestones.value, 0)
     if not nanotech_step:
         return True
 
-    if nanotech_level > 100:
-        return (nanotech_level - 100) % nanotech_step != 0
     return nanotech_level % nanotech_step != 0
 
 def get_nanotech_locations(options: type[RaC3Options]) -> list[str]:
