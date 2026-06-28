@@ -15,7 +15,7 @@ else:
             options.FarmType,
             options.BundleRandomization,
             options.BundlePrice,
-            options.BundlesPerRoom,
+            options.BundlePerRoom,
             options.EntranceRandomization,
             options.ExcludeGingerIsland,
         ]),

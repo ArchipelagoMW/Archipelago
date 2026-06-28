@@ -15,7 +15,7 @@ class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
 
     def test_option_pair_debug(self):
         option_dict = {
-            options.BundlesPerRoom.internal_name: options.BundlesPerRoom.option_two_fewer,
+            options.BundlePerRoom.internal_name: options.BundlePerRoom.option_two_fewer,
             options.Hatsanity.internal_name: options.Hatsanity.option_post_perfection,
         }
         for i in range(1):

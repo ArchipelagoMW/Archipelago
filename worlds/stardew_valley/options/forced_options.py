@@ -1,12 +1,12 @@
-from worlds.stardew_valley.regions.model import reverse_connection_name
 import logging
 
 import Options as ap_options
+from worlds.stardew_valley.regions.model import reverse_connection_name
 from . import options
 from .jojapocalypse_options import Jojapocalypse, JojaAreYouSure
 from ..mods.mod_data import mod_combination_is_valid, get_invalid_mod_combination
 from ..options.settings import StardewSettings
-from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName, EntranceRandomizationBehaviorOptionName
+from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName, EntranceRandomizationBehaviorOptionName, DataRandomizationOptionName
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +78,7 @@ def force_change_options_if_incompatible(world_options: options.StardewValleyOpt
     force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options)
     force_reverse_entrance_plando_when_not_decoupled(world_options, player, player_name)
+    force_data_randomization_toggles_that_need_each_other(world_options, player, player_name)
 
 
 def force_no_jojapocalypse_without_being_sure(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
@@ -207,3 +208,15 @@ def force_accessibility_to_full_when_goal_requires_all_locations(player, player_
         goal_name = world_options.goal.current_option_name
         logger.warning(f"Goal '{goal_name}' requires full accessibility. "
                        f"Accessibility option forced to 'Full' for player {player} ({player_name})")
+
+
+def force_data_randomization_toggles_that_need_each_other(world_options: options.StardewValleyOptions, player, player_name):
+    data_to_randomize = world_options.data_randomization.value
+    if len(data_to_randomize) <= 0:
+        return
+
+    if DataRandomizationOptionName.fish_catch_method in data_to_randomize and DataRandomizationOptionName.fish_location not in data_to_randomize:
+        world_options.data_randomization.value.remove(DataRandomizationOptionName.fish_catch_method)
+        logger.warning(f"Randomizing fish catch methods requires randomizing their locations. "
+                       f"Fish catch methods was removed from the DataRandomization in {player} ({player_name})'s world")
+

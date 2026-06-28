@@ -1,5 +1,5 @@
 from .options import (StardewValleyOption, Goal, FarmType, StartingMoney, ProfitMargin,
-                      BundleRandomization, BundlePrice, BundlesPerRoom, EntranceRandomization, EntranceRandomizationBehavior, StartWithout,
+                      BundleRandomization, BundlePrice, BundlePerRoom, EntranceRandomization, EntranceRandomizationBehavior, StartWithout,
                       SeasonRandomization, Cropsanity, BackpackProgression, ToolProgression,
                       ElevatorProgression, SkillProgression, BuildingProgression, FestivalLocations,
                       JourneyOfThePrairieKing, JunimoKart, SpecialOrderLocations, QuestLocations, Fishsanity,
