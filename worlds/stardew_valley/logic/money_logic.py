@@ -45,23 +45,25 @@ class MoneyLogic(BaseLogic):
             return self.logic.true_
 
         shipping_rule = self.logic.shipping.can_use_any_shipping_bin
-        pierre_rule = self.logic.region.can_reach_all(Region.pierre_shop, Region.forest)
-        willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
-        clint_rule = self.logic.region.can_reach_all(Region.blacksmith_shop, Region.mines_floor_5) & self.logic.tool.has_tool(Tool.pickaxe)
-        robin_rule = self.logic.region.can_reach_all(Region.carpenter_shop, Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
         farming_rule = self.logic.farming.can_plant_and_grow_item(Season.not_winter)
 
-        if amount <= 2000:
-            selling_any_rule = shipping_rule | pierre_rule | willy_rule | clint_rule | robin_rule
-            return selling_any_rule
-
-        if amount <= 3000:
-            selling_any_rule = shipping_rule | pierre_rule | willy_rule
-            return selling_any_rule
-
         if amount <= 5000:
-            selling_all_rule = shipping_rule | (pierre_rule & farming_rule) | (pierre_rule & willy_rule & clint_rule & robin_rule)
-            return selling_all_rule
+            pierre_forage_rule = self.logic.region.can_reach_all(Region.pierre_shop, Region.forest)
+            willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
+            clint_rule = self.logic.region.can_reach_all(Region.blacksmith_shop, Region.mines_floor_5) & self.logic.tool.has_tool(Tool.pickaxe)
+            robin_rule = self.logic.region.can_reach_all(Region.carpenter_shop, Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
+
+            if amount <= 2000:
+                selling_any_rule = shipping_rule | pierre_forage_rule | willy_rule | clint_rule | robin_rule
+                return selling_any_rule
+
+            if amount <= 3000:
+                selling_any_rule = shipping_rule | pierre_forage_rule | willy_rule
+                return selling_any_rule
+
+            if amount <= 5000:
+                selling_all_rule = shipping_rule | (pierre_forage_rule & farming_rule) | (pierre_forage_rule & willy_rule & clint_rule & robin_rule)
+                return selling_all_rule
 
         if amount <= 10000:
             return shipping_rule & farming_rule
