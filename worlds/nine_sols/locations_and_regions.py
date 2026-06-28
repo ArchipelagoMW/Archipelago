@@ -97,6 +97,8 @@ chiyou_shop = set(n for n in location_names if n.startswith("Chiyou's Shop: "))
 printer = set(n for n in location_names if n.startswith("3D Printer: "))
 all_shops = kuafu_shop | kuafu_extra | chiyou_shop | printer
 
+st_nodes = set(n for n in location_names if n.startswith("Skill Tree Node: "))
+
 location_name_groups = {
     # Auto-generated groups
     # We don't need an "Everywhere" group because AP makes that for us
@@ -139,6 +141,8 @@ location_name_groups = {
     "Chiyou's Shop": chiyou_shop,
     "3D Printer": printer,
     "All Shops": all_shops,
+
+    "Skill Tree Nodes": st_nodes,
 
     # Manually curated groups
     "Sol Seal Locations": {
