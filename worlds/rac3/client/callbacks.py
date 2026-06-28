@@ -156,6 +156,7 @@ async def _handle_game_ready(ctx: "Context") -> None:
             await sleep(5)
 
         if menu is True and ctx.main_menu is False:
+            ctx.last_game_message = None
             await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_PLAYING)])
             logger.info("Starting game...")
             ctx.game_interface.reset_file()
