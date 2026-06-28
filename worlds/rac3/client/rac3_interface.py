@@ -899,6 +899,8 @@ class Rac3Interface(GameInterface):
                     self.bolt_and_xp_multiplier_value += 1
                 self._write8(RAC3STATUS.JACKPOT_PACKS, self._read8(RAC3STATUS.JACKPOT_PACKS) + 1)
             case RAC3ITEM.NANOTECH_XP:
+                if not self.nanotech_exp:
+                    self.nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
                 nanotech_gain = min(200000, max(20000, int(self.nanotech_exp * 0.15)))
                 self.nanotech_exp += nanotech_gain
                 if self.nanotech_exp > 0x7FFFFFFF:
