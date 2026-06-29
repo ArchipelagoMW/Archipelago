@@ -149,7 +149,11 @@ class PlanetLifecycleMixin:
         # extra condition needed to force-grant the Shrink Ray there.
         if self._initial_load_done:
             self._reapply_inv()
-        self.armour.apply_ap_armour()
+        # See on_respawn in _hooks.py — apply_ap_armour() would zero the
+        # armour-set bytes _reapply_inv() just OR-merged AP ownership into
+        # (self.ap_armour is permanently empty, nothing ever populates it).
+        # restore_equipped_slots() still needs to run for the equipped-slot
+        # bytes.
         self.armour.restore_equipped_slots()
         await self._swap_to_planet(planet_id)
 
@@ -214,6 +218,10 @@ class PlanetLifecycleMixin:
             return
         self._initial_load_done = True
         self._log(f"[RAC] Initial load on {PLANET_NAMES[planet_id]} — applying world state.")
+        # RAC3 gospel: this is the "main_menu True -> False" edge — the one
+        # moment it tells the server CLIENT_PLAYING and replays the player's
+        # full item/location history. _on_initial_load fires that here.
+        self._on_initial_load()
         self.clank.write_defaults()
         self.quick_select.zero()
         if planet_id == Planets.POKITARU.planet_id:
@@ -222,8 +230,10 @@ class PlanetLifecycleMixin:
         self.bolts.sync()
         self.skill_points.sync()
         self.armour_sets.sync()
+        # See on_respawn in _hooks.py — no apply_ap_armour() call here either,
+        # same reason. _finish_planet_enter (the only caller of this method)
+        # runs restore_equipped_slots() right after this returns.
         self._reapply_inv()
-        self.armour.apply_ap_armour()
 
     async def _monitor_ryllus_cutscene(self) -> None:
         await asyncio.sleep(1.0)

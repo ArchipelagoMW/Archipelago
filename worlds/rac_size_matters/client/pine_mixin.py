@@ -56,11 +56,17 @@ class PineMixin:
             await self._teardown_pine_connection()
 
     async def _attempt_pine_connect(self, is_reconnect: bool = False) -> None:
-        loop = asyncio.get_event_loop()
+        # PINE calls run in-line on the event loop thread, never via
+        # run_in_executor — same as RAC3's single-coroutine pcsx2_sync_task.
+        # A thread-pool worker blocked inside a 5s-timeout PINE call would
+        # hold _pine_lock for that whole window, freezing every other PINE
+        # consumer (poll loop, vendor sync, deathlink) behind it. Calling
+        # in-line means a slow PCSX2 response only stalls this one coroutine,
+        # exactly like it would stall RAC3's.
         async with self._pine_lock:
             try:
-                await loop.run_in_executor(None, self.pine.connect)
-                game_id = await loop.run_in_executor(None, self.pine.get_game_id)
+                self.pine.connect()
+                game_id = self.pine.get_game_id()
             except Exception:
                 logger.warning("[RAC] Could not connect to PCSX2. Use /reconnect once the emulator is running.")
                 await self._teardown_pine_connection()
@@ -86,7 +92,7 @@ class PineMixin:
             )
             self.pine_connected = True
             try:
-                await loop.run_in_executor(None, self._read_initial_state_sync)
+                self._read_initial_state_sync()
             except Exception as exc:
                 logger.warning(
                     f"[RAC] Initial state read failed: {exc}. Use /reconnect once the game is fully loaded."
@@ -103,7 +109,13 @@ class PineMixin:
                 "PCSX2", TextColour.WHITE,
             ))
         try:
-            await self._wiring.start()
+            # GameWiring.start() does a couple of raw PINE reads before its own
+            # poll loop (which serializes on this same lock) takes over — hold
+            # the lock here too so those startup reads can't interleave with
+            # another in-flight PINE call from a packet that arrived while
+            # reconnecting (e.g. a vendor purchase or wiring sync).
+            async with self._pine_lock:
+                await self._wiring.start()
             # Baseline before applying so the catch-up batch of items already
             # received before this PCSX2 connection doesn't pop a notification.
             self._notification_item_index = len(self.items_received)
@@ -115,10 +127,9 @@ class PineMixin:
                 await self._teardown_pine_connection()
 
     async def _read_initial_state(self) -> None:
-        loop = asyncio.get_event_loop()
         try:
             async with self._pine_lock:
-                await loop.run_in_executor(None, self._read_initial_state_sync)
+                self._read_initial_state_sync()
         except Exception as exc:
             self._log(f"[RAC] Initial state read failed: {exc}", "warning")
 

@@ -121,9 +121,8 @@ class DeathLinkMixin:
         self._write_notification_text(colored_text(
             TextColour.RED, "Deathlink: ", source, TextColour.WHITE, " ", cause,
         ))
-        loop = asyncio.get_event_loop()
         async with self._pine_lock:
-            await loop.run_in_executor(None, self._kill_player_sync)
+            self._kill_player_sync()
 
     def _kill_player_sync(self) -> None:
         state_addr  = PLAYER_ADDRS.get(self._prev_planet, (PLAYER_STATE, PLAYER_HEALTH))[0]

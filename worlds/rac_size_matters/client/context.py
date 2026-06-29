@@ -136,6 +136,7 @@ class RACContext(
             self.pine, log=self._log,
             expected_game_id=EXPECTED_GAME_ID,
             on_wrong_game=self._on_wrong_game_detected,
+            pine_lock=self._pine_lock,
         )
 
     async def _guarded_wiring_call(self, fn: Callable[[], None]) -> None:
@@ -149,11 +150,17 @@ class RACContext(
         same "Connected" handler that calls this. A connection drop mid-call
         (for callers that do touch self.pine, e.g. reapply_inv) is still
         treated as a soft flag, not a crash, same as game_watcher's poll loop.
+
+        Runs fn() in-line rather than via run_in_executor — same reasoning as
+        PineMixin._attempt_pine_connect: a thread-pool worker stuck inside a
+        slow/timing-out PINE call would hold _pine_lock for the entire 5s
+        socket timeout, freezing every other PINE consumer (poll loop, vendor
+        sync, deathlink) behind it for that whole window. RAC3's equivalent
+        calls are all in-line on its single coroutine for the same reason.
         """
-        loop = asyncio.get_event_loop()
         async with self._pine_lock:
             try:
-                await loop.run_in_executor(None, fn)
+                fn()
             except Exception as exc:
                 # Not a full disconnect — GameWiring's own poll loop keeps running
                 # independently of pine_connected, so pickup detection isn't
@@ -220,6 +227,8 @@ class RACContext(
                 on_vendor_open     = lambda: asyncio.create_task(self._send_vendor_hints()),
                 on_vendor_close    = self._on_menu_close_for_armour_sets,
                 on_bonus_weapon_pickup = self._grant_random_bonus_item,
+                on_scripted_gadget_pickup = self._handle_scripted_gadget_pickup,
+                on_initial_load    = lambda: asyncio.create_task(self._send_playing_status()),
             )
             checked = self._checked_location_names()
             asyncio.create_task(self._guarded_wiring_call(

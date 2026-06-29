@@ -49,8 +49,15 @@ class HooksMixin:
 
         def on_respawn() -> None:
             self._death_count = 0
+            # _reapply_inv() already OR-merges AP-owned armour sets into memory
+            # (client._apply_player_inventory_sync's ARMOUR_ADDRESSES write).
+            # apply_ap_armour() used to run right after it and zero those same
+            # set bytes straight back out — self.ap_armour is only ever
+            # populated through sync_from_ap's armour_item_pickups param,
+            # which no call site passes, so it's permanently empty. Don't call
+            # it here; restore_equipped_slots() below still needs to run to
+            # put the equipped-slot bytes back.
             self._reapply_inv()
-            self.armour.apply_ap_armour()
             self.armour.restore_equipped_slots()
 
         def on_pickup_start() -> None:
@@ -193,11 +200,18 @@ class HooksMixin:
                 return on_mod_purchased
             ps.on_vendor_mod_purchased = make_mod_hook(planet_id)
 
-    # Bonus weapon pickup (Pokitaru starter weapons)
+    # Bonus weapon pickup (Pokitaru starter weapons) / other intro-scripted
+    # pickups that bypass the normal vendor-menu purchase path entirely.
 
     _BONUS_TRIGGER_WEAPONS: frozenset[str] = frozenset({
         "lacerator", "acid_bomb_glove", "concussion_gun",
     })
+
+    # Hypershot is handed to the player as a scripted Pokitaru tutorial event,
+    # not a normal gadget-vendor purchase, so its vendor location also needs
+    # detecting off the raw unlocked-bit transition instead of the vendor-menu
+    # redirect in PlanetState._wire_vendor_purchase_callbacks.
+    _SCRIPTED_PICKUP_GADGETS: frozenset[str] = frozenset({"hypershot"})
 
     def _wire_bonus_weapon_hooks(self) -> None:
         prev_on_weapon_acquired = self.weapons.on_weapon_acquired
@@ -208,3 +222,12 @@ class HooksMixin:
                 self._on_bonus_weapon_pickup(name)
 
         self.weapons.on_weapon_acquired = on_weapon_acquired
+
+        prev_on_gadget_acquired = self.weapons.on_gadget_acquired
+
+        def on_gadget_acquired(name: str) -> None:
+            prev_on_gadget_acquired(name)
+            if name in self._SCRIPTED_PICKUP_GADGETS:
+                self._on_scripted_gadget_pickup(name)
+
+        self.weapons.on_gadget_acquired = on_gadget_acquired

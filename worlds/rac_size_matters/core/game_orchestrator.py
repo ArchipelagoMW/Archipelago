@@ -84,9 +84,19 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
         self, pine: Pine, log: Callable[[str], None] | None = None,
         expected_game_id: str | None = None,
         on_wrong_game: Callable[[str], None] | None = None,
+        pine_lock: asyncio.Lock | None = None,
     ) -> None:
         self._pine       = pine
         self._pine_iface = PineInterface(pine)
+        # Shared with RACContext/PineMixin so this poll loop's PINE reads/
+        # writes are sequenced against the other entry points that touch PINE
+        # (reconnect, vendor sync, deathlink) instead of interleaving with
+        # them mid-operation — e.g. a planet-poll write landing between a
+        # vendor purchase's read and its write. All PINE calls anywhere in
+        # this client run in-line on the event loop thread (no
+        # run_in_executor), so this lock is purely for that ordering, not
+        # cross-thread safety.
+        self._pine_lock  = pine_lock or asyncio.Lock()
         self._global_map = build_global_address_map()
         self._log        = log or logger.info
         self._expected_game_id = expected_game_id
@@ -95,11 +105,11 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
 
         # Guards the vendor weapon/gadget/mod memory region against a race
         # between this orchestrator's poll loop (preload/open/close zero+
-        # restore writes) and the client's _apply_player_inventory_sync,
-        # which runs on a separate executor thread. Both write the same
-        # addresses; without this, an in-flight AP-ownership write can land
-        # after a vendor-state zero, re-showing a mod that wasn't purchased
-        # at this vendor.
+        # restore writes) and the client's _apply_player_inventory_sync. Both
+        # run on the event loop thread but from separate coroutines/await
+        # points, so without this an in-flight AP-ownership write can still
+        # land after a vendor-state zero, re-showing a mod that wasn't
+        # purchased at this vendor.
         self.vendor_write_lock = threading.Lock()
 
         self._orchestrator = Orchestrator(
@@ -138,6 +148,8 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
         self._on_vendor_close:    Callable[[], None]     = lambda: None
         self._on_pause_close:     Callable[[], None]     = lambda: None
         self._on_bonus_weapon_pickup: Callable[[str], None] = lambda _: None
+        self._on_scripted_gadget_pickup: Callable[[str], None] = lambda _: None
+        self._on_initial_load:    Callable[[], None]     = lambda: None
 
         self.planet_states: dict[int, PlanetState] = self._build_planet_states(acc, storage)
 
@@ -198,6 +210,8 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
         on_vendor_close:    Callable[[], None]  = lambda: None,
         on_pause_close:     Callable[[], None]  = lambda: None,
         on_bonus_weapon_pickup: Callable[[str], None] = lambda _: None,
+        on_scripted_gadget_pickup: Callable[[str], None] = lambda _: None,
+        on_initial_load:    Callable[[], None]  = lambda: None,
     ) -> None:
         self._send_location      = lambda name: send_location(name) if self._initial_load_done else None
         self._send_deathlink     = send_deathlink
@@ -209,6 +223,8 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
         self._on_vendor_close    = on_vendor_close
         self._on_pause_close     = on_pause_close
         self._on_bonus_weapon_pickup = on_bonus_weapon_pickup
+        self._on_scripted_gadget_pickup = on_scripted_gadget_pickup
+        self._on_initial_load    = on_initial_load
 
         _raw_reapply = reapply_inv
 
@@ -231,6 +247,16 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
         # a reconnect (stop() then start() again) leaves every state's struct-change
         # handlers unregistered forever, since enter() used to only run once from
         # __init__. That's what silently broke menu/vendor detection after /reconnect.
+        #
+        # Each call is independently guarded against the mirror-image failure
+        # in stop()'s loop below: if an earlier state's exit() raised there,
+        # every state after it in that fixed-order tuple never got exit()
+        # called at all, so _active was left stuck True from the previous
+        # session. That made this "if not state._active" check skip calling
+        # enter() for it here too — no handlers registered for the rest of
+        # the session, only fixable by restarting the whole client. Now that
+        # stop()'s loop can't abort partway through, this shouldn't recur,
+        # but enter() itself failing must equally not strand later states.
         for state in (
             self.armour, self.armour_sets, self.bolts, self.skill_points, self.planet_unlock,
             self.quick_select, self.clank, self.skyboard, self.weapons, self.player,
@@ -238,10 +264,16 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
             self.missions,
         ):
             if not state._active:
-                state.enter()
+                try:
+                    state.enter()
+                except Exception:
+                    logger.exception(f"[RAC] {state!r}.enter() failed — its handlers may not be registered.")
         for ps in self.planet_states.values():
             if not ps._active:
-                ps.enter()
+                try:
+                    ps.enter()
+                except Exception:
+                    logger.exception(f"[RAC] {ps!r}.enter() failed — its handlers may not be registered.")
 
         self.planet_unlock.sync()
         try:
@@ -290,15 +322,28 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
         except Exception:
             pass
 
+        # Same guard as start(): one state's exit() raising must not abort the
+        # loop and leave every later state's _active stuck True (which would
+        # then make start()'s "if not state._active" skip re-entering it on
+        # the next connect, with no handlers registered for that state for
+        # the rest of the session — see the comment there).
         for state in (
             self.armour, self.armour_sets, self.bolts, self.skill_points, self.planet_unlock,
             self.quick_select, self.clank, self.skyboard, self.weapons, self.player,
             self.menu, self.weapon_vendor, self.mod_vendor, self.display_text, self.displayed_text_box,
             self.missions,
         ):
-            state.exit()
+            try:
+                state.exit()
+            except Exception:
+                logger.exception(f"[RAC] {state!r}.exit() failed — forcing _active False so start() retries it.")
+                state._active = False
         for ps in self.planet_states.values():
-            ps.exit()
+            try:
+                ps.exit()
+            except Exception:
+                logger.exception(f"[RAC] {ps!r}.exit() failed — forcing _active False so start() retries it.")
+                ps._active = False
 
         self._initial_load_done      = False
         self._first_swap_done        = False
@@ -341,16 +386,24 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
         # that with "RuntimeError: no running event loop". The GUI freeze
         # this used to cause was actually the duplicate-Pine-object bug
         # (two sockets fighting over one PCSX2 slot) — see Pine.rebind.
+        #
+        # The per-tick body below still runs synchronously on this thread (no
+        # internal awaits), so acquiring _pine_lock here costs nothing beyond
+        # the lock check itself — but it's what stops this loop's PINE reads
+        # from interleaving with another coroutine's own in-line PINE call
+        # while that coroutine is itself suspended on something else (e.g.
+        # awaiting send_msgs mid vendor-purchase sequence).
         while True:
             try:
-                if self._maybe_check_wrong_game():
-                    return
-                self._orchestrator.poll()
-                self._maybe_apply_quick_select()
-                self._check_planet_menu_hotkey()
-                self._check_weapon_vendor_view_toggle()
-                self._check_debug_buttons()
-                self._debug_print_transition_gate()
+                async with self._pine_lock:
+                    if self._maybe_check_wrong_game():
+                        return
+                    self._orchestrator.poll()
+                    self._maybe_apply_quick_select()
+                    self._check_planet_menu_hotkey()
+                    self._check_weapon_vendor_view_toggle()
+                    self._check_debug_buttons()
+                    self._debug_print_transition_gate()
             except Exception as exc:
                 logger.warning(f"[RAC] Poll error: {exc}")
             await asyncio.sleep(POLL_INTERVAL)

@@ -38,9 +38,11 @@ from ..items import (
     WEAPON_MOD_NAME_TO_SLOT,
 )
 from ..locations import (
+    GADGET_INTERNAL_TO_LOCATION,
     MOD_INTERNAL_TO_VENDOR_SLOT_LOCATION,
     VENDOR_GADGET_LOC,
     VENDOR_WEAPON_LOC,
+    WEAPON_INTERNAL_TO_LOCATION,
 )
 
 _SMALL_BOX_BY_PLANET = {tb.planet_id: tb for tb in SmallTextBoxAddrs}
@@ -134,10 +136,9 @@ class InventoryMixin:
         await asyncio.sleep(0.5)
         if not self._pending_item_apply or self._wiring.is_picking_up:
             return
-        loop = asyncio.get_event_loop()
         async with self._pine_lock:
-            await loop.run_in_executor(None, self._apply_world_states_sync)
-            await loop.run_in_executor(None, self._apply_player_inventory_sync)
+            self._apply_world_states_sync()
+            self._apply_player_inventory_sync()
         self._pending_item_apply = False
 
     async def force_sync(self) -> None:
@@ -145,10 +146,9 @@ class InventoryMixin:
         regardless of pickup/menu guards or what's already been applied."""
         if not self.pine_connected:
             return
-        loop = asyncio.get_event_loop()
         async with self._pine_lock:
-            await loop.run_in_executor(None, self._apply_player_inventory_sync)
-            await loop.run_in_executor(None, self._apply_world_states_sync)
+            self._apply_player_inventory_sync()
+            self._apply_world_states_sync()
         self._pending_item_apply = False
 
     async def _apply_received_items(self) -> None:
@@ -157,13 +157,12 @@ class InventoryMixin:
             return
         if not self.items_received:
             return
-        loop = asyncio.get_event_loop()
         async with self._pine_lock:
             # Always rebuild internal inventory state (weapons/armour/gadgets)
             # so it is up-to-date even during a pickup animation.
             # _apply_player_inventory_sync guards game-memory writes internally
             # when is_picking_up is True, so only the state rebuild runs.
-            await loop.run_in_executor(None, self._apply_player_inventory_sync)
+            self._apply_player_inventory_sync()
             # Bolts/traps don't depend on the weapon/armour pickup-detection
             # window, so apply them immediately rather than deferring behind
             # is_picking_up — otherwise a trap received mid-pickup-animation
@@ -176,7 +175,7 @@ class InventoryMixin:
             if self._wiring.is_picking_up:
                 self._pending_item_apply = True
                 return
-            await loop.run_in_executor(None, self._apply_world_states_sync)
+            self._apply_world_states_sync()
         self._show_new_item_notifications()
         self._pending_item_apply = False
 
@@ -430,11 +429,12 @@ class InventoryMixin:
         # gadget restore below would mean receiving the qualifying item while
         # already standing at the vendor leaves you stuck until you back out.
         self._apply_mod_unlock_flags()
-        # This runs on a worker thread (loop.run_in_executor) while the
-        # orchestrator's vendor open/close zero-then-restore writes run on the
-        # main thread. Take the same lock and re-check the vendor guard
-        # *inside* it — otherwise a write that passed the guard just before the
-        # vendor opened can land right after, re-showing an unpurchased mod.
+        # This and the orchestrator's vendor open/close zero-then-restore
+        # writes both run on the event loop thread, but interleaved across
+        # separate await points. Take the same lock and re-check the vendor
+        # guard *inside* it — otherwise a write that passed the guard just
+        # before the vendor opened can land right after, re-showing an
+        # unpurchased mod.
         with self._wiring.vendor_write_lock:
             # Never write weapons or gadgets while vendor owns the weapon state.
             if self._wiring.vendor_active:
@@ -483,14 +483,29 @@ class InventoryMixin:
             )
             self.pine.write_int8(addr, 1 if unlocked else 0)
 
-    # Bonus weapon pickup
+    # Bonus weapon pickup / intro-scripted vendor locations
 
     def _grant_random_bonus_item(self, trigger_name: str) -> None:
-        """Called when lacerator/acid_bomb_glove/concussion_gun transitions
-        locked->unlocked in-game. Force-unlocks a random AP-unlocked weapon
-        or gadget the player doesn't already have equipped on this planet."""
+        """Called whenever lacerator/acid_bomb_glove/concussion_gun's unlocked
+        bit transitions 0->1 in memory — both when the player picks one at
+        Pokitaru's intro kiosk (a scripted event, not a normal vendor menu
+        purchase — see _wire_planet_hooks/PlanetState._wire_vendor_purchase_callbacks,
+        neither of which ever engage for it) and when we ourselves re-write
+        that same bit while re-applying an already-AP-owned weapon.
+
+        Only the former is a real pickup: if trigger_name is already AP-owned
+        the transition can only be our own write, so skip both the bonus
+        grant (this used to fire on every re-apply, not just the real pick)
+        and the location check below.
+        """
         if not self.pine_connected or self._wiring.writes_blocked:
             return
+        if self._gs.tracked_weapons.get(trigger_name):
+            return
+        loc = WEAPON_INTERNAL_TO_LOCATION.get(trigger_name)
+        if loc:
+            self._log(f"[RAC] Intro weapon picked: {trigger_name!r} -> loc={loc!r}")
+            self._append_location_by_name(loc)
         candidates: list[int] = []
         for name, unlocked in self._gs.tracked_weapons.items():
             if unlocked and name in WEAPONS and name != trigger_name:
@@ -505,6 +520,25 @@ class InventoryMixin:
             self.pine.write_int8(addr, 1)
         except Exception:
             pass
+
+    def _handle_scripted_gadget_pickup(self, trigger_name: str) -> None:
+        """Called whenever hypershot's unlocked bit transitions 0->1.
+
+        Hypershot is handed to the player during Pokitaru's tutorial as a
+        scripted event, not a normal gadget-vendor purchase, so (like the
+        three intro weapons above) it never goes through
+        PlanetState._wire_vendor_purchase_callbacks's vendor-menu redirect.
+        Same not-yet-AP-owned guard as _grant_random_bonus_item, for the same
+        reason — this also fires on our own re-apply writes.
+        """
+        if not self.pine_connected or self._wiring.writes_blocked:
+            return
+        if self._gs.tracked_gadgets.get(trigger_name):
+            return
+        loc = GADGET_INTERNAL_TO_LOCATION.get(trigger_name)
+        if loc:
+            self._log(f"[RAC] Intro gadget picked: {trigger_name!r} -> loc={loc!r}")
+            self._append_location_by_name(loc)
 
     # Notification helper
 
@@ -641,6 +675,5 @@ class InventoryMixin:
         """Seed and apply bolt/skill-point states.  Called only on connection events."""
         if not self.pine_connected:
             return
-        loop = asyncio.get_event_loop()
         async with self._pine_lock:
-            await loop.run_in_executor(None, self._apply_world_states_sync)
+            self._apply_world_states_sync()
