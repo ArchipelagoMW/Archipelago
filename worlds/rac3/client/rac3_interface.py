@@ -11,7 +11,7 @@ from worlds.rac3.client.general_interface import GameInterface
 from worlds.rac3.client.notification import RAC3NOTIFICATION
 from worlds.rac3.client.texthelper import (ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET, ITEM_TO_STRING_TABLE_INDEX_OFFSET,
                                            remove_accents, TEXT_BYTE_TO_EXPECTED_WIDTH)
-from worlds.rac3.constants.action_type import RAC3ACTIONTYPE
+from worlds.rac3.constants.action_type import ACTION_TYPE_NAMES, RAC3ACTIONTYPE
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.cutscene_flag import RAC3CUTSCENEFLAG
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA, SAVE_DATA
@@ -51,7 +51,7 @@ from worlds.rac3.constants.moby_flag import (BOLT_CRANK_TO_REGION, HACKER_PUZZLE
                                              REFRACTOR_PUZZLE_TO_REGION, TYHRRANOID_PUZZLE_TO_REGION)
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
-from worlds.rac3.constants.player_action import RAC3PLAYERACTION
+from worlds.rac3.constants.player_action import PLAYER_ACTION_NAMES, RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
 from worlds.rac3.constants.progress_flag import HALO_JUMP_TO_REGION, RAC3PROGRESSFLAG
 from worlds.rac3.constants.region import (PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET,
@@ -67,7 +67,6 @@ from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 from worlds.rac3.constants.vendors.vendor import RAC3SHIPVENDOR, RAC3VENDOR, RAC3WEAPONVENDOR, VENDORTYPE_TO_SLOT_SIZE
 from worlds.rac3.constants.version import (GAME_ID_TO_OFFSET, GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION,
                                            VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE, )
-
 
 class Rac3Interface(GameInterface):
     """Handles reading and modifying the game memory"""
@@ -1791,7 +1790,7 @@ class Rac3Interface(GameInterface):
                         self._write8(RAC3_ITEM_DATA_TABLE[name].LEVEL_ADDRESS, threshold_id)
             else:
                 self._write8(addr, 0)
-                self._write8(ammo_addr, 0)
+                self._write32(ammo_addr, 0)
 
         if self.equipped_item > 1 and self.UnlockItem[ITEM_NAME_FROM_ID[self.equipped_item]].status == 0:
             if self.last_used_1 == 0:
@@ -2734,7 +2733,12 @@ class Rac3Interface(GameInterface):
         logger.info(f"Archipelago Version: {__version__}")
         logger.info(f"AP World Version: {RAC3OPTION.VERSION_NUMBER}")
         logger.info(f'Game Version: {GAME_ID_TO_VERSION.get(self.current_game, "Unknown")} ({self.current_game})')
-        logger.info(f"Current planet Tracked: {self.planet}")
+        logger.info(f"Current Planet Tracked: {self.planet}")
+        logger.info(f"Current Player Type: {self.player_type}")
+        logger.info(f"Current Player Action: {PLAYER_ACTION_NAMES.get(self.action, 'Unknown')} ({self.action})")
+        logger.info(f"Current Action Type: {ACTION_TYPE_NAMES.get(self.action_type, 'Unknown')} ({self.action_type})")
+        logger.info(f"Current Available Weapon Vendor Items: {self.weapon_vendor_items}")
+        logger.info(f"Current Available Omega Weapon Items: {self.omega_weapon_vendors_items}")
         if self.cycle_times:
             cycle_min = min(self.cycle_times)
             cycle_avg = sum(self.cycle_times) / len(self.cycle_times)
