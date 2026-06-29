@@ -99,7 +99,6 @@ rac3_option_groups = [
         ProgressionBalancing,
         Accessibility,
         DeathLink,
-        HelpDesk,
     ]),
     OptionGroup("RAC3 Game Options", [
         Shortcuts,
@@ -142,6 +141,9 @@ rac3_option_groups = [
         ShipWings,
         ShipSkin,
         RatchetSkin,
+    ]),
+    OptionGroup("RAC3 QoL Options", [
+        HelpDesk,
     ]),
     OptionGroup("Item & Location Options", [
         RAC3ExcludeLocations,
