@@ -55,6 +55,12 @@ class OkamiEnemies(Enum):
     BLUE_CYCLOPS = EnnemyData(0x29, "Blue Cyclops", 2)
     BANDIT_SPIDER = EnnemyData(0x0b, "Bandit Spider", 2, required_techniques=[BrushTechniques.GREENSPROUT_VINE])
     TUBE_FOX = EnnemyData(0x0e, "Tube Fox", 3)
+    RED_OGRE = EnnemyData(0x66, "Red Ogre", 3)
+    BLUE_OGRE = EnnemyData(0x67, "Blue Ogre", 3)
+    POLTERGEIST = EnnemyData(0x5e, "Poltergeist", 3)
+    HEADLESS_GUARDIAN = EnnemyData(0x71, "Headless Guardian", 3)
+    EXECUTIONER_GUARDIAN = EnnemyData(0x74, "Executioner Guardian", 3)
+    NINETAILS_1 = EnnemyData(0x61, "Ninetails", 3, required_techniques=[BrushTechniques.THUNDERSTORM])
 
     @staticmethod
     def list():

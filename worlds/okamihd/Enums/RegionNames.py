@@ -253,6 +253,43 @@ class RegionNames(StrEnum):
     INSIDE_THE_DRAGON_DEEP = "Inside the dragon (Deeper part)"
     INSIDE_THE_DRAGON_ORB = "Inside the dragon (Orb area)"
 
+    ## ONI ISLAND
+
+    ### Exterior
+    ONI_ISLAND_ENTRANCE = "Oni Island (Entrance)"
+    ONI_ISLAND_ENTRANCE_BRIDGE = "Oni Island (Entrance Bridge)"
+    ONI_ISLAND_ENTRANCE_SEA_OF_FIRE = "Oni Island (Sea of Fire)"
+    ONI_ISLAND_ENTRANCE_UPPER = "Oni Island (Sea of Fire Upper Part)"
+    ONI_ISLAND_EXTERIOR_ROOF = "Oni Island (Exterior roof)"
+
+    ### Interior
+    ONI_ISLAND_INTERIOR_ENTRANCE_ROOM = "Oni Island (Interior Entrance Room)"
+    ONI_ISLAND_INTERIOR_PRE_TOBI_1 = "Oni Island (Pre tobi #1)"
+    ONI_ISLAND_INTERIOR_TOBI_1_2 = "Oni Island (between Tobi #1 and #2)"
+    ONI_ISLAND_INTERIOR_TOBI_2_3 = "Oni Island (between Tobi #2 and #3)"
+    ONI_ISLAND_INTERIOR_TOBI_3_4 = "Oni Island (between Tobi #3 and #4)"
+    ONI_ISLAND_INTERIOR_TOBI_4_5 = "Oni Island (between Tobi #4 and #5)"
+    ONI_ISLAND_INTERIOR_TOBI_5_6 = "Oni Island (between Tobi #5 and #6)"
+    ONI_ISLAND_INTERIOR_LASER_BRIDGES = "Oni Island (after tobi #6, Labyrinth of Torment)"
+    ONI_ISLAND_INTERIOR_POST_TOBI_7 = "Oni Island (after tobi #7, Passage of Needles)"
+    ONI_ISLAND_INTERIOR_3F_POST_LOCKJAW = "Oni Island (3F post lockjaw)"
+    ONI_ISLAND_INTERIOR_3F_POST_GEKIGAMI = "Oni Island (3F post gekigami)"
+    ONI_ISLAND_INTERIOR_1F_THUNDER_KEY = "Oni Island (1F Thunder Key Area)"
+    ONI_ISLAND_INTERIOR_1F_SLIDING_DOORS = "Oni Island (1F Sliding Doors of hell)"
+    ONI_ISLAND_INTERIOR_1F_WEST_ROOM = "Oni Island (1F West Room)"
+    ONI_ISLAND_INTERIOR_1F_STATUE = "Oni Island (1F Statue Room)"
+    ONI_ISLAND_INTERIOR_B1F_ALARM = "Oni Island (B1F Alarm Room)"
+    ONI_ISLAND_SIDESCROLLER = "Oni Island (Sidescroller Section)"
+    ONI_ISLAND_INTERIOR_4F = "Oni Island (4F)"
+    ONI_ISLAND_INTERIOR_5F = "Oni Island (4F-5F Thunder Platforms)"
+    ONI_ISLAND_INTERIOR_4F_KEY = "Oni Island (4F Key Area)"
+    ONI_ISLAND_INTERIOR_4F_STAIRS = "Oni Island (4F Stairs)"
+    ONI_ISLAND_INTERIOR_PRE_TOBI_8 = "Oni Island (before Tobi #8)"
+    ONI_ISLAND_INTERIOR_6F = "Oni Island (6F)"
+    ONI_ISLAND_INTERIOR_PRE_TOBI_9 = "Oni Island (Pre Tobi #9)"
+    ONI_ISLAND_INTERIOR_POST_TOBI_9 = "Oni Island (Post Tobi #9)"
+    ONI_ISLAND_NINETAILS = "Oni Island (Ninetails Arena)"
+
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
@@ -289,7 +326,11 @@ class MapIds(Enum):
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207
+    ONI_ISLAND_LOWER_INT = 0x208
     CATCALL_TOWER = 0x20A
+    ONI_ISLAND_EXT = 0x20D
+    ONI_ISLAND_UPPER_INT = 0x20E
+    ONI_ISLAND_SIDESCROLLER = 0x20F
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03
@@ -315,7 +356,6 @@ class MapIndexes(Enum):
     CALCIFIED_CAVERN = 15
     MOON_CAVE = 16
     RIVER_OF_THE_HEAVENS = 30
-    # FIXME: Ensure this is the right index
     SEIAN_CITY_COMMONERS = 32
     SHINSHU_FIELD = 71
     AGATA_FOREST = 72

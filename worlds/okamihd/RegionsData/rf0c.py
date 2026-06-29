@@ -47,13 +47,15 @@ exits = {
                  required_items_events=["Northern Ryoshima Coast - Open Treasure Cave"]),
         ExitData(RegionNames.DRAGON_PALACE, loading_screen=False,
                  special_rule=n_ryoshima_islands_dragon_rule,required_items_events=["Northern Ryoshima Coast - Open Whirlpool"]),
+
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS, one_way=True, loading_screen=False,
                  required_items_events=["Northern Ryoshima Coast - Mandatory encounter in Watcher's Cape"])
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS: [
-        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST, one_way=True, loading_screen=False)
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST, one_way=True, loading_screen=False),
+        ExitData(RegionNames.ONI_ISLAND_ENTRANCE, required_items_events=["Himiko's Palace - Get Oni Island Location"])
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST_TOMB: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST, one_way=True, loading_screen=False)

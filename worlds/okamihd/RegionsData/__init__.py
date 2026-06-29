@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from . import menu, r100, r122, r101, r102, r103, r104, rf01, rf02, rf03, rf04, rf07, rf08, r108, r109, r107, r10e, \
     r110, rf06, r105, rf09, rf0a, r201, r205, r200, r206, r207, r202, r10a, rf0c, r113, r114, r116, r117, r11a, r11d, \
-    r20a, r203, r11c, r204
+    r20a, r203, r11c, r204, r20d, r208, r20f, r20e, r209
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -37,7 +37,12 @@ okami_exits = {
     **r205.exits,
     **r206.exits,
     **r207.exits,
+    **r208.exits,
+    **r209.exits,
     **r20a.exits,
+    **r20d.exits,
+    **r20e.exits,
+    **r20f.exits,
     **rf01.exits,
     **rf02.exits,
     **rf03.exits,
@@ -79,7 +84,12 @@ okami_locations = {
     **r205.locations,
     **r206.locations,
     **r207.locations,
+    **r208.locations,
+    **r209.locations,
     **r20a.locations,
+    **r20d.locations,
+    **r20e.locations,
+    **r20f.locations,
     **rf01.locations,
     **rf02.locations,
     **rf03.locations,
@@ -121,7 +131,12 @@ okami_events = {
     **r205.events,
     **r206.events,
     **r207.events,
+    **r208.events,
+    **r209.events,
     **r20a.events,
+    **r20d.events,
+    **r20e.events,
+    **r20f.events,
     **rf01.events,
     **rf02.events,
     **rf03.events,
@@ -143,6 +158,7 @@ okami_shop_locations = {
     **getattr(r110, 'shop_locations', {}),
     **getattr(r201, 'shop_locations', {}),
     **getattr(r203, 'shop_locations', {}),
+    **getattr(r208, 'shop_locations', {}),
     **getattr(rf02, 'shop_locations', {}),
     **getattr(rf04, 'shop_locations', {}),
     **getattr(rf08, 'shop_locations', {}),
