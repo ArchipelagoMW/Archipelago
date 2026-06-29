@@ -26,7 +26,7 @@ events = {
 }
 locations = {
     RegionNames.RYOSHIMA_COAST_BANDIT_SPIDER: {
-        "Ryoshima Coast - Chest after Bandit Spider": LocData(container_check_id(MapIds.RYOSHIMA_BANDIT_SPIDER, 0)),
-        "Ryoshima Coast - Chest after 10 devil gates": LocData(container_check_id(MapIds.RYOSHIMA_BANDIT_SPIDER, 1))
+        "Ryoshima Coast - Chest after Bandit Spider": LocData(container_check_id(MapIds.RYOSHIMA_BANDIT_SPIDER, 0),required_items_events=["Ryoshima Coast - Defeat Bandit Spider in cave"]),
+        "Ryoshima Coast - Chest after 10 devil gates": LocData(container_check_id(MapIds.RYOSHIMA_BANDIT_SPIDER, 1),required_items_events=["Ryoshima Coast - Clear 10 Devil Gates in cave"])
     }
 }

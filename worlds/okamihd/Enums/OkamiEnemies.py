@@ -19,6 +19,7 @@ class EnnemyData(NamedTuple):
 
 # Reference https://github.com/whataboutclyde/okami-utils/blob/master/data/enemy_id.yaml
 class OkamiEnemies(Enum):
+
     GREEN_IMP = EnnemyData(0x03, "Green Imp", 0, BrushTechniques.POWER_SLASH)
     RED_IMP = EnnemyData(0x00, "Red Imp", 0, BrushTechniques.POWER_SLASH)
     BLUE_IMP = EnnemyData(0x01, "Blue Imp", 0, BrushTechniques.POWER_SLASH)
@@ -48,6 +49,7 @@ class OkamiEnemies(Enum):
     SABURO = EnnemyData(0x14, "Saburo", 2)
     ICHIRO = EnnemyData(0x12, "Ichiro", 2, requires_slash=True)
     THUNDER_DOOM_MIRROR = EnnemyData(0x5d, "Thunder Doom Mirror", 2)
+    ICE_DOOM_MIRROR = EnnemyData(0x5b, "Ice Doom Mirror", 2)
     WIND_DOOM_MIRROR = EnnemyData(0x5c, "Wind Doom Mirror", 2, required_techniques=[BrushTechniques.VEIL_OF_MIST])
     BLIGHT = EnnemyData(0x7c, "Blight", 2, requires_slash=True)
     THUNDER_EAR = EnnemyData(0x55, "Thunder Ear", 2)
@@ -59,6 +61,8 @@ class OkamiEnemies(Enum):
     BLUE_OGRE = EnnemyData(0x67, "Blue Ogre", 3)
     POLTERGEIST = EnnemyData(0x5e, "Poltergeist", 3)
     HEADLESS_GUARDIAN = EnnemyData(0x71, "Headless Guardian", 3)
+    BELL_GUARDIAN = EnnemyData(0x72, "Bell Guardian",3)
+    HALO_GUARDIAN = EnnemyData(0x73, "Halo Guardian", 3)
     EXECUTIONER_GUARDIAN = EnnemyData(0x74, "Executioner Guardian", 3)
     NINETAILS_1 = EnnemyData(0x61, "Ninetails", 3, required_techniques=[BrushTechniques.THUNDERSTORM])
 
