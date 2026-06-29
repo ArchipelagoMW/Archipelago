@@ -75,6 +75,9 @@ exits = {
     RegionNames.ONI_ISLAND_INTERIOR_1F_STATUE: [
         ExitData(RegionNames.ONI_ISLAND_INTERIOR_B1F_ALARM, loading_screen=False,
                  required_items_events=["Oni Island - 1F Blow up Statue"])
+    ],
+    RegionNames.ONI_ISLAND_INTERIOR_B1F_ALARM:[
+        ExitData(RegionNames.ONI_ISLAND_SIDESCROLLER,required_items_events=["Oni Island - B1F Cut alarm"])
     ]
 
 }

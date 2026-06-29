@@ -59,6 +59,8 @@ class OkamiEnemies(Enum):
     BLUE_OGRE = EnnemyData(0x67, "Blue Ogre", 3)
     POLTERGEIST = EnnemyData(0x5e, "Poltergeist", 3)
     HEADLESS_GUARDIAN = EnnemyData(0x71, "Headless Guardian", 3)
+    EXECUTIONER_GUARDIAN = EnnemyData(0x74, "Executioner Guardian", 3)
+    NINETAILS_1 = EnnemyData(0x61, "Ninetails", 3, required_techniques=[BrushTechniques.THUNDERSTORM])
 
     @staticmethod
     def list():
