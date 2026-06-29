@@ -12,12 +12,13 @@ from ..Types import EventData, ExitData, LocData, WarpData
 if TYPE_CHECKING:
     from .. import OkamiWorld
 
-exits={
-    RegionNames.TAKA_PASS:[ExitData(RegionNames.KUSA_VILLAGE),
-                           ExitData(RegionNames.SASA_SANCTUARY_ENTRANCE),
-                           ExitData(RegionNames.CITY_CHECKPOINT_TAKA),
-                           ExitData(RegionNames.TAKA_COMMON_LOGIC, one_way=True, loading_screen=False)
-                           ]
+exits = {
+    RegionNames.TAKA_PASS: [ExitData(RegionNames.KUSA_VILLAGE),
+                            ExitData(RegionNames.SASA_SANCTUARY_ENTRANCE),
+                            ExitData(RegionNames.CITY_CHECKPOINT_TAKA),
+                            ExitData(RegionNames.TAKA_COMMON_LOGIC, one_way=True, loading_screen=False),
+                            ExitData(RegionNames.TAKA_PASS_CAVE,required_items_events=["Taka Pass - Open Digging Cave"])
+    ]
 
 }
 events = {
@@ -25,7 +26,8 @@ events = {
         "Taka Pass - Clear Devil gate near waterfall": EventData(
             mandatory_enemies=[OkamiEnemies.BUD_OGRE, OkamiEnemies.YELLOW_IMP]),
         "Taka Pass - Save Chun": EventData(cherry_bomb_level=1, mandatory_enemies=[OkamiEnemies.CUTTERS],
-                                           required_items_events=["Satomi Power Orb (Tei)"])
+                                           required_items_events=["Satomi Power Orb (Tei)"]),
+        "Taka Pass - Open Digging Cave": EventData(required_items_events=["Digging Champ"])
     }
 }
 

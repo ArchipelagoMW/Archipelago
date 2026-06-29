@@ -52,7 +52,7 @@ class RegionNames(StrEnum):
 
     ## AGATA FOREST
     CURSED_AGATA_FOREST = "Cursed Agata Forest"
-    AGATA_COMMON_LOGIC= "Agata Forest (Common)"
+    AGATA_COMMON_LOGIC = "Agata Forest (Common)"
     AGATA_FOREST_WAKA = "Agata Forest (Pre-waka fight)"
     AGATA_FOREST = "Agata Forest"
     AGATA_FOREST_TAKA = "Agata Forest (Behind Bridge to Taka Pass)"
@@ -69,11 +69,12 @@ class RegionNames(StrEnum):
 
     ## TAKA PASS
     CURSED_TAKA_PASS = "Curesd Taka Pass"
-    TAKA_COMMON_LOGIC="Taka Pass (Common)"
+    TAKA_COMMON_LOGIC = "Taka Pass (Common)"
     CURSED_TAKA_PASS_WAKA = "Cursed Taka Pass (Waka Fight)"
     CURSED_TAKA_PASS_CAVE = "Cursed Taka Pass (Cave)"
     CURSED_TAKA_PASS_GUARDIAN_SAPLING = "Cursed Taka Pass (Guardian Sapling)"
     TAKA_PASS = "Taka Pass"
+    TAKA_PASS_CAVE = "Taka Pass Cave"
 
     ## KUSA VILLAGE
     KUSA_VILLAGE = "Kusa Village"
@@ -146,6 +147,7 @@ class RegionNames(StrEnum):
     RYOSHIMA_COAST_LUNAR_LAGOON = "Ryoshima Coast (Lunar Lagoon)"
     RYOSHIMA_COAST_WEST_PIER = "Ryoshima Coast (West of Pier)"
     ANKOKU_TEMPLE = "Ankoku Temple"
+    RYOSHIMA_COAST_BANDIT_SPIDER = "Ryoshima Coast (Bandit spider cave)"
 
     ## SEIAN CITY
     ### COMMONERS QUARTER
@@ -214,6 +216,80 @@ class RegionNames(StrEnum):
     IMPERIAL_PALACE_WEST_BEAM = "Imperial Palace (Small Size - West Beam)"
     IMPERIAL_PALACE_INSIDE_EMPEROR = "Imperial Palace (Small Size - Inside the Emperor's Body)"
 
+    ## Northern Ryoshima Coast
+    NORTHERN_RYOSHIMA_COAST_MANDATORY_FIGHT = "Nothern Rysohima Coast (Mandatory Fight)"
+    NORTHERN_RYOSHIMA_COAST = "Nothern Rysohima Coast"
+    NORTHERN_RYOSHIMA_COAST_MIST_WARP = "Northern Ryoshima Coast (Secret Mist Warp Area)"
+    NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER = "Northern Ryoshima Coast (Watcher's cape mandatory Encounter)"
+    NORTHERN_RYOSHIMA_COAST_WATCHERS = "Northern Ryoshima Coast (Watcher's cape)"
+    NORTHERN_RYOSHIMA_COAST_SAPLING = "Northern Ryoshima Coast (Guardian Sapling Island)"
+    NORTHERN_RYOSHIMA_COAST_TOMB = "Northern Ryoshima Coast (Tomb Cave)"
+    NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND = "Northern Ryoshima Coast (Westernmost Island)"
+    NORTHERN_RYOSHIMA_COAST_UMI = "Northern Ryoshima Coast (Umi's Restaurant)"
+    NORTHERN_RYOSHIMA_COAST_CATCALL_NORTH = "Northern Ryoshima Coast (Island North of Catcall Tower)"
+    NORTHERN_RYOSHIMA_COAST_CB2_ISLAND = "Northern Ryoshima Coast (Cherry Bomb 2 Island)"
+    NORTHERN_RYOSHIMA_COAST_PS2_ISLAND = "Northern Ryoshima Coast (Power Slash 2 Island)"
+    NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_ISLAND = "Northern Ryoshima Coast (Bandit Spider Island)"
+    NORTHERN_RYOSHIMA_COAST_SEA = "Northern Ryoshima Coast (Sea)"
+    NORTHERN_RYOSHIMA_COAST_PS2_CAVE = "Northern Ryoshima Coast (Power Slash 2 Cave)"
+    NORTHERN_RYOSHIMA_COAST_CB2_CAVE = "Northern Ryoshima Coast (Cherry Bomb 2 Cave)"
+    NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_CAVE = "Northern Ryoshima Coast (Bandit spider cave)"
+    NORTHERN_RYOSHIMA_COAST_TREASURE_CAVE = "Northern Ryoshima Coast (Treasure cave)"
+    NORTHERN_RYOSHIMA_COAST_CATCALL_ISLAND = "Northern Ryoshima Coast (Catcall Tower Island)"
+
+    ## Catcall Tower
+    CATCALL_TOWER_BOTTOM = "Catcall Tower (Bottom)"
+    CATCALL_TOWER = "Catcall Tower"
+    CATCALL_TOWER_TOP = "Catcall Tower(Top)"
+
+    ## DRAGON PALACE
+    DRAGON_PALACE = "Dragon Palace"
+    DRAGON_PALACE_SPRING = "Dragon Palace (Soothing Spring)"
+    DRAGON_PALACE_CAVE = "Dragon Palace (Treasure Cave)"
+    DRAGON_PALACE_GARDEN = "Dragon Palace (Water Dragon's Garden)"
+
+    ## INSIDE THE DRAGON
+    INSIDE_THE_DRAGON = "Inside the dragon"
+    INSIDE_THE_DRAGON_DEEP = "Inside the dragon (Deeper part)"
+    INSIDE_THE_DRAGON_ORB = "Inside the dragon (Orb area)"
+
+    ## ONI ISLAND
+
+    ### Exterior
+    ONI_ISLAND_ENTRANCE = "Oni Island (Entrance)"
+    ONI_ISLAND_ENTRANCE_BRIDGE = "Oni Island (Entrance Bridge)"
+    ONI_ISLAND_ENTRANCE_SEA_OF_FIRE = "Oni Island (Sea of Fire)"
+    ONI_ISLAND_ENTRANCE_UPPER = "Oni Island (Sea of Fire Upper Part)"
+    ONI_ISLAND_EXTERIOR_ROOF = "Oni Island (Exterior roof)"
+
+    ### Interior
+    ONI_ISLAND_INTERIOR_ENTRANCE_ROOM = "Oni Island (Interior Entrance Room)"
+    ONI_ISLAND_INTERIOR_PRE_TOBI_1 = "Oni Island (Pre tobi #1)"
+    ONI_ISLAND_INTERIOR_TOBI_1_2 = "Oni Island (between Tobi #1 and #2)"
+    ONI_ISLAND_INTERIOR_TOBI_2_3 = "Oni Island (between Tobi #2 and #3)"
+    ONI_ISLAND_INTERIOR_TOBI_3_4 = "Oni Island (between Tobi #3 and #4)"
+    ONI_ISLAND_INTERIOR_TOBI_4_5 = "Oni Island (between Tobi #4 and #5)"
+    ONI_ISLAND_INTERIOR_TOBI_5_6 = "Oni Island (between Tobi #5 and #6)"
+    ONI_ISLAND_INTERIOR_LASER_BRIDGES = "Oni Island (after tobi #6, Labyrinth of Torment)"
+    ONI_ISLAND_INTERIOR_POST_TOBI_7 = "Oni Island (after tobi #7, Passage of Needles)"
+    ONI_ISLAND_INTERIOR_3F_POST_LOCKJAW = "Oni Island (3F post lockjaw)"
+    ONI_ISLAND_INTERIOR_3F_POST_GEKIGAMI = "Oni Island (3F post gekigami)"
+    ONI_ISLAND_INTERIOR_1F_THUNDER_KEY = "Oni Island (1F Thunder Key Area)"
+    ONI_ISLAND_INTERIOR_1F_SLIDING_DOORS = "Oni Island (1F Sliding Doors of hell)"
+    ONI_ISLAND_INTERIOR_1F_WEST_ROOM = "Oni Island (1F West Room)"
+    ONI_ISLAND_INTERIOR_1F_STATUE = "Oni Island (1F Statue Room)"
+    ONI_ISLAND_INTERIOR_B1F_ALARM = "Oni Island (B1F Alarm Room)"
+    ONI_ISLAND_SIDESCROLLER = "Oni Island (Sidescroller Section)"
+    ONI_ISLAND_INTERIOR_4F = "Oni Island (4F)"
+    ONI_ISLAND_INTERIOR_5F = "Oni Island (4F-5F Thunder Platforms)"
+    ONI_ISLAND_INTERIOR_4F_KEY = "Oni Island (4F Key Area)"
+    ONI_ISLAND_INTERIOR_4F_STAIRS = "Oni Island (4F Stairs)"
+    ONI_ISLAND_INTERIOR_PRE_TOBI_8 = "Oni Island (before Tobi #8)"
+    ONI_ISLAND_INTERIOR_6F = "Oni Island (6F)"
+    ONI_ISLAND_INTERIOR_PRE_TOBI_9 = "Oni Island (Pre Tobi #9)"
+    ONI_ISLAND_INTERIOR_POST_TOBI_9 = "Oni Island (Post Tobi #9)"
+    ONI_ISLAND_NINETAILS = "Oni Island (Ninetails Arena)"
+
     # SPECIAL REGIONS
     # Special Hub regions to handle warps
     MIST_WARP_HUB = "Mist Warp Hub"
@@ -234,13 +310,27 @@ class MapIds(Enum):
     AGATA_FOREST_MME_FAWN = 0x10A
     CALCIFIED_CAVERN = 0x10E
     MOON_CAVE = 0x110
+    RYOSHIMA_BANDIT_SPIDER = 0x113
+    TAKA_PASS_CAVE = 0x114
+    POWER_SLASH_2_CAVE = 0x116
+    CHERRY_BOMB_2_CAVE = 0x117
+    NORTHERN_RYOSHIMA_BANDIT_SPIDER = 0x11A
+    DRAGON_PALACE_TREASURE = 0x11C
+    NORTHERN_RYOSHIMA_TREASURE = 0x11D
     RIVER_OF_THE_HEAVENS = 0x122
     SEIAN_ARISTORATIC = 0x200
     SEIAN_COMMONERS = 0x201
     HIMIKO_PALACE = 0x202
+    DRAGON_PALACE = 0x203
+    INSIDE_THE_DRAGON = 0x204
     SUNKEN_SHIP = 0x205
     IMPERIAL_PALACE = 0x206
     IMPERIAL_PALACE_SMALL = 0x207
+    ONI_ISLAND_LOWER_INT = 0x208
+    CATCALL_TOWER = 0x20A
+    ONI_ISLAND_EXT = 0x20D
+    ONI_ISLAND_UPPER_INT = 0x20E
+    ONI_ISLAND_SIDESCROLLER = 0x20F
     CURSED_SHINSHU = 0xF01
     HEALED_SHINSHU = 0xF02
     CURSED_AGATA = 0xF03
@@ -249,6 +339,7 @@ class MapIds(Enum):
     HEALED_TAKA = 0xF08
     CURSED_RYOSHIMA = 0xF09
     HEALED_RYOSHIMA = 0xF0A
+    NORTHERN_RYOSHIMA = 0xF0C
 
 
 class MapIndexes(Enum):
@@ -265,7 +356,6 @@ class MapIndexes(Enum):
     CALCIFIED_CAVERN = 15
     MOON_CAVE = 16
     RIVER_OF_THE_HEAVENS = 30
-    # FIXME: Ensure this is the right index
     SEIAN_CITY_COMMONERS = 32
     SHINSHU_FIELD = 71
     AGATA_FOREST = 72

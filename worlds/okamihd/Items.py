@@ -110,6 +110,7 @@ equips = {
     "Golden Lucky Cat": ItemData(0x95, ItemClassification.useful),
     "Thief's Glove": ItemData(0x96, ItemClassification.useful),
     "Wood Mat": ItemData(0x97, ItemClassification.useful),
+    # Has to be progression since we require it for some checks.
     "Golden Ink Pot": ItemData(0x98, ItemClassification.progression),
     "Fire Tablet": ItemData(0x9d, ItemClassification.progression)
 }

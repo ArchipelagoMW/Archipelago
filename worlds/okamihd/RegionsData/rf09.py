@@ -7,7 +7,7 @@ from ..Types import ExitData, EventData, LocData, WarpData
 from ..Enums.RegionNames import RegionNames
 
 if TYPE_CHECKING:
-    pass
+    from .. import OkamiWorld
 
 exits = {
     RegionNames.CURSED_RYOSHIMA_COAST: [
