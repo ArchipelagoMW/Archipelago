@@ -1347,7 +1347,7 @@
             { "item": "Grapple" }, // for slider
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // for two slightly long jumps over spikes
         ],
-        "medium_requires": [{ "item": "Trick - Bow Hover" }]
+        "medium_requires": [ { "item": "Grapple" } ] // for slider, then SR for the long jumps
     },
     {
         "from": "AM - Root Node", "to": "AM - Above Left Exit",
