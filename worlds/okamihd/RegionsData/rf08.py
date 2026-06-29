@@ -7,6 +7,7 @@ from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
 from ..Enums.WarpType import WarpType
+from ..Rules import night_time_check_rule
 from ..Types import EventData, ExitData, LocData, WarpData
 
 if TYPE_CHECKING:
@@ -26,7 +27,7 @@ events = {
         "Taka Pass - Clear Devil gate near waterfall": EventData(
             mandatory_enemies=[OkamiEnemies.BUD_OGRE, OkamiEnemies.YELLOW_IMP]),
         "Taka Pass - Save Chun": EventData(cherry_bomb_level=1, mandatory_enemies=[OkamiEnemies.CUTTERS],
-                                           required_items_events=["Satomi Power Orb (Tei)"]),
+                                           required_items_events=["Satomi Power Orb (Tei)"],special_rule=night_time_check_rule),
         "Taka Pass - Open Digging Cave": EventData(required_items_events=["Digging Champ"])
     }
 }
