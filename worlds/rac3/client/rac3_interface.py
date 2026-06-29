@@ -2088,6 +2088,11 @@ class Rac3Interface(GameInterface):
             self._write32(RAC3STATUS.JACKPOT_TIMER, 0x7FFFFFFF)
             self._write8(RAC3STATUS.JACKPOT, self.bolt_and_xp_multiplier_value)
 
+            # Fix latching jackpot fillers from receiving a ton at once
+            if (not any("Jackpot" in key for key in self.timers.keys())
+                and self.bolt_and_xp_multiplier_value != self.options.bolt_and_xp_multiplier):
+                self.bolt_and_xp_multiplier_value = self.options.bolt_and_xp_multiplier
+
     def challenge_mode_cycler(self):
         """Update challenge mode related values based on settings"""
         if self.options.ngplus_start:
