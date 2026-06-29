@@ -57,6 +57,9 @@ moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source,
                                   HasAll("Moon Cave - 4F Move Fireball", BrushTechniques.INFERNO))
 
 oni_island_1f_thunder_rule = Or(has_portable_thunder_source_strict,HasAll("Oni Island - 1F Grab First Thunder Key",BrushTechniques.THUNDERSTORM))
+
+oni_island_5f_thunder_rule = Or(has_portable_thunder_source, HasAll("Oni Island - 4F Grab Thunder Key",BrushTechniques.THUNDERSTORM))
+
 # FIXME Once we've figured out which story trigger can spawn the thunder source here
 gen_thunder_chest_rule: Rule = has_portable_thunder_source
 
@@ -220,7 +223,5 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
 
 
 def set_completion_rules(world: "OkamiWorld"):
-    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm",
-                                     "Tsuta Ruins - Defeat the spider queen", "Himiko's Palace - Cross sea of fire",
-                                     "Imperial Palace - Defeat Blight"))
+    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Oni Island - Defeat Ninetails"))
     return
