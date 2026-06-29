@@ -180,10 +180,10 @@
             ]
         ] } ],
         "medium_requires": [
-            { "item": "Charged Strike" }, // using CS-dashes during the drop
-            { "anyOf": [
-                { "item": "Cloud Leap" }, // solves both the first jump and completing the drop
-                [ { "item": "Grapple" }, { "item": "Air Dash" } ] // grapple for first jump, AD for completing drop
+            { "item": "Charged Strike" }, // using CS-dashes over the highest spikes and during the drop
+            { "anyOf": [ // the two times a grapple target is present
+                { "item": "Grapple" }, // either use grapple as intended
+                { "item": "Cloud Leap" } // or we need CL to skip them (AD won't work for the 1st target)
             ] }
         ] // bow hover wouldn't help, no qi source for t-dash
     },
