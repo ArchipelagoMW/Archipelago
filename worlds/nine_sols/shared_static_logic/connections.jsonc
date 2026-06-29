@@ -948,10 +948,14 @@
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Above Root Node", "requires": [
-        { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
-    ] }, // from the rightmost safety orb's right platform, cloud leap is the only way to the higher middle platform
-    // from the middle safety orb, G AND AD AND CL AND WC (in that order) works, but is redundant with these other routes
+    {
+        "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Above Root Node",
+        // from the rightmost safety orb's right platform, cloud leap is the only way to the higher middle platform
+        "requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ],
+        // from the hallway before the rightmost fire zone, do T-dash setup, ride the right platform back up to the hallway,
+        // then bow hover out of the hallway until you can LS vault onto the higher platform
+        "ls_requires": [ { "item": "Trick - Bow Hover" }, { "item": "Ledge Grab" } ]
+    }, // from the middle safety orb, G AND AD AND CL AND WC (in that order) works, but is redundant with these other routes
     {
         "from": "Factory (GH) - Hammer Brothers Roof", "to": "Factory (GH) - Above Root Node",
         "requires": [ { "anyOf": [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ] } ],
