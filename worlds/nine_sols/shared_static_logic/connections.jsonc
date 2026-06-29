@@ -213,7 +213,8 @@
         "requires": [{ "item": "Air Dash" }, { "item": "Cloud Leap" }],
         "medium_requires": [ { "anyOf": [
             { "item": "Air Dash" }, // and T-dash
-            { "item": "Cloud Leap" } // and swift runner
+            { "item": "Cloud Leap" }, // and swift runner
+            { "item": "Charged Strike" } // and T-dash and swift runner
         ] } ]
     },
     {
