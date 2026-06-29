@@ -25,7 +25,8 @@ exits = {
         ExitData(RegionNames.SEIAN_CITY_TAO,
                  required_items_events=["Sei-an City (Commoner's Quarter) - Climb to Tao Troopers Headquarters"],
                  one_way=True, loading_screen=False),
-        ExitData(RegionNames.SEIAN_CITY_BLOSSOM)
+        ExitData(RegionNames.SEIAN_CITY_BLOSSOM),
+        ExitData(RegionNames.SEIN_CITY_KIMONO)
     ],
     RegionNames.SEIAN_CITY_TAO: [
         ExitData(RegionNames.SEIAN_CITY_COMMONERS, one_way=True)

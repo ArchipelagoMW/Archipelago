@@ -135,7 +135,7 @@ class RegionNames(StrEnum):
 
     ## RYOSHIMA COAST
     CURSED_RYOSHIMA_COAST = "Cursed Ryoshima Coast"
-    CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE = "Cursed Ryoshima Coast"
+    CURSED_RYOSHIMA_COAST_GUARDIAN_SAPLING_CAVE = "Cursed Ryoshima Coast (Guardian Sapling Cave)"
     RYOSHIMA_COAST = "Ryoshima Coast"
     RYOSHIMA_COAST_SEA = "Ryoshima Coast (Sea)"
     RYOSHIMA_COAST_SEA_FAR = "Ryoshima Coast (Sea, far away)"
@@ -160,6 +160,7 @@ class RegionNames(StrEnum):
     SEIAN_CITY_TOOL_SHOP = "Sei-an City (Tool Shop)"
     SEIAN_CITY_WEAPON_SHOP = "Sei-an City (Weapon Shop)"
     SEIAN_CITY_BLOSSOM = "Sei-an City (Blossom's house)"
+    SEIN_CITY_KIMONO = "Sei-an City (Kimono shop)"
 
     ### ARISTOCRATIC QUARTERS
     SEIAN_CITY_BRIDGE_COMMONERS = "Sei-an City Lake Beewa Bridge (Commoner's Side)"
@@ -328,6 +329,7 @@ class MapIds(Enum):
     IMPERIAL_PALACE_SMALL = 0x207
     ONI_ISLAND_LOWER_INT = 0x208
     CATCALL_TOWER = 0x20A
+    SEIAN_KIMONO=0x20C
     ONI_ISLAND_EXT = 0x20D
     ONI_ISLAND_UPPER_INT = 0x20E
     ONI_ISLAND_SIDESCROLLER = 0x20F

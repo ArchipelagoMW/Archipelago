@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from BaseClasses import LocationProgressType
 from rule_builder.rules import True_, Has
 from ..CheckIds import container_check_id, brush_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
@@ -39,7 +40,7 @@ exits = {
     RegionNames.SEIAN_CITY_ARISTOCRATIC: [
         ExitData(RegionNames.SEIAN_CITY_HIMIKO, one_way=True, loading_screen=False),
         ExitData(RegionNames.SEIAN_CITY_GUARDS),
-        ExitData(RegionNames.SEIAN_CITY_LAKE,needs_long_swim=True,loading_screen=False)
+        ExitData(RegionNames.SEIAN_CITY_LAKE, needs_long_swim=True, loading_screen=False)
     ],
     RegionNames.SEIAN_CITY_HIMIKO: [
         ExitData(RegionNames.SEIAN_CITY_ARISTOCRATIC, one_way=True, loading_screen=False),
@@ -67,6 +68,14 @@ events = {
         # biteable check #2, do we have access to Rao to give her the item ?
         "Sei-an City (Aristocratic Quarter) - Give Prayer Slips to Rao": EventData(
             required_items_events=["Imperial Palace - Grab Prayer Slips"])
+    },
+    RegionNames.SEIAN_CITY_CLOCK_TOWER: {
+        "Sei-an City(Aristocratic Quarter) - Give Gimmick gear to Gen": EventData(
+            required_items_events=["Gimmick Gear"])
+    },
+    RegionNames.SEIAN_CITY_HIMIKO: {
+        "Sei-an City (Aristocratic Quarter) - Mourn Himiko": EventData(
+            required_brush_techniques=[BrushTechniques.WATERSPOUT])
     }
 }
 locations = {
@@ -100,13 +109,18 @@ locations = {
         "Sei-an City (Aristocratic Quarter) - Chest in northeast house": LocData(
             container_check_id(MapIds.SEIAN_ARISTORATIC, 40)),
     },
-    # FIXME: Add chest after thunderbolt
     RegionNames.SEIAN_CITY_CLOCK_TOWER: {
         "Sei-an City (Aristocratic Quarter) - Thunder Chest in Clock Tower": LocData(
             container_check_id(MapIds.SEIAN_ARISTORATIC, 10), type=LocationType.THUNDER_CHEST_SPECIAL_SOURCE,
             special_rule=gen_thunder_chest_rule),
-        #"Sei-an City (Aristocratic Quarter) - Chest after thunderbolt": LocData(
-        #    container_check_id(MapIds.SEIAN_ARISTORATIC, 0))
+        "Sei-an City (Aristocratic Quarter) - Chest after thunderbolt": LocData(
+            container_check_id(MapIds.SEIAN_ARISTORATIC, 0),
+            required_items_events=["Sei-an City(Aristocratic Quarter) - Give Gimmick gear to Gen"],
+            progress_type=LocationProgressType.EXCLUDED),
+        "Sei-an City (Aristocratic Quarter) - Gekigami (Thunderbolt)": LocData(
+            brush_check_id(9),
+            required_items_events=["Sei-an City(Aristocratic Quarter) - Give Gimmick gear to Gen"],
+            progress_type=LocationProgressType.EXCLUDED)
     },
     RegionNames.SEIAN_CITY_HIMIKO: {
         "Sei-an City (Aristocratic Quarter) - East buried chest behind Himiko's guards": LocData(
@@ -115,8 +129,14 @@ locations = {
             container_check_id(MapIds.SEIAN_ARISTORATIC, 6)),
         "Sei-an City (Aristocratic Quarter) - Freestanding chest behind Himiko's palace": LocData(
             container_check_id(MapIds.SEIAN_ARISTORATIC, 47)),
-        #"Sei-an City (Aristocratic Quarter) - Chest after deluge": LocData(
-        #    container_check_id(MapIds.SEIAN_ARISTORATIC, 1))
+        "Sei-an City (Aristocratic Quarter) - Chest after deluge": LocData(
+            container_check_id(MapIds.SEIAN_ARISTORATIC, 1),
+            required_items_events=["Sei-an City (Aristocratic Quarter) - Mourn Himiko"],
+            progress_type=LocationProgressType.EXCLUDED),
+        "Sei-an City (Aristocratic Quarter) - Nuregami (Deluge)": LocData(
+            brush_check_id(14),
+            required_items_events=["Sei-an City (Aristocratic Quarter) - Mourn Himiko"],
+            progress_type=LocationProgressType.EXCLUDED)
     },
     RegionNames.SEIAN_CITY_TREASURE_WEST: {
         "Sei-an City (Aristocratic Quarter) - Daruma doll inside Himiko's west treasure room": LocData(
@@ -152,14 +172,15 @@ locations = {
         "Sei-an City (Aristocratic Quarter) - Chest inside guard house": LocData(
             container_check_id(MapIds.SEIAN_ARISTORATIC, 45))
     },
-    RegionNames.SEIAN_CITY_LAKE:{
-        "Sei-an City (Aristocratic Quarter) - Underwater chest in Lake Beewa":LocData(
-            container_check_id(MapIds.SEIAN_ARISTORATIC,43)
+    RegionNames.SEIAN_CITY_LAKE: {
+        "Sei-an City (Aristocratic Quarter) - Underwater chest in Lake Beewa": LocData(
+            container_check_id(MapIds.SEIAN_ARISTORATIC, 43)
         )
     }
 }
 warps = {
     RegionNames.SEIAN_CITY_ARISTOCRATIC: [
-        WarpData(WarpType.MERMAID_SPRING, Has("Imperial Palace - Defeat Blight"), Has("Imperial Palace - Defeat Blight"))
+        WarpData(WarpType.MERMAID_SPRING, Has("Imperial Palace - Defeat Blight"),
+                 Has("Imperial Palace - Defeat Blight"))
     ]
 }
