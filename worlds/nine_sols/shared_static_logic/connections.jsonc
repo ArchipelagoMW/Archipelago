@@ -1399,16 +1399,18 @@
         // LS can't help because if you have WC the ledge on the light spinner won't work for LS
     },
     // no point doing the reverse connection since it'd be dark, and it's easier to fall down to root node
-    { "from": "AM - Above Root Node", "to": "AM - Root Node", "requires": [] }, // fall, break one-way barrier
+    { "from": "AM - Above Root Node", "to": "AM - Behind One-Way Barrier Next To Root Node", "requires": [] }, // fall
+    { "from": "AM - Behind One-Way Barrier Next To Root Node", "to": "AM - Root Node", "requires": [] }, // break one-way barrier
     {
-        "from": "AM - Root Node", "to": "AM - Above Root Node",
-        "medium_requires": [
-            { "item": "Trick - Break One-Way Barrier With Bow" },
-            { "anyOf": [
-                [ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ],
-                { "item": "Cloud Leap" }
-            ] }
-        ]
+        "from": "AM - Root Node", "to": "AM - Behind One-Way Barrier Next To Root Node",
+        "medium_requires": [ { "item": "Trick - Break One-Way Barrier With Bow" } ]
+    },
+    {
+        "from": "AM - Behind One-Way Barrier Next To Root Node", "to": "AM - Above Root Node",
+        "requires": [ { "anyOf": [
+            [ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ],
+            { "item": "Cloud Leap" }
+        ] } ]
     },
     { "from": "AM - Above Root Node", "to": "AM - Upper Right Exit", "requires": [ { "item": "Grapple" } ] },
     {

@@ -1018,7 +1018,7 @@
     },
     {
         "address": 2303, "name": "AM: Near Root Node",
-        "region": "AM - Above Root Node", "requires": []
+        "region": "AM - Behind One-Way Barrier Next To Root Node", "requires": []
     },
     {
         "address": 2304, "name": "AM: Walking Chest",
