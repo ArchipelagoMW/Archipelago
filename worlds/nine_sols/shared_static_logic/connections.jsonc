@@ -896,13 +896,22 @@
     { "from": "Yinglong Canal - Farmland Markings", "to": "Yinglong Canal - Upper Caves", "requires": [ { "anyOf": [
         { "item": "Wall Climb" }, { "item": "Cloud Leap" }
     ] } ] },
-    { "from": "Yinglong Canal - Farmland Markings", "to": "Yinglong Canal - Above Egg Cave", "requires": [ { "anyOf": [
-        { "item": "Cloud Leap" }, // jump into "Between Egg Cave and Farmland Markings" room and jump to upper platforms of it
-        [
-            { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Air Dash" } ] }, // get into the "Between ..." room somehow
-            { "item": "Wall Climb" } // then climb the green wall in the "Between ..." room
-        ]
-    ] } ] },
+    {
+        "from": "Yinglong Canal - Farmland Markings", "to": "Yinglong Canal - Above Egg Cave",
+        "requires": [ { "anyOf": [
+            { "item": "Cloud Leap" }, // jump into "Between Egg Cave and Farmland Markings" room and jump to upper platforms of it
+            [
+                { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Air Dash" } ] }, // get into the "Between ..." room somehow
+                { "item": "Wall Climb" } // then climb the green wall in the "Between ..." room
+            ]
+        ] } ],
+        "medium_requires": [ // use a Swift Runner jump to get into the "Between ..." room
+            { "item": "Wall Climb" } // so WC alone is enough now
+        ],
+        "ls_requires": [ // use a Swift Runner jump to get into the "Between ..." room
+            { "item": "Ledge Grab" } // then wall slide instead of WC or CL
+        ] // T-dash setup is fine here
+    },
     { "from": "Yinglong Canal - Above Egg Cave", "to": "Yinglong Canal - Farmland Markings", "requires": [] }, // fall
     { "from": "Yinglong Canal - Above Egg Cave", "to": "Yinglong Canal - Egg Cave & Left Exit", "requires": [] }, // fall
     { "from": "Yinglong Canal - Egg Cave & Left Exit", "to": "Yinglong Canal - Above Egg Cave", "requires": [ { "item": "Cloud Leap" } ] },
