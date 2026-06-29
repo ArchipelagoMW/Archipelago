@@ -37,7 +37,7 @@ events = {
     },
     RegionNames.CITY_CHECKPOINT_RYOSHIMA: {
         "City Checkpoint - Restore Cursed Patches on Ryoshima side": EventData(
-            required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM])
+            required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM],required_items_events=["City Checkpoint - Activate the Drawbridge"])
     }
 }
 locations = {
@@ -60,7 +60,7 @@ locations = {
     },
     RegionNames.CITY_CHECKPOINT_RYOSHIMA: {
         "City Checkpoint - Buried Chest on Ryoshima side after cursed patches": LocData(
-            container_check_id(MapIds.CITY_CHECKPOINT, 13), type=LocationType.BURIED_CHEST),
+            container_check_id(MapIds.CITY_CHECKPOINT, 13), type=LocationType.BURIED_CHEST,required_items_events=[ "City Checkpoint - Restore Cursed Patches on Ryoshima side"]),
     },
     RegionNames.CITY_CHECKPOINT_RIVER: {
         "City Checkpoint - Southernmost buried chest on river's edge ": LocData(
