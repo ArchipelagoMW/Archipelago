@@ -1775,6 +1775,7 @@ class Rac3Interface(GameInterface):
 
         for name in non_prog_weapon_data.keys():
             addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
+            ammo_addr = non_prog_weapon_data[name].AMMO_ADDRESS
             if self.UnlockItem[name].status:
                 if self.UnlockItem[name].unlock_delay:
                     self._write8(addr, 1)
@@ -1790,6 +1791,7 @@ class Rac3Interface(GameInterface):
                         self._write8(RAC3_ITEM_DATA_TABLE[name].LEVEL_ADDRESS, threshold_id)
             else:
                 self._write8(addr, 0)
+                self._write8(ammo_addr, 0)
 
         if self.equipped_item > 1 and self.UnlockItem[ITEM_NAME_FROM_ID[self.equipped_item]].status == 0:
             if self.last_used_1 == 0:
