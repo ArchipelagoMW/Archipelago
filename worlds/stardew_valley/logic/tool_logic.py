@@ -3,6 +3,7 @@ from typing import Union, Iterable
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..stardew_rule import StardewRule, False_
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.ap_names.skill_level_names import ModSkillLevel
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
@@ -102,7 +103,11 @@ class ToolLogic(BaseLogic):
         level = FishingRod.material_to_tier[material]
         tool_progression = self.content.features.tool_progression
 
-        rebuy_rule = self.logic.source.has_access_to_any_without_other_requirements(self.content.tool_upgrades[material].sources)
+        buy_rule = self.logic.source.has_access_to_any_without_other_requirements(self.content.tool_upgrades[material].sources)
+        if CustomLogicOptionName.critical_free_samples in self.options.custom_logic:
+            rebuy_rule = self.logic.true_
+        else:
+            rebuy_rule = buy_rule
 
         if tool_progression.is_progressive:
             return self.logic.tool._has_progressive_tool(Tool.fishing_rod, level) & rebuy_rule
@@ -110,12 +115,12 @@ class ToolLogic(BaseLogic):
         if material == FishingRod.bamboo:
             return self.logic.region.can_reach(Region.beach) & rebuy_rule
         if material == FishingRod.fiberglass:
-            return self.logic.skill.has_level(Skill.fishing, 2) & rebuy_rule
+            return self.logic.skill.has_level(Skill.fishing, 2) & buy_rule
         if material == FishingRod.iridium:
-            return self.logic.skill.has_level(Skill.fishing, 6) & rebuy_rule
+            return self.logic.skill.has_level(Skill.fishing, 6) & buy_rule
         if material == FishingRod.advanced_iridium:
             return self.logic.skill.has_mastery(Skill.fishing) & rebuy_rule
-        return rebuy_rule
+        return buy_rule
 
     def _has_progressive_tool(self, tool: str, amount: int) -> StardewRule:
         tool_progression = self.content.features.tool_progression
