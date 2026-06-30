@@ -1241,6 +1241,18 @@
     // these crates are moving in the opposite direction we want to go, and even CL + LS tricks is not enough vertical
     // to do this without wall climbing the sides, so in this case the logic really is just WC
     {
+        "from": "IW - Root Node", "to": "IW - Above Frogs",
+        "ls_requires": [
+            { "item": "Ledge Grab" }, // wall slide to 2nd platform, T-dash setup viable with crates right of node
+            { "anyOf": [ // after the wall slide, single jump is not enough to reach the other ledge
+                { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Charged Strike" }
+            ] }
+            // from this direction you won't have the usual crates on the right to ride up to the 3rd level
+            // so lower the shortcut rope, do a T-dash setup off the 2nd platform's ledge and climb back up,
+            // then LS vault onto the crates on the *left* to reach the 3rd platform
+        ]
+    },
+    {
         "from": "IW - Upper Right Statue", "to": "IW - Above Frogs",
         "requires": [ { "anyOf": [
             { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Ledge Grab" }
