@@ -120,6 +120,7 @@ class Region:
     abandoned_jojamart = "Abandoned JojaMart"
     movie_theater = "Movie Theater"
     movie_ticket_stand = "Ticket Stand"
+    ice_cream_stand = "Ice Cream Stand"
     fish_cabin = "Willy's Fish Cabin"
     fish_shop = "Willy's Fish Shop"
     boat_tunnel = "Boat Tunnel"

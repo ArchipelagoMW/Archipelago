@@ -456,6 +456,7 @@ class LogicEntrance:
     search_garbage_cans = "Search Garbage Cans"
     purchase_wizard_blueprints = "Purchase Wizard Blueprints"
 
+    purchase_ice_cream = "Purchase Ice Cream"
     purchase_movie_ticket = "Purchase Movie Ticket"
     feed_trash_bear = "Feed Trash Bear"
 

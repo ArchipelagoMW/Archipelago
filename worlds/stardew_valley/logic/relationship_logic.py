@@ -85,6 +85,16 @@ class RelationshipLogic(BaseLogic):
         return self.logic.or_(*(self.logic.relationship.has_hearts(name, hearts)
                                 for name, villager in self.content.villagers.items()))
 
+    def people_exist(self, number_villagers: int = 1) -> StardewRule:
+        assert number_villagers >= 0, f"Can't have a negative hearts with any npc."
+        if number_villagers == 0:
+            return True_()
+
+        if StartWithoutOptionName.villagers not in self.options.start_without:
+            return True_()
+
+        return self.logic.count(number_villagers, *(self.logic.relationship.exists(name) for name in self.content.villagers.keys()))
+
     def has_hearts_with_n(self, amount: int, hearts: int = 1) -> StardewRule:
         assert hearts >= 0, f"Can't have a negative hearts with any npc."
         assert amount >= 0, f"Can't have a negative amount of npc."

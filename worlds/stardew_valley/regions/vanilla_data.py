@@ -174,6 +174,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.minecart_town_to_bus_stop,
             Entrance.minecart_town_to_mines,
             Entrance.minecart_town_to_quarry,
+            LogicEntrance.purchase_ice_cream,
             LogicEntrance.purchase_movie_ticket,
             LogicEntrance.buy_books,
             LogicEntrance.search_garbage_cans,
@@ -323,6 +324,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.jojamart, (Entrance.jojamart_to_town, Entrance.enter_abandoned_jojamart)),  # can't randomize
     RegionData(RegionName.abandoned_jojamart, (Entrance.enter_movie_theater,)),  # can't randomize
     RegionData(RegionName.movie_ticket_stand),
+    RegionData(RegionName.ice_cream_stand),
     RegionData(RegionName.movie_theater),
     RegionData(RegionName.fish_cabin, (Entrance.willy_fish_cabin_to_beach, Entrance.purchase_from_willy)),
     RegionData(RegionName.fish_shop),
@@ -1225,6 +1227,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(LogicEntrance.purchase_ice_cream, RegionName.ice_cream_stand),
     ConnectionData(LogicEntrance.purchase_movie_ticket, RegionName.movie_ticket_stand),
     ConnectionData(Entrance.enter_abandoned_jojamart, RegionName.abandoned_jojamart),
     ConnectionData(Entrance.enter_movie_theater, RegionName.movie_theater),

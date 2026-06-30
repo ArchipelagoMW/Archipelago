@@ -15,7 +15,7 @@ from ...data.requirement import ToolRequirement, BookRequirement, SkillRequireme
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
     ReceivedRaccoonsRequirement, \
     PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement, EndgameItemReceivedRequirement, MasteryRequirement, ReceivedRequirement, \
-    BachelorFriendRequirement, SeasonRequirement, SpeakJunimoRequirement, FestivalItemReceivedRequirement, MuseumArtifactsRequirement, \
+    BachelorFriendRequirement, SpeakJunimoRequirement, FestivalItemReceivedRequirement, MuseumArtifactsRequirement, \
     CraftedSpecificItemRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
@@ -406,8 +406,7 @@ pelican_town = ContentPack(
 
         Gift.movie_ticket: (ShopSource(price=1000, currency=Currency.money, shop_region=Region.movie_ticket_stand),),
 
-        Meal.ice_cream: (ShopSource(price=250, currency=Currency.money, shop_region=Region.town,
-                                       other_requirements=(SeasonRequirement(Season.summer),)),),
+        Meal.ice_cream: (ShopSource(price=250, currency=Currency.money, shop_region=Region.ice_cream_stand),),
 
         f"{NPC.abigail} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.abigail, 14),)),),
         f"{NPC.alex} Portrait": (ShopSource(price=30_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpecificFriendRequirement(NPC.alex, 14),)),),

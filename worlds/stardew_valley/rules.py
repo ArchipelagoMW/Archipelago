@@ -301,6 +301,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     # for the safeguard "in case you get a theater"
     rule_collector.set_entrance_rule(Entrance.town_to_jojamart, logic.money.can_spend(1000))
     rule_collector.set_entrance_rule(Entrance.enter_abandoned_jojamart, logic.has_abandoned_jojamart())
+    rule_collector.set_entrance_rule(LogicEntrance.purchase_ice_cream, logic.season.has(Season.summer) & logic.relationship.exists(NPC.alex))
     movie_theater_rule = logic.has_movie_theater()
     rule_collector.set_entrance_rule(LogicEntrance.purchase_movie_ticket, movie_theater_rule)
     rule_collector.set_entrance_rule(Entrance.enter_movie_theater, movie_theater_rule & logic.has(Gift.movie_ticket))
