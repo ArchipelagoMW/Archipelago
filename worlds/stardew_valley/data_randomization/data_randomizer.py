@@ -13,6 +13,7 @@ from ..data.shop import ShopSource
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
+from ..strings.generic_names import Generic
 from ..strings.region_names import LogicRegion, Region
 from ..strings.season_names import Season
 from ..strings.weather_names import Weather
@@ -30,6 +31,7 @@ def randomize_data(content: StardewContent, options: StardewValleyOptions, rando
     randomize_fish_data(behavior, content, data_to_randomize, random)
     randomize_crops_data(behavior, content, data_to_randomize, random)
     randomize_festivals_data(behavior, content, data_to_randomize, random)
+    randomize_villagers_data(behavior, content, data_to_randomize, random)
     randomize_shops_data(behavior, content, data_to_randomize, random)
 
     return content
@@ -55,6 +57,11 @@ def randomize_festivals_data(behavior, content, data_to_randomize, random):
     randomize_festival_seasons(content, data_to_randomize, behavior, random)
     randomize_festival_dates(content, data_to_randomize, behavior, random)
     sanitize_festival_dates(content, data_to_randomize, behavior, random)
+
+
+def randomize_villagers_data(behavior, content, data_to_randomize, random):
+    randomize_birthday_seasons(content, data_to_randomize, behavior, random)
+    sanitize_birthday_dates(content, data_to_randomize, behavior, random)
 
 
 def randomize_shops_data(behavior, content, data_to_randomize, random):
@@ -496,3 +503,46 @@ def get_new_extra_material_sources(data, randomized_shop_materials):
     new_sources.extend(unchanged_sources)
     new_sources.extend(modified_shop_sources)
     return tuple(new_sources)
+
+
+def randomize_birthday_seasons(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.villager_birthday not in data_to_randomize:
+        return
+
+    birthdays_by_villager = {villager_name: villager_data.birthday for villager_name, villager_data in content.villagers.items() if villager_data.birthday and villager_data.birthday != Generic.any}
+    randomized_birthdays_by_villager = randomizers_per_behavior[behavior](birthdays_by_villager, random)
+
+    for villager_name, birthday_season in randomized_birthdays_by_villager.items():
+        original_villager = content.villagers[villager_name]
+        content.villagers[villager_name] = override(original_villager, birthday=birthday_season)
+
+
+def sanitize_birthday_dates(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    season_counts = dict()
+    for villager_name, villager_data in content.villagers.items():
+        if not villager_data.birthday or villager_data.birthday == Generic.any:
+            continue
+        birthday_season = villager_data.birthday
+        if birthday_season not in season_counts:
+            season_counts[birthday_season] = list()
+        season_counts[birthday_season].append(villager_name)
+
+    season_least_birthdays = min(season_counts, key=lambda k: len(season_counts[k]))
+    season_most_birthdays = max(season_counts, key=lambda k: len(season_counts[k]))
+    while len(season_counts[season_most_birthdays]) > 20:
+        villagers = season_counts[season_most_birthdays]
+        villager_to_move = random.choice(villagers)
+        content.villagers[villager_to_move] = override(content.villagers[villager_to_move], birthday=season_least_birthdays)
+        season_counts[season_least_birthdays].append(villager_to_move)
+        season_counts[season_most_birthdays].remove(villager_to_move)
+        season_least_birthdays = min(season_counts, key=lambda k: len(season_counts[k]))
+        season_most_birthdays = max(season_counts, key=lambda k: len(season_counts[k]))
+
+
+
+def any_season_too_many_birthdays(season_counts):
+    for season, villagers in season_counts.items():
+        if len(villagers) > 20:
+            return season
+    return None
+

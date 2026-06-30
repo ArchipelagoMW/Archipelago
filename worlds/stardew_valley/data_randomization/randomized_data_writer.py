@@ -8,6 +8,7 @@ from ..data.shop import ShopSource
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
+from ..strings.generic_names import Generic
 
 
 def add_randomized_data_to_spoiler_log(spoiler_handle: TextIO, player_name: str, content: StardewContent, options: StardewValleyOptions):
@@ -46,6 +47,7 @@ def prepare_randomized_data(content: StardewContent, options: StardewValleyOptio
     prepare_fish_data(content, data_to_randomize, prepared_data)
     prepare_crop_data(content, data_to_randomize, prepared_data)
     prepare_festival_data(content, data_to_randomize, prepared_data)
+    prepare_villager_data(content, data_to_randomize, prepared_data)
     prepare_shops_data(content, data_to_randomize, prepared_data)
 
     return prepared_data
@@ -73,6 +75,11 @@ def prepare_festival_data(content: StardewContent, data_to_randomize: set[str], 
     prepared_data["Festivals"] = dict()
     prepare_festival_season_data(content, data_to_randomize, prepared_data)
     prepare_festival_days_data(content, data_to_randomize, prepared_data)
+
+
+def prepare_villager_data(content: StardewContent, data_to_randomize: set[str], prepared_data):
+    prepared_data["Villagers"] = dict()
+    prepare_villager_birthday_data(content, data_to_randomize, prepared_data)
 
 
 def prepare_shops_data(content: StardewContent, data_to_randomize: set[str], prepared_data):
@@ -219,6 +226,26 @@ def prepare_festival_data_aspect(content: StardewContent, data_to_randomize: set
         if festival_name not in prepared_data["Festivals"]:
             prepared_data["Festivals"][festival_name] = dict()
         prepared_data["Festivals"][festival_name][aspect_key] = festival_data_extractor(festival_data)
+
+
+def prepare_villager_birthday_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_villager_data_aspect(content, data_to_randomize, prepared_data,
+                                 DataRandomizationOptionName.villager_birthday,
+                                 lambda villager: villager.birthday and villager.birthday != Generic.any,
+                                 lambda villager: villager.birthday,
+                                 "Birthday")
+
+
+def prepare_villager_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
+                                 randomize_toggle: str, villager_validator, villager_data_extractor, aspect_key: str):
+    if randomize_toggle not in data_to_randomize:
+        return
+    for villager_name, villager_data in content.villagers.items():
+        if not villager_validator(villager_data):
+            continue
+        if villager_name not in prepared_data["Villagers"]:
+            prepared_data["Villagers"][villager_name] = dict()
+        prepared_data["Villagers"][villager_name][aspect_key] = villager_data_extractor(villager_data)
 
 
 def prepare_shops_currencies_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
