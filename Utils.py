@@ -567,7 +567,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
 
     file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record, "NoFile", False)))
     file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.getMessage()))
-    file_handler.level = logging.INFO
+    file_handler.level = loglevel
     root_logger.addHandler(file_handler)
     if sys.stdout:
         formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
@@ -575,7 +575,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
         if add_timestamp:
             stream_handler.setFormatter(formatter)
-        stream_handler.level = logging.INFO
+        stream_handler.level = loglevel
         root_logger.addHandler(stream_handler)
         if hasattr(sys.stdout, "reconfigure"):
             sys.stdout.reconfigure(encoding="utf-8", errors="replace")
