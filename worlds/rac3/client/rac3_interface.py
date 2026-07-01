@@ -1311,21 +1311,46 @@ class Rac3Interface(GameInterface):
                     RAC3BOXTHEME.WARNING,
                     5.0)
     
-    def arena_disabled_warning(self):
+    def region_disabled_warning(self):
         """Checks if the player is on a planet with an arena and informs them that it is disabled"""
         match self.planet:
             case RAC3REGION.ANNIHILATION_NATION:
                 if not self.options.arena:
-                    message = "You have disabled Annihilation Nation in your yaml. "
+                    log_message = "You have disabled Annihilation Nation in your yaml. "
                     notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Annihilation Nation{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n"
                     if self.options.weapon_vendors:
-                        message += "You can still buy the Agents of Doom vendor check from the weapon vendor."
+                        log_message += "You can still buy the Agents of Doom vendor check from the weapon vendor."
                         notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Agents of Doom{RAC3TEXTFORMATSTRING.NORMAL} vendor check from the weapon vendor.\n"
                     else:
-                        message += "There are no locations on this planet."
-                        notification_message += f"There are no locations on this planet."
-                    logger.info(message)
+                        log_message += "There are no locations on this planet."
+                        notification_message += "There are no locations on this planet."
+                    logger.info(log_message)
                     self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
+            case RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS:
+                if self.options.rangers < 2:
+                    log_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Optional Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml. There are no locations in this region."
+                    notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Optional Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\nThere are no locations in this region."
+                    logger.info(log_message)
+                    self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
+            case RAC3REGION.ARIDIA:
+                if self.options.rangers == 0 or self.options.rangers == 2:
+                    log_message = "You have disabled Story Ranger Missions in your yaml. "
+                    notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Story Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n"
+                    if self.options.weapon_vendors:
+                        log_message += "You can still buy the Qwack-O-Ray vendor check from the weapon vendor."
+                        notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Qwack-O-Ray{RAC3TEXTFORMATSTRING.NORMAL} vendor check from the weapon vendor.\n"
+                    else:
+                        log_message += "There are no locations on this planet."
+                        notification_message += "There are no locations on this planet."
+                    logger.info(log_message)
+                    self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
+            case RAC3REGION.BLACKWATER_CITY:
+                if self.options.rangers == 0 or self.options.rangers == 2:
+                    log_message = "You have disabled Story Ranger Missions in your yaml. There are no locations on this planet."
+                    notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Story Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\nThere are no locations on this planet."
+                    logger.info(log_message)
+                    self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
+
 
     ##################
     # Player Respawn #
