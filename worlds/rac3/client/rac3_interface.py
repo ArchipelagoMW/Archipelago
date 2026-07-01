@@ -433,6 +433,8 @@ class Rac3Interface(GameInterface):
         """Runs when loading into game from the main menu to update the player with filler items from the server"""
         if RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS:
             self.initial_fillers[ITEM_FROM_AP_CODE[item]] = self.initial_fillers.get(ITEM_FROM_AP_CODE[item], 0) + 1
+            if self.initial_fillers[ITEM_FROM_AP_CODE[item]] > 255:
+                self.initial_fillers[ITEM_FROM_AP_CODE[item]] = 255
 
     def process_offline_fillers(self, data_received: bool):
         """Process any filler items received while offline"""
@@ -562,10 +564,10 @@ class Rac3Interface(GameInterface):
 
     def init_stored_fillers(self):
         """Read the stored filler items from memory and fill the stored_fillers dictionary"""
-        self.stored_fillers[RAC3ITEM.BOLTS] = self._read8(RAC3STATUS.BOLT_PACKS)
-        self.stored_fillers[RAC3ITEM.JACKPOT] = self._read8(RAC3STATUS.JACKPOT_PACKS)
-        self.stored_fillers[RAC3ITEM.NANOTECH_XP] = self._read8(RAC3STATUS.NANOTECH_EXP_PACKS)
-        self.stored_fillers[RAC3ITEM.WEAPON_XP] = self._read8(RAC3STATUS.WEAPON_LEVEL_PACKS)
+        self.stored_fillers[RAC3ITEM.BOLTS] = self._read8(RAC3STATUS.BOLT_PACKS) & 0xFF
+        self.stored_fillers[RAC3ITEM.JACKPOT] = self._read8(RAC3STATUS.JACKPOT_PACKS) & 0xFF
+        self.stored_fillers[RAC3ITEM.NANOTECH_XP] = self._read8(RAC3STATUS.NANOTECH_EXP_PACKS) & 0xFF
+        self.stored_fillers[RAC3ITEM.WEAPON_XP] = self._read8(RAC3STATUS.WEAPON_LEVEL_PACKS) & 0xFF
         logger.debug(f"Stored filler items: {self.stored_fillers}")
 
 
@@ -883,7 +885,10 @@ class Rac3Interface(GameInterface):
                 if new_bolts > 0x7FFFFFFF:
                     new_bolts = 0x7FFFFFFF
                 self._write32(RAC3STATUS.BOLTS, new_bolts)
-                self._write8(RAC3STATUS.BOLT_PACKS, self._read8(RAC3STATUS.BOLT_PACKS) + 1)
+                bolt_packs = self._read8(RAC3STATUS.BOLT_PACKS) & 0xFF
+                if bolt_packs < 255:
+                    bolt_packs += 1
+                self._write8(RAC3STATUS.BOLT_PACKS, bolt_packs)
             case RAC3ITEM.INFERNO_MODE:
                 timer = self._read32(RAC3STATUS.INFERNO_TIMER)
                 new_timer = timer + 1000 + randint(1, 100)
@@ -896,7 +901,10 @@ class Rac3Interface(GameInterface):
                     _time = time.time() + 30.0
                     self.timers[name + str(_time)] = _time
                     self.bolt_and_xp_multiplier_value += 1
-                self._write8(RAC3STATUS.JACKPOT_PACKS, self._read8(RAC3STATUS.JACKPOT_PACKS) + 1)
+                jackpot_packs = self._read8(RAC3STATUS.JACKPOT_PACKS) & 0xFF
+                if jackpot_packs < 255:
+                    jackpot_packs += 1
+                self._write8(RAC3STATUS.JACKPOT_PACKS, jackpot_packs)
             case RAC3ITEM.NANOTECH_XP:
                 if not self.nanotech_exp:
                     self.nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
@@ -905,7 +913,10 @@ class Rac3Interface(GameInterface):
                 if self.nanotech_exp > 0x7FFFFFFF:
                     self.nanotech_exp = 0x7FFFFFFF
                 self._write32(RAC3STATUS.NANOTECH_EXP, self.nanotech_exp)
-                self._write8(RAC3STATUS.NANOTECH_EXP_PACKS, self._read8(RAC3STATUS.NANOTECH_EXP_PACKS) + 1)
+                nanotech_exp_packs = self._read8(RAC3STATUS.NANOTECH_EXP_PACKS) & 0xFF
+                if nanotech_exp_packs < 255:
+                    nanotech_exp_packs += 1
+                self._write8(RAC3STATUS.NANOTECH_EXP_PACKS, nanotech_exp_packs)
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = self.get_valid_weapon_level_ups()
                 if valid_weapons:
@@ -914,7 +925,10 @@ class Rac3Interface(GameInterface):
                         self.delayed_weapon_levelups.append(selected_weapon)
                     else:
                         self.weapon_level_up(selected_weapon)
-                self._write8(RAC3STATUS.WEAPON_LEVEL_PACKS, self._read8(RAC3STATUS.WEAPON_LEVEL_PACKS) + 1)
+                weapon_level_packs = self._read8(RAC3STATUS.WEAPON_LEVEL_PACKS) & 0xFF
+                if weapon_level_packs < 255:
+                    weapon_level_packs += 1
+                self._write8(RAC3STATUS.WEAPON_LEVEL_PACKS, weapon_level_packs)
             case RAC3ITEM.OHKO_TRAP:
                 self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
                 self._write8(RAC3STATUS.HEALTH, 1)
