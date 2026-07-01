@@ -7,10 +7,11 @@ from worlds.rac3.constants.options import RAC3OPTION
 class ProgressiveWeapons(Choice):
     """
     Determines whether weapon level-ups are progressive items or not.
-    **Disable**: Weapon leveling and exp functions like in the vanilla game.
-    **Manual Leveling**: Weapons level cap is increased when a progressive item is collected, weapon exp past the cap is disabled.
-    **Automatic Leveling**: Weapons level-up when it's progressive item is collected, weapon exp is disabled.
-
+    ------------------------------------------------------------------------------------
+    Disable:            Weapon leveling and exp functions like in the vanilla game.
+    Manual Leveling:    Weapon level caps are increased when a progressive item is collected, weapon exp past the cap is disabled.
+    Automatic Leveling: Weapons level-up when it's progressive item is collected, weapon exp is disabled.
+    ------------------------------------------------------------------------------------
     Note: If Weapon Level Locations are enabled, Automatic Leveling will be forced to Manual Leveling instead.
     """
     display_name = RAC3OPTION.PROGRESSIVE_WEAPONS

@@ -7,8 +7,9 @@ from worlds.rac3.constants.options import RAC3OPTION
 class SkillPoints(Choice):
     """
     Determines which skill points are locations in the world.
-    Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled
-    Simple locations are the following:
+    Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled.
+    -----------------------------------------------------------------------------------------------
+    Simple skill pointlocations are the following:
     - Aridia: Skillpoint: Go for hang time
     - Phoenix: Skillpoint: Beat Helga's best time
     - Phoenix: Skillpoint: Turn Up The Heat

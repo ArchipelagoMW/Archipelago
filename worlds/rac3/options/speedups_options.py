@@ -7,9 +7,10 @@ from worlds.rac3.constants.speedups import SPEEDUPS
 class Speedups(OptionCounter):
     """
     Determines which gameplay sections are already completed.
+    -----------------------------------------------------------------------------------------------
     When a speedup is enabled, the corresponding puzzle type will be skipped from the start.
     Gadget speedups require the corresponding gadget to be unlocked in order for the skip to activate.
-
+    -----------------------------------------------------------------------------------------------
     1 = Enabled, 0 = Disabled
     """
     min = 0

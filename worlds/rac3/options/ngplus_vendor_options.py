@@ -6,9 +6,11 @@ from worlds.rac3.constants.options import RAC3OPTION
 
 class NGPlusVendor(Choice):
     """
-    Determines if the RY3NO Purchase should be a location in the vendor or not.
-    **Disabled**: It is not purchasable.
-    **Enabled**: It is purchasable.
+    Determines if the RY3N0 Purchase should be a location in the vendor or not.
+    ------------------------------------------------------------------------------------
+    Disabled: The RY3N0 is not a purchasable location.
+    Enabled:  The RY3N0 is a purchasable location.
+    ------------------------------------------------------------------------------------
     """
     display_name = RAC3OPTION.NGPLUS_VENDOR
     option_disabled = 0
