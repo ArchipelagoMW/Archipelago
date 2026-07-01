@@ -1,8 +1,6 @@
 import os
 import threading
-from pkgutil import get_data
 
-import bsdiff4
 import Utils
 import settings
 import typing
@@ -15,9 +13,10 @@ from .Locations import location_table, level_locations, major_locations, shop_lo
     standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations, \
     take_any_locations, sword_cave_locations
 from .Options import TlozOptions
-from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
+from .Rom import TLoZProcedurePatch
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
+from worlds.Files import APTokenTypes
 from worlds.generic.Rules import add_rule
 
 
@@ -26,7 +25,7 @@ class TLoZSettings(settings.Group):
         """File name of the Zelda 1"""
         description = "The Legend of Zelda (U) ROM File"
         copy_to = "Legend of Zelda, The (U) (PRG0) [!].nes"
-        md5s = [TLoZDeltaPatch.hash]
+        md5s = [TLoZProcedurePatch.hash]
 
     class RomStart(str):
         """
@@ -117,12 +116,6 @@ class TLoZWorld(World):
         self.levels = None
         self.filler_items = None
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
-
     def create_item(self, name: str):
         return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
 
@@ -191,60 +184,25 @@ class TLoZWorld(World):
         pass
 
 
-    def apply_base_patch(self, rom):
-        # The base patch source is on a different repo, so here's the summary of changes:
-        # Remove Triforce check for recorder, so you can always warp.
-        # Remove level check for Triforce Fragments (and maps and compasses, but this won't matter)
-        # Replace some code with a jump to free space
-        # Check if we're picking up a Triforce Fragment. If so, increment the local count
-        # In either case, we do the instructions we overwrote with the jump and then return to normal flow
-        # Remove map/compass check so they're always on
-        # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
-        # go past 0x1F items for dungeon items.
-        base_patch = get_data(__name__, "z1_base_patch.bsdiff4")
-        rom_data = bsdiff4.patch(rom.read(), base_patch)
-        rom_data = bytearray(rom_data)
-        # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should
-        # become type 1 boss roars, so we at least keep the sound of roaring where it should be.
-        for i in range(0, 0x7F):
-            item = rom_data[first_quest_dungeon_items_early + i]
-            if item & 0b00100000:
-                item = item & 0b11011111
-                item = item | 0b01000000
-                rom_data[first_quest_dungeon_items_early + i] = item
-            if item & 0b00011111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
-                rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
-
-            item = rom_data[first_quest_dungeon_items_late + i]
-            if item & 0b00100000:
-                item = item & 0b11011111
-                item = item | 0b01000000
-                rom_data[first_quest_dungeon_items_late + i] = item
-            if item & 0b00011111 == 0b00000011:
-                rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
-        return rom_data
-
-    def apply_randomizer(self):
-        with open(get_base_rom_path(), 'rb') as rom:
-            rom_data = self.apply_base_patch(rom)
+    def place_items(self, patch: TLoZProcedurePatch):
         # Write each location's new data in
         for location in self.multiworld.get_filled_locations(self.player):
             # Zelda and Ganon aren't real locations
             if location.name == "Ganon" or location.name == "Zelda":
                 continue
-        
+
             # Neither are boss defeat events
             if "Status" in location.name:
                 continue
-        
+
             item = location.item.name
             # Remote items are always going to look like Rupees.
             if location.item.player != self.player:
                 item = "Rupee"
-        
+
             item_id = item_game_ids[item]
             location_id = location_ids[location.name]
-        
+
             # Shop prices need to be set
             if location.name in shop_locations:
                 if location.name[-5:] == "Right":
@@ -262,12 +220,12 @@ class TLoZWorld(World):
                         item_price = item_price // 2
                     elif item_class == ItemClassification.trap:
                         item_price = item_price * 2
-                rom_data[price_location] = item_price
+                patch.write_token(APTokenTypes.WRITE, price_location, item_price.to_bytes(1, "little"))
             if location.name == "Take Any Item Right":
                 # Same story as above: bit 6 is what makes this a Take Any cave
                 item_id = item_id | 0b01000000
-            rom_data[location_id] = item_id
-        
+            patch.write_token(APTokenTypes.WRITE, location_id, item_id.to_bytes(1, "little"))
+
         # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
         secret_caves = self.random.sample(sorted(secret_money_ids), 3)
         secret_cave_money_amounts = [20, 50, 100]
@@ -276,33 +234,26 @@ class TLoZWorld(World):
             amount = amount * self.random.triangular(1.5, 2.5)
             secret_cave_money_amounts[i] = int(amount)
         for i, cave in enumerate(secret_caves):
-            rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
-        return rom_data
+            patch.write_token(APTokenTypes.WRITE, secret_money_ids[cave],
+                              secret_cave_money_amounts[i].to_bytes(1, "little"))
 
     def generate_output(self, output_directory: str):
         try:
-            patched_rom = self.apply_randomizer()
-            outfilebase = 'AP_' + self.multiworld.seed_name
-            outfilepname = f'_P{self.player}'
-            outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
-            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.nes')
+            patch = TLoZProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+            self.place_items(patch)
             self.rom_name_text = f'LOZ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
             self.romName = bytearray(self.rom_name_text, 'utf8')[:0x20]
             self.romName.extend([0] * (0x20 - len(self.romName)))
             self.rom_name = self.romName
-            patched_rom[0x10:0x30] = self.romName
+            patch.write_token(APTokenTypes.WRITE, 0x10, bytes(self.romName))
             self.playerName = bytearray(self.multiworld.player_name[self.player], 'utf8')[:0x20]
             self.playerName.extend([0] * (0x20 - len(self.playerName)))
-            patched_rom[0x30:0x50] = self.playerName
-            patched_filename = os.path.join(output_directory, outputFilename)
-            with open(patched_filename, 'wb') as patched_rom_file:
-                patched_rom_file.write(patched_rom)
-            patch = TLoZDeltaPatch(os.path.splitext(outputFilename)[0] + TLoZDeltaPatch.patch_file_ending,
-                                   player=self.player,
-                                   player_name=self.multiworld.player_name[self.player],
-                                   patched_path=outputFilename)
-            patch.write()
-            os.unlink(patched_filename)
+            patch.write_token(APTokenTypes.WRITE, 0x30, bytes(self.playerName))
+            patch.write_file("token_patch.bin", patch.get_token_binary())
+            outfilebase = 'AP_' + self.multiworld.seed_name
+            outfilepname = f'_P{self.player}'
+            outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
+            patch.write(os.path.join(output_directory, f'{outfilebase}{outfilepname}{patch.patch_file_ending}'))
         finally:
             self.rom_name_available_event.set()
 

@@ -1,9 +1,11 @@
 import hashlib
+import pkgutil
 import zlib
 import os
 
+import bsdiff4
 import Utils
-from worlds.Files import APDeltaPatch
+from worlds.Files import APProcedurePatch, APTokenMixin, APPatchExtension
 
 NA10CHECKSUM = '337bd6f1a1163df31bf2633665589ab0'
 ROM_PLAYER_LIMIT = 65535
@@ -44,11 +46,53 @@ rupees_to_add = 0x067D
 
 
 
-class TLoZDeltaPatch(APDeltaPatch):
+class TLoZPatchExtension(APPatchExtension):
+    game = "The Legend of Zelda"
+
+    @staticmethod
+    def apply_base_patch(caller: "APProcedurePatch", rom: bytes) -> bytes:
+        # The base patch source is on a different repo, so here's the summary of changes:
+        # Remove Triforce check for recorder, so you can always warp.
+        # Remove level check for Triforce Fragments (and maps and compasses, but this won't matter)
+        # Replace some code with a jump to free space
+        # Check if we're picking up a Triforce Fragment. If so, increment the local count
+        # In either case, we do the instructions we overwrote with the jump and then return to normal flow
+        # Remove map/compass check so they're always on
+        # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
+        # go past 0x1F items for dungeon items.
+        base_patch = pkgutil.get_data(__name__, "z1_base_patch.bsdiff4")
+        rom_data = bytearray(bsdiff4.patch(bytes(rom), base_patch))
+        # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should
+        # become type 1 boss roars, so we at least keep the sound of roaring where it should be.
+        for i in range(0, 0x7F):
+            item = rom_data[first_quest_dungeon_items_early + i]
+            if item & 0b00100000:
+                item = item & 0b11011111
+                item = item | 0b01000000
+                rom_data[first_quest_dungeon_items_early + i] = item
+            if item & 0b00011111 == 0b00000011:  # Change all Item 03s to Item 3F, the proper "nothing"
+                rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
+
+            item = rom_data[first_quest_dungeon_items_late + i]
+            if item & 0b00100000:
+                item = item & 0b11011111
+                item = item | 0b01000000
+                rom_data[first_quest_dungeon_items_late + i] = item
+            if item & 0b00011111 == 0b00000011:
+                rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
+        return bytes(rom_data)
+
+
+class TLoZProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = NA10CHECKSUM
     game = "The Legend of Zelda"
     patch_file_ending = ".aptloz"
     result_file_ending = ".nes"
+
+    procedure = [
+        ("apply_base_patch", []),
+        ("apply_tokens", ["token_patch.bin"]),
+    ]
 
     @classmethod
     def get_source_data(cls) -> bytes:
