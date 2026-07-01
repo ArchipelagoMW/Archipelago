@@ -1312,7 +1312,7 @@ class Rac3Interface(GameInterface):
                     5.0)
     
     def region_disabled_warning(self):
-        """Checks if the player is on a planet with an arena and informs them that it is disabled"""
+        """Checks if the player went to a planet/region and informs them if they have disabled the content in their yaml"""
         match self.planet:
             case RAC3REGION.ANNIHILATION_NATION:
                 if not self.options.arena:
