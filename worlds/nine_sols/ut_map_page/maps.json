@@ -1,5 +1,7 @@
 [
     { "name": "world_map", "img": "world_map.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "four_seasons_pavilion", "img": "four_seasons_pavilion.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "skill_tree", "img": "skill_tree_labeled.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "abandoned_mines", "img": "abandoned_mines.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "agrarian_hall", "img": "agrarian_hall.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "ancient_stone_pillar", "img": "ancient_stone_pillar.png", "location_size": 20, "location_border_thickness": 3 },
@@ -22,7 +24,6 @@
         "location_size": 10, "location_border_thickness": 2
     },
     { "name": "factory_underground", "img": "factory_underground.png", "location_size": 20, "location_border_thickness": 3 },
-    { "name": "four_seasons_pavilion", "img": "four_seasons_pavilion.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "galactic_dock_and_village", "img": "galactic_dock_and_village.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "greenhouse", "img": "greenhouse.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "grotto_of_scriptures_east", "img": "grotto_of_scriptures_east.png", "location_size": 20, "location_border_thickness": 3 },

@@ -41,6 +41,7 @@ tracker_pages = {
     "water_and_oxygen_synthesis": 37,
     "yangu_hall": 38,
     "yinglong_canal": 39,
+    "skill_tree": 40,
 }
 
 

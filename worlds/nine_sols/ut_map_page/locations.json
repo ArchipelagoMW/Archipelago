@@ -166,6 +166,43 @@
                 }]
             },
             {
+                "name": "Skill Tree",
+                "sections": [
+                    { "name": "Skill Tree Node: Swift Runner" },
+                    { "name": "Skill Tree Node: Qi Boost (Top Left)" },
+                    { "name": "Skill Tree Node: Shadow Strike" },
+                    { "name": "Skill Tree Node: Bullet Deflect" },
+                    { "name": "Skill Tree Node: Swift Rise" },
+                    { "name": "Skill Tree Node: Life Recovery" },
+                    { "name": "Skill Tree Node: Qi Boost (Top Right)" },
+                    { "name": "Skill Tree Node: Backlash" },
+                    { "name": "Skill Tree Node: Skull Kick" },
+                    { "name": "Skill Tree Node: Breathing Exercise" },
+                    { "name": "Skill Tree Node: Leverage" },
+                    { "name": "Skill Tree Node: Water Flow" },
+                    { "name": "Skill Tree Node: Full Control" },
+                    { "name": "Skill Tree Node: Incisive Drain" },
+                    { "name": "Skill Tree Node: Enhanced Bullet Deflect" },
+                    { "name": "Skill Tree Node: Enhanced Blade (Left)" },
+                    { "name": "Skill Tree Node: Unbounded Drain" },
+                    { "name": "Skill Tree Node: Enhanced Talisman (Left)" },
+                    { "name": "Skill Tree Node: Qi Boost (Bottom Left)" },
+                    { "name": "Skill Tree Node: Azure Recovery" },
+                    { "name": "Skill Tree Node: Qi Boost (Bottom Right)" },
+                    { "name": "Skill Tree Node: Enhanced Talisman (Right)" },
+                    { "name": "Skill Tree Node: Enhanced Blade (Right)" },
+                    { "name": "Skill Tree Node: Unbounded Charge" },
+                    { "name": "Skill Tree Node: Enhanced Water Flow" },
+                    { "name": "Skill Tree Node: Enhanced Full Control" },
+                    { "name": "Skill Tree Node: Enhanced Qi Blast" }
+                ],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 877,
+                    "y": 190
+                }]
+            },
+            {
                 "name": "Cortex Center",
                 "sections": [
                     { "name": "Cortex Center: Defeat Lady Ethereal" },
@@ -2249,6 +2286,123 @@
             {
                 "name": "Near Root Node", "sections": [{ "name": "Yinglong Canal: Near Root Node" }],
                 "map_locations": [{ "map": "yinglong_canal", "x": 285, "y": 397 }]
+            }
+        ]
+    },
+    {
+        "name": "Skill Tree",
+        "children": [
+            {
+                "name": "Swift Runner", "sections": [{ "name": "Skill Tree Node: Swift Runner" }],
+                "map_locations": [{ "map": "skill_tree", "x": 399, "y": 215 }]
+            },
+            {
+                "name": "Qi Boost (Top Left)", "sections": [{ "name": "Skill Tree Node: Qi Boost (Top Left)" }],
+                "map_locations": [{ "map": "skill_tree", "x": 499, "y": 215 }]
+            },
+            {
+                "name": "Shadow Strike", "sections": [{ "name": "Skill Tree Node: Shadow Strike" }],
+                "map_locations": [{ "map": "skill_tree", "x": 703, "y": 215 }]
+            },
+            {
+                "name": "Bullet Deflect", "sections": [{ "name": "Skill Tree Node: Bullet Deflect" }],
+                "map_locations": [{ "map": "skill_tree", "x": 1006, "y": 215 }]
+            },
+
+            {
+                "name": "Swift Rise", "sections": [{ "name": "Skill Tree Node: Swift Rise" }],
+                "map_locations": [{ "map": "skill_tree", "x": 299, "y": 320 }]
+            },
+            {
+                "name": "Life Recovery", "sections": [{ "name": "Skill Tree Node: Life Recovery" }],
+                "map_locations": [{ "map": "skill_tree", "x": 499, "y": 320 }]
+            },
+            {
+                "name": "Qi Boost (Top Right)", "sections": [{ "name": "Skill Tree Node: Qi Boost (Top Right)" }],
+                "map_locations": [{ "map": "skill_tree", "x": 703, "y": 320 }]
+            },
+            {
+                "name": "Backlash", "sections": [{ "name": "Skill Tree Node: Backlash" }],
+                "map_locations": [{ "map": "skill_tree", "x": 804, "y": 320 }]
+            },
+            {
+                "name": "Skull Kick", "sections": [{ "name": "Skill Tree Node: Skull Kick" }],
+                "map_locations": [{ "map": "skill_tree", "x": 905, "y": 320 }]
+            },
+            {
+                "name": "Breathing Exercise", "sections": [{ "name": "Skill Tree Node: Breathing Exercise" }],
+                "map_locations": [{ "map": "skill_tree", "x": 1006, "y": 320 }]
+            },
+
+            {
+                "name": "Leverage", "sections": [{ "name": "Skill Tree Node: Leverage" }],
+                "map_locations": [{ "map": "skill_tree", "x": 197, "y": 425 }]
+            },
+            {
+                "name": "Water Flow", "sections": [{ "name": "Skill Tree Node: Water Flow" }],
+                "map_locations": [{ "map": "skill_tree", "x": 399, "y": 428 }]
+            },
+            {
+                "name": "Full Control", "sections": [{ "name": "Skill Tree Node: Full Control" }],
+                "map_locations": [{ "map": "skill_tree", "x": 601, "y": 428 }]
+            },
+            {
+                "name": "Incisive Drain", "sections": [{ "name": "Skill Tree Node: Incisive Drain" }],
+                "map_locations": [{ "map": "skill_tree", "x": 804, "y": 478 }]
+            },
+            {
+                "name": "Enhanced Bullet Deflect", "sections": [{ "name": "Skill Tree Node: Enhanced Bullet Deflect" }],
+                "map_locations": [{ "map": "skill_tree", "x": 1006, "y": 478 }]
+            },
+
+            {
+                "name": "Enhanced Blade (Left)", "sections": [{ "name": "Skill Tree Node: Enhanced Blade (Left)" }],
+                "map_locations": [{ "map": "skill_tree", "x": 96, "y": 530 }]
+            },
+            {
+                "name": "Unbounded Drain", "sections": [{ "name": "Skill Tree Node: Unbounded Drain" }],
+                "map_locations": [{ "map": "skill_tree", "x": 197, "y": 585 }]
+            },
+            {
+                "name": "Enhanced Talisman (Left)", "sections": [{ "name": "Skill Tree Node: Enhanced Talisman (Left)" }],
+                "map_locations": [{ "map": "skill_tree", "x": 299, "y": 530 }]
+            },
+            {
+                "name": "Qi Boost (Bottom Left)", "sections": [{ "name": "Skill Tree Node: Qi Boost (Bottom Left)" }],
+                "map_locations": [{ "map": "skill_tree", "x": 399, "y": 585 }]
+            },
+            {
+                "name": "Azure Recovery", "sections": [{ "name": "Skill Tree Node: Azure Recovery" }],
+                "map_locations": [{ "map": "skill_tree", "x": 501, "y": 530 }]
+            },
+            {
+                "name": "Qi Boost (Bottom Right)", "sections": [{ "name": "Skill Tree Node: Qi Boost (Bottom Right)" }],
+                "map_locations": [{ "map": "skill_tree", "x": 601, "y": 585 }]
+            },
+            {
+                "name": "Enhanced Talisman (Right)", "sections": [{ "name": "Skill Tree Node: Enhanced Talisman (Right)" }],
+                "map_locations": [{ "map": "skill_tree", "x": 704, "y": 530 }]
+            },
+            {
+                "name": "Enhanced Blade (Right)", "sections": [{ "name": "Skill Tree Node: Enhanced Blade (Right)" }],
+                "map_locations": [{ "map": "skill_tree", "x": 905, "y": 585 }]
+            },
+
+            {
+                "name": "Unbounded Charge", "sections": [{ "name": "Skill Tree Node: Unbounded Charge" }],
+                "map_locations": [{ "map": "skill_tree", "x": 105, "y": 695 }]
+            },
+            {
+                "name": "Enhanced Water Flow", "sections": [{ "name": "Skill Tree Node: Enhanced Water Flow" }],
+                "map_locations": [{ "map": "skill_tree", "x": 298, "y": 692 }]
+            },
+            {
+                "name": "Enhanced Full Control", "sections": [{ "name": "Skill Tree Node: Enhanced Full Control" }],
+                "map_locations": [{ "map": "skill_tree", "x": 500, "y": 692 }]
+            },
+            {
+                "name": "Enhanced Qi Blast", "sections": [{ "name": "Skill Tree Node: Enhanced Qi Blast" }],
+                "map_locations": [{ "map": "skill_tree", "x": 703, "y": 692 }]
             }
         ]
     }
