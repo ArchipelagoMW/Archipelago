@@ -105,7 +105,8 @@ class AutoWorldRegister(type):
                     or dct["game"] == "Temp World"
                     # and finally, this one is only required by the CI-only "Build" jobs because build.yml
                     # assumes that Generate Template Options will produce a VVVVVV.yaml file
-                    or dct["game"] == "VVVVVV"):
+                    or dct["game"] == "VVVVVV"
+                    or dct["game"] == "Universal Tracker"):
                 AutoWorldRegister.world_types[dct["game"]] = new_class
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
