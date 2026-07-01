@@ -402,6 +402,7 @@ async def handle_planet_changed(ctx: "Context") -> None:
                                          "opened_the_hacker_doors", PLANETS_WITH_HACKER_PUZZLES,
                                          HACKER_PUZZLE_TO_REGION, True)
         ctx.game_interface.softlock_warning()
+        ctx.game_interface.arena_disabled_warning()
         ctx.game_interface.tyhrranosis_fix()
 
     # Handle UT map changes

@@ -626,7 +626,7 @@ class Rac3Interface(GameInterface):
 
     def find_pda_vendor(self) -> int:
         """Traverse the moby linked list on Qwarks Hideout to find the PDA vendor moby and return its address"""
-        if self.planet != RAC3REGION.QWARKS_HIDEOUT:
+        if self.planet != RAC3REGION.QWARKS_HIDEOUT or RAC3LOCATION.HIDEOUT_PDA in self.checked_locations:
             # reset PDA vendor when leaving Qwarks Hideout
             return 0
         target_moby_id = RAC3STATUS.PDA_VENDOR_MOBY_ID
@@ -1310,6 +1310,22 @@ class Rac3Interface(GameInterface):
                     f"{RAC3TEXTFORMATSTRING.R1}+ SELECT",
                     RAC3BOXTHEME.WARNING,
                     5.0)
+    
+    def arena_disabled_warning(self):
+        """Checks if the player is on a planet with an arena and informs them that it is disabled"""
+        match self.planet:
+            case RAC3REGION.ANNIHILATION_NATION:
+                if not self.options.arena:
+                    message = "You have disabled Annihilation Nation in your yaml. "
+                    notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Annihilation Nation{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n"
+                    if self.options.weapon_vendors:
+                        message += "You can still buy the Agents of Doom vendor check from the weapon vendor."
+                        notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Agents of Doom{RAC3TEXTFORMATSTRING.NORMAL} vendor check from the weapon vendor.\n"
+                    else:
+                        message += "There are no locations on this planet."
+                        notification_message += f"There are no locations on this planet."
+                    logger.info(message)
+                    self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
 
     ##################
     # Player Respawn #
@@ -1709,8 +1725,8 @@ class Rac3Interface(GameInterface):
         """Calculate the distance from the player to the moby"""
         if not moby:
             return float("inf")
-        assert self.ratchet_moby < moby < self.ratchet_moby + 0x00200000, \
-            f"Moby {hex(moby)} not in the typical moby range"
+        assert self.ratchet_moby < moby < self.ratchet_moby + 0x00300000, \
+            f"Moby {hex(moby)} not in the typical moby range ({hex(self.ratchet_moby)} - {hex(self.ratchet_moby + 0x00300000)})"
         player_pos = self.player_pos
         moby_pos = RAC3POSITIONDATA(
             self._read_float(moby + 0x10),
