@@ -94,6 +94,8 @@ class AutoWorldRegister(type):
                 {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
             if (dct["game"] == "Nine Sols"  # the game I actually want to test
+                    # uncomment when we need UT to run, rather than the tests to pass; right now we can't have both
+                    # or dct["game"] == "Universal Tracker"
                     # all the "magic" game names that core AP tests assume exist and fail without
                     or dct["game"] == "APQuest"
                     or dct["game"] == "Archipelago"
