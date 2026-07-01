@@ -1016,6 +1016,11 @@ class DataRandomization(OptionSet):
     Which Crop From Which Seed: Which crop come from which seeds. Only "Shuffled" behavior
     Festival Season: Which seasons festivals occur in
     Festival Date: Which day of the month festivals occur in
+    Shop Currencies: Which currencies are used to trade for various shop items
+    Shop Prices: The price of items (in their currencies) in shops
+    Shop Prices Across Vendors: Shuffle the prices across vendors instead of in separate pools. Very Difficult.
+    Shop Extra Materials: The extra materials or barter items requested for shop purchases
+    Villager Birthdays: The birthday date of villagers
     """
     internal_name = "data_randomization"
     display_name = "Data Randomization"
