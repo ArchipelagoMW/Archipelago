@@ -1510,10 +1510,16 @@
     { "from": "Factory (MR) - Above Green Pillar", "to": "Factory (MR) - Walking Chest Above Green Pillar", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "Factory (MR) - Left Elevator", "to": "Factory (MR) - Top of Green Pillar", "requires": [
-        { "item": "Wall Climb" },
-        { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" } ] } // gap in the green wall
-    ] },
+    {
+        "from": "Factory (MR) - Left Elevator", "to": "Factory (MR) - Top of Green Pillar",
+        "requires": [
+            { "item": "Wall Climb" },
+            { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" } ] } // gap in the green wall
+        ],
+        "ls_requires": [
+            { "item": "Cloud Leap" }, { "item": "Ledge Grab" } // two triple jumps
+        ]
+    },
     { "from": "Factory (MR) - Top of Green Pillar", "to": "Factory (MR) - Above Green Pillar", "requires": [
         { "item": "Unbounded Counter" }, { "item": "Grapple" }
     ] }, // CL + LS getup is barely not enough
