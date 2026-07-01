@@ -1551,6 +1551,7 @@
     ] } ] }, // in practice this should be free, but collapsible platforms require us to assume the worst case
     // no T-dashes in logic because it's possible to get here from Left Elevator without passing a parryable enemy
     { "from": "Factory (MR) - Moving Platforms", "to": "Factory (MR) - Right Elevator", "requires": [] }, // fall, one-way door
+    { "from": "Factory (MR) - Moving Platforms", "to": "Factory (MR) - Root Node", "requires": [] }, // fall farther
 
     // Factory (Production Area)
     { "from": "Factory (PA) - Lower Left Elevator", "to": "Factory (PA) - Root Node", "requires": [ { "item": "Wall Climb" } ] },
