@@ -107,3 +107,12 @@ class TestSolSealCounts(NineSolsTestBase):
             "Mystic Nymph: Scout Mode", "Charged Strike", "Air Dash", "Tai-Chi Kick",  # to reach CC and FGH
             "Seal of Kuafu", "Seal of Goumang",  # 2 seals (and nymph) to trigger prison
         ])
+
+
+class TestRandomizeSkillTree(NineSolsTestBase):
+    options = {
+        "randomize_skill_tree": True
+    }
+
+    def test_randomize_skill_tree(self):
+        pass
