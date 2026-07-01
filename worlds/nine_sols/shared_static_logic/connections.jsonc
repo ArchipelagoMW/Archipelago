@@ -503,11 +503,21 @@
                 { "item": "Wall Climb" } // to ride the crate, and climb to arena afterward
             ],
             [ // skip nymph / activating the crate by platforming all the way through the tunnel with:
-                { "item": "Air Dash" },
                 { "item": "Cloud Leap" }, // and T-dash
                 { "anyOf": [
-                    { "item": "Tai-Chi Kick" }, // use the TCK target so we can save CL for getting on top of the box
-                    { "item": "Wall Climb" } // or climb up the side of the box instead
+                    [ // use the TCK target so we can save CL for getting on top of the box
+                        { "item": "Tai-Chi Kick" },
+                        { "item": "Air Dash" }
+                    ],
+                    [ // or use the TCK target so we can save CL, but...
+                        { "item": "Tai-Chi Kick" },
+                        { "item": "Charged Strike" }, // a shorter CS-dash instead of AD
+                        { "item": "Ledge Grab" } // so CL is just barely enough to grab the crate's corner
+                    ],
+                    [ // or use CL to skip the TCK target and WC up the side of the box
+                        { "item": "Air Dash" },
+                        { "item": "Wall Climb" }
+                    ]
                 ] }
             ]
         ] } ],
