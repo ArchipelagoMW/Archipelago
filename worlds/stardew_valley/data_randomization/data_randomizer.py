@@ -11,8 +11,9 @@ from ..data.mod_only_data.crops_prices import all_crop_sell_prices
 from ..data.mod_only_data.fish_prices import all_fish_sell_prices
 from ..data.shop import ShopSource
 from ..options import StardewValleyOptions
-from ..options.options import DataRandomizationBehavior
-from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
+from ..options.options import DataRandomizationBehavior, FestivalLocations, Booksanity
+from ..strings.ap_names.ap_option_names import DataRandomizationOptionName, HatsanityOptionName
+from ..strings.fish_names import Fish
 from ..strings.generic_names import Generic
 from ..strings.region_names import LogicRegion, Region
 from ..strings.season_names import Season
@@ -28,22 +29,23 @@ def randomize_data(content: StardewContent, options: StardewValleyOptions, rando
     if len(data_to_randomize) <= 0:
         return content
 
-    randomize_fish_data(behavior, content, data_to_randomize, random)
     randomize_crops_data(behavior, content, data_to_randomize, random)
     randomize_festivals_data(behavior, content, data_to_randomize, random)
     randomize_villagers_data(behavior, content, data_to_randomize, random)
+    randomize_fish_data(behavior, content, data_to_randomize, random, options)
     randomize_shops_data(behavior, content, data_to_randomize, random)
 
     return content
 
 
-def randomize_fish_data(behavior, content, data_to_randomize, random):
+def randomize_fish_data(behavior, content, data_to_randomize, random, options: StardewValleyOptions):
     randomize_fish_catch_method(content, data_to_randomize, behavior, random)
     randomize_fish_difficulty(content, data_to_randomize, behavior, random)
     randomize_fish_location(content, data_to_randomize, behavior, random)
     randomize_fish_season(content, data_to_randomize, behavior, random)
     randomize_fish_weather(content, data_to_randomize, behavior, random)
     randomize_fish_sell_prices(content, data_to_randomize, behavior, random)
+    sanitize_fish_data(content, data_to_randomize, behavior, random, options)
 
 
 def randomize_crops_data(behavior, content, data_to_randomize, random):
@@ -191,6 +193,35 @@ def randomize_fish_sell_prices(content: StardewContent, data_to_randomize: set[s
     for fish_name, fish_price in randomized_sell_prices_per_fish.items():
         original_fish = content.fishes[fish_name]
         content.fishes[fish_name] = override(original_fish, sell_price=fish_price)
+
+
+def sanitize_fish_data(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random, options: StardewValleyOptions):
+    need_festivals = options.festival_locations != FestivalLocations.option_disabled
+    need_trout_derby = need_festivals or HatsanityOptionName.medium in options.hatsanity.value
+    need_squid_fest = need_festivals or HatsanityOptionName.medium in options.hatsanity.value or options.booksanity >= Booksanity.option_power
+    if not (need_trout_derby or need_squid_fest):
+        return
+
+    if need_trout_derby:
+        rainbow_trout = content.fishes[Fish.rainbow_trout]
+        seasons = set(rainbow_trout.seasons)
+        seasons.add(Season.summer)
+        seasons_tuple = tuple(seasons)
+        weather = set(rainbow_trout.weather)
+        weather.add(Weather.sun)
+        weather_tuple = tuple(weather)
+        content.fishes[Fish.rainbow_trout] = override(rainbow_trout, seasons=seasons_tuple, weather=weather_tuple)
+
+    if need_squid_fest:
+        squid = content.fishes[Fish.squid]
+        seasons = set(squid.seasons)
+        seasons.add(Season.winter)
+        seasons_tuple = tuple(seasons)
+        weather = set(squid.weather)
+        weather.add(Weather.sun)
+        weather_tuple = tuple(weather)
+        content.fishes[Fish.squid] = override(squid, seasons=seasons_tuple, weather=weather_tuple)
+
 
 
 def randomize_crop_sell_prices(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
