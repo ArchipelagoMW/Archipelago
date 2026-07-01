@@ -327,6 +327,7 @@ async def patch_and_run_game(apmmbn3_file):
     patch.patch(patched_rom_file)
 
     asyncio.create_task(run_game(patched_rom_file))
+    return patch.server
 
 
 def confirm_checksum():
@@ -353,7 +354,9 @@ def launch(*launch_args):
         checksum_matches = confirm_checksum()
         if checksum_matches:
             if args.patch_file:
-                asyncio.create_task(patch_and_run_game(args.patch_file))
+                server = await patch_and_run_game(args.patch_file)
+                if server and not args.connect:
+                    args.connect = server
 
         ctx = MMBN3Context(args.connect, args.password)
         if not checksum_matches:
