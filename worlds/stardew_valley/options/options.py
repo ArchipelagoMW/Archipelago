@@ -1008,7 +1008,7 @@ class DataRandomization(OptionSet):
     Fish Season: Which seasons fish can be caught in
     Fish Location: Which body of water fish can be caught in
     Fish Weather: Which weather fish can be caught in
-    Fish Catch Method: Whether fish are caught using fishing rods or crab pots.
+    Fish Catch Method: Whether fish are caught using fishing rods or crab pots. Only works if you also randomized their locations.
     Fish Sell Price: Ssell price of all fish
     Crop Sell Price: Sell price of all crops and forage
     Growth Time: Time to grow crops from planting to first harvest

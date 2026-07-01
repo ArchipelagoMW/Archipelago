@@ -321,7 +321,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         }
 
         for item in set(content_rules.keys()).intersection(self.registry.item_rules.keys()):
-            logger.warning(f"Rule for {item} already exists in the registry, combining them.")
             content_rules[item] = content_rules[item] | self.registry.item_rules[item]
 
         self.registry.item_rules.update(content_rules)
