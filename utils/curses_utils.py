@@ -1,6 +1,7 @@
 import curses
 import curses.textpad
 import curses.ascii
+from typing import Callable
 
 
 class CursesCancel(Exception):
@@ -169,7 +170,7 @@ class SelectBox:
             return self.pointer
 
 
-def curses_select(data: list[str]) -> str | None:
+def curses_select(data: list[str], key: Callable[int, str] | None = None) -> str | None:
     """
     Starts a curses select box the user can navigate with arrow keys around,
     escape to quit, and any other key to select the current listed string
@@ -187,4 +188,6 @@ def curses_select(data: list[str]) -> str | None:
         return None
     if window.ret is None:
         return None
-    return data[window.ret]
+    if key is None:
+        return data[window.ret]
+    return key[window.ret]
