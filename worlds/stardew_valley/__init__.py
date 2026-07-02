@@ -7,7 +7,7 @@ from random import Random
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 import entrance_rando
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial, EntranceType
 from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
@@ -496,6 +496,13 @@ class StardewValleyWorld(World):
             )
             self.randomized_entrances = prepare_mod_data(placement, self.forced_entrances)
         elif not is_chaos:
+
+            for en, ex in self.randomized_entrances.items():
+                en = self.get_entrance(en)
+                if en.connected_region is not None:
+                    en.connected_region.create_er_target(ex).randomization_type = EntranceType.ONE_WAY
+                    en.connected_region.entrances.remove(en)
+                    en.connected_region = None
 
             # randomized_entrances were in the slot_data, connecting them as entered
             entrances = {entrance.name: entrance for region in self.get_regions() for entrance in region.entrances if entrance.parent_region is None}
