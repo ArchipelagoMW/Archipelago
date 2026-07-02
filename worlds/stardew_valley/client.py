@@ -57,15 +57,19 @@ def cmd_more(world: StardewValleyWorld, index: str, state: CollectionState) -> l
     return parse_explanation(expl)
 
 
-def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
+def parse_explanation(explanation: RuleExplanation) -> list[list[JSONMessagePart]]:
     # Split the explanation in parts, by isolating all the delimiters, being \(, \), & , -> , | , \d+x , \[ , \] , \(\w+\), \n\s*
-    result_regex = r"(\(|\)| & | -> | \| |\d+x | \[|\](?: ->)?\s*| \(\w+\)|\n\s*)"
+    result_regex = r"\s*(\(|\)| & | -> | \| |\d+x | \[|\](?: ->)?\s*| \(\w+\)|\n)"
     splits = re.split(result_regex, str(explanation).strip())
 
     messages = []
+    contents = []
+    content_length = 0
     for s in splits:
         if len(s) == 0:
             continue
+
+        content_length += len(s)
 
         if s == "True":
             messages.append({"type": "color", "color": "green", "text": s})
@@ -98,5 +102,13 @@ def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
                 messages.append({"text": s, "type": "text"})
         else:
             messages.append({"text": s, "type": "text"})
+
+        if content_length > 5000 and s.endswith("\n"):
+            contents[-1]["text"] = contents[-1]["text"][:-1]
+            messages.append(contents)
+            contents = []
+            content_length = 0
+
+    messages.append(contents)
 
     return messages
