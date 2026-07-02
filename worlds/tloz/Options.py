@@ -34,7 +34,7 @@ class StartingPosition(Choice):
     option_very_dangerous = 3
 
 class DialogSpeed(Choice):
-    """The speed dialog advances.
+    """The speed at which dialog advances.
     option_vanilla: 6 frames per letter
     option_fast: 2 frames per letter
     option_faster: 1 frame per letter
