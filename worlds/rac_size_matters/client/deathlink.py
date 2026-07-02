@@ -122,7 +122,7 @@ class DeathLinkMixin:
             TextColour.RED, "Deathlink: ", source, TextColour.WHITE, " ", cause,
         ))
         async with self._pine_lock:
-            self._kill_player_sync()
+            self.pine.run_locked(self._kill_player_sync)
 
     def _kill_player_sync(self) -> None:
         state_addr  = PLAYER_ADDRS.get(self._prev_planet, (PLAYER_STATE, PLAYER_HEALTH))[0]

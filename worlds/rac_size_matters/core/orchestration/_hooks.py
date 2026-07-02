@@ -77,12 +77,29 @@ class HooksMixin:
 
         async def _delayed_pickup_end(ps: PlanetState) -> None:
             await asyncio.sleep(0.3)
-            ps.on_pickup_end()                    # scan memory, detect new pieces, fire location hooks
-            self._pickup_detection_active = False # unblock AP inventory writes now that detection is done
-            self.armour.clear_all_memory()        # zero before writing AP state
-            await asyncio.sleep(0.2)
-            self._reapply_inv()                   # write AP armour set bitmasks
-            self.armour.restore_equipped_slots()  # restore slot bytes last, after all bitmask writes
+            try:
+                async with self._pine_lock:
+                    # scan memory, detect new pieces, fire location hooks
+                    self._pine.run_locked(ps.on_pickup_end)
+            except Exception as exc:
+                logger.warning(f"[RAC] on_pickup_end scan failed: {exc}")
+            finally:
+                # Unblock AP inventory writes now that detection is done, even
+                # if the scan above failed — otherwise is_picking_up stays
+                # stuck True and every future armour/weapon write is silently
+                # skipped.
+                self._pickup_detection_active = False
+            try:
+                async with self._pine_lock:
+                    self._pine.run_locked(self.armour.clear_all_memory)  # zero before writing AP state
+                await asyncio.sleep(0.2)
+                async with self._pine_lock:
+                    self._pine.run_locked(lambda: (
+                        self._reapply_inv(),                  # write AP armour set bitmasks
+                        self.armour.restore_equipped_slots(),  # restore slot bytes last, after all bitmask writes
+                    ))
+            except Exception as exc:
+                logger.warning(f"[RAC] Post-pickup armour reapply failed: {exc}")
 
         self.player.on_death        = on_death
         self.player.on_respawn      = on_respawn

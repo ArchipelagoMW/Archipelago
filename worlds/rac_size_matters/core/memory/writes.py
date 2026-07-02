@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ...pcsx2_interface.pine import Pine
+from ...interface import Pine
 from ..armour import ArmourPiece
 from ..states.game_state import GameState
 from ..weapons import WeaponAddresses

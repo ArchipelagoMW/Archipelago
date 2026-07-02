@@ -38,13 +38,21 @@ class TitaniumBoltAddresses:
 
 @dataclass(frozen=True)
 class TitaniumBolt:
-    planet_id: int  # used with delta for unambiguous detection
+    # Usually a single planet ID; some locations (e.g. Outpost Omega Dream,
+    # reachable from both the first and second Outpost Omega visit) can be
+    # picked up while registered under more than one planet ID for the same
+    # physical location — pass a tuple in that case.
+    planet_id: int | tuple[int, ...]
     bit:       int  # bit position in the pickup int64
     region:    str  # AP region name
 
     @property
     def delta(self) -> int:
         return 1 << self.bit
+
+    @property
+    def planet_ids(self) -> tuple[int, ...]:
+        return self.planet_id if isinstance(self.planet_id, tuple) else (self.planet_id,)
 
 
 TITANIUM_BOLTS: dict[str, TitaniumBolt] = {
@@ -59,7 +67,7 @@ TITANIUM_BOLTS: dict[str, TitaniumBolt] = {
     Rac5TBolts.DREAMTIME_HAT:      TitaniumBolt(0x05, 16, Rac5Planets.DREAMTIME),
     Rac5TBolts.DREAMTIME_GARAGE:   TitaniumBolt(0x05, 17, Rac5Planets.DREAMTIME),
     Rac5TBolts.DREAMTIME_CRAB:     TitaniumBolt(0x05, 18, Rac5Planets.DREAMTIME),
-    Rac5TBolts.OUTPOST_OMEGA_DREAM:TitaniumBolt(0x17, 20, Rac5Planets.OUTPOST_OMEGA),
+    Rac5TBolts.OUTPOST_OMEGA_DREAM:TitaniumBolt((0x06, 0x17), 20, Rac5Planets.OUTPOST_OMEGA),
     Rac5TBolts.CHALLAX_MECH_PAD:   TitaniumBolt(0x07, 24, Rac5Planets.CHALLAX),
     Rac5TBolts.CHALLAX_ROOM:       TitaniumBolt(0x07, 25, Rac5Planets.CHALLAX),
     Rac5TBolts.CHALLAX_PLANT:      TitaniumBolt(0x07, 26, Rac5Planets.CHALLAX),
@@ -72,8 +80,9 @@ TITANIUM_BOLTS: dict[str, TitaniumBolt] = {
 
 # (planet_id, delta) → location name — used by the client for unambiguous detection
 BOLT_BY_PLANET_AND_DELTA: dict[tuple[int, int], str] = {
-    (bolt.planet_id, bolt.delta): name
+    (planet_id, bolt.delta): name
     for name, bolt in TITANIUM_BOLTS.items()
+    for planet_id in bolt.planet_ids
 }
 
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from ...interface_orchestrator.memory.base import MemoryInterface
-from ...pcsx2_interface.pine import Pine
+from ...interface import Pine
 
 
 class PineInterface(MemoryInterface):

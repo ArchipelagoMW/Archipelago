@@ -137,8 +137,10 @@ class InventoryMixin:
         if not self._pending_item_apply or self._wiring.is_picking_up:
             return
         async with self._pine_lock:
-            self._apply_world_states_sync()
-            self._apply_player_inventory_sync()
+            self.pine.run_locked(lambda: (
+                self._apply_world_states_sync(),
+                self._apply_player_inventory_sync(),
+            ))
         self._pending_item_apply = False
 
     async def force_sync(self) -> None:
@@ -147,8 +149,10 @@ class InventoryMixin:
         if not self.pine_connected:
             return
         async with self._pine_lock:
-            self._apply_player_inventory_sync()
-            self._apply_world_states_sync()
+            self.pine.run_locked(lambda: (
+                self._apply_player_inventory_sync(),
+                self._apply_world_states_sync(),
+            ))
         self._pending_item_apply = False
 
     async def _apply_received_items(self) -> None:
@@ -162,20 +166,22 @@ class InventoryMixin:
             # so it is up-to-date even during a pickup animation.
             # _apply_player_inventory_sync guards game-memory writes internally
             # when is_picking_up is True, so only the state rebuild runs.
-            self._apply_player_inventory_sync()
+            self.pine.run_locked(self._apply_player_inventory_sync)
             # Bolts/traps don't depend on the weapon/armour pickup-detection
             # window, so apply them immediately rather than deferring behind
             # is_picking_up — otherwise a trap received mid-pickup-animation
             # sits pending indefinitely (the post-pickup retry path doesn't
             # re-check for new bolts/traps).
             if self._filler_checkpoint_synced:
-                self._grant_new_bolt_items()
-                self._grant_new_trap_items()
+                self.pine.run_locked(lambda: (
+                    self._grant_new_bolt_items(),
+                    self._grant_new_trap_items(),
+                ))
                 await self._persist_filler_checkpoint()
             if self._wiring.is_picking_up:
                 self._pending_item_apply = True
                 return
-            self._apply_world_states_sync()
+            self.pine.run_locked(self._apply_world_states_sync)
         self._show_new_item_notifications()
         self._pending_item_apply = False
 
@@ -676,4 +682,4 @@ class InventoryMixin:
         if not self.pine_connected:
             return
         async with self._pine_lock:
-            self._apply_world_states_sync()
+            self.pine.run_locked(self._apply_world_states_sync)
