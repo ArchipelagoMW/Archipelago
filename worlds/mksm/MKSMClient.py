@@ -173,6 +173,7 @@ class MKSMContext(CommonContext):
     first_loop: bool
     pending_server_address: str | None
     emulator_settled: bool
+    was_dead: bool
 
     def __init__(self, server_address: str | None, password: str | None) -> None:
         super().__init__(server_address, password)
@@ -185,6 +186,7 @@ class MKSMContext(CommonContext):
         self.first_loop = True
         self.pending_server_address = None
         self.emulator_settled = False
+        self.was_dead = False
 
     def ready_to_connect(self) -> bool:
         return self.emulator_settled and self.game_interface.get_game_state() == GameState.MAIN_MENU

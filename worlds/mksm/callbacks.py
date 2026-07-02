@@ -15,6 +15,21 @@ from .consts import GameState, DEFAULT_EVENT_ARRAY, EVENTS_TO_LOCATION_NAME, ANI
     ROOM_EVENT_GATES, XC1_EVENTS, MAIN_BOSS_EVENTS, GORO_DEFEATED_EVENTS
 from .items import ITEM_NAME_TO_ID
 from .locations import LOCATION_NAME_TO_ID
+from .options import BossGoal
+
+MAIN_BOSS_LOCATIONS = [
+    "EM: Kitana Mileena and Jade defeated",
+    "LF: Reptile defeated",
+    "ST: Baraka defeated",
+    "W: Goro defeated",
+    "N: Scorpion defeated",
+]
+
+SECRET_BOSS_LOCATIONS = [
+    "WSA: Ermac defeated",
+    "LF: Mileena defeated",
+    "F: Kano defeated",
+]
 
 if TYPE_CHECKING:
     from .MKSMClient import MKSMContext
@@ -413,15 +428,24 @@ def update_koin_counter(ctx):
 
 
 async def check_completed_game(ctx: MKSMContext):
-    if not ctx.slot_data or "red_koin_amount" not in ctx.slot_data or "red_koin_need_percent" not in ctx.slot_data:
+    if not ctx.slot_data or "red_koin_amount" not in ctx.slot_data or "red_koin_need_percent" not in ctx.slot_data \
+            or "boss_goal" not in ctx.slot_data:
         return  # haven't heard back from the server yet - don't guess
 
     total = ctx.slot_data["red_koin_amount"]
     needed = int(total * ctx.slot_data["red_koin_need_percent"] / 100)
     current = sum(item.item == ITEM_NAME_TO_ID["Red Koin"] for item in ctx.items_received)
-    beat_final_boss = LOCATION_NAME_TO_ID["F: Shao Kahn defeated"] in ctx.checked_locations
 
-    if current >= needed and beat_final_boss:
+    boss_goal = ctx.slot_data["boss_goal"]
+    required_boss_locations = ["F: Shao Kahn defeated"]
+    if boss_goal >= BossGoal.option_main_bosses:
+        required_boss_locations += MAIN_BOSS_LOCATIONS
+    if boss_goal >= BossGoal.option_main_and_secret_bosses:
+        required_boss_locations += SECRET_BOSS_LOCATIONS
+
+    bosses_defeated = all(LOCATION_NAME_TO_ID[name] in ctx.checked_locations for name in required_boss_locations)
+
+    if current >= needed and bosses_defeated:
         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
         ctx.finished_game = True
 
@@ -434,10 +458,14 @@ def set_character(ctx: MKSMContext) -> None:
     ctx.game_interface.set_character(character_option)
 
 
-async def check_death(ctx: MKSMContext):
-    if ctx.game_interface.is_dead():
-        print("sending death")
+async def check_death(ctx: MKSMContext) -> None:
+    if ctx.game_state != GameState.GAMEPLAY:
+        return
+
+    is_dead = ctx.game_interface.is_dead()
+    if is_dead and not ctx.was_dead and "DeathLink" in ctx.tags:
         await ctx.send_death("")
+    ctx.was_dead = is_dead
 
 
 async def set_xp_items(ctx: MKSMContext) -> None:

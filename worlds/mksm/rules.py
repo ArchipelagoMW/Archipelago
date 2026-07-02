@@ -238,7 +238,7 @@ def set_completion_condition(world: MKSMWorld) -> None:
         goal_rule = goal_rule & SHAO_KAHN
 
     if world.options.boss_goal >= BossGoal.option_main_bosses:
-        goal_rule = goal_rule & KITANA & REPTILE & BARAKA & SCORPION & GORO
+        goal_rule = goal_rule & KITANA & REPTILE & BARAKA & GORO & SCORPION
 
     if world.options.boss_goal >= BossGoal.option_main_and_secret_bosses:
         goal_rule = goal_rule & ERMAC & MILEENA & KANO
