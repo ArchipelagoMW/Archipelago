@@ -20,7 +20,7 @@ The following are required in order to play Civ VI in Archipelago:
 
 2. Copy the folder containing the mod files to your Civ VI mods folder. On Windows, this is usually located at `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods`. If you use OneDrive, check if the folder is instead located in your OneDrive file structure, and use that path when relevant in future steps.
 
-3. Remember this file path, as you will be returning here to install the patch you get from either the Archipelago Multiworld room. The mod will not function without the patch files.
+3. Remember this file path, as you will be returning here to install the patch you get from the Archipelago Multiworld room. The mod will not function without the patch files.
 
 ## Installing the Patch
 
@@ -30,9 +30,9 @@ The following are required in order to play Civ VI in Archipelago:
     - The first method is by opening it as a zip file. You can do this by either right-clicking it and opening it with a program that handles zip files (If you associate the file type with that program, future `.apcivvi` files will open with it when you double-click them), or by right-clicking and renaming the file extension from `apcivvi` to `zip` (file extensions must be displayed). 
     - You can also associate the file with the Archipelago Launcher and double-click it; doing so will create a folder containing the mod files.
 
-5. Copy the contents of the zip file or folder it generated (the name of the folder should be the same as the apcivvi file) into your Civilization VI Archipelago Mod folder (there should be five files placed there from the `.apcivvi` file, overwrite if asked). It is very important that all five files are placed directly in the `civilization_archipelago_mod` folder.
+3. Copy the contents of the zip file or folder it generated (the name of the folder should be the same as the apcivvi file) into your Civilization VI Archipelago Mod folder (there should be five files placed there from the `.apcivvi` file, overwrite if asked). It is very important that all five files are placed directly in the `civilization_archipelago_mod` folder.
 
-6. Your mod path should look something like `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods\civilization_archipelago_mod`. If everything was done correctly, you can now connect to the game.
+4. Your mod path should look something like `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods\civilization_archipelago_mod`. If everything was done correctly, you can now connect to the game.
 
 ## Connecting to a game
 
@@ -52,11 +52,11 @@ The following are required in order to play Civ VI in Archipelago:
 
 - If you get an error when trying to start a game saying `Error - One or more Mods failed to load content`, make sure the files from the `.apcivvi` file are placed directly into the `civilization_archipelago_mod` folder as loose files and not as a folder.
 
-- If you have troubles with file extensions, make sure Windows shows file extensions as they are turned off by default. If you don't know how to turn them on it a quick Google search should help.
+- If you have troubles with file extensions, make sure Windows shows file extensions as they are turned off by default. If you don't know how to turn them on, a quick Google search should help.
 
 - If you are not sending or receiving items, make sure the tuner is enabled.
 
-- If your game enters a state where where someone has sent you items or you have sent locations but these are not correctly sent to the multiworld, you can run `/resync` from the Civ 6 client. This may take up to a minute depending on how many items there are. This can resend certain items to you, like one time bonuses.
+- If your game enters a state where someone has sent you items or you have sent locations but these are not correctly sent to the multiworld, you can run `/resync` from the Civ 6 client. This may take up to a minute depending on how many items there are. This can resend certain items to you, like one time bonuses.
 
 - If the archipelago mod does not appear in the mod selector in the game, make sure the mod is correctly placed as a folder in the `Sid Meier's Civilization VI\Mods` folder, there should not be any loose files in there, only folders. As in the path should look something like `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods\civilization_archipelago_mod`.
 
