@@ -1320,7 +1320,7 @@ class Rac3Interface(GameInterface):
                     notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Annihilation Nation{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n"
                     if self.options.weapon_vendors:
                         log_message += "You can still buy the Agents of Doom vendor check from the weapon vendor."
-                        notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Agents of Doom{RAC3TEXTFORMATSTRING.NORMAL} vendor check from the weapon vendor.\n"
+                        notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Agents of Doom{RAC3TEXTFORMATSTRING.NORMAL} vendor check\nfrom the weapon vendor."
                     else:
                         log_message += "There are no locations on this planet."
                         notification_message += "There are no locations on this planet."
@@ -1338,7 +1338,7 @@ class Rac3Interface(GameInterface):
                     notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Story Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n"
                     if self.options.weapon_vendors:
                         log_message += "You can still buy the Qwack-O-Ray vendor check from the weapon vendor."
-                        notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Qwack-O-Ray{RAC3TEXTFORMATSTRING.NORMAL} vendor check from the weapon vendor.\n"
+                        notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Qwack-O-Ray{RAC3TEXTFORMATSTRING.NORMAL} vendor check\nfrom the weapon vendor."
                     else:
                         log_message += "There are no locations on this planet."
                         notification_message += "There are no locations on this planet."
