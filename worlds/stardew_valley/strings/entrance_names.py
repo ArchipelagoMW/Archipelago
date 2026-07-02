@@ -347,6 +347,7 @@ class Entrance:
     purchase_from_dwarf = "Purchase From Dwarf"
     purchase_from_sandy = "Purchase From Sandy"
     purchase_from_hospital = "Purchase From Hospital"
+    purchase_from_krobus = "Purchase From Krobus"
 
 
 @final

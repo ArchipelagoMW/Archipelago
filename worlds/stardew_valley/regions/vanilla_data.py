@@ -235,8 +235,9 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.mastery_cave, (Entrance.mastery_cave_to_forest,)),
     RegionData(
         RegionName.sewer,
-        (Entrance.sewer_to_town, Entrance.sewer_to_forest, Entrance.enter_mutant_bug_lair, Entrance.use_return_scepter),
+        (Entrance.purchase_from_krobus, Entrance.sewer_to_town, Entrance.sewer_to_forest, Entrance.enter_mutant_bug_lair, Entrance.use_return_scepter),
     ),
+    RegionData(RegionName.sewer_shop),
     RegionData(RegionName.mutant_bug_lair, (Entrance.leave_mutant_bug_lair,)),
     RegionData(
         RegionName.wizard_tower,
@@ -883,6 +884,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.purchase_from_krobus, RegionName.sewer_shop),
     ConnectionData(
         Entrance.forest_to_mastery_cave,
         RegionName.mastery_cave,

@@ -360,7 +360,7 @@ pelican_town = ContentPack(
         Catalogue.joja: (ShopSource(price=25_000, shop_region=Region.movie_theater, other_requirements=(SpeakJunimoRequirement(), EndgameItemReceivedRequirement(Catalogue.joja),)),),
         Catalogue.junimo: (ShopSource(price=70_000, shop_region=LogicRegion.traveling_cart, other_requirements=(SpeakJunimoRequirement(), EndgameItemReceivedRequirement(Catalogue.junimo),)),),
         Catalogue.retro: (ShopSource(price=110_000, shop_region=LogicRegion.traveling_cart, other_requirements=(EndgameItemReceivedRequirement(Catalogue.retro),)),),
-        Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer, other_requirements=(EndgameItemReceivedRequirement(Catalogue.wizard),)),),
+        Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer_shop, other_requirements=(EndgameItemReceivedRequirement(Catalogue.wizard),)),),
 
         # Furniture
         Furniture.single_bed: (ShopSource(price=500, shop_region=Region.carpenter_shop),),
@@ -396,10 +396,10 @@ pelican_town = ContentPack(
 
         Trash.joja_cola: (ShopSource(price=75, currency=Currency.money, shop_region=Region.saloon_shop),),
 
-        AnimalProduct.void_egg_starter: (ShopSource(price=5000, currency=Currency.money, shop_region=Region.sewer),),
-        Consumable.butterfly_powder: (ShopSource(price=20000, currency=Currency.money, shop_region=Region.sewer),),
-        ShopLocation.krobus_stardrop: (ShopSource(price=20000, currency=Currency.money, shop_region=Region.sewer),),
-        Tool.return_scepter: (ShopSource(price=2_000_000, currency=Currency.money, shop_region=Region.sewer),),
+        AnimalProduct.void_egg_starter: (ShopSource(price=5000, currency=Currency.money, shop_region=Region.sewer_shop),),
+        Consumable.butterfly_powder: (ShopSource(price=20000, currency=Currency.money, shop_region=Region.sewer_shop),),
+        ShopLocation.krobus_stardrop: (ShopSource(price=20000, currency=Currency.money, shop_region=Region.sewer_shop),),
+        Tool.return_scepter: (ShopSource(price=2_000_000, currency=Currency.money, shop_region=Region.sewer_shop),),
 
         AnimalProduct.golden_egg_starter:  (ShopSource(price=100000, currency=Currency.money, shop_region=Region.ranch_shop,
                                                        other_requirements=(ReceivedRequirement(AnimalProduct.golden_egg),)),),
@@ -1364,7 +1364,7 @@ pelican_town = ContentPack(
         CraftingRecipe(name=Floor.rustic, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=200),),),
         CraftingRecipe(name=Floor.straw, ingredients=((Material.wood, 1), (Material.fiber, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=200),),),
         CraftingRecipe(name=Floor.weathered, ingredients=((Material.wood, 1),), sources=(ShopSource(shop_region=LogicRegion.mines_dwarf_shop, price=500),),),
-        CraftingRecipe(name=Floor.crystal, ingredients=((MetalBar.quartz, 1),), sources=(ShopSource(shop_region=Region.sewer, price=500),),),
+        CraftingRecipe(name=Floor.crystal, ingredients=((MetalBar.quartz, 1),), sources=(ShopSource(shop_region=Region.sewer_shop, price=500),),),
         CraftingRecipe(name=Floor.stone, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=100),),),
         CraftingRecipe(name=Floor.stone_walkway, ingredients=((Material.stone, 1),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=200),),),
         CraftingRecipe(name=Floor.brick, ingredients=((Material.clay, 2), (Material.stone, 5),), sources=(ShopSource(shop_region=Region.carpenter_shop, price=500),),),
@@ -1446,7 +1446,7 @@ pelican_town = ContentPack(
         CraftingRecipe(name=Machine.deluxe_worm_bin, ingredients=((Machine.worm_bin, 1), (Material.moss, 30),), sources=(SkillSource(skill=Skill.fishing, level=8),),),
 
         CraftingRecipe(name=Furniture.tub_o_flowers, ingredients=((Material.wood, 25), (Seed.tulip, 1), (Seed.jazz, 1), (Seed.poppy, 1), (Seed.spangle, 1),), sources=(ShopSource(shop_region=LogicRegion.flower_dance_shop, price=2000),),),
-        CraftingRecipe(name=Furniture.wicked_statue, ingredients=((Material.stone, 25), (Material.coal, 5),), sources=(ShopSource(shop_region=Region.sewer, price=1000),),),
+        CraftingRecipe(name=Furniture.wicked_statue, ingredients=((Material.stone, 25), (Material.coal, 5),), sources=(ShopSource(shop_region=Region.sewer_shop, price=1000),),),
         CraftingRecipe(name=Furniture.flute_block, ingredients=((Material.wood, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter_shop, friend=NPC.robin, hearts=6),),),
         CraftingRecipe(name=Furniture.drum_block, ingredients=((Material.stone, 10), (Ore.copper, 2), (Material.fiber, 20),), sources=(CutsceneSource(region=Region.carpenter_shop, friend=NPC.robin, hearts=6),),),
 

@@ -373,7 +373,7 @@ id,region,name,tags,content_packs
 704,Farmhouse Crib,Have a Baby,BABY,
 705,Farmhouse Crib,Have Another Baby,BABY,
 706,Farmhouse Kitchen,Spouse Stardrop,,
-707,Sewer,Krobus Stardrop,MANDATORY,
+707,Sewer - Shop,Krobus Stardrop,MANDATORY,
 708,Forest,Secret: Pot Of Gold,"SECRETSANITY,EASY_SECRET",
 801,Forest,Help Wanted: Gathering 1,HELP_WANTED,
 802,Forest,Help Wanted: Gathering 2,HELP_WANTED,
@@ -964,16 +964,16 @@ id,region,name,tags,content_packs
 1575,Sam's House,Friendsanity: Kent 8 <3,FRIENDSANITY,
 1576,Sam's House,Friendsanity: Kent 9 <3,FRIENDSANITY,
 1577,Sam's House,Friendsanity: Kent 10 <3,FRIENDSANITY,
-1579,Sewer,Friendsanity: Krobus 1 <3,FRIENDSANITY,
-1580,Sewer,Friendsanity: Krobus 2 <3,FRIENDSANITY,
-1581,Sewer,Friendsanity: Krobus 3 <3,FRIENDSANITY,
-1582,Sewer,Friendsanity: Krobus 4 <3,FRIENDSANITY,
-1583,Sewer,Friendsanity: Krobus 5 <3,FRIENDSANITY,
-1584,Sewer,Friendsanity: Krobus 6 <3,FRIENDSANITY,
-1585,Sewer,Friendsanity: Krobus 7 <3,FRIENDSANITY,
-1586,Sewer,Friendsanity: Krobus 8 <3,FRIENDSANITY,
-1587,Sewer,Friendsanity: Krobus 9 <3,FRIENDSANITY,
-1588,Sewer,Friendsanity: Krobus 10 <3,FRIENDSANITY,
+1579,Sewer - Shop,Friendsanity: Krobus 1 <3,FRIENDSANITY,
+1580,Sewer - Shop,Friendsanity: Krobus 2 <3,FRIENDSANITY,
+1581,Sewer - Shop,Friendsanity: Krobus 3 <3,FRIENDSANITY,
+1582,Sewer - Shop,Friendsanity: Krobus 4 <3,FRIENDSANITY,
+1583,Sewer - Shop,Friendsanity: Krobus 5 <3,FRIENDSANITY,
+1584,Sewer - Shop,Friendsanity: Krobus 6 <3,FRIENDSANITY,
+1585,Sewer - Shop,Friendsanity: Krobus 7 <3,FRIENDSANITY,
+1586,Sewer - Shop,Friendsanity: Krobus 8 <3,FRIENDSANITY,
+1587,Sewer - Shop,Friendsanity: Krobus 9 <3,FRIENDSANITY,
+1588,Sewer - Shop,Friendsanity: Krobus 10 <3,FRIENDSANITY,
 1590,Leo's Hut,Friendsanity: Leo 1 <3,"FRIENDSANITY,GINGER_ISLAND",
 1591,Leo's Hut,Friendsanity: Leo 2 <3,"FRIENDSANITY,GINGER_ISLAND",
 1592,Leo's Hut,Friendsanity: Leo 3 <3,"FRIENDSANITY,GINGER_ISLAND",
@@ -2300,7 +2300,7 @@ id,region,name,tags,content_packs
 3553,Carpenter Shop,Rustic Plank Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3554,Carpenter Shop,Straw Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3555,Mines Dwarf Shop,Weathered Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
-3556,Sewer,Crystal Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3556,Sewer - Shop,Crystal Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3557,Carpenter Shop,Stone Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3558,Carpenter Shop,Stone Walkway Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3559,Carpenter Shop,Brick Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
@@ -2318,7 +2318,7 @@ id,region,name,tags,content_packs
 3571,Carpenter Shop,Marble Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3572,Carpenter Shop,Wood Lamp-post Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3573,Carpenter Shop,Iron Lamp-post Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
-3574,Sewer,Wicked Statue Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3574,Sewer - Shop,Wicked Statue Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3575,Desert,Warp Totem: Desert Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3576,Island Trader,Deluxe Retaining Soil Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE,GINGER_ISLAND",
 3577,Willy's Fish Cabin,Fish Smoker Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
@@ -2585,7 +2585,7 @@ id,region,name,tags,content_packs
 4243,Farm,Secret: Secret Iridium Stackmaster Trophy,"SECRETSANITY,DIFFICULT_SECRET",
 4244,Willy's Fish Shop,Secret: What kind of monster is this?,"SECRETSANITY,EASY_SECRET",
 4245,Pierre's General Store,Secret: My mouth is watering already,"SECRETSANITY,EASY_SECRET",
-4246,Sewer,Secret: A gift of lovely perfume,"SECRETSANITY,EASY_SECRET",
+4246,Sewer - Shop,Secret: A gift of lovely perfume,"SECRETSANITY,EASY_SECRET",
 4247,Mines Dwarf Cave,Secret: Where exactly does this juice come from?,"SECRETSANITY,EASY_SECRET",
 4261,Secret Notes,Secret Note #1: A Page From Abigail's Diary,"SECRETSANITY,SECRET_NOTE",
 4262,Secret Notes,Secret Note #2: Sam's Holiday Shopping List,"SECRETSANITY,SECRET_NOTE",
@@ -3166,7 +3166,7 @@ id,region,name,tags,content_packs
 5104,Wizard Blueprints,Island Obelisk Blueprint,"ENDGAME_LOCATIONS,GINGER_ISLAND",
 5105,Wizard Blueprints,Junimo Hut Blueprint,"ENDGAME_LOCATIONS",
 5106,Wizard Blueprints,Gold Clock Blueprint,"ENDGAME_LOCATIONS",
-5107,Sewer,Purchase Return Scepter,"ENDGAME_LOCATIONS",
+5107,Sewer - Shop,Purchase Return Scepter,"ENDGAME_LOCATIONS",
 5108,Carpenter Shop,Pam House Blueprint,"ENDGAME_LOCATIONS",
 5109,Carpenter Shop,Forest To Beach Shortcut Blueprint,"ENDGAME_LOCATIONS",
 5110,Carpenter Shop,Mountain Shortcuts Blueprint,"ENDGAME_LOCATIONS",
@@ -3185,7 +3185,7 @@ id,region,name,tags,content_packs
 5125,Traveling Cart,Purchase Junimo Catalogue,"ENDGAME_LOCATIONS",
 5126,Traveling Cart,Purchase Retro Catalogue,"ENDGAME_LOCATIONS",
 5127,Garbage Cans,Find Trash Catalogue,"ENDGAME_LOCATIONS",
-5128,Sewer,Purchase Wizard Catalogue,"ENDGAME_LOCATIONS",
+5128,Sewer - Shop,Purchase Wizard Catalogue,"ENDGAME_LOCATIONS",
 5129,Traveling Cart,Purchase Spouse Portrait,"ENDGAME_LOCATIONS,REQUIRES_FRIENDSANITY",
 5130,Traveling Cart,Purchase Abigail Portrait,"ENDGAME_LOCATIONS,REQUIRES_FRIENDSANITY_MARRIAGE",
 5131,Traveling Cart,Purchase Alex Portrait,"ENDGAME_LOCATIONS,REQUIRES_FRIENDSANITY_MARRIAGE",
@@ -3789,7 +3789,7 @@ id,region,name,tags,content_packs
 57509,Grandpa's Shed Interior,Quest: Grandpa's Shed,"STORY_QUEST",Stardew Valley Expanded
 57510,Aurora Vineyard,Quest: Aurora Vineyard,"STORY_QUEST",Stardew Valley Expanded
 57511,Lance's House Main,Quest: Monster Crops,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
-57512,Sewer,Quest: Void Soul Retrieval,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
+57512,Sewer - Shop,Quest: Void Soul Retrieval,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
 57513,Fairhaven Farm,Andy's Cellar,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 57514,Adventurer's Guild,A Mysterious Venture,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 57515,Jenkins' Residence,An Elegant Reception,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
@@ -3831,8 +3831,8 @@ id,region,name,tags,content_packs
 57606,Saloon - Shop,Mixed Berry Pie Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 57607,Adventurer's Guild,Mushroom Berry Rice Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Stardew Valley Expanded
 57608,Adventurer's Guild,Seaweed Salad Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
-57609,Sewer,Void Delight Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Stardew Valley Expanded
-57610,Sewer,Void Salmon Sushi Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+57609,Sewer - Shop,Void Delight Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Stardew Valley Expanded
+57610,Sewer - Shop,Void Salmon Sushi Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 57611,Witch's Swamp,Mushroom Kebab Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 57613,Witch's Swamp,Pemmican Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 57614,Witch's Swamp,Void Mint Tea Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
