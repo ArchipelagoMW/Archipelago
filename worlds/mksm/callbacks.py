@@ -44,7 +44,6 @@ async def game_watcher(ctx: MKSMContext) -> None:
     # TODO check soul tomb destroyed events
     # TODO check portal start area open world style
     # TODO open co op doors from start
-    # TODO seperate goals, only final boss, all bosses, include secret bosses, red koins only etc
     # TODO smoke missions
     # TODO "GL: koin from shooting the moon" is excluded from the world for Sub-Zero/Scorpion
     #      seeds (see locations.create_region_locations), but MKSMInterface/consts.RED_KOINS

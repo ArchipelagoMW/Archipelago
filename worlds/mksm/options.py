@@ -30,7 +30,7 @@ class RedKoinPercent(Range):
     80 (default) means you need to find at least 80% of all Red Koins AND beat the boss goal to win.
     There is a tracker in the pause menu that shows: current amount / need for goal / total in the multiworld.
     """
-    display_name = "Red Koin completion percent"  # TODO better name
+    display_name = "Red Koin goal percent"
     range_start = 0
     range_end = 100
 
