@@ -320,3 +320,11 @@ class MKSMInterface(GameInterface):
             self._write32(debug_1, YES_DEBUG[0])
             self._write32(debug_2, YES_DEBUG[1])
             return True
+
+    def kill_player(self):
+        cur_health_addr = self.addresses.get("CUR_HEALTH")
+        self._write32(cur_health_addr, 0)
+
+    def is_dead(self):
+        cur_health_addr = self.addresses.get("CUR_HEALTH")
+        return self._read32(cur_health_addr) <= 0

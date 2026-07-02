@@ -55,6 +55,7 @@ async def game_watcher(ctx: MKSMContext) -> None:
     set_blood_bar(ctx)
     update_koin_counter(ctx)
 
+    await check_death(ctx)
     await check_move_upgrades(ctx)
     await sync_red_koins(ctx)
     await update_events_in_server(ctx)
@@ -434,6 +435,12 @@ def set_character(ctx: MKSMContext) -> None:
 
     character_option = ctx.slot_data["character"]
     ctx.game_interface.set_character(character_option)
+
+
+async def check_death(ctx: MKSMContext):
+    if ctx.game_interface.is_dead():
+        print("sending death")
+        await ctx.send_death("")
 
 
 async def set_xp_items(ctx: MKSMContext) -> None:

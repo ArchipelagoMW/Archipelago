@@ -14,6 +14,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import sys
+import typing
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, get_base_parser, handle_url_arg, logger, \
@@ -150,6 +151,12 @@ class MKSMCommandProcessor(ClientCommandProcessor):
 
         return True
 
+    async def _cmd_deathlink(self):
+        ctx: MKSMContext = self.ctx
+        is_death_link = "DeathLink" in ctx.tags
+        self.output(f"Setting Death Link: {not is_death_link}")
+        await ctx.update_death_link(not is_death_link)
+
 
 class MKSMContext(CommonContext):
     game = "Mortal Kombat: Shaolin Monks"
@@ -199,6 +206,10 @@ class MKSMContext(CommonContext):
     def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
+
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
+        super().on_deathlink(data)
+        self.game_interface.kill_player()
 
 
 async def game_watcher(ctx: MKSMContext) -> None:
