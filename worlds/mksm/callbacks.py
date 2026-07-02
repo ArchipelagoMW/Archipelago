@@ -22,8 +22,6 @@ if TYPE_CHECKING:
 
 async def game_watcher(ctx: MKSMContext) -> None:
     """Called once per tick by the client's main loop."""
-    # TODO red koin cmd
-    # TODO close gracefully
     # TODO traps
     # TODO turn fatality checks to fatalitysanity option
     # TODO check events for breaking statues before kitana

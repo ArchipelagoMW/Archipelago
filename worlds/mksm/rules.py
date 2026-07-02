@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from rule_builder.rules import Has, Rule, HasFromListUnique
 from .locations import FINISHING_MOVES_LOCATIONS
+from .options import BossGoal
 
 if TYPE_CHECKING:
     from .world import MKSMWorld
@@ -24,6 +25,9 @@ REPTILE = Has("Reptile defeated item")
 BARAKA = Has("Baraka defeated item")
 GORO = Has("Goro defeated item")
 SCORPION = Has("Scorpion defeated item")
+ERMAC = Has("Ermac defeated item")
+MILEENA = Has("Mileena defeated item")
+KANO = Has("Kano defeated item")
 SHAO_KAHN = Has("Shao Kahn defeated item")
 
 DEAD_POOL = Has("Dead Pool item")
@@ -228,6 +232,17 @@ def set_completion_condition(world: MKSMWorld) -> None:
     percent = world.options.red_koin_need_percent.value
     enough_red_koins = Has("Red Koin", count=int(world.red_koin_amount * percent / 100))
 
+    goal_rule = enough_red_koins
+
+    if world.options.boss_goal >= BossGoal.option_shao_kahn_only:
+        goal_rule = goal_rule & SHAO_KAHN
+
+    if world.options.boss_goal >= BossGoal.option_main_bosses:
+        goal_rule = goal_rule & KITANA & REPTILE & BARAKA & SCORPION & GORO
+
+    if world.options.boss_goal >= BossGoal.option_main_and_secret_bosses:
+        goal_rule = goal_rule & ERMAC & MILEENA & KANO
+
     world.set_completion_rule(
-        enough_red_koins & SHAO_KAHN
+        goal_rule
     )

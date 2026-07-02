@@ -267,13 +267,23 @@ def create_finishing_moves_locations(world: MKSMWorld) -> None:
 
 
 def create_event_locations(world: MKSMWorld) -> None:
+    wu_shi_ermac: Region = world.get_region("Wu-Shi - Ermac arena")
     monastery_kitana: Region = world.get_region("Monastery - Kitana arena")
     forest_reptile: Region = world.get_region("Forest - Reptile arena")
+    forest_bridges: Region = world.get_region("Forest - Bridges")
     tombs_baraka: Region = world.get_region("Tombs - Baraka arena")
     wasteland_3: Region = world.get_region("Wasteland 3")
     dead_pool: Region = world.get_region("Dead Pool")
     netherrealm: Region = world.get_region("Netherrealm")
     foundry: Region = world.get_region("Foundry")
+
+    wu_shi_ermac.add_event(
+        location_name="Ermac defeated event",
+        item_name="Ermac defeated item",
+        location_type=MKSMLocation,
+        item_type=MKSMItem,
+        show_in_spoiler=False
+    )
 
     monastery_kitana.add_event(
         location_name="Kitana defeated event",
@@ -289,7 +299,14 @@ def create_event_locations(world: MKSMWorld) -> None:
         location_type=MKSMLocation,
         item_type=MKSMItem,
         show_in_spoiler=False
+    )
 
+    forest_bridges.add_event(
+        location_name="Mileena defeated event",
+        item_name="Mileena defeated item",
+        location_type=MKSMLocation,
+        item_type=MKSMItem,
+        show_in_spoiler=False
     )
 
     tombs_baraka.add_event(
@@ -325,7 +342,14 @@ def create_event_locations(world: MKSMWorld) -> None:
         location_type=MKSMLocation,
         item_type=MKSMItem,
         show_in_spoiler=False
+    )
 
+    foundry.add_event(
+        location_name="Kano defeated event",
+        item_name="Kano defeated item",
+        location_type=MKSMLocation,
+        item_type=MKSMItem,
+        show_in_spoiler=False
     )
 
     dead_pool.add_event(
