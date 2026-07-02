@@ -38,7 +38,6 @@ if TYPE_CHECKING:
 async def game_watcher(ctx: MKSMContext) -> None:
     """Called once per tick by the client's main loop."""
     # TODO traps
-    # TODO turn fatality checks to fatalitysanity option
     # TODO check events for breaking statues before kitana
     # TODO check bruatlity room trigger after cutscene event from beating reptile ONLY
     # TODO check soul tomb destroyed events
@@ -402,6 +401,9 @@ def set_blood_bar(ctx: MKSMContext):
 
 
 async def check_finishing_moves(ctx: MKSMContext) -> None:
+    if not ctx.slot_data or not ctx.slot_data.get("fatalitysanity"):
+        return
+
     animation = ctx.game_interface.get_current_animation()
 
     if animation not in ANIMATIONS_TO_LOCATION_NAME:

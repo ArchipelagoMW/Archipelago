@@ -53,4 +53,5 @@ class MKSMWorld(World):
             "red_koin_amount": self.red_koin_amount,
             "red_koin_need_percent": self.options.red_koin_need_percent.value,
             "boss_goal": self.options.boss_goal.value,
+            "fatalitysanity": bool(self.options.fatalitysanity.value),
         }

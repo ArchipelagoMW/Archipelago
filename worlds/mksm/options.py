@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, Range
+from Options import Choice, PerGameCommonOptions, Range, DefaultOnToggle
 
 
 class Character(Choice):
@@ -54,8 +54,16 @@ class BossGoal(Choice):
     default = option_shao_kahn_only
 
 
+class Fatalitysanity(DefaultOnToggle):
+    """
+    If on, adds checks for performing all of your character's different fatalities, multalities and brutality
+    """
+    display_name = "Fatalitysanity"
+
+
 @dataclass
 class MKSMOptions(PerGameCommonOptions):
     character: Character
     red_koin_need_percent: RedKoinPercent
     boss_goal: BossGoal
+    fatalitysanity: Fatalitysanity

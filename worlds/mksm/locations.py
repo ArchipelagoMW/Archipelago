@@ -213,8 +213,10 @@ class MKSMLocation(Location):
 def create_all_locations(world: MKSMWorld) -> None:
     create_region_locations(world)
     create_purchase_locations(world)
-    create_finishing_moves_locations(world)
     create_event_locations(world)
+
+    if world.options.fatalitysanity:
+        create_finishing_moves_locations(world)
 
     world.get_location("GL: koin above the doorway").progress_type = LocationProgressType.EXCLUDED
     world.get_location("GL: koin above the breakable door").progress_type = LocationProgressType.EXCLUDED
