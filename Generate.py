@@ -40,6 +40,8 @@ def mystery_argparse(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
     parser.add_argument('--outputpath', default=settings.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
+    parser.add_argument('--allow_quantity', action="store_true", default=defaults.allow_quantity,
+                        help='Allows the use of the quantity option in yamls. Default is the set value in the host.yaml.')
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
     parser.add_argument('--log_level', default=defaults.loglevel, help='Sets log level')
@@ -87,7 +89,8 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
 
     seed = get_seed(args.seed)
 
-    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level, add_timestamp=args.log_time)
+    if __name__ == "__main__":
+        Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level, add_timestamp=args.log_time)
     random.seed(seed)
     seed_name = get_seed_name(random)
 
@@ -122,6 +125,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     player_id: int = 1
     player_files: dict[int, str] = {}
     player_errors: list[str] = []
+    allow_quantity = args.allow_quantity
     for file in os.scandir(args.player_files_path):
         fname = file.name
         if file.is_file() and not fname.startswith(".") and not fname.lower().endswith(".ini") and \
@@ -133,7 +137,14 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                     if yaml is None:
                         logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
                     else:
-                        weights_for_file.append(yaml)
+                        quantity = yaml.get("quantity", 1)
+                        if quantity <= 0:
+                            raise ValueError("A quantity of 0 or less is invalid. Please change it to at least 1.")
+                        if not allow_quantity and quantity > 1:
+                            raise ValueError("Quantity greater than 1 is deactivated by host settings.")
+
+                        for _ in range(quantity):
+                            weights_for_file.append(yaml)
                 weights_cache[fname] = tuple(weights_for_file)
 
             except Exception as e:
@@ -574,7 +585,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
         from worlds import failed_world_loads
-        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
+        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + list(failed_world_loads.keys()),
+                                        limit=1)[0]
         if picks[0] in failed_world_loads:
             raise Exception(f"No functional world found to handle game {ret.game}. "
                             f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "

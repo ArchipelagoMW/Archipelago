@@ -15,6 +15,7 @@ class MuseDashCollections:
         "Default Music",
         "Budget Is Burning: Nano Core",
         "Budget Is Burning Vol.1",
+        "Wuthering Waves Pioneer Podcast",
     ]
 
     MUSE_PLUS_DLC: str = "Muse Plus"
@@ -40,6 +41,7 @@ class MuseDashCollections:
         "Heart Message feat. Aoi Tokimori Secret",
         "Meow Rock feat. Chun Ge, Yuan Shen",
         "Stra Stella Secret",
+        "Musepyoi Legend",
     ]
 
     song_items = SONG_DATA
