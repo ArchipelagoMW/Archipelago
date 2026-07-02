@@ -26,7 +26,7 @@ from ..core import (
 from ..core.game_orchestrator import GameOrchestrator as GameWiring
 from ..core.states.game_state import GameState
 from ..locations import ALL_LOCATIONS
-from ..pcsx2_interface.pine import Pine
+from ..interface import Pine
 from .command_processor import RACCommandProcessor
 from .constants import EXPECTED_GAME_ID, GAME_NAME
 from .deathlink import DeathLinkMixin
@@ -117,6 +117,11 @@ class RACContext(
         # wasn't connected yet). Granting is gated on this being True so we
         # never grant against the wrong (zero) starting point.
         self._filler_checkpoint_synced = False
+        # Guards quick-select/armour restore-from-AP so it only applies once
+        # per reconnect — without this, set_notify echoing our own later
+        # push_save()/push_slots_save() writes back as SetReply would
+        # re-trigger restore_equipped_slots() on every in-game change.
+        self._ap_loadout_restored = False
         self._starting_bolts_granted = False
         self._death_count = 0
         self._weapon_array_base: int | None = None
@@ -160,7 +165,7 @@ class RACContext(
         """
         async with self._pine_lock:
             try:
-                fn()
+                self.pine.run_locked(fn)
             except Exception as exc:
                 # Not a full disconnect — GameWiring's own poll loop keeps running
                 # independently of pine_connected, so pickup detection isn't
@@ -231,6 +236,7 @@ class RACContext(
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
             self._already_hinted.clear()
+            self._ap_loadout_restored = False
             self._death_link_enabled = bool(self.slot_data.get("death_link", False))
             self._armour_set_checks_enabled = bool(self.slot_data.get("armour_set_checks", False))
             self._wiring.clank.set_mode(int(self.slot_data.get("clank_challenges", 1)))
@@ -254,6 +260,10 @@ class RACContext(
                 on_goal            = lambda: asyncio.create_task(self._send_goal_status()),
                 on_vendor_open     = lambda: asyncio.create_task(self._send_vendor_hints()),
                 on_vendor_close    = self._on_menu_close_for_armour_sets,
+                on_pause_close     = lambda: (
+                    self._wiring.quick_select.push_save(),
+                    self._wiring.armour.push_slots_save(),
+                ),
                 on_bonus_weapon_pickup = self._grant_random_bonus_item,
                 on_scripted_gadget_pickup = self._handle_scripted_gadget_pickup,
                 on_initial_load    = lambda: asyncio.create_task(self._send_playing_status()),
@@ -279,8 +289,9 @@ class RACContext(
                 # AP (re)connect — it's not something to persist and trust,
                 # it's something to always re-check and re-send on connect.
                 asyncio.create_task(self._send_map_page(self.current_planet))
-            # Wire save callbacks for quick select and armour slots so changes
-            # in-game are pushed to AP data storage immediately.
+            # Wire save callbacks for quick select and armour slots — pushed to
+            # AP data storage on pause-menu close (see on_pause_close above),
+            # not on every poll-detected change.
             self._wiring.quick_select.on_save = (
                 lambda data: asyncio.create_task(self._persist_quick_select(data))
             )
@@ -306,14 +317,16 @@ class RACContext(
             return
 
         if cmd in ("Retrieved", "SetReply") and self.slot is not None:
-            qs_key = self._qs_storage_key()
-            if qs_key in self.stored_data and isinstance(self.stored_data[qs_key], dict):
-                self._wiring.quick_select.load(self.stored_data[qs_key])
-            armour_key = self._armour_slots_storage_key()
-            if armour_key in self.stored_data and isinstance(self.stored_data[armour_key], dict):
-                self._wiring.armour.load_slots(self.stored_data[armour_key])
-                if self._wiring._initial_load_done:
-                    self._wiring.armour.restore_equipped_slots()
+            if not self._ap_loadout_restored:
+                qs_key = self._qs_storage_key()
+                if qs_key in self.stored_data and isinstance(self.stored_data[qs_key], dict):
+                    self._wiring.quick_select.load(self.stored_data[qs_key])
+                armour_key = self._armour_slots_storage_key()
+                if armour_key in self.stored_data and isinstance(self.stored_data[armour_key], dict):
+                    self._wiring.armour.load_slots(self.stored_data[armour_key])
+                    if self._wiring._initial_load_done:
+                        self._wiring.armour.restore_equipped_slots()
+                self._ap_loadout_restored = True
             if not self._filler_checkpoint_synced:
                 key = self._filler_applied_key()
                 if key in self.stored_data:

@@ -1,6 +1,6 @@
 from enum import IntFlag
 
-from ..pcsx2_interface.pine import Pine
+from ..interface import Pine
 from .address_maps import PLANET_ADDRESSES
 
 """

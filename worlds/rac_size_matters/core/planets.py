@@ -492,8 +492,14 @@ PLANET_UNLOCK_ORDER: list[str] = list(PlanetProgressStruct.PLANET_NAME_ORDER)
 _AUTO_UNLOCK_NAMES: frozenset[str] = frozenset({
     "POKITARU",
     "DREAMTIME",
-    "INSIDE_CLANK",
 })
+
+# Planets whose unlock byte the game manages entirely on its own — never
+# read, written, or forced by AP. Inside Clank's entrance naturally opens
+# once Dayni Moon's own in-game progress (Shrink Ray) allows it; forcing it
+# here used to fight that, either locking it back before it should open or
+# needlessly rewriting a byte the game already set correctly.
+_NATURAL_UNLOCK_NAMES: frozenset[str] = frozenset({"INSIDE_CLANK"})
 
 # Planets auto-unlocked in memory but gated behind different AP progress.
 # Maps auto-unlock planet → the planet whose AP status we check for vendor access.
@@ -550,21 +556,27 @@ class PlanetUnlockState(BaseState):
     def _enforce_desired(self) -> None:
         if not self._enforce_active:
             return
-        if any(self.unlocked[n] != self._desired[n] for n in PLANET_UNLOCK_ORDER):
-            self._write_desired()
-            for name in PLANET_UNLOCK_ORDER:
+        names = [n for n in PLANET_UNLOCK_ORDER if n not in _NATURAL_UNLOCK_NAMES]
+        if any(self.unlocked[n] != self._desired[n] for n in names):
+            self._write_desired(names)
+            for name in names:
                 self.unlocked[name] = self._desired[name]
 
-    def _write_desired(self) -> None:
-        instance = PlanetProgressStruct()
+    def _write_desired(self, names: list[str]) -> None:
+        # Per-field writes rather than one packed write_struct() call, so
+        # planets in _NATURAL_UNLOCK_NAMES (e.g. Inside Clank) are never
+        # touched at all — a single write_struct() would clobber their live
+        # game-managed byte with whatever this instance's default/desired
+        # value happened to be.
         for field, name in zip(PlanetProgressStruct.PLANET_ORDER, PLANET_UNLOCK_ORDER, strict=False):
+            if name not in names:
+                continue
             unlock_val = PlanetLockValue.UNLOCKED if self._desired[name] else PlanetLockValue.LOCKED
-            setattr(instance, field, unlock_val)
+            self.accessor.write_field(PlanetProgressStruct, field, unlock_val)
             pu = PLANET_UNLOCKS.get(name)
             if pu is not None:
                 state_val = max(int(unlock_val), pu.default_state)
                 self.accessor.write_raw(pu.state_addr, bytes([state_val]))
-        self.accessor.write_struct(instance)
 
     def set_unlocked_planets(self, planets: set[str]) -> None:
         self._infobot_planets = set(planets)

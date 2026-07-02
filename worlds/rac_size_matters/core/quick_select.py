@@ -41,6 +41,12 @@ class QuickSelectState(BaseState):
             if name in data:
                 self._snapshot[name] = int(data[name])
 
+    def push_save(self) -> None:
+        """Push the current snapshot to AP data storage. Called explicitly
+        (e.g. on pause-menu close) rather than on every poll-detected change,
+        since that would echo back via set_notify and re-trigger restores."""
+        self.on_save(dict(self._snapshot))
+
     # Starts frozen — polling only begins after zero() is called on first planet load.
     def _register_handlers(self) -> None:
         pass
@@ -76,7 +82,6 @@ class QuickSelectState(BaseState):
         instance = QuickSelectStruct.from_bytes(new_bytes)
         for name in QuickSelectStruct.SLOT_ORDER:
             self._snapshot[name] = getattr(instance, name)
-        self.on_save(dict(self._snapshot))
 
     def sync(self) -> None:
         instance = self.accessor.read_struct(QuickSelectStruct)

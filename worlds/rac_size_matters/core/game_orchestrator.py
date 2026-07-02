@@ -9,7 +9,7 @@ from typing import Any
 from CommonClient import logger
 
 from ..interface_orchestrator import Orchestrator
-from ..pcsx2_interface.pine import Pine
+from ..interface import Pine
 from .address_maps import (
     CURRENT_PLANET_ADDRESS,
     MENU_ADDR_BY_PLANET_ID,
@@ -396,14 +396,18 @@ class GameOrchestrator(APSyncMixin, PlanetLifecycleMixin, HooksMixin):
         while True:
             try:
                 async with self._pine_lock:
-                    if self._maybe_check_wrong_game():
+                    def _tick() -> bool:
+                        if self._maybe_check_wrong_game():
+                            return True
+                        self._orchestrator.poll()
+                        self._maybe_apply_quick_select()
+                        self._check_planet_menu_hotkey()
+                        self._check_weapon_vendor_view_toggle()
+                        self._check_debug_buttons()
+                        self._debug_print_transition_gate()
+                        return False
+                    if self._pine.run_locked(_tick):
                         return
-                    self._orchestrator.poll()
-                    self._maybe_apply_quick_select()
-                    self._check_planet_menu_hotkey()
-                    self._check_weapon_vendor_view_toggle()
-                    self._check_debug_buttons()
-                    self._debug_print_transition_gate()
             except Exception as exc:
                 logger.warning(f"[RAC] Poll error: {exc}")
             await asyncio.sleep(POLL_INTERVAL)

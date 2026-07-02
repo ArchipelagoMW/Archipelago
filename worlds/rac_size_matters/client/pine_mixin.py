@@ -64,9 +64,11 @@ class PineMixin:
         # in-line means a slow PCSX2 response only stalls this one coroutine,
         # exactly like it would stall RAC3's.
         async with self._pine_lock:
-            try:
+            def _connect_and_get_game_id() -> str:
                 self.pine.connect()
-                game_id = self.pine.get_game_id()
+                return self.pine.get_game_id()
+            try:
+                game_id = self.pine.run_locked(_connect_and_get_game_id)
             except Exception:
                 logger.warning("[RAC] Could not connect to PCSX2. Use /reconnect once the emulator is running.")
                 await self._teardown_pine_connection()
@@ -92,7 +94,7 @@ class PineMixin:
             )
             self.pine_connected = True
             try:
-                self._read_initial_state_sync()
+                self.pine.run_locked(self._read_initial_state_sync)
             except Exception as exc:
                 logger.warning(
                     f"[RAC] Initial state read failed: {exc}. Use /reconnect once the game is fully loaded."
@@ -129,7 +131,7 @@ class PineMixin:
     async def _read_initial_state(self) -> None:
         try:
             async with self._pine_lock:
-                self._read_initial_state_sync()
+                self.pine.run_locked(self._read_initial_state_sync)
         except Exception as exc:
             self._log(f"[RAC] Initial state read failed: {exc}", "warning")
 
@@ -162,7 +164,7 @@ class PineMixin:
     async def _poll_game(self) -> None:
         prev_planet = self.current_planet
         async with self._pine_lock:
-            checks = self._poll_game_sync()
+            checks = self.pine.run_locked(self._poll_game_sync)
         if self.current_planet != prev_planet:
             await self._send_map_page(self.current_planet)
         if checks:
