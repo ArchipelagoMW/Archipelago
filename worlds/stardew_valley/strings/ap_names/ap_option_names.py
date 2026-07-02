@@ -132,7 +132,7 @@ class DataRandomizationOptionName:
     shop_prices_across_vendors = "Shop Prices Across Vendors"
     shop_currencies = "Shop Currencies"
     shop_extra_materials = "Shop Extra Materials"
-    villager_birthday = "Surprise" # "Villager Birthdays"
+    villager_birthday = "Villager Birthdays"
     # villager_gift_preference = "Villager Gift Preferences"
     # universal_gift_preference = "Universal Gift Preferences"
     festival_season = "Festival Season"
@@ -148,4 +148,3 @@ class DataRandomizationOptionName:
     # crafting_result = "Crafting Recipe result"
     # machine_inputs = "Machine inputs"
     # machine_outputs = "Machine outputs"
-    surprise = "Surprise"
