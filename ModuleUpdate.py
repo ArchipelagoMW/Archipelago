@@ -38,7 +38,7 @@ class RequirementsSet(set):
 
 
 local_dir = os.path.dirname(__file__)
-requirements_files = RequirementsSet((os.path.join(local_dir, 'requirements.txt'),))
+requirements_files = RequirementsSet()
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):
@@ -48,6 +48,9 @@ if not update_ran:
                 req_file = os.path.join(entry.path, "requirements.txt")
                 if os.path.exists(req_file):
                     requirements_files.add(req_file)
+
+# add core reqs last to override any matching world reqs
+requirements_files.add(os.path.join(local_dir, 'requirements.txt'))
 
 
 def check_pip():
