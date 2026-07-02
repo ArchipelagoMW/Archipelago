@@ -1750,6 +1750,8 @@ class Spoiler:
         # in the second phase, we cull each sphere such that the game is still beatable,
         # reducing each range of influence to the bare minimum required inside it
         required_locations = {location for sphere in collection_spheres for location in sphere}
+        required_location_count = len(required_locations)
+        checked_locations_count = 0
         for num, sphere in reversed(tuple(enumerate(collection_spheres))):
             to_delete: Set[Location] = set()
             for location in sphere:
@@ -1762,6 +1764,9 @@ class Spoiler:
                 else:
                     # still required, got to keep it around
                     required_locations.add(location)
+                checked_locations_count += 1
+                if checked_locations_count % 1000 == 0 or checked_locations_count == required_location_count:
+                    logging.info("Culling progression tree %d/%d", checked_locations_count, required_location_count)
 
             # cull entries in spheres for spoiler walkthrough at end
             sphere -= to_delete
