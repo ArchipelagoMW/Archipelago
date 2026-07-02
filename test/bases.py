@@ -83,7 +83,7 @@ class WorldTestBase(unittest.TestCase):
 
     # methods that can be called within tests
     def collect_all_but(self, item_names: typing.Union[str, typing.Iterable[str]],
-                        state: typing.Optional[CollectionState] = None) -> None:
+                        state: typing.Optional[CollectionState] = None, prevent_sweep = False) -> None:
         """Collects all pre-placed items and items in the multiworld itempool except those provided"""
         if isinstance(item_names, str):
             item_names = (item_names,)
@@ -91,7 +91,7 @@ class WorldTestBase(unittest.TestCase):
             state = self.multiworld.state
         for item in self.multiworld.get_items():
             if item.name not in item_names:
-                state.collect(item)
+                state.collect(item, prevent_sweep)
 
     def get_item_by_name(self, item_name: str) -> Item:
         """Returns the first item found in placed items, or in the itempool with the matching name"""
@@ -106,19 +106,20 @@ class WorldTestBase(unittest.TestCase):
             item_names = (item_names,)
         return [item for item in self.multiworld.itempool if item.name in item_names]
 
-    def collect_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
+    def collect_by_name(self, item_names: typing.Union[str, typing.Iterable[str]],
+                        prevent_sweep = False) -> typing.List[Item]:
         """ collect all of the items in the item pool that have the given names """
         items = self.get_items_by_name(item_names)
-        self.collect(items)
+        self.collect(items, prevent_sweep)
         return items
 
-    def collect(self, items: typing.Union[Item, typing.Iterable[Item]]) -> None:
+    def collect(self, items: typing.Union[Item, typing.Iterable[Item]], prevent_sweep = False) -> None:
         """Collects the provided item(s) into state"""
         if isinstance(items, Item):
             items = (items,)
         for item in items:
-            self.multiworld.state.collect(item)
-    
+            self.multiworld.state.collect(item, prevent_sweep)
+
     def remove_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
         """Remove all of the items in the item pool with the given names from state"""
         items = self.get_items_by_name(item_names)
@@ -141,7 +142,7 @@ class WorldTestBase(unittest.TestCase):
     def can_reach_entrance(self, entrance: str) -> bool:
         """Determines if the current state can reach the provided entrance name"""
         return self.multiworld.state.can_reach(entrance, "Entrance", self.player)
-    
+
     def can_reach_region(self, region: str) -> bool:
         """Determines if the current state can reach the provided region name"""
         return self.multiworld.state.can_reach(region, "Region", self.player)
