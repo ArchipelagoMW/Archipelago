@@ -86,7 +86,7 @@ class RelationshipLogic(BaseLogic):
                                 for name, villager in self.content.villagers.items()))
 
     def people_exist(self, number_villagers: int = 1) -> StardewRule:
-        assert number_villagers >= 0, f"Can't have a negative hearts with any npc."
+        assert number_villagers >= 0, f"Can't have a negative number of people existing"
         if number_villagers == 0:
             return True_()
 
@@ -146,7 +146,15 @@ class RelationshipLogic(BaseLogic):
         return self.logic.true_
 
     @cache_self1
-    def can_meet(self, npc: str) -> StardewRule:
+    def can_meet(self, npc: str | int) -> StardewRule:
+        if isinstance(npc, int):
+            number_villagers = npc
+            assert number_villagers >= 0, f"Can't meet a negative number of people"
+            if number_villagers == 0:
+                return True_()
+
+            return self.logic.count(number_villagers, *(self.logic.relationship.can_meet(name) for name in self.content.villagers.keys()))
+
         villager = self.content.villagers.get(npc)
         if villager is None:
             return false_

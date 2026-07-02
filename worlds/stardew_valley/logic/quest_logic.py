@@ -151,16 +151,16 @@ class QuestLogic(BaseLogic):
         return self.logic.region.can_reach_all(*(Region.town, Region.forest)) & \
             self.logic.region.can_reach_any(*(Region.mines, Region.quarry, Region.skull_cavern_25)) & \
             self.logic.tool.has_tool(Tool.axe) & \
-            self.logic.tool.has_tool(Tool.pickaxe) & self.logic.relationship.exists(NPC.robin) & self.logic.relationship.exists(NPC.clint)
+            self.logic.tool.has_tool(Tool.pickaxe) & self.logic.relationship.can_meet(NPC.robin) & self.logic.relationship.can_meet(NPC.clint)
 
     def can_do_fishing_quest(self) -> StardewRule:
         return self.logic.region.can_reach_all(*(Region.town, Region.beach)) & \
-            self.logic.tool.has_fishing_rod(FishingRod.bamboo) & self.logic.relationship.exists(NPC.willy) & self.logic.relationship.exists(NPC.demetrius)
+            self.logic.tool.has_fishing_rod(FishingRod.bamboo) & self.logic.relationship.can_meet(NPC.willy) & self.logic.relationship.can_meet(NPC.demetrius)
 
     def can_do_slaying_quest(self) -> StardewRule:
         return self.logic.region.can_reach_all(*(Region.town, Region.mines_floor_10)) &\
-               self.logic.relationship.exists(NPC.lewis) & self.logic.relationship.exists(NPC.clint) &\
-               self.logic.relationship.exists(NPC.demetrius) & self.logic.relationship.exists(NPC.wizard)
+               self.logic.relationship.can_meet(NPC.lewis) & self.logic.relationship.can_meet(NPC.clint) &\
+               self.logic.relationship.can_meet(NPC.demetrius) & self.logic.relationship.can_meet(NPC.wizard)
 
     def can_drink_snake_milk(self) -> StardewRule:
         if self.options.quest_locations.has_story_quests() or SecretsanityOptionName.secret_notes in self.options.secretsanity:
