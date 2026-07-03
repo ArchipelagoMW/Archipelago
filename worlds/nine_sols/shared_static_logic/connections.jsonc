@@ -1706,9 +1706,9 @@
     {
         "from": "GoS (Entry) - Root Node", "to": "GoS (Entry) - Coffin",
         "requires": [ { "anyOf": [
-            { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Charged Strike" }, { "item": "Ledge Grab" }
+            { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Ledge Grab" }
         ] } ],
-        "medium_requires": [] // Swift Runner, or bow hover
+        "medium_requires": [] // Swift Runner, or bow hover, or CS-dash
     }, // parry hover works but is redundant with vanilla logic
     {
         "from": "GoS (Entry) - Root Node", "to": "GoS (Entry) - Greenhouse",
