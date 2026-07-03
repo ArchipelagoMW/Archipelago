@@ -17,7 +17,7 @@ gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 logger = logging.getLogger("Client")
 
 class OpenRCT2Context(CommonContext):
-    tags = {"DeathLink"}
+    tags = {"DeathLink", "TrapLink"}
     game = "OpenRCT2"
     items_handling = 0b111  # receive all items for /received
     want_slot_data = True 

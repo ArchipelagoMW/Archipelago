@@ -400,6 +400,11 @@ class openRCT2DeathLink(DeathLink):
         + "Fix that coaster quickly!\n This option can be enabled/disabled in game as well by typing !!toggledeathlink"
         + " in the chat tab of the unlock shop.")
 
+class openRCT2TrapLink(Toggle):
+    """When your friends recieve a trap, you get it too! Of course the same is true the other direction. Works with comatible games."""
+    display_name = "Trap Link"
+
+
 class SelectedVisibility(Choice):
     """Choose how much the unlock shop displays. 
 
@@ -908,6 +913,7 @@ openrct2_option_groups = [
         SpamTraps,
         LoanSharkTraps,
         FoodpoisoningTraps,
+        openRCT2TrapLink,
         AllRidesAndSceneryBase,
         AllRidesAndSceneryExpansion
     ]),
@@ -917,6 +923,7 @@ openrct2_option_groups = [
 class openRCT2Options(PerGameCommonOptions):
     #Game Options
     death_link: openRCT2DeathLink
+    trap_link: openRCT2TrapLink
 
     #Scenario Options
     scenario: SelectedScenario
