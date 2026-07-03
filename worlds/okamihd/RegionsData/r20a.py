@@ -47,7 +47,7 @@ locations = {
         "Catcall Tower - Freestanding chest near mermaid spring": LocData(container_check_id(MapIds.CATCALL_TOWER, 3)),
         "Catcall Tower - Freestanding chest on top of tower 2F": LocData(container_check_id(MapIds.CATCALL_TOWER, 0)),
         # Requires Feedbag fish - Maybe place one guaranteed in the tower ?
-        "Catcall Tower - Kabegami": LocData(brush_check_id(1),type=LocationType.CONSTELLATION),
+        "Catcall Tower - Kabegami": LocData(brush_check_id(30),type=LocationType.CONSTELLATION),
         "Catcall Tower - Freestanding chest on top of tower behind cat statue": LocData(container_check_id(MapIds.CATCALL_TOWER, 2)),
         "Catcall Tower - Secret chest after climbing the tower twice": LocData(container_check_id(MapIds.CATCALL_TOWER, 1)),
     }
