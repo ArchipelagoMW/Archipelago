@@ -52,10 +52,10 @@ locations = {
                                                                           BrushTechniques.GREENSPROUT_VINE],required_items_events=["Fire Tablet"]),
     },
     RegionNames.ONI_ISLAND_ENTRANCE_UPPER: {
-        "Oni Island - East chest on sea upper center": LocData(container_check_id(MapIds.ONI_ISLAND_EXT, 2),
+        "Oni Island - West chest on sea upper center": LocData(container_check_id(MapIds.ONI_ISLAND_EXT, 2),
                                                                required_brush_techniques=[
                                                                    BrushTechniques.GREENSPROUT_VINE]),
-        "Oni Island - West chest on sea upper center": LocData(container_check_id(MapIds.ONI_ISLAND_EXT, 3),
+        "Oni Island - East chest on sea upper center": LocData(container_check_id(MapIds.ONI_ISLAND_EXT, 3),
                                                                required_brush_techniques=[
                                                                    BrushTechniques.GREENSPROUT_VINE])
     }

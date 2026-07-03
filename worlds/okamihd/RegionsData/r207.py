@@ -109,7 +109,7 @@ locations = {
         )
     },
     RegionNames.IMPERIAL_PALACE_FLASK_ROOM: {
-        "Imperial Palace - Kasugami": LocData(brush_check_id(15), type=LocationType.CONSTELLATION,
+        "Imperial Palace - Kasugami": LocData(brush_check_id(16), type=LocationType.CONSTELLATION,
                                               required_brush_techniques=[BrushTechniques.GALESTORM],
                                               power_slash_level=1,progress_type=LocationProgressType.EXCLUDED)
     },

@@ -6,7 +6,8 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.WarpType import WarpType
-from ..Rules import long_swim_rule, n_ryoshima_guardian_sapling_rule, n_ryoshima_islands_dragon_rule
+from ..Rules import long_swim_rule, n_ryoshima_guardian_sapling_rule, n_ryoshima_islands_dragon_rule, \
+    night_time_check_rule
 from ..Types import ExitData, EventData, LocData, WarpData
 from ..Enums.RegionNames import RegionNames, MapIds
 
@@ -22,7 +23,7 @@ exits = {
     ],
     RegionNames.NORTHERN_RYOSHIMA_COAST: [
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_MANDATORY_FIGHT, one_way=True, loading_screen=False),
-        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER, one_way=True, loading_screen=False),
+        ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS_ENCOUNTER, one_way=True, loading_screen=False,required_items_events=["Northern Ryoshima Coast - Climb to Watcher's Cape"]),
         # Special rule to account for Orca
         ExitData(RegionNames.NORTHERN_RYOSHIMA_COAST_SAPLING, loading_screen=False,
                  special_rule=n_ryoshima_guardian_sapling_rule),
@@ -96,7 +97,7 @@ events = {
             mandatory_enemies=[OkamiEnemies.BLUE_CYCLOPS]),
     },
     RegionNames.NORTHERN_RYOSHIMA_COAST_WATCHERS:{
-        "Northern Ryoshima Coast - Open Whirlpool":EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
+        "Northern Ryoshima Coast - Open Whirlpool":EventData(required_brush_techniques=[BrushTechniques.GALESTORM],special_rule=night_time_check_rule),
         "Northern Ryoshima Coast - Open Bridge to Oni Island":EventData(required_items_events=["Himiko's Palace - Get Oni Island Location"])
     },
     RegionNames.NORTHERN_RYOSHIMA_COAST_WESTERN_ISLAND: {

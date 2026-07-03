@@ -108,9 +108,6 @@ locations = {
             container_check_id(MapIds.HEALED_RYOSHIMA, 61), type=LocationType.BURIED_CHEST),
     },
     RegionNames.RYOSHIMA_COAST_SEA: {
-        "Ryoshima Coast - Underwater Clam in dojo island bombable room": LocData(
-            container_check_id(MapIds.HEALED_RYOSHIMA, 2), type=LocationType.UNDERWATER_CHEST_SHALLOW,
-            cherry_bomb_level=1),
         "Ryoshima Coast - Underwater Clam southwest of ultimate origin mirror": LocData(
             container_check_id(MapIds.HEALED_RYOSHIMA, 57), type=LocationType.UNDERWATER_CHEST),
         "Ryoshima Coast - Eastmost Underwater Clam, south of city checkpoint warp": LocData(
@@ -156,7 +153,10 @@ locations = {
                                                                       required_items_events=[
                                                                           "Holy Eagle"]),
         "Ryoshima Coast - Freestanding chest on bottom of dojo island": LocData(
-            container_check_id(MapIds.HEALED_RYOSHIMA, 30))
+            container_check_id(MapIds.HEALED_RYOSHIMA, 30)),
+        "Ryoshima Coast - Underwater Clam in dojo island bombable room": LocData(
+            container_check_id(MapIds.HEALED_RYOSHIMA, 2), type=LocationType.UNDERWATER_CHEST_SHALLOW,
+            cherry_bomb_level=1),
     },
     RegionNames.RYOSHIMA_COAST_SHIP_TOP: {
         "Ryoshima Coast - Left Chest on top of Sunken Ship": LocData(container_check_id(MapIds.HEALED_RYOSHIMA, 20)),

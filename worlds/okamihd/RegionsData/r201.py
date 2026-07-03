@@ -75,7 +75,7 @@ locations = {
         "Sei-an City (Commoner's quarter) - Freestanding chest west of Ryoshima entrance": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 13)),
         "Sei-an City (Commoner's quarter) - Buried Chest behind Mr. Flower's house": LocData(
-            container_check_id(MapIds.SEIAN_COMMONERS, 17)),
+            container_check_id(MapIds.SEIAN_COMMONERS, 17),type=LocationType.BURIED_CHEST),
         "Sei-an City (Commoner's quarter) - Chest in canal northeast corner": LocData(
             container_check_id(MapIds.SEIAN_COMMONERS, 21)),
         "Sei-an City (Commoner's quarter) - Freestanding chest behind Aspiring Carpenter's house": LocData(

@@ -132,7 +132,7 @@ quest_items = {
     "Sewaprolo": ItemData(0x63, ItemClassification.progression),
     "Charcoal": ItemData(0x71, ItemClassification.progression),
     "Blinding Snow": ItemData(0x72, ItemClassification.progression),
-    "Treasure Box": ItemData(0x73, ItemClassification.progression),
+    "Treasure Box": ItemData(0x73, ItemClassification.progression,count_in_pool=0),
     "Herbal Medicine": ItemData(0x75, ItemClassification.progression),
     "Pinwheel": ItemData(0x76, ItemClassification.progression),
     "Marlin Rod": ItemData(0x77, ItemClassification.progression),

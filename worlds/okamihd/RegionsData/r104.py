@@ -78,6 +78,7 @@ events = {
     }
 }
 locations = {
+
     RegionNames.TSUTA_RUINS_1F_MAIN_PART: {
         "Tsuta Ruins - Treasure Bud in Entrance Hall Left Side": LocData(container_check_id(MapIds.TSUTA_RUINS, 13),type=LocationType.TREASURE_BUD),# spawn_idx=13, Exorcism Slip S
         "Tsuta Ruins - Freestanding Chest at Entrance": LocData(container_check_id(MapIds.TSUTA_RUINS, 17)),  # spawn_idx=17, Travel Guide: Enhancing Divinity
@@ -85,11 +86,13 @@ locations = {
         "Tsuta Ruins - Treasure Bud in Entrance Hall Right Side": LocData(container_check_id(MapIds.TSUTA_RUINS, 9), type=LocationType.TREASURE_BUD),  # spawn_idx=9, Steel Soul Sake
         "Tsuta Ruins - Chest in Entrance Hall near right side door": LocData(container_check_id(MapIds.TSUTA_RUINS, 26)),  # spawn_idx=26, Vase
         "Tsuta Ruins - Treasure Bud on 1F rightside path before ledge": LocData(container_check_id(MapIds.TSUTA_RUINS, 0), type=LocationType.TREASURE_BUD),  # spawn_idx=12, Steel Fist Sake
+        #FIXME: requires long swim
         "Tsuta Ruins - Treasure Bud near glass ball": LocData(container_check_id(MapIds.TSUTA_RUINS, 12), type=LocationType.TREASURE_BUD),  # spawn_idx=0, Incense Burner
         "Tsuta Ruins - Stray bead chest on 1F rightside path upper part": LocData(container_check_id(MapIds.TSUTA_RUINS, 15), required_brush_techniques=[
             BrushTechniques.GREENSPROUT_VINE], type=LocationType.TREASURE_BUD),  # spawn_idx=15, Stray Bead
     },
     RegionNames.TSUTA_RUINS_MUSHROOMS: {
+        # FIXME: requires long swim
         "Tsuta Ruins - Treasure bud behind logs in Mushrooms room": LocData(container_check_id(MapIds.TSUTA_RUINS, 2), power_slash_level=1,
                                                                             type=LocationType.TREASURE_BUD),  # spawn_idx=2, Vengeance Slip
     },

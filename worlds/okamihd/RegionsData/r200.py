@@ -75,7 +75,7 @@ events = {
     },
     RegionNames.SEIAN_CITY_HIMIKO: {
         "Sei-an City (Aristocratic Quarter) - Mourn Himiko": EventData(
-            required_brush_techniques=[BrushTechniques.WATERSPOUT])
+            required_brush_techniques=[BrushTechniques.WATERSPOUT],required_items_events=["Oni Island - Defeat Ninetails"])
     }
 }
 locations = {

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from BaseClasses import LocationProgressType
 from ..CheckIds import container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -23,7 +24,7 @@ events = {
 locations = {
     RegionNames.CALCIFIED_CAVERN: {
         "Calcified Cavern - Freestanding item": LocData(container_check_id(MapIds.CALCIFIED_CAVERN, 0),
-                                                        type=LocationType.FREESTANDING_ITEM),
+                                                        type=LocationType.FREESTANDING_ITEM,progress_type=LocationProgressType.EXCLUDED),
 
         "Calcified Cavern - Chest after devil gate": LocData(container_check_id(MapIds.CALCIFIED_CAVERN, 1), required_items_events=["Calcified Cavern - Defeat devil gate"]),
         "Calcified Cavern - Left Side chest": LocData(container_check_id(MapIds.CALCIFIED_CAVERN, 2)),
