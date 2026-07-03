@@ -62,6 +62,7 @@ async def game_watcher(ctx: MKSMContext) -> None:
     set_health_upgrades(ctx)
     set_blood_bar(ctx)
     update_koin_counter(ctx)
+    force_ui(ctx)
     update_message(ctx)
 
     await check_death(ctx)
@@ -83,10 +84,8 @@ async def game_watcher(ctx: MKSMContext) -> None:
 def clear_events(ctx: MKSMContext):
     if ctx.game_state != GameState.GAMEPLAY:
         if "EVENT_ARRAY" not in ctx.stored_data or ctx.stored_data["EVENT_ARRAY"] is None:
-            print("setting default")
             server_array = DEFAULT_EVENT_ARRAY
         else:
-            print("setting from server")
             server_array = list(ctx.stored_data["EVENT_ARRAY"])
 
         # a still-gated room's event can be sitting in live memory without having made it
@@ -516,3 +515,7 @@ def update_message(ctx: MKSMContext) -> None:
     else:
         if time.time() - 5 > ctx.print_start_time:
             ctx.currently_printing = False
+
+
+def force_ui(ctx: MKSMContext):
+    ctx.game_interface.force_ui()

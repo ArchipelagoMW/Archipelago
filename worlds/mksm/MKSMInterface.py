@@ -348,3 +348,8 @@ class MKSMInterface(GameInterface):
         fmt_arr = bytearray(6)
         fmt_arr[0:len(fmt)] = fmt
         self._write_bytes(exp_fmt_addr, bytes(fmt_arr))
+
+    def force_ui(self):
+        inst_addr = self.addresses.get("FORCE_UI_INST")
+
+        self._write32(inst_addr, 0)
