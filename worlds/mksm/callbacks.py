@@ -8,6 +8,7 @@ Item granting / other location types come later.
 
 from __future__ import annotations
 
+import time
 from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
@@ -61,6 +62,7 @@ async def game_watcher(ctx: MKSMContext) -> None:
     set_health_upgrades(ctx)
     set_blood_bar(ctx)
     update_koin_counter(ctx)
+    update_message(ctx)
 
     await check_death(ctx)
     await check_move_upgrades(ctx)
@@ -79,11 +81,13 @@ async def game_watcher(ctx: MKSMContext) -> None:
 
 
 def clear_events(ctx: MKSMContext):
-    if not ctx.game_state == GameState.GAMEPLAY:
-        if "EVENT_ARRAY" not in ctx.stored_data:
-            return  # haven't heard back from the server yet - don't guess
-
-        server_array = list(ctx.stored_data["EVENT_ARRAY"] or DEFAULT_EVENT_ARRAY)
+    if ctx.game_state != GameState.GAMEPLAY:
+        if "EVENT_ARRAY" not in ctx.stored_data or ctx.stored_data["EVENT_ARRAY"] is None:
+            print("setting default")
+            server_array = DEFAULT_EVENT_ARRAY
+        else:
+            print("setting from server")
+            server_array = list(ctx.stored_data["EVENT_ARRAY"])
 
         # a still-gated room's event can be sitting in live memory without having made it
         # into the server's array yet (update_events_in_server withholds it until its gate
@@ -99,7 +103,7 @@ def clear_events(ctx: MKSMContext):
         ]
 
         restored = server_array + [byte for event in pending_gated_events for byte in event]
-        ctx.game_interface.clear_event_log(bytes(restored))
+        ctx.game_interface.clear_event_log(bytes(server_array))
 
 
 def add_xc1_events_after_bosses(ctx: MKSMContext) -> None:
@@ -494,3 +498,21 @@ async def set_xp_items(ctx: MKSMContext) -> None:
                               }
                           ],
                           }])
+
+
+def update_message(ctx: MKSMContext) -> None:
+    if ctx.is_paused:
+        ctx.game_interface.set_default_exp_string()
+        return
+
+    if not ctx.currently_printing:
+        if len(ctx.message_queue) > 0:
+            new_msg = ctx.message_queue.popleft()
+            ctx.print_start_time = time.time()
+            ctx.currently_printing = True
+            ctx.game_interface.set_message(new_msg)
+        else:
+            ctx.game_interface.set_default_exp_string()
+    else:
+        if time.time() - 5 > ctx.print_start_time:
+            ctx.currently_printing = False

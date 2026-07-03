@@ -3,7 +3,7 @@ from logging import Logger
 from typing import Optional, Dict
 
 from .consts import ADDRESSES, GameState, CharacterPurchaseAmounts, CHARACTER_OPTION_TO_VALUE_IN_GAME, YES_DEBUG, \
-    NO_DEBUG
+    NO_DEBUG, DEFAULT_EXP_STRING, DEFAULT_EXP_FMT, MESSAGE_EXP_FMT
 
 from .pcsx2_interface.pine import Pine
 
@@ -176,7 +176,9 @@ class MKSMInterface(GameInterface):
 
         # total_bytes = total_events * 8
         # self._write_bytes(self.addresses.get("EVENT_LOG_ARRAY"), bytes([0] * total_bytes))
-        self._write_bytes(self.addresses.get("EVENT_LOG_ARRAY"), event_data)
+        buffer = bytearray(16000)
+        buffer[0:len(event_data)] = event_data
+        self._write_bytes(self.addresses.get("EVENT_LOG_ARRAY"), buffer)
         self._write32(self.addresses.get("TOTAL_EVENTS"), len(event_data) // 8)
 
     def get_event_block(self) -> bytes:
@@ -328,3 +330,21 @@ class MKSMInterface(GameInterface):
     def is_dead(self):
         cur_health_addr = self.addresses.get("CUR_HEALTH")
         return self._read32(cur_health_addr) <= 0
+
+    def set_default_exp_string(self):
+        self.set_message(DEFAULT_EXP_STRING, default_fmt=True)
+
+    def set_message(self, message: str, default_fmt: bool = False):
+        message = message.encode("ASCII", errors="ignore")
+        fmt = DEFAULT_EXP_FMT if default_fmt else MESSAGE_EXP_FMT
+        fmt = fmt.encode("ASCII", errors="ignore")
+
+        exp_str_addr = self.addresses.get("EXP_STRING")
+        exp_fmt_addr = self.addresses.get("EXP_FMT")
+        str_arr = bytearray(128)
+        str_arr[0:len(message)] = message
+        self._write_bytes(exp_str_addr, bytes(str_arr))
+
+        fmt_arr = bytearray(6)
+        fmt_arr[0:len(fmt)] = fmt
+        self._write_bytes(exp_fmt_addr, bytes(fmt_arr))

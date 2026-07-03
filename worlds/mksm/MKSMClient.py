@@ -12,9 +12,11 @@ and other location categories come later.
 from __future__ import annotations
 
 import asyncio
+import copy
 import logging
 import sys
 import typing
+from collections import deque
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, get_base_parser, handle_url_arg, logger, \
@@ -174,6 +176,9 @@ class MKSMContext(CommonContext):
     pending_server_address: str | None
     emulator_settled: bool
     was_dead: bool
+    message_queue: deque
+    currently_printing: bool = False
+    print_start_time: float
 
     def __init__(self, server_address: str | None, password: str | None) -> None:
         super().__init__(server_address, password)
@@ -187,6 +192,7 @@ class MKSMContext(CommonContext):
         self.pending_server_address = None
         self.emulator_settled = False
         self.was_dead = False
+        self.message_queue = deque()
 
     def ready_to_connect(self) -> bool:
         return self.emulator_settled and self.game_interface.get_game_state() == GameState.MAIN_MENU
@@ -212,6 +218,12 @@ class MKSMContext(CommonContext):
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         super().on_deathlink(data)
         self.game_interface.kill_player()
+
+    def on_print_json(self, args: dict):
+        super().on_print_json(args)
+        self.message_queue.append(
+            self.rawjsontotextparser(copy.deepcopy(args["data"]))
+        )
 
 
 async def game_watcher(ctx: MKSMContext) -> None:

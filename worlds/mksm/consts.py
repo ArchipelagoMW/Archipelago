@@ -197,6 +197,10 @@ ADDRESSES = {
         "CURRENT_CHARACTER": 0xc2974c,
 
         "DEBUG_MENU": (0x4c6fe0, 0x4c6fe4),
+
+        "FORCE_UI_INST": 0x183eb8,
+        "EXP_STRING": 0xc48380,
+        "EXP_FMT": 0x5770d0
     }
 }
 
@@ -364,3 +368,7 @@ CHARACTER_OPTION_TO_VALUE_IN_GAME = {
 
 NO_DEBUG = (0x000001a5, 0x001aa630)
 YES_DEBUG = (0x0000019f, 0x001aae80)
+
+DEFAULT_EXP_STRING = "Exp: "
+DEFAULT_EXP_FMT = "%s %d"
+MESSAGE_EXP_FMT = "%s"
