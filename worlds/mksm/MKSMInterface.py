@@ -342,6 +342,7 @@ class MKSMInterface(GameInterface):
         exp_str_addr = self.addresses.get("EXP_STRING")
         exp_fmt_addr = self.addresses.get("EXP_FMT")
         str_arr = bytearray(128)
+        message = message[:128]
         str_arr[0:len(message)] = message
         self._write_bytes(exp_str_addr, bytes(str_arr))
 
