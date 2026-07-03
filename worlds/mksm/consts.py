@@ -268,6 +268,15 @@ DEFAULT_EVENT_ARRAY = [
     *_make_event(0x8e, 0x42),
     *_make_event(0x8e, 0x41),
     *_make_event(0x8e, 0x26),
+
+    # # monastery fist of ruin statues
+    # *_make_event(0xc2, 0x48),
+    # *_make_event(0xc2, 0x27),
+    # *_make_event(0xc2, 0x29),
+    # *_make_event(0xc2, 0x2b),
+    # *_make_event(0xc2, 0x2c),
+    # *_make_event(0xc2, 0x2f),
+    # *_make_event(0xc2, 0x2e),
 ]
 
 # the 5 main boss fights - in a real playthrough, room 0xc1's events (see XC1_EVENTS below)

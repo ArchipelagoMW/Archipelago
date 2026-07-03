@@ -38,12 +38,13 @@ if TYPE_CHECKING:
 async def game_watcher(ctx: MKSMContext) -> None:
     """Called once per tick by the client's main loop."""
     # TODO traps
-    # TODO check events for breaking statues before kitana
+    # TODO check events for breaking statues before kitana, need to inject them only after entering boss room after
     # TODO check bruatlity room trigger after cutscene event from beating reptile ONLY
     # TODO check soul tomb destroyed events
     # TODO check portal start area open world style
     # TODO open co op doors from start
     # TODO smoke missions
+    # TODO change character name to archipelago log, force UI on? toasy? code cave?
 
     if ctx.game_interface.current_game is None:
         return  # not connected to the emulator/game yet
