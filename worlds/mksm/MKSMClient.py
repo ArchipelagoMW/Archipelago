@@ -101,17 +101,18 @@ class MKSMCommandProcessor(ClientCommandProcessor):
         softlocks if exited at wrong times, use only on main menu"""
         ctx: MKSMContext = self.ctx
         if ctx.game_state != GameState.MAIN_MENU:
-            print("only use /removeevents on main menu")
+            self.output("only use /removeevents on main menu")
             return True
 
         current_events = ctx.stored_data.get("EVENT_ARRAY")
 
         if not current_events or current_events == DEFAULT_EVENT_ARRAY:
-            print("no event to remove")
+            self.output("no event to remove")
             return True
 
         events = [tuple(current_events[i:i + 8]) for i in range(0, len(current_events), 8)]
         last_room = events[-1][0]
+        self.output(f"Removing events from last room: {hex(last_room)}")
         remaining_events = [event for event in events if event[0] != last_room]
         new_array = [byte for event in remaining_events for byte in event]
 

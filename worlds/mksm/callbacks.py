@@ -44,6 +44,7 @@ async def game_watcher(ctx: MKSMContext) -> None:
     # TODO check soul tomb destroyed events
     # TODO check portal start area open world style
     # TODO open co op doors from start
+    # TODO change purchase location tiers to be by price, and revert combos to be separate
     # TODO smoke missions
 
     if ctx.game_interface.current_game is None:

@@ -272,6 +272,7 @@ DEFAULT_EVENT_ARRAY = [
     *_make_event(0x8e, 0x42),
     *_make_event(0x8e, 0x41),
     *_make_event(0x8e, 0x26),
+    *_make_event(0x8f, 0x21), # TODO test this, brutality room red koin
 
     # # monastery fist of ruin statues
     # *_make_event(0xc2, 0x48),
