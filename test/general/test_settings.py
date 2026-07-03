@@ -5,7 +5,7 @@ from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestSettings(TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_settings_can_update(self) -> None:
         """

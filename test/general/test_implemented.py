@@ -8,7 +8,7 @@ from . import setup_solo_multiworld
 
 
 class TestImplemented(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_completion_condition(self):
         """Ensure a completion condition is set that has requirements."""

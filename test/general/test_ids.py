@@ -7,7 +7,7 @@ from . import setup_solo_multiworld
 
 
 class TestIDs(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_range_items(self):
         """There are Javascript clients, which are limited to Number.MAX_SAFE_INTEGER due to 64bit float precision."""

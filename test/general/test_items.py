@@ -11,7 +11,7 @@ from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_create_item(self):
         """Test that a world can successfully create all items in its datapackage"""

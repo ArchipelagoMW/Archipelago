@@ -8,7 +8,7 @@ from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestOptions(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_options_have_doc_string(self):
         """Test that submitted options have their own specified docstring"""

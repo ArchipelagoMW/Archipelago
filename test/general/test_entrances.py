@@ -4,7 +4,7 @@ from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_entrance_connection_steps(self):
         """Tests that Entrances are connected and not changed after connect_entrances."""

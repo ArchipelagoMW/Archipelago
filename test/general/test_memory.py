@@ -6,7 +6,7 @@ from . import setup_solo_multiworld
 
 
 class TestWorldMemory(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_leak(self) -> None:
         """Tests that worlds don't leak references to MultiWorld or themselves with default options."""

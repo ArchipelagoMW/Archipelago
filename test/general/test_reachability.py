@@ -6,7 +6,7 @@ from . import setup_solo_multiworld, gen_steps
 
 
 class TestBase(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
     gen_steps = gen_steps
 
     default_settings_unreachable_regions = {

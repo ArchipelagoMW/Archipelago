@@ -6,7 +6,7 @@ from Options import OptionCounter, NamedRange, NumericOption, OptionList, Option
 
 
 class TestOptionPresets(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_option_presets_have_valid_options(self):
         """Test that all predefined option presets are valid options."""

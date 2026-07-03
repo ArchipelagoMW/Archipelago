@@ -5,7 +5,7 @@ from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_create_duplicate_locations(self):
         """Tests that no two Locations share a name or ID."""

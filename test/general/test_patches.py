@@ -4,7 +4,7 @@ from worlds.Files import AutoPatchRegister
 
 
 class TestPatches(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_patch_name_matches_game(self) -> None:
         for game_name in AutoPatchRegister.patch_types:

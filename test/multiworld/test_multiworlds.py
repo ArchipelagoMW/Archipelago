@@ -67,6 +67,7 @@ class TestAllGamesMultiworld(MultiworldTestBase):
 
 @classvar_matrix(game=AutoWorldRegister.world_types.keys())
 class TestTwoPlayerMulti(MultiworldTestBase):
+    world_relevant = True
     game: ClassVar[str]
 
     def test_two_player_single_game_fills(self) -> None:

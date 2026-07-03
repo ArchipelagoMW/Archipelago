@@ -3,7 +3,7 @@ from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestNames(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_item_names_format(self) -> None:
         """Item names must not be all numeric in order to differentiate between ID and name in !hint"""

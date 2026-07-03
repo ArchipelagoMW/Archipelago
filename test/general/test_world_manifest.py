@@ -43,7 +43,7 @@ def get_source_world_manifest_path(game: str) -> Path | None:
 # TODO: remove the filter once manifests are mandatory.
 @classvar_matrix(game=filter(get_source_world_manifest_path, source_world_names))
 class TestWorldManifest(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
     game: ClassVar[str]
     manifest: ClassVar[dict[str, Any]]
 

@@ -4,7 +4,7 @@ from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestWebDescriptions(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_item_descriptions_have_valid_names(self) -> None:
         """Ensure all item descriptions match an item name or item group name"""

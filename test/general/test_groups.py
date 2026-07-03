@@ -4,7 +4,7 @@ from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestNameGroups(TestCase):
-    world_iterating = True
+    world_relevant = True
 
     def test_item_name_groups_not_empty(self) -> None:
         """

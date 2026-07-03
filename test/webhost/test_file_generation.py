@@ -7,7 +7,7 @@ import WebHost
 
 
 class TestFileGeneration(unittest.TestCase):
-    world_iterating = True
+    world_relevant = True
 
     @classmethod
     def setUpClass(cls) -> None:

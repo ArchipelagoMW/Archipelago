@@ -29,7 +29,7 @@ class InvalidItemError(KeyError):
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
-    # worlds the world-iterating tests cover; scoped to AP_TEST_WORLDS by worlds/__init__
+    # worlds under test; scoped to AP_TEST_WORLDS by worlds/__init__
     testable_worlds: Dict[str, Type[World]] = world_types
     __file__: str
     zip_path: Optional[str]
