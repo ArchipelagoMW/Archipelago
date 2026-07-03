@@ -38,7 +38,8 @@ class RequirementsSet(set):
 
 
 local_dir = os.path.dirname(__file__)
-requirements_files = RequirementsSet((os.path.join(local_dir, 'requirements.txt'),))
+core_constraints = os.path.join(local_dir, 'requirements.txt')
+requirements_files = RequirementsSet((core_constraints,))
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):
@@ -69,7 +70,7 @@ def confirm(msg: str):
 def update_command():
     check_pip()
     for file in requirements_files:
-        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--upgrade"])
+        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "-c", core_constraints, "--upgrade"])
 
 
 def install_pkg_resources(yes=False):
