@@ -62,7 +62,6 @@ locations = {
             container_check_id(MapIds.INSIDE_THE_DRAGON, 6),
             special_rule=HasAny(BrushTechniques.WATERSPOUT, "Holy Eagle")),
 
-        # FIXME: Check if those really need digging champ
         "Inside the dragon - Buried Clam near entrance west of river": LocData(
             container_check_id(MapIds.INSIDE_THE_DRAGON, 9), type=LocationType.STONE_BURIED_CHEST),
         "Inside the dragon - Buried Clam before small bridge": LocData(

@@ -18,7 +18,6 @@ events = {
     RegionNames.NORTHERN_RYOSHIMA_COAST_BANDIT_SPIDER_CAVE: {
         "Northern Ryoshima Coast - Defeat Bandit Spider in cave": EventData(
             mandatory_enemies=[OkamiEnemies.BANDIT_SPIDER]),
-        # FIXME: Add enemies, requires nintails defeated to appear.
         # Headless Guardian, Bell Guardian
         "Northern Ryoshima Coast - Clear 10 Devil Gates in cave": EventData(
             mandatory_enemies=[OkamiEnemies.HEADLESS_GUARDIAN, OkamiEnemies.BELL_GUARDIAN, OkamiEnemies.THUNDER_EAR,
