@@ -9,7 +9,6 @@ Currently, the items randomized are:
 - All Brush Powers and Upgrades
 - All Divine Instruments, excepted Divine Retribution *(you always start with it)*.
 - Tools and Treasures
-- Stray Beads, although they don't have any use yet.
 
 - Story and quest items are Work In Progress.
 - Dungeons Keys and Praise related upgrades are **not** included yet.*(The first Astral pouch is a static Sphere 0 item
@@ -41,12 +40,9 @@ Currently, the items randomized are:
 - Some warps may allow you to access the healed version of a map without blooming the guardian tree, Logic should
   account for that. You'll find a list of the possible ways to do so below.
 - Vista of the gods will always be found in Kamiki Village. You can also get it from its vanilla source.
-- Tsuta Ruins Key will always be found in Agata Forest. You can also get it from its vanilla source. Unfortunately just
-  having the key doesn't open the dungeon yet.
 - Mask will always be found in Calcified Cavern (Except in the freestanding item spot, it breaks the cutscene.)
 - Moon Cave ingredients will be randomized in Moon Cave. (You can bypass this with the settings.)
-- The city checkpoint drawbridge can be opened by setting the arrow on fire. Logic will expect you to have inferno +
-  either Solar flare or the moegami statue lit by beating orochi.
+
 
 ## Healed areas available without blooming their guardian sapling:
 
@@ -63,3 +59,48 @@ Currently, the items randomized are:
 
 - by exiting Kusa Village, Sasa Sanctuary or City Checkpoint (All 3 can be mist warped to)
 
+## How do I enter X?
+
+### Tsuta Ruins
+
+- You'll find the Tsuta ruins key in Agata Forest. Unfortunatly it's not enouth to open the door. You'll need to do tha
+  vanilla way and fish for the key with Kokari.
+
+### Gale Shrine
+
+- Vanilla after getting all orbs, any other setting isn't implemented and won't work.
+
+### Moon cave
+
+- Vanilla after defeating Crimson Helm, any other setting isn't implemented and won't work.
+
+### Ryoshima Coast
+
+- You can open the drawbridge with solar flare or the statue and inferno by lighting the arrow. Beat Orochi in Moon Cave
+  to light the statue. Another way is warping to Cursed Ryoshima with Mist Warp.
+
+### Sunken Ship
+
+- Vanilla after giving prayer slips to Rao and jumping to lunar turret and using crescent
+
+### Imperial Palace (Issun size)
+
+- [Not tested yet]. You need to have Lucky Mallet and enter the treasure room in Sunken ship to get the escape the water
+  dargon cutscene.
+
+### Himiko's Palace
+
+- Vanilla after beating blight
+
+### N. Ryoshima Coast
+
+- meet Himiko for the first time
+
+### Inside the Water Dragon
+
+- Vanilla, talk with Otohime to gain access
+
+### Oni Island
+
+- Vanilla: After doing inside the dragon, go see Otohime, then run to Ankoku Temple to open the shortcut, In Himiko's
+  Chambers, beat the evil Rao, the nrun to watcher's cape.
