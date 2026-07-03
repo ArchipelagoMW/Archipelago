@@ -61,6 +61,7 @@ class RegionNames(StrEnum):
 
     ## TSUTA RUINS
     TSUTA_RUINS_1F_MAIN_PART = "Tsuta Ruins (1F - Main Part)"
+    TUSTA_RUINS_1F_AFTER_WATERFALL= "Tsuta Ruins (1F - After Waterfall )"
     TSUTA_RUINS_MUSHROOMS = "Tsuta Ruins (Mushrooms)"
     TSUTA_RUINS_LEFT_SIDE = "Tsuta Ruins (Left Side)"
     TSUTA_RUINS_DEVIL_GATES = "Tsuta Ruins (Devil Gates)"
