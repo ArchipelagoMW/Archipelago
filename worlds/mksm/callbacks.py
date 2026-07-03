@@ -45,7 +45,6 @@ async def game_watcher(ctx: MKSMContext) -> None:
     # TODO check portal start area open world style
     # TODO open co op doors from start
     # TODO smoke missions
-    # TODO change character name to archipelago log, force UI on? toasy? code cave?
 
     if ctx.game_interface.current_game is None:
         return  # not connected to the emulator/game yet
