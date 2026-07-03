@@ -118,7 +118,7 @@ equips = {
 quest_items = {
     # Quest Items
     "Canine Tracker": ItemData(0x42, ItemClassification.progression,count_in_pool=0),
-    "Lucky Mallet": ItemData(0x43, ItemClassification.progression,count_in_pool=0),
+    "Lucky Mallet": ItemData(0x43, ItemClassification.progression),
     "Border Key": ItemData(0x44, ItemClassification.progression,count_in_pool=0),
     "Dragon Orb": ItemData(0x45, ItemClassification.progression,count_in_pool=0),
     "Fox Rods": ItemData(0x46, ItemClassification.progression,count_in_pool=0),

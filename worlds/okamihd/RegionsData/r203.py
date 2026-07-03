@@ -54,7 +54,7 @@ locations = {
         "Dragon Palace -Chest on Pillars": LocData(container_check_id(MapIds.DRAGON_PALACE, 2),
                                                    required_brush_techniques=[BrushTechniques.REJUVENATION],
                                                    required_items_events=["Holy Eagle"]),
-        "Dragon Palace - Nuregami (Fountain)": LocData(brush_check_id(16), required_items_events=[
+        "Dragon Palace - Nuregami (Fountain)": LocData(brush_check_id(15), required_items_events=[
             "Dragon Palace - Restore the soothing spring"]),
         # FIXME: This chest doesn't have a container id !
         "Dragon Palace - Chest after fountain": LocData(1001, required_items_events=[
