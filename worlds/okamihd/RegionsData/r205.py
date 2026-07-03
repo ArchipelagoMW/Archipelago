@@ -104,7 +104,8 @@ events = {
             required_brush_techniques=[BrushTechniques.WATERSPOUT]),
         "Sunken Ship - Open lockjaw": EventData(required_items_events=["Sunken Ship - use Cannon in southeast room"]),
         "Sunken Ship - Open final cursed door": EventData(
-            required_items_events=["Sunken Ship - Open lockjaw", "Sunken Ship - Rao climbs on Ama's back"])
+            required_items_events=["Sunken Ship - Open lockjaw", "Sunken Ship - Rao climbs on Ama's back"]),
+        "Sunken Ship - Get Chased by water Dragon": EventData(required_items_events=["Sunken Ship - Open lockjaw","Lucky Mallet"])
     },
     RegionNames.SUNKEN_SHIP_HANDS_HIGH: {
         "Sunken Ship - Set barrel on Scales": EventData(power_slash_level=1)

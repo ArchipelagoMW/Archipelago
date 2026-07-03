@@ -85,7 +85,7 @@ Currently, the items randomized are:
 
 ### Imperial Palace (Issun size)
 
-- [Not tested yet]. You need to have Lucky Mallet and enter the treasure room in Sunken ship to get the escape the water
+- You need to have Lucky Mallet and enter the treasure room in Sunken ship to get the escape the water
   dargon cutscene.
 
 ### Himiko's Palace

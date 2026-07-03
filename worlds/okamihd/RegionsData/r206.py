@@ -22,7 +22,7 @@ events = {
         "Imperial Palace - Prayer Slips": EventData(event_item_name="Prayer Slips"),
         # biteable items check - Can we access their vanilla spawn point ?
         "Imperial Palace - Grab Prayer Slips": EventData(required_items_events=["Prayer Slips"]),
-        "Imperial Palace - Become Smol": EventData(required_items_events=["Lucky Mallet"]),
+        "Imperial Palace - Become Smol": EventData(required_items_events=["Sunken Ship - Get Chased by water Dragon"]),
     }
 
 }
