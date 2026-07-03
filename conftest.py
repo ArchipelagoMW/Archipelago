@@ -14,7 +14,7 @@ def pytest_ignore_collect(collection_path, config):
     if not env:
         return None
     selected = {name.strip() for name in env.split(",") if name.strip()}
-    parts = str(collection_path).replace("\\", "/").split("/")
+    parts = collection_path.parts
     if "worlds" in parts:
         i = parts.index("worlds")
         if i + 1 < len(parts) and parts[i + 1] not in selected:
@@ -23,9 +23,9 @@ def pytest_ignore_collect(collection_path, config):
 
 
 def pytest_collection_modifyitems(items):
-    # mark for `-m world`: classes with `world_relevant = True`, plus anything under worlds/<world>/test
+    # mark for `-m world`: classes with `world_relevant = True`, plus anything under worlds/ (nodeid is
+    # always "/"-separated and relative to rootdir)
     for item in items:
-        parts = item.nodeid.replace("\\", "/").split("/")
         if getattr(getattr(item, "cls", None), "world_relevant", False) or \
-                (parts[:1] == ["worlds"] and "test" in parts):
+                item.nodeid.split("/", 1)[0] == "worlds":
             item.add_marker("world")
