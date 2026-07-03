@@ -351,11 +351,13 @@ class RandomizeSkillTree(Toggle):
     at most 3/9/10 skill points to unlock itself and all of its prerequisite nodes.
     For example, Enhanced Water Flow takes 15 "total skill points" so it's "high cost",
     while Swift Runner takes only 1 so it's "low cost".
-    - Like vanilla, some skill tree locations cannot be checked until you have Tai-Chi Kick or Unbounded Counter.
+    - Like vanilla, some skill tree locations cannot be checked until you have
+    Tai-Chi Kick, or Unbounded Counter, or the bow/any arrow.
+    - The vanilla game has a level cap of 30 so that Tao Fruits are required to complete the skill tree.
+    The randomizer mod raises this level cap to 99, since "Tao Fruit logic" would be more trouble than it's worth.
 
     Experience can get pretty tight if enough important items land in the skill tree,
-    and the vanilla game has a hard cap on how many skill points you can earn without Tao Fruits.
-    WARNING: You may not want to enable this until I finish creating a separate mod for experience multipliers and cap raising.
+    so be aware there's an "Experience Multiplier" in the mod's F1 settings.
     """
 
 
