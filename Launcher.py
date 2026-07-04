@@ -283,8 +283,8 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
-            self.favorites = []
-            self.hidden = []
+            self.user_favorites_list = []
+            self.user_hidden_list = []
             self.launch_components = components
             self.launch_args = args
             self.cards = []
@@ -293,9 +293,9 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             persistent = Utils.persistent_load()
             if "launcher" in persistent:
                 if "favorites" in persistent["launcher"]:
-                    self.favorites.extend(persistent["launcher"]["favorites"])
+                    self.user_favorites_list.extend(persistent["launcher"]["favorites"])
                 if "hidden" in persistent["launcher"]:
-                    self.hidden.extend(persistent["launcher"]["hidden"])
+                    self.user_hidden_list.extend(persistent["launcher"]["hidden"])
                 if "filter" in persistent["launcher"]:
                     if persistent["launcher"]["filter"]:
                         filters = []
@@ -317,11 +317,11 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             :type caller: MDButton
             """
 
-            if caller.component.display_name in self.hidden:
-                self.hidden.remove(caller.component.display_name)
+            if caller.component.display_name in self.user_hidden_list:
+                self.user_hidden_list.remove(caller.component.display_name)
                 caller.icon = "eye-off-outline"
             else:
-                self.hidden.append(caller.component.display_name)
+                self.user_hidden_list.append(caller.component.display_name)
                 caller.icon = "eye-off"
             #TODO: Consider optimizing this by only removing the specific card instead of refreshing all components.
             self._refresh_components(self.current_filter)
@@ -334,11 +334,11 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             :param caller: The button associated with the launcher component.
             :type caller: MDButton
             """
-            if caller.component.display_name in self.favorites:
-                self.favorites.remove(caller.component.display_name)
+            if caller.component.display_name in self.user_favorites_list:
+                self.user_favorites_list.remove(caller.component.display_name)
                 caller.icon = "star-outline"
             else:
-                self.favorites.append(caller.component.display_name)
+                self.user_favorites_list.append(caller.component.display_name)
                 caller.icon = "star"
 
         def build_card(self, component: Component) -> LauncherCard:
@@ -379,13 +379,13 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 self.button_layout.layout.remove_widget(child)
 
             if "hidden" in type_filter:
-                cards = [card for card in self.cards if card.component.display_name in self.hidden]
+                cards = [card for card in self.cards if card.component.display_name in self.user_hidden_list]
             else:
                 cards = [
                     card for card in self.cards
                     if (card.component.type in type_filter
-                    or (favorites and card.component.display_name in self.favorites))
-                    and (card.component.display_name not in self.hidden)
+                    or (favorites and card.component.display_name in self.user_favorites_list))
+                    and (card.component.display_name not in self.user_hidden_list)
                 ]
 
                 # sort the list by type_filter order
@@ -540,8 +540,8 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             super()._stop(*largs)
 
         def on_stop(self):
-            Utils.persistent_store("launcher", "hidden", self.hidden)
-            Utils.persistent_store("launcher", "favorites", self.favorites)
+            Utils.persistent_store("launcher", "hidden", self.user_hidden_list)
+            Utils.persistent_store("launcher", "favorites", self.user_favorites_list)
             Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
                                                                    for filter in self.current_filter))
             super().on_stop()

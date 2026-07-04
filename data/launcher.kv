@@ -33,7 +33,7 @@
 
         MDIconButton:
             component: main.component
-            icon: "eye-off" if self.component.display_name in app.hidden else "eye-off-outline"
+            icon: "eye-off" if self.component.display_name in app.user_hidden_list else "eye-off-outline"
             style: "standard"
             pos_hint:{"center_x": 0.75, "center_y": 0.8}
             theme_text_color: "Custom"
@@ -43,7 +43,7 @@
 
         MDIconButton:
             component: main.component
-            icon: "star" if self.component.display_name in app.favorites else "star-outline"
+            icon: "star" if self.component.display_name in app.user_favorites_list else "star-outline"
             style: "standard"
             pos_hint:{"center_x": 0.85, "center_y": 0.8}
             theme_text_color: "Custom"
