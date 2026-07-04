@@ -79,6 +79,9 @@ ChecksMate:
     vanilla: 20
     mixed: 1
     berolina: 8
+  # Pool and Max fairy_chess_pawn_upgrades presets are deprecated in favor of Configure plus
+  # Preference Priority/Preference Ratio (see the EvenHandedUpgrades example below) - they are kept
+  # working for now but may be removed in a future update.
   fairy_chess_pawn_upgrades: configure
   piece_upgrade_preferences:
     - new-pawn
@@ -91,6 +94,31 @@ ChecksMate:
     - jack-to-queen
     - major-to-queen
     - queen-to-amazon
+
+---
+
+description: 'An even split between Minor and Major pawn upgrades, favored 1:2 over other upgrade paths'
+name: EvenHandedUpgrades
+game: ChecksMate
+ChecksMate:
+  difficulty: daily
+  fairy_chess_pieces: fide
+  fairy_chess_pawns: vanilla
+  # Preference Priority and Preference Ratio both apply regardless of fairy_chess_pawn_upgrades mode,
+  # and Preference Priority (when set) takes precedence over Piece Upgrade Preferences and any
+  # legacy preset ordering. A priority of -1 disables that action entirely.
+  fairy_chess_pawn_upgrades: "off"
+  piece_upgrade_priority:
+    pawn-to-minor: 2
+    pawn-to-major: 2 # tied with pawn-to-minor above: an even split between Minor and Major upgrades
+    new-pawn: 1
+  # Preference Ratio governs how often each action is chosen relative to the others when the
+  # generator draws a weighted/random upgrade - a 1:2 ratio here means pawn-to-major is picked
+  # twice as often as minor-to-major.
+  piece_upgrade_ratio:
+    minor-to-major: 1
+    pawn-to-major: 2
+  fair_board_guarantee: standard_count
 
 ---
 

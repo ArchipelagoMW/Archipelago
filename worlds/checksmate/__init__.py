@@ -4,7 +4,7 @@ from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions, OptionError
 from worlds.AutoWorld import WebWorld, World
 
-from .Options import CMOptions, resolve_piece_upgrade_preferences
+from .Options import CMOptions, resolve_piece_upgrade_preferences, resolve_piece_upgrade_ratio
 from .Items import CMItem, item_table, item_name_groups
 from .Locations import CMLocation, location_table, Tactic
 from .Presets import checksmate_option_presets
@@ -36,7 +36,7 @@ class CMWorld(World):
     """
     game: ClassVar[str] = "ChecksMate"
     web = CMWeb()
-    required_chess_client_version = "0.3.2"
+    required_chess_client_version = "0.3.3"
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CMOptions
     options: CMOptions
 
@@ -134,10 +134,12 @@ class CMWorld(World):
         option_names = ["goal", "death_link", "difficulty", "piece_locations", "piece_types",
                         "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pieces_configure", "fairy_chess_pawns", "fairy_chess_pawn_upgrades",
                         "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
-                        "pocket_limit_by_pocket"]
+                        "pocket_limit_by_pocket", "fair_board_guarantee"]
         slot_options = self.options.as_dict(*option_names)
         slot_options["piece_upgrade_preferences"] = resolve_piece_upgrade_preferences(
-            self.options.fairy_chess_pawn_upgrades, self.options.piece_upgrade_preferences)
+            self.options.fairy_chess_pawn_upgrades, self.options.piece_upgrade_preferences,
+            self.options.piece_upgrade_priority)
+        slot_options["piece_upgrade_ratio"] = resolve_piece_upgrade_ratio(self.options.piece_upgrade_ratio)
         return dict(cursed_knowledge, **slot_options)
 
     def create_item(self, name: str) -> CMItem:

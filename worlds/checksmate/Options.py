@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Callable
 
-from Options import Range, Option, Choice, NamedRange, ItemDict, PerGameCommonOptions, OptionList, OptionSet, DeathLink
+from Options import Range, Option, Choice, NamedRange, ItemDict, PerGameCommonOptions, OptionList, OptionSet, \
+    OptionCounter, DeathLink
 
 
 class Goal(Choice):
@@ -296,24 +297,26 @@ class FairyChessPawnUpgrades(Choice):
 
     Off: No upgrades; only standard pawns.
 
-    Pool: Upgraded pieces are added as one extra option in the random pawn pool. The generator guards against
-    picking too many upgrades and leaving you short on overall pawn count.
+    Pool (deprecated): Upgraded pieces are added as one extra option in the random pawn pool. The generator guards
+    against picking too many upgrades and leaving you short on overall pawn count. Equivalent to Configure with
+    Preference Priority {"new-pawn": 1, "pool-pawn-upgrade": 1, "better-pawn": 1, "major-to-queen": 1}, in that
+    order of priority. Prefer Configure with Preference Priority/Ratio directly; this mode may be removed in a
+    future update.
 
-    Max: Prefer upgrades whenever possible, falling back to a regular pawn when adding another upgrade would
-    prevent reaching your earned pawn count.
+    Max (deprecated): Prefer upgrades whenever possible, falling back to a regular pawn when adding another upgrade
+    would prevent reaching your earned pawn count. Equivalent to Configure with Preference Priority
+    {"new-pawn": 1, "better-pawn": 1, "major-to-queen": 1}, in that order of priority. Prefer Configure with
+    Preference Priority/Ratio directly; this mode may be removed in a future update.
 
-    Super Max: As Max, but once known non-pawn pieces satisfy some board-location requirements, excess pawn material can
-    become upgrades instead of forcing every earned pawn to deploy as a separate pawn.
-
-    Configure: Uses Piece Upgrade Preferences to decide upgrade order.
+    Configure: Uses Piece Upgrade Preferences (and, if set, Preference Priority/Preference Ratio) to decide upgrade
+    order. See also the standalone Fair Board Guarantee option for the board-location-based pawn guarantee
+    previously offered by Super Max.
     """
     display_name = "Pawn Upgrades"
     option_off = 0
     option_pool = 1
     option_max = 2
-    option_super_max = 3
-    option_configure = 4
-    alias_supermax = option_super_max
+    option_configure = 3
     default = option_off
 
 
@@ -321,6 +324,8 @@ VALID_PIECE_UPGRADE_PREFERENCES = frozenset([
     "new-pawn",
     "better-pawn",
     "pool-pawn-upgrade",
+    "pawn-to-minor",
+    "pawn-to-major",
     "major-to-queen",
     "minor-to-major",
     "major-to-jack",
@@ -335,8 +340,8 @@ class PieceUpgradePreferences(OptionList):
     Ordered action preference list used when Pawn Upgrades is set to Configure.
 
     Valid configure-list actions include:
-    new-pawn, more-pawn, better-pawn, pool-pawn-upgrade, major-to-queen, minor-to-major, major-to-jack,
-    minor-to-jack, jack-to-queen, and queen-to-amazon.
+    new-pawn, more-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen,
+    minor-to-major, major-to-jack, minor-to-jack, jack-to-queen, and queen-to-amazon.
 
     Future upgrade-path actions round-trip for clients that understand them; no item-pool or rule behavior is implied.
     The major-to-queen action is the major-piece queen-upgrade preference; clients may implement it by preferring literal
@@ -347,17 +352,99 @@ class PieceUpgradePreferences(OptionList):
     default = ()
 
 
+class PieceUpgradePriority(OptionCounter):
+    """
+    Assigns a relative priority to each upgrade action, used to rank upgrade order as an alternative to (and taking
+    precedence over) Piece Upgrade Preferences. Applies regardless of the Pawn Upgrades mode selected, including the
+    legacy Pool and Max presets.
+
+    Any action not listed defaults to a priority of 1. Higher priority actions are preferred first; ties keep their
+    relative order. A priority of -1 disables that action entirely.
+
+    Whenever this option has any entries at all, it takes precedence over Piece Upgrade Preferences and over any
+    legacy Pawn Upgrades preset ordering.
+
+    Valid actions are the same as for Piece Upgrade Preferences:
+    new-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen, minor-to-major,
+    major-to-jack, minor-to-jack, jack-to-queen, and queen-to-amazon.
+    """
+    display_name = "Preference Priority"
+    valid_keys = VALID_PIECE_UPGRADE_PREFERENCES
+    default = {}
+    min = -1
+
+
+DEFAULT_PIECE_UPGRADE_RATIO: dict[str, int] = {
+    "new-pawn": 7,
+    "better-pawn": 3,
+    "pawn-to-minor": 6,
+    "pawn-to-major": 2,
+    "minor-to-major": 3,
+    "major-to-jack": 2,
+    "minor-to-jack": 2,
+    "major-to-queen": 1,
+    "jack-to-queen": 1,
+    "queen-to-amazon": 1,
+    "pool-pawn-upgrade": 1,
+}
+
+
+class PieceUpgradeRatio(OptionCounter):
+    """
+    Assigns a relative weight to each upgrade action, controlling how often it is chosen relative to the others
+    when the generator draws a weighted/random upgrade. Applies regardless of the Pawn Upgrades mode selected.
+
+    Any action not listed keeps its default weight, roughly mirroring the pawn-heavy bias already present in
+    today's item pool generation. Values are relative, not percentages; a 2:1 ratio between two actions means the
+    first is picked twice as often as the second.
+
+    Valid actions are the same as for Piece Upgrade Preferences:
+    new-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen, minor-to-major,
+    major-to-jack, minor-to-jack, jack-to-queen, and queen-to-amazon.
+    """
+    display_name = "Preference Ratio"
+    valid_keys = VALID_PIECE_UPGRADE_PREFERENCES
+    default = {}
+    min = 0
+
+
+def rank_actions_by_priority(priority_map: dict[str, int]) -> list[str]:
+    """
+    Render a priority map (action -> priority; higher values are preferred first) into an ordered preference list.
+    Actions at or below the disabled threshold (0) are dropped. Ties preserve the input dict's iteration order,
+    since Python's sort is stable. This is the same ranking primitive used to derive the legacy Pool/Max preference
+    lists below, demonstrating that those legacy presets are just fixed Preference Priority presets.
+    """
+    return sorted(
+        (action for action, value in priority_map.items() if value > 0),
+        key=lambda action: priority_map[action],
+        reverse=True,
+    )
+
+
+# Deprecated: Pool and Max are fixed Preference Priority presets, expressed here as priority maps (rather than
+# hand-maintained ordered lists) and rendered to a list via rank_actions_by_priority, to prove they are fully
+# reproducible via Configure + Preference Priority. New content should prefer Configure + Preference Priority/Ratio
+# directly instead of these legacy presets.
+LEGACY_PAWN_UPGRADE_PRIORITY: dict[int, dict[str, int]] = {
+    FairyChessPawnUpgrades.option_off: {"new-pawn": 4, "more-pawn": 3, "better-pawn": 2, "major-to-queen": 1},
+    FairyChessPawnUpgrades.option_pool: {"new-pawn": 5, "pool-pawn-upgrade": 4, "more-pawn": 3, "better-pawn": 2,
+                                         "major-to-queen": 1},
+    FairyChessPawnUpgrades.option_max: {"new-pawn": 4, "better-pawn": 3, "more-pawn": 2, "major-to-queen": 1},
+}
+
+
 LEGACY_PAWN_UPGRADE_PREFERENCES: dict[int, list[str]] = {
-    FairyChessPawnUpgrades.option_off: ["new-pawn", "more-pawn", "better-pawn", "major-to-queen"],
-    FairyChessPawnUpgrades.option_pool: ["new-pawn", "pool-pawn-upgrade", "more-pawn", "better-pawn",
-                                         "major-to-queen"],
-    FairyChessPawnUpgrades.option_max: ["new-pawn", "better-pawn", "more-pawn", "major-to-queen"],
-    FairyChessPawnUpgrades.option_super_max: ["new-pawn", "better-pawn", "more-pawn", "major-to-queen"],
+    mode: rank_actions_by_priority(priority_map) for mode, priority_map in LEGACY_PAWN_UPGRADE_PRIORITY.items()
 }
 
 
 def resolve_piece_upgrade_preferences(pawn_upgrades: FairyChessPawnUpgrades,
-                                      preferences: PieceUpgradePreferences) -> list[str]:
+                                      preferences: PieceUpgradePreferences,
+                                      priority: PieceUpgradePriority) -> list[str] | dict[str, int]:
+    if priority.value:
+        return {action: priority.value.get(action, 1) for action in VALID_PIECE_UPGRADE_PREFERENCES}
+
     if pawn_upgrades.value == FairyChessPawnUpgrades.option_configure:
         configured_preferences = [preference for preference in preferences.value
                                   if preference in VALID_PIECE_UPGRADE_PREFERENCES]
@@ -367,6 +454,33 @@ def resolve_piece_upgrade_preferences(pawn_upgrades: FairyChessPawnUpgrades,
         pawn_upgrades.value,
         LEGACY_PAWN_UPGRADE_PREFERENCES[FairyChessPawnUpgrades.option_off],
     ))
+
+
+def resolve_piece_upgrade_ratio(ratio: PieceUpgradeRatio) -> dict[str, int]:
+    return {**DEFAULT_PIECE_UPGRADE_RATIO, **{action: value for action, value in ratio.value.items()
+                                              if action in VALID_PIECE_UPGRADE_PREFERENCES}}
+
+
+class FairBoardGuarantee(Choice):
+    """
+    Whether excess pawn material may become upgrades once known non-pawn pieces satisfy some board-location
+    requirements, instead of forcing every earned pawn to deploy as a separate pawn. Independent of Pawn Upgrades
+    mode; replaces the old Super Max preset's board-guarantee behavior with a standalone option.
+
+    None: No board-location guarantee; pawn upgrades are governed purely by Pawn Upgrades mode (and Preference
+    Priority/Ratio, if set).
+
+    Standard Count: Once your found non-pawn pieces satisfy standard board-location requirements, excess pawn
+    material can become upgrades.
+
+    Standard And Pawns: As Standard Count, but pawns already found also count toward satisfying the board-location
+    requirements.
+    """
+    display_name = "Fair Board Guarantee"
+    option_none = 0
+    option_standard_count = 1
+    option_standard_and_pawns = 2
+    default = option_none
 
 
 class AsymmetricTrades(Choice):
@@ -493,6 +607,9 @@ class CMOptions(PerGameCommonOptions):
     fairy_chess_pawns: FairyChessPawns
     fairy_chess_pawn_upgrades: FairyChessPawnUpgrades
     piece_upgrade_preferences: PieceUpgradePreferences
+    piece_upgrade_priority: PieceUpgradePriority
+    piece_upgrade_ratio: PieceUpgradeRatio
+    fair_board_guarantee: FairBoardGuarantee
     minor_piece_limit_by_type: MinorPieceLimitByType
     major_piece_limit_by_type: MajorPieceLimitByType
     queen_piece_limit_by_type: QueenPieceLimitByType
