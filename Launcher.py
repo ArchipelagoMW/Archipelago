@@ -384,8 +384,8 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 cards = [
                     card for card in self.cards
                     if (card.component.type in type_filter
-                    or (favorites and card.component.display_name in self.user_favorites_list))
-                    and (card.component.display_name not in self.user_hidden_list)
+                    and card.component.display_name not in self.user_hidden_list)
+                    or (favorites and card.component.display_name in self.user_favorites_list)
                 ]
 
                 # sort the list by type_filter order
