@@ -12,7 +12,7 @@ class VRChallenges(Choice):
     Enabled:  VR Challenges, and anything directly locked behind them, are added as locations.
     -----------------------------------------------------------------------------------------------
     Any Skill Points or Titanium Bolts are added if their respective setting is enabled.
-    This option also includes the VR Training Challenge before Daxx and all of it's checks
+    This option also includes the VR Gadget Training Challenge before Daxx and all of its checks
     """
     display_name = RAC3OPTION.VR_CHALLENGES
     option_disabled = 0

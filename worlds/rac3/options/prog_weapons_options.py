@@ -10,7 +10,7 @@ class ProgressiveWeapons(Choice):
     ------------------------------------------------------------------------------------
     Disable:            Weapon leveling and exp functions like in the vanilla game.
     Manual Leveling:    Weapon level caps are increased when a progressive item is collected, weapon exp past the cap is disabled.
-    Automatic Leveling: Weapons level-up when it's progressive item is collected, weapon exp is disabled.
+    Automatic Leveling: Weapons level-up when its progressive item is collected, weapon exp is disabled.
     ------------------------------------------------------------------------------------
     Note: If Weapon Level Locations are enabled, Automatic Leveling will be forced to Manual Leveling instead.
     """
