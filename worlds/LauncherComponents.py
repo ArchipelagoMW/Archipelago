@@ -15,6 +15,7 @@ class Type(Enum):
     SETUP = auto()
     FUNC = auto()  # do not use anymore
     HIDDEN = auto()
+    ADJUSTER = auto() # do not use anymore
 
 
 class Component:
@@ -71,6 +72,10 @@ class Component:
             from Utils import deprecate
             deprecate(f"Launcher Component {self.display_name} is using Type.FUNC Type, which is pending removal.")
             component_type = Type.MISC
+        if component_type == Type.ADJUSTER:
+            from Utils import deprecate
+            deprecate(f"Launcher Component {self.display_name} is using Type.ADJUSTER Type, which is pending removal.")
+            component_type = Type.TOOL
 
         self.type = component_type or (
             Type.CLIENT if "Client" in display_name else Type.MISC)
