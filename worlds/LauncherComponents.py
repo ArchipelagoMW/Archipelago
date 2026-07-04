@@ -229,7 +229,7 @@ components: List[Component] = [
               description="Host a generated multiworld on your computer."),
     Component('Generate', 'Generate', component_type=Type.SETUP, cli=True,
               description="Generate a multiworld with the YAMLs in the players folder."),
-    Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.TOOL,
+    Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.SETUP,
               description="Visual creator for Archipelago option files."),
     Component("Install APWorld", component_type=Type.SETUP, func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
               description="Install an APWorld to play games not included with Archipelago by default."),
