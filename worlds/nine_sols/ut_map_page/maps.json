@@ -10,8 +10,9 @@
     { "name": "apeman_facility_elevator", "img": "apeman_facility_elevator.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "apeman_facility_monitoring", "img": "apeman_facility_monitoring.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "boundless_repository", "img": "boundless_repository.webp", "location_size": 20, "location_border_thickness": 3 },
-    { "name": "cortex_center", "img": "cortex_center.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "central_hall", "img": "central_hall.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "central_transport_hub", "img": "central_transport_hub.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "cortex_center", "img": "cortex_center.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "empyrean_district_living_area", "img": "empyrean_district_living_area.webp",
         "location_size": 10, "location_border_thickness": 2
     },
@@ -34,7 +35,6 @@
     { "name": "lake_yaochi_ruins", "img": "lake_yaochi_ruins.webp",
         "location_size": 10, "location_border_thickness": 2
     },
-    { "name": "central_hall", "img": "central_hall.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "nobility_hall", "img": "nobility_hall.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "outer_warehouse", "img": "outer_warehouse.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "power_reservoir_central", "img": "power_reservoir_central.webp",
