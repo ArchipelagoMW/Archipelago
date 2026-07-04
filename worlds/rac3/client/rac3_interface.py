@@ -781,6 +781,9 @@ class Rac3Interface(GameInterface):
         planet_data = RAC3_REGION_DATA_TABLE[self.planet]
         if planet_data.PLANET_TO_LOAD:
             self.homewarping = True
+            # Ensure the player is not softlocked from entering the sewers
+            if self.planet == RAC3REGION.AQUATOS_BASE:
+                self._write8(RAC3STATUS.SEWERS_VISITED, 1)
             self._write8(planet_data.PLANET_TO_LOAD, planet_id)
             self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PLANET_LOAD, 1)
             self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PAUSE_STATE, RAC3PAUSESTATE.PLANET_CHANGE)
