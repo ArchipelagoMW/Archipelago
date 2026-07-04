@@ -542,6 +542,8 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                     return True  # Skip all weapon level locations that are not V5 if weapon levels are set to V5 only
                 if options.ngplus_items.value == 0 and ("RY3N0" in loc or "V6" in loc or "V7" in loc or "V8" in loc):
                     return True  # Skip all weapon level locations that are V6 or higher if NG+ items are disabled
+                if options.one_hp_challenge.value.get(RAC3PLAYERTYPE.RATCHET, False) and "Shield Charger" in loc:
+                    return True  # Skip Shield Charger level locations in One HP Challenge
             # Add more conditions here if needed in the future
     return False
 
