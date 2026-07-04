@@ -1463,6 +1463,12 @@ class Rac3Interface(GameInterface):
                         RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
                     found_all_ammo = False
                     for slot_data in [self.read_weapon_vendor_slot_data(slot) for slot in range(vendor_size)]:
+                        # Remove ammo for weapons we dont have unlocked yet
+                        weapon = ITEM_NAME_FROM_ID.get(slot_data.item_id.value, None)
+                        if weapon is not None and weapon in non_prog_weapon_data:
+                            if self.UnlockItem[weapon].status == 0:
+                                continue
+
                         new_inventory.append(slot_data)
                         if slot_data.all_ammo.value:
                             found_all_ammo = True
