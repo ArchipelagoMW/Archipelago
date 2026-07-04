@@ -97,7 +97,7 @@ class NineSolsWorld(World):
             raise OptionError("jade_cost_max is less than jade_cost_min")
 
         # implement .yaml-less Universal Tracker support
-        if hasattr(self.multiworld, "generation_is_fake"):
+        if getattr(self.multiworld, "generation_is_fake", False):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 if "Nine Sols" in self.multiworld.re_gen_passthrough:
                     self.using_ut = True
