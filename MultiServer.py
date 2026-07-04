@@ -254,7 +254,7 @@ class Context:
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
-                 countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
+                 countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0,
                  compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
         self.logger = logger
         super(Context, self).__init__()
@@ -847,12 +847,12 @@ class Context:
             if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
-    
+
     def replace_hint(self, team: int, slot: int, old_hint: Hint, new_hint: Hint) -> None:
         if old_hint in self.hints[team, slot]:
             self.hints[team, slot].remove(old_hint)
             self.hints[team, slot].add(new_hint)
-    
+
     # "events"
 
     def on_goal_achieved(self, client: Client):
@@ -1271,7 +1271,7 @@ def format_hint(ctx: Context, team: int, hint: Hint) -> str:
 
     if hint.entrance:
         text += f" at {hint.entrance}"
-    
+
     return text + ". " + status_names.get(hint.status, "(unknown)")
 
 
@@ -1808,11 +1808,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
         else:
             if points_available >= cost:
                 if for_location:
-                    self.output(f"Nothing found for recognized location name \"{hint_name}\". "
-                                f"Location appears to not exist in this multiworld.")
+                    self.output(
+                        f"Recognized location \"{hint_name}\" does not exist for your slot. "
+                        f"This is likely due to your options."
+                    )
                 else:
-                    self.output(f"Nothing found for recognized item name \"{hint_name}\". "
-                                f"Item appears to not exist in this multiworld.")
+                    self.output(
+                        f"Recognized item \"{hint_name}\" does not exist for your slot. "
+                        f"This is likely due to your options."
+                    )
             else:
                 self.output(f"You can't afford the hint. "
                             f"You have {points_available} points and need at least "
@@ -2085,7 +2089,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             # As of writing this code, only_new=True does not update status for existing hints
             ctx.notify_hints(client.team, hints, only_new=True, persist_even_if_found=True)
             ctx.save()
-        
+
         elif cmd == 'UpdateHint':
             location = args["location"]
             player = args["player"]
