@@ -464,7 +464,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             # Test if persistent storage exists (first time running the Launcher)
             # Depending on the result, either show the setup screen for the first time
             # Otherwise, show the main screen with all the components
-            if os.path.exists(Utils.local_path("_persistent_storage.yaml")):
+            if os.path.exists(Utils.user_path("_persistent_storage.yaml")):
                 self.top_screen.ids.all.trigger_action(duration=0)
             else:
                 self.top_screen.ids.setup.trigger_action(duration=0)
