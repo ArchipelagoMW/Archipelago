@@ -165,7 +165,6 @@ async def _handle_game_ready(ctx: "Context") -> None:
             logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
             logger.info(f"Items Received: {len(ctx.items_received)}")
             items_to_process = ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, len(ctx.items_received))
-            ctx.game_interface.init_stored_fillers()
             ctx.game_interface.initial_fillers.clear()
             counter = 0
             for count, item in enumerate(ctx.items_received):
@@ -188,6 +187,7 @@ async def _handle_game_ready(ctx: "Context") -> None:
             logger.info(f"Locations collected: {counter}")
             logger.info("Updating save data...")
             ctx.game_interface.load_save(ctx.save_data)
+            ctx.game_interface.init_stored_fillers()
             ctx.game_interface.process_offline_fillers(ctx.data_received)
             ctx.game_interface.reset_death_count()
             ctx.game_interface.setup_challenge_mode()
