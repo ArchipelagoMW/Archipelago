@@ -70,7 +70,7 @@ def confirm(msg: str):
 def update_command():
     check_pip()
     for file in requirements_files:
-        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "-c", core_constraints])
+        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--constraint", core_constraints])
 
 
 def install_pkg_resources(yes=False):
