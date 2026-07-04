@@ -91,7 +91,7 @@ class WorldTestBase(unittest.TestCase):
             state = self.multiworld.state
         for item in self.multiworld.get_items():
             if item.name not in item_names:
-                state.collect(item, prevent_sweep)
+                state.collect(item, prevent_sweep=prevent_sweep)
 
     def get_item_by_name(self, item_name: str) -> Item:
         """Returns the first item found in placed items, or in the itempool with the matching name"""
@@ -110,7 +110,7 @@ class WorldTestBase(unittest.TestCase):
                         prevent_sweep = False) -> typing.List[Item]:
         """ collect all of the items in the item pool that have the given names """
         items = self.get_items_by_name(item_names)
-        self.collect(items, prevent_sweep)
+        self.collect(items, prevent_sweep=prevent_sweep)
         return items
 
     def collect(self, items: typing.Union[Item, typing.Iterable[Item]], prevent_sweep = False) -> None:
@@ -118,7 +118,7 @@ class WorldTestBase(unittest.TestCase):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
-            self.multiworld.state.collect(item, prevent_sweep)
+            self.multiworld.state.collect(item, prevent_sweep=prevent_sweep)
 
     def remove_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
         """Remove all of the items in the item pool with the given names from state"""
