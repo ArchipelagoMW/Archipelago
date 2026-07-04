@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Callable
 
-from Options import Range, Option, Choice, NamedRange, ItemDict, PerGameCommonOptions, OptionSet, DeathLink
+from Options import Range, Option, Choice, NamedRange, ItemDict, PerGameCommonOptions, OptionList, OptionSet, DeathLink
 
 
 class Goal(Choice):
@@ -304,14 +304,69 @@ class FairyChessPawnUpgrades(Choice):
 
     Super Max: As Max, but once known non-pawn pieces satisfy some board-location requirements, excess pawn material can
     become upgrades instead of forcing every earned pawn to deploy as a separate pawn.
+
+    Configure: Uses Piece Upgrade Preferences to decide upgrade order.
     """
     display_name = "Pawn Upgrades"
     option_off = 0
     option_pool = 1
     option_max = 2
     option_super_max = 3
+    option_configure = 4
     alias_supermax = option_super_max
     default = option_off
+
+
+VALID_PIECE_UPGRADE_PREFERENCES = frozenset([
+    "new-pawn",
+    "better-pawn",
+    "pool-pawn-upgrade",
+    "major-to-queen",
+    "minor-to-major",
+    "major-to-jack",
+    "minor-to-jack",
+    "jack-to-queen",
+    "queen-to-amazon",
+])
+
+
+class PieceUpgradePreferences(OptionList):
+    """
+    Ordered action preference list used when Pawn Upgrades is set to Configure.
+
+    Valid configure-list actions include:
+    new-pawn, more-pawn, better-pawn, pool-pawn-upgrade, major-to-queen, minor-to-major, major-to-jack,
+    minor-to-jack, jack-to-queen, and queen-to-amazon.
+
+    Future upgrade-path actions round-trip for clients that understand them; no item-pool or rule behavior is implied.
+    The major-to-queen action is the major-piece queen-upgrade preference; clients may implement it by preferring literal
+    rooks before falling back to other major pieces.
+    """
+    display_name = "Piece Upgrade Preferences"
+    valid_keys = VALID_PIECE_UPGRADE_PREFERENCES
+    default = ()
+
+
+LEGACY_PAWN_UPGRADE_PREFERENCES: dict[int, list[str]] = {
+    FairyChessPawnUpgrades.option_off: ["new-pawn", "more-pawn", "better-pawn", "major-to-queen"],
+    FairyChessPawnUpgrades.option_pool: ["new-pawn", "pool-pawn-upgrade", "more-pawn", "better-pawn",
+                                         "major-to-queen"],
+    FairyChessPawnUpgrades.option_max: ["new-pawn", "better-pawn", "more-pawn", "major-to-queen"],
+    FairyChessPawnUpgrades.option_super_max: ["new-pawn", "better-pawn", "more-pawn", "major-to-queen"],
+}
+
+
+def resolve_piece_upgrade_preferences(pawn_upgrades: FairyChessPawnUpgrades,
+                                      preferences: PieceUpgradePreferences) -> list[str]:
+    if pawn_upgrades.value == FairyChessPawnUpgrades.option_configure:
+        configured_preferences = [preference for preference in preferences.value
+                                  if preference in VALID_PIECE_UPGRADE_PREFERENCES]
+        return configured_preferences or list(LEGACY_PAWN_UPGRADE_PREFERENCES[FairyChessPawnUpgrades.option_off])
+
+    return list(LEGACY_PAWN_UPGRADE_PREFERENCES.get(
+        pawn_upgrades.value,
+        LEGACY_PAWN_UPGRADE_PREFERENCES[FairyChessPawnUpgrades.option_off],
+    ))
 
 
 class AsymmetricTrades(Choice):
@@ -437,6 +492,7 @@ class CMOptions(PerGameCommonOptions):
     fairy_chess_army: FairyChessArmy
     fairy_chess_pawns: FairyChessPawns
     fairy_chess_pawn_upgrades: FairyChessPawnUpgrades
+    piece_upgrade_preferences: PieceUpgradePreferences
     minor_piece_limit_by_type: MinorPieceLimitByType
     major_piece_limit_by_type: MajorPieceLimitByType
     queen_piece_limit_by_type: QueenPieceLimitByType

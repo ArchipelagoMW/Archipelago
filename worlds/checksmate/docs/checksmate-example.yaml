@@ -79,6 +79,18 @@ ChecksMate:
     vanilla: 20
     mixed: 1
     berolina: 8
+  fairy_chess_pawn_upgrades: configure
+  piece_upgrade_preferences:
+    - new-pawn
+    - pool-pawn-upgrade
+    - more-pawn
+    - better-pawn
+    - minor-to-major
+    - major-to-jack
+    - minor-to-jack
+    - jack-to-queen
+    - major-to-queen
+    - queen-to-amazon
 
 ---
 
