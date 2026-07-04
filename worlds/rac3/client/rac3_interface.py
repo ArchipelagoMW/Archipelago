@@ -899,7 +899,12 @@ class Rac3Interface(GameInterface):
                 # Limit multiplier to 128x
                 if self.bolt_and_xp_multiplier_value <= 6:
                     _time = time.time() + 30.0
-                    self.timers[name + str(_time)] = _time
+                    key = name + str(_time)
+                    # if key already exists, add 1 millisecond to prevent overlap
+                    if key in self.timers:
+                        _time += 0.001
+                        key = name + str(_time)
+                    self.timers[key] = _time
                     self.bolt_and_xp_multiplier_value += 1
                 jackpot_packs = self._read32(RAC3STATUS.JACKPOT_PACKS)
                 if jackpot_packs < 0x7FFFFFFF:
