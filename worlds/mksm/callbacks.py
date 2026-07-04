@@ -46,6 +46,7 @@ async def game_watcher(ctx: MKSMContext) -> None:
     # TODO open co op doors from start
     # TODO change purchase location tiers to be by price, and revert combos to be separate
     # TODO smoke missions
+    # TODO mileena boss is bugged, check which events are needed to not bug her
 
     if ctx.game_interface.current_game is None:
         return  # not connected to the emulator/game yet

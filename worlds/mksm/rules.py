@@ -173,9 +173,9 @@ def connect_regions(world: MKSMWorld) -> None:
 
     # netherrealm.connect(portal_2)
 
-    portal_1.connect(forest, rule=FIST_OF_RUIN)
+    portal_1.connect(forest, rule=FIST_OF_RUIN & WALL_CLIMB)
     # forest.connect(portal_1)
-    forest.connect(forest_bridges, rule=SWING & WALL_CLIMB)
+    forest.connect(forest_bridges, rule=SWING)
     # forest_bridges.connect(forest)
     forest.connect(forest_reptile)
     # forest_reptile.connect(forest, rule=WALL_CLIMB)
@@ -184,7 +184,7 @@ def connect_regions(world: MKSMWorld) -> None:
     # wasteland_1.connect(portal_2)
     wasteland_1.connect(wasteland_2, rule=FIST_OF_RUIN)
     # wasteland_2.connect(wasteland_1)
-    wasteland_2.connect(wasteland_3, rule=DOUBLE_JUMP | WALL_RUN)
+    wasteland_2.connect(wasteland_3, rule=WALL_RUN)
     # wasteland_3.connect(wasteland_2)
     wasteland_2.connect(dead_pool, rule=GORO)
     # dead_pool.connect(portal_2, rule=SWING | (DOUBLE_JUMP & WALL_JUMP & WALL_RUN))
@@ -198,7 +198,7 @@ def connect_regions(world: MKSMWorld) -> None:
 
     # wu_shi_fire.connect(tombs_baraka, rule=BARAKA)
 
-    portal_1.connect(monastery, rule=DOUBLE_JUMP | LONG_JUMP)
+    portal_1.connect(monastery, rule=FIST_OF_RUIN & (DOUBLE_JUMP | LONG_JUMP))
     # monastery.connect(portal_1)
     monastery.connect(monastery_kitana)
     # monastery_kitana.connect(monastery, rule=FIST_OF_RUIN)
