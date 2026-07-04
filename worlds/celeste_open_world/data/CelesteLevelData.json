@@ -45012,7 +45012,7 @@
         {
             "name": "9c",
             "display_name": "Core C",
-            "items": [ "dash_refills", "bumpers", "core_toggles", "core_blocks", "traffic_blocks", "dream_blocks", "pink_clouds", "swap_blocks", "kevin_blocks" ],
+            "items": [ "springs", "dash_refills", "bumpers", "core_toggles", "core_blocks", "traffic_blocks", "dream_blocks", "pink_clouds", "swap_blocks", "kevin_blocks" ],
             "rooms": [
                 {
                     "name": "intro",
@@ -45165,10 +45165,10 @@
                             "connections": [
                                 {
                                     "dest": "goal",
-                                    "rule": [ [ "traffic_blocks", "dash_refills", "core_toggles", "dream_blocks", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks", "ur_dash", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch" ] ],
+                                    "rule": [ [ "springs", "traffic_blocks", "dash_refills", "core_toggles", "dream_blocks", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks", "ur_dash", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch" ] ],
                                     "vm_rule": [
-                                        [ "traffic_blocks", "dash_refills", "core_toggles", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch", "r_climb", "l_climb" ],
-                                        [ "traffic_blocks", "dash_refills", "core_toggles", "bumpers", "pink_clouds", "kevin_blocks", "core_blocks", "ur_dash", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch", "r_climb", "l_climb" ]
+                                        [ "springs", "traffic_blocks", "dash_refills", "core_toggles", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch", "r_climb", "l_climb" ],
+                                        [ "springs", "traffic_blocks", "dash_refills", "core_toggles", "bumpers", "pink_clouds", "kevin_blocks", "core_blocks", "ur_dash", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch", "r_climb", "l_climb" ]
                                     ],
                                     "assist_rule": [
                                         [ "any_dash_u_ur_r" ],
@@ -45199,8 +45199,8 @@
                                     "name": "golden",
                                     "display_name": "Golden Strawberry",
                                     "type": "golden_strawberry",
-                                    "rule": [ [ "traffic_blocks", "dash_refills", "core_toggles", "dream_blocks", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks", "ur_dash", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch" ] ],
-                                    "vm_rule": [ [ "traffic_blocks", "dash_refills", "core_toggles", "bumpers", "pink_clouds", "kevin_blocks", "core_blocks", "ur_dash", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch", "r_climb", "l_climb" ] ],
+                                    "rule": [ [ "springs", "traffic_blocks", "dash_refills", "core_toggles", "dream_blocks", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks", "ur_dash", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch" ] ],
+                                    "vm_rule": [ [ "springs", "traffic_blocks", "dash_refills", "core_toggles", "bumpers", "pink_clouds", "kevin_blocks", "core_blocks", "ur_dash", "r_dash", "any_dash_ul_l_dl", "u_dash", "dr_dash", "crouch", "r_climb", "l_climb" ] ],
                                     "assist_rule": [
                                         [ "any_dash_u_ur_r" ],
                                         [ "r_climb", "ul_dash" ]
