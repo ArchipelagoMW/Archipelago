@@ -27,6 +27,8 @@ class GameLocation(Location):
 
 
 all_nanotech: list[str] = [getattr(RAC3NANOTECH, f"LEVEL_{level}") for level in range(11, 201)]
+
+
 def should_skip_nanotech_location(location: str, options: type[RaC3Options]) -> bool:
     """Determine if a nanotech location should be skipped based on options."""
     nanotech_level = int(location.split()[-1])
@@ -43,9 +45,11 @@ def should_skip_nanotech_location(location: str, options: type[RaC3Options]) -> 
 
     return nanotech_level % nanotech_step != 0
 
+
 def get_nanotech_locations(options: type[RaC3Options]) -> list[str]:
     """Get a list of nanotech locations based on the provided options."""
     return [location for location in all_nanotech if not should_skip_nanotech_location(location, options)]
+
 
 def should_skip_skill_master(options: type[RaC3Options]) -> bool:
     """Determine if the skill master trophy location should be skipped based on options."""
@@ -467,14 +471,15 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
             case RAC3TAG.LONG_TROPHY:
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
-                if (should_skip_skill_master(options) and loc == RAC3TROPHY.PHOENIX_SKILL_MASTER):
+                if should_skip_skill_master(options) and loc == RAC3TROPHY.PHOENIX_SKILL_MASTER:
                     return True
                 if options.ngplus_start.value < 1:
                     if loc == RAC3TROPHY.PHOENIX_NANO_FINDER or loc == RAC3TROPHY.PHOENIX_OMEGA_ARSENAL:
-                        return True # Skip Phoenix Nano Master and Omega Arsenal trophies if NG+ start is not enabled
+                        return True  # Skip Phoenix Nano Master and Omega Arsenal trophies if NG+ start is not enabled
                 if options.ngplus_start.value > 0:
                     if loc == RAC3TROPHY.PHOENIX_NANO_FINDER and options.nanotech_limitation.value < 200:
-                        return True  # Skip Phoenix Nano Master trophy if nanotech limitation is not set to include level 200
+                        return True  # Skip Phoenix Nano Master trophy if nanotech limitation is not set to include
+                        # level 200
                     if loc == RAC3TROPHY.PHOENIX_OMEGA_ARSENAL and options.ngplus_items.value == 0:
                         return True  # Skip Phoenix Omega Arsenal trophy if NG+ items are disabled
             case RAC3TAG.SKILLPOINT:
@@ -525,7 +530,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                     return True  # Skips every weapon vendor checks except the Veldin ones
             case RAC3TAG.NGPLUS:
                 if options.ngplus_vendors.value == 0:
-                    return True # Skips any NG+ items
+                    return True  # Skips any NG+ items
             case RAC3TAG.ONE_HP_UNSTABLE:
                 if options.one_hp_challenge.value.get(RAC3PLAYERTYPE.RATCHET, False):
                     return True  # Skip all unstable locations in One HP Challenge

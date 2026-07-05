@@ -1,5 +1,6 @@
 """This module defines constants for Trophy locations"""
 
+
 class RAC3TROPHY:
     """String constants for Trophy locations"""
     FLORANA_RATCHET = "Florana: Trophy: 2nd Building Upstairs North-East"

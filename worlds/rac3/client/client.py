@@ -422,7 +422,6 @@ class Rac3Context(CommonContext):
                             self.game_interface.load_save(self.save_data)
                             self.game_interface.process_offline_fillers(self.data_received)
 
-
         if cmd == "SetReply":
             logger.debug(f"{cmd} server packet: {args}")
             if args["key"]:

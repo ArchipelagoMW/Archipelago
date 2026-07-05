@@ -43,6 +43,7 @@ class RAC3ACTIONTYPE:
     SKYDIVE = 0x25
     CNT = 0x26
 
+
 ACTION_TYPE_NAMES: dict[int, str] = {
     0x00: "Stationary",
     0x01: "Walking",

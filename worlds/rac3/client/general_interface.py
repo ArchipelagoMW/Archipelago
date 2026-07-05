@@ -163,8 +163,9 @@ class GameInterface:
                     self.current_game = "None"
                     other_ratchet_game = GAME_ID_TO_OTHER_RATCHET.get(game_id)
                     if other_ratchet_game is not None:
-                        logger.warning(f"Connected to {other_ratchet_game} instead of Ratchet and Clank 3!\n" + 
-                                       "This client is for Ratchet and Clank 3 only, please load the correct Ratchet game to play.")
+                        logger.warning(f"Connected to {other_ratchet_game} instead of Ratchet and Clank 3!\n" +
+                                       "This client is for Ratchet and Clank 3 only, please load the correct Ratchet "
+                                       "game to play.")
                     else:
                         logger.info("Unknown game version detected")
         if self.current_game == "None" and self.game_id_error != game_id and game_id != b"\x00\x00\x00\x00\x00\x00":

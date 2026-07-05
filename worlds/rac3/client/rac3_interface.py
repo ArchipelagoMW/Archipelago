@@ -68,6 +68,7 @@ from worlds.rac3.constants.vendors.vendor import RAC3SHIPVENDOR, RAC3VENDOR, RAC
 from worlds.rac3.constants.version import (GAME_ID_TO_OFFSET, GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION,
                                            VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE, )
 
+
 class Rac3Interface(GameInterface):
     """Handles reading and modifying the game memory"""
 
@@ -370,7 +371,7 @@ class Rac3Interface(GameInterface):
 
     def check_main_menu(self):
         """Check if the player is on the main menu, before starting the game"""
-        if (self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF 
+        if (self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF
             or (self._read32(RAC3STATUS.GAME_LAUNCHED) == 0 and self.current_game == RAC3VERSION.US_ID)):
             return True
         return False
@@ -448,8 +449,9 @@ class Rac3Interface(GameInterface):
                 diff = count - stored_count
                 logger.debug(f"Processing {diff} offline filler items for {item}")
                 for _ in range(diff):
-                    self.item_received(RAC3_ITEM_DATA_TABLE[item].AP_CODE, None, None, None)
-                notification_message += f'Received {RAC3TEXTFORMATSTRING.GREEN}{diff}x {RAC3TEXTFORMATSTRING.WHITE}{item} {RAC3TEXTFORMATSTRING.NORMAL}while offline\n'
+                    self.item_received(RAC3_ITEM_DATA_TABLE[item].AP_CODE, None, None, 0)
+                notification_message += (f'Received {RAC3TEXTFORMATSTRING.GREEN}{diff}x {RAC3TEXTFORMATSTRING.WHITE}'
+                                         f'{item} {RAC3TEXTFORMATSTRING.NORMAL}while offline\n')
             else:
                 logger.debug(f"No new offline filler items for {item} (stored: {stored_count}, current: {count})")
         self.stored_fillers = self.initial_fillers.copy()
@@ -560,7 +562,7 @@ class Rac3Interface(GameInterface):
         """Update in game settings based on the slot options"""
         self._write8(RAC3STATUS.HELP_DESK_VOICE, self.options.helpdesk)
         self._write8(RAC3STATUS.HELP_DESK_TEXT, self.options.helpdesk)
-        #TODO: Add stuff like camera speed, normal/inverted controls, subtitles, etc.
+        # TODO: Add stuff like camera speed, normal/inverted controls, subtitles, etc.
 
     def init_stored_fillers(self):
         """Read the stored filler items from memory and fill the stored_fillers dictionary"""
@@ -569,7 +571,6 @@ class Rac3Interface(GameInterface):
         self.stored_fillers[RAC3ITEM.NANOTECH_XP] = self._read32(RAC3STATUS.NANOTECH_EXP_PACKS)
         self.stored_fillers[RAC3ITEM.WEAPON_XP] = self._read32(RAC3STATUS.WEAPON_LEVEL_PACKS)
         logger.debug(f"Stored filler items: {self.stored_fillers}")
-
 
     #############################
     # Start of Main Update Loop #
@@ -1293,7 +1294,8 @@ class Rac3Interface(GameInterface):
         if self.planet == RAC3REGION.TYHRRANOSIS:
             self._write8(RAC3STATUS.ROBONOIDS, 0)
             if self.options.shortcuts.get(RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP, False):
-                self.tyhrra_dropship = bool(self._read8(RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[0]) & (1 << RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[1]))
+                self.tyhrra_dropship = bool(self._read8(RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[0]) & (
+                    1 << RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[1]))
 
     def softlock_warning(self):
         """Checks if the player is on a planet with a potential softlock and informs them on how to escape"""
@@ -1318,17 +1320,20 @@ class Rac3Interface(GameInterface):
                     f"{RAC3TEXTFORMATSTRING.R1}+ SELECT",
                     RAC3BOXTHEME.WARNING,
                     5.0)
-    
+
     def region_disabled_warning(self):
-        """Checks if the player went to a planet/region and informs them if they have disabled the content in their yaml"""
+        """Checks if the player went to a planet/region and informs them if they have disabled the content in their
+        YAML"""
         match self.planet:
             case RAC3REGION.ANNIHILATION_NATION:
                 if not self.options.arena:
                     log_message = "You have disabled Annihilation Nation in your yaml. "
-                    notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Annihilation Nation{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n"
+                    notification_message = (f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Annihilation Nation"
+                                            f"{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n")
                     if self.options.weapon_vendors:
                         log_message += "You can still buy the Agents of Doom vendor check from the weapon vendor."
-                        notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Agents of Doom{RAC3TEXTFORMATSTRING.NORMAL} vendor check\nfrom the weapon vendor."
+                        notification_message += (f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Agents of Doom"
+                                                 f"{RAC3TEXTFORMATSTRING.NORMAL} vendor check\nfrom the weapon vendor.")
                     else:
                         log_message += "There are no locations on this planet."
                         notification_message += "There are no locations on this planet."
@@ -1336,17 +1341,23 @@ class Rac3Interface(GameInterface):
                     self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
             case RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS:
                 if self.options.rangers < 2:
-                    log_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Optional Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml. There are no locations in this region."
-                    notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Optional Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\nThere are no locations in this region."
+                    log_message = (f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Optional Ranger Missions"
+                                   f"{RAC3TEXTFORMATSTRING.NORMAL} in your yaml. There are no locations in this "
+                                   f"region.")
+                    notification_message = (f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Optional Ranger Missions"
+                                            f"{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\nThere are no locations in "
+                                            f"this region.")
                     logger.info(log_message)
                     self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
             case RAC3REGION.ARIDIA:
                 if self.options.rangers == 0 or self.options.rangers == 2:
                     log_message = "You have disabled Story Ranger Missions in your yaml. "
-                    notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Story Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n"
+                    notification_message = (f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Story Ranger Missions"
+                                            f"{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\n")
                     if self.options.weapon_vendors:
                         log_message += "You can still buy the Qwack-O-Ray vendor check from the weapon vendor."
-                        notification_message += f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Qwack-O-Ray{RAC3TEXTFORMATSTRING.NORMAL} vendor check\nfrom the weapon vendor."
+                        notification_message += (f"You can still buy the {RAC3TEXTFORMATSTRING.WHITE}Qwack-O-Ray"
+                                                 f"{RAC3TEXTFORMATSTRING.NORMAL} vendor check\nfrom the weapon vendor.")
                     else:
                         log_message += "There are no locations on this planet."
                         notification_message += "There are no locations on this planet."
@@ -1354,11 +1365,13 @@ class Rac3Interface(GameInterface):
                     self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
             case RAC3REGION.BLACKWATER_CITY:
                 if self.options.rangers == 0 or self.options.rangers == 2:
-                    log_message = "You have disabled Story Ranger Missions in your yaml. There are no locations on this planet."
-                    notification_message = f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Story Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\nThere are no locations on this planet."
+                    log_message = ("You have disabled Story Ranger Missions in your yaml. There are no locations on "
+                                   "this planet.")
+                    notification_message = (f"You have disabled {RAC3TEXTFORMATSTRING.WHITE}Story "
+                                            f"Ranger Missions{RAC3TEXTFORMATSTRING.NORMAL} in your yaml.\nThere are "
+                                            f"no locations on this planet.")
                     logger.info(log_message)
                     self.enqueue_notification(notification_message, RAC3BOXTHEME.WARNING, 5.0)
-
 
     ##################
     # Player Respawn #
@@ -1466,7 +1479,7 @@ class Rac3Interface(GameInterface):
                         RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
                     found_all_ammo = False
                     for slot_data in [self.read_weapon_vendor_slot_data(slot) for slot in range(vendor_size)]:
-                        # Remove ammo for weapons we dont have unlocked yet
+                        # Remove ammo for weapons we don't have unlocked yet
                         weapon = ITEM_NAME_FROM_ID.get(slot_data.item_id.value, None)
                         if weapon is not None and weapon in non_prog_weapon_data:
                             if self.UnlockItem[weapon].status == 0:
@@ -1613,8 +1626,7 @@ class Rac3Interface(GameInterface):
 
     def overwrite_vendor_item_names(self):
         """Overwrite the names of the weapons in the weapon vendor with the provided list of weapon names"""
-        if (not self.should_overwrite_vendor_item_names
-                or self.planet not in PLANET_VENDOR_OFFSET.keys()):
+        if not self.should_overwrite_vendor_item_names or self.planet not in PLANET_VENDOR_OFFSET.keys():
             return
         string_id_table_start = self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_STRING_TABLE_BASE)
         combined_locations = ITEM_TO_WEAPON_VENDOR_LOCATION | ITEM_TO_ARMOR_VENDOR_LOCATION
@@ -1765,7 +1777,8 @@ class Rac3Interface(GameInterface):
         if not moby:
             return float("inf")
         assert self.ratchet_moby < moby < self.ratchet_moby + 0x00300000, \
-            f"Moby {hex(moby)} not in the typical moby range ({hex(self.ratchet_moby)} - {hex(self.ratchet_moby + 0x00300000)})"
+            (f"Moby {hex(moby)} not in the typical moby range ({hex(self.ratchet_moby)} - "
+             f"{hex(self.ratchet_moby + 0x00300000)})")
         player_pos = self.player_pos
         moby_pos = RAC3POSITIONDATA(
             self._read_float(moby + 0x10),
@@ -2031,12 +2044,12 @@ class Rac3Interface(GameInterface):
 
                         # Temporarily set the vendor-focused weapon to its base/display id
                         self._write8(weapon_data.LEVEL_ADDRESS,
-                                    RAC3_ITEM_DATA_TABLE[weapon_name].ID)
+                                     RAC3_ITEM_DATA_TABLE[weapon_name].ID)
                         self.last_hovered_weapon = weapon_name
                     else:
                         restore_level = self.weapon_levels.get(weapon_name, 1)
                         self._write8(weapon_data.LEVEL_ADDRESS,
-                                    UPGRADE_DICT[weapon_name][restore_level - 1])
+                                     UPGRADE_DICT[weapon_name][restore_level - 1])
                 else:
                     target_id = UPGRADE_DICT[weapon_name][target_level - 1]
                     target_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[target_id]].XP_THRESHOLD
@@ -2048,7 +2061,7 @@ class Rac3Interface(GameInterface):
                 and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE):
                 restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
                 self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS,
-                                UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
+                             UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
                 self.last_hovered_weapon = ""
 
         # Automatic weapon leveling for progressive weapons
@@ -2108,7 +2121,7 @@ class Rac3Interface(GameInterface):
                 and self.pause_state_value != RAC3PAUSESTATE.WEAPON_UPGRADE):
                 restore_level = self.weapon_levels.get(self.last_hovered_weapon, 1)
                 self._write8(non_prog_weapon_data[self.last_hovered_weapon].LEVEL_ADDRESS,
-                            UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
+                             UPGRADE_DICT[self.last_hovered_weapon][restore_level - 1])
                 self.last_hovered_weapon = ""
 
     def verify_quick_select_and_last_used(self):
@@ -2269,7 +2282,7 @@ class Rac3Interface(GameInterface):
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
             health_addr = self._read32(self._read32(self.vehicle + 0x68))
-            max_health =  self._read32(self._read32(self.vehicle + 0x68) + 0x34)
+            max_health = self._read32(self._read32(self.vehicle + 0x68) + 0x34)
             target_health = max_health * 0.01
             if self._read_float(health_addr) > target_health:
                 self._write_float(health_addr, target_health)
@@ -2298,7 +2311,8 @@ class Rac3Interface(GameInterface):
                     # special cases
                     if name == RAC3SHORTCUTS.TYHRRANOSIS_DROPSHIP and data.FLAG_ADDRESSES is not None:
                         if not self.tyhrra_dropship:
-                            has_seen_cutscene = bool(self._read8(RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[0]) & (1 << RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[1]))
+                            has_seen_cutscene = bool(self._read8(RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[0]) & (
+                                1 << RAC3CUTSCENEFLAG.TYHRRANOSIS_FINISH_PROLOGUE[1]))
                             if has_seen_cutscene:
                                 self.tyhrra_dropship = True
                                 self.force_respawn()

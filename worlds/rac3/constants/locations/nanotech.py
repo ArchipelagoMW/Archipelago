@@ -1,5 +1,6 @@
 """This module contains string constants for Nanotech level ups"""
 
+
 class RAC3NANOTECH:
     """String constants for Nanotech level ups"""
     LEVEL_11 = "Nanotech Milestone: 11"

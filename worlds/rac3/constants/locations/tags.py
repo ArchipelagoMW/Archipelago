@@ -1,5 +1,6 @@
 """This module contains string constants used for tagging each location type"""
 
+
 class RAC3TAG:
     """String constants for each location tag"""
     SKILLPOINT = "SkillPoint"

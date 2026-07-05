@@ -1,5 +1,4 @@
 """Progress flag addresses and which bit is set."""
-from worlds.rac3.constants.region import RAC3REGION
 
 
 class RAC3CUTSCENEFLAG:

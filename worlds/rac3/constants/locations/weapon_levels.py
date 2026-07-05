@@ -1,5 +1,6 @@
 """This module contains string constants for each weapon level V2-V8 game location"""
 
+
 class RAC3WEAPONLEVEL:
     """String constants for each weapon level V2-V8 game location"""
     SHOCK_BLASTER_V2 = "Weapon Level: Shock Blaster V2"

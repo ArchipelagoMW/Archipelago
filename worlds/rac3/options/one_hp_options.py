@@ -14,11 +14,11 @@ class OneHpChallenge(OptionCounter):
     Clank:       Clank has only 1 HP.
     Vehicle:     Vehicles have only 1 HP.
     Qwark:       Qwark has only 1 HP.
-    Giant Clank: Giant Clank has only 1 HP. This one is almost impossible as terror of talos will one hit you immediately
+    Giant Clank: Giant Clank has only 1 HP. This is almost impossible as terror of talos will hit you immediately
     ---------------------------------------------------------------------------------------
     If you feel like this is too hard for you, you can always toggle the challenge for a character using /one_hp [
     character name]
-    
+
     1 = Enabled, 0 = Disabled
     """
     min = 0

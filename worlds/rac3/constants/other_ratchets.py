@@ -1,5 +1,6 @@
 """This module contains constant strings for the IDs of other Ratchet and Clank games"""
 
+
 class OTHERRATCHETGAMES:
     """Constant strings for the IDs of other Ratchet and Clank games"""
     RAC1_US = "SCUS-97199"

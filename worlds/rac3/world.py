@@ -152,7 +152,8 @@ class RaC3World(World):
         total_location_count = len(self.multiworld.get_unfilled_locations())
         existing_item_count = len(self.multiworld.itempool)
         item_count = len(itempool)
-        placement_location_count = total_location_count - existing_item_count if self.multiworld.players > 1 else own_location_count
+        placement_location_count = total_location_count - existing_item_count if self.multiworld.players > 1 else (
+            own_location_count)
         excluded_count = self.get_excluded_count()
         filler_count = own_location_count - item_count
         if item_count > placement_location_count:
@@ -221,7 +222,8 @@ class RaC3World(World):
         message = f"Not enough location options enabled! {count} items have nowhere to be placed."
         if count >= 50:
             message += ("\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
-                        "Crystal Trade locations, Additional Nanotech level locations or Additional Weapon Level locations.")
+                        "Crystal Trade locations, Additional Nanotech level locations or Additional Weapon Level "
+                        "locations.")
         if count <= 10 and sum(self.options.start_inventory_from_pool.value.values()) <= 10:
             message += "\nConsider adding some items to your starting_items_from_pool or "
         else:
