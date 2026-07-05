@@ -2038,10 +2038,16 @@ class Rac3Interface(GameInterface):
                 target_level = self.UnlockItem[weapon_name].status
                 if not target_level:
                     continue
+                if target_level > 5 and (not self.options.ngplus_items or weapon_name == RAC3ITEM.RY3N0):
+                    target_level = 5
+                if target_level > 8 and self.options.ngplus_items and weapon_name != RAC3ITEM.RY3N0:
+                    target_level = 8
+                if weapon_name == RAC3ITEM.RY3N0 and target_level > self.ryno:
+                    target_level = self.ryno
                 current_id = self._read8(weapon_data.LEVEL_ADDRESS)
                 current_level = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[current_id]].LEVEL
                 prev_saved = self.weapon_levels.get(weapon_name, 1)
-                if current_level > prev_saved and current_level <= target_level:
+                if prev_saved < current_level <= target_level:
                     self.weapon_levels[weapon_name] = current_level
                 if self.vendor_type == RAC3VENDORTYPE.WEAPON:
                     if self.read_weapon_vendor_slot_data(self.vendor_cursor_pos).item_id.value == RAC3_ITEM_DATA_TABLE[
@@ -2191,9 +2197,11 @@ class Rac3Interface(GameInterface):
         # award omega arsenal trophy if all 8 weapon levels are unlocked with ng+ items on and level 5 for ry3no
         if self.options.ngplus_items and self.weapon_levels:
             for weapon_name, level in self.weapon_levels.items():
-                if weapon_name == RAC3ITEM.RY3N0 and level < 4:
-                    return
-                if weapon_name != RAC3ITEM.RY3N0 and level < 8:
+                if weapon_name == RAC3ITEM.RY3N0:
+                    if level < self.ryno or (self.options.progressive_weapons
+                                             and self.UnlockItem[weapon_name].status < 5):
+                        return
+                elif level < 8:
                     return
             self._write8(RAC3STATUS.OMEGA_ARSENAL_TROPHY, 1)
 
