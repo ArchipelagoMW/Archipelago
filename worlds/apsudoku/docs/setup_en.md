@@ -11,7 +11,11 @@ Does not need to be added at the start of a seed, as it does not create any slot
 
 ## Installation Procedures
 
-Go to the latest release from the [APSudoku Releases page](https://github.com/APSudoku/APSudoku/releases/latest). Download and extract the appropriate file for your platform.
+### Windows / Linux
+Go to the latest release from the [github APSudoku Releases page](https://github.com/APSudoku/APSudoku/releases/latest). Download and extract the appropriate file for your platform.
+
+### Web
+Go to the [github pages](apsudoku.github.io) or [itch.io](https://emilyv99.itch.io/apsudoku) site, and play in the browser.
 
 ## Joining a MultiWorld Game
 
@@ -35,6 +39,14 @@ Info:
 - You can also use the `Tracking` tab to view either a basic tracker or a valid [GodotAP tracker pack](https://github.com/EmilyV99/GodotAP/blob/main/tracker_packs/GET_PACKS.md)
 - While connected, the number of "unhinted" locations for your slot is shown in the upper-left of the the `Sudoku` tab. (If this reads 0, no further hints can be earned for this slot, as every locations is already hinted)
 - Click the various `?` buttons for information on controls/how to play
+
+## Admin Settings
+
+By using the connected room's Admin Password on the Admin Panel tab, you can configure some settings at any time to affect the entire room.
+
+- You can disable APSudoku for the entire room, preventing any hints from being granted.
+- You can customize the reward weights for each difficulty, making progression hints more or less likely, and/or adding a chance to get "no hint" after a solve.
+
 ## DeathLink Support
 
 If `DeathLink` is enabled when you click `Connect`:

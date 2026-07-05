@@ -41,16 +41,18 @@ There are also the following optional fields:
 If the APWorld is packaged as an `.apworld` zip file, it also needs to have `version` and `compatible_version`,
 which refer to the version of the APContainer packaging scheme defined in [Files.py](../worlds/Files.py).  
 These get automatically added to the `archipelago.json` of an .apworld if it is packaged using the 
-["Build apworlds" launcher component](#build-apworlds-launcher-component),
+["Build APWorlds" launcher component](#build-apworlds-launcher-component),
 which is the correct way to package your `.apworld` as a world developer. Do not write these fields yourself.
 
-### "Build apworlds" Launcher Component
+### "Build APWorlds" Launcher Component
 
-In the Archipelago Launcher, there is a "Build apworlds" component that will package all world folders to `.apworld`,
+In the Archipelago Launcher, there is a "Build APWorlds" component that will package all world folders to `.apworld`,
 and add `archipelago.json` manifest files to them.  
 These .apworld files will be output to `build/apworlds` (relative to the Archipelago root directory).  
 The `archipelago.json` file in each .apworld will automatically include the appropriate
-`version` and `compatible_version`.
+`version` and `compatible_version`.  
+The component can also be called from the command line to allow for specifying a certain list of worlds to build.
+For example, running `Launcher.py "Build APWorlds" -- "Game Name"` will build only the game called `Game Name`.
 
 If a world folder has an `archipelago.json` in its root, any fields it contains will be carried over.  
 So, a world folder with an `archipelago.json` that looks like this:
@@ -79,10 +81,26 @@ will be packaged into an `.apworld` with a manifest file inside of it that looks
 
 This is the recommended workflow for packaging your world to an `.apworld`.
 
-## Extra Data
+### .apignore Exclusions
 
-The zip can contain arbitrary files in addition what was specified above.
+By default, any additional files inside of the world folder will be packaged into the resulting `.apworld` archive and
+can then be read by the world. However, if there are any other files that aren't needed in the resulting `.apworld`, you
+can automatically prevent the build component from including them by specifying them in a file called `.apignore` inside
+the root of the world folder.
 
+The `.apignore` file selects files in the same way as the `.gitignore` format with patterns separated by line describing
+which files to ignore. For example, an `.apignore` like this:
+
+```gitignore
+*.iso
+scripts/
+!scripts/needed.py
+```
+
+would ignore any `.iso` files and anything in the scripts folder except for `scripts/needed.py`.
+
+Some exclusions are made by default for all worlds such as `__pycache__` folders. These are listed in the
+`GLOBAL.apignore` file inside of the `data` directory.
 
 ## Caveats
 

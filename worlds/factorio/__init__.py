@@ -9,7 +9,7 @@ from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
-from .Locations import location_pools, location_table
+from .Locations import location_pools, location_table, craftsanity_locations
 from .Mod import generate_mod
 from .Options import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
                       TechCostDistribution, option_groups)
@@ -88,6 +88,7 @@ class Factorio(World):
     skip_silo: bool = False
     origin_region_name = "Nauvis"
     science_locations: typing.List[FactorioScienceLocation]
+    craftsanity_locations: typing.List[FactorioCraftsanityLocation]
     removed_technologies: typing.Set[str]
     settings: typing.ClassVar[FactorioSettings]
     trap_names: tuple[str] = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery",
@@ -100,6 +101,7 @@ class Factorio(World):
         self.advancement_technologies = set()
         self.custom_recipes = {}
         self.science_locations = []
+        self.craftsanity_locations = []
         self.tech_tree_layout_prerequisites = {}
 
     generate_output = generate_mod
@@ -127,17 +129,42 @@ class Factorio(World):
 
         location_pool = []
 
+        craftsanity_pool = [craft for craft in craftsanity_locations
+                            if self.options.silo != Silo.option_spawn
+                            or craft not in ["Craft rocket-silo", "Craft cargo-landing-pad"]]
+        # Ensure at least 2 science pack locations for automation and logistics, and 1 more for rocket-silo
+        # if it is not pre-spawned
+        craftsanity_count = min(self.options.craftsanity.value, len(craftsanity_pool),
+                                location_count - (2 if self.options.silo == Silo.option_spawn else 3))
+
+        location_count -= craftsanity_count
+
         for pack in sorted(self.options.max_science_pack.get_allowed_packs()):
             location_pool.extend(location_pools[pack])
         try:
-            location_names = random.sample(location_pool, location_count)
+            # Ensure there are two "AP-1-" locations for automation and logistics, and one max science pack location
+            # for rocket-silo if it is not pre-spawned
+            max_science_pack_number = len(self.options.max_science_pack.get_allowed_packs())
+            science_location_names = None
+            while (not science_location_names or
+                   len([location for location in science_location_names if location.startswith("AP-1-")]) < 2
+                    or (self.options.silo != Silo.option_spawn and len([location for location in science_location_names
+                            if location.startswith(f"AP-{max_science_pack_number}")]) < 1)):
+                science_location_names = random.sample(location_pool, location_count)
+            craftsanity_location_names = random.sample(craftsanity_pool, craftsanity_count)
+
         except ValueError as e:
             # should be "ValueError: Sample larger than population or is negative"
             raise Exception("Too many traps for too few locations. Either decrease the trap count, "
                             f"or increase the location count (higher max science pack). (Player {self.player})") from e
 
         self.science_locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
-                                  for loc_name in location_names]
+                                  for loc_name in science_location_names]
+
+        self.craftsanity_locations = [FactorioCraftsanityLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
+                                      for loc_name in craftsanity_location_names]
+
+
         distribution: TechCostDistribution = self.options.tech_cost_distribution
         min_cost = self.options.min_tech_cost.value
         max_cost = self.options.max_tech_cost.value
@@ -159,6 +186,7 @@ class Factorio(World):
             location.count = rand_values[i]
         del rand_values
         nauvis.locations.extend(self.science_locations)
+        nauvis.locations.extend(self.craftsanity_locations)
         location = FactorioLocation(player, "Rocket Launch", None, nauvis)
         nauvis.locations.append(location)
         event = FactorioItem("Victory", ItemClassification.progression, None, player)
@@ -188,7 +216,7 @@ class Factorio(World):
         loc: FactorioScienceLocation
         if self.options.tech_tree_information == TechTreeInformation.option_full:
             # mark all locations as pre-hinted
-            for loc in self.science_locations:
+            for loc in self.science_locations + self.craftsanity_locations:
                 loc.revealed = True
         if self.skip_silo:
             self.removed_technologies |= {"rocket-silo"}
@@ -236,6 +264,23 @@ class Factorio(World):
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
 
+        for location in self.craftsanity_locations:
+            if location.crafted_item == "crude-oil":
+                recipe = recipes["pumpjack"]
+            elif location.crafted_item in recipes:
+                recipe = recipes[location.crafted_item]
+            else:
+                for recipe_name, recipe in recipes.items():
+                    if recipe_name.endswith("-barrel"):
+                        continue
+                    if location.crafted_item in recipe.products:
+                        break
+                else:
+                    raise Exception(
+                        f"No recipe found for {location.crafted_item} for Craftsanity for player {self.player}")
+            location.access_rule = lambda state, recipe=recipe: \
+                state.has_all({technology.name for technology in recipe.recursive_unlocking_technologies}, player)
+
         for location in self.science_locations:
             Rules.set_rule(location, lambda state, ingredients=frozenset(location.ingredients):
                 all(state.has(f"Automated {ingredient}", player) for ingredient in ingredients))
@@ -246,14 +291,15 @@ class Factorio(World):
 
         silo_recipe = None
         cargo_pad_recipe = None
-        if self.options.silo == Silo.option_spawn:
+        if self.options.silo != Silo.option_spawn:
             silo_recipe = self.get_recipe("rocket-silo")
             cargo_pad_recipe = self.get_recipe("cargo-landing-pad")
         part_recipe = self.custom_recipes["rocket-part"]
-        satellite_recipe = None
-        if self.options.goal == Goal.option_satellite:
-            satellite_recipe = self.get_recipe("satellite")
-        victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe, cargo_pad_recipe)
+        satellite_recipe = self.get_recipe("satellite")
+        victory_tech_names = get_rocket_requirements(
+            silo_recipe, part_recipe,
+            satellite_recipe if self.options.goal == Goal.option_satellite else None,
+            cargo_pad_recipe)
         if self.options.silo == Silo.option_spawn:
             victory_tech_names -= {"rocket-silo"}
         else:
@@ -262,6 +308,46 @@ class Factorio(World):
                                                                            for technology in
                                                                            victory_tech_names)
         self.multiworld.completion_condition[player] = lambda state: state.has('Victory', player)
+
+        if "Craft rocket-silo" in self.multiworld.regions.location_cache[self.player]:
+            victory_tech_names_r = get_rocket_requirements(silo_recipe, None, None, None)
+            if self.options.silo == Silo.option_spawn:
+                victory_tech_names_r -= {"rocket-silo"}
+            else:
+                victory_tech_names_r |= {"rocket-silo"}
+            self.get_location("Craft rocket-silo").access_rule = lambda state: all(state.has(technology, player)
+                                                                                   for technology in
+                                                                                   victory_tech_names_r)
+
+        if "Craft rocket-part" in self.multiworld.regions.location_cache[self.player]:
+            victory_tech_names_p = get_rocket_requirements(silo_recipe, part_recipe, None, None)
+            if self.options.silo == Silo.option_spawn:
+                victory_tech_names_p -= {"rocket-silo"}
+            else:
+                victory_tech_names_p |= {"rocket-silo"}
+            self.get_location("Craft rocket-part").access_rule = lambda state: all(state.has(technology, player)
+                                                                                   for technology in
+                                                                                   victory_tech_names_p)
+
+        if "Craft satellite" in self.multiworld.regions.location_cache[self.player]:
+            victory_tech_names_s = get_rocket_requirements(None, None, satellite_recipe, None)
+            if self.options.silo == Silo.option_spawn:
+                victory_tech_names_s -= {"rocket-silo"}
+            else:
+                victory_tech_names_s |= {"rocket-silo"}
+            self.get_location("Craft satellite").access_rule = lambda state: all(state.has(technology, player)
+                                                                                   for technology in
+                                                                                   victory_tech_names_s)
+
+        if "Craft cargo-landing-pad" in self.multiworld.regions.location_cache[self.player]:
+            victory_tech_names_c = get_rocket_requirements(None, None, None, cargo_pad_recipe)
+            if self.options.silo == Silo.option_spawn:
+                victory_tech_names_c -= {"rocket-silo"}
+            else:
+                victory_tech_names_c |= {"rocket-silo"}
+            self.get_location("Craft cargo-landing-pad").access_rule = lambda state: all(state.has(technology, player)
+                                                                                   for technology in
+                                                                                   victory_tech_names_c)
 
     def get_recipe(self, name: str) -> Recipe:
         return self.custom_recipes[name] if name in self.custom_recipes \
@@ -486,8 +572,16 @@ class Factorio(World):
         needed_recipes = self.options.max_science_pack.get_allowed_packs() | {"rocket-part"}
         if self.options.silo != Silo.option_spawn:
             needed_recipes |= {"rocket-silo", "cargo-landing-pad"}
-        if self.options.goal.value == Goal.option_satellite:
+        if (self.options.goal.value == Goal.option_satellite
+                or "Craft satellite" in self.multiworld.regions.location_cache[self.player]):
             needed_recipes |= {"satellite"}
+
+        needed_items = {location.crafted_item for location in self.craftsanity_locations}
+        for recipe_name, recipe in recipes.items():
+            for product in recipe.products:
+                if product in needed_items:
+                    self.advancement_technologies |= {tech.name for tech in recipe.recursive_unlocking_technologies}
+                    break
 
         for recipe in needed_recipes:
             recipe = self.custom_recipes.get(recipe, recipes[recipe])
@@ -520,9 +614,23 @@ class FactorioLocation(Location):
     game: str = Factorio.game
 
 
+class FactorioCraftsanityLocation(FactorioLocation):
+    ingredients = {}
+    count = 0
+    revealed = False
+
+    def __init__(self, player: int, name: str, address: int, parent: Region):
+        super(FactorioCraftsanityLocation, self).__init__(player, name, address, parent)
+
+    @property
+    def crafted_item(self):
+        return " ".join(self.name.split(" ")[1:])
+
+
 class FactorioScienceLocation(FactorioLocation):
     complexity: int
     revealed: bool = False
+    crafted_item = None
 
     # Factorio technology properties:
     ingredients: typing.Dict[str, int]

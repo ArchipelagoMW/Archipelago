@@ -128,8 +128,13 @@ def tutorial_landing():
                 "authors": tutorial.authors,
                 "language": tutorial.language
             }
-    tutorials = {world_name: tutorials for world_name, tutorials in title_sorted(
-        tutorials.items(), key=lambda element: "\x00" if element[0] == "Archipelago" else worlds[element[0]].game)}
+
+    worlds = dict(
+        title_sorted(
+            worlds.items(), key=lambda element: "\x00" if element[0] == "Archipelago" else worlds[element[0]].game
+        )
+    )
+
     return render_template("tutorialLanding.html", worlds=worlds, tutorials=tutorials)
 
 

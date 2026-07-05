@@ -97,11 +97,12 @@ class SavingPrincessWorld(World):
     settings: ClassVar[SavingPrincessSettings]
 
     is_pool_expanded: bool = False
-    music_table: List[int] = list(range(16))
+    music_table: List[int]
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
+        self.music_table = list(range(16))
         self.is_pool_expanded = self.options.expanded_pool > 0
         if self.options.music_shuffle:
             self.random.shuffle(self.music_table)

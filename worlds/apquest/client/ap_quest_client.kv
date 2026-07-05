@@ -1,0 +1,56 @@
+<ConfettiView>:
+    size_hint: None, None
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    spacing: 0
+    padding: 0
+
+<APQuestGrid>:
+    cols: 12
+    rows: 11
+    spacing: 0
+    padding: 0
+    size_hint: None, None
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<APQuestGameView>:
+    RelativeLayout:
+        id: game_container
+
+<APQuestControlsView>:
+    Label:
+        markup: True
+        font_size: "20sp"
+        valign: "middle"
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        text:
+            """[b]Controls:[/b]
+
+            WASD or Arrow Keys to move
+            Space to attack or interact
+            C to fire available Confetti Cannons
+            Number Keys + Backspace for Math Trap\n
+
+            Rebinding controls might be added in the future :)"""
+
+<VolumeSliderView>:
+    orientation: "horizontal"
+    size_hint: 1, None
+    padding: 0
+    height: 50
+
+    Label:
+        size_hint: None, 1
+        text: "Volume:"
+
+    Slider:
+        id: volume_slider
+        size_hint: 1, 1
+        min: 0
+        max: 100
+        step: 1
+        value: 50
+        orientation: "horizontal"
+
+    Label:
+        size_hint: None, 1
+        text: str(int(volume_slider.value))

@@ -1,10 +1,11 @@
 from ..bases import SVTestBase
-from ..options.presets import allsanity_mods_6_x_x
+from ..options.presets import allsanity_mods_7_x_x
 from ...stardew_rule import HasProgressionPercent
 
 
 class TestHasProgressionPercentWithVictory(SVTestBase):
-    options = allsanity_mods_6_x_x()
+    options = allsanity_mods_7_x_x()
+    skip_default_tests = True
 
     def test_has_100_progression_percent_is_false_while_items_are_missing(self):
         has_100_progression_percent = HasProgressionPercent(1, 100)
