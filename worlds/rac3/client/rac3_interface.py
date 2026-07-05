@@ -2,7 +2,9 @@
 import time
 from dataclasses import dataclass
 from random import choice, randint, uniform
-from typing import Any, Optional
+from typing import Any
+
+from typing_extensions import deprecated
 
 from BaseClasses import ItemClassification
 from CommonClient import logger
@@ -17,8 +19,8 @@ from worlds.rac3.constants.cutscene_flag import RAC3CUTSCENEFLAG
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA, SAVE_DATA
 from worlds.rac3.constants.data.item import (armor_data, cheat_data, equipable_data, gadget_data, infobot_data,
                                              ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID, non_prog_weapon_data,
-                                             PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data,
-                                             quick_selectable_data)
+                                             PROG_TO_NAME_DICT, quick_selectable_data, RAC3_ITEM_DATA_TABLE,
+                                             timer_to_status, vidcomic_data)
 from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION_TO_INFOBOT_FLAG,
                                                  RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA, REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
@@ -1033,6 +1035,7 @@ class Rac3Interface(GameInterface):
             if target_ammo:
                 self._write32(weapon_data.AMMO_ADDRESS, target_ammo)
 
+    @deprecated("Unused")
     def weapon_level_from_xp(self, weapon_name: str) -> int:
         """Returns the weapon level based on the current xp"""
         current_xp = self._read32(non_prog_weapon_data[weapon_name].XP_ADDRESS)
@@ -1046,6 +1049,7 @@ class Rac3Interface(GameInterface):
                 level_from_xp = lvl + 1
         return level_from_xp
 
+    @deprecated("Unused")
     def has_all_weapons(self) -> bool:
         """Returns whether the player has collected all weapons, used for endgame checks"""
         for weapon_name in non_prog_weapon_data.keys():
@@ -1789,6 +1793,7 @@ class Rac3Interface(GameInterface):
                     (player_pos.Z - moby_pos.Z) ** 2) ** 0.5
         return distance
 
+    @deprecated("Unused")
     def get_checked_locations_by_tag(self, tag: str) -> list[str]:
         """Get a list of checked locations that match the given tag"""
         return [loc for loc in self.checked_locations if tag in RAC3_LOCATION_DATA_TABLE[loc].TAGS]
