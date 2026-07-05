@@ -306,6 +306,16 @@
 
     // Trick Events
     {
+        "category": "medium_logic", "address": null, "name": "Trick - Long Jump with Swift Runner",
+        "region": "FSP - Root Node", "requires": [
+            {
+                "option": "randomize_skill_tree",
+                "true": [ { "item": "Swift Runner" } ],
+                "false": []
+            }
+        ]
+    },
+    {
         "category": "medium_logic", "address": null, "name": "Trick - Bow Hover",
         "region": "FSP - Root Node", "requires": [
             {
@@ -1349,7 +1359,10 @@
         "medium_requires": [ // but if you can fall down from the root node, you can bring qi from one of the archers up there
             { "region": "GoS (East) - Root Node" }, // then T-dash from the tiny rock platforms to the middle long platform
             { "anyOf": [
-                { "item": "Ledge Grab" }, // + Swift Runner over the final gap to the leftmost long platform
+                [ // SR-jump over the final gap to the leftmost long platform
+                    { "item": "Ledge Grab" },
+                    { "item": "Trick - Long Jump with Swift Runner" }
+                ],
                 { "item": "Tai-Chi Kick" } // or get a 2nd qi / 2nd T-dash from the worm on this platform
             ] }
         ]

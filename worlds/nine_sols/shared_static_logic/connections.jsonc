@@ -24,8 +24,9 @@
             ]
         ] } ],
         "medium_requires": [
-            { "item": "Air Dash" }, // and Swift Runner onto the roof above the root node
-            { "item": "Trick - Bow Hover" }
+            { "item": "Trick - Long Jump with Swift Runner" }, // SR-jump from the left stairs
+            { "item": "Air Dash" }, // dash onto the roof above the root node
+            { "item": "Trick - Bow Hover" } // then hover from this roof past the grapple target
         ]
     },
     { "from": "AF (Elevator) - Leave Tutorial Arena", "to": "AF (Elevator) - Upper Root Node", "requires": [] }, // from this side, single jump is enough
@@ -78,7 +79,10 @@
         ] } ],
         "medium_requires": [ { "anyOf": [
             { "item": "Trick - Bow Hover" },
-            { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // Swift Runner replaces one of AD or CL
+            [
+                { "item": "Trick - Long Jump with Swift Runner" }, // replaces one of AD or CL
+                { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // but not both
+            ]
         ] } ],
         "ls_requires": [
             { "item": "Ledge Grab" }, // LS parry hover
@@ -213,8 +217,8 @@
         "requires": [{ "item": "Air Dash" }, { "item": "Cloud Leap" }],
         "medium_requires": [ { "anyOf": [
             { "item": "Air Dash" }, // and T-dash
-            { "item": "Cloud Leap" }, // and swift runner
-            { "item": "Charged Strike" } // and T-dash and swift runner
+            [ { "item": "Cloud Leap" }, { "item": "Trick - Long Jump with Swift Runner" } ],
+            [ { "item": "Charged Strike" }, { "item": "Trick - Long Jump with Swift Runner" } ] // and T-dash
         ] } ]
     },
     {
@@ -234,7 +238,7 @@
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
-        "medium_requires": [] // T-dash // bow hover also works, as does (LG AND (swift runner OR CS-dash))
+        "medium_requires": [] // T-dash // bow hover also works, as does (LG AND (SR OR CS-dash))
     },
     { "from": "AF (Depths) - Lower Level", "to": "AF (Depths) - Right Exit", "requires": [ { "anyOf": [
         { "item": "Tai-Chi Kick" },
@@ -483,7 +487,7 @@
             { "anyOf": [ // for crossing the shaft horizontally
                 { "item": "Air Dash" }, // and T-dash
                 { "item": "Cloud Leap" }, // and T-dash
-                { "item": "Charged Strike" }, // and T-dash *and* Swift Runner
+                [ { "item": "Charged Strike" }, { "item": "Trick - Long Jump with Swift Runner" } ], // *and* T-dash
                 { "item": "Trick - Bow Hover" }
             ] }
         ],
@@ -562,7 +566,7 @@
         // while there's no qi source in this region, if you can get here then you must have passed through
         // either Lower Left Vents or Root Node, and both of those regions have enemies to parry
         "medium_requires": [ { "anyOf": [
-            { "item": "Ledge Grab" }, // { "item": "Swift Runner" } ], and T-dash or AD
+            [ { "item": "Ledge Grab" }, { "item": "Trick - Long Jump with Swift Runner" } ], // and T-dash
             { "item": "Air Dash" } // AD *and* T-dash works without LG or SR; T-dash likes to "snap up" onto ledges
         ] } ]
         // no LS logic: bow hover into LS vault with AD setup works, but is redundant with medium logic
@@ -632,8 +636,11 @@
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
-        "medium_requires": [] // just swift runner
-    }, // bow hover or (CS + AD + T-dash) works but is redundant // no ledge for parry hover
+        "medium_requires": [ { "anyOf": [
+            { "item": "Trick - Long Jump with Swift Runner" },
+            { "item": "Trick - Bow Hover" }
+        ] } ]
+    }, // (CS + AD + T-dash) works but is redundant // no ledge for parry hover
     {
         "from": "PR (Central) - Upper Right", "to": "PR (Central) - Upper Right Roof Statue",
         "requires": [ { "anyOf": [
@@ -765,12 +772,15 @@
     {
         "from": "LYR - Left Exit", "to": "LYR - Root Node",
         "requires": [ { "anyOf": [
-            { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+            { "item": "Grapple" },
+            { "item": "Air Dash" },
+            { "item": "Cloud Leap" }
         ] } ],
-        "medium_requires": [] // just swift runner and single jump for now
-        // in the future with an SR item, this will be { "anyOf": [
-        //     { "item": "Trick - Bow Hover" }, { "item": "Charged Strike" }, { "item": "Swift Runner" }
-        // ] }
+        "medium_requires": [ { "anyOf": [
+            { "item": "Trick - Bow Hover" },
+            { "item": "Charged Strike" },
+            { "item": "Trick - Long Jump with Swift Runner" }
+        ] } ]
     }, // LS can't help
     {
         "from": "LYR - Root Node", "to": "LYR - Left Exit",
@@ -916,10 +926,12 @@
                 { "item": "Wall Climb" } // then climb the green wall in the "Between ..." room
             ]
         ] } ],
-        "medium_requires": [ // use a Swift Runner jump to get into the "Between ..." room
-            { "item": "Wall Climb" } // so WC alone is enough now
+        "medium_requires": [
+            { "item": "Trick - Long Jump with Swift Runner" }, // to get into the "Between ..." room
+            { "item": "Wall Climb" } // then WC is enough
         ],
-        "ls_requires": [ // use a Swift Runner jump to get into the "Between ..." room
+        "ls_requires": [
+            { "item": "Trick - Long Jump with Swift Runner" }, // to get into the "Between ..." room
             { "item": "Ledge Grab" } // then wall slide instead of WC or CL
         ] // T-dash setup is fine here
     },
@@ -1032,7 +1044,10 @@
         "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
-        "medium_requires": [ { "item": "Charged Strike" } ] // and Swift Runner
+        "medium_requires": [
+            { "item": "Charged Strike" },
+            { "item": "Trick - Long Jump with Swift Runner" }
+        ]
     },
     {
         "from": "Factory (U) - Main Intersection", "to": "Factory (U) - Broken Shanhai",
@@ -1051,7 +1066,7 @@
         "medium_requires": [
             { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // getting onto the ledge is the same
             { "anyOf": [
-                { "item": "Cloud Leap" }, // and swift runner
+                [ { "item": "Cloud Leap" }, { "item": "Trick - Long Jump with Swift Runner" } ],
                 { "item": "Trick - Bow Hover" }
             ] } // can't assume you have qi for T-dash since you may have already spent it reaching FU-BS
         ]
@@ -1087,7 +1102,7 @@
         ] } ], // either CL up to the chest and ropes, or (AD OR CL) over the spikes to the statue
         "medium_requires": [ { "anyOf": [
             { "item": "Trick - Bow Hover" },
-            { "item": "Charged Strike" } // and swift runner
+            [ { "item": "Charged Strike" }, { "item": "Trick - Long Jump with Swift Runner" } ]
         ] } ]
     }, // in RN&LE no enemies for a T-dash, and no ledge to store
     {
@@ -1377,7 +1392,10 @@
             { "item": "Grapple" }, // for slider
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // for two slightly long jumps over spikes
         ],
-        "medium_requires": [ { "item": "Grapple" } ] // for slider, then SR for the long jumps
+        "medium_requires": [
+            { "item": "Grapple" }, // for slider
+            { "item": "Trick - Long Jump with Swift Runner" } // for the spike jumps
+        ]
     },
     {
         "from": "AM - Root Node", "to": "AM - Above Left Exit",
@@ -1708,7 +1726,11 @@
         "requires": [ { "anyOf": [
             { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Ledge Grab" }
         ] } ],
-        "medium_requires": [] // Swift Runner, or bow hover, or CS-dash
+        "medium_requires": [ { "anyOf": [
+            { "item": "Trick - Long Jump with Swift Runner" },
+            { "item": "Trick - Bow Hover" },
+            { "item": "Charged Strike" }
+        ] } ]
     }, // parry hover works but is redundant with vanilla logic
     {
         "from": "GoS (Entry) - Root Node", "to": "GoS (Entry) - Greenhouse",
@@ -2332,7 +2354,11 @@
     {
         "from": "ED (Living Area) - Opera Theater", "to": "ED (Living Area) - East Building Rooftops",
         "requires": [{ "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Wall Climb" }],
-        "medium_requires": [{ "item": "Cloud Leap" }, { "item": "Air Dash" }] // and swift runner
+        "medium_requires": [
+            { "item": "Cloud Leap" },
+            { "item": "Air Dash" },
+            { "item": "Trick - Long Jump with Swift Runner" }
+        ]
     }, // you'll always need CL for the rope at the end
     { "from": "ED (Living Area) - Opera Theater", "to": "ED (Living Area) - Opera Theater Roofs", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
@@ -2348,8 +2374,11 @@
         "requires": [{ "item": "Cloud Leap" }],
         "ls_requires": [
             { "item": "Mystic Nymph: Scout Mode" }, // if the rope has been lowered
-            { "item": "Ledge Grab" } // then you can do T-dash LS setup, climb rope back up, and LS vault to higher roof
-            // then swift runner OR air dash to the Tao Fruit building
+            { "item": "Ledge Grab" }, // then you can do T-dash LS setup, climb rope back up, and LS vault to higher roof
+            { "anyOf": [ // then long jump to the Tao Fruit building
+                { "item": "Air Dash" },
+                { "item": "Trick - Long Jump with Swift Runner" }
+            ] }
         ]
     },
     { "from": "ED (Living Area) - Opera Theater", "to": "ED (Living Area) - Five Bells Room", "requires": [] }, // fall
@@ -2369,12 +2398,12 @@
     {
         "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Root Node",
         "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
-        "medium_requires": [] // Swift Runner
+        "medium_requires": [ { "item": "Trick - Long Jump with Swift Runner" } ]
     },
     {
         "from": "ED (Sanctum) - Root Node", "to": "ED (Sanctum) - Right Exit",
         "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
-        "medium_requires": [] // Swift Runner
+        "medium_requires": [ { "item": "Trick - Long Jump with Swift Runner" } ]
     },
     { "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Monitoring Panel", "requires": [
         { "item": "Tai-Chi Kick" },
