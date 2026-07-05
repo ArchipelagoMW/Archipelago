@@ -514,7 +514,7 @@
                             "connections": [
                                 {
                                     "dest": "west",
-                                    "rule": [],
+                                    "rule": [ [ "any_dash_u_ul_l" ] ],
                                     "vm_rule": [ [ "any_dash_u_ul_l_dl" ] ]
                                 }
                             ]
@@ -1806,7 +1806,11 @@
                             "connections": [
                                 {
                                     "dest": "north",
-                                    "rule": [ [ "any_dash_u_l_ul" ] ],
+                                    "rule": [ [ "any_dash_u_ul_l" ] ],
+                                    "vm_rule": [
+                                        [ "any_dash_u_ul" ],
+                                        [ "l_climb" ]
+                                    ],
                                     "assist_rule": [
                                         [ "any_dash_u_ul_l" ],
                                         [ "l_climb" ]
@@ -2247,12 +2251,7 @@
                         },
                         {
                             "name": "north-west",
-                            "connections": [
-                                {
-                                    "dest": "south-east",
-                                    "rule": []
-                                }
-                            ]
+                            "connections": []
                         },
                         {
                             "name": "north-east",
@@ -2395,7 +2394,7 @@
                                 {
                                     "dest": "south",
                                     "rule": [ [ "traffic_blocks", "any_dash_l_ul" ] ],
-                                    "vm_rule": [ [ "traffic_blocks", "l_climb", "any_dash_l_ul" ] ],
+                                    "vm_rule": [ [ "traffic_blocks", "l_climb", "any_dash_u_ul" ] ],
                                     "assist_rule": [
                                         [ "traffic_blocks", "l_climb" ],
                                         [ "any_dash_l_ul_u_ur_r" ],
@@ -2405,7 +2404,7 @@
                                 {
                                     "dest": "west",
                                     "rule": [ [ "traffic_blocks", "any_dash_l_ul" ] ],
-                                    "vm_rule": [ [ "traffic_blocks", "l_climb", "any_dash_l_ul" ] ],
+                                    "vm_rule": [ [ "traffic_blocks", "l_climb", "any_dash_u_ul" ] ],
                                     "assist_rule": [ [ "traffic_blocks", "l_climb" ] ]
                                 }
                             ]
@@ -4385,8 +4384,8 @@
                                     "rule": [ [ "dream_blocks", "ul_dash" ] ],
                                     "vm_rule": [
                                         [ "dream_blocks", "ul_dash" ],
-                                        [ "dream_blocks", "l_dash", "ur_dash" ],
-                                        [ "u_dash" ]
+                                        [ "dream_blocks", "l_dash", "r_dash" ],
+                                        [ "any_dash_u_ur" ]
                                     ],
                                     "assist_rule": [
                                         [ "ul_dash" ],
@@ -4614,8 +4613,8 @@
                                 {
                                     "dest": "north-east",
                                     "rule": [ [ "dream_blocks", "r_dash" ] ],
-                                    "vm_rule": [ [ "dream_blocks", "any_dash_d_dr" ] ],
-                                    "assist_rule": [ [ "dream_blocks", "any_dash_d_dr" ] ]
+                                    "vm_rule": [ [ "dream_blocks", "any_dash_r_dr" ] ],
+                                    "assist_rule": [ [ "dream_blocks", "any_dash_r_dr" ] ]
                                 },
                                 {
                                     "dest": "west",
@@ -6099,8 +6098,8 @@
                                 {
                                     "dest": "south",
                                     "rule": [ [ "dream_blocks", "d_dash" ] ],
-                                    "vm_rule": [ [ "dream_blocks", "any_dash_d_dl" ] ],
-                                    "assist_rule": [ [ "dream_blocks", "any_dash_d_dl" ] ]
+                                    "vm_rule": [ [ "dream_blocks", "any_dash_dr_d_dl" ] ],
+                                    "assist_rule": [ [ "dream_blocks", "any_dash_dr_d_dl" ] ]
                                 },
                                 {
                                     "dest": "east",
@@ -6116,8 +6115,8 @@
                                 {
                                     "dest": "north",
                                     "rule": [ [ "dream_blocks", "u_dash" ] ],
-                                    "vm_rule": [ [ "dream_blocks", "any_dash_u_ur" ] ],
-                                    "assist_rule": [ [ "dream_blocks", "any_dash_u_ur" ] ]
+                                    "vm_rule": [ [ "dream_blocks", "any_dash_ul_u_ur" ] ],
+                                    "assist_rule": [ [ "dream_blocks", "any_dash_ul_u_ur" ] ]
                                 }
                             ]
                         },
@@ -7406,7 +7405,7 @@
                                 {
                                     "dest": "west",
                                     "rule": [ [ "dream_blocks", "l_dash", "u_dash" ] ],
-                                    "vm_rule": [ [ "dream_blocks", "l_dash", "any_dash_ul_u_ur" ] ],
+                                    "vm_rule": [ [ "dream_blocks", "l_dash", "any_dash_ul_u_ur_r" ] ],
                                     "assist_rule": [ [ "dream_blocks", "l_dash" ] ]
                                 }
                             ]
@@ -7619,7 +7618,7 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "dream_blocks", "coins", "u_dash", "dr_dash", "l_dash", "r_dash" ] ],
-                                    "vm_rule": [ [ "dream_blocks", "coins", "any_dash_u_ul", "dr_dash", "l_dash", "r_dash", "l_climb" ] ],
+                                    "vm_rule": [ [ "dream_blocks", "coins", "any_dash_u_ul", "dr_dash", "l_dash", "r_dash" ] ],
                                     "assist_rule": [ [ "dream_blocks", "coins", "any_dash_u_ul", "any_dash_d_dr", "l_dash", "r_dash" ] ]
                                 }
                             ]
@@ -7874,10 +7873,10 @@
                                     "dest": "east",
                                     "rule": [ [ "dream_blocks", "dash_refills", "u_dash", "r_dash", "d_dash", "ur_dash", "dr_dash", "ul_dash" ] ],
                                     "vm_rule": [
-                                        [ "dream_blocks", "u_dash", "r_dash", "dr_dash", "ul_dash" ],
-                                        [ "dream_blocks", "u_dash", "r_dash", "dr_dash", "r_climb" ]
+                                        [ "dream_blocks", "dash_refills", "u_dash", "r_dash", "dr_dash", "ul_dash" ],
+                                        [ "dream_blocks", "dash_refills", "u_dash", "r_dash", "dr_dash", "r_climb" ]
                                     ],
-                                    "assist_rule": [ [ "dream_blocks", "dash_refills", "u_dash", "r_dash" ] ]
+                                    "assist_rule": [ [ "dream_blocks", "u_dash", "r_dash" ] ]
                                 }
                             ]
                         },
@@ -9197,8 +9196,7 @@
                                     "rule": [ [ "sinking_platforms", "u_dash" ] ],
                                     "vm_rule": [
                                         [ "dr_dash", "crouch", "any_dash_u_ur_r" ],
-                                        [ "sinking_platforms", "any_dash_u_ur" ],
-                                        [ "sinking_platforms", "ul_dash", "r_climb" ]
+                                        [ "sinking_platforms", "any_dash_ul_u_ur_r" ]
                                     ]
                                 },
                                 {
@@ -18197,20 +18195,21 @@
                                     "dest": "east",
                                     "rule": [ [ "coins", "moving_platforms", "springs", "blue_boosters", "any_dash_ul_l", "any_dash_ur_u" ] ],
                                     "vm_rule": [
-                                        [ "coins", "blue_boosters", "springs", "l_dash", "r_dash" ],
+                                        [ "coins", "blue_boosters", "springs", "moving_platforms", "l_dash", "r_dash" ],
                                         [ "coins", "blue_boosters", "ul_dash", "dl_dash", "dr_dash", "crouch" ],
+                                        [ "coins", "blue_boosters", "l_dash", "any_dash_u_ur", "dl_dash", "dr_dash", "crouch" ],
                                         [ "coins", "blue_boosters", "springs", "u_dash" ],
                                         [ "coins", "blue_boosters", "springs", "ul_dash", "ur_dash" ],
                                         [ "coins", "blue_boosters", "springs", "ul_dash", "r_dash" ],
                                         [ "coins", "blue_boosters", "springs", "ul_dash", "crouch", "dr_dash" ],
                                         [ "coins", "blue_boosters", "springs", "ur_dash", "l_dash" ],
-                                        [ "coins", "blue_boosters", "springs", "ur_dash", "crouch", "dl_dash" ],
+                                        [ "coins", "blue_boosters", "springs", "ur_dash", "dl_dash" ],
                                         [ "coins", "blue_boosters", "moving_platforms", "u_dash" ],
                                         [ "coins", "blue_boosters", "moving_platforms", "ul_dash", "ur_dash" ],
                                         [ "coins", "blue_boosters", "moving_platforms", "ul_dash", "r_dash" ],
                                         [ "coins", "blue_boosters", "moving_platforms", "ul_dash", "crouch", "dr_dash" ],
                                         [ "coins", "blue_boosters", "moving_platforms", "ur_dash", "l_dash" ],
-                                        [ "coins", "blue_boosters", "moving_platforms", "ur_dash", "crouch", "dl_dash" ]
+                                        [ "coins", "blue_boosters", "moving_platforms", "ur_dash", "dl_dash" ]
                                     ],
                                     "assist_rule": [
                                         [ "any_dash_r_ur_u_ul_l" ],
@@ -18966,10 +18965,7 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "move_blocks", "dash_refills", "u_dash", "ur_dash" ] ],
-                                    "vm_rule": [
-                                        [ "move_blocks", "dash_refills", "any_dash_u_ur", "r_climb", "l_climb" ],
-                                        [ "move_blocks", "dash_refills", "r_dash", "ul_dash", "r_climb", "l_climb" ]
-                                    ],
+                                    "vm_rule": [ [ "move_blocks", "dash_refills", "any_dash_u_ur_r", "r_climb", "l_climb" ]],
                                     "assist_rule": [
                                         [ "move_blocks" ],
                                         [ "u_dash" ],
@@ -19059,7 +19055,7 @@
                                     "display_name": "Golden Strawberry",
                                     "type": "golden_strawberry",
                                     "rule": [ [ "pink_clouds", "blue_boosters", "move_blocks", "dash_refills", "u_dash", "ur_dash" ] ],
-                                    "vm_rule": [ [ "pink_clouds", "blue_boosters", "move_blocks", "dash_refills", "u_dash", "ur_dash", "r_climb", "l_climb" ] ],
+                                    "vm_rule": [ [ "pink_clouds", "blue_boosters", "move_blocks", "u_dash", "ur_dash", "r_climb", "l_climb" ] ],
                                     "assist_rule": [
                                         [ "u_dash" ],
                                         [ "ul_dash", "move_blocks", "blue_boosters" ],
@@ -19985,12 +19981,13 @@
                             "connections": [
                                 {
                                     "dest": "center",
-                                    "rule": []
+                                    "rule": [ [ "cannot_access" ] ],
+                                    "vm_rule": [ [ "dl_dash", "crouch", "l_dash" ] ]
                                 },
                                 {
                                     "dest": "north",
                                     "rule": [ [ "cannot_access" ] ],
-                                    "vm_rule": [ [ "dl_dash", "crouch", "l_dash" ] ],
+                                    "vm_rule": [ [ "cannot_access" ] ],
                                     "assist_rule": [ [ "swap_blocks" ] ]
                                 }
                             ]
@@ -21222,7 +21219,10 @@
                                 {
                                     "dest": "south",
                                     "rule": [ [ "l_dash" ] ],
-                                    "vm_rule": [ [ "any_dash_l_dl" ] ]
+                                    "vm_rule": [
+                                        [ "l_dash" ],
+                                        [ "dl_dash", "crouch" ]
+                                    ]
                                 }
                             ],
                             "locations": [
@@ -21231,7 +21231,10 @@
                                     "display_name": "Depths Key",
                                     "type": "key",
                                     "rule": [ [ "l_dash" ] ],
-                                    "vm_rule": [ [ "any_dash_l_dl" ] ]
+                                    "vm_rule": [
+                                        [ "l_dash" ],
+                                        [ "dl_dash", "crouch" ]
+                                    ]
                                 }
                             ]
                         },
@@ -21253,6 +21256,7 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "cannot_access" ] ],
+                                    "vm_rule": [ [ "cannot_access" ] ],
                                     "assist_rule": [ [ "any_dash_ur_u_ul" ] ]
                                 }
                             ]
@@ -23595,6 +23599,25 @@
                             ]
                         },
                         {
+                            "name": "east",
+                            "connections": [
+                                {
+                                    "dest": "center",
+                                    "rule": [ [ "dash_switches", "any_dash_ul_l_dl" ] ],
+                                    "vm_rule": [ [ "dash_switches", "any_dash_ul_l_dl" ] ],
+                                    "assist_rule": [ [ "dash_switches", "any_dash_ul_l_dl" ] ]
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "strawberry_2",
+                                    "display_name": "Strawberry 2",
+                                    "type": "strawberry",
+                                    "rule": []
+                                }
+                            ]
+                        },
+                        {
                             "name": "west",
                             "connections": [],
                             "locations": [
@@ -23662,25 +23685,6 @@
                                         [ "any_dash_u_ur_r" ],
                                         [ "r_climb" ]
                                     ]
-                                }
-                            ]
-                        },
-                        {
-                            "name": "east",
-                            "connections": [
-                                {
-                                    "dest": "center",
-                                    "rule": [ [ "dash_switches", "any_dash_ul_l_dl" ] ],
-                                    "vm_rule": [ [ "dash_switches", "any_dash_ul_l_dl" ] ],
-                                    "assist_rule": [ [ "dash_switches", "any_dash_ul_l_dl" ] ]
-                                }
-                            ],
-                            "locations": [
-                                {
-                                    "name": "strawberry_2",
-                                    "display_name": "Strawberry 2",
-                                    "type": "strawberry",
-                                    "rule": []
                                 }
                             ]
                         },
@@ -25024,7 +25028,7 @@
                 {
                     "source_room": "d-01",
                     "source_door": "west",
-                    "dest_room": "d-09",
+                    "dest_room": "d-04",
                     "dest_door": "east"
                 },
                 {
@@ -25528,6 +25532,7 @@
                                 {
                                     "dest": "west",
                                     "rule": [ [ "cannot_access" ] ],
+                                    "vm_rule": [ [ "cannot_access" ] ],
                                     "assist_rule": [
                                         [ "any_dash_u_ul_l" ],
                                         [ "l_climb" ]
@@ -25536,6 +25541,7 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "cannot_access" ] ],
+                                    "vm_rule": [ [ "cannot_access" ] ],
                                     "assist_rule": [
                                         [ "any_dash_u_ur_r" ],
                                         [ "r_climb" ]
@@ -25549,6 +25555,7 @@
                                 {
                                     "dest": "north",
                                     "rule": [ [ "swap_blocks", "dash_refills", "ur_dash" ] ],
+                                    "vm_rule": [ [ "cannot_access" ] ],
                                     "assist_rule": [
                                         [ "swap_blocks", "l_dash" ],
                                         [ "any_dash_ul_u_ur" ]
@@ -25557,6 +25564,7 @@
                                 {
                                     "dest": "west",
                                     "rule": [ [ "cannot_access" ] ],
+                                    "vm_rule": [ [ "cannot_access" ] ],
                                     "assist_rule": [
                                         [ "any_dash_u_ul_l" ],
                                         [ "l_climb" ]
@@ -30779,7 +30787,10 @@
                                 {
                                     "dest": "top",
                                     "rule": [ [ "feathers", "dash_refills", "r_dash", "ur_dash" ] ],
-                                    "vm_rule": [ [ "feathers", "ur_dash" ] ],
+                                    "vm_rule": [
+                                        [ "feathers", "ur_dash" ],
+                                        [ "feathers", "dash_refills", "u_dash", "r_dash" ]
+                                    ],
                                     "assist_rule": [
                                         [ "any_dash_u_ur_r" ],
                                         [ "r_climb" ],
@@ -30877,7 +30888,10 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "kevin_blocks", "coins", "feathers", "any_dash_u_ur_r", "any_dash_dl_d_dr", "any_dash_ul_l_dl" ] ],
-                                    "vm_rule": [ [ "kevin_blocks", "coins", "feathers", "any_dash_u_ur_r", "any_dash_dl_d_dr", "any_dash_ul_l_dl" ] ],
+                                    "vm_rule": [
+                                        [ "kevin_blocks", "coins", "feathers", "any_dash_u_ur_r", "any_dash_dl_d_dr", "any_dash_ul_l_dl" ],
+                                        [ "kevin_blocks", "coins", "feathers", "dr_dash", "crouch", "any_dash_ul_l_dl" ]
+                                    ],
                                     "assist_rule": [
                                         [ "coins", "any_dash_ul_u_ur" ],
                                         [ "coins", "l_dash", "r_dash" ],
@@ -34680,8 +34694,7 @@
                                     "vm_rule": [
                                         [ "dream_blocks", "any_dash_u_ur", "dr_dash" ],
                                         [ "dream_blocks", "ur_dash", "dl_dash" ],
-                                        [ "dream_blocks", "any_dash_u_ul", "r_dash", "dl_dash" ],
-                                        [ "dream_blocks", "r_dash", "dr_dash", "ul_dash" ]
+                                        [ "dream_blocks", "any_dash_ur_u_ul", "r_dash" ]
                                     ],
                                     "assist_rule": [
                                         [ "dream_blocks", "any_dash_u_ur", "any_dash_r_dr_d_dl" ],
@@ -34946,7 +34959,11 @@
                                 {
                                     "dest": "top",
                                     "rule": [ [ "dash_refills", "u_dash", "any_dash_ur_r" ] ],
-                                    "vm_rule": [ [ "dash_refills", "any_dash_u_ul", "any_dash_ur_r" ] ],
+                                    "vm_rule": [
+                                        [ "dash_refills", "ul_dash", "any_dash_ur_r" ],
+                                        [ "dash_refills", "u_dash", "r_dash" ],
+                                        [ "u_dash", "ur_dash" ]
+                                    ],
                                     "assist_rule": [
                                         [ "any_dash_u_ur" ],
                                         [ "any_dash_ul_l", "r_dash" ],
@@ -37585,7 +37602,7 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "red_boosters", "dash_refills", "swap_blocks", "dash_switches", "r_dash", "ur_dash", "u_dash" ] ],
-                                    "vm_rule": [ [ "red_boosters", "dash_refills", "dash_switches", "u_dash", "any_dash_ur_r", "r_climb", "l_climb" ] ]
+                                    "vm_rule": [ [ "red_boosters", "dash_refills", "swap_blocks", "dash_switches", "u_dash", "any_dash_ur_r", "r_climb", "l_climb" ] ]
                                 }
                             ]
                         },
@@ -38052,7 +38069,7 @@
                             "name": "south-west",
                             "direction": "down",
                             "blocked": false,
-                            "closes_behind": true
+                            "closes_behind": false
                         },
                         {
                             "name": "south",
@@ -38064,7 +38081,7 @@
                             "name": "south-east",
                             "direction": "down",
                             "blocked": false,
-                            "closes_behind": true
+                            "closes_behind": false
                         }
                     ],
                     "checkpoint": "",
@@ -38413,7 +38430,10 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "springs", "dash_refills", "dash_switches", "u_dash", "ur_dash" ] ],
-                                    "vm_rule": [ [ "dash_refills", "any_dash_u_ur" ] ],
+                                    "vm_rule": [
+                                        [ "dash_refills", "ur_dash" ],
+                                        [ "dash_refills", "u_dash", "r_dash" ]
+                                    ],
                                     "assist_rule": [
                                         [ "any_dash_u_ur_r" ],
                                         [ "r_climb" ]
@@ -38427,7 +38447,7 @@
                                 {
                                     "dest": "west",
                                     "rule": [ [ "cannot_access" ] ],
-                                    "vm_rule": [ [ "cannot_access" ] ],
+                                    "vm_rule": [ [ "dash_refills", "dash_switches", "u_dash", "ul_dash" ] ],
                                     "assist_rule": [
                                         [ "any_dash_u_ul_l" ],
                                         [ "l_climb" ]
@@ -38941,7 +38961,7 @@
                                     "display_name": "Golden Strawberry",
                                     "type": "golden_strawberry",
                                     "rule": [ [ "springs", "dash_refills", "feathers", "blue_clouds", "pink_clouds", "coins", "badeline_boosters", "red_boosters", "swap_blocks", "dash_switches", "2500 M Key", "move_blocks", "blue_boosters", "dream_blocks", "traffic_blocks", "sinking_platforms", "u_dash", "ur_dash", "r_dash", "ul_dash", "l_dash" ] ],
-                                    "vm_rule": [ [ "springs", "dash_refills", "feathers", "blue_clouds", "pink_clouds", "coins", "badeline_boosters", "red_boosters", "swap_blocks", "dash_switches", "2500 M Key", "move_blocks", "blue_boosters", "dream_blocks", "traffic_blocks", "sinking_platforms", "u_dash", "ur_dash", "r_dash", "l_dash", "any_dash_dl_dr", "crouch" ] ],
+                                    "vm_rule": [ [ "springs", "dash_refills", "feathers", "blue_clouds", "pink_clouds", "coins", "badeline_boosters", "red_boosters", "swap_blocks", "2500 M Key", "move_blocks", "blue_boosters", "dream_blocks", "traffic_blocks", "sinking_platforms", "u_dash", "ur_dash", "r_dash", "l_dash" ] ],
                                     "assist_rule": [
                                         [ "badeline_boosters", "2500 M Key", "coins", "traffic_blocks", "dream_blocks", "r_dash", "u_dash", "l_dash", "l_climb" ],
                                         [ "badeline_boosters", "2500 M Key", "coins", "traffic_blocks", "dream_blocks", "r_dash", "u_dash", "l_dash", "r_climb" ],
@@ -39045,10 +39065,10 @@
                     "dest_door": "south"
                 },
                 {
-                    "source_room": "b-02",
-                    "source_door": "north",
-                    "dest_room": "b-02d",
-                    "dest_door": "south"
+                    "source_room": "b-02d",
+                    "source_door": "south",
+                    "dest_room": "b-02",
+                    "dest_door": "north"
                 },
                 {
                     "source_room": "b-02",
@@ -42136,7 +42156,7 @@
                                     "rule": [ [ "fire_ice_balls", "core_toggles", "dash_refills", "coins", "u_dash" ] ],
                                     "vm_rule": [
                                         [ "dash_refills", "coins", "dl_dash", "ul_dash", "crouch" ],
-                                        [ "fire_ice_balls", "coins", "any_dash_u_ul" ]
+                                        [ "fire_ice_balls", "coins", "any_dash_u_ul_l" ]
                                     ],
                                     "assist_rule": [ [ "any_dash_u_ur_r", "coins" ] ]
                                 }
@@ -42173,8 +42193,8 @@
                                     "type": "strawberry",
                                     "rule": [ [ "fire_ice_balls", "core_toggles", "core_blocks", "dash_refills", "bumpers", "coins", "u_dash", "any_dash_ur_r" ] ],
                                     "vm_rule": [
-                                        [ "fire_ice_balls", "core_toggles", "core_blocks", "coins", "any_dash_u_ul", "any_dash_u_ur_r", "dr_dash", "crouch" ],
-                                        [ "fire_ice_balls", "core_toggles", "core_blocks", "coins", "any_dash_u_ul", "any_dash_u_ur_r", "l_climb" ],
+                                        [ "fire_ice_balls", "core_toggles", "core_blocks", "coins", "any_dash_u_ul_l", "any_dash_u_ur_r", "dr_dash", "crouch" ],
+                                        [ "fire_ice_balls", "core_toggles", "core_blocks", "coins", "any_dash_u_ul_l", "any_dash_u_ur_r", "any_dash_ul_u_ur", "l_climb" ],
                                         [ "core_toggles", "core_blocks", "dash_refills", "bumpers", "coins", "dl_dash", "crouch", "ul_dash", "any_dash_u_ur_r", "dr_dash" ],
                                         [ "core_toggles", "core_blocks", "dash_refills", "bumpers", "coins", "dl_dash", "crouch", "ul_dash", "any_dash_u_ur_r", "l_climb" ]
                                     ],
@@ -42274,10 +42294,10 @@
                                         [ "core_toggles", "bumpers", "core_blocks", "l_dash", "r_dash" ]
                                     ],
                                     "assist_rule": [
-                                        [ "any_dash_l_ul_u" ],
-                                        [ "l_climb" ],
-                                        [ "fire_ice_balls", "bumpers", "any_dash_ur_r" ],
-                                        [ "fire_ice_balls", "bumpers", "r_climb" ]
+                                        [ "core_toggles", "any_dash_l_ul_u" ],
+                                        [ "core_toggles", "l_climb" ],
+                                        [ "core_toggles", "fire_ice_balls", "bumpers", "any_dash_ur_r" ],
+                                        [ "core_toggles", "fire_ice_balls", "bumpers", "r_climb" ]
                                     ]
                                 }
                             ]
@@ -45935,7 +45955,7 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "pufferfish", "coins", "springs", "l_dash", "r_dash", "u_dash" ] ],
-                                    "vm_rule": [ [ "pufferfish", "coins", "springs", "l_dash", "any_dash_ur_r", "u_dash", "l_climb" ] ],
+                                    "vm_rule": [ [ "pufferfish", "coins", "springs", "any_dash_ul_l", "any_dash_ur_r", "u_dash", "l_climb" ] ],
                                     "assist_rule": [ [ "coins", "any_dash_ul_u_ur" ] ]
                                 }
                             ]
@@ -46077,7 +46097,10 @@
                                 {
                                     "dest": "east",
                                     "rule": [ [ "double_dash_refills", "dash_refills", "u_dash", "ur_dash", "r_dash", "l_dash" ] ],
-                                    "vm_rule": [ [ "double_dash_refills", "dash_refills", "u_dash", "r_dash", "l_dash" ] ]
+                                    "vm_rule": [
+                                        [ "double_dash_refills", "dash_refills", "u_dash", "r_dash", "any_dash_ul_l" ],
+                                        [ "double_dash_refills", "dash_refills", "ul_dash", "ur_dash", "r_dash" ]
+                                    ]
                                 }
                             ]
                         },
@@ -47598,7 +47621,7 @@
                             "connections": [
                                 {
                                     "dest": "east",
-                                    "rule": [ [ "pufferfish", "springs", "coins", "traffic_blocks", "ul_dash" ] ],
+                                    "rule": [ [ "pufferfish", "springs", "coins", "traffic_blocks", "u_dash" ] ],
                                     "vm_rule": [
                                         [ "pufferfish", "coins", "traffic_blocks", "any_dash_u_ur" ],
                                         [ "pufferfish", "springs", "coins", "traffic_blocks", "ul_dash" ],
