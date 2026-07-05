@@ -664,7 +664,14 @@ def set_rules(world: "RaC3World"):
         RAC3SKILLPOINT.ARIDIA_HANG_TIME:
             lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2, world.player),
         RAC3LOCATION.ARIDIA_RANGERS_3:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player)
+            lambda state: (state.has_any([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.RIFT_INDUCER,
+                                         RAC3ITEM.FLUX_RIFLE, RAC3ITEM.PROGRESSIVE_FLUX_RIFLE,
+                                         RAC3ITEM.ANNIHILATOR, RAC3ITEM.PROGRESSIVE_ANNIHILATOR,
+                                         RAC3ITEM.RY3N0, RAC3ITEM.PROGRESSIVE_RY3N0,
+                                         RAC3ITEM.SUCK_CANNON, RAC3ITEM.PROGRESSIVE_SUCK_CANNON,
+                                         RAC3ITEM.DISC_BLADE, RAC3ITEM.PROGRESSIVE_DISC_BLADE,
+                                         RAC3ITEM.PLASMA_COIL, RAC3ITEM.PROGRESSIVE_PLASMA_COIL], world.player)
+                          or state.has(RAC3ITEM.PROGRESSIVE_RIFT_INDUCER, world.player, 2))
                           and state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2, world.player),
         RAC3LOCATION.ARIDIA_RANGERS_4:
             lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_3, world.player),
