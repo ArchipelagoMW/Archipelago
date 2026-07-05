@@ -194,7 +194,8 @@ class TestVanillaFULogic(NineSolsTestBase):
     }
 
     def test_default(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 2)
+        reachable_locations = [loc for loc in self.multiworld.get_reachable_locations() if not loc.is_event]
+        self.assertEqual(len(reachable_locations), 2)
         self.assertReachableWith("Factory (MR): Below Right Elevator", [])
 
         self.assertNotReachableWith("Factory (U): Near Lower Elevator", [])
@@ -216,7 +217,8 @@ class TestMediumFULogic(NineSolsTestBase):
     }
 
     def test_default(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 2)
+        reachable_locations = [loc for loc in self.multiworld.get_reachable_locations() if not loc.is_event]
+        self.assertEqual(len(reachable_locations), 2)
         self.assertReachableWith("Factory (MR): Below Right Elevator", [])
 
         self.assertNotReachableWith("Factory (U): Near Lower Elevator", [])
