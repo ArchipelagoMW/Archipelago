@@ -101,8 +101,8 @@ class TWWWeb(WebWorld):
             ["mobby45"]
         ),
          Tutorial(
-            "Guía de Configuración para el Multimundo",
-            "Una guía para configurar el software Archipelago The Wind Waker en tu computadora.",
+            "Multiworld Setup Guide",
+            "A guide to setting up the Archipelago The Wind Waker software on your computer.",
             "Español",
             "setup_es.md",
             "setup/es",

@@ -119,6 +119,7 @@ Este randomizador no pudo haber sido posible de no ser por la ayuda de:
 - BigSharkZ: (arte del icono)
 - Celeste (Maëlle): (corrección de lógica y errores tipográficos, programación adicional)
 - Chavu: (documento de dificultad lógica)
+- ChinchyPandora7: (traducción al español de las guías)
 - CrainWWR: (asistencia en la memoria del multijugador y Dolphin, programación adicional)
 - Cyb3R: (referencias para `TWWClient`)
 - DeamonHunter: (programación adicional)
@@ -132,7 +133,6 @@ Este randomizador no pudo haber sido posible de no ser por la ayuda de:
 - Ouro: (soporte del tracker)
 - tal (matzahTalSoup): (guía de secretos de las mazmorras)
 - Tubamann: (programación adicional)
-- ChinchyPandora7: (traducción al español de las guías)
 
 El logo de Archipielago © 2022 por Krista Corkos y Christopher Wilson, bajo la licencia
 [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).

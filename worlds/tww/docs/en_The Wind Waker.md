@@ -109,6 +109,7 @@ This randomizer would not be possible without the help from:
 - BigSharkZ: (icon artwork)
 - Celeste (Maëlle): (logic and typo fixes, additional programming)
 - Chavu: (logic difficulty document)
+- ChinchyPandora7: (Spanish Translation of Guides)
 - CrainWWR: (multiworld and Dolphin memory assistance, additional programming)
 - Cyb3R: (reference for `TWWClient`)
 - DeamonHunter: (additional programming)
@@ -122,7 +123,6 @@ This randomizer would not be possible without the help from:
 - Ouro: (tracker support)
 - tal (matzahTalSoup): (dungeon secrets guide)
 - Tubamann: (additional programming)
-- ChinchyPandora7: (Spanish Translation of Guides)
 
 The Archipelago logo © 2022 by Krista Corkos and Christopher Wilson, licensed under
 [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).

@@ -124,6 +124,7 @@ Ce randomiseur ne pouvait pas être possible sans l'aide de :
 - BigSharkZ: (Dessinateur de l'îcone)
 - Celeste (Maëlle): (correction de logique et de fautes d'orthographe, programmation additionnelle)
 - Chavu: (document sur les difficultés de logique)
+- ChinchyPandora7: (Traduction du guide espagnol)
 - CrainWWR: (multiworld et assitance sur la mémoire de Dolphin, programmation additionnelle)
 - Cyb3R: (référence pour `TWWClient`)
 - DeamonHunter: (programmation additionnelle)
@@ -137,7 +138,6 @@ Ce randomiseur ne pouvait pas être possible sans l'aide de :
 - Ouro: (Support du tracker)
 - tal (matzahTalSoup): (guide pour les dungeon secrets)
 - Tubamann: (programmation additionnelle)
-- ChinchyPandora7: (Traduction du guide espagnol)
 
 Le logo archipelago © 2022 par Krista Corkos et Christopher Wilson, sous licence
 [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).
