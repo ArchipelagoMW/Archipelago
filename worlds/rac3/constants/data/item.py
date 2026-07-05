@@ -36,7 +36,7 @@ class RAC3ITEMDATA:
                  level_address: int = 0,
                  armor: float = 0,
                  ap_classification: ItemClassification = ItemClassification.filler,
-                 tags: list[str] = None):
+                 tags: list[str] | None = None):
         self.ID = idx
         self.AP_CODE = idx + 50000000
         self.AP_CLASSIFICATION = ap_classification
@@ -79,7 +79,7 @@ class RAC3ITEMDATA:
                          power: int,
                          ammo: int = 0,
                          ap_classification: ItemClassification = ItemClassification.progression_skip_balancing,
-                         tags: list[str] = None):
+                         tags: list[str] | None = None):
         """Construct a weapon item"""
         address: int = idx + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
@@ -96,7 +96,7 @@ class RAC3ITEMDATA:
                                power: int,
                                ammo: int = 0,
                                xp: int = 0,
-                               tags: list[str] = None):
+                               tags: list[str]  | None = None):
         """Construct a weapon level item"""
         entry: dict[str, list[int]] = dict(filter(lambda data_kv: idx in data_kv[1], UPGRADE_DICT.items()))
         base: int = next(iter(entry.values()))[0]
@@ -197,7 +197,7 @@ class RAC3ITEMDATA:
     @staticmethod
     def construct_cheat(idx: int,
                         address: int = 0,
-                        tag: list[str] = None):
+                        tag: list[str] | None = None):
         """Construct a cheat menu item"""
         if tag:
             tags: list[str] = [*tag, RAC3ITEMTAG.CHEAT]
@@ -224,13 +224,13 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.GRIND_BOOTS: RAC3ITEMDATA.construct_unused(0x0E),  # Unused
     RAC3ITEM.GLIDER: RAC3ITEMDATA.construct_unused(0x0F),  # Unused
     RAC3ITEM.PLASMA_COIL:
-        RAC3ITEMDATA.construct_weapon(0x10, 2400, 15, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.LAVA_GUN: RAC3ITEMDATA.construct_weapon(0x11, 160, 150, ItemClassification.progression_skip_balancing),
+        RAC3ITEMDATA.construct_weapon(0x10, 2400, 15),
+    RAC3ITEM.LAVA_GUN: RAC3ITEMDATA.construct_weapon(0x11, 160, 150),
     RAC3ITEM.REFRACTOR: RAC3ITEMDATA.construct_gadget(0x12, ItemClassification.progression, [RAC3ITEMTAG.EQUIPABLE, RAC3ITEMTAG.QUICK_SELECTABLE]),
-    RAC3ITEM.BOUNCER: RAC3ITEMDATA.construct_weapon(0x13, 1200, 10, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.BOUNCER: RAC3ITEMDATA.construct_weapon(0x13, 1200, 10),
     RAC3ITEM.HACKER: RAC3ITEMDATA.construct_gadget(0x14, ItemClassification.progression),
-    RAC3ITEM.MINI_TURRET: RAC3ITEMDATA.construct_weapon(0x15, 600, 10, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.SHIELD_CHARGER: RAC3ITEMDATA.construct_weapon(0x16, 60, 3, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.MINI_TURRET: RAC3ITEMDATA.construct_weapon(0x15, 600, 10),
+    RAC3ITEM.SHIELD_CHARGER: RAC3ITEMDATA.construct_weapon(0x16, 60, 3),
     # 0x17 Set on new file, Empty Hand
     RAC3ITEM.HELMET: RAC3ITEMDATA.construct_unused(0x18),  # Unused
     # 0x19 SEVERE CRASH RISK
@@ -255,7 +255,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.SHOCK_CANNON_V6: RAC3ITEMDATA.construct_weapon_level(0x2C, 1100, 50, tags=[RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.SHOCK_CANNON_V7: RAC3ITEMDATA.construct_weapon_level(0x2D, 1400, 55, 10000, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.SHOCK_CANNON_V8: RAC3ITEMDATA.construct_weapon_level(0x2E, 2100, 60, 25000, [RAC3ITEMTAG.NGPLUS]),
-    RAC3ITEM.N60_STORM: RAC3ITEMDATA.construct_weapon(0x2F, 150, 150, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.N60_STORM: RAC3ITEMDATA.construct_weapon(0x2F, 150, 150),
     RAC3ITEM.N60_STORM_V2: RAC3ITEMDATA.construct_weapon_level(0x30, 175, 175, 200),
     RAC3ITEM.N60_STORM_V3: RAC3ITEMDATA.construct_weapon_level(0x31, 200, 200, 500),
     RAC3ITEM.N60_STORM_V4: RAC3ITEMDATA.construct_weapon_level(0x32, 250, 225, 1500),
@@ -295,7 +295,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.MULTI_DISC_V6: RAC3ITEMDATA.construct_weapon_level(0x54, 4400, 25, tags=[RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.MULTI_DISC_V7: RAC3ITEMDATA.construct_weapon_level(0x55, 5600, 28, 10000, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.MULTI_DISC_V8: RAC3ITEMDATA.construct_weapon_level(0x56, 8400, 30, 25000, [RAC3ITEMTAG.NGPLUS]),
-    RAC3ITEM.AGENTS_OF_DOOM: RAC3ITEMDATA.construct_weapon(0x57, 240, 6, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.AGENTS_OF_DOOM: RAC3ITEMDATA.construct_weapon(0x57, 240, 6),
     RAC3ITEM.AGENTS_OF_DOOM_V2: RAC3ITEMDATA.construct_weapon_level(0x58, 400, 6, 400),
     RAC3ITEM.AGENTS_OF_DOOM_V3: RAC3ITEMDATA.construct_weapon_level(0x59, 660, 6, 1000),
     RAC3ITEM.AGENTS_OF_DOOM_V4: RAC3ITEMDATA.construct_weapon_level(0x5A, 2000, 8, 3000),
@@ -311,7 +311,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.RIFT_RIPPER_V6: RAC3ITEMDATA.construct_weapon_level(0x64, 4000, 12, tags=[RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.RIFT_RIPPER_V7: RAC3ITEMDATA.construct_weapon_level(0x65, 5000, 14, 15000, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.RIFT_RIPPER_V8: RAC3ITEMDATA.construct_weapon_level(0x66, 6000, 16, 37500, [RAC3ITEMTAG.NGPLUS]),
-    RAC3ITEM.HOLO_SHIELD: RAC3ITEMDATA.construct_weapon(0x67, 200, 8, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.HOLO_SHIELD: RAC3ITEMDATA.construct_weapon(0x67, 200, 8),
     RAC3ITEM.HOLO_SHIELD_V2: RAC3ITEMDATA.construct_weapon_level(0x68, 300, 8, 150),
     RAC3ITEM.HOLO_SHIELD_V3: RAC3ITEMDATA.construct_weapon_level(0x69, 400, 10, 450),
     RAC3ITEM.HOLO_SHIELD_V4: RAC3ITEMDATA.construct_weapon_level(0x6A, 500, 10, 1350),
@@ -327,7 +327,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.SPLITTER_RIFLE_V6: RAC3ITEMDATA.construct_weapon_level(0x74, 5200, 15, tags=[RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.SPLITTER_RIFLE_V7: RAC3ITEMDATA.construct_weapon_level(0x75, 7000, 18, 7500, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.SPLITTER_RIFLE_V8: RAC3ITEMDATA.construct_weapon_level(0x76, 8400, 20, 20000, [RAC3ITEMTAG.NGPLUS]),
-    RAC3ITEM.NITRO_LAUNCHER: RAC3ITEMDATA.construct_weapon(0x77, 200, 8, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.NITRO_LAUNCHER: RAC3ITEMDATA.construct_weapon(0x77, 200, 8),
     RAC3ITEM.NITRO_LAUNCHER_V2: RAC3ITEMDATA.construct_weapon_level(0x78, 240, 8, 200),
     RAC3ITEM.NITRO_LAUNCHER_V3: RAC3ITEMDATA.construct_weapon_level(0x79, 300, 10, 500),
     RAC3ITEM.NITRO_LAUNCHER_V4: RAC3ITEMDATA.construct_weapon_level(0x7A, 400, 10, 1100),

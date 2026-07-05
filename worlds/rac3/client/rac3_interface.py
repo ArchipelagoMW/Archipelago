@@ -430,7 +430,7 @@ class Rac3Interface(GameInterface):
             return
         self.item_received(item, us, None, location)
 
-    def filler_items(self, item: int, us: str, location: int):
+    def filler_items(self, item: int):
         """Runs when loading into game from the main menu to update the player with filler items from the server"""
         if RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS:
             self.initial_fillers[ITEM_FROM_AP_CODE[item]] = self.initial_fillers.get(ITEM_FROM_AP_CODE[item], 0) + 1

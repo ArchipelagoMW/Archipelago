@@ -18,9 +18,9 @@ class RAC3SHORTCUTDATA:
 
     def __init__(self,
                  planet: str,
-                 items: list[list[str]] = None,
-                 flag: list[tuple[int, int]] = None,
-                 visit: list[str] = None):
+                 items: list[list[str]] | None = None,
+                 flag: list[tuple[int, int]] | None = None,
+                 visit: list[str] | None = None):
         self.PLANET = planet
         self.ITEMS = items
         self.FLAG_ADDRESSES = flag

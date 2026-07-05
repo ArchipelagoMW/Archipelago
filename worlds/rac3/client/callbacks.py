@@ -174,7 +174,7 @@ async def _handle_game_ready(ctx: "Context") -> None:
                     logger.debug("Handle Later")
                     continue
                 ctx.game_interface.important_items(item.item, ctx.player_names[ctx.slot], item.location)
-                ctx.game_interface.filler_items(item.item, ctx.player_names[ctx.slot], item.location)
+                ctx.game_interface.filler_items(item.item)
             ctx.processed_item_count = min(counter, items_to_process)
             await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
             logger.info(f"Items Processed: {ctx.processed_item_count}")

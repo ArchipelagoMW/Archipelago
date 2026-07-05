@@ -3537,8 +3537,8 @@ class RAC3LOCATIONDATA:
     def __init__(self,
                  idx: int,
                  region: str = RAC3REGION.GALAXY,
-                 check: list[RAC3ADDRESSDATA] = None,
-                 tags: set[str] = None):
+                 check: list[RAC3ADDRESSDATA] | None = None,
+                 tags: set[str] | None = None):
         self.ID = idx
         self.REGION = region
         self.CHECK_ADDRESS = check if check else []

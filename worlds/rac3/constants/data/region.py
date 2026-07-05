@@ -1,8 +1,6 @@
 """This module contains the dataclass for levels in the game and exportable constants"""
 from dataclasses import dataclass
 
-from worlds.rac3.constants.checkpoint import PLANET_CHECKPOINT
-from worlds.rac3.constants.data.position import RAC3POSITIONDATA
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.region import (PLANET_LOAD_OFFSET, PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID,
                                           PLANET_SPECIAL_OFFSET, PLANET_VENDOR_OFFSET, RAC3REGION,
@@ -14,30 +12,27 @@ from worlds.rac3.constants.status import RAC3STATUS
 class RAC3REGIONDATA:
     """Data class for each level of the game"""
     ID: int
-    CHECKPOINT: RAC3POSITIONDATA | None
-    PAUSE_ADDRESS: int
     PLANET_TO_LOAD: int
+    PAUSE_ADDRESS: int
     PLANET_SPECIAL_OFFSET: int
     RESPAWN_COORDS_ADDRESS: int | None
-    VENDOR_OFFSET: int
+    VENDOR_OFFSET: int | None
     VISIT_ADDRESS: int
     ACCESS_ADDRESS: int
 
     def __init__(self,
                  idx: int,
-                 checkpoint: RAC3POSITIONDATA = None,
-                 pause_address: int = 0,
                  planet_to_load_address: int = 0,
+                 pause_address: int = 0,
                  planet_special_offset: int = 0,
-                 respawn_coords_address: int = None,
-                 vendor_offset: int = 0):
+                 respawn_coords_address: int | None = None,
+                 vendor_offset: int | None = 0):
         self.ID: int = idx
-        self.CHECKPOINT: RAC3POSITIONDATA | None = checkpoint
-        self.PAUSE_ADDRESS: int = pause_address
         self.PLANET_TO_LOAD: int = planet_to_load_address
+        self.PAUSE_ADDRESS: int = pause_address
         self.PLANET_SPECIAL_OFFSET: int = planet_special_offset
         self.RESPAWN_COORDS_ADDRESS: int | None = respawn_coords_address
-        self.VENDOR_OFFSET: int = vendor_offset
+        self.VENDOR_OFFSET: int | None = vendor_offset
         self.VISIT_ADDRESS: int = RAC3STATUS.VISITED_BASE + idx
         self.ACCESS_ADDRESS: int = RAC3STATUS.INFOBOT_BASE + idx
 
@@ -50,15 +45,13 @@ class RAC3REGIONDATA:
         pause = PLANET_MENU_OFFSET[name] + RAC3STATUS.PAUSE_BASE
         load = PLANET_LOAD_OFFSET[name] + RAC3STATUS.PLANET_LOAD_BASE
         offset = PLANET_SPECIAL_OFFSET.get(name, 0)
-        checkpoint = PLANET_CHECKPOINT.get(name, None)
         respawn_coords_address = RESPAWN_COORDS_OFFSET.get(name, None)
         if respawn_coords_address is not None:  # Not all planets should have respawn coords changed
             respawn_coords_address += RAC3STATUS.RESPAWN_BASE
         vendor_offset = PLANET_VENDOR_OFFSET.get(name, None)
         if vendor_offset is not None:
             vendor_offset += RAC3STATUS.VENDOR_BASE
-        return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=pause, planet_to_load_address=load,
-                              planet_special_offset=offset, respawn_coords_address=respawn_coords_address)
+        return RAC3REGIONDATA(idx, load, pause, offset, respawn_coords_address, vendor_offset)
 
 
 RAC3_REGION_DATA_TABLE: dict[str, RAC3REGIONDATA] = {
@@ -98,15 +91,15 @@ RAC3_REGION_DATA_TABLE: dict[str, RAC3REGIONDATA] = {
     RAC3REGION.AQUATOS_BASE: RAC3REGIONDATA.construct_planet(0x1B),
     RAC3REGION.AQUATOS_SEWERS: RAC3REGIONDATA.construct_planet(0x1C),
     RAC3REGION.TYHRRANOSIS_RANGERS: RAC3REGIONDATA.construct_planet(0x1D),
-    RAC3REGION.QWARK_VID_COMIC_UNUSED_1: RAC3REGIONDATA(0x1E, 
-                                                        planet_to_load_address=PLANET_LOAD_OFFSET[RAC3REGION.QWARK_VID_COMIC_UNUSED_1] + RAC3STATUS.PLANET_LOAD_BASE),
+    RAC3REGION.QWARK_VID_COMIC_UNUSED_1: RAC3REGIONDATA(0x1E, PLANET_LOAD_OFFSET[
+        RAC3REGION.QWARK_VID_COMIC_UNUSED_1] + RAC3STATUS.PLANET_LOAD_BASE),
     RAC3REGION.QWARK_VID_COMIC_1: RAC3REGIONDATA.construct_planet(0x1F),
     RAC3REGION.QWARK_VID_COMIC_4: RAC3REGIONDATA.construct_planet(0x20),
     RAC3REGION.QWARK_VID_COMIC_2: RAC3REGIONDATA.construct_planet(0x21),
     RAC3REGION.QWARK_VID_COMIC_3: RAC3REGIONDATA.construct_planet(0x22),
     RAC3REGION.QWARK_VID_COMIC_5: RAC3REGIONDATA.construct_planet(0x23),
-    RAC3REGION.QWARK_VID_COMIC_UNUSED_2: RAC3REGIONDATA(0x24, 
-                                                        planet_to_load_address=PLANET_LOAD_OFFSET[RAC3REGION.QWARK_VID_COMIC_UNUSED_2] + RAC3STATUS.PLANET_LOAD_BASE),
+    RAC3REGION.QWARK_VID_COMIC_UNUSED_2: RAC3REGIONDATA(0x24, PLANET_LOAD_OFFSET[
+        RAC3REGION.QWARK_VID_COMIC_UNUSED_2] + RAC3STATUS.PLANET_LOAD_BASE),
     RAC3REGION.MENU: RAC3REGIONDATA(0xFF),
 }
 PLANET_FROM_INFOBOT: dict[str, str] = {
