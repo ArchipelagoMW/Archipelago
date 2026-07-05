@@ -118,15 +118,15 @@ def generate_location_table() -> dict[str, int]:
 
     from .Items import add_interactable_to_table
     for level_name, level_items in per_level_side_items.items():
-        for item_name in level_items:
+        for item_name in sorted(level_items):
             add_interactable_to_table(item_name, level_name[:-1], level_name[-1])
 
     for level_name, level_items in per_level_items.items():
-        for item_name in level_items:
+        for item_name in sorted(level_items):
             add_interactable_to_table(item_name, level_name, None)
 
     for side_name, side_items in per_side_items.items():
-        for item_name in side_items:
+        for item_name in sorted(side_items):
             add_interactable_to_table(item_name, None, side_name)
 
     return location_table
