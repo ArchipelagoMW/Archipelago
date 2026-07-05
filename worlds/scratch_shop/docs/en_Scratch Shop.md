@@ -1,0 +1,3 @@
+The Scratch Shop game was made exclusively for Archipelago as a very basic outline of a game made using a single sprite on Scratch (turbowarp specifically). This sprite (known in the code as 'APManager') handles all Archipelago connections. This sprite can be dropped into any Scratch project and with a bit of easy code adjustment, the Scratch project is now an Archipelago.
+
+*The APManager sprite requires the turbowarp-exclusive extensions of websocket and json*
