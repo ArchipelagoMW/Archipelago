@@ -2634,7 +2634,7 @@ all_region_connections: dict[str, RegionConnection] = {
     "1a_5_center---1a_5_south-east": RegionConnection("1a_5_center", "1a_5_south-east", [], [], []),
     "1a_5_south-east---1a_5_north-east": RegionConnection("1a_5_south-east", "1a_5_north-east", [[ItemName.u_dash, ], [ItemName.ur_dash, ], ], [], [[ItemName.r_dash, ], [ItemName.u_dash, ], [ItemName.ur_dash, ], [ItemName.r_climb, ], ]),
     "1a_5_south-east---1a_5_center": RegionConnection("1a_5_south-east", "1a_5_center", [[ItemName.u_dash, ], [ItemName.ul_dash, ], ], [], [[ItemName.l_dash, ], [ItemName.u_dash, ], [ItemName.ul_dash, ], [ItemName.l_climb, ], ]),
-    "1a_5_south-east---1a_5_south-east-door": RegionConnection("1a_5_south-east", "1a_5_south-east-door", [[ItemName.dr_dash, ], [ItemName.r_dash, ], [ItemName.ur_dash, ], ], [[ItemName.dr_dash, ], [ItemName.r_dash, ], [ItemName.ur_dash, ], ], [[ItemName.dr_dash, ], [ItemName.r_dash, ], [ItemName.u_dash, ], [ItemName.ur_dash, ], ]),
+    "1a_5_south-east---1a_5_south-east-door": RegionConnection("1a_5_south-east", "1a_5_south-east-door", [[ItemName.dr_dash, ], [ItemName.r_dash, ], [ItemName.ur_dash, ], ], [[ItemName.dr_dash, ], [ItemName.r_dash, ], [ItemName.ur_dash, ], ], [[ItemName.dr_dash, ], [ItemName.r_dash, ], [ItemName.ur_dash, ], ]),
     "1a_5_south-east-door---1a_5_south-east": RegionConnection("1a_5_south-east-door", "1a_5_south-east", [], [], []),
     "1a_5_north-east---1a_5_center": RegionConnection("1a_5_north-east", "1a_5_center", [], [], [[ItemName.l_dash, ], [ItemName.u_dash, ], [ItemName.ul_dash, ], [ItemName.l_climb, ], ]),
     "1a_5_north-east---1a_5_top": RegionConnection("1a_5_north-east", "1a_5_top", [], [], []),

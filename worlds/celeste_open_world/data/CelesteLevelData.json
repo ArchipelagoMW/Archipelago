@@ -731,7 +731,7 @@
                                     "dest": "south-east-door",
                                     "rule": [ [ "any_dash_ur_r_dr" ] ],
                                     "vm_rule": [ [ "any_dash_ur_r_dr" ] ],
-                                    "assist_rule": [ [ "any_dash_u_ur_r_dr" ] ]
+                                    "assist_rule": [ [ "any_dash_ur_r_dr" ] ]
                                 }
                             ]
                         },
