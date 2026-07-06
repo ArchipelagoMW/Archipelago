@@ -1,0 +1,9 @@
+{
+    "game": "Potion Craft",
+    "world_version": "0.0.1",
+    "mod_version": "0.0.1",
+    "minimum_ap_version": "0.6.7",
+    "authors": [
+        "Pink, FyreDay"
+    ]
+}

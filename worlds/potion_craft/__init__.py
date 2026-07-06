@@ -3,12 +3,14 @@ from typing import ClassVar, Dict
 from BaseClasses import Tutorial, ItemClassification
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
-from worlds.potion_craft.Items import PotionCraftItem, create_potion_craft_items, full_item_dict, Direction, \
-    get_ingredients_by_direction
-from worlds.potion_craft.Locations import create_potion_craft_locations, get_all_potion_craft_locations
-from worlds.potion_craft.Options import potion_craft_option_groups, PotionCraftOptions
-from worlds.potion_craft.Regions import create_potion_craft_regions, connect_potion_craft_regions
-from worlds.potion_craft.Rules import set_rules
+from .constants import POTION_CRAFT
+from .data import Direction
+from .data.items import all_items, get_ingredients_by_direction
+from .data.locations import all_locations
+from .items import PotionCraftItem, create_events, create_items
+from .locations import create_regions, create_locations, create_entrances
+from .options import potion_craft_option_groups, PotionCraftOptions
+from .world_base import PotionCraftBase
 
 
 class PotionCraftWeb(WebWorld):
@@ -25,17 +27,17 @@ class PotionCraftWeb(WebWorld):
 
     tutorials = [setup_en]
 
-class PotionCraftWorld(World):
+class PotionCraftWorld(PotionCraftBase):
     """
     Potion Craft is a game that...
     """
-    game = "Potion Craft"
+    game = POTION_CRAFT
     web = PotionCraftWeb()
-    options_dataclass = PotionCraftOptions
-    options: PotionCraftOptions
     option_groups = potion_craft_option_groups
-    item_name_to_id: ClassVar[Dict[str, int]] = {item_name: item_data.code for item_name, item_data in full_item_dict.items()} #needs list of all possible items
-    location_name_to_id: ClassVar[Dict[str, int]] = {loc_name: loc_data.code for loc_name, loc_data in get_all_potion_craft_locations().items()} #needs list of all possible locations
+    item_name_to_id: ClassVar[Dict[str, int]] = {item.value: item.item_id for item in all_items} #needs list of all possible items
+    location_name_to_id: ClassVar[Dict[str, int]] = {loc.value: loc.location_id for loc in all_locations} #needs list of all possible locations
+
+    item_lookup = {item.value: item for item in all_items}
 
     item_name_groups = {
         "north": set(get_ingredients_by_direction(Direction.NORTH)),
@@ -50,24 +52,36 @@ class PotionCraftWorld(World):
         self.locations = {}
 
     def generate_early(self) -> None:
-        self.locations = create_potion_craft_locations(self)
+        print("Handle option validation")
 
     def create_regions(self):
-        create_potion_craft_regions(self, self.locations)
-        connect_potion_craft_regions(self)
+        create_regions(self)
+        create_locations(self)
+        create_entrances(self)
 
     def create_item(self, item: str) -> PotionCraftItem:
-        return PotionCraftItem(item, ItemClassification.useful, self.item_name_to_id[item], self.player)
+        item_enum = self.item_lookup[item]
+
+        return PotionCraftItem(
+            item,
+            item_enum.classification,
+            item_enum.item_id,
+            self.player,
+        )
 
     def create_items(self):
-        create_potion_craft_items(self)
+        create_events(self)
+        create_items(self)
 
     def set_rules(self):
-        set_rules(self)
+
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory",
+                                                                                      self.player)  # need victory to beat world
 
     def fill_slot_data(self) -> id:
         return {
-            "ModVersion": "0.0.1" #update mods version when you commit, on rider as well
+            "ModVersion": "0.0.1", #update mods version when you commit, on rider as well
+            "Deathlink": self.options.death_link.value
         }
 
     def generate_output(self, output_directory: str):
