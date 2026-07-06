@@ -111,9 +111,13 @@ class MKSMCommandProcessor(ClientCommandProcessor):
             return True
 
         events = [tuple(current_events[i:i + 8]) for i in range(0, len(current_events), 8)]
+        default_events = {tuple(DEFAULT_EVENT_ARRAY[i:i + 8]) for i in range(0, len(DEFAULT_EVENT_ARRAY), 8)}
         last_room = events[-1][0]
-        self.output(f"Removing events from last room: {hex(last_room)}")
-        remaining_events = [event for event in events if event[0] != last_room]
+        self.output(f"Removing non-default events from last room: {hex(last_room)}")
+        remaining_events = [
+            event for event in events
+            if event[0] != last_room or event in default_events
+        ]
         new_array = [byte for event in remaining_events for byte in event]
 
         await ctx.send_msgs([{"cmd": "Set",
