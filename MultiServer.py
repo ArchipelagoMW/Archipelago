@@ -2465,7 +2465,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     self.ctx.notify_hints(team, hints)
 
                 else:
-                    self.output("No hints found.")
+                    self.output(
+                        f"Recognized item \"{item}\" does not exist for this slot. "
+                        "This is likely due to this slot's options."
+                    )
                 return True
             else:
                 self.output(response)
@@ -2504,7 +2507,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if hints:
                     self.ctx.notify_hints(team, hints)
                 else:
-                    self.output("No hints found.")
+                    self.output(
+                        f"Recognized location \"{location}\" does not exist for this slot. "
+                        "This is likely due to this slot's options."
+                    )
                 return True
             else:
                 self.output(response)
