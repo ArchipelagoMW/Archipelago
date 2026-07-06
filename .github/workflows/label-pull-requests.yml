@@ -12,10 +12,9 @@ env:
 jobs:
   labeler:
     name: 'Apply content-based labels'
-    if: github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'synchronize'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/labeler@v5
+      - uses: actions/labeler@v6.0.1
         with:
           sync-labels: false
   peer_review:

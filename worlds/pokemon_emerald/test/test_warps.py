@@ -1,8 +1,8 @@
-from test.bases import TestBase
+from unittest import TestCase
 from ..data import Warp
 
 
-class TestWarps(TestBase):
+class TestWarps(TestCase):
     def test_warps_connect_ltr(self) -> None:
         # 2-way
         self.assertTrue(Warp("FAKE_MAP_A:0/FAKE_MAP_B:0").connects_to(Warp("FAKE_MAP_B:0/FAKE_MAP_A:0")))

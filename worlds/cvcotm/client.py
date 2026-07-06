@@ -247,6 +247,10 @@ class CastlevaniaCotMClient(BizHawkClient):
                 await bizhawk.write(ctx.bizhawk_ctx, [(QUEUED_TEXTBOX_1_ADDRESS, [0 for _ in range(12)], "EWRAM")])
                 return
 
+            # If the player doesn't have Dash Boots for whatever reason, put them in their inventory now.
+            if not magic_items_array[0]:
+                await bizhawk.write(ctx.bizhawk_ctx, [(MAGIC_ITEMS_ARRAY_START, [1], "EWRAM")])
+
             # Enable DeathLink if it's in our slot_data.
             if "DeathLink" not in ctx.tags and ctx.slot_data["death_link"]:
                 await ctx.update_death_link(True)

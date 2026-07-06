@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState
-from worlds.generic.Rules import CollectionRule, add_rule, allow_self_locking_items
+from BaseClasses import CollectionState, CollectionRule, Region
+from worlds.generic.Rules import add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
 
@@ -13,6 +13,7 @@ class MessengerRules:
     player: int
     world: "MessengerWorld"
     connection_rules: dict[str, CollectionRule]
+    indirect_conditions: dict[str, list[Region]]
     region_rules: dict[str, CollectionRule]
     location_rules: dict[str, CollectionRule]
     maximum_price: int
@@ -108,17 +109,18 @@ class MessengerRules:
             "Searing Crags - Right -> Searing Crags - Portal":
                 lambda state: self.has_tabi(state) and self.has_wingsuit(state),
             "Searing Crags - Colossuses Shop -> Searing Crags - Key of Strength Shop":
-                lambda state: state.has("Power Thistle", self.player)
-                              and (self.has_dart(state)
-                                   or (self.has_wingsuit(state)
-                                       and self.can_destroy_projectiles(state))),
+                lambda state: state.has("Power Thistle", self.player),
+            "Searing Crags - Key of Strength Shop -> Searing Crags - Key of Strength Room":
+                lambda state: self.has_dart(state)
+                              or (self.has_wingsuit(state)
+                                  and self.can_destroy_projectiles(state)),
             "Searing Crags - Falling Rocks Shop -> Searing Crags - Searing Mega Shard Shop":
                 self.has_dart,
             "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Before Final Climb Shop":
                 lambda state: self.has_dart(state) or self.can_destroy_projectiles(state),
             "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Falling Rocks Shop":
                 self.has_dart,
-            "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Shop":
+            "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Room":
                 self.false,
             "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
                 self.has_dart,
@@ -192,7 +194,7 @@ class MessengerRules:
                               or (self.has_dart(state) and self.has_wingsuit(state)),
             # Dark Cave
             "Dark Cave - Right -> Dark Cave - Left":
-                lambda state: state.has("Candle", self.player) and self.has_dart(state),
+                lambda state: state.has("Candle", self.player) and self.has_dart(state) and self.has_wingsuit(state),
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (
@@ -217,6 +219,16 @@ class MessengerRules:
                 self.has_tabi,
             "Sunken Shrine - Tabi Gauntlet Shop -> Sunken Shrine - Sun Path Shop":
                 lambda state: self.can_dboost(state) or self.has_dart(state),
+        }
+
+        # dict of connection names and the regions checked in the requirements to traverse the exit
+        self.indirect_conditions = {
+            "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Crushing Pits Shop": [
+                self.world.get_region("Howling Grotto - Emerald Golem Shop")
+            ],
+            "Glacial Peak - Left -> Elemental Skylands - Air Shmup": [
+                self.world.get_location("Quillshroom Marsh - Queen of Quills").parent_region
+            ],
         }
 
         self.location_rules = {
@@ -364,6 +376,8 @@ class MessengerRules:
         for entrance_name, rule in self.connection_rules.items():
             entrance = multiworld.get_entrance(entrance_name, self.player)
             entrance.access_rule = rule
+            for region in self.indirect_conditions.get(entrance_name, ()):
+                multiworld.register_indirect_condition(region, entrance)
         for loc in multiworld.get_locations(self.player):
             if loc.name in self.location_rules:
                 loc.access_rule = self.location_rules[loc.name]
@@ -406,7 +420,7 @@ class MessengerHardRules(MessengerRules):
                     lambda state: self.has_dart(state) or
                                   (self.can_destroy_projectiles(state) and
                                    (self.has_wingsuit(state) or self.can_dboost(state))),
-                "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Shop":
+                "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Room":
                     lambda state: self.can_leash(state) or self.has_windmill(state),
                 "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
                     self.true,
@@ -512,7 +526,6 @@ class MessengerOOBRules(MessengerRules):
 
         self.location_rules = {
             "Bamboo Creek - Claustro": self.has_wingsuit,
-            "Searing Crags - Key of Strength": self.has_wingsuit,
             "Sunken Shrine - Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Searing Crags - Pyro": self.has_tabi,
             "Underworld - Key of Chaos": self.has_tabi,

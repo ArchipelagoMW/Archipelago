@@ -20,7 +20,8 @@ if typing.TYPE_CHECKING:
     from BaseClasses import MultiWorld, CollectionState
 
 __all__ = ["pyevermizer", "SoEWorld"]
-
+__version__ = "0.50.1"
+__author__ = "black-sliver"
 
 """
 In evermizer:
@@ -461,7 +462,7 @@ class SoEWorld(World):
             except FileNotFoundError:
                 pass
 
-    def modify_multidata(self, multidata: typing.Dict[str, typing.Any]) -> None:
+    def modify_multidata(self, multidata: typing.Mapping[str, typing.Any]) -> None:
         # wait for self.connect_name to be available.
         self.connect_name_available_event.wait()
         # we skip in case of error, so that the original error in the output thread is the one that gets raised

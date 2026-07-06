@@ -609,8 +609,8 @@ class CV64PatchExtensions(APPatchExtension):
 
         # Shimmy speed increase hack
         if options["increase_shimmy_speed"]:
-            rom_data.write_int32(0x97EB4, 0x803FE9F0)
-            rom_data.write_int32s(0xBFE9F0, patches.shimmy_speed_modifier)
+            rom_data.write_int32(0x97EB4, 0x803FEA20)
+            rom_data.write_int32s(0xBFEA20, patches.shimmy_speed_modifier)
 
         # Disable landing fall damage
         if options["fall_guard"]:
@@ -1030,7 +1030,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if CV64_US_10_HASH != basemd5.hexdigest():
-            raise Exception("Supplied Base Rom does not match known MD5 for Castlevania 64 US 1.0."
+            raise Exception("Supplied Base Rom does not match known MD5 for Castlevania 64 US 1.0. "
                             "Get the correct game and version, then dump it.")
         setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
     return base_rom_bytes
