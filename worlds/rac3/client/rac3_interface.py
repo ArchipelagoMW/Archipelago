@@ -2831,8 +2831,8 @@ class Rac3Interface(GameInterface):
         logger.info(f'Game Version: {GAME_ID_TO_VERSION.get(self.current_game, "Unknown")} ({self.current_game})')
         logger.info(f"Current Planet Tracked: {self.planet}")
         logger.info(f"Current Player Type: {self.player_type}")
-        logger.info(f"Current Player Action: {PLAYER_ACTION_NAMES.get(self.action, 'Unknown')} ({self.action})")
-        logger.info(f"Current Action Type: {ACTION_TYPE_NAMES.get(self.action_type, 'Unknown')} ({self.action_type})")
+        logger.info(f"Current Player Action: {PLAYER_ACTION_NAMES.get(self.action, 'Unknown')} ({hex(self.action).upper()})")
+        logger.info(f"Current Action Type: {ACTION_TYPE_NAMES.get(self.action_type, 'Unknown')} ({hex(self.action_type).upper()})")
         logger.info(f"Current Available Weapon Vendor Items: {self.weapon_vendor_items}")
         logger.info(f"Current Available Omega Weapon Items: {self.omega_weapon_vendors_items}")
         if self.cycle_times:
