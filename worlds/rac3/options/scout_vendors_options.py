@@ -14,11 +14,10 @@ class ScoutVendors(OptionCounter):
     Weapon: Gadgetron vendors and Slim Cognito's shop send out hints.
     --------------------------------------------------------------------------------
     The vendors will always show the item names inside them in game, regardless of this option.
-    
-    1 = Enabled, 0 = Disabled
+
+    0 = Disabled, Any other number = Enabled
     """
     min = 0
-    max = 1
     display_name = RAC3OPTION.SCOUT_VENDORS
     default = dict.fromkeys(VENDOR_TYPES, 0)
     valid_keys = VENDOR_TYPES
