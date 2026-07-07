@@ -23,7 +23,6 @@ class SkillPoints(Choice):
     - Blackwater City: Skillpoint: Bash the party
     - Koros: Skillpoint: You break it, you win it
     - Metropolis: Skillpoint: 2002 was a good year in the city
-    - Crash Site: Skillpoint: Suck it up!
     - Crash Site: Skillpoint: Aim High
     - Aridia: Skillpoint: Zap back at ya'
     - Hideout: Skillpoint: Break the Dan
