@@ -11,7 +11,7 @@ import urllib.parse
 import urllib.request
 from collections import Counter
 from itertools import chain
-from typing import Any
+from typing import Any, cast
 
 import ModuleUpdate
 
@@ -482,7 +482,7 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def roll_triggers(weights: dict, triggers: list[dict], valid_keys: set[str],
-                  options: dict[str, type[Options.Option]]) -> dict:
+                  options: dict[str, dict[str, type[Options.Option]]]) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
@@ -496,7 +496,7 @@ def roll_triggers(weights: dict, triggers: list[dict], valid_keys: set[str],
                 logging.warning(f'Specified option name {option_set["option_name"]} did not '
                                 f'match with a root option. '
                                 f'This is probably in error.')
-            option = options.get(key)
+            option = options.get(cast(str, category), {}).get(key)
             if option and option.supports_weighting:
                 trigger_result = get_choice("option_result", option_set)
                 result = get_choice(key, currently_targeted_weights)
@@ -553,6 +553,15 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
+    categories = set(weights) - {"description", "name", "game", "requires", "triggers", "linked_options"}
+    # if there's unrecognized game names as categories, we can just ignore them since they'd error if set as game anyway
+    category_options = {category: AutoWorldRegister.world_types[category].options_dataclass.type_hints
+                        for category in categories if category in AutoWorldRegister.world_types}
+
+    valid_keys = {"triggers"}
+    if "triggers" in weights:
+        weights = roll_triggers(weights, weights["triggers"], valid_keys, category_options)
+
     requirements = weights.get("requires", {})
     if requirements:
         version = requirements.get("version", __version__)
@@ -604,13 +613,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if ret.game not in weights:
         raise Exception(f"No game options for selected game \"{ret.game}\" found.")
 
-    world_type = AutoWorldRegister.world_types[ret.game]
-    options = world_type.options_dataclass.type_hints
-
-    valid_keys = {"triggers"}
-    if "triggers" in weights:
-        weights = roll_triggers(weights, weights["triggers"], valid_keys, options)
-
     game_weights = weights[ret.game]
 
     for weight in chain(game_weights, weights):
@@ -620,14 +622,14 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception(f"Remove tag cannot be used outside of trigger contexts. Found {weight}")
 
     if "triggers" in game_weights:
-        weights = roll_triggers(weights, game_weights["triggers"], valid_keys, options)
+        weights = roll_triggers(weights, game_weights["triggers"], valid_keys, category_options)
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
     for option_key, option in Options.CommonOptions.type_hints.items():
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
-    for option_key, option in options.items():
+    for option_key, option in category_options[ret.game].items():
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
 
