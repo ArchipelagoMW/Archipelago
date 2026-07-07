@@ -51,7 +51,10 @@ class MoneyLogic(BaseLogic):
             pierre_forage_rule = self.logic.region.can_reach_all(Region.pierre_shop, Region.forest)
             willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
             clint_rule = self.logic.region.can_reach_all(Region.blacksmith_shop, Region.mines_floor_5) & self.logic.tool.has_tool(Tool.pickaxe)
-            robin_rule = self.logic.region.can_reach_all(Region.carpenter_shop, Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
+            if self.options.tool_progression.is_progressive:
+                robin_rule = self.logic.region.can_reach_all(Region.carpenter_shop, Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
+            else:
+                robin_rule = self.logic.false_ # If you earn your own tools, you'll need money for the axe, so this would make an infinite loop
 
             if amount <= 2000:
                 selling_any_rule = shipping_rule | pierre_forage_rule | willy_rule | clint_rule | robin_rule

@@ -102,10 +102,17 @@ class FishingLogic(BaseLogic):
 
         if fish.name == SVEFish.kittyfish:
             item_rule = self.logic.received(SVEQuestItem.kittyfish_spell)
-        elif LogicRegion.night_market in fish.locations and any(season != Season.winter for season in fish.seasons):
-            item_rule = self.logic.fishing.can_use_any_bait() & self.logic.has(Fishing.magic_bait)
         else:
-            item_rule = True_()
+            item_rule = self.logic.true_
+        if LogicRegion.night_market in fish.locations:
+            region_rules = []
+            for loc in fish.locations:
+                if loc == LogicRegion.night_market:
+                    region_rules.append(self.logic.region.can_reach(loc) & self.logic.season.has(Season.winter))
+                else:
+                    region_rules.append(self.logic.region.can_reach(loc) & self.logic.season.has_any(fish.seasons))
+            region_rule = self.logic.or_(*region_rules)
+            season_rule = self.logic.true_
 
         return quest_rule & region_rule & season_rule & difficulty_rule & item_rule
 
