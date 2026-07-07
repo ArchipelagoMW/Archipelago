@@ -49,6 +49,8 @@ class SeasonLogic(BaseLogic):
         return self.logic.received(season)
 
     def has_any(self, seasons: Iterable[str]):
+        if len(set(seasons)) == 4 and all(season in seasons for season in Season.all):
+            seasons = Season.all
         if seasons == Season.all:
             return true_
         if not seasons:

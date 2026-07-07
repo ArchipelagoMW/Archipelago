@@ -237,13 +237,15 @@ def sanitize_fish_season_data(content: StardewContent, data_to_randomize: set[st
             seasons = set(fish_data.seasons)
             seasons.add(Season.winter)
             seasons_tuple = tuple(seasons)
-            locations_tuple = tuple(LogicRegion.night_market)
+            # locations_tuple = tuple(LogicRegion.night_market)
             content.fishes[fish_name] = override(fish_data, seasons=seasons_tuple)
+            fish_data = content.fishes[fish_name]
         if any(loc in island_regions for loc in fish_data.locations):
             seasons = set(fish_data.seasons)
             seasons.add(Season.summer)
             seasons_tuple = tuple(seasons)
             content.fishes[fish_name] = override(fish_data, seasons=seasons_tuple)
+            fish_data = content.fishes[fish_name]
 
 
 
