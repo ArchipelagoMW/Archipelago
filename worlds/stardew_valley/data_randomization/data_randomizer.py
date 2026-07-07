@@ -231,15 +231,17 @@ def sanitize_fish_festival_data(content: StardewContent, data_to_randomize: set[
 def sanitize_fish_season_data(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random, options: StardewValleyOptions):
     island_regions = [Region.island_south, LogicRegion.island_west_ocean, Region.island_south_east, LogicRegion.island_west_river]
 
-    for fish_name, fish_data in content.fishes:
-        if any(loc in island_regions for loc in fish_data.locations):
-            seasons = set(fish_data.seasons)
-            seasons.add(Season.summer)
-            seasons_tuple = tuple(seasons)
-            content.fishes[fish_name] = override(fish_data, seasons=seasons_tuple)
+    for fish_name in content.fishes:
+        fish_data = content.fishes[fish_name]
         if LogicRegion.night_market in fish_data.locations:
             seasons = set(fish_data.seasons)
             seasons.add(Season.winter)
+            seasons_tuple = tuple(seasons)
+            locations_tuple = tuple(LogicRegion.night_market)
+            content.fishes[fish_name] = override(fish_data, seasons=seasons_tuple)
+        if any(loc in island_regions for loc in fish_data.locations):
+            seasons = set(fish_data.seasons)
+            seasons.add(Season.summer)
             seasons_tuple = tuple(seasons)
             content.fishes[fish_name] = override(fish_data, seasons=seasons_tuple)
 
