@@ -135,10 +135,12 @@ class RelationshipLogic(BaseLogic):
             if ModNPC.ayeisha in self.content.villagers:
                 npc_finding_pet = ModNPC.ayeisha
             return self.logic.received(f"{npc} Arrival") & self.exists(npc_finding_pet)
-        
+
         villager = self.content.villagers.get(npc)
         if villager is None:
-            return false_
+            if npc in ["Gunther", "Marlon"]:
+                return self.logic.true_
+            return self.logic.false_
 
         if StartWithoutOptionName.villagers in self.options.start_without or npc == NPC.kent:
             return self.logic.received(f"{npc} Arrival")

@@ -195,6 +195,7 @@ def set_tool_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, co
     if not tool_progression.is_progressive:
         return
 
+    rule_collector.set_location_rule("The Mines Entrance Cutscene", logic.relationship.exists("Marlon"))
     rule_collector.set_location_rule("Bamboo Pole Cutscene", logic.relationship.exists(NPC.willy))
     training_rule = logic.source.has_access_to_any(content.tool_upgrades["Training Rod"].sources)
     rule_collector.set_location_rule("Purchase Training Rod", training_rule)
@@ -203,7 +204,7 @@ def set_tool_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, co
     iridium_rule = logic.source.has_access_to_any(content.tool_upgrades["Iridium Rod"].sources)
     rule_collector.set_location_rule("Purchase Iridium Rod", iridium_rule)
 
-    rule_collector.set_location_rule("Copper Pan Cutscene", logic.received("Glittering Boulder Removed"))
+    rule_collector.set_location_rule("Copper Pan Cutscene", logic.received("Glittering Boulder Removed") & logic.relationship.exists(NPC.willy))
 
     # Pan has no basic tier, so it is removed from materials.
     pan_materials = ToolMaterial.materials[1:]
@@ -305,7 +306,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     movie_theater_rule = logic.has_movie_theater()
     rule_collector.set_entrance_rule(LogicEntrance.purchase_movie_ticket, movie_theater_rule)
     rule_collector.set_entrance_rule(Entrance.enter_movie_theater, movie_theater_rule & logic.has(Gift.movie_ticket))
-    rule_collector.set_entrance_rule(Entrance.take_bus_to_desert, logic.received(Transportation.bus_repair) & logic.money.can_spend(500))
+    rule_collector.set_entrance_rule(Entrance.take_bus_to_desert, logic.received(Transportation.bus_repair) & logic.money.can_spend(500) & logic.relationship.exists(NPC.pam))
     rule_collector.set_entrance_rule(Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
     rule_collector.set_entrance_rule(LogicEntrance.break_dwarf_rocks, logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days() & logic.money.can_spend(1200))
@@ -620,7 +621,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.use_farm_obelisk: logic.can_use_obelisk(Transportation.farm_obelisk),
         Entrance.use_island_totem: logic.has("Warp Totem: Island"),
         Entrance.fish_cabin_to_boat_tunnel: boat_repaired,
-        Entrance.boat_to_ginger_island: boat_repaired & logic.money.can_spend(1000),
+        Entrance.boat_to_ginger_island: boat_repaired & logic.money.can_spend(1000) & logic.relationship.exists(NPC.willy),
         Entrance.island_south_to_west: logic.received("Island West Turtle"),
         Entrance.island_south_to_north: logic.received("Island North Turtle"),
         Entrance.island_west_to_island_farmhouse: logic.received("Island Farmhouse"),

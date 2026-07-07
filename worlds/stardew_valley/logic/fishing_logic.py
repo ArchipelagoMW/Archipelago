@@ -102,7 +102,7 @@ class FishingLogic(BaseLogic):
 
         if fish.name == SVEFish.kittyfish:
             item_rule = self.logic.received(SVEQuestItem.kittyfish_spell)
-        elif LogicRegion.night_market in fish.locations and Season.winter not in fish.seasons:
+        elif LogicRegion.night_market in fish.locations and any(season != Season.winter for season in fish.seasons):
             item_rule = self.logic.fishing.can_use_any_bait() & self.logic.has(Fishing.magic_bait)
         else:
             item_rule = True_()

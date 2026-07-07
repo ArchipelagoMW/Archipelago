@@ -50,3 +50,4 @@ class Trap:
     trap("Back To School Trap")
     trap("Tired Trap")
     trap("Injury Trap")
+    trap("Reverse Trap")

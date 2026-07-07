@@ -196,6 +196,11 @@ def randomize_fish_sell_prices(content: StardewContent, data_to_randomize: set[s
 
 
 def sanitize_fish_data(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random, options: StardewValleyOptions):
+    sanitize_fish_festival_data(content, data_to_randomize, behavior, random, options)
+    sanitize_fish_season_data(content, data_to_randomize, behavior, random, options)
+
+
+def sanitize_fish_festival_data(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random, options: StardewValleyOptions):
     need_festivals = options.festival_locations != FestivalLocations.option_disabled
     need_trout_derby = need_festivals or HatsanityOptionName.medium in options.hatsanity.value
     need_squid_fest = need_festivals or HatsanityOptionName.medium in options.hatsanity.value or options.booksanity >= Booksanity.option_power
@@ -221,6 +226,23 @@ def sanitize_fish_data(content: StardewContent, data_to_randomize: set[str], beh
         weather.add(Weather.sun)
         weather_tuple = tuple(weather)
         content.fishes[Fish.squid] = override(squid, seasons=seasons_tuple, weather=weather_tuple)
+
+
+def sanitize_fish_season_data(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random, options: StardewValleyOptions):
+    island_regions = [Region.island_south, LogicRegion.island_west_ocean, Region.island_south_east, LogicRegion.island_west_river]
+
+    for fish_name, fish_data in content.fishes:
+        if any(loc in island_regions for loc in fish_data.locations):
+            seasons = set(fish_data.seasons)
+            seasons.add(Season.summer)
+            seasons_tuple = tuple(seasons)
+            content.fishes[fish_name] = override(fish_data, seasons=seasons_tuple)
+        if LogicRegion.night_market in fish_data.locations:
+            seasons = set(fish_data.seasons)
+            seasons.add(Season.winter)
+            seasons_tuple = tuple(seasons)
+            content.fishes[fish_name] = override(fish_data, seasons=seasons_tuple)
+
 
 
 
