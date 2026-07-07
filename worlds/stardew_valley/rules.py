@@ -322,7 +322,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(LogicEntrance.witch_swamp_bot_to_top, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(LogicEntrance.witch_swamp_top_to_bot, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(Entrance.enter_mutant_bug_lair,
-                                     (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(NPC.krobus))
+                                     (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(NPC.krobus) & logic.relationship.exists(NPC.wizard))
                                      | logic.mod.magic.can_blink())
     rule_collector.set_entrance_rule(Entrance.enter_casino, logic.quest.has_club_card())
 

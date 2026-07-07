@@ -5,7 +5,7 @@ from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
 from ..content.feature import friendsanity
 from ..data.villagers_data import Villager
-from ..stardew_rule import StardewRule, True_, false_, true_
+from ..stardew_rule import StardewRule, True_, false_
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName, StartWithoutOptionName
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.building_names import Building
@@ -113,7 +113,7 @@ class RelationshipLogic(BaseLogic):
             return false_
 
         if hearts == 0:
-            return true_
+            return self.logic.relationship.can_meet(npc)
 
         heart_steps = self.content.features.friendsanity.get_randomized_hearts(villager)
         if not heart_steps or hearts > heart_steps[-1]:  # Hearts are sorted, bigger is the last one.
