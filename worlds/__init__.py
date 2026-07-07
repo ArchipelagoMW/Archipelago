@@ -15,6 +15,7 @@ from zipfile import ZipFile, BadZipFile
 
 from NetUtils import DataPackage
 from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
+from .Files import APWorldContainer
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -74,6 +75,23 @@ class WorldSource:
             return False
 
 
+apworld_module_specs = {}
+class APWorldModuleFinder(importlib.abc.MetaPathFinder):
+    def find_spec(
+            self, fullname: str, _path: Sequence[str] | None, _target: ModuleType | None = None
+    ) -> importlib.machinery.ModuleSpec | None:
+        return apworld_module_specs.get(fullname)
+sys.meta_path.insert(0, APWorldModuleFinder())
+
+
+def add_apworld_spec(source: WorldSource, container: APWorldContainer):
+    importer = zipimport.zipimporter(source.resolved_path)
+    world_name = Path(container.path).stem
+
+    spec = importer.find_spec(f"worlds.{world_name}")
+    apworld_module_specs[f"worlds.{world_name}"] = spec
+
+
 # find potential world containers, currently folders and zip-importable .apworld's
 world_sources: List[WorldSource] = []
 for folder in (folder for folder in (user_folder, local_folder) if folder):
@@ -125,7 +143,7 @@ if apworlds:
     # encapsulation for namespace / gc purposes
     def load_apworlds() -> None:
         global apworlds
-        from .Files import APWorldContainer, InvalidDataError
+        from .Files import InvalidDataError
         core_compatible: list[tuple[WorldSource, APWorldContainer]] = []
 
         def fail_world(game_name: str, reason: str, add_as_failed_to_load: bool = True) -> None:
@@ -174,15 +192,6 @@ if apworlds:
             key=lambda element: element[1].world_version if element[1].world_version else Version(0, 0, 0),
             reverse=True)
 
-        apworld_module_specs = {}
-        class APWorldModuleFinder(importlib.abc.MetaPathFinder):
-            def find_spec(
-                    self, fullname: str, _path: Sequence[str] | None, _target: ModuleType = None
-            ) -> importlib.machinery.ModuleSpec | None:
-                return apworld_module_specs.get(fullname)
-
-        sys.meta_path.insert(0, APWorldModuleFinder())
-
         for apworld_source, apworld in core_compatible:
             if apworld.game and apworld.game in AutoWorldRegister.world_types:
                 fail_world(apworld.game,
@@ -190,11 +199,7 @@ if apworlds:
                            f"as its game {apworld.game} is already loaded.",
                            add_as_failed_to_load=False)
             else:
-                importer = zipimport.zipimporter(apworld_source.resolved_path)
-                world_name = Path(apworld.path).stem
-
-                spec = importer.find_spec(f"worlds.{world_name}")
-                apworld_module_specs[f"worlds.{world_name}"] = spec
+                add_apworld_spec(apworld_source, apworld)
 
                 apworld_source.load()
                 if apworld.game in AutoWorldRegister.world_types:
