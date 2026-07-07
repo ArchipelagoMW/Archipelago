@@ -381,13 +381,14 @@ class OptionsCreator(ThemedApp):
         self.options[name] = default
         return box
 
-    def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str):
+    def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str, bind=True):
         text = VisualFreeText(option=option, name=name)
 
         def set_value(instance, value):
             self.options[name] = value
 
-        text.bind(text=set_value)
+        if bind:
+            text.bind(text=set_value)
         self.options[name] = option.default
         return text
 
@@ -426,13 +427,13 @@ class OptionsCreator(ThemedApp):
                     child.text = text
 
         box = VisualTextChoice(option=option, name=name, choice=self.create_choice(option, name),
-                               text=self.create_free_text(option, name))
+                               text=self.create_free_text(option, name, bind=False))
 
-        def set_value(instance):
+        def set_value(instance, value):
             set_button_text(box.choice, "Custom")
-            self.options[name] = instance.text
+            self.options[name] = value
 
-        box.text.bind(on_text_validate=set_value)
+        box.text.bind(text=set_value)
         return box
 
     def create_toggle(self, option: typing.Type[Toggle], name: str) -> Widget:
