@@ -402,6 +402,9 @@ class OptionsCreator(ThemedApp):
             dropdown.dismiss()
 
         def open_dropdown(button):
+            # clicking the edge of a choice button apparently still runs this?
+            if button.disabled:
+                return
             # for some reason this fixes an issue causing some to not open
             dropdown.open()
 
