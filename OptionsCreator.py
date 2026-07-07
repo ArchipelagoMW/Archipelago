@@ -522,25 +522,23 @@ class OptionsCreator(ThemedApp):
 
         option_base.add_widget(label_box)
         if issubclass(option, NamedRange):
-            widget = self.create_named_range(option, name)
+            option_base.add_widget(self.create_named_range(option, name))
         elif issubclass(option, Range):
-            widget = self.create_range(option, name)
+            option_base.add_widget(self.create_range(option, name))
         elif issubclass(option, Toggle):
-            widget = self.create_toggle(option, name)
+            option_base.add_widget(self.create_toggle(option, name))
         elif issubclass(option, TextChoice):
-            widget = self.create_text_choice(option, name)
+            option_base.add_widget(self.create_text_choice(option, name))
         elif issubclass(option, Choice):
-            widget = self.create_choice(option, name)
+            option_base.add_widget(self.create_choice(option, name))
         elif issubclass(option, FreeText):
-            widget = self.create_free_text(option, name)
+            option_base.add_widget(self.create_free_text(option, name))
         elif issubclass(option, (OptionSet, OptionList, OptionCounter)):
-            widget = self.create_option_set_list_counter(option, name, world)
+            option_base.add_widget(self.create_option_set_list_counter(option, name, world))
         else:
             option_base.add_widget(MDLabel(text="This option isn't supported by the option creator.\n"
                                                 "Please edit your yaml manually to set this option."))
             return option_base
-
-        option_base.add_widget(widget)
 
         if option_can_be_randomized(option):
             def randomize_option(instance: Widget, value: str):
@@ -567,14 +565,10 @@ class OptionsCreator(ThemedApp):
             label_box.add_widget(random_toggle)
             if default_random:
                 # change stored value to match displayed one before randomizing it
-                if isinstance(widget, VisualNamedRange):
-                    self.options[name] = widget.range.tag.text
-                elif isinstance(widget, VisualRange):
-                    self.options[name] = widget.tag.text
-                elif isinstance(widget, VisualTextChoice):
-                    self.options[name] = widget.choice.text.text
-                elif isinstance(widget, VisualChoice):
-                    self.options[name] = widget.text.text
+                if issubclass(option, Range):
+                    self.options[name] = option.range_start
+                elif issubclass(option, Choice):
+                    self.options[name] = list(option.options.values())[0]
 
                 randomize_option(random_toggle, "down")
 
