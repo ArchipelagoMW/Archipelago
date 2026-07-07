@@ -203,6 +203,7 @@ class Rac3Interface(GameInterface):
     opened_the_refractor_doors: bool = False
     weapon_levels: dict[str, int] = {}
     delayed_weapon_levelups: list[str] = []
+    delayed_debt_trap_count: int = 0
     stored_fillers: dict[str, int] = {}
     initial_fillers: dict[str, int] = {}
     last_hovered_weapon: str = ""
@@ -990,6 +991,15 @@ class Rac3Interface(GameInterface):
                     self.timers[name] += randint(10, 15)
                 else:
                     self.timers[name] = int(time.time() + uniform(10, 20))
+            case RAC3ITEM.GADGETRON_DEBT_TRAP:
+                # Losing bolts near pda vendor triggers failsafe for the pda vendor location,
+                # so we need to delay the debt trap until the player is away from the pda vendor
+                if not self.near_pda_vendor():
+                    bolts = self._read32(RAC3STATUS.BOLTS)
+                    new_bolts = bolts * 0.92
+                    self._write32(RAC3STATUS.BOLTS, int(new_bolts))
+                else:
+                    self.delayed_debt_trap_count += 1
             case RAC3ITEM.LIGHTSABER_WRENCH:
                 self._write8(RAC3STATUS.WRENCH_REPLACEMENT_CHEAT, 1)
         if name in non_prog_weapon_data.keys():
@@ -1731,6 +1741,7 @@ class Rac3Interface(GameInterface):
         self.challenge_mode_cycler()
         self.patch_cycler()
         self.overflow_fix()
+        self.process_delayed_things_cycler()
         self.health_cycler()
         self.shortcut_cycler()
         self.speedup_cycler()
@@ -2269,6 +2280,16 @@ class Rac3Interface(GameInterface):
             self._write32(RAC3STATUS.NANOTECH_EXP, 0)
             self.enqueue_notification("Negative Nanotech EXP detected! Resetting EXP to 0", RAC3BOXTHEME.WARNING)
         # If other stuff needs overflow fixing, add here
+
+    def process_delayed_things_cycler(self):
+        """Process delayed things such as debt traps"""
+        if not self.near_pda_vendor():
+            for _ in range(self.delayed_debt_trap_count):
+                bolts = self._read32(RAC3STATUS.BOLTS)
+                new_bolts = bolts * 0.92
+                self._write32(RAC3STATUS.BOLTS, int(new_bolts))
+            self.delayed_debt_trap_count = 0
+        # Add any other things we need to delay and process here
 
     def health_cycler(self):
         """
