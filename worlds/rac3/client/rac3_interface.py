@@ -197,6 +197,7 @@ class Rac3Interface(GameInterface):
     metro_dropship: int = 0
     holo_teleport: int = 0
     holo_final_door: int = 0
+    holo_door: int = 0
     hacker_door_addresses: dict[int, int] = {}
     opened_the_hacker_doors: bool = False
     opened_the_tyhrranoid_doors: bool = False
@@ -620,6 +621,11 @@ class Rac3Interface(GameInterface):
         self.nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
         self.clank_disabled = bool(self._read8(RAC3STATUS.NO_CLANK))
         self.pda_vendor = self.find_pda_vendor()
+        self.holo_final_door = self.find_holostar_door()
+        if self.holo_final_door:
+            self.holo_door = self._read16(self.holo_final_door + 0xBE)
+        else:
+            self.holo_door = 0
         self.vendor_type = self.vendor_check()
         self.get_visited_planets()
         self.determine_weapon_vendor_items()
@@ -637,6 +643,15 @@ class Rac3Interface(GameInterface):
         if self.pda_vendor and self._read16(self.pda_vendor + 0xB2) == target_moby_id:
             return self.pda_vendor
         return self.find_moby_by_id_iteration(target_moby_id)
+
+    def find_holostar_door(self) -> int:
+        """Traverse the moby linked list on Holostar to find the final door moby and return its address"""
+        if self.planet != RAC3REGION.HOLOSTAR_STUDIOS or RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP in self.checked_locations:
+            # reset moby ID when leaving planet
+            return 0
+        if self.holo_final_door and self._read16(self.holo_final_door + 0xB2) == 0xC2:
+            return self.holo_final_door
+        return self.find_moby_by_id_iteration(0xC2)
 
     def vendor_check(self) -> RAC3VENDORTYPE | None:
         """Returns the current vendor type if the vendor is open, else None"""
@@ -2382,10 +2397,13 @@ class Rac3Interface(GameInterface):
                         continue
                     # Todo: check for the player opening the final door
                     if name == RAC3SHORTCUTS.HOLOSTAR_TELEPORTER and data.FLAG_ADDRESSES is not None:
-                        if self.holo_teleport == 0:
+                        if self.holo_teleport == 0 and self.short_pause:
                             self.holo_teleport += 1
                             self._write_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
-                        if self.holo_teleport == 1:
+                            logger.debug("Set Holostar Teleporter")
+                        elif self.holo_teleport == 1 and self.holo_door > 1 and 278.0 < self._read_float(
+                            RESPAWN_COORDS_OFFSET[self.planet] + RAC3STATUS.RESPAWN_BASE + 4) < 279:
+                            logger.debug("Trigger Holostar Cutscene")
                             self.holo_teleport += 1
                             self._unwrite_bits(data.FLAG_ADDRESSES[0][0], {data.FLAG_ADDRESSES[0][1]})
                             self.force_respawn()
@@ -2860,8 +2878,11 @@ class Rac3Interface(GameInterface):
         logger.info(f'Game Version: {GAME_ID_TO_VERSION.get(self.current_game, "Unknown")} ({self.current_game})')
         logger.info(f"Current Planet Tracked: {self.planet}")
         logger.info(f"Current Player Type: {self.player_type}")
-        logger.info(f"Current Player Action: {PLAYER_ACTION_NAMES.get(self.action, 'Unknown')} ({hex(self.action).upper()})")
-        logger.info(f"Current Action Type: {ACTION_TYPE_NAMES.get(self.action_type, 'Unknown')} ({hex(self.action_type).upper()})")
+        logger.info(
+            f"Current Player Action: {PLAYER_ACTION_NAMES.get(self.action, 'Unknown')} ({hex(self.action).upper()})")
+        logger.info(
+            f"Current Action Type: {ACTION_TYPE_NAMES.get(self.action_type, 'Unknown')} ("
+            f"{hex(self.action_type).upper()})")
         logger.info(f"Current Available Weapon Vendor Items: {self.weapon_vendor_items}")
         logger.info(f"Current Available Omega Weapon Items: {self.omega_weapon_vendors_items}")
         if self.cycle_times:
