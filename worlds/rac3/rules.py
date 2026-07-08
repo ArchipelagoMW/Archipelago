@@ -227,8 +227,8 @@ def set_rules(world: "RaC3World"):
         # RAC3LOCATION.PHOENIX_MEET_SASHA
         RAC3SKILLPOINT.PHOENIX_MONKEY: lambda state: state.has(RAC3ITEM.TYHRRA_GUISE, world.player),
         RAC3LOCATION.PHOENIX_ASSAULT:
-            lambda state: state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT, world.player)
-                          and state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT, RAC3ITEM.REFRACTOR], world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.HIDEOUT_FIND_QWARK, world.player)
+                          and state.has(RAC3ITEM.REFRACTOR, world.player),
         RAC3LOCATION.PHOENIX_GRAND_PRIZE:
             lambda state: state.can_reach_region(RAC3REGION.ANNIHILATION_NATION, world.player),
         RAC3LOCATION.PHOENIX_STAR_MAP: lambda state: state.has(RAC3ITEM.STAR_MAP, world.player),
