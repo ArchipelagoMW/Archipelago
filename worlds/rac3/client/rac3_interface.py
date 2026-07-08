@@ -1101,7 +1101,7 @@ class Rac3Interface(GameInterface):
             return (
                 abs(current_pos.X - skidd_pos.X) < 8
                 and abs(current_pos.Y - skidd_pos.Y) < 8
-                and abs(current_pos.Z - skidd_pos.Z) < 8
+                and abs(current_pos.Z - skidd_pos.Z) < 5
             )
         if location == RAC3LOCATION.PHOENIX_MEET_SASHA and self.planet == RAC3REGION.STARSHIP_PHOENIX:
             current_pos = self.player_pos
@@ -1109,7 +1109,15 @@ class Rac3Interface(GameInterface):
             return (
                 abs(current_pos.X - sasha_pos.X) < 8
                 and abs(current_pos.Y - sasha_pos.Y) < 8
-                and abs(current_pos.Z - sasha_pos.Z) < 8
+                and abs(current_pos.Z - sasha_pos.Z) < 5
+            )
+        if location == RAC3LOCATION.HIDEOUT_FIND_QWARK and self.planet == RAC3REGION.QWARKS_HIDEOUT:
+            current_pos = self.player_pos
+            qwark_pos = RAC3POSITIONDATA(306, 298, 109)
+            return (
+                abs(current_pos.X - qwark_pos.X) < 5
+                and abs(current_pos.Y - qwark_pos.Y) < 5
+                and abs(current_pos.Z - qwark_pos.Z) < 5
             )
         if location == RAC3LOCATION.ARIDIA_RANGERS_5 and self.options.speedups.get(RAC3SPEEDUPS.MISSIONS, False):
             if self._read8(MISSION_COUNTS[location]) > 1:  # Aridia final mission needs special checks
