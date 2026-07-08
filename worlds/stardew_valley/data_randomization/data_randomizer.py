@@ -100,7 +100,7 @@ def randomize_fish_catch_method(content: StardewContent, data_to_randomize: set[
                                                      weather=(Weather.sun, Weather.rain,))
             continue
         elif original_difficulty == crab_pot_difficulty:
-            fish_difficulty = random.randrange(10, 111)
+            fish_difficulty = random.randrange(10, 45)
             if original_fish.locations[0] == LogicRegion.crab_pot_seawater:
                 fish_locations = (Region.beach,)
             else:
