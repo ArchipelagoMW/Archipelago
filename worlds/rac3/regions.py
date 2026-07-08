@@ -376,6 +376,21 @@ def create_regions(world: "RaC3World"):
     create_region_and_connect(world, RAC3REGION.NGPLUS, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.NGPLUS}",
                               starship_phoenix)
 
+    missing_regions = []
+    regions_missing = []
+    region_dict = world.multiworld.regions.region_cache[world.player]
+    for name in REGIONS_WITH_LOCATIONS:
+        if name not in region_dict.keys():
+            missing_regions.append(name)
+    for name, region in region_dict.items():
+        if name not in REGIONS_WITH_LOCATIONS and len(region.locations):
+            regions_missing.append(name)
+    if missing_regions and regions_missing:
+        assert False, (f"Regions: {missing_regions} were declared but not created\nRegions: {regions_missing} were "
+                       f"created but not declared.")
+    assert missing_regions == [], f"Regions: {missing_regions} were declared but not created."
+    assert regions_missing == [], f"Regions: {regions_missing} were created but not declared."
+
     # shock_blaster_upgrades = create_region(world, f"{RAC3ITEM.SHOCK_BLASTER} Upgrades")
     # menu.connect(shock_blaster_upgrades, rule=lambda state: state.has(RAC3ITEM.SHOCK_BLASTER, world.player)),
     #
