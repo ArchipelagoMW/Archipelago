@@ -1,7 +1,7 @@
 import os
 import binascii
 from ..assembler import ASM
-from ..utils import formatText
+from ..utils import preformatText, formatText
 
 import pkgutil
 
@@ -13,7 +13,7 @@ def generate_name(l, i):
         name = l[i]
     else:
         name = f"player {i}"
-    name = formatText(name, skip_names=True).decode('latin1')[:-1][:16]
+    name = preformatText(name, skip_names=True).decode('latin1')[:16]
     assert(len(name) <= 16)
     return 'db "' + name + '"' + ', $ff' * (17 - len(name)) + '\n'
 

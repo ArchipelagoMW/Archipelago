@@ -264,8 +264,7 @@ _CHARACTERS = {
 def setReplacementName(key: str, value: str) -> None:
     _NAMES[key] = value
 
-
-def formatText(instr: str, *, center: bool = False, ask: Optional[str] = None, skip_names: bool = False) -> bytes:
+def preformatText(instr: str, skip_names: bool = False) -> bytes:
     if not skip_names:
         instr = instr.format(**_NAMES)
     for character, replacement in _PREFILTER.items():
@@ -273,6 +272,10 @@ def formatText(instr: str, *, center: bool = False, ask: Optional[str] = None, s
     s = unicodedata.normalize("NFKD", instr).encode("ascii", "ignore")
     for character, encodedCharacter in _CHARACTERS.items():
         s = s.replace(character, encodedCharacter)
+    return s
+
+def formatText(instr: str, *, center: bool = False, ask: Optional[str] = None, skip_names: bool = False) -> bytes:
+    s = preformatText(instr, skip_names)
 
     def padLine(line: bytes) -> bytes:
         return line + b' ' * (16 - len(line))
