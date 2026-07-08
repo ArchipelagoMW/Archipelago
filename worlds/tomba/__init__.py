@@ -1,0 +1,1 @@
+from .world import TombaWorld as TombaWorld
