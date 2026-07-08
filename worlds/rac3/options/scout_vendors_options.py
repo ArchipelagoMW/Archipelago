@@ -15,7 +15,7 @@ class ScoutVendors(OptionCounter):
     --------------------------------------------------------------------------------
     The vendors will always show the item names inside them in game, regardless of this option.
 
-    0 = Disabled, Any other number = Enabled
+    0 = Disabled, Any other value = Enabled
     """
     min = 0
     display_name = RAC3OPTION.SCOUT_VENDORS

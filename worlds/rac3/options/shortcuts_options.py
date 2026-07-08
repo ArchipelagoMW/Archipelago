@@ -13,10 +13,9 @@ class Shortcuts(OptionCounter):
     Shortcuts will not let you skip logic. You still need the required items to access the areas.
     Veldin Skip will force the player to start on the Starship Phoenix.
     ------------------------------------------------------------------------------------------------
-    1 = Enabled, 0 = Disabled
+    0 = Disabled, Any other value = Enabled
     """
     min = 0
-    max = 1
     display_name = RAC3OPTION.SHORTCUTS
     default = dict.fromkeys(SHORTCUTS, 0)
     default[RAC3SHORTCUTS.VELDIN_SKIP] = 1

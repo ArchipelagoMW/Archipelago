@@ -19,10 +19,9 @@ class OneHpChallenge(OptionCounter):
     If you feel like this is too hard for you, you can always toggle the challenge for a character using /one_hp [
     character name]
 
-    1 = Enabled, 0 = Disabled
+    0 = Disabled, Any other value = Enabled
     """
     min = 0
-    max = 1
     display_name = RAC3OPTION.ONE_HP_CHALLENGE
     default = dict.fromkeys(ONE_HP_CHALLENGE_CHARACTERS, 0)
     valid_keys = ONE_HP_CHALLENGE_CHARACTERS

@@ -11,10 +11,9 @@ class Speedups(OptionCounter):
     When a speedup is enabled, the corresponding puzzle type will be skipped from the start.
     Gadget speedups require the corresponding gadget to be unlocked in order for the skip to activate.
     -----------------------------------------------------------------------------------------------
-    1 = Enabled, 0 = Disabled
+    0 = Disabled, Any other value = Enabled
     """
     min = 0
-    max = 1
     display_name = RAC3OPTION.SPEEDUPS
     default = dict.fromkeys(SPEEDUPS, 0)
     valid_keys = SPEEDUPS
