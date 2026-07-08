@@ -283,6 +283,7 @@ class RaC3World(World):
             RAC3OPTION.NGPLUS_START: self.options.ngplus_start.value,
             RAC3OPTION.HELP_DESK: self.options.helpdesk.value,
             RAC3OPTION.WEAPON_LEVEL_LOCATIONS: self.options.weapon_level_locations.value,
+            RAC3OPTION.VENDOR_ACCESS: self.options.vendor_access.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

@@ -130,6 +130,7 @@ class Rac3Interface(GameInterface):
         ngplus_start: int
         helpdesk: int
         weapon_level_locations: int
+        vendor_access: int
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
@@ -354,6 +355,7 @@ class Rac3Interface(GameInterface):
         self.options.ngplus_start = slot_data[RAC3OPTION.NGPLUS_START]
         self.options.helpdesk = slot_data[RAC3OPTION.HELP_DESK]
         self.options.weapon_level_locations = slot_data[RAC3OPTION.WEAPON_LEVEL_LOCATIONS]
+        self.options.vendor_access = slot_data[RAC3OPTION.VENDOR_ACCESS]
 
     ########################################
     # Called on Game and Server Connection #
@@ -711,11 +713,20 @@ class Rac3Interface(GameInterface):
                     continue
                 if item == RAC3ITEM.RY3N0 and not self.options.ngplus_vendors:
                     continue
-                if WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[loc] in self.visited_planets and item not in already_sold:
-                    if loc in self.checked_locations:
-                        already_sold.add(item)
-                    else:
-                        items_to_sell.append(item)
+                if self.options.vendor_access:
+                    if (item not in already_sold and self.UnlockItem[INFOBOT_FROM_PLANET[
+                        WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[loc]]]):
+                        if loc in self.checked_locations:
+                            already_sold.add(item)
+                        else:
+                            items_to_sell.append(item)
+                else:
+                    if item not in already_sold and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[
+                        loc] in self.visited_planets:
+                        if loc in self.checked_locations:
+                            already_sold.add(item)
+                        else:
+                            items_to_sell.append(item)
             self.weapon_vendor_items = items_to_sell
 
         if self.options.ngplus_items:

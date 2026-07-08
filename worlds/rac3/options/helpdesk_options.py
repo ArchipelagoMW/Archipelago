@@ -1,4 +1,4 @@
-"""This module contains options for New Game Plus purchase locations"""
+"""This module contains options for toggling the in game helpdesk"""
 
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION

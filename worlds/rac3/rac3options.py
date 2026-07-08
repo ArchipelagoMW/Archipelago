@@ -36,6 +36,7 @@ from worlds.rac3.options.titanium_bolts_options import TitaniumBolts
 from worlds.rac3.options.trap_weight_options import TrapWeight
 from worlds.rac3.options.traps_options import EnableTraps
 from worlds.rac3.options.trophies_options import Trophies
+from worlds.rac3.options.vendor_access_options import VendorAccess
 from worlds.rac3.options.vidcomics_options import VidComics
 from worlds.rac3.options.vr_challenges_options import VRChallenges
 from worlds.rac3.options.weapon_level_options import WeaponLevels
@@ -91,6 +92,7 @@ class RaC3Options(PerGameCommonOptions):
     ngplus_vendors: NGPlusVendor
     ngplus_start: NGPlusStart
     helpdesk: HelpDesk
+    vendor_access: VendorAccess
     weapon_level_locations: WeaponLevels
 
 
@@ -144,6 +146,7 @@ rac3_option_groups = [
     ]),
     OptionGroup("RAC3 QoL Options", [
         HelpDesk,
+        VendorAccess,
     ]),
     OptionGroup("Item & Location Options", [
         RAC3ExcludeLocations,
@@ -189,4 +192,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.NGPLUS_VENDOR,
     RAC3OPTION.HELP_DESK,
     RAC3OPTION.WEAPON_LEVEL_LOCATIONS,
+    RAC3OPTION.VENDOR_ACCESS,
 ]
