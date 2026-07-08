@@ -237,7 +237,7 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
-                self.default('Development command "load_level" was used in a non-development build.')
+                self.default(f'Development command "/load_level {" ".join(str(x) for x in args)}" was used in a non-development build.')
             if not args:
                 self.output("No level specified. Provide an integer ID or region name.")
                 return
@@ -270,13 +270,13 @@ class CommandProcessor(ClientCommandProcessor):
                 self.output("Invalid level ID or region name. Provide an integer or valid region key.")
 
     def _cmd_traversal(self, *args):
-        """Test command for linked list traversal purposes."""
+        """Test command for moby table linked list traversal purposes."""
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
                 # let everyone know that a development command was used in a release build.
-                self.default('Development command "traversal" was used in a non-development build.')
+                self.default(f'Development command "/traversal {" ".join(str(x) for x in args)}" was used in a non-development build.')
 
             # convert the hex input to an int and then do traversal with that as the target id
             try:
@@ -293,13 +293,13 @@ class CommandProcessor(ClientCommandProcessor):
                 self.output(f"Could not find moby with ID {hex(target_id)}")
 
     def _cmd_iteration(self, *args):
-        """Test command for linked list iteration purposes."""
+        """Test command for moby table iteration purposes."""
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             if not self.is_development_build():
                 # let everyone know that a development command was used in a release build.
-                self.default('Development command "iteration" was used in a non-development build.')
+                self.default(f'Development command "/iteration {" ".join(str(x) for x in args)}" was used in a non-development build.')
 
             # convert the hex input to an int and then do iteration with that as the target id
             try:
