@@ -1,3 +1,5 @@
+"""This module contains the CHECKTYPE enum used for tracking what memory size and comparison are to be used"""
+
 from enum import IntFlag
 
 

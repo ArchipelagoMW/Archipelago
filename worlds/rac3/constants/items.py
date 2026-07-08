@@ -1,4 +1,8 @@
+"""This module contains constant strings for each item in RaC3"""
+
+
 class RAC3ITEM:
+    """Item name strings"""
     AGENTS_OF_DOOM = "Agents of Doom"
     AGENTS_OF_DOOM_V2 = "Agents of Doom V2"
     AGENTS_OF_DOOM_V3 = "Agents of Doom V3"
@@ -269,6 +273,7 @@ class RAC3ITEM:
     NO_CLANK_TRAP = "No Clank Trap"
     INVISIBLE_TRAP = "Invisible Trap"
     DISARM_TRAP = "Disarm Trap"
+    GADGETRON_DEBT_TRAP = "Gadgetron Debt Trap"
 
     QUICK_SELECT_0 = "Quick Select 0"
     QUICK_SELECT_1 = "Quick Select 1"

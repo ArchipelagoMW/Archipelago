@@ -1,4 +1,7 @@
+"""This module contains constants used for handling different death causes"""
+
 class RAC3DEATH:
+    """Death cause"""
     EATEN = "was Eaten"
     DIED = "Died"
     DROWNED = "Drowned"

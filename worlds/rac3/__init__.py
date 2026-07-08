@@ -4,6 +4,7 @@ from typing import Optional
 
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, SuffixIdentifier, Type
 from worlds.rac3.constants.options import RAC3OPTION
+# noinspection PyUnusedImports
 from worlds.rac3.world import RaC3World
 
 

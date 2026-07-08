@@ -1,4 +1,8 @@
+"""This module defines constants for Trophy locations"""
+
+
 class RAC3TROPHY:
+    """String constants for Trophy locations"""
     FLORANA_RATCHET = "Florana: Trophy: 2nd Building Upstairs North-East"
     TYHRRANOSIS_AL = "Tyhrranosis: Trophy: North East Pillar"
     DAXX_PLUMBER = "Daxx: Trophy: Ledge overlooking Ship"
@@ -12,3 +16,5 @@ class RAC3TROPHY:
     PHOENIX_FRIEND_OF_THE_RANGERS = "Phoenix: Long Term Trophy: Friend of the Rangers"
     PHOENIX_ANNIHILATION_NATION_CHAMPION = "Phoenix: Long Term Trophy: Annihilation Nation Champion"
     PHOENIX_SKILL_MASTER = "Phoenix: Long Term Trophy: Skill Master"
+    PHOENIX_NANO_FINDER = "Phoenix: Long Term Trophy: Nanofinder"
+    PHOENIX_OMEGA_ARSENAL = "Phoenix: Long Term Trophy: Omega Arsenal"

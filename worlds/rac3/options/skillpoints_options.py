@@ -1,3 +1,5 @@
+"""This module contains options for skillpoint locations"""
+
 from Options import Choice
 from worlds.rac3.constants.options import RAC3OPTION
 
@@ -5,8 +7,9 @@ from worlds.rac3.constants.options import RAC3OPTION
 class SkillPoints(Choice):
     """
     Determines which skill points are locations in the world.
-    Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled
-    Simple locations are the following:
+    Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled.
+    -----------------------------------------------------------------------------------------------
+    Simple skill point locations are the following:
     - Aridia: Skillpoint: Go for hang time
     - Phoenix: Skillpoint: Beat Helga's best time
     - Phoenix: Skillpoint: Turn Up The Heat
@@ -20,7 +23,6 @@ class SkillPoints(Choice):
     - Blackwater City: Skillpoint: Bash the party
     - Koros: Skillpoint: You break it, you win it
     - Metropolis: Skillpoint: 2002 was a good year in the city
-    - Crash Site: Skillpoint: Suck it up!
     - Crash Site: Skillpoint: Aim High
     - Aridia: Skillpoint: Zap back at ya'
     - Hideout: Skillpoint: Break the Dan

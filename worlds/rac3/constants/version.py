@@ -1,6 +1,5 @@
 """This module contains the constant strings used to determine which version of RAC3 is being played"""
 
-
 from worlds.rac3.constants.region import RAC3REGION
 
 
@@ -18,6 +17,7 @@ class RAC3VERSION:
     EU_ID = "SCES-52456"
     EU_BETA_ID = "TCES-52456"
     EU_DEMO_ID = "SCED-52847"
+
 
 GAME_ID_TO_VERSION: dict[str, str] = {
     RAC3VERSION.US_ID: "US release",
@@ -53,6 +53,10 @@ PAL_SHIFTED_PLANETS: list[str] = [
     RAC3REGION.OBANI_DRACO,
     RAC3REGION.HOLOSTAR_STUDIOS_CLANK,
     RAC3REGION.METROPOLIS_RANGERS,
+    RAC3REGION.QWARK_VID_COMIC_1,
+    RAC3REGION.QWARK_VID_COMIC_2,
+    RAC3REGION.QWARK_VID_COMIC_3,
+    RAC3REGION.QWARK_VID_COMIC_5,
 ]
 
 VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE: dict[str, int] = {

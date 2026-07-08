@@ -21,8 +21,8 @@ The following are required in order to play Ratchet and Clank 3 in Archipelago
 ## PCSX2 Settings
 
 - Enable PINE in PCSX2
-    - In PCSX2, Under Tools, **Check** Show Advanced Settings
-    - In PCSX2, System → Settings → Advanced tab → PINE Settings,
+  - In PCSX2, Under Tools, **Check** Show Advanced Settings
+  - In PCSX2, System → Settings → Advanced tab → PINE Settings,
       **Check** Enable and ensure Slot is set to 28011
 
 Make sure you restart PCSX2 afterwards.
@@ -39,7 +39,7 @@ an experience customized for their taste, and different players in the same mult
 
 You can customize your options by visiting
 the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-options).
-Alternatively, you can use the "Options Creator" (a GUI tool in the Archipelago Launcher) to customize your options and export your YAML file, or use the "Generate Template Options" feature if you prefer editing your YAML in a text editor. Both tools are available in the Archipelago Launcher.
+Alternatively, you can use the "Options Creator" (a GUI tool in the Archipelago Launcher) to customize your options and export your YAML file. You can also use the "Generate Template Options" feature if you prefer editing your YAML in a text editor. Both tools are available in the Archipelago Launcher.
 
 ### Hosting your MultiWorld
 
@@ -61,13 +61,12 @@ This section is for players who want to host a solo or multiplayer game.
 
 2. Launch Ratchet and Clank 3 client in the Archipelago Launcher
     - In the address field, enter your Archipelago connection address (e.g., archipelago.gg:51780 or localhost:38281). Then, type your player name (as specified in your YAML file, e.g., Player1) into the client.
-    - Start a new save file by choosing "New Game" from the main menu, then select your preferred save slot. Watch/skip the intro cutscene once the game starts. If the client is connected first, items will begin being sent to the player even if you are still on the main menu but you will not receive them until you are actually in-game.
-    - To apply cosmetics, reload the save file by pausing and going into options and then load file with the same slot.
+    - Start a new save file by choosing "New Game" from the main menu, then select your preferred save slot. Watch/skip the intro cutscene once the game starts. If the client connects before you load into the game, your items will be delivered as soon as you are in-game.
+    - To apply cosmetics, reload the save file by pausing and going into options and then load file with the same slot. Alternatively, visit the armor vendor on the Starship Phoenix to have the game reload your cosmetics. If you accidentally overwrite your cosmetics with the skin menu, go visit the ship vendor and then armor vendor on the Starship Phoenix to re-apply cosmetics.
     - To continue a previous session, simply reconnect to the same Archipelago connection address and load the save file you used for that session.
 
-
 ## Troubleshooting
+
 For common issues, check the [FAQ](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/worlds/rac3/docs/frequently_asked_questions_Rac3_en.md).
 
 If you need further help, join the [Archipelago Discord](https://discord.gg/archipelago) and visit the `[PS2] Ratchet and Clank 3: Up Your Arsenal` thread in the `future-game-design` forum channel (located at the bottom).
-

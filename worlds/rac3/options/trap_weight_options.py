@@ -1,3 +1,5 @@
+"""This module contains options for weighting traps in the item pool"""
+
 from Options import ItemDict
 from worlds.rac3.constants.data.item import trap_data
 from worlds.rac3.constants.options import RAC3OPTION

@@ -1,4 +1,8 @@
+"""This module contains constants used for tracking the current playable character"""
+
+
 class RAC3PLAYERTYPE:
+    """Player types"""
     RATCHET = "Ratchet"
     CLANK = "Clank"
     GIANT = "Giant Clank"

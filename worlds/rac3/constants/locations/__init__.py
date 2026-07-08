@@ -1,0 +1,1 @@
+"""This package contains the string constants for each location"""

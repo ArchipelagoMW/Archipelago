@@ -7,9 +7,10 @@ You can read about the changes [here](https://github.com/Taoshix/Archipelago-RaC
 ## Which versions are supported?
 
 All game region versions are able to be played at various levels of compatibility:
+
 - **US (Black Label `SCUS-97353` + Greatest Hits `SCUS-97518`):** Fully Supported
-- **PAL (EU/AUS `SCES-52456`):** Mostly Supported. One HP Challenge patches on Annihilation Nation wont work
-- **Japanese (`SCPS-15084` + The Best release `SCPS-19309`):** No Information, Please provide feedback (previously 
+- **PAL (EU/AUS `SCES-52456`):** Mostly Supported. One HP Challenge patches on Annihilation Nation does not work
+- **Japanese (`SCPS-15084` + The Best release `SCPS-19309`):** No Information, Please provide feedback (previously
 supported but got removed)
 - **Korean (`SCKA-20037`):** No Information, Please provide feedback
 - **Chinese (`SCAJ-20109`):** No Information, Please provide feedback
@@ -33,7 +34,7 @@ Updating Universal Tracker appears to solve this problem for those reporting thi
 
 ## X check is in logic, but when I go there I don't receive it, why?
 
-Currently, there are some checks that doesn't work with sequence breaking (For example most of the Phoenix checks) 
+Currently, there are some checks that doesn't work with sequence breaking (For example most of the Phoenix checks)
 these are collected into a location group called  `Unstable`. If you generate the .yaml for yourself make sure it
 is in the **excluded locations** section (it should be there by default). This will make the unstable locations have
 only filler/trap items.
@@ -46,12 +47,12 @@ Go to the [Locations](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/w
 - Weapons - RAC3TAG.WEAPONS
 - Gadgets - RAC3TAG.GADGETS
 
-Any location including one of those tags will be a part of the location group. 
+Any location including one of those tags will be a part of the location group.
 A location can have multiple tags and be part of multiple groups at the same time.
 
 ## My cosmetics are missing, what can I do?
 
-The client tells you to reload the save file as soon you start the game on Veldin or Phoenix if intro skip is enabled. To reapply cosmetics, restart the client and reconnect, then visit the armor vendor or reload your save file without saving first. If you accidentially overwrite your skin with the skin vendor, you can visit the ship vendor to have the randomizer apply your skin values and then visit the armor vendor to have the game reapply your player skin.
+The client tells you to reload the save file as soon you start the game on Veldin or Phoenix if intro skip is enabled. To reapply cosmetics, restart the client and reconnect, then visit the armor vendor or reload your save file without saving first. If you accidentally overwrite your skin with the skin vendor, you can visit the ship vendor to have the randomizer apply your skin values and then visit the armor vendor to have the game reapply your player skin.
 
 ## How do I toggle death link?
 
@@ -75,7 +76,5 @@ Some checks can be obtained logically with the charge boots as well, like the on
 These submissions should be sent to the `[PS2] Ratchet and Clank 3: Up Your Arsenal` channel on the Archipelago discord. When you encounter an issue, make sure to use the `/rac3_info` command in your Ratchet and Clank 3 client and send the result of that
 command into the discord channel as well.
 - **As a developer**: If you wish to contribute to the implementation
-itself then fork this repository on GitHub, make a new branch based of the `staging` branch of the project and make your changes there. Then open a pull request targetting `staging` with a detailed description of your changes.
+itself then fork this repository on GitHub, make a new branch based of the `staging` branch of the project and make your changes there. Then open a pull request targeting `staging` with a detailed description of your changes.
 If the changes made in the pull request are acceptable, then they will be merged. **Make sure your pull request targets the repository's `staging` branch!**
-
-

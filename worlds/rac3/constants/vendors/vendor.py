@@ -16,7 +16,7 @@ class RAC3VENDOR:
     IS_PDA_OFFSET: int = -0xE4
     SLOT_SIZE: int = 0
     NO_ITEMS_AVAILABLE_LOC_KEY: str = "NO_VENDOR_ITEMS"
-    NO_ITEMS_AVAILABLE_MSG: str = "No items available. 1 infobot = 3 items in stock!"
+    NO_ITEMS_AVAILABLE_MSG: str = "No items available. 1 infobot = 2 items in stock!"
     ALL_ITEMS_SOLD_OUT_LOC_KEY: str = "ALL_VENDOR_ITEMS_SOLD_OUT"
     ALL_ITEMS_SOLD_OUT_MSG: str = "All 38 items purchased. Congratulations!"
 
@@ -66,6 +66,7 @@ class RAC3ARMORVENDOR(RAC3VENDOR):
     ITEM_LEVEL_OFFSET: int = 0x08
     ITEM_LEVEL_SIZE: int = 1
 
+
 class RAC3SHIPVENDOR(RAC3VENDOR):
     """Struct for Ship Vendor data, with ship-specific slot size and offsets"""
     SLOT_SIZE: int = 0x24
@@ -89,6 +90,7 @@ class RAC3SHIPVENDOR(RAC3VENDOR):
     ITEM_IS_EQUIPPED_OFFSET: int = 0x20
     ITEM_IS_EQUIPPED_SIZE: int = 1
 
+
 class RAC3SKINVENDOR(RAC3VENDOR):
     """Struct for Skin Vendor data, with skin-specific slot size and offsets"""
     SLOT_SIZE: int = 0xF
@@ -99,6 +101,7 @@ class RAC3SKINVENDOR(RAC3VENDOR):
     ITEM_SKIN_ID_SIZE: int = 4
     ITEM_DESCRIPTION_STRING_ID_OFFSET: int = 0x0C
     ITEM_DESCRIPTION_STRING_ID_SIZE: int = 4
+
 
 VENDORTYPE_TO_SLOT_SIZE: dict[int, int] = {
     RAC3VENDORTYPE.WEAPON: 0x14,

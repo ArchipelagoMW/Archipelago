@@ -1,7 +1,10 @@
+"""This module contains constants for controller inputs"""
+
 from enum import IntFlag
 
 
 class RAC3INPUT(IntFlag):
+    """Button inputs"""
     NOTHING = 0b0000000000000000
     L2 = 0b0000000000000001
     R2 = 0b0000000000000010

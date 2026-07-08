@@ -1,4 +1,7 @@
+"""This module contains string constants for Titanium Bolt locations"""
+
 class RAC3TBOLT:
+    """String constants for Titanium Bolt locations"""
     FLORANA_BELOW_VENDOR = "Florana: T-Bolt: Below Gadgetron Vendor"
     FLORANA_PATH_OF_DEATH = "Florana: T-Bolt: Path of Death"
     PHOENIX_VR_TRAINING = "Phoenix: T-Bolt: VR Gadget Training"

@@ -1,3 +1,5 @@
+"""This module provides weighting options for filler items"""
+
 from Options import ItemDict
 from worlds.rac3.constants.data.item import filler_data
 from worlds.rac3.constants.items import RAC3ITEM
