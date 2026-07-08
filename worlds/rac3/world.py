@@ -143,7 +143,7 @@ class RaC3World(World):
             self.preplaced_items += [RAC3ITEM.CLANK, RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]
         for item in self.preplaced_items:
             self.push_precollected(self.create_item(item))
-        self.preplaced_items.extend(process_start_inventory(self))
+        process_start_inventory(self)
         return starting_weapons(self), starting_planets(self)
 
     def create_items(self):

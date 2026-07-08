@@ -31,9 +31,9 @@ def create_itempool(world: "RaC3World") -> list[Item]:
     itempool: list[Item] = []
     options: type[RaC3Options] = world.options
 
-    for name in item_table.keys():
-        item_type: ItemClassification = item_table[name].AP_CLASSIFICATION
-        item_tags: list[str] = item_table[name].TAGS
+    for name, entry in item_table.items():
+        item_type: ItemClassification = entry.AP_CLASSIFICATION
+        item_tags: list[str] = entry.TAGS
         if item_type in [ItemClassification.filler, ItemClassification.trap]:
             continue
         if RAC3ITEMTAG.WEAPON_UPGRADE in item_tags:
@@ -45,9 +45,10 @@ def create_itempool(world: "RaC3World") -> list[Item]:
                 item_amount: int = 5
             else:
                 item_amount: int = ngplus_item_counts.get(name, 1)
-        else:
+        elif name != RAC3ITEM.PROGRESSIVE_RY3N0:
             item_amount: int = item_counts.get(name, 1)
-
+        else:
+            continue
         # Already placed items (Starting items and vanilla)
         if name in world.preplaced_items:
             count = world.preplaced_items.count(name)
@@ -134,24 +135,138 @@ def get_filler_selection(world: "RaC3World") -> list[str]:
     return [name for name, count in frequencies.items() for _ in range(count)]
 
 
-def process_start_inventory(world: "RaC3World") -> list[str]:
-    """Returns a list of items the player will start with"""
-    itemlist: list[str] = []
+def process_start_inventory(world: "RaC3World"):
+    """Process the player's starting inventory options to account settings and convert items if needed"""
     if not world.options.progressive_weapons.value:
         for item in PROG_TO_NAME_DICT.keys():
             if world.options.start_inventory_from_pool.value.get(item, None):
+                new_item = PROG_TO_NAME_DICT[item]
+                rac3_logger.warning(f"Player: {world.player_name}'s starting {item} from pool have been converted to "
+                                    f"{new_item} to match their settings, item count set to 1.")
                 world.options.start_inventory_from_pool.value.pop(item)
-                world.options.start_inventory_from_pool.value[PROG_TO_NAME_DICT[item]] = 1
+                world.options.start_inventory_from_pool.value[new_item] = 1
+            if world.options.start_inventory.value.get(item, None):
+                new_item = PROG_TO_NAME_DICT[item]
+                rac3_logger.warning(f"Player: {world.player_name}'s starting {item} have been converted to "
+                                    f"{new_item} to match their settings, item count set to 1.")
+                world.options.start_inventory.value.pop(item)
+                world.options.start_inventory.value[new_item] = 1
     else:
         for item in NAME_TO_PROG_DICT.keys():
             if world.options.start_inventory_from_pool.value.get(item, None):
+                new_item = NAME_TO_PROG_DICT[item]
+                rac3_logger.warning(f"Player: {world.player_name}'s starting {item} from pool have been converted to "
+                                    f"{new_item} to match their settings, item totals have been preserved.")
                 count = world.options.start_inventory_from_pool.value[item]
                 world.options.start_inventory_from_pool.value.pop(item)
-                world.options.start_inventory_from_pool.value[NAME_TO_PROG_DICT[item]] += count
+                world.options.start_inventory_from_pool.value[new_item] += count
+            if world.options.start_inventory.value.get(item, None):
+                new_item = NAME_TO_PROG_DICT[item]
+                rac3_logger.warning(f"Player: {world.player_name}'s starting {item} have been converted to "
+                                    f"{new_item} to match their settings, item totals have been preserved.")
+                count = world.options.start_inventory.value[item]
+                world.options.start_inventory.value.pop(item)
+                world.options.start_inventory.value[new_item] += count
+    match world.options.clank_options.value:
+        case world.options.clank_options.option_start_with:
+            pass  # already handled
+
+        case world.options.clank_options.option_shuffled_as_one:
+            for item in [RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK, RAC3ITEM.PROGRESSIVE_PACK]:
+                if world.options.start_inventory_from_pool.value.get(item, None):
+                    rac3_logger.warning(f"Player: {world.player_name}'s starting {item} from pool have been converted "
+                                        f"to a {RAC3ITEM.CLANK} to match their settings.")
+                    world.options.start_inventory_from_pool.value.pop(item)
+                    world.options.start_inventory_from_pool.value[RAC3ITEM.CLANK] += 1
+                if world.options.start_inventory.value.get(item, None):
+                    rac3_logger.warning(f"Player: {world.player_name}'s starting {item} have been converted "
+                                        f"to a {RAC3ITEM.CLANK} to match their settings.")
+                    world.options.start_inventory.value.pop(item)
+                    world.options.start_inventory.value[RAC3ITEM.CLANK] += 1
+
+        case world.options.clank_options.option_shuffled_independently:
+            if world.options.start_inventory_from_pool.value.get(RAC3ITEM.CLANK, None):
+                rac3_logger.warning(
+                    f"Player: {world.player_name}'s starting {RAC3ITEM.CLANK} from pool has been converted to a "
+                    f"{RAC3ITEM.HELI_PACK} and a {RAC3ITEM.THRUSTER_PACK} to match their settings.")
+                world.options.start_inventory_from_pool.value.pop(RAC3ITEM.CLANK)
+                world.options.start_inventory_from_pool.value[RAC3ITEM.HELI_PACK] += 1
+                world.options.start_inventory_from_pool.value[RAC3ITEM.THRUSTER_PACK] += 1
+            if world.options.start_inventory.value.get(RAC3ITEM.CLANK, None):
+                rac3_logger.warning(
+                    f"Player: {world.player_name}'s starting {RAC3ITEM.CLANK} has been converted to a "
+                    f"{RAC3ITEM.HELI_PACK} and a {RAC3ITEM.THRUSTER_PACK} to match their settings.")
+                world.options.start_inventory.value.pop(RAC3ITEM.CLANK)
+                world.options.start_inventory.value[RAC3ITEM.HELI_PACK] += 1
+                world.options.start_inventory.value[RAC3ITEM.THRUSTER_PACK] += 1
+
+            if world.options.start_inventory_from_pool.value.get(RAC3ITEM.PROGRESSIVE_PACK, 0) > 1:
+                rac3_logger.warning(
+                    f"Player: {world.player_name}'s starting {RAC3ITEM.PROGRESSIVE_PACK}s from pool have been "
+                    f"converted to {RAC3ITEM.HELI_PACK}s and {RAC3ITEM.THRUSTER_PACK}s to match their settings.")
+                world.options.start_inventory_from_pool.value.pop(RAC3ITEM.PROGRESSIVE_PACK)
+                world.options.start_inventory_from_pool.value[RAC3ITEM.HELI_PACK] += 1
+                world.options.start_inventory_from_pool.value[RAC3ITEM.THRUSTER_PACK] += 1
+            if world.options.start_inventory_from_pool.value.get(RAC3ITEM.PROGRESSIVE_PACK, 0) == 1:
+                world.options.start_inventory_from_pool.value.pop(RAC3ITEM.PROGRESSIVE_PACK)
+                if not world.options.start_inventory_from_pool.value.get(RAC3ITEM.HELI_PACK, None):
+                    rac3_logger.warning(
+                        f"Player: {world.player_name}'s starting {RAC3ITEM.PROGRESSIVE_PACK} from pool has been "
+                        f"converted to a {RAC3ITEM.HELI_PACK} to match their settings.")
+                    world.options.start_inventory_from_pool.value[RAC3ITEM.HELI_PACK] += 1
+                elif not world.options.start_inventory_from_pool.value.get(RAC3ITEM.THRUSTER_PACK, None):
+                    rac3_logger.warning(
+                        f"Player: {world.player_name}'s starting {RAC3ITEM.PROGRESSIVE_PACK} from pool has been "
+                        f"converted to a {RAC3ITEM.THRUSTER_PACK} to match their settings.")
+                    world.options.start_inventory_from_pool.value[RAC3ITEM.THRUSTER_PACK] += 1
+            if world.options.start_inventory.value.get(RAC3ITEM.PROGRESSIVE_PACK, 0) > 1:
+                rac3_logger.warning(
+                    f"Player: {world.player_name}'s starting {RAC3ITEM.PROGRESSIVE_PACK}s have been "
+                    f"converted to {RAC3ITEM.HELI_PACK}s and {RAC3ITEM.THRUSTER_PACK}s to match their settings.")
+                world.options.start_inventory.value.pop(RAC3ITEM.PROGRESSIVE_PACK)
+                world.options.start_inventory.value[RAC3ITEM.HELI_PACK] += 1
+                world.options.start_inventory.value[RAC3ITEM.THRUSTER_PACK] += 1
+            if world.options.start_inventory.value.get(RAC3ITEM.PROGRESSIVE_PACK, 0) == 1:
+                world.options.start_inventory.value.pop(RAC3ITEM.PROGRESSIVE_PACK)
+                if not world.options.start_inventory.value.get(RAC3ITEM.HELI_PACK, None):
+                    rac3_logger.warning(
+                        f"Player: {world.player_name}'s starting {RAC3ITEM.PROGRESSIVE_PACK} has been "
+                        f"converted to a {RAC3ITEM.HELI_PACK} to match their settings.")
+                    world.options.start_inventory.value[RAC3ITEM.HELI_PACK] += 1
+                elif not world.options.start_inventory.value.get(RAC3ITEM.THRUSTER_PACK, None):
+                    rac3_logger.warning(
+                        f"Player: {world.player_name}'s starting {RAC3ITEM.PROGRESSIVE_PACK} has been "
+                        f"converted to a {RAC3ITEM.THRUSTER_PACK} to match their settings.")
+                    world.options.start_inventory.value[RAC3ITEM.THRUSTER_PACK] += 1
+
+        case world.options.clank_options.option_shuffled_progressive:
+            for item in [RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]:
+                if world.options.start_inventory_from_pool.value.get(item, None):
+                    count = world.options.start_inventory_from_pool.value[item]
+                    rac3_logger.warning(f"Player: {world.player_name}'s starting {item} from pool have been converted "
+                                        f"to {RAC3ITEM.PROGRESSIVE_PACK} to match their settings.")
+                    world.options.start_inventory_from_pool.value.pop(item)
+                    world.options.start_inventory_from_pool.value[RAC3ITEM.PROGRESSIVE_PACK] += count
+                if world.options.start_inventory.value.get(item, None):
+                    count = world.options.start_inventory.value[item]
+                    rac3_logger.warning(f"Player: {world.player_name}'s starting {item} have been converted "
+                                        f"to {RAC3ITEM.PROGRESSIVE_PACK} to match their settings.")
+                    world.options.start_inventory.value.pop(item)
+                    world.options.start_inventory.value[RAC3ITEM.PROGRESSIVE_PACK] += count
+
+            if world.options.start_inventory_from_pool.value.get(RAC3ITEM.CLANK, None):
+                rac3_logger.warning(f"Player: {world.player_name}'s starting {RAC3ITEM.CLANK} from pool has been "
+                                    f"converted to {RAC3ITEM.PROGRESSIVE_PACK}s to match their settings.")
+                world.options.start_inventory_from_pool.value.pop(item)
+                world.options.start_inventory_from_pool.value[RAC3ITEM.PROGRESSIVE_PACK] += 2
+            if world.options.start_inventory.value.get(item, None):
+                rac3_logger.warning(f"Player: {world.player_name}'s starting {RAC3ITEM.CLANK} has been converted "
+                                    f"to {RAC3ITEM.PROGRESSIVE_PACK}s to match their settings.")
+                world.options.start_inventory.value.pop(item)
+                world.options.start_inventory.value[RAC3ITEM.PROGRESSIVE_PACK] += 2
+
     world.options.start_inventory_from_pool.value.pop(RAC3ITEM.VELDIN, None)
-    for item, count in world.options.start_inventory_from_pool.items():
-        itemlist.extend([item for _ in range(count)])
-    return itemlist
+    world.options.start_inventory.value.pop(RAC3ITEM.VELDIN, None)
 
 
 def starting_weapons(world: "RaC3World") -> list[str]:
@@ -163,14 +278,14 @@ def starting_weapons(world: "RaC3World") -> list[str]:
             continue
         if world.options.progressive_weapons.value:
             new_name = NAME_TO_PROG_DICT[name]
-            preplaced_count = world.preplaced_items.count(new_name)
-            if preplaced_count <= item_counts[new_name] - 2:
-                for _ in range(count):
-                    weapon_list.append(new_name)
-            elif preplaced_count == item_counts[new_name] - 1:
+            item_cap = item_counts[new_name] if world.options.ngplus_items.value else ngplus_item_counts[new_name]
+            preplaced_count = world.options.start_inventory_from_pool.value.get(new_name, 0)
+            if preplaced_count <= item_cap - 2:
+                weapon_list.extend(new_name for _ in range(count))
+            elif preplaced_count == item_cap - 1:
                 weapon_list.append(new_name)
         else:
-            if name not in world.preplaced_items:
+            if name not in world.options.start_inventory_from_pool.value:
                 weapon_list.append(name)
     world.random.shuffle(weapon_list)
     return weapon_list[:2]
@@ -178,7 +293,8 @@ def starting_weapons(world: "RaC3World") -> list[str]:
 
 def starting_planets(world: "RaC3World") -> list[str]:
     """Returns the planets randomly selected for the player to start with"""
-    planet_list: list[str] = [infobot for infobot in infobot_data.keys() if infobot not in world.preplaced_items]
+    planet_list: list[str] = [infobot for infobot in infobot_data.keys() if
+                              infobot not in world.options.start_inventory_from_pool.value]
     planet_list = remove_dead_starting_planets(world, planet_list)
     if len(planet_list) > 1:  # [Phoenix], [Florana], or [Other]
         world.random.shuffle(planet_list)
@@ -213,43 +329,46 @@ def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[s
     """Removes any starting planets that are unreachable from Veldin"""
     # Remove unreachable planets in a single loop
     unreachable = [
+        RAC3ITEM.VELDIN,  # Shouldn't be considered by accident
         RAC3ITEM.MUSEUM,
         RAC3ITEM.OBANI_DRACO,
-        RAC3ITEM.OBANI_GEMINI,
         RAC3ITEM.QWARKS_HIDEOUT,
-        RAC3ITEM.COMMAND_CENTER,
-        RAC3ITEM.HOLOSTAR_STUDIOS
+        RAC3ITEM.COMMAND_CENTER
     ]
-    current_planet_list = [planet for planet in current_planet_list if planet not in unreachable]
 
     # If Rangers are disabled or only the optional missions are enabled, Aridia and Blackwater City are unreachable
     if world.options.rangers.value == 0 or world.options.rangers.value == 2:
-        to_remove = {RAC3ITEM.BLACKWATER_CITY}
+        unreachable.append(RAC3ITEM.BLACKWATER_CITY)
         if world.options.weapon_vendors.value == 0:
-            to_remove.add(RAC3ITEM.ARIDIA)
+            unreachable.append(RAC3ITEM.ARIDIA)
 
-        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+    # If no weapon can be purchased from the vendor, you can't get any items
+    if world.options.weapon_vendors.value == 0:
+        unreachable.append(RAC3ITEM.OBANI_GEMINI)
+
+    # If clank skip or no skillpoints, you can't get the skillpoint
+    # If no weapon vendor, you can't get a vendor item
+    if ((world.options.shortcuts.get(RAC3SHORTCUTS.HOLOSTAR_CLANK, False) or world.options.skill_points.value < 2)
+        and world.options.weapon_vendors.value == 0):
+        unreachable.append(RAC3ITEM.HOLOSTAR_STUDIOS)
 
     # If no Arena challenges are locations or only the second half is,
     # Annihilation Nation is unreachable from the start
     if (world.options.arena.value == 0 or world.options.arena.value == 2) and world.options.weapon_vendors.value == 0:
-        to_remove = {RAC3ITEM.ANNIHILATION_NATION}
-        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+        unreachable.append(RAC3ITEM.ANNIHILATION_NATION)
 
     # If you don't start with clank, you cant do leviathan
     # If you also don't have titanium bolts, you can't get the one before first hypershot node
     # If you also don't start with hypershot, you can't get the 'explore the starport' rewards
     if world.options.clank_options.value and not world.options.titanium_bolts.value and (
         RAC3ITEM.HYPERSHOT not in world.options.start_inventory.value):
-        to_remove = {RAC3ITEM.ZELDRIN_STARPORT}
-        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+        unreachable.append(RAC3ITEM.ZELDRIN_STARPORT)
 
     # If titanium bolts are disabled, you cant get the one on marcadia before the ranger
     # If you also don't have rangers or only the optional rangers, you cant get any of the marcadia locations
     # including LDF
     if world.options.titanium_bolts.value == 0 and (
         world.options.rangers.value == 0 or world.options.rangers.value == 2):
-        to_remove = {RAC3ITEM.MARCADIA}
-        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+        unreachable.append(RAC3ITEM.MARCADIA)
 
-    return current_planet_list
+    return [planet for planet in current_planet_list if planet not in unreachable]
