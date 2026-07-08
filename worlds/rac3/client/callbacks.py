@@ -460,7 +460,7 @@ async def handle_vendors(ctx: "Context") -> None:
     vendor_location_apcodes = ctx.game_interface.get_vendor_apcodes()
     if vendor_location_apcodes:
         current_hints = set(vendor_location_apcodes)
-        if current_hints and current_hints != ctx.already_hinted:
+        if current_hints and not current_hints.issubset(ctx.already_hinted):
             await ctx.send_msgs([
                 {"cmd": "CreateHints", "locations": vendor_location_apcodes, "player": ctx.slot}
             ])

@@ -709,20 +709,19 @@ class Rac3Interface(GameInterface):
             items_to_sell: list[str] = []
             already_sold = set()
             for loc, item in WEAPON_VENDOR_LOCATION_TO_ITEM.items():
-                if item == RAC3ITEM.HOLO_SHIELD and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations:
-                    continue
                 if item == RAC3ITEM.RY3N0 and not self.options.ngplus_vendors:
                     continue
+                planet = WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[loc]
                 if self.options.vendor_access:
-                    if (item not in already_sold and self.UnlockItem[INFOBOT_FROM_PLANET[
-                        WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[loc]]]):
+                    if item not in already_sold and self.UnlockItem[INFOBOT_FROM_PLANET[planet]].status:
                         if loc in self.checked_locations:
                             already_sold.add(item)
                         else:
                             items_to_sell.append(item)
                 else:
-                    if item not in already_sold and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[
-                        loc] in self.visited_planets:
+                    if item == RAC3ITEM.HOLO_SHIELD and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations:
+                        continue
+                    if item not in already_sold and planet in self.visited_planets:
                         if loc in self.checked_locations:
                             already_sold.add(item)
                         else:
@@ -754,11 +753,19 @@ class Rac3Interface(GameInterface):
         items_to_sell: list[str] = []
         already_sold = set()
         for location, item in ARMOR_VENDOR_LOCATION_TO_ITEM.items():
-            if ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION[location] in self.visited_planets and item not in already_sold:
-                if location in self.checked_locations:
-                    already_sold.add(item)
-                else:
-                    items_to_sell.append(item)
+            planet = ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION[location]
+            if self.options.vendor_access:
+                if item not in already_sold and self.UnlockItem[INFOBOT_FROM_PLANET[planet]].status:
+                    if location in self.checked_locations:
+                        already_sold.add(item)
+                    else:
+                        items_to_sell.append(item)
+            else:
+                if item not in already_sold and planet in self.visited_planets:
+                    if location in self.checked_locations:
+                        already_sold.add(item)
+                    else:
+                        items_to_sell.append(item)
         self.armor_vendor_items = items_to_sell
 
     def vehicle_check(self):
@@ -2369,7 +2376,7 @@ class Rac3Interface(GameInterface):
         if ((self.planet != RAC3REGION.METROPOLIS or not self.short_pause)
             and RAC3LOCATION.METROPOLIS_DEFEAT_KLUNK not in self.checked_locations):
             self.metro_dropship = 0
-        if ((self.planet != RAC3REGION.HOLOSTAR_STUDIOS or self.short_pause)
+        if ((self.planet != RAC3REGION.HOLOSTAR_STUDIOS or not self.short_pause)
             and RAC3LOCATION.HOLOSTAR_RETURN_TO_SHIP not in self.checked_locations):
             self.holo_teleport = 0
         for name, data in RAC3_SHORTCUT_DATA_TABLE.items():
