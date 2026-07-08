@@ -938,6 +938,7 @@ class OptionCounter(OptionDict):
     min: int | None = None
     max: int | None = None
     cull_zeroes: bool = False
+    value: collections.Counter
 
     def __init__(self, value: dict[str, int]) -> None:
         cleaned_dict = {}
@@ -957,7 +958,7 @@ class OptionCounter(OptionDict):
             type_errors = [f"For option {self.__class__.__name__}:"] + invalid_value_errors
             raise TypeError("\n".join(invalid_value_errors))
 
-        super(OptionCounter, self).__init__(collections.Counter(cleaned_dict))
+        self.value = collections.Counter(cleaned_dict)
 
     def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
         super(OptionCounter, self).verify(world, player_name, plando_options)
