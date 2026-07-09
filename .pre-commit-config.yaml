@@ -1,0 +1,11 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: 26.5.1
+    hooks:
+    - id: black
+      args: ["worlds/tomba"]
+-   repo: https://github.com/PyCQA/flake8
+    rev: 7.3.0
+    hooks:
+    - id: flake8
+      args: ["worlds/tomba"]
