@@ -182,8 +182,7 @@ class MKSMContext(CommonContext):
     emulator_settled: bool
     was_dead: bool
     message_queue: deque
-    currently_printing: bool = False
-    print_start_time: float
+    print_start_time: float | None
 
     def __init__(self, server_address: str | None, password: str | None) -> None:
         super().__init__(server_address, password)
@@ -198,6 +197,7 @@ class MKSMContext(CommonContext):
         self.emulator_settled = False
         self.was_dead = False
         self.message_queue = deque()
+        self.print_start_time = None  # None means no message is currently being displayed
 
     def ready_to_connect(self) -> bool:
         return self.emulator_settled and self.game_interface.get_game_state() == GameState.MAIN_MENU
@@ -226,9 +226,8 @@ class MKSMContext(CommonContext):
 
     def on_print_json(self, args: dict):
         super().on_print_json(args)
-        self.message_queue.append(
-            self.rawjsontotextparser(copy.deepcopy(args["data"]))
-        )
+        message = self.rawjsontotextparser(copy.deepcopy(args["data"]))
+        self.message_queue.append(message)
 
 
 async def game_watcher(ctx: MKSMContext) -> None:

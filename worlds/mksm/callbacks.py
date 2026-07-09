@@ -505,18 +505,15 @@ def update_message(ctx: MKSMContext) -> None:
         ctx.game_interface.set_default_exp_string()
         return
 
-    if not ctx.currently_printing:
-        if len(ctx.message_queue) > 0:
-            new_msg = ctx.message_queue.popleft()
-            ctx.print_start_time = time.time()
-            ctx.currently_printing = True
-            ctx.game_interface.set_message(new_msg)
-        else:
-            ctx.game_interface.set_default_exp_string()
-    else:
-        if time.time() - 5 > ctx.print_start_time:
-            ctx.currently_printing = False
+    if ctx.print_start_time is not None and time.time() - ctx.print_start_time < 5:
+        return  # still showing the current message
 
+    if ctx.message_queue:
+        ctx.print_start_time = time.time()
+        ctx.game_interface.set_message(ctx.message_queue.popleft())
+    else:
+        ctx.print_start_time = None
+        ctx.game_interface.set_default_exp_string()
 
 def force_ui(ctx: MKSMContext):
     ctx.game_interface.force_ui()

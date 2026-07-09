@@ -151,64 +151,38 @@ def connect_regions(world: MKSMWorld) -> None:
     menu.connect(goros_lair_1)
 
     goros_lair_1.connect(goros_lair_boss)
-    # goros_lair_boss.connect(goros_lair_1, rule=LONG_JUMP | DOUBLE_JUMP)
     goros_lair_1.connect(goros_lair_2, rule=LONG_JUMP | DOUBLE_JUMP)
-    # goros_lair_2.connect(goros_lair_boss)
     goros_lair_2.connect(wu_shi)
 
-    # wu_shi.connect(goros_lair_2, rule=FIST_OF_RUIN)
     wu_shi.connect(wu_shi_ermac, rule=FIST_OF_RUIN & SWING)
-    # wu_shi_ermac.connect(wu_shi)
     wu_shi.connect(wu_shi_fire)
-    # wu_shi_fire.connect(wu_shi)
     wu_shi_fire.connect(wu_shi_wallrun, rule=FIST_OF_RUIN)
-    # wu_shi_wallrun.connect(wu_shi_fire, rule=WALL_RUN)
     wu_shi.connect(portal_1)
 
     portal_1.connect(wu_shi)
     portal_1.connect(portal_2)
-    # portal_2.connect(portal_1)
 
     portal_2.connect(netherrealm, rule=SWING)
 
-    # netherrealm.connect(portal_2)
-
-    portal_1.connect(forest, rule=FIST_OF_RUIN & WALL_CLIMB)
-    # forest.connect(portal_1)
+    portal_1.connect(forest, rule=FIST_OF_RUIN)
     forest.connect(forest_bridges, rule=SWING)
-    # forest_bridges.connect(forest)
     forest.connect(forest_reptile)
-    # forest_reptile.connect(forest, rule=WALL_CLIMB)
 
     portal_2.connect(wasteland_1, rule=WALL_CLIMB & (WALL_JUMP | (WALL_RUN & DOUBLE_JUMP)))
-    # wasteland_1.connect(portal_2)
     wasteland_1.connect(wasteland_2, rule=FIST_OF_RUIN)
-    # wasteland_2.connect(wasteland_1)
     wasteland_2.connect(wasteland_3, rule=WALL_RUN)
-    # wasteland_3.connect(wasteland_2)
     wasteland_2.connect(dead_pool, rule=GORO)
-    # dead_pool.connect(portal_2, rule=SWING | (DOUBLE_JUMP & WALL_JUMP & WALL_RUN))
-    # portal_2.connect(dead_pool, rule=DEAD_POOL)
 
     portal_1.connect(tombs, rule=WALL_CLIMB)
-    # tombs.connect(portal_1)
     tombs.connect(tombs_baraka, rule=FIST_OF_RUIN)
-    # tombs_baraka.connect(tombs)
-    # tombs_baraka.connect(wu_shi_fire)
 
-    # wu_shi_fire.connect(tombs_baraka, rule=BARAKA)
-
-    portal_1.connect(monastery, rule=FIST_OF_RUIN & (DOUBLE_JUMP | LONG_JUMP))
-    # monastery.connect(portal_1)
+    portal_1.connect(monastery, rule=DOUBLE_JUMP | LONG_JUMP)
     monastery.connect(monastery_kitana)
-    # monastery_kitana.connect(monastery, rule=FIST_OF_RUIN)
 
     portal_2.connect(
         foundry,
         rule=KITANA & REPTILE & BARAKA & GORO & SCORPION
     )
-
-    # foundry.connect(portal_2)
 
 
 def set_finishing_moves_rules(world: MKSMWorld) -> None:

@@ -160,14 +160,21 @@ ADDRESSES = {
                                                             0x005d82a6: [6]},
         },
         "GAME_STATE": 0x5e1650,
-        "TOTAL_EVENTS": 0xc2def0,
         "XP": 0xc2e224,
+        "TOTAL_EVENTS": 0xc2def0,
         "EVENT_LOG_ARRAY": 0xc2a070,
         "PAUSE_FLAG": 0x4c49e8,
+
         "SQUARE_UPGRADE": 0xc29844,
         "TRIANGLE_UPGRADE": 0xc29845,
         "CIRCLE_UPGRADE": 0xc29846,
         "R2_UPGRADE": 0xc29847,
+
+        "COMBO_1": 0xc29851,
+        "COMBO_2": 0xc29852,
+        "COMBO_3": 0xc29853,
+        "COMBO_4": 0xc29854,
+        "COMBO_5": 0xc29855,
 
         "WALL_CLIMB": 0xc29848,
         "WALL_RUN": 0xc29849,
@@ -176,12 +183,6 @@ ADDRESSES = {
         "LONG_JUMP": 0xc2984c,
         "SWING": 0xc2984d,
         "FIST_OF_RUIN": 0xc2984e,
-
-        "COMBO_1": 0xc29851,
-        "COMBO_2": 0xc29852,
-        "COMBO_3": 0xc29853,
-        "COMBO_4": 0xc29854,
-        "COMBO_5": 0xc29855,
 
         "HEALTH_UPGRADES": 0xc29760,
         "MAX_HEALTH": (0xc29714, 0xc08930),
@@ -272,16 +273,9 @@ DEFAULT_EVENT_ARRAY = [
     *_make_event(0x8e, 0x42),
     *_make_event(0x8e, 0x41),
     *_make_event(0x8e, 0x26),
-    *_make_event(0x8f, 0x21), # TODO test this, brutality room red koin
 
-    # # monastery fist of ruin statues
-    # *_make_event(0xc2, 0x48),
-    # *_make_event(0xc2, 0x27),
-    # *_make_event(0xc2, 0x29),
-    # *_make_event(0xc2, 0x2b),
-    # *_make_event(0xc2, 0x2c),
-    # *_make_event(0xc2, 0x2f),
-    # *_make_event(0xc2, 0x2e),
+    # event of cutscene after reptile, enables the brutality room red koin
+    *_make_event(0x8f, 0x21),
 ]
 
 # the 5 main boss fights - in a real playthrough, room 0xc1's events (see XC1_EVENTS below)
