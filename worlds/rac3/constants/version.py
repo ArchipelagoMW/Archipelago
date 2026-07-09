@@ -110,7 +110,8 @@ def jp_convert_address(address: int, planet: str) -> int:
     if planet in JP_SHIFTED_PLANETS and 0x001DE000 <= addr < 0x001DF000:
         addr += 0x80
     for start, end, offset in [
-        (0x0016C000, 0x0016CFFF,  0x9310),
+        (0x0016C000, 0x0016C5EF,  0x9280),
+        (0x0016C5F0, 0x0016CFFF,  0x9310),
         (0x00140000, 0x0019FFFF,   -0x80),
         (0x001A0000, 0x001B0000,  0x9280),
         (0x0010BB00, 0x001BFFFF,  0x9298),
