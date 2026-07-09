@@ -118,8 +118,8 @@ def jp_convert_address(address: int, planet: str) -> int:
         (0x001D545C, 0x001DF000,  0x9300),
         (0x001DF001, 0x001DFFFF,  0x9380),
         (0x001E0000, 0x00200000,  0x106C),
-        (0x00200001, 0x002418BF,  0x9380),
-        (0x002418C0, 0x00300000,  0x93C0),
+        (0x00200001, 0x002417CF,  0x9380),
+        (0x002417D0, 0x00300000,  0x93C0),
     ]:
         if start <= addr <= end:
             addr += offset
