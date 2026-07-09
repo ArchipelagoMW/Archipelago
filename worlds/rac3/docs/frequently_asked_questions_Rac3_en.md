@@ -10,8 +10,8 @@ All game region versions are able to be played at various levels of compatibilit
 
 - **US (Black Label `SCUS-97353` + Greatest Hits `SCUS-97518`):** Fully Supported
 - **PAL (EU/AUS `SCES-52456`):** Mostly Supported. One HP Challenge patches on Annihilation Nation does not work
-- **Japanese (`SCPS-15084` + The Best release `SCPS-19309`):** No Information, Please provide feedback (previously
-supported but got removed)
+- **Japanese (`SCPS-15084`):** Beta support. The game is completable, but please report any version-specific issues.
+- **Japanese The Best release (`SCPS-19309`):** No Information, Please provide feedback
 - **Korean (`SCKA-20037`):** No Information, Please provide feedback
 - **Chinese (`SCAJ-20109`):** No Information, Please provide feedback
 
