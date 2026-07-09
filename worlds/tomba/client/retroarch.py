@@ -115,3 +115,48 @@ class RetroArch:
             rom_name.decode("ascii", errors="replace"),
             rom_crc,
         )
+
+    async def read_memory_block(self, address: int, size: int):
+        block = bytearray()
+        remaining_size = size
+        while remaining_size:
+            chunk = await self.async_read_memory(address + len(block), remaining_size)
+            remaining_size -= len(chunk)
+            block += chunk
+
+        return block
+
+    async def async_read_memory(self, address, size=1):
+        command = "READ_CORE_MEMORY"
+
+        self.send(f'{command} {hex(address)} {size}\n')
+        response = await self.async_recv()
+        self.check_command_response(command, response)
+        response = response[:-1]
+        splits = response.decode().split(" ", 2)
+        try:
+            response_addr = int(splits[1], 16)
+        except ValueError:
+            raise BadRetroArchResponse()
+
+        if response_addr != address:
+            raise BadRetroArchResponse()
+
+        ret = bytearray.fromhex(splits[2])
+        if len(ret) > size:
+            raise BadRetroArchResponse()
+        return ret
+
+    def write_memory(self, address, bytes):
+        command = "WRITE_CORE_MEMORY"
+
+        self.send(f'{command} {hex(address)} {" ".join(hex(b) for b in bytes)}')
+        select.select([self.socket], [], [])
+        response, _ = self.socket.recvfrom(4096)
+        self.check_command_response(command, response)
+        splits = response.decode().split(" ", 3)
+
+        assert (splits[0] == command)
+
+        if splits[2] == "-1":
+            logger.info(splits[3])

@@ -13,6 +13,7 @@ from CommonClient import (
 
 from worlds.tomba import constants
 from worlds.tomba.client import retroarch
+from worlds.tomba.items import GAME_ID_TO_ITEM
 
 MIN_TICK_DURATION = 0.1
 CORE_TYPE = "playstation"
@@ -45,7 +46,32 @@ class TombaClient:
         logger.info(f"Connected to Retroarch {version} running {rom_name}")
 
     async def main_tick(self):
-        pass
+        inventory = await self.get_inventory()
+        for item in inventory:
+            logger.info(item["name"])
+        
+        await asyncio.sleep(1.0)
+    
+    async def get_inventory(self) -> list[dict]:
+        inventory = []
+        inventory_stack = await self.playstation.read_memory_block(constants.INVENTORY_STACK_ADDRESS, constants.INVENTORY_STACK_SIZE)
+        inventory_counter = (await self.playstation.async_read_memory(constants.INVENTORY_COUNTER_ADDRESS))[0]
+
+        item_processed = 0
+
+        for i in range(0, constants.INVENTORY_STACK_SIZE, 4):
+            chunk = inventory_stack[i:i+4]
+
+            for game_id in chunk[::-1]:
+                item_object = GAME_ID_TO_ITEM.get(game_id)
+                if item_object:
+                    inventory.append(item_object)
+                
+                item_processed += 1
+                if item_processed >= inventory_counter:
+                    return inventory
+
+        return inventory
 
 
 class TombaContext(CommonContext):

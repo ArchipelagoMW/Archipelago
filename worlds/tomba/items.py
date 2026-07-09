@@ -10,12 +10,53 @@ if TYPE_CHECKING:
     from .world import TombaWorld
 
 ITEMS = {
-    constants.FURIOUS_TORNADO: {"classification": ItemClassification.progression},
-    constants.CHARITY_WINGS: {"classification": ItemClassification.filler},
+    "Chick": {
+        "game_id": 0x00,
+        "classification": ItemClassification.progression
+    },
+    "Frog": {
+        "game_id": 0x01,
+        "classification": ItemClassification.progression
+    },
+    "Lost Dwarf": {
+        "game_id": 0x02,
+        "classification": ItemClassification.progression
+    },
+    "Bananas": {
+        "game_id": 0x03,
+        "classification": ItemClassification.progression
+    },
+    constants.FURIOUS_TORNADO: {
+        "game_id": 0x04,
+        "classification": ItemClassification.progression
+    },
+    "100 Year Old Bell": {
+        "game_id": 0x05,
+        "classification": ItemClassification.useful
+    },
+    "100 Year Old Key": {
+        "game_id": 0x06,
+        "classification": ItemClassification.progression
+    },
+    constants.CHARITY_WINGS: {
+        "game_id": 0x07,
+        "classification": ItemClassification.filler
+    },
+    "Blackjack": {
+        "game_id": 0x1B,
+        "classification": ItemClassification.useful
+    },
+    "Normal Pants": {
+        "game_id": 0x20,
+        "classification": ItemClassification.useful
+    },
 }
 
 ITEM_NAME_TO_ID = {name: id for id, name in enumerate(ITEMS, constants.BASE_ID)}
-
+GAME_ID_TO_ITEM = {
+    details["game_id"]: {"name": name, **details}
+    for name, details in ITEMS.items()
+}
 
 class TombaItem(Item):
     game = constants.GAME
