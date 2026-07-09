@@ -45,7 +45,7 @@ class MKSMWorld(World):
         return items.create_item_with_correct_classification(self, name)
 
     def get_filler_item_name(self) -> str:
-        return items.get_random_filler_item_name(self)
+        return "2000 XP"
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         return {

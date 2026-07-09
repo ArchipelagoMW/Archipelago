@@ -39,6 +39,8 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Wall Jump": ItemClassification.progression,
     "Swing": ItemClassification.progression,
     "Double Jump": ItemClassification.progression,
+    "Red Koin": ItemClassification.progression_deprioritized_skip_balancing,
+    "Blood bar": ItemClassification.progression_deprioritized_skip_balancing,
     "Combo 1": ItemClassification.filler,
     "Combo 2": ItemClassification.filler,
     "Combo 3": ItemClassification.filler,
@@ -49,18 +51,12 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Circle special upgrade": ItemClassification.filler,
     "R2 special upgrade": ItemClassification.filler,
     "Health upgrade": ItemClassification.filler,
-    "Red Koin": ItemClassification.progression_deprioritized_skip_balancing,
-    "Blood bar": ItemClassification.progression_deprioritized_skip_balancing,
     "2000 XP": ItemClassification.filler,
 }
 
 
 class MKSMItem(Item):
     game = "Mortal Kombat: Shaolin Monks"
-
-
-def get_random_filler_item_name(world: MKSMWorld) -> str:
-    return "2000 XP"
 
 
 def create_item_with_correct_classification(world: MKSMWorld, name: str) -> MKSMItem:
@@ -95,9 +91,13 @@ def create_all_items(world: MKSMWorld) -> None:
     diff = number_of_unfilled_locations - current_count
     diff = 0 if diff < 0 else diff
 
-    red_koin_count = diff
-
+    red_koin_count = min(diff, 60)
     world.red_koin_amount = red_koin_count
     itempool += [world.create_item("Red Koin") for _ in range(red_koin_count)]
+
+    new_diff = diff - red_koin_count
+    new_diff = 0 if new_diff < 0 else new_diff
+
+    itempool += [world.create_filler() for _ in range(new_diff)]
 
     world.multiworld.itempool += itempool

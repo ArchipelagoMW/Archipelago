@@ -136,27 +136,28 @@ REGION_NAME_LOCATIONS = {
         "F: Kano defeated": 81,
         "F: Shao Kahn defeated": 82,
     },
-    "Menu": {
-        "Purchase upgrade - Square 2": 83,
-        "Purchase upgrade - Square 3": 84,
-        "Purchase upgrade - Square 4": 85,
-        "Purchase upgrade - Triangle 2": 86,
-        "Purchase upgrade - Triangle 3": 87,
-        "Purchase upgrade - Triangle 4": 88,
-        "Purchase upgrade - Circle 2": 89,
-        "Purchase upgrade - Circle 3": 90,
-        "Purchase upgrade - Circle 4": 91,
-        "Purchase upgrade - Circle 5": 92,
-        "Purchase upgrade - R2 2": 93,
-        "Purchase upgrade - R2 3": 94,
-        "Purchase upgrade - R2 4": 95,
-        "Purchase upgrade - R2 5": 96,
-        "Purchase 1st combo": 97,
-        "Purchase 2nd combo": 98,
-        "Purchase 3rd combo": 99,
-        "Purchase 4th combo": 100,
-        "Purchase 5th combo": 101,
-    },
+}
+
+PURCHASE_LOCATIONS = {
+    "Purchase upgrade - Square 2": 83,
+    "Purchase upgrade - Square 3": 84,
+    "Purchase upgrade - Square 4": 85,
+    "Purchase upgrade - Triangle 2": 86,
+    "Purchase upgrade - Triangle 3": 87,
+    "Purchase upgrade - Triangle 4": 88,
+    "Purchase upgrade - Circle 2": 89,
+    "Purchase upgrade - Circle 3": 90,
+    "Purchase upgrade - Circle 4": 91,
+    "Purchase upgrade - Circle 5": 92,
+    "Purchase upgrade - R2 2": 93,
+    "Purchase upgrade - R2 3": 94,
+    "Purchase upgrade - R2 4": 95,
+    "Purchase upgrade - R2 5": 96,
+    "Purchase 1st combo": 97,
+    "Purchase 2nd combo": 98,
+    "Purchase 3rd combo": 99,
+    "Purchase 4th combo": 100,
+    "Purchase 5th combo": 101,
 }
 
 FINISHING_MOVES_LOCATIONS = {
@@ -204,6 +205,7 @@ FINISHING_MOVES_LOCATIONS = {
 
 LOCATION_NAME_TO_ID = {loc: loc_id for k, v in REGION_NAME_LOCATIONS.items() for loc, loc_id in v.items()}
 LOCATION_NAME_TO_ID |= {loc: loc_id for k, v in FINISHING_MOVES_LOCATIONS.items() for loc, loc_id in v.items()}
+LOCATION_NAME_TO_ID |= PURCHASE_LOCATIONS
 
 
 class MKSMLocation(Location):
@@ -218,25 +220,21 @@ def create_all_locations(world: MKSMWorld) -> None:
     if world.options.fatalitysanity:
         create_finishing_moves_locations(world)
 
-    world.get_location("GL: koin above the doorway").progress_type = LocationProgressType.EXCLUDED
-    world.get_location("GL: koin above the breakable door").progress_type = LocationProgressType.EXCLUDED
-
 
 def create_region_locations(world: MKSMWorld) -> None:
     can_shoot_moon = world.options.character.value in (Character.option_liu_kang, Character.option_kung_lao)
 
     for region_name in REGION_NAME_LOCATIONS:
-        if not region_name == world.origin_region_name:
-            region = world.get_region(region_name)
-            region_locations = REGION_NAME_LOCATIONS[region_name]
+        region = world.get_region(region_name)
+        region_locations = REGION_NAME_LOCATIONS[region_name]
 
-            if not can_shoot_moon:
-                region_locations = {
-                    name: loc_id for name, loc_id in region_locations.items()
-                    if name != "GL: koin from shooting the moon"
-                }
+        if not can_shoot_moon:
+            region_locations = {
+                name: loc_id for name, loc_id in region_locations.items()
+                if name != "GL: koin from shooting the moon"
+            }
 
-            region.add_locations(region_locations, MKSMLocation)
+        region.add_locations(region_locations, MKSMLocation)
 
 
 def create_purchase_locations(world: MKSMWorld) -> None:
