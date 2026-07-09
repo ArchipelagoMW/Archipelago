@@ -16,9 +16,7 @@ def create_and_connect_regions(world: TombaWorld) -> None:
 
 
 def create_all_regions(world: TombaWorld) -> None:
-    village_of_all_beginnings = Region(
-        constants.VILLAGE_OF_ALL_BEGINNINGS, world.player, world.multiworld
-    )
+    village_of_all_beginnings = Region(constants.VILLAGE_OF_ALL_BEGINNINGS, world.player, world.multiworld)
 
     regions = [village_of_all_beginnings]
 

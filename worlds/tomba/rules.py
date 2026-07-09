@@ -23,8 +23,8 @@ def set_all_entrance_rules(_: TombaWorld) -> None:
 def set_all_location_rules(world: TombaWorld) -> None:
     can_dissipate_fog: Rule = Has(constants.FURIOUS_TORNADO)
 
-    fog = world.get_location(constants.VILLAGE_OF_ALL_BEGINNINGS_FOG)
-    world.set_rule(fog, can_dissipate_fog)
+    fog_dissipated = world.get_location(constants.VILLAGE_OF_ALL_BEGINNINGS_FOG_DISSIPATED)
+    world.set_rule(fog_dissipated, can_dissipate_fog)
 
 
 def set_completion_condition(world: TombaWorld) -> None:
