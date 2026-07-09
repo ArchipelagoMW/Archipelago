@@ -1,0 +1,35 @@
+/* Shared monochrome theme. Every game theme @imports this, so whatever theme a
+   world declares (web.theme), it resolves to the same grayscale look. Colors come
+   from the tokens defined in globalStyles.css. */
+
+#base-header{
+    background-color: var(--header-bg);
+}
+
+.markdown{
+    background-color: var(--panel) !important;
+    border: 1px solid var(--border);
+}
+
+pre{
+    margin-top: 0;
+    padding: 0.5rem 0.25rem;
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+}
+
+pre code{
+    border: none;
+    display: block;
+}
+
+code{
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: var(--text);
+}

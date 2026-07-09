@@ -2,11 +2,12 @@
     width: 60%;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: var(--panel);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 1rem;
-    color: #eeffeb;
-    font-family: LexendDeca-Light, sans-serif;
+    color: var(--text);
+    font-family: var(--font-body);
     line-height: 24px;
 }
 
@@ -15,11 +16,11 @@
 }
 
 #host-room a{
-    color: #ffef00;
+    color: var(--text);
 }
 
 #host-room input[type=text]{
-    border: 1px solid #000000;
+    border: 1px solid var(--border);
     padding: 3px;
     border-radius: 3px;
     width: 50%;
@@ -37,13 +38,13 @@
 #host-room table th{
     text-align: left;
     padding: 10px;
-    border: 1px solid white;
+    border: 1px solid var(--border);
     font-size: 20px;
-    font-family: LexendDeca-Regular, sans-serif;
+    font-family: var(--font-body);
 }
 
 #host-room table td{
-    border: 1px solid white;
+    border: 1px solid var(--border);
     text-align: left;
     padding: 10px;
 }
@@ -51,10 +52,10 @@
 #host-room #logger{
     margin-top: 0;
     padding: 0.5rem 0.25rem;
-    background-color: #b5e9a4;
-    border: 1px solid #2a6c2f;
+    background-color: var(--panel);
+    border: 1px solid var(--border);
     border-radius: 6px;
-    color: #000000;
+    color: var(--text);
     overflow-y: auto;
     max-height: 400px;
 }
@@ -65,7 +66,7 @@
   margin-left: 5px;
   width: 40px;
   aspect-ratio: 4;
-  --_g: no-repeat radial-gradient(circle closest-side,#fff 90%,#fff0);
+  --_g: no-repeat radial-gradient(circle closest-side,var(--text) 90%,#fff0);
   background:
     var(--_g) 0    50%,
     var(--_g) 50%  50%,

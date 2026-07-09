@@ -5,10 +5,11 @@
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 30px;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: var(--panel);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 25px 30px 30px;
-    font-family: LexendDeca-Light, sans-serif;
+    font-family: var(--font-body);
     font-size: 19px;
 }
 
@@ -26,26 +27,24 @@
 .markdown h1, .markdown details summary.h1{
     font-size: 52px;
     font-weight: normal;
-    font-family: LondrinaSolid-Regular, sans-serif;
+    font-family: var(--font-display);
     text-transform: uppercase;
     width: 100%;
-    text-shadow: 1px 1px 4px #000000;
 }
 
 .markdown h2, .markdown details summary.h2{
     font-size: 38px;
     font-weight: normal;
-    font-family: LondrinaSolid-Light, sans-serif;
+    font-family: var(--font-display);
     width: 100%;
     margin-top: 20px;
     margin-bottom: 0.5rem;
     text-transform: lowercase;
-    text-shadow: 1px 1px 2px #000000;
 }
 
 .markdown h3, .markdown details summary.h3{
     font-size: 26px;
-    font-family: LexendDeca-Regular, sans-serif;
+    font-family: var(--font-body);
     text-transform: none;
     text-align: left;
     width: 100%;
@@ -53,20 +52,20 @@
 }
 
 .markdown h4, .markdown details summary.h4{
-    font-family: LexendDeca-Regular, sans-serif;
+    font-family: var(--font-body);
     text-transform: none;
     font-size: 24px;
     margin-bottom: 24px;
 }
 
 .markdown h5, .markdown details summary.h5{
-    font-family: LexendDeca-Regular, sans-serif;
+    font-family: var(--font-body);
     text-transform: none;
     font-size: 22px;
 }
 
 .markdown h6, .markdown details summary.h6{
-    font-family: LexendDeca-Regular, sans-serif;
+    font-family: var(--font-body);
     text-transform: none;
     font-size: 20px;
 }
@@ -118,7 +117,7 @@
     padding: 10px;
     border: 1px solid white;
     font-size: 20px;
-    font-family: LexendDeca-Regular, sans-serif;
+    font-family: var(--font-body);
 }
 
 .markdown table td{
@@ -132,6 +131,6 @@
 }
 
 strong{
-    font-family: LexendDeca-Medium, sans-serif;
+    font-family: var(--font-body);
     font-weight: normal;
 }

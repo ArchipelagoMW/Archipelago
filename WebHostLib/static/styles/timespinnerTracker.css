@@ -10,7 +10,7 @@
     border-top-right-radius: 4px;
     padding: 3px 3px 10px;
     width: 374px;
-    background-color: #8d60a7;
+    background-color: var(--panel);
 
     display: grid;
     grid-template-rows: repeat(5, 48px);
@@ -86,7 +86,7 @@
 }
 
 #inventory-table span{
-    color: #B4B4A0;
+    color: var(--text);
     font-size: 40px;
     max-width: 40px;
     max-height: 40px;
@@ -166,7 +166,7 @@
     border-bottom: 2px solid #000000;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    background-color: #8d60a7;
+    background-color: var(--panel);
     padding: 0 3px 3px;
     font-size: 14px;
     cursor: default;

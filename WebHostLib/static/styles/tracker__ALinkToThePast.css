@@ -8,7 +8,7 @@
     border-radius: 4px;
     resize: both;
 
-    background-color: #42b149;
+    background-color: var(--panel);
     color: white;
 }
 

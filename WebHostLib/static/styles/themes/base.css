@@ -42,15 +42,38 @@ html{
 #base-header #site-title img{
     height: 38px;
     margin-top: 4px;
+    /* Render the logo as a white silhouette on the black header bar. */
+    filter: brightness(0) invert(1);
 }
 
-#base-header a, #base-header-mobile-menu a, #base-header-popover-text{
-    color: #2f6b83;
+#base-header-popover-icon,
+#base-header-right-mobile img{
+    /* Header UI icons: white on the black bar. */
+    filter: brightness(0) invert(1);
+}
+
+#base-header a, #base-header-popover-text{
+    color: var(--header-text);
     text-decoration: none;
     cursor: pointer;
     margin-right: 1.2rem;
     font-size: 22px;
-    font-family: LondrinaSolid-Light, sans-serif;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+}
+
+#base-header a:hover{
+    color: var(--accent);
+    font-weight: 500;
+}
+
+#base-header-mobile-menu a{
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    margin-right: 1.2rem;
+    font-size: 22px;
+    font-family: var(--font-display);
     text-transform: uppercase;
 }
 
@@ -63,7 +86,7 @@ html{
 #base-header-mobile-menu{
     display: none;
     flex-direction: column;
-    background-color: #ffffff;
+    background-color: var(--bg);
     text-align: center;
     overflow-y: auto;
     z-index: 10000;
@@ -80,8 +103,8 @@ html{
     padding: 3rem 1.5rem;
     font-size: 4rem;
     line-height: 5rem;
-    color: #699ca8;
-    border-top: 1px solid #d3d3d3;
+    color: var(--text);
+    border-top: 1px solid var(--border);
 }
 
 #base-header-mobile-menu :first-child, #base-header-popover-menu :first-child{
@@ -96,19 +119,17 @@ html{
     display: none;
     flex-direction: column;
     position: absolute;
-    background-color: #fff;
+    background-color: var(--bg);
     margin-left: -108px;
     margin-top: 2.25rem;
     border-radius: 10px;
-    border-left: 2px solid #d0ebe6;
-    border-bottom: 2px solid #d0ebe6;
-    border-right: 1px solid #d0ebe6;
-    filter: drop-shadow(-6px 6px 2px #2e3e83);
+    border: 1px solid var(--border);
+    filter: drop-shadow(-4px 4px 2px rgba(0, 0, 0, 0.25));
 }
 
 #base-header-popover-menu a{
-    color: #699ca8;
-    border-top: 1px solid #d3d3d3;
+    color: var(--text);
+    border-top: 1px solid var(--border);
     text-align: center;
     font-size: 1.5rem;
     line-height: 3rem;
@@ -145,9 +166,9 @@ html{
     #base-header-mobile-menu{
         top: 3.3rem;
         width: unset;
-        border-left: 2px solid #d0ebe6;
-        border-bottom: 2px solid #d0ebe6;
-        filter: drop-shadow(-6px 6px 2px #2e3e83);
+        border-left: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        filter: drop-shadow(-4px 4px 2px rgba(0, 0, 0, 0.25));
         border-top-left-radius: 10px;
     }
 

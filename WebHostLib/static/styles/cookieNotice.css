@@ -5,7 +5,8 @@
     left: 0;
     width: 100%;
     line-height: 40px;
-    background-color: #c7cda5;
+    background-color: var(--panel);
+    border-top: 1px solid var(--border);
     text-align: center;
     cursor: pointer;
 }

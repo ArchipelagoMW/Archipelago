@@ -1,37 +1,72 @@
-@font-face{
-    font-family: LexendDeca-ExtraLight;
-    src: url("../../static/static/fonts/LexendDeca-ExtraLight.ttf");
+/* Grayscale editorial design tokens — single source of truth for the whole site. */
+:root{
+    --bg: #ffffff;
+    --text: #1a1a1a;        /* body text */
+    --heading: #000000;
+    --muted: #666666;       /* captions, help text, secondary */
+    --accent: #555555;      /* hover / active / current-nav */
+    --border: #dddddd;      /* hairlines, input & table borders */
+    --panel: #f4f4f4;       /* code blocks, table stripes, cards */
+    --header-bg: #111111;   /* the one high-contrast anchor */
+    --header-text: #ffffff;
+    --font-body: "Inter", system-ui, sans-serif;
+    --font-display: "JetBrains Mono", ui-monospace, monospace;
 }
 
 @font-face{
-    font-family: LexendDeca-Light;
-    src: url("../../static/static/fonts/LexendDeca-Light.ttf");
+    font-family: "Inter";
+    font-weight: 300;
+    font-display: swap;
+    src: url("../../static/static/fonts/Inter-Light.woff2") format("woff2");
 }
 
 @font-face{
-    font-family: LexendDeca-Regular;
-    src: url("../../static/static/fonts/LexendDeca-Regular.ttf");
+    font-family: "Inter";
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../static/static/fonts/Inter-Regular.woff2") format("woff2");
 }
 
 @font-face{
-    font-family: LexendDeca-Medium;
-    src: url("../../static/static/fonts/LexendDeca-Medium.ttf");
+    font-family: "Inter";
+    font-weight: 500;
+    font-display: swap;
+    src: url("../../static/static/fonts/Inter-Medium.woff2") format("woff2");
 }
 
 @font-face{
-    font-family: LondrinaSolid-Regular;
-    src: url("../../static/static/fonts/LondrinaSolid-Regular.ttf");
+    font-family: "Inter";
+    font-weight: 600;
+    font-display: swap;
+    src: url("../../static/static/fonts/Inter-SemiBold.woff2") format("woff2");
 }
 
 @font-face{
-    font-family: LondrinaSolid-Light;
-    src: url("../../static/static/fonts/LondrinaSolid-Light.ttf");
+    font-family: "JetBrains Mono";
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../static/static/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+}
+
+@font-face{
+    font-family: "JetBrains Mono";
+    font-weight: 500;
+    font-display: swap;
+    src: url("../../static/static/fonts/JetBrainsMono-Medium.woff2") format("woff2");
+}
+
+@font-face{
+    font-family: "JetBrains Mono";
+    font-weight: 700;
+    font-display: swap;
+    src: url("../../static/static/fonts/JetBrainsMono-Bold.woff2") format("woff2");
 }
 
 html{
-    font-family: LexendDeca-ExtraLight, sans-serif;
+    font-family: var(--font-body);
     font-size: 1.1rem;
-    color: #000000;
+    color: var(--text);
+    background-color: var(--bg);
 }
 
 body{
@@ -46,45 +81,50 @@ main {
 }
 
 a{
-    color: #ffef00;
-    text-decoration: none;
-    font-family: LexendDeca-Regular, sans-serif;
+    color: var(--text);
+    text-decoration: underline;
+    font-family: var(--font-body);
+}
+
+a:hover{
+    color: var(--accent);
+    font-weight: 500;
 }
 
 button, input[type=submit]{
+    font-family: var(--font-display);
     font-weight: 500;
     font-size: 0.9rem;
     padding: 10px 17px 11px 16px; /* top right bottom left */
     border-radius: 4px;
-    border-top: 1px solid rgba(0, 0, 0, 0.5);
-    border-left: 1px solid rgba(0, 0, 0, 0.5);
-    border-right: 2px solid rgba(0, 0, 0, 0.5);
-    border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--heading);
+    background-color: var(--heading);
+    color: var(--bg);
     font-kerning: auto;
     cursor: pointer;
 }
 
+button:hover, input[type=submit]:hover{
+    background-color: var(--bg);
+    color: var(--heading);
+}
+
 button:active, input[type=submit]:active{
-    border-right: 1px solid rgba(0, 0, 0, 0.5);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-    padding-right: 16px;
-    margin-right: 2px;
-    padding-bottom: 10px;
-    margin-bottom: 2px;
+    background-color: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
 }
 
-button.button-grass, input[type=submit].button-grass{
-    border: 1px solid black;
-}
-
-button.button-dirt, input[type=submit].button-dirt{
-    border: 1px solid black;
+:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 h1, h2, h3, h4, h5, h6{
-    font-weight: normal;
+    font-family: var(--font-display);
+    font-weight: 500;
     margin: 0;
-    color: #032605;
+    color: var(--heading);
 }
 
 h1{ font-size: 3rem; }
@@ -107,15 +147,16 @@ h5, h6{
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    color: #000000;
+    color: var(--text);
+    border: 1px solid var(--border);
     border-radius: 4px;
     margin-bottom: 20px;
-    background-color: #ffff00;
+    background-color: var(--panel);
 }
 .user-message a{
-    color: #ff7700;
+    color: var(--text);
 }
 
 .interactive{
-    color: #ffef00;
+    color: var(--accent);
 }

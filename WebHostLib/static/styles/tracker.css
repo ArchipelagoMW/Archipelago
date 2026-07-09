@@ -8,7 +8,7 @@
 }
 
 #tracker-wrapper a {
-    color: #234ae4;
+    color: var(--text);
     text-decoration: none;
     cursor: pointer;
 }
@@ -24,7 +24,7 @@
 }
 
 #tracker-header-bar .info {
-    color: #ffffff;
+    color: var(--text);
     padding: 2px;
     flex-grow: 1;
     align-self: center;
@@ -41,7 +41,7 @@
 
 .tracker-navigation-bar {
     display: flex;
-    background-color: #b0a77d;
+    background-color: var(--panel);
     border-radius: 4px;
 }
 
@@ -60,11 +60,11 @@
 }
 
 .tracker-navigation-button:hover {
-    background-color: #e2eabb !important;
+    background-color: #e6e6e6 !important;
 }
 
 .tracker-navigation-button.selected {
-    background-color: rgb(220, 226, 189);
+    background-color: #d6d6d6;
 }
 
 .table-wrapper {
@@ -75,7 +75,7 @@
 }
 
 #search {
-    border: 1px solid #000000;
+    border: 1px solid var(--border);
     border-radius: 3px;
     padding: 3px;
     width: 200px;
@@ -86,20 +86,20 @@ div.dataTables_wrapper.no-footer .dataTables_scrollBody {
 }
 
 table.dataTable {
-    color: #000000;
+    color: var(--text);
 }
 
 table.dataTable thead {
-    font-family: LexendDeca-Regular, sans-serif;
+    font-family: var(--font-body);
 }
 
 table.dataTable tbody, table.dataTable tfoot {
-    background-color: #dce2bd;
-    font-family: LexendDeca-Light, sans-serif;
+    background-color: var(--bg);
+    font-family: var(--font-body);
 }
 
 table.dataTable tbody tr:hover, table.dataTable tfoot tr:hover {
-    background-color: #e2eabb;
+    background-color: #e6e6e6;
 }
 
 table.dataTable tbody td, table.dataTable tfoot td {
@@ -107,7 +107,7 @@ table.dataTable tbody td, table.dataTable tfoot td {
 }
 
 table.dataTable, table.dataTable.no-footer {
-    border-left: 1px solid #bba967;
+    border-left: 1px solid var(--border);
     width: calc(100% - 2px) !important;
     font-size: 1rem;
 }
@@ -115,14 +115,14 @@ table.dataTable, table.dataTable.no-footer {
 table.dataTable thead th {
     position: -webkit-sticky;
     position: sticky;
-    background-color: #b0a77d;
+    background-color: var(--panel);
     top: 0;
 }
 
 table.dataTable thead th.upper-row {
     position: -webkit-sticky;
     position: sticky;
-    background-color: #b0a77d;
+    background-color: var(--panel);
     height: 36px;
     top: 0;
 }
@@ -130,13 +130,13 @@ table.dataTable thead th.upper-row {
 table.dataTable thead th.lower-row {
     position: -webkit-sticky;
     position: sticky;
-    background-color: #b0a77d;
+    background-color: var(--panel);
     height: 22px;
     top: 46px;
 }
 
 table.dataTable tbody td, table.dataTable tfoot td {
-    border: 1px solid #bba967;
+    border: 1px solid var(--border);
 }
 
 table.dataTable tfoot td {
@@ -158,14 +158,14 @@ img.icon-sprite {
 }
 
 .item-acquired {
-    background-color: #d3c97d;
+    background-color: #cccccc;
 }
 
 @media all and (max-width: 1700px) {
     table.dataTable thead th.upper-row{
         position: -webkit-sticky;
         position: sticky;
-        background-color: #b0a77d;
+        background-color: var(--panel);
         height: 27px;
         top: 0;
     }
@@ -173,7 +173,7 @@ img.icon-sprite {
     table.dataTable thead th.lower-row {
         position: -webkit-sticky;
         position: sticky;
-        background-color: #b0a77d;
+        background-color: var(--panel);
         height: 20px;
         top: 37px;
     }
@@ -193,7 +193,7 @@ img.icon-sprite {
     table.dataTable thead th.upper-row{
         position: -webkit-sticky;
         position: sticky;
-        background-color: #b0a77d;
+        background-color: var(--panel);
         height: 22px;
         top: 0;
     }
@@ -201,7 +201,7 @@ img.icon-sprite {
     table.dataTable thead th.lower-row {
         position: -webkit-sticky;
         position: sticky;
-        background-color: #b0a77d;
+        background-color: var(--panel);
         height: 19px;
         top: 32px;
     }

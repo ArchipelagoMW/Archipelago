@@ -15,5 +15,5 @@
 }
 
 h2, h4 {
-    color: #ffffff;
+    color: var(--text);
 }

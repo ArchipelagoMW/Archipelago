@@ -7,12 +7,12 @@ body{
   --item-class-padding: 4px;
 }
 a{
-  color: #1ae;
+  color: var(--text);
 }
 
 /* Section colours */
 #player-info{
-  background-color: #37a;
+  background-color: var(--panel);
 }
 .player-tracker{
   max-width: 100%;
@@ -21,22 +21,22 @@ a{
   background-color: grey;
 }
 #terran-items{
-  background-color: #3a7;
+  background-color: var(--panel);
 }
 #zerg-items{
-  background-color: #d94;
+  background-color: var(--panel);
 }
 #protoss-items{
-  background-color: #37a;
+  background-color: var(--panel);
 }
 #nova-items{
   background-color: #777;
 }
 #kerrigan-items{
-  background-color: #a37;
+  background-color: var(--panel);
 }
 #keys{
-  background-color: #aa2;
+  background-color: var(--panel);
 }
 
 /* Sections */

@@ -11,7 +11,7 @@
 }
 
 #tutorial-landing h2{
-    color: #fff677;
+    color: var(--text);
     margin-bottom: 2px;
     margin-top: 33px;
     font-size: 44px;
@@ -23,7 +23,7 @@
 
 #tutorial-landing .link-spacer{
     margin: 0 6px;
-    color: #fffc95;
+    color: var(--text);
 }
 
 #tutorial-landing p{

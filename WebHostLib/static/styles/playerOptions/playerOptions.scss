@@ -1,9 +1,7 @@
 @import "../markdown.css";
 
 html{
-    background-image: url('../../static/backgrounds/grass.png');
-    background-repeat: repeat;
-    background-size: 650px 650px;
+    background-color: var(--bg);
     overflow-x: hidden;
 }
 
@@ -12,10 +10,11 @@ html{
     max-width: 1024px;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: var(--panel);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 1rem;
-    color: #eeffeb;
+    color: var(--text);
     word-break: break-word;
 
     #player-options-header{
@@ -35,8 +34,9 @@ html{
         width: calc(100% - 1rem);
         padding: 0.5rem;
         border-radius: 4px;
-        background-color: #f3f309;
-        color: #000000;
+        background-color: var(--panel);
+        border: 1px solid var(--border);
+        color: var(--text);
         margin-bottom: 0.5rem;
         text-align: center;
     }
@@ -65,9 +65,10 @@ html{
     #user-message{
         display: none;
         width: calc(100% - 8px);
-        background-color: #ffe86b;
+        background-color: var(--panel);
+        border: 1px solid var(--border);
         border-radius: 4px;
-        color: #000000;
+        color: var(--text);
         padding: 4px;
         text-align: center;
         cursor: pointer;
@@ -78,7 +79,6 @@ html{
         font-weight: normal;
         width: 100%;
         margin-bottom: 0.5rem;
-        text-shadow: 1px 1px 4px #000000;
     }
 
     h2{
@@ -87,30 +87,25 @@ html{
         width: 100%;
         margin-bottom: 0.5rem;
         text-transform: lowercase;
-        text-shadow: 1px 1px 2px #000000;
-    }
-
-    h3, h4, h5, h6{
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     }
 
     input:not([type]){
-        border: 1px solid #000000;
+        border: 1px solid var(--border);
         padding: 3px;
         border-radius: 3px;
         min-width: 150px;
 
         &:focus{
-            border: 1px solid #ffffff;
+            border: 1px solid var(--accent);
         }
     }
 
     select{
-        border: 1px solid #000000;
+        border: 1px solid var(--border);
         padding: 3px;
         border-radius: 3px;
         min-width: 150px;
-        background-color: #ffffff;
+        background-color: var(--bg);
         text-overflow: ellipsis;
     }
 
@@ -225,10 +220,10 @@ html{
     .option-container{
         display: flex;
         flex-direction: column;
-        background-color: rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(20, 20, 20, 0.25);
+        background-color: var(--panel);
+        border: 1px solid var(--border);
         border-radius: 3px;
-        color: #ffffff;
+        color: var(--text);
         max-height: 10rem;
         min-width: 14.5rem;
         overflow-y: auto;
@@ -238,7 +233,7 @@ html{
         .option-divider{
             width: 100%;
             height: 2px;
-            background-color: rgba(20, 20, 20, 0.25);
+            background-color: var(--border);
             margin-top: 0.125rem;
             margin-bottom: 0.125rem;
         }
@@ -252,7 +247,7 @@ html{
             user-select: none;
 
             &:hover{
-                background-color: rgba(20, 20, 20, 0.25);
+                background-color: var(--border);
             }
 
             input[type=checkbox]{
@@ -290,7 +285,7 @@ html{
         max-width: 30px;
         margin: 0 0 0 0.25rem;
         font-size: 14px;
-        border: 1px solid black;
+        border: 1px solid var(--border);
         border-radius: 3px;
         background-color: #d3d3d3;
         user-select: none;
@@ -318,10 +313,10 @@ html{
         }
 
         &:has(input[type=checkbox]:checked){
-            background-color: #ffef00; /* Same as .interactive in globalStyles.css */
+            background-color: #888888; /* checked (randomize on) */
 
             &:hover{
-                background-color: #eedd27;
+                background-color: #777777;
             }
         }
 
