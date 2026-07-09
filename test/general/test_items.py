@@ -3,11 +3,11 @@ from argparse import Namespace
 from collections import ChainMap
 from typing import Type
 
-from BaseClasses import CollectionState, MultiWorld
+from BaseClasses import CollectionState, Item, ItemClassification, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import ItemLinks
 from worlds.AutoWorld import AutoWorldRegister, World, call_all
-from . import setup_solo_multiworld
+from . import generate_test_multiworld, setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
@@ -165,3 +165,43 @@ class TestBase(unittest.TestCase):
                                          f"{game_name} modified local_items during {step}")
                         self.assertEqual(non_local_items, multiworld.worlds[1].options.non_local_items.value,
                                          f"{game_name} modified non_local_items during {step}")
+
+    def test_item_link_merging(self) -> None:
+        """Test that item links do not greedily merge item classifications"""
+        multiworld = generate_test_multiworld(2)
+        group_id = multiworld.players + 1
+        multiworld.regions.add_group(group_id)
+        item_name = "SharedItem"
+        class MockGroupWorld:
+            origin_region_name = "Itemlink"
+            def create_item(self, name: str) -> Item:
+                return Item(name, ItemClassification.filler, None, group_id)
+            def create_filler(self) -> Item:
+                return Item("Filler", ItemClassification.filler, None, group_id)
+        mock_world = MockGroupWorld()
+        multiworld.worlds[group_id] = mock_world
+        multiworld.game[group_id] = "Test"
+        multiworld.groups = {
+            group_id: {
+                "players": {1, 2},
+                "item_pool": {item_name},
+                "world": mock_world,
+                "link_replacement": True,
+                "replacement_items": {1: None, 2: None},
+            }
+        }
+        items_p1 = (
+            [Item(item_name, ItemClassification.trap, None, 1)] * 2
+            + [Item(item_name, ItemClassification.progression | ItemClassification.useful, None, 1)]
+        )
+        items_p2 = (
+            [Item(item_name, ItemClassification.progression, None, 2)]
+            + [Item(item_name, ItemClassification.trap, None, 2)] * 2
+        )
+        multiworld.itempool = items_p1 + items_p2
+        multiworld.link_items()
+        linked = [item for item in multiworld.itempool if item.player == group_id and item.name == item_name]
+        classifications = [item.classification for item in linked]
+        self.assertEqual(len(linked), 3)
+        self.assertEqual(classifications.count(ItemClassification.progression | ItemClassification.useful), 1)
+        self.assertEqual(classifications.count(ItemClassification.trap), 2)
