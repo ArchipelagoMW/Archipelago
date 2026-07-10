@@ -291,20 +291,12 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.selected_filter = None
             self.current_filter = None
             persistent = Utils.persistent_load()
+            # Load user preferences for favorites and hidden components from persistent storage
             if "launcher" in persistent:
                 if "favorites" in persistent["launcher"]:
                     self.user_favorites_list.extend(persistent["launcher"]["favorites"])
                 if "hidden" in persistent["launcher"]:
                     self.user_hidden_list.extend(persistent["launcher"]["hidden"])
-                if "filter" in persistent["launcher"]:
-                    if persistent["launcher"]["filter"]:
-                        filters = []
-                        for filter in persistent["launcher"]["filter"].split(", "):
-                            if filter == "favorites" or filter == "hidden":
-                                filters.append(filter)
-                            else:
-                                filters.append(Type[filter])
-                        self.current_filter = filters
             super().__init__()
 
         def set_hidden(self, caller: MDButton) -> None:
@@ -461,8 +453,18 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 self.launch_components = None
                 self.launch_args = None
 
-            #TODO: Add a first-time user experience here, instead of just opening the "All" filter by default.
-            self.top_screen.ids.all.trigger_action(duration=0)
+
+            # Restore the last selected filter button and triggers its action
+            # -> This will "load" the last selected filter and display the corresponding components
+            persistent = Utils.persistent_load()
+            if "category_button" in persistent["launcher"]:
+                button_id = persistent["launcher"]["category_button"]
+                self.selected_filter = self.top_screen.ids.get(button_id)
+
+            if self.selected_filter:
+                self.selected_filter.trigger_action(duration=0)
+            else:
+                self.top_screen.ids.all.trigger_action(duration=0)
 
         @staticmethod
         def component_action(button):
@@ -535,10 +537,15 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             super()._stop(*largs)
 
         def on_stop(self):
+            # extract the id of the selected filter button to save in persistent storage
+            button_id = next(
+                (key for key, widget in self.top_screen.ids.items() if widget is self.selected_filter),
+                None
+            )
+
             Utils.persistent_store("launcher", "hidden", self.user_hidden_list)
             Utils.persistent_store("launcher", "favorites", self.user_favorites_list)
-            Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
-                                                                   for filter in self.current_filter))
+            Utils.persistent_store("launcher", "category_button", button_id)
             super().on_stop()
 
     Launcher(components=launch_components, args=args).run()
