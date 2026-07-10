@@ -1,10 +1,3 @@
-# /// script
-# requires-python = ">=3.11.9,<3.14.0"
-# dependencies = [
-#     "typing-extensions==4.15.0",
-# ]
-# ///
-
 import os
 import shutil
 import sys
