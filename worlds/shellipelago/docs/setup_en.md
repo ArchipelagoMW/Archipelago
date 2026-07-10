@@ -10,7 +10,7 @@
 
 Use the [player options page for this game](../player-options) to configure and export a Shellipelago YAML.
 
-Enabling easy destructible checks adds many locations and can significantly slow down a playthrough.
+Adding destructible tiles or enemies to locations adds many checks and can significantly slow down a playthrough.
 
 ## Joining a MultiWorld
 

@@ -8,7 +8,7 @@ The [player options page for this game](../player-options) contains all the opti
 
 Shellipelago shuffles the items needed to explore the map, fight enemies, and complete the final run.
 
-The main progression items are Graphics, Progressive Room, Bombs, Gun, Sword, Fire, Pickaxe, Water Walkers, Tank Treads, Tank Chassis, and Tank Cannon. Max HP, Max Rounds, SFX, and BGM can also be shuffled depending on options.
+The main progression items are Graphics, Progressive Room, Bombs, Gun, Sword, Fire, Pickaxe, Water Walkers, Tank Treads, Tank Chassis, and Tank Cannon. Max HP, Max Rounds, SFX, and BGM can also be shuffled depending on options, with Max Rounds treated as filler resource upgrades.
 
 ## What is the goal of Shellipelago?
 
@@ -34,13 +34,15 @@ The browser client shows a message and applies the item immediately. Some receiv
 
 - `shuffle_essential_items`: Shuffles essential progression items. When off, those items are given at the start.
 - `shuffle_max_resource_upgrades`: Shuffles Max HP and Max Rounds upgrades. When off, those upgrades are given at the start.
-- `add_easy_destructible_checks`: Adds normal destructible objects as checks. This adds many locations and can significantly slow down a playthrough.
-- `enemies_are_checks`: Adds defeated enemies as checks.
+- `add_easy_destructible_checks`: Adds destructible tiles as locations. This adds many locations and can significantly slow down a playthrough.
+- `enemies_are_checks`: Adds defeated enemies as locations. This adds many locations and can significantly slow down a playthrough.
 - `enemies_are_hints`: Allows selected enemy defeats to create Archipelago hints for useful or progression Shellipelago locations.
 - `shuffle_shops`: Shuffles shop item locations.
 - `show_essential_pickup_hints`: Shows special graphics for essential pickups in the client.
 - `add_traps_to_pool`: Allows trap items to be placed as rewards. When off, vanilla trap locations are replaced with filler.
+- `trap_fill_percentage`: Sets the percentage of filler item slots that can become traps.
 - `trap_pool_spawn`: Controls which traps can activate from trap items.
+- `trap_weights`: Sets the relative weight for each trap. A trap with weight 0 will not be placed.
 - `other_players_can_find_item_pool_drops`: Adds item-pool-only drops as checks.
 - `ring_link`: Syncs Rounds with rings in other games that have Ring Link enabled.
 - `energy_link`: Syncs Energy with other clients that have Energy Link enabled.
