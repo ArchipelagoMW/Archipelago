@@ -50,8 +50,8 @@ Go to the [Locations](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/w
 Any location including one of those tags will be a part of the location group.
 A location can have multiple tags and be part of multiple groups at the same time.
 
-## Some doors wont automatically with refractor skip, why is that?
-The refractor door on Phoenix Rescue and the one on Command Center doesn't have a direct progress flag we can use. In the future, we will probably add some moby scanning to force them open ourselves, but right now you just have to do the puzzle yourself.
+## Some doors wont open automatically with refractor skip, why is that?
+The refractor door on Phoenix Rescue and the one on Command Center don't have a direct progress flag we can use. In the future, we will probably add some moby scanning to force them open ourselves, but right now you just have to do the puzzle yourself.
 
 ## My cosmetics are missing, what can I do?
 
