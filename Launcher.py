@@ -429,16 +429,11 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
 
-            global refresh_components
-            refresh_components = self._refresh_components
-
             Window.bind(on_drop_file=self._on_drop_file)
             Window.bind(on_keyboard=self._on_keyboard)
 
             for component in components:
                 self.cards.append(self.build_card(component))
-
-            self._refresh_components(self.current_filter)
 
             # Uncomment to re-enable the Kivy console/live editor
             # Ctrl-E to enable it, make sure numlock/capslock is disabled
@@ -452,7 +447,6 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 build_uri_popup(self.launch_components, self.launch_args)
                 self.launch_components = None
                 self.launch_args = None
-
 
             # Restore the last selected filter button and triggers its action
             # -> This will "load" the last selected filter and display the corresponding components
