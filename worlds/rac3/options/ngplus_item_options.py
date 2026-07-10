@@ -7,7 +7,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 class NGPlusItems(Choice):
     """
     Determines how New Game Plus items appear in the multiworld.
-    When enabled, puts the RY3N0 into the item pool and the mega versions of weapons in the vendor
+    When enabled, it puts the RY3N0 into the item pool and the mega versions of weapons in the vendor
     if you have a V5 weapon.
     ---------------------------------------------------------------------------------------------------------
     Disabled: The RY3N0 will not appear in the multiworld, the mega versions of weapons are not purchasable.
