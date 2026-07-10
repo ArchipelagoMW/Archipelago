@@ -527,7 +527,11 @@ else:
         except ImportError:
             pyximport = None
         try:
+            import logging
+            logger = logging.getLogger()
+            old_level = logger.level
             from _speedups import LocationStore
+            logger.setLevel(old_level)
         except ImportError:
             warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
                           "Install a matching C++ compiler for your platform to compile _speedups.")

@@ -1,4 +1,4 @@
-from typing import *
+from typing import Any, cast
 import unittest
 import random
 from argparse import Namespace
@@ -6,17 +6,10 @@ from BaseClasses import MultiWorld, CollectionState, PlandoOptions
 from Generate import get_seed_name
 from worlds import AutoWorld
 from test.general import gen_steps, call_all
+from Fill import distribute_items_restrictive
 
-from test.bases import WorldTestBase
 from .. import SC2World, SC2Campaign
-from .. import client
 from .. import options
-
-class Sc2TestBase(WorldTestBase):
-    game = client.SC2Context.game
-    world: SC2World
-    player: ClassVar[int] = 1
-    skip_long_tests: bool = True
 
 
 class Sc2SetupTestBase(unittest.TestCase):
@@ -37,10 +30,11 @@ class Sc2SetupTestBase(unittest.TestCase):
     PROTOSS_CAMPAIGNS = {
         'enabled_campaigns': {SC2Campaign.PROPHECY.campaign_name, SC2Campaign.PROLOGUE.campaign_name, SC2Campaign.LOTV.campaign_name,}
     }
-    seed: Optional[int] = None
+    seed: int | None = None
     game = SC2World.game
     player = 1
-    def generate_world(self, options: Dict[str, Any]) -> None:
+
+    def generate_world(self, options: dict[str, Any]) -> None:
         self.multiworld = MultiWorld(1)
         self.multiworld.game[self.player] = self.game
         self.multiworld.player_name = {self.player: "Tester"}
@@ -60,6 +54,14 @@ class Sc2SetupTestBase(unittest.TestCase):
         try:
             for step in gen_steps:
                 call_all(self.multiworld, step)
+        except Exception as ex:
+            ex.add_note(f"Seed: {self.multiworld.seed}")
+            raise
+
+    def fill_after_generation(self) -> None:
+        assert self.multiworld
+        try:
+            distribute_items_restrictive(self.multiworld)
         except Exception as ex:
             ex.add_note(f"Seed: {self.multiworld.seed}")
             raise
