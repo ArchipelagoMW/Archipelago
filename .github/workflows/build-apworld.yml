@@ -345,15 +345,34 @@ jobs:
 
           # Get authors from git history
           git fetch origin ${{ needs.build.outputs.branch }}
-          authors=$(git log --format='%aN' -- worlds/rac3 | sort -u)
+          authors=$(git log --format='%aN' -- worlds/rac3)
+          
+          # Normalize known aliases
+          normalized_authors=()
+          while IFS= read -r author; do
+            case "$author" in
+              newcontributor|ContributorNew)
+                author="NewContributor"
+                ;;
+              yuxia|yuxia228)
+                author="Yuxia228"
+                ;;
+            esac
+            normalized_authors+=("$author")
+          done <<< "$authors"
+          # Remove duplicates after normalization
+          authors=$(printf "%s\n" "${normalized_authors[@]}" | sort -fu)
 
           # Add custom authors. Example: ("NewContributor" "AnotherDev")
-          custom_authors=("AmondoVagyok" "Myth197" "Taoshi" "yuxia228" "1theory")
+          custom_authors=("AmondoVagyok" "Myth197" "Taoshi" "Yuxia228" "1theory")
           for a in "${custom_authors[@]}"; do
             if ! echo "$authors" | grep -Fxq "$a"; then
               authors="${authors}"$'\n'"${a}"
             fi
           done
+
+          # Final dedupe + sort
+          authors=$(echo "$authors" | sort -fu)
 
           # Default if no authors found
           if [ -z "$authors" ]; then
