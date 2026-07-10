@@ -45,7 +45,7 @@ if install_cx_freeze:
     if shutil.which("uv") is not None:
         if '--yes' not in sys.argv and '-y' not in sys.argv:
             input(f'Requirement {requirement} is not satisfied, press enter to install it')
-        subprocess.call(['uv', 'pip', 'install', '--python', sys.executable,"--break-system-packages",requirement, '--upgrade'])
+        subprocess.call(['uv', 'pip', 'install',requirement, '--upgrade'])
     else:
         # check if pip is available, if uv not available
         try:
@@ -539,7 +539,7 @@ $APPDIR/$exe "$@"
             if not self.yes:
                 input("Requirement PIL is not satisfied, press enter to install it")
             if shutil.which("uv") is not None:
-                subprocess.call(['uv', 'pip', 'install','--python', sys.executable,"--break-system-packages", 'Pillow', '--upgrade'])
+                subprocess.call(['uv', 'pip', 'install', 'Pillow', '--upgrade'])
             else:
                 subprocess.call([sys.executable, '-m', 'pip', 'install', 'Pillow', '--upgrade'])
             from PIL import Image
