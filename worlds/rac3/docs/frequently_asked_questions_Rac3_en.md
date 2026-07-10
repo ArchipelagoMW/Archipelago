@@ -50,6 +50,9 @@ Go to the [Locations](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/w
 Any location including one of those tags will be a part of the location group.
 A location can have multiple tags and be part of multiple groups at the same time.
 
+## Some doors wont automatically with refractor skip, why is that?
+The refractor door on Phoenix Rescue and the one on Command Center doesn't have a direct progress flag we can use. In the future, we will probably add some moby scanning to force them open ourselves, but right now you just have to do the puzzle yourself.
+
 ## My cosmetics are missing, what can I do?
 
 The client tells you to reload the save file as soon you start the game on Veldin or Phoenix if intro skip is enabled. To reapply cosmetics, restart the client and reconnect, then visit the armor vendor or reload your save file without saving first. If you accidentally overwrite your skin with the skin vendor, you can visit the ship vendor to have the randomizer apply your skin values and then visit the armor vendor to have the game reapply your player skin.
