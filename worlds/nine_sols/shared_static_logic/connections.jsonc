@@ -1227,10 +1227,16 @@
     // The crates in the middle of OW are active without hacking the panel in the bottom left.
     // The crate track you start on goes to "OW: Enemy Gauntlet Room". On the way up you'll see another track on the left
     // that goes to "OW: Crusher Gauntlet", and a third track on the right that goes to "OW - Shortcut Elevator".
-    { "from": "OW - Root Node & Middle Exits", "to": "OW - Shortcut Elevator", "requires": [
-        { "item": "Wall Climb" },
-        { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
-    ] }, // I suspect this is possible without wall climb, but the crushers and unsafe crates make it totally impractical.
+    {
+        "from": "OW - Root Node & Middle Exits", "to": "OW - Shortcut Elevator",
+        "requires": [
+            { "item": "Wall Climb" },
+            { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
+        ],
+        "medium_requires": [ {"item": "Wall Climb" } ]
+        // T-Dash over to the other track instead of using CL or AD.
+        // Swift Runner also works instead of a T-Dash but seems redundant.
+    }, // I suspect this is possible without wall climb, but the crushers and unsafe crates make it totally impractical.
     { "from": "OW - Shortcut Elevator", "to": "OW - Root Node & Middle Exits", "requires": [] }, // hacking
     {
         "from": "OW - Shortcut Elevator", "to": "OW - Robot",
