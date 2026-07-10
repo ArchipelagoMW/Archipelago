@@ -1245,7 +1245,16 @@
             { "item": "Wall Climb" },
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
         ],
-        // the parryable enemies up here tend to get themselves killed so let's not put T-dashes in logic
+        // the parryable enemies up here tend to get themselves killed, and even with UC the turrets are single-use only,
+        // so I'd rather not include T-dash routes here
+        "medium_requires": [
+            { "item": "Grapple" },
+            { "item": "Wall Climb" },
+            // replacing AD or CL here requires a CS-dash and SR *and* LG at the end
+            { "item": "Charged Strike" },
+            { "item": "Trick - Long Jump with Swift Runner" }, // or a slight coyote jump, but we're trying to keep those OoL
+            { "item": "Ledge Grab" }
+        ],
         "ls_requires": [ // replace the one WC use with CL + LS vault
             { "item": "Grapple" },
             { "item": "Ledge Grab" },
