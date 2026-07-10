@@ -10,13 +10,15 @@ from worlds.rac3.options.armor_vendor_options import ArmorVendors
 from worlds.rac3.options.clank_options import ClankOptions
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
-from worlds.rac3.options.holostar_skip_options import HolostarSkip
-from worlds.rac3.options.intro_skip_options import IntroSkip
+from worlds.rac3.options.helpdesk_options import HelpDesk
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
+from worlds.rac3.options.ngplus_item_options import NGPlusItems
+from worlds.rac3.options.ngplus_start_options import NGPlusStart
+from worlds.rac3.options.ngplus_vendor_options import NGPlusVendor
 from worlds.rac3.options.one_hp_options import OneHpChallenge
-from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
+from worlds.rac3.options.prog_weapons_options import ProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
 from worlds.rac3.options.scout_vendors_options import ScoutVendors
@@ -26,14 +28,18 @@ from worlds.rac3.options.ship_nose_options import ShipNose
 from worlds.rac3.options.ship_skin_options import ShipSkin
 from worlds.rac3.options.ship_vendor_options import ShipVendors
 from worlds.rac3.options.ship_wings_options import ShipWings
+from worlds.rac3.options.shortcuts_options import Shortcuts
 from worlds.rac3.options.skillpoints_options import SkillPoints
+from worlds.rac3.options.speedups_options import Speedups
 from worlds.rac3.options.starting_weapons_options import StartingWeapons
 from worlds.rac3.options.titanium_bolts_options import TitaniumBolts
 from worlds.rac3.options.trap_weight_options import TrapWeight
 from worlds.rac3.options.traps_options import EnableTraps
 from worlds.rac3.options.trophies_options import Trophies
+from worlds.rac3.options.vendor_access_options import VendorAccess
 from worlds.rac3.options.vidcomics_options import VidComics
 from worlds.rac3.options.vr_challenges_options import VRChallenges
+from worlds.rac3.options.weapon_level_options import WeaponLevels
 from worlds.rac3.options.weapon_vendors_options import WeaponVendors
 
 
@@ -53,7 +59,7 @@ class RaC3Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     starting_weapons: StartingWeapons
     bolt_and_xp_multiplier: BoltAndXPMultiplier
-    enable_progressive_weapons: EnableProgressiveWeapons
+    progressive_weapons: ProgressiveWeapons
     armor_upgrade: ArmorUpgrade
     filler_weight: FillerWeight
     traps_enabled: EnableTraps
@@ -74,14 +80,20 @@ class RaC3Options(PerGameCommonOptions):
     ship_nose: ShipNose
     ship_wings: ShipWings
     ship_skin: ShipSkin
-    skin: RatchetSkin
+    player_skin: RatchetSkin
     one_hp_challenge: OneHpChallenge
-    intro_skip: IntroSkip
-    holostar_skip: HolostarSkip
     clank_options: ClankOptions
     ship_vendor: ShipVendors
     armor_vendor: ArmorVendors
     scout_vendors: ScoutVendors
+    shortcuts: Shortcuts
+    speedups: Speedups
+    ngplus_items: NGPlusItems
+    ngplus_vendors: NGPlusVendor
+    ngplus_start: NGPlusStart
+    helpdesk: HelpDesk
+    vendor_access: VendorAccess
+    weapon_level_locations: WeaponLevels
 
 
 rac3_option_groups = [
@@ -91,14 +103,16 @@ rac3_option_groups = [
         DeathLink,
     ]),
     OptionGroup("RAC3 Game Options", [
-        IntroSkip,
-        HolostarSkip,
+        Shortcuts,
+        Speedups,
         BoltAndXPMultiplier,
         OneHpChallenge,
+        NGPlusStart,
     ]),
     OptionGroup("RAC3 Item Options", [
         StartingWeapons,
-        EnableProgressiveWeapons,
+        NGPlusItems,
+        ProgressiveWeapons,
         ArmorUpgrade,
         ClankOptions,
         EnableTraps,
@@ -107,12 +121,14 @@ rac3_option_groups = [
     ]),
     OptionGroup("RAC3 Location Options", [
         WeaponVendors,
+        NGPlusVendor,
         ArmorVendors,
         ShipVendors,
         ScoutVendors,
         SkillPoints,
         Trophies,
         TitaniumBolts,
+        WeaponLevels,
         Rangers,
         VidComics,
         VRChallenges,
@@ -128,6 +144,10 @@ rac3_option_groups = [
         ShipSkin,
         RatchetSkin,
     ]),
+    OptionGroup("RAC3 QoL Options", [
+        HelpDesk,
+        VendorAccess,
+    ]),
     OptionGroup("Item & Location Options", [
         RAC3ExcludeLocations,
     ]),
@@ -138,7 +158,9 @@ slot_data_options: list[str] = [
     RAC3OPTION.START_INVENTORY_FROM_POOL,
     RAC3OPTION.STARTING_WEAPONS,
     RAC3OPTION.BOLT_AND_XP_MULTIPLIER,
-    RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS,
+    RAC3OPTION.PROGRESSIVE_WEAPONS,
+    RAC3OPTION.NGPLUS_ITEMS,
+    RAC3OPTION.NGPLUS_START,
     RAC3OPTION.ARMOR_UPGRADE,
     RAC3OPTION.SKILL_POINTS,
     RAC3OPTION.TROPHIES,
@@ -149,7 +171,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.SHIP_NOSE,
     RAC3OPTION.SHIP_WINGS,
     RAC3OPTION.SHIP_SKIN,
-    RAC3OPTION.SKIN,
+    RAC3OPTION.PLAYER_SKIN,
     RAC3OPTION.ENABLE_TRAPS,
     RAC3OPTION.TRAP_WEIGHT,
     RAC3OPTION.RANGERS,
@@ -161,9 +183,14 @@ slot_data_options: list[str] = [
     RAC3OPTION.WEAPON_VENDORS,
     RAC3OPTION.FILLER_WEIGHT,
     RAC3OPTION.ONE_HP_CHALLENGE,
-    RAC3OPTION.INTRO_SKIP,
     RAC3OPTION.CLANK_OPTIONS,
+    RAC3OPTION.SHORTCUTS,
+    RAC3OPTION.SPEEDUPS,
     RAC3OPTION.SHIP_VENDOR,
     RAC3OPTION.ARMOR_VENDOR,
     RAC3OPTION.SCOUT_VENDORS,
+    RAC3OPTION.NGPLUS_VENDOR,
+    RAC3OPTION.HELP_DESK,
+    RAC3OPTION.WEAPON_LEVEL_LOCATIONS,
+    RAC3OPTION.VENDOR_ACCESS,
 ]

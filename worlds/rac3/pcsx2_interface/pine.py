@@ -81,31 +81,42 @@ class Pine:
         self._sock_state: bool = False
         # self._init_socket()
 
+    def is_wsl(self) -> bool:
+        if system() != "Linux":
+            return False
+        try:
+            with open("/proc/sys/kernel/osrelease", "r") as f:
+                return "microsoft" in f.read().lower()
+        except Exception:
+            return False
+
     def _init_socket(self) -> bool:
-        if system() == "Windows":
+        socket_file_name = "pcsx2.sock" if self._slot == 28011 else f"pcsx2.sock.{self._slot}"
+        if system() == "Windows" or self.is_wsl():
             socket_family = socket.AF_INET
-            socket_name = ("127.0.0.1", self._slot)
+            socket_path = ("127.0.0.1", self._slot)
         elif system() == "Linux":
             socket_family = socket.AF_UNIX
-            base_socket = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
-            socket_file = "/pcsx2.sock"
-            # Flatpak Socket Path
-            socket_name = base_socket + "/.flatpak/net.pcsx2.PCSX2/xdg-run" + socket_file
-            # Use default XDG_RUNTIME_DIR or /tmp if Flatpak socket is not detected
-            if not os.access(socket_name, os.W_OK):
-                socket_name = base_socket + socket_file
+            base_path = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+
+            # Write Permissions are required to connect to Unix Sockets in Linux
+            if os.access(os.path.join(base_path, socket_file_name), os.W_OK):
+               socket_path = os.path.join(base_path, socket_file_name)
+            else:
+                # Find the Socket in the Flatpak runtime otherwise
+                socket_path = os.path.join(base_path, ".flatpak/net.pcsx2.PCSX2/xdg-run", socket_file_name)
         elif system() == "Darwin":
             socket_family = socket.AF_UNIX
-            socket_name = os.environ.get("TMPDIR", "/tmp")
-            socket_name += "/pcsx2.sock"
+            socket_path = os.path.join(os.environ.get("TMPDIR", "/tmp"), socket_file_name)
         else:
             socket_family = socket.AF_UNIX
-            socket_name = "/tmp/pcsx2.sock"
+            # Other Unix systems may use the XDG spec, so XDG_RUN should also be checked for
+            socket_path = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), socket_file_name)
 
         try:
             self._sock = socket.socket(socket_family, socket.SOCK_STREAM)
             self._sock.settimeout(5.0)
-            self._sock.connect(socket_name)
+            self._sock.connect(socket_path)
         except socket.error:
             self._sock.close()
             self._sock_state = False
@@ -117,10 +128,10 @@ class Pine:
     def connect(self) -> None:
         if not self.is_connected():
             if not self._init_socket():
-                raise Pine.ConnectionError()
+                raise self.ConnectionError()
 
             if not self.is_connected():
-                raise Pine.DuplicateConnectionError()
+                raise self.DuplicateConnectionError()
 
     def disconnect(self) -> None:
         if self._sock_state:
@@ -138,58 +149,58 @@ class Pine:
         return True
 
     def read_int8(self, address: int) -> int:
-        request = Pine._create_request(Pine.IPCCommand.READ8, address, 9)
-        return Pine.from_bytes(self._send_request(request)[-1:])
+        request = self._create_request(self.IPCCommand.READ8, address, 9)
+        return self.from_bytes(self._send_request(request)[-1:])
 
     def read_int16(self, address) -> int:
-        request = Pine._create_request(Pine.IPCCommand.READ16, address, 9)
-        return Pine.from_bytes(self._send_request(request)[-2:])
+        request = self._create_request(self.IPCCommand.READ16, address, 9)
+        return self.from_bytes(self._send_request(request)[-2:])
 
     def read_int32(self, address) -> int:
-        request = Pine._create_request(Pine.IPCCommand.READ32, address, 9)
-        return Pine.from_bytes(self._send_request(request)[-4:])
+        request = self._create_request(self.IPCCommand.READ32, address, 9)
+        return self.from_bytes(self._send_request(request)[-4:])
 
     def read_int64(self, address) -> int:
-        request = Pine._create_request(Pine.IPCCommand.READ64, address, 9)
-        return Pine.from_bytes(self._send_request(request)[-8:])
+        request = self._create_request(self.IPCCommand.READ64, address, 9)
+        return self.from_bytes(self._send_request(request)[-8:])
 
     def read_bytes(self, address: int, length: int) -> bytes:
         """Careful! This can be quite slow for large reads"""
         data = b''
         while len(data) < length:
             if length - len(data) >= 8:
-                data += self._send_request(Pine._create_request(Pine.IPCCommand.READ64, address + len(data), 9))[-8:]
+                data += self._send_request(self._create_request(self.IPCCommand.READ64, address + len(data), 9))[-8:]
             elif length - len(data) >= 4:
-                data += self._send_request(Pine._create_request(Pine.IPCCommand.READ32, address + len(data), 9))[-4:]
+                data += self._send_request(self._create_request(self.IPCCommand.READ32, address + len(data), 9))[-4:]
             elif length - len(data) >= 2:
-                data += self._send_request(Pine._create_request(Pine.IPCCommand.READ16, address + len(data), 9))[-2:]
+                data += self._send_request(self._create_request(self.IPCCommand.READ16, address + len(data), 9))[-2:]
             elif length - len(data) >= 1:
-                data += self._send_request(Pine._create_request(Pine.IPCCommand.READ8, address + len(data), 9))[-1:]
+                data += self._send_request(self._create_request(self.IPCCommand.READ8, address + len(data), 9))[-1:]
 
         return data
 
     def write_int8(self, address: int, value: int) -> None:
-        request = Pine._create_request(Pine.IPCCommand.WRITE8, address, 9 + Pine.DataSize.INT8)
+        request = self._create_request(self.IPCCommand.WRITE8, address, 9 + self.DataSize.INT8)
         request += value.to_bytes(length=1, byteorder="little")
         self._send_request(request)
 
     def write_int16(self, address: int, value: int) -> None:
-        request = Pine._create_request(Pine.IPCCommand.WRITE16, address, 9 + Pine.DataSize.INT16)
+        request = self._create_request(self.IPCCommand.WRITE16, address, 9 + self.DataSize.INT16)
         request += value.to_bytes(length=2, byteorder="little")
         self._send_request(request)
 
     def write_int32(self, address: int, value: int) -> None:
-        request = Pine._create_request(Pine.IPCCommand.WRITE32, address, 9 + Pine.DataSize.INT32)
+        request = self._create_request(self.IPCCommand.WRITE32, address, 9 + self.DataSize.INT32)
         request += value.to_bytes(length=4, byteorder="little")
         self._send_request(request)
 
     def write_int64(self, address: int, value: int) -> None:
-        request = Pine._create_request(Pine.IPCCommand.WRITE64, address, 9 + Pine.DataSize.INT64)
+        request = self._create_request(self.IPCCommand.WRITE64, address, 9 + self.DataSize.INT64)
         request += value.to_bytes(length=8, byteorder="little")
         self._send_request(request)
 
     def write_float(self, address: int, value: float) -> None:
-        request = Pine._create_request(Pine.IPCCommand.WRITE32, address, 9 + Pine.DataSize.INT32)
+        request = self._create_request(self.IPCCommand.WRITE32, address, 9 + self.DataSize.INT32)
         request += struct.pack("<f", value)
         self._send_request(request)
 
@@ -198,22 +209,22 @@ class Pine:
         bytes_written = 0
         while bytes_written < len(data):
             if len(data) - bytes_written >= 8:
-                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written, 9 + Pine.DataSize.INT64)
+                request = self._create_request(self.IPCCommand.WRITE64, address + bytes_written, 9 + self.DataSize.INT64)
                 request += data[bytes_written:bytes_written + 8]
                 self._send_request(request)
                 bytes_written += 8
             elif len(data) - bytes_written >= 4:
-                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written, 9 + Pine.DataSize.INT32)
+                request = self._create_request(self.IPCCommand.WRITE32, address + bytes_written, 9 + self.DataSize.INT32)
                 request += data[bytes_written:bytes_written + 4]
                 self._send_request(request)
                 bytes_written += 4
             elif len(data) - bytes_written >= 2:
-                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written, 9 + Pine.DataSize.INT16)
+                request = self._create_request(self.IPCCommand.WRITE16, address + bytes_written, 9 + self.DataSize.INT16)
                 request += data[bytes_written:bytes_written + 2]
                 self._send_request(request)
                 bytes_written += 2
             elif len(data) - bytes_written >= 1:
-                request = self._create_request(Pine.IPCCommand.WRITE8, address + bytes_written, 9 + Pine.DataSize.INT8)
+                request = self._create_request(self.IPCCommand.WRITE8, address + bytes_written, 9 + self.DataSize.INT8)
                 request += data[bytes_written:bytes_written + 1]
                 self._send_request(request)
                 bytes_written += 1
@@ -227,14 +238,14 @@ class Pine:
         return data.split(b'\x00', 1)[0].decode("ascii")
 
     def get_game_id(self) -> str:
-        request = Pine.to_bytes(5, 4) + Pine.to_bytes(Pine.IPCCommand.ID, 1)
+        request = self.to_bytes(5, 4) + self.to_bytes(self.IPCCommand.ID, 1)
         response = self._send_request(request)
         return response[9:-1].decode("ascii")
 
     def get_emu_status(self) -> EmuStatus:
-        request = Pine.to_bytes(5, 4) + Pine.to_bytes(Pine.IPCCommand.STATUS, 1)
+        request = self.to_bytes(5, 4) + self.to_bytes(self.IPCCommand.STATUS, 1)
         response = self._send_request(request)
-        return Pine.EmuStatus(Pine.from_bytes(response[-4:]))
+        return self.EmuStatus(self.from_bytes(response[-4:]))
 
     def _send_request(self, request: bytes) -> bytes:
         if not self._sock_state:
@@ -263,14 +274,14 @@ class Pine:
             result += response
 
             if end_length == 4 and len(response) >= 4:
-                end_length = Pine.from_bytes(result[0:4])
-                if end_length > Pine.MAX_IPC_SIZE:
+                end_length = self.from_bytes(result[0:4])
+                if end_length > self.MAX_IPC_SIZE:
                     result = b''
                     break
 
         if len(result) == 0:
             raise ConnectionError("Invalid response from PCSX2.")
-        if result[4] == Pine.IPCResult.IPC_FAIL:
+        if result[4] == self.IPCResult.IPC_FAIL:
             raise ConnectionError("Failure indicated in PCSX2 response.")
 
         return result

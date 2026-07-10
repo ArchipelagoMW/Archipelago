@@ -1,3 +1,5 @@
+"""This module contains options for weighting traps in the item pool"""
+
 from Options import ItemDict
 from worlds.rac3.constants.data.item import trap_data
 from worlds.rac3.constants.options import RAC3OPTION
@@ -13,4 +15,4 @@ class TrapWeight(ItemDict):
     min = 0
     max = 100
     valid_keys = trap_data.keys()
-    default = dict.fromkeys(trap_data.keys(), 2)
+    default = dict.fromkeys(trap_data.keys(), 1)

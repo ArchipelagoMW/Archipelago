@@ -1,0 +1,1 @@
+"""This package contains constants used for in game notification popups"""

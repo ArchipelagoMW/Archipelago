@@ -1,3 +1,5 @@
+"""This module provides weighting options for filler items"""
+
 from Options import ItemDict
 from worlds.rac3.constants.data.item import filler_data
 from worlds.rac3.constants.items import RAC3ITEM
@@ -17,7 +19,7 @@ class FillerWeight(ItemDict):
     default = {
         # RAC3ITEM.TITANIUM_BOLT: 0,
         RAC3ITEM.WEAPON_XP: 5,
-        RAC3ITEM.PLAYER_XP: 5,
+        RAC3ITEM.NANOTECH_XP: 5,
         RAC3ITEM.BOLTS: 10,
-        RAC3ITEM.JACKPOT: 10,
+        RAC3ITEM.JACKPOT: 5,
     }

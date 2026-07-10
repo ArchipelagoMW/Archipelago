@@ -1,6 +1,9 @@
+"""This module contains data structures for in game notifications"""
+
 from dataclasses import dataclass
 
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
+
 
 @dataclass
 class RAC3NOTIFICATION:

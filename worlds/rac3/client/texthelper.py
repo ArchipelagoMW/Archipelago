@@ -2,6 +2,8 @@
 
 from typing import TYPE_CHECKING
 
+import unicodedata
+
 from BaseClasses import ItemClassification
 from NetUtils import NetworkItem
 from worlds.rac3.constants.items import RAC3ITEM
@@ -34,6 +36,13 @@ def get_sent_item_message(ctx: "Rac3Context", net_item: NetworkItem, player_name
     if player_name_after:
         return f"Sent {item_name} to {RAC3TEXTFORMATSTRING.GREEN}{player_name}"
     return f"Sent {player_name}'s {item_name}"
+
+
+def remove_accents(input_str):
+    """Converts Unicode accented characters to their base ASCII equivalent"""
+    nfkd_form = unicodedata.normalize(u"NFKD", input_str)
+    return nfkd_form.encode("ascii", 'ignore').decode("ascii")
+
 
 TEXT_BYTE_TO_EXPECTED_WIDTH = {
     0x00: 0,  # Null terminator
@@ -211,7 +220,7 @@ ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET: dict[str, int] = {
     RAC3ITEM.LAVA_GUN: 0x01F8,
     RAC3ITEM.MINI_TURRET: 0x097E,
     RAC3ITEM.BOUNCER: 0x03BE,
-    RAC3ITEM.PLASMA_COIL: 0x02C8,
+    RAC3ITEM.PLASMA_COIL: 0x02BC,
     RAC3ITEM.SHIELD_CHARGER: 0x030F,
     RAC3ITEM.RY3N0: 0x0664,
     RAC3ITEM.MAGNAPLATE: 0x11DE,

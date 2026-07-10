@@ -1,6 +1,6 @@
 """This module contains functionality for universal tracker"""
 
-from typing import TYPE_CHECKING, Any
+from typing import Any, TYPE_CHECKING
 
 from worlds.rac3.constants.data.location import UT_MAPPING
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
@@ -20,16 +20,16 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.start_inventory_from_pool.value = world.passthrough[RAC3OPTION.START_INVENTORY_FROM_POOL]
             world.options.starting_weapons.value = world.passthrough[RAC3OPTION.STARTING_WEAPONS]
             world.options.bolt_and_xp_multiplier.value = world.passthrough[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
-            world.options.enable_progressive_weapons.value = world.passthrough[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]
+            world.options.progressive_weapons.value = world.passthrough[RAC3OPTION.PROGRESSIVE_WEAPONS]
             world.options.armor_upgrade.value = world.passthrough[RAC3OPTION.ARMOR_UPGRADE]
             world.options.skill_points.value = world.passthrough[RAC3OPTION.SKILL_POINTS]
             world.options.trophies.value = world.passthrough[RAC3OPTION.TROPHIES]
             world.options.titanium_bolts.value = world.passthrough[RAC3OPTION.TITANIUM_BOLTS]
             world.options.nanotech_milestones.value = world.passthrough[RAC3OPTION.NANOTECH_MILESTONES]
-            world.options.ship_nose = world.passthrough[RAC3OPTION.SHIP_NOSE]
-            world.options.ship_wings = world.passthrough[RAC3OPTION.SHIP_WINGS]
-            world.options.ship_skin = world.passthrough[RAC3OPTION.SHIP_SKIN]
-            world.options.skin = world.passthrough[RAC3OPTION.SKIN]
+            world.options.ship_nose.value = world.passthrough[RAC3OPTION.SHIP_NOSE]
+            world.options.ship_wings.value = world.passthrough[RAC3OPTION.SHIP_WINGS]
+            world.options.ship_skin.value = world.passthrough[RAC3OPTION.SHIP_SKIN]
+            world.options.player_skin.value = world.passthrough[RAC3OPTION.PLAYER_SKIN]
             world.options.traps_enabled.value = world.passthrough[RAC3OPTION.ENABLE_TRAPS]
             world.options.trap_weight.value = world.passthrough[RAC3OPTION.TRAP_WEIGHT]
             world.options.rangers.value = world.passthrough[RAC3OPTION.RANGERS]
@@ -44,12 +44,18 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.weapon_vendors.value = world.passthrough[RAC3OPTION.WEAPON_VENDORS]
             world.options.filler_weight.value = world.passthrough[RAC3OPTION.FILLER_WEIGHT]
             world.options.one_hp_challenge.value = world.passthrough[RAC3OPTION.ONE_HP_CHALLENGE]
-            world.options.intro_skip.value = world.passthrough[RAC3OPTION.INTRO_SKIP]
-            world.options.holostar_skip = world.passthrough[RAC3OPTION.HOLOSTAR_SKIP]
             world.options.clank_options.value = world.passthrough[RAC3OPTION.CLANK_OPTIONS]
             world.options.ship_vendor.value = world.passthrough[RAC3OPTION.SHIP_VENDOR]
             world.options.armor_vendor.value = world.passthrough[RAC3OPTION.ARMOR_VENDOR]
             world.options.scout_vendors.value = world.passthrough[RAC3OPTION.SCOUT_VENDORS]
+            world.options.shortcuts.value = world.passthrough[RAC3OPTION.SHORTCUTS]
+            world.options.speedups.value = world.passthrough[RAC3OPTION.SPEEDUPS]
+            world.options.ngplus_items.value = world.passthrough[RAC3OPTION.NGPLUS_ITEMS]
+            world.options.ngplus_vendors.value = world.passthrough[RAC3OPTION.NGPLUS_VENDOR]
+            world.options.ngplus_start.value = world.passthrough[RAC3OPTION.NGPLUS_START]
+            world.options.helpdesk.value = world.passthrough[RAC3OPTION.HELP_DESK]
+            world.options.weapon_level_locations.value = world.passthrough[RAC3OPTION.WEAPON_LEVEL_LOCATIONS]
+            world.options.vendor_access.value = world.passthrough[RAC3OPTION.VENDOR_ACCESS]
         else:
             world.using_ut = False
     else:

@@ -1,3 +1,5 @@
+"""This module contains the dataclass for tracking the current game status"""
+
 from dataclasses import dataclass
 
 from worlds.rac3.constants.items import RAC3ITEM
@@ -6,6 +8,7 @@ from worlds.rac3.constants.status import RAC3STATUS
 
 @dataclass
 class RAC3STATUSDATA:
+    """Dataclass for the current status of the game"""
     SLOT_ADDRESS: int = None
 
     def __init__(self, slot: int | None = None):
