@@ -261,6 +261,7 @@ class PreventAnnoyingRunbacks(DefaultOnToggle):
 	- The location "Central Hall: Turrets and Double Axe Robot Room" will logically require Mystic Nymph: Scout Mode,
 	because nymph can open the door to the left side of Central Hall
     """
+    display_name = "Prevent Annoying Runbacks"
 
 
 class PreventWeakenedPrisonState(Toggle):
@@ -269,6 +270,7 @@ class PreventWeakenedPrisonState(Toggle):
     but this should solve what many players find annoying about it.
 
     This is a .yaml/generation option because it changes the logic for unlocking Prison."""
+    display_name = "Prevent Weakened Prison State"
 
 
 class ShuffleSomeRootNodes(Toggle):
@@ -294,6 +296,7 @@ class ShuffleSomeRootNodes(Toggle):
     It is intentional that not every first_root_node choice has a node item, and vice versa.
     Especially since some first_root_nodes are only viable because they early-place certain items.
     """
+    display_name = "Shuffle Some Root Nodes"
 
 
 class RandomizeShops(Toggle):
@@ -319,6 +322,7 @@ class RandomizeShops(Toggle):
     Jin can get pretty tight if enough important items land in shops, so consider additional mods
     such as Jin Multiplier and No Death Penalty.
     """
+    display_name = "Randomize Shops"
 
 
 class RandomizeSkillTree(Toggle):
@@ -359,6 +363,7 @@ class RandomizeSkillTree(Toggle):
     Experience can get pretty tight if enough important items land in the skill tree,
     so be aware there's an "Experience Multiplier" in the mod's F1 settings.
     """
+    display_name = "Randomize Skill Tree"
 
 
 # actual Option Groups are specified in the WebWorld in __init__.py for some reason
