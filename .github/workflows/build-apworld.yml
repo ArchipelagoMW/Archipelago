@@ -348,7 +348,7 @@ jobs:
           authors=$(git log --format='%aN' -- worlds/rac3 | sort -u)
 
           # Add custom authors. Example: ("NewContributor" "AnotherDev")
-          custom_authors=("AmondoVagyok" "Myth197" "Taoshi" "Yuxia228" "1theory")
+          custom_authors=("AmondoVagyok" "Myth197" "Taoshi" "yuxia228" "1theory")
           for a in "${custom_authors[@]}"; do
             if ! echo "$authors" | grep -Fxq "$a"; then
               authors="${authors}"$'\n'"${a}"
