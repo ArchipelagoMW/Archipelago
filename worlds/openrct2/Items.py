@@ -12,10 +12,6 @@ class OpenRCT2Item(Item):
 
 
 def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[str],str]:
-    # print("\nThis is the selected scenario:")
-    # print(scenario)
-    # print("And these items will be randomized:")
-    # print(Scenario_Items[scenario])
     if(options.all_rides_and_scenery_expansion):
         openRCT2_items = copy.deepcopy(Scenario_Items[152]) # Archipelago Madness has every ride in the game. We can go off that
     elif(options.all_rides_and_scenery_base):

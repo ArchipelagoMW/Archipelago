@@ -1,4 +1,5 @@
 import math
+import logging
 import random #I know this looks wrong, but it's only used to randomly select a message for the launcher!
 from typing import TextIO
 from Utils import local_path, logging
@@ -641,17 +642,26 @@ class OpenRCT2World(World):
         eligible_rides = [item for item in self.item_table if
                           (item in item_info["Rides"] or item in item_info["stalls"])
                           and item not in item_info["non_starters"]]
-        eligible_rides = list(set(eligible_rides)) # Remove duplicates
+        eligible_rides = list(dict.fromkeys(eligible_rides))#Removes Duplicates
         self.random.shuffle(eligible_rides)
         if self.options.required_unique_rides.value:
-            count = 0
-            while count < self.options.required_unique_rides.value:
-                self.unique_rides.append(eligible_rides[count])
-                count += 1
-        # print("Here's the eligible rides:")
-        # print(eligible_rides)
-        # print("Here's what was chosen:")
-        # print(self.unique_rides)
+            if len(eligible_rides) < self.options.required_unique_rides.value:
+                logging.warning(
+                    f"Player {self.player} ({self.multiworld.get_player_name(self.player)}): "
+                    f"requested {self.options.required_unique_rides.value} unique rides, "
+                    f"but only {len(eligible_rides)} eligible rides are available. "
+                    f"Using all available eligible rides instead. Please inform Crazycolbster"
+                    f" On the Archipelago Discord. He'll complain about Past Colby p*cking this"
+                    f" up."
+                )
+                count = len(eligible_rides)
+            else:
+                count = self.options.required_unique_rides.value
+        self.unique_rides = eligible_rides[:count]
+        print("Here's the eligible rides:")
+        print(eligible_rides)
+        print("Here's what was chosen:")
+        print(self.unique_rides)
         for ride in self.unique_rides:
             add_rule(self.multiworld.get_region("Victory", self.player).entrances[0],
                      lambda state, selected_prereq=ride: state.has(selected_prereq, self.player))
