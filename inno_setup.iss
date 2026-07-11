@@ -57,9 +57,8 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
 
 [Files]
-Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs;
-Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs;
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -83,7 +82,6 @@ Type: files; Name: "{app}\*.exe"
 Type: files; Name: "{app}\data\lua\connector_pkmn_rb.lua"
 Type: files; Name: "{app}\data\lua\connector_ff1.lua"
 Type: filesandordirs; Name: "{app}\SNI\lua*"
-Type: filesandordirs; Name: "{app}\EnemizerCLI*"
 #include "installdelete.iss"
 
 [Registry]
@@ -97,11 +95,6 @@ Root: HKCR; Subkey: ".apsm";                                     ValueData: "{#M
 Root: HKCR; Subkey: "{#MyAppName}smpatch";                       ValueData: "Archipelago Super Metroid Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}smpatch\DefaultIcon";           ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}smpatch\shell\open\command";    ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
-
-Root: HKCR; Subkey: ".apdkc3";                                   ValueData: "{#MyAppName}dkc3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}dkc3patch";                     ValueData: "Archipelago Donkey Kong Country 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}dkc3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}dkc3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
 Root: HKCR; Subkey: ".apsmw";                                    ValueData: "{#MyAppName}smwpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}smwpatch";                      ValueData: "Archipelago Super Mario World Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";

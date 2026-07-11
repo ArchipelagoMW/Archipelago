@@ -18,11 +18,12 @@ import logging
 import warnings
 
 from argparse import Namespace
+from collections.abc import Collection, Iterable
 from datetime import datetime, timezone
 
 from settings import Settings, get_settings
 from time import sleep
-from typing import BinaryIO, Coroutine, Mapping, Optional, Set, Dict, Any, Union, TypeGuard
+from typing import BinaryIO, Coroutine, Generic, Mapping, Optional, Set, Dict, Any, TypeVar, Union, TypeGuard
 from yaml import load, load_all, dump
 from pathspec import PathSpec, GitIgnoreSpec
 from typing_extensions import deprecated
@@ -52,7 +53,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.7"
+__version__ = "0.6.8"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -450,13 +451,10 @@ safe_builtins = frozenset((
 
 
 class RestrictedUnpickler(pickle.Unpickler):
-    generic_properties_module: Optional[object]
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
-        self.generic_properties_module = None
 
     def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
@@ -470,10 +468,6 @@ class RestrictedUnpickler(pickle.Unpickler):
                                              "SlotType", "NetworkSlot", "HintStatus"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
-        if module == "worlds.generic" and name == "PlandoItem":
-            if not self.generic_properties_module:
-                self.generic_properties_module = importlib.import_module("worlds.generic")
-            return getattr(self.generic_properties_module, name)
         # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
         if module.lower().endswith("options"):
             if module == "Options":
@@ -1277,8 +1271,11 @@ def visualize_regions(
         f.write("\n".join(uml))
 
 
-class RepeatableChain:
-    def __init__(self, iterable: typing.Iterable):
+_T_co = TypeVar("_T_co", covariant=True)
+
+
+class RepeatableChain(Generic[_T_co]):
+    def __init__(self, iterable: Iterable[Collection[_T_co]]):
         self.iterable = iterable
 
     def __iter__(self):
@@ -1289,6 +1286,9 @@ class RepeatableChain:
 
     def __len__(self):
         return sum(len(iterable) for iterable in self.iterable)
+
+    def __contains__(self, o: object) -> bool:
+        return any(o in sub_iterable for sub_iterable in self.iterable)
 
 
 def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:

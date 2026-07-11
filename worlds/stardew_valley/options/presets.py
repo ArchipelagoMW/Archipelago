@@ -6,60 +6,6 @@ from . import options
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..strings.ap_names.ap_option_names import EatsanityOptionName, ChefsanityOptionName, HatsanityOptionName
 
-all_random_settings = {
-    "progression_balancing":                            "random",
-    "accessibility":                                    "random",
-    options.Goal.internal_name:                         "random",
-    options.FarmType.internal_name:                     "random",
-    options.StartingMoney.internal_name:                "random",
-    options.ProfitMargin.internal_name:                 "random",
-    options.BundleRandomization.internal_name:          "random",
-    options.BundlePrice.internal_name:                  "random",
-    options.BundlePerRoom.internal_name:                "random",
-    options.EntranceRandomization.internal_name:        "random",
-    options.SeasonRandomization.internal_name:          "random",
-    options.Cropsanity.internal_name:                   "random",
-    options.BackpackProgression.internal_name:          "random",
-    options.BackpackSize.internal_name:                 "random",
-    options.ToolProgression.internal_name:              "random",
-    options.ElevatorProgression.internal_name:          "random",
-    options.SkillProgression.internal_name:             "random",
-    options.BuildingProgression.internal_name:          "random",
-    options.FestivalLocations.internal_name:            "random",
-    options.ArcadeMachineLocations.internal_name:       "random",
-    options.SpecialOrderLocations.internal_name:        "random",
-    options.QuestLocations.internal_name:               "random",
-    options.Fishsanity.internal_name:                   "random",
-    options.Museumsanity.internal_name:                 "random",
-    options.Monstersanity.internal_name:                "random",
-    options.Shipsanity.internal_name:                   "random",
-    options.Cooksanity.internal_name:                   "random",
-    options.Craftsanity.internal_name:                  "random",
-    options.Friendsanity.internal_name:                 "random",
-    options.FriendsanityHeartSize.internal_name:        "random",
-    options.Booksanity.internal_name:                   "random",
-    options.Moviesanity.internal_name:                  "random",
-    options.IncludeEndgameLocations.internal_name:      "random",
-    options.NumberOfMovementBuffs.internal_name:        "random",
-    options.ExcludeGingerIsland.internal_name:          "random",
-    options.TrapDifficulty.internal_name:               "random",
-    options.MultipleDaySleepEnabled.internal_name:      "random",
-    options.MultipleDaySleepCost.internal_name:         "random",
-    options.ExperienceMultiplier.internal_name:         "random",
-    options.FriendshipMultiplier.internal_name:         "random",
-    options.DebrisMultiplier.internal_name:             "random",
-    options.QuickStart.internal_name:                   "random",
-    options.Gifting.internal_name:                      "random",
-    "death_link":                                       "random",
-
-    options.Jojapocalypse.internal_name:                Jojapocalypse.option_disabled,
-    options.JojaStartPrice.internal_name:               JojaStartPrice.default,
-    options.JojaEndPrice.internal_name:                 JojaEndPrice.default,
-    options.JojaPricingPattern.internal_name:           JojaPricingPattern.default,
-    options.JojaPurchasesForMembership.internal_name:   JojaPurchasesForMembership.default,
-    options.JojaAreYouSure.internal_name:               JojaAreYouSure.option_false,
-}
-
 easy_settings = {
     options.Goal.internal_name:                         options.Goal.option_community_center,
     options.FarmType.internal_name:                     "random",
@@ -414,9 +360,9 @@ minsanity_settings = {
     options.JojaAreYouSure.internal_name:               JojaAreYouSure.option_false,
 }
 
-allsanity_settings = {
+maxsanity_settings = {
     options.Goal.internal_name:                         options.Goal.default,
-    options.FarmType.internal_name:                     "random",
+    options.FarmType.internal_name:                     options.FarmType.option_beach,
     options.StartingMoney.internal_name:                options.StartingMoney.default,
     options.ProfitMargin.internal_name:                 options.ProfitMargin.default,
     options.BundleRandomization.internal_name:          options.BundleRandomization.default,
@@ -476,12 +422,11 @@ allsanity_settings = {
 
 
 sv_options_presets: Dict[str, Dict[str, Any]] = {
-    "All random": all_random_settings,
     "Easy": easy_settings,
     "Medium": medium_settings,
     "Hard": hard_settings,
     "Nightmare": nightmare_settings,
     "Short": short_settings,
     "Minsanity": minsanity_settings,
-    "Allsanity": allsanity_settings,
+    "Maxsanity": maxsanity_settings,
 }

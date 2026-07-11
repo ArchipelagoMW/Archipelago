@@ -140,6 +140,15 @@ MDFloatLayout:
 
             MDNavigationDrawerDivider:
 
+            MDBoxLayout:
+                orientation: "horizontal"
+                MDIconButton:
+                    icon: "alert" if app.failed_worlds else ""
+                    theme_text_color: "Custom"
+                    text_color: "D23C42"
+                    disabled: not app.failed_worlds
+                    on_release: app.display_failed()
+
 
         MDGridLayout:
             id: main_layout
