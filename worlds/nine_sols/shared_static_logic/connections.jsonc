@@ -27,7 +27,7 @@
             { "item": "Trick - Long Jump with Swift Runner" }, // SR-jump from the left stairs
             { "item": "Air Dash" }, // dash onto the roof above the root node
             { "item": "Trick - Bow Hover" } // then hover from this roof past the grapple target
-        ]
+        ] // parry hover is redundant with vanilla AD + LG, since you need (CL or (SR and AD)) to get onto the roof
     },
     { "from": "AF (Elevator) - Leave Tutorial Arena", "to": "AF (Elevator) - Upper Root Node", "requires": [] }, // from this side, single jump is enough
     {
@@ -217,7 +217,7 @@
         "requires": [{ "item": "Air Dash" }, { "item": "Cloud Leap" }],
         "medium_requires": [ { "anyOf": [
             { "item": "Air Dash" }, // and T-dash
-            [ { "item": "Cloud Leap" }, { "item": "Trick - Long Jump with Swift Runner" } ],
+            { "item": "Cloud Leap" }, // and T-dash (or SR or CS-dash)
             [ { "item": "Charged Strike" }, { "item": "Trick - Long Jump with Swift Runner" } ] // and T-dash
         ] } ]
     },
@@ -926,12 +926,11 @@
                 { "item": "Wall Climb" } // then climb the green wall in the "Between ..." room
             ]
         ] } ],
-        "medium_requires": [
-            { "item": "Trick - Long Jump with Swift Runner" }, // to get into the "Between ..." room
+        "medium_requires": [ // T-dash to get into the "Between ..." room
             { "item": "Wall Climb" } // then WC is enough
         ],
         "ls_requires": [
-            { "item": "Trick - Long Jump with Swift Runner" }, // to get into the "Between ..." room
+            { "item": "Trick - Long Jump with Swift Runner" }, // to get into the "Between ..." room without losing LS
             { "item": "Ledge Grab" } // then wall slide instead of WC or CL
         ] // T-dash setup is fine here
     },
