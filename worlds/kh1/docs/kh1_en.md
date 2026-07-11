@@ -1,89 +1,38 @@
 # Kingdom Hearts Archipelago Randomizer Setup Guide
 
+For the full, up-to-date setup guide with screenshots, see the
+[Setup Guide](https://www.kh1fmrando.com/setup_guide) on kh1fmrando.com. The steps below cover the
+Archipelago-specific parts of setup; kh1fmrando.com covers installing and configuring the required
+software and applying your seed's mod.
+
 ## Required software
 
 - KINGDOM HEARTS -HD 1.5+2.5 ReMIX- from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts) or [Steam](https://store.steampowered.com/app/2552430/KINGDOM_HEARTS_HD_1525_ReMIX/)
 
-- The latest release of [OpenKH](https://github.com/OpenKH/OpenKh/releases/latest)
-
-- The latest release of the [Kingdom Hearts 1FM Randomizer Software](https://github.com/gaithern/KH1FM-RANDOMIZER/releases/latest)
-
 - The latest release of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 
-## Setting up the required software
-
-- Before beginning, ensure that KH1 has been launched to the title screen at least once before.
-- Verify game files via Steam/Epic; clean files are needed for the modding process to work.
-
-### OpenKH
-
-- Extract the OpenKH files to a directory within the same drive you have the game installed.
-- Open `OpenKh.Tools.ModsManager.exe` within the OpenKH folder.
-- When prompted for game edition, choose PC Release, select which platform you're using (EGS or Steam), navigate to your `Kingdom Hearts I.5 + II.5` installation folder in the path box and click `Next`.
-- When prompted, install Panacea, then click `Next`.
-- When prompted, check KH1 plus any other AP game you want to play, and click `Install and configure Lua backend`, then click `Next`.
-- Extract the data for KH1.
-- Click `Finish`
-
-### Kingdom Hearts 1FM Randomizer Software
-
-- Extract the Kingdom Hearts 1FM Randomizer Software files in a directory of your choosing.
+- The tools covered in the [Software Setup](https://www.kh1fmrando.com/software_setup) guide (OpenKH, Panacea, and the Lua Backend)
 
 ## Obtaining and using the patch
 
 - [Generate an Archipelago game](https://archipelago.gg/generate) using the KH1 yaml generated from the KH1 [options page](https://archipelago.gg/games/Kingdom%20Hearts/player-options). 
 - When you generate a game you will see a download link for a KH1 patch (.kh1rpatch) on the room page.
-- After downloading this zip, open `mod_generator.exe` in your Kingdom Hearts 1FM Randomizer Software folder.
-- Direct `mod_generator.exe` to both your patch zip and your KH1 data folder extracted during your OpenKH set up.
-- Click `start`.
-- After some time, you will find a file in your `Output` folder called `mod_YYYYMMDDHHMMSS.zip`
-- Open `OpenKh.Tools.ModsManager.exe` and ensure that the dropdown in the top right is set to `Kingdom Hearts 1`
-- Click the green plus, choose `Select and install Mod Archive or Lua Script`, and direct the prompt to your new mod zip.
-- You should now see a mod on your list called `KH1 Randomizer Seed XYZ` where XYZ is your seed hex value.
-- Ensure this mod is checked `[x]`.
-- Click `Mod Loader` at the top, then click `Build and Run`.  Your modded game should now open.
+- Follow the [Installing the Mod](https://www.kh1fmrando.com/installing_the_mod) guide to apply this patch and launch your modded game.
 
 ## Connecting to your multiworld
 
-For the latest information on connecting to a multiworld, check https://www.kh1fmrando.com/multiworld_guide
+For the latest information on connecting to a multiworld, check the
+[Multiworld Guide](https://www.kh1fmrando.com/multiworld_guide) on kh1fmrando.com.
 
 ## FAQ
 
-### Why aren't the evidence boxes spawning in Wonderland?
-
-You'll need to find `Footprints`, or a second `Wonderland`, in your multiworld.
-
-### Why won't Phil let me start the Prelims?
-
-You'll need to find `Entry Pass`, or a second `Olympus Colosseum`, in the multiworld.
-
-### Why aren't the slides spawning in Deep Jungle?
-
-You'll need to find `Slides`, or a second `Deep Jungle`, in the multiworld.
-
-### Why can't I make progress in Atlantica?
-
-You'll need to find `Crystal Trident`, or a second `Atlantica`, in the multiworld.
-
-### Why won't the doctor let me progress in Halloween Town?
-
-You'll need to find either `Forget-Me-Not` and/or `Jack-in-the-Box`, or a second `Halloween Town`, in the multiworld.
-
-### Why is there a book missing in the Hollow Bastion library?
-
-You'll need to find `Theon Vol. 6`, or a second `Hollow Bastion`, in the multiworld.
-
-### How do I unlock End of the World?
-
-Depending on your settings, your options are either finding a specified amount of `Lucky Emblems` or finding the item `End of the World`.
+For questions about what unlocks a specific world, cup, or event (e.g. why the evidence boxes aren't
+spawning in Wonderland, or why Phil won't let you start the Prelims), see the world-by-world
+breakdown in the [Locations Guide](https://www.kh1fmrando.com/locations_guide) on kh1fmrando.com.
 
 ### How do I enter Destiny Islands?
 
 After obtaining the item `Destiny Islands`, you can land there as an additional option in Traverse Town.
-
-### How do I progress to Destiny Islands Day 2 and 3?
-
-In order to access Day 2 and 3, you need to collect an amount of `Raft Materials` specified in your settings.  When you start Day 3, you'll be immediately warped to Homecoming (Final Bosses).
 
 ### Why can't I use the summon I obtained?
 

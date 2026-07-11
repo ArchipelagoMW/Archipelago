@@ -39,11 +39,13 @@ def generate_json(world, output_directory):
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
     
     item_location_map = get_item_location_map(world)
+    location_spheres = get_location_spheres(world)
     settings = get_settings(world)
     keyblade_stats = world.get_keyblade_stats()
 
     files = {
         "item_location_map.json":  json.dumps(item_location_map),
+        "location_spheres.json":   json.dumps(location_spheres),
         "keyblade_stats.json":     json.dumps(keyblade_stats),
         "settings.json":           json.dumps(settings),
         "ap_costs.json":           json.dumps(world.get_ap_costs()),
@@ -71,6 +73,25 @@ def get_item_location_map(world):
             location_id = location_data.code
             location_item_map[location_id] = item_id
     return location_item_map
+
+def get_location_spheres(world):
+    """
+    Maps this player's location codes to the logical sphere they fall in
+    (0-indexed, in playthrough order). Locations that turn out to be
+    unreachable (e.g. under minimal accessibility) are mapped to -1.
+    """
+    location_spheres = {}
+    reachable = True
+    for sphere_index, sphere in enumerate(world.multiworld.get_spheres()):
+        if not sphere:
+            reachable = False
+            continue
+        for location in sphere:
+            if location.player != world.player or location.name == "Final Ansem":
+                continue
+            location_data = location_table[location.name]
+            location_spheres[location_data.code] = sphere_index if reachable else -1
+    return location_spheres
 
 def get_mod_yml(settings):
     seed_str = settings["seed"].lstrip("W")
