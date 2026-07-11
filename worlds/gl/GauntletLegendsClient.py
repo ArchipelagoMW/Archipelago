@@ -47,6 +47,8 @@ MOD_BOSS_GOAL = 0x3FC7E5
 MOD_PLAYERS_LIST = 0x3FC7D0
 MOD_COMPASS_COUNT = 0x3FC7D4
 
+GOAL_POLLS = 5
+
 
 class RetroSocket:
     def __init__(self):
@@ -152,6 +154,7 @@ class GauntletLegendsContext(CommonContext):
         self.spawned_traps: int = 0
         self.item_ram_indices: dict[int, int] = {}
         self.chest_ram_indices: dict[int, int] = {}
+        self.goal_streak: int = 0
 
     def on_deathlink(self, data: dict):
         super().on_deathlink(data)
@@ -170,7 +173,11 @@ class GauntletLegendsContext(CommonContext):
             return goal == 0xA or backup == 0xA
         elif self.glslotdata["goal"] == 2:
             goal = await self._read_ram_int(MOD_BOSS_GOAL, 1, True)
-            return goal >= self.glslotdata["boss_goal_count"]
+            if goal >= self.glslotdata["boss_goal_count"]:
+                self.goal_streak += 1
+            else:
+                self.goal_streak = 0
+            return self.goal_streak >= GOAL_POLLS
 
     def _normalize_item_name(self, name: str) -> str:
         if "Runestone" in name:
@@ -443,6 +450,7 @@ class GauntletLegendsContext(CommonContext):
             self.level_id = (self.current_zone << 4) + self.current_level
             self.scouted = False
             self.spawned_traps = 0
+            self.goal_streak = 0
             await asyncio.sleep(2)
 
         if self.current_zone in (0x8, 0xE):
@@ -589,6 +597,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
             checking = await ctx.location_loop()
 
             menu = await ctx._read_ram_int(PLAYER_MENU, 4)
+            alive = False
             if ctx.deathlink_pending and ctx.deathlink_enabled and menu == 1:
                 ctx.deathlink_pending = False
                 ctx.deathlink_triggered = True
@@ -608,10 +617,14 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 ctx.locations_checked += checking
                 await ctx.check_locations(checking)
 
-            goal = await ctx.check_goal()
-            if not ctx.finished_game and goal:
-                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                ctx.finished_game = True
+            # Only trust the goal check when the player is alive
+            if alive:
+                goal = await ctx.check_goal()
+                if not ctx.finished_game and goal:
+                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                    ctx.finished_game = True
+            else:
+                ctx.goal_streak = 0
 
         except Exception as e:
             logger.error(f"Error: {e}\n{traceback.format_exc()}")

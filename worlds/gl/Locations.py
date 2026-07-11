@@ -22,10 +22,10 @@ class GLLocation(Location):
     game: str = "Gauntlet Legends"
 
 def import_locations() -> List[LocationData]:
-    import json
+    import orjson
     import pkgutil
 
-    return json.loads(pkgutil.get_data(__name__, "json/locations.json").decode("utf-8"), object_hook=lambda d: LocationData(**d))
+    return [LocationData(**loc) for loc in orjson.loads(pkgutil.get_data(__name__, "json/locations.json").decode("utf-8"))]
 
 
 def get_locations_by_tags(tags: str | List[str]) -> List[LocationData]:

@@ -143,7 +143,7 @@ class TrapsFrequency(Range):
 
     display_name = "Trap Frequency"
     range_start = 0
-    range_end = 75
+    range_end = 90
     default = 10
 
 
@@ -155,7 +155,7 @@ class LocalFillerFrequency(Range):
 
     display_name = "Local Filler Frequency"
     range_start = 0
-    range_end = 75
+    range_end = 90
     default = 50
 
 

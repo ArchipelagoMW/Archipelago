@@ -1,8 +1,10 @@
 import typing
 
+from BaseClasses import CollectionRule
 from worlds.generic.Rules import add_rule, forbid_item
 
-from .Data import difficulty_lambda, level_locations, obelisks, boss_regions, excluded_levels, spawner_trap_ids
+from .Data import difficulty_lambda, level_locations, obelisks, boss_regions, excluded_levels, spawner_trap_ids, \
+    difficulty_lambda_no_portal
 from .Items import items_by_id
 from .Locations import get_locations_by_tags
 from .Options import Goal
@@ -27,16 +29,34 @@ def set_rules(world: "GauntletLegendsWorld"):
             for location in locations:
                 if location.difficulty > 1:
                     if location.name not in world.disabled_locations:
-                        add_rule(
-                            world.get_location(location.name),
-                            lambda state, level_id_=level_id >> 4, difficulty=location.difficulty - 1:
-                            state.has("progression", world.player, max(difficulty_lambda[level_id_][difficulty] - (len(world.excluded_regions) * 4), 0))
+                        if location.name not in world.disabled_locations:
+                            level_id_ = level_id >> 4
+                            difficulty = location.difficulty - 1
+                            if world.options.portals:
+                                expected_count = difficulty_lambda[level_id_][difficulty] - (
+                                            len(world.excluded_regions) * 4)
+                            else:
+                                expected_count = difficulty_lambda_no_portal[level_id_][difficulty] - (
+                                        len(world.excluded_regions) * 4)
+                            expected_count = max(expected_count, 0)
+                            add_rule(
+                                world.get_location(location.name),
+                                lambda state, expected_count_=expected_count: state.has("progression", world.player,
+                                                                                        expected_count)
                             )
 
-def goal_conditions(state, world: "GauntletLegendsWorld") -> bool:
-    return state.can_reach("Gates of the Underworld", "Region", world.player) \
-                            if world.options.goal == Goal.option_defeat_skorne else \
-                            (sum(state.can_reach(boss, "Region", world.player)
-                                for boss in boss_regions if boss not in
-                                [level for region, levels in excluded_levels.items() if region in world.excluded_regions for level in levels])
-                                >= world.options.boss_goal_count.value)
+
+def goal_conditions(world: "GauntletLegendsWorld") -> CollectionRule:
+    if world.options.goal == Goal.option_defeat_skorne:
+        return lambda state: state.can_reach("Gates of the Underworld", "Region", world.player)
+
+    eligible_boss_regions = [
+        boss for boss in boss_regions
+        if boss not in [
+            level for region, levels in excluded_levels.items()
+            if region in world.excluded_regions for level in levels
+        ]
+    ]
+    needed_boss_count = world.options.boss_goal_count.value
+
+    return lambda state: sum(state.can_reach_region(boss, world.player) for boss in eligible_boss_regions) >= needed_boss_count

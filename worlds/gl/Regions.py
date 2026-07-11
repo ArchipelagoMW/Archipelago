@@ -103,8 +103,10 @@ def connect_regions(world: "GauntletLegendsWorld"):
             lambda state: state.has("stones", world.player, 13)
     )
 
-def _portal_helper(item: str, world: "GauntletLegendsWorld") -> Callable:
-    return lambda state, portals=bool(world.options.portals.value): (state.has(item, world.player) if portals else True)
+def _portal_helper(item: str, world: "GauntletLegendsWorld") -> Callable | None:
+    if world.options.portals.value:
+        return lambda state: state.has(item, world.player)
+    return None
 
 
 def create_region(world: "GauntletLegendsWorld", name: str, locations: list[LocationData]):

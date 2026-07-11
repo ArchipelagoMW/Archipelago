@@ -8,11 +8,11 @@ from typing import ClassVar
 
 from worlds.AutoWorld import WebWorld, World
 
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch
 from .Data import obelisks, mirror_shards, portals, excluded_portals, \
     excluded_obelisks, level_locations
 from .Items import GLItem, item_table, item_list, gauntlet_item_name_groups
-from .Locations import LocationData, all_locations, location_table, get_locations_by_tags
+from .Locations import LocationData, all_locations, location_table, get_locations_by_tags, locationName_to_data
 from .Options import GLOptions, IncludedAreas, IncludedTraps
 from .Regions import connect_regions, create_regions
 from .Rom import GLProcedurePatch, write_files
@@ -20,8 +20,8 @@ from .Rules import set_rules, goal_conditions
 
 
 def launch_client(*args):
-    from .GauntletLegendsClient import launch
-    launch_subprocess(launch, name="GauntletLegendsClient", args=args)
+    from .GauntletLegendsClient import launch as launch_glclient
+    launch(launch_glclient, name="GauntletLegendsClient", args=args)
 
 
 components.append(
@@ -143,7 +143,6 @@ class GauntletLegendsWorld(World):
         ]
         chests_barrels = self.options.chests_barrels.value
         return {
-            "player": self.player,
             "chests": int(chests_barrels == 3 or chests_barrels == 1),
             "barrels": int(chests_barrels == 3 or chests_barrels == 2),
             "speed": self.options.permanent_speed.value,
@@ -165,7 +164,7 @@ class GauntletLegendsWorld(World):
         required_items = []
         precollected = [item for item in item_list if item.item_name in [item.name for item in self.multiworld.precollected_items[self.player]]]
         skipped_items = set()
-        item_required_count = len(self.multiworld.get_unfilled_locations(self.player))
+        items_required_count = len(self.multiworld.get_unfilled_locations(self.player))
         if self.options.infinite_keys:
             skipped_items.add("Key")
         if self.options.permanent_speed:
@@ -188,7 +187,7 @@ class GauntletLegendsWorld(World):
                      and item_.item_name not in skipped_items]:
             freq = item.frequency
             required_items += [item.item_name for _ in range(freq)]
-            item_required_count -= freq
+            items_required_count -= freq
 
         self.multiworld.itempool += [self.create_item(item_name) for item_name in required_items]
 
@@ -207,13 +206,19 @@ class GauntletLegendsWorld(World):
             self.random.shuffle(filler_items)
 
         if len(self.options.included_traps.value) != 0:
+            traps_cap = items_required_count - len(
+                [location for location in self.multiworld.get_unfilled_locations(self.player) if
+                 "no_spawner" in locationName_to_data[location.name].tags])
             traps_frequency = int(len(self.get_locations()) * (self.options.traps_frequency / 100)) // len(self.options.included_traps.value)
+            traps_frequency = min(traps_frequency, traps_cap // len(self.options.included_traps.value))
             for item in self.options.included_traps.value:
-                self.multiworld.itempool += [self.create_item(item) for _ in range(traps_frequency)]
-                item_required_count -= traps_frequency
+                if items_required_count == 0:
+                    break
+                self.multiworld.itempool += [self.create_item(item) for _ in range(min(traps_frequency, items_required_count))]
+                items_required_count = max(items_required_count - traps_frequency, 0)
 
-        for i in range(item_required_count):
-            if i < int(item_required_count * (self.options.local_filler_frequency / 100)):
+        for i in range(items_required_count):
+            if i < int(items_required_count * (self.options.local_filler_frequency / 100)):
                 if self.multiworld.players > 1:
                     self.items.append(self.create_item(filler_items.pop()))
                 else:
@@ -224,7 +229,7 @@ class GauntletLegendsWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self)
-        self.multiworld.completion_condition[self.player] = lambda state: goal_conditions(state, self)
+        self.multiworld.completion_condition[self.player] = goal_conditions(self)
 
     def pre_fill(self) -> None:
         local_item_count = len(self.items)

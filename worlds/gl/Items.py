@@ -26,10 +26,10 @@ class GLItem(Item):
     game: str = "Gauntlet Legends"
 
 def import_items() -> tuple[ItemData, ...]:
-    import json
+    import orjson
     import pkgutil
 
-    return json.loads(pkgutil.get_data(__name__, "json/items.json").decode("utf-8"), object_hook=lambda d: ItemData(**d))
+    return tuple(ItemData(**item) for item in orjson.loads(pkgutil.get_data(__name__, "json/items.json").decode("utf-8")))
 
 item_list: Final[tuple[ItemData, ...]] = import_items()
 item_table: Final[Mapping[str, ItemData]] = MappingProxyType({item.item_name: item for item in item_list})

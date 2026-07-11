@@ -333,6 +333,18 @@ difficulty_lambda: Final[Mapping[int, Sequence[int]]] = MappingProxyType({
     0x5: (0, 20, 21, 22)
 })
 
+# Runestones required to access difficulties
+# Used in Rules.py for access calculation
+difficulty_lambda_no_portal: Final[Mapping[int, Sequence[int]]] = MappingProxyType({
+    0x3: (0, 0, 1, 2),
+    0x0: (0, 2, 3, 4),
+    0x7: (0, 5, 6, 7),
+    0x6: (0, 8, 9, 10),
+    0xD: (0, 11, 12, 13),
+    0xC: (0, 14, 15, 16),
+    0x5: (0, 17, 18, 19)
+})
+
 # ID's for names said by announcer
 sounds: Final[Mapping[int, int]] = MappingProxyType({
     0: 0x9D,
