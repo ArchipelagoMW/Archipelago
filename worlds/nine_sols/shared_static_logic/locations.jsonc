@@ -1354,7 +1354,12 @@
     {
         "address": 3104, "name": "GoS (East): Spike Ball Hall Upper Left",
         "region": "GoS (East) - Spike Ball Hall Platforms",
-        "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
+        "requires": [ { "anyOf": [
+            { "item": "Cloud Leap" },
+            // the higher of the two tiny rock ledges in the middle is just low enough that you can't AD "under" it,
+            // but high enough that you can fall and AD from it, yet you need LG to get onto it in the first place
+            [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ]
+        ] } ],
         // enemies here aren't reliable enough for qi, so you usually need AD OR CL even on higher difficulties
         "medium_requires": [ // but if you can fall down from the root node, you can bring qi from one of the archers up there
             { "region": "GoS (East) - Root Node" }, // then T-dash from the tiny rock platforms to the middle long platform
