@@ -24,10 +24,6 @@ class BadRetroArchResponse(RetroArchException):
     pass
 
 
-class VersionError(Exception):
-    pass
-
-
 class RetroArchStatus(Enum):
     UNKNOWN = 1
     PAUSED = 2
@@ -129,7 +125,7 @@ class RetroArch:
     async def async_read_memory(self, address, size=1):
         command = "READ_CORE_MEMORY"
 
-        self.send(f'{command} {hex(address)} {size}\n')
+        self.send(f"{command} {hex(address)} {size}\n")
         response = await self.async_recv()
         self.check_command_response(command, response)
         response = response[:-1]
@@ -156,7 +152,7 @@ class RetroArch:
         self.check_command_response(command, response)
         splits = response.decode().split(" ", 3)
 
-        assert (splits[0] == command)
+        assert splits[0] == command
 
         if splits[2] == "-1":
             logger.info(splits[3])

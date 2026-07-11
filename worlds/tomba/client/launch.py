@@ -11,6 +11,7 @@ def launch_tomba_client(*args) -> None:
 
     parser = get_base_parser(description=f"{constants.GAME} Client.")
     parser.add_argument("--name", default=None, help="Slot Name to connect as.")
+    parser.add_argument("--loglevel", default="info", choices=["debug", "info", "warning", "error"], help="Log level.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
 
     launch_args = handle_url_arg(parser.parse_args(args))

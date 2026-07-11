@@ -14,7 +14,7 @@ LOCATIONS = [
     constants.VILLAGE_OF_ALL_BEGINNINGS_MAILBOX,
 ]
 
-LOCATION_NAME_TO_ID = {name: id for id, name in enumerate(LOCATIONS, constants.BASE_ID)}
+LOCATION_NAME_TO_ID = {name: id for id, name in enumerate(LOCATIONS)}
 
 
 class TombaLocation(Location):

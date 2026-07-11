@@ -43,4 +43,6 @@ class TombaWorld(World):
         return items.get_random_filler_item_name(self)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        return {}
+        slot_data = {"world_version": self.world_version.as_simple_string()}
+
+        return slot_data

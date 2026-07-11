@@ -9,54 +9,41 @@ from . import constants
 if TYPE_CHECKING:
     from .world import TombaWorld
 
-ITEMS = {
-    "Chick": {
-        "game_id": 0x00,
-        "classification": ItemClassification.progression
-    },
-    "Frog": {
-        "game_id": 0x01,
-        "classification": ItemClassification.progression
-    },
-    "Lost Dwarf": {
-        "game_id": 0x02,
-        "classification": ItemClassification.progression
-    },
-    "Bananas": {
+ITEMS = [
+    {"name": constants.CHICK, "game_id": 0x00, "classification": ItemClassification.progression, "has_quantity": True},
+    {"name": "Frog", "game_id": 0x01, "classification": ItemClassification.progression},
+    {"name": "Lost Dwarf", "game_id": 0x02, "classification": ItemClassification.progression},
+    {
+        "name": constants.BANANAS,
         "game_id": 0x03,
-        "classification": ItemClassification.progression
+        "classification": ItemClassification.progression,
+        "has_quantity": True,
     },
-    constants.FURIOUS_TORNADO: {
-        "game_id": 0x04,
-        "classification": ItemClassification.progression
-    },
-    "100 Year Old Bell": {
-        "game_id": 0x05,
-        "classification": ItemClassification.useful
-    },
-    "100 Year Old Key": {
-        "game_id": 0x06,
-        "classification": ItemClassification.progression
-    },
-    constants.CHARITY_WINGS: {
+    {"name": constants.FURIOUS_TORNADO, "game_id": 0x04, "classification": ItemClassification.progression},
+    {"name": "100 Year Old Bell", "game_id": 0x05, "classification": ItemClassification.useful},
+    {"name": "100 Year Old Key", "game_id": 0x06, "classification": ItemClassification.progression},
+    {
+        "name": constants.CHARITY_WINGS,
         "game_id": 0x07,
-        "classification": ItemClassification.filler
+        "classification": ItemClassification.filler,
+        "has_quantity": True,
     },
-    "Blackjack": {
-        "game_id": 0x1B,
-        "classification": ItemClassification.useful
+    {
+        "name": "Bitting Plant Flower",
+        "game_id": 0x08,
+        "classification": ItemClassification.useful,
+        "has_quantity": True,
     },
-    "Normal Pants": {
-        "game_id": 0x20,
-        "classification": ItemClassification.useful
-    },
-}
+    {"name": "Healing Mushroom", "game_id": 0x09, "classification": ItemClassification.useful, "has_quantity": True},
+    {"name": "Bucket", "game_id": 0x0A, "classification": ItemClassification.useful},
+    {"name": "Baked Yam", "game_id": 0x0F, "classification": ItemClassification.useful},
+    {"name": "Blackjack", "game_id": 0x1B, "classification": ItemClassification.useful},
+    {"name": "Normal Pants", "game_id": 0x20, "classification": ItemClassification.useful},
+]
 
-ITEM_NAME_TO_ID = {name: id for id, name in enumerate(ITEMS, constants.BASE_ID)}
-GAME_ID_TO_ITEM = {
-    details["game_id"]: {"name": name, **details}
-    for name, details in ITEMS.items()
-}
+ITEM_NAME_TO_ID = {details["name"]: id for id, details in enumerate(ITEMS)}
+GAME_ID_TO_ITEM = {details["game_id"]: {**details} for details in ITEMS}
+
 
 class TombaItem(Item):
     game = constants.GAME
@@ -67,7 +54,8 @@ def get_random_filler_item_name(world: TombaWorld) -> str:
 
 
 def create_item_with_correct_classification(world: TombaWorld, name: str) -> TombaItem:
-    classification = ITEMS[name]["classification"]
+    id = ITEM_NAME_TO_ID[name]
+    classification = ITEMS[id]["classification"]
 
     return TombaItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
