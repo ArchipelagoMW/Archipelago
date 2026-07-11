@@ -1916,16 +1916,18 @@ class Rac3Interface(GameInterface):
             weapons_to_remove = self.weapon_vendor_items
             for name in non_prog_weapon_data.keys():
                 if name in weapons_to_remove:
-                    addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
-                    self._write8(addr, 0)
+                    unlock_addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
+                    self._write8(unlock_addr, 0)
             return
 
         for name in non_prog_weapon_data.keys():
-            addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
+            unlock_addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
             ammo_addr = non_prog_weapon_data[name].AMMO_ADDRESS
+            xp_addr = non_prog_weapon_data[name].XP_ADDRESS
+            level_addr = non_prog_weapon_data[name].LEVEL_ADDRESS
             if self.UnlockItem[name].status:
                 if self.UnlockItem[name].unlock_delay:
-                    self._write8(addr, 1)
+                    self._write8(unlock_addr, 1)
                     self.UnlockItem[name].unlock_delay = 0
                 else:
                     self.UnlockItem[name].unlock_delay += 1
@@ -1937,8 +1939,11 @@ class Rac3Interface(GameInterface):
                         self._write32(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS, threshold_xp)
                         self._write8(RAC3_ITEM_DATA_TABLE[name].LEVEL_ADDRESS, threshold_id)
             else:
-                self._write8(addr, 0)
+                # Prevent the player from using locked weapons and leveling them to accidentally break vendors
+                self._write8(unlock_addr, 0)
                 self._write32(ammo_addr, 0)
+                self._write32(xp_addr, 0)
+                self._write8(level_addr, UPGRADE_DICT[name][0])
 
         if self.equipped_item > 1 and self.UnlockItem[ITEM_NAME_FROM_ID[self.equipped_item]].status == 0:
             if self.last_used_1 == 0:
