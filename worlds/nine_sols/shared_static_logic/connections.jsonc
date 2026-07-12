@@ -2143,6 +2143,29 @@
         ],
         "medium_requires": [{ "item": "Trick - Bow Hover" }] // after dropping down a level
     },
+	{
+		"from": "ED (Passages) - Left Exit", "to": "ED (Passages) - Under Root Node",
+		"requires": [
+			// reach the second zipline without going up the TCK platform tutorial room
+			{ "item": "Grapple" },
+			{ "item": "Cloud Leap"},
+			{ "item": "Air Dash"}
+		],
+		"medium_requires": [
+			{ "anyOf": [
+				// bow hover past both ziplines (needs two arrows)
+				// the second hover can be started from below the TCK platform tutorial room
+				{ "item": "Trick - Bow Hover" },
+				// or reach the second zipline again, but this time T-dash replaces air dash
+				[ { "item": "Grapple" }, { "item": "Cloud Leap" } ]
+			] }
+		],
+		"ls_requires": [
+			// parry hover to skip both ziplines instead of bow hover
+			{ "item": "Ledge Grab" },
+			{ "item": "Cloud Leap" } //cl is the only viable setup for ls here
+		]
+	},
     {
         "from": "ED (Passages) - Under Root Node", "to": "ED (Passages) - Around Root Node",
         "requires": [
