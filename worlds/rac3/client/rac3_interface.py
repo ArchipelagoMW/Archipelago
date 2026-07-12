@@ -1841,6 +1841,9 @@ class Rac3Interface(GameInterface):
         """Calculate the distance from the player to the moby"""
         if not moby:
             return float("inf")
+        if not self.ratchet_moby:
+            self.ratchet_moby = self._read32(RAC3STATUS.RATCHET_MOBY_POINTER)
+            assert self.ratchet_moby, "Ratchet moby pointer is null"
         assert self.ratchet_moby < moby < self.ratchet_moby + 0x00300000, \
             (f"Moby {hex(moby)} not in the typical moby range ({hex(self.ratchet_moby)} - "
              f"{hex(self.ratchet_moby + 0x00300000)})")
