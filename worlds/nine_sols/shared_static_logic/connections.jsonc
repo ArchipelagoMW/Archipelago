@@ -316,6 +316,9 @@
     },
     { "from": "Central Hall - Left Vents", "to": "Central Hall - Left", "requires": [] }, // one-way fall + shortcut rope
 
+	{ "from": "Central Hall - Left", "to": "Central Hall - Center",
+	"ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // three triple jumps get you through the vents backwards
+	},
     { "from": "Central Hall - Center", "to": "FSP - Root Node", "requires": [] }, // rando will make this a one-way door
 
     { "from": "Central Hall - Right Vents", "to": "CTH - Above Elevator", "requires": [] }, // one-way fall
