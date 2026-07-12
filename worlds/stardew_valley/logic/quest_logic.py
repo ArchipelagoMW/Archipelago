@@ -80,7 +80,7 @@ class QuestLogic(BaseLogic):
             Quest.wanted_lobster: (self.logic.season.has(Season.fall) & self.logic.season.has(Season.fall) & self.logic.has(Fish.lobster) &
                                    self.logic.relationship.can_meet(NPC.gus)),
             Quest.pam_needs_juice: self.logic.season.has(Season.fall) & self.logic.has(ArtisanGood.battery_pack) & self.logic.relationship.can_meet(NPC.pam),
-            Quest.fish_casserole: self.logic.relationship.has_hearts(NPC.jodi, 4) & self.logic.has(Fish.largemouth_bass) & self.logic.relationship.exists(NPC.vincent) & self.logic.relationship.exists(NPC.sam),
+            Quest.fish_casserole: self.logic.relationship.has_hearts(NPC.jodi, 4) & self.logic.has(Fish.largemouth_bass) & self.logic.relationship.exists(NPC.vincent) & self.logic.relationship.exists(NPC.sam) & self.logic.relationship.exists(NPC.kent),
             Quest.catch_a_squid: self.logic.season.has(Season.winter) & self.logic.has(Fish.squid) & self.logic.relationship.can_meet(NPC.willy),
             Quest.fish_stew: self.logic.season.has(Season.winter) & self.logic.has(Fish.albacore) & self.logic.relationship.can_meet(NPC.gus),
             Quest.pierres_notice: self.logic.season.has(Season.spring) & self.logic.has(Meal.sashimi) & self.logic.relationship.can_meet(NPC.pierre),

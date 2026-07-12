@@ -1164,9 +1164,9 @@ def set_secrets_rules(logic: StardewLogic, rule_collector: StardewRuleCollector,
     if SecretsanityOptionName.easy in world_options.secretsanity:
         rule_collector.set_location_rule("Secret: Old Master Cannoli", logic.has(Fruit.sweet_gem_berry))
         rule_collector.set_location_rule("Secret: Pot Of Gold", logic.season.has(Season.spring))
-        rule_collector.set_location_rule("Secret: Poison The Governor", logic.has(SpecialItem.lucky_purple_shorts))
-        rule_collector.set_location_rule("Secret: Grange Display Bribe", logic.has(SpecialItem.lucky_purple_shorts))
-        rule_collector.set_location_rule("Secret: Purple Lettuce", logic.has(SpecialItem.lucky_purple_shorts))
+        rule_collector.set_location_rule("Secret: Poison The Governor", logic.has(SpecialItem.lucky_purple_shorts) & logic.relationship.exists(NPC.lewis))
+        rule_collector.set_location_rule("Secret: Grange Display Bribe", logic.has(SpecialItem.lucky_purple_shorts) & logic.relationship.exists(NPC.lewis))
+        rule_collector.set_location_rule("Secret: Purple Lettuce", logic.has(SpecialItem.lucky_purple_shorts) & logic.relationship.exists(NPC.lewis) & logic.relationship.exists(NPC.marnie))
         rule_collector.set_location_rule("Secret: Make Marnie Laugh", logic.has(SpecialItem.trimmed_purple_shorts) & logic.relationship.can_meet(NPC.marnie))
         rule_collector.set_location_rule("Secret: Jumpscare Lewis", logic.has(SpecialItem.trimmed_purple_shorts) & logic.relationship.can_meet(NPC.lewis))
         rule_collector.set_location_rule("Secret: Confront Marnie", logic.gifts.can_gift_to(NPC.marnie, SpecialItem.lucky_purple_shorts))
