@@ -2520,6 +2520,7 @@ class Rac3Interface(GameInterface):
                 self._write16(door_addr + 0xBE, 5)
             self.opened_the_hacker_doors = True
 
+    # TODO: Add moby scanning for Phoenix Rescue and Command Center Refractor doors since they dont have a progress flag
     def puzzle_cycler(self, item: str, option: str, check: str, planets: list[str], table: dict[tuple[int, int],
     str], already: bool | None = False):
         """General function for handling updating any puzzle type during the cycler iterations."""

@@ -676,7 +676,8 @@ def set_rules(world: "RaC3World"):
                                           RAC3ITEM.FLUX_RIFLE, RAC3ITEM.ANNIHILATOR,
                                           RAC3ITEM.RY3N0, RAC3ITEM.SUCK_CANNON,
                                           RAC3ITEM.DISC_BLADE, RAC3ITEM.PLASMA_COIL], world.player)
-                           or state.has(RAC3ITEM.PROGRESSIVE_RIFT_INDUCER, world.player, 2 if progressive_requirement == 1 else progressive_requirement)
+                           or state.has(RAC3ITEM.PROGRESSIVE_RIFT_INDUCER, world.player, 2 
+                                        if progressive_requirement == 1 else progressive_requirement)
                            or state.has(RAC3ITEM.PROGRESSIVE_FLUX_RIFLE, world.player, progressive_requirement)
                            or state.has(RAC3ITEM.PROGRESSIVE_ANNIHILATOR, world.player, progressive_requirement)
                            or state.has(RAC3ITEM.PROGRESSIVE_RY3N0, world.player, progressive_requirement)
