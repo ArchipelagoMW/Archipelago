@@ -2367,13 +2367,20 @@
     { "from": "ED (Living Area) - East Building Interior Part 2", "to": "ED (Living Area) - Opera Theater", "requires": [] }, // one-way elevator
     {
         "from": "ED (Living Area) - Opera Theater", "to": "ED (Living Area) - East Building Rooftops",
+        // the intended route: clinging to a series of small green walls over a long pink pool
         "requires": [{ "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Wall Climb" }],
-        "medium_requires": [
-            { "item": "Cloud Leap" },
-            { "item": "Air Dash" },
-            { "item": "Trick - Long Jump with Swift Runner" }
-        ]
-    }, // you'll always need CL for the rope at the end
+        "medium_requires": [ { "anyOf": [
+            [
+                { "item": "Trick - Long Jump with Swift Runner" },
+                { "item": "Cloud Leap" }, // CL first to maximize SR benefit
+                { "item": "Air Dash" } // then T-dash and AD in either order
+            ],
+            [
+                { "item": "Trick - Bow Hover" }, // hover over the pink pool; the arrow will also destroy the turrets
+                { "item": "Cloud Leap" } // only for the rope at the end
+            ]
+        ] } ]
+    }, // no LS logic since parry hover would be stopped by the turrets, and there's no good ledge here anyway
     { "from": "ED (Living Area) - Opera Theater", "to": "ED (Living Area) - Opera Theater Roofs", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
@@ -2412,12 +2419,15 @@
     {
         "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Root Node",
         "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
-        "medium_requires": [ { "item": "Trick - Long Jump with Swift Runner" } ]
+        "medium_requires": [] // T-dash is safe/repeatable because there's a mutant on the elevator's top floor right side
     },
     {
         "from": "ED (Sanctum) - Root Node", "to": "ED (Sanctum) - Right Exit",
         "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
-        "medium_requires": [ { "item": "Trick - Long Jump with Swift Runner" } ]
+        "medium_requires": [ { "anyOf": [ // no T-dash since there's no guaranteed qi source on this side
+            { "item": "Trick - Long Jump with Swift Runner" },
+            { "item": "Trick - Bow Hover" }
+        ] } ]
     },
     { "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Monitoring Panel", "requires": [
         { "item": "Tai-Chi Kick" },
