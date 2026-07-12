@@ -407,11 +407,12 @@ function update_player(index)
     --player.print(serpent.block(data['pending_samples']))
     local stack = {}
 
+    local quality = "{{ free_sample_quality_name }}"
     for name, count in pairs(samples) do
         stack.name = name
         stack.count = count
         if script.active_mods["quality"] then
-            stack.quality = "{{ free_sample_quality_name }}"
+            stack.quality = quality
         end
         if prototypes.item[name] then
             if character.can_insert(stack) then
@@ -420,7 +421,7 @@ function update_player(index)
                 sent = 0
             end
             if sent > 0 then
-                player.print({"archipelago.receive-sample-item", sent, "[item=" .. name .. ",quality="..stack.quality.."]"})
+                player.print({"archipelago.receive-sample-item", sent, "[item=" .. name .. ",quality="..quality.."]"})
                 data.suppress_full_inventory_message = false
             end
             if sent ~= count then               -- Couldn't full send.
