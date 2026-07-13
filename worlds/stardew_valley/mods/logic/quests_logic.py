@@ -95,9 +95,9 @@ class ModQuestLogic(BaseLogic):
 
         return {
             ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.has(Fertilizer.deluxe) &
-                                         self.logic.quest.can_complete_quest(Quest.magic_ink) & self.logic.relationship.can_meet(ModNPC.alecto),
+                                         self.logic.quest.can_complete_quest(Quest.magic_ink) & self.logic.relationship.can_meet_all(ModNPC.alecto, ModNPC.goblin),
             ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.deluxe) &
-                                 self.logic.quest.can_complete_quest(Quest.magic_ink) & self.logic.relationship.can_meet(ModNPC.alecto),
+                                 self.logic.quest.can_complete_quest(Quest.magic_ink) & self.logic.relationship.can_meet_all(ModNPC.alecto, ModNPC.goblin),
             ModQuest.ANewPot: self.logic.region.can_reach(Region.saloon_shop) &
                               self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_house) &
                               self.logic.region.can_reach(Region.blacksmith_shop) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin,
