@@ -1460,8 +1460,16 @@
                 { "item": "Grapple" }, // finally need to use the grapple target now that AD/CL aren't replacing it
                 { "item": "Tai-Chi Kick" } // use the TCK targets as usual, T-dash between the 2nd and 3rd
             ]
-        ] } ]
-        // LS can't help because if you have WC the ledge on the light spinner won't work for LS
+        ] } ],
+        "ls_requires": [
+			{ "item": "Ledge Grab" },
+			{ "anyOf": [
+				{ "item": "Cloud Leap" }
+				{ "item": "Wall Climb" } // T-Dash setup is only viable if you have wall climb
+				// then parry hover over
+				// dropping shortly before the zipline lands you safely on the way to the root node
+			] }
+		]
     },
     // no point doing the reverse connection since it'd be dark, and it's easier to fall down to root node
     { "from": "AM - Above Root Node", "to": "AM - Behind One-Way Barrier Next To Root Node", "requires": [] }, // fall
