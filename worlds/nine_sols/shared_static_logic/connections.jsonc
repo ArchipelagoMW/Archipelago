@@ -2474,10 +2474,18 @@
     { // this is just a shortcut that doesn't matter in practice
         "from": "ED (Sanctum) - Outside Nobility Hall", "to": "ED (Sanctum) - Monitoring Panel",
         "requires": [
-            { "item": "Mystic Nymph: Scout Mode" },
-            { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
-        ],
-        "medium_requires": [{ "item": "Charged Strike" }] // CS-dash
+			{ "anyOf": [
+				[ 
+				    { "item": "Mystic Nymph: Scout Mode" },
+				    { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" }, { "item": "Air Dash" } ] } 
+				],
+				// or we can bypass the shortcut door by going around the long way
+				// this is doable on vanilla logic but is most likely only ever relevant on ls logic
+				[ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ]
+			] }
+		],
+        "medium_requires": [
+			{ "item": "Mystic Nymph: Scout Mode" }] // nymph to open the shortcut door, then t-dash over the water
     },
     { "from": "ED (Sanctum) - Below Nobility Hall", "to": "ED (Sanctum) - Root Node", "requires": [ { "item": "Super Mutant Buster" } ] },
     { "from": "ED (Sanctum) - Below Nobility Hall", "to": "ED (Sanctum) - Below Root Node", "requires": [
