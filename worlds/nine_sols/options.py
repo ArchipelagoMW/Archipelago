@@ -340,7 +340,6 @@ class RandomizeSkillTree(Toggle):
     - On logic_difficulty: vanilla, Progressive Bullet Deflect is the only progression item added by this option,
     because of its use in the Grotto tomb parry challenges.
     - On logic_difficulty: medium or higher, Swift Runner is also progression.
-    NOTE: "Swift Runner logic" has not yet been implemented
 
     Location details:
     - The locations are named after the skills they would unlock in vanilla, e.g. "Skill Tree Node: Bullet Deflect"
