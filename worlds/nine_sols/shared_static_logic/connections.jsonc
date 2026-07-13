@@ -1481,7 +1481,14 @@
     {
         "from": "AM - Highest Light Spinner", "to": "AM - Upper Right Exit",
         "medium_requires": [{ "item": "Trick - Bow Hover" }],
-        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // parry hover after CL setup
+        "ls_requires": [
+			{ "item": "Ledge Grab" },
+			{ "anyOf": [
+				{ "item": "Cloud Leap" }
+				{ "item": "Wall Climb" } // T-Dash setup is only viable if you have wall climb
+				// then parry hover over
+			] }
+		]
     },
     { "from": "AM - Above Root Node", "to": "AM - Bottom Right", "requires": [ { "anyOf": [
         { "item": "Air Dash" }, { "item": "Cloud Leap" }
