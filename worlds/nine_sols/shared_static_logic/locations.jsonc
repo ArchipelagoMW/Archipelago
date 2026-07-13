@@ -1555,21 +1555,34 @@
             ] }
         ],
         "medium_requires": [
-            { "item": "Grapple" },
+			{ "anyOf": [ 
+				{ "item": "Grapple" }, 
+				// Bow Hover from the platform left of the box (reachable via T-Dash + LG or CL) can replace Grapple
+				{ "item": "Trick - Bow Hover" },
+			] }
             { "item": "Tai-Chi Kick" },
-            // only the non-CL route is affected by medium logic, so no anyOf here
-            { "item": "Ledge Grab" },
-            { "item": "Wall Climb" }
+            { "anyOf": [
+				[ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ] // to climb up the box at the start and the walls at the end
+				{ "item": "Cloud Leap" }
+			] }
             // and the difference is you can bring a T-dash up here to replace the Air Dash
         ],
         "ls_requires": [
             { "item": "Ledge Grab" }, // T-dash setup is viable here
             { "anyOf": [
                 [ // this is the only way to completely avoid TCK:
-                    { "item": "Trick - Bow Hover" }, // hover over to the rope
-                    { "item": "Cloud Leap" } // jump to grab the rope
-                    // then wall slide up to the chest, using LS you got before the hover
-                ],
+				{ "anyOf": [
+					{ "item": "Grapple" }, 
+					[ { "item": "Trick - Bow Hover" }, { "item": "Cloud Leap" } ],
+					// using a bow hover specifically requires cloud leap because there is no way to get ls
+					// on the top platform left of the box without it and hovering from the box does not reach the rope
+				] }
+				{ "anyOf": [ // setup LS with...
+				    { "item": "Cloud Leap" }, // CL setup is easy
+				    { "item": "Air Dash" } // use AD to reach ledge left of box, do AD setup *and* T-dash to land on box with LS
+				] }
+                    // then wall slide up to the chest, using LS you got before the zipline
+                ]
                 [ // various ways of using LS to get onto the rope, then using TCK at the end as usual
                     { "anyOf": [ // then get onto the rope without the Grapple/zipline/slider by using
                         { "item": "Cloud Leap" }, // parry hover into Cloud Leap
