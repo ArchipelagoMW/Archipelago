@@ -316,9 +316,9 @@
     },
     { "from": "Central Hall - Left Vents", "to": "Central Hall - Left", "requires": [] }, // one-way fall + shortcut rope
 
-	{ "from": "Central Hall - Left", "to": "Central Hall - Center",
-	"ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // three triple jumps get you through the vents backwards
-	},
+    { "from": "Central Hall - Left", "to": "Central Hall - Center",
+    "ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // three triple jumps get you through the vents backwards
+    },
     { "from": "Central Hall - Center", "to": "FSP - Root Node", "requires": [] }, // rando will make this a one-way door
 
     { "from": "Central Hall - Right Vents", "to": "CTH - Above Elevator", "requires": [] }, // one-way fall
@@ -1462,14 +1462,14 @@
             ]
         ] } ],
         "ls_requires": [
-			{ "item": "Ledge Grab" },
-			{ "anyOf": [
-				{ "item": "Cloud Leap" }
-				{ "item": "Wall Climb" } // T-Dash setup is only viable if you have wall climb
-				// then parry hover over
-				// dropping shortly before the zipline lands you safely on the way to the root node
-			] }
-		]
+            { "item": "Ledge Grab" },
+            { "anyOf": [
+                { "item": "Cloud Leap" },
+                { "item": "Wall Climb" } // T-Dash setup is only viable if you have wall climb
+                // then parry hover over
+                // dropping shortly before the zipline lands you safely on the way to the root node
+            ] }
+        ]
     },
     // no point doing the reverse connection since it'd be dark, and it's easier to fall down to root node
     { "from": "AM - Above Root Node", "to": "AM - Behind One-Way Barrier Next To Root Node", "requires": [] }, // fall
@@ -1490,13 +1490,13 @@
         "from": "AM - Highest Light Spinner", "to": "AM - Upper Right Exit",
         "medium_requires": [{ "item": "Trick - Bow Hover" }],
         "ls_requires": [
-			{ "item": "Ledge Grab" },
-			{ "anyOf": [
-				{ "item": "Cloud Leap" }
-				{ "item": "Wall Climb" } // T-Dash setup is only viable if you have wall climb
-				// then parry hover over
-			] }
-		]
+            { "item": "Ledge Grab" },
+            { "anyOf": [
+                { "item": "Cloud Leap" },
+                { "item": "Wall Climb" } // T-Dash setup is only viable if you have wall climb
+                // then parry hover over
+            ] }
+        ]
     },
     { "from": "AM - Above Root Node", "to": "AM - Bottom Right", "requires": [ { "anyOf": [
         { "item": "Air Dash" }, { "item": "Cloud Leap" }
@@ -2158,29 +2158,29 @@
         ],
         "medium_requires": [{ "item": "Trick - Bow Hover" }] // after dropping down a level
     },
-	{
-		"from": "ED (Passages) - Left Exit", "to": "ED (Passages) - Under Root Node",
-		"requires": [
-			// reach the second zipline without going up the TCK platform tutorial room
-			{ "item": "Grapple" },
-			{ "item": "Cloud Leap"},
-			{ "item": "Air Dash"}
-		],
-		"medium_requires": [
-			{ "anyOf": [
-				// bow hover past both ziplines (needs two arrows)
-				// the second hover can be started from below the TCK platform tutorial room
-				{ "item": "Trick - Bow Hover" },
-				// or reach the second zipline again, but this time T-dash replaces air dash
-				[ { "item": "Grapple" }, { "item": "Cloud Leap" } ]
-			] }
-		],
-		"ls_requires": [
-			// parry hover to skip both ziplines instead of bow hover
-			{ "item": "Ledge Grab" },
-			{ "item": "Cloud Leap" } //cl is the only viable setup for ls here
-		]
-	},
+    {
+        "from": "ED (Passages) - Left Exit", "to": "ED (Passages) - Under Root Node",
+        "requires": [
+            // reach the second zipline without going up the TCK platform tutorial room
+            { "item": "Grapple" },
+            { "item": "Cloud Leap"},
+            { "item": "Air Dash"}
+        ],
+        "medium_requires": [
+            { "anyOf": [
+                // bow hover past both ziplines (needs two arrows)
+                // the second hover can be started from below the TCK platform tutorial room
+                { "item": "Trick - Bow Hover" },
+                // or reach the second zipline again, but this time T-dash replaces air dash
+                [ { "item": "Grapple" }, { "item": "Cloud Leap" } ]
+            ] }
+        ],
+        "ls_requires": [
+            // parry hover to skip both ziplines instead of bow hover
+            { "item": "Ledge Grab" },
+            { "item": "Cloud Leap" } //cl is the only viable setup for ls here
+        ]
+    },
     {
         "from": "ED (Passages) - Under Root Node", "to": "ED (Passages) - Around Root Node",
         "requires": [
@@ -2470,11 +2470,11 @@
             { "item": "Trick - Bow Hover" }
         ] } ]
     },
-	{
-		"from": "ED (Sanctum) - Root Node", "to": "ED (Sanctum) - Outside Nobility Hall",
+    {
+        "from": "ED (Sanctum) - Root Node", "to": "ED (Sanctum) - Outside Nobility Hall",
         // use elevator shaft ledges (not in this region but reachable with CL alone) to do CL setup
-		"ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // then triple jump up to the shortcut rope
-	},
+        "ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // then triple jump up to the shortcut rope
+    },
     { "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Monitoring Panel", "requires": [
         { "item": "Tai-Chi Kick" },
         { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] }
@@ -2489,18 +2489,18 @@
     { // this is just a shortcut that doesn't matter in practice
         "from": "ED (Sanctum) - Outside Nobility Hall", "to": "ED (Sanctum) - Monitoring Panel",
         "requires": [
-			{ "anyOf": [
-				[ 
-				    { "item": "Mystic Nymph: Scout Mode" },
-				    { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" }, { "item": "Air Dash" } ] } 
-				],
-				// or we can bypass the shortcut door by going around the long way
-				// this is doable on vanilla logic but is most likely only ever relevant on ls logic
-				[ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ]
-			] }
-		],
+            { "anyOf": [
+                [ 
+                    { "item": "Mystic Nymph: Scout Mode" },
+                    { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" }, { "item": "Air Dash" } ] } 
+                ],
+                // or we can bypass the shortcut door by going around the long way
+                // this is doable on vanilla logic but is most likely only ever relevant on ls logic
+                [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ]
+            ] }
+        ],
         "medium_requires": [
-			{ "item": "Mystic Nymph: Scout Mode" }] // nymph to open the shortcut door, then t-dash over the water
+            { "item": "Mystic Nymph: Scout Mode" }] // nymph to open the shortcut door, then t-dash over the water
     },
     { "from": "ED (Sanctum) - Below Nobility Hall", "to": "ED (Sanctum) - Root Node", "requires": [ { "item": "Super Mutant Buster" } ] },
     { "from": "ED (Sanctum) - Below Nobility Hall", "to": "ED (Sanctum) - Below Root Node", "requires": [
