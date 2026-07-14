@@ -106,9 +106,6 @@ class JsonWorld(World):
         game_name = data["game_name"]
         description = data["description"]
 
-        item_name_to_id = data["item_name_to_id"]
-        location_name_to_id = data["location_name_to_id"]
-
         class JsonItem(Item):
             game = game_name
         class JsonLocation(Location):
