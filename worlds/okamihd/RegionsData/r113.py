@@ -20,7 +20,7 @@ events = {
             mandatory_enemies=[OkamiEnemies.GREEN_IMP, OkamiEnemies.RED_IMP, OkamiEnemies.YELLOW_IMP,
                                OkamiEnemies.DEAD_FISH, OkamiEnemies.BUD_OGRE, OkamiEnemies.BLUE_IMP,
                                OkamiEnemies.CROW_TENGU, OkamiEnemies.CHIMERA, OkamiEnemies.BLACK_IMP,
-                               OkamiEnemies.ICE_LIPS, OkamiEnemies.FIRE_EYE]),
+                               OkamiEnemies.ICE_LIPS, OkamiEnemies.FIRE_EYE],required_items_events=["Ryoshima Coast - Defeat Bandit Spider in cave"]),
     }
 
 }

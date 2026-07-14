@@ -25,7 +25,7 @@ events = {
                                OkamiEnemies.WIND_DOOM_MIRROR, OkamiEnemies.ICE_DOOM_MIRROR, OkamiEnemies.HALO_GUARDIAN,
                                OkamiEnemies.POLTERGEIST, OkamiEnemies.BLUE_CYCLOPS, OkamiEnemies.TUBE_FOX,
                                OkamiEnemies.RED_OGRE, OkamiEnemies.BLUE_OGRE],
-            required_items_events=["Oni Island - Defeat Ninetails"]),
+            required_items_events=["Oni Island - Defeat Ninetails","Northern Ryoshima Coast - Defeat Bandit Spider in cave"]),
     }
 
 }
