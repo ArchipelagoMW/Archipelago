@@ -1,4 +1,5 @@
 import math
+from dataclasses import fields
 
 from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -8,7 +9,7 @@ from .locations import location_table
 from .options import ESSENTIAL_ITEMS, MAX_RESOURCE_UPGRADES, ShellipelagoOptions
 
 
-__version__ = "1.11"
+__version__ = "1.14"
 
 
 class ShellipelagoItem(Item):
@@ -43,6 +44,7 @@ class ShellipelagoWorld(World):
     options_dataclass = ShellipelagoOptions
     options: ShellipelagoOptions
     topology_present = False
+    ut_can_gen_without_yaml = True
     victory_location_name = "Final Boss Defeated"
     starting_item_counts = {
         "Progressive Room": 1,
@@ -84,6 +86,44 @@ class ShellipelagoWorld(World):
             if location_data["category"] == "easy_destructible"
         },
     }
+
+    def generate_early(self) -> None:
+        passthrough_by_game = getattr(self.multiworld, "re_gen_passthrough", {})
+        passthrough = passthrough_by_game.get(self.game, {}) if isinstance(passthrough_by_game, dict) else {}
+
+        if not isinstance(passthrough, dict):
+            return
+
+        for option_field in fields(self.options):
+            option_name = option_field.name
+            if option_name not in passthrough or not hasattr(self.options, option_name):
+                continue
+
+            option = getattr(self.options, option_name)
+            value = passthrough[option_name]
+            if isinstance(option.value, (set, frozenset)):
+                value = set(value)
+            elif isinstance(option.value, dict):
+                value = dict(value)
+            option.value = value
+
+    def universal_tracker_options(self) -> dict:
+        option_data = {}
+
+        for option_field in fields(self.options):
+            option_name = option_field.name
+            value = getattr(self.options, option_name).value
+            if isinstance(value, (set, frozenset)):
+                value = sorted(value)
+            elif isinstance(value, dict):
+                value = dict(value)
+            option_data[option_name] = value
+
+        return option_data
+
+    @staticmethod
+    def interpret_slot_data(slot_data: dict) -> dict:
+        return slot_data
 
     def create_item(self, name: str) -> ShellipelagoItem:
         item_data = item_table[name]
@@ -324,7 +364,7 @@ class ShellipelagoWorld(World):
             if location_data["category"] == "shop"
         }
 
-        return {
+        slot_data = {
             "world_version": __version__,
             "show_essential_pickup_hints": bool(self.options.show_essential_pickup_hints),
             "add_easy_destructible_checks": bool(self.options.add_easy_destructible_checks),
@@ -336,3 +376,5 @@ class ShellipelagoWorld(World):
             "death_link": bool(self.options.death_link),
             "trap_link": bool(self.options.trap_link),
         }
+        slot_data.update(self.universal_tracker_options())
+        return slot_data

@@ -15,7 +15,7 @@ raw_item_table = [
     "name": "Graphics",
     "classification": "progression",
     "trap": False,
-    "count": 3
+    "count": 2
   },
   {
     "key": "progressiveRoom",
@@ -39,7 +39,7 @@ raw_item_table = [
     "name": "Gun",
     "classification": "progression",
     "trap": False,
-    "count": 2
+    "count": 3
   },
   {
     "key": "sword",
@@ -50,28 +50,28 @@ raw_item_table = [
     "count": 3
   },
   {
-    "key": "hp",
+    "key": "fire",
     "id": 100005,
+    "name": "Fire",
+    "classification": "progression",
+    "trap": False,
+    "count": 2
+  },
+  {
+    "key": "hp",
+    "id": 100006,
     "name": "Max HP",
-    "classification": "filler",
+    "classification": "progression",
     "trap": False,
     "count": 30
   },
   {
     "key": "rounds",
-    "id": 100006,
-    "name": "Max Rounds",
-    "classification": "filler",
-    "trap": False,
-    "count": 40
-  },
-  {
-    "key": "fire",
     "id": 100007,
-    "name": "Fire",
+    "name": "Max Rounds",
     "classification": "progression",
     "trap": False,
-    "count": 1
+    "count": 40
   },
   {
     "key": "sfx",
@@ -130,8 +130,48 @@ raw_item_table = [
     "count": 1
   },
   {
-    "key": "healthPotion",
+    "key": "magnifyingGlass",
     "id": 100015,
+    "name": "Magnifying Glass",
+    "classification": "useful",
+    "trap": False,
+    "count": 1
+  },
+  {
+    "key": "orthopedicInserts",
+    "id": 100016,
+    "name": "Orthopedic Inserts",
+    "classification": "useful",
+    "trap": False,
+    "count": 1
+  },
+  {
+    "key": "teleportation",
+    "id": 100017,
+    "name": "Teleportation",
+    "classification": "useful",
+    "trap": False,
+    "count": 1
+  },
+  {
+    "key": "steelToe",
+    "id": 100018,
+    "name": "Steel Toe",
+    "classification": "useful",
+    "trap": False,
+    "count": 1
+  },
+  {
+    "key": "verminPouch",
+    "id": 100019,
+    "name": "Vermin Pouch",
+    "classification": "useful",
+    "trap": False,
+    "count": 1
+  },
+  {
+    "key": "healthPotion",
+    "id": 100020,
     "name": "Health Potion",
     "classification": "filler",
     "trap": False,
@@ -139,7 +179,7 @@ raw_item_table = [
   },
   {
     "key": "energyGem",
-    "id": 100016,
+    "id": 100021,
     "name": "Energy Gem",
     "classification": "filler",
     "trap": False,
@@ -147,7 +187,7 @@ raw_item_table = [
   },
   {
     "key": "roundPouch",
-    "id": 100017,
+    "id": 100022,
     "name": "Round Pouch",
     "classification": "filler",
     "trap": False,
@@ -155,7 +195,7 @@ raw_item_table = [
   },
   {
     "key": "itemPool",
-    "id": 100018,
+    "id": 100023,
     "name": "Item Pool",
     "classification": "filler",
     "trap": False,
@@ -163,7 +203,7 @@ raw_item_table = [
   },
   {
     "key": "trapStun",
-    "id": 100019,
+    "id": 100024,
     "name": "Stun Trap",
     "classification": "trap",
     "trap": True,
@@ -171,7 +211,7 @@ raw_item_table = [
   },
   {
     "key": "trapInvisible",
-    "id": 100020,
+    "id": 100025,
     "name": "Invisible Trap",
     "classification": "trap",
     "trap": True,
@@ -179,7 +219,7 @@ raw_item_table = [
   },
   {
     "key": "trapFast",
-    "id": 100021,
+    "id": 100026,
     "name": "Fast Trap",
     "classification": "trap",
     "trap": True,
@@ -187,7 +227,7 @@ raw_item_table = [
   },
   {
     "key": "trapSlow",
-    "id": 100022,
+    "id": 100027,
     "name": "Slow Trap",
     "classification": "trap",
     "trap": True,
@@ -195,7 +235,7 @@ raw_item_table = [
   },
   {
     "key": "trapReverse",
-    "id": 100023,
+    "id": 100028,
     "name": "Reverse Trap",
     "classification": "trap",
     "trap": True,
@@ -203,7 +243,7 @@ raw_item_table = [
   },
   {
     "key": "trapScreenFlip",
-    "id": 100024,
+    "id": 100029,
     "name": "Screen Flip Trap",
     "classification": "trap",
     "trap": True,
@@ -211,7 +251,7 @@ raw_item_table = [
   },
   {
     "key": "trapZoom",
-    "id": 100025,
+    "id": 100030,
     "name": "Zoom In Trap",
     "classification": "trap",
     "trap": True,
@@ -219,7 +259,7 @@ raw_item_table = [
   },
   {
     "key": "trapDeath",
-    "id": 100026,
+    "id": 100031,
     "name": "Instant Death Trap",
     "classification": "trap",
     "trap": True,
@@ -227,7 +267,7 @@ raw_item_table = [
   },
   {
     "key": "suddenlySnake",
-    "id": 100027,
+    "id": 100032,
     "name": "Snake Trap",
     "classification": "trap",
     "trap": True,
