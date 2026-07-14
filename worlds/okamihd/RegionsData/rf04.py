@@ -19,16 +19,17 @@ exits = {
         ExitData(RegionNames.AGATA_FOREST, required_items_events=["Agata Forest - Defeat Waka"], one_way=True,
                  loading_screen=False)],
     RegionNames.AGATA_FOREST: [
-        ExitData(RegionNames.AGATA_COMMON_LOGIC,one_way=True,loading_screen=False),
+        ExitData(RegionNames.AGATA_COMMON_LOGIC, one_way=True, loading_screen=False),
         ExitData(RegionNames.AGATA_FOREST_TAKA, required_items_events=["Agata Forest - Repair Bridge with Kokari"],
                  loading_screen=False),
         ExitData(RegionNames.TSUTA_RUINS_1F_MAIN_PART,
                  required_items_events=["Agata Forest - Open Ruins Door"]),
-        ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE, required_items_events=["Agata Forest - Open shortcut to Shinshu Field"])
+        ExitData(RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE,
+                 required_items_events=["Agata Forest - Open shortcut to Shinshu Field"])
     ],
     RegionNames.AGATA_FOREST_TAKA: [
-        ExitData(RegionNames.CURSED_TAKA_PASS,one_way=True),
-        ExitData(RegionNames.TAKA_PASS,required_items_events=["Taka pass - Restore Guardian Sapling"],one_way=True),
+        ExitData(RegionNames.CURSED_TAKA_PASS, one_way=True),
+        ExitData(RegionNames.TAKA_PASS, required_items_events=["Taka pass - Restore Guardian Sapling"], one_way=True),
     ]
 }
 events = {
@@ -42,10 +43,11 @@ events = {
         "Agata Forest - Repair Bridge with Kokari": EventData(
             required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE],
             required_items_events=["Tsuta Ruins - Defeat the spider queen"]),
-        "Agata Forest - Fill Kushi's Barrel": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],required_items_events=["Satomi Power Orb (Tei)"]),
+        "Agata Forest - Fill Kushi's Barrel": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT],
+                                                        required_items_events=["Satomi Power Orb (Tei)"]),
         "Agata Forest - Fight with Susano": EventData(power_slash_level=1,
                                                       required_items_events=["Agata Forest - Fill Kushi's Barrel"]),
-        "Agata Forest - Fish Whopper with Kokari": EventData(power_slash_level=1,
+        "Agata Forest - Fish Whopper with Kokari": EventData(type=LocationType.FISHING_MINIGAME,
                                                              required_items_events=[
                                                                  "Agata Forest - Fight with Susano"]),
         "Agata Forest - Get Orb from Ume": EventData(id=127, mandatory_enemies=[OkamiEnemies.UME],
@@ -106,21 +108,24 @@ locations = {
             type=LocationType.BURIED_UNDER_LEAF_PILE),
         "Agata Forest - Buried Chest under leaf pile near shortcut": LocData(
             container_check_id(MapIds.HEALED_AGATA, 44), type=LocationType.BURIED_UNDER_LEAF_PILE),
-        "Agata Forest - Chest under leaf pile near river": LocData(container_check_id(MapIds.HEALED_AGATA, 45),
-                                                                   type=LocationType.BURIED_UNDER_LEAF_PILE,
-                                                                   required_items_events=[
-                                                                       "Agata Forest - Repair Bridge with Kokari"]),
+
         "Agata Forest - Buried chest near Tsuta Ruins entrance": LocData(container_check_id(MapIds.HEALED_AGATA, 46),
                                                                          type=LocationType.STONE_BURIED_CHEST),
-        "Agata Forest - Chest after Bridge cutscene": LocData(container_check_id(MapIds.HEALED_AGATA, 47),
-                                                              required_items_events=[
-                                                                  "Agata Forest - Repair Bridge with Kokari"]),
+
         "Agata Forest - Chest near Kiba": LocData(container_check_id(MapIds.HEALED_AGATA, 49)),
         "Agata Forest - Chest near Tusta ruins door": LocData(container_check_id(MapIds.HEALED_AGATA, 50)),
-        ## Special check
-        "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1,progress_type=LocationProgressType.EXCLUDED),
+        ## Special check - gives Tsuta Ruins Key
+        "Agata Forest - Fish Giant Salmon with Kokari": LocData(77, power_slash_level=1,
+                                                                progress_type=LocationProgressType.EXCLUDED),
         "Agata Forest - Yumigami": LocData(brush_check_id(18), type=LocationType.CONSTELLATION,  # bit 18
-                                           required_items_events=["Agata Forest - Fish Whopper with Kokari"],progress_type=LocationProgressType.EXCLUDED)
+                                           required_items_events=["Agata Forest - Fish Whopper with Kokari"],
+                                           progress_type=LocationProgressType.EXCLUDED)
+    },
+    RegionNames.AGATA_FOREST_TAKA: {
+        "Agata Forest - Chest near Taka Entrance": LocData(container_check_id(MapIds.HEALED_AGATA, 47)),
+        "Agata Forest - Chest under leaf pile near Taka Entrance": LocData(container_check_id(MapIds.HEALED_AGATA, 45),
+                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE)
+
     }
 }
 
@@ -142,6 +147,7 @@ shop_locations = {
 }
 warps = {
     RegionNames.AGATA_FOREST: [
-        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Agata Forest - Unlock Mermaid Spring"), trigger_warp_from=Has("Agata Forest - Unlock Mermaid Spring"))
+        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Agata Forest - Unlock Mermaid Spring"),
+                 trigger_warp_from=Has("Agata Forest - Unlock Mermaid Spring"))
     ]
 }

@@ -52,7 +52,7 @@ class OkamiWorld(World):
 
         create_regions(self)
         # DEBUG
-        # visualize_regions(self.multiworld.get_region("Menu", self.player),"G:\projets\OkamiAP\worlds\okamihd\docs\OkamiHD.puml")
+        #visualize_regions(self.multiworld.get_region("Menu", self.player),"G:\projets\OkamiAP\worlds\okamihd\docs\OkamiHD.puml")
 
     def create_items(self):
         self.prepare_local_items()

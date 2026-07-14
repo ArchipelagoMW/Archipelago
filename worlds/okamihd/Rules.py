@@ -12,9 +12,15 @@ from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
     from . import OkamiWorld
 
-has_portable_fire_source: Rule = Or(And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
-                                           Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO)),
-                                    Has(BrushTechniques.FIREBURST))
+long_swim_rule: Rule = HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY)
+
+has_portable_fire_source_strict: Rule = And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
+                                               Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
+
+has_portable_thunder_source_strict:Rule=And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
+                                               Has("Progressive Sword", 4)), Has(BrushTechniques.THUNDERSTORM))
+
+has_portable_fire_source: Rule = Or(has_portable_fire_source_strict, Has(BrushTechniques.FIREBURST))
 
 has_portable_thunder_source: Rule = Or(And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
                                               Has("Progressive Sword", 5)), Has(BrushTechniques.THUNDERSTORM)),
@@ -27,6 +33,11 @@ has_portable_ice_source: Rule = Or(And(Or(Has(DivineInstruments.TUNDRA_BEADS.val
 gale_shrine_access: Rule = HasGroup("canine_warriors", count=FromOption(RequiredDoggorbs))
 
 moon_cave_access: Rule = Has("Serpent Crystal")
+n_ryoshima_islands_dragon_rule: Rule = Or(Has("Orca"), HasAll("Water Tablet", "Inside the dragon - Get Dragon Orb"))
+
+n_ryoshima_guardian_sapling_rule:Rule= Or(long_swim_rule,Has("Orca"))
+
+
 
 # Probably should be removed;Directly add it to the checks that require it.
 def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount: int) -> bool:
@@ -38,13 +49,17 @@ night_time_check_rule: Rule = Has(BrushTechniques.CRESCENT, options=[
 
 moon_cave_fire_rule: Rule = Or(has_portable_fire_source,
                                HasAll("Moon Cave - 3F Push the ball", BrushTechniques.INFERNO))
-#Fireburst doesn't light the canons' fuse.
-moon_cave_canon_rule: Rule = And(
-    Or(HasAny(DivineInstruments.SOLAR_FLARE.value.item_name, "Moon Cave - 3F Push the ball"),
-       Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
+# Fireburst doesn't light the canons' fuse.
+moon_cave_canon_rule: Rule = Or(has_portable_fire_source_strict,
+                                HasAll("Moon Cave - 3F Push the ball", BrushTechniques.INFERNO))
 
 moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source,
                                   HasAll("Moon Cave - 4F Move Fireball", BrushTechniques.INFERNO))
+
+oni_island_1f_thunder_rule = Or(has_portable_thunder_source_strict,HasAll("Oni Island - 1F Grab First Thunder Key",BrushTechniques.THUNDERSTORM))
+
+oni_island_5f_thunder_rule = Or(has_portable_thunder_source, HasAll("Oni Island - 4F Grab Thunder Key",BrushTechniques.THUNDERSTORM))
+
 # FIXME Once we've figured out which story trigger can spawn the thunder source here
 gen_thunder_chest_rule: Rule = has_portable_thunder_source
 
@@ -89,6 +104,8 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
     ## RULE BUILDER REWORK:
     # - FOR EACH LOCATION, BUILD AN ARRAY OF RULES THAT WILL BE ADDED TO THE world.set_rule(loc,AND(*Rules))
 
+    debug_rule = False
+
     rules: List[Rule] = []
 
     required_techinques = []
@@ -120,7 +137,8 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.STONE_BURIED_CHEST:
-            # FIXME when dojo techniques are handled
+            # Digging Champ Requirement
+            rules.append(Has("Digging Champ"))
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.BURNING_CHEST:
@@ -140,6 +158,12 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
             required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
                                     BrushTechniques.GALESTORM]
+        case LocationType.DIGGING_MINIGAME_HARD:
+            required_power_slash_level = max(required_power_slash_level, 1)
+            required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
+            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
+                                    BrushTechniques.GALESTORM]
+            rules.append(HasAll("Holy Eagle","Golden Ink Pot"))
         case LocationType.FROZEN_CHEST:
             rules.append(HasAny(BrushTechniques.INFERNO,BrushTechniques.FIREBURST))
         case LocationType.FISHING_MINIGAME:
@@ -151,7 +175,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             required_techinques += []
 
     if data.needs_long_swim:
-        rules.append(HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY))
+        rules.append(long_swim_rule)
 
     if len(required_techinques) > 0:
         rules.append(HasAll(*required_techinques))
@@ -169,32 +193,35 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         # Append special rule if it's defined
         rules.append(data.special_rule)
 
-
     # Set the location to require all concatenated rule
     if len(rules) > 0:
         final_rule = And(*rules)
         world.set_rule(loc, final_rule)
+        if debug_rule:
+            print("[Debug] - Rule for " + loc.name)
+            print(final_rule)
 
 
-#    print(final_rule)
 # else:
 #    print("no rule for this check")
 
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
     rules: List[Rule] = []
     if data.needs_long_swim:
-        rules.append(HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERLILY))
+        rules.append(long_swim_rule)
 
     if len(data.required_items_events) > 0:
         rules.append(HasAll(*data.required_items_events))
 
-    if len(rules) > 0:
+    if data.special_rule is not None:
+        # Append special rule if it's defined
+        rules.append(data.special_rule)
 
+    if len(rules) > 0:
         final_rule = And(*rules)
         world.set_rule(etr, final_rule)
 
 
 def set_completion_rules(world: "OkamiWorld"):
-    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Gale Shrine - Defeat Crimson Helm","Tsuta Ruins - Defeat the spider queen"))
-
+    world.set_completion_rule(HasAll("Moon Cave - Defeat Orochi", "Oni Island - Defeat Ninetails"))
     return

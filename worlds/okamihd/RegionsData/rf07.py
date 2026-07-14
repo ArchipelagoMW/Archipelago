@@ -61,6 +61,6 @@ locations = {
 
 warps = {
     RegionNames.CURSED_TAKA_PASS: [
-        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_),
-    ],
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
+    ]
 }

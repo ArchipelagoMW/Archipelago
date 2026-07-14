@@ -93,7 +93,7 @@ locations = {
                                                     type=LocationType.DARUMA)
     },
     RegionNames.KUSA_VILLAGE_BLOCKHEAD: {
-        "Kusa Village - Chest inside Blockhead Cave": LocData(container_check_id(MapIds.KUSA_VILLAGE, 10))
+        "Kusa Village - Chest inside Blockhead Cave": LocData(container_check_id(MapIds.KUSA_VILLAGE, 10),required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE])
     },
     RegionNames.BAMBOO_HOUSE: {
         "Kusa Village - Buried Chest inside Mr Bamboo's house": LocData(container_check_id(MapIds.KUSA_VILLAGE, 47),

@@ -95,7 +95,7 @@ locations = {
             container_check_id(MapIds.KAMIKI_VILLAGE, 32), type=LocationType.UNDERWATER_CHEST),  # spawn_idx=32, Vase
         "Kamiki Village - Hasugami": LocData(brush_check_id(5),
                                              required_items_events=["Kamiki Village - Restore Sakuya's Tree"],
-                                             type=LocationType.CONSTELLATION),  # Brush acquisition (Waterlily)
+                                             type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED),  # Brush acquisition (Waterlily)
         "Kamiki Village - Buried chest in field": LocData(container_check_id(MapIds.KAMIKI_VILLAGE, 13),
                                                           type=LocationType.BURIED_CHEST),
         # spawn_idx=13, Dragonfly Bead

@@ -110,19 +110,20 @@ equips = {
     "Golden Lucky Cat": ItemData(0x95, ItemClassification.useful),
     "Thief's Glove": ItemData(0x96, ItemClassification.useful),
     "Wood Mat": ItemData(0x97, ItemClassification.useful),
-    "Golden Ink Pot": ItemData(0x98, ItemClassification.useful),
+    # Has to be progression since we require it for some checks.
+    "Golden Ink Pot": ItemData(0x98, ItemClassification.progression),
     "Fire Tablet": ItemData(0x9d, ItemClassification.progression)
 }
 
 quest_items = {
     # Quest Items
-    "Canine Tracker": ItemData(0x42, ItemClassification.progression),
+    "Canine Tracker": ItemData(0x42, ItemClassification.progression,count_in_pool=0),
     "Lucky Mallet": ItemData(0x43, ItemClassification.progression),
-    "Border Key": ItemData(0x44, ItemClassification.progression),
-    "Dragon Orb": ItemData(0x45, ItemClassification.progression),
-    "Fox Rods": ItemData(0x46, ItemClassification.progression),
+    "Border Key": ItemData(0x44, ItemClassification.progression,count_in_pool=0),
+    "Dragon Orb": ItemData(0x45, ItemClassification.progression,count_in_pool=0),
+    "Fox Rods": ItemData(0x46, ItemClassification.progression,count_in_pool=0),
     "Thunder Brew": ItemData(0x47, ItemClassification.progression),
-    "Shell Amulet": ItemData(0x48, ItemClassification.progression),
+    "Shell Amulet": ItemData(0x48, ItemClassification.progression,count_in_pool=0),
 
     "Mask": ItemData(0x49, ItemClassification.progression),
     "Golden Mushroom": ItemData(0x5f, ItemClassification.progression),
@@ -131,7 +132,7 @@ quest_items = {
     "Sewaprolo": ItemData(0x63, ItemClassification.progression),
     "Charcoal": ItemData(0x71, ItemClassification.progression),
     "Blinding Snow": ItemData(0x72, ItemClassification.progression),
-    "Treasure Box": ItemData(0x73, ItemClassification.progression),
+    "Treasure Box": ItemData(0x73, ItemClassification.progression,count_in_pool=0),
     "Herbal Medicine": ItemData(0x75, ItemClassification.progression),
     "Pinwheel": ItemData(0x76, ItemClassification.progression),
     "Marlin Rod": ItemData(0x77, ItemClassification.progression),
@@ -150,20 +151,17 @@ bitable_items = {
     # "Oddly Shaped Turnip": ItemData(0x41, ItemClassification.progression)
 }
 useful_items = {
-    # Useful items - Counts here are invalid, it's intended, to not fill the item pool with these
-    "Sun Fragment": ItemData(0x05, ItemClassification.useful, count_in_pool=4),  # Should be 12
-    "Astral Pouch": ItemData(0x06, ItemClassification.useful, count_in_pool=0),  # Intended
-    "Stray Bead": ItemData(0xCC, ItemClassification.useful, count_in_pool=0),
-    # Should be 99, set to 0 for now cause they mess with container collection states
+    # Useful items - Counts here are invalid, it's intended, to not fille the item pool with these
+    "Sun Fragment": ItemData(0x05, ItemClassification.useful,count_in_pool=9), # Should be 15
+    "Astral Pouch": ItemData(0x06, ItemClassification.useful,count_in_pool=0),# Intended
+    "Stray Bead": ItemData(0xCC, ItemClassification.useful,count_in_pool=0),# Should be 99, set to 0 for now cause they mess with container collection states
     # probably will have to be changed to progession_skip balancing once DF shops get randomized
     "Demon Fang": ItemData(0x1F, ItemClassification.useful, count_in_pool=0),  # to see when DF shops get randomized
     # Technically a filler item, but useful feels more appropriate. Warping with those without Fountain will probably be out of logic.
-    "Mermaid Coin": ItemData(0x0e, ItemClassification.useful, count_in_pool=5),
-    # Accurate count, kept it since it isn't too much
-    "Golden Peach": ItemData(0x0f, ItemClassification.useful, count_in_pool=5),
-    # 14 in total... Probably not useful to have THAT many?,
-    "Gold Dust": ItemData(0x9e, ItemClassification.useful, count_in_pool=5)
-    # 15 if we count the ones sold by merchants, which we may randomize, only 1 in a chest if we don't count those...
+    "Mermaid Coin": ItemData(0x0e, ItemClassification.useful,count_in_pool=5),#Accurate count, kept it since it isn't too much
+    "Golden Peach": ItemData(0x0f, ItemClassification.useful,count_in_pool=10), # 14 in total... Probably not useful to have THAT many?,
+    "Gold Dust": ItemData(0x9e, ItemClassification.useful,count_in_pool=11), # 15 if we count the ones sold by merchants, which we may randomize, only 1 in a chest if we don't count those...
+    "Praise": ItemData(0x59,ItemClassification.useful,count_in_pool=0) #Here for testing for now; Doesn't work
 }
 
 filler_items = {
@@ -285,6 +283,7 @@ item_table = {
     **useful_items,
     **quest_items,
     **filler_items,
+    **quest_items,
     **event_items,
     **weapons_items,
     **progressive_weapons,
