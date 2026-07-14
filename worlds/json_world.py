@@ -154,7 +154,7 @@ class JsonWorld(World):
             "region_list": build_region_list(data),
             "region_map": build_region_map(data),
             "location_map": build_location_map(data),
-            # "event_map": dict[name, list[tuple[str, str, Rule | None]]]
+            "event_map": build_event_map(),
             "item_list": build_item_list(data),
             "completion_rule": build_completion_rule(data),
 
