@@ -22,6 +22,4 @@ locations = {
     }
 
 }
-warps = {
 
-}
