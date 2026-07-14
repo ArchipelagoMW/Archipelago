@@ -514,7 +514,7 @@ class MultiWorld():
         state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
         self.indirect_connections.setdefault(region, set()).add(entrance)
 
-    def get_locations(self, player: Optional[int] = None) -> Iterable[Location]:
+    def get_locations(self, player: int | None = None) -> Collection[Location]:
         if player is not None:
             return self.regions.location_cache[player].values()
         return Utils.RepeatableChain(tuple(self.regions.location_cache[player].values()
@@ -1038,6 +1038,8 @@ class CollectionState():
 
     def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list."""
+        if count <= 0:
+            return True
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in items:
@@ -1049,6 +1051,8 @@ class CollectionState():
     def has_from_list_unique(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list.
         Ignores duplicates of the same item."""
+        if count <= 0:
+            return True
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in items:
@@ -1077,6 +1081,8 @@ class CollectionState():
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
         """Returns True if the state contains at least `count` items present in a specified item group."""
+        if count <= 0:
+            return True
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
@@ -1089,6 +1095,8 @@ class CollectionState():
         """Returns True if the state contains at least `count` items present in a specified item group.
         Ignores duplicates of the same item.
         """
+        if count <= 0:
+            return True
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
