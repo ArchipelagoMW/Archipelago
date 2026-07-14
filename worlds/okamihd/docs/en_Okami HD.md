@@ -32,6 +32,8 @@ Currently, the items randomized are:
 - Dragon Orb,Shell Amulet cannot be picked up.
 - Chests available both in cursed and healed areas don't get randomized in cursed area.
 - Fishing with Kokari for the whooper without having caught the giant salmon before will crash the game
+- Kaguya and Canine warriors cutscenes in Sasa Sanctuary may overlap, which may lead to a softlock; To bypass, refuse to
+  fight the dog before doing the digging minigame with Kaguya.
 
 ## Other info
 
@@ -42,7 +44,6 @@ Currently, the items randomized are:
 - Vista of the gods will always be found in Kamiki Village. You can also get it from its vanilla source.
 - Mask will always be found in Calcified Cavern (Except in the freestanding item spot, it breaks the cutscene.)
 - Moon Cave ingredients will be randomized in Moon Cave. (You can bypass this with the settings.)
-
 
 ## Healed areas available without blooming their guardian sapling:
 
