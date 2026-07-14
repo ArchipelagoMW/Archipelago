@@ -16,6 +16,24 @@ def build_location_datapackage(data) -> dict[str, int]:
     raise Exception("unknown format type")
 
 
+def build_item_groups(data) -> dict[str, int]:
+    format = data.get("formats", {}).get("item_groups", "explicit")
+    if format == "explicit":
+        if "item_name_groups" not in data:
+            return {}
+        return {group: set(items) for group, items in data["item_name_groups"].items()}
+    raise Exception("unknown format type")
+
+
+def build_location_groups(data) -> dict[str, int]:
+    format = data.get("formats", {}).get("location_name_groups", "explicit")
+    if format == "explicit":
+        if "location_name_groups" not in data:
+            return {}
+        return {group: set(locations) for group, locations in data["location_name_groups"].items()}
+    raise Exception("unknown format type")
+
+
 def build_region_list(data) -> list[str]:
     format = data.get("formats", {}).get("region_list", "explicit")
     if format == "explicit":
@@ -28,7 +46,7 @@ def build_region_list(data) -> list[str]:
     raise Exception("unknown format type")
 
 
-def create_rule(rule_data, rule_format) -> CollectionRule | Rule | None:
+def create_rule(rule_data, rule_format) -> Rule | None:
     if rule_data is None:
         return None
     if rule_format == "dnf_items":
@@ -36,7 +54,7 @@ def create_rule(rule_data, rule_format) -> CollectionRule | Rule | None:
     raise Exception("unknown format type")
 
 
-def build_region_map(data) -> dict[str, dict[str, CollectionRule | Rule | None]]:
+def build_region_map(data) -> dict[str, dict[str, Rule | None]]:
     format = data.get("formats", {}).get("region_map", "explicit")
     rule_format = data.get("formats", {}).get("rule", "dnf_items")
     if format == "explicit":
@@ -45,12 +63,21 @@ def build_region_map(data) -> dict[str, dict[str, CollectionRule | Rule | None]]
     raise Exception("unknown format type")
 
 
-def build_location_map(data) -> dict[str, dict[str, CollectionRule | Rule | None]]:
+def build_location_map(data) -> dict[str, dict[str, Rule | None]]:
     format = data.get("formats", {}).get("location_map", "explicit")
     rule_format = data.get("formats", {}).get("rule", "dnf_items")
     if format == "explicit":
         return {region: {target: create_rule(rule_data, rule_format) for target, rule_data in entrance_data.items()}
                 for region, entrance_data in data["location_map"].items()}
+    raise Exception("unknown format type")
+
+
+def build_event_map(data) -> dict[str, tuple[str, str, Rule | None]]:
+    format = data.get("formats", {}).get("event_map", None)
+    if format is None:
+        return {}
+    if format == "explicit":
+        return {region: tuple(data) for region, data in data["event_map"]}
     raise Exception("unknown format type")
 
 
@@ -63,7 +90,7 @@ def build_item_list(data) -> list[str]:
     raise Exception("unknown format type")
 
 
-def build_completion_rule(data) -> CollectionRule | Rule:
+def build_completion_rule(data) -> Rule:
     rule_format = data.get("formats", {}).get("rule", "dnf_items")
     if data["completion_rule"] is None:
         raise Exception("empty completion rule is not supported")
@@ -93,10 +120,10 @@ class JsonWorld(World):
     location_class: Location
 
     region_list: list[str]
-    region_map: dict[str, dict[str, CollectionRule | Rule | None]]
-    location_map: dict[str, dict[str, CollectionRule | Rule | None]]
+    region_map: dict[str, dict[str, Rule | None]]
+    location_map: dict[str, dict[str, Rule | None]]
     item_list: list[str]
-    completion_rule: CollectionRule | Rule
+    completion_rule: Rule
 
     classification_lookup: dict[str, ItemClassification]
     filler_weights: dict[str, int]
@@ -118,8 +145,8 @@ class JsonWorld(World):
             # "web": WebWorld,
             "item_name_to_id": build_item_datapackage(data),
             "location_name_to_id": build_location_datapackage(data),
-            # "item_name_groups": dict[str, set[str, ...]]
-            # "location_name_groups": dict[str, set[str, ...]]
+            "item_name_groups": build_item_groups(data),
+            "location_name_groups": build_location_groups(data),
 
             "item_class": JsonItem,
             "location_class": JsonLocation,
@@ -127,7 +154,7 @@ class JsonWorld(World):
             "region_list": build_region_list(data),
             "region_map": build_region_map(data),
             "location_map": build_location_map(data),
-            # "event_map": dict[name, list[tuple[str, str, CollectionRule | Rule | None]]]
+            # "event_map": dict[name, list[tuple[str, str, Rule | None]]]
             "item_list": build_item_list(data),
             "completion_rule": build_completion_rule(data),
 
@@ -153,6 +180,9 @@ class JsonWorld(World):
                 if rule is not None:
                     self.set_rule(loc, rule)
                 regions[region].locations.append(loc)
+
+        for region, (location, item, rule) in self.event_map.items():
+            regions[region].add_event(location, item, rule, self.location_class, self.item_class)
 
     def create_items(self) -> None:
         # create all items in item_list
