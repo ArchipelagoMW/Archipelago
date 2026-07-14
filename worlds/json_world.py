@@ -1,4 +1,4 @@
-from BaseClasses import CollectionRule, Item, ItemClassification, Location, Region  # Tutorial
+from BaseClasses import Item, ItemClassification, Location, Region  # Tutorial
 from worlds.AutoWorld import World  # WebWorld
 from rule_builder.rules import Rule, Or, HasAll
 
