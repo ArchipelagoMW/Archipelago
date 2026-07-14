@@ -147,7 +147,7 @@
     "key": "steelToe",
     "id": 100018,
     "name": "Steel Toe",
-    "classification": "useful",
+    "classification": "progression",
     "trap": false,
     "count": 1
   },
@@ -155,7 +155,7 @@
     "key": "verminPouch",
     "id": 100019,
     "name": "Vermin Pouch",
-    "classification": "useful",
+    "classification": "progression",
     "trap": false,
     "count": 1
   },

@@ -188,6 +188,10 @@ class ShellipelagoWorld(World):
 
         return 1
 
+    @staticmethod
+    def item_sort_key(name: str) -> int:
+        return item_table[name]["id"]
+
     def location_enabled(self, location_data: dict) -> bool:
         category = location_data["category"]
         drop_name = location_data.get("drop_name", "")
@@ -291,14 +295,15 @@ class ShellipelagoWorld(World):
         precollected_item_counts = dict(self.starting_item_counts)
 
         if not bool(self.options.shuffle_essential_items):
-            for item_name in ESSENTIAL_ITEMS:
+            for item_name in sorted(ESSENTIAL_ITEMS, key=self.item_sort_key):
                 precollected_item_counts[item_name] = self.item_count(item_name)
 
         if not bool(self.options.shuffle_max_resource_upgrades):
-            for item_name in MAX_RESOURCE_UPGRADES:
+            for item_name in sorted(MAX_RESOURCE_UPGRADES, key=self.item_sort_key):
                 precollected_item_counts[item_name] = self.item_count(item_name)
 
-        for item_name, item_count_value in precollected_item_counts.items():
+        for item_name in sorted(precollected_item_counts, key=self.item_sort_key):
+            item_count_value = precollected_item_counts[item_name]
             for _ in range(item_count_value):
                 self.multiworld.push_precollected(self.create_item(item_name))
 

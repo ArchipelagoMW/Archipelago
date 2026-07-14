@@ -157,7 +157,7 @@ raw_item_table = [
     "key": "steelToe",
     "id": 100018,
     "name": "Steel Toe",
-    "classification": "useful",
+    "classification": "progression",
     "trap": False,
     "count": 1
   },
@@ -165,7 +165,7 @@ raw_item_table = [
     "key": "verminPouch",
     "id": 100019,
     "name": "Vermin Pouch",
-    "classification": "useful",
+    "classification": "progression",
     "trap": False,
     "count": 1
   },

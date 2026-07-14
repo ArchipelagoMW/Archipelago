@@ -31,7 +31,7 @@ class TestDefaultGeneration(ShellipelagoTestBase):
         self.assertTrue(enemy_locations)
         for location_data in enemy_locations:
             weapon_names = {"Sword", "Bombs", "Fire"}
-            if location_data.get("enemy_type") != "negaBlob":
+            if location_data.get("enemy_type") != "Nega Slime":
                 weapon_names.add("Gun")
             self.assertTrue(any(
                 {requirement["item"] for requirement in requirement_row} == weapon_names
@@ -73,7 +73,7 @@ class TestDefaultGeneration(ShellipelagoTestBase):
                     )
 
     def test_default_location_count(self) -> None:
-        self.assertEqual(len(self.multiworld.get_locations(self.player)), 107)
+        self.assertEqual(len(self.multiworld.get_locations(self.player)), 109)
 
     def test_victory_location(self) -> None:
         victory_location = self.world.get_location(ShellipelagoWorld.victory_location_name)
@@ -99,7 +99,7 @@ class TestDefaultGeneration(ShellipelagoTestBase):
             if location_data.get("trap_location")
         ]
 
-        self.assertEqual(len(trap_locations), 9)
+        self.assertEqual(len(trap_locations), 8)
         self.assertFalse(any(item.trap for item in self.multiworld.itempool))
 
 
@@ -110,7 +110,7 @@ class TestExpandedChecks(ShellipelagoTestBase):
     }
 
     def test_expanded_location_count(self) -> None:
-        self.assertEqual(len(self.multiworld.get_locations(self.player)), 1695)
+        self.assertEqual(len(self.multiworld.get_locations(self.player)), 1612)
 
 
 class TestTrapsEnabled(ShellipelagoTestBase):
