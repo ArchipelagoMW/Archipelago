@@ -1,4 +1,11 @@
 {
+    "game_name": "Air Delivery",
+    "description": "deliver mail",
+    "formats": {
+        "region_list": "region_map",
+        "classification_lookup": "reverse_lookup",
+        "filler_weights": "single"
+    },
     "region_map": {
         "Menu": {"main": null},
         "main": {
@@ -51,8 +58,23 @@
         }
     },
     "completion_rule": [["claw", "drill", "fly"]],
-    "items": {
-        "prog_items": [
+    "item_list": [
+        "mayor missive",
+        "friend freight",
+        "climber cargo",
+        "driller dispatch",
+        "paper pack",
+        "buried bento",
+        "grandpa goods",
+        "history haul",
+        "wife word",
+        "claw",
+        "fly",
+        "key",
+        "drill"
+    ],
+    "classification_lookup": {
+        "progression": [
             "mayor missive",
             "friend freight",
             "climber cargo",
@@ -67,25 +89,25 @@
             "key",
             "drill"
         ],
-        "filler_items": [
+        "filler": [
             "Feeling of Satisfaction"
         ]
     },
     "item_name_to_id": {
-            "mayor missive": 19827412012,
-            "friend freight": 19827412013,
-            "climber cargo": 19827412014,
-            "driller dispatch": 19827412015,
-            "paper pack": 19827412016,
-            "buried bento": 19827412017,
-            "grandpa goods": 19827412018,
-            "history haul": 19827412019,
-            "wife word": 19827412020,
-            "claw": 19827412021,
-            "fly": 19827412022,
-            "key": 19827412023,
-            "drill": 19827412024,
-            "Feeling of Satisfaction": 19827412025
+        "mayor missive": 19827412012,
+        "friend freight": 19827412013,
+        "climber cargo": 19827412014,
+        "driller dispatch": 19827412015,
+        "paper pack": 19827412016,
+        "buried bento": 19827412017,
+        "grandpa goods": 19827412018,
+        "history haul": 19827412019,
+        "wife word": 19827412020,
+        "claw": 19827412021,
+        "fly": 19827412022,
+        "key": 19827412023,
+        "drill": 19827412024,
+        "Feeling of Satisfaction": 19827412025
     },
     "location_name_to_id": {
         "mayor delivery": 19827412012,
@@ -116,10 +138,7 @@
         "wife chat": 19827412037,
         "driller dispatch": 19827412038
     },
-    "base_id": 19827412012,
-    "game_name": "Air Delivery",
-    "description": "deliver mail",
-    "filler_name": "Feeling of Satisfaction",
+    "filler_item": "Feeling of Satisfaction",
     "item_name_groups": {
         "Packages": [
             "mayor missive",

@@ -1,16 +1,91 @@
-from BaseClasses import Region, Location, Item, ItemClassification, Tutorial, CollectionRule
-from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import (
-    Component,
-    components,
-    Type as component_type,
-    )
-from collections import defaultdict
-from rule_builder.rules import Rule, Or, HasAll, Has
+from BaseClasses import CollectionRule, Item, ItemClassification, Location, Region  # Tutorial
+from worlds.AutoWorld import World  # WebWorld
+from rule_builder.rules import Rule, Or, HasAll
 
-## flatten lists of locations and items so they are indexed for name_to_id
-#location_list = [location for locations in json_world["location_map"].values() for location in locations.keys()]
-#item_list = [item for item_lists in json_world["items"].values() for item in item_lists]
+def build_item_datapackage(data) -> dict[str, int]:
+    format = data.get("formats", {}).get("item_name_to_id", "explicit")
+    if format == "explicit":
+        return data["item_name_to_id"]
+    raise Exception("unknown format type")
+
+
+def build_location_datapackage(data) -> dict[str, int]:
+    format = data.get("formats", {}).get("location_name_to_id", "explicit")
+    if format == "explicit":
+        return data["location_name_to_id"]
+    raise Exception("unknown format type")
+
+
+def build_region_list(data) -> list[str]:
+    format = data.get("formats", {}).get("region_list", "explicit")
+    if format == "explicit":
+        return data["region_list"]
+    if format == "region_map":
+        region_set = set(data["region_map"].keys())
+        for regions in data["region_map"].values():
+            region_set.update(regions.keys())
+        return sorted(region_set)
+    raise Exception("unknown format type")
+
+
+def create_rule(rule_data, rule_format) -> CollectionRule | Rule | None:
+    if rule_data is None:
+        return None
+    if rule_format == "dnf_items":
+        return Or(*[HasAll(*inner) for inner in rule_data])
+    raise Exception("unknown format type")
+
+
+def build_region_map(data) -> dict[str, dict[str, CollectionRule | Rule | None]]:
+    format = data.get("formats", {}).get("region_map", "explicit")
+    rule_format = data.get("formats", {}).get("rule", "dnf_items")
+    if format == "explicit":
+        return {region: {target: create_rule(rule_data, rule_format) for target, rule_data in entrance_data.items()}
+                for region, entrance_data in data["region_map"].items()}
+    raise Exception("unknown format type")
+
+
+def build_location_map(data) -> dict[str, dict[str, CollectionRule | Rule | None]]:
+    format = data.get("formats", {}).get("location_map", "explicit")
+    rule_format = data.get("formats", {}).get("rule", "dnf_items")
+    if format == "explicit":
+        return {region: {target: create_rule(rule_data, rule_format) for target, rule_data in entrance_data.items()}
+                for region, entrance_data in data["location_map"].items()}
+    raise Exception("unknown format type")
+
+
+def build_item_list(data) -> list[str]:
+    format = data.get("formats", {}).get("item_list", "explicit")
+    if format == "explicit":
+        return data["item_list"]
+    if format == "counter":
+        return [item for item, count in data["item_count"] for _ in range(count)]
+    raise Exception("unknown format type")
+
+
+def build_completion_rule(data) -> CollectionRule | Rule:
+    rule_format = data.get("formats", {}).get("rule", "dnf_items")
+    if data["completion_rule"] is None:
+        raise Exception("empty completion rule is not supported")
+    return create_rule(data["completion_rule"], rule_format)
+
+
+def build_classification_lookup(data) -> dict[str, ItemClassification]:
+    format = data.get("formats", {}).get("classification_lookup", "explicit")
+    if format == "explicit":
+        return {key: getattr(ItemClassification, value) for key, value in data["classification_lookup"].items()}
+    if format == "reverse_lookup":
+        return {item: getattr(ItemClassification, classification) for classification, items in data["classification_lookup"].items() for item in items}
+    raise Exception("unknown format type")
+
+
+def build_filler_weights(data) -> dict[str, ItemClassification]:
+    format = data.get("formats", {}).get("filler_weights", "explicit")
+    if format == "explicit":
+        return data["filler_weights"]
+    if format == "single":
+        return {data["filler_item"]: 1}
+    raise Exception("unknown format type")
 
 
 class JsonWorld(World):
@@ -18,7 +93,7 @@ class JsonWorld(World):
     location_class: Location
 
     region_list: list[str]
-    region_connections: dict[str, dict[str, CollectionRule | Rule | None]]
+    region_map: dict[str, dict[str, CollectionRule | Rule | None]]
     location_map: dict[str, dict[str, CollectionRule | Rule | None]]
     item_list: list[str]
     completion_rule: CollectionRule | Rule
@@ -34,34 +109,6 @@ class JsonWorld(World):
         item_name_to_id = data["item_name_to_id"]
         location_name_to_id = data["location_name_to_id"]
 
-        region_set = set(data["region_map"].keys())
-        for regions in data["region_map"].values():
-            region_set.update(regions.keys())
-        region_list = list(region_set)
-        region_connections = {
-            region: {
-                target: None if rule is None else Or(*[HasAll(*inner) for inner in rule])
-                for target, rule in mapping.items()
-            }
-            for region, mapping in data["region_map"].items()
-        }
-        location_map = {
-            region: {
-                location: None if rule is None else Or(*[HasAll(*inner) for inner in rule])
-                for location, rule in mapping.items()
-            }
-            for region, mapping in data["location_map"].items()
-        }
-        item_list = data["items"]["prog_items"]
-        item_list.extend(data["items"]["filler_items"])
-        completion_rule = Or(*[HasAll(*inner) for inner in data["completion_rule"]])
-
-        classification_lookup = {
-            **{n: ItemClassification.progression for n in data["items"]["prog_items"]},
-            **{n: ItemClassification.filler for n in data["items"]["filler_items"]}
-        }
-        filler_weights = {data["filler_name"]: 1}
-
         class JsonItem(Item):
             game = game_name
         class JsonLocation(Location):
@@ -72,78 +119,37 @@ class JsonWorld(World):
             "__doc__": description,
             "game": game_name,
             # "web": WebWorld,
-            "item_name_to_id": item_name_to_id,
-            "location_name_to_id": location_name_to_id,
+            "item_name_to_id": build_item_datapackage(data),
+            "location_name_to_id": build_location_datapackage(data),
             # "item_name_groups": dict[str, set[str, ...]]
             # "location_name_groups": dict[str, set[str, ...]]
 
             "item_class": JsonItem,
             "location_class": JsonLocation,
 
-            "region_list": region_list,
-            "region_connections": region_connections,
-            "location_map": location_map,
+            "region_list": build_region_list(data),
+            "region_map": build_region_map(data),
+            "location_map": build_location_map(data),
             # "event_map": dict[name, list[tuple[str, str, CollectionRule | Rule | None]]]
-            "item_list": item_list,
-            "completion_rule": completion_rule,
+            "item_list": build_item_list(data),
+            "completion_rule": build_completion_rule(data),
 
-            "classification_lookup": classification_lookup,
-            "filler_weights": filler_weights,
+            "classification_lookup": build_classification_lookup(data),
+            "filler_weights": build_filler_weights(data),
         })
-
-# basic getters for json_world data, any option based modifications can be done here; may cache these later
-# expect authors to modify the return of super() per options, or fully override if their format is different
-    def get_region_list(self) -> list[str]:
-        """
-        Parser method to return the list of all regions to be created.
-        Currently flattens region_map to create all regions with a connection in or out
-        """
-        ret = {
-            r for connections in json_world["region_map"].values()
-            for r in connections.keys()
-        }.union(json_world["region_map"].keys())
-        return ret
-
-    def get_connections(self) -> dict[str, dict[str, Rule | None]]:
-        """
-        Parser method to convert the region definitions in the json_world object
-        into a dict of connection entries formatted as {parent_region_name: {target_region_name: rule}}
-        """
-        return {
-            region1: {
-                region2: None if rule is None else Or(*[HasAll(*inner) for inner in rule])
-                for region2, rule in connections.items()
-                }
-            for region1, connections in json_world["region_map"].items()
-        }
-
-    def get_location_map(self) -> dict[str, dict[str, Rule | None]]:
-        """
-        Parser method to convert the location definitions in the json_world object
-        into a list of location entries formatted as {parent_region_name: {location_name: rule}}
-        """
-        return {
-            region: {
-                location: None if rule is None else Or(*[HasAll(*inner) for inner in rule])
-                for location, rule in placements.items()
-                }
-            for region, placements in json_world["location_map"].items()
-        }
 
     # common World methods
     def create_regions(self) -> None:
-        # create a local map of get_region_list names to region object
-        # for referencing in create_regions and adding those regions to the multiworld
         regions = {
             name: Region(name, self.player, self.multiworld)
             for name in self.region_list}
         self.multiworld.regions.extend(regions.values())
 
-        # loop through get_region_map, letting add_exits add rules if present
-        for region, connections in self.region_connections.items():
+        # loop through region_map, letting add_exits add rules if present
+        for region, connections in self.region_map.items():
             regions[region].add_exits(connections.keys(), connections)
 
-        # loop through get_location_map, adding the rules if present to the location
+        # loop through location_map, adding the rules if present to the location
         for region, placements in self.location_map.items():
             for location, rule in placements.items():
                 loc = self.location_class(self.player, location, self.location_name_to_id[location], regions[region])
