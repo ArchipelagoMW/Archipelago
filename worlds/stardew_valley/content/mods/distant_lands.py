@@ -58,7 +58,7 @@ register_mod_content_pack(DistantLandsContentPack(
         DistantLandsCrop.vile_ancient_fruit: (Tag(ItemTag.FRUIT), HarvestCropSource(seed=DistantLandsSeed.vile_ancient_fruit, seasons=(Season.spring, Season.summer, Season.fall)),)
     },
     cooking_recipes=(
-        CookingRecipe(name=DistantLandsMeal.mushroom_kebab, ingredients=((Mushroom.chanterelle, 1), (Mushroom.common, 1), (Mushroom.red, 1), (Material.wood, 1),), sources=(FriendshipSource(friend=ModNPC.goblin, hearts=2),),),
+        CookingRecipe(name=DistantLandsMeal.mushroom_kebab, ingredients=((Mushroom.morel, 1), (Mushroom.common, 1), (Mushroom.red, 1), (Material.wood, 1),), sources=(FriendshipSource(friend=ModNPC.goblin, hearts=2),),),
         CookingRecipe(name=DistantLandsMeal.void_mint_tea, ingredients=((DistantLandsCrop.void_mint, 1),), sources=(FriendshipSource(friend=ModNPC.goblin, hearts=4),),),
         CookingRecipe(name=DistantLandsMeal.crayfish_soup, ingredients=((Forageable.cave_carrot, 1), (Fish.crayfish, 1), (DistantLandsFish.purple_algae, 1), (WaterItem.white_algae, 1),), sources=(FriendshipSource(friend=ModNPC.goblin, hearts=6),),),
         CookingRecipe(name=DistantLandsMeal.pemmican, ingredients=((Loot.bug_meat, 1), (Fish.any, 1), (Forageable.salmonberry, 3), (Material.stone, 2),), sources=(FriendshipSource(friend=ModNPC.goblin, hearts=8),),),
