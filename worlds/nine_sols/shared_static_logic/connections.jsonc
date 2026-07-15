@@ -278,7 +278,9 @@
     {
         "from": "AF (Depths) - Lower Left Exit", "to": "AF (Depths) - Climb to Root Node",
         "requires": [ { "anyOf": [{ "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }] } ],
-        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Air Dash" }] // and a T-dash
+        "ls_requires": [ // T-dash setup using a ledge on the Right Exit->Lower Level path
+            { "item": "Ledge Grab" } // then LS vault up to LG onto the first platform of the climb
+        ] // then parry the flying enemy so you can jump, T-dash and LG onto the second platform
     },
     { "from": "AF (Depths) - Climb to Root Node", "to": "AF (Depths) - Root Node", "requires": [] }, // one-way door
     { "from": "AF (Depths) - Climb to Root Node", "to": "AF (Depths) - Upper Right", "requires": [] }, // hack the lift OR CL broken platforms near node
@@ -933,7 +935,11 @@
             { "item": "Wall Climb" } // then WC is enough
         ],
         "ls_requires": [
-            { "item": "Trick - Long Jump with Swift Runner" }, // to get into the "Between ..." room without losing LS
+            { "anyOf": [ // to get into the "Between ..." room without losing LS
+                { "item": "Trick - Long Jump with Swift Runner" },
+                { "item": "Air Dash" },
+                { "item": "Trick - Bow Hover" }
+            ] },
             { "item": "Ledge Grab" } // then wall slide instead of WC or CL
         ] // T-dash setup is fine here
     },
@@ -1895,10 +1901,12 @@
         "requires": [{ "item": "Cloud Leap" }, { "item": "Grapple" }],
         "ls_requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }]
     },
-    { "from": "GoS (East) - Stone Carvings", "to": "GoS (East) - Outside Guiguzi's Tomb", "requires": [] }, // fall
-    { "from": "GoS (East) - Stone Carvings", "to": "GoS (East) - Upper Exit", "requires": [
-        { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
-    ] },
+    { "from": "GoS (East) - Stone Carvings", "to": "GoS (East) - Outside Guiguzi's Tomb", "requires": [] }, // fall through grapple platform
+    {
+        "from": "GoS (East) - Stone Carvings", "to": "GoS (East) - Upper Exit",
+        "requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ],
+        "ls_requires": [ { "item": "Ledge Grab" } ] // wall slide up and over the obstacle, T-dash setup is fine here
+    },
     { "from": "GoS (East) - Upper Exit", "to": "GoS (East) - Stone Carvings", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
