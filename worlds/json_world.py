@@ -16,8 +16,8 @@ def build_location_datapackage(data) -> dict[str, int]:
     raise Exception("unknown format type")
 
 
-def build_item_groups(data) -> dict[str, int]:
-    format = data.get("formats", {}).get("item_groups", "explicit")
+def build_item_groups(data) -> dict[str, set[str]]:
+    format = data.get("formats", {}).get("item_name_groups", "explicit")
     if format == "explicit":
         if "item_name_groups" not in data:
             return {}
@@ -25,7 +25,7 @@ def build_item_groups(data) -> dict[str, int]:
     raise Exception("unknown format type")
 
 
-def build_location_groups(data) -> dict[str, int]:
+def build_location_groups(data) -> dict[str, set[str]]:
     format = data.get("formats", {}).get("location_name_groups", "explicit")
     if format == "explicit":
         if "location_name_groups" not in data:
@@ -106,7 +106,7 @@ def build_classification_lookup(data) -> dict[str, ItemClassification]:
     raise Exception("unknown format type")
 
 
-def build_filler_weights(data) -> dict[str, ItemClassification]:
+def build_filler_weights(data) -> dict[str, int]:
     format = data.get("formats", {}).get("filler_weights", "explicit")
     if format == "explicit":
         return data["filler_weights"]
