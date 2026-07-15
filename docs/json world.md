@@ -143,9 +143,13 @@ for mapping classification name (i.e. `progression`) to item name
 ### Filler Weights
 
 Filler Weights uses the format key `filler_weights` with the default value `explicit`
+Note: filler item names do not have to be items with filler classification.
 
 #### Filler Weights - explicit
 
 The key `filler_weights` is expected to have a dict[str, int] mapping
-for mapping filler item names to random weights. Note: filler item names do not have to be
-items with filler classification.
+for mapping filler item names to random weights.
+
+#### Filler Weights - single
+
+The key `filler_item` is expected to have a single str item name to be used for all itempool filling.
