@@ -33,7 +33,17 @@
 
         MDIconButton:
             component: main.component
-            icon: "star" if self.component.display_name in app.favorites else "star-outline"
+            icon: "eye-off" if self.component.display_name in app.user_hidden_list else "eye-off-outline"
+            style: "standard"
+            pos_hint:{"center_x": 0.75, "center_y": 0.8}
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primaryColor
+            detect_visible: False
+            on_release: app.set_hidden(self)
+
+        MDIconButton:
+            component: main.component
+            icon: "star" if self.component.display_name in app.user_favorites_list else "star-outline"
             style: "standard"
             pos_hint:{"center_x": 0.85, "center_y": 0.8}
             theme_text_color: "Custom"
@@ -79,13 +89,14 @@ MDFloatLayout:
             MDButton:
                 id: all
                 style: "text"
-                type: (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+                type: (Type.SETUP, Type.TOOL, Type.CLIENT, Type.MISC, )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "asterisk"
                 MDButtonText:
                     text: "All"
+
             MDButton:
                 id: client
                 style: "text"
@@ -96,26 +107,29 @@ MDFloatLayout:
                     icon: "controller"
                 MDButtonText:
                     text: "Client"
+
             MDButton:
-                id: Tool
+                id: setup
                 style: "text"
-                type: (Type.TOOL, )
+                type: (Type.SETUP, )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "desktop-classic"
                 MDButtonText:
-                    text: "Tool"
+                    text: "Setup"
+
             MDButton:
-                id: adjuster
+                id: tool
                 style: "text"
-                type: (Type.ADJUSTER, )
+                type: (Type.TOOL, )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "wrench"
                 MDButtonText:
-                    text: "Adjuster"
+                    text: "Tool"
+
             MDButton:
                 id: misc
                 style: "text"
@@ -137,6 +151,17 @@ MDFloatLayout:
                     icon: "star"
                 MDButtonText:
                     text: "Favorites"
+
+            MDButton:
+                id: hidden
+                style: "text"
+                type: ("hidden", )
+                on_release: app.filter_clients_by_type(self)
+
+                MDButtonIcon:
+                    icon: "eye-off"
+                MDButtonText:
+                    text: "Hidden"
 
             MDNavigationDrawerDivider:
 

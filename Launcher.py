@@ -119,9 +119,9 @@ components.extend([
     # Functions
     Component("Open host.yaml", func=open_host_yaml,
               description="Open the host.yaml file to change settings for generation, games, and more."),
-    Component("Open Patch", func=open_patch,
+    Component("Open Patch", component_type=Type.SETUP, func=open_patch,
               description="Open a patch file, downloaded from the room page or provided by the host."),
-    Component("Generate Template Options", func=generate_yamls,
+    Component("Generate Template Options", component_type=Type.SETUP, func=generate_yamls,
               description="Generate template YAMLs for currently installed games."),
     Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/"),
               description="Open archipelago.gg in your browser."),
@@ -275,6 +275,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         button_layout: ScrollBox = ObjectProperty(None)
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
+        selected_filter : MDButton | None
         current_filter: Sequence[str | Type] | None
         failed_worlds: bool = bool(failed_world_loads)
 
@@ -282,32 +283,54 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
-            self.favorites = []
+            self.user_favorites_list = []
+            self.user_hidden_list = []
             self.launch_components = components
             self.launch_args = args
             self.cards = []
-            self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+            self.selected_filter = None
+            self.current_filter = None
             persistent = Utils.persistent_load()
+            # Load user preferences for favorites and hidden components from persistent storage
             if "launcher" in persistent:
                 if "favorites" in persistent["launcher"]:
-                    self.favorites.extend(persistent["launcher"]["favorites"])
-                if "filter" in persistent["launcher"]:
-                    if persistent["launcher"]["filter"]:
-                        filters = []
-                        for filter in persistent["launcher"]["filter"].split(", "):
-                            if filter == "favorites":
-                                filters.append(filter)
-                            else:
-                                filters.append(Type[filter])
-                        self.current_filter = filters
+                    self.user_favorites_list.extend(persistent["launcher"]["favorites"])
+                if "hidden" in persistent["launcher"]:
+                    self.user_hidden_list.extend(persistent["launcher"]["hidden"])
             super().__init__()
 
-        def set_favorite(self, caller):
-            if caller.component.display_name in self.favorites:
-                self.favorites.remove(caller.component.display_name)
+        def set_hidden(self, caller: MDButton) -> None:
+            """
+            Toggle the hidden state of a launcher component.
+            Update the icon of the associated button.
+            Refresh the displayed components accordingly.
+
+            :param caller: The button associated with the launcher component.
+            :type caller: MDButton
+            """
+
+            if caller.component.display_name in self.user_hidden_list:
+                self.user_hidden_list.remove(caller.component.display_name)
+                caller.icon = "eye-off-outline"
+            else:
+                self.user_hidden_list.append(caller.component.display_name)
+                caller.icon = "eye-off"
+            #TODO: Consider optimizing this by only removing the specific card instead of refreshing all components.
+            self._refresh_components(self.current_filter)
+
+        def set_favorite(self, caller: MDButton) -> None:
+            """
+            Toggle the favorite state of a launcher component.
+            Update the icon of the associated button.
+
+            :param caller: The button associated with the launcher component.
+            :type caller: MDButton
+            """
+            if caller.component.display_name in self.user_favorites_list:
+                self.user_favorites_list.remove(caller.component.display_name)
                 caller.icon = "star-outline"
             else:
-                self.favorites.append(caller.component.display_name)
+                self.user_favorites_list.append(caller.component.display_name)
                 caller.icon = "star"
 
         def build_card(self, component: Component) -> LauncherCard:
@@ -338,7 +361,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
 
         def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
             if not type_filter:
-                type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
+                type_filter = [Type.SETUP, Type.TOOL, Type.CLIENT, Type.MISC]
             favorites = "favorites" in type_filter
 
             # clear before repopulating
@@ -347,8 +370,19 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             for child in tool_children:
                 self.button_layout.layout.remove_widget(child)
 
-            cards = [card for card in self.cards if card.component.type in type_filter
-                     or favorites and card.component.display_name in self.favorites]
+            if "hidden" in type_filter:
+                cards = [card for card in self.cards if card.component.display_name in self.user_hidden_list]
+            else:
+                cards = [
+                    card for card in self.cards
+                    if (card.component.type in type_filter
+                    and card.component.display_name not in self.user_hidden_list)
+                    or (favorites and card.component.display_name in self.user_favorites_list)
+                ]
+
+                # sort the list by type_filter order
+                priority = {t: i for i, t in enumerate(type_filter)}
+                cards.sort(key=lambda c: priority.get(c.component.type, float("inf")))
 
             self.current_filter = type_filter
 
@@ -361,6 +395,15 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
 
         def filter_clients_by_type(self, caller: MDButton):
+            # Reset previous highlighted button
+            if self.selected_filter and self.selected_filter is not caller:
+                self.selected_filter.style = "text"
+
+            # Highlight current button
+            caller.style = "filled"
+            self.selected_filter = caller
+
+            # Filter components by type
             self._refresh_components(caller.type)
             self.search_box.text = ""
 
@@ -386,16 +429,11 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
 
-            global refresh_components
-            refresh_components = self._refresh_components
-
             Window.bind(on_drop_file=self._on_drop_file)
             Window.bind(on_keyboard=self._on_keyboard)
 
             for component in components:
                 self.cards.append(self.build_card(component))
-
-            self._refresh_components(self.current_filter)
 
             # Uncomment to re-enable the Kivy console/live editor
             # Ctrl-E to enable it, make sure numlock/capslock is disabled
@@ -409,6 +447,18 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 build_uri_popup(self.launch_components, self.launch_args)
                 self.launch_components = None
                 self.launch_args = None
+
+            # Restore the last selected filter button and triggers its action
+            # -> This will "load" the last selected filter and display the corresponding components
+            persistent = Utils.persistent_load()
+            if "category_button" in persistent["launcher"]:
+                button_id = persistent["launcher"]["category_button"]
+                self.selected_filter = self.top_screen.ids.get(button_id)
+
+            if self.selected_filter:
+                self.selected_filter.trigger_action(duration=0)
+            else:
+                self.top_screen.ids.all.trigger_action(duration=0)
 
         @staticmethod
         def component_action(button):
@@ -481,9 +531,15 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             super()._stop(*largs)
 
         def on_stop(self):
-            Utils.persistent_store("launcher", "favorites", self.favorites)
-            Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
-                                                                   for filter in self.current_filter))
+            # extract the id of the selected filter button to save in persistent storage
+            button_id = next(
+                (key for key, widget in self.top_screen.ids.items() if widget is self.selected_filter),
+                None
+            )
+
+            Utils.persistent_store("launcher", "hidden", self.user_hidden_list)
+            Utils.persistent_store("launcher", "favorites", self.user_favorites_list)
+            Utils.persistent_store("launcher", "category_button", button_id)
             super().on_stop()
 
     Launcher(components=launch_components, args=args).run()

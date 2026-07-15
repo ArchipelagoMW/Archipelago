@@ -12,9 +12,10 @@ class Type(Enum):
     TOOL = auto()
     MISC = auto()
     CLIENT = auto()
-    ADJUSTER = auto()
+    SETUP = auto()
     FUNC = auto()  # do not use anymore
     HIDDEN = auto()
+    ADJUSTER = auto() # do not use anymore
 
 
 class Component:
@@ -71,10 +72,13 @@ class Component:
             from Utils import deprecate
             deprecate(f"Launcher Component {self.display_name} is using Type.FUNC Type, which is pending removal.")
             component_type = Type.MISC
+        if component_type == Type.ADJUSTER:
+            from Utils import deprecate
+            deprecate(f"Launcher Component {self.display_name} is using Type.ADJUSTER Type, which is pending removal.")
+            component_type = Type.TOOL
 
         self.type = component_type or (
-            Type.CLIENT if "Client" in display_name else
-            Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
+            Type.CLIENT if "Client" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
         self.game_name = game_name
@@ -220,22 +224,22 @@ components: List[Component] = [
     # Launcher
     Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
     # Core
-    Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
+    Component('Host', 'MultiServer', 'ArchipelagoServer', component_type=Type.SETUP, cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip'),
               description="Host a generated multiworld on your computer."),
-    Component('Generate', 'Generate', cli=True,
+    Component('Generate', 'Generate', component_type=Type.SETUP, cli=True,
               description="Generate a multiworld with the YAMLs in the players folder."),
-    Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.TOOL,
+    Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.SETUP,
               description="Visual creator for Archipelago option files."),
-    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
+    Component("Install APWorld", component_type=Type.SETUP, func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
               description="Connect to a multiworld using the text client."),
-    Component('LttP Adjuster', 'LttPAdjuster'),
+    Component('LttP Adjuster', 'LttPAdjuster', component_type=Type.TOOL),
     # Ocarina of Time
     Component('OoT Client', 'OoTClient',
               file_identifier=SuffixIdentifier('.apz5')),
-    Component('OoT Adjuster', 'OoTAdjuster'),
+    Component('OoT Adjuster', 'OoTAdjuster', component_type=Type.TOOL),
     # TLoZ
     Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
