@@ -164,6 +164,9 @@ class RelationshipLogic(BaseLogic):
         rules = [self.logic.region.can_reach_any(*villager.locations)]
         rules.append(self.logic.relationship.exists(npc))
 
+        if npc == NPC.dwarf:
+            rules.append(self.logic.wallet.can_speak_dwarf())
+
         if npc == NPC.leo:
             rules.append(self.logic.received("Island North Turtle"))
             rules.append(self.logic.region.can_reach(Region.leo_hut))

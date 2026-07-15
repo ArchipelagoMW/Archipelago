@@ -421,7 +421,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.purchase_from_marnie, logic.relationship.can_meet(NPC.marnie))
     rule_collector.set_entrance_rule(Entrance.purchase_from_gus, logic.relationship.can_meet(NPC.gus))
     rule_collector.set_entrance_rule(Entrance.purchase_from_willy, logic.relationship.can_meet(NPC.willy))
-    rule_collector.set_entrance_rule(Entrance.purchase_from_dwarf, logic.relationship.can_meet(NPC.dwarf) & logic.wallet.can_speak_dwarf())
+    rule_collector.set_entrance_rule(Entrance.purchase_from_dwarf, logic.relationship.can_meet(NPC.dwarf))
     rule_collector.set_entrance_rule(Entrance.purchase_from_sandy, logic.relationship.can_meet(NPC.sandy))
     rule_collector.set_entrance_rule(Entrance.purchase_from_hospital, logic.relationship.can_meet_any(NPC.harvey, NPC.maru))
     rule_collector.set_entrance_rule(Entrance.purchase_from_krobus, logic.relationship.can_meet(NPC.krobus))
