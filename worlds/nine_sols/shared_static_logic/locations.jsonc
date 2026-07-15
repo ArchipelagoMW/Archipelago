@@ -380,8 +380,10 @@
         "region": "Cortex Center - Caves Middle Left",
         "requires": [
             { "item": "Charged Strike" }, // to break in
-            { "item": "Mystic Nymph: Scout Mode" } // to unlock ropes, since we can't assume
-                                                   // the single-use floor will be used optimally
+            { "anyOf": [ // we can't assume the single-use floor will be used optimally, so either...
+                { "item": "Mystic Nymph: Scout Mode" }, // unlock the ropes
+                { "item": "Cloud Leap" } // or jump to the one short rope that's already unlocked
+            ] }
         ],
         "medium_requires": [
             { "anyOf": [ // to break in
