@@ -2,7 +2,6 @@
     "game_name": "Air Delivery",
     "description": "deliver mail",
     "formats": {
-        "region_list": "region_map",
         "classification_lookup": "reverse_lookup",
         "filler_weights": "single"
     },

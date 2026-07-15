@@ -34,18 +34,6 @@ def build_location_groups(data) -> dict[str, set[str]]:
     raise Exception("unknown format type")
 
 
-def build_region_list(data) -> list[str]:
-    format = data.get("formats", {}).get("region_list", "explicit")
-    if format == "explicit":
-        return data["region_list"]
-    if format == "region_map":
-        region_set = set(data["region_map"].keys())
-        for regions in data["region_map"].values():
-            region_set.update(regions.keys())
-        return sorted(region_set)
-    raise Exception("unknown format type")
-
-
 def create_rule(rule_data, rule_format) -> Rule | None:
     if rule_data is None:
         return None
@@ -54,13 +42,22 @@ def create_rule(rule_data, rule_format) -> Rule | None:
     raise Exception("unknown format type")
 
 
-def build_region_map(data) -> dict[str, dict[str, Rule | None]]:
+def build_region_data(data) -> tuple[list[str], dict[str, dict[str, Rule | None]]]:
+    """returns a tuple of region_list and region_map"""
     format = data.get("formats", {}).get("region_map", "explicit")
     rule_format = data.get("formats", {}).get("rule", "dnf_items")
     if format == "explicit":
-        return {region: {target: create_rule(rule_data, rule_format) for target, rule_data in entrance_data.items()}
-                for region, entrance_data in data["region_map"].items()}
-    raise Exception("unknown format type")
+        region_map = {
+            region: {target: create_rule(rule_data, rule_format) for target, rule_data in entrance_data.items()}
+            for region, entrance_data in data["region_map"].items()
+        }
+    else:
+        raise Exception("unknown format type")
+
+    region_set = set(region_map.keys())
+    for regions in region_map.values():
+        region_set.update(regions.keys())
+    return region_map, sorted(region_set)
 
 
 def build_location_map(data) -> dict[str, dict[str, Rule | None]]:
@@ -138,6 +135,7 @@ class JsonWorld(World):
         class JsonLocation(Location):
             game = game_name
 
+        region_map, region_list = build_region_data(data)
         # only need to define the class, the metaclass registers it for use later
         type(f"json_world_{game_name}", (JsonWorld,), {
             "__doc__": description,
@@ -151,10 +149,10 @@ class JsonWorld(World):
             "item_class": JsonItem,
             "location_class": JsonLocation,
 
-            "region_list": build_region_list(data),
-            "region_map": build_region_map(data),
+            "region_list": region_list,
+            "region_map": region_map,
             "location_map": build_location_map(data),
-            "event_map": build_event_map(),
+            "event_map": build_event_map(data),
             "item_list": build_item_list(data),
             "completion_rule": build_completion_rule(data),
 

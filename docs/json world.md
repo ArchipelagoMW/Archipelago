@@ -49,20 +49,6 @@ Location Group definitions use the format key `location_name_groups` with the de
 The key `location_name_groups` is expected to have the full dict[str, list[str]] mapping.
 Alternatively 
 
-### Region List
-
-TODO: is there a reason to not always calculate this from region_map?
-Region List uses the format key `region_list` with the default value of `explicit`
-
-#### Region List - explicit
-
-The key `region_list` is expected to have the full list[str] object.
-
-#### Region List - region_map
-
-The key `region_map` is expected to have a dict[str, dict[str, Rule]] mapping of region connections,
-and the region list is calculated by the join of inner and outer dict keys.
-
 ### Rules
 
 Rule definitions use the format key `rule` with the default value of `dnf_items`.
