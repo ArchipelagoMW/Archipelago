@@ -187,6 +187,7 @@ with the `/option server_password <password>` command.
 3. Slot Name
 4. Download link for data files
 5. Link to tracker page for this player
+6. Server console (only shown for room owner)
 
 #### From a website generated game
 
