@@ -131,10 +131,10 @@ class RelationshipLogic(BaseLogic):
     @cache_self1
     def exists(self, npc: str) -> StardewRule:
         if npc == NPC.pet:
-            npc_finding_pet = NPC.marnie
+            npcs_finding_pet = [NPC.marnie]
             if ModNPC.ayeisha in self.content.villagers:
-                npc_finding_pet = ModNPC.ayeisha
-            return self.logic.received(f"{npc} Arrival") & self.exists(npc_finding_pet)
+                npcs_finding_pet.append(ModNPC.ayeisha)
+            return self.logic.received(f"{npc} Arrival") & self.logic.and_(*[self.exists(pet_finder) for pet_finder in npcs_finding_pet])
 
         villager = self.content.villagers.get(npc)
         if villager is None:
