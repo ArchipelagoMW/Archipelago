@@ -2557,7 +2557,13 @@
         "requires": [{ "item": "Wall Climb" }],
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // triple jump past the broken stairs
     },
-    { "from": "TRC - Lower Sickbay", "to": "TRC - Chest Above Sol Statue", "requires": [ { "item": "Cloud Leap" } ] },
+    {
+        "from": "TRC - Lower Sickbay", "to": "TRC - Chest Above Sol Statue",
+        "requires": [ { "item": "Cloud Leap" } ],
+        "ls_requires": [ // T-dash setup, hover under the chest, LS vault
+            { "item": "Ledge Grab" }, { "item": "Trick - Bow Hover" }
+        ]
+    },
     { "from": "TRC - Upper Levels", "to": "TRC - Chest Above Sol Statue", "medium_requires": [
         { "item": "Air Dash" } // and T-dash. Probably T-dash first since you need to slash the spikes before landing.
     ] },
