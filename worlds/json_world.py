@@ -57,7 +57,7 @@ def build_region_data(data) -> tuple[list[str], dict[str, dict[str, Rule | None]
     region_set = set(region_map.keys())
     for regions in region_map.values():
         region_set.update(regions.keys())
-    return region_map, sorted(region_set)
+    return sorted(region_set), region_map
 
 
 def build_location_map(data) -> dict[str, dict[str, Rule | None]]:
@@ -71,10 +71,12 @@ def build_location_map(data) -> dict[str, dict[str, Rule | None]]:
 
 def build_event_map(data) -> dict[str, tuple[str, str, Rule | None]]:
     format = data.get("formats", {}).get("event_map", None)
+    rule_format = data.get("formats", {}).get("rule", "dnf_items")
     if format is None:
         return {}
     if format == "explicit":
-        return {region: tuple(data) for region, data in data["event_map"]}
+        return {region: [(loc, item, create_rule(rule, rule_format)) for loc, item, rule in events]
+                for region, events in data["event_map"].items()}
     raise Exception("unknown format type")
 
 
@@ -83,7 +85,7 @@ def build_item_list(data) -> list[str]:
     if format == "explicit":
         return data["item_list"]
     if format == "counter":
-        return [item for item, count in data["item_count"] for _ in range(count)]
+        return [item for item, count in data["item_count"].items() for _ in range(count)]
     raise Exception("unknown format type")
 
 
@@ -119,6 +121,7 @@ class JsonWorld(World):
     region_list: list[str]
     region_map: dict[str, dict[str, Rule | None]]
     location_map: dict[str, dict[str, Rule | None]]
+    event_map: dict[str, list[tuple[str, str, Rule | None]]]
     item_list: list[str]
     completion_rule: Rule
 
@@ -135,7 +138,7 @@ class JsonWorld(World):
         class JsonLocation(Location):
             game = game_name
 
-        region_map, region_list = build_region_data(data)
+        region_list, region_map = build_region_data(data)
         # only need to define the class, the metaclass registers it for use later
         type(f"json_world_{game_name}", (JsonWorld,), {
             "__doc__": description,
@@ -179,8 +182,9 @@ class JsonWorld(World):
                     self.set_rule(loc, rule)
                 regions[region].locations.append(loc)
 
-        for region, (location, item, rule) in self.event_map.items():
-            regions[region].add_event(location, item, rule, self.location_class, self.item_class)
+        for region, events in self.event_map.items():
+            for location, item, rule in events:
+                regions[region].add_event(location, item, rule, self.location_class, self.item_class)
 
     def create_items(self) -> None:
         # create all items in item_list
