@@ -2284,6 +2284,8 @@ class Rac3Interface(GameInterface):
                     self.UnlockItem[name].unlock_delay = 0
                 else:
                     self.UnlockItem[name].unlock_delay += 1
+            else:
+                self._write8(addr, 0)
 
     def patch_cycler(self):
         """Apply runtime instruction patches based on current planet."""
