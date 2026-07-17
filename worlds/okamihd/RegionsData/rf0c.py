@@ -118,7 +118,7 @@ events = {
 locations = {
     RegionNames.NORTHERN_RYOSHIMA_COAST_UMI: {
         "Northern Ryoshima Coast - Kazegami (Whirlwind)": LocData(
-            brush_check_id(24), required_items_events=["Northern Ryoshima Coast - Fish Marlin"],
+            brush_check_id(7), required_items_events=["Northern Ryoshima Coast - Fish Marlin"],
             type=LocationType.CONSTELLATION),
         "Northern Ryoshima Coast - Chest after Whirlwind": LocData(
             container_check_id(MapIds.NORTHERN_RYOSHIMA, 0),
