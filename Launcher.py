@@ -173,6 +173,9 @@ def identify(path: None | str) -> tuple[None | str, None | Component]:
 
 
 def get_exe(component: str | Component) -> Sequence[str] | None:
+    if isinstance(component, Component) and component.func:
+        return [*get_exe("Launcher"), component.display_name]
+
     if isinstance(component, str):
         name = component
         component = None
@@ -223,6 +226,19 @@ def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
             return True
     subprocess.Popen(exe)
     return False
+
+
+def launch_component_from_gui(component, in_terminal=False):
+    """
+    Launch a component from within a GUI, deciding whether the component needs its own new process or not.
+    Should not be used as an "entry point" launch, because that will create an infinite loop. Use run_component instead.
+    """
+
+    if component.func and not in_terminal:
+        component.func()
+        return
+
+    launch(get_exe(component), in_terminal)
 
 
 def create_shortcut(button: Any, component: Component) -> None:
@@ -423,6 +439,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
 
             MDSnackbar(MDSnackbarText(text=open_text), y=dp(24), pos_hint={"center_x": 0.5},
                        size_hint_x=0.5).open()
+            launch_component_from_gui(button.component, button.component.cli)
 
         @staticmethod
         def copy_to_clipboard(text):
