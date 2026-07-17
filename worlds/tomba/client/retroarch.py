@@ -60,6 +60,7 @@ class RetroArch:
         self.socket.setblocking(False)
 
     def send(self, b):
+        logger.debug(f"> {b}")
         if type(b) is str:
             b = b.encode("ascii")
         self.socket.sendto(b, (self.address, self.port))
@@ -67,6 +68,7 @@ class RetroArch:
     def recv(self):
         select.select([self.socket], [], [])
         response, _ = self.socket.recvfrom(4096)
+        logger.debug(f"< {response}")
         return response
 
     async def async_recv(self, timeout=1.0):
@@ -143,7 +145,7 @@ class RetroArch:
             raise BadRetroArchResponse()
         return ret
 
-    def write_memory(self, address, bytes):
+    def write_memory(self, address, bytes: bytearray | bytes):
         command = "WRITE_CORE_MEMORY"
 
         self.send(f'{command} {hex(address)} {" ".join(hex(b) for b in bytes)}')
@@ -156,3 +158,15 @@ class RetroArch:
 
         if splits[2] == "-1":
             logger.info(splits[3])
+
+    async def get_flag(self, address: int, mask: int) -> bool:
+        value = (await self.async_read_memory(address))[0]
+        return bool(value & mask)
+
+    async def set_flag(self, address: int, mask: int, set: bool = True):
+        value = (await self.async_read_memory(address))[0]
+        if set:
+            value |= mask
+        else:
+            value &= ~mask
+        self.write_memory(address, value.to_bytes())

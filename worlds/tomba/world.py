@@ -4,10 +4,13 @@ from typing import Any
 from worlds.AutoWorld import World
 
 from . import constants
-from . import items, locations, regions, rules, web_world
+from . import locations, regions, rules, web_world
 from . import (
     options as tomba_options,
-)  # rename due to a name conflict with World.options
+)
+from .constants import Regions
+from .locations import LocationHandler
+from .items import ItemHandler, TombaItem
 
 
 class TombaWorld(World):
@@ -21,10 +24,10 @@ class TombaWorld(World):
     options_dataclass = tomba_options.TombaOptions
     options: tomba_options.TombaOptions
 
-    location_name_to_id = locations.LOCATION_NAME_TO_ID
-    item_name_to_id = items.ITEM_NAME_TO_ID
+    location_name_to_id = LocationHandler.name_to_id
+    item_name_to_id = ItemHandler.name_to_id
 
-    origin_region_name = constants.VILLAGE_OF_ALL_BEGINNINGS
+    origin_region_name = Regions.VILLAGE_OF_ALL_BEGINNINGS
 
     def create_regions(self) -> None:
         regions.create_and_connect_regions(self)
@@ -34,13 +37,13 @@ class TombaWorld(World):
         rules.set_all_rules(self)
 
     def create_items(self) -> None:
-        items.create_all_items(self)
+        ItemHandler.create_all_items(self)
 
-    def create_item(self, name: str) -> items.TombaItem:
-        return items.create_item_with_correct_classification(self, name)
+    def create_item(self, name: str) -> TombaItem:
+        return ItemHandler.create_item(self, name)
 
     def get_filler_item_name(self) -> str:
-        return items.get_random_filler_item_name(self)
+        return ItemHandler.get_random_filler_item_name(self)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         slot_data = {"world_version": self.world_version.as_simple_string()}
