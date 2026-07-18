@@ -464,7 +464,7 @@ class MultiWorld():
         return ret
 
     def get_items(self) -> List[Item]:
-        return [loc.item for loc in self.get_filled_locations()] + self.itempool
+        return [loc.item for loc in self.get_filled_locations()] + [item for item in self.itempool if item.location is None]
 
     def find_item_locations(self, item: str, player: int, resolve_group_locations: bool = False) -> List[Location]:
         if resolve_group_locations:
