@@ -44,6 +44,26 @@ These get automatically added to the `archipelago.json` of an .apworld if it is 
 ["Build APWorlds" launcher component](#build-apworlds-launcher-component),
 which is the correct way to package your `.apworld` as a world developer. Do not write these fields yourself.
 
+### Choosing `minimum_ap_version` and `maximum_ap_version`
+
+Both fields are optional, and most worlds only ever need `minimum_ap_version`.
+
+* **`minimum_ap_version`** - the most cost-effective approach is to set it to the latest stable Archipelago
+  version when you first create your world, then only raise it when you deliberately start using a new core
+  feature that requires a newer version. When you want such a feature you can choose to either bump
+  `minimum_ap_version`, write code that supports both the old and new core conditionally (for example a
+  `try`/`except` around a moved import), or decide the feature is not worth it and leave it alone. There is
+  usually no need to determine your world's "true" minimum version, since most players run the latest release
+  or close to it.
+* **`maximum_ap_version`** - rarely needed. Only set it when you already know a particular Archipelago version
+  breaks your world and you cannot quickly fix it or handle the difference conditionally. Most incompatibilities
+  are better resolved by updating the world instead. The main legitimate use case is a world or tool that is
+  tightly coupled to core's generation behavior, where supporting both sides of a breaking change in a single
+  release is not feasible.
+
+When present, both fields use the same `"major.minor.build"` string format as the Archipelago version itself,
+for example `"0.6.4"`.
+
 ### "Build APWorlds" Launcher Component
 
 In the Archipelago Launcher (on [source only](/docs/running%20from%20source.md)), there is a "Build APWorlds"
