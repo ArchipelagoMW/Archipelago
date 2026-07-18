@@ -2284,13 +2284,34 @@
         ]
     },
     {
-        "from": "ED (Passages) - Left Pink Pool", "to": "ED (Passages) - Outside Tianshou Arena",
+        "from": "ED (Passages) - Left Pink Pool", "to": "ED (Passages) - Above Left Pink Pool (Right)",
+        "requires": [ { "item": "Tai-Chi Kick" } ]
+    },
+    {
+        "from": "ED (Passages) - Above Left Pink Pool (Right)", "to": "ED (Passages) - Above Left Pink Pool (Left)",
         "requires": [
-            { "item": "Tai-Chi Kick" }, // platforms above pool
-            // one higher TCK target requires AD OR CL OR CS OR T-dash, but later steps will cover that
+            { "item": "Tai-Chi Kick" },
+            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] } // one of the TCK switches is too far out to reach with a normal jump
+        ],
+        "medium_requires": [
+            { "anyOf": [
+                { "item": "Tai-Chi Kick" }, // T-Dash let's you reach the TCK switch instead of vanilla requirements
+                // several options of skipping TCK
+                { "item": "Trick - Bow Hover" },
+                [ { "item": "Cloud Leap" }, { "item": "Air Dash" }, 
+                    { "anyOf": [ { "item": "Trick - Long Jump with Swift Runner" }, { "item": "Charged Strike" } ] }
+                // we can't require T-Dash for TCK-less methods due to there being no replenishable Qi source nearby without TCK
+                ] 
+            ] }
+        ]
+    },
+    {
+        "from": "ED (Passages) - Above Left Pink Pool (Left)", "to": "ED (Passages) - Outside Tianshou Arena",
+        "requires": [
             { "item": "Grapple" },
             { "item": "Cloud Leap" },
-            { "item": "Air Dash" } // next pink waterfall and TCK platform puzzle hard require CL AND AD AND TCK
+            { "item": "Air Dash" },
+            { "item": "Tai-Chi Kick" } // next pink waterfall and TCK platform puzzle hard require CL AND AD AND TCK
         ],
         "medium_requires": [
             { "item": "Tai-Chi Kick" },
@@ -2301,11 +2322,21 @@
         ], // bow hover works on the 1st zipline, but not the 2nd, so it's not relevant to medium
         "ls_requires": [
             { "item": "Tai-Chi Kick" },
-            { "item": "Trick - Bow Hover" }, // for the 1st zipline
-            { "item": "Air Dash" }, // pink waterfall hard requires AD, also a T-dash using qi from the TCKs earlier
-            { "item": "Cloud Leap" }, // to reach green platforms between ziplines, which are the only source of LS here
-            { "item": "Ledge Grab" } // finally, do AD setup on the green platforms to get LS,
+            { "item": "Cloud Leap" }, // to set up LS above the first pink pool and on the TCK platforms above the second pool
+            { "item": "Ledge Grab" }, // AD setup works for the second zipline, first setup requires CL
+            // bypass the first zipline with a parry hover from the topmost TCK platform
             // then bypass the 2nd zipline with a wall slide followed by a CL over the final hazard
+            { "item": "Air Dash" } // pink waterfall hard requires AD, also a T-dash using qi from the TCKs earlier or CL
+        ]
+    },
+    {
+        "from": "ED (Passages) - Outside Tianshou Arena", "to": "ED (Passages) - Above Left Pink Pool (Right)",
+        "ls_requires": [
+            { "item": "Ledge Grab" },
+            { "item": "Cloud Leap" },
+            { "item": "Air Dash" }
+            // AD and T-Dash comfortably get you past the last Zipline as well, trivial with CL on top
+            // Bow Hover gets you all the way to the left pool side as well but that is already accounted for by a right side to left side connection
         ]
     },
     { "from": "ED (Passages) - Outside Tianshou Arena", "to": "ED (Passages) - Between Root Node & Tianshou Arena", "requires": [] }, // shortcut rope
