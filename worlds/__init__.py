@@ -80,7 +80,7 @@ class WorldSource:
     def name(self) -> str:
         return Path(self.path).stem
 
-# AP_TEST_WORLDS (pytest only) scopes auto-loading to the named worlds; these are always loaded for the
+# AP_TEST_WORLDS scopes auto-loading to the named worlds; these are always loaded for the
 # suite's fixtures but aren't themselves worlds under test.
 _SUITE_FIXTURE_WORLDS = {"generic", "apquest"}
 _test_worlds_env = os.environ.get("AP_TEST_WORLDS") if "pytest" in sys.modules or "unittest" in sys.modules else None
