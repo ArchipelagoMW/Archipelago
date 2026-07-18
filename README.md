@@ -85,6 +85,7 @@ Currently, the following games are supported:
 * Satisfactory
 * EarthBound
 * Mega Man 3
+* Gauntlet Legends
 * Wargroove 2
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
