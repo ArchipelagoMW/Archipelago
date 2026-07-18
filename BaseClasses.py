@@ -452,12 +452,14 @@ class MultiWorld():
         ret = CollectionState(self, allow_partial_entrances)
 
         for item in self.itempool:
-            self.worlds[item.player].collect(ret, item)
+            if item.location is None:
+                self.worlds[item.player].collect(ret, item)
         if collect_pre_fill_items:
             for player in self.player_ids:
                 subworld = self.worlds[player]
                 for item in subworld.get_pre_fill_items():
-                    subworld.collect(ret, item)
+                    if item.location is None:
+                        subworld.collect(ret, item)
         if perform_sweep:
             ret.sweep_for_advancements()
 
