@@ -327,6 +327,11 @@ reject the placement of an item there.
 
 ### Events (or "generation-only items/locations")
 
+> **Warning:** If you're trying to tell the Archipelago server that the player has achieved their goal, you want to send
+a [StatusUpdate packet](network%20protocol.md#statusupdate), or however [your client library](network%20protocol.md)
+wraps it. Despite the popularity of "victory events" during generation, events have nothing to do with how goals are
+triggered during gameplay.
+
 An event item or location is one that only exists during multiworld generation; the server is never made aware of them.
 Event locations can never be checked by the player, and event items cannot be received during play.
 
@@ -491,9 +496,10 @@ class MyGameWorld(World):
     base_id = 1234
     # instead of dynamic numbering, IDs could be part of data
 
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
+    # The following two dicts are required for the generation to know which items exist.
+    # They can be generated with arbitrary code during world load, but keep in mind that
+    # anything expensive (e.g. parsing non-python data files) will delay world loading.
+    # They can include events, but don't have to since events will be placed manually.
     item_name_to_id = {name: id for
                        id, name in enumerate(mygame_items, base_id)}
     location_name_to_id = {name: id for
@@ -770,6 +776,7 @@ class MyGameState(LogicMixin):
         new_state.mygame_defeatable_enemies = {
             player: enemies.copy() for player, enemies in self.mygame_defeatable_enemies.items()
         }
+        return new_state
 ```
 
 After doing this, you can now access `state.mygame_defeatable_enemies[player]` from your access rules.

@@ -144,7 +144,7 @@ pelican_town = ContentPack(
         ),
         Mushroom.morel: (
             Tag(ItemTag.FORAGE),
-            ForagingSource(seasons=(Season.spring, Season.fall), regions=(Region.secret_woods,)),
+            ForagingSource(seasons=(Season.spring,), regions=(Region.secret_woods,)),
         ),
         Mushroom.red: (
             Tag(ItemTag.FORAGE),

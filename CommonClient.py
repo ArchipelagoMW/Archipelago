@@ -773,7 +773,7 @@ class CommonContext:
         if len(parts) == 1:
             parts = title.split(', ', 1)
         if len(parts) > 1:
-            text = parts[1] + '\n\n' + text
+            text = f"{parts[1]}\n\n{text}" if text else parts[1]
             title = parts[0]
         # display error
         self._messagebox = MessageBox(title, text, error=True)
@@ -896,6 +896,8 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
                                    "May not be running Archipelago on that address or port.")
     except websockets.InvalidURI:
         ctx.handle_connection_loss("Failed to connect to the multiworld server (invalid URI)")
+    except asyncio.TimeoutError:
+        ctx.handle_connection_loss("Failed to connect to the multiworld server. Connection timed out.")
     except OSError:
         ctx.handle_connection_loss("Failed to connect to the multiworld server")
     except Exception:
@@ -1067,13 +1069,17 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if "players" in args:
             ctx.consume_players_package(args["players"])
         if "hint_points" in args:
-            ctx.hint_points = args['hint_points']
+            ctx.hint_points = args["hint_points"]
         if "checked_locations" in args:
             checked = set(args["checked_locations"])
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
         if "permissions" in args:
             ctx.update_permissions(args["permissions"])
+
+        # Update hint info for local display
+        if "hint_cost" in args:
+            ctx.hint_cost = int(args["hint_cost"])
 
     elif cmd == 'Print':
         ctx.on_print(args)

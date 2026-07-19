@@ -35,8 +35,8 @@ There are also the following optional fields:
 * `world_version` - an arbitrary version for that world in order to only load the newest valid world.
   An APWorld without a world_version is always treated as older than one with a version
   (**Must** use exactly the format `"major.minor.build"`, e.g. `1.0.0`)
-* `authors` - a list of authors, to eventually be displayed in various user-facing places such as WebHost and
-  package managers. Should always be a list of strings.
+* `authors` - a list of authors of the world. Displayed in user-facing places like the Supported Games page
+  on WebHost. Should always be a list of strings.
 
 If the APWorld is packaged as an `.apworld` zip file, it also needs to have `version` and `compatible_version`,
 which refer to the version of the APContainer packaging scheme defined in [Files.py](../worlds/Files.py).  
@@ -44,10 +44,30 @@ These get automatically added to the `archipelago.json` of an .apworld if it is 
 ["Build APWorlds" launcher component](#build-apworlds-launcher-component),
 which is the correct way to package your `.apworld` as a world developer. Do not write these fields yourself.
 
+### Choosing `minimum_ap_version` and `maximum_ap_version`
+
+Both fields are optional, and most worlds only ever need `minimum_ap_version`.
+
+* **`minimum_ap_version`** - the most cost-effective approach is to set it to the latest stable Archipelago
+  version when you first create your world, then only raise it when you deliberately start using a new core
+  feature that requires a newer version. When you want such a feature you can choose to either bump
+  `minimum_ap_version`, write code that supports both the old and new core conditionally (for example a
+  `try`/`except` around a moved import), or decide the feature is not worth it and leave it alone. There is
+  usually no need to determine your world's "true" minimum version, since most players run the latest release
+  or close to it.
+* **`maximum_ap_version`** - rarely needed. Only set it when you already know a particular Archipelago version
+  breaks your world and you cannot quickly fix it or handle the difference conditionally. Most incompatibilities
+  are better resolved by updating the world instead. The main legitimate use case is a world or tool that is
+  tightly coupled to core's generation behavior, where supporting both sides of a breaking change in a single
+  release is not feasible.
+
+When present, both fields use the same `"major.minor.build"` string format as the Archipelago version itself,
+for example `"0.6.4"`.
+
 ### "Build APWorlds" Launcher Component
 
-In the Archipelago Launcher, there is a "Build APWorlds" component that will package all world folders to `.apworld`,
-and add `archipelago.json` manifest files to them.  
+In the Archipelago Launcher (on [source only](/docs/running%20from%20source.md)), there is a "Build APWorlds"
+component that will package all world folders to `.apworld`, and add `archipelago.json` manifest files to them.  
 These .apworld files will be output to `build/apworlds` (relative to the Archipelago root directory).  
 The `archipelago.json` file in each .apworld will automatically include the appropriate
 `version` and `compatible_version`.  

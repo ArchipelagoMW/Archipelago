@@ -28,7 +28,9 @@ class InvalidItemError(KeyError):
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    world_types: dict[str, Type[World]] = {}
+    testable_worlds: dict[str, Type[World]] = world_types
+    """worlds under test; scoped to AP_TEST_WORLDS by worlds/__init__"""
     __file__: str
     zip_path: Optional[str]
     settings_key: str
@@ -367,6 +369,8 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
     world_version: ClassVar[Version] = Version(0, 0, 0)
     """Optional world version loaded from archipelago.json"""
+    manifest: ClassVar[dict[str, Any]] = {}
+    """Mapping of the world's archipelago.json manifest. Use game and world_version attrs instead for those values."""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
@@ -377,7 +381,7 @@ class World(metaclass=AutoWorldRegister):
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
-            return self.__class__.settings
+            return getattr(self.__class__, item)
         raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
@@ -444,6 +448,23 @@ class World(metaclass=AutoWorldRegister):
         This happens before progression balancing, so the items may not be in their final locations yet.
         """
 
+    def finalize_multiworld(self) -> None:
+        """
+        Optional Method that is called after fill and progression balancing.
+        This is the last stage of generation where worlds may change logically relevant data,
+        such as item placements and connections. To not break assumptions,
+        only ever increase accessibility, never decrease it.
+        """
+        pass
+
+    def pre_output(self):
+        """
+        Optional method that is called before output generation.
+        Items and connections are not meant to be moved anymore,
+        anything that would affect logical spheres is forbidden at this point.
+        """
+        pass
+
     def generate_output(self, output_directory: str) -> None:
         """
         This method gets called from a threadpool, do not use multiworld.random here.
@@ -509,7 +530,9 @@ class World(metaclass=AutoWorldRegister):
 
     def get_filler_item_name(self) -> str:
         """
-        Called when the item pool needs to be filled with additional items to match location count.
+        If core AP removes an item from your item pool, this method is called to choose a replacement item
+        so item count and location count remain equal.
+        For example: plando, item_links and start_inventory_from_pool are features that may cause this.
 
         Any returned item name must be for a "repeatable" item, i.e. one that it's okay to generate arbitrarily many of.
         For most worlds this will be one or more of your filler items, but the classification of these items
