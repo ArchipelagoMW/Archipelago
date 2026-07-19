@@ -1,3 +1,5 @@
+from collections import Counter
+import random
 from typing import ClassVar, Type
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
@@ -5,14 +7,21 @@ from Options import PerGameCommonOptions, OptionError
 from worlds.AutoWorld import WebWorld, World
 
 from .Options import CMOptions, resolve_piece_upgrade_preferences, resolve_piece_upgrade_ratio
-from .Items import CMItem, item_table, item_name_groups
-from .Locations import CMLocation, location_table, Tactic
+from .Items import MATERIAL_TOTAL_KEY, CMItem, item_table, item_name_groups
+from .contract_resource import (
+    UNLOCK_ITEM_ROLES,
+    load_production_contract,
+    production_contract_document,
+)
+from .Locations import BoardStage, CMLocation, location_names_for_stage, location_table
 from .Presets import checksmate_option_presets
 from .Rules import set_rules
 from .CollectionState import CMCollectionState
 from .ItemPool import CMItemPool
 from .PieceModel import PieceModel, PieceLimitCascade
 from .MaterialModel import MaterialModel
+from .logic_projection import WorldLogicProjection
+from .semantic_projection import SemanticSeeds
 
 
 class CMWeb(WebWorld):
@@ -36,7 +45,7 @@ class CMWorld(World):
     """
     game: ClassVar[str] = "ChecksMate"
     web = CMWeb()
-    required_chess_client_version = "0.3.3"
+    required_chess_client_version = "0.4.0"
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CMOptions
     options: CMOptions
 
@@ -81,9 +90,12 @@ class CMWorld(World):
         self._material_model = MaterialModel(self)
         self._material_model.items_used = self.items_used
         self._collection_state = CMCollectionState(self)
+        self._logic_projection: WorldLogicProjection | None = None
+        self._semantic_seed_values: dict[str, int] | None = None
 
 
     def generate_early(self) -> None:
+        self._ensure_semantic_seeds()
         piece_collection = self.options.fairy_chess_pieces.value
         army_options = []
         if piece_collection == self.options.fairy_chess_pieces.option_fide:
@@ -122,13 +134,18 @@ class CMWorld(World):
             self.armies[self.player] = army_options
 
     def fill_slot_data(self) -> dict:
-        cursed_knowledge = {name: self.random.getrandbits(31) for name in [
-            "pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"]}
+        contract = load_production_contract()
+        self._ensure_semantic_seeds()
+        cursed_knowledge = dict(self._semantic_seed_values)
         potential_pockets = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]
         self.random.shuffle(potential_pockets)
         cursed_knowledge["pocket_order"] = potential_pockets
         cursed_knowledge["total_queens"] = self.items_used[self.player].get("Progressive Major To Queen", 0)
         cursed_knowledge["required_chess_client_version"] = self.required_chess_client_version
+        cursed_knowledge["apmw_contract"] = production_contract_document()
+        cursed_knowledge["material_item_value"] = contract.expected_material["material_item"]
+        cursed_knowledge["castling_location_count"] = contract.castler.maximum
+        cursed_knowledge["geometry_unlock_items"] = dict(UNLOCK_ITEM_ROLES)
         if self.player in self.armies:
             cursed_knowledge["army"] = self.armies[self.player]
         option_names = ["goal", "death_link", "difficulty", "piece_locations", "piece_types",
@@ -136,9 +153,24 @@ class CMWorld(World):
                         "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
                         "pocket_limit_by_pocket", "fair_board_guarantee"]
         slot_options = self.options.as_dict(*option_names)
-        slot_options["piece_upgrade_preferences"] = resolve_piece_upgrade_preferences(
+        slot_options["progression_itemization"] = (
+            "fundamental"
+            if self.options.progression_itemization.value
+            == self.options.progression_itemization.option_fundamental
+            else "legacy"
+        )
+        upgrade_preferences = resolve_piece_upgrade_preferences(
             self.options.fairy_chess_pawn_upgrades, self.options.piece_upgrade_preferences,
             self.options.piece_upgrade_priority)
+        if (
+            self.options.progression_itemization.value
+            == self.options.progression_itemization.option_fundamental
+            and not self.options.piece_upgrade_priority.value
+            and self.options.fairy_chess_pawn_upgrades.value
+            != self.options.fairy_chess_pawn_upgrades.option_configure
+        ):
+            upgrade_preferences = []
+        slot_options["piece_upgrade_preferences"] = upgrade_preferences
         slot_options["piece_upgrade_ratio"] = resolve_piece_upgrade_ratio(self.options.piece_upgrade_ratio)
         return dict(cursed_knowledge, **slot_options)
 
@@ -150,22 +182,34 @@ class CMWorld(World):
         set_rules(self)
 
     def create_items(self) -> None:
-        self.multiworld.itempool += self._item_pool.create_items()
+        items = self._item_pool.create_items()
+        self.multiworld.itempool += items
+        obtainable = Counter(item.name for item in items)
+        obtainable.update(
+            item.name
+            for item in self.multiworld.precollected_items[self.player]
+        )
+        obtainable.update(
+            location.item.name
+            for location in self.multiworld.get_locations(self.player)
+            if location.locked and location.item is not None
+        )
+        self.logic_projection.set_obtainable_counts(obtainable)
 
     def create_regions(self) -> None:
         region = Region("Menu", self.player, self.multiworld)
         super_sized = self.options.goal.value != self.options.goal.option_single
+        stage = BoardStage.Board12x12 if super_sized else BoardStage.Board8x8
+        tactics_mode = (
+            "none"
+            if self.options.enable_tactics.value == self.options.enable_tactics.option_none
+            else "turns"
+            if self.options.enable_tactics.value == self.options.enable_tactics.option_turns
+            else "all"
+        )
 
-        for loc_name in location_table:
+        for loc_name in location_names_for_stage(stage, tactics_mode):
             loc_data = location_table[loc_name]
-            if not super_sized and loc_data.material_expectations == -1:
-                continue
-            if loc_data.is_tactic is not None:
-                if self.options.enable_tactics.value == self.options.enable_tactics.option_none:
-                    continue
-                elif self.options.enable_tactics.value == self.options.enable_tactics.option_turns and \
-                        loc_data.is_tactic == Tactic.Fork:
-                    continue
             region.locations.append(CMLocation(self.player, loc_name, loc_data.code, region))
 
         self.multiworld.regions.append(region)
@@ -176,10 +220,13 @@ class CMWorld(World):
             self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(victory_item)
         else:
             victory_item = self.create_item("Victory")
-            self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
+            self.multiworld.get_location("Checkmate 12x12", self.player).place_locked_item(victory_item)
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         """Collect an item and update material value."""
+        if not self._collection_state.is_effective_collection(state, item):
+            self._collection_state.record_excess_collection(state, item)
+            return False
         # Calculate material value before state change
         material = self._collection_state.collect(state, item)
 
@@ -187,12 +234,15 @@ class CMWorld(World):
         change = super().collect(state, item)
         if change:
             # we actually collected the item, so we must gain the material
-            state.prog_items[self.player]["Material"] += material
+            state.prog_items[self.player][MATERIAL_TOTAL_KEY] += material
 
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         """Remove an item and update material value."""
+        if self._collection_state.remove_excess_collection(state, item):
+            return False
+
         # Calculate material value before state change
         material = self._collection_state.remove(state, item)
 
@@ -200,10 +250,37 @@ class CMWorld(World):
         change = super().remove(state, item)
         if change:
             # we actually removed the item, so we must lose the material
-            state.prog_items[self.player]["Material"] -= material
+            state.prog_items[self.player][MATERIAL_TOTAL_KEY] -= material
 
         return change
 
     def find_piece_limit(self, piece_name: str, cascade_type: PieceLimitCascade) -> int:
         """Delegate piece limit finding to the PieceModel."""
         return self._piece_model.find_piece_limit(piece_name, cascade_type)
+
+    @property
+    def logic_projection(self) -> WorldLogicProjection:
+        if self._logic_projection is None:
+            self._ensure_semantic_seeds()
+            seeds = SemanticSeeds(**{
+                name: str(value)
+                for name, value in self._semantic_seed_values.items()
+            })
+            self._logic_projection = WorldLogicProjection(self.options, seeds)
+        return self._logic_projection
+
+    def _ensure_semantic_seeds(self) -> None:
+        if self._semantic_seed_values is not None:
+            return
+        probe = random.Random()
+        probe.setstate(self.random.getstate())
+        self._semantic_seed_values = {
+            name: probe.getrandbits(31)
+            for name in (
+                "pocket_seed",
+                "pawn_seed",
+                "minor_seed",
+                "major_seed",
+                "queen_seed",
+            )
+        }

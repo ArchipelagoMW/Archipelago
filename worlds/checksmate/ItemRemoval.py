@@ -1,6 +1,6 @@
 
 from BaseClasses import Item
-from .Items import item_table, progression_items, item_name_groups
+from .Items import LEGACY_CHESSMEN_GROUP, item_table, progression_items, item_name_groups
 from .Locations import highest_chessmen_requirement_small, highest_chessmen_requirement
 
 
@@ -45,6 +45,19 @@ class ItemRemoval:
 
     def _exceeds_basic_limits(self, chosen_item: str, progression_items_list: list[str]) -> bool:
         """Check if the item exceeds basic quantity or piece type limits."""
+        if chosen_item == "Progressive Pocket":
+            pocket_limit = min(
+                self.world.options.max_pocket.value,
+                self.world.options.pocket_limit_by_pocket.value * 3,
+            )
+            if (
+                pocket_limit
+                and self.piece_model.items_used[self.world.player].get(
+                    chosen_item, 0
+                ) >= pocket_limit
+            ):
+                return True
+
         # Check quantity limits
         if chosen_item in self.piece_model.items_used[self.world.player]:
             if self.piece_model.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
@@ -127,15 +140,25 @@ class ItemRemoval:
 
     def _count_chessmen(self, items: list[Item]) -> int:
         """Count the number of chessmen in the items list."""
+        if self._is_fundamental():
+            return len([item for item in items if item.name == "Chessmen"])
         pocket_limit = self.world.options.pocket_limit_by_pocket.value
         pocket_amount = (0 if pocket_limit <= 0 else
                         len([item for item in items if item.name == "Progressive Pocket"]) // pocket_limit)
-        chessmen_amount = len([item for item in items if item.name in item_name_groups["Chessmen"]])
+        chessmen_amount = len([item for item in items if item.name in item_name_groups[LEGACY_CHESSMEN_GROUP]])
         return chessmen_amount + pocket_amount
 
     def _is_chessman(self, item_name: str) -> bool:
         """Check if an item is a chessman."""
-        return item_name in item_name_groups["Chessmen"]
+        return (
+            item_name == "Chessmen"
+            if self._is_fundamental()
+            else item_name in item_name_groups[LEGACY_CHESSMEN_GROUP]
+        )
+
+    def _is_fundamental(self) -> bool:
+        option = getattr(self.world.options, "progression_itemization", None)
+        return option is not None and option.value == option.option_fundamental
 
     def _is_pocket_piece(self, item_name: str) -> bool:
         """Check if an item is a pocket piece."""
@@ -152,6 +175,8 @@ class ItemRemoval:
 
     def _calculate_lockable_material(self, chosen_item: str, items: list[Item], locked_items: dict[str, int]) -> int:
         """Calculate the material value if this item was added."""
+        if chosen_item == "Progressive Pocket":
+            return 0
         material = progression_items[chosen_item].material
         if self._is_minimal_accessibility():
             return material
@@ -170,4 +195,6 @@ class ItemRemoval:
         """Calculate the material value of locked items."""
         return sum(locked_items[item] * progression_items[item].material 
                   for item in locked_items 
-                  if item in progression_items and progression_items[item].material > 0)
+                  if item in progression_items
+                  and progression_items[item].material > 0
+                  and item != "Progressive Pocket")

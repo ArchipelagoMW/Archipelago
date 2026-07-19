@@ -2,7 +2,8 @@ from copy import copy
 
 from .bases import CMTestBase
 from ..Rules import determine_difficulty
-from ..Items import item_table
+from ..Items import MATERIAL_TOTAL_KEY, item_table
+from ..Locations import BoardStage
 
 
 class MaterialStateTestBase(CMTestBase):
@@ -19,7 +20,7 @@ class MaterialStateTestBase(CMTestBase):
     def test_basic_fill(self) -> None:
         # this is mostly to demonstrate that collect fundamentally acquires the items and to show that setUp sets up
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
-        self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Material"])
+        self.assertEqual(0, self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY])
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
         self.assertEqual(
             len([item for item in self.multiworld.itempool if item.name == "Progressive Pawn"]),
@@ -34,20 +35,26 @@ class TestSimpleMaterial(MaterialStateTestBase):
     """
     def test_no_options(self) -> None:
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
-        past_material = self.multiworld.state.prog_items[self.player]["Material"]
-        self.assertLessEqual(4150 * self.difficulty, past_material)
-        self.assertGreaterEqual(4650 * self.difficulty, past_material)
+        past_material = self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY]
+        logic_material = self.world.logic_projection.metrics(
+            self.multiworld.state, self.player, BoardStage.Board8x8
+        ).material
+        self.assertGreater(logic_material, 0)
+        self.assertEqual(
+            self.world.logic_projection.maximum_material(BoardStage.Board8x8),
+            logic_material,
+        )
 
     def test_exact_material(self) -> None:
         """Test that the material value matches exactly what we expect from summing all items."""
         # First collect everything
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
-        actual_material = self.multiworld.state.prog_items[self.player]["Material"]
+        actual_material = self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY]
         
         # Calculate expected material by summing up each item's material value
         expected_material = 0
         for item_name, count in self.multiworld.state.prog_items[self.player].items():
-            if item_name == "Material":  # Skip the material counter itself
+            if item_name == MATERIAL_TOTAL_KEY:
                 continue
             if item_name in item_table and item_table[item_name].material > 0:
                 expected_material += item_table[item_name].material * count
@@ -62,36 +69,53 @@ class TestCyclicMaterial(MaterialStateTestBase):
     """Removes all material, then adds it back again. This tests remove() via sledgehammer method"""
     def test_no_options(self) -> None:
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
-        past_material = self.multiworld.state.prog_items[self.player]["Material"]
-        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
-        self.assertLessEqual(4150 * self.difficulty, past_material)
-        self.assertGreaterEqual(4650 * self.difficulty, past_material)
+        past_material = self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY]
+        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY])
+        logic_material = self.world.logic_projection.metrics(
+            self.multiworld.state, self.player, BoardStage.Board8x8
+        ).material
+        self.assertGreater(logic_material, 0)
+        self.assertEqual(
+            self.world.logic_projection.maximum_material(BoardStage.Board8x8),
+            logic_material,
+        )
 
-        for item in list(self.multiworld.state.prog_items[self.player].keys()):
+        for item in [
+            name for name in self.multiworld.state.prog_items[self.player]
+            if name != MATERIAL_TOTAL_KEY
+        ]:
             self.remove_by_name(item)
         # self.assertEqual(0, self.multiworld.state.prog_items[self.player])
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
-        self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Material"])
+        self.assertEqual(0, self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY])
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
 
-        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
+        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY])
 
     """Same as before, but backward, to test "children" logic"""
     def test_backward(self) -> None:
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
-        past_material = self.multiworld.state.prog_items[self.player]["Material"]
-        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
-        self.assertLessEqual(4150 * self.difficulty, past_material)
-        self.assertGreaterEqual(4650 * self.difficulty, past_material)
+        past_material = self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY]
+        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY])
+        logic_material = self.world.logic_projection.metrics(
+            self.multiworld.state, self.player, BoardStage.Board8x8
+        ).material
+        self.assertGreater(logic_material, 0)
+        self.assertEqual(
+            self.world.logic_projection.maximum_material(BoardStage.Board8x8),
+            logic_material,
+        )
 
-        items = list(self.multiworld.state.prog_items[self.player].keys())
+        items = [
+            name for name in self.multiworld.state.prog_items[self.player]
+            if name != MATERIAL_TOTAL_KEY
+        ]
         items.reverse()
         for item in items:
             self.remove_by_name(item)
         # self.assertEqual(0, self.multiworld.state.prog_items[self.player])
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
-        self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Material"])
+        self.assertEqual(0, self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY])
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
 
-        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
-
+        self.assertEqual(past_material, self.multiworld.state.prog_items[self.player][MATERIAL_TOTAL_KEY])

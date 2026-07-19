@@ -1,5 +1,6 @@
 from BaseClasses import CollectionState, Item, ItemClassification
-from ..Items import item_table
+from ..Items import MATERIAL_TOTAL_KEY, item_allowed_in_mode, item_table
+from ..Rules import has_board_files_unlock
 from .bases import CMTestBase
 import random
 
@@ -54,31 +55,35 @@ class TestCollectionState(CMTestBase):
         
     def test_remove_beyond_quantity(self):
         """Test that removing items beyond their quantity limit doesn't affect material"""
-        # Set up initial state with 3 Progressive King Promotions
         item = self.create_test_item("Progressive King Promotion")
-        
-        # Add 3 items first
-        self.cm_collection_state.collect(self.collection_state, item)
-        self.cm_collection_state.collect(self.collection_state, item)
-        self.cm_collection_state.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        
-        # First removal should not count (going from 3->2)
-        material1 = self.cm_collection_state.remove(self.collection_state, item)
-        self.world.remove(self.collection_state, item)
-        self.assertEqual(material1, 0)
-        
-        # Second removal should count (going from 2->1)
-        material2 = self.cm_collection_state.remove(self.collection_state, item)
-        self.world.remove(self.collection_state, item)
-        self.assertGreater(material2, 0)
-        
-        # Third removal should count (going from 1->0)
-        material3 = self.cm_collection_state.remove(self.collection_state, item)
-        self.world.remove(self.collection_state, item)
-        self.assertGreater(material3, 0)
+
+        self.assertTrue(self.world.collect(self.collection_state, item))
+        self.assertTrue(self.world.collect(self.collection_state, item))
+        self.assertFalse(self.world.collect(self.collection_state, item))
+        expected_material = 2 * item_table[item.name].material
+        self.assertEqual(2, self.collection_state.count(item.name, self.player))
+        self.assertEqual(
+            expected_material,
+            self.collection_state.prog_items[self.player][MATERIAL_TOTAL_KEY],
+        )
+
+        self.assertFalse(self.world.remove(self.collection_state, item))
+        self.assertEqual(2, self.collection_state.count(item.name, self.player))
+        self.assertEqual(
+            expected_material,
+            self.collection_state.prog_items[self.player][MATERIAL_TOTAL_KEY],
+        )
+
+        self.assertTrue(self.world.remove(self.collection_state, item))
+        self.assertEqual(1, self.collection_state.count(item.name, self.player))
+        self.assertEqual(
+            item_table[item.name].material,
+            self.collection_state.prog_items[self.player][MATERIAL_TOTAL_KEY],
+        )
+
+        self.assertTrue(self.world.remove(self.collection_state, item))
+        self.assertEqual(0, self.collection_state.count(item.name, self.player))
+        self.assertEqual(0, self.collection_state.prog_items[self.player][MATERIAL_TOTAL_KEY])
         
     def test_pocket_limit_interaction(self):
         """Test that Progressive Pocket respects pocket limit"""
@@ -107,10 +112,20 @@ class TestCollectionState(CMTestBase):
         self.world.collect(self.collection_state, item)
         self.assertEqual(material4, 0)
 
+    def test_legacy_super_size_marker_aliases_first_board_file_unlock(self):
+        item = self.create_test_item("Super-Size Me")
+
+        self.assertFalse(has_board_files_unlock(self.collection_state, self.player))
+        self.assertTrue(self.world.collect(self.collection_state, item))
+        self.assertTrue(has_board_files_unlock(self.collection_state, self.player))
+
     def test_random_collect_remove(self):
         """Test collecting and removing items in random order to verify state consistency"""
         # Create list of all items that have material value
-        material_items = {name: data for name, data in item_table.items() if data.material > 0}
+        material_items = {
+            name: data for name, data in item_table.items()
+            if data.material > 0 and item_allowed_in_mode(name, "legacy")
+        }
         material_items_list = list(material_items.items())
         
         # Track what we expect to have
@@ -130,7 +145,7 @@ class TestCollectionState(CMTestBase):
                 collected_items.append(item_name)
                 
             # Verify material matches expectations
-            actual_material = self.collection_state.prog_items[self.player].get("Material", 0)
+            actual_material = self.collection_state.prog_items[self.player].get(MATERIAL_TOTAL_KEY, 0)
             self.assertEqual(expected_material, actual_material,
                 f"Material mismatch after collecting {item_name}. "
                 f"Expected {expected_material}, got {actual_material}")
@@ -152,11 +167,11 @@ class TestCollectionState(CMTestBase):
             expected_material -= material_loss
             
             # Verify material matches expectations
-            actual_material = self.collection_state.prog_items[self.player].get("Material", 0)
+            actual_material = self.collection_state.prog_items[self.player].get(MATERIAL_TOTAL_KEY, 0)
             self.assertEqual(expected_material, actual_material,
                 f"Material mismatch after removing {item_name}. "
                 f"Expected {expected_material}, got {actual_material}")
         
         # Verify we're back to 0 material
-        self.assertEqual(0, self.collection_state.prog_items[self.player].get("Material", 0),
+        self.assertEqual(0, self.collection_state.prog_items[self.player].get(MATERIAL_TOTAL_KEY, 0),
             "Material should be 0 after removing all items")

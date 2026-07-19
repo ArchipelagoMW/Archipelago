@@ -99,7 +99,11 @@ class TestItemPool(CMMockTestCase):
             locked_items=locked_items
         )
         
-        added_material = sum(progression_items[item.name].material for item in items)
+        added_material = sum(
+            progression_items[item.name].material
+            for item in items
+            if item.name != "Progressive Pocket"
+        )
         locked_material = sum(progression_items[item_name].material * count 
                             for item_name, count in locked_items.items())
         total_material = added_material + locked_material

@@ -5,7 +5,7 @@ from ..Options import Goal, EnableTactics, FairyChessPieces, FairyChessArmy
 
 class TestItemPoolSize(CMMockTestCase):
     event_count = 1
-    ordered_event_count = 2
+    ordered_event_count = 5
     tactics_all_item_count = 10
     tactics_turns_item_count = 4
     # All "Capture Pawn" locations (A through H) - 8 locations
@@ -31,7 +31,7 @@ class TestItemPoolSize(CMMockTestCase):
     # 'Capture 8 Of Each' and 'Capture 9 Of Each'(+2)
     # 'Capture Any 15' through 'Capture Any 18'(+4)
     # Total additional locations: 15
-    super_location_count = 86
+    super_location_count = 103
     super_item_count = super_location_count - event_count
 
     def setUp(self):
@@ -109,3 +109,32 @@ class TestItemPoolSize(CMMockTestCase):
         max_items_super = self.item_pool.get_max_items(True)
         self.assertEqual(len(items_super), max_items_super - self.event_count,
             f"Expected {max_items_super} location items plus {self.event_count} event items in super-sized mode")
+
+    def test_current_location_and_item_pool_count_matrix(self):
+        expected = {
+            ("single", "all"): (71, 70),
+            ("single", "turns"): (65, 64),
+            ("single", "none"): (61, 60),
+            ("ordered_progressive", "all"): (103, 98),
+            ("ordered_progressive", "turns"): (97, 92),
+            ("ordered_progressive", "none"): (93, 88),
+            ("progressive", "all"): (103, 102),
+            ("progressive", "turns"): (97, 96),
+            ("progressive", "none"): (93, 92),
+            ("super", "all"): (103, 102),
+            ("super", "turns"): (97, 96),
+            ("super", "none"): (93, 92),
+        }
+
+        for (goal_name, tactics_name), (location_count, item_count) in expected.items():
+            with self.subTest(goal=goal_name, tactics=tactics_name):
+                world = self.create_mock_world()
+                world.options.goal = Goal(getattr(Goal, f"option_{goal_name}"))
+                world.options.enable_tactics = EnableTactics(getattr(EnableTactics, f"option_{tactics_name}"))
+                item_pool = CMItemPool(world)
+
+                self.assertEqual(
+                    location_count,
+                    item_pool.get_max_items(goal_name != "single"),
+                )
+                self.assertEqual(item_count, len(item_pool.create_items()))

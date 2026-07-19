@@ -4,9 +4,27 @@ from BaseClasses import Item
 import logging
 import math
 
-from .Items import (CMItem, item_table, filler_items, progression_items,
-                   useful_items, item_name_groups)
-from .Locations import location_table, Tactic
+from .Items import (
+    CMItem,
+    FUNDAMENTAL_ITEMS,
+    GEOMETRY_ITEMS,
+    LEGACY_CHESSMEN_GROUP,
+    LEGACY_MATERIAL_ITEMS,
+    filler_items,
+    item_allowed_in_mode,
+    item_name_groups,
+    item_table,
+    progression_items,
+    useful_items,
+)
+from .contract_resource import mode_item_maxima
+from .Locations import (
+    BoardStage,
+    highest_chessmen_requirement,
+    highest_chessmen_requirement_small,
+    location_names_for_stage,
+    location_table,
+)
 from .Rules import determine_min_material, determine_max_material
 from .PieceModel import PieceModel
 from .MaterialModel import MaterialModel
@@ -47,6 +65,52 @@ class CMItemPool:
             self._removal = ItemRemoval(self.world, self.piece_model)
         return self._removal
 
+    @property
+    def is_fundamental(self) -> bool:
+        option = getattr(self.world.options, "progression_itemization", None)
+        return option is not None and option.value == option.option_fundamental
+
+    @property
+    def itemization(self) -> str:
+        return "fundamental" if self.is_fundamental else "legacy"
+
+    def normalize_counts(self, counts) -> dict[str, int]:
+        maxima = mode_item_maxima(self.itemization)
+        normalized = {}
+        for name, raw_count in counts.items():
+            if name not in item_table or not item_allowed_in_mode(name, self.itemization):
+                continue
+            if (
+                name in GEOMETRY_ITEMS
+                and self.world.options.goal.value == self.world.options.goal.option_single
+            ):
+                continue
+            count = max(0, int(raw_count))
+            maximum = maxima.get(name, item_table[name].quantity)
+            if maximum > 0:
+                count = min(count, maximum)
+            if count:
+                normalized[name] = count
+        return normalized
+
+    def has_prereqs(self, item_name: str, locked_items: dict[str, int]) -> bool:
+        if item_name != "Castler":
+            return self.piece_model.has_prereqs(item_name)
+        castlers = self.items_used[self.world.player].get("Castler", 0)
+        chessmen = (
+            self.items_used[self.world.player].get("Chessmen", 0)
+            + locked_items.get("Chessmen", 0)
+        )
+        material_items = (
+            self.items_used[self.world.player].get("Material", 0)
+            + locked_items.get("Material", 0)
+        )
+        return (
+            castlers < item_table["Castler"].quantity
+            and chessmen > castlers
+            and material_items * item_table["Material"].material >= (castlers + 1) * 500
+        )
+
     def create_items(self) -> list[Item]:
         super_sized = self.world.options.goal.value != self.world.options.goal.option_single
         self.initialize_item_tracking()
@@ -60,6 +124,7 @@ class CMItemPool:
         for item in starter_items:
             self.consume_item(item.name, {})
         self.handle_excluded_items(excluded_items)
+        items.extend(self.initialize_remaining_geometry_unlocks())
         user_event_count = len(starter_items)
         user_event_count += 1  # Victory item is counted as part of the pool, but you don't start with it
 
@@ -75,11 +140,15 @@ class CMItemPool:
 
         # Calculate max items
         max_items = self.get_max_items(super_sized)
+        locked_items = self.fit_locked_items(
+            locked_items,
+            max(0, max_items - len(items) - user_event_count),
+        )
         logging.debug(f"Max items: {max_items}")
 
         # Create progression items
         progression_items = self.create_progression_items(
-            max_items=max_items,
+            max_items=max(0, max_items - len(items)),
             min_material=min_material,
             max_material=max_material,
             locked_items=locked_items,
@@ -134,6 +203,108 @@ class CMItemPool:
 
         return items
 
+    def fit_locked_items(self, locked_items: dict[str, int], capacity: int) -> dict[str, int]:
+        if capacity <= 0:
+            return {}
+        fitted: dict[str, int] = {}
+        remaining = capacity
+        if self.is_fundamental:
+            mandatory_chessmen = min(
+                locked_items.get("Chessmen", 0),
+                self._fundamental_accessibility_chessmen_requirement(),
+                remaining,
+            )
+            if mandatory_chessmen:
+                fitted["Chessmen"] = mandatory_chessmen
+                remaining -= mandatory_chessmen
+        if self.is_fundamental and locked_items.get("Castler", 0):
+            requested = locked_items["Castler"]
+            used_castlers = self.items_used[self.world.player].get("Castler", 0)
+            used_chessmen = self.items_used[self.world.player].get("Chessmen", 0)
+            used_material = self.items_used[self.world.player].get("Material", 0)
+            for castlers in range(requested, 0, -1):
+                total_castlers = used_castlers + castlers
+                chessmen = max(
+                    0,
+                    total_castlers
+                    - used_chessmen
+                    - fitted.get("Chessmen", 0),
+                )
+                material = max(
+                    0,
+                    math.ceil(total_castlers * 500 / item_table["Material"].material)
+                    - used_material
+                    - fitted.get("Material", 0),
+                )
+                if castlers + chessmen + material <= remaining:
+                    fitted["Castler"] = castlers
+                    if chessmen:
+                        fitted["Chessmen"] = (
+                            fitted.get("Chessmen", 0) + chessmen
+                        )
+                    if material:
+                        fitted["Material"] = (
+                            fitted.get("Material", 0) + material
+                        )
+                    remaining -= castlers + chessmen + material
+                    break
+        if (
+            self.is_fundamental
+            and self._fundamental_accessibility_chessmen_requirement()
+        ):
+            remaining_names = [
+                "Material",
+                *sorted(
+                    name
+                    for name in locked_items
+                    if name not in {"Castler", "Chessmen", "Material"}
+                ),
+                "Chessmen",
+            ]
+        else:
+            remaining_names = list(locked_items)
+        for name in remaining_names:
+            count = locked_items.get(name, 0)
+            if self.is_fundamental and name == "Castler":
+                continue
+            already = fitted.get(name, 0)
+            add = min(max(0, count - already), remaining)
+            if add:
+                fitted[name] = already + add
+                remaining -= add
+            if remaining <= 0:
+                break
+        return fitted
+
+    def _fundamental_accessibility_chessmen_requirement(self) -> int:
+        if (
+            not self.is_fundamental
+            or self.world.options.accessibility.value
+            == self.world.options.accessibility.option_minimal
+        ):
+            return 0
+        required_chessmen = (
+            highest_chessmen_requirement_small
+            if self.world.options.goal.value == self.world.options.goal.option_single
+            else highest_chessmen_requirement
+        )
+        return max(
+            0,
+            required_chessmen
+            - self.items_used[self.world.player].get("Chessmen", 0),
+        )
+
+    def initialize_remaining_geometry_unlocks(self) -> list[Item]:
+        if self.world.options.goal.value == self.world.options.goal.option_single:
+            return []
+        items = []
+        for name in ("Board Files", "Board Ranks"):
+            remaining = item_table[name].quantity - self.items_used[self.world.player].get(name, 0)
+            for _ in range(max(0, remaining)):
+                self.consume_item(name, {})
+                items.append(self.world.create_item(name))
+        return items
+
     def initialize_item_tracking(self) -> None:
         """Initialize the item tracking dictionaries."""
         self.items_used[self.world.player] = {}
@@ -143,13 +314,10 @@ class CMItemPool:
         """Initialize required items like Victory and Play as White."""
         items = []
         
-        # Add Super-Size Me for progressive mode
+        # Current-schema v2 uses independent geometry unlock items.
         if self.world.options.goal.value == self.world.options.goal.option_progressive:
-            items.append(self.world.create_item("Super-Size Me"))
-        #     self.items_used[self.world.player]["Super-Size Me"] = 1
-        # # In super mode, Super-Size Me is precollected
-        # elif self.world.options.goal.value == self.world.options.goal.option_super:
-        #     self.items_used[self.world.player]["Super-Size Me"] = 1
+            items.append(self.world.create_item("Board Files"))
+            self.consume_item("Board Files", {})
             
         # Add Play as White
         items.append(self.world.create_item("Play as White"))
@@ -163,15 +331,15 @@ class CMItemPool:
 
         # Handle super-sized items
         if self.world.options.goal.value == self.world.options.goal.option_super:
-            item = self.world.create_item("Super-Size Me")
+            item = self.world.create_item("Board Files")
             self.world.multiworld.push_precollected(item)
             # excluded_items["Super-Size Me"] = 1
 
         # Track precollected items
-        for item in self.world.multiworld.precollected_items[self.world.player]:
-            if item.name not in excluded_items:
-                excluded_items[item.name] = 0
-            excluded_items[item.name] += 1
+        raw_counts = Counter(
+            item.name for item in self.world.multiworld.precollected_items[self.world.player]
+        )
+        excluded_items.update(self.normalize_counts(raw_counts))
 
         # TODO: Handle excluded_items_option if needed
         # excluded_items_option = getattr(multiworld, 'excluded_items', {player: []})
@@ -187,27 +355,42 @@ class CMItemPool:
         
         # Handle ordered progression
         if self.world.options.goal.value == self.world.options.goal.option_ordered_progressive:
-            item = self.world.create_item("Super-Size Me")
-            self.world.multiworld.get_location("Checkmate Minima", self.world.player).place_locked_item(item)
-            locked_locations.append("Checkmate Minima")
-            user_items.append(item)
-            # excluded_items["Super-Size Me"] = 1
+            ordered_unlocks = (
+                ("Checkmate Minima", "Board Files"),
+                ("Checkmate Maxima", "Board Ranks"),
+                ("Checkmate 10x10", "Board Files"),
+                ("Checkmate 12x10", "Board Ranks"),
+            )
+            for location_name, item_name in ordered_unlocks:
+                item = self.world.create_item(item_name)
+                self.world.multiworld.get_location(
+                    location_name, self.world.player
+                ).place_locked_item(item)
+                locked_locations.append(location_name)
+                user_items.append(item)
 
         # Handle early material option
         early_material_option = self.world.options.early_material.value
         if early_material_option > 0:
-            early_units = []
-            if early_material_option == 1 or early_material_option > 4:
-                early_units.append("Progressive Pawn")
-            if early_material_option == 2 or early_material_option > 3:
-                early_units.append("Progressive Minor Piece")
-            if early_material_option > 2:
-                early_units.append("Progressive Major Piece")
-                if self.world.options.asymmetric_trades.value != self.world.options.asymmetric_trades.option_disabled:
-                    early_units.append("Progressive Jack")
+            if self.is_fundamental:
+                early_units = ["Chessmen"]
+            else:
+                early_units = []
+                if early_material_option == 1 or early_material_option > 4:
+                    early_units.append("Progressive Pawn")
+                if early_material_option == 2 or early_material_option > 3:
+                    early_units.append("Progressive Minor Piece")
+                if early_material_option > 2:
+                    early_units.append("Progressive Major Piece")
+                    if self.world.options.asymmetric_trades.value != self.world.options.asymmetric_trades.option_disabled:
+                        early_units.append("Progressive Jack")
 
             # Filter out non-local and excluded items
-            non_local_items = self.world.options.non_local_items.value
+            non_local_items = getattr(
+                getattr(self.world.options, "non_local_items", None),
+                "value",
+                set(),
+            )
             local_basic_unit = sorted(item for item in early_units if
                                     item not in non_local_items and (
                                         item not in excluded_items or
@@ -253,7 +436,47 @@ class CMItemPool:
         """Process locked items from options and ensure prerequisites are met."""
         # Get locked items from options
         yaml_locked_items: dict[str, int] = self.world.options.locked_items.value
-        locked_items = dict(yaml_locked_items)
+        locked_items = self.normalize_counts(yaml_locked_items)
+        maxima = mode_item_maxima(self.itemization)
+        locked_items = {
+            name: min(count, max(0, maxima.get(name, count) - self.items_used[self.world.player].get(name, 0)))
+            for name, count in locked_items.items()
+        }
+        locked_items = {name: count for name, count in locked_items.items() if count > 0}
+
+        if self.is_fundamental:
+            if (
+                self.world.options.accessibility.value
+                != self.world.options.accessibility.option_minimal
+            ):
+                locked_items["Castler"] = max(
+                    locked_items.get("Castler", 0),
+                    1
+                    - self.items_used[self.world.player].get("Castler", 0),
+                )
+            total_castlers = (
+                self.items_used[self.world.player].get("Castler", 0)
+                + locked_items.get("Castler", 0)
+            )
+            required_chessmen = total_castlers
+            required_material = math.ceil(total_castlers * 500 / item_table["Material"].material)
+            locked_items["Chessmen"] = max(
+                locked_items.get("Chessmen", 0),
+                required_chessmen - self.items_used[self.world.player].get("Chessmen", 0),
+            )
+            locked_items["Material"] = max(
+                locked_items.get("Material", 0),
+                required_material - self.items_used[self.world.player].get("Material", 0),
+            )
+            required_chessmen = (
+                self._fundamental_accessibility_chessmen_requirement()
+            )
+            if required_chessmen:
+                locked_items["Chessmen"] = max(
+                    locked_items.get("Chessmen", 0),
+                    required_chessmen,
+                )
+            return {name: count for name, count in locked_items.items() if count > 0}
 
         # Ensure locked items have enough parents
         player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
@@ -277,19 +500,15 @@ class CMItemPool:
 
     def get_max_items(self, super_sized: bool) -> int:
         """Calculate the maximum number of items based on world options."""
-        # Start with all locations that are valid for the current game mode
-        valid_locations = [loc for loc in location_table if 
-                         (super_sized or location_table[loc].material_expectations != -1)]
-        
-        # Filter out tactics based on options
-        if self.world.options.enable_tactics.value == self.world.options.enable_tactics.option_none:
-            valid_locations = [loc for loc in valid_locations if location_table[loc].is_tactic is None]
-        elif self.world.options.enable_tactics.value == self.world.options.enable_tactics.option_turns:
-            valid_locations = [loc for loc in valid_locations if 
-                             location_table[loc].is_tactic is None or 
-                             location_table[loc].is_tactic == Tactic.Turns]
-
-        return len(valid_locations)
+        stage = BoardStage.Board12x12 if super_sized else BoardStage.Board8x8
+        tactics_mode = (
+            "none"
+            if self.world.options.enable_tactics.value == self.world.options.enable_tactics.option_none
+            else "turns"
+            if self.world.options.enable_tactics.value == self.world.options.enable_tactics.option_turns
+            else "all"
+        )
+        return len(location_names_for_stage(stage, tactics_mode))
 
     def create_progression_items(self,
                                max_items: int,
@@ -314,12 +533,16 @@ class CMItemPool:
                 my_progression_items.remove(chosen_item)
                 continue
             
-            if (self.piece_model.has_prereqs(chosen_item) and
+            if (self.has_prereqs(chosen_item, locked_items) and
                     self.piece_model.can_add_more(chosen_item)):
                 try_item = self.world.create_item(chosen_item)
                 was_locked = self.consume_item(chosen_item, locked_items)
                 items.append(try_item)
-                material += progression_items[chosen_item].material
+                material += (
+                    0
+                    if chosen_item == "Progressive Pocket"
+                    else progression_items[chosen_item].material
+                )
                 if not was_locked:
                     self.lock_new_items(chosen_item, items, locked_items)
                 
@@ -332,8 +555,19 @@ class CMItemPool:
     def prepare_progression_item_pool(self) -> list[str]:
         """Prepare the pool of progression items with adjusted frequencies."""
         # Start with all progression items except Victory and those with quantity=0
-        items = [item for item in progression_items.keys() 
-                if item != "Victory" and progression_items[item].quantity > 0]
+        items = [
+            item for item in progression_items
+            if item not in {"Victory", "Super-Size Me"}
+            and item not in GEOMETRY_ITEMS
+            and progression_items[item].quantity > 0
+            and item_allowed_in_mode(item, self.itemization)
+        ]
+
+        if self.is_fundamental:
+            items.extend(["Chessmen"] * 3)
+            items.extend(["Material"] * 2)
+            items.extend(["Progressive Pocket"] * 2)
+            return items
         
         if self.world.options.asymmetric_trades.value != self.world.options.asymmetric_trades.option_jacks:
             items.remove("Progressive Jack")
@@ -367,6 +601,11 @@ class CMItemPool:
         """Create filler items up to max_items limit."""
         items = []
         my_filler_items = list(filler_items.keys())
+        if self.is_fundamental:
+            my_filler_items = [
+                item for item in my_filler_items
+                if item not in LEGACY_MATERIAL_ITEMS
+            ]
         
         # Filter out pocket-related items if pocket is disabled
         if not has_pocket:
@@ -388,7 +627,7 @@ class CMItemPool:
                 my_filler_items.remove(chosen_item)  # Remove items we can't use
                 continue
                 
-            if has_pocket or self.piece_model.can_add_more(chosen_item):
+            if self.piece_model.can_add_more(chosen_item):
                 self.consume_item(chosen_item, locked_items)
                 try_item = self.world.create_item(chosen_item)
                 items.append(try_item)
@@ -442,6 +681,7 @@ class CMItemPool:
                 progression_items[item_name].material * progression_items[item_name].quantity)
             for item_name, count in item_counts.items()
             if item_name in progression_items
+            and item_name != "Progressive Pocket"
         )
 
     def calculate_remaining_material(self, locked_items: dict[str, int]) -> int:
@@ -471,7 +711,11 @@ class CMItemPool:
         """Count the number of chessmen in the item pool."""
         pocket_amount = (0 if pocket_limit <= 0 else
                         math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit))
-        chessmen_amount = len([item for item in items if item.name in item_name_groups["Chessmen"]])
+        chessmen_amount = (
+            len([item for item in items if item.name == "Chessmen"])
+            if self.is_fundamental
+            else len([item for item in items if item.name in item_name_groups[LEGACY_CHESSMEN_GROUP]])
+        )
         logging.debug("Found {} chessmen and {} pocket men".format(chessmen_amount, pocket_amount))
         return chessmen_amount + pocket_amount
 

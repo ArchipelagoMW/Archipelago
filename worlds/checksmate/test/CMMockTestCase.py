@@ -2,7 +2,8 @@ import unittest
 import random
 from ..Options import (EnableTactics, FairyChessArmy, FairyChessPieces, FairyChessPawns, FairyChessPawnUpgrades,
                       Difficulty, FairyChessPiecesConfigure, Goal, PieceLocations, AsymmetricTrades,
-                      PieceUpgradePreferences, PieceUpgradePriority, PieceUpgradeRatio, FairBoardGuarantee)
+                      PieceUpgradePreferences, PieceUpgradePriority, PieceUpgradeRatio, FairBoardGuarantee,
+                      ProgressionItemization)
 from unittest.mock import patch
 
 class CMMockTestCase(unittest.TestCase):
@@ -30,6 +31,7 @@ class CMMockTestCase(unittest.TestCase):
                     'pocket_limit_by_pocket': type('PocketLimit', (), {'value': 3})(),
                     'enable_tactics': EnableTactics(EnableTactics.option_all),
                     'goal': Goal(Goal.option_single),
+                    'progression_itemization': ProgressionItemization(ProgressionItemization.option_legacy),
                     'fairy_chess_army': FairyChessArmy(FairyChessArmy.option_stable),
                     'fairy_chess_pieces': FairyChessPieces(FairyChessPieces.option_fide),
                     'fairy_chess_pieces_configure': FairyChessPiecesConfigure(FairyChessPiecesConfigure.default),
@@ -71,7 +73,7 @@ class CMMockTestCase(unittest.TestCase):
 
             def create_item(self, name):
                 """Create a mock item with the given name."""
-                return type('CMItem', (), {'name': name})()
+                return type('CMItem', (), {'name': name, 'player': self.player})()
 
             def has_prereqs(self, item_name):
                 """Mock implementation that always returns True."""
@@ -82,10 +84,11 @@ class CMMockTestCase(unittest.TestCase):
                 class MockLocation:
                     def __init__(self, name):
                         self.name = name
+                        self.item = None
                         self.access_rule = None
                         
                     def place_locked_item(self, item):
-                        pass
+                        self.item = item
                         
                     def can_reach(self, state):
                         """Check if location can be reached with given state."""
@@ -100,7 +103,7 @@ class CMMockTestCase(unittest.TestCase):
                         self._locations = {}
                     
                     def push_precollected(self, item):
-                        pass
+                        self.precollected_items[item.player].append(item)
                     
                     def get_location(self, name, player):
                         """Get or create a mock location."""

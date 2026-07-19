@@ -1,6 +1,6 @@
 
 from BaseClasses import Item
-from .Items import item_name_groups
+from .Items import LEGACY_CHESSMEN_GROUP, item_name_groups
 import math
 
 class ChessmenModel:
@@ -13,7 +13,13 @@ class ChessmenModel:
         """Count the number of chessmen in the item pool."""
         pocket_amount = (0 if pocket_limit <= 0 else
                         math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit))
-        chessmen_amount = len([item for item in items if item.name in item_name_groups["Chessmen"]])
+        option = self.world.options.progression_itemization
+        itemization = "fundamental" if option.value == option.option_fundamental else "legacy"
+        chessmen_amount = (
+            len([item for item in items if item.name == "Chessmen"])
+            if itemization == "fundamental"
+            else len([item for item in items if item.name in item_name_groups[LEGACY_CHESSMEN_GROUP]])
+        )
         return chessmen_amount + pocket_amount
 
     def meets_chessmen_expectations(self, count: int, items: list[Item]) -> bool:

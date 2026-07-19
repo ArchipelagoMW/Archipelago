@@ -72,6 +72,7 @@ class TestCastleAccessibilityBug(CMMockTestCase):
         """Test the fixed castle rule logic."""
         # Create an item pool to get correct max_queens calculation  
         self.world._item_pool = CMItemPool(self.world)
+        self.world._item_pool.initialize_item_tracking()
         max_queens_fixed = self.world._item_pool.calculate_possible_queens()
         
         print(f"Fixed max_queens calculation: {max_queens_fixed}")

@@ -12,12 +12,13 @@ class Goal(Choice):
     Single: Your opponent starts with an army of 7 pieces and 8 pawns. You have a king. Finding checkmate is your goal.
     To get there, find checks, mate!
 
-    Ordered Progressive: When you deliver checkmate, you instead graduate to a Super-Sized board. Your goal is to
-    checkmate again, on that board!
+    Ordered Progressive: Each checkmate unlocks the next board dimension in the sequence
+    8x8, 10x8, 10x10, 12x10, and 12x12. Checkmate the opponent on the final board to win.
 
-    Progressive: As Ordered Progressive, but the board grows larger when someone sends you your Super-Sized board.
+    Progressive: As Ordered Progressive, but the Board Files and Board Ranks unlocks are shuffled into the multiworld.
 
-    Super: You skip the 8x8 board immediately. Nearly equivalent to adding Super-Size Me to your Start Inventory.
+    Super: You skip the 8x8 board immediately by starting with the first Board Files unlock; later dimensions remain
+    shuffled into the multiworld.
     """
     display_name = "Goal"
     option_single = 0
@@ -96,6 +97,14 @@ class PieceTypes(Choice):
     option_stable = 1
     # option_book = 2
     default = 1
+
+
+class ProgressionItemization(Choice):
+    """Selects family-specific Legacy items or shared Chessmen/Material Fundamental items."""
+    display_name = "Progression Itemization"
+    option_legacy = 0
+    option_fundamental = 1
+    default = option_legacy
 
 
 class EarlyMaterial(Choice):
@@ -322,6 +331,7 @@ class FairyChessPawnUpgrades(Choice):
 
 VALID_PIECE_UPGRADE_PREFERENCES = frozenset([
     "new-pawn",
+    "more-pawn",
     "better-pawn",
     "pool-pawn-upgrade",
     "pawn-to-minor",
@@ -365,7 +375,7 @@ class PieceUpgradePriority(OptionCounter):
     legacy Pawn Upgrades preset ordering.
 
     Valid actions are the same as for Piece Upgrade Preferences:
-    new-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen, minor-to-major,
+    new-pawn, more-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen, minor-to-major,
     major-to-jack, minor-to-jack, jack-to-queen, and queen-to-amazon.
     """
     display_name = "Preference Priority"
@@ -376,6 +386,7 @@ class PieceUpgradePriority(OptionCounter):
 
 DEFAULT_PIECE_UPGRADE_RATIO: dict[str, int] = {
     "new-pawn": 7,
+    "more-pawn": 1,
     "better-pawn": 3,
     "pawn-to-minor": 6,
     "pawn-to-major": 2,
@@ -399,7 +410,7 @@ class PieceUpgradeRatio(OptionCounter):
     first is picked twice as often as the second.
 
     Valid actions are the same as for Piece Upgrade Preferences:
-    new-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen, minor-to-major,
+    new-pawn, more-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen, minor-to-major,
     major-to-jack, minor-to-jack, jack-to-queen, and queen-to-amazon.
     """
     display_name = "Preference Ratio"
@@ -592,6 +603,7 @@ class ChessDeathLink(DeathLink):
 @dataclass
 class CMOptions(PerGameCommonOptions):
     goal: Goal
+    progression_itemization: ProgressionItemization
     difficulty: Difficulty
     enable_tactics: EnableTactics
     piece_locations: PieceLocations

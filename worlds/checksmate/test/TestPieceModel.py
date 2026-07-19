@@ -52,5 +52,44 @@ class TestPieceModel(CMMockTestCase):
             PieceLimitCascade.POTENTIAL_CHILDREN
         )
         
-        self.assertLess(no_children, with_children)
-        self.assertLess(with_children, potential)
+        self.assertEqual(4, no_children)
+        self.assertEqual(5, with_children)
+        self.assertEqual(6, potential)
+
+    def test_current_piece_type_and_total_queen_limits(self):
+        self.assertEqual(
+            4,
+            self.piece_model.find_piece_limit(
+                "Progressive Minor Piece",
+                PieceLimitCascade.NO_CHILDREN,
+            ),
+        )
+        self.assertEqual(
+            4,
+            self.piece_model.find_piece_limit(
+                "Progressive Major Piece",
+                PieceLimitCascade.NO_CHILDREN,
+            ),
+        )
+        self.assertEqual(
+            2,
+            self.piece_model.find_piece_limit(
+                "Progressive Major To Queen",
+                PieceLimitCascade.NO_CHILDREN,
+            ),
+        )
+
+        self.piece_model.items_used[self.world.player]["Progressive Major To Queen"] = 1
+        self.assertTrue(
+            self.piece_model.under_piece_limit(
+                "Progressive Major To Queen",
+                PieceLimitCascade.NO_CHILDREN,
+            )
+        )
+        self.piece_model.items_used[self.world.player]["Progressive Major To Queen"] = 2
+        self.assertFalse(
+            self.piece_model.under_piece_limit(
+                "Progressive Major To Queen",
+                PieceLimitCascade.NO_CHILDREN,
+            )
+        )

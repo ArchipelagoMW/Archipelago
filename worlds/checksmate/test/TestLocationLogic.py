@@ -1,9 +1,15 @@
 
 from BaseClasses import CollectionState, Item, ItemClassification
 from .bases import CMTestBase
-from ..Items import item_table, material_items, item_name_groups
-from ..Locations import location_table
-from ..Rules import determine_difficulty
+from ..Items import (
+    LEGACY_CHESSMEN_GROUP,
+    MATERIAL_TOTAL_KEY,
+    item_table,
+    material_items,
+    item_name_groups,
+)
+from ..Locations import BoardStage, location_table
+from ..Rules import determine_difficulty, effective_rule_stage, has_board_stage
 import logging
 
 
@@ -34,7 +40,7 @@ class TestLocationLogic(CMTestBase):
     def get_current_chessmen(self) -> int:
         """Helper to count current chessmen"""
         chessmen = 0
-        for item_name in item_name_groups["Chessmen"]:
+        for item_name in item_name_groups[LEGACY_CHESSMEN_GROUP]:
             chessmen += self.collection_state.prog_items[self.player].get(item_name, 0)
         # Pockets count as partial chessmen (0.5 each)
         pocket_count = self.collection_state.prog_items[self.player].get("Progressive Pocket", 0)
@@ -45,7 +51,9 @@ class TestLocationLogic(CMTestBase):
         """Assert that all locations with material requirements <= threshold are accessible"""
         accessible = self.get_accessible_locations()
         current_chessmen = self.get_current_chessmen()
-        current_material = self.collection_state.prog_items[self.player].get("Material", 0)
+        current_material = self.world.logic_projection.metrics(
+            self.collection_state, self.player, BoardStage.Board8x8
+        ).material
         
         # Special locations that have rules beyond material/chessmen requirements
         special_rule_locations = {
@@ -71,7 +79,16 @@ class TestLocationLogic(CMTestBase):
                 continue
                 
             # Calculate scaled material requirement
-            scaled_requirement = loc_data.material_expectations * self.difficulty
+            rule_stage = effective_rule_stage(
+                loc_name,
+                loc_data.required_stage,
+                self.world.options.goal.value
+                != self.world.options.goal.option_single,
+            )
+            scaled_requirement = min(
+                loc_data.material_expectations * self.difficulty,
+                self.world.logic_projection.maximum_material(rule_stage),
+            )
             
             # Check if location should be accessible
             should_be_accessible = (
@@ -120,7 +137,7 @@ class TestLocationLogic(CMTestBase):
         non_chessmen = []
         
         for name, data in material_items.items():
-            if name in item_name_groups["Chessmen"]:
+            if name in item_name_groups[LEGACY_CHESSMEN_GROUP]:
                 full_chessmen.append((name, data))
             elif name == "Progressive Pocket":
                 partial_chessmen.append((name, data))
@@ -139,6 +156,10 @@ class TestLocationLogic(CMTestBase):
         max_material = max(loc.material_expectations * self.difficulty
                            for loc in location_table.values() 
                            if loc.material_expectations > 0)
+        max_material = min(
+            max_material,
+            self.world.logic_projection.maximum_material(BoardStage.Board8x8),
+        )
                            
         while current_material < max_material:
             # Find next item to add that gives us the least material gain
@@ -146,7 +167,9 @@ class TestLocationLogic(CMTestBase):
                 if item_data.material > 0:  # Skip 0 material items
                     material_gain = self.collect_item_and_get_material(item_name)
                     if material_gain > 0:  # If we actually gained material (didn't hit quantity limit)
-                        current_material = self.collection_state.prog_items[self.player].get("Material", 0)
+                        current_material = self.world.logic_projection.metrics(
+                            self.collection_state, self.player, BoardStage.Board8x8
+                        ).material
                         self.assert_locations_accessible(current_material)
                         break
             else:
@@ -177,14 +200,14 @@ class TestLocationLogic(CMTestBase):
         base_material = location_table["Capture Everything"].material_expectations
         grand_material = location_table["Capture Everything"].material_expectations_grand
         
-        # In super-sized mode, it requires Super-Size Me and grand material
+        # In current-schema super-sized mode, it requires the 12x10 stage and grand material.
         if self.world.options.goal.value != self.world.options.goal.option_single:
-            # Should still be unreachable without Super-Size Me
+            # Should still be unreachable without Board Files
             self.assertFalse("Capture Everything" in self.get_accessible_locations(),
                 "Capture Everything should be unreachable without Super-Size Me in super-sized mode")
             
-            # Add Super-Size Me
-            super_size = self.create_test_item("Super-Size Me")
+            # Add Board Files
+            super_size = self.create_test_item("Board Files")
             self.world.collect(self.collection_state, super_size)
             
             # Should still be unreachable without enough material
@@ -192,19 +215,61 @@ class TestLocationLogic(CMTestBase):
                 "Capture Everything should be unreachable without enough material in super-sized mode")
             
             # Add enough material for grand requirement
-            while self.collection_state.prog_items[self.player].get("Material", 0) < grand_material * self.difficulty:
+            target_material = min(
+                grand_material * self.difficulty,
+                self.world.logic_projection.maximum_material(
+                    BoardStage.Board12x10
+                ),
+            )
+            while self.world.logic_projection.metrics(
+                    self.collection_state, self.player, BoardStage.Board12x10
+            ).material < target_material:
                 self.collect_item_and_get_material("Progressive Pawn")
                 self.collect_item_and_get_material("Progressive Major Piece")
             
+            # Material alone is insufficient until both file unlocks and the first rank unlock arrive.
+            self.assertFalse("Capture Everything" in self.get_accessible_locations(),
+                "Capture Everything should remain unreachable before the 12x10 stage")
+            self.world.collect(self.collection_state, self.create_test_item("Board Files"))
+            self.world.collect(self.collection_state, self.create_test_item("Board Ranks"))
+
             # Should now be accessible
             self.assertTrue("Capture Everything" in self.get_accessible_locations(),
-                "Capture Everything should be accessible with Super-Size Me and enough material in super-sized mode")
+                "Capture Everything should be accessible at 12x10 with enough material in super-sized mode")
         else:
             # In single mode, it just needs base material
-            while self.collection_state.prog_items[self.player].get("Material", 0) < base_material * self.difficulty:
+            target_material = min(
+                base_material * self.difficulty,
+                self.world.logic_projection.maximum_material(
+                    BoardStage.Board8x8
+                ),
+            )
+            while self.world.logic_projection.metrics(
+                    self.collection_state, self.player, BoardStage.Board8x8
+            ).material < target_material:
                 self.collect_item_and_get_material("Progressive Pawn")
                 self.collect_item_and_get_material("Progressive Major Piece")
             
             # Should now be accessible
             self.assertTrue("Capture Everything" in self.get_accessible_locations(),
                 "Capture Everything should be accessible with enough material in single mode") 
+
+    def test_geometry_stage_unlock_requirements(self):
+        self.assertTrue(has_board_stage(self.collection_state, self.player, BoardStage.Board8x8))
+        for stage in list(BoardStage)[1:]:
+            self.assertFalse(has_board_stage(self.collection_state, self.player, stage))
+
+        self.world.collect(self.collection_state, self.create_test_item("Super-Size Me"))
+        self.assertTrue(has_board_stage(self.collection_state, self.player, BoardStage.Board10x8))
+        self.assertFalse(has_board_stage(self.collection_state, self.player, BoardStage.Board10x10))
+
+        self.world.collect(self.collection_state, self.create_test_item("Board Ranks"))
+        self.assertTrue(has_board_stage(self.collection_state, self.player, BoardStage.Board10x10))
+        self.assertFalse(has_board_stage(self.collection_state, self.player, BoardStage.Board12x10))
+
+        self.world.collect(self.collection_state, self.create_test_item("Board Files"))
+        self.assertTrue(has_board_stage(self.collection_state, self.player, BoardStage.Board12x10))
+        self.assertFalse(has_board_stage(self.collection_state, self.player, BoardStage.Board12x12))
+
+        self.world.collect(self.collection_state, self.create_test_item("Board Ranks"))
+        self.assertTrue(has_board_stage(self.collection_state, self.player, BoardStage.Board12x12))

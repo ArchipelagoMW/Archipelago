@@ -5,6 +5,20 @@ from typing import NamedTuple
 from BaseClasses import Item, ItemClassification
 
 
+MATERIAL_TOTAL_KEY = "_checksmate_material_total"
+LEGACY_CHESSMEN_GROUP = "Legacy Chessmen"
+LEGACY_MATERIAL_ITEMS = frozenset({
+    "Progressive Pawn",
+    "Progressive Pawn Forwardness",
+    "Progressive Minor Piece",
+    "Progressive Major Piece",
+    "Progressive Major To Queen",
+    "Progressive Jack",
+})
+FUNDAMENTAL_ITEMS = frozenset({"Chessmen", "Material", "Castler"})
+GEOMETRY_ITEMS = frozenset({"Board Files", "Board Ranks"})
+
+
 class CMItem(Item):
     game: str = "ChecksMate"
 
@@ -33,8 +47,13 @@ item_table = {
     "Progressive Major To Queen": CMItemData(4_901_006, ItemClassification.progression, quantity=9, material=415,
                                              parents=[["Progressive Major Piece", 1]]),
     "Progressive Jack": CMItemData(4_901_007, ItemClassification.progression, quantity=9, material=700),
+    "Chessmen": CMItemData(4_901_008, ItemClassification.progression, quantity=107, material=100),
     "Victory": CMItemData(4_901_009, ItemClassification.progression),
     "Super-Size Me": CMItemData(4_901_010, ItemClassification.progression, quantity=0),  # :)
+    "Material": CMItemData(4_901_011, ItemClassification.progression, quantity=321, material=400),
+    "Castler": CMItemData(4_901_012, ItemClassification.progression, quantity=2, material=0),
+    "Board Files": CMItemData(4_901_013, ItemClassification.progression, quantity=2, material=0),
+    "Board Ranks": CMItemData(4_901_014, ItemClassification.progression, quantity=2, material=0),
     # TODO: implement extra moves
     # "Progressive Enemy Pawn": CMItemData(4_907, ItemClassification.trap, quantity=8),
     # "Progressive Enemy Piece": CMItemData(4_908, ItemClassification.trap, quantity=7),
@@ -95,5 +114,24 @@ item_name_groups = {
     #                "Enemy Pawn E", "Enemy Pawn F", "Enemy Pawn G", "Enemy Pawn H"},
     # "Enemy Piece": {"Enemy Piece A", "Enemy Piece B", "Enemy Piece C", "Enemy Piece D",
     #                 "Enemy Piece F", "Enemy Piece G", "Enemy Piece H"},
-    "Chessmen": {"Progressive Pawn", "Progressive Minor Piece", "Progressive Major Piece", "Progressive Jack", "Progressive Consul"},
+    LEGACY_CHESSMEN_GROUP: {
+        "Progressive Pawn",
+        "Progressive Minor Piece",
+        "Progressive Major Piece",
+        "Progressive Jack",
+        "Progressive Consul",
+    },
+    "Chessmen Pieces": {
+        "Progressive Pawn",
+        "Progressive Minor Piece",
+        "Progressive Major Piece",
+        "Progressive Jack",
+        "Progressive Consul",
+    },
 }
+
+
+def item_allowed_in_mode(item_name: str, itemization: str) -> bool:
+    if itemization == "fundamental":
+        return item_name not in LEGACY_MATERIAL_ITEMS
+    return item_name not in FUNDAMENTAL_ITEMS

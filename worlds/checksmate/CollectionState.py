@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState, Item
-from .Items import item_table
+from .Items import GEOMETRY_ITEMS, item_allowed_in_mode, item_table
 from .ItemUtils import get_parents, get_children
 import logging
 
@@ -52,6 +52,29 @@ class CMCollectionState:
         logging.debug(f"Adding {item.name} with material value {total_material}")
         return total_material
 
+    def is_effective_collection(self, state: CollectionState, item: Item) -> bool:
+        if not self._is_allowed_collection(item):
+            return False
+        item_count = state.prog_items[self.world.player][item.name]
+        return not self._is_quantity_limit_exceeded(item, item_count)
+
+    def record_excess_collection(self, state: CollectionState, item: Item) -> bool:
+        if not self._is_allowed_collection(item):
+            return False
+        item_count = state.prog_items[self.world.player][item.name]
+        if not self._is_quantity_limit_exceeded(item, item_count):
+            return False
+        state.prog_items[self.world.player][self._excess_key(item.name)] += 1
+        return True
+
+    def remove_excess_collection(self, state: CollectionState, item: Item) -> bool:
+        key = self._excess_key(item.name)
+        excess = state.prog_items[self.world.player][key]
+        if excess <= 0:
+            return False
+        state.prog_items[self.world.player][key] -= 1
+        return True
+
     def remove(self, state: CollectionState, item: Item) -> int:
         """Calculate the material value lost from removing this item."""
         item_count = state.prog_items[self.world.player][item.name]
@@ -92,6 +115,24 @@ class CMCollectionState:
                 return True
                 
         return False
+
+    def _itemization(self) -> str:
+        option = getattr(self.world.options, "progression_itemization", None)
+        if option is not None and option.value == option.option_fundamental:
+            return "fundamental"
+        return "legacy"
+
+    def _is_allowed_collection(self, item: Item) -> bool:
+        if not item_allowed_in_mode(item.name, self._itemization()):
+            return False
+        return not (
+            item.name in GEOMETRY_ITEMS
+            and self.world.options.goal.value == self.world.options.goal.option_single
+        )
+
+    @staticmethod
+    def _excess_key(item_name: str) -> str:
+        return f"_checksmate_excess:{item_name}"
 
     def _check_children(self, state: CollectionState, item: Item, item_count: int) -> int:
         """Check child upgrades and calculate material value."""

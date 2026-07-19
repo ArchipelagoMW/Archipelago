@@ -1,5 +1,10 @@
 from .bases import CMTestBase
-from ..Options import DEFAULT_PIECE_UPGRADE_RATIO, VALID_PIECE_UPGRADE_PREFERENCES
+from ..Options import (
+    DEFAULT_PIECE_UPGRADE_RATIO,
+    FairyChessPawnUpgrades,
+    LEGACY_PAWN_UPGRADE_PREFERENCES,
+    VALID_PIECE_UPGRADE_PREFERENCES,
+)
 
 
 OFF_PREFERENCES = ["new-pawn", "more-pawn", "better-pawn", "major-to-queen"]
@@ -39,6 +44,117 @@ class TestWorldGeneration(CMTestBase):
         slot_data = self.world.fill_slot_data()
         self.assertIn("fair_board_guarantee", slot_data)
         self.assertEqual(slot_data["fair_board_guarantee"], 0)
+
+    def test_current_default_client_contract(self):
+        slot_data = self.world.fill_slot_data()
+        expected_keys = {
+            "army",
+            "apmw_contract",
+            "castling_location_count",
+            "death_link",
+            "difficulty",
+            "fair_board_guarantee",
+            "fairy_chess_army",
+            "fairy_chess_pawn_upgrades",
+            "fairy_chess_pawns",
+            "fairy_chess_pieces",
+            "fairy_chess_pieces_configure",
+            "goal",
+            "geometry_unlock_items",
+            "major_piece_limit_by_type",
+            "material_item_value",
+            "major_seed",
+            "minor_piece_limit_by_type",
+            "minor_seed",
+            "pawn_seed",
+            "piece_locations",
+            "piece_types",
+            "progression_itemization",
+            "piece_upgrade_preferences",
+            "piece_upgrade_ratio",
+            "pocket_limit_by_pocket",
+            "pocket_order",
+            "pocket_seed",
+            "queen_piece_limit_by_type",
+            "queen_seed",
+            "required_chess_client_version",
+            "total_queens",
+        }
+        expected_options = {
+            "army": [0],
+            "death_link": 0,
+            "difficulty": 1,
+            "fair_board_guarantee": 0,
+            "fairy_chess_army": 0,
+            "fairy_chess_pawn_upgrades": 0,
+            "fairy_chess_pawns": 0,
+            "fairy_chess_pieces": 0,
+            "fairy_chess_pieces_configure": [
+                "Camel",
+                "Cannon",
+                "Clobberers",
+                "FIDE",
+                "Nutty",
+                "Petal",
+                "Rookies",
+            ],
+            "goal": 1,
+            "castling_location_count": 2,
+            "geometry_unlock_items": {
+                "Board Files": "board-file-unlock",
+                "Board Ranks": "board-rank-unlock",
+            },
+            "major_piece_limit_by_type": 0,
+            "material_item_value": 400,
+            "minor_piece_limit_by_type": 0,
+            "piece_locations": 0,
+            "piece_types": 1,
+            "progression_itemization": "legacy",
+            "piece_upgrade_preferences": OFF_PREFERENCES,
+            "piece_upgrade_ratio": DEFAULT_PIECE_UPGRADE_RATIO,
+            "pocket_limit_by_pocket": 4,
+            "queen_piece_limit_by_type": 0,
+            "required_chess_client_version": "0.4.0",
+        }
+
+        self.assertEqual(expected_keys, set(slot_data))
+        self.assertEqual(
+            expected_options,
+            {key: slot_data[key] for key in expected_options},
+        )
+        self.assertNotIn("piece_upgrade_proportion", slot_data)
+        self.assertEqual("f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15",
+                         slot_data["apmw_contract"]["manifest_sha256"])
+        self.assertEqual("0.4.0", slot_data["apmw_contract"]["minimum_client_version"])
+        self.assertEqual(
+            self.world.items_used[self.player].get("Progressive Major To Queen", 0),
+            slot_data["total_queens"],
+        )
+        for seed_name in ("pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"):
+            self.assertIsInstance(slot_data[seed_name], int)
+            self.assertGreaterEqual(slot_data[seed_name], 0)
+            self.assertLess(slot_data[seed_name], 2 ** 31)
+        self.assertEqual([0] * 4 + [1] * 4 + [2] * 4, sorted(slot_data["pocket_order"]))
+
+    def test_current_pawn_upgrade_enum_and_action_key_spellings(self):
+        self.assertEqual(
+            {
+                "off": 0,
+                "pool": 1,
+                "max": 2,
+                "configure": 3,
+            },
+            {
+                name: FairyChessPawnUpgrades.from_any(name).value
+                for name in ("off", "pool", "max", "configure")
+            },
+        )
+        self.assertIn(
+            "more-pawn",
+            LEGACY_PAWN_UPGRADE_PREFERENCES[FairyChessPawnUpgrades.option_off],
+        )
+        self.assertIn("more-pawn", VALID_PIECE_UPGRADE_PREFERENCES)
+        self.assertEqual(1, DEFAULT_PIECE_UPGRADE_RATIO["more-pawn"])
 
 
 class TestWorldGenerationPawnUpgradesPool(CMTestBase):
@@ -121,13 +237,14 @@ class TestWorldGenerationPiecePriorityOverridesLegacyPreset(CMTestBase):
 
 
 class TestWorldGenerationPieceUpgradeRatioOverride(CMTestBase):
-    options = {"piece_upgrade_ratio": {"new-pawn": 1, "better-pawn": 2}}
+    options = {"piece_upgrade_ratio": {"new-pawn": 1, "more-pawn": 5, "better-pawn": 2}}
 
     def test_piece_upgrade_ratio_override_merges_with_defaults(self):
         """Overridden ratio actions replace their default weight; unset actions keep their default."""
         slot_data = self.world.fill_slot_data()
         ratio = slot_data["piece_upgrade_ratio"]
         self.assertEqual(ratio["new-pawn"], 1)
+        self.assertEqual(ratio["more-pawn"], 5)
         self.assertEqual(ratio["better-pawn"], 2)
         self.assertEqual(ratio["pawn-to-minor"], DEFAULT_PIECE_UPGRADE_RATIO["pawn-to-minor"])
 
@@ -140,4 +257,3 @@ class TestWorldGenerationFairBoardGuarantee(CMTestBase):
         slot_data = self.world.fill_slot_data()
         self.assertEqual(slot_data["fair_board_guarantee"], 1)
         self.assertEqual(slot_data["fairy_chess_pawn_upgrades"], 0)
-
