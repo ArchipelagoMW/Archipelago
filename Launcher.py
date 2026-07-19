@@ -445,9 +445,9 @@ def main(args: argparse.Namespace | dict | None = None):
             if not component:
                 logging.warning(f"Could not identify Component responsible for {path}")
     elif not gui_enabled:
-        from worlds.LauncherComponents import components
+        from worlds.LauncherComponents import components, Type
         from utils.curses_utils import curses_select
-        component_lookup = {c.display_name: c for c in components}
+        component_lookup = {c.display_name: c for c in components if c.type != Type.HIDDEN}
         component_name = curses_select(list(component_lookup.keys()))
         if component_name is not None:
             args['component'] = component_lookup[component_name]
