@@ -34,26 +34,26 @@ class SpecialOrderLogic(BaseLogic):
 
     def initialize_rules(self):
         self.update_rules({
-            SpecialOrder.cave_patrol: self.logic.relationship.can_meet(NPC.clint),
+            SpecialOrder.cave_patrol: self.logic.relationship.can_meet(NPC.clint) & self.logic.region.can_reach(Region.mines_floor_60),
             SpecialOrder.aquatic_overpopulation: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
             SpecialOrder.biome_balance: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
             SpecialOrder.rock_rejuivenation: (self.logic.relationship.has_hearts(NPC.emily, 4) &
                                               self.logic.has_all(Mineral.ruby, Mineral.topaz, Mineral.emerald, Mineral.jade, Mineral.amethyst,
                                                                  ArtisanGood.cloth)),
-            SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek),
-            SpecialOrder.fragments_of_the_past: self.logic.monster.can_kill(Monster.skeleton),
-            SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
+            SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek) & self.logic.region.can_reach(Region.alex_house),
+            SpecialOrder.fragments_of_the_past: self.logic.monster.can_kill(Monster.skeleton) & self.logic.region.can_reach(Region.museum),
+            SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg) & self.logic.region.can_reach(Region.saloon),
             SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_use_any_shipping_bin,
-            SpecialOrder.community_cleanup: self.logic.fishing.can_crab_pot_anywhere,
-            SpecialOrder.the_strong_stuff: self.logic.has(ArtisanGood.specific_juice(Vegetable.potato)),
-            SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly(),
+            SpecialOrder.community_cleanup: self.logic.fishing.can_crab_pot_anywhere & self.logic.region.can_reach(Region.railroad),
+            SpecialOrder.the_strong_stuff: self.logic.has(ArtisanGood.specific_juice(Vegetable.potato)) & self.logic.region.can_reach(Region.trailer),
+            SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly() & self.logic.region.can_reach(Region.pierre_house),
             SpecialOrder.robins_project: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
                                          self.logic.has(Material.hardwood),
             SpecialOrder.robins_resource_rush: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
                                                self.logic.has(Fertilizer.tree) & self.logic.ability.can_mine_perfectly(),
-            SpecialOrder.juicy_bugs_wanted: self.logic.has(Loot.bug_meat),
-            SpecialOrder.a_curious_substance: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_55,)),
-            SpecialOrder.prismatic_jelly: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_25,)),
+            SpecialOrder.juicy_bugs_wanted: self.logic.has(Loot.bug_meat) & self.logic.region.can_reach(Region.beach),
+            SpecialOrder.a_curious_substance: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_55,)) & self.logic.relationship.exists(NPC.wizard),
+            SpecialOrder.prismatic_jelly: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_25,)) & self.logic.relationship.exists(NPC.wizard),
 
         })
 
