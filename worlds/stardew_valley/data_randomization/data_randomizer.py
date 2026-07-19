@@ -308,11 +308,13 @@ def randomize_crop_which_seed(content: StardewContent, data_to_randomize: set[st
     harvest_sources_included = list(content.find_sources_of_type(HarvestCropSource))
 
     seed_by_crop = dict()
+    source_by_seed = dict()
     for game_item in content.game_items.values():
         harvest_sources = [source for source in game_item.sources if source in harvest_sources_included]
         if any(harvest_sources):
             assert len(harvest_sources) == 1
             seed_by_crop[game_item.name] = harvest_sources[0].seed
+            source_by_seed[harvest_sources[0].seed] = harvest_sources[0]
 
     randomized_seeds_by_crops = randomizers_per_behavior[DataRandomizationBehavior.option_shuffled](seed_by_crop, random)
 
@@ -322,7 +324,7 @@ def randomize_crop_which_seed(content: StardewContent, data_to_randomize: set[st
         harvest_sources = [source for source in item.sources if isinstance(source, HarvestCropSource)]
         if len(harvest_sources) <= 0:
             continue
-        modified_harvest_sources = [override(source, seed=randomized_seeds_by_crops[item_name]) for source in harvest_sources]
+        modified_harvest_sources = [override(source_by_seed[randomized_seeds_by_crops[item_name]]) for source in harvest_sources]
         new_sources = list(item.sources)
         new_sources = [source for source in new_sources if source not in harvest_sources]
         new_sources.extend(modified_harvest_sources)
