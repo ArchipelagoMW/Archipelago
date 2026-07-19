@@ -95,21 +95,7 @@ class AutoWorldRegister(type):
                 raise RuntimeError(f"""Game {dct["game"]} already registered in 
                 {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
-            if (dct["game"] == "Nine Sols"  # the game I actually want to test
-                    # uncomment when we need UT to run, rather than the tests to pass; right now we can't have both
-                    # or dct["game"] == "Universal Tracker"
-                    # all the "magic" game names that core AP tests assume exist and fail without
-                    or dct["game"] == "APQuest"
-                    or dct["game"] == "Archipelago"
-                    or dct["game"] == "Test Game"
-                    or dct["game"] == "Rule Builder Test Game"
-                    # this is only required by the CI-only hosting/__main__.py test
-                    or dct["game"] == "Temp World"
-                    # and finally, this one is only required by the CI-only "Build" jobs because build.yml
-                    # assumes that Generate Template Options will produce a VVVVVV.yaml file
-                    or dct["game"] == "VVVVVV"
-                    or dct["game"] == "Universal Tracker"):
-                AutoWorldRegister.world_types[dct["game"]] = new_class
+            AutoWorldRegister.world_types[dct["game"]] = new_class
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:
