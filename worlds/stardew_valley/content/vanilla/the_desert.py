@@ -35,7 +35,7 @@ the_desert = ContentPack(
         Forageable.cactus_fruit: (
             Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.desert,)),
-            HarvestCropSource(seed=Seed.cactus, seasons=())
+            HarvestCropSource(seed=Seed.cactus, seasons=(), growth_time=2)
         ),
         Forageable.coconut: (
             Tag(ItemTag.FORAGE),
@@ -46,9 +46,9 @@ the_desert = ContentPack(
             ForagingSource(regions=(Region.skull_cavern_25,)),
         ),
 
-        Fruit.rhubarb: (HarvestCropSource(seed=Seed.rhubarb, seasons=(Season.spring,)),),
-        Fruit.starfruit: (HarvestCropSource(seed=Seed.starfruit, seasons=(Season.summer,)),),
-        Vegetable.beet: (HarvestCropSource(seed=Seed.beet, seasons=(Season.fall,)),),
+        Fruit.rhubarb: (HarvestCropSource(seed=Seed.rhubarb, seasons=(Season.spring,), growth_time=13),),
+        Fruit.starfruit: (HarvestCropSource(seed=Seed.starfruit, seasons=(Season.summer,), growth_time=13),),
+        Vegetable.beet: (HarvestCropSource(seed=Seed.beet, seasons=(Season.fall,), growth_time=6),),
     },
     shop_sources={
         Seed.cactus: (ShopSource(price=150, shop_region=Region.oasis_shop),),

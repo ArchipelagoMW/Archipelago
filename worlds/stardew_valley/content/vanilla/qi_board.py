@@ -33,7 +33,7 @@ qi_board_content_pack = QiBoardContentPack(
     harvest_sources={
         # This one is a bit special, because it's only available during the special order, but it can be found from like, everywhere.
         Seed.qi_bean: (GenericSource(regions=(Region.qi_walnut_room,)),),
-        Fruit.qi_fruit: (HarvestCropSource(seed=Seed.qi_bean),),
+        Fruit.qi_fruit: (HarvestCropSource(seed=Seed.qi_bean, growth_time=4),),
     },
     shop_sources={
         Furniture.exotic_double_bed: (ShopSource(price=50, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
