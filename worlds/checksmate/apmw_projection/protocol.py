@@ -62,7 +62,11 @@ def canonical_json(value: Any) -> str:
 def handle_json_request(text: str) -> dict[str, Any]:
     """Decode and process one sidecar request without starting a subprocess."""
     try:
-        request = json.loads(text)
+        request = json.loads(
+            text,
+            object_pairs_hook=_reject_duplicate_properties,
+            parse_constant=_reject_non_json_constant,
+        )
     except (TypeError, ValueError, json.JSONDecodeError) as error:
         raise ProtocolError(INVALID_JSON, "request is not valid JSON") from error
     return handle_batch_request(request)
@@ -91,7 +95,7 @@ def handle_batch_request(request: Any) -> dict[str, Any]:
                 contract, projection_input_from_dict(projection_input)
             )
         except ProjectionError as error:
-            raise ProtocolError(PROJECTION_ERROR, "semantic projection failed") from error
+            raise ProtocolError(PROJECTION_ERROR, str(error)) from error
         results.append(
             {
                 "geometry_stage": stage_id,
@@ -130,6 +134,19 @@ def _validate_request_envelope(request: Any) -> None:
     for field in ("request_id", "contract_hash"):
         if not isinstance(request[field], str) or not request[field]:
             raise ProtocolError(INVALID_REQUEST, f"{field} must be a non-empty string")
+
+
+def _reject_duplicate_properties(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON property")
+        result[key] = value
+    return result
+
+
+def _reject_non_json_constant(value: str) -> None:
+    raise ValueError(f"non-JSON numeric constant: {value}")
 
 
 def _validate_input(value: Any) -> dict[str, Any]:

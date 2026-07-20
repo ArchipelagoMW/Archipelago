@@ -3,22 +3,41 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import sys
 import unittest
 
-from ..apmw_contract import load_contract
-from ..semantic_projection import (
-    CounterBasedSeedSeries,
-    ProjectionError,
-    SemanticSeeds,
-    UpgradePreference,
-    characterize_fundamental_owned_plan,
-    expected_normalized_grant_material,
-    projection_input_from_dict,
-    projection_to_dict,
-    project_exact_active_material,
-    project_exact_active_non_primary_count,
-    project_semantic_roster,
-)
+if __package__:
+    from ..apmw_projection.contract import load_contract
+    from ..apmw_projection.semantic import (
+        CounterBasedSeedSeries,
+        ProjectionError,
+        SemanticSeeds,
+        UpgradePreference,
+        characterize_fundamental_owned_plan,
+        expected_normalized_grant_material,
+        projection_input_from_dict,
+        projection_to_dict,
+        project_exact_active_material,
+        project_exact_active_non_primary_count,
+        project_semantic_roster,
+    )
+else:
+    CHECKSMATE_ROOT = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(CHECKSMATE_ROOT))
+    from apmw_projection.contract import load_contract
+    from apmw_projection.semantic import (
+        CounterBasedSeedSeries,
+        ProjectionError,
+        SemanticSeeds,
+        UpgradePreference,
+        characterize_fundamental_owned_plan,
+        expected_normalized_grant_material,
+        projection_input_from_dict,
+        projection_to_dict,
+        project_exact_active_material,
+        project_exact_active_non_primary_count,
+        project_semantic_roster,
+    )
 
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures" / "projection-v2"

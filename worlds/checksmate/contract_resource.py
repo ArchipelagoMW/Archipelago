@@ -8,3 +8,4 @@ from .apmw_projection.resource import (
     load_frozen_contract as load_production_contract,
     mode_item_maxima,
 )
+from .apmw_projection.contract import ApmwContractV2, parse_contract

@@ -1,12 +1,22 @@
 import json
 from pathlib import Path
+import sys
 import unittest
 
-from ..apmw_contract import (
-    ApmwContractError,
-    compute_manifest_sha256,
-    parse_contract,
-)
+if __package__:
+    from ..apmw_projection.contract import (
+        ApmwContractError,
+        compute_manifest_sha256,
+        parse_contract,
+    )
+else:
+    CHECKSMATE_ROOT = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(CHECKSMATE_ROOT))
+    from apmw_projection.contract import (
+        ApmwContractError,
+        compute_manifest_sha256,
+        parse_contract,
+    )
 
 
 EXPECTED_HASH = "f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15"
