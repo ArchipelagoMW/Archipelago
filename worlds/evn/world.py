@@ -369,6 +369,11 @@ class EVNWorld(World):
         our_multiworld_locations = [l.name for l in self.multiworld.get_locations(self.player)]
         # NOTE: This is because we may NOT have created the extended custom location checks!
 
+        # If we were to dynamically create custom outfit locations, we would need to do it here, but for now we will just assume they are already created in locations.py and we will just export the data for them.
+        # While target_id in locaitons.ev_location_bank:
+        #   [create outfit data]
+        #   target_id += 1
+
         for coutf in cust_outf_table.keys():
             temp_coutf = cust_outf_table[coutf]
             for column in outfits.outf_columns.keys():
@@ -379,6 +384,8 @@ class EVNWorld(World):
                     default_val = f'"{current_val}"\t'
 
                 target_id = offsets_table["outf_cks"] + coutf
+
+                # TODO: make the locations.ev_location_bank check once here and reuse below, instead of checking for each column. But for now, this works.
 
                 if column == "on_purchase":
                     # We need to inject our special bit here as well, so the client can know when to unlock the outf.

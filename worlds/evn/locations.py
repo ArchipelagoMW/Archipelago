@@ -13,6 +13,7 @@ from .logics import possible_regions, EVNRegionData, story_routes, EVNStoryRoute
 from .apdata.offsets import offsets_table as loc_type_offset
 
 # import re
+import random
 
 if TYPE_CHECKING:
     from .world import EVNWorld
@@ -82,6 +83,8 @@ class EVNLocation(Location):
     # item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
     # item: Optional[Item] = None
 
+# NOTE: This is *NOT* the base class get_locations of multiworld.
+# Accidentally named the same thing. Ref'd only by ev_location_bank.
 def get_locations() -> Dict[int, EVNLocationData]:
     # wild. For some reason this was updating ev_item_bank, but treating item_name_to_id as a local variable and not updating it, even though we declared it as global. So, explicity informing the function that both are globals.
     ret_data: Dict[int, EVNLocationData] = {}
@@ -97,7 +100,10 @@ def get_locations() -> Dict[int, EVNLocationData]:
             address=loc_id,
         )
 
+
     # Custom outf checks
+    # NOTE: Add info for all our possible custom outfits / checks in customoutf.py
+    # We'll filter to the ones we actually want to use later when creating our multiworld locations. 
     for coutf in cust_outf_table.keys():
         temp_outf = cust_outf_table[coutf]
         loc_id = loc_type_offset["outf_cks"] + (int)(temp_outf["id"])
@@ -106,6 +112,11 @@ def get_locations() -> Dict[int, EVNLocationData]:
             name=temp_outf["name"].strip() + "-" + temp_outf["id"],
             address=loc_id
         )
+
+    # How many custom outfits do we need to make?
+
+
+    # get our template custom outfit
 
     return ret_data
     
@@ -147,6 +158,8 @@ def create_all_locations(world: EVNWorld) -> None:
     create_universe_locations(world)
     create_regular_locations(world)
     #create_events(world)
+    # If we were to dynamically create custom outfit locations...
+    # create_custom_outfit_locations(world)
 
     # Create universe locations - where not exists id in logic regions, add mission to temp obj. return temp obj into universe region list of locations
 
@@ -167,19 +180,45 @@ def create_universe_locations(world: EVNWorld) -> None:
 
     chosen_route = world.get_chosen_string()
 
+    # This could go after the below loop, but for reader's clarity, I'm putting it here.
+    # Check how many additional locations we need to create for the story route
+    # and randomly pick them to be added.
+    # NOTE: Only added if shuffling outf. Otherwise, don't need for just ships.
+    pick_list = chosen_route["cust_outfs"].copy()
+    random.shuffle(pick_list)
+    x = 0
+    y = chosen_route["use_cust_outfs_count"]
+    while world.options.include_outfits and x < y and len(pick_list) > 0:
+        #logger.info(f"copied chosen route cust out list: {len(pick_list)}; {pick_list}")
+        coutf = pick_list.pop()
+        loc = ev_location_bank[coutf + loc_type_offset["outf_cks"]]
+        universe.add_locations(
+            get_location_names_with_ids(world, [loc["name"]])
+            , EVNLocation
+        )
+        x += 1
+    if x > 0 and x < y:
+        logger.warning(f"Ran out of custom items in story route pool before reaching desired count!")
+
     # Check if location used by any story regions
     for key, loc in ev_location_bank.items():
         loc_found = False
 
         # cust outf - shortcut it (was added later)
+        # if key > coutf_offset: # misn is 2k but outf_cks is 4k, so we know here this is an okay check
+        #     if not chosen_route["use_extended_checks"] and "(ext)" in loc["name"]:
+        #         #logger.info(f'skipping cust outf {key}')
+        #         continue
+        #     universe.add_locations(
+        #         get_location_names_with_ids(world, [loc["name"]])
+        #         , EVNLocation
+        #     )
+        #     continue
+
+        # NOTE: We're not including custom outfits in the regions because we need to randomly pick from them later
+        # I'm not a big fan of this separation, but oh well.
+        # Thus, we must skip them here, and add them in the next function instead.
         if key > coutf_offset: # misn is 2k but outf_cks is 4k, so we know here this is an okay check
-            if not chosen_route["use_extended_checks"] and "(ext)" in loc["name"]:
-                #logger.info(f'skipping cust outf {key}')
-                continue
-            universe.add_locations(
-                get_location_names_with_ids(world, [loc["name"]])
-                , EVNLocation
-            )
             continue
 
         # misns
@@ -189,7 +228,14 @@ def create_universe_locations(world: EVNWorld) -> None:
         if offset_key in misns_to_ignore:
             continue
 
-        # is the mission used by the storyline?
+        # is the mission used by a storyline?
+        # If the misn id is listed in the region of *any* storyline (not just the chosen one)
+        # then it will be skipped.
+        # However, it will only get added to the pool (in the next function) if it is part of
+        # the *chosen* storyline.
+        # This is neat in that a storyline doesn't have to list missions that belong to another
+        # storyline and thus won't be accessible in game (as saves can only play through 1 storyline)
+        # This side effect is that the size of the pool of locations *changes* based on the storyline chosen.
         for rid, sreg in possible_regions.items():
             if offset_key in sreg["missions"]:
                 loc_found = True

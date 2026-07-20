@@ -22,6 +22,36 @@ from typing import Dict, TypedDict, List, Set
 # This should be a bit that will NEVER be set naturally by the game. Use it to perm block missions in the seed that you don't want to be reachable.
 MISSION_BLOCKING_BIT = 9955
 
+# # NOTE: This is the total number of progression items in the pool that'll need locations.
+# #   - If you try to generate, look for the output line "number of items before filler".
+# #   - This will help determine the number of custom outfit shop "locations" will need to be generated.
+# # Ramble time: I do *not* approve of doing it this way really... Here's a brief on the issue:
+# #   - There's too many outfits and ships to shuffle, and not enough missions to put them behind.
+# #   - So we created the custom outfits to "buy" checks. Cool. Except, I kept finding missions that are 
+# #       incompletable in game and needed to be ignored. The result - not enough missions AGAIN.
+# #   - I wanted to create a dynamic determination of how many custom outfits would be needed.
+# #       However, locations are generated first, meaning we don't know how many items will be generated necessarily...
+# #       Like at run time, the code won't know. We can't call len(item_pool) as it is empty. And even if we did,
+# #       we'd probably get a circular reference issue or something.
+# #   - Conclusion: Until I find a better way, I'm going to cheat and use this enum.
+# # IF YOU ARE ADDING A TC OR PLUGIN, you'll need to recalculate and adjust this number. Otherwise, there *might* be too few "locations" to generate successfully.
+# ITEM_COUNT_SHORTCUT = 360
+
+# MAX_CUST_CHECKS = 50 # Max number of custom outfits / locations that can be referenced
+# # NOTE: increasing DOES affect gen time, so don't do so arbitrarily.
+# #   Ref: locations.py > get_locations()
+
+# # Define your function for how you want the credit cost of checks to scale
+# def get_cust_check_val(x: int) -> int:
+#     """
+#     x: current iteration. Ex: 5'th check out of total.
+#     result: the resulting value for that iteration.
+#     """
+#     # NOTE: some of these values *could* be variables possibly.
+    
+
+# CUST_CHECK_FORMULA = get_cust_check_val()
+
 # NOTE: This is a bit of a catch-all for missions that don't fit well with the archipelago check system.
 #   Namely, this will be missions that cannot be completed. Ex: Ship asks to be refilled (afaik, the game literally doesn't have a way to trigger the on_success of the misn for this scenario.)
 #   Or, are engine drivers / not intended for gameplay / may never be used, found, or interacted with. Ex: "Link" missions
@@ -947,8 +977,10 @@ class EVNStoryRoute(TypedDict, total=False):
     regions: List[int] # NOTE: ORDER MATTERS. If we need to, we'll reorg to have each define their entrance and exit regions, but for now, will make the assumption that these are in order and connect in that order.
     region_connections: Dict[int, List[int]] # Dict[FromID, ToIDs] - Use 0 for Universe
     final_mission: int | None # The mission ID that we need to assign the victory condition to
-    use_extended_checks: bool
+    #use_extended_checks: bool
+    cust_outfs: List[int] # List of custom outfit IDs that'll be utilized. NOTE: Only used when outfits are included in shuffle. Not necessary if just ships.
     #region_entrance_rules: Dict[int, Dict[str, int]] # region_id: key_reason - id or count (ex: "ship": 435, "min_cargo": 10)
+    use_cust_outfs_count: int # the number of custom outfits to randomly pull from cust_outfs
     
 
 # Dictionary of our possible storylines / region routes
@@ -973,7 +1005,14 @@ story_routes: Dict[int, EVNStoryRoute] = {
         #"region_connections": { 0: [1, 101, 102, 20] }, # I don't think we need to add the blocking missions
         "region_connections": { 0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312] },
         "final_mission": 417,
-        "use_extended_checks": False,
+        #"use_extended_checks": False,
+        "cust_outfs": [
+            450, 454, 455, 456, 457, 458, 459, 462, 463, 464, 465
+        ],   # NOTE: This list of IDs are the *possible* custom outfits that could be used for this story route.
+        "use_cust_outfs_count": 5, #only 2 needed, 5 to round it out # This isn't how I'd want to do this, but I don't have a great way of determining how many
+            # custom outfits we'll actually need without creating circular references.
+            # Maybe I'm wrong, and we can fix this later.
+            # NOTE: This determines how many IDs are randomly selected from "cust_outfs"
     },
     2: {
         "id": 2,
@@ -993,7 +1032,14 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312], 2: [4], 4: [5], 5: [7], 7: [9] },
         "final_mission": 887,
-        "use_extended_checks": True, # due to how short this path is, we'll need to utilize extended checks to make sure players don't jump into the endgame too early.
+        #"use_extended_checks": True, # due to how short this path is, we'll need to utilize extended checks to make sure players don't jump into the endgame too early.
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,     
+        ], 
+        "use_cust_outfs_count": 22
     },
     3: {    # So, there's 2 starting options, and 2 paths, for 4 combos. May implement all 4, may not.
         "id": 3,
@@ -1013,7 +1059,14 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312], 3: [4], 4: [6], 6: [7], 7: [8] },
         "final_mission": 887,
-        "use_extended_checks": True,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+        ], 
+        "use_cust_outfs_count": 20 #19
     },
     4: {    # Auroran options
         "id": 4,
@@ -1033,7 +1086,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312], 10: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
-        "use_extended_checks": True,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+            # Extra 2.5M
+            485, 486, 487, 488, 489,
+            # Extra 5M
+            490, 491,# 492, 493,
+        ], 
+        "use_cust_outfs_count": 25 #24
     },
     5: {    # Auroran options
         "id": 5,
@@ -1053,49 +1117,86 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [21, 23, 27, 300, 301, 302, 310, 311, 312], 21: [11], 11: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
-        "use_extended_checks": True,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+            # Extra 2.5M
+            485, 486, 487, 488, 489,
+            # Extra 5M
+            490, 491,# 492, 493,
+        ], 
+        "use_cust_outfs_count": 25 #23
     },
-    # 6: {    # Auroran options
-    #     "id": 6,
-    #     "name": "Auroran - From Bounty Hunter",
-    #     "option_name": "bh_auroran",
-    #     "regions": [
-    #         # Universe
-    #         0, 
-    #         # Block other story strings
-    #         100, 101, 102, 103, 104, 201,
-    #         # our story line
-    #         24, 13, 12, 14, 15, 16, 
-    #         # side misn stuff
-    #         20, # WG good ending
-    #         300, 301, 302, # Sigma
-    #         310, 311, 312, # vellos ship misns
-    #     ],
-    #     "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
-    #     "final_mission": 686,
-    #     "use_extended_checks": True,
-    # },
-    # Once again, too short and not enough locations (even with extended checks). Removing for now, may add back in later.
-    # 7: {    # Pirates
-    #     "id": 7,
-    #     "name": "Pirate",
-    #     "option_name": "pirate",
-    #     "regions": [
-    #         # Universe
-    #         0, # universe
-    #         # Block other story strings
-    #         100, 101, 102, 104, 201, # blocking other strings (don't connect)
-    #         # our story line
-    #         30, 32, 34, # Story
-    #         # side misn stuff
-    #         20, 23, 27, # WG + BH
-    #         300, 301, 302, # Sigma
-    #         310, 311, 312, # vellos ship misns
-    #     ],
-    #     "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312], 30: [32], 32: [34] },
-    #     "final_mission": 712,
-    #     "use_extended_checks": True,
-    # },
+    6: {    # Auroran options
+        "id": 6,
+        "name": "Auroran - From Bounty Hunter",
+        "option_name": "bh_auroran",
+        "regions": [
+            # Universe
+            0, 
+            # Block other story strings
+            100, 101, 102, 103, 104, 201,
+            # our story line
+            24, 13, 12, 14, 15, 16, 
+            # side misn stuff
+            20, # WG good ending
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
+        ],
+        "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
+        "final_mission": 686,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 500k
+            473, 474, 475,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+            # Extra 2.5M
+            485, 486, 487, 488, 489,
+            # Extra 5M
+            490, 491, 492, 493,
+        ], 
+        "use_cust_outfs_count": 40 #38 (filler is mostly credits, so helps offset cost?)
+    },
+    #Once again, too short and not enough locations (even with extended checks). Removing for now, may add back in later.
+    7: {    # Pirates
+        "id": 7,
+        "name": "Pirate",
+        "option_name": "pirate",
+        "regions": [
+            # Universe
+            0, # universe
+            # Block other story strings
+            100, 101, 102, 104, 201, # blocking other strings (don't connect)
+            # our story line
+            30, 32, 34, # Story
+            # side misn stuff
+            20, 23, 27, # WG + BH
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
+        ],
+        "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312], 30: [32], 32: [34] },
+        "final_mission": 712,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 500k
+            473, 474, 475,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+            # Extra 2.5M
+            485, 486, 487, 488, 489,
+            # Extra 5M
+            490, 491, 492, 493,
+        ], 
+        "use_cust_outfs_count": 44 # damn this is so short...
+    },
     8: {   
         "id": 8,
         "name": "Pirates - From WG",
@@ -1114,7 +1215,20 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [22, 23, 27, 300, 301, 302, 310, 311, 312], 22: [31], 31: [32], 32: [34] },
         "final_mission": 712,
-        "use_extended_checks": False,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 500k
+            473, 474, 475,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+            # Extra 2.5M
+            485, 486, 487, 488, 489,
+            # Extra 5M
+            490, 491, 492, 493,
+        ], 
+        "use_cust_outfs_count": 43
     },
     9: {   
         "id": 9,
@@ -1134,7 +1248,20 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [20, 23, 27, 40, 300, 301, 302, 310, 311, 312], 40: [42] },
         "final_mission": 474,
-        "use_extended_checks": False,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 500k
+            473, 474, 475,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+            # Extra 2.5M
+            485, 486, 487, 488, 489,
+            # Extra 5M
+            #490, 491, 492, 493,
+        ], 
+        "use_cust_outfs_count": 35 #32
     },
     10: {   
         "id": 10,
@@ -1154,7 +1281,20 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312], 23: [26], 26: [51], 51: [53] },
         "final_mission": 354,
-        "use_extended_checks": False,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 500k
+            473, 474, 475,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+            # Extra 2.5M
+            485, 486, 487, 488, 489,
+            # Extra 5M
+            490, 491, 492, 493,
+        ], 
+        "use_cust_outfs_count": 40 #39
     },
     11: {   
         "id": 11,
@@ -1174,6 +1314,19 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312], 23: [26], 26: [51], 51: [54] },
         "final_mission": 381,
-        "use_extended_checks": False,
+        #"use_extended_checks": True, 
+        "cust_outfs": [
+            # Core
+            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
+            # Extra 500k
+            473, 474, 475,
+            # Extra 1M
+            476, 477, 478, 479, 480, 481, 482, 483, 484,  
+            # Extra 2.5M
+            485, 486, 487, 488, 489,
+            # Extra 5M
+            #490, 491, 492, 493,
+        ], 
+        "use_cust_outfs_count": 35 #34
     }
 }

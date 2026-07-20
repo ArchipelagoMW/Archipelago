@@ -218,7 +218,11 @@ def create_all_items(world: EVNWorld) -> None:
     # There's probably a more elegant way to do this, but we also need to subtract the number of completion locations, since those will be filled with event items instead of regular items.
     # basically, they aren't created *until* we start filling locations over in rules... so we have to account for them here.
     #needed_number_of_filler_items = number_of_unfilled_locations - number_of_items - len(rules.COMPLETION_LOCATIONS) # also need to subtract the number of completion locations, since those will be filled with event items instead of regular items.
-    # NOTE: removing 1 for the single completion location we have now that options forces story string choice.
+    # NOTE: removing 1 for the single completion location we have now that options.py forces story string choice.
+    #   AKA, the final location completes the game, so isn't a valid check (in this case). It is filled by an event we use
+    #   for detecting said completion. Thus, -1 to the overall count.
+    #   This will show up oddly in the generator (#items, #unfilled locations, #dif - but #dif offset by 1)
+    # NOTE: EVN has so many items, this'll only really come into effect if the outfits aren't also shuffled.
     needed_number_of_filler_items = number_of_unfilled_locations - number_of_items - 1
     logger.info(f"number of filler items needed: {needed_number_of_filler_items}")
     #logger.info(f"number of completion locations: {len(rules.COMPLETION_LOCATIONS)}")
