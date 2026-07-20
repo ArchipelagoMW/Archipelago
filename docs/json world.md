@@ -38,7 +38,7 @@ Item Group definitions use the format key `item_name_groups` with the default va
 
 #### Item Groups - explicit
 
-The key `item_name_groups` is expected to have the full dict[str, list[str]] mapping.
+The key `item_name_groups` is expected to either be missing or to have the full dict[str, list[str]] mapping.
 
 ### Location Groups
 
@@ -46,8 +46,7 @@ Location Group definitions use the format key `location_name_groups` with the de
 
 #### Location Groups - explicit
 
-The key `location_name_groups` is expected to have the full dict[str, list[str]] mapping.
-Alternatively 
+The key `location_name_groups` is expected to either be missing or have the full dict[str, list[str]] mapping.
 
 ### Rules
 

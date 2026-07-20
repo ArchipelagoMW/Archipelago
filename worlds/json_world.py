@@ -131,6 +131,10 @@ class JsonWorld(World):
 
     @classmethod
     def from_json(cls, data):
+        """
+        Class method to build a new World class from a json-parsed dict,
+        following the formats in `docs/json world.md`
+        """
         game_name = data["game_name"]
         description = data["description"]
 
