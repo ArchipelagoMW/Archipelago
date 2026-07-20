@@ -41,7 +41,10 @@ data.raw["recipe"]["ap-energy-bridge"] = energy_bridge_recipe
 data.raw["map-gen-presets"].default["archipelago"] = general.map_preset
 
 local function create_trigger_science_pack(pack)
-    local pack_item = data.raw.item[pack]
+    local pack_item = data.raw.tool[pack]
+    if pack_item == nil then
+        pack_item = data.raw.item[pack]
+    end
     local pack_localised_name = pack_item.localised_name or {"item-name."..pack_item.name} or pack
     local pack_trigger = {
         type           = "technology",

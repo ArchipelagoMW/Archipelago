@@ -31,10 +31,10 @@ base_info = {
     "author": "Berserker, Osiris, CosmicWolf",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
-    "factorio_version": "2.1",
+    "factorio_version": "2.0",
     "dependencies": [
-        "base >= 2.1.7",
-        "? quality >= 2.1.7",
+        "base >= 2.0.28",
+        "? quality >= 2.0.28",
     ]
 }
 

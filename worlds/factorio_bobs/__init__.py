@@ -393,12 +393,7 @@ class FactorioBobs(World):
         for catalyst in recipe.technologies:
             req.add(catalyst.tech)
 
-
-        def get_one_element(s):
-            for e in s:
-                break
-            return e
-        ordered_machines = sorted(get_one_element(recipe.categories).machines, key=lambda m: m.score)
+        ordered_machines = sorted(recipe.category.machines, key=lambda m: m.score)
         for machine in ordered_machines:
             if machine.is_valid:
                 req |= machine.get_req_techs()
@@ -562,12 +557,8 @@ class FactorioBobs(World):
                                                               DefinitionSource.WORLD, product.is_fluid)
             custom_products[self.custom_products[product.name]] = amount
 
-        def get_one_element(s):
-            for e in s:
-                break
-            return e
         recipe = GameRecipe(self.modpack.recipe_engine, original.name, DefinitionSource.WORLD,
-                            self.get_category(new_ingredients, get_one_element(original.categories).name), new_ingredients,
+                            self.get_category(new_ingredients, original.category.name), new_ingredients,
                       custom_products, original.energy)
         recipe.technologies = original.technologies
         return recipe
@@ -601,12 +592,8 @@ class FactorioBobs(World):
         original_rocket_part = self.modpack.recipe_engine.recipes["rocket-part"]
         custom_rocket_part = GameItem(self.modpack.recipe_engine, "rocket-part", DefinitionSource.WORLD, False)
         self.custom_products[custom_rocket_part.name] = custom_rocket_part
-        def get_one_element(s):
-            for e in s:
-                break
-            return e
         self.custom_recipes["rocket-part"] = GameRecipe(self.modpack.recipe_engine, "rocket-part", DefinitionSource.WORLD,
-                                                     get_one_element(original_rocket_part.categories),
+                                                        original_rocket_part.category,
                                                      {pools.pop_item_from_pool(-1): 10 for _ in range(3 + ingredients_offset)},
                                                      {custom_rocket_part: 1},
                                                      original_rocket_part.energy)

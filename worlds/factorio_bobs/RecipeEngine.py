@@ -525,7 +525,7 @@ class GameRecipe(RecipeEngineType):
                                                 for product, amount in products.items()}
         self.energy = energy
         self.technologies: set[TechCatalyst] = set()
-        self.categories: set[Category] = set([ctx.get_category(category)])
+        self.category: Category = ctx.get_category(category)
         self.needed_items: set[ItemCatalyst] = set()
 
         self.productivity: bool | None = None # ternary set to override default
