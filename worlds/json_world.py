@@ -2,6 +2,7 @@ from BaseClasses import Item, ItemClassification, Location, Region  # Tutorial
 from worlds.AutoWorld import World  # WebWorld
 from rule_builder.rules import Rule, Or, HasAll
 
+
 def build_item_datapackage(data) -> dict[str, int]:
     format = data.get("formats", {}).get("item_name_to_id", "explicit")
     if format == "explicit":
@@ -135,6 +136,7 @@ class JsonWorld(World):
 
         class JsonItem(Item):
             game = game_name
+
         class JsonLocation(Location):
             game = game_name
 
