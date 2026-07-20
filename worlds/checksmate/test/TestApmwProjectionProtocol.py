@@ -48,6 +48,7 @@ else:
 FIXTURE_DIR = Path(__file__).parent / "fixtures" / "projection-v2"
 CASES_FIXTURE = FIXTURE_DIR / "cases.json"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+PROJECTOR_ENTRY = REPOSITORY_ROOT / "worlds" / "checksmate" / "tools" / "ApmwProjector.py"
 
 
 class TestApmwProjectionProtocol(unittest.TestCase):
@@ -163,7 +164,7 @@ class TestApmwProjectionProtocol(unittest.TestCase):
     def test_standalone_entrypoint_matches_direct_api(self):
         expected = handle_batch_request(self.request)
         completed = subprocess.run(
-            [sys.executable, "ApmwProjector.py"],
+            [sys.executable, str(PROJECTOR_ENTRY)],
             cwd=REPOSITORY_ROOT,
             input=canonical_json(self.request),
             capture_output=True,
@@ -186,7 +187,7 @@ import sys
 sys.stdin = io.StringIO({request!r})
 sys.stdout = io.StringIO()
 try:
-    runpy.run_path("ApmwProjector.py", run_name="__main__")
+    runpy.run_path({str(PROJECTOR_ENTRY)!r}, run_name="__main__")
 except SystemExit as error:
     exit_code = error.code
 else:

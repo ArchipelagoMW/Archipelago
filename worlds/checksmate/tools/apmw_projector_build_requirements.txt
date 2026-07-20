@@ -1,4 +1,4 @@
-# Python 3.12 Windows x86/x64 build lock for the frozen APMW projector.
+# Python 3.12 Windows x86/x64 build lock for the ChecksMate APMW projector.
 cabarchive==0.2.5 \
     --hash=sha256:6d95d83145625898143d732dc0aa0443e53b4262fe9f282f3db5cdedfaf31e01
 cx-Freeze==8.0.0 \

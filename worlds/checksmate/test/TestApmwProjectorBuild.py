@@ -25,8 +25,9 @@ else:
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
-BUILD_SCRIPT = REPOSITORY_ROOT / "tools" / "build_apmw_projector.py"
-BUILD_REQUIREMENTS = REPOSITORY_ROOT / "tools" / "apmw_projector_build_requirements.txt"
+CHECKSMATE_TOOLS = REPOSITORY_ROOT / "worlds" / "checksmate" / "tools"
+BUILD_SCRIPT = CHECKSMATE_TOOLS / "build_apmw_projector.py"
+BUILD_REQUIREMENTS = CHECKSMATE_TOOLS / "apmw_projector_build_requirements.txt"
 RELEASE_WORKFLOW = REPOSITORY_ROOT / ".github" / "workflows" / "apmw-projector-release.yml"
 TEST_OUTPUT = REPOSITORY_ROOT / "build" / "test-apmw-projector-manifest"
 
@@ -101,6 +102,18 @@ class TestApmwProjectorBuild(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "cx_Freeze 8.0.0 is required"):
                 self.builder._load_cx_freeze()
 
+    def test_projector_tooling_is_scoped_to_checksmate(self):
+        self.assertEqual(CHECKSMATE_TOOLS, BUILD_SCRIPT.parent)
+        self.assertEqual(CHECKSMATE_TOOLS / "ApmwProjector.py", self.builder.ENTRY_SCRIPT)
+        self.assertFalse((REPOSITORY_ROOT / "ApmwProjector.py").exists())
+        for filename in (
+            "build_apmw_projector.py",
+            "smoke_apmw_projector.py",
+            "create_apmw_projector_release_manifest.py",
+            "apmw_projector_build_requirements.txt",
+        ):
+            self.assertFalse((REPOSITORY_ROOT / "tools" / filename).exists())
+
     def test_release_build_uses_immutable_actions_and_hashed_dependencies(self):
         workflow = RELEASE_WORKFLOW.read_text(encoding="utf-8")
         action_references = re.findall(r"^\s*uses:\s*[^@\s]+@([^\s#]+)", workflow, re.MULTILINE)
@@ -108,7 +121,10 @@ class TestApmwProjectorBuild(unittest.TestCase):
         self.assertTrue(action_references)
         self.assertTrue(all(re.fullmatch(r"[0-9a-f]{40}", value) for value in action_references))
         self.assertIn("--require-hashes", workflow)
-        self.assertIn("tools\\apmw_projector_build_requirements.txt", workflow)
+        self.assertIn(
+            "worlds\\checksmate\\tools\\apmw_projector_build_requirements.txt",
+            workflow,
+        )
 
         requirements = BUILD_REQUIREMENTS.read_text(encoding="ascii")
         requirement_starts = [

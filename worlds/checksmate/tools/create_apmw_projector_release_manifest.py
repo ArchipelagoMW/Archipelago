@@ -1,4 +1,4 @@
-"""Create an immutable release manifest from two frozen projector archives."""
+"""Create an immutable ChecksMate release manifest from frozen projector archives."""
 
 from __future__ import annotations
 

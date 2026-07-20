@@ -7,7 +7,7 @@ import sys
 
 
 if not getattr(sys, "frozen", False):
-    CHECKSMATE_ROOT = Path(__file__).resolve().parent / "worlds" / "checksmate"
+    CHECKSMATE_ROOT = Path(__file__).resolve().parents[1]
     sys.path.insert(0, str(CHECKSMATE_ROOT))
 
 from apmw_projection.protocol import run_cli

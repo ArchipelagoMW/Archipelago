@@ -25,7 +25,13 @@ else:
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
-RELEASE_SCRIPT = REPOSITORY_ROOT / "tools" / "create_apmw_projector_release_manifest.py"
+RELEASE_SCRIPT = (
+    REPOSITORY_ROOT
+    / "worlds"
+    / "checksmate"
+    / "tools"
+    / "create_apmw_projector_release_manifest.py"
+)
 TEST_OUTPUT = REPOSITORY_ROOT / "build" / "test-apmw-projector-release-manifest"
 SOURCE_COMMIT = "0123456789abcdef0123456789abcdef01234567"
 SOURCE_REPOSITORY = "chesslogic/Archipelago"

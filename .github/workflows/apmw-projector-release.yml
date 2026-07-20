@@ -102,7 +102,7 @@ jobs:
           python -m pip install
           --disable-pip-version-check
           --require-hashes
-          -r tools\apmw_projector_build_requirements.txt
+          -r worlds\checksmate\tools\apmw_projector_build_requirements.txt
 
       - name: Test canonical projector
         working-directory: worlds/checksmate/test
@@ -116,12 +116,12 @@ jobs:
 
       - name: Freeze projector
         run: >-
-          python tools\build_apmw_projector.py
+          python worlds\checksmate\tools\build_apmw_projector.py
           --output dist\apmw-projector-windows-${{ matrix.architecture }}
 
       - name: Smoke frozen projector
         run: >-
-          python tools\smoke_apmw_projector.py
+          python worlds\checksmate\tools\smoke_apmw_projector.py
           --executable
           dist\apmw-projector-windows-${{ matrix.architecture }}\ApmwProjector.exe
 
@@ -171,7 +171,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python tools/create_apmw_projector_release_manifest.py \
+          python worlds/checksmate/tools/create_apmw_projector_release_manifest.py \
             --input dist/apmw-projector-windows-x86-manifest.json dist/apmw-projector-windows-x86.zip \
             --input dist/apmw-projector-windows-x64-manifest.json dist/apmw-projector-windows-x64.zip \
             --source-repository "${GITHUB_REPOSITORY}" \

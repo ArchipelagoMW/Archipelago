@@ -1,7 +1,7 @@
 """Build the standalone APMW projector without running the Archipelago setup.
 
 Run a frozen sidecar smoke build with:
-    python tools/build_apmw_projector.py --output build/apmw-projector-smoke
+    python worlds/checksmate/tools/build_apmw_projector.py --output build/apmw-projector-smoke
 """
 
 from __future__ import annotations
@@ -15,9 +15,9 @@ import sys
 from typing import Any
 
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-CHECKSMATE_ROOT = REPOSITORY_ROOT / "worlds" / "checksmate"
-ENTRY_SCRIPT = REPOSITORY_ROOT / "ApmwProjector.py"
+CHECKSMATE_ROOT = Path(__file__).resolve().parents[1]
+REPOSITORY_ROOT = CHECKSMATE_ROOT.parents[1]
+ENTRY_SCRIPT = Path(__file__).resolve().with_name("ApmwProjector.py")
 CONTRACT_DATA = (
     CHECKSMATE_ROOT / "apmw_projection" / "data" / "apmw_contract_v2.json"
 )
@@ -121,7 +121,7 @@ def write_manifest(executable: Path, output_dir: Path) -> Path:
 
 
 def build_projector(output_dir: Path) -> Path:
-    """Freeze only ApmwProjector.py and return its manifest path."""
+    """Freeze only the ChecksMate projector entry and return its manifest path."""
     cx_freeze = _load_cx_freeze()
     output_dir = output_dir.resolve()
     if output_dir.exists() and any(output_dir.iterdir()):

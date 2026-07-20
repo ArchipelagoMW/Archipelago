@@ -10,8 +10,7 @@ import subprocess
 import sys
 
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-CHECKSMATE_ROOT = REPOSITORY_ROOT / "worlds" / "checksmate"
+CHECKSMATE_ROOT = Path(__file__).resolve().parents[1]
 CASES_FIXTURE = (
     CHECKSMATE_ROOT / "test" / "fixtures" / "projection-v2" / "cases.json"
 )
