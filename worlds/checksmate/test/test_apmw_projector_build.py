@@ -28,6 +28,11 @@ CHECKSMATE_TOOLS = REPOSITORY_ROOT / "worlds" / "checksmate" / "tools"
 BUILD_SCRIPT = CHECKSMATE_TOOLS / "build_apmw_projector.py"
 BUILD_REQUIREMENTS = CHECKSMATE_TOOLS / "apmw_projector_build_requirements.txt"
 TEST_OUTPUT = REPOSITORY_ROOT / "build" / "test-apmw-projector-manifest"
+EXPECTED_PROJECTOR_METADATA = {
+    "runtime_semantic_version": "0.1.0",
+    "protocol_version": 1,
+    "contract_hash": "f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15",
+}
 
 
 def load_builder():
@@ -60,6 +65,7 @@ class TestApmwProjectorBuild(unittest.TestCase):
         manifest_path = self.builder.write_manifest(executable, TEST_OUTPUT)
         manifest = json.loads(manifest_path.read_text(encoding="ascii"))
 
+        self.assertEqual(EXPECTED_PROJECTOR_METADATA, self.builder.projector_metadata())
         self.assertEqual(
             {
                 "schema",
@@ -76,6 +82,10 @@ class TestApmwProjectorBuild(unittest.TestCase):
         )
         self.assertEqual(self.builder.BUILD_MANIFEST_SCHEMA, manifest["schema"])
         self.assertEqual(self.builder.BUILD_MANIFEST_VERSION, manifest["version"])
+        self.assertEqual(
+            EXPECTED_PROJECTOR_METADATA,
+            {key: manifest[key] for key in EXPECTED_PROJECTOR_METADATA},
+        )
         self.assertEqual(RUNTIME_SEMANTIC_VERSION, manifest["runtime_semantic_version"])
         self.assertEqual(PROTOCOL_VERSION, manifest["protocol_version"])
         self.assertEqual(FROZEN_CONTRACT_HASH, manifest["contract_hash"])

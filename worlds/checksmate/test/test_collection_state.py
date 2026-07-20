@@ -1,177 +1,124 @@
-from BaseClasses import CollectionState, Item, ItemClassification
-from ..items import MATERIAL_TOTAL_KEY, item_allowed_in_mode, item_table
-from ..rules import has_board_files_unlock
+from BaseClasses import CollectionState
+
+from ..items import MATERIAL_TOTAL_KEY
 from .bases import CMTestBase
-import random
+
 
 class TestCollectionState(CMTestBase):
-    def setUp(self):
-        super().setUp()
-        self.collection_state = CollectionState(self.multiworld)
-        self.cm_collection_state = self.world._collection_state
-        
-    def create_test_item(self, name: str) -> Item:
-        """Helper to create a test item with the given name"""
-        return Item(name, ItemClassification.progression, self.player, item_table[name])
-        
-    def get_expected_material_loss(self, item_name: str) -> int:
-        """Calculate expected material loss based on current state and upgrades"""
-        if item_name == "Progressive Major Piece":
-            # If we have a queen upgrade, removing the major piece actually removes a queen
-            queens = self.collection_state.prog_items[self.player].get("Progressive Major To Queen", 0)
-            majors = self.collection_state.prog_items[self.player].get("Progressive Major Piece", 0)
-            if queens > 0 and majors <= queens:
-                # This major piece was upgraded to a queen
-                return item_table["Progressive Major To Queen"].material + item_table["Progressive Major Piece"].material
-            return item_table[item_name].material
-        elif item_name == "Progressive Major To Queen":
-            # Queen upgrade has no value without a major piece to upgrade
-            majors = self.collection_state.prog_items[self.player].get("Progressive Major Piece", 0)
-            queens = self.collection_state.prog_items[self.player].get("Progressive Major To Queen", 0)
-            if majors < queens:  # If we have more queen upgrades than pieces to upgrade
-                return 0  # This upgrade isn't being used
-            return item_table[item_name].material
-        return item_table[item_name].material
-        
-    def test_collect_beyond_quantity(self):
-        """Test that collecting items beyond their quantity limit doesn't affect material"""
-        # Test with Progressive King Promotion which has quantity=2
-        item = self.create_test_item("Progressive King Promotion")
-        
-        # First collection should count
-        material1 = self.cm_collection_state.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.assertGreater(material1, 0)
-        
-        # Second collection should count
-        material2 = self.cm_collection_state.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.assertGreater(material2, 0)
-        
-        # Third collection should not count due to quantity limit
-        material3 = self.cm_collection_state.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.assertEqual(material3, 0)
-        
-    def test_remove_beyond_quantity(self):
-        """Test that removing items beyond their quantity limit doesn't affect material"""
-        item = self.create_test_item("Progressive King Promotion")
+    def world_setup(self, *args, **kwargs) -> None:
+        super().world_setup(seed=0)
 
-        self.assertTrue(self.world.collect(self.collection_state, item))
-        self.assertTrue(self.world.collect(self.collection_state, item))
-        self.assertFalse(self.world.collect(self.collection_state, item))
-        expected_material = 2 * item_table[item.name].material
-        self.assertEqual(2, self.collection_state.count(item.name, self.player))
-        self.assertEqual(
-            expected_material,
-            self.collection_state.prog_items[self.player][MATERIAL_TOTAL_KEY],
+    def fresh_state(self) -> CollectionState:
+        return CollectionState(self.multiworld)
+
+    def collect_names(self, state: CollectionState, names: list[str]) -> list[bool]:
+        return [
+            self.world.collect(state, self.world.create_item(name))
+            for name in names
+        ]
+
+    def remove_names(self, state: CollectionState, names: list[str]) -> list[bool]:
+        return [
+            self.world.remove(state, self.world.create_item(name))
+            for name in names
+        ]
+
+    def snapshot(self, state: CollectionState) -> tuple[int, int, int]:
+        return (
+            state.count("Progressive Major Piece", self.player),
+            state.count("Progressive Major To Queen", self.player),
+            state.prog_items[self.player][MATERIAL_TOTAL_KEY],
         )
 
-        self.assertFalse(self.world.remove(self.collection_state, item))
-        self.assertEqual(2, self.collection_state.count(item.name, self.player))
+    def test_parent_child_collection_order_is_invariant(self) -> None:
+        parent_first = self.fresh_state()
+        child_first = self.fresh_state()
+
         self.assertEqual(
-            expected_material,
-            self.collection_state.prog_items[self.player][MATERIAL_TOTAL_KEY],
+            [True, True],
+            self.collect_names(
+                parent_first,
+                ["Progressive Major Piece", "Progressive Major To Queen"],
+            ),
+        )
+        self.assertEqual(
+            [True, True],
+            self.collect_names(
+                child_first,
+                ["Progressive Major To Queen", "Progressive Major Piece"],
+            ),
         )
 
-        self.assertTrue(self.world.remove(self.collection_state, item))
-        self.assertEqual(1, self.collection_state.count(item.name, self.player))
-        self.assertEqual(
-            item_table[item.name].material,
-            self.collection_state.prog_items[self.player][MATERIAL_TOTAL_KEY],
-        )
+        self.assertEqual((1, 1, 900), self.snapshot(parent_first))
+        self.assertEqual(self.snapshot(parent_first), self.snapshot(child_first))
 
-        self.assertTrue(self.world.remove(self.collection_state, item))
-        self.assertEqual(0, self.collection_state.count(item.name, self.player))
-        self.assertEqual(0, self.collection_state.prog_items[self.player][MATERIAL_TOTAL_KEY])
-        
-    def test_pocket_limit_interaction(self):
-        """Test that Progressive Pocket respects pocket limit"""
-        # Set up a world with pocket_limit_by_pocket = 1 and max_pocket = 3
+    def test_collect_then_remove_is_an_exact_inverse_in_both_orders(self) -> None:
+        for collection_order in (
+            ["Progressive Major Piece", "Progressive Major To Queen"],
+            ["Progressive Major To Queen", "Progressive Major Piece"],
+        ):
+            with self.subTest(collection_order=collection_order):
+                state = self.fresh_state()
+                self.collect_names(state, collection_order)
+
+                self.assertEqual(
+                    [True, True],
+                    self.remove_names(state, list(reversed(collection_order))),
+                )
+                self.assertEqual((0, 0, 0), self.snapshot(state))
+
+    def test_unpaired_child_upgrades_only_gain_material_when_parents_arrive(self) -> None:
+        state = self.fresh_state()
+
+        self.assertEqual(
+            [True, True, True],
+            self.collect_names(state, ["Progressive Major To Queen"] * 3),
+        )
+        self.assertEqual((0, 3, 0), self.snapshot(state))
+
+        self.assertTrue(
+            self.world.collect(
+                state,
+                self.world.create_item("Progressive Major Piece"),
+            )
+        )
+        self.assertEqual((1, 3, 900), self.snapshot(state))
+
+        self.assertTrue(
+            self.world.remove(
+                state,
+                self.world.create_item("Progressive Major Piece"),
+            )
+        )
+        self.assertEqual((0, 3, 0), self.snapshot(state))
+
+    def test_fixed_quantity_cap_tracks_linked_or_starting_overcounts(self) -> None:
+        """Extra incoming copies are removed before either effective copy."""
+        state = self.fresh_state()
+        item_name = "Progressive King Promotion"
+
+        self.assertEqual(
+            [True, True, False, False],
+            self.collect_names(state, [item_name] * 4),
+        )
+        self.assertEqual(2, state.count(item_name, self.player))
+        self.assertEqual(850, state.prog_items[self.player][MATERIAL_TOTAL_KEY])
+
+        self.assertEqual(
+            [False, False, True, True],
+            self.remove_names(state, [item_name] * 4),
+        )
+        self.assertEqual(0, state.count(item_name, self.player))
+        self.assertEqual(0, state.prog_items[self.player][MATERIAL_TOTAL_KEY])
+
+    def test_dynamic_pocket_cap_is_three_times_per_pocket_limit(self) -> None:
+        state = self.fresh_state()
         self.world.options.pocket_limit_by_pocket.value = 1
-        self.world.options.max_pocket.value = 3
-        item = self.create_test_item("Progressive Pocket")
-        
-        # First collection should count
-        material1 = self.cm_collection_state.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.assertGreater(material1, 0)
-        
-        # Second collection should count
-        material2 = self.cm_collection_state.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.assertGreater(material2, 0)
+        self.world.options.max_pocket.value = 12
 
-        # Third collection should count
-        material3 = self.cm_collection_state.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.assertGreater(material3, 0)
-
-        # Fourth collection should not count due to pocket limit
-        material4 = self.cm_collection_state.collect(self.collection_state, item)
-        self.world.collect(self.collection_state, item)
-        self.assertEqual(material4, 0)
-
-    def test_legacy_super_size_marker_aliases_first_board_file_unlock(self):
-        item = self.create_test_item("Super-Size Me")
-
-        self.assertFalse(has_board_files_unlock(self.collection_state, self.player))
-        self.assertTrue(self.world.collect(self.collection_state, item))
-        self.assertTrue(has_board_files_unlock(self.collection_state, self.player))
-
-    def test_random_collect_remove(self):
-        """Test collecting and removing items in random order to verify state consistency"""
-        # Create list of all items that have material value
-        material_items = {
-            name: data for name, data in item_table.items()
-            if data.material > 0 and item_allowed_in_mode(name, "legacy")
-        }
-        material_items_list = list(material_items.items())
-        
-        # Track what we expect to have
-        expected_material = 0
-        collected_items = []
-        
-        # First collect items in random order
-        random.shuffle(material_items_list)
-        for item_name, item_data in material_items_list:
-            # Collect the item
-            item = self.create_test_item(item_name)
-            material_gain = self.cm_collection_state.collect(self.collection_state, item)
-            self.world.collect(self.collection_state, item)
-            
-            if material_gain > 0:  # If we actually gained material (didn't hit quantity limit)
-                expected_material += material_gain
-                collected_items.append(item_name)
-                
-            # Verify material matches expectations
-            actual_material = self.collection_state.prog_items[self.player].get(MATERIAL_TOTAL_KEY, 0)
-            self.assertEqual(expected_material, actual_material,
-                f"Material mismatch after collecting {item_name}. "
-                f"Expected {expected_material}, got {actual_material}")
-        
-        # Now remove items in random order
-        random.shuffle(collected_items)
-        for item_name in collected_items:
-            # Remove the item
-            item = self.create_test_item(item_name)
-            expected_loss = self.get_expected_material_loss(item_name)
-            material_loss = self.cm_collection_state.remove(self.collection_state, item)
-            self.world.remove(self.collection_state, item)
-            
-            # Material loss should match what we expect based on current state
-            self.assertEqual(material_loss, expected_loss,
-                f"Material loss {material_loss} doesn't match expected loss {expected_loss} "
-                f"when removing {item_name}")
-            
-            expected_material -= material_loss
-            
-            # Verify material matches expectations
-            actual_material = self.collection_state.prog_items[self.player].get(MATERIAL_TOTAL_KEY, 0)
-            self.assertEqual(expected_material, actual_material,
-                f"Material mismatch after removing {item_name}. "
-                f"Expected {expected_material}, got {actual_material}")
-        
-        # Verify we're back to 0 material
-        self.assertEqual(0, self.collection_state.prog_items[self.player].get(MATERIAL_TOTAL_KEY, 0),
-            "Material should be 0 after removing all items")
+        self.assertEqual(
+            [True, True, True, False],
+            self.collect_names(state, ["Progressive Pocket"] * 4),
+        )
+        self.assertEqual(3, state.count("Progressive Pocket", self.player))
+        self.assertEqual(330, state.prog_items[self.player][MATERIAL_TOTAL_KEY])

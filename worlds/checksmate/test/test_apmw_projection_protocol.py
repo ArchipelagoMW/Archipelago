@@ -1,5 +1,6 @@
 import ast
 import copy
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -49,6 +50,9 @@ FIXTURE_DIR = Path(__file__).parent / "fixtures" / "projection-v2"
 CASES_FIXTURE = FIXTURE_DIR / "cases.json"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 PROJECTOR_ENTRY = REPOSITORY_ROOT / "worlds" / "checksmate" / "tools" / "apmw_projector.py"
+EXPECTED_CONTRACT_HASH = "f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15"
+EXPECTED_PROTOCOL_VERSION = 1
+EXPECTED_RUNTIME_SEMANTIC_VERSION = "0.1.0"
 
 
 class TestApmwProjectionProtocol(unittest.TestCase):
@@ -100,35 +104,73 @@ class TestApmwProjectionProtocol(unittest.TestCase):
             [result["geometry_stage"] for result in first["results"]],
         )
 
+    def test_request_and_response_wire_serialization_is_frozen(self):
+        request = copy.deepcopy(self.request)
+        request["request_id"] = "characterization"
+        request["geometries"] = ["8x8"]
+        expected_request = (
+            '{"contract_hash":"f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15",'
+            '"geometries":["8x8"],"input":{"item_counts":{"Progressive Pawn":8},'
+            '"itemization":"legacy","ordering":"stable","seeds":{"major_seed":"404",'
+            '"minor_seed":"303","pawn_seed":"202","pocket_seed":"101","queen_seed":"505"}},'
+            '"protocol_version":1,"request_id":"characterization"}'
+        )
+
+        self.assertEqual(expected_request, canonical_json(request))
+        response_text = canonical_json(handle_json_request(expected_request))
+        self.assertEqual(
+            "9e207c4907cf93c1a4f44ba4d22605107664ffa0aeb5447c3b5c095ec8bbc728",
+            hashlib.sha256(response_text.encode("ascii")).hexdigest(),
+        )
+        response = json.loads(response_text)
+        self.assertEqual(
+            {
+                "contract_hash": EXPECTED_CONTRACT_HASH,
+                "protocol_version": EXPECTED_PROTOCOL_VERSION,
+                "request_id": "characterization",
+                "runtime_semantic_version": EXPECTED_RUNTIME_SEMANTIC_VERSION,
+            },
+            {key: response[key] for key in response if key != "results"},
+        )
+
     def test_structured_failures(self):
         failures = (
-            (INVALID_JSON, lambda: handle_json_request("{")),
+            (
+                INVALID_JSON,
+                "request is not valid JSON",
+                lambda: handle_json_request("{"),
+            ),
             (
                 INVALID_PROTOCOL,
+                "unsupported protocol version",
                 lambda: handle_batch_request(
                     {**self.request, "protocol_version": PROTOCOL_VERSION + 1}
                 ),
             ),
             (
                 CONTRACT_MISMATCH,
+                "contract hash does not match frozen v2 contract",
                 lambda: handle_batch_request(
                     {**self.request, "contract_hash": "not-the-frozen-contract"}
                 ),
             ),
             (
                 INVALID_REQUEST,
+                "geometries must not contain duplicates",
                 lambda: handle_batch_request(
                     {**self.request, "geometries": ["8x8", "8x8"]}
                 ),
             ),
             (
                 UNKNOWN_GEOMETRY,
+                "geometry is not defined by frozen v2 contract",
                 lambda: handle_batch_request(
                     {**self.request, "geometries": ["9x9"]}
                 ),
             ),
             (
                 PROJECTION_ERROR,
+                "item count for Progressive Pawn must not be negative",
                 lambda: handle_batch_request(
                     {
                         **self.request,
@@ -140,14 +182,18 @@ class TestApmwProjectionProtocol(unittest.TestCase):
                 ),
             ),
         )
-        for code, operation in failures:
+        for code, message, operation in failures:
             with self.subTest(code=code):
                 with self.assertRaises(ProtocolError) as raised:
                     operation()
                 self.assertEqual(code, raised.exception.code)
                 self.assertEqual(
-                    {"error": {"code": code, "message": raised.exception.message}},
+                    {"error": {"code": code, "message": message}},
                     raised.exception.to_dict(),
+                )
+                self.assertEqual(
+                    canonical_json({"error": {"code": code, "message": message}}),
+                    canonical_json(raised.exception.to_dict()),
                 )
 
     def test_projection_errors_keep_actionable_details_without_tracebacks(self):

@@ -1,3 +1,10 @@
+r"""Projection compatibility snapshot provenance.
+
+Source: ``..\chessv\APMW.Test\Fixtures\ProjectionV2``.
+Regenerate from this repository root with:
+``Copy-Item ..\chessv\APMW.Test\Fixtures\ProjectionV2\*.json worlds\checksmate\test\fixtures\projection-v2\``.
+"""
+
 import copy
 import hashlib
 import json
@@ -45,6 +52,11 @@ CONTRACT_FIXTURE = FIXTURE_DIR / "baseline.json"
 CASES_FIXTURE = FIXTURE_DIR / "cases.json"
 EXPECTED_CONTRACT_HASH = "f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15"
 EXPECTED_CASES_HASH = "8d644bee7d7565f45b572d1e93c8f6e544a1efdb8b1a8f198172c8f528e8e98c"
+SNAPSHOT_SOURCE = Path("..") / "chessv" / "APMW.Test" / "Fixtures" / "ProjectionV2"
+REGENERATION_COMMAND = (
+    r"Copy-Item ..\chessv\APMW.Test\Fixtures\ProjectionV2\*.json "
+    "worlds\\checksmate\\test\\fixtures\\projection-v2\\"
+)
 
 
 def _single_non_primary_summary(output):
@@ -109,6 +121,130 @@ class TestSemanticProjectionV2(unittest.TestCase):
                 "pawn-creation-action-compatibility",
             }.issubset(covered)
         )
+
+    def test_compatibility_snapshot_source_and_regeneration_command_are_frozen(self):
+        self.assertEqual(
+            r"..\chessv\APMW.Test\Fixtures\ProjectionV2",
+            str(SNAPSHOT_SOURCE),
+        )
+        self.assertEqual(
+            r"Copy-Item ..\chessv\APMW.Test\Fixtures\ProjectionV2\*.json "
+            "worlds\\checksmate\\test\\fixtures\\projection-v2\\",
+            REGENERATION_COMMAND,
+        )
+        source = (
+            Path(__file__).resolve().parents[4]
+            / "chessv"
+            / "APMW.Test"
+            / "Fixtures"
+            / "ProjectionV2"
+        )
+        if source.is_dir():
+            for filename in ("baseline.json", "cases.json"):
+                with self.subTest(filename=filename):
+                    self.assertEqual(
+                        (FIXTURE_DIR / filename).read_bytes(),
+                        (source / filename).read_bytes(),
+                    )
+
+    def test_seed_root_legacy_and_fundamental_projection_vectors_are_frozen(self):
+        seeds = {
+            "pocket_seed": "101",
+            "pawn_seed": "202",
+            "minor_seed": "303",
+            "major_seed": "404",
+            "queen_seed": "505",
+        }
+        self.assertEqual("101|202|303|404|505", SemanticSeeds(**seeds).stable_root)
+
+        legacy = projection_to_dict(
+            project_semantic_roster(
+                self.contract,
+                projection_input_from_dict(
+                    {
+                        "itemization": "legacy",
+                        "ordering": "stable",
+                        "seeds": seeds,
+                        "item_counts": {
+                            "Progressive Major Piece": 1,
+                            "Progressive Jack": 1,
+                        },
+                        "upgrade_preferences": [
+                            {"action": "major-to-jack", "priority": 10}
+                        ],
+                    }
+                ),
+            )
+        )
+        self.assertEqual(
+            [
+                ("primary-royal:000000", 4, 0),
+                ("major-slot:000000", 6, 0),
+            ],
+            [
+                (entry["slot_id"], entry["file"], entry["relative_rank"])
+                for entry in legacy["active_placements"]
+            ],
+        )
+        self.assertEqual(
+            [("active:major-slot:000000", "major-slot:000000", 700)],
+            [
+                (entry["entry_id"], entry["slot_id"], entry["amount"])
+                for entry in legacy["active_material_ledger"]
+            ],
+        )
+
+        fundamental = projection_to_dict(
+            project_semantic_roster(
+                self.contract,
+                projection_input_from_dict(
+                    {
+                        "itemization": "fundamental",
+                        "ordering": "stable",
+                        "seeds": seeds,
+                        "item_counts": {"Chessmen": 5, "Material": 12},
+                        "upgrade_preferences": [
+                            {"action": "pawn-to-minor", "priority": 7},
+                            {"action": "minor-to-major", "priority": 6},
+                            {"action": "major-to-jack", "priority": 5},
+                            {"action": "minor-to-jack", "priority": 4},
+                            {"action": "major-to-queen", "priority": 3},
+                            {"action": "jack-to-queen", "priority": 2},
+                            {"action": "queen-to-amazon", "priority": 1},
+                        ],
+                    }
+                ),
+            )
+        )
+        self.assertEqual(
+            [
+                ("chessman:000003", "queen", 900),
+                ("chessman:000004", "amazon", 1300),
+                ("chessman:000001", "queen", 900),
+                ("chessman:000002", "amazon", 1300),
+                ("chessman:000000", "queen", 900),
+            ],
+            [
+                (entry["slot_id"], entry["final_family"], entry["granted_material"])
+                for entry in fundamental["owned_slots"]
+                if entry["source_role"] != "primary-royal"
+            ],
+        )
+        self.assertEqual(
+            [
+                ("chessman:000003", 5, 0),
+                ("chessman:000004", 3, 0),
+                ("chessman:000001", 7, 0),
+                ("chessman:000002", 0, 0),
+                ("chessman:000000", 1, 0),
+            ],
+            [
+                (entry["slot_id"], entry["file"], entry["relative_rank"])
+                for entry in fundamental["active_placements"]
+                if entry["slot_id"] != "primary-royal:000000"
+            ],
+        )
+        self.assertEqual(5300, fundamental["total_accounted_material"])
 
     def test_all_canonical_cases_match_byte_model(self):
         for case in self.document["cases"]:

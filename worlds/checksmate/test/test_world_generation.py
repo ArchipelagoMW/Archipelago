@@ -1,3 +1,7 @@
+import random
+
+from Fill import distribute_items_restrictive
+
 from .bases import CMTestBase
 from ..options import (
     DEFAULT_PIECE_UPGRADE_RATIO,
@@ -23,8 +27,37 @@ FUTURE_CONFIGURE_PREFERENCES = [
 
 class TestWorldGeneration(CMTestBase):
     def test_full_generation(self):
-        """Test that a complete world generates successfully"""
-        pass
+        """The default option set can be filled into a complete, reachable world."""
+        distribute_items_restrictive(self.multiworld)
+        spheres = list(self.multiworld.get_spheres())
+        self.assertTrue(spheres)
+        self.assertTrue(all(spheres))
+        self.assertTrue(all(location.item is not None for location in self.multiworld.get_locations()))
+
+    def test_legacy_repeated_slot_data_advances_rng_for_each_pocket_shuffle(self):
+        """Legacy behavior: repeated serialization reshuffles pockets and advances world RNG."""
+        initial_state = self.world.random.getstate()
+        probe = random.Random()
+        probe.setstate(initial_state)
+        expected_first_order = [0] * 4 + [1] * 4 + [2] * 4
+        probe.shuffle(expected_first_order)
+        expected_first_state = probe.getstate()
+        expected_second_order = [0] * 4 + [1] * 4 + [2] * 4
+        probe.shuffle(expected_second_order)
+        expected_second_state = probe.getstate()
+
+        first = self.world.fill_slot_data()
+        self.assertEqual(expected_first_order, first["pocket_order"])
+        self.assertEqual(expected_first_state, self.world.random.getstate())
+
+        second = self.world.fill_slot_data()
+        self.assertEqual(expected_second_order, second["pocket_order"])
+        self.assertEqual(expected_second_state, self.world.random.getstate())
+        self.assertNotEqual(first["pocket_order"], second["pocket_order"])
+        self.assertEqual(
+            {key: value for key, value in first.items() if key != "pocket_order"},
+            {key: value for key, value in second.items() if key != "pocket_order"},
+        )
 
     def test_fairy_chess_pawn_upgrades_in_slot_data_default(self):
         """Default off (0) should appear in fill_slot_data output."""

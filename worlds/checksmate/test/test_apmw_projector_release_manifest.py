@@ -35,6 +35,11 @@ RELEASE_SCRIPT = (
 TEST_OUTPUT = REPOSITORY_ROOT / "build" / "test-apmw-projector-release-manifest"
 SOURCE_COMMIT = "0123456789abcdef0123456789abcdef01234567"
 SOURCE_REPOSITORY = "chesslogic/Archipelago"
+EXPECTED_PROJECTOR_METADATA = {
+    "runtime_semantic_version": "0.1.0",
+    "protocol_version": 1,
+    "contract_hash": "f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15",
+}
 
 
 def load_release_builder():
@@ -80,6 +85,10 @@ class TestApmwProjectorReleaseManifest(unittest.TestCase):
         )
         self.assertEqual(
             self.release_builder.RELEASE_MANIFEST_VERSION, manifest["version"]
+        )
+        self.assertEqual(
+            EXPECTED_PROJECTOR_METADATA,
+            {key: manifest[key] for key in EXPECTED_PROJECTOR_METADATA},
         )
         self.assertEqual(RUNTIME_SEMANTIC_VERSION, manifest["runtime_semantic_version"])
         self.assertEqual(PROTOCOL_VERSION, manifest["protocol_version"])
