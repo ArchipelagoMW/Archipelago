@@ -1,6 +1,9 @@
 r"""Projection compatibility snapshot provenance.
 
 Source: ``..\chessv\APMW.Test\Fixtures\ProjectionV2``.
+The production contract is canonical at
+``worlds\checksmate\apmw_projection\data\apmw_contract_v2.json``; the baseline
+fixture remains an independently hashed cross-language compatibility snapshot.
 Regenerate from this repository root with:
 ``Copy-Item ..\chessv\APMW.Test\Fixtures\ProjectionV2\*.json worlds\checksmate\test\fixtures\projection-v2\``.
 """
@@ -50,7 +53,14 @@ else:
 FIXTURE_DIR = Path(__file__).parent / "fixtures" / "projection-v2"
 CONTRACT_FIXTURE = FIXTURE_DIR / "baseline.json"
 CASES_FIXTURE = FIXTURE_DIR / "cases.json"
+CANONICAL_CONTRACT = (
+    Path(__file__).resolve().parents[1]
+    / "apmw_projection"
+    / "data"
+    / "apmw_contract_v2.json"
+)
 EXPECTED_CONTRACT_HASH = "f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15"
+EXPECTED_CONTRACT_FILE_HASH = "56eb5e5e8ccfe69babd1fda0820a6e81497f542679a1061ba62488bb0f0518fb"
 EXPECTED_CASES_HASH = "8d644bee7d7565f45b572d1e93c8f6e544a1efdb8b1a8f198172c8f528e8e98c"
 SNAPSHOT_SOURCE = Path("..") / "chessv" / "APMW.Test" / "Fixtures" / "ProjectionV2"
 REGENERATION_COMMAND = (
@@ -123,6 +133,17 @@ class TestSemanticProjectionV2(unittest.TestCase):
         )
 
     def test_compatibility_snapshot_source_and_regeneration_command_are_frozen(self):
+        canonical_text = CANONICAL_CONTRACT.read_text(encoding="utf-8")
+        snapshot_text = CONTRACT_FIXTURE.read_text(encoding="utf-8")
+        self.assertEqual(
+            EXPECTED_CONTRACT_FILE_HASH,
+            hashlib.sha256(canonical_text.encode("utf-8")).hexdigest(),
+        )
+        self.assertEqual(
+            EXPECTED_CONTRACT_FILE_HASH,
+            hashlib.sha256(snapshot_text.encode("utf-8")).hexdigest(),
+        )
+        self.assertEqual(json.loads(canonical_text), json.loads(snapshot_text))
         self.assertEqual(
             r"..\chessv\APMW.Test\Fixtures\ProjectionV2",
             str(SNAPSHOT_SOURCE),

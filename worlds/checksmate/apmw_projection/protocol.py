@@ -5,8 +5,9 @@ from __future__ import annotations
 import json
 from typing import Any, TextIO
 
+from .models import ProjectionError, projection_input_from_dict, projection_to_dict
 from .resource import load_frozen_contract
-from .semantic import ProjectionError, projection_input_from_dict, projection_to_dict, project_semantic_roster
+from .semantic import project_semantic_roster
 
 
 PROTOCOL_VERSION = 1

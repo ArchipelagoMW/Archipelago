@@ -1,3 +1,46 @@
 """Compatibility wrapper for the canonical APMW projection contract."""
 
-from .apmw_projection.contract import *
+from .apmw_projection.contract import (
+    SUPPORTED_MAJOR,
+    SUPPORTED_MINOR,
+    ApmwContractError,
+    ApmwContractV2,
+    CastlerSemantics,
+    ContractVersion,
+    CpuProfiles,
+    Geometry,
+    GeometryStage,
+    GeometryUnlockRole,
+    GeometryUnlocks,
+    ModeCombination,
+    OverflowPolicy,
+    PawnCapacityFormula,
+    UpgradeDag,
+    UpgradeTransition,
+    compute_manifest_sha256,
+    load_contract,
+    parse_contract,
+)
+
+
+__all__ = (
+    "SUPPORTED_MAJOR",
+    "SUPPORTED_MINOR",
+    "ApmwContractError",
+    "ApmwContractV2",
+    "CastlerSemantics",
+    "ContractVersion",
+    "CpuProfiles",
+    "Geometry",
+    "GeometryStage",
+    "GeometryUnlockRole",
+    "GeometryUnlocks",
+    "ModeCombination",
+    "OverflowPolicy",
+    "PawnCapacityFormula",
+    "UpgradeDag",
+    "UpgradeTransition",
+    "compute_manifest_sha256",
+    "load_contract",
+    "parse_contract",
+)

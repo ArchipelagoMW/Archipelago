@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 import unittest
@@ -20,6 +21,7 @@ from ..locations import (
 
 CHECKSMATE_ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_CONTRACT_HASH = "f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15"
+EXPECTED_RESOURCE_SHA256 = "56eb5e5e8ccfe69babd1fda0820a6e81497f542679a1061ba62488bb0f0518fb"
 EXPECTED_MAXIMA = {
     "common": {
         "Play as White": 1,
@@ -72,15 +74,30 @@ class TestContractRuntimeConsistency(unittest.TestCase):
     def setUpClass(cls):
         cls.contract = load_production_contract()
 
-    def test_contract_copies_hash_and_runtime_metadata_are_frozen(self):
-        paths = (
-            CHECKSMATE_ROOT / "data" / "apmw_contract_v2.json",
-            CHECKSMATE_ROOT / "apmw_projection" / "data" / "apmw_contract_v2.json",
-            CHECKSMATE_ROOT / "test" / "fixtures" / "projection-v2" / "baseline.json",
+    def test_canonical_contract_snapshot_hash_and_runtime_metadata_are_frozen(self):
+        canonical = (
+            CHECKSMATE_ROOT
+            / "apmw_projection"
+            / "data"
+            / "apmw_contract_v2.json"
         )
-        copies = [path.read_bytes() for path in paths]
-        self.assertTrue(all(contents == copies[0] for contents in copies[1:]))
-        text = copies[0].decode("utf-8")
+        compatibility_snapshot = (
+            CHECKSMATE_ROOT
+            / "test"
+            / "fixtures"
+            / "projection-v2"
+            / "baseline.json"
+        )
+        self.assertFalse(
+            (CHECKSMATE_ROOT / "data" / "apmw_contract_v2.json").exists()
+        )
+        canonical_bytes = canonical.read_bytes()
+        self.assertEqual(canonical_bytes, compatibility_snapshot.read_bytes())
+        self.assertEqual(
+            EXPECTED_RESOURCE_SHA256,
+            hashlib.sha256(canonical_bytes).hexdigest(),
+        )
+        text = canonical_bytes.decode("utf-8")
         self.assertEqual(EXPECTED_CONTRACT_HASH, compute_manifest_sha256(text))
         self.assertEqual(EXPECTED_CONTRACT_HASH, FROZEN_CONTRACT_HASH)
         self.assertEqual(1, PROTOCOL_VERSION)

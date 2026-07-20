@@ -113,6 +113,25 @@ class TestApmwProjectorBuild(unittest.TestCase):
     def test_projector_tooling_is_scoped_to_checksmate(self):
         self.assertEqual(CHECKSMATE_TOOLS, BUILD_SCRIPT.parent)
         self.assertEqual(CHECKSMATE_TOOLS / "apmw_projector.py", self.builder.ENTRY_SCRIPT)
+        self.assertEqual(
+            REPOSITORY_ROOT
+            / "worlds"
+            / "checksmate"
+            / "apmw_projection"
+            / "data"
+            / "apmw_contract_v2.json",
+            self.builder.CONTRACT_DATA,
+        )
+        self.assertTrue(self.builder.CONTRACT_DATA.is_file())
+        self.assertFalse(
+            (
+                REPOSITORY_ROOT
+                / "worlds"
+                / "checksmate"
+                / "data"
+                / "apmw_contract_v2.json"
+            ).exists()
+        )
         self.assertFalse((REPOSITORY_ROOT / "apmw_projector.py").exists())
         for filename in (
             "build_apmw_projector.py",
