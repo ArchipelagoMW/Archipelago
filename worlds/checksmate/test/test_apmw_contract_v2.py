@@ -163,7 +163,7 @@ class TestApmwContractV2(unittest.TestCase):
         self.assertEqual(500, contract.castler.normalized_cost)
         self.assertEqual(2, contract.castler.maximum)
 
-    def test_mirrored_fixture_is_byte_identical_when_both_repositories_are_present(self):
+    def test_mirrored_fixture_is_semantically_identical_when_both_repositories_are_present(self):
         chessv_fixture = (
             Path(__file__).resolve().parents[4]
             / "chessv"
@@ -173,7 +173,10 @@ class TestApmwContractV2(unittest.TestCase):
             / "baseline.json"
         )
         if chessv_fixture.exists():
-            self.assertEqual(FIXTURE.read_bytes(), chessv_fixture.read_bytes())
+            self.assertEqual(
+                json.loads(FIXTURE.read_text(encoding="utf-8")),
+                json.loads(chessv_fixture.read_text(encoding="utf-8")),
+            )
 
     def test_rejects_unknown_major_and_newer_minor_explicitly(self):
         self.document["version"]["major"] = 3

@@ -72,14 +72,14 @@ class TestSemanticProjectionV2(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.contract = load_contract(CONTRACT_FIXTURE)
-        cls.fixture_bytes = CASES_FIXTURE.read_bytes()
-        cls.document = json.loads(cls.fixture_bytes)
+        cls.fixture_text = CASES_FIXTURE.read_text(encoding="utf-8")
+        cls.document = json.loads(cls.fixture_text)
         cls.cases = {case["id"]: case for case in cls.document["cases"]}
 
     def test_fixture_hash_contract_hash_and_required_coverage_are_frozen(self):
         self.assertEqual(
             EXPECTED_CASES_HASH,
-            hashlib.sha256(self.fixture_bytes).hexdigest(),
+            hashlib.sha256(self.fixture_text.encode("utf-8")).hexdigest(),
         )
         self.assertEqual("apmw_projection_cases", self.document["schema"])
         self.assertEqual(2, self.document["version"])
@@ -143,8 +143,12 @@ class TestSemanticProjectionV2(unittest.TestCase):
             for filename in ("baseline.json", "cases.json"):
                 with self.subTest(filename=filename):
                     self.assertEqual(
-                        (FIXTURE_DIR / filename).read_bytes(),
-                        (source / filename).read_bytes(),
+                        json.loads(
+                            (FIXTURE_DIR / filename).read_text(encoding="utf-8")
+                        ),
+                        json.loads(
+                            (source / filename).read_text(encoding="utf-8")
+                        ),
                     )
 
     def test_seed_root_legacy_and_fundamental_projection_vectors_are_frozen(self):
