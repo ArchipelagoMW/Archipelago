@@ -3,6 +3,7 @@ from BaseClasses import ItemClassification
 from rule_builder.rules import HasAll, Or
 from worlds import json_world
 
+
 class TestItemDatapackage(TestCase):
     def test_explicit(self):
         data = {
@@ -14,6 +15,7 @@ class TestItemDatapackage(TestCase):
         parsed = json_world.build_item_datapackage(data)
         self.assertEqual(parsed, {"item": 1})
 
+
 class TestLocationDatapackage(TestCase):
     def test_explicit(self):
         data = {
@@ -24,6 +26,7 @@ class TestLocationDatapackage(TestCase):
         }
         parsed = json_world.build_location_datapackage(data)
         self.assertEqual(parsed, {"location": 1})
+
 
 class TestItemGroups(TestCase):
     def test_explicit(self):
@@ -43,6 +46,7 @@ class TestItemGroups(TestCase):
         parsed = json_world.build_item_groups(data)
         self.assertEqual(parsed, {})
 
+
 class TestLocationGroups(TestCase):
     def test_explicit(self):
         data = {
@@ -61,11 +65,18 @@ class TestLocationGroups(TestCase):
         parsed = json_world.build_location_groups(data)
         self.assertEqual(parsed, {})
 
+
 class TestRule(TestCase):
     def test_dnf(self):
         data = [["one", "two"], ["three"]]
         parsed = json_world.create_rule(data, rule_format="dnf_items")
         self.assertEqual(parsed, Or(HasAll("one", "two"), HasAll("three")))
+
+    def test_serialised(self):
+        data = Or(HasAll("one", "two"), HasAll("three")).to_dict()
+        parsed = json_world.create_rule(data, rule_format="serialized")
+        self.assertEqual(parsed, Or(HasAll("one", "two"), HasAll("three")))
+
 
 class TestRegionData(TestCase):
     def test_explicit(self):
@@ -83,6 +94,7 @@ class TestRegionData(TestCase):
         with self.subTest("region_map"):
             self.assertEqual(region_map, {"Main": {"Treehouse": None}})
 
+
 class TestLocationMap(TestCase):
     def test_explicit(self):
         data = {
@@ -95,6 +107,7 @@ class TestLocationMap(TestCase):
         }
         parsed = json_world.build_location_map(data)
         self.assertEqual(parsed, {"Treehouse": {"Open Treehouse": None}})
+
 
 class TestEventMap(TestCase):
     def test_explicit(self):
@@ -115,6 +128,7 @@ class TestEventMap(TestCase):
         }
         parsed = json_world.build_event_map(data)
         self.assertEqual(parsed, {})
+
 
 class TestItemList(TestCase):
     def test_explicit(self):
@@ -138,6 +152,7 @@ class TestItemList(TestCase):
         parsed = json_world.build_item_list(data)
         self.assertEqual(parsed, ["item", "item"])
 
+
 class TestCompletionRule(TestCase):
     def test_explicit(self):
         data = {
@@ -154,6 +169,7 @@ class TestCompletionRule(TestCase):
         }
         with self.assertRaises(Exception):
             parsed = json_world.build_completion_rule(data)
+
 
 class TestClassificationLookup(TestCase):
     def test_explicit(self):
@@ -178,6 +194,7 @@ class TestClassificationLookup(TestCase):
         parsed = json_world.build_classification_lookup(data)
         self.assertEqual(parsed, {"item": ItemClassification.progression})
 
+
 class TestFillerWeights(TestCase):
     def test_explicit(self):
         data = {
@@ -196,4 +213,3 @@ class TestFillerWeights(TestCase):
         }
         parsed = json_world.build_filler_weights(data)
         self.assertEqual(parsed, {"item": 1})
-

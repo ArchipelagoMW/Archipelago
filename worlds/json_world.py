@@ -36,10 +36,13 @@ def build_location_groups(data) -> dict[str, set[str]]:
 
 
 def create_rule(rule_data, rule_format) -> Rule | None:
+    from worlds.generic import GenericWorld
     if rule_data is None:
         return None
     if rule_format == "dnf_items":
         return Or(*[HasAll(*inner) for inner in rule_data])
+    if rule_format == "serialized":
+        return GenericWorld.rule_from_dict(rule_data)
     raise Exception("unknown format type")
 
 
