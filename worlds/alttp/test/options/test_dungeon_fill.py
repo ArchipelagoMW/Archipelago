@@ -38,7 +38,7 @@ class DungeonFillTestBase(TestCase):
     def test_original_dungeons(self):
         self.generate_with_options(DungeonItem.option_original_dungeon)
         for location in self.multiworld.get_filled_locations():
-            with (self.subTest(location=location)):
+            with (self.subTest(location_name=location.name)):
                 if location.parent_region.dungeon is None:
                     self.assertIs(location.item.dungeon, None)
                 else:
@@ -52,7 +52,7 @@ class DungeonFillTestBase(TestCase):
     def test_own_dungeons(self):
         self.generate_with_options(DungeonItem.option_own_dungeons)
         for location in self.multiworld.get_filled_locations():
-            with self.subTest(location=location):
+            with self.subTest(location_name=location.name):
                 if location.parent_region.dungeon is None:
                     self.assertIs(location.item.dungeon, None)
                 else:

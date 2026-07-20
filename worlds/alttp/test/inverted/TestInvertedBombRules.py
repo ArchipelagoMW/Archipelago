@@ -4,7 +4,7 @@ from worlds.alttp.EntranceShuffle import connect_entrance, Inverted_LW_Entrances
 from worlds.alttp.InvertedRegions import create_inverted_regions
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Rules import set_inverted_big_bomb_rules
-from worlds.alttp.test import LTTPTestBase
+from worlds.alttp.test.bases import LTTPTestBase
 
 
 class TestInvertedBombRules(LTTPTestBase):

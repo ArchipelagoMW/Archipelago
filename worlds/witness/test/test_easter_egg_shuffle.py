@@ -3,7 +3,7 @@ from typing import cast
 from BaseClasses import LocationProgressType
 
 from .. import WitnessWorld
-from ..test import WitnessMultiworldTestBase
+from ..test.bases import WitnessMultiworldTestBase
 
 
 class TestEasterEggShuffle(WitnessMultiworldTestBase):

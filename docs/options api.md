@@ -269,7 +269,8 @@ placed on them.
 
 ### PriorityLocations
 Marks locations given here as `LocationProgressType.Priority` forcing progression items on them if any are available in
-the pool.
+the pool. Progression items without a deprioritized flag will be used first when filling priority_locations. Progression items with
+a deprioritized flag will be used next.
 
 ### ItemLinks
 Allows users to share their item pool with other players. Currently item links are per game. A link of one game between
@@ -333,7 +334,7 @@ within the world.
 ### TextChoice
 Like choice allows you to predetermine options and has all of the same comparison methods and handling. Also accepts any
 user defined string as a valid option, so will either need to be validated by adding a validation step to the option
-class or within world, if necessary. Value for this class is `Union[str, int]` so if you need the value at a specified
+class or within world, if necessary. Value for this class is `str | int` so if you need the value at a specified
 point, `self.options.my_option.current_key` will always return a string.
 
 ### PlandoBosses
@@ -344,7 +345,7 @@ names, and `def can_place_boss`, which passes a boss and location, allowing you 
 your game. When this function is called, `bosses`, `locations`, and the passed strings will all be lowercase. There is
 also a `duplicate_bosses` attribute allowing you to define if a boss can be placed multiple times in your world. False
 by default, and will reject duplicate boss names from the user. For an example of using this class, refer to
-`worlds.alttp.options.py`
+`worlds/alttp/Options.py`
 
 ### OptionDict
 This option returns a dictionary. Setting a default here is recommended as it will output the dictionary to the

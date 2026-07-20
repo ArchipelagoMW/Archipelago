@@ -884,7 +884,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("RS: Homeward Bone - balcony by Farron Keep", "Homeward Bone x2"),
         DS3LocationData("RS: Titanite Shard - woods, surrounded by enemies", "Titanite Shard"),
         DS3LocationData("RS: Twin Dragon Greatshield - woods by Crucifixion Woods bonfire",
-                        "Twin Dragon Greatshield"),
+                        "Twin Dragon Greatshield", missable=True), # After Eclipse
         DS3LocationData("RS: Sorcerer Hood - water beneath stronghold", "Sorcerer Hood",
                         hidden=True),  # Hidden fall
         DS3LocationData("RS: Sorcerer Robe - water beneath stronghold", "Sorcerer Robe",
@@ -1887,7 +1887,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("AL: Twinkling Titanite - lizard after light cathedral #2",
                         "Twinkling Titanite", lizard=True),
         DS3LocationData("AL: Aldrich's Ruby - dark cathedral, miniboss", "Aldrich's Ruby",
-                        miniboss=True),  # Deep Accursed drop
+                        miniboss=True, missable=True),  # Deep Accursed drop, missable after defeating Aldrich
         DS3LocationData("AL: Aldrich Faithful - water reserves, talk to McDonnel", "Aldrich Faithful",
                         hidden=True),  # Behind illusory wall
 
@@ -2025,13 +2025,13 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("LC: Rusted Coin - chapel", "Rusted Coin x2"),
         DS3LocationData("LC: Braille Divine Tome of Lothric - wyvern room",
                         "Braille Divine Tome of Lothric", hidden=True),  # Hidden fall
-        DS3LocationData("LC: Red Tearstone Ring - chapel, drop onto roof", "Red Tearstone Ring"),
+        DS3LocationData("LC: Red Tearstone Ring - chapel, balcony before drop", "Red Tearstone Ring"),
         DS3LocationData("LC: Twinkling Titanite - moat, left side", "Twinkling Titanite x2"),
         DS3LocationData("LC: Large Soul of a Nameless Soldier - plaza left, by pillar",
                         "Large Soul of a Nameless Soldier"),
         DS3LocationData("LC: Titanite Scale - altar", "Titanite Scale x3"),
         DS3LocationData("LC: Titanite Scale - chapel, chest", "Titanite Scale"),
-        DS3LocationData("LC: Hood of Prayer", "Hood of Prayer"),
+        DS3LocationData("LC: Hood of Prayer - ascent, chest at beginning", "Hood of Prayer"),
         DS3LocationData("LC: Robe of Prayer - ascent, chest at beginning", "Robe of Prayer"),
         DS3LocationData("LC: Skirt of Prayer - ascent, chest at beginning", "Skirt of Prayer"),
         DS3LocationData("LC: Spirit Tree Crest Shield - basement, chest",

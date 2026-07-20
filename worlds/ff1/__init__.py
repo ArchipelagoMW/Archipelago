@@ -7,6 +7,7 @@ from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, 
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import FF1Options
 from ..AutoWorld import World, WebWorld
+from .Client import FF1Client
 
 
 class FF1Settings(settings.Group):
@@ -49,8 +50,8 @@ class FF1World(World):
 
     web = FF1Web()
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.locked_items = []
         self.locked_locations = []
 

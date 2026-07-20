@@ -1,6 +1,7 @@
 from __future__ import annotations
 import os
 import sys
+import time
 import asyncio
 import typing
 import bsdiff4
@@ -15,6 +16,9 @@ from CommonClient import CommonContext, server_loop, \
     gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from Utils import async_start
 
+# Heartbeat for position sharing via bounces, in seconds
+UNDERTALE_STATUS_INTERVAL = 30.0
+UNDERTALE_ONLINE_TIMEOUT  = 60.0
 
 class UndertaleCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
@@ -45,7 +49,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, UndertaleContext):
             os.makedirs(name=Utils.user_path("Undertale"), exist_ok=True)
             tempInstall = steaminstall
-            if not os.path.isfile(os.path.join(tempInstall, "data.win")):
+            if tempInstall and not os.path.isfile(os.path.join(tempInstall, "data.win")):
                 tempInstall = None
             if tempInstall is None:
                 tempInstall = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"
@@ -109,6 +113,11 @@ class UndertaleContext(CommonContext):
         self.completed_routes = {"pacifist": 0, "genocide": 0, "neutral": 0}
         # self.save_game_folder: files go in this path to pass data between us and the actual game
         self.save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
+        self.last_sent_position: typing.Optional[tuple] = None
+        self.last_room: typing.Optional[str] = None
+        self.last_status_write: float = 0.0
+        self.other_undertale_status: dict[int, dict] = {}
+
 
     def patch_game(self):
         with open(Utils.user_path("Undertale", "data.win"), "rb") as f:
@@ -219,6 +228,9 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         await ctx.send_msgs([{"cmd": "SetNotify", "keys": [str(ctx.slot)+" RoutesDone neutral",
                                                            str(ctx.slot)+" RoutesDone pacifist",
                                                            str(ctx.slot)+" RoutesDone genocide"]}])
+        if any(info.game == "Undertale" and slot != ctx.slot 
+               for slot, info in ctx.slot_info.items()):
+            ctx.set_notify("undertale_room_status")
         if args["slot_data"]["only_flakes"]:
             with open(os.path.join(ctx.save_game_folder, "GenoNoChest.flag"), "w") as f:
                 f.close()
@@ -263,6 +275,12 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if str(ctx.slot)+" RoutesDone pacifist" in args["keys"]:
             if args["keys"][str(ctx.slot) + " RoutesDone pacifist"] is not None:
                 ctx.completed_routes["pacifist"] = args["keys"][str(ctx.slot)+" RoutesDone pacifist"]
+        if "undertale_room_status" in args["keys"] and args["keys"]["undertale_room_status"]:
+            status = args["keys"]["undertale_room_status"]
+            ctx.other_undertale_status = {
+                int(key): val for key, val in status.items()
+                if int(key) != ctx.slot
+            }
     elif cmd == "SetReply":
         if args["value"] is not None:
             if str(ctx.slot)+" RoutesDone pacifist" == args["key"]:
@@ -271,17 +289,19 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 ctx.completed_routes["genocide"] = args["value"]
             elif str(ctx.slot)+" RoutesDone neutral" == args["key"]:
                 ctx.completed_routes["neutral"] = args["value"]
+        if args.get("key") == "undertale_room_status" and args.get("value"):
+            ctx.other_undertale_status = {
+                int(key): val for key, val in args["value"].items()
+                if int(key) != ctx.slot
+            }
     elif cmd == "ReceivedItems":
         start_index = args["index"]
 
         if start_index == 0:
             ctx.items_received = []
         elif start_index != len(ctx.items_received):
-            sync_msg = [{"cmd": "Sync"}]
-            if ctx.locations_checked:
-                sync_msg.append({"cmd": "LocationChecks",
-                                 "locations": list(ctx.locations_checked)})
-            await ctx.send_msgs(sync_msg)
+            await ctx.check_locations(ctx.locations_checked)
+            await ctx.send_msgs([{"cmd": "Sync"}])
         if start_index == len(ctx.items_received):
             counter = -1
             placedWeapon = 0
@@ -368,9 +388,8 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 f.close()
 
     elif cmd == "Bounced":
-        tags = args.get("tags", [])
-        if "Online" in tags:
-            data = args.get("data", {})
+        data = args.get("data", {})
+        if "x" in data and "room" in data:
             if data["player"] != ctx.slot and data["player"] is not None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
                 with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
@@ -381,21 +400,63 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
 
 async def multi_watcher(ctx: UndertaleContext):
     while not ctx.exit_event.is_set():
-        path = ctx.save_game_folder
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                if "spots.mine" in file and "Online" in ctx.tags:
-                    with open(os.path.join(root, file), "r") as mine:
-                        this_x = mine.readline()
-                        this_y = mine.readline()
-                        this_room = mine.readline()
-                        this_sprite = mine.readline()
-                        this_frame = mine.readline()
-                        mine.close()
-                    message = [{"cmd": "Bounce", "tags": ["Online"],
-                                "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
-                                         "spr": this_sprite, "frm": this_frame}}]
-                    await ctx.send_msgs(message)
+        if "Online" in ctx.tags and any(
+                info.game == "Undertale" and slot != ctx.slot
+                for slot, info in ctx.slot_info.items()):
+            now = time.time()
+            path = ctx.save_game_folder
+            for root, dirs, files in os.walk(path):
+                for file in files:
+                    if "spots.mine" in file:
+                        with open(os.path.join(root, file), "r") as mine:
+                            this_x = mine.readline()
+                            this_y = mine.readline()
+                            this_room = mine.readline()
+                            this_sprite = mine.readline()
+                            this_frame = mine.readline()
+
+                        if this_room != ctx.last_room or \
+                                now - ctx.last_status_write >= UNDERTALE_STATUS_INTERVAL:
+                            ctx.last_room = this_room
+                            ctx.last_status_write = now
+                            await ctx.send_msgs([{
+                                "cmd": "Set",
+                                "key": "undertale_room_status",
+                                "default": {},
+                                "want_reply": False,
+                                "operations": [{"operation": "update",
+                                                "value": {str(ctx.slot): {"room": this_room,
+                                                                           "time": now}}}]
+                            }])
+
+                        # If player was visible but timed out (heartbeat) or left the room, remove them.
+                        for slot, entry in ctx.other_undertale_status.items():
+                            if entry.get("room") != this_room or \
+                                    now - entry.get("time", now) > UNDERTALE_ONLINE_TIMEOUT:
+                                playerspot = os.path.join(ctx.save_game_folder,
+                                                          f"FRISK{slot}.playerspot")
+                                if os.path.exists(playerspot):
+                                    os.remove(playerspot)
+
+                        current_position = (this_x, this_y, this_room, this_sprite, this_frame)
+                        if current_position == ctx.last_sent_position:
+                            continue
+
+                        # Empty status dict = no data yet → send to bootstrap.
+                        online_in_room = any(
+                            entry.get("room") == this_room and
+                            now - entry.get("time", now) <= UNDERTALE_ONLINE_TIMEOUT
+                            for entry in ctx.other_undertale_status.values()
+                        )
+                        if ctx.other_undertale_status and not online_in_room:
+                            continue
+
+                        message = [{"cmd": "Bounce", "games": ["Undertale"],
+                                    "data": {"player": ctx.slot, "x": this_x, "y": this_y,
+                                             "room": this_room, "spr": this_sprite,
+                                             "frm": this_frame}}]
+                        await ctx.send_msgs(message)
+                        ctx.last_sent_position = current_position
 
         await asyncio.sleep(0.1)
 
@@ -409,10 +470,9 @@ async def game_watcher(ctx: UndertaleContext):
                 for file in files:
                     if ".item" in file:
                         os.remove(os.path.join(root, file))
-            sync_msg = [{"cmd": "Sync"}]
-            if ctx.locations_checked:
-                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
-            await ctx.send_msgs(sync_msg)
+            await ctx.check_locations(ctx.locations_checked)
+            await ctx.send_msgs([{"cmd": "Sync"}])
+
             ctx.syncing = False
         if ctx.got_deathlink:
             ctx.got_deathlink = False
@@ -447,7 +507,7 @@ async def game_watcher(ctx: UndertaleContext):
                         for l in lines:
                             sending = sending+[(int(l.rstrip('\n')))+12000]
                     finally:
-                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sending}])
+                        await ctx.check_locations(sending)
                 if "victory" in file and str(ctx.route) in file:
                     victory = True
                 if ".playerspot" in file and "Online" not in ctx.tags:

@@ -30,7 +30,6 @@ from .Patches import OoTContainer, patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
-from settings import get_settings
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
 from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections, PlandoItems
 from Fill import fill_restrictive, fast_fill, FillError
@@ -203,7 +202,8 @@ class OOTWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom = Rom(file=get_settings()['oot_options']['rom_file'])
+        oot_settings = OOTWorld.settings
+        rom = Rom(file=oot_settings.rom_file)
 
 
     # Option parsing, handling incompatible options, building useful-item table
@@ -1089,7 +1089,8 @@ class OOTWorld(World):
             self.hint_rng = self.random
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
-            rom = Rom(file=get_settings()['oot_options']['rom_file'])
+            oot_settings = OOTWorld.settings
+            rom = Rom(file=oot_settings.rom_file)
             try:
                 if self.hints != 'none':
                     buildWorldGossipHints(self)
@@ -1323,10 +1324,20 @@ class OOTWorld(World):
             state.prog_items[self.player][alt_item_name] -= count
             if state.prog_items[self.player][alt_item_name] < 1:
                 del (state.prog_items[self.player][alt_item_name])
+            # invalidate caches, nothing can be trusted anymore now
+            state.child_reachable_regions[self.player] = set()
+            state.child_blocked_connections[self.player] = set()
+            state.adult_reachable_regions[self.player] = set()
+            state.adult_blocked_connections[self.player] = set()
             state._oot_stale[self.player] = True
             return True
         changed = super().remove(state, item)
         if changed:
+            # invalidate caches, nothing can be trusted anymore now
+            state.child_reachable_regions[self.player] = set()
+            state.child_blocked_connections[self.player] = set()
+            state.adult_reachable_regions[self.player] = set()
+            state.adult_blocked_connections[self.player] = set()
             state._oot_stale[self.player] = True
         return changed
 

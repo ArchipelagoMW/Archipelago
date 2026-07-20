@@ -1,6 +1,9 @@
 from itertools import groupby
-from typing import Dict, List, Set, NamedTuple, Optional
+from typing import NamedTuple
+
 from BaseClasses import ItemClassification as IC
+
+from .constants import base_id
 
 
 class TunicItemData(NamedTuple):
@@ -9,12 +12,10 @@ class TunicItemData(NamedTuple):
     item_id_offset: int
     item_group: str = ""
     # classification if combat logic is on
-    combat_ic: Optional[IC] = None
+    combat_ic: None | IC = None
 
 
-item_base_id = 509342400
-
-item_table: Dict[str, TunicItemData] = {
+item_table: dict[str, TunicItemData] = {
     "Firecracker x2": TunicItemData(IC.filler, 3, 0, "Bombs"),
     "Firecracker x3": TunicItemData(IC.filler, 3, 1, "Bombs"),
     "Firecracker x4": TunicItemData(IC.filler, 3, 2, "Bombs"),
@@ -29,14 +30,14 @@ item_table: Dict[str, TunicItemData] = {
     "Lure x2": TunicItemData(IC.filler, 1, 11, "Consumables"),
     "Pepper x2": TunicItemData(IC.filler, 4, 12, "Consumables"),
     "Ivy x3": TunicItemData(IC.filler, 2, 13, "Consumables"),
-    "Effigy": TunicItemData(IC.useful, 12, 14, "Money", combat_ic=IC.progression),
+    "Effigy": TunicItemData(IC.useful, 12, 14, "Money", combat_ic=IC.progression | IC.deprioritized),
     "HP Berry": TunicItemData(IC.filler, 2, 15, "Consumables"),
     "HP Berry x2": TunicItemData(IC.filler, 4, 16, "Consumables"),
     "HP Berry x3": TunicItemData(IC.filler, 2, 17, "Consumables"),
     "MP Berry": TunicItemData(IC.filler, 4, 18, "Consumables"),
     "MP Berry x2": TunicItemData(IC.filler, 2, 19, "Consumables"),
     "MP Berry x3": TunicItemData(IC.filler, 7, 20, "Consumables"),
-    "Fairy": TunicItemData(IC.progression, 20, 21),
+    "Fairy": TunicItemData(IC.progression | IC.deprioritized, 20, 21),
     "Stick": TunicItemData(IC.progression | IC.useful, 1, 22, "Weapons"),
     "Sword": TunicItemData(IC.progression | IC.useful, 3, 23, "Weapons"),
     "Sword Upgrade": TunicItemData(IC.progression | IC.useful, 4, 24, "Weapons"),
@@ -51,22 +52,22 @@ item_table: Dict[str, TunicItemData] = {
     "Torch": TunicItemData(IC.useful, 0, 156),
     "Hourglass": TunicItemData(IC.useful, 1, 33),
     "Old House Key": TunicItemData(IC.progression, 1, 34, "Keys"),
-    "Key": TunicItemData(IC.progression, 2, 35, "Keys"),
+    "Key": TunicItemData(IC.progression | IC.deprioritized, 2, 35, "Keys"),
     "Fortress Vault Key": TunicItemData(IC.progression, 1, 36, "Keys"),
-    "Flask Shard": TunicItemData(IC.useful, 12, 37, combat_ic=IC.progression),
+    "Flask Shard": TunicItemData(IC.useful, 12, 37, combat_ic=IC.progression | IC.deprioritized),
     "Potion Flask": TunicItemData(IC.useful, 5, 38, "Flask", combat_ic=IC.progression),
-    "Golden Coin": TunicItemData(IC.progression, 17, 39),
+    "Golden Coin": TunicItemData(IC.progression | IC.deprioritized, 17, 39),
     "Card Slot": TunicItemData(IC.useful, 4, 40),
     "Red Questagon": TunicItemData(IC.progression_skip_balancing, 1, 41, "Hexagons"),
     "Green Questagon": TunicItemData(IC.progression_skip_balancing, 1, 42, "Hexagons"),
     "Blue Questagon": TunicItemData(IC.progression_skip_balancing, 1, 43, "Hexagons"),
     "Gold Questagon": TunicItemData(IC.progression_skip_balancing, 0, 44, "Hexagons"),
     "ATT Offering": TunicItemData(IC.useful, 4, 45, "Offerings", combat_ic=IC.progression),
-    "DEF Offering": TunicItemData(IC.useful, 4, 46, "Offerings", combat_ic=IC.progression),
-    "Potion Offering": TunicItemData(IC.useful, 3, 47, "Offerings", combat_ic=IC.progression),
-    "HP Offering": TunicItemData(IC.useful, 6, 48, "Offerings", combat_ic=IC.progression),
-    "MP Offering": TunicItemData(IC.useful, 3, 49, "Offerings", combat_ic=IC.progression),
-    "SP Offering": TunicItemData(IC.useful, 2, 50, "Offerings", combat_ic=IC.progression),
+    "DEF Offering": TunicItemData(IC.useful, 4, 46, "Offerings", combat_ic=IC.progression | IC.deprioritized),
+    "Potion Offering": TunicItemData(IC.useful, 3, 47, "Offerings", combat_ic=IC.progression | IC.deprioritized),
+    "HP Offering": TunicItemData(IC.useful, 6, 48, "Offerings", combat_ic=IC.progression | IC.deprioritized),
+    "MP Offering": TunicItemData(IC.useful, 3, 49, "Offerings", combat_ic=IC.progression | IC.deprioritized),
+    "SP Offering": TunicItemData(IC.useful, 2, 50, "Offerings", combat_ic=IC.progression | IC.deprioritized),
     "Hero Relic - ATT": TunicItemData(IC.progression_skip_balancing, 1, 51, "Hero Relics", combat_ic=IC.progression),
     "Hero Relic - DEF": TunicItemData(IC.progression_skip_balancing, 1, 52, "Hero Relics", combat_ic=IC.progression),
     "Hero Relic - HP": TunicItemData(IC.progression_skip_balancing, 1, 53, "Hero Relics", combat_ic=IC.progression),
@@ -90,17 +91,17 @@ item_table: Dict[str, TunicItemData] = {
     "Aura's Gem": TunicItemData(IC.useful, 1, 71, "Cards"),
     "Bone Card": TunicItemData(IC.useful, 1, 72, "Cards"),
     "Mr Mayor": TunicItemData(IC.useful, 1, 73, "Golden Treasures", combat_ic=IC.progression),
-    "Secret Legend": TunicItemData(IC.useful, 1, 74, "Golden Treasures", combat_ic=IC.progression),
-    "Sacred Geometry": TunicItemData(IC.useful, 1, 75, "Golden Treasures", combat_ic=IC.progression),
-    "Vintage": TunicItemData(IC.useful, 1, 76, "Golden Treasures", combat_ic=IC.progression),
-    "Just Some Pals": TunicItemData(IC.useful, 1, 77, "Golden Treasures", combat_ic=IC.progression),
-    "Regal Weasel": TunicItemData(IC.useful, 1, 78, "Golden Treasures", combat_ic=IC.progression),
-    "Spring Falls": TunicItemData(IC.useful, 1, 79, "Golden Treasures", combat_ic=IC.progression),
-    "Power Up": TunicItemData(IC.useful, 1, 80, "Golden Treasures", combat_ic=IC.progression),
-    "Back To Work": TunicItemData(IC.useful, 1, 81, "Golden Treasures", combat_ic=IC.progression),
-    "Phonomath": TunicItemData(IC.useful, 1, 82, "Golden Treasures", combat_ic=IC.progression),
-    "Dusty": TunicItemData(IC.useful, 1, 83, "Golden Treasures", combat_ic=IC.progression),
-    "Forever Friend": TunicItemData(IC.useful, 1, 84, "Golden Treasures", combat_ic=IC.progression),
+    "Secret Legend": TunicItemData(IC.useful, 1, 74, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Sacred Geometry": TunicItemData(IC.useful, 1, 75, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Vintage": TunicItemData(IC.useful, 1, 76, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Just Some Pals": TunicItemData(IC.useful, 1, 77, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Regal Weasel": TunicItemData(IC.useful, 1, 78, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Spring Falls": TunicItemData(IC.useful, 1, 79, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Power Up": TunicItemData(IC.useful, 1, 80, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Back To Work": TunicItemData(IC.useful, 1, 81, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Phonomath": TunicItemData(IC.useful, 1, 82, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Dusty": TunicItemData(IC.useful, 1, 83, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
+    "Forever Friend": TunicItemData(IC.useful, 1, 84, "Golden Treasures", combat_ic=IC.progression | IC.deprioritized),
     "Fool Trap": TunicItemData(IC.trap, 0, 85),
     "Money x1": TunicItemData(IC.filler, 3, 86, "Money"),
     "Money x2": TunicItemData(IC.filler, 0, 152, "Money"),
@@ -119,9 +120,9 @@ item_table: Dict[str, TunicItemData] = {
     "Money x50": TunicItemData(IC.filler, 7, 96, "Money"),
     "Money x64": TunicItemData(IC.filler, 1, 97, "Money"),
     "Money x100": TunicItemData(IC.filler, 5, 98, "Money"),
-    "Money x128": TunicItemData(IC.useful, 3, 99, "Money", combat_ic=IC.progression),
-    "Money x200": TunicItemData(IC.useful, 1, 100, "Money", combat_ic=IC.progression),
-    "Money x255": TunicItemData(IC.useful, 1, 101, "Money", combat_ic=IC.progression),
+    "Money x128": TunicItemData(IC.useful, 3, 99, "Money", combat_ic=IC.progression | IC.deprioritized),
+    "Money x200": TunicItemData(IC.useful, 1, 100, "Money", combat_ic=IC.progression | IC.deprioritized),
+    "Money x255": TunicItemData(IC.useful, 1, 101, "Money", combat_ic=IC.progression | IC.deprioritized),
     "Pages 0-1": TunicItemData(IC.useful, 1, 102, "Pages"),
     "Pages 2-3": TunicItemData(IC.useful, 1, 103, "Pages"),
     "Pages 4-5": TunicItemData(IC.useful, 1, 104, "Pages"),
@@ -172,10 +173,35 @@ item_table: Dict[str, TunicItemData] = {
     "Ladders in Lower Quarry": TunicItemData(IC.progression, 0, 149, "Ladders"),
     "Ladders in Swamp": TunicItemData(IC.progression, 0, 150, "Ladders"),
     "Grass": TunicItemData(IC.filler, 0, 151),
+    "Swamp Fuse 1": TunicItemData(IC.progression, 0, 157, "Fuses"),
+    "Swamp Fuse 2": TunicItemData(IC.progression, 0, 158, "Fuses"),
+    "Swamp Fuse 3": TunicItemData(IC.progression, 0, 159, "Fuses"),
+    "Cathedral Elevator Fuse": TunicItemData(IC.progression, 0, 160, "Fuses"),
+    "Quarry Fuse 1": TunicItemData(IC.progression, 0, 161, "Fuses"),
+    "Quarry Fuse 2": TunicItemData(IC.progression, 0, 162, "Fuses"),
+    "Ziggurat Miniboss Fuse": TunicItemData(IC.progression, 0, 163, "Fuses"),
+    "Ziggurat Teleporter Fuse": TunicItemData(IC.progression, 0, 164, "Fuses"),
+    "Fortress Exterior Fuse 1": TunicItemData(IC.progression, 0, 165, "Fuses"),
+    "Fortress Exterior Fuse 2": TunicItemData(IC.progression, 0, 166, "Fuses"),
+    "Fortress Courtyard Upper Fuse": TunicItemData(IC.progression, 0, 167, "Fuses"),
+    "Fortress Courtyard Fuse": TunicItemData(IC.progression, 0, 168, "Fuses"),
+    "Beneath the Vault Fuse": TunicItemData(IC.progression, 0, 169, "Fuses"),
+    "Fortress Candles Fuse": TunicItemData(IC.progression, 0, 170, "Fuses"),
+    "Fortress Door Left Fuse": TunicItemData(IC.progression, 0, 171, "Fuses"),
+    "Fortress Door Right Fuse": TunicItemData(IC.progression, 0, 172, "Fuses"),
+    "West Furnace Fuse": TunicItemData(IC.progression, 0, 173, "Fuses"),
+    "West Garden Fuse": TunicItemData(IC.progression, 0, 174, "Fuses"),
+    "Atoll Northeast Fuse": TunicItemData(IC.progression, 0, 175, "Fuses"),
+    "Atoll Northwest Fuse": TunicItemData(IC.progression, 0, 176, "Fuses"),
+    "Atoll Southeast Fuse": TunicItemData(IC.progression, 0, 177, "Fuses"),
+    "Atoll Southwest Fuse": TunicItemData(IC.progression, 0, 178, "Fuses"),
+    "Library Lab Fuse": TunicItemData(IC.progression, 0, 179, "Fuses"),
+    "East Bell": TunicItemData(IC.progression, 0, 180, "Bells"),
+    "West Bell": TunicItemData(IC.progression, 0, 181, "Bells")
 }
 
 # items to be replaced by fool traps
-fool_tiers: List[List[str]] = [
+fool_tiers: list[list[str]] = [
     [],
     ["Money x1", "Money x10", "Money x15", "Money x16"],
     ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20"],
@@ -214,25 +240,25 @@ slot_data_item_names = [
     "Gold Questagon",
 ]
 
-combat_items: List[str] = [name for name, data in item_table.items()
+combat_items: list[str] = [name for name, data in item_table.items()
                            if data.combat_ic and IC.progression in data.combat_ic]
 combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's Laurels", "Gun"])
 
-item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
+item_name_to_id: dict[str, int] = {name: base_id + data.item_id_offset for name, data in item_table.items()}
 
-filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler and name != "Grass"]
+filler_items: list[str] = [name for name, data in item_table.items() if data.classification == IC.filler and name != "Grass"]
 
 
 def get_item_group(item_name: str) -> str:
     return item_table[item_name].item_group
 
 
-item_name_groups: Dict[str, Set[str]] = {
+item_name_groups: dict[str, set[str]] = {
     group: set(item_names) for group, item_names in groupby(sorted(item_table, key=get_item_group), get_item_group) if group != ""
 }
 
 # extra groups for the purpose of aliasing items
-extra_groups: Dict[str, Set[str]] = {
+extra_groups: dict[str, set[str]] = {
     "Laurels": {"Hero's Laurels"},
     "Orb": {"Magic Orb"},
     "Dagger": {"Magic Dagger"},

@@ -8,7 +8,7 @@ import bsdiff4
 
 import Utils
 from settings import get_settings
-from worlds.Files import APPatch, AutoPatchRegister
+from worlds.Files import APPatch
 from .Locations import LocationData
 
 ADVENTUREHASH: str = "157bddb7192754a45372be196797f284"
@@ -78,7 +78,7 @@ class BatNoTouchLocation:
         return ret_dict
 
 
-class AdventureDeltaPatch(APPatch, metaclass=AutoPatchRegister):
+class AdventureDeltaPatch(APPatch):
     hash = ADVENTUREHASH
     game = "Adventure"
     patch_file_ending = ".apadvn"
@@ -182,10 +182,11 @@ class AdventureDeltaPatch(APPatch, metaclass=AutoPatchRegister):
                                     json.dumps(self.rom_deltas),
                                     compress_type=zipfile.ZIP_LZMA)
 
-    def read_contents(self, opened_zipfile: zipfile.ZipFile):
-        super(AdventureDeltaPatch, self).read_contents(opened_zipfile)
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> dict[str, Any]:
+        manifest = super(AdventureDeltaPatch, self).read_contents(opened_zipfile)
         self.foreign_items = AdventureDeltaPatch.read_foreign_items(opened_zipfile)
         self.autocollect_items = AdventureDeltaPatch.read_autocollect_items(opened_zipfile)
+        return manifest
 
     @classmethod
     def get_source_data(cls) -> bytes:

@@ -5,7 +5,7 @@ from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import item_factory
 from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
-from worlds.alttp.test import LTTPTestBase
+from worlds.alttp.test.bases import LTTPTestBase
 
 
 class TestDungeon(LTTPTestBase):

@@ -1,4 +1,4 @@
-from ..test import WitnessMultiworldTestBase
+from ..test.bases import WitnessMultiworldTestBase
 
 
 class TestElevatorsComeToYouBleed(WitnessMultiworldTestBase):

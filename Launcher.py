@@ -11,230 +11,117 @@ Additional components can be added to worlds.LauncherComponents.components.
 import argparse
 import logging
 import multiprocessing
+import os
 import shlex
 import subprocess
 import sys
 import urllib.parse
-import webbrowser
 from collections.abc import Callable, Sequence
-from os.path import isfile
 from shutil import which
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from worlds.LauncherComponents import Component, Type
 
 if __name__ == "__main__":
     import ModuleUpdate
 
     ModuleUpdate.update()
 
-import settings
 import Utils
-from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
-                   user_path)
-from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
+from Utils import env_cleared_lib_path, init_logging, is_linux, is_macos, is_windows, local_path
 
-
-def open_host_yaml():
-    s = settings.get_settings()
-    file = s.filename
-    s.save()
-    assert file, "host.yaml missing"
-    if is_linux:
-        exe = which('sensible-editor') or which('gedit') or \
-              which('xdg-open') or which('gnome-open') or which('kde-open')
-        subprocess.Popen([exe, file])
-    elif is_macos:
-        exe = which("open")
-        subprocess.Popen([exe, file])
-    else:
-        webbrowser.open(file)
-
-
-def open_patch():
-    suffixes = []
-    for c in components:
-        if c.type == Type.CLIENT and \
-                isinstance(c.file_identifier, SuffixIdentifier) and \
-                (c.script_name is None or isfile(get_exe(c)[-1])):
-            suffixes += c.file_identifier.suffixes
-    try:
-        filename = open_filename("Select patch", (("Patches", suffixes),))
-    except Exception as e:
-        messagebox("Error", str(e), error=True)
-    else:
-        file, component = identify(filename)
-        if file and component:
-            exe = get_exe(component)
-            if exe is None or not isfile(exe[-1]):
-                exe = get_exe("Launcher")
-
-            launch([*exe, file], component.cli)
-
-
-def generate_yamls():
-    from Options import generate_yaml_templates
-
-    target = Utils.user_path("Players", "Templates")
-    generate_yaml_templates(target, False)
-    open_folder(target)
-
-
-def browse_files():
-    open_folder(user_path())
-
-
-def open_folder(folder_path):
-    if is_linux:
-        exe = which('xdg-open') or which('gnome-open') or which('kde-open')
-    elif is_macos:
-        exe = which("open")
-    else:
-        webbrowser.open(folder_path)
-        return
-
-    if exe:
-        subprocess.Popen([exe, folder_path])
-    else:
-        logging.warning(f"No file browser available to open {folder_path}")
-
+if __name__ == "__main__":
+    init_logging('Launcher')
 
 def update_settings():
     from settings import get_settings
     get_settings().save()
 
 
-components.extend([
-    # Functions
-    Component("Open host.yaml", func=open_host_yaml),
-    Component("Open Patch", func=open_patch),
-    Component("Generate Template Options", func=generate_yamls),
-    Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/")),
-    Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component("Unrated/18+ Discord Server", icon="discord",
-              func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
-    Component("Browse Files", func=browse_files),
-])
-
-
-def handle_uri(path: str, launch_args: tuple[str, ...]) -> None:
+def handle_uri(path: str) -> tuple[list["Component"], "Component"]:
+    from worlds.LauncherComponents import components
     url = urllib.parse.urlparse(path)
     queries = urllib.parse.parse_qs(url.query)
-    launch_args = (path, *launch_args)
-    client_component = []
+    client_components = []
     text_client_component = None
-    if "game" in queries:
-        game = queries["game"][0]
-    else:  # TODO around 0.6.0 - this is for pre this change webhost uri's
-        game = "Archipelago"
+    game = queries["game"][0]
     for component in components:
         if component.supports_uri and component.game_name == game:
-            client_component.append(component)
+            client_components.append(component)
         elif component.display_name == "Text Client":
             text_client_component = component
-
-    from kvui import MDButton, MDButtonText
-    from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
-    from kivymd.uix.divider import MDDivider
-
-    if not client_component:
-        run_component(text_client_component, *launch_args)
-        return
-    else:
-        popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
-        component_buttons = [MDDivider()]
-        for component in [text_client_component, *client_component]:
-            component_buttons.append(MDButton(
-                MDButtonText(text=component.display_name),
-                on_release=lambda *args, comp=component: run_component(comp, *launch_args),
-                style="text"
-            ))
-        component_buttons.append(MDDivider())
-
-    MDDialog(
-        # Headline
-        MDDialogHeadlineText(text="Connect to Multiworld"),
-        # Text
-        popup_text,
-        # Content
-        MDDialogContentContainer(
-            *component_buttons,
-            orientation="vertical"
-        ),
-
-    ).open()
+    return client_components, text_client_component
 
 
-def identify(path: None | str) -> tuple[None | str, None | Component]:
-    if path is None:
-        return None, None
-    for component in components:
-        if component.handles_file(path):
-            return path, component
-        elif path == component.display_name or path == component.script_name:
-            return None, component
-    return None, None
+def build_uri_popup(component_list: list["Component"], launch_args: tuple[str, ...]) -> None:
+    from kvui import ButtonsPrompt
+    component_options = {
+        component.display_name: component for component in component_list
+    }
+    popup = ButtonsPrompt("Connect to Multiworld",
+                          "Select client to open and connect with.",
+                          lambda component_name: run_component(component_options[component_name], *launch_args),
+                          *component_options.keys())
+    popup.open()
 
 
-def get_exe(component: str | Component) -> Sequence[str] | None:
-    if isinstance(component, str):
-        name = component
-        component = None
-        if name.startswith("Archipelago"):
-            name = name[11:]
-        if name.endswith(".exe"):
-            name = name[:-4]
-        if name.endswith(".py"):
-            name = name[:-3]
-        if not name:
-            return None
-        for c in components:
-            if c.script_name == name or c.frozen_name == f"Archipelago{name}":
-                component = c
-                break
-        if not component:
-            return None
-    if is_frozen():
-        suffix = ".exe" if is_windows else ""
-        return [local_path(f"{component.frozen_name}{suffix}")] if component.frozen_name else None
-    else:
-        return [sys.executable, local_path(f"{component.script_name}.py")] if component.script_name else None
 
+def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
+    """Runs the given command/args in `exe` in a new process.
 
-def launch(exe, in_terminal=False):
+    If `in_terminal` is True, it will attempt to run in a terminal window,
+    and the return value will indicate whether one was found."""
     if in_terminal:
         if is_windows:
-            subprocess.Popen(['start', *exe], shell=True)
-            return
+            # intentionally using a window title with a space so it gets quoted and treated as a title
+            subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
+            return True
         elif is_linux:
-            terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
+            terminal = which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm")
             if terminal:
-                subprocess.Popen([terminal, '-e', shlex.join(exe)])
-                return
+                # Clear LD_LIB_PATH during terminal startup, but set it again when running command in case it's needed
+                ld_lib_path = os.environ.get("LD_LIBRARY_PATH")
+                lib_path_setter = f"env LD_LIBRARY_PATH={shlex.quote(ld_lib_path)} " if ld_lib_path else ""
+                env = env_cleared_lib_path()
+
+                subprocess.Popen([terminal, "-e", lib_path_setter + shlex.join(exe)], env=env)
+                return True
         elif is_macos:
-            terminal = [which('open'), '-W', '-a', 'Terminal.app']
+            terminal = [which("open"), "-W", "-a", "Terminal.app"]
             subprocess.Popen([*terminal, *exe])
-            return
+            return True
     subprocess.Popen(exe)
+    return False
 
 
-def create_shortcut(button: Any, component: Component) -> None:
+def create_shortcut(button: Any, component: "Component") -> None:
     from pyshortcuts import make_shortcut
-    script = sys.argv[0]
-    wkdir = Utils.local_path()
+    env = os.environ
+    if "APPIMAGE" in env:
+        script = env["ARGV0"]
+        wkdir = None # defaults to ~ on Linux
+    else:
+        script = sys.argv[0]
+        wkdir = Utils.local_path()
 
     script = f"{script} \"{component.display_name}\""
     make_shortcut(script, name=f"Archipelago {component.display_name}", icon=local_path("data", "icon.ico"),
-                  startmenu=False, terminal=False, working_dir=wkdir)
+                  startmenu=False, terminal=False, working_dir=wkdir, noexe=Utils.is_frozen())
     button.menu.dismiss()
 
 
 refresh_components: Callable[[], None] | None = None
 
 
-def run_gui(path: str, args: Any) -> None:
-    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
+def run_gui(launch_components: list["Component"], args: Any) -> None:
+    import threading
+    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox,
+                      MDScreenManager, MDScreen, LoadingScreen, LogtoLoadingScreen)
     from kivy.properties import ObjectProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
+    from kivy.clock import Clock
     from kivymd.uix.button import MDIconButton, MDButton
     from kivymd.uix.card import MDCard
     from kivymd.uix.menu import MDDropdownMenu
@@ -244,11 +131,11 @@ def run_gui(path: str, args: Any) -> None:
     from kivy.lang.builder import Builder
 
     class LauncherCard(MDCard):
-        component: Component | None
+        component: "Component | None"
         image: str
         context_button: MDIconButton = ObjectProperty(None)
 
-        def __init__(self, *args, component: Component | None = None, image_path: str = "", **kwargs):
+        def __init__(self, *args, component: "Component | None" = None, image_path: str = "", **kwargs):
             self.component = component
             self.image = image_path
             super().__init__(args, kwargs)
@@ -261,16 +148,22 @@ def run_gui(path: str, args: Any) -> None:
         button_layout: ScrollBox = ObjectProperty(None)
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
-        current_filter: Sequence[str | Type] | None
+        current_filter: Sequence[str, "Type"] | None
+        failed_worlds: bool = False
 
-        def __init__(self, ctx=None, path=None, args=None):
+        def __init__(self, ctx=None, components=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             self.favorites = []
-            self.launch_uri = path
+            self.launch_components = components
             self.launch_args = args
             self.cards = []
+            self.current_filter = ()
+            super().__init__()
+
+        def load_filter(self):
+            from worlds.LauncherComponents import Type
             self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
             persistent = Utils.persistent_load()
             if "launcher" in persistent:
@@ -285,7 +178,6 @@ def run_gui(path: str, args: Any) -> None:
                             else:
                                 filters.append(Type[filter])
                         self.current_filter = filters
-            super().__init__()
 
         def set_favorite(self, caller):
             if caller.component.display_name in self.favorites:
@@ -295,7 +187,7 @@ def run_gui(path: str, args: Any) -> None:
                 self.favorites.append(caller.component.display_name)
                 caller.icon = "star"
 
-        def build_card(self, component: Component) -> LauncherCard:
+        def build_card(self, component: "Component") -> LauncherCard:
             """
                 Builds a card widget for a given component.
 
@@ -303,6 +195,7 @@ def run_gui(path: str, args: Any) -> None:
 
                 :return: The created Card Widget.
                 """
+            from worlds.LauncherComponents import icon_paths
             button_card = LauncherCard(component=component,
                                        image_path=icon_paths[component.icon])
 
@@ -321,8 +214,9 @@ def run_gui(path: str, args: Any) -> None:
 
             return button_card
 
-        def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
+        def _refresh_components(self, type_filter: Sequence["Type"] | None = None) -> None:
             if not type_filter:
+                from worlds.LauncherComponents import Type
                 type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
             favorites = "favorites" in type_filter
 
@@ -353,6 +247,7 @@ def run_gui(path: str, args: Any) -> None:
             if len(name) == 0:
                 self._refresh_components(self.current_filter)
                 return
+            from worlds.LauncherComponents import Type
 
             sub_matches = [
                 card for card in self.cards
@@ -363,54 +258,129 @@ def run_gui(path: str, args: Any) -> None:
                 self.button_layout.layout.add_widget(card)
 
         def build(self):
+            self.set_colors()
+            self.screen_manager = MDScreenManager()
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
+            self.loading_screen = LoadingScreen(name="loading")
+            self.screen_manager.add_widget(self.loading_screen)
             self.grid = self.top_screen.ids.grid
             self.navigation = self.top_screen.ids.navigation
             self.button_layout = self.top_screen.ids.button_layout
             self.search_box = self.top_screen.ids.search_box
-            self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
-
-            global refresh_components
-            refresh_components = self._refresh_components
 
             Window.bind(on_drop_file=self._on_drop_file)
             Window.bind(on_keyboard=self._on_keyboard)
-
-            for component in components:
-                self.cards.append(self.build_card(component))
-
-            self._refresh_components(self.current_filter)
 
             # Uncomment to re-enable the Kivy console/live editor
             # Ctrl-E to enable it, make sure numlock/capslock is disabled
             # from kivy.modules.console import create_console
             # create_console(Window, self.top_screen)
 
-            return self.top_screen
+            main_screen = MDScreen(name="main")
+            main_screen.add_widget(self.top_screen)
+            self.screen_manager.add_widget(main_screen)
+
+            return self.screen_manager
 
         def on_start(self):
-            if self.launch_uri:
-                handle_uri(self.launch_uri, self.launch_args)
-                self.launch_uri = None
+            super().on_start()
+            logger = logging.getLogger("Worlds")
+            logger.propagate = False
+            self.loading_handler = LogtoLoadingScreen(self.loading_screen.update_text)
+            logger.addHandler(self.loading_handler)
+            threading.Thread(target=self.do_loading, name="WorldLoading").start()
+
+            if self.launch_components:
+                build_uri_popup(self.launch_components, self.launch_args)
+                self.launch_components = None
                 self.launch_args = None
+
+        def do_loading(self):
+            import importlib
+            import time
+            start = time.perf_counter()
+            assert "worlds" not in sys.modules, "worlds module already loaded."
+            importlib.import_module("worlds")
+            logging.error(f"Worlds module loaded in {time.perf_counter() - start:.2f} seconds")
+
+            global refresh_components
+            logger = logging.getLogger("Worlds")
+            logger.info("User Data")
+            self.load_filter()
+
+            refresh_components = self._refresh_components
+            logger.info("Finalizing startup")
+            Clock.schedule_once(self.finish_loading)
+
+        def finish_loading(self, dt):
+            from worlds.LauncherComponents import components
+            from worlds import failed_world_loads
+            logger = logging.getLogger("Worlds")
+            self.failed_worlds = bool(failed_world_loads)
+            for component in components:
+                self.cards.append(self.build_card(component))
+            self._refresh_components(self.current_filter)
+            logger.removeHandler(self.loading_handler)
+            self.screen_manager.current = "main"
 
         @staticmethod
         def component_action(button):
-            MDSnackbar(MDSnackbarText(text="Opening in a new window..."), y=dp(24), pos_hint={"center_x": 0.5},
-                       size_hint_x=0.5).open()
+            open_text = "Opening in a new window..."
             if button.component.func:
+                # Note: if we want to draw the Snackbar before running func, func needs to be wrapped in schedule_once
                 button.component.func()
             else:
-                launch(get_exe(button.component), button.component.cli)
+                # if launch returns False, it started the process in background (not in a new terminal)
+                from worlds.LauncherComponents import get_exe
+                if not launch(get_exe(button.component), button.component.cli) and button.component.cli:
+                    open_text = "Running in the background..."
+
+            MDSnackbar(MDSnackbarText(text=open_text), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
+
+        @staticmethod
+        def copy_to_clipboard(text):
+            from kivy.core.clipboard import Clipboard
+            Clipboard.copy(text)
+            MDSnackbar(MDSnackbarText(text="Copied to clipboard."), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
+
+        def display_failed(self):
+            """Display a dialog showing the exceptions produced by any world that failed to load during
+            initialization."""
+            if not self.failed_worlds:
+                return
+            from kivymd.uix.dialog import MDDialog, MDDialogIcon, MDDialogHeadlineText, MDDialogContentContainer
+            from kivymd.uix.divider import MDDivider
+            from worlds import failed_world_loads
+            from kivymd.uix.list import MDListItem, MDListItemHeadlineText, MDListItemSupportingText
+            entries = []
+            for world, reason in failed_world_loads.items():
+                entries.append(MDListItem(
+                    MDListItemHeadlineText(text=world),
+                    MDListItemSupportingText(text=reason),
+                    on_release=lambda x, r=reason: self.copy_to_clipboard(r)
+                ))
+            dialog = MDDialog(
+                MDDialogIcon(icon="alert"),
+                MDDialogHeadlineText(text="Failed World Loads"),
+                MDDialogContentContainer(
+                    MDDivider(),
+                    *entries,
+                    orientation="vertical",
+                )
+            )
+            dialog.open()
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
             """ When a patch file is dropped into the window, run the associated component. """
+            from worlds.LauncherComponents import identify
             file, component = identify(filename.decode())
             if file and component:
                 run_component(component, file)
             else:
-                logging.warning(f"unable to identify component for {file}")
+                logging.warning(f"unable to identify component for {filename}")
 
         def _on_keyboard(self, window: Window, key: int, scancode: int, codepoint: str, modifier: list[str]):
             # Activate search as soon as we start typing, no matter if we are focused on the search box or not.
@@ -428,12 +398,13 @@ def run_gui(path: str, args: Any) -> None:
             super()._stop(*largs)
 
         def on_stop(self):
+            from worlds.LauncherComponents import Type
             Utils.persistent_store("launcher", "favorites", self.favorites)
             Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
                                                                    for filter in self.current_filter))
             super().on_stop()
 
-    Launcher(path=path, args=args).run()
+    Launcher(components=launch_components, args=args).run()
 
     # avoiding Launcher reference leak
     # and don't try to do something with widgets after window closed
@@ -441,15 +412,11 @@ def run_gui(path: str, args: Any) -> None:
     refresh_components = None
 
 
-def run_component(component: Component, *args):
-    if component.func:
-        component.func(*args)
-        if refresh_components:
-            refresh_components()
-    elif component.script_name:
-        subprocess.run([*get_exe(component.script_name), *args])
-    else:
-        logging.warning(f"Component {component} does not appear to be executable.")
+def run_component(component: "Component", *args):
+    global refresh_components
+    component.run(*args)
+    if refresh_components:
+        refresh_components()
 
 
 def main(args: argparse.Namespace | dict | None = None):
@@ -460,7 +427,16 @@ def main(args: argparse.Namespace | dict | None = None):
 
     path = args.get("Patch|Game|Component|url", None)
     if path is not None:
-        if not path.startswith("archipelago://"):
+        if path.startswith("archipelago://"):
+            args["args"] = (path, *args.get("args", ()))
+            # add the url arg to the passthrough args
+            components, text_client_component = handle_uri(path)
+            if not components:
+                args["component"] = text_client_component
+            else:
+                args['launch_components'] = [text_client_component, *components]
+        else:
+            from worlds.LauncherComponents import identify
             file, component = identify(path)
             if file:
                 args['file'] = file
@@ -476,12 +452,11 @@ def main(args: argparse.Namespace | dict | None = None):
     elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
-        run_gui(path, args.get("args", ()))
+        run_gui(args.get("launch_components", None), args.get("args", ()))
 
 
 if __name__ == '__main__':
-    init_logging('Launcher')
-    Utils.freeze_support()
+    multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(
         description='Archipelago Launcher',

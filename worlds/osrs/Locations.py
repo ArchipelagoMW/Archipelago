@@ -3,6 +3,8 @@ import typing
 from BaseClasses import Location
 
 
+task_types = ["prayer", "magic", "runecraft", "mining", "crafting", "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
+
 class SkillRequirement(typing.NamedTuple):
     skill: str
     level: int
