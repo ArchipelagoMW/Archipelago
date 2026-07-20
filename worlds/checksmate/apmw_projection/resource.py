@@ -15,10 +15,12 @@ from .contract import ApmwContractV2, parse_contract
 
 
 CONTRACT_RESOURCE = "data/apmw_contract_v2.json"
-UNLOCK_ITEM_ROLES = {
-    "Board Files": "board-file-unlock",
-    "Board Ranks": "board-rank-unlock",
-}
+UNLOCK_ITEM_ROLES = MappingProxyType(
+    {
+        "Board Files": "board-file-unlock",
+        "Board Ranks": "board-rank-unlock",
+    }
+)
 
 
 @cache

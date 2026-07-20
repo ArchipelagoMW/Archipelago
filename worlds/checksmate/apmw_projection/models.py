@@ -265,7 +265,7 @@ _Choice = TypeVar("_Choice")
 class CounterBasedSeedSeries:
     """Exact Python wire twin of C# CounterBasedSeedSeries."""
 
-    def __init__(self, root: str | None, series_id: str | None):
+    def __init__(self, root: str | None, series_id: str | None) -> None:
         self.root = root or ""
         self.series_id = series_id or ""
 

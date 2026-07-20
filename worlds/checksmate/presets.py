@@ -1,7 +1,19 @@
 from typing import Any
 
-from .options import *
+from .options import (
+    EarlyMaterial,
+    FairyChessArmy,
+    FairyChessPawns,
+    FairyChessPieces,
+)
 
+# These are the "one-click" presets shown on the player-options webpage dropdown. They intentionally reuse the
+# names and themes of several entries in docs/checksmate-example.yaml, but the two files serve different purposes
+# and are not meant to be kept value-for-value identical:
+#  - This file must generate successfully for every seed and every random army/early-material draw, so its values
+#    are chosen conservatively (see "Different Army" and "Power Couples" below for constraints that come from that).
+#  - checksmate-example.yaml is a broader tutorial of individual options (including some, like locked_items tuned
+#    to one specific army, that are only safe for a single fixed YAML rather than every possible generation).
 checksmate_option_presets: dict[str, dict[str, Any]] = {
     # Standard Chess pieces, moving in standard Chess ways, allowing many combinations of material.
     # Leaves unique features and mixed material on, but all pieces will be recognizable.
@@ -71,14 +83,12 @@ checksmate_option_presets: dict[str, dict[str, Any]] = {
         "fairy_chess_army": FairyChessArmy.option_stable,
         "asymmetric_trades": 0,
 
-        "minor_piece_limit_by_type": 2,
-        "major_piece_limit_by_type": 2,
-        "queen_piece_limit": 1,
-        "locked_items": {
-            "Progressive Minor Piece": 4,
-            "Progressive Major Piece": 3,
-            "Progressive Major To Queen": 1,
-        },
+        # Fairy Chess Army "stable" picks one random army for the whole game, and the Betza
+        # armies don't all share the same Minor/Major piece type counts (e.g. Colorbound
+        # Clobberers has 1 minor type where the others have 2). Per-type limits or Locked
+        # Items sized for one army composition can exceed what a different army supports, so
+        # neither is set here (matches the DifferentArmy example in checksmate-example.yaml).
+        "locked_items": {},
         "start_hints": {"Play as White"},
     },
 
@@ -90,6 +100,8 @@ checksmate_option_presets: dict[str, dict[str, Any]] = {
 
         "max_engine_penalties": 5,
         "max_pocket": 12,
+        "max_kings": 3,  # locked_items below needs 2 spare Consuls (max_kings - 1)
+        "fairy_kings": 2,  # locked_items below needs 1 King Promotion
         "fairy_chess_pieces": FairyChessPieces.option_betza,
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
         "fairy_chess_army": FairyChessArmy.option_chaos,

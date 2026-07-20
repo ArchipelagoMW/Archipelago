@@ -91,14 +91,20 @@ class TestContractRuntimeConsistency(unittest.TestCase):
         self.assertFalse(
             (CHECKSMATE_ROOT / "data" / "apmw_contract_v2.json").exists()
         )
-        canonical_bytes = canonical.read_bytes()
-        self.assertEqual(canonical_bytes, compatibility_snapshot.read_bytes())
+        canonical_text = canonical.read_text(encoding="utf-8")
+        self.assertEqual(
+            canonical_text,
+            compatibility_snapshot.read_text(encoding="utf-8"),
+        )
+        canonical_bytes = canonical_text.encode("utf-8")
         self.assertEqual(
             EXPECTED_RESOURCE_SHA256,
             hashlib.sha256(canonical_bytes).hexdigest(),
         )
-        text = canonical_bytes.decode("utf-8")
-        self.assertEqual(EXPECTED_CONTRACT_HASH, compute_manifest_sha256(text))
+        self.assertEqual(
+            EXPECTED_CONTRACT_HASH,
+            compute_manifest_sha256(canonical_text),
+        )
         self.assertEqual(EXPECTED_CONTRACT_HASH, FROZEN_CONTRACT_HASH)
         self.assertEqual(1, PROTOCOL_VERSION)
         self.assertEqual("0.1.0", RUNTIME_SEMANTIC_VERSION)

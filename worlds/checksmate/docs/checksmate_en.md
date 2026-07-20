@@ -5,8 +5,14 @@
 ## Required Software
 
 - Any ChecksMate client. Currently, a modified ChessV client is supported and can be accessed via
-  its [GitHub releases page](https://github.com/chesslogic/chessv/releases/latest) (latest version)
+  its [GitHub releases page](https://github.com/chesslogic/chessv/releases/latest) (latest version). The generated
+  game reports its minimum required client version (currently 0.4.0) to whichever client connects, so always use the
+  newest client release available.
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
+
+Standalone APMW projector releases are built by a manual workflow owned by the
+[`chesslogic/Archipelago`](https://github.com/chesslogic/Archipelago) fork. They are separate from the ChessV client
+releases linked above and are not built by Archipelago's upstream pull-request CI.
 
 ## Configuring your YAML file
 

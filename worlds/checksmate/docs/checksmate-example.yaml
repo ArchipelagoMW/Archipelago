@@ -1,3 +1,8 @@
+# These YAML documents are a tutorial of individual ChecksMate options, not the same thing as the "presets" dropdown
+# on the player-options webpage (worlds/checksmate/presets.py). Several entries below share a name/theme with a
+# preset there, but their values can differ intentionally: presets must generate successfully for every seed and
+# every random army/early-material draw, while these examples are free to tune values (including locked_items) to
+# one specific YAML.
 description: 'Standard Chess pieces, moving in standard Chess ways, allowing many combinations of material'
 name: NoDumbPieces
 game: ChecksMate
@@ -33,6 +38,8 @@ description: 'Horde Chess, but with random additional pieces'
 name: OopsAllPawns
 game: ChecksMate
 ChecksMate:
+  # Near-maximum locked pawns do not efficiently satisfy larger-board material targets.
+  goal: single
   difficulty: relaxed # raises material requirement for goal far beyond just 32 pawns, therefore, player will get a lot
   early_material: pawn
   fairy_chess_pieces: betza
