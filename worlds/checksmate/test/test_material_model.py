@@ -1,20 +1,21 @@
 from .cm_mock_test_case import CMMockTestCase
 from ..material_model import MaterialModel
+from ..pool_state import PoolAccounting
 
 class TestMaterialModel(CMMockTestCase):
     def setUp(self):
         super().setUp()
-        self.material_model = MaterialModel(self.world)
-        self.material_model.items_used = {self.world.player: {}}
+        self.accounting = PoolAccounting()
+        self.material_model = MaterialModel(self.world, self.accounting)
 
     def test_calculate_current_material(self):
         """Test that current material is calculated correctly"""
         # Add some items
-        self.material_model.items_used[self.world.player] = {
+        self.accounting.used.update({
             "Progressive Pawn": 2,  # 2 * 100 = 200
             "Progressive Minor Piece": 1,  # 1 * 300 = 300
             "Progressive Major Piece": 1  # 1 * 485 = 485
-        }
+        })
         
         self.assertEqual(self.material_model.calculate_current_material(), 985)
 

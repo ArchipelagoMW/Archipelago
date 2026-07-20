@@ -207,7 +207,7 @@ class TestGenerationLockedItems(CMTestBase):
         pool.handle_excluded_items(excluded)
 
         self.assertEqual(["Progressive Pawn"], [item.name for item in starter_items])
-        self.assertEqual(3, pool.items_used[world.player]["Progressive Pawn"])
+        self.assertEqual(3, pool.accounting.used["Progressive Pawn"])
         self.assertEqual(57, pool.handle_locked_items()["Progressive Pawn"])
 
     def test_locked_internal_requests_survive_normalization_as_legacy_behavior(self):

@@ -25,19 +25,19 @@ class TestItemPool(CMMockTestCase):
         
         # Check king limits
         self.assertLessEqual(
-            self.item_pool.items_used[self.world.player]["Progressive Consul"],
+            self.item_pool.accounting.used["Progressive Consul"],
             3 - self.world.options.max_kings.value
         )
         
         # Check fairy king limits
         self.assertLessEqual(
-            self.item_pool.items_used[self.world.player]["Progressive King Promotion"],
+            self.item_pool.accounting.used["Progressive King Promotion"],
             2 - self.world.options.fairy_kings.value
         )
         
         # Check engine penalty limits
         self.assertLessEqual(
-            self.item_pool.items_used[self.world.player]["Progressive AI Intelligence Malus"],
+            self.item_pool.accounting.used["Progressive AI Intelligence Malus"],
             5 - self.world.options.max_engine_penalties.value
         )
 
@@ -59,9 +59,9 @@ class TestItemPool(CMMockTestCase):
         
         self.item_pool.consume_item(test_item, {})
         
-        self.assertEqual(self.item_pool.items_used[self.world.player][test_item], 1)
+        self.assertEqual(self.item_pool.accounting.used[test_item], 1)
         self.assertEqual(
-            self.item_pool.items_remaining[self.world.player][test_item],
+            self.item_pool.accounting.remaining[test_item],
             initial_quantity - 1
         )
 
@@ -164,5 +164,8 @@ class TestItemPool(CMMockTestCase):
         starter_items = self.item_pool.handle_excluded_items(excluded)
         
         self.assertEqual(len(starter_items), 3)  # 2 pawns + 1 minor piece
-        self.assertEqual(self.item_pool.items_used[self.world.player]["Progressive Pawn"], 2)
-        self.assertEqual(self.item_pool.items_used[self.world.player]["Progressive Minor Piece"], 1)
+        self.assertEqual(self.item_pool.accounting.used["Progressive Pawn"], 2)
+        self.assertEqual(
+            self.item_pool.accounting.used["Progressive Minor Piece"],
+            1,
+        )

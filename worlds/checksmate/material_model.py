@@ -1,30 +1,51 @@
-
+from collections import Counter
 
 from .rules import determine_max_material, determine_min_material
-from .locations import location_table
 from .items import progression_items, CMItem
+from .pool_state import PoolAccounting
+
 
 class MaterialModel:
     """Handles material value calculations and requirements."""
-    
-    def __init__(self, world):
+
+    def __init__(self, world, accounting: PoolAccounting | None = None):
         self.world = world
-        self.items_used: dict[int, dict[str, int]] = {}
+        world_accounting = getattr(world, "pool_accounting", None)
+        if accounting is None:
+            accounting = world_accounting
+        self.accounting = (
+            accounting if accounting is not None else PoolAccounting()
+        )
 
     def calculate_current_material(self) -> int:
         """Calculate the total material value of currently used items."""
-        return sum([
-            progression_items[item].material * self.items_used[self.world.player][item]
-            for item in self.items_used[self.world.player] if item in progression_items
-        ])
+        return sum(
+            progression_items[item].material * count
+            for item, count in self.accounting.used.items()
+            if item in progression_items
+        )
+
+    def calculate_items_material(self, items: list[CMItem]) -> int:
+        """Calculate material represented by an explicit generated item list."""
+        item_counts = Counter(item.name for item in items)
+        return sum(
+            min(
+                progression_items[item_name].material * count,
+                progression_items[item_name].material
+                * progression_items[item_name].quantity,
+            )
+            for item_name, count in item_counts.items()
+            if item_name in progression_items
+            and item_name != "Progressive Pocket"
+        )
 
     def calculate_remaining_material(self, locked_items: dict[str, int]) -> int:
         """Calculate the material value of locked items that have material value."""
-        return sum([
-            locked_items[item] * progression_items[item].material 
-            for item in locked_items 
+        return sum(
+            locked_items[item] * progression_items[item].material
+            for item in locked_items
             if item in progression_items and progression_items[item].material > 0
-        ])
+        )
 
     def calculate_material_requirements(self) -> tuple[float, float]:
         """Calculate the minimum and maximum material requirements based on world options."""
@@ -35,7 +56,7 @@ class MaterialModel:
         min_material -= 50
         max_material -= 50
         return min_material, max_material
-    
+
     def castling_pieces_in_pool(self, items: list[CMItem], locked_items: dict[str, int]) -> int:
         """Returns the number of castling pieces in the pool."""
         # Count majors in items list
@@ -61,16 +82,3 @@ class MaterialModel:
         total_upgrades = upgrades_in_items + upgrades_in_locked
 
         return max(0, total_majors - total_upgrades)
-
-    def lockable_material_value(self, chosen_item: str, items: list[CMItem], 
-                              locked_items: dict[str, int]) -> float:
-        """Calculate the total material value if this item was added, including cascading effects."""
-        material = progression_items[chosen_item].material
-        if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
-            return material
-            
-        if (chosen_item == "Progressive Major To Queen" and 
-                self.unupgraded_majors_in_pool(items, locked_items) <= 2):
-            material += progression_items["Progressive Major Piece"].material
-            
-        return material

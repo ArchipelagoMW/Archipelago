@@ -34,30 +34,20 @@ class TestWorldGeneration(CMTestBase):
         self.assertTrue(all(spheres))
         self.assertTrue(all(location.item is not None for location in self.multiworld.get_locations()))
 
-    def test_legacy_repeated_slot_data_advances_rng_for_each_pocket_shuffle(self):
-        """Legacy behavior: repeated serialization reshuffles pockets and advances world RNG."""
+    def test_repeated_slot_data_is_stable_without_advancing_world_rng(self):
         initial_state = self.world.random.getstate()
-        probe = random.Random()
-        probe.setstate(initial_state)
-        expected_first_order = [0] * 4 + [1] * 4 + [2] * 4
-        probe.shuffle(expected_first_order)
-        expected_first_state = probe.getstate()
-        expected_second_order = [0] * 4 + [1] * 4 + [2] * 4
-        probe.shuffle(expected_second_order)
-        expected_second_state = probe.getstate()
-
         first = self.world.fill_slot_data()
-        self.assertEqual(expected_first_order, first["pocket_order"])
-        self.assertEqual(expected_first_state, self.world.random.getstate())
+        expected_order = [0] * 4 + [1] * 4 + [2] * 4
+        random.Random(first["pocket_seed"]).shuffle(expected_order)
+        self.assertEqual(expected_order, first["pocket_order"])
+        self.assertEqual(initial_state, self.world.random.getstate())
 
         second = self.world.fill_slot_data()
-        self.assertEqual(expected_second_order, second["pocket_order"])
-        self.assertEqual(expected_second_state, self.world.random.getstate())
-        self.assertNotEqual(first["pocket_order"], second["pocket_order"])
-        self.assertEqual(
-            {key: value for key, value in first.items() if key != "pocket_order"},
-            {key: value for key, value in second.items() if key != "pocket_order"},
-        )
+        self.assertEqual(first, second)
+        self.assertEqual(initial_state, self.world.random.getstate())
+
+        first["pocket_order"][0] = 99
+        self.assertEqual(expected_order, self.world.fill_slot_data()["pocket_order"])
 
     def test_fairy_chess_pawn_upgrades_in_slot_data_default(self):
         """Default off (0) should appear in fill_slot_data output."""
@@ -160,7 +150,7 @@ class TestWorldGeneration(CMTestBase):
                          slot_data["apmw_contract"]["manifest_sha256"])
         self.assertEqual("0.4.0", slot_data["apmw_contract"]["minimum_client_version"])
         self.assertEqual(
-            self.world.items_used[self.player].get("Progressive Major To Queen", 0),
+            self.world.pool_accounting.used_count("Progressive Major To Queen"),
             slot_data["total_queens"],
         )
         for seed_name in ("pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"):

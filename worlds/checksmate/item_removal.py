@@ -2,6 +2,7 @@
 from BaseClasses import Item
 from .items import LEGACY_CHESSMEN_GROUP, item_table, progression_items, item_name_groups
 from .locations import highest_chessmen_requirement_small, highest_chessmen_requirement
+from .piece_limit_cascade import PieceLimitCascade
 
 
 class ItemRemoval:
@@ -52,19 +53,25 @@ class ItemRemoval:
             )
             if (
                 pocket_limit
-                and self.piece_model.items_used[self.world.player].get(
-                    chosen_item, 0
-                ) >= pocket_limit
+                and self.piece_model.accounting.used_count(chosen_item)
+                >= pocket_limit
             ):
                 return True
 
         # Check quantity limits
-        if chosen_item in self.piece_model.items_used[self.world.player]:
-            if self.piece_model.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
+        if chosen_item in self.piece_model.accounting.used:
+            if (
+                self.piece_model.accounting.used[chosen_item]
+                >= item_table[chosen_item].quantity
+            ):
                 return True
 
         # Check piece type limits
-        if not self.piece_model.under_piece_limit(chosen_item, "POTENTIAL_CHILDREN", progression_items_list):
+        if not self.piece_model.under_piece_limit(
+            chosen_item,
+            PieceLimitCascade.POTENTIAL_CHILDREN,
+            progression_items_list,
+        ):
             return True
 
         return False

@@ -4,7 +4,7 @@ from .bases import CMTestBase
 class VictoryLifecycleMixin:
     victory_location: str
 
-    def test_generate_basic_fills_the_reserved_victory_capacity(self) -> None:
+    def test_create_items_places_victory_and_generate_basic_is_inert(self) -> None:
         locations = self.multiworld.get_locations(self.player)
         victory_location = self.multiworld.get_location(
             self.victory_location,
@@ -13,32 +13,32 @@ class VictoryLifecycleMixin:
 
         self.assertEqual("Victory", victory_location.item.name)
         self.assertNotIn("Victory", {item.name for item in self.multiworld.itempool})
-
-        victory_location.item = None
-        victory_location.locked = False
         locked_before = [
             location
             for location in locations
             if location.locked and location.item is not None
         ]
         self.assertEqual(
-            len(locations) - 1,
+            len(locations),
             len(self.multiworld.itempool) + len(locked_before),
         )
 
-        self.world.generate_basic()
-
-        locked_after = [
+        victory_location.item = None
+        victory_location.locked = False
+        locked_without_victory = [
             location
             for location in locations
             if location.locked and location.item is not None
         ]
-        self.assertTrue(victory_location.locked)
-        self.assertEqual("Victory", victory_location.item.name)
         self.assertEqual(
-            len(locations),
-            len(self.multiworld.itempool) + len(locked_after),
+            len(locations) - 1,
+            len(self.multiworld.itempool) + len(locked_without_victory),
         )
+
+        self.world.generate_basic()
+
+        self.assertFalse(victory_location.locked)
+        self.assertIsNone(victory_location.item)
 
 
 class TestSingleVictoryLifecycle(VictoryLifecycleMixin, CMTestBase):

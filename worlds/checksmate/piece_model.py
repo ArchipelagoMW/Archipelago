@@ -3,14 +3,20 @@ import math
 from .items import item_table
 from .options import piece_type_limit_options, piece_limit_options
 from .piece_limit_cascade import PieceLimitCascade
+from .pool_state import PoolAccounting
 
 
 class PieceModel:
     """Handles piece relationships, limits, and cascading effects."""
-    
-    def __init__(self, world):
+
+    def __init__(self, world, accounting: PoolAccounting | None = None):
         self.world = world
-        self.items_used: dict[int, dict[str, int]] = {}
+        world_accounting = getattr(world, "pool_accounting", None)
+        if accounting is None:
+            accounting = world_accounting
+        self.accounting = (
+            accounting if accounting is not None else PoolAccounting()
+        )
 
     def get_parents(self, chosen_item: str) -> list[list[str | int]]:
         """Get the parent items required for this item."""
@@ -22,18 +28,16 @@ class PieceModel:
                 if item_table[item].parents is not None and chosen_item in map(
                 lambda x: x[0], item_table[item].parents)]
 
-    def fewest_parents(self, parents: list[list[str | int]]) -> int | None:
+    def fewest_parents(self, parents: list[list[str | int]]) -> int:
         """Get the minimum number of parent items available."""
-        return min([self.items_used[self.world.player].get(item[0], 0) for item in parents])
+        return min(self.accounting.used_count(item[0]) for item in parents)
 
     def has_prereqs(self, chosen_item: str) -> bool:
         """Check if the prerequisites for this item are met."""
         parents = self.get_parents(chosen_item)
         if parents:
             fewest_parents = self.fewest_parents(parents) * parents[0][1]
-            if fewest_parents is None:
-                return True
-            enough_parents = fewest_parents > self.items_used[self.world.player].get(chosen_item, 0)
+            enough_parents = fewest_parents > self.accounting.used_count(chosen_item)
             if not enough_parents:
                 return False
         return self.under_piece_limit(chosen_item, PieceLimitCascade.ACTUAL_CHILDREN)
@@ -45,23 +49,21 @@ class PieceModel:
             return False
             
         # Then check if we're under quantity limits
-        if chosen_item not in self.items_used[self.world.player]:
+        if chosen_item not in self.accounting.used:
             return True
-            
+
         max_count = item_table[chosen_item].quantity
         if max_count == math.inf:
             return True
 
-        current_count = self.items_used[self.world.player][chosen_item]
+        current_count = self.accounting.used[chosen_item]
         return current_count < max_count
 
     def under_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade,
                          available_items: list[str] | None = None) -> bool:
         """Check if adding this item would exceed piece limits."""
-        if self.world.player not in self.items_used:
-            return True
         piece_limit = self.find_piece_limit(chosen_item, with_children, available_items)
-        pieces_used = self.items_used[self.world.player].get(chosen_item, 0)
+        pieces_used = self.accounting.used_count(chosen_item)
         if 0 < piece_limit <= pieces_used:
             return False
         if chosen_item in piece_limit_options:
@@ -80,34 +82,46 @@ class PieceModel:
         base_limit: int = self.piece_limit_of(chosen_item)
         
         # Get army-specific multiplier
+        army_ids = getattr(self.world, "army_ids", None)
+        if army_ids is None:
+            army_ids = self.world.armies[self.world.player]
         army_piece_types = {
-            piece: sum([self.world.piece_types_by_army[army][piece] 
-                       for army in self.world.armies[self.world.player]])
-            for piece in set().union(*self.world.piece_types_by_army.values())}
-        
+            piece: sum(
+                self.world.piece_types_by_army[army][piece]
+                for army in army_ids
+            )
+            for piece in set().union(*self.world.piece_types_by_army.values())
+        }
+
         # Calculate total limit including army multiplier
         total_limit = base_limit * army_piece_types[chosen_item]
-        
+
         # For NO_CHILDREN, return just the base limit
         if with_children == PieceLimitCascade.NO_CHILDREN:
             return total_limit
-            
+
         # For other cascade types, consider children
         children = self.get_children(chosen_item)
         if not children:
             return total_limit
-            
+
         if with_children == PieceLimitCascade.ACTUAL_CHILDREN:
             # Add the count of existing child items
-            child_count = sum(self.items_used[self.world.player].get(child, 0) for child in children)
+            child_count = sum(self.accounting.used_count(child) for child in children)
             return total_limit + child_count
         else:  # POTENTIAL_CHILDREN
             # Filter available children if needed
             if available_items is not None:
                 children = [child for child in children if child in available_items]
             # Add the potential limits of child items
-            child_limits = sum(self.find_piece_limit(child, PieceLimitCascade.NO_CHILDREN, available_items) 
-                             for child in children)
+            child_limits = sum(
+                self.find_piece_limit(
+                    child,
+                    PieceLimitCascade.NO_CHILDREN,
+                    available_items,
+                )
+                for child in children
+            )
             return total_limit + child_limits
 
     def piece_limit_of(self, chosen_item: str) -> int:

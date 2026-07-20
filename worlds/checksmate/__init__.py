@@ -18,8 +18,8 @@ from .presets import checksmate_option_presets
 from .rules import set_rules
 from .collection_state import CMCollectionState
 from .item_pool import CMItemPool
-from .piece_model import PieceModel, PieceLimitCascade
-from .material_model import MaterialModel
+from .piece_limit_cascade import PieceLimitCascade
+from .pool_state import PoolAccounting
 from .logic_projection import WorldLogicProjection
 from .semantic_projection import SemanticSeeds
 
@@ -54,14 +54,7 @@ class CMWorld(World):
     locked_locations: list[str]
 
     item_name_groups = item_name_groups
-    items_used: ClassVar[dict[int, dict[str, int]]] = {}
-    items_remaining: ClassVar[dict[int, dict[str, int]]] = {}
-    armies: ClassVar[dict[int, list[int]]] = {}
-
-    item_pool: list[CMItem] = []
-    prefill_items: list[CMItem] = []
-
-    piece_types_by_army: dict[int, dict[str, int]] = {
+    piece_types_by_army: ClassVar[dict[int, dict[str, int]]] = {
         # Vanilla
         0: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
         # Colorbound Clobberers (the War Elephant is rather powerful)
@@ -81,18 +74,13 @@ class CMWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
         super(CMWorld, self).__init__(multiworld, player)
         self.locked_locations = []
-        self.items_used = {}
-        self.items_remaining = {}
-        self._item_pool = CMItemPool(self)
-        self._item_pool.items_used = self.items_used
-        self._piece_model = PieceModel(self)
-        self._piece_model.items_used = self.items_used
-        self._material_model = MaterialModel(self)
-        self._material_model.items_used = self.items_used
+        self.army_ids: list[int] = []
+        self.pool_accounting = PoolAccounting()
+        self._item_pool = CMItemPool(self, accounting=self.pool_accounting)
         self._collection_state = CMCollectionState(self)
         self._logic_projection: WorldLogicProjection | None = None
         self._semantic_seed_values: dict[str, int] | None = None
-
+        self._pocket_order: tuple[int, ...] | None = None
 
     def generate_early(self) -> None:
         self._ensure_semantic_seeds()
@@ -129,25 +117,25 @@ class CMWorld(World):
 
         army_constraint = self.options.fairy_chess_army
         if army_constraint != self.options.fairy_chess_army.option_chaos:
-            self.armies[self.player] = [self.random.choice(army_options)]
+            self.army_ids = [self.random.choice(army_options)]
         else:
-            self.armies[self.player] = army_options
+            self.army_ids = army_options
 
     def fill_slot_data(self) -> dict:
         contract = load_production_contract()
         self._ensure_semantic_seeds()
         cursed_knowledge = dict(self._semantic_seed_values)
-        potential_pockets = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]
-        self.random.shuffle(potential_pockets)
-        cursed_knowledge["pocket_order"] = potential_pockets
-        cursed_knowledge["total_queens"] = self.items_used[self.player].get("Progressive Major To Queen", 0)
+        cursed_knowledge["pocket_order"] = self._stable_pocket_order()
+        cursed_knowledge["total_queens"] = self.pool_accounting.used_count(
+            "Progressive Major To Queen"
+        )
         cursed_knowledge["required_chess_client_version"] = self.required_chess_client_version
         cursed_knowledge["apmw_contract"] = production_contract_document()
         cursed_knowledge["material_item_value"] = contract.expected_material["material_item"]
         cursed_knowledge["castling_location_count"] = contract.castler.maximum
         cursed_knowledge["geometry_unlock_items"] = dict(UNLOCK_ITEM_ROLES)
-        if self.player in self.armies:
-            cursed_knowledge["army"] = self.armies[self.player]
+        if self.army_ids:
+            cursed_knowledge["army"] = list(self.army_ids)
         option_names = ["goal", "death_link", "difficulty", "piece_locations", "piece_types",
                         "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pieces_configure", "fairy_chess_pawns", "fairy_chess_pawn_upgrades",
                         "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
@@ -182,7 +170,8 @@ class CMWorld(World):
         set_rules(self)
 
     def create_items(self) -> None:
-        items = self._item_pool.create_items()
+        self._place_victory()
+        items = self._item_pool.create_items(reserved_locations=1)
         self.multiworld.itempool += items
         obtainable = Counter(item.name for item in items)
         obtainable.update(
@@ -215,12 +204,7 @@ class CMWorld(World):
         self.multiworld.regions.append(region)
 
     def generate_basic(self) -> None:
-        if self.options.goal.value == self.options.goal.option_single:
-            victory_item = self.create_item("Victory")
-            self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(victory_item)
-        else:
-            victory_item = self.create_item("Victory")
-            self.multiworld.get_location("Checkmate 12x12", self.player).place_locked_item(victory_item)
+        """All item placement is completed during create_items."""
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         """Collect an item and update material value."""
@@ -256,7 +240,17 @@ class CMWorld(World):
 
     def find_piece_limit(self, piece_name: str, cascade_type: PieceLimitCascade) -> int:
         """Delegate piece limit finding to the PieceModel."""
-        return self._piece_model.find_piece_limit(piece_name, cascade_type)
+        return self._item_pool.piece_model.find_piece_limit(piece_name, cascade_type)
+
+    @property
+    def items_used(self) -> dict[int, dict[str, int]]:
+        """Compatibility view for legacy callers that still expect a player key."""
+        return self.pool_accounting.used_player_view(self.player)
+
+    @property
+    def items_remaining(self) -> dict[int, dict[str, int]]:
+        """Compatibility view for legacy callers that still expect a player key."""
+        return self.pool_accounting.remaining_player_view(self.player)
 
     @property
     def logic_projection(self) -> WorldLogicProjection:
@@ -284,3 +278,28 @@ class CMWorld(World):
                 "queen_seed",
             )
         }
+
+    def _stable_pocket_order(self) -> list[int]:
+        self._ensure_semantic_seeds()
+        if self._pocket_order is None:
+            pocket_random = random.Random(
+                self._semantic_seed_values["pocket_seed"]
+            )
+            pocket_order = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]
+            pocket_random.shuffle(pocket_order)
+            self._pocket_order = tuple(pocket_order)
+        return list(self._pocket_order)
+
+    def _place_victory(self) -> None:
+        location_name = (
+            "Checkmate Minima"
+            if self.options.goal.value == self.options.goal.option_single
+            else "Checkmate 12x12"
+        )
+        location = self.multiworld.get_location(location_name, self.player)
+        if location.item is None:
+            location.place_locked_item(self.create_item("Victory"))
+        elif location.item.name != "Victory":
+            raise RuntimeError(
+                f"{location_name} is already occupied before Victory placement"
+            )

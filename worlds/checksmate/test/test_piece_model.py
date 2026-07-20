@@ -1,11 +1,13 @@
 from .cm_mock_test_case import CMMockTestCase
-from ..piece_model import PieceModel, PieceLimitCascade
+from ..piece_limit_cascade import PieceLimitCascade
+from ..piece_model import PieceModel
+from ..pool_state import PoolAccounting
 
 class TestPieceModel(CMMockTestCase):
     def setUp(self):
         super().setUp()
-        self.piece_model = PieceModel(self.world)
-        self.piece_model.items_used = {self.world.player: {}}
+        self.accounting = PoolAccounting()
+        self.piece_model = PieceModel(self.world, self.accounting)
 
     def test_has_prereqs_root_item(self):
         """Test that root items (like pieces) have no prerequisites"""
@@ -19,24 +21,24 @@ class TestPieceModel(CMMockTestCase):
         self.assertFalse(self.piece_model.has_prereqs("Progressive Major To Queen"))
         
         # Add major piece and test again
-        self.piece_model.items_used[self.world.player]["Progressive Major Piece"] = 1
+        self.accounting.used["Progressive Major Piece"] = 1
         self.assertTrue(self.piece_model.has_prereqs("Progressive Major To Queen"))
 
     def test_can_add_more_respects_limits(self):
         """Test that can_add_more respects piece type limits"""
         # Should be able to add first two
         self.assertTrue(self.piece_model.can_add_more("Progressive Minor Piece"))
-        self.piece_model.items_used[self.world.player]["Progressive Minor Piece"] = 1
+        self.accounting.used["Progressive Minor Piece"] = 1
         self.assertTrue(self.piece_model.can_add_more("Progressive Minor Piece"))
         
         # Should not be able to add third
-        self.piece_model.items_used[self.world.player]["Progressive Minor Piece"] = 99999
+        self.accounting.used["Progressive Minor Piece"] = 99999
         self.assertFalse(self.piece_model.can_add_more("Progressive Minor Piece"))
 
     def test_piece_limit_cascading(self):
         """Test that piece limits properly cascade to children"""
         # Set up a scenario where we have a major piece that could be upgraded to queen
-        self.piece_model.items_used[self.world.player]["Progressive Major To Queen"] = 1
+        self.accounting.used["Progressive Major To Queen"] = 1
         
         # Test different cascade levels
         no_children = self.piece_model.find_piece_limit(
@@ -79,14 +81,14 @@ class TestPieceModel(CMMockTestCase):
             ),
         )
 
-        self.piece_model.items_used[self.world.player]["Progressive Major To Queen"] = 1
+        self.accounting.used["Progressive Major To Queen"] = 1
         self.assertTrue(
             self.piece_model.under_piece_limit(
                 "Progressive Major To Queen",
                 PieceLimitCascade.NO_CHILDREN,
             )
         )
-        self.piece_model.items_used[self.world.player]["Progressive Major To Queen"] = 2
+        self.accounting.used["Progressive Major To Queen"] = 2
         self.assertFalse(
             self.piece_model.under_piece_limit(
                 "Progressive Major To Queen",
