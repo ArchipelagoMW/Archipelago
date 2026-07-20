@@ -1,8 +1,11 @@
 from dataclasses import dataclass
+from enum import IntEnum
 from typing import Callable
 
 from Options import Range, Option, Choice, NamedRange, ItemDict, PerGameCommonOptions, OptionList, OptionSet, \
-    OptionCounter, DeathLink
+    OptionCounter, DeathLink, OptionError, StartInventoryPool
+
+from .items import ItemizationMode, itemization_mode
 
 
 class Goal(Choice):
@@ -107,6 +110,16 @@ class ProgressionItemization(Choice):
     default = option_legacy
 
 
+class EarlyMaterialKind(IntEnum):
+    OFF = 0
+    PAWN = 1
+    MINOR = 2
+    MAJOR = 3
+    PIECE = 4
+    ANY = 5
+    JACK = 6
+
+
 class EarlyMaterial(Choice):
     """
     Guarantees that a King move directly onto the second rank within the first few moves will provide a piece or pawn
@@ -119,19 +132,62 @@ class EarlyMaterial(Choice):
 
     Piece: You will get an early minor or major piece.
 
-    Jack: You will get an early advanced piece, worth about 7 material.
+    Jack: You will get an early Progressive Jack when Jacks are enabled. When
+    Asymmetric Trades is disabled, this falls back to a Progressive Major Piece.
 
     Any: You will get an early chessman.
     """
     display_name = "Early Material"
-    option_off = 0
-    option_pawn = 1
-    option_minor = 2
-    option_major = 3
-    option_jack = 6
-    option_piece = 4
-    option_any = 5
+    option_off = EarlyMaterialKind.OFF.value
+    option_pawn = EarlyMaterialKind.PAWN.value
+    option_minor = EarlyMaterialKind.MINOR.value
+    option_major = EarlyMaterialKind.MAJOR.value
+    option_jack = EarlyMaterialKind.JACK.value
+    option_piece = EarlyMaterialKind.PIECE.value
+    option_any = EarlyMaterialKind.ANY.value
     default = 0
+
+
+LEGACY_EARLY_MATERIAL_CANDIDATES: dict[
+    EarlyMaterialKind, tuple[str, ...]
+] = {
+    EarlyMaterialKind.OFF: (),
+    EarlyMaterialKind.PAWN: ("Progressive Pawn",),
+    EarlyMaterialKind.MINOR: ("Progressive Minor Piece",),
+    EarlyMaterialKind.MAJOR: ("Progressive Major Piece",),
+    EarlyMaterialKind.PIECE: (
+        "Progressive Minor Piece",
+        "Progressive Major Piece",
+    ),
+    EarlyMaterialKind.ANY: (
+        "Progressive Pawn",
+        "Progressive Minor Piece",
+        "Progressive Major Piece",
+        "Progressive Jack",
+    ),
+    EarlyMaterialKind.JACK: ("Progressive Jack",),
+}
+
+
+def early_material_candidates(options) -> tuple[str, ...]:
+    choice = EarlyMaterialKind(options.early_material.value)
+    if choice is EarlyMaterialKind.OFF:
+        return ()
+    if itemization_mode(options) is ItemizationMode.FUNDAMENTAL:
+        return ("Chessmen",)
+
+    jacks_enabled = (
+        options.asymmetric_trades.value
+        == options.asymmetric_trades.option_jacks
+    )
+    if choice is EarlyMaterialKind.JACK and not jacks_enabled:
+        return ("Progressive Major Piece",)
+    candidates = LEGACY_EARLY_MATERIAL_CANDIDATES[choice]
+    if not jacks_enabled:
+        candidates = tuple(
+            name for name in candidates if name != "Progressive Jack"
+        )
+    return candidates
 
 
 class MaximumEnginePenalties(Range):
@@ -250,7 +306,6 @@ class FairyChessPiecesConfigure(OptionSet):
     default = valid_keys
 
 
-# TODO: Rename to ...Mixed/Mercs
 class FairyChessArmy(Choice):
     """
     Whether to mix pieces between the Different Armies. Does not affect pawns. Note that the Cannon pieces, which
@@ -264,8 +319,6 @@ class FairyChessArmy(Choice):
     display_name = "Fairy Chess Army"
     option_chaos = 0
     option_stable = 1
-    # TODO: will select within one army but that army will change between games - clobberers issue with major pieces
-    # option_limited = 2
     default = 0
 
 
@@ -281,7 +334,8 @@ class FairyChessPawns(Choice):
 
     Checkers: Only borrow Checkers, which move diagonally and capture by skipping over the intervening piece. Can capture many times.
 
-    Reserved: Crashes your game. (Not implemented.)
+    Reserved: Not implemented. Option validation rejects this value with an
+    actionable error before generation starts.
 
     Any Pawn: A mix of Vanilla and Berolina - anything referred to as a Pawn by the source text.
 
@@ -298,6 +352,15 @@ class FairyChessPawns(Choice):
     option_any_pawn = 5
     option_any_fairy = 6
     option_any_classical = 7
+
+    def verify(self, world, player_name, plando_options) -> None:
+        super().verify(world, player_name, plando_options)
+        if self.value == self.option_reserved:
+            raise OptionError(
+                f"{player_name}: ChecksMate Fairy Chess Pawns 'reserved' is "
+                "not implemented; choose vanilla, mixed, berolina, checkers, "
+                "any_pawn, any_fairy, or any_classical."
+            )
 
 
 class FairyChessPawnUpgrades(Choice):
@@ -591,6 +654,21 @@ class LockedItems(ItemDict):
     is not guaranteed - a future version may simply validate the pool contains these items.
     """
     display_name = "Locked Items"
+    min = 0
+
+    def verify_values(self) -> None:
+        negative = [
+            (name, count) for name, count in self.value.items() if count < 0
+        ]
+        if negative:
+            details = ", ".join(
+                f"{name}: {count}" for name, count in negative
+            )
+            raise OptionError(
+                "ChecksMate Locked Items counts must be zero or greater; "
+                f"received {details}."
+            )
+        super().verify_values()
 
 
 class ChessDeathLink(DeathLink):
@@ -602,6 +680,7 @@ class ChessDeathLink(DeathLink):
 
 @dataclass
 class CMOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     goal: Goal
     progression_itemization: ProgressionItemization
     difficulty: Difficulty

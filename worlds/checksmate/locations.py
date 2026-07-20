@@ -1,5 +1,5 @@
-from enum import Enum, IntEnum
-from typing import NamedTuple
+from dataclasses import dataclass
+from enum import Enum, IntEnum, StrEnum
 
 from BaseClasses import Location
 
@@ -11,6 +11,12 @@ class CMLocation(Location):
 class Tactic(Enum):
     Fork = 0
     Turns = 1
+
+
+class TacticsMode(StrEnum):
+    ALL = "all"
+    TURNS = "turns"
+    NONE = "none"
 
 
 class BoardStage(IntEnum):
@@ -29,21 +35,61 @@ GEOMETRY_UNLOCKS_BY_STAGE = {
     BoardStage.Board12x12: (2, 2),
 }
 
+STAGE_IDS = {
+    BoardStage.Board8x8: "8x8",
+    BoardStage.Board10x8: "10x8",
+    BoardStage.Board10x10: "10x10",
+    BoardStage.Board12x10: "12x10",
+    BoardStage.Board12x12: "12x12",
+}
+
 CHECKMATE_12_FILE_MATERIAL = 8_020  # Checkmate Maxima plus two outer attendants at about 1000 each.
 
 
-class CMLocationData(NamedTuple):
+@dataclass(frozen=True, slots=True)
+class CMLocationData:
     code: int | None
     # suggested material required to perform task. generally an upper-end estimate. used to:
     # a. capture individual pieces
     # b. capture series of pieces and pawns within 1 game
     # c. fork/pin
-    material_expectations: int
+    material_expectations: int | None
     # material in grand chess mode
     material_expectations_grand: int
     chessmen_expectations: int = 0
     is_tactic: Tactic | None = None
     required_stage: BoardStage = BoardStage.Board8x8
+    use_grand_material_when_expanded: bool = False
+    chessmen_expectations_grand: int | None = None
+    required_stage_when_expanded: BoardStage | None = None
+
+    def material_requirement(
+        self,
+        expanded: bool,
+        force_grand: bool = False,
+    ) -> int | None:
+        if not expanded:
+            return self.material_expectations
+        if (
+            force_grand
+            or self.use_grand_material_when_expanded
+            or self.material_expectations is None
+        ):
+            return self.material_expectations_grand
+        return min(
+            self.material_expectations,
+            self.material_expectations_grand,
+        )
+
+    def chessmen_requirement(self, expanded: bool) -> int:
+        if expanded and self.chessmen_expectations_grand is not None:
+            return self.chessmen_expectations_grand
+        return self.chessmen_expectations
+
+    def stage_requirement(self, expanded: bool) -> BoardStage:
+        if expanded and self.required_stage_when_expanded is not None:
+            return self.required_stage_when_expanded
+        return self.required_stage
 
 
 location_table = {
@@ -59,10 +105,10 @@ location_table = {
     "Capture Pawn G": CMLocationData(4_902_006, 390, 620),
     # AI prefers not to use edge pawns early - thus they stay defended longer
     "Capture Pawn H": CMLocationData(4_902_007, 490, 860),
-    "Capture Pawn I": CMLocationData(4_902_101, -1, 810, required_stage=BoardStage.Board10x8),
-    "Capture Pawn J": CMLocationData(4_902_102, -1, 890, required_stage=BoardStage.Board10x8),
-    "Capture Pawn K": CMLocationData(4_902_103, -1, 970, required_stage=BoardStage.Board12x10),
-    "Capture Pawn L": CMLocationData(4_902_104, -1, 1050, required_stage=BoardStage.Board12x10),
+    "Capture Pawn I": CMLocationData(4_902_101, None, 810, required_stage=BoardStage.Board10x8),
+    "Capture Pawn J": CMLocationData(4_902_102, None, 890, required_stage=BoardStage.Board10x8),
+    "Capture Pawn K": CMLocationData(4_902_103, None, 970, required_stage=BoardStage.Board12x10),
+    "Capture Pawn L": CMLocationData(4_902_104, None, 1050, required_stage=BoardStage.Board12x10),
     # bishops are less deployable than knights, and rooks are even more stuck back there
     "Capture Piece Queen's Rook": CMLocationData(4_902_008, 1500, 2850),
     "Capture Piece Queen's Knight": CMLocationData(4_902_010, 700, 1200),
@@ -70,32 +116,32 @@ location_table = {
     "Capture Piece Queen": CMLocationData(4_902_014, 1300, 4100),
     "Checkmate Minima": CMLocationData(4_902_098, 4020, 4020),  # (this is the game's goal / completion condition)
     "Checkmate Maxima": CMLocationData(
-        4_902_099, -1, 6020, required_stage=BoardStage.Board10x8
+        4_902_099, None, 6020, required_stage=BoardStage.Board10x8
     ),
     "Checkmate 10x10": CMLocationData(
-        4_902_105, -1, 6020, required_stage=BoardStage.Board10x10
+        4_902_105, None, 6020, required_stage=BoardStage.Board10x10
     ),
     "Checkmate 12x10": CMLocationData(
-        4_902_106, -1, CHECKMATE_12_FILE_MATERIAL, required_stage=BoardStage.Board12x10
+        4_902_106, None, CHECKMATE_12_FILE_MATERIAL, required_stage=BoardStage.Board12x10
     ),
     "Checkmate 12x12": CMLocationData(
-        4_902_107, -1, CHECKMATE_12_FILE_MATERIAL, required_stage=BoardStage.Board12x12
+        4_902_107, None, CHECKMATE_12_FILE_MATERIAL, required_stage=BoardStage.Board12x12
     ),
     # AI prefers not to open kingside as developing queen has more tempo
     "Capture Piece King's Bishop": CMLocationData(4_902_013, 1140, 1400),
     "Capture Piece King's Knight": CMLocationData(4_902_011, 1040, 1400),
     "Capture Piece King's Rook": CMLocationData(4_902_009, 1900, 3250),
     "Capture Piece Queen's Attendant": CMLocationData(
-        4_902_109, -1, 3950, required_stage=BoardStage.Board10x8
+        4_902_109, None, 3950, required_stage=BoardStage.Board10x8
     ),
     "Capture Piece King's Attendant": CMLocationData(
-        4_902_110, -1, 4030, required_stage=BoardStage.Board10x8
+        4_902_110, None, 4030, required_stage=BoardStage.Board10x8
     ),
     "Capture Piece Queen's Outer Attendant": CMLocationData(
-        4_902_111, -1, 4110, required_stage=BoardStage.Board12x10
+        4_902_111, None, 4110, required_stage=BoardStage.Board12x10
     ),
     "Capture Piece King's Outer Attendant": CMLocationData(
-        4_902_112, -1, 4190, required_stage=BoardStage.Board12x10
+        4_902_112, None, 4190, required_stage=BoardStage.Board12x10
     ),
     # some first locations
     # for strategic analysis see: https://en.wikipedia.org/wiki/Bongcloud_Attack
@@ -113,16 +159,16 @@ location_table = {
     "Capture 7 Pawns": CMLocationData(4_902_025, 3255, 4255, 6),
     "Capture 8 Pawns": CMLocationData(4_902_026, 3545, 4545, 7),
     "Capture 9 Pawns": CMLocationData(
-        4_902_120, -1, 4645, 8, required_stage=BoardStage.Board10x8
+        4_902_120, None, 4645, 8, required_stage=BoardStage.Board10x8
     ),
     "Capture 10 Pawns": CMLocationData(
-        4_902_121, -1, 5245, 9, required_stage=BoardStage.Board10x8
+        4_902_121, None, 5245, 9, required_stage=BoardStage.Board10x8
     ),
     "Capture 11 Pawns": CMLocationData(
-        4_902_124, -1, 5845, 10, required_stage=BoardStage.Board12x10
+        4_902_124, None, 5845, 10, required_stage=BoardStage.Board12x10
     ),
     "Capture 12 Pawns": CMLocationData(
-        4_902_125, -1, 6445, 11, required_stage=BoardStage.Board12x10
+        4_902_125, None, 6445, 11, required_stage=BoardStage.Board12x10
     ),
     # Specific pieces should not be guaranteed to be accessible early, so we add +4 material (1piece+1pawn more)
     "Capture 2 Pieces": CMLocationData(4_902_027, 1450, 3000, 1),
@@ -132,16 +178,16 @@ location_table = {
     "Capture 6 Pieces": CMLocationData(4_902_031, 3300, 4500, 5),
     "Capture 7 Pieces": CMLocationData(4_902_032, 3750, 4900, 6),
     "Capture 8 Pieces": CMLocationData(
-        4_902_122, -1, 5200, 7, required_stage=BoardStage.Board10x8
+        4_902_122, None, 5200, 7, required_stage=BoardStage.Board10x8
     ),
     "Capture 9 Pieces": CMLocationData(
-        4_902_123, -1, 5400, 8, required_stage=BoardStage.Board10x8
+        4_902_123, None, 5400, 8, required_stage=BoardStage.Board10x8
     ),
     "Capture 10 Pieces": CMLocationData(
-        4_902_126, -1, 6100, 9, required_stage=BoardStage.Board12x10
+        4_902_126, None, 6100, 9, required_stage=BoardStage.Board12x10
     ),
     "Capture 11 Pieces": CMLocationData(
-        4_902_127, -1, 6800, 10, required_stage=BoardStage.Board12x10
+        4_902_127, None, 6800, 10, required_stage=BoardStage.Board12x10
     ),
     "Capture 2 Of Each": CMLocationData(4_902_033, 2250, 4150, 3),
     "Capture 3 Of Each": CMLocationData(4_902_034, 2650, 4550, 5),
@@ -150,18 +196,26 @@ location_table = {
     "Capture 6 Of Each": CMLocationData(4_902_037, 3500, 5450, 11),
     "Capture 7 Of Each": CMLocationData(4_902_038, 3850, 5650, 13),
     "Capture 8 Of Each": CMLocationData(
-        4_902_130, -1, 5850, 15, required_stage=BoardStage.Board10x8
+        4_902_130, None, 5850, 15, required_stage=BoardStage.Board10x8
     ),
     "Capture 9 Of Each": CMLocationData(
-        4_902_131, -1, 5950, 17, required_stage=BoardStage.Board10x8
+        4_902_131, None, 5950, 17, required_stage=BoardStage.Board10x8
     ),
     "Capture 10 Of Each": CMLocationData(
-        4_902_132, -1, 6900, 19, required_stage=BoardStage.Board12x10
+        4_902_132, None, 6900, 19, required_stage=BoardStage.Board12x10
     ),
     "Capture 11 Of Each": CMLocationData(
-        4_902_133, -1, 7850, 21, required_stage=BoardStage.Board12x10
+        4_902_133, None, 7850, 21, required_stage=BoardStage.Board12x10
     ),
-    "Capture Everything": CMLocationData(4_902_039, 4020, 8050, -1),
+    "Capture Everything": CMLocationData(
+        4_902_039,
+        4020,
+        8050,
+        14,
+        use_grand_material_when_expanded=True,
+        chessmen_expectations_grand=22,
+        required_stage_when_expanded=BoardStage.Board12x10,
+    ),
     "Capture Any 2": CMLocationData(4_902_070, 750, 1650, 1),
     "Capture Any 3": CMLocationData(4_902_071, 1450, 2450, 2),
     "Capture Any 4": CMLocationData(4_902_072, 2240, 3240, 3),
@@ -176,28 +230,28 @@ location_table = {
     "Capture Any 13": CMLocationData(4_902_081, 3750, 5350, 12),
     "Capture Any 14": CMLocationData(4_902_082, 3900, 5600, 13),
     "Capture Any 15": CMLocationData(
-        4_902_083, -1, 5750, 14, required_stage=BoardStage.Board10x8
+        4_902_083, None, 5750, 14, required_stage=BoardStage.Board10x8
     ),
     "Capture Any 16": CMLocationData(
-        4_902_084, -1, 5850, 15, required_stage=BoardStage.Board10x8
+        4_902_084, None, 5850, 15, required_stage=BoardStage.Board10x8
     ),
     "Capture Any 17": CMLocationData(
-        4_902_085, -1, 5950, 16, required_stage=BoardStage.Board10x8
+        4_902_085, None, 5950, 16, required_stage=BoardStage.Board10x8
     ),
     "Capture Any 18": CMLocationData(
-        4_902_086, -1, 6000, 17, required_stage=BoardStage.Board10x8
+        4_902_086, None, 6000, 17, required_stage=BoardStage.Board10x8
     ),
     "Capture Any 19": CMLocationData(
-        4_902_087, -1, 6400, 18, required_stage=BoardStage.Board12x10
+        4_902_087, None, 6400, 18, required_stage=BoardStage.Board12x10
     ),
     "Capture Any 20": CMLocationData(
-        4_902_088, -1, 6900, 19, required_stage=BoardStage.Board12x10
+        4_902_088, None, 6900, 19, required_stage=BoardStage.Board12x10
     ),
     "Capture Any 21": CMLocationData(
-        4_902_089, -1, 7450, 20, required_stage=BoardStage.Board12x10
+        4_902_089, None, 7450, 20, required_stage=BoardStage.Board12x10
     ),
     "Capture Any 22": CMLocationData(
-        4_902_090, -1, 8000, 21, required_stage=BoardStage.Board12x10
+        4_902_090, None, 8000, 21, required_stage=BoardStage.Board12x10
     ),
     "Current Objective: Survive 3 Turns": CMLocationData(4_902_140, 0, 0, 0, is_tactic=Tactic.Turns),
     "Current Objective: Survive 5 Turns": CMLocationData(4_902_141, 200, 330, 2, is_tactic=Tactic.Turns),
@@ -210,8 +264,6 @@ location_table = {
     "Threaten Queen": CMLocationData(4_902_043, 300, 500),
     "Threaten King": CMLocationData(4_902_044, 1000, 1800),
     # special moves and tactics
-    # TODO: Getting a french move on the AI occurs seldom - maybe I can tweak the evaluation or something?
-    # "French Move": CMLocationData(4_902_050, 0),
     "Fork, Sacrificial": CMLocationData(4_902_052, 700, 1100, 6, is_tactic=Tactic.Fork),
     "Fork, Sacrificial Triple": CMLocationData(4_902_053, 3300, 2700, 9, is_tactic=Tactic.Fork),
     # AI really hates getting royal forked
@@ -241,14 +293,28 @@ piece_names = ["Queen's Rook", "Queen's Knight", "Queen's Bishop", "Queen",
                "Queen's Outer Attendant", "King's Outer Attendant"]
 
 
-def location_names_for_stage(stage: BoardStage, tactics_mode: str = "all") -> tuple[str, ...]:
-    if tactics_mode not in {"all", "turns", "none"}:
-        raise ValueError(f"Unknown tactics mode: {tactics_mode}")
+def tactics_mode_for_options(options) -> TacticsMode:
+    tactics = options.enable_tactics
+    if tactics.value == tactics.option_none:
+        return TacticsMode.NONE
+    if tactics.value == tactics.option_turns:
+        return TacticsMode.TURNS
+    return TacticsMode.ALL
+
+
+def location_names_for_stage(
+    stage: BoardStage,
+    tactics_mode: TacticsMode | str = TacticsMode.ALL,
+) -> tuple[str, ...]:
+    try:
+        mode = TacticsMode(tactics_mode)
+    except ValueError as error:
+        raise ValueError(f"Unknown tactics mode: {tactics_mode}") from error
     return tuple(
         name for name, data in location_table.items()
         if data.required_stage <= stage
-        and not (tactics_mode == "none" and data.is_tactic is not None)
-        and not (tactics_mode == "turns" and data.is_tactic == Tactic.Fork)
+        and not (mode is TacticsMode.NONE and data.is_tactic is not None)
+        and not (mode is TacticsMode.TURNS and data.is_tactic == Tactic.Fork)
     )
 
 
@@ -256,11 +322,15 @@ def geometry_unlocks_for_stage(stage: BoardStage) -> tuple[int, int]:
     return GEOMETRY_UNLOCKS_BY_STAGE[stage]
 
 
+def stage_id(stage: BoardStage) -> str:
+    return STAGE_IDS[stage]
+
+
 highest_chessmen_requirement_small = max(
-    data.chessmen_expectations
+    data.chessmen_requirement(False)
     for data in location_table.values()
-    if data.material_expectations != -1
+    if data.material_expectations is not None
 )
 highest_chessmen_requirement = max(
-    data.chessmen_expectations for data in location_table.values()
+    data.chessmen_requirement(True) for data in location_table.values()
 )

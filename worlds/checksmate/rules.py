@@ -1,21 +1,31 @@
-from math import ceil
+import logging
 from typing import cast
+
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
-from .items import LEGACY_CHESSMEN_GROUP, MATERIAL_TOTAL_KEY, progression_items
 from worlds.generic.Rules import add_rule, forbid_item
+
+from .item_utils import (
+    castling_requirement,
+    chessmen_count as count_chessmen,
+    effective_fundamental_castlers,
+)
+from .items import ItemizationMode, itemization_mode, progression_items
 from .options import CMOptions
 from .locations import (
     BoardStage,
     geometry_unlocks_for_stage,
     location_names_for_stage,
     location_table,
+    tactics_mode_for_options,
 )
-import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def has_french_move(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Pawn", player, 7)  # and self.has("Play En Passant", player)
+    return state.has("Progressive Pawn", player, 7)
 
 
 def has_pawn(state: CollectionState, player: int) -> bool:
@@ -33,16 +43,11 @@ def effective_castlers(
     stage: BoardStage = BoardStage.Board8x8,
 ) -> int:
     if world is not None:
-        options = cast(CMOptions, world.options)
-        if (
-            options.progression_itemization.value
-            == options.progression_itemization.option_fundamental
-        ):
-            return world.logic_projection.metrics(state, player, stage).castlers
-    return min(
+        return world.logic_projection.metrics(state, player, stage).castlers
+    return effective_fundamental_castlers(
         state.count("Castler", player),
         state.count("Chessmen", player),
-        state.count("Material", player) * progression_items["Material"].material // 500,
+        state.count("Material", player),
     )
 
 
@@ -78,12 +83,13 @@ def effective_rule_stage(
     declared_stage: BoardStage,
     super_sized: bool,
 ) -> BoardStage:
-    if super_sized and location_name == "Capture Everything":
-        return BoardStage.Board12x10
+    profile = location_table.get(location_name)
+    if profile is not None and profile.required_stage == declared_stage:
+        return profile.stage_requirement(super_sized)
     return declared_stage
 
 
-def determine_difficulty(opts: CMOptions):
+def determine_difficulty(opts: CMOptions) -> float:
     difficulty = 1.0
     
     # Army composition affects difficulty
@@ -114,8 +120,6 @@ def determine_difficulty(opts: CMOptions):
     elif opts.fairy_chess_pieces.value == opts.fairy_chess_pieces.option_full:
         fairy_pieces = 6
     difficulty *= 0.99 + (0.01 * fairy_pieces)
-    # difficulty *= 1 + (0.025 * (5 - self.options.max_engine_penalties))
-
     if opts.difficulty.value == opts.difficulty.option_daily:
         difficulty *= 1.1  # results in, for example, the 4000 checkmate requirement becoming 4400
     if opts.difficulty.value == opts.difficulty.option_bullet:
@@ -125,14 +129,14 @@ def determine_difficulty(opts: CMOptions):
     return difficulty
 
 
-def determine_material(opts: CMOptions, base_material: int):
+def determine_material(opts: CMOptions, base_material: int) -> float:
     difficulty = determine_difficulty(opts)
     material = base_material * 100 * difficulty
     material += progression_items["Play as White"].material * difficulty
     return material + determine_relaxation(opts)
 
 
-def determine_min_material(opts: CMOptions):
+def determine_min_material(opts: CMOptions) -> float:
     super_sized = opts.goal.value != opts.goal.option_single
     base_material = 41
     if super_sized:
@@ -141,7 +145,7 @@ def determine_min_material(opts: CMOptions):
     return determine_material(opts, base_material)
 
 
-def determine_max_material(opts: CMOptions):
+def determine_max_material(opts: CMOptions) -> float:
     super_sized = opts.goal.value != opts.goal.option_single
     base_material = 46
     if super_sized:
@@ -171,16 +175,19 @@ def meets_material_expectations(state: CollectionState,
                                 stage: BoardStage = BoardStage.Board8x8) -> bool:
     target = (material * difficulty) + (absolute_relaxation if material > 90 else 0)
     if world is not None:
-        # TODO(chesslogic): Do not replace this v2 envelope with exact active material until
-        # Fundamental shared-wave planning and Legacy overflow/upgrades are monotonic. Exact
-        # projection remains authoritative for client setup, reserves, and missing material.
         current_material = world.logic_projection.metrics(
             state, player, stage
         ).material
         target = min(target, world.logic_projection.maximum_material(stage))
     else:
-        current_material = state.prog_items[player][MATERIAL_TOTAL_KEY]
-    logging.debug(f"Checking material: current={current_material}, target={target}")
+        raise ValueError(
+            "ChecksMate material rules require the world's logic projection"
+        )
+    logger.debug(
+        "Checking material: current=%s, target=%s",
+        current_material,
+        target,
+    )
     return current_material >= target
 
 
@@ -193,40 +200,37 @@ def meets_chessmen_expectations(state: CollectionState,
         chessmen_count = world.logic_projection.metrics(
             state, player, stage
         ).chessmen
-    elif fundamental:
-        chessmen_count = state.count("Chessmen", player)
     else:
-        chessmen_count = state.count_group(LEGACY_CHESSMEN_GROUP, player)
-    if pocket_limit_by_pocket == 0:
-        return chessmen_count >= count
-    pocket_count = ceil(state.count("Progressive Pocket", player) / pocket_limit_by_pocket)
-    return chessmen_count + pocket_count >= count
+        mode = (
+            ItemizationMode.FUNDAMENTAL
+            if fundamental
+            else ItemizationMode.LEGACY
+        )
+        chessmen_count = count_chessmen(
+            state.prog_items[player],
+            mode,
+            pocket_limit_by_pocket,
+        )
+    return chessmen_count >= count
 
 
-def set_rules(world: World):
+def set_rules(world: World) -> None:
     opts = cast(CMOptions, world.options)
     difficulty = determine_difficulty(opts)
     absolute_relaxation = determine_relaxation(opts)
     super_sized = opts.goal.value != opts.goal.option_single
     always_super_sized = opts.goal.value == opts.goal.option_super
-    fundamental = opts.progression_itemization.value == opts.progression_itemization.option_fundamental
+    mode = itemization_mode(opts)
+    fundamental = mode is ItemizationMode.FUNDAMENTAL
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
 
     stage = BoardStage.Board12x12 if super_sized else BoardStage.Board8x8
-    tactics_mode = (
-        "none"
-        if opts.enable_tactics.value == opts.enable_tactics.option_none
-        else "turns"
-        if opts.enable_tactics.value == opts.enable_tactics.option_turns
-        else "all"
-    )
+    tactics_mode = tactics_mode_for_options(opts)
 
     for name in location_names_for_stage(stage, tactics_mode):
         item = location_table[name]
-        rule_stage = effective_rule_stage(
-            name, item.required_stage, super_sized
-        )
+        rule_stage = item.stage_requirement(super_sized)
 
         location = world.multiworld.get_location(name, world.player)
 
@@ -236,15 +240,11 @@ def set_rules(world: World):
             ))
 
         # Material expectations rule
-        if not super_sized:
-            material_cost = item.material_expectations
-        elif name == "Capture Everything" or always_super_sized or item.material_expectations == -1:
-            material_cost = item.material_expectations_grand
-        else:
-            material_cost = min(
-                item.material_expectations, item.material_expectations_grand
-            )
-        if material_cost > 0:
+        material_cost = item.material_requirement(
+            super_sized,
+            force_grand=always_super_sized,
+        )
+        if material_cost is not None and material_cost > 0:
             add_rule(location, lambda state, v=material_cost, s=rule_stage:
                      has_later_board_stage(state, world.player, s)
                      or meets_material_expectations(
@@ -252,16 +252,9 @@ def set_rules(world: World):
                          world, s))
 
         # Chessmen expectations rule
-        if item.chessmen_expectations == -1:
-            # this is used for items which change between grand and not... currently only 1 location
-            assert item.code == 4_902_039, f"Unknown location code for custom chessmen: {str(item.code)}"
-            add_rule(location, lambda state, s=rule_stage:
-                     meets_chessmen_expectations(
-                         state, 22 if super_sized else 14, world.player,
-                         opts.pocket_limit_by_pocket.value, fundamental, world, s)
-                     or has_later_board_stage(state, world.player, s))
-        elif item.chessmen_expectations > 0:
-            add_rule(location, lambda state, v=item.chessmen_expectations, s=rule_stage:
+        chessmen_requirement = item.chessmen_requirement(super_sized)
+        if chessmen_requirement > 0:
+            add_rule(location, lambda state, v=chessmen_requirement, s=rule_stage:
                      has_later_board_stage(state, world.player, s)
                      or meets_chessmen_expectations(
                          state, v, world.player, opts.pocket_limit_by_pocket.value,
@@ -295,42 +288,19 @@ def set_rules(world: World):
             threat_rule,
         )
 
-    # Castle rules
-    if fundamental:
+    required_castlers = castling_requirement(opts)
+    for castle_name in ("O-O Castle", "O-O-O Castle"):
         add_rule(
-            world.multiworld.get_location("O-O Castle", world.player),
-            lambda state: effective_castlers(
-                state, world.player, world, BoardStage.Board8x8
-            ) >= 1,
+            world.multiworld.get_location(castle_name, world.player),
+            lambda state, required=required_castlers:
+            world.logic_projection.metrics(
+                state, world.player, BoardStage.Board8x8
+            ).castlers >= required,
         )
-        add_rule(
-            world.multiworld.get_location("O-O-O Castle", world.player),
-            lambda state: effective_castlers(
-                state, world.player, world, BoardStage.Board8x8
-            ) >= 1,
-        )
-    else:
-        castling_pieces = ["Progressive Major Piece", "Progressive Jack"]
-        is_tracker = hasattr(world.multiworld, "generation_is_fake")
-        if is_tracker:
-            add_rule(world.multiworld.get_location("O-O Castle", world.player),
-                    lambda state: state.has_from_list(castling_pieces, world.player, 2 + state.count("Progressive Major To Queen", world.player)))
-            add_rule(world.multiworld.get_location("O-O-O Castle", world.player),
-                    lambda state: state.has_from_list(castling_pieces, world.player, 2 + state.count("Progressive Major To Queen", world.player)))
-        else:
-            max_queens = world._item_pool.calculate_possible_queens()
-            add_rule(world.multiworld.get_location("O-O Castle", world.player),
-                    lambda state: state.has_from_list(castling_pieces, world.player, 2 + max_queens))
-            add_rule(world.multiworld.get_location("O-O-O Castle", world.player),
-                    lambda state: state.has_from_list(castling_pieces, world.player, 2 + max_queens))
 
     if opts.goal.value in (opts.goal.option_progressive, opts.goal.option_super):
         for name in location_names_for_stage(BoardStage.Board12x12, tactics_mode):
-            required_stage = effective_rule_stage(
-                name,
-                location_table[name].required_stage,
-                True,
-            )
+            required_stage = location_table[name].stage_requirement(True)
             location = world.multiworld.get_location(name, world.player)
             if required_stage > BoardStage.Board8x8:
                 forbid_item(location, "Board Files", world.player)

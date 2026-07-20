@@ -9,7 +9,11 @@ from .pool_state import PoolAccounting
 class PieceModel:
     """Handles piece relationships, limits, and cascading effects."""
 
-    def __init__(self, world, accounting: PoolAccounting | None = None):
+    def __init__(
+        self,
+        world,
+        accounting: PoolAccounting | None = None,
+    ) -> None:
         self.world = world
         world_accounting = getattr(world, "pool_accounting", None)
         if accounting is None:
@@ -18,17 +22,25 @@ class PieceModel:
             accounting if accounting is not None else PoolAccounting()
         )
 
-    def get_parents(self, chosen_item: str) -> list[list[str | int]]:
+    def get_parents(
+        self,
+        chosen_item: str,
+    ) -> tuple[tuple[str, int], ...]:
         """Get the parent items required for this item."""
         return item_table[chosen_item].parents
 
     def get_children(self, chosen_item: str) -> list[str]:
         """Get the items that can be created from this item."""
-        return [item for item in item_table
-                if item_table[item].parents is not None and chosen_item in map(
-                lambda x: x[0], item_table[item].parents)]
+        return [
+            item
+            for item, data in item_table.items()
+            if any(parent == chosen_item for parent, _ in data.parents)
+        ]
 
-    def fewest_parents(self, parents: list[list[str | int]]) -> int:
+    def fewest_parents(
+        self,
+        parents: tuple[tuple[str, int], ...],
+    ) -> int:
         """Get the minimum number of parent items available."""
         return min(self.accounting.used_count(item[0]) for item in parents)
 

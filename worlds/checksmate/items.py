@@ -1,11 +1,10 @@
-import math
+from enum import StrEnum
 from sys import maxsize
-from typing import NamedTuple
+from typing import Any, NamedTuple
 
 from BaseClasses import Item, ItemClassification
 
 
-MATERIAL_TOTAL_KEY = "_checksmate_material_total"
 LEGACY_CHESSMEN_GROUP = "Legacy Chessmen"
 LEGACY_MATERIAL_ITEMS = frozenset({
     "Progressive Pawn",
@@ -17,6 +16,19 @@ LEGACY_MATERIAL_ITEMS = frozenset({
 })
 FUNDAMENTAL_ITEMS = frozenset({"Chessmen", "Material", "Castler"})
 GEOMETRY_ITEMS = frozenset({"Board Files", "Board Ranks"})
+INTERNAL_ITEMS = frozenset({"Victory", "Play as White", "Super-Size Me"})
+
+
+class ItemizationMode(StrEnum):
+    LEGACY = "legacy"
+    FUNDAMENTAL = "fundamental"
+
+
+def itemization_mode(options: Any) -> ItemizationMode:
+    option = getattr(options, "progression_itemization", None)
+    if option is not None and option.value == option.option_fundamental:
+        return ItemizationMode.FUNDAMENTAL
+    return ItemizationMode.LEGACY
 
 
 class CMItem(Item):
@@ -28,8 +40,7 @@ class CMItemData(NamedTuple):
     classification: ItemClassification
     quantity: int = 1  # maximum, not guaranteed
     material: int = 0  # pawns=100, minor=300, major=500, queen=900
-    # for each given parent item, the maximum number of child items which may be present
-    parents: list[list[str | int]] = []
+    parents: tuple[tuple[str, int], ...] = ()
 
 
 item_table = {
@@ -37,15 +48,24 @@ item_table = {
     "Progressive AI Intelligence Malus": CMItemData(4_901_001, ItemClassification.useful, quantity=5),
     # TODO: stop counting material if the board fills up with 23 pieces+pawns
     "Progressive Pawn": CMItemData(4_901_002, ItemClassification.progression, quantity=60, material=100),
-    "Progressive Pawn Forwardness": CMItemData(4_901_003, ItemClassification.filler, quantity=13, parents=[
-        ["Progressive Pawn", 3]]),
+    "Progressive Pawn Forwardness": CMItemData(
+        4_901_003,
+        ItemClassification.filler,
+        quantity=13,
+        parents=(("Progressive Pawn", 3),),
+    ),
     # Bishops and Knights are worth 3.25 to 3.5, but some minor pieces are worse, so we assume 3.0 conservatively
     "Progressive Minor Piece": CMItemData(4_901_004, ItemClassification.progression, quantity=15, material=300),
     # Rooks are worth 5.25 to 5.5, but many major pieces are worse, so we assume 4.85, which stays under 5.0
     "Progressive Major Piece": CMItemData(4_901_005, ItemClassification.progression, quantity=11, material=485),
     # Queen pieces are pretty good, and even the weak ones are pretty close, so queens can stay 9.0 (but not 10.0)
-    "Progressive Major To Queen": CMItemData(4_901_006, ItemClassification.progression, quantity=9, material=415,
-                                             parents=[["Progressive Major Piece", 1]]),
+    "Progressive Major To Queen": CMItemData(
+        4_901_006,
+        ItemClassification.progression,
+        quantity=9,
+        material=415,
+        parents=(("Progressive Major Piece", 1),),
+    ),
     "Progressive Jack": CMItemData(4_901_007, ItemClassification.progression, quantity=9, material=700),
     "Chessmen": CMItemData(4_901_008, ItemClassification.progression, quantity=107, material=100),
     "Victory": CMItemData(4_901_009, ItemClassification.progression),
@@ -54,10 +74,6 @@ item_table = {
     "Castler": CMItemData(4_901_012, ItemClassification.progression, quantity=2, material=0),
     "Board Files": CMItemData(4_901_013, ItemClassification.progression, quantity=2, material=0),
     "Board Ranks": CMItemData(4_901_014, ItemClassification.progression, quantity=2, material=0),
-    # TODO: implement extra moves
-    # "Progressive Enemy Pawn": CMItemData(4_907, ItemClassification.trap, quantity=8),
-    # "Progressive Enemy Piece": CMItemData(4_908, ItemClassification.trap, quantity=7),
-    # "Progressive Opening Move": CMItemData(4_013, ItemClassification.useful, quantity=3),
 
     # Players have 3 pockets, which can be empty, or hold a pawn, minor piece, major piece, or queen.
     # Collected pocket items are distributed randomly to the 3 pockets in the above order.
@@ -76,23 +92,8 @@ item_table = {
     "Progressive King Promotion": CMItemData(4_901_025, ItemClassification.progression, quantity=2, material=425),
     # Material is really about your ability to get checks, so here is the material value of a Commoner, but the AI gets
     # pretty confused when a royal piece isn't subject to check/mate, so this is a more powerful item than indicated for
-    # the purpose of Checkmate Maxima. TODO: Consider adding a property "tactics", used for some complex locations.
+    # the purpose of Checkmate Maxima.
     "Progressive Consul": CMItemData(4_901_026, ItemClassification.progression, quantity=2, material=325),
-
-    # 4_901_030 - 4_901_044 are unused, previously N
-    # TODO: implement castling rule & guarantee major piece on that side for Locations
-    # "Play 00 Castle": CMItemData(4_014, ItemClassification.progression),
-    # "Play 000 Castle": CMItemData(4_015, ItemClassification.progression),
-    # TODO: consider breaking passant into individual pawns, or progressive for outer..center pawns
-    # "Play En Passant": CMItemData(4_011, ItemClassification.progression),
-
-    # == Possible pocket implementation ==
-    # "Progressive Pocket Pawn": CMItemData(4_021, ItemClassification.progression, quantity=3, material=90),
-    # "Progressive Pocket Pawn to Piece": CMItemData(4_022, ItemClassification.progression, quantity=3, material=190,
-    #                                               parents=["Progressive Pocket Pawn"]),
-    # "Progressive Pocket Piece Promotion": parents=["Progressive Pocket Pawn to Piece",
-    #          "Progressive Pocket Pawn"]),
-    # == End possible pocket implementation ==
 }
 
 lookup_id_to_name: dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
@@ -131,7 +132,11 @@ item_name_groups = {
 }
 
 
-def item_allowed_in_mode(item_name: str, itemization: str) -> bool:
-    if itemization == "fundamental":
+def item_allowed_in_mode(
+    item_name: str,
+    itemization: ItemizationMode | str,
+) -> bool:
+    mode = ItemizationMode(itemization)
+    if mode is ItemizationMode.FUNDAMENTAL:
         return item_name not in LEGACY_MATERIAL_ITEMS
     return item_name not in FUNDAMENTAL_ITEMS

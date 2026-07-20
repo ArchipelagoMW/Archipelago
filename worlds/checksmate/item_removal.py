@@ -1,6 +1,20 @@
-
+from collections import Counter
 from BaseClasses import Item
-from .items import LEGACY_CHESSMEN_GROUP, item_table, progression_items, item_name_groups
+from .item_utils import (
+    castling_requirement,
+    chessmen_count,
+    collection_item_maximum,
+    occupied_pockets,
+    pocket_item_limit,
+)
+from .items import (
+    LEGACY_CHESSMEN_GROUP,
+    ItemizationMode,
+    item_name_groups,
+    item_table,
+    itemization_mode,
+    progression_items,
+)
 from .locations import highest_chessmen_requirement_small, highest_chessmen_requirement
 from .piece_limit_cascade import PieceLimitCascade
 
@@ -8,38 +22,51 @@ from .piece_limit_cascade import PieceLimitCascade
 class ItemRemoval:
     """Handles the rules for when items should be removed from the pool during generation."""
 
-    def __init__(self, world, piece_model):
+    def __init__(self, world, piece_model) -> None:
         self.world = world
         self.piece_model = piece_model
 
-    def should_remove_item(self, chosen_item: str, material: int, min_material: float,
-                          max_material: float, items: list[Item], progression_items_list: list[str],
-                          locked_items: dict[str, int], user_location_count: int) -> bool:
+    def should_remove_item(
+        self,
+        chosen_item: str,
+        material: int,
+        max_material: float,
+        items: list[Item],
+        progression_items_list: list[str],
+        locked_items: dict[str, int],
+    ) -> bool:
         """Determine if an item should be removed from the pool based on various rules."""
-        # Check queen upgrade rules
-        if chosen_item == "Progressive Major To Queen":
-            if self._should_remove_queen_upgrade(items, locked_items):
-                return True
+        if (
+            chosen_item == "Progressive Major To Queen"
+            and self._should_remove_queen_upgrade(items, locked_items)
+        ):
+            return True
 
-        # Check piece type and quantity limits first
         if self._exceeds_basic_limits(chosen_item, progression_items_list):
             return True
-        
-        # Check material limits
-        total_material = (material + 
-                        self._calculate_lockable_material(chosen_item, items, locked_items) +
-                        self._calculate_remaining_material(locked_items))
+
+        total_material = (
+            material
+            + self._calculate_lockable_material(
+                chosen_item,
+                items,
+                locked_items,
+            )
+            + self._calculate_remaining_material(locked_items)
+        )
         if total_material > max_material:
             return True
 
-        # Check chessmen requirements for full accessibility
-        if not self._is_minimal_accessibility():
-            if self._violates_chessmen_requirements(chosen_item, max_material, total_material, items, locked_items):
-                return True
-
-        # Check material requirements when few locations remain under a large material deficit
-        if self._violates_material_requirements(
-                chosen_item, min_material, total_material, items, locked_items, user_location_count):
+        if (
+            not self._is_minimal_accessibility()
+            and self._violates_chessmen_requirements(
+                chosen_item,
+                max_material,
+                total_material,
+                items,
+                locked_items,
+            )
+        ):
             return True
 
         return False
@@ -47,10 +74,7 @@ class ItemRemoval:
     def _exceeds_basic_limits(self, chosen_item: str, progression_items_list: list[str]) -> bool:
         """Check if the item exceeds basic quantity or piece type limits."""
         if chosen_item == "Progressive Pocket":
-            pocket_limit = min(
-                self.world.options.max_pocket.value,
-                self.world.options.pocket_limit_by_pocket.value * 3,
-            )
+            pocket_limit = pocket_item_limit(self.world.options)
             if (
                 pocket_limit
                 and self.piece_model.accounting.used_count(chosen_item)
@@ -58,7 +82,6 @@ class ItemRemoval:
             ):
                 return True
 
-        # Check quantity limits
         if chosen_item in self.piece_model.accounting.used:
             if (
                 self.piece_model.accounting.used[chosen_item]
@@ -66,7 +89,6 @@ class ItemRemoval:
             ):
                 return True
 
-        # Check piece type limits
         if not self.piece_model.under_piece_limit(
             chosen_item,
             PieceLimitCascade.POTENTIAL_CHILDREN,
@@ -81,58 +103,67 @@ class ItemRemoval:
         total_majors = (
             len([item for item in items if item.name == "Progressive Major Piece"]) +
             locked_items.get("Progressive Major Piece", 0)
+            + self._starting_count("Progressive Major Piece")
+        )
+        total_jacks = (
+            len([item for item in items if item.name == "Progressive Jack"])
+            + locked_items.get("Progressive Jack", 0)
+            + self._starting_count("Progressive Jack")
         )
         total_queens = (
             len([item for item in items if item.name == "Progressive Major To Queen"]) +
             locked_items.get("Progressive Major To Queen", 0)
+            + self._starting_count("Progressive Major To Queen")
         )
 
-        # No majors means no queens
         if total_majors == 0:
             return True
 
-        # In minimal accessibility, each queen needs a major
-        if self._is_minimal_accessibility():
-            return total_queens >= total_majors
+        if total_queens >= total_majors:
+            return True
+        if (
+            self.world.options.accessibility.value
+            == self.world.options.accessibility.option_minimal
+        ):
+            return False
+        remaining_castlers = total_majors + total_jacks - total_queens
+        return remaining_castlers <= castling_requirement(self.world.options)
 
-        # In full accessibility, need 2 unupgraded majors for castling
-        return total_queens + 2 >= total_majors
+    def _starting_count(self, item_name: str) -> int:
+        starting_inventory = getattr(
+            getattr(self.world.options, "start_inventory", None),
+            "value",
+            {},
+        )
+        raw_count = starting_inventory.get(
+            item_name,
+            0,
+        )
+        return min(
+            max(0, int(raw_count)),
+            collection_item_maximum(self.world.options, item_name),
+        )
 
     def _violates_chessmen_requirements(self, chosen_item: str, max_material: float, total_material: float,
                                        items: list[Item], locked_items: dict[str, int]) -> bool:
         """Check if adding this item would violate chessmen requirements."""
         chessmen_requirement = self._get_chessmen_requirement()
-        necessary_chessmen = chessmen_requirement - self._count_chessmen(items)
+        necessary_chessmen = (
+            chessmen_requirement
+            - self._count_chessmen(items, locked_items)
+        )
 
-        # Adjust for the chosen item
         if self._is_chessman(chosen_item):
             necessary_chessmen -= 1
         elif self._is_pocket_piece(chosen_item):
             if self._creates_new_pocket(chosen_item, items, locked_items):
                 necessary_chessmen -= 1
 
-        # If we need more chessmen, check if we can afford them
         if necessary_chessmen > 0:
             minimum_possible_material = total_material + (
                 item_table["Progressive Pawn"].material * necessary_chessmen)
             return minimum_possible_material > max_material
 
-        return False
-
-    def _violates_material_requirements(self, chosen_item: str, min_material: float, total_material: float,
-                                        items: list[Item], locked_items: dict[str, int],
-                                        user_location_count: int) -> bool:
-        """Check if adding this item would violate material requirements."""
-        # TODO(chesslogic): In games with many pawns, check that we have enough locations for high-value items
-        # Imagine the player added 40 pawns for 80 locations, but needed 100 material. If we added another 40 pawns,
-        # we could never reach the goal. So, we need to check if we have enough locations that we can add some sort of
-        # high-value item, while respecting piece limits. For example, if the player has 1 army with 1 major piece and
-        # major piece limit of 1, and perhaps a queen limit of 1, we would have to add only bishops to reach the
-        # min_material. That would mean among those 40 locations we need to add 10 bishops and 30 pawns, which also
-        # results in having no Useful or Filler items. For the benefit of the player, I would prefer to reserve another
-        # 5 locations (or fewer, if the player sets an AI reduction limit) for Useful items. Also, keep in mind
-        # that a few of the locations are locked with progression items like Victory and Super-Size Me, but that might
-        # be accounted for by the items list.
         return False
 
     def _is_minimal_accessibility(self) -> bool:
@@ -145,15 +176,20 @@ class ItemRemoval:
                 if self.world.options.goal.value == self.world.options.goal.option_single
                 else highest_chessmen_requirement)
 
-    def _count_chessmen(self, items: list[Item]) -> int:
+    def _count_chessmen(
+        self,
+        items: list[Item],
+        locked_items: dict[str, int] | None = None,
+    ) -> int:
         """Count the number of chessmen in the items list."""
-        if self._is_fundamental():
-            return len([item for item in items if item.name == "Chessmen"])
-        pocket_limit = self.world.options.pocket_limit_by_pocket.value
-        pocket_amount = (0 if pocket_limit <= 0 else
-                        len([item for item in items if item.name == "Progressive Pocket"]) // pocket_limit)
-        chessmen_amount = len([item for item in items if item.name in item_name_groups[LEGACY_CHESSMEN_GROUP]])
-        return chessmen_amount + pocket_amount
+        counts = Counter(item.name for item in items)
+        if locked_items:
+            counts.update(locked_items)
+        return chessmen_count(
+            counts,
+            itemization_mode(self.world.options),
+            self.world.options.pocket_limit_by_pocket.value,
+        )
 
     def _is_chessman(self, item_name: str) -> bool:
         """Check if an item is a chessman."""
@@ -164,8 +200,10 @@ class ItemRemoval:
         )
 
     def _is_fundamental(self) -> bool:
-        option = getattr(self.world.options, "progression_itemization", None)
-        return option is not None and option.value == option.option_fundamental
+        return (
+            itemization_mode(self.world.options)
+            is ItemizationMode.FUNDAMENTAL
+        )
 
     def _is_pocket_piece(self, item_name: str) -> bool:
         """Check if an item is a pocket piece."""
@@ -176,9 +214,17 @@ class ItemRemoval:
         if not self._is_pocket_piece(item_name):
             return False
         pocket_limit = self.world.options.pocket_limit_by_pocket.value
-        next_pocket = (locked_items.get("Progressive Pocket", 0) +
-                      len([item for item in items if item.name == "Progressive Pocket"]) + 1)
-        return next_pocket % pocket_limit == 1
+        current = (
+            locked_items.get("Progressive Pocket", 0)
+            + sum(
+                item.name == "Progressive Pocket"
+                for item in items
+            )
+        )
+        return occupied_pockets(
+            current + 1,
+            pocket_limit,
+        ) > occupied_pockets(current, pocket_limit)
 
     def _calculate_lockable_material(self, chosen_item: str, items: list[Item], locked_items: dict[str, int]) -> int:
         """Calculate the material value if this item was added."""

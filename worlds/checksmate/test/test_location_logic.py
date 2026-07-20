@@ -1,10 +1,8 @@
 
-from BaseClasses import CollectionState, Item, ItemClassification
+from BaseClasses import CollectionState, Item
 from .bases import CMTestBase
 from ..items import (
     LEGACY_CHESSMEN_GROUP,
-    MATERIAL_TOTAL_KEY,
-    item_table,
     material_items,
     item_name_groups,
 )
@@ -23,15 +21,23 @@ class TestLocationLogic(CMTestBase):
         
     def create_test_item(self, name: str) -> Item:
         """Helper to create a test item with the given name"""
-        return Item(name, ItemClassification.progression, self.player, item_table[name])
+        return self.world.create_item(name)
 
     def collect_item_and_get_material(self, item_name: str) -> int:
         """Helper to collect an item and return the material gained"""
+        before = self.world.logic_projection.metrics(
+            self.collection_state,
+            self.player,
+            BoardStage.Board8x8,
+        ).material
         item = self.create_test_item(item_name)
-        # Only collect through world to ensure proper state updates
-        material_gain = self.world._collection_state.collect(self.collection_state, item)
         self.world.collect(self.collection_state, item)
-        return material_gain
+        after = self.world.logic_projection.metrics(
+            self.collection_state,
+            self.player,
+            BoardStage.Board8x8,
+        ).material
+        return after - before
 
     def get_accessible_locations(self) -> set[str]:
         """Helper to get all currently accessible location names"""
@@ -39,13 +45,11 @@ class TestLocationLogic(CMTestBase):
 
     def get_current_chessmen(self) -> int:
         """Helper to count current chessmen"""
-        chessmen = 0
-        for item_name in item_name_groups[LEGACY_CHESSMEN_GROUP]:
-            chessmen += self.collection_state.prog_items[self.player].get(item_name, 0)
-        # Pockets count as partial chessmen (0.5 each)
-        pocket_count = self.collection_state.prog_items[self.player].get("Progressive Pocket", 0)
-        chessmen += pocket_count // 2
-        return chessmen
+        return self.world.logic_projection.metrics(
+            self.collection_state,
+            self.player,
+            BoardStage.Board8x8,
+        ).chessmen
 
     def assert_locations_accessible(self, material_threshold: int):
         """Assert that all locations with material requirements <= threshold are accessible"""
@@ -85,29 +89,50 @@ class TestLocationLogic(CMTestBase):
                 self.world.options.goal.value
                 != self.world.options.goal.option_single,
             )
-            scaled_requirement = min(
-                loc_data.material_expectations * self.difficulty,
-                self.world.logic_projection.maximum_material(rule_stage),
+            expanded = (
+                self.world.options.goal.value
+                != self.world.options.goal.option_single
             )
+            material_requirement = loc_data.material_requirement(
+                expanded,
+                force_grand=(
+                    self.world.options.goal.value
+                    == self.world.options.goal.option_super
+                ),
+            )
+            scaled_requirement = (
+                None
+                if material_requirement is None
+                else min(
+                    material_requirement * self.difficulty,
+                    self.world.logic_projection.maximum_material(rule_stage),
+                )
+            )
+            chessmen_requirement = loc_data.chessmen_requirement(expanded)
             
             # Check if location should be accessible
             should_be_accessible = (
-                loc_data.material_expectations != -1 and  # Not a super-size only location
+                scaled_requirement is not None and
                 scaled_requirement <= current_material and  # Meets material requirement
-                loc_data.chessmen_expectations <= current_chessmen  # Meets chessmen requirement
+                chessmen_requirement <= current_chessmen and
+                has_board_stage(
+                    self.collection_state,
+                    self.player,
+                    rule_stage,
+                )
             )
             
             if should_be_accessible:
                 self.assertIn(loc_name, accessible, 
                     f"Location {loc_name} with material requirement {scaled_requirement} "
-                    f"(base: {loc_data.material_expectations}, difficulty: {self.difficulty}) "
-                    f"and chessmen requirement {loc_data.chessmen_expectations} "
+                    f"(base: {material_requirement}, difficulty: {self.difficulty}) "
+                    f"and chessmen requirement {chessmen_requirement} "
                     f"should be accessible with current material {current_material} "
                     f"and chessmen {current_chessmen}")
             else:
                 self.assertNotIn(loc_name, accessible,
                     f"Location {loc_name} should not be accessible yet. "
-                    f"Required: material={scaled_requirement}, chessmen={loc_data.chessmen_expectations}. "
+                    f"Required: material={scaled_requirement}, chessmen={chessmen_requirement}. "
                     f"Current: material={current_material}, chessmen={current_chessmen}")
 
     def test_initial_locations_unreachable(self):
@@ -116,13 +141,26 @@ class TestLocationLogic(CMTestBase):
         logging.debug(f"Initial state - Material: {self.collection_state.prog_items[self.player].get('Material', 0)}, Difficulty: {self.difficulty}")
         
         for loc_name, loc_data in location_table.items():
-            if (loc_data.material_expectations > 0 or 
-                  loc_data.chessmen_expectations > 0):
+            material_requirement = loc_data.material_requirement(
+                self.world.options.goal.value
+                != self.world.options.goal.option_single,
+                force_grand=(
+                    self.world.options.goal.value
+                    == self.world.options.goal.option_super
+                ),
+            )
+            chessmen_requirement = loc_data.chessmen_requirement(
+                self.world.options.goal.value
+                != self.world.options.goal.option_single
+            )
+            if (
+                (material_requirement is not None and material_requirement > 0)
+                or chessmen_requirement > 0
+            ):
                 if loc_name in accessible:
                     logging.debug(f"Location {loc_name} unexpectedly accessible:")
-                    logging.debug(f"  Material expectation: {loc_data.material_expectations}")
-                    logging.debug(f"  Scaled requirement: {loc_data.material_expectations * self.difficulty}")
-                    logging.debug(f"  Chessmen expectation: {loc_data.chessmen_expectations}")
+                    logging.debug(f"  Material expectation: {material_requirement}")
+                    logging.debug(f"  Chessmen expectation: {chessmen_requirement}")
                     logging.debug(f"  Current chessmen: {self.get_current_chessmen()}")
                 self.assertNotIn(loc_name, accessible,
                     f"Location {loc_name} should not be accessible with 0 material and 0 chessmen")
@@ -153,9 +191,21 @@ class TestLocationLogic(CMTestBase):
         material_items_sorted = full_chessmen + partial_chessmen + non_chessmen
         
         # Keep adding items until we have enough material for all locations
-        max_material = max(loc.material_expectations * self.difficulty
-                           for loc in location_table.values() 
-                           if loc.material_expectations > 0)
+        max_material = max(
+            requirement * self.difficulty
+            for loc in location_table.values()
+            if (
+                requirement := loc.material_requirement(
+                    self.world.options.goal.value
+                    != self.world.options.goal.option_single,
+                    force_grand=(
+                        self.world.options.goal.value
+                        == self.world.options.goal.option_super
+                    ),
+                )
+            ) is not None
+            and requirement > 0
+        )
         max_material = min(
             max_material,
             self.world.logic_projection.maximum_material(BoardStage.Board8x8),

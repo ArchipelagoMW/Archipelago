@@ -8,7 +8,9 @@ from typing import Mapping
 
 from BaseClasses import CollectionState
 
-from .locations import BoardStage, geometry_unlocks_for_stage
+from .item_utils import effective_fundamental_castlers, occupied_pockets
+from .items import ItemizationMode, itemization_mode
+from .locations import BoardStage, geometry_unlocks_for_stage, stage_id
 from .options import resolve_piece_upgrade_preferences, resolve_piece_upgrade_ratio
 from .apmw_contract import ApmwContractV2, GeometryStage
 from .contract_resource import load_production_contract, mode_item_maxima
@@ -65,19 +67,14 @@ class WorldLogicProjection:
         self.options = options
         self.seeds = seeds
         self.contract = contract or load_production_contract()
-        self.itemization = (
-            "fundamental"
-            if options.progression_itemization.value
-            == options.progression_itemization.option_fundamental
-            else "legacy"
-        )
+        self.itemization = itemization_mode(options)
         self.axes = (
             _FUNDAMENTAL_ENVELOPE_AXES
-            if self.itemization == "fundamental"
+            if self.itemization is ItemizationMode.FUNDAMENTAL
             else _LEGACY_ENVELOPE_AXES
         )
         self.preferences = _upgrade_preferences(options, self.itemization)
-        self.maxima = dict(mode_item_maxima(self.itemization))
+        self.maxima = dict(mode_item_maxima(self.itemization.value))
         self._obtainable = {
             name: self.maxima.get(name, 0)
             for name in self.axes
@@ -109,6 +106,28 @@ class WorldLogicProjection:
         self._tables.clear()
         self._active_count_cache.clear()
 
+    def set_obtainable_count(self, name: str, count: int) -> None:
+        if name == "Progressive King Promotion":
+            self._obtainable_king_promotions = min(
+                max(0, int(count)),
+                self.maxima[name],
+            )
+        elif name in self._obtainable:
+            self._obtainable[name] = min(
+                max(0, int(count)),
+                self.maxima[name],
+            )
+        else:
+            raise KeyError(f"{name!r} is not a logic projection axis")
+        self._tables.clear()
+        self._active_count_cache.clear()
+
+    def obtainable_counts(self) -> dict[str, int]:
+        return {
+            **self._obtainable,
+            "Progressive King Promotion": self._obtainable_king_promotions,
+        }
+
     def metrics(
         self,
         state: CollectionState,
@@ -119,10 +138,19 @@ class WorldLogicProjection:
             name: self._normalized_count(state.count(name, player), name)
             for name in (
                 *self.axes,
+                "Progressive Pocket",
                 "Progressive King Promotion",
             )
         }
-        return self.metrics_from_counts(counts, stage)
+        metrics = self.metrics_from_counts(counts, stage)
+        return LogicMetrics(
+            metrics.material,
+            metrics.chessmen + occupied_pockets(
+                counts["Progressive Pocket"],
+                self.options.pocket_limit_by_pocket.value,
+            ),
+            metrics.castlers,
+        )
 
     def metrics_from_counts(
         self,
@@ -133,6 +161,7 @@ class WorldLogicProjection:
             name: self._normalized_count(counts.get(name, 0), name)
             for name in (
                 *self.axes,
+                "Progressive Pocket",
                 "Progressive King Promotion",
             )
         }
@@ -140,10 +169,10 @@ class WorldLogicProjection:
             max(self._obtainable[name], normalized[name])
             for name in self.axes
         )
-        active_chessmen = self._logic_chessmen_floor(normalized, stage)
+        roster_chessmen = self._logic_chessmen_floor(normalized, stage)
         dimensions, table = self._envelope(stage, maxima)
         if table is None:
-            material = self._slot_floor(active_chessmen)
+            material = self._slot_floor(roster_chessmen)
         else:
             material = table[_flat_index(
                 tuple(normalized[name] for name in self.axes),
@@ -163,17 +192,27 @@ class WorldLogicProjection:
             - 1
             - self.maxima["Progressive Consul"],
         )
-        castlers = 0
-        if self.itemization == "fundamental":
+        if self.itemization is ItemizationMode.FUNDAMENTAL:
             castlers = min(
-                normalized["Castler"],
-                normalized["Chessmen"],
-                normalized["Material"]
-                * self.contract.expected_material["material_item"]
-                // self.contract.castler.normalized_cost,
+                effective_fundamental_castlers(
+                    normalized["Castler"],
+                    normalized["Chessmen"],
+                    normalized["Material"],
+                    self.contract,
+                ),
                 safe_castler_slots,
             )
-        return LogicMetrics(material, active_chessmen, castlers)
+        else:
+            castlers = min(
+                max(
+                    0,
+                    normalized["Progressive Major Piece"]
+                    - self._obtainable["Progressive Major To Queen"],
+                )
+                + normalized["Progressive Jack"],
+                safe_castler_slots,
+            )
+        return LogicMetrics(material, roster_chessmen, castlers)
 
     def maximum_material(self, stage: BoardStage) -> int:
         counts = dict(self._obtainable)
@@ -213,7 +252,7 @@ class WorldLogicProjection:
         counts: Mapping[str, int],
         stage: BoardStage,
     ) -> int:
-        if self.itemization == "fundamental":
+        if self.itemization is ItemizationMode.FUNDAMENTAL:
             # Future Material can turn Pawn slots into non-pawns, whose capacity
             # is the safe lower bound for every reachable future composition.
             owned_slots = (
@@ -261,7 +300,7 @@ class WorldLogicProjection:
         for dimension in dimensions:
             cells *= dimension
         if (
-            self.itemization == "legacy"
+            self.itemization is ItemizationMode.LEGACY
             or cells > _MAX_EXACT_ENVELOPE_CELLS
         ):
             # Every active non-primary semantic slot is worth at least one pawn.
@@ -338,7 +377,7 @@ class WorldLogicProjection:
     ) -> ProjectionInput:
         files, ranks = geometry_unlocks_for_stage(stage)
         return ProjectionInput(
-            self.itemization,
+            self.itemization.value,
             "stable",
             self.seeds,
             tuple(
@@ -354,14 +393,12 @@ class WorldLogicProjection:
         )
 
     def _geometry(self, stage: BoardStage) -> GeometryStage:
-        stage_id = {
-            BoardStage.Board8x8: "8x8",
-            BoardStage.Board10x8: "10x8",
-            BoardStage.Board10x10: "10x10",
-            BoardStage.Board12x10: "12x10",
-            BoardStage.Board12x12: "12x12",
-        }[stage]
-        return next(value for value in self.contract.stages if value.stage_id == stage_id)
+        expected_stage_id = stage_id(stage)
+        return next(
+            value
+            for value in self.contract.stages
+            if value.stage_id == expected_stage_id
+        )
 
     def _normalized_count(self, count: int, name: str) -> int:
         maximum = self.maxima.get(name, 0)
@@ -369,10 +406,11 @@ class WorldLogicProjection:
 
 def _upgrade_preferences(
     options,
-    itemization: str,
+    itemization: ItemizationMode | str,
 ) -> tuple[UpgradePreference, ...]:
+    mode = ItemizationMode(itemization)
     if (
-        itemization == "fundamental"
+        mode is ItemizationMode.FUNDAMENTAL
         and not options.piece_upgrade_priority.value
         and options.fairy_chess_pawn_upgrades.value
         != options.fairy_chess_pawn_upgrades.option_configure

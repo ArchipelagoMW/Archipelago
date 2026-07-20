@@ -4,6 +4,7 @@ from pathlib import Path
 
 from BaseClasses import CollectionState
 from Fill import distribute_items_restrictive
+from Options import OptionError
 
 from .cm_mock_test_case import CMMockTestCase
 from .bases import CMTestBase
@@ -19,13 +20,12 @@ from ..items import (
     FUNDAMENTAL_ITEMS,
     LEGACY_CHESSMEN_GROUP,
     LEGACY_MATERIAL_ITEMS,
-    MATERIAL_TOTAL_KEY,
     item_name_groups,
     item_table,
 )
 from ..options import Goal, ProgressionItemization
 from ..rules import effective_castlers
-from ..locations import highest_chessmen_requirement_small
+from ..locations import BoardStage, highest_chessmen_requirement_small
 
 
 class TestV2ItemizationUnit(CMMockTestCase):
@@ -120,37 +120,27 @@ class TestV2ItemizationUnit(CMMockTestCase):
 
         single = self.fundamental_world(Goal.option_single)
         single.options.locked_items.value = {"Board Files": 2, "Board Ranks": 2}
-        single.multiworld.precollected_items[single.player].append(
-            single.create_item("Board Files")
-        )
-        single_items = CMItemPool(single).create_items()
-        self.assertFalse(
-            any(item.name in {"Board Files", "Board Ranks"} for item in single_items)
-        )
+        with self.assertRaisesRegex(
+            OptionError,
+            "Board Files.*unavailable for goal 'single'",
+        ):
+            CMItemPool(single).create_items()
 
-    def test_locked_and_precollected_overcounts_are_normalized(self):
+    def test_valid_fundamental_locks_are_preserved_without_truncation(self):
         world = self.fundamental_world(Goal.option_progressive)
         world.options.locked_items.value = {
-            "Chessmen": 999,
-            "Material": 999,
-            "Castler": 999,
-            "Progressive Pawn": 999,
-            "Board Files": 999,
+            "Chessmen": 20,
+            "Material": 20,
+            "Castler": 2,
         }
-        world.multiworld.precollected_items[world.player].extend(
-            [world.create_item("Material") for _ in range(400)]
-            + [world.create_item("Progressive Pawn") for _ in range(10)]
-        )
         pool = CMItemPool(world)
         items = pool.create_items()
         counts = Counter(item.name for item in items)
         self.assertLessEqual(len(items), pool.get_max_items(True) - 1)
         self.assertNotIn("Progressive Pawn", counts)
-        self.assertLessEqual(counts["Castler"], 2)
-        total_chessmen = counts["Chessmen"]
-        total_material = counts["Material"] + 321
-        self.assertGreaterEqual(total_chessmen, counts["Castler"])
-        self.assertGreaterEqual(total_material * 400, counts["Castler"] * 500)
+        self.assertGreaterEqual(counts["Chessmen"], 20)
+        self.assertGreaterEqual(counts["Material"], 20)
+        self.assertEqual(2, counts["Castler"])
 
     def test_incompatible_items_are_ignored_and_castler_prerequisites_are_finite(self):
         world = self.fundamental_world()
@@ -171,31 +161,30 @@ class TestV2ItemizationUnit(CMMockTestCase):
         world = self.fundamental_world()
         world.options.locked_items.value = {"Castler": 1}
         pool = CMItemPool(world)
-        pool.initialize_item_tracking()
-        pool.items_used[world.player]["Chessmen"] = 1
-        pool.items_used[world.player]["Material"] = 2
-
-        locked = pool.handle_locked_items()
+        locked = pool.handle_locked_items(
+            Counter({
+                "Play as White": 1,
+                "Chessmen": 1,
+                "Material": 2,
+            })
+        )
         self.assertEqual({"Castler": 1}, locked)
-        self.assertEqual({"Castler": 1}, pool.fit_locked_items(locked, 4))
+        self.assertEqual({"Castler": 1}, pool.fit_locked_items(locked, 1))
+        with self.assertRaisesRegex(
+            OptionError,
+            "need 4 additional items.*only 2 slots",
+        ):
+            pool.fit_locked_items(
+                {"Castler": 1, "Chessmen": 1, "Material": 2},
+                2,
+            )
 
-        pool.items_used[world.player]["Chessmen"] = 0
-        pool.items_used[world.player]["Material"] = 0
-        self.assertEqual(
-            {"Chessmen": 1, "Material": 1},
-            pool.fit_locked_items({"Castler": 1, "Chessmen": 1, "Material": 2}, 2),
-        )
-        self.assertEqual(
-            {"Castler": 1, "Chessmen": 2, "Material": 2},
-            pool.fit_locked_items({"Castler": 2, "Chessmen": 2, "Material": 3}, 5),
-        )
-
-    def test_full_access_locked_overflow_preserves_required_chessmen(self):
+    def test_full_access_valid_locks_preserve_required_chessmen(self):
         world = self.fundamental_world()
         world.options.accessibility.value = 1
         world.options.locked_items.value = {
-            "Material": 999,
-            "Chessmen": 999,
+            "Material": 10,
+            "Chessmen": 10,
         }
         items = CMItemPool(world).create_items()
         counts = Counter(item.name for item in items)
@@ -243,16 +232,30 @@ class TestV2SlotDataAndMaterial(CMTestBase):
             production_contract_document(),
         )
 
-    def test_material_item_and_private_aggregate_do_not_collide(self):
+    def test_logic_projection_is_the_authoritative_material_view(self):
         state = CollectionState(self.multiworld)
-        item = self.world.create_item("Material")
-        self.assertTrue(self.world.collect(state, item))
-        self.assertEqual(1, state.prog_items[self.player]["Material"])
-        self.assertEqual(400, state.prog_items[self.player][MATERIAL_TOTAL_KEY])
-        self.assertNotEqual(
-            state.prog_items[self.player]["Material"],
-            state.prog_items[self.player][MATERIAL_TOTAL_KEY],
+        self.assertTrue(
+            self.world.collect(state, self.world.create_item("Material"))
         )
+        self.assertEqual(1, state.prog_items[self.player]["Material"])
+        self.assertEqual(
+            0,
+            self.world.logic_projection.metrics(
+                state,
+                self.player,
+                BoardStage.Board8x8,
+            ).material,
+        )
+        self.assertTrue(
+            self.world.collect(state, self.world.create_item("Chessmen"))
+        )
+        metrics = self.world.logic_projection.metrics(
+            state,
+            self.player,
+            BoardStage.Board8x8,
+        )
+        self.assertEqual(485, metrics.material)
+        self.assertEqual(1, metrics.chessmen)
 
     def test_item_link_style_overcounts_cap_logic_and_castler_effect(self):
         state = CollectionState(self.multiworld)
@@ -268,7 +271,14 @@ class TestV2SlotDataAndMaterial(CMTestBase):
         self.assertEqual(321, state.count("Material", self.player))
         self.assertEqual(107, state.count("Chessmen", self.player))
         self.assertEqual(2, state.count("Castler", self.player))
-        self.assertEqual(321 * 400 + 107 * 100, state.prog_items[self.player][MATERIAL_TOTAL_KEY])
+        metrics = self.world.logic_projection.metrics(
+            state,
+            self.player,
+            BoardStage.Board8x8,
+        )
+        self.assertEqual(1500, metrics.material)
+        self.assertEqual(15, metrics.chessmen)
+        self.assertEqual(2, metrics.castlers)
         self.assertEqual(2, effective_castlers(state, self.player))
 
         parentless = CollectionState(self.multiworld)
@@ -287,11 +297,11 @@ class TestFundamentalLockedOverflowWorld(CMTestBase):
         "accessibility": "full",
         "enable_tactics": "turns",
         "goal": "single",
-        "locked_items": {"Material": 999, "Chessmen": 999},
+        "locked_items": {"Material": 10, "Chessmen": 10},
         "progression_itemization": "fundamental",
     }
 
-    def test_full_access_locked_overflow_fills_successfully(self):
+    def test_full_access_valid_locks_fill_successfully(self):
         names = Counter(item.name for item in self.multiworld.itempool)
         self.assertGreaterEqual(
             names["Chessmen"],

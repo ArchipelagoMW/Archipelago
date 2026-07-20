@@ -1,4 +1,5 @@
 from collections import Counter
+from collections.abc import Mapping
 import random
 from typing import ClassVar, Type
 
@@ -7,13 +8,25 @@ from Options import PerGameCommonOptions, OptionError
 from worlds.AutoWorld import WebWorld, World
 
 from .options import CMOptions, resolve_piece_upgrade_preferences, resolve_piece_upgrade_ratio
-from .items import MATERIAL_TOTAL_KEY, CMItem, item_table, item_name_groups
+from .items import (
+    CMItem,
+    ItemizationMode,
+    item_table,
+    item_name_groups,
+    itemization_mode,
+)
 from .contract_resource import (
     UNLOCK_ITEM_ROLES,
     load_production_contract,
     production_contract_document,
 )
-from .locations import BoardStage, CMLocation, location_names_for_stage, location_table
+from .locations import (
+    BoardStage,
+    CMLocation,
+    location_names_for_stage,
+    location_table,
+    tactics_mode_for_options,
+)
 from .presets import checksmate_option_presets
 from .rules import set_rules
 from .collection_state import CMCollectionState
@@ -22,6 +35,16 @@ from .piece_limit_cascade import PieceLimitCascade
 from .pool_state import PoolAccounting
 from .logic_projection import WorldLogicProjection
 from .semantic_projection import SemanticSeeds
+from .item_utils import collection_item_maximum
+
+
+_SEMANTIC_SEED_NAMES = (
+    "pocket_seed",
+    "pawn_seed",
+    "minor_seed",
+    "major_seed",
+    "queen_seed",
+)
 
 
 class CMWeb(WebWorld):
@@ -79,11 +102,21 @@ class CMWorld(World):
         self._item_pool = CMItemPool(self, accounting=self.pool_accounting)
         self._collection_state = CMCollectionState(self)
         self._logic_projection: WorldLogicProjection | None = None
+        self._logic_obtainable_counts: dict[str, int] | None = None
         self._semantic_seed_values: dict[str, int] | None = None
         self._pocket_order: tuple[int, ...] | None = None
+        self._early_material_item_name: str | None = None
 
     def generate_early(self) -> None:
         self._ensure_semantic_seeds()
+        if (
+            self.options.fairy_chess_pawns.value
+            == self.options.fairy_chess_pawns.option_reserved
+        ):
+            raise OptionError(
+                "ChecksMate Fairy Chess Pawns 'reserved' is not implemented; "
+                "choose a supported named value."
+            )
         piece_collection = self.options.fairy_chess_pieces.value
         army_options = []
         if piece_collection == self.options.fairy_chess_pieces.option_fide:
@@ -120,15 +153,24 @@ class CMWorld(World):
             self.army_ids = [self.random.choice(army_options)]
         else:
             self.army_ids = army_options
+        self._item_pool.validate_options()
 
     def fill_slot_data(self) -> dict:
         contract = load_production_contract()
         self._ensure_semantic_seeds()
         cursed_knowledge = dict(self._semantic_seed_values)
         cursed_knowledge["pocket_order"] = self._stable_pocket_order()
-        cursed_knowledge["total_queens"] = self.pool_accounting.used_count(
-            "Progressive Major To Queen"
+        cursed_knowledge["total_queens"] = (
+            self._total_obtainable_queen_upgrades()
         )
+        logic_obtainable_counts = (
+            self._tracker_logic_obtainable_counts()
+            or self._logic_obtainable_counts
+        )
+        if logic_obtainable_counts is not None:
+            cursed_knowledge["logic_obtainable_counts"] = dict(
+                logic_obtainable_counts
+            )
         cursed_knowledge["required_chess_client_version"] = self.required_chess_client_version
         cursed_knowledge["apmw_contract"] = production_contract_document()
         cursed_knowledge["material_item_value"] = contract.expected_material["material_item"]
@@ -136,31 +178,36 @@ class CMWorld(World):
         cursed_knowledge["geometry_unlock_items"] = dict(UNLOCK_ITEM_ROLES)
         if self.army_ids:
             cursed_knowledge["army"] = list(self.army_ids)
-        option_names = ["goal", "death_link", "difficulty", "piece_locations", "piece_types",
+        option_names = ["goal", "death_link", "difficulty", "enable_tactics", "piece_locations", "piece_types",
                         "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pieces_configure", "fairy_chess_pawns", "fairy_chess_pawn_upgrades",
+                        "max_pocket", "piece_upgrade_priority",
                         "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
                         "pocket_limit_by_pocket", "fair_board_guarantee"]
         slot_options = self.options.as_dict(*option_names)
-        slot_options["progression_itemization"] = (
-            "fundamental"
-            if self.options.progression_itemization.value
-            == self.options.progression_itemization.option_fundamental
-            else "legacy"
-        )
+        slot_options["progression_itemization"] = itemization_mode(
+            self.options
+        ).value
         upgrade_preferences = resolve_piece_upgrade_preferences(
             self.options.fairy_chess_pawn_upgrades, self.options.piece_upgrade_preferences,
             self.options.piece_upgrade_priority)
         if (
-            self.options.progression_itemization.value
-            == self.options.progression_itemization.option_fundamental
+            itemization_mode(self.options) is ItemizationMode.FUNDAMENTAL
             and not self.options.piece_upgrade_priority.value
             and self.options.fairy_chess_pawn_upgrades.value
             != self.options.fairy_chess_pawn_upgrades.option_configure
         ):
             upgrade_preferences = []
         slot_options["piece_upgrade_preferences"] = upgrade_preferences
+        slot_options["piece_upgrade_priority"] = dict(
+            self.options.piece_upgrade_priority.value
+        )
         slot_options["piece_upgrade_ratio"] = resolve_piece_upgrade_ratio(self.options.piece_upgrade_ratio)
         return dict(cursed_knowledge, **slot_options)
+
+    @staticmethod
+    def interpret_slot_data(slot_data: dict) -> dict:
+        """Preserve generated values required for Universal Tracker rules."""
+        return slot_data
 
     def create_item(self, name: str) -> CMItem:
         data = item_table[name]
@@ -174,28 +221,19 @@ class CMWorld(World):
         items = self._item_pool.create_items(reserved_locations=1)
         self.multiworld.itempool += items
         obtainable = Counter(item.name for item in items)
-        obtainable.update(
-            item.name
-            for item in self.multiworld.precollected_items[self.player]
-        )
+        obtainable.update(self.options.start_inventory.value)
         obtainable.update(
             location.item.name
             for location in self.multiworld.get_locations(self.player)
             if location.locked and location.item is not None
         )
-        self.logic_projection.set_obtainable_counts(obtainable)
+        self._set_logic_obtainable_counts(obtainable)
 
     def create_regions(self) -> None:
         region = Region("Menu", self.player, self.multiworld)
         super_sized = self.options.goal.value != self.options.goal.option_single
         stage = BoardStage.Board12x12 if super_sized else BoardStage.Board8x8
-        tactics_mode = (
-            "none"
-            if self.options.enable_tactics.value == self.options.enable_tactics.option_none
-            else "turns"
-            if self.options.enable_tactics.value == self.options.enable_tactics.option_turns
-            else "all"
-        )
+        tactics_mode = tactics_mode_for_options(self.options)
 
         for loc_name in location_names_for_stage(stage, tactics_mode):
             loc_data = location_table[loc_name]
@@ -207,36 +245,20 @@ class CMWorld(World):
         """All item placement is completed during create_items."""
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        """Collect an item and update material value."""
+        """Collect an effective item and retain removable excess copies."""
         if not self._collection_state.is_effective_collection(state, item):
             self._collection_state.record_excess_collection(state, item)
             return False
-        # Calculate material value before state change
-        material = self._collection_state.collect(state, item)
-
-        # Update state through parent class
-        change = super().collect(state, item)
-        if change:
-            # we actually collected the item, so we must gain the material
-            state.prog_items[self.player][MATERIAL_TOTAL_KEY] += material
-
-        return change
+        return super().collect(state, item)
 
     def remove(self, state: CollectionState, item: Item) -> bool:
-        """Remove an item and update material value."""
+        """Remove excess copies before effective AP progression."""
         if self._collection_state.remove_excess_collection(state, item):
             return False
+        return super().remove(state, item)
 
-        # Calculate material value before state change
-        material = self._collection_state.remove(state, item)
-
-        # Update state through parent class
-        change = super().remove(state, item)
-        if change:
-            # we actually removed the item, so we must lose the material
-            state.prog_items[self.player][MATERIAL_TOTAL_KEY] -= material
-
-        return change
+    def get_filler_item_name(self) -> str:
+        return "Progressive Pocket Gems"
 
     def find_piece_limit(self, piece_name: str, cascade_type: PieceLimitCascade) -> int:
         """Delegate piece limit finding to the PieceModel."""
@@ -261,22 +283,143 @@ class CMWorld(World):
                 for name, value in self._semantic_seed_values.items()
             })
             self._logic_projection = WorldLogicProjection(self.options, seeds)
+            self._apply_tracker_projection_overrides(self._logic_projection)
         return self._logic_projection
+
+    def _total_obtainable_queen_upgrades(self) -> int:
+        tracker_total = self._tracker_total_queen_upgrades()
+        if tracker_total is not None:
+            return tracker_total
+        return min(
+            (
+                self.pool_accounting.used_count("Progressive Major To Queen")
+                + self.options.start_inventory.value.get(
+                    "Progressive Major To Queen",
+                    0,
+                )
+            ),
+            collection_item_maximum(
+                self.options,
+                "Progressive Major To Queen",
+            ),
+        )
+
+    def _set_logic_obtainable_counts(
+        self,
+        counts: Mapping[str, int],
+    ) -> None:
+        projection = self.logic_projection
+        projection.set_obtainable_counts(counts)
+        self._apply_tracker_projection_overrides(projection)
+        self._logic_obtainable_counts = projection.obtainable_counts()
+
+    def _apply_tracker_projection_overrides(
+        self,
+        projection: WorldLogicProjection,
+    ) -> None:
+        tracker_counts = self._tracker_logic_obtainable_counts()
+        if tracker_counts is not None:
+            projection.set_obtainable_counts(tracker_counts)
+            return
+        tracker_total_queens = self._tracker_total_queen_upgrades()
+        if (
+            projection.itemization is ItemizationMode.LEGACY
+            and tracker_total_queens is not None
+        ):
+            projection.set_obtainable_count(
+                "Progressive Major To Queen",
+                tracker_total_queens,
+            )
+
+    def _tracker_logic_obtainable_counts(self) -> dict[str, int] | None:
+        slot_data = self._tracker_slot_data()
+        if slot_data is None:
+            return None
+        counts = slot_data.get("logic_obtainable_counts")
+        if counts is None:
+            return None
+        if not isinstance(counts, dict):
+            raise ValueError(
+                "ChecksMate slot data logic_obtainable_counts must be a mapping"
+            )
+        normalized = {}
+        for name, count in counts.items():
+            if (
+                not isinstance(name, str)
+                or name not in item_table
+                or not isinstance(count, int)
+                or isinstance(count, bool)
+                or count < 0
+            ):
+                raise ValueError(
+                    "ChecksMate slot data logic_obtainable_counts must contain "
+                    "known item names with non-negative integer counts"
+                )
+            normalized[name] = count
+        return normalized
+
+    def _tracker_total_queen_upgrades(self) -> int | None:
+        slot_data = self._tracker_slot_data()
+        if slot_data is None:
+            return None
+        total_queens = slot_data.get("total_queens")
+        if total_queens is None:
+            return None
+        if (
+            not isinstance(total_queens, int)
+            or isinstance(total_queens, bool)
+            or total_queens < 0
+        ):
+            raise ValueError(
+                "ChecksMate slot data total_queens must be a non-negative integer"
+            )
+        return total_queens
+
+    def _tracker_semantic_seeds(self) -> dict[str, int] | None:
+        slot_data = self._tracker_slot_data()
+        if slot_data is None:
+            return None
+        present = tuple(name in slot_data for name in _SEMANTIC_SEED_NAMES)
+        if not any(present):
+            return None
+        if not all(present):
+            raise ValueError(
+                "ChecksMate slot data must include every semantic projection seed"
+            )
+        seeds = {}
+        for name in _SEMANTIC_SEED_NAMES:
+            value = slot_data[name]
+            if (
+                not isinstance(value, int)
+                or isinstance(value, bool)
+                or not 0 <= value < 2 ** 31
+            ):
+                raise ValueError(
+                    f"ChecksMate slot data {name} must be a 31-bit "
+                    "non-negative integer"
+                )
+            seeds[name] = value
+        return seeds
+
+    def _tracker_slot_data(self) -> dict | None:
+        passthrough = getattr(self.multiworld, "re_gen_passthrough", None)
+        if not isinstance(passthrough, dict):
+            return None
+        slot_data = passthrough.get(self.game)
+        return slot_data if isinstance(slot_data, dict) else None
 
     def _ensure_semantic_seeds(self) -> None:
         if self._semantic_seed_values is not None:
+            return
+        tracker_seeds = self._tracker_semantic_seeds()
+        if tracker_seeds is not None:
+            self._semantic_seed_values = tracker_seeds
             return
         probe = random.Random()
         probe.setstate(self.random.getstate())
         self._semantic_seed_values = {
             name: probe.getrandbits(31)
-            for name in (
-                "pocket_seed",
-                "pawn_seed",
-                "minor_seed",
-                "major_seed",
-                "queen_seed",
-            )
+            for name in _SEMANTIC_SEED_NAMES
         }
 
     def _stable_pocket_order(self) -> list[int]:

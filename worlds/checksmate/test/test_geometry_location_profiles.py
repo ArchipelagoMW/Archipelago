@@ -1,5 +1,12 @@
 from .bases import CMTestBase
-from ..locations import BoardStage, location_names_for_stage, location_table
+from ..locations import (
+    BoardStage,
+    TacticsMode,
+    location_names_for_stage,
+    location_table,
+    stage_id,
+    tactics_mode_for_options,
+)
 
 
 class TestGeometryLocationProfiles(CMTestBase):
@@ -48,6 +55,31 @@ class TestGeometryLocationProfiles(CMTestBase):
         self.assertEqual(
             self.NEW_LOCATION_IDS,
             {name: location_table[name].code for name in self.NEW_LOCATION_IDS},
+        )
+
+    def test_typed_profile_metadata_replaces_sentinels_and_magic_cases(self):
+        self.assertIsNone(
+            location_table["Capture Pawn I"].material_expectations
+        )
+        capture_everything = location_table["Capture Everything"]
+        self.assertEqual(
+            4020,
+            capture_everything.material_requirement(False),
+        )
+        self.assertEqual(
+            8050,
+            capture_everything.material_requirement(True),
+        )
+        self.assertEqual(14, capture_everything.chessmen_requirement(False))
+        self.assertEqual(22, capture_everything.chessmen_requirement(True))
+        self.assertEqual(
+            BoardStage.Board12x10,
+            capture_everything.stage_requirement(True),
+        )
+        self.assertEqual("12x12", stage_id(BoardStage.Board12x12))
+        self.assertIs(
+            TacticsMode.ALL,
+            tactics_mode_for_options(self.world.options),
         )
 
     def test_single_and_non_single_generated_location_sets(self):

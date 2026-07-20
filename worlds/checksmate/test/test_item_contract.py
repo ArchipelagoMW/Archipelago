@@ -38,7 +38,7 @@ class TestItemContract(unittest.TestCase):
 
     def test_current_upgrade_item_identity_and_parent_spelling(self):
         self.assertEqual(
-            [["Progressive Major Piece", 1]],
+            (("Progressive Major Piece", 1),),
             item_table["Progressive Major To Queen"].parents,
         )
         self.assertNotIn("Progressive Queen", item_table)

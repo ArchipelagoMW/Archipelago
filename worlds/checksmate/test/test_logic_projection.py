@@ -7,7 +7,7 @@ from Fill import distribute_items_restrictive
 
 from .cm_mock_test_case import CMMockTestCase
 from .bases import CMTestBase
-from ..items import MATERIAL_TOTAL_KEY
+from ..items import item_table
 from ..locations import BoardStage, location_table
 from ..options import PieceLocations, ProgressionItemization
 from ..rules import (
@@ -277,6 +277,13 @@ class TestLegacyLogicProjectionEnvelope(CMMockTestCase):
                         projector.metrics_from_counts(counts, stage).chessmen,
                         (stage, counts, axis),
                     )
+                    self.assertGreaterEqual(
+                        projector.metrics_from_counts(
+                            future_counts, stage
+                        ).castlers,
+                        projector.metrics_from_counts(counts, stage).castlers,
+                        (stage, counts, axis),
+                    )
 
     def test_frozen_pawn_overflow_forwardness_regression(self):
         fixture = (
@@ -467,7 +474,7 @@ class TestLegacyRuleProjection(CMTestBase):
         for _ in range(12):
             self.world.collect(state, self.world.create_item("Progressive Pocket"))
         self.assertGreater(
-            state.prog_items[self.player][MATERIAL_TOTAL_KEY],
+            12 * item_table["Progressive Pocket"].material,
             location_table["Capture Pawn D"].material_expectations,
         )
         self.assertEqual(

@@ -76,6 +76,7 @@ class TestWorldGeneration(CMTestBase):
             "castling_location_count",
             "death_link",
             "difficulty",
+            "enable_tactics",
             "fair_board_guarantee",
             "fairy_chess_army",
             "fairy_chess_pawn_upgrades",
@@ -85,7 +86,9 @@ class TestWorldGeneration(CMTestBase):
             "goal",
             "geometry_unlock_items",
             "major_piece_limit_by_type",
+            "logic_obtainable_counts",
             "material_item_value",
+            "max_pocket",
             "major_seed",
             "minor_piece_limit_by_type",
             "minor_seed",
@@ -94,6 +97,7 @@ class TestWorldGeneration(CMTestBase):
             "piece_types",
             "progression_itemization",
             "piece_upgrade_preferences",
+            "piece_upgrade_priority",
             "piece_upgrade_ratio",
             "pocket_limit_by_pocket",
             "pocket_order",
@@ -107,6 +111,7 @@ class TestWorldGeneration(CMTestBase):
             "army": [0],
             "death_link": 0,
             "difficulty": 1,
+            "enable_tactics": 1,
             "fair_board_guarantee": 0,
             "fairy_chess_army": 0,
             "fairy_chess_pawn_upgrades": 0,
@@ -129,11 +134,13 @@ class TestWorldGeneration(CMTestBase):
             },
             "major_piece_limit_by_type": 0,
             "material_item_value": 400,
+            "max_pocket": 12,
             "minor_piece_limit_by_type": 0,
             "piece_locations": 0,
             "piece_types": 1,
             "progression_itemization": "legacy",
             "piece_upgrade_preferences": OFF_PREFERENCES,
+            "piece_upgrade_priority": {},
             "piece_upgrade_ratio": DEFAULT_PIECE_UPGRADE_RATIO,
             "pocket_limit_by_pocket": 4,
             "queen_piece_limit_by_type": 0,
@@ -152,6 +159,10 @@ class TestWorldGeneration(CMTestBase):
         self.assertEqual(
             self.world.pool_accounting.used_count("Progressive Major To Queen"),
             slot_data["total_queens"],
+        )
+        self.assertEqual(
+            self.world.logic_projection.obtainable_counts(),
+            slot_data["logic_obtainable_counts"],
         )
         for seed_name in ("pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"):
             self.assertIsInstance(slot_data[seed_name], int)
