@@ -1,6 +1,6 @@
 import unittest
-from ..ItemUtils import get_parents, get_children
-from ..Items import item_table
+from ..item_utils import get_parents, get_children
+from ..items import item_table
 
 
 class TestItemUtils(unittest.TestCase):

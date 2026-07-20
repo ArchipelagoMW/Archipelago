@@ -1,5 +1,5 @@
 from .bases import CMTestBase
-from ..Locations import BoardStage, location_names_for_stage, location_table
+from ..locations import BoardStage, location_names_for_stage, location_table
 
 
 class TestGeometryLocationProfiles(CMTestBase):

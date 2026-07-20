@@ -6,20 +6,20 @@ from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions, OptionError
 from worlds.AutoWorld import WebWorld, World
 
-from .Options import CMOptions, resolve_piece_upgrade_preferences, resolve_piece_upgrade_ratio
-from .Items import MATERIAL_TOTAL_KEY, CMItem, item_table, item_name_groups
+from .options import CMOptions, resolve_piece_upgrade_preferences, resolve_piece_upgrade_ratio
+from .items import MATERIAL_TOTAL_KEY, CMItem, item_table, item_name_groups
 from .contract_resource import (
     UNLOCK_ITEM_ROLES,
     load_production_contract,
     production_contract_document,
 )
-from .Locations import BoardStage, CMLocation, location_names_for_stage, location_table
-from .Presets import checksmate_option_presets
-from .Rules import set_rules
-from .CollectionState import CMCollectionState
-from .ItemPool import CMItemPool
-from .PieceModel import PieceModel, PieceLimitCascade
-from .MaterialModel import MaterialModel
+from .locations import BoardStage, CMLocation, location_names_for_stage, location_table
+from .presets import checksmate_option_presets
+from .rules import set_rules
+from .collection_state import CMCollectionState
+from .item_pool import CMItemPool
+from .piece_model import PieceModel, PieceLimitCascade
+from .material_model import MaterialModel
 from .logic_projection import WorldLogicProjection
 from .semantic_projection import SemanticSeeds
 

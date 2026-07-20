@@ -1,6 +1,6 @@
 import unittest
 import random
-from ..Options import (EnableTactics, FairyChessArmy, FairyChessPieces, FairyChessPawns, FairyChessPawnUpgrades,
+from ..options import (EnableTactics, FairyChessArmy, FairyChessPieces, FairyChessPawns, FairyChessPawnUpgrades,
                       Difficulty, FairyChessPiecesConfigure, Goal, PieceLocations, AsymmetricTrades,
                       PieceUpgradePreferences, PieceUpgradePriority, PieceUpgradeRatio, FairBoardGuarantee,
                       ProgressionItemization)

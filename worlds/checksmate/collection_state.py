@@ -1,6 +1,6 @@
 from BaseClasses import CollectionState, Item
-from .Items import GEOMETRY_ITEMS, item_allowed_in_mode, item_table
-from .ItemUtils import get_parents, get_children
+from .items import GEOMETRY_ITEMS, item_allowed_in_mode, item_table
+from .item_utils import get_parents, get_children
 import logging
 
 

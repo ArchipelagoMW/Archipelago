@@ -1,6 +1,6 @@
 
 from BaseClasses import Item
-from .Items import LEGACY_CHESSMEN_GROUP, item_name_groups
+from .items import LEGACY_CHESSMEN_GROUP, item_name_groups
 import math
 
 class ChessmenModel:

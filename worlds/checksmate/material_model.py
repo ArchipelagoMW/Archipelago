@@ -1,8 +1,8 @@
 
 
-from .Rules import determine_max_material, determine_min_material
-from .Locations import location_table
-from .Items import progression_items, CMItem
+from .rules import determine_max_material, determine_min_material
+from .locations import location_table
+from .items import progression_items, CMItem
 
 class MaterialModel:
     """Handles material value calculations and requirements."""

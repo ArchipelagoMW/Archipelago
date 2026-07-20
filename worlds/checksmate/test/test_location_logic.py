@@ -1,15 +1,15 @@
 
 from BaseClasses import CollectionState, Item, ItemClassification
 from .bases import CMTestBase
-from ..Items import (
+from ..items import (
     LEGACY_CHESSMEN_GROUP,
     MATERIAL_TOTAL_KEY,
     item_table,
     material_items,
     item_name_groups,
 )
-from ..Locations import BoardStage, location_table
-from ..Rules import determine_difficulty, effective_rule_stage, has_board_stage
+from ..locations import BoardStage, location_table
+from ..rules import determine_difficulty, effective_rule_stage, has_board_stage
 import logging
 
 

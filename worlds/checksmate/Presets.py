@@ -1,6 +1,6 @@
 from typing import Any
 
-from .Options import *
+from .options import *
 
 checksmate_option_presets: dict[str, dict[str, Any]] = {
     # Standard Chess pieces, moving in standard Chess ways, allowing many combinations of material.

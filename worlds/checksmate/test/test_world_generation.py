@@ -1,5 +1,5 @@
 from .bases import CMTestBase
-from ..Options import (
+from ..options import (
     DEFAULT_PIECE_UPGRADE_RATIO,
     FairyChessPawnUpgrades,
     LEGACY_PAWN_UPGRADE_PREFERENCES,

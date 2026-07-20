@@ -2,10 +2,10 @@ from math import ceil
 from typing import cast
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
-from .Items import LEGACY_CHESSMEN_GROUP, MATERIAL_TOTAL_KEY, progression_items
+from .items import LEGACY_CHESSMEN_GROUP, MATERIAL_TOTAL_KEY, progression_items
 from worlds.generic.Rules import add_rule, forbid_item
-from .Options import CMOptions
-from .Locations import (
+from .options import CMOptions
+from .locations import (
     BoardStage,
     geometry_unlocks_for_stage,
     location_names_for_stage,

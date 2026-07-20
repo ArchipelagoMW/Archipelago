@@ -1,8 +1,8 @@
 import math
 
-from .Items import item_table
-from .Options import piece_type_limit_options, piece_limit_options
-from .PieceLimitCascade import PieceLimitCascade
+from .items import item_table
+from .options import piece_type_limit_options, piece_limit_options
+from .piece_limit_cascade import PieceLimitCascade
 
 
 class PieceModel:

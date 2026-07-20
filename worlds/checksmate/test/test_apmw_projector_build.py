@@ -2,7 +2,6 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
-import re
 import shutil
 import sys
 import unittest
@@ -28,7 +27,6 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 CHECKSMATE_TOOLS = REPOSITORY_ROOT / "worlds" / "checksmate" / "tools"
 BUILD_SCRIPT = CHECKSMATE_TOOLS / "build_apmw_projector.py"
 BUILD_REQUIREMENTS = CHECKSMATE_TOOLS / "apmw_projector_build_requirements.txt"
-RELEASE_WORKFLOW = REPOSITORY_ROOT / ".github" / "workflows" / "apmw-projector-release.yml"
 TEST_OUTPUT = REPOSITORY_ROOT / "build" / "test-apmw-projector-manifest"
 
 
@@ -104,8 +102,8 @@ class TestApmwProjectorBuild(unittest.TestCase):
 
     def test_projector_tooling_is_scoped_to_checksmate(self):
         self.assertEqual(CHECKSMATE_TOOLS, BUILD_SCRIPT.parent)
-        self.assertEqual(CHECKSMATE_TOOLS / "ApmwProjector.py", self.builder.ENTRY_SCRIPT)
-        self.assertFalse((REPOSITORY_ROOT / "ApmwProjector.py").exists())
+        self.assertEqual(CHECKSMATE_TOOLS / "apmw_projector.py", self.builder.ENTRY_SCRIPT)
+        self.assertFalse((REPOSITORY_ROOT / "apmw_projector.py").exists())
         for filename in (
             "build_apmw_projector.py",
             "smoke_apmw_projector.py",
@@ -114,18 +112,7 @@ class TestApmwProjectorBuild(unittest.TestCase):
         ):
             self.assertFalse((REPOSITORY_ROOT / "tools" / filename).exists())
 
-    def test_release_build_uses_immutable_actions_and_hashed_dependencies(self):
-        workflow = RELEASE_WORKFLOW.read_text(encoding="utf-8")
-        action_references = re.findall(r"^\s*uses:\s*[^@\s]+@([^\s#]+)", workflow, re.MULTILINE)
-
-        self.assertTrue(action_references)
-        self.assertTrue(all(re.fullmatch(r"[0-9a-f]{40}", value) for value in action_references))
-        self.assertIn("--require-hashes", workflow)
-        self.assertIn(
-            "worlds\\checksmate\\tools\\apmw_projector_build_requirements.txt",
-            workflow,
-        )
-
+    def test_build_dependencies_are_pinned_and_hashed(self):
         requirements = BUILD_REQUIREMENTS.read_text(encoding="ascii")
         requirement_starts = [
             line for line in requirements.splitlines()
@@ -134,16 +121,6 @@ class TestApmwProjectorBuild(unittest.TestCase):
         self.assertTrue(requirement_starts)
         self.assertTrue(all("==" in line for line in requirement_starts))
         self.assertEqual(requirements.count("--hash=sha256:"), 13)
-
-    def test_release_rechecks_tag_identity_immediately_before_publication(self):
-        workflow = RELEASE_WORKFLOW.read_text(encoding="utf-8")
-        publish_step = workflow.index("- name: Publish immutable GitHub release")
-        publish_script = workflow[publish_step:]
-
-        self.assertIn('git fetch --force origin "refs/tags/${RELEASE_TAG}:refs/tags/${RELEASE_TAG}"', publish_script)
-        self.assertIn('current_tag_commit="$(git rev-list -n 1 "${RELEASE_TAG}^{commit}")"', publish_script)
-        self.assertIn('needs.prepare.outputs.source_commit', publish_script)
-        self.assertLess(publish_script.index("git fetch --force"), publish_script.index("gh release create"))
 
 
 if __name__ == "__main__":

@@ -5,12 +5,12 @@ from pathlib import Path
 from BaseClasses import CollectionState
 from Fill import distribute_items_restrictive
 
-from .CMMockTestCase import CMMockTestCase
+from .cm_mock_test_case import CMMockTestCase
 from .bases import CMTestBase
-from ..Items import MATERIAL_TOTAL_KEY
-from ..Locations import BoardStage, location_table
-from ..Options import PieceLocations, ProgressionItemization
-from ..Rules import (
+from ..items import MATERIAL_TOTAL_KEY
+from ..locations import BoardStage, location_table
+from ..options import PieceLocations, ProgressionItemization
+from ..rules import (
     determine_difficulty,
     determine_relaxation,
     meets_chessmen_expectations,

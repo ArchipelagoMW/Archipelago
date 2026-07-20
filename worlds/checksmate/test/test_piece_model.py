@@ -1,5 +1,5 @@
-from .CMMockTestCase import CMMockTestCase
-from ..PieceModel import PieceModel, PieceLimitCascade
+from .cm_mock_test_case import CMMockTestCase
+from ..piece_model import PieceModel, PieceLimitCascade
 
 class TestPieceModel(CMMockTestCase):
     def setUp(self):

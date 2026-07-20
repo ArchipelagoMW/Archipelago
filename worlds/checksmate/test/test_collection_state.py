@@ -1,6 +1,6 @@
 from BaseClasses import CollectionState, Item, ItemClassification
-from ..Items import MATERIAL_TOTAL_KEY, item_allowed_in_mode, item_table
-from ..Rules import has_board_files_unlock
+from ..items import MATERIAL_TOTAL_KEY, item_allowed_in_mode, item_table
+from ..rules import has_board_files_unlock
 from .bases import CMTestBase
 import random
 

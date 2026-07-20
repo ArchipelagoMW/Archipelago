@@ -1,6 +1,6 @@
-from .CMMockTestCase import CMMockTestCase
-from ..ItemPool import CMItemPool
-from ..Options import Goal, EnableTactics, FairyChessPieces, FairyChessArmy
+from .cm_mock_test_case import CMMockTestCase
+from ..item_pool import CMItemPool
+from ..options import Goal, EnableTactics, FairyChessPieces, FairyChessArmy
 
 
 class TestItemPoolSize(CMMockTestCase):

@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-from ..Items import item_table
+from ..items import item_table
 
 
 class TestItemContract(unittest.TestCase):

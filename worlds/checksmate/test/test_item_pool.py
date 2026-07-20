@@ -1,9 +1,9 @@
 import functools
 
-from .CMMockTestCase import CMMockTestCase
-from ..ItemPool import CMItemPool
-from ..Items import progression_items
-from ..Options import EnableTactics
+from .cm_mock_test_case import CMMockTestCase
+from ..item_pool import CMItemPool
+from ..items import progression_items
+from ..options import EnableTactics
 
 
 class TestItemPool(CMMockTestCase):

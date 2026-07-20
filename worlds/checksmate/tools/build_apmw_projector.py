@@ -17,7 +17,7 @@ from typing import Any
 
 CHECKSMATE_ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY_ROOT = CHECKSMATE_ROOT.parents[1]
-ENTRY_SCRIPT = Path(__file__).resolve().with_name("ApmwProjector.py")
+ENTRY_SCRIPT = Path(__file__).resolve().with_name("apmw_projector.py")
 CONTRACT_DATA = (
     CHECKSMATE_ROOT / "apmw_projection" / "data" / "apmw_contract_v2.json"
 )

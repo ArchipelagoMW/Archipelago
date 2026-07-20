@@ -48,7 +48,7 @@ else:
 FIXTURE_DIR = Path(__file__).parent / "fixtures" / "projection-v2"
 CASES_FIXTURE = FIXTURE_DIR / "cases.json"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
-PROJECTOR_ENTRY = REPOSITORY_ROOT / "worlds" / "checksmate" / "tools" / "ApmwProjector.py"
+PROJECTOR_ENTRY = REPOSITORY_ROOT / "worlds" / "checksmate" / "tools" / "apmw_projector.py"
 
 
 class TestApmwProjectionProtocol(unittest.TestCase):

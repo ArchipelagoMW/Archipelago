@@ -8,8 +8,8 @@ from typing import Mapping
 
 from BaseClasses import CollectionState
 
-from .Locations import BoardStage, geometry_unlocks_for_stage
-from .Options import resolve_piece_upgrade_preferences, resolve_piece_upgrade_ratio
+from .locations import BoardStage, geometry_unlocks_for_stage
+from .options import resolve_piece_upgrade_preferences, resolve_piece_upgrade_ratio
 from .apmw_contract import ApmwContractV2, GeometryStage
 from .contract_resource import load_production_contract, mode_item_maxima
 from .semantic_projection import (

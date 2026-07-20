@@ -4,7 +4,7 @@ from BaseClasses import Item
 import logging
 import math
 
-from .Items import (
+from .items import (
     CMItem,
     FUNDAMENTAL_ITEMS,
     GEOMETRY_ITEMS,
@@ -18,17 +18,17 @@ from .Items import (
     useful_items,
 )
 from .contract_resource import mode_item_maxima
-from .Locations import (
+from .locations import (
     BoardStage,
     highest_chessmen_requirement,
     highest_chessmen_requirement_small,
     location_names_for_stage,
     location_table,
 )
-from .Rules import determine_min_material, determine_max_material
-from .PieceModel import PieceModel
-from .MaterialModel import MaterialModel
-from .ItemRemoval import ItemRemoval
+from .rules import determine_min_material, determine_max_material
+from .piece_model import PieceModel
+from .material_model import MaterialModel
+from .item_removal import ItemRemoval
 
 
 class CMItemPool:

@@ -1,5 +1,5 @@
 
-from .Items import item_table
+from .items import item_table
 from BaseClasses import Item
 
 

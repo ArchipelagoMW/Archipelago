@@ -1,5 +1,5 @@
-from .CMMockTestCase import CMMockTestCase
-from ..ItemPool import CMItemPool
+from .cm_mock_test_case import CMMockTestCase
+from ..item_pool import CMItemPool
 
 
 class TestCastleAccessibilityBug(CMMockTestCase):

@@ -1,7 +1,7 @@
 
 from BaseClasses import Item
-from .Items import LEGACY_CHESSMEN_GROUP, item_table, progression_items, item_name_groups
-from .Locations import highest_chessmen_requirement_small, highest_chessmen_requirement
+from .items import LEGACY_CHESSMEN_GROUP, item_table, progression_items, item_name_groups
+from .locations import highest_chessmen_requirement_small, highest_chessmen_requirement
 
 
 class ItemRemoval:

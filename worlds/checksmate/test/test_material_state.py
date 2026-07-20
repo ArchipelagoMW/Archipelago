@@ -1,9 +1,9 @@
 from copy import copy
 
 from .bases import CMTestBase
-from ..Rules import determine_difficulty
-from ..Items import MATERIAL_TOTAL_KEY, item_table
-from ..Locations import BoardStage
+from ..rules import determine_difficulty
+from ..items import MATERIAL_TOTAL_KEY, item_table
+from ..locations import BoardStage
 
 
 class MaterialStateTestBase(CMTestBase):

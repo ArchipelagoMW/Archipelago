@@ -5,7 +5,7 @@ from pathlib import Path
 from BaseClasses import CollectionState
 from Fill import distribute_items_restrictive
 
-from .CMMockTestCase import CMMockTestCase
+from .cm_mock_test_case import CMMockTestCase
 from .bases import CMTestBase
 from ..apmw_contract import compute_manifest_sha256
 from ..contract_resource import (
@@ -14,8 +14,8 @@ from ..contract_resource import (
     production_contract_document,
     production_contract_text,
 )
-from ..ItemPool import CMItemPool
-from ..Items import (
+from ..item_pool import CMItemPool
+from ..items import (
     FUNDAMENTAL_ITEMS,
     LEGACY_CHESSMEN_GROUP,
     LEGACY_MATERIAL_ITEMS,
@@ -23,9 +23,9 @@ from ..Items import (
     item_name_groups,
     item_table,
 )
-from ..Options import Goal, ProgressionItemization
-from ..Rules import effective_castlers
-from ..Locations import highest_chessmen_requirement_small
+from ..options import Goal, ProgressionItemization
+from ..rules import effective_castlers
+from ..locations import highest_chessmen_requirement_small
 
 
 class TestV2ItemizationUnit(CMMockTestCase):

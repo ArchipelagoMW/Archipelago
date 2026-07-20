@@ -1,5 +1,5 @@
-from .CMMockTestCase import CMMockTestCase
-from ..MaterialModel import MaterialModel
+from .cm_mock_test_case import CMMockTestCase
+from ..material_model import MaterialModel
 
 class TestMaterialModel(CMMockTestCase):
     def setUp(self):
