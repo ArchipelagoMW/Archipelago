@@ -7,7 +7,9 @@ This guide is intended to provide an overview of how to:
 
 This is a general overview. For more specific steps, reference the relevant game's [setup guide](/tutorial).
 
-Some steps also assume use of Windows, so may vary with your OS.
+Some steps also assume use of Windows, so may vary with your OS. For macOS specifically, there are not pre-built
+releases, so you should refer to the [guide for running from source on macOS](mac_en) instead for the first
+installation step.
 
 ## Installing the Archipelago software
 
