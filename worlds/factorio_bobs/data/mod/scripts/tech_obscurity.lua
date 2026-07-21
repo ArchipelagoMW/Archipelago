@@ -376,6 +376,7 @@ local function on_init()
     for _, force in pairs(game.forces) do
         setup_storage(force)
         update_trigger_tech_tree(force, false)
+        update_science_tech_tree(force)
     end
     for _, surface in pairs(game.surfaces) do
         update_surface_based_techs(surface, false)
