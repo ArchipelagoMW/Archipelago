@@ -67,7 +67,7 @@ commands.add_command("ap-deathlink", "Kill all players", function(call)
     local force = game.forces["player"]
     local source = call.parameter or "Archipelago"
     kill_players(force)
-    game.print("Death was granted by " .. source)
+    game.print({"archipelago.death-link",source})
 end)
 
 local lib = {}

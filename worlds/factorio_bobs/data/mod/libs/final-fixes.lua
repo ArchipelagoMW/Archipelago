@@ -33,7 +33,7 @@ end
 
 local function get_gears_mat()
     return {
-        icon = "__"..general.mod_name.."__/graphics/icons/ap_gears_mat.png",
+        icon = "__"..general.mod_name.."__/graphics/icons/gears_mat.png",
         icon_size = 300,
         scale = 0.426
     }
@@ -66,7 +66,7 @@ end
 
 --more icons need to be added to this if statement
 local function get_icon_from_type(type)
-    if type == "advancement" or type == "unkown" then
+    if type == "advancement" or type == "unknown" then
         return get_gears_bright()
     elseif type == "useful" then
         return get_gears_mat()

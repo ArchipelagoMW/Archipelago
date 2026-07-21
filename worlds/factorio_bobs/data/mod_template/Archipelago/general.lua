@@ -92,23 +92,24 @@ general.technologies.hint_list = {{dict_to_lua(techs_to_hint)}}
 
 --recipes
 general.recipes = {}
-{% if recipe_time_scale %}
+{%- if recipe_time_scale %}
 general.recipes.type = "scale" --scale means that is gets x lower to y higher.
 {% elif recipe_time_range %}
 general.recipes.type = "range" --means new values from x to y.
-{% endif %}
+{% endif -%}
+
 function general.recipes.time_adjustments()
     return {
-        {% if recipe_time_scale %}
+        {%- if recipe_time_scale %}
         {%- for recipe_name, recipe in recipes.items() %}
         {%- if recipe.category not in ("basic-solid", "basic-fluid", "water") %}
-        ["{{ recipe_name }}"] = {{ flop_random(*recipe_time_scale) }}
+        ["{{ recipe_name }}"] = {{ flop_random(*recipe_time_scale) }},
         {%- endif %}
         {%- endfor -%}
         {% elif recipe_time_range %}
         {%- for recipe_name, recipe in recipes.items() %}
         {%- if recipe.category not in ("basic-solid", "basic-fluid", "water") %}
-        ["{{ recipe_name }}"] =  {{ flop_random(*recipe_time_range) }}
+        ["{{ recipe_name }}"] =  {{ flop_random(*recipe_time_range) }},
         {%- endif %}
         {%- endfor -%}
         {% endif %}
@@ -130,33 +131,6 @@ function general.recipes.tool_tips()
     }
 end
 
-function general.recipes.custom_recipes()
-    return {
-        {%- for recipe_name, recipe in recipes.items() %}
-        {%- if recipe.source.value == 2 %}
-        ["{{recipe_name}}"] = {
-            name = "{{recipe_name}}",
-            category = "{{recipe.category.name}}",
-            energy = {{recipe.energy}},
-            ingredients = {{dict_to_recipe(recipe.ingredients)}},
-            products = {{dict_to_recipe(recipe.products)}},
-            productivity = {{recipe.productivity}},
-        },
-        {%- endif %}
-        {%- endfor %}
-        {%- for recipe_name, recipe in custom_recipes.items() %}
-        {# todo add check for non-standard recipe categories #}
-        ["{{recipe_name}}"] = {
-            name = "{{recipe_name}}",
-            category = "{{recipe.category.name}}",
-            energy = {{recipe.energy}},
-            ingredients = {{dict_to_recipe(recipe.ingredients)}},
-            products = {{dict_to_recipe(recipe.products)}},
-            productivity = {{recipe.productivity}},
-        },
-        {%- endfor %}
-    }
-end
 general.recipes.enable_productivity = function ()
     return {
     {%- for recipe_name, recipe in recipes.items() %}

@@ -297,7 +297,7 @@ class FactorioContext(CommonContext):
                     location_id = int(tech_split[1])
                     #this should now only have te location id of the check. So 123456.....
                     already_hinted = False
-                    if self.stored_data[f"_read_hints_{self.team}_{self.slot}"]:
+                    if f"_read_hints_{self.team}_{self.slot}" in self.stored_data:
                         for hint in self.stored_data[f"_read_hints_{self.team}_{self.slot}"]:
                             if hint["location"] == location_id and hint["finding_player"] == self.slot:
                                 already_hinted = True
