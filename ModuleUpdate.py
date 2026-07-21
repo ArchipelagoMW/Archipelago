@@ -39,7 +39,8 @@ class RequirementsSet(set):
 
 
 local_dir = os.path.dirname(__file__)
-requirements_files = RequirementsSet((os.path.join(local_dir, 'requirements.txt'),))
+core_constraints = os.path.join(local_dir, 'requirements.txt')
+requirements_files = RequirementsSet((core_constraints,))
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):
@@ -73,9 +74,9 @@ def update_command():
     for file in requirements_files:
         if shutil.which("uv") is not None:
             subprocess.call(['uv', 'pip', 'install',"--python", sys.executable,
-                             "--break-system-packages",'-r', file, '--upgrade'])
+                             "--break-system-packages",'-r', file, '--constraint'])
         else:
-            subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--upgrade"])
+            subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--constraint", core_constraints])
 
 
 def install_pkg_resources(yes=False):
@@ -87,9 +88,9 @@ def install_pkg_resources(yes=False):
             confirm("pkg_resources not found, press enter to install it")
         if shutil.which("uv") is not None:
             subprocess.call(['uv', 'pip', 'install','--python', sys.executable,
-                             '--break-system-packages','--upgrade', 'setuptools>=75,<81'])
+                             '--break-system-packages', 'setuptools>=75,<81'])
         else:
-            subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools>=75,<81"])
+            subprocess.call([sys.executable, "-m", "pip", "install", "setuptools>=75,<81"])
 
 
 def update(yes: bool = False, force: bool = False) -> None:
