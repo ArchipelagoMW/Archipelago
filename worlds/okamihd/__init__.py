@@ -60,7 +60,7 @@ class OkamiWorld(World):
 
     def prepare_local_items(self):
         self.local_items = global_local_items.copy()
-        if not self.options.IngredientsInMoonCave.value:
+        if self.options.IngredientsInMoonCave.value:
             self.local_items.append(soup_ingredient_local_items)
 
     def set_rules(self):
