@@ -405,7 +405,6 @@ if not is_frozen():
 
         from worlds import AutoWorldRegister
         from worlds.Files import APWorldContainer
-        from Launcher import open_folder
 
         import argparse
         parser = argparse.ArgumentParser(prog="Build APWorlds", description="Build script for APWorlds")
