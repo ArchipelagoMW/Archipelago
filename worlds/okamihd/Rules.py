@@ -116,12 +116,8 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         weapon_tier_required = 0
         for e in data.mandatory_enemies:
             weapon_tier_required = max(weapon_tier_required, e.value.required_weapon_tier)
-            if len(e.value.required_techniques) > 0:
-                required_techinques += e.value.required_techniques
-            if e.value.requires_slash:
-                required_power_slash_level = max(required_power_slash_level, 1)
-            if e.value.requires_bomb:
-                required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
+            if e.value.defeat_condition is not None:
+                rules.append(e.value.defeat_condition)
 
         if weapon_tier_required > 0:
             rules.append(has_divine_instrument_tier(weapon_tier_required))
