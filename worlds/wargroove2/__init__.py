@@ -7,7 +7,7 @@ import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification, MultiWorld
 from Options import NumericOption, OptionSet, OptionError
-from .Items import item_table, faction_table, Wargroove2Item, PROGRESSION, PROGRESSION_SKIP_BALANCING
+from .Items import item_table, faction_table, Wargroove2Item, PROGRESSION, PROGRESSION_SKIP_BALANCING, item_name_groups
 from .Levels import Wargroove2Level, low_victory_checks_levels, high_victory_checks_levels, first_level, \
     final_levels, region_names, FINAL_LEVEL_1, \
     FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, LEVEL_COUNT, FINAL_LEVEL_COUNT, main_filler_levels, \
@@ -102,7 +102,7 @@ class Wargroove2World(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
-    item_name_groups = Items.item_name_groups
+    item_name_groups = item_name_groups
 
     def generate_early(self) -> None:
         early_level_slots = 4

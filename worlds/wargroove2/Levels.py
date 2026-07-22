@@ -445,6 +445,16 @@ high_victory_checks_levels = [
         },
         has_ocean=False
     ),
+    Wargroove2Level(
+        name="Thieves' Town",
+        file_name="Thieves_Town.json",
+        location_rules={
+            "Thieves' Town: Gold Digging": None,
+            "Thieves' Town: Lock Pick": lambda player: lambda state: state.has_all(("Walls Event", "Thief"), player),
+            "Thieves' Town: Victory": lambda player: lambda state: state.has("Walls Event", player),
+        },
+        has_ocean=False
+    ),
 ]
 
 final_levels = [
