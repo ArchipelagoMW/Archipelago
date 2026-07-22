@@ -17,8 +17,8 @@ long_swim_rule: Rule = HasAny("Water Tablet", BrushTechniques.GREENSPROUT_WATERL
 has_portable_fire_source_strict: Rule = And(Or(Has(DivineInstruments.SOLAR_FLARE.value.item_name),
                                                Has("Progressive Mirror", 4)), Has(BrushTechniques.INFERNO))
 
-has_portable_thunder_source_strict:Rule=And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
-                                               Has("Progressive Sword", 4)), Has(BrushTechniques.THUNDERSTORM))
+has_portable_thunder_source_strict: Rule = And(Or(Has(DivineInstruments.THUNDER_EDGE.value.item_name),
+                                                  Has("Progressive Sword", 4)), Has(BrushTechniques.THUNDERSTORM))
 
 has_portable_fire_source: Rule = Or(has_portable_fire_source_strict, Has(BrushTechniques.FIREBURST))
 
@@ -35,8 +35,13 @@ gale_shrine_access: Rule = HasGroup("canine_warriors", count=FromOption(Required
 moon_cave_access: Rule = Has("Serpent Crystal")
 n_ryoshima_islands_dragon_rule: Rule = Or(Has("Orca"), HasAll("Water Tablet", "Inside the dragon - Get Dragon Orb"))
 
-n_ryoshima_guardian_sapling_rule:Rule= Or(long_swim_rule,Has("Orca"))
+n_ryoshima_guardian_sapling_rule: Rule = Or(long_swim_rule, Has("Orca"))
 
+city_checkpoint_drawbridge_rule = And(
+    Has(BrushTechniques.INFERNO),
+    Or(Has(BrushTechniques.FIREBURST), Has(
+        DivineInstruments.SOLAR_FLARE.value.item_name),
+       Has("Progressive Mirror", 4), Has("Moon Cave - Defeat Orochi")))
 
 
 # Probably should be removed;Directly add it to the checks that require it.
@@ -56,9 +61,11 @@ moon_cave_canon_rule: Rule = Or(has_portable_fire_source_strict,
 moon_cave_4f_fire_rule: Rule = Or(has_portable_fire_source,
                                   HasAll("Moon Cave - 4F Move Fireball", BrushTechniques.INFERNO))
 
-oni_island_1f_thunder_rule = Or(has_portable_thunder_source_strict,HasAll("Oni Island - 1F Grab First Thunder Key",BrushTechniques.THUNDERSTORM))
+oni_island_1f_thunder_rule = Or(has_portable_thunder_source_strict,
+                                HasAll("Oni Island - 1F Grab First Thunder Key", BrushTechniques.THUNDERSTORM))
 
-oni_island_5f_thunder_rule = Or(has_portable_thunder_source, HasAll("Oni Island - 4F Grab Thunder Key",BrushTechniques.THUNDERSTORM))
+oni_island_5f_thunder_rule = Or(has_portable_thunder_source,
+                                HasAll("Oni Island - 4F Grab Thunder Key", BrushTechniques.THUNDERSTORM))
 
 # FIXME Once we've figured out which story trigger can spawn the thunder source here
 gen_thunder_chest_rule: Rule = has_portable_thunder_source
@@ -132,7 +139,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         case LocationType.TREASURE_BUD:
             required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
         case LocationType.BURIED_UNDER_LEAF_PILE:
-            rules.append(HasAny(BrushTechniques.GALESTORM,BrushTechniques.WHIRLWIND))
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WHIRLWIND))
         case LocationType.BURIED_CHEST:
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
@@ -142,9 +149,10 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
         case LocationType.BURNING_CHEST:
-            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WATERSPOUT,BrushTechniques.WHIRLWIND,BrushTechniques.DELUGE))
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WATERSPOUT, BrushTechniques.WHIRLWIND,
+                                BrushTechniques.DELUGE))
         case LocationType.BURNING_CHEST_NO_WATER:
-            rules.append(HasAny(BrushTechniques.GALESTORM,BrushTechniques.WHIRLWIND,BrushTechniques.DELUGE))
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WHIRLWIND, BrushTechniques.DELUGE))
         case LocationType.UNDERWATER_CHEST:
             required_power_slash_level = max(required_power_slash_level, 1)
         case LocationType.UNDERWATER_CHEST_SHALLOW:
@@ -163,13 +171,13 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
             required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
             required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
                                     BrushTechniques.GALESTORM]
-            rules.append(HasAll("Holy Eagle","Golden Ink Pot"))
+            rules.append(HasAll("Holy Eagle", "Golden Ink Pot"))
         case LocationType.FROZEN_CHEST:
-            rules.append(HasAny(BrushTechniques.INFERNO,BrushTechniques.FIREBURST))
+            rules.append(HasAny(BrushTechniques.INFERNO, BrushTechniques.FIREBURST))
         case LocationType.FISHING_MINIGAME:
             required_power_slash_level = max(required_power_slash_level, 1)
         case LocationType.THUNDER_CHEST:
-           rules.append(HasAny(BrushTechniques.THUNDERBOLT,BrushTechniques.THUNDERSTORM))
+            rules.append(HasAny(BrushTechniques.THUNDERBOLT, BrushTechniques.THUNDERSTORM))
 
         case _:
             required_techinques += []

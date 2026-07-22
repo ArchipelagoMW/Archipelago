@@ -6,7 +6,7 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.RegionNames import RegionNames, MapIds
 from ..Enums.WarpType import WarpType
-from ..Rules import has_portable_fire_source_strict
+from ..Rules import has_portable_fire_source_strict, city_checkpoint_drawbridge_rule
 from ..Types import LocData, EventData, ExitData, WarpData
 
 if TYPE_CHECKING:
@@ -33,8 +33,7 @@ events = {
     RegionNames.CITY_CHECKPOINT_TAKA: {
         # we'll probably handle it in a specific way.
         "City Checkpoint - Activate the Drawbridge": EventData(
-            special_rule=Or(HasAll("Moon Cave - Defeat Orochi", BrushTechniques.INFERNO),
-                            has_portable_fire_source_strict))
+            special_rule=city_checkpoint_drawbridge_rule)
     },
     RegionNames.CITY_CHECKPOINT_RYOSHIMA: {
         "City Checkpoint - Restore Cursed Patches on Ryoshima side": EventData(
