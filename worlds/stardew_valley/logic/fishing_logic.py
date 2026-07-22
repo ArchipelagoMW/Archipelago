@@ -8,7 +8,7 @@ from ..data.fish_data import FishItem, crab_pot_difficulty
 from ..stardew_rule import StardewRule, True_
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
-from ..strings.craftable_names import Fishing
+from ..strings.craftable_names import Fishing, Consumable
 from ..strings.fish_names import SVEFish
 from ..strings.machine_names import Machine
 from ..strings.quality_names import FishQuality
@@ -16,6 +16,7 @@ from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
 from ..strings.skill_names import Skill
 from ..strings.tool_names import FishingRod
+from ..strings.weather_names import Weather
 
 
 class FishingLogicMixin(BaseLogicMixin):
@@ -113,6 +114,10 @@ class FishingLogic(BaseLogic):
                     region_rules.append(self.logic.region.can_reach(loc) & self.logic.season.has_any(fish.seasons))
             region_rule = self.logic.or_(*region_rules)
             season_rule = self.logic.true_
+        if fish.weather == Weather.rain and Season.winter in fish.seasons:
+            has_rainy_winter = self.logic.season.has(Season.winter) & self.logic.has(Consumable.rain_totem)
+            has_rainy_other = self.logic.season.has_any(*(season for season in fish.seasons if season != Season.winter))
+            season_rule = has_rainy_other | has_rainy_winter
 
         return quest_rule & region_rule & season_rule & difficulty_rule & item_rule
 
