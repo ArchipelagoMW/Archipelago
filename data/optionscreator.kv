@@ -67,6 +67,52 @@
 <CounterItemValue>:
     height: "30dp"
 
+<VisualKeyCheckbox>:
+    orientation: "horizontal"
+    size_hint_y: None
+    height: max(dp(48), key_label.texture_size[1] + dp(16))
+    padding: (0, dp(4), dp(8), dp(4))
+
+    MDIconButton:
+        icon: "checkbox-marked" if root.selected else "checkbox-blank-outline"
+        on_release: root.toggle()
+
+    MDLabel:
+        id: key_label
+        text: root.key
+        text_size: self.width, None
+        size_hint_y: None
+        height: self.texture_size[1]
+        valign: "middle"
+        on_touch_down: root.toggle() if self.collide_point(*args[1].pos) else None
+
+<VisualValidKeys>:
+    id: this
+    scrollbox: scrollbox
+    save: save
+    focus_behavior: False
+
+    MDDialogHeadlineText:
+        text: getattr(this.option, "display_name", this.name)
+
+    MDDialogSupportingText:
+        text: "Select Entries"
+
+    MDDialogContentContainer:
+        orientation: "vertical"
+
+        ScrollBox:
+            id: scrollbox
+            size_hint_y: None
+            height: dp(320)
+            adapt_minimum: False
+            box_height: dp(320)
+
+        MDButton:
+            id: save
+            MDButtonText:
+                text: "Save Changes"
+
 <VisualListSetCounter>:
     id: this
     scrollbox: scrollbox

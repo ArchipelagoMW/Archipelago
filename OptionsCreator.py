@@ -20,7 +20,7 @@ from kivymd.uix.dialog import MDDialog
 from kivy.core.text.markup import MarkupLabel
 from kivy.utils import escape_markup
 from kivy.lang.builder import Builder
-from kivy.properties import ObjectProperty
+from kivy.properties import BooleanProperty, ObjectProperty, StringProperty
 from textwrap import dedent
 from copy import deepcopy
 import Utils
@@ -161,6 +161,30 @@ class CounterItemValue(ResizableTextField):
 
     def insert_text(self, substring, from_undo=False):
         return super().insert_text(re.sub(self.pat, "", substring), from_undo=from_undo)
+
+
+class VisualKeyCheckbox(MDBoxLayout):
+    key = StringProperty("")
+    selected = BooleanProperty(False)
+
+    def toggle(self):
+        self.selected = not self.selected
+
+
+class VisualValidKeys(MDDialog):
+    option: typing.Type[OptionSet] | typing.Type[OptionList]
+    scrollbox: ScrollBox = ObjectProperty(None)
+    save: MDButton = ObjectProperty(None)
+    entries: list[VisualKeyCheckbox]
+
+    def __init__(self, *args, option: typing.Type[OptionSet] | typing.Type[OptionList],
+                 name: str, valid_keys: typing.Iterable[str], selected_keys: typing.Collection[str], **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(*args, **kwargs)
+        self.entries = [VisualKeyCheckbox(key=key, selected=key in selected_keys) for key in valid_keys]
+        for entry in self.entries:
+            self.scrollbox.layout.add_widget(entry)
 
 
 class VisualListSetCounter(MDDialog):
@@ -452,7 +476,7 @@ class OptionsCreator(ThemedApp):
     def create_popup(self, option: typing.Type[OptionList] | typing.Type[OptionSet] | typing.Type[OptionCounter],
                      name: str, world: typing.Type[World]):
 
-        valid_keys = sorted(option.valid_keys)
+        valid_keys = list(option.valid_keys)
         if option.verify_item_name:
             valid_keys += list(world.item_name_to_id.keys())
             if option.convert_name_groups:
@@ -461,6 +485,23 @@ class OptionsCreator(ThemedApp):
             valid_keys += list(world.location_name_to_id.keys())
             if option.convert_name_groups:
                 valid_keys += list(world.location_name_groups.keys())
+        valid_keys = list(dict.fromkeys(valid_keys))
+
+        if valid_keys and not issubclass(option, OptionCounter):
+            def apply_valid_key_changes(button):
+                self.options[name].clear()
+                self.options[name].extend(entry.key for entry in dialog.entries if entry.selected)
+                dialog.dismiss()
+
+            dialog = VisualValidKeys(option=option, name=name, valid_keys=valid_keys,
+                                     selected_keys=self.options[name])
+            dialog.scrollbox.layout.theme_bg_color = "Custom"
+            dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
+            dialog.scrollbox.layout.spacing = dp(2)
+            dialog.scrollbox.layout.padding = [0, dp(5), 0, dp(5)]
+            dialog.save.bind(on_release=apply_valid_key_changes)
+            dialog.open()
+            return
 
         if not issubclass(option, OptionCounter):
             def apply_changes(button):
