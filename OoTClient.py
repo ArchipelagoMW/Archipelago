@@ -96,14 +96,15 @@ class OoTContext(CommonContext):
         self.deathlink_client_override = False
         self.version_warning = False
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(OoTContext, self).server_auth(password_requested)
+            await super(OoTContext, self).server_auth(password_requested, team_required)
         if not self.auth:
             self.awaiting_rom = True
             logger.info('Awaiting connection to EmuHawk to get player information')
             return
-
+        if team_required:
+            await self.get_team()
         await self.send_connect()
 
     def on_deathlink(self, data: dict):

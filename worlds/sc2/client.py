@@ -673,11 +673,13 @@ class SC2Context(CommonContext):
         self.mission_item_classification: typing.Optional[typing.Dict[str, int]] = None
         self.war_council_nerfs: bool = False
 
-    async def server_auth(self, password_requested: bool = False) -> None:
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False) -> None:
         self.game = STARCRAFT2
         if password_requested and not self.password:
-            await super(SC2Context, self).server_auth(password_requested)
+            await super(SC2Context, self).server_auth(password_requested, team_required)
         await self.get_username()
+        if team_required:
+            await self.get_team()
         await self.send_connect()
         if self.ui:
             self.ui.first_check = True

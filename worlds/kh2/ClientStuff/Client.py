@@ -276,10 +276,12 @@ class KH2Context(CommonContext):
     from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests, verifyLevel
     from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, displayChestTextInGame, verifyItems, give_item, IsInShop, to_khscii
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(KH2Context, self).server_auth(password_requested)
+            await super(KH2Context, self).server_auth(password_requested, team_required)
         await self.get_username()
+        if team_required:
+            await self.get_team()
         # if slot name != first time login or previous name
         # and seed name is none or saved seed name
         if not self.slot_name and not self.kh2seedname:

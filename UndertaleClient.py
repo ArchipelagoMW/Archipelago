@@ -131,10 +131,12 @@ class UndertaleContext(CommonContext):
                           "line other than this one.\n", "frisk"])
             f.close()
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super().server_auth(password_requested)
+            await super().server_auth(password_requested, team_required)
         await self.get_username()
+        if team_required:
+            await self.get_team()
         await self.send_connect()
 
     def clear_undertale_files(self):

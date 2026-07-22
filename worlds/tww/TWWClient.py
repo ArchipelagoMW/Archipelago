@@ -179,20 +179,23 @@ class TWWContext(CommonContext):
         self.visited_stage_names = None
         await super().disconnect(allow_autoreconnect)
 
-    async def server_auth(self, password_requested: bool = False) -> None:
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False) -> None:
         """
         Authenticate with the Archipelago server.
 
         :param password_requested: Whether the server requires a password. Defaults to `False`.
+        :param team_requested: Whether the server requires a team. Defaults to `False`.
         """
         if password_requested and not self.password:
-            await super().server_auth(password_requested)
+            await super().server_auth(password_requested, team_required)
         if not self.auth:
             if self.awaiting_rom:
                 return
             self.awaiting_rom = True
             logger.info("Awaiting connection to Dolphin to get player information.")
             return
+        if team_required:
+            await self.get_team()
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict[str, Any]) -> None:

@@ -123,6 +123,7 @@ class BizHawkClientContext(CommonContext):
     server_seed_name: str | None = None
     auth_status: AuthStatus
     password_requested: bool
+    team_required: bool
     client_handler: BizHawkClient | None
     slot_data: dict[str, Any] | None = None
     rom_hash: str | None = None
@@ -136,6 +137,7 @@ class BizHawkClientContext(CommonContext):
         self.text_passthrough_categories = set()
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
+        self.team_required = False
         self.client_handler = None
         self.bizhawk_ctx = BizHawkContext()
         self.watcher_timeout = 0.5
@@ -175,8 +177,9 @@ class BizHawkClientContext(CommonContext):
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
 
-    async def server_auth(self, password_requested: bool=False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         self.password_requested = password_requested
+        self.team_required = team_required
 
         if self.bizhawk_ctx.connection_status != ConnectionStatus.CONNECTED:
             logger.info("Awaiting connection to BizHawk before authenticating")
@@ -196,7 +199,11 @@ class BizHawkClientContext(CommonContext):
 
         if password_requested and not self.password:
             self.auth_status = AuthStatus.NEED_INFO
-            await super(BizHawkClientContext, self).server_auth(password_requested)
+            await super(BizHawkClientContext, self).server_auth(password_requested, team_required)
+
+        if team_required:
+            self.auth_status = AuthStatus.NEED_INFO
+            await self.get_team()
 
         await self.send_connect()
         self.auth_status = AuthStatus.PENDING
@@ -295,7 +302,7 @@ async def _game_watcher(ctx: BizHawkClientContext):
         # Server auth
         if ctx.server is not None and not ctx.server.socket.closed:
             if ctx.auth_status == AuthStatus.NOT_AUTHENTICATED:
-                Utils.async_start(ctx.server_auth(ctx.password_requested))
+                Utils.async_start(ctx.server_auth(ctx.password_requested, ctx.team_required))
         else:
             ctx.auth_status = AuthStatus.NOT_AUTHENTICATED
 

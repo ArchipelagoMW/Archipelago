@@ -212,10 +212,12 @@ class WargrooveContext(CommonContext):
                 f.write(f"DeathLink: Received from {data['source']}")
         super(WargrooveContext, self).on_deathlink(data)
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(WargrooveContext, self).server_auth(password_requested)
+            await super(WargrooveContext, self).server_auth(password_requested, team_required)
         await self.get_username()
+        if team_required:
+            await self.get_team()
         await self.send_connect()
 
     async def connection_closed(self):

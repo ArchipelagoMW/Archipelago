@@ -126,12 +126,14 @@ class ZillionContext(CommonContext):
         return super().on_deathlink(data)
 
     @override
-    async def server_auth(self, password_requested: bool = False) -> None:
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False) -> None:
         if password_requested and not self.password:
-            await super().server_auth(password_requested)
+            await super().server_auth(password_requested, team_required)
         if not self.auth:
             logger.info("waiting for connection to game...")
             return
+        if team_required:
+            await self.get_team()
         logger.info("logging in to server...")
         await self.send_connect()
 

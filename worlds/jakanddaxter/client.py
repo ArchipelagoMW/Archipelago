@@ -128,10 +128,12 @@ class JakAndDaxterContext(CommonContext):
         self.ui = JakAndDaxterManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
             await super(JakAndDaxterContext, self).server_auth(password_requested)
         await self.get_username()
+        if team_required:
+            await self.get_team()
         self.tags = set()
         await self.send_connect()
 
