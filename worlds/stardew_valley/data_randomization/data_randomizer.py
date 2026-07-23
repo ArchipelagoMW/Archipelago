@@ -248,6 +248,18 @@ def sanitize_fish_season_data(content: StardewContent, data_to_randomize: set[st
             content.fishes[fish_name] = override(fish_data, seasons=seasons_tuple)
             fish_data = content.fishes[fish_name]
 
+    extended_family = [Fish.son_of_crimsonfish, Fish.ms_angler, Fish.legend_ii, Fish.radioactive_carp, Fish.glacierfish_jr]
+    if any(fish not in content.fishes for fish in extended_family):
+        return
+    random.shuffle(extended_family)
+    seasons = [Season.spring, Season.summer, Season.fall, Season.winter]
+    season_counts = [content.fishes[fish].seasons for fish in extended_family]
+    most_seasons = max(season_counts, key=lambda k: len(k))
+    for fish in extended_family:
+        fish_data = content.fishes[fish]
+        seasons_tuple = tuple(most_seasons)
+        content.fishes[fish] = override(fish_data, seasons=seasons_tuple)
+
 
 def sanitize_fish_weather_data(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random, options: StardewValleyOptions):
     always_sunny_regions = [Region.desert]
@@ -258,7 +270,7 @@ def sanitize_fish_weather_data(content: StardewContent, data_to_randomize: set[s
             weather = set(fish_data.weather)
             weather.add(Weather.sun)
             weather_tuple = tuple(weather)
-            content.fishes[Fish.squid] = override(fish_data, weather=weather_tuple)
+            content.fishes[fish_name] = override(fish_data, weather=weather_tuple)
 
 
 def randomize_crop_sell_prices(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
