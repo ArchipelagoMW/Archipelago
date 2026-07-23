@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from ..CheckIds import brush_check_id, container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
-from ..Types import ExitData, LocData, EventData
+from ..Types import LocData, EventData
 from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:

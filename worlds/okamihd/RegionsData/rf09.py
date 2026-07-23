@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from rule_builder.rules import True_
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.WarpType import WarpType
-from ..Types import ExitData, EventData, LocData, WarpData
+from ..Types import ExitData, EventData, WarpData
 from ..Enums.RegionNames import RegionNames
 
 if TYPE_CHECKING:

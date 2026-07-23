@@ -6,7 +6,7 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.RegionNames import RegionNames, MapIds
 from ..Enums.WarpType import WarpType
-from ..Rules import has_portable_fire_source_strict, city_checkpoint_drawbridge_rule
+from ..Rules import city_checkpoint_drawbridge_rule
 from ..Types import LocData, EventData, ExitData, WarpData
 
 if TYPE_CHECKING:

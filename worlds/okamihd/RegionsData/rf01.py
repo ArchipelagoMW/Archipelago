@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
 
 from ..Enums.BrushTechniques import BrushTechniques
-from ..Enums.LocationType import LocationType
 from ..Enums.RegionNames import RegionNames
-from ..Types import ExitData, LocData, EventData
+from ..Types import ExitData, EventData
 
 if TYPE_CHECKING:
     from .. import OkamiWorld

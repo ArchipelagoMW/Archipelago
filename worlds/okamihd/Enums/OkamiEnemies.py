@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, NamedTuple, List
+from typing import TYPE_CHECKING, NamedTuple
 from enum import Enum
 
 from rule_builder.rules import Has, Rule

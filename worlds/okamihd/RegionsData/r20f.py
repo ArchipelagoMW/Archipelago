@@ -1,13 +1,9 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import LocationProgressType
-from rule_builder.rules import HasAny
-from ..CheckIds import container_check_id, brush_check_id, shop_check_id
+
+from ..CheckIds import container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
-from ..Enums.LocationType import LocationType
-from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Rules import oni_island_1f_thunder_rule
 from ..Types import ExitData, LocData, EventData
 
 if TYPE_CHECKING:

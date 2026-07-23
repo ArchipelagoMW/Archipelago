@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from ..CheckIds import container_check_id, brush_check_id
+from ..CheckIds import container_check_id
 from ..Enums.LocationType import LocationType
-from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Types import LocData, EventData, ExitData
+from ..Types import LocData, EventData
 from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:

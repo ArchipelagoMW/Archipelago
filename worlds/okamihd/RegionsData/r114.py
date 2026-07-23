@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ..CheckIds import container_check_id
-from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Types import LocData, EventData, ExitData
+from ..Types import LocData
 from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:
