@@ -7,7 +7,7 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Rules import has_soup_ingerdients, moon_cave_fire_rule, moon_cave_4f_fire_rule, moon_cave_canon_rule
+from ..Rules import moon_cave_fire_rule, moon_cave_4f_fire_rule, moon_cave_canon_rule
 from ..Types import ExitData, LocData, EventData
 
 if TYPE_CHECKING:

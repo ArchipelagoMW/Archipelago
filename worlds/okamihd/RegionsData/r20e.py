@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from rule_builder.rules import HasAny
+from rule_builder.rules import HasAny, And
 from ..CheckIds import container_check_id, brush_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Rules import oni_island_1f_thunder_rule, oni_island_5f_thunder_rule
+from ..Rules import oni_island_1f_thunder_rule, oni_island_5f_thunder_rule, slowdown_rule
 from ..Types import ExitData, LocData, EventData
 
 if TYPE_CHECKING:
@@ -47,7 +47,7 @@ exits = {
         ExitData(RegionNames.ONI_ISLAND_INTERIOR_POST_TOBI_9, loading_screen=False,
                  required_items_events=["Oni Island - Tobi Race #9 (Final)"])
     ],
-    RegionNames.ONI_ISLAND_INTERIOR_POST_TOBI_9:[
+    RegionNames.ONI_ISLAND_INTERIOR_POST_TOBI_9: [
         ExitData(RegionNames.ONI_ISLAND_NINETAILS)
     ]
 }
@@ -58,7 +58,7 @@ events = {
             required_items_events=["Oni Island - 4F Grab Thunder Key", "Holy Eagle"])
     },
     RegionNames.ONI_ISLAND_INTERIOR_5F: {
-        "Oni Island - 5F Cross Spider": EventData(required_brush_techniques=[BrushTechniques.VEIL_OF_MIST])
+        "Oni Island - 5F Cross Spider": EventData(special_rule=slowdown_rule)
     },
     RegionNames.ONI_ISLAND_INTERIOR_4F_KEY: {
         "Oni Island - 4F Grab Key": EventData(),
@@ -70,7 +70,7 @@ events = {
             required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE])
     },
     RegionNames.ONI_ISLAND_INTERIOR_PRE_TOBI_8: {
-        "Oni Island - Tobi Race #8": EventData(required_brush_techniques=[BrushTechniques.VEIL_OF_MIST],
+        "Oni Island - Tobi Race #8": EventData(special_rule=slowdown_rule,
                                                required_items_events=["Oni Island - 4F Grab Thunder Key"])
     },
     RegionNames.ONI_ISLAND_INTERIOR_6F: {
@@ -114,10 +114,10 @@ locations = {
     },
     RegionNames.ONI_ISLAND_INTERIOR_6F: {
         "Oni Island - 7F Thunder chest behind spider": LocData(container_check_id(MapIds.ONI_ISLAND_UPPER_INT, 1),
-                                                               required_brush_techniques=[BrushTechniques.CATWALK,
-                                                                                          BrushTechniques.VEIL_OF_MIST],
+                                                               required_brush_techniques=[BrushTechniques.CATWALK],
                                                                type=LocationType.THUNDER_CHEST_SPECIAL_SOURCE,
-                                                               special_rule=oni_island_5f_thunder_rule,
+                                                               special_rule=And(oni_island_5f_thunder_rule,
+                                                                                slowdown_rule),
                                                                required_items_events=[
                                                                    "Oni Island - 6F Climb to Cat statue",
                                                                    "Holy Eagle"]),
@@ -131,7 +131,7 @@ locations = {
                                                                         "Holy Eagle"]),
     },
     RegionNames.ONI_ISLAND_INTERIOR_POST_TOBI_9: {
-        #Not set a special source since thunder key is required to access it anyway
+        # Not set a special source since thunder key is required to access it anyway
         "Oni Island - 7F Thunder Chest above railing": LocData(container_check_id(MapIds.ONI_ISLAND_UPPER_INT, 2),
                                                                required_items_events=["Holy Eagle",
                                                                                       "Oni Island - 4F Grab Thunder Key"],

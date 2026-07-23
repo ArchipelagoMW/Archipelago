@@ -7,7 +7,7 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.RegionNames import RegionNames, MapIds
 from ..Enums.WarpType import WarpType
-from ..Rules import gen_thunder_chest_rule
+from ..Rules import has_portable_thunder_source
 from ..Types import ExitData, LocData, EventData, WarpData
 
 if TYPE_CHECKING:
@@ -112,7 +112,7 @@ locations = {
     RegionNames.SEIAN_CITY_CLOCK_TOWER: {
         "Sei-an City (Aristocratic Quarter) - Thunder Chest in Clock Tower": LocData(
             container_check_id(MapIds.SEIAN_ARISTORATIC, 10), type=LocationType.THUNDER_CHEST_SPECIAL_SOURCE,
-            special_rule=gen_thunder_chest_rule),
+            special_rule=has_portable_thunder_source),
         "Sei-an City (Aristocratic Quarter) - Chest after thunderbolt": LocData(
             container_check_id(MapIds.SEIAN_ARISTORATIC, 0),
             required_items_events=["Sei-an City(Aristocratic Quarter) - Give Gimmick gear to Gen"],

@@ -1,13 +1,9 @@
 from rule_builder.field_resolvers import FromOption
 from rule_builder.rules import Has, And, Rule, OptionFilter, Or, HasGroup, HasAny, HasAll
-from worlds.AutoWorld import CollectionState
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.DivineInstruments import DivineInstruments
-from .Enums.LocationType import LocationType
-from .Options import ProgressiveWeapons, RequiredDoggorbs, NightTimeChecksRequireCrescent
-from .Types import LocData, ExitData, EventData
-from BaseClasses import Location, Entrance
-from typing import TYPE_CHECKING, List
+from .Options import ProgressiveWeapons, RequiredDoggorbs, NightTimeChecksRequireCrescent, AlternativeMistSlowdown
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -37,16 +33,17 @@ n_ryoshima_islands_dragon_rule: Rule = Or(Has("Orca"), HasAll("Water Tablet", "I
 
 n_ryoshima_guardian_sapling_rule: Rule = Or(long_swim_rule, Has("Orca"))
 
-city_checkpoint_drawbridge_rule = And(
+city_checkpoint_drawbridge_rule: Rule = And(
     Has(BrushTechniques.INFERNO),
     Or(Has(BrushTechniques.FIREBURST), Has(
         DivineInstruments.SOLAR_FLARE.value.item_name),
        Has("Progressive Mirror", 4), Has("Moon Cave - Defeat Orochi")))
 
-
-# Probably should be removed;Directly add it to the checks that require it.
-def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount: int) -> bool:
-    return state.has_group("soup_ingredients", world.player, amount)
+# Only count Fireburst and icestrom if FireburstIcestormSlowdown is set to true.
+slowdown_rule: Rule = Or(Has(BrushTechniques.VEIL_OF_MIST),
+                         HasAny(BrushTechniques.FIREBURST, BrushTechniques.ICESTORM, options=[
+                             OptionFilter(AlternativeMistSlowdown, AlternativeMistSlowdown.option_true)],
+                                filtered_resolution=False))
 
 
 night_time_check_rule: Rule = Has(BrushTechniques.CRESCENT, options=[
@@ -66,9 +63,6 @@ oni_island_1f_thunder_rule = Or(has_portable_thunder_source_strict,
 
 oni_island_5f_thunder_rule = Or(has_portable_thunder_source,
                                 HasAll("Oni Island - 4F Grab Thunder Key", BrushTechniques.THUNDERSTORM))
-
-# FIXME Once we've figured out which story trigger can spawn the thunder source here
-gen_thunder_chest_rule: Rule = has_portable_thunder_source
 
 
 def has_divine_instrument_tier(tier: int) -> Rule:
@@ -105,125 +99,6 @@ def has_divine_instrument_tier(tier: int) -> Rule:
                                                   HasGroup('divine_instrument_tier_3', count=1),
                                                   HasGroup('divine_instrument_tier_4', count=1),
                                                   HasGroup('divine_instrument_tier_5', count=1)))
-
-
-def apply_event_or_location_rules(loc: Location, name: str, data: LocData | EventData, world: "OkamiWorld"):
-    ## RULE BUILDER REWORK:
-    # - FOR EACH LOCATION, BUILD AN ARRAY OF RULES THAT WILL BE ADDED TO THE world.set_rule(loc,AND(*Rules))
-
-    debug_rule = False
-
-    rules: List[Rule] = []
-
-    required_techinques = []
-    required_power_slash_level = data.power_slash_level
-    required_cherry_bomb_level = data.cherry_bomb_level
-
-    if len(data.mandatory_enemies) > 0:
-        weapon_tier_required = 0
-        for e in data.mandatory_enemies:
-            weapon_tier_required = max(weapon_tier_required, e.value.required_weapon_tier)
-            if e.value.defeat_condition is not None:
-                rules.append(e.value.defeat_condition)
-
-        if weapon_tier_required > 0:
-            rules.append(has_divine_instrument_tier(weapon_tier_required))
-
-    required_techinques += data.required_brush_techniques
-
-    match data.type:
-        case LocationType.TREASURE_BUD:
-            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
-        case LocationType.BURIED_UNDER_LEAF_PILE:
-            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WHIRLWIND))
-        case LocationType.BURIED_CHEST:
-            if world.options.NightTimeChecksRequireCrescent:
-                required_techinques += [BrushTechniques.CRESCENT]
-        case LocationType.STONE_BURIED_CHEST:
-            # Digging Champ Requirement
-            rules.append(Has("Digging Champ"))
-            if world.options.NightTimeChecksRequireCrescent:
-                required_techinques += [BrushTechniques.CRESCENT]
-        case LocationType.BURNING_CHEST:
-            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WATERSPOUT, BrushTechniques.WHIRLWIND,
-                                BrushTechniques.DELUGE))
-        case LocationType.BURNING_CHEST_NO_WATER:
-            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WHIRLWIND, BrushTechniques.DELUGE))
-        case LocationType.UNDERWATER_CHEST:
-            required_power_slash_level = max(required_power_slash_level, 1)
-        case LocationType.UNDERWATER_CHEST_SHALLOW:
-            rules.append(HasAny(BrushTechniques.POWER_SLASH, BrushTechniques.CHERRY_BOMB))
-        case LocationType.DIGGING_MINIGAME_EARLY:
-            required_power_slash_level = max(required_power_slash_level, 1)
-            required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
-            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
-        case LocationType.DIGGING_MINIGAME_LATER:
-            required_power_slash_level = max(required_power_slash_level, 1)
-            required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
-            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
-                                    BrushTechniques.GALESTORM]
-        case LocationType.DIGGING_MINIGAME_HARD:
-            required_power_slash_level = max(required_power_slash_level, 1)
-            required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
-            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
-                                    BrushTechniques.GALESTORM]
-            rules.append(HasAll("Holy Eagle", "Golden Ink Pot"))
-        case LocationType.FROZEN_CHEST:
-            rules.append(HasAny(BrushTechniques.INFERNO, BrushTechniques.FIREBURST))
-        case LocationType.FISHING_MINIGAME:
-            required_power_slash_level = max(required_power_slash_level, 1)
-        case LocationType.THUNDER_CHEST:
-            rules.append(HasAny(BrushTechniques.THUNDERBOLT, BrushTechniques.THUNDERSTORM))
-
-        case _:
-            required_techinques += []
-
-    if data.needs_long_swim:
-        rules.append(long_swim_rule)
-
-    if len(required_techinques) > 0:
-        rules.append(HasAll(*required_techinques))
-
-    if required_power_slash_level > 0:
-        rules.append(Has(BrushTechniques.POWER_SLASH, count=required_power_slash_level))
-
-    if required_cherry_bomb_level > 0:
-        rules.append(Has(BrushTechniques.CHERRY_BOMB, count=required_cherry_bomb_level))
-
-    if len(data.required_items_events) > 0:
-        rules.append(HasAll(*data.required_items_events))
-
-    if data.special_rule is not None:
-        # Append special rule if it's defined
-        rules.append(data.special_rule)
-
-    # Set the location to require all concatenated rule
-    if len(rules) > 0:
-        final_rule = And(*rules)
-        world.set_rule(loc, final_rule)
-        if debug_rule:
-            print("[Debug] - Rule for " + loc.name)
-            print(final_rule)
-
-
-# else:
-#    print("no rule for this check")
-
-def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
-    rules: List[Rule] = []
-    if data.needs_long_swim:
-        rules.append(long_swim_rule)
-
-    if len(data.required_items_events) > 0:
-        rules.append(HasAll(*data.required_items_events))
-
-    if data.special_rule is not None:
-        # Append special rule if it's defined
-        rules.append(data.special_rule)
-
-    if len(rules) > 0:
-        final_rule = And(*rules)
-        world.set_rule(etr, final_rule)
 
 
 def set_completion_rules(world: "OkamiWorld"):
