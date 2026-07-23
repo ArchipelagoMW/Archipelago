@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
+from rule_builder.rules import HasAny
 from ..CheckIds import container_check_id, brush_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -78,7 +79,7 @@ events = {
         "Imperial Palace - Mandatory Wind Doom Mirror": EventData(mandatory_enemies=[OkamiEnemies.WIND_DOOM_MIRROR])
     },
     RegionNames.IMPERIAL_PALACE_POISON_SOZU: {
-        "Imperial Palace - Cross the Sozu": EventData(required_brush_techniques=[BrushTechniques.WATERSPOUT])
+        "Imperial Palace - Cross the Sozu": EventData(special_rule=HasAny(BrushTechniques.WATERSPOUT,"Holy Eagle"))
     },
     RegionNames.IMPERIAL_PALACE_INSIDE_EMPEROR: {
         "Imperial Palace - Defeat Blight":EventData(mandatory_enemies=[OkamiEnemies.BLIGHT])
