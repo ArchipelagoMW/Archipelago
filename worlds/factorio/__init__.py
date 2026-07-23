@@ -12,7 +12,7 @@ from worlds.generic import Rules
 from .Locations import location_pools, location_table, craftsanity_locations
 from .Mod import generate_mod
 from .Options import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
-                      TechCostDistribution, option_groups)
+                      TechLayerObscurity, TechDepthObscurity, TechCraftObscurity, TechCostDistribution, option_groups)
 from .Shapes import get_shapes
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_product_sources, required_technologies, get_rocket_requirements, \
@@ -103,6 +103,9 @@ class Factorio(World):
         self.science_locations = []
         self.craftsanity_locations = []
         self.tech_tree_layout_prerequisites = {}
+        self.techs_to_hint = {}
+        
+        self.logger = logging.getLogger(f"{self.game}:{self.player}")
 
     generate_output = generate_mod
 
@@ -214,9 +217,9 @@ class Factorio(World):
                          "logistics": 1,
                          "rocket-silo": -1}
         loc: FactorioScienceLocation
-        if self.options.tech_tree_information == TechTreeInformation.option_full:
+        if self.options.tech_tree_information == TechTreeInformation.option_full or self.options.tech_tree_information == TechTreeInformation.option_full_only_hint_advancement:
             # mark all locations as pre-hinted
-            for loc in self.science_locations + self.craftsanity_locations:
+            for loc in self.craftsanity_locations + self.science_locations:
                 loc.revealed = True
         if self.skip_silo:
             self.removed_technologies |= {"rocket-silo"}
@@ -358,16 +361,6 @@ class Factorio(World):
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
             # 32 bit uint
             map_basic_settings["seed"] = self.random.randint(0, 2 ** 32 - 1)
-
-        start_location_hints: typing.Set[str] = self.options.start_location_hints.value
-
-        for loc in self.science_locations:
-            # show start_location_hints ingame
-            if loc.name in start_location_hints:
-                loc.revealed = True
-            # make spoiler match mod info
-            elif loc.revealed:
-                start_location_hints.add(loc.name)
 
     def collect_item(self, state, item, remove=False):
         if item.advancement and item.name in progressive_technology_table:
@@ -608,6 +601,42 @@ class Factorio(World):
                             ItemClassification.trap if name.endswith("Trap") else ItemClassification.filler,
                             all_items[name], self.player)
         return item
+    
+    def post_fill(self) -> None:
+        
+        start_location_hints: typing.Set[str] = self.options.start_location_hints.value
+        advancement_only: bool  = self.options.tech_tree_information == TechTreeInformation.option_full_only_hint_advancement
+        full_hints: bool  = self.options.tech_tree_information == TechTreeInformation.option_full
+
+        def set_propper_hint(location, pre_hint):
+            # show start_location_hints ingame
+            if loc.name in start_location_hints:
+                loc.revealed = True
+            # make spoiler match mod info
+            elif pre_hint:
+                if loc.revealed:
+                    if advancement_only:
+                        if loc.item.advancement:
+                            start_location_hints.add(loc.name)
+                    else:
+                        start_location_hints.add(loc.name)
+            
+            if loc.revealed:
+                if full_hints:
+                    self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = True
+                else:
+                    if loc.item.advancement:
+                        self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = True
+                    else:
+                        self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = False
+            else:
+                self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = False
+
+        for loc in self.science_locations:
+            set_propper_hint(loc, self.options.tech_layer_obscurity == TechLayerObscurity.disabled and self.options.tech_depth_obscurity == TechDepthObscurity.disabled)
+
+        for loc in self.craftsanity_locations:
+            set_propper_hint(loc, self.options.tech_craft_obscurity == TechCraftObscurity.disabled)
 
 
 class FactorioLocation(Location):

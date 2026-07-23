@@ -1,4 +1,15 @@
-function get_any_stack_size(name)
+
+--re organized the file; at the top are local functions. At the bottom are functions in the lib.
+--This flows better with the best practices I know of factorio mod dev.
+
+local function random_offset_position(position, offset)
+    return {x=position.x+math.random(-offset, offset), y=position.y+math.random(-offset, offset)}
+end
+
+
+local lib = {}
+
+lib.get_any_stack_size = function (name)
     local item = prototypes.item[name]
     if item ~= nil then
         return item.stack_size
@@ -13,7 +24,7 @@ end
 
 -- from https://stackoverflow.com/a/40180465
 -- split("a,b,c", ",") => {"a", "b", "c"}
-function split(s, sep)
+lib.split = function (s, sep)
     local fields = {}
 
     sep = sep or " "
@@ -23,21 +34,9 @@ function split(s, sep)
     return fields
 end
 
-function random_offset_position(position, offset)
-    return {x=position.x+math.random(-offset, offset), y=position.y+math.random(-offset, offset)}
-end
 
-function fire_entity_at_players(entity_name, speed)
-    local entities = {}
-    for _, player in ipairs(game.forces["player"].players) do
-        if player.character ~= nil then
-            table.insert(entities, player.character)
-        end
-    end
-    return fire_entity_at_entities(entity_name, entities, speed)
-end
 
-function fire_entity_at_entities(entity_name, entities, speed)
+lib.fire_entity_at_entities = function(entity_name, entities, speed)
     for _, current_entity in ipairs(entities) do
         local target = current_entity
         if target.health == nil then
@@ -49,11 +48,24 @@ function fire_entity_at_entities(entity_name, entities, speed)
     end
 end
 
+
+lib.fire_entity_at_players = function(entity_name, speed)
+    local entities = {}
+    for _, player in ipairs(game.forces["player"].players) do
+        if player.character ~= nil then
+            table.insert(entities, player.character)
+        end
+    end
+    return lib.fire_entity_at_entities(entity_name, entities, speed)
+end
+
+
+
 local teleport_requests = {}
 local teleport_attempts = {}
 local max_attempts = 100
 
-function attempt_teleport_player(player, attempt)
+lib.attempt_teleport_player = function(player, attempt)
     -- global attempt storage as metadata can't be stored
     if attempt == nil then
         attempt = teleport_attempts[player.index]
@@ -91,11 +103,11 @@ function attempt_teleport_player(player, attempt)
         -- Store the request with the player index as the key
         teleport_requests[player.index] = path_id
     else
-        attempt_teleport_player(player, attempt + 1)
+        lib.attempt_teleport_player(player, attempt + 1)
     end
 end
 
-function handle_teleport_attempt(event)
+lib.handle_teleport_attempt = function(event)
     for player_index, path_id in pairs(teleport_requests) do
         -- Check if the event matches the stored path_id
         if path_id == event.id then
@@ -111,12 +123,14 @@ function handle_teleport_attempt(event)
                 return
             end
 
-            attempt_teleport_player(player, nil)
+            lib.attempt_teleport_player(player, nil)
             break
         end
     end
 end
-function spill_character_inventory(character)
+
+
+lib.spill_character_inventory = function(character)
     if not (character and character.valid) then
         return false
     end
@@ -152,3 +166,5 @@ function spill_character_inventory(character)
         end
     end
 end
+
+return lib
