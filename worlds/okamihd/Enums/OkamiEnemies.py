@@ -1,8 +1,9 @@
-from typing import TYPE_CHECKING, NamedTuple, List
+from typing import TYPE_CHECKING, NamedTuple
 from enum import Enum
 
-from rule_builder.rules import Rule, Has
+from rule_builder.rules import Has, Rule
 from .BrushTechniques import BrushTechniques
+from ..Rules import slowdown_rule
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -48,10 +49,10 @@ class OkamiEnemies(Enum):
     ICHIRO = EnemyData(0x12, "Ichiro", 2, defeat_condition=Has(BrushTechniques.POWER_SLASH))
     THUNDER_DOOM_MIRROR = EnemyData(0x5d, "Thunder Doom Mirror", 2)
     ICE_DOOM_MIRROR = EnemyData(0x5b, "Ice Doom Mirror", 2)
-    WIND_DOOM_MIRROR = EnemyData(0x5c, "Wind Doom Mirror", 2, defeat_condition=Has(BrushTechniques.VEIL_OF_MIST))
+    WIND_DOOM_MIRROR = EnemyData(0x5c, "Wind Doom Mirror", 2, defeat_condition=slowdown_rule)
     BLIGHT = EnemyData(0x7c, "Blight", 2, defeat_condition=Has(BrushTechniques.POWER_SLASH))
     THUNDER_EAR = EnemyData(0x55, "Thunder Ear", 2)
-    EARTH_NOSE = EnemyData(0x54, "Earth Nose", 2, defeat_condition=Has(BrushTechniques.VEIL_OF_MIST))
+    EARTH_NOSE = EnemyData(0x54, "Earth Nose", 2, defeat_condition=slowdown_rule)
     BLUE_CYCLOPS = EnemyData(0x29, "Blue Cyclops", 2)
     BANDIT_SPIDER = EnemyData(0x0b, "Bandit Spider", 2, defeat_condition=Has(BrushTechniques.GREENSPROUT_VINE))
     TUBE_FOX = EnemyData(0x0e, "Tube Fox", 3)

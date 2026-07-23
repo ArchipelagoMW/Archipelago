@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from rule_builder.rules import True_, Has
+from rule_builder.rules import Has
 from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType

@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from ..CheckIds import container_check_id, brush_check_id, shop_check_id
+from ..CheckIds import container_check_id, brush_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
+from ..Rules import slowdown_rule
 from ..Types import ExitData, LocData, EventData
 
 if TYPE_CHECKING:
@@ -63,7 +64,7 @@ events = {
     RegionNames.IMPERIAL_PALACE_FEET_HELL: {
         "Imperial Palace - Blow up alcove walls in feet hell": EventData(cherry_bomb_level=1),
         "Imperial Palace - Grab lockjaw key": EventData(),
-        "Imperial Palace - Outspeed the Brooms": EventData(required_brush_techniques=[BrushTechniques.VEIL_OF_MIST]),
+        "Imperial Palace - Outspeed the Brooms": EventData(special_rule=slowdown_rule),
     },
     RegionNames.IMPERIAL_PALACE_WEST_CAVE: {
         "Imperial Palace - Blow up west cave floor": EventData(cherry_bomb_level=1)
@@ -72,7 +73,7 @@ events = {
         "Imperial Palace - Blow up wall to mist flask room": EventData(cherry_bomb_level=1)
     },
     RegionNames.IMPERIAL_PALACE_FLASK_ROOM: {
-        "Imperial Palace - Outspeed the spider": EventData(required_brush_techniques=[BrushTechniques.VEIL_OF_MIST]),
+        "Imperial Palace - Outspeed the spider": EventData(special_rule=slowdown_rule),
         # Not really in that room, but triggers when exiting it:
         "Imperial Palace - Mandatory Wind Doom Mirror": EventData(mandatory_enemies=[OkamiEnemies.WIND_DOOM_MIRROR])
     },
@@ -124,7 +125,7 @@ locations = {
             container_check_id(MapIds.IMPERIAL_PALACE_SMALL, 5)),
         "Imperial Palace - Southwest locked chest in webs above the emperor's bedroom": LocData(
             container_check_id(MapIds.IMPERIAL_PALACE_SMALL, 7), type=LocationType.LOCKED_CHEST,
-            required_brush_techniques=[BrushTechniques.VEIL_OF_MIST])
+            special_rule=slowdown_rule)
     },
     RegionNames.IMPERIAL_PALACE_WEST_BEAM:{
         "Imperial Palace - Southmost chest on west beam above the emperor's bedroom": LocData(
