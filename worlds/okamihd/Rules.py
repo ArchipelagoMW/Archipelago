@@ -39,7 +39,7 @@ city_checkpoint_drawbridge_rule: Rule = And(
         DivineInstruments.SOLAR_FLARE.value.item_name),
        Has("Progressive Mirror", 4), Has("Moon Cave - Defeat Orochi")))
 
-# Only count Fireburst and icestrom if FireburstIcestormSlowdown is set to true.
+# Only count Fireburst and icestrom if AlternativeMistSlowdown is set to true.
 slowdown_rule: Rule = Or(Has(BrushTechniques.VEIL_OF_MIST),
                          HasAny(BrushTechniques.FIREBURST, BrushTechniques.ICESTORM, options=[
                              OptionFilter(AlternativeMistSlowdown, AlternativeMistSlowdown.option_true)],

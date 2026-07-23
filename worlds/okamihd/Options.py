@@ -180,7 +180,7 @@ class OkamiOptions(PerGameCommonOptions):
     MoonCaveAccess: MoonCaveAccess
     BloomGuardianSaplings: BloomGuardianSaplings
     IngredientsInMoonCave: IngredientsInMoonCave
-    FireburstIcestormSlowdown:AlternativeMistSlowdown
+    AlternativeMistSlowdown:AlternativeMistSlowdown
 
 
 #    PraiseSanity:PraiseSanity
