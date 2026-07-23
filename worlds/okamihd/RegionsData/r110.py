@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from rule_builder.rules import HasGroup, And, Has
+from rule_builder.rules import HasGroup
 from ..CheckIds import brush_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames, MapIds
-from ..Rules import has_soup_ingerdients, moon_cave_fire_rule, moon_cave_4f_fire_rule, moon_cave_canon_rule
+from ..Rules import moon_cave_fire_rule, moon_cave_4f_fire_rule, moon_cave_canon_rule
 from ..Types import ExitData, LocData, EventData
 
 if TYPE_CHECKING:

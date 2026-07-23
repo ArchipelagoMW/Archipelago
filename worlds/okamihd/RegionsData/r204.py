@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import LocationProgressType
-from rule_builder.rules import Has, HasAny
-from ..CheckIds import container_check_id, shop_check_id, brush_check_id
+from rule_builder.rules import  HasAny
+from ..CheckIds import container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
-from ..Enums.WarpType import WarpType
-from ..Types import LocData, EventData, ExitData, WarpData
+from ..Types import LocData, EventData, ExitData
 from ..Enums.RegionNames import RegionNames, MapIds
 
 if TYPE_CHECKING:

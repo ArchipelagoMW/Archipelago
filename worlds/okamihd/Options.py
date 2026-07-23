@@ -44,6 +44,7 @@ class KarmicTransformers(Choice):
     option_in_item_pool = 2
     default = 1
 
+
 class OpenGameStart(Toggle):
     """ NOT IMPLEMENTED IN CLIENT YET - USE AT YOUR OWN RISK !!
         Remove some early events for a more open game start:
@@ -133,10 +134,23 @@ class ShopSlots(Range):
     range_end = 12
     default = 6
 
+
 class IngredientsInMoonCave(Toggle):
     """Place the 4 ingredients for Orochi's Soup in Moon Cave"""
-    display_name="Randomize Ingredients in Moon Cave"
+    display_name = "Randomize Ingredients in Moon Cave"
     default = 1
+
+
+
+class AlternativeMistSlowdown(Toggle):
+    """Should Logic take into account the fact that you
+    can replicate in the Veil of Mist slowdown effect by using Fireburst/Icestorm?
+    Notable exceptions :
+     - Himiko's guards
+    """
+    display_name = "Use Fireburst/Icestrom for slowdown"
+    default = 0
+
 
 #
 # class PraiseSanity(Choice):
@@ -165,7 +179,8 @@ class OkamiOptions(PerGameCommonOptions):
     CanineRewards: CanineRewards
     MoonCaveAccess: MoonCaveAccess
     BloomGuardianSaplings: BloomGuardianSaplings
-    IngredientsInMoonCave:IngredientsInMoonCave
+    IngredientsInMoonCave: IngredientsInMoonCave
+    AlternativeMistSlowdown:AlternativeMistSlowdown
 
 
 #    PraiseSanity:PraiseSanity
@@ -193,6 +208,9 @@ okami_option_groups: Dict[str, List[Any]] = {
         CanineRewards,
         MoonCaveAccess,
         IngredientsInMoonCave
+    ],
+    "Advanced Options":[
+        AlternativeMistSlowdown
     ]
 
 }

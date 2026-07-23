@@ -1,7 +1,5 @@
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING
 from enum import StrEnum, Enum
-
-from BaseClasses import ItemClassification
 
 if TYPE_CHECKING:
     from .. import OkamiWorld

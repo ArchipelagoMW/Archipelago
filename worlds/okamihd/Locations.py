@@ -1,8 +1,10 @@
 from BaseClasses import Region, Location, ItemClassification, LocationProgressType
+from rule_builder.rules import Rule, HasAny, Has, HasAll, And
+from .Enums.BrushTechniques import BrushTechniques
 from .Enums.LocationType import LocationType
-from .Rules import apply_event_or_location_rules
+from .Rules import has_divine_instrument_tier, long_swim_rule
 from .Types import LocData, OkamiLocation, OkamiItem, resolve_option_callable, EventData
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from .RegionsData import okami_locations, okami_events, okami_shop_locations
 
 if TYPE_CHECKING:
@@ -111,3 +113,102 @@ def get_unfilled_locations_count(world: "OkamiWorld"):
         else:
             count_excluded += 1
     return count + count_excluded
+
+
+def apply_event_or_location_rules(loc: Location, name: str, data: LocData | EventData, world: "OkamiWorld"):
+    ## RULE BUILDER REWORK:
+    # - FOR EACH LOCATION, BUILD AN ARRAY OF RULES THAT WILL BE ADDED TO THE world.set_rule(loc,AND(*Rules))
+
+    debug_rule = False
+
+    rules: List[Rule] = []
+
+    required_techinques = []
+    required_power_slash_level = data.power_slash_level
+    required_cherry_bomb_level = data.cherry_bomb_level
+
+    if len(data.mandatory_enemies) > 0:
+        weapon_tier_required = 0
+        for e in data.mandatory_enemies:
+            weapon_tier_required = max(weapon_tier_required, e.value.required_weapon_tier)
+            if e.value.defeat_condition is not None:
+                rules.append(e.value.defeat_condition)
+
+        if weapon_tier_required > 0:
+            rules.append(has_divine_instrument_tier(weapon_tier_required))
+
+    required_techinques += data.required_brush_techniques
+
+    match data.type:
+        case LocationType.TREASURE_BUD:
+            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
+        case LocationType.BURIED_UNDER_LEAF_PILE:
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WHIRLWIND))
+        case LocationType.BURIED_CHEST:
+            if world.options.NightTimeChecksRequireCrescent:
+                required_techinques += [BrushTechniques.CRESCENT]
+        case LocationType.STONE_BURIED_CHEST:
+            # Digging Champ Requirement
+            rules.append(Has("Digging Champ"))
+            if world.options.NightTimeChecksRequireCrescent:
+                required_techinques += [BrushTechniques.CRESCENT]
+        case LocationType.BURNING_CHEST:
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WATERSPOUT, BrushTechniques.WHIRLWIND,
+                                BrushTechniques.DELUGE))
+        case LocationType.BURNING_CHEST_NO_WATER:
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WHIRLWIND, BrushTechniques.DELUGE))
+        case LocationType.UNDERWATER_CHEST:
+            required_power_slash_level = max(required_power_slash_level, 1)
+        case LocationType.UNDERWATER_CHEST_SHALLOW:
+            rules.append(HasAny(BrushTechniques.POWER_SLASH, BrushTechniques.CHERRY_BOMB))
+        case LocationType.DIGGING_MINIGAME_EARLY:
+            required_power_slash_level = max(required_power_slash_level, 1)
+            required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
+            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
+        case LocationType.DIGGING_MINIGAME_LATER:
+            required_power_slash_level = max(required_power_slash_level, 1)
+            required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
+            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
+                                    BrushTechniques.GALESTORM]
+        case LocationType.DIGGING_MINIGAME_HARD:
+            required_power_slash_level = max(required_power_slash_level, 1)
+            required_cherry_bomb_level = max(required_cherry_bomb_level, 1)
+            required_techinques += [BrushTechniques.GREENSPROUT_BLOOM, BrushTechniques.WATERSPOUT,
+                                    BrushTechniques.GALESTORM]
+            rules.append(HasAll("Holy Eagle", "Golden Ink Pot"))
+        case LocationType.FROZEN_CHEST:
+            rules.append(HasAny(BrushTechniques.INFERNO, BrushTechniques.FIREBURST))
+        case LocationType.FISHING_MINIGAME:
+            required_power_slash_level = max(required_power_slash_level, 1)
+        case LocationType.THUNDER_CHEST:
+            rules.append(HasAny(BrushTechniques.THUNDERBOLT, BrushTechniques.THUNDERSTORM))
+
+        case _:
+            required_techinques += []
+
+    if data.needs_long_swim:
+        rules.append(long_swim_rule)
+
+    if len(required_techinques) > 0:
+        rules.append(HasAll(*required_techinques))
+
+    if required_power_slash_level > 0:
+        rules.append(Has(BrushTechniques.POWER_SLASH, count=required_power_slash_level))
+
+    if required_cherry_bomb_level > 0:
+        rules.append(Has(BrushTechniques.CHERRY_BOMB, count=required_cherry_bomb_level))
+
+    if len(data.required_items_events) > 0:
+        rules.append(HasAll(*data.required_items_events))
+
+    if data.special_rule is not None:
+        # Append special rule if it's defined
+        rules.append(data.special_rule)
+
+    # Set the location to require all concatenated rule
+    if len(rules) > 0:
+        final_rule = And(*rules)
+        world.set_rule(loc, final_rule)
+        if debug_rule:
+            print("[Debug] - Rule for " + loc.name)
+            print(final_rule)

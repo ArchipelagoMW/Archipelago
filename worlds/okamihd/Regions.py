@@ -1,12 +1,13 @@
-from BaseClasses import Region, LocationProgressType
+from BaseClasses import Region, LocationProgressType, Entrance
 from rule_builder.rules import Rule, Has, HasAll, And, False_, True_
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.WarpType import WarpType
 from .Locations import create_region_locations, create_region_events
 from typing import TYPE_CHECKING, List
-from .Rules import apply_exit_rules
 from .Enums.RegionNames import RegionNames
 from .RegionsData import okami_exits, okami_warps
+from .Rules import long_swim_rule
+from .Types import ExitData
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -88,3 +89,20 @@ def get_region_location_count(world: "OkamiWorld", region_name: str, included_on
             count += 1
 
     return count
+
+
+def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
+    rules: List[Rule] = []
+    if data.needs_long_swim:
+        rules.append(long_swim_rule)
+
+    if len(data.required_items_events) > 0:
+        rules.append(HasAll(*data.required_items_events))
+
+    if data.special_rule is not None:
+        # Append special rule if it's defined
+        rules.append(data.special_rule)
+
+    if len(rules) > 0:
+        final_rule = And(*rules)
+        world.set_rule(etr, final_rule)

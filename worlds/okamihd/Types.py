@@ -41,7 +41,7 @@ class LocData(NamedTuple):
     praise_sanity: int = 0
     progress_type: LocationProgressType | typing.Callable[
         [OkamiOptions], LocationProgressType] = LocationProgressType.DEFAULT
-    # This rule overrides all other access rules
+    # This rule is applied with all other access rules
     special_rule: Rule | None = None
 
 
