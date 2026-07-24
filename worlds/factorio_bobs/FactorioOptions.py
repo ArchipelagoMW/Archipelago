@@ -172,9 +172,9 @@ class TechDepthObscurity(Range):
 
 
 #class TechCraftObscurity(Toggle):
-#    """Hides all trigger techechnologies based on if you have the recipe onlocked.
-#    Note. It does not check if you have all the items before. If you get fluid handeling and thus a pump. This will not check if you can also make the engine for said pump.
-#    On: It hides all trigger tech untill you have a recipe that will unlock the item.
+#    """Hides all trigger technologies based on if you have the recipe unlocked.
+#    Note. It does not check if you have all the items before. If you get fluid handling and thus a pump. This will not check if you can also make the engine for said pump.
+#    On: It hides all trigger tech until you have a recipe that will unlock the item.
 #    Off: It does not hide the trigger techs.
 #    If information is Full, then this will also hide the hints."""
 #    display_name = "Tech Craft Obscurity"
@@ -343,7 +343,20 @@ class TrapCount(Range):
 class AttackTrapCount(TrapCount):
     """Trap items that when received trigger an attack on your base."""
     display_name = "Attack Traps"
+    
+class EvolutionTrapCount(TrapCount):
+    """Trap items that when received increase the enemy evolution."""
+    display_name = "Evolution Traps"
+    range_end = 10
 
+class EvolutionTrapIncrease(Range):
+    """How much an Evolution Trap increases the enemy evolution.
+    Increases scale down proportionally to the session's current evolution factor
+    (40 increase at 0.50 will add 0.20... 40 increase at 0.75 will add 0.10...)"""
+    display_name = "Evolution Trap %% Effect"
+    range_start = 1
+    default = 10
+    range_end = 100
 
 class TeleportTrapCount(TrapCount):
     """Trap items that when received trigger a random teleport.
@@ -355,48 +368,53 @@ class GrenadeTrapCount(TrapCount):
     """Trap items that when received trigger a grenade explosion on each player."""
     display_name = "Grenade Traps"
 
-
 class ClusterGrenadeTrapCount(TrapCount):
     """Trap items that when received trigger a cluster grenade explosion on each player."""
     display_name = "Cluster Grenade Traps"
 
-
 class ArtilleryTrapCount(TrapCount):
     """Trap items that when received trigger an artillery shell on each player."""
     display_name = "Artillery Traps"
-
 
 class AtomicRocketTrapCount(TrapCount):
     """Trap items that when received trigger an atomic rocket explosion on each player.
     Warning: there is no warning. The launch is instantaneous."""
     display_name = "Atomic Rocket Traps"
 
-
 class AtomicCliffRemoverTrapCount(TrapCount):
     """Trap items that when received trigger an atomic rocket explosion on a random cliff.
     Warning: there is no warning. The launch is instantaneous."""
     display_name = "Atomic Cliff Remover Traps"
 
-
-class EvolutionTrapCount(TrapCount):
-    """Trap items that when received increase the enemy evolution."""
-    display_name = "Evolution Traps"
-    range_end = 10
-
-
-class EvolutionTrapIncrease(Range):
-    """How much an Evolution Trap increases the enemy evolution.
-    Increases scale down proportionally to the session's current evolution factor
-    (40 increase at 0.50 will add 0.20... 40 increase at 0.75 will add 0.10...)"""
-    display_name = "Evolution Trap % Effect"
-    range_start = 1
-    default = 10
-    range_end = 100
-
-
 class InventorySpillTrapCount(TrapCount):
     """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
     display_name = "Inventory Spill Traps"
+    
+class PeekATechTrapCount(TrapCount):
+    """Trap items that when received hide all the technologies on the tech screen. Stopping all science for a short while."""
+    display_name = "Peek a Tech Traps"
+    
+class TechResetTrapCount(TrapCount):
+    """Trap items that when received resets the process of all technologies, does not unresearch."""
+    display_name = "Tech Reset Traps"
+    
+class MapInfoResetTrapCount(TrapCount):
+    """Trap items that when received trigger that your map data gets deleted."""
+    display_name = "Reset Map Info Traps"
+    
+class EnergySpiralTrapCount(TrapCount):
+    """Trap items that when received temporarily increases the energy cost and raises pollution produced of all machines."""
+    display_name = "Energy Spiral Traps"
+
+class EnergySpiralTrapStackType(Choice):
+    """Determine how the Energy Spiral Traps stack.
+    Intensity: Makes intensity stack, leading to that more traps means even higher energy costs.
+    Duration: Makes the duration stack, leading to a longer during time in which the energy costs are higher."""
+    display_name = "Energy Spiral Type"
+    option_intensity = 0
+    option_duration = 1
+    
+    default = 1
 
 class WorldGen(Choice):
     """World gen settings for the factorio world
@@ -629,6 +647,11 @@ class FactorioOptions(PackOptions):
     world_gen: WorldGen
     custom_world_gen: CustomWorldGen
     progressive: Progressive
+    
+    # traps
+    attack_traps: AttackTrapCount
+    evolution_traps: EvolutionTrapCount
+    evolution_trap_increase: EvolutionTrapIncrease
     teleport_traps: TeleportTrapCount
     grenade_traps: GrenadeTrapCount
     cluster_grenade_traps: ClusterGrenadeTrapCount
@@ -636,9 +659,12 @@ class FactorioOptions(PackOptions):
     atomic_rocket_traps: AtomicRocketTrapCount
     atomic_cliff_remover_traps: AtomicCliffRemoverTrapCount
     inventory_spill_traps: InventorySpillTrapCount
-    attack_traps: AttackTrapCount
-    evolution_traps: EvolutionTrapCount
-    evolution_trap_increase: EvolutionTrapIncrease
+    peek_a_tech_traps: PeekATechTrapCount
+    tech_reset_traps: TechResetTrapCount
+    reset_map_info_traps: MapInfoResetTrapCount
+    energy_spiral_traps: EnergySpiralTrapCount
+    energy_spiral_type: EnergySpiralTrapStackType
+
     death_link: DeathLink
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
@@ -676,6 +702,10 @@ option_groups: list[OptionGroup] = [
             AtomicRocketTrapCount,
             AtomicCliffRemoverTrapCount,
             InventorySpillTrapCount,
+            PeekATechTrapCount,
+            TechResetTrapCount,
+            MapInfoResetTrapCount,
+            EnergySpiralTrapCount,
         ],
         start_collapsed=True
     ),

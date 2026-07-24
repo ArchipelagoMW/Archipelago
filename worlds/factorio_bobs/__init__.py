@@ -86,7 +86,8 @@ class FactorioBobs(World):
     removed_technologies: typing.Set[str]
     settings: typing.ClassVar[FactorioSettings]
     trap_names: tuple[str] = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery",
-                              "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill")
+                              "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill",
+                              "Peek a Tech", "Tech Reset", "Reset Map Info", "Energy Spiral")
     want_progressives: dict[str, bool] = collections.defaultdict(lambda: False)
 
     seeded_random_seed: int
@@ -285,6 +286,7 @@ class FactorioBobs(World):
 
     def create_items(self) -> None:
         self.custom_technologies = self.set_custom_technologies()
+
         for trap_name in self.trap_names:
             self.multiworld.itempool.extend(self.create_item(f"{trap_name} Trap") for _ in
                                             range(getattr(self.options,
