@@ -3,6 +3,8 @@ import os
 
 
 class TestPackages(unittest.TestCase):
+    world_relevant = True
+
     def test_packages_have_init(self):
         """Test that all world folders containing .py files also have a __init__.py file,
         to indicate full package rather than namespace package."""
