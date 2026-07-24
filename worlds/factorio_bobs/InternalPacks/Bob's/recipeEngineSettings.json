@@ -26,6 +26,20 @@
     "depleted-uranium-fuel-cell",
     "bob-depleted-thorium-fuel-cell",
     "bob-depleted-deuterium-fuel-cell",
-    "bob-fusion-catalyst"
+    "bob-fusion-catalyst",
+    "bob-alien-artifact",
+    "bob-small-alien-artifact",
+    "bob-alien-artifact-red",
+    "bob-small-alien-artifact-red",
+    "bob-alien-artifact-orange",
+    "bob-small-alien-artifact-orange",
+    "bob-alien-artifact-yellow",
+    "bob-small-alien-artifact-yellow",
+    "bob-alien-artifact-green",
+    "bob-small-alien-artifact-green",
+    "bob-alien-artifact-blue",
+    "bob-small-alien-artifact-blue",
+    "bob-alien-artifact-purple",
+    "bob-small-alien-artifact-purple"
   ]
 }
