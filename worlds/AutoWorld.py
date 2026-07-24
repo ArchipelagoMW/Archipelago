@@ -28,7 +28,9 @@ class InvalidItemError(KeyError):
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    world_types: dict[str, Type[World]] = {}
+    testable_worlds: dict[str, Type[World]] = world_types
+    """worlds under test; scoped to AP_TEST_WORLDS by worlds/__init__"""
     __file__: str
     zip_path: Optional[str]
     settings_key: str
