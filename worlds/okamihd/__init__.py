@@ -12,8 +12,8 @@ from .RegionsData import okami_events, okami_locations, okami_shop_locations
 from .Rules import set_completion_rules
 from .Options import create_option_groups, OkamiOptions, slot_data_options, KarmicTransformers
 from worlds.AutoWorld import World, WebWorld, CollectionState
-from typing import List
-from .Types import OkamiItem, resolve_option_callable, LocalItem
+from typing import List, TextIO
+from .Types import OkamiItem, resolve_option_callable, LocalItem, StartPoint
 from .Enums.DivineInstruments import DivineInstruments
 from .Enums.RegionNames import RegionNames
 
@@ -43,6 +43,15 @@ class OkamiWorld(World):
     options: OkamiOptions
     web = OkamiWebWolrd()
     local_items = []
+    start_point_list = {
+        "Vanilla": StartPoint(RegionNames.CURSED_KAMIKI, (0, 0, 0)),
+        "Healed Kamiki": StartPoint(RegionNames.KAMIKI_VILLAGE, (0, 0, 0)),
+        "Shinshu Field": StartPoint(RegionNames.SHINSHU_FIELD, (0, 0, 0)),
+        "Ryoshima Coast": StartPoint(RegionNames.RYOSHIMA_COAST, (0, 0, 0)),
+        "Sei-an City": StartPoint(RegionNames.SEIAN_CITY_COMMONERS_DRY, (0, 0, 0))
+    }
+    picked_start = None
+
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -51,8 +60,9 @@ class OkamiWorld(World):
         # noinspection PyClassVar
 
         create_regions(self)
+        self.handle_start_point()
         # DEBUG
-        #visualize_regions(self.multiworld.get_region("Menu", self.player),"G:\projets\OkamiAP\worlds\okamihd\docs\OkamiHD.puml")
+        # visualize_regions(self.multiworld.get_region("Menu", self.player),"G:\projets\OkamiAP\worlds\okamihd\docs\OkamiHD.puml")
 
     def create_items(self):
         self.prepare_local_items()
@@ -138,6 +148,7 @@ class OkamiWorld(World):
         return change
 
     def create_itempool(self) -> List[Item]:
+
         itempool: List[Item] = []
         precollected_items: List[Item] = []
 
@@ -229,6 +240,31 @@ class OkamiWorld(World):
                     list.append(self.get_location(shop_loc_name))
 
         return list
+
+    def solve_start_point_option(self) -> str:
+        option = self.options.StartingLocation.current_key
+        if option == "Random" or option == "Not Vanilla":
+            sp: List[str] = list(self.start_point_list.keys())
+            if option == "Not Vanilla":
+                # Remove vanilla start
+                sp.pop(0)
+            self.random.shuffle(sp)
+            return sp[0]
+        else:
+            return option
+
+    def handle_start_point(self):
+        start_point_option: str = self.solve_start_point_option()
+        self.picked_start = start_point_option
+        starting_point:StartPoint = self.start_point_list[start_point_option]
+        menu_region = self.get_region(RegionNames.MENU)
+        sp_region = self.get_region(starting_point.region)
+        exit_name = menu_region.name + ' -> ' + sp_region.name
+        ext = menu_region.connect(sp_region, exit_name)
+
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        if self.picked_start is not None:
+            spoiler_handle.write('Picked start: '+self.picked_start)
 
     # Probably has to be a better way to do this.
     item_name_groups = {

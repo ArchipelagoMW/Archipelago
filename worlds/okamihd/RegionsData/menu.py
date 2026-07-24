@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 exits = {
     # TODO: in ER this should be the starting point.
-    RegionNames.MENU: [ExitData(RegionNames.CURSED_KAMIKI,one_way=True)]
+    #RegionNames.MENU: [ExitData(RegionNames.CURSED_KAMIKI,one_way=True)]
 }
 events = {
 }

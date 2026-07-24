@@ -104,3 +104,8 @@ def resolve_option_callable(value: T | Callable[[OkamiOptions], T], world: "Okam
         return value(world.options)
     else:
         return value
+
+
+class StartPoint(NamedTuple):
+    region: RegionNames
+    position: tuple[int, int, int]

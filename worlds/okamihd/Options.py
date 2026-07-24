@@ -1,7 +1,7 @@
 from typing import List, TYPE_CHECKING, Dict, Any
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from Options import Range, Toggle, Choice, OptionGroup
+from Options import Range, Toggle, Choice, OptionGroup, TextChoice
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -141,7 +141,6 @@ class IngredientsInMoonCave(Toggle):
     default = 1
 
 
-
 class AlternativeMistSlowdown(Toggle):
     """Should Logic take into account the fact that you
     can replicate in the Veil of Mist slowdown effect by using Fireburst/Icestorm?
@@ -150,6 +149,16 @@ class AlternativeMistSlowdown(Toggle):
     """
     display_name = "Use Fireburst/Icestrom for slowdown"
     default = 0
+
+
+class StartingLocation(TextChoice):
+    """[POC] Starting location"""
+    display_name = "Starting Location"
+    default = "Vanilla"
+    options = ["Vanilla", "Healed Kamiki",
+               "Shinshu Field",
+               "Ryoshima Coast",
+               "Sei-an City", "Random", "Not Vanilla"]
 
 
 #
@@ -180,7 +189,8 @@ class OkamiOptions(PerGameCommonOptions):
     MoonCaveAccess: MoonCaveAccess
     BloomGuardianSaplings: BloomGuardianSaplings
     IngredientsInMoonCave: IngredientsInMoonCave
-    AlternativeMistSlowdown:AlternativeMistSlowdown
+    AlternativeMistSlowdown: AlternativeMistSlowdown
+    StartingLocation: StartingLocation
 
 
 #    PraiseSanity:PraiseSanity
@@ -199,8 +209,8 @@ okami_option_groups: Dict[str, List[Any]] = {
         OpenGameStart,
         ProgressiveWeapons,
         RemoveBlockHead,
-        BloomGuardianSaplings
-
+        BloomGuardianSaplings,
+        StartingLocation
         # PraiseSanity
     ],
     "Orochi Arc Options": [
@@ -209,7 +219,7 @@ okami_option_groups: Dict[str, List[Any]] = {
         MoonCaveAccess,
         IngredientsInMoonCave
     ],
-    "Advanced Options":[
+    "Advanced Options": [
         AlternativeMistSlowdown
     ]
 
@@ -229,6 +239,7 @@ slot_data_options = {
     "CanineRewards",
     "MoonCaveAccess",
     "BloomGuardianSaplings",
-    "IngredientsInMoonCave"
+    "IngredientsInMoonCave",
+    "StartingLocation"
     #    "PraiseSanity"
 }
