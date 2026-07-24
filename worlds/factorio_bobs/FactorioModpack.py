@@ -14,9 +14,9 @@ external_directory_path = Path(Utils.user_path("factorio_mods", "packs"))
 if not external_directory_path.exists():
     external_directory_path.mkdir(parents=True)
 BaseModpack.modpack_directories.append((external_directory_path,[]))
-player_directory_path = Path(Utils.user_path("Players"))
-if player_directory_path.exists():
-    BaseModpack.modpack_directories.append((player_directory_path,[]))
+# player_directory_path = Path(Utils.user_path("Players"))
+# if player_directory_path.exists():
+#     BaseModpack.modpack_directories.append((player_directory_path,[]))
 
 class FactorioModpack(BaseModpack):
     def __init__(self, packPath: Path, filesystems=None):
