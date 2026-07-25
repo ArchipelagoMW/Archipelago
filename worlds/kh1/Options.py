@@ -515,7 +515,7 @@ class StartingWorlds(Range):
     display_name = "Starting Worlds"
     default = 4
     range_start = 0
-    range_end = 10
+    range_end = 11
     
 class StartingTools(DefaultOnToggle):
     """
