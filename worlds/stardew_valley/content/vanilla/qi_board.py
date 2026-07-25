@@ -30,6 +30,9 @@ qi_board_content_pack = QiBoardContentPack(
         pelican_town_content_pack.name,
         ginger_island_content_pack.name,
     ),
+    currencies={
+        Currency.qi_gem,
+    },
     harvest_sources={
         # This one is a bit special, because it's only available during the special order, but it can be found from like, everywhere.
         Seed.qi_bean: (GenericSource(regions=(Region.qi_walnut_room,)),),
@@ -60,10 +63,11 @@ qi_board_content_pack = QiBoardContentPack(
     ),
     hat_sources={
         Hats.infinity_crown: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(ForgeInfinityWeaponRequirement(),)),),
-        Hats.space_helmet: (HatMouseSource(price=20000, unlock_requirements=(DangerousMinesRequirement(120),)),),
+        Hats.gnomes_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(9999),)),),
+        Hats.mr_qis_hat: (Tag(ItemTag.HAT), ShopSource(price=5, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
         Hats.qi_mask: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fruit.qi_fruit,)),),
         Hats.radioactive_goggles: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(MetalBar.radioactive,)),),
-        Hats.gnomes_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(9999),)),),
+        Hats.space_helmet: (HatMouseSource(price=20000, unlock_requirements=(DangerousMinesRequirement(120),)),),
         Hats.star_helmet: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(TreeSeed.mushroom,)),),
     },
 )

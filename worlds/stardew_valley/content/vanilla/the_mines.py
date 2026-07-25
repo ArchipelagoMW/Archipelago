@@ -8,6 +8,7 @@ from ...data.monster_data import MonsterSource
 from ...data.requirement import ToolRequirement, RegionRequirement
 from ...logic.tailoring_logic import TailoringSource
 from ...logic.time_logic import MAX_MONTHS
+from ...strings.currency_names import MemeCurrency
 from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.monster_names import Monster
@@ -19,6 +20,9 @@ the_mines = ContentPack(
     dependencies=(
         pelican_town_content_pack.name,
     ),
+    currencies={
+        MemeCurrency.deathlinks,
+    },
     harvest_sources={
         Forageable.cave_carrot: (
             Tag(ItemTag.FORAGE),

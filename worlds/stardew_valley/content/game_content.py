@@ -36,6 +36,7 @@ class StardewContent:
     # regions -> To be used with can reach rule
 
     game_items: dict[str, GameItem] = field(default_factory=dict)
+    currencies: set[str] = field(default_factory=set)
     fishes: dict[str, FishItem] = field(default_factory=dict)
     villagers: dict[str, Villager] = field(default_factory=dict)
     farm_buildings: dict[str, Building] = field(default_factory=dict)
@@ -183,6 +184,11 @@ class ContentPack:
         ...
 
     shop_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
+
+    currencies: Iterable[str] = ()
+
+    # def fish_hook(self, content: StardewContent):
+    #     ...
 
     def shop_source_hook(self, content: StardewContent):
         ...

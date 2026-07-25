@@ -12,6 +12,7 @@ from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import WildSeeds, Edible, Consumable, Lighting
 from ...strings.crop_names import Fruit, Vegetable
+from ...strings.currency_names import Currency, MemeCurrency
 from ...strings.fish_names import Fish, WaterChest
 from ...strings.flower_names import Flower
 from ...strings.food_names import Beverage, Meal
@@ -105,6 +106,19 @@ class BaseGameContentPack(ContentPack):
 
 base_game = BaseGameContentPack(
     "Base game (Vanilla)",
+    currencies={
+        Currency.money,
+        MemeCurrency.bank_money,
+        MemeCurrency.sleep_days,
+        MemeCurrency.blood,
+        MemeCurrency.clic,
+        MemeCurrency.cookies,
+        MemeCurrency.code,
+        MemeCurrency.energy,
+        MemeCurrency.steps,
+        MemeCurrency.time,
+        MemeCurrency.error,
+    },
     harvest_sources={
         # Fruit tree
         Fruit.apple: (HarvestFruitTreeSource(sapling=Sapling.apple, seasons=(Season.fall,)),),

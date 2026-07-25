@@ -229,16 +229,16 @@ bulletin_board_remixed = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_boar
 abandoned_joja_mart_remixed = abandoned_joja_mart_thematic
 
 # Vault
-vault_gambler_items = BundleItem(Currency.qi_coin, 10000)
+vault_gambler_items = BundleItem(Currency.qi_coin, 10000, source=BundleItem.Sources.content_currency)
 vault_gambler_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.gambler, vault_gambler_items)
 
 vault_carnival_items = BundleItem(Currency.star_token, 2500, source=BundleItem.Sources.festival)
 vault_carnival_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.carnival, vault_carnival_items)
 
-vault_walnut_hunter_items = BundleItem(Currency.golden_walnut, 25)
+vault_walnut_hunter_items = BundleItem(Currency.golden_walnut, 25, source=BundleItem.Sources.content_currency)
 vault_walnut_hunter_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.walnut_hunter, vault_walnut_hunter_items)
 
-vault_qi_helper_items = BundleItem(Currency.qi_gem, 25, source=BundleItem.Sources.island)
+vault_qi_helper_items = BundleItem(Currency.qi_gem, 25, source=BundleItem.Sources.content_currency)
 vault_qi_helper_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.qi_helper, vault_qi_helper_items)
 
 vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_helper_bundle, vault_carnival_bundle]  # , vault_walnut_hunter_bundle

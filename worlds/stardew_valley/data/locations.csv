@@ -2836,7 +2836,7 @@ id,region,name,tags,content_packs
 4669,Hat Wearing,Wear Magic Cowboy Hat,"HATSANITY,HAT_DIFFICULT",
 4670,Hat Wearing,Wear Magic Turban,"HATSANITY,HAT_DIFFICULT",
 4671,Hat Wearing,Wear Mouse Ears,"HATSANITY,HAT_EASY",
-4672,Hat Wearing,Wear Mr. Qi's Hat,"HATSANITY,HAT_MEDIUM,GINGER_ISLAND",
+4672,Hat Wearing,Wear Mr. Qi's Hat,"HATSANITY,HAT_MEDIUM,GINGER_ISLAND,REQUIRES_QI_ORDERS",
 4673,Hat Wearing,Wear Mummy Mask,"HATSANITY,HAT_EASY",
 4674,Hat Wearing,Wear Mushroom Cap,"HATSANITY,HAT_RNG",
 4675,Hat Wearing,Wear Mystery Hat,"HATSANITY,HAT_RNG",

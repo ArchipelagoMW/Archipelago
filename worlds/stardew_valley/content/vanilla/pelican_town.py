@@ -31,7 +31,7 @@ from ...strings.catalogue_names import Catalogue
 from ...strings.craftable_names import Furniture, Consumable, Fishing, WildSeeds, Bomb, Fence, Sprinkler, Floor, Edible, Ring, Lighting, Storage, Sign, \
     Craftable, Statue
 from ...strings.crop_names import Fruit, Vegetable
-from ...strings.currency_names import Currency
+from ...strings.currency_names import Currency, MemeCurrency
 from ...strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ...strings.festival_check_names import FestivalCheck
 from ...strings.fish_names import WaterItem, Fish, Trash
@@ -58,6 +58,17 @@ from ...strings.villager_names import NPC
 
 pelican_town = ContentPack(
     "Pelican Town (Vanilla)",
+    currencies={
+        Currency.money,
+        Currency.star_token,
+        Currency.golden_tag,
+        Currency.prize_ticket,
+        MemeCurrency.goat,
+        MemeCurrency.time_elapsed,
+        MemeCurrency.honeywell,
+        MemeCurrency.missed_fish,
+        MemeCurrency.yeehaw,
+    },
     harvest_sources={
         # Spring
         Forageable.daffodil: (

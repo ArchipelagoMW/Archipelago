@@ -82,6 +82,11 @@ class MoneyLogic(BaseLogic):
     def can_spend(self, amount: int) -> StardewRule:
         if self.options.starting_money == -1:
             return True_()
+
+        if Currency.money not in self.content.currencies:
+            assert Currency.money in self.content.currencies, f"Cannot purchase using currency {Currency.money} because it is not in the enabled content packs"
+            return self.logic.false_
+
         spend_earned_multiplier = 5  # We assume that if you earned 5x an amount, you can reasonably spend that amount on things
         return self.logic.money.can_have_earned_total(amount * spend_earned_multiplier)
 
@@ -98,6 +103,10 @@ class MoneyLogic(BaseLogic):
     @cache_self1
     def can_shop_from(self, source: ShopSource) -> StardewRule:
         season_rule = self.logic.season.has_any(source.seasons)
+        if source.price is not None and source.price > 0:
+            if source.currency not in self.content.currencies:
+                assert source.currency in self.content.currencies, f"Cannot purchase using currency {source.currency} because it is not in the enabled content packs"
+                return self.logic.false_
         if source.currency == Currency.money:
             money_rule = self.logic.money.can_spend(source.price) if source.price is not None else true_
         else:
@@ -116,6 +125,9 @@ class MoneyLogic(BaseLogic):
     def can_trade(self, currency: str, amount: int) -> StardewRule:
         if amount == 0:
             return self.logic.true_
+        if currency not in self.content.currencies:
+            assert currency in self.content.currencies, f"Cannot purchase using currency {currency} because it is not in the enabled content packs"
+            return self.logic.false_
 
         if currency == Currency.money or currency == MemeCurrency.bank_money:
             return self.can_spend(amount)

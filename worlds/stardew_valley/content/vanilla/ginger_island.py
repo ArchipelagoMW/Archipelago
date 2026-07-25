@@ -22,7 +22,7 @@ from ...strings.book_names import Book
 from ...strings.building_names import Building
 from ...strings.craftable_names import WildSeeds, Craftable, Consumable, Fishing, Ring
 from ...strings.crop_names import Fruit, Vegetable
-from ...strings.currency_names import Currency
+from ...strings.currency_names import Currency, MemeCurrency
 from ...strings.fertilizer_names import SpeedGro, RetainingSoil
 from ...strings.fish_names import Fish
 from ...strings.flower_names import Flower
@@ -62,6 +62,11 @@ ginger_island_content_pack = GingerIslandContentPack(
     weak_dependencies=(
         pelican_town_content_pack.name,
     ),
+    currencies={
+        Currency.golden_walnut,
+        MemeCurrency.dead_crops,
+        MemeCurrency.dead_pumpkins,
+    },
     harvest_sources={
         # Foraging
         Forageable.dragon_tooth: (
@@ -152,7 +157,6 @@ ginger_island_content_pack = GingerIslandContentPack(
         Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
         Hats.small_cap: (
         Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((30, Vegetable.taro_root),), shop_region=Region.island_trader),),
-        Hats.mr_qis_hat: (Tag(ItemTag.HAT), ShopSource(price=5, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
         Hats.pink_bow: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=Region.volcano_dwarf_shop),),
 
         Hats.tiger_hat: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.tiger_slime,), amount_tier=MAX_MONTHS,

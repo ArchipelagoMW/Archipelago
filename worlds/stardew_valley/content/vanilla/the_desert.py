@@ -31,6 +31,10 @@ the_desert = ContentPack(
     dependencies=(
         pelican_town_content_pack.name,
     ),
+    currencies={
+        Currency.qi_coin,
+        Currency.calico_egg,
+    },
     harvest_sources={
         Forageable.cactus_fruit: (
             Tag(ItemTag.FORAGE),

@@ -6,6 +6,7 @@ from ...data.harvest import FruitBatsSource, MushroomCaveSource
 from ...data.shop import ShopSource
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.building_names import Building
+from ...strings.currency_names import Currency, MemeCurrency
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.region_names import Region
 
@@ -14,6 +15,14 @@ the_farm = ContentPack(
     dependencies=(
         pelican_town_content_pack.name,
     ),
+    currencies={
+        Currency.money,
+        MemeCurrency.bank_money,
+        MemeCurrency.sleep_days,
+        MemeCurrency.child,
+        MemeCurrency.dead_crops,
+        MemeCurrency.dead_pumpkins,
+    },
     harvest_sources={
         # Fruit cave
         Forageable.blackberry: (
