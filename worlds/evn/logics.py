@@ -1,6 +1,4 @@
-from typing import Dict, TypedDict, List, Set
-
-#from worlds.evn.rezdata.misns import MisnDict, misn_table
+from typing import Dict, TypedDict, List
 
 # PREFACE:
 # The biggest part of EVN that doesn't work well with AP is the potential to permanently lock out a mission, and therefore lock out a location/check.

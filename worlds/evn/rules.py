@@ -2,20 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, List
 
-from flask_caching import logger
+# TODO: Fix reference. Doesn't work with AP Launcher
+#from flask_caching import logger
 
-from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, set_rule
+from worlds.generic.Rules import set_rule
 
-#from .options import ChosenString
-#from .logics import story_routes
-#from .locations import ev_location_bank
-from .rezdata.misns import misn_table
-from .rezdata.ships import ship_table #, ShipDict
-#from .locations import loc_type_offset
+from .rezdata.ships import ship_table 
 from .apdata.offsets import offsets_table as loc_type_offset
 from .logics import possible_regions
-#from .items import ev_item_bank
 
 if TYPE_CHECKING:
     from .world import EVNWorld

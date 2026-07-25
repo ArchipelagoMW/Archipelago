@@ -1,18 +1,21 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, Optional, TypedDict
-from venv import logger
+# NOTE: This allows us to log to the console. However, we dev'ed in a venv setup
+# that VSCode setup for python 3.13.11...
+# If we include this import in final build, AP launcher will fail to generate yaml
+# due to bad reference (it won't have the virtual environment)
+# NOTE: Include only when testing!
+# from venv import logger
 
-from BaseClasses import ItemClassification, Location, Region
-#from worlds.evn.regions import can_accept_location  # Is this an improper import?
+from BaseClasses import Location
 
 from .rezdata import misns
 from .apdata.customoutf import cust_outf_table
-from .logics import possible_regions, EVNRegionData, story_routes, EVNStoryRoute, misns_to_ignore
+from .logics import possible_regions, misns_to_ignore
 
 from .apdata.offsets import offsets_table as loc_type_offset
 
-# import re
 import random
 
 if TYPE_CHECKING:
@@ -150,7 +153,7 @@ def get_location_names_with_ids(world: EVNWorld, location_names: list[str]) -> D
             ret_dict[name] = loc_name_to_id[name]
         else:
             ret_dict[name] = None
-            logger.info(f"location id not found for {name}")
+            # logger.info(f"location id not found for {name}")
     return ret_dict
 
 
@@ -197,8 +200,9 @@ def create_universe_locations(world: EVNWorld) -> None:
             , EVNLocation
         )
         x += 1
-    if x > 0 and x < y:
-        logger.warning(f"Ran out of custom items in story route pool before reaching desired count!")
+    # Testing
+    # if x > 0 and x < y:
+    #     logger.warning(f"Ran out of custom items in story route pool before reaching desired count!")
 
     # Check if location used by any story regions
     for key, loc in ev_location_bank.items():

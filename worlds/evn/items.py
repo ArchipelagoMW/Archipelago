@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, TypedDict
 
-from flask_caching import logger
+# TODO: Fix this reference. Wtf is flask_caching? It doesn't work with AP Launcher.
+# from flask_caching import logger
 
 from BaseClasses import Item, ItemClassification
-from . import rules
 
 from .rezdata import ships, outfits
 from .logics import ships_to_ignore, outf_to_ignore
@@ -133,7 +133,7 @@ def get_items() -> Dict[int, EVNItemData]:
         )
         #j += 1
 
-    logger.info(f"data bank size: {len(ret_bank)}")
+    #logger.info(f"data bank size: {len(ret_bank)}")
     return ret_bank
 
 
@@ -197,6 +197,7 @@ def create_all_items(world: EVNWorld) -> None:
     itempool = []
     for item_id in ev_item_bank: #NOTE: could probably now change to "if item.origin not blank, append"
         if ((item_id < 9900 or item_id >= 9906) and item_id != STRING_COMPLETE_BIT): # don't add credits to regular itempool, since they're just filler. We'll add them as needed in the filler section later.
+            # If shuffling outfits was not selected in options, skip outfit items.
             if (not world.options.include_outfits and ev_item_bank[item_id]["origin"] == "outf"):
                 continue
             itempool.append(create_item_with_correct_classification(world, ev_item_bank[item_id]["name"]))
@@ -204,14 +205,14 @@ def create_all_items(world: EVNWorld) -> None:
     
     # The length of our itempool is easy to determine, since we have it as a list.
     number_of_items = len(itempool)
-    logger.info(f"number of items before filler: {number_of_items}")
+    #logger.info(f"number of items before filler: {number_of_items}")
     #number_of_items = len(ev_item_bank)
 
     # The number of locations is also easy to determine, but we have to be careful.
     # Just calling len(world.get_locations()) would report an incorrect number, because of our *event locations*.
     # What we actually want is the number of *unfilled* locations. Luckily, there is a helper method for this:
     number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
-    logger.info(f"number of unfilled locations: {number_of_unfilled_locations}")
+    #logger.info(f"number of unfilled locations: {number_of_unfilled_locations}")
 
     # Now, we just subtract the number of items from the number of locations to get the number of empty item slots.
     #needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
@@ -224,8 +225,7 @@ def create_all_items(world: EVNWorld) -> None:
     #   This will show up oddly in the generator (#items, #unfilled locations, #dif - but #dif offset by 1)
     # NOTE: EVN has so many items, this'll only really come into effect if the outfits aren't also shuffled.
     needed_number_of_filler_items = number_of_unfilled_locations - number_of_items - 1
-    logger.info(f"number of filler items needed: {needed_number_of_filler_items}")
-    #logger.info(f"number of completion locations: {len(rules.COMPLETION_LOCATIONS)}")
+    #logger.info(f"number of filler items needed: {needed_number_of_filler_items}")
 
     # Finally, we create that many filler items and add them to the itempool.
     # To create our filler, we could just use world.create_item("Confetti Cannon").

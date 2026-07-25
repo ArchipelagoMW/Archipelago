@@ -3,13 +3,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
-from venv import logger
+# NOTE: Only include when testing!
+# from venv import logger
 
 
 #from .options import ChosenString
 from .logics import story_routes, possible_regions
-
-import re
 
 if TYPE_CHECKING:
     from .world import EVNWorld
