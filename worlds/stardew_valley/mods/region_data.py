@@ -128,13 +128,13 @@ juna_entrances = [
     ConnectionData(
         JunaEntrance.forest_to_juna_cave,
         JunaRegion.juna_cave,
-        flag=RandomizationFlag.NON_PROGRESSION,
+        flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         JunaEntrance.juna_cave_to_forest,
         Region.forest,
-        flag=RandomizationFlag.NON_PROGRESSION,
+        flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT,
     )]
 
