@@ -412,7 +412,7 @@ def randomize_shop_currencies(content: StardewContent, data_to_randomize: set[st
     if DataRandomizationOptionName.shop_currencies not in data_to_randomize:
         return
 
-    shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.price is not None and shop_source.price >= 1])
+    shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.price is not None and shop_source.price >= 1 and shop_source.currency in content.currencies])
 
     shop_currencies = dict()
     for shop_source in shop_sources_included:
@@ -469,7 +469,7 @@ def randomize_shop_prices(content: StardewContent, data_to_randomize: set[str], 
     if DataRandomizationOptionName.shop_prices not in data_to_randomize:
         return
 
-    shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.price is not None and shop_source.price >= 1])
+    shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.price is not None and shop_source.price >= 1 and shop_source.currency in content.currencies])
 
     shop_sources_by_currency = dict()
     for shop_source in shop_sources_included:
