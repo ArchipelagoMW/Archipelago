@@ -47,7 +47,7 @@ from .strings.craftable_names import Bomb, Furniture, Consumable, Craftable
 from .strings.crop_names import Fruit, Vegetable
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \
     DeepWoodsEntrance, AlecEntrance, \
-    SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance
+    SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance, JunaEntrance
 from .strings.fish_names import Fish
 from .strings.food_names import Meal
 from .strings.forageable_names import Forageable
@@ -534,6 +534,8 @@ def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, cont
         rule_collector.set_entrance_rule(AlecEntrance.petshop_to_bedroom, (logic.relationship.has_hearts(ModNPC.alec, 2) | logic.mod.magic.can_blink()))
     if content.is_enabled(ModNames.lacey):
         rule_collector.set_entrance_rule(LaceyEntrance.forest_to_hat_house, logic.relationship.has_hearts(ModNPC.lacey, 2))
+    if content.is_enabled(ModNames.juna):
+        rule_collector.set_entrance_rule(JunaEntrance.forest_to_juna_cave, logic.relationship.has_hearts(ModNPC.juna, 2))
 
 
 def set_mines_floor_entrance_rules(logic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
