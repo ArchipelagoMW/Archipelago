@@ -621,7 +621,6 @@ def sanitize_birthday_dates(content: StardewContent, data_to_randomize: set[str]
         season_most_birthdays = max(season_counts, key=lambda k: len(season_counts[k]))
 
 
-
 def any_season_too_many_birthdays(season_counts):
     for season, villagers in season_counts.items():
         if len(villagers) > 20:
