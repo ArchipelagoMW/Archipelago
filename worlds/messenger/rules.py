@@ -447,7 +447,7 @@ class MessengerHardRules(MessengerRules):
                 "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
                     self.true,
                 "Elemental Skylands - Earth Intro Shop -> Elemental Skylands - Earth Generator Shop":
-                    lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+                    self.true,
                 # Riviere Turquoise
                 "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                     self.true,
@@ -474,6 +474,8 @@ class MessengerHardRules(MessengerRules):
                     self.true,
                 "Howling Grotto Seal - Windy Saws and Balls":
                     self.true,
+                "Howling Grotto Seal - Crushing Pits":
+                    self.has_vertical,
                 "Searing Crags Seal - Triple Ball Spinner":
                     self.true,
                 "Glacial Peak Seal - Ice Climbers":
