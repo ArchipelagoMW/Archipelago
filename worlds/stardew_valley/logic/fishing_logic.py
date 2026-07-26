@@ -3,7 +3,6 @@ from functools import cached_property
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
-from ..data import fish_data
 from ..data.fish_data import FishItem, crab_pot_difficulty
 from ..stardew_rule import StardewRule, True_
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
@@ -128,8 +127,7 @@ class FishingLogic(BaseLogic):
 
     def can_start_extended_family_quest(self) -> StardewRule:
         if self.content.is_enabled(qi_board_content_pack):
-            return (self.logic.region.can_reach(Region.qi_walnut_room) &
-                    self.logic.and_(*(self.logic.fishing.can_catch_fish(fish) for fish in fish_data.vanilla_legendary_fish)))
+            return self.logic.region.can_reach(Region.qi_walnut_room)
 
         return self.logic.false_
 
