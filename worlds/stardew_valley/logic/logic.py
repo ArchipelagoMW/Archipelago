@@ -68,7 +68,7 @@ from ..strings.boot_names import tier_by_boots
 from ..strings.building_names import Building
 from ..strings.catalogue_names import items_by_catalogue
 from ..strings.craftable_names import Consumable, Ring, Fishing, Lighting
-from ..strings.crop_names import Fruit, Vegetable
+from ..strings.crop_names import Vegetable
 from ..strings.currency_names import Currency
 from ..strings.decoration_names import Decoration
 from ..strings.fertilizer_names import Fertilizer
@@ -127,11 +127,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             if recipe.name in self.registry.crafting_rules:
                 can_craft_rule = can_craft_rule | self.registry.crafting_rules[recipe.name]
             self.registry.crafting_rules[recipe.name] = can_craft_rule
-
-        self.registry.crop_rules.update({
-            Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
-                                 self.region.can_reach(Region.greenhouse) & self.has(Machine.seed_maker),
-        })
 
         # @formatter:off
         self.registry.item_rules.update({
@@ -326,7 +321,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.registry.item_rules.update(content_rules)
         self.registry.item_rules.update(self.registry.fish_rules)
         self.registry.item_rules.update(self.registry.museum_rules)
-        self.registry.item_rules.update(self.registry.crop_rules)
         self.artisan.initialize_rules()
         self.registry.item_rules.update(self.registry.artisan_good_rules)
 
