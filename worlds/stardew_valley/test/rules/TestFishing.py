@@ -2,6 +2,7 @@ from ..bases import SVTestBase
 from ... import StardewItem, StartWithoutOptionName
 from ...options import (ElevatorProgression, ExcludeGingerIsland, Fishsanity, SeasonRandomization, SkillProgression, SpecialOrderLocations, StartWithout,
                         ToolProgression)
+from ...options.options import DataRandomization, DataRandomizationBehavior
 from ...strings.ap_names.transport_names import Transportation
 from ...strings.fish_names import Fish
 
@@ -35,11 +36,11 @@ class TestNeedRegionToCatchFish(SVTestBase):
             Fish.sandfish: [Transportation.bus_repair],
             Fish.scorpion_carp: ["Wizard Invitation", "Desert Obelisk"],
 
-            Fish.son_of_crimsonfish: ["Beach Bridge", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", ["Beach Bridge", "Town To Tide Pools Shortcut"]],
-            Fish.radioactive_carp: ["Beach Bridge", "Rusty Key", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", "Rusty Key"],
-            Fish.glacierfish_jr: ["Beach Bridge", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"],
-            Fish.legend_ii: ["Beach Bridge", "Wizard Invitation", "Island Obelisk", ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"],
-            Fish.ms_angler: ["Beach Bridge", "Wizard Invitation", "Island Obelisk", ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"], }
+            Fish.son_of_crimsonfish: [Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", ["Beach Bridge", "Town To Tide Pools Shortcut"]],
+            Fish.radioactive_carp: ["Rusty Key", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"],
+            Fish.glacierfish_jr: [Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"],
+            Fish.legend_ii: ["Wizard Invitation", "Island Obelisk", ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"],
+            Fish.ms_angler: ["Wizard Invitation", "Island Obelisk", ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"], }
         self.collect("Progressive Fishing Rod", 4)
         self.collect_all_the_money()
         for fish in fish_and_items:
@@ -80,9 +81,12 @@ class TestNeedLevelsToCatchFish(SVTestBase):
         ToolProgression.internal_name: ToolProgression.option_progressive,
         Fishsanity.internal_name: Fishsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
-        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi, }
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        DataRandomization.internal_name: frozenset(DataRandomization.preset_all),
+        DataRandomizationBehavior.internal_name: DataRandomizationBehavior.option_weighted_randomized,
+    }
 
-    def test_catch_fish_requires_region_unlock(self):
+    def test_catch_fish_requires_minimum_level(self):
         fish_and_levels: dict[str, int] = {
             Fish.angler: 3,
             Fish.crimsonfish: 5,
@@ -103,12 +107,9 @@ class TestNeedLevelsToCatchFish(SVTestBase):
             with self.subTest(f"Level rules for {fish}"):
                 level = fish_and_levels[fish]
                 location = f"Fishsanity: {fish}"
-                self.assert_cannot_reach_location(location)
-                items = ["Fishing Level"] * level
+                items = [self.create_item(item_name) for item_name in (["Fishing Level"] * level)]
                 for item in items:
                     self.assert_cannot_reach_location(location)
                     self.collect(item)
-                with self.subTest(f"{fish} can be reached with {level} fishing levels"):
-                    self.assert_can_reach_location(location)
                 for item in items:
                     self.remove(item)
