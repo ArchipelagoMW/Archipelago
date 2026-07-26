@@ -11,6 +11,7 @@ from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.building_names import Building
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
+from ..strings.metal_names import Mineral
 from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
@@ -42,6 +43,9 @@ class RelationshipLogic(BaseLogic):
     def can_get_married(self) -> StardewRule:
         return self.logic.relationship.has_hearts_with_any_bachelor(10) & self.logic.has(Gift.mermaid_pendant)
 
+    def can_get_divorced(self) -> StardewRule:
+        return self.logic.relationship.can_get_married() & self.logic.money.can_spend_at(Region.mayor_house, 50000)
+
     def has_children(self, number_children: int) -> StardewRule:
         assert number_children >= 0, "Can't have a negative amount of children."
         if number_children == 0:
@@ -53,6 +57,9 @@ class RelationshipLogic(BaseLogic):
         return self.logic.received_n(*possible_kids, count=number_children) & \
             self.logic.building.has_building(Building.kids_room) & \
             self.logic.relationship.can_reproduce(number_children)
+
+    def can_dove_children(self, number_children: int) -> StardewRule:
+        return self.logic.relationship.has_children(number_children) & self.logic.region.can_reach(Region.witch_hut) & self.logic.has(Mineral.prismatic_shard)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         assert number_children >= 0, "Can't have a negative amount of children."

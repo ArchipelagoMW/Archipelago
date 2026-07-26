@@ -50,6 +50,8 @@ class BundleLogic(BaseLogic):
     def get_special_bundle_requirement(self, bundle: Bundle) -> StardewRule:
         if bundle.name == MemeBundleName.pomnut:
             return self.logic.building.has_building(Building.stable)
+        if bundle.name == MemeBundleName.commitment:
+            return self.logic.relationship.can_get_divorced() & self.logic.relationship.can_dove_children(2)
         return self.logic.true_
 
     def get_quality_rules(self, qualities: List[str]) -> StardewRule:
