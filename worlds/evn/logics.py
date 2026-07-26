@@ -6,52 +6,11 @@ from typing import Dict, TypedDict, List
 # Consequently, we have to protect against that in the logic less some poor (other) player's important item is forever locked.
 # I would love to say I found an elegant solution to this problem, but alas, I am still hard coding paths :(
 
-# From Regions (originally):
-# REGION_KEYS = {
-#     "Universe" : [],
-#     "Fed" : ["Fed"], # Fed story mission string
-#     "Vellos" : ["Vellos", "Vell-os"],
-#     "Polaris" : ["Polaris"],
-#     "Auroran" : ["Auroran"],
-#     "Rebel" : ["Rebel"],
-#     "Pirate" : ["Pirate"],
-# }
-
 # This should be a bit that will NEVER be set naturally by the game. Use it to perm block missions in the seed that you don't want to be reachable.
 MISSION_BLOCKING_BIT = 9955
 
-# # NOTE: This is the total number of progression items in the pool that'll need locations.
-# #   - If you try to generate, look for the output line "number of items before filler".
-# #   - This will help determine the number of custom outfit shop "locations" will need to be generated.
-# # Ramble time: I do *not* approve of doing it this way really... Here's a brief on the issue:
-# #   - There's too many outfits and ships to shuffle, and not enough missions to put them behind.
-# #   - So we created the custom outfits to "buy" checks. Cool. Except, I kept finding missions that are 
-# #       incompletable in game and needed to be ignored. The result - not enough missions AGAIN.
-# #   - I wanted to create a dynamic determination of how many custom outfits would be needed.
-# #       However, locations are generated first, meaning we don't know how many items will be generated necessarily...
-# #       Like at run time, the code won't know. We can't call len(item_pool) as it is empty. And even if we did,
-# #       we'd probably get a circular reference issue or something.
-# #   - Conclusion: Until I find a better way, I'm going to cheat and use this enum.
-# # IF YOU ARE ADDING A TC OR PLUGIN, you'll need to recalculate and adjust this number. Otherwise, there *might* be too few "locations" to generate successfully.
-# ITEM_COUNT_SHORTCUT = 360
-
-# MAX_CUST_CHECKS = 50 # Max number of custom outfits / locations that can be referenced
-# # NOTE: increasing DOES affect gen time, so don't do so arbitrarily.
-# #   Ref: locations.py > get_locations()
-
-# # Define your function for how you want the credit cost of checks to scale
-# def get_cust_check_val(x: int) -> int:
-#     """
-#     x: current iteration. Ex: 5'th check out of total.
-#     result: the resulting value for that iteration.
-#     """
-#     # NOTE: some of these values *could* be variables possibly.
-    
-
-# CUST_CHECK_FORMULA = get_cust_check_val()
-
 # NOTE: This is a bit of a catch-all for missions that don't fit well with the archipelago check system.
-#   Namely, this will be missions that cannot be completed. Ex: Ship asks to be refilled (afaik, the game literally doesn't have a way to trigger the on_success of the misn for this scenario.)
+#   Namely, these are missions that cannot be completed. Ex: Ship asks to be refilled (afaik, the game literally doesn't have a way to trigger the on_success of the misn for this scenario.)
 #   Or, are engine drivers / not intended for gameplay / may never be used, found, or interacted with. Ex: "Link" missions
 #   Or, are highly impractical, unfun, or even impossible for a player to complete. Ex: Drop bear event (which is done as a chron based misn iirc)
 misns_to_ignore: List[int] = [
@@ -60,12 +19,10 @@ misns_to_ignore: List[int] = [
     813, 814, 816, 817, 818, 819, 836, 837, 838, 839, 879, 905,
     784, # NOTE: Special case as this is actually a mission instead of a link. Auroran 2nd try, but forcing first instead.
     796, # NOTE: Another Auroran mission that requires previous failure, so won't include.
-    901,    # NOTE: "You Need to Register..." requests. Not going to happen, so remove.
-    902,
-    903,
-    904,
-    609, # drop bear - "haha"...
-    610, 
+    # NOTE: "You Need to Register..." requests. Not going to occur, so remove.
+    901, 902, 903, 904,
+    # drop bear - "haha"...
+    609, 610, 
     # cutoff variants of story line missions
     820, 821, 822, 823, 824, 825, 826, 860,
 
@@ -97,11 +54,10 @@ misns_to_ignore: List[int] = [
     614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 626, 627, 628, 629, 
 ]
 
-# Introducing this logic caused the number of available missions to drop below the item count
-# when also using outf. As such, we need to cut down on these.
-# I'm starting with "bad apple" variants (that are more of traps than helpful), then maybe cutting into variants in general.
-
-# TODO: Implement in items, and change default in world so they aren't provided if not found in items bank.
+# Conversely, we now need to try and trim down on the number of items.
+# Essentially, there aren't enough locations, and when outfits are mixed into the random pool,
+# there are way to many ships + outfits.
+# Let's mostly focus on cutting duplicates, AI only variants (mostly), trap items, variants that are never worth it, etc.
 ships_to_ignore: List[int] = [
     168, 169, 170, 171, 185, # wraith
     176, # krypt pod
@@ -185,15 +141,10 @@ outf_to_ignore: List[int] = [
 
 # I thought about offshoots that require a mission refusal, just setting the mission to auto-abort if accepted (one flag, easy)
 # but that would be confusing to the player I think. So, instead going to try and edit the mission to look like it has one button (cannot refuse flag) that is modelled to look like the specific option, such as "refuse" instead of "okay"
-class MisnSafetyLogic(TypedDict, total=False):
-    misn_id: int    # the id of the target mission, ex: 129
-    #column_name: str    # the misn.MisnDict column name, ex: on_accept
-    #replacement_logic: str  # 
-    column_edits: Dict[str, str] # ex: on_accept, "b511" - NOTE: The value type is still checked by the output logic, so do NOT wrap with quotes
 
 
 # Region class: What info do we need to know about a given segment of an overall story route?
-#   Note: EVNRegion would imply inheritance from AP's region class (whether it actually did or not), so let's be more specific
+#   NOTE: EVNRegion would imply inheritance from AP's region class (whether it actually did or not), so let's be more specific
 class EVNRegionData(TypedDict, total=False):
     id: int
     name: str
@@ -204,14 +155,40 @@ class EVNRegionData(TypedDict, total=False):
     misn_edits: Dict[int, Dict[str, str]] # The typing was nice, but id was redundant...
     entrance_rules: Dict[str, int] # ex: "ship": 435, "min_cargo": 10
 
-# NOTE: This is universe and story, but may just become story if I decide to handle side stories more.
-# TODO: With stories that can come from side stories, edit the branches of those side stories. Ex: If Pirate - WB pirate branch needs to be blocked (and auroran too...)
+# NOTE: The purpose of this section is to group missions into reusable segments when defining our story string
+# and how the regions connect.
+# Section 0 is the open universe, and will end up being filled with everything now found in one of the other sections.
+# So leave it blank for now.
+# NOTE: When implementing this for other scenarios / TCs, keep in mind:
+#   - Some strings can exit into multiple other strings, or have multiple entrances.
+#       These need to be accounted for as well.
+#       Ex: There is a region for each outcome of the WildGeese string.
+#       A story string will then use either its specific WG entrace region, or instead use the generic
+#       WG one that doesn't link to another string.
 possible_regions: Dict[int, EVNRegionData] = {
     0: {
-        "id": 0,  # I don't know if we need this one here. It is our default starting region that all story lines start from.
+        # Duplicative, as it matches the index, but still, a formal ID that can be referenced.
+        "id": 0,  # This is our default starting region that all story lines start from.
+        # A name that tells us the purpose of the region.
         "name": "Universe",
-        "missions": [],  # I would like to dynamically populate this by adding all missions in misn_table not in any other region's list
-        "misn_edits": {},
+        # All mission IDs that are used in this *region* (not necessarily the whole string)
+        "missions": [],  # This is dynamically populated by adding all missions in misn_table not in any other region's list
+        # This allows limited modification of the misn data at gen time *without* modifying the original data.
+        # This is *very* useful in that we can modify it based on the string chosen and not ruin the data for other strings.
+        "misn_edits": {
+            # Example structure:
+            # Mission_ID: { # This is the ID of the actual mission that will be altered. It does not need to be in the missions array above.
+            #   "column_name": "new_value", # This is the column name in the misn_table that will be altered, and the new value to set it to.
+            #}
+            # Example uses: 
+            # - change button text
+            # - recycle mission if accidently refused / aborted
+            # - Maybe on_refuse is actually the correct option instead of on_success here. 
+            # - block the mission from ever being available via the MISSION_BLOCK bit
+        },
+        # This is an attempt at pushing some missions into later spheres so they aren't required
+        # by other players in the early game... Partial success.
+        # Refer to rules.py -> set_all_entrance_rules
         "entrance_rules": {},
     },
     1: {
@@ -970,16 +947,13 @@ possible_regions: Dict[int, EVNRegionData] = {
 
 class EVNStoryRoute(TypedDict, total=False):
     id: int # NOTE: This will be used as the value for the options selection!
-    name: str # I dunno, w/e we wanna call this to clue in what it is
+    name: str # A readable name to tell us what it is for
     option_name: str # this will be prefaced by option_, and will be in the format of [word]_[word], ex: "wg_pirate" will become "option_wg_pirate" and indicate that the player will have to go through the WG storyline into the Pirate storyline
     regions: List[int] # NOTE: ORDER MATTERS. If we need to, we'll reorg to have each define their entrance and exit regions, but for now, will make the assumption that these are in order and connect in that order.
     region_connections: Dict[int, List[int]] # Dict[FromID, ToIDs] - Use 0 for Universe
     final_mission: int | None # The mission ID that we need to assign the victory condition to
-    #use_extended_checks: bool
     cust_outfs: List[int] # List of custom outfit IDs that'll be utilized. NOTE: Only used when outfits are included in shuffle. Not necessary if just ships.
-    #region_entrance_rules: Dict[int, Dict[str, int]] # region_id: key_reason - id or count (ex: "ship": 435, "min_cargo": 10)
-    use_cust_outfs_count: int # the number of custom outfits to randomly pull from cust_outfs
-    
+    use_cust_outfs_count: int # the number of custom outfits to randomly pull from cust_outfs. Use these two to make sure there are enough items to fulfill the locations amount.
 
 # Dictionary of our possible storylines / region routes
 # NOTE: IDs MUST be sequential due to how they are referenced elsewhere!
@@ -1000,10 +974,8 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        #"region_connections": { 0: [1, 101, 102, 20] }, # I don't think we need to add the blocking missions
         "region_connections": { 0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312] },
         "final_mission": 417,
-        #"use_extended_checks": False,
         "cust_outfs": [
             450, 454, 455, 456, 457, 458, 459, 462, 463, 464, 465
         ],   # NOTE: This list of IDs are the *possible* custom outfits that could be used for this story route.

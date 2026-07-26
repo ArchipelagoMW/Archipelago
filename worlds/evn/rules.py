@@ -14,22 +14,11 @@ from .logics import possible_regions
 if TYPE_CHECKING:
     from .world import EVNWorld
 
-
-# COMPLETION_LOCATIONS = {
-#     "Take Polaris Home;Rebel I22 LAST-354": 354,
-#     "Take Llyrell to Korell; Vellos31 LAST-417": 417,
-#     "Take Krane to Earth;Fed43 LAST-474": 474,
-#     "A Parting Gift;Fed26 (forced) LAST-596": 596,
-#     "Return to Heraan;Auroran 029 LAST-686": 686,
-#     "Destroy McGowan;Pirate 011 LAST-712": 712,
-#     "Return to Ar'Za Iusia;Polaris 46-887": 887,
-# }
-
 def _ship_id_rule(ship_id: int) -> str:
-    ship_offset = loc_type_offset["ship"]
-    #return ev_item_bank[ship_offset + ship_id]["name"]
-    # apparently can't import items bank when this is run... so we have to manually recreate the name.
-    # I don't like this, because it could change...
+    # NOTE: WARNING - we can't import the item bank. I don't recall why... Maybe it wasn't created yet?
+    #   The result is that we have to recreate the index ID ourselves.
+    #   I don't like that. If it changes in items, it could break this!
+    # NOTE: This references the item *name*, not ID later.
     ship_data = ship_table[ship_id]
     return ship_data["name"].strip() + ship_data["id"]
 
@@ -39,12 +28,7 @@ def _min_cargo_rule(min_weight: int) -> List[str]:
     for ship_id, ship_data in ship_table.items():
         ship_cargo = ship_data["cargo"]
         if int(ship_cargo) >= min_weight:
-            #core_list.append(ship_id)
             core_list.append(ship_data["name"].strip() + ship_data["id"])
-    # ret_list = []
-    # for ship_id in core_list:
-    #     ret_list.append(ev_item_bank[ship_offset + ship_id]["name"])
-    # return ret_list
     return core_list
 
 def _min_ship_str_rule(min_str: int) -> List[str]:
@@ -61,7 +45,7 @@ def _min_ship_str_rule(min_str: int) -> List[str]:
 def set_all_rules(world: EVNWorld) -> None:
     # In order for AP to generate an item layout that is actually possible for the player to complete,
     # we need to define rules for our Entrances and Locations.
-    # Note: Regions do not have rules, the Entrances connecting them do!
+    # NOTE: Regions do not have rules, the Entrances connecting them do!
     # We'll do entrances first, then locations, and then finally we set our victory condition.
 
     set_all_entrance_rules(world)
@@ -70,55 +54,30 @@ def set_all_rules(world: EVNWorld) -> None:
 
 
 def set_all_entrance_rules(world: EVNWorld) -> None:
-    #return
-    #test = 1
-    # # First, we need to actually grab our entrances. Luckily, there is a helper method for this.
-    # overworld_to_bottom_right_room = world.get_entrance("Overworld to Bottom Right Room")
-    # overworld_to_top_left_room = world.get_entrance("Overworld to Top Left Room")
-    # right_room_to_final_boss_room = world.get_entrance("Right Room to Final Boss Room")
+    # Review apquest's rules file for good info on designing this section.
 
-    # # An access rule is a function. We can define this function like any other function.
-    # # This function must accept exactly one parameter: A "CollectionState".
-    # # A CollectionState describes the current progress of the players in the multiworld, i.e. what items they have,
-    # # which regions they've reached, etc.
-    # # In an access rule, we can ask whether the player has a collected a certain item.
-    # # We can do this via the state.has(...) function.
-    # # This function takes an item name, a player number, and an optional count parameter (more on that below)
-    # # Since a rule only takes a CollectionState parameter, but we also need the player number in the state.has call,
-    # # our function needs to be locally defined so that it has access to the player number from the outer scope.
-    # # In our case, we are inside a function that has access to the "world" parameter, so we can use world.player.
-    # def can_destroy_bush(state: CollectionState) -> bool:
-    #     return state.has("Sword", world.player)
-
-    # # Now we can set our "can_destroy_bush" rule to our entrance which requires slashing a bush to clear the path.
-    # # One way to set rules is via the set_rule() function, which works on both Entrances and Locations.
-    # set_rule(overworld_to_bottom_right_room, can_destroy_bush)
-
-    # # Because the function has to be defined locally, most worlds prefer the lambda syntax.
-    # set_rule(overworld_to_top_left_room, lambda state: state.has("Key", world.player))
-
-    # # Conditions can depend on event items.
-    # set_rule(right_room_to_final_boss_room, lambda state: state.has("Top Left Room Button Pressed", world.player))
-
-    # # Some entrance rules may only apply if the player enabled certain options.
-    # # In our case, if the hammer option is enabled, we need to add the Hammer requirement to the Entrance from
-    # # Overworld to the Top Middle Room.
-    # if world.options.hammer:
-    #     overworld_to_top_middle_room = world.get_entrance("Overworld to Top Middle Room")
-    #     set_rule(overworld_to_top_middle_room, lambda state: state.has("Hammer", world.player))
-
+    # Get our story string logic
+    # Look at "region_connections". Format: "from_region_id", ["to_region_ids"]
     chosen_route = world.get_chosen_string()
     for from_id, to_regions in chosen_route["region_connections"].items():
         from_region = possible_regions[from_id]
         for to_id in to_regions:
             to_region = possible_regions[to_id]
+            # Give ourselves a name we can understand about the objects and relation
             entrance_name = f"{from_region['name']} to {to_region['name']}"
+            # Helper method for grabbing entrances
             region_entrance = world.get_entrance(entrance_name)
+            # Review the type of entrance rule we described in logics
+            # and apply that here.
+            # Essentially, our rules will filter for a set of ships / outfits that meet the
+            # described rule req in logics, and return that filtered list, where
+            # the entrance rule will see if we have any of those filtered qualifying items.
             for rule_type, rule_value in to_region["entrance_rules"].items():
                 match rule_type:
                     case "ship":
                         temp_ship_id = _ship_id_rule(rule_value)
                         #logger.info(f"Ship rule for: {temp_ship_id}")
+                        # state.has wants name, not id
                         set_rule(region_entrance, lambda state: state.has(temp_ship_id, world.player))
                     case "min_cargo":
                         temp_list = _min_cargo_rule(rule_value)
@@ -136,85 +95,31 @@ def set_all_entrance_rules(world: EVNWorld) -> None:
 
 
 def set_all_location_rules(world: EVNWorld) -> None:
-    # NOTE: I'll have to care for missions that can't be repeated. Ex: the first tutorial mission - if you say "no" to accepting it, you can't get it later.
-    
-    # # Let's see if event names have to be unique...
-    # for loc_completion_name in COMPLETION_LOCATIONS.keys():
-    #     #world.multiworld.get_location(loc_completion_name, world.player).place_locked_item(world.create_event("Victory"))
-    #     world.multiworld.get_location(loc_completion_name, world.player).place_locked_item(world.create_item("Victory"))
-        
-                # if loc_name in COMPLETION_LOCATIONS:
-                #     evregion.add_event(loc_name, "Victory", location_type=EVNLocation, item_type=items.EVNItem)
-    
-    
-    # chosen_route = story_routes[world.options.chosen_string.value]
-    # world.multiworld.get_location(ev_location_bank[chosen_route["final_mission"]], world.player).place_locked_item(world.create_item("Victory"))
+    # NOTE: I'll have to care for missions that can't be repeated. 
+    # Ex: the first tutorial mission - if you say "no" to accepting it, you can't get it later without making a new pilot file.
+
+    # Currently, we only have one event that we need to set - the victory event
+    # So we do that here.    
     chosen_route = world.get_chosen_string()
     misn_offset = loc_type_offset["misn"]
     loc_name = world.location_id_to_name[chosen_route["final_mission"] + misn_offset] # Do we not have a helper function for this?
     world.multiworld.get_location(loc_name, world.player).place_locked_item(world.create_item("Victory"))
 
-    # Location rules work no differently from Entrance rules.
-    # Most of our locations are chests that can simply be opened by walking up to them.
-    # Thus, their logical requirements are covered by the Entrance rules of the Entrances that were required to
-    # reach the region that the chest sits in.
-    # However, our two enemies work differently.
-    # Entering the room with the enemy is not enough, you also need to have enough combat items to be able to defeat it.
-    # So, we need to set requirements on the Locations themselves.
-    # Since combat is a bit more complicated, we'll use this chance to cover some advanced access rule concepts.
+    # We don't really have any other location events or specific rules. Those were handled by the entrances.
+    # Again, check exerpts from apquest. It directly discusses what I mean about entrance vs location rules.
 
-    # Sometimes, you may want to have different rules depending on the player's chosen options.
-    # There is a wrong way to do this, and a right way to do this. Let's do the wrong way first.
-    # right_room_enemy = world.get_location("Right Room Enemy Drop")
-
-    # # DON'T DO THIS!!!!
-    # set_rule(
-    #     right_room_enemy,
-    #     lambda state: (
-    #         state.has("Sword", world.player)
-    #         and (not world.options.hard_mode or state.has_any(("Shield", "Health Upgrade"), world.player))
-    #     ),
-    # )
-    # # DON'T DO THIS!!!!
-
-    # # Now, what's actually wrong with this? It works perfectly fine, right?
-    # # If hard mode disabled, Sword is enough. If hard mode is enabled, we also need a Shield or a Health Upgrade.
-    # # The access rule we just wrote does this correctly, so what's the problem?
-    # # The problem is performance.
-    # # Most of your world code doesn't need to be perfectly performant, since it just runs once per slot.
-    # # However, access rules in particular are by far the hottest code path in Archipelago.
-    # # An access rule will potentially be called thousands or even millions of times over the course of one generation.
-    # # As a result, access rules are the one place where it's really worth putting in some effort to optimize.
-    # # What's the performance problem here?
-    # # Every time our access rule is called, it has to evaluate whether world.options.hard_mode is True or False.
-    # # Wouldn't it be better if in easy mode, the access rule only checked for Sword to begin with?
-    # # Wouldn't it also be better if in hard mode, it already knew it had to check Shield and Health Upgrade as well?
-    # # Well, we can achieve this by doing the "if world.options.hard_mode" check outside the set_rule call,
-    # # and instead having two *different* set_rule calls depending on which case we're in.
-
-    # if world.options.hard_mode:
-    #     # If you have multiple conditions, you can obviously chain them via "or" or "and".
-    #     # However, there are also the nice helper functions "state.has_any" and "state.has_all".
-    #     set_rule(
-    #         right_room_enemy,
-    #         lambda state: (
-    #             state.has("Sword", world.player) and state.has_any(("Shield", "Health Upgrade"), world.player)
-    #         ),
-    #     )
-    # else:
-    #     set_rule(right_room_enemy, lambda state: state.has("Sword", world.player))
-
-    # # Another way to chain multiple conditions is via the add_rule function.
-    # # This makes the access rules a bit slower though, so it should only be used if your structure justifies it.
-    # # In our case, it's pretty useful because hard mode and easy mode have different requirements.
-    # final_boss = world.get_location("Final Boss Defeated")
-
-    # # For the "known" requirements, it's still better to chain them using a normal "and" condition.
-    # add_rule(final_boss, lambda state: state.has_all(("Sword", "Shield"), world.player))
-
-    # if world.options.hard_mode:
-    #     # You can check for multiple copies of an item by using the optional count parameter of state.has().
-    #     add_rule(final_boss, lambda state: state.has("Health Upgrade", world.player, 2))
+    # Possible idea on additional rules that would help us create more spheres of logic in gen'ed APs:
+    # ADDING STRING PROGRESS CONDITION for the sake of creating another logic sphere level:
+    # the idea being that there would be one or two progress check items that would be given out by story
+    # but that we could check against in logic, allowing us to get sphere 3 for example.
+    # the item would be invisible to the user.
+    # The item would be added to the pool, and then manually place here based on the region entrance rule or something...
+    #   looping through here like in the above function.
+    # BUT! We don't want to replace the actual check of a mission.
+    # I think the way we get around that is to maybe have the mission fire off a chron
+    # that completes a hidden mission that awards the item.
+    # The hidden mission is what we assign to here. We can't just bit logic give the item because then the 
+    # server logic won't know about where the item is assigned and thus wouldn't give a new sphere.
 
 
 def set_completion_condition(world: EVNWorld) -> None:
@@ -223,6 +128,5 @@ def set_completion_condition(world: EVNWorld) -> None:
     #world.multiworld.completion_condition[world.player] = lambda state: state.has_all(("Starbridge"), world.player)
 
     # In our case, we went for the Victory event design pattern (see create_events() in locations.py).
-    # So lets undo what we just did, and instead set the completion condition to:
+    # So lets instead set the completion condition to:
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
-    #world.multiworld.completion_condition[world.player] = lambda state: state.has_all(("Victory"), world.player)

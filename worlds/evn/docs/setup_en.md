@@ -72,10 +72,13 @@ Each AP generation will result in a plugin (zzzapdata) that is specifically for 
 
 ### But can I use other plugins?
 
-Generally, no. Because this required reimplementing so much game data in the plugin, things that touch
-ships, outfits, missions, crons, chars, etc. will largely be incompatible.
+Generally, if it touches one of the following types of resources, no.
+Because this required reimplementing so much game data in the plugin, things that touch
+Resources: ships, outfits, missions, crons, chars, descriptions
 
 You may be able to use some graphic overhauls, but they have not been tested yet. *Use at your own risk.*
+
+As weapon resources aren't touched, you could still use beam fix plugins and the like.
 
 ### Will any TCs ever be implemented?
 

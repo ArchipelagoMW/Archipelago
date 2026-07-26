@@ -21,74 +21,32 @@ import random
 if TYPE_CHECKING:
     from .world import EVNWorld
 
-
 GAME_NAME = "EV Nova"
 
 # Every location must have a unique integer ID associated with it.
 # We will have a lookup from location name to ID here that, in world.py, we will import and bind to the world class.
-# Even if a location doesn't exist on specific options, it must be present in this lookup.
-# I feel like "location" is a misnomer for a "check"
-# Possible types:
-#   mission completes
-#   purchase items
-#   first explore of a sys
-#   _
-# FOR TESTING
-# LOCATION_NAME_TO_ID = {
-#     # Location IDs don't need to be sequential, as long as they're unique and greater than 0.
-#     # "Example_Mission": 10,
-#     # "Fed Mission 1": 11,
-#     # "Fed Mission Final": 12,
-#     "Delivery to Earth; Vellos1-128": 128,
-#     "Visit Vell-os Homeworld; Vellos2-129": 129,
-#     "Head to Sol;Tutorial 001-251": 251,
-#     "Trade between Earth and Port Kane;Tutorial 002-630": 630, # Do *not* lock progression behind this mission
-#     "United Shipping Intro;United Shipping1-504": 504,
-#     "Un. Shipping Delivery;United Shipping1a-505": 505,
-#     "Take Polaris Home;Rebel I22 LAST-354": 354,
-#     "Take Llyrell to Korell; Vellos31 LAST-417": 417,
-#     "Take Krane to Earth;Fed43 LAST-474": 474,
-#     "A Parting Gift;Fed26 (forced) LAST-596": 596,
-#     "Return to Heraan;Auroran 029 LAST-686": 686,
-#     "Destroy McGowan;Pirate 011 LAST-712": 712,
-#     "Return to Ar'Za Iusia;Polaris 46-887": 887,
-# }
-
-# to add other checks, such as outfits, give them their own offset and range.
-# TODO: Move all these offset dictionaries to an offset file that they will import from.
-# starting_id = 128
-# loc_type_offset: Dict[str, int] = {
-#     "misn": 2000 - starting_id,   # 2000 - 2999 will be missions. We have 791/1000 misns, so this should be safe.
-# }
+# Even if a location isn't used based on specific options settings, it must be present in this lookup.
+# "Locations" == "checks". (Namely missions, with additional from custom outfits)
+# We may be able to expand that later, depending on game engine bit setting logic.
 
 class EVNLocationData(TypedDict, total=False): 
     name: str
     address: Optional[int]
     #parent_region: Optional[Region]
 
-
-
-
 # Each Location instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Location class and override the "game" field.
 class EVNLocation(Location):
-    #game = EVNWorld.game
     game = GAME_NAME
-    # player: int
-    # name: str
-    # address: Optional[int]    # I think this is the location ID
-    # parent_region: Optional[Region]
-    # locked: bool = False
-    # show_in_spoiler: bool = True
-    # progress_type: LocationProgressType = LocationProgressType.DEFAULT
-    # always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
-    # access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
-    # item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
-    # item: Optional[Item] = None
 
 # NOTE: This is *NOT* the base class get_locations of multiworld.
 # Accidentally named the same thing. Ref'd only by ev_location_bank.
 def get_locations() -> Dict[int, EVNLocationData]:
+    """
+    Returns a dictionary of EVN Locations that include:
+    Missions, Custom Outfits.
+    These are not filtered. Contains all data from source data files.
+    """
     # wild. For some reason this was updating ev_item_bank, but treating item_name_to_id as a local variable and not updating it, even though we declared it as global. So, explicity informing the function that both are globals.
     ret_data: Dict[int, EVNLocationData] = {}
 
@@ -99,10 +57,10 @@ def get_locations() -> Dict[int, EVNLocationData]:
         loc_id = loc_type_offset["misn"] + (int)(temp_mission["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
         #logger.info(f"creating location for mission {temp_mission['name']} with id {loc_id}. final name: {temp_mission['name'].strip() + '-' + temp_mission['id']}")
         ret_data[loc_id] = EVNLocationData(
-            name=temp_mission["name"].strip() + "-" + temp_mission["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
+            # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
+            name=temp_mission["name"].strip() + "-" + temp_mission["id"], 
             address=loc_id,
         )
-
 
     # Custom outf checks
     # NOTE: Add info for all our possible custom outfits / checks in customoutf.py
@@ -116,15 +74,8 @@ def get_locations() -> Dict[int, EVNLocationData]:
             address=loc_id
         )
 
-    # How many custom outfits do we need to make?
-
-
-    # get our template custom outfit
-
     return ret_data
     
-    #loc_name_to_id = {data.name: loc_id for loc_id, data in ev_location_bank.items()}  
-
 
 # the int key will be our control bit used by the client to identify the item
 ev_location_bank = get_locations()
@@ -143,10 +94,6 @@ def get_location_inverted_lookup() -> Dict[int, str]:
 loc_id_to_name = get_location_inverted_lookup()
 
 def get_location_names_with_ids(world: EVNWorld, location_names: list[str]) -> Dict[str, int | None]:
-    # Surely there is a simpler way? This seems inefficient. 
-    #return ev_location_bank[[loc_id for loc_id in ev_location_bank if ev_location_bank[loc_id].name == name][0]]
-    #return ev_location_bank[loc_name_to_id[name]]
-    #return {name: loc_name_to_id[name] for name in location_names if name in loc_name_to_id}
     ret_dict: Dict[str, int | None] = {}
     for name in location_names:
         if name in loc_name_to_id:
@@ -160,14 +107,8 @@ def get_location_names_with_ids(world: EVNWorld, location_names: list[str]) -> D
 def create_all_locations(world: EVNWorld) -> None:
     create_universe_locations(world)
     create_regular_locations(world)
-    #create_events(world)
-    # If we were to dynamically create custom outfit locations...
-    # create_custom_outfit_locations(world)
-
-    # Create universe locations - where not exists id in logic regions, add mission to temp obj. return temp obj into universe region list of locations
-
-    # Create remaining locations - just the missions listed in the chosen story line's regions. Don't add the rest - they'll be blocked in the plugin.
-
+  
+  
 def create_universe_locations(world: EVNWorld) -> None:
     """
     Populates the default universe region with all locations not used by a story string.
@@ -194,6 +135,7 @@ def create_universe_locations(world: EVNWorld) -> None:
     while world.options.include_outfits and x < y and len(pick_list) > 0:
         #logger.info(f"copied chosen route cust out list: {len(pick_list)}; {pick_list}")
         coutf = pick_list.pop()
+        # The offset is important, otherwise we'd pick the id of a different item
         loc = ev_location_bank[coutf + loc_type_offset["outf_cks"]]
         universe.add_locations(
             get_location_names_with_ids(world, [loc["name"]])
@@ -208,24 +150,12 @@ def create_universe_locations(world: EVNWorld) -> None:
     for key, loc in ev_location_bank.items():
         loc_found = False
 
-        # cust outf - shortcut it (was added later)
-        # if key > coutf_offset: # misn is 2k but outf_cks is 4k, so we know here this is an okay check
-        #     if not chosen_route["use_extended_checks"] and "(ext)" in loc["name"]:
-        #         #logger.info(f'skipping cust outf {key}')
-        #         continue
-        #     universe.add_locations(
-        #         get_location_names_with_ids(world, [loc["name"]])
-        #         , EVNLocation
-        #     )
-        #     continue
-
-        # NOTE: We're not including custom outfits in the regions because we need to randomly pick from them later
-        # I'm not a big fan of this separation, but oh well.
-        # Thus, we must skip them here, and add them in the next function instead.
+        # We already handled the custom outfits, so skip them here.
         if key > coutf_offset: # misn is 2k but outf_cks is 4k, so we know here this is an okay check
             continue
 
         # misns
+        # Find the original misn ID before offset
         offset_key = key - misn_offset
 
         # first, check if it is a link mission and auto-ignore
@@ -258,17 +188,19 @@ def create_universe_locations(world: EVNWorld) -> None:
         #logger.info(f"added to universe: {key} - {offset_key} - {loc['name']}")
 
 
-
 def create_regular_locations(world: EVNWorld) -> None:
+    """
+    Populate regions other than the default universe with their defined locations
+    based on logics.py
+    """
     # Finally, we need to put the Locations ("checks") into their regions.
-    # Once again, before we do anything, we can grab our regions we created by using world.get_region()
-    #universe = world.get_region("Universe")
 
     misn_offset = loc_type_offset["misn"]
 
     chosen_route = world.get_chosen_string()
     for key in chosen_route["regions"]:
         sregion = possible_regions[key]
+        # get the region object we'll add locations to
         world_region = world.get_region(sregion["name"])
         for misnid in sregion["missions"]:
             loc = ev_location_bank[misnid + misn_offset]
@@ -276,15 +208,3 @@ def create_regular_locations(world: EVNWorld) -> None:
                 get_location_names_with_ids(world, [loc["name"]])
                 , EVNLocation
             )
-
-    # I don't know how I want to handle the victory conditions yet.
-    # fed_string.add_event(
-    #     "Fed Final Mission Complete", "Victory", location_type=EVNLocation, item_type=items.EVNItem
-    # )
-
-    # universe.add_event(
-    #     "String Complete", STRING_COMPLETE_BIT, location_type=EVNLocation, item_type=items.EVNItem
-    # )
-
-
-# NOTE: I think that event locations and items have null ID because they exist purely for AP logic, and don't actually trade to/from the game.

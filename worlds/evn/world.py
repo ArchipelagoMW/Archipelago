@@ -200,29 +200,18 @@ class EVNWorld(World):
 
     def prep_plugins_output(self) -> str:
         """
-        This exports our modified data into a text file format that can be converted into a game plugin. That's how the game's data will be initially altered to reflect the generated item placements.
+        Method that exports our modified data into a text file format that can be converted into a game plugin.
+        That's how the game's data will be initially altered to reflect the generated item placements.
         """
         output_file_string = ""
 
         # Missions
 
-        # We've added the option for story string choice, so let's enforce that in the plugin by making the other strings not startable.
-        # block_missions = {
-        #     evn_options.ChosenString.option_vellos: 128, #"Delivery to Earth; Vellos1"
-        #     evn_options.ChosenString.option_fed: 428, #"Federation Resupply;Fed1"
-        #     #evn_options.ChosenString.option_rebel: 3, #rebels can ONLY come from other lines, so don't I guess
-        #     evn_options.ChosenString.option_pirate: 693, #"Pick Up Cargo From Sol;Pirate 001"
-        #     evn_options.ChosenString.option_auroran: 653, #Take Supplies to Dominance
-        #     evn_options.ChosenString.option_polaris: 150, #Transport Mu'Randa
-        # }
-
-        # block_missions[self.options.chosen_string.value] = 0 #so we won't block the one that was chosen.
-
         #chosen_route = story_routes[self.options.chosen_string.value]
         chosen_route = self.get_chosen_string()
-        #use_extended = chosen_route["use_extended_checks"] # handled in locations.py
 
-        # first, the column headers
+        # first, reprint the column headers
+        # EVNew expects them as the first line of each block
         for column in misns.misn_columns.keys():
             output_file_string += f'"{misns.misn_columns[column]}"\t'
         output_file_string += "\r\n"
@@ -230,6 +219,7 @@ class EVNWorld(World):
         for mission in misns.misn_table.keys():
             # check for mission edits
             misn_edits = {} # dict[str,str]
+            # Refer to story_routes in logics.py for more info
             for regionid in chosen_route["regions"]:
                 sregion = possible_regions[regionid]
                 if mission in sregion["misn_edits"]:
@@ -287,14 +277,12 @@ class EVNWorld(World):
                     else:
                         #logger.info(f"Warning: on_success location id {target_id} for mission {temp_mission['name']} not found in location_id_to_name. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the mission table and location creation code to debug this issue.")
                         output_file_string += default_val
-                # elif column == "available_bits" and mission in block_missions.values():
-                #     output_file_string += f'"b{offsets_table['misn-block']} & ({current_val})"\t'   #we know it is a bit string, and we know these ones have bits, so don't need to protect as much
                 else:
                     output_file_string += default_val
             output_file_string += "\r\n"
 
         # Handle other data tables in a similar way...
-        # prelude with two new lines to separate from the missions table. There should be a blank line between each type table.
+        # prelude with two new lines to separate from the missions table. There should be a blank line between each type table for EVNew.
 
         # Ships
         output_file_string += "\r\n"
@@ -303,12 +291,11 @@ class EVNWorld(World):
         output_file_string += "\r\n"
         # then, the ship data
         for ship in ships.ship_table.keys():
-            # if ship in items.specific_exclusions:
-            #     continue
             temp_ship = ships.ship_table[ship]
             for column in ships.ship_columns.keys():
                 current_val = temp_ship[column]
                 default_val = current_val + "\t"
+                # If the datatype is string, wrap in quotes, otherwise leave as is. (EVNew)
                 col_anno = ships.ShipDict.__annotations__[column]
                 if col_anno == str:
                     default_val = f'"{current_val}"\t'
@@ -317,7 +304,7 @@ class EVNWorld(World):
                     # We need to inject our special bit here as well, so the client can know when to unlock the ship.
                     target_id = offsets_table["ship"] + ship
                     if target_id in items.ev_item_bank:
-                        #associated_item = items.ev_item_bank[target_id]
+                        # NOTE: "code" is the ID sent to / from the client (the bit ID)
                         new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
                         if (new_id is not None):
                             output_file_string += f'"b{new_id}"\t'
@@ -325,12 +312,10 @@ class EVNWorld(World):
                             #logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
                             output_file_string += default_val
                     else:
-                        #logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} not found in ev_item_bank. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
-                        #output_file_string += default_val
-                        #logger.info(f"Ship blocked (must have been ignored): {target_id} for ship {temp_ship['name']}")
+                        # If the ship wasn't in the items, we're ignoring it. So, don't make it available in game.
                         output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
                 elif (column == "buy_random" and self.options.always_avail_shops):
-                    output_file_string += f'100\t' # considering altering hire chance too
+                    output_file_string += f'100\t' # considering altering hire chance too (chance to show in bar)
                 elif (column == "tech_level" and self.options.ignore_tech):
                     output_file_string += f'1\t'
                 elif (column == "require_bits"): # and self.options.ignore_tech): 
@@ -372,25 +357,20 @@ class EVNWorld(World):
                         # We need to inject our special bit here as well, so the client can know when to unlock the outf.
                         target_id = offsets_table["outf"] + outf
                         if target_id in items.ev_item_bank:
-                            #associated_item = items.ev_item_bank[target_id]
                             new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
                             if (new_id is not None):
-                                #TESTING:
-                                #new_id = 9999
                                 output_file_string += f'"b{new_id}"\t'
                             else:
                                 #logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
                                 output_file_string += default_val
                         else:
-                            #logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} not found in ev_item_bank. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
-                            #output_file_string += default_val
-                            #logger.info(f"Outf blocked (must have been ignored): {target_id} for outf {temp_outf['name']}")
+                            # Wasn't included, so don't let it show up in game.
                             output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
                     elif (column == "buy_random" and self.options.always_avail_shops):
                         output_file_string += f'100\t'
                     elif (column == "tech_level" and self.options.ignore_tech):
                         output_file_string += f'1\t'
-                    elif (column == "require_bits"): # and self.options.ignore_tech): 
+                    elif (column == "require_bits"): 
                         # ignore license requirements regardless of options. removing licenses from pool.
                         output_file_string += f"0x0000000000000001\t"
                     elif (column == "flags" and (self.options.always_avail_shops or self.options.ignore_tech)):
@@ -411,13 +391,9 @@ class EVNWorld(World):
         # meaning, use locations.ev_location_bank not items.ev_item_bank.
         # I kinda hate having to check this, but haven't figured out a better way yet
         our_multiworld_locations = [l.name for l in self.multiworld.get_locations(self.player)]
-        # NOTE: This is because we may NOT have created the extended custom location checks!
-
-        # If we were to dynamically create custom outfit locations, we would need to do it here, but for now we will just assume they are already created in locations.py and we will just export the data for them.
-        # While target_id in locaitons.ev_location_bank:
-        #   [create outfit data]
-        #   target_id += 1
-
+        # NOTE: We have locations in the bank that may not have actually been used / created
+        #   So, we'll have to verify they were used before adding the associated game data.
+        
         for coutf in cust_outf_table.keys():
             temp_coutf = cust_outf_table[coutf]
             for column in outfits.outf_columns.keys():
