@@ -1,9 +1,9 @@
+from ..bases import SVTestBase
 from ... import StardewItem, StartWithoutOptionName
 from ...options import (ElevatorProgression, ExcludeGingerIsland, Fishsanity, SeasonRandomization, SkillProgression, SpecialOrderLocations, StartWithout,
                         ToolProgression)
 from ...strings.ap_names.transport_names import Transportation
 from ...strings.fish_names import Fish
-from ..bases import SVTestBase
 
 
 class TestNeedRegionToCatchFish(SVTestBase):
@@ -34,12 +34,12 @@ class TestNeedRegionToCatchFish(SVTestBase):
                             "Progressive Pickaxe", "Progressive Pickaxe"],
             Fish.sandfish: [Transportation.bus_repair],
             Fish.scorpion_carp: ["Wizard Invitation", "Desert Obelisk"],
-            # Starting the extended family quest requires having caught all the legendaries before, so they all have the rules of every other legendary
-            Fish.son_of_crimsonfish: ["Beach Bridge", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", "Rusty Key"],
-            Fish.radioactive_carp: ["Beach Bridge", "Rusty Key", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"],
-            Fish.glacierfish_jr: ["Beach Bridge", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", "Rusty Key"],
-            Fish.legend_ii: ["Beach Bridge", "Wizard Invitation", "Island Obelisk", ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", "Rusty Key"],
-            Fish.ms_angler: ["Beach Bridge", "Wizard Invitation", "Island Obelisk", ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", "Rusty Key"], }
+
+            Fish.son_of_crimsonfish: ["Beach Bridge", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", ["Beach Bridge", "Town To Tide Pools Shortcut"]],
+            Fish.radioactive_carp: ["Beach Bridge", "Rusty Key", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room", "Rusty Key"],
+            Fish.glacierfish_jr: ["Beach Bridge", Transportation.boat_repair, ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"],
+            Fish.legend_ii: ["Beach Bridge", "Wizard Invitation", "Island Obelisk", ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"],
+            Fish.ms_angler: ["Beach Bridge", "Wizard Invitation", "Island Obelisk", ["Island West Turtle", "Parrot Express"], "Qi Walnut Room"], }
         self.collect("Progressive Fishing Rod", 4)
         self.collect_all_the_money()
         for fish in fish_and_items:
@@ -67,5 +67,48 @@ class TestNeedRegionToCatchFish(SVTestBase):
                             self.assert_cannot_reach_location(location)
                             self.collect(items_required)
                             self.assert_can_reach_location(location)
+                for item in items:
+                    self.remove(item)
+
+
+class TestNeedLevelsToCatchFish(SVTestBase):
+    options = {
+        StartWithout: frozenset({StartWithoutOptionName.landslide, StartWithoutOptionName.community_center}),
+        SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
+        ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
+        SkillProgression.internal_name: SkillProgression.option_progressive,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
+        Fishsanity.internal_name: Fishsanity.option_all,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi, }
+
+    def test_catch_fish_requires_region_unlock(self):
+        fish_and_levels: dict[str, int] = {
+            Fish.angler: 3,
+            Fish.crimsonfish: 5,
+            Fish.glacierfish: 6,
+            Fish.legend: 10,
+
+            Fish.ms_angler: 3,
+            Fish.son_of_crimsonfish: 5,
+            Fish.glacierfish_jr: 6,
+            Fish.legend_ii: 10,
+        }
+        self.collect("Progressive Fishing Rod", 4)
+        region_items = ["Beach Bridge", "Town To Tide Pools Shortcut", "Rusty Key", "Beach Bridge",
+                        "Wizard Invitation", "Island Obelisk", "Island West Turtle", "Qi Walnut Room" ]
+        collected_items = [self.collect(item) for item in region_items]
+        self.collect_all_the_money()
+        for fish in fish_and_levels:
+            with self.subTest(f"Level rules for {fish}"):
+                level = fish_and_levels[fish]
+                location = f"Fishsanity: {fish}"
+                self.assert_cannot_reach_location(location)
+                items = ["Fishing Level"] * level
+                for item in items:
+                    self.assert_cannot_reach_location(location)
+                    self.collect(item)
+                with self.subTest(f"{fish} can be reached with {level} fishing levels"):
+                    self.assert_can_reach_location(location)
                 for item in items:
                     self.remove(item)
