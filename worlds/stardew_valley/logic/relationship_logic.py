@@ -190,6 +190,10 @@ class RelationshipLogic(BaseLogic):
         elif npc == ModNPC.goblin:
             rules.append(self.logic.region.can_reach_all(Region.witch_hut, Region.wizard_tower))
 
+        elif npc == ModNPC.juna:
+            rules.append(self.logic.region.can_reach_all(Region.farm, Region.forest))
+            rules.append(self.logic.relationship.exists(NPC.wizard))
+
         return self.logic.and_(*rules)
 
     def can_meet_all(self, *npcs: str) -> StardewRule:
