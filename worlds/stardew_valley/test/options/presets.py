@@ -323,7 +323,7 @@ def setting_mins_and_maxes():
         options.Fishsanity.internal_name: [options.Fishsanity.option_none, options.Fishsanity.option_all],
         options.Friendsanity.internal_name: [options.Friendsanity.option_none, options.Friendsanity.option_all_with_marriage],
         options.FriendsanityHeartSize.internal_name: [1, 8],
-        options.Goal.internal_name: options.Goal.option_maxsanity,
+        options.Goal.internal_name: options.Goal.option_allsanity,
         options.IncludeEndgameLocations.internal_name: [options.IncludeEndgameLocations.option_false, options.IncludeEndgameLocations.option_true],
         options.JourneyOfThePrairieKing.internal_name: [options.JourneyOfThePrairieKing.option_disabled, options.JourneyOfThePrairieKing.option_full_shuffle],
         options.JunimoKart.internal_name: [options.JunimoKart.option_disabled, options.JunimoKart.option_full_shuffle],
