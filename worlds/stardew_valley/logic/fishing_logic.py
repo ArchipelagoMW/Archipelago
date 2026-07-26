@@ -88,7 +88,9 @@ class FishingLogic(BaseLogic):
         return self.logic.tool.has_fishing_rod(fishing_rod_required) & skill_rule
 
     @cache_self1
-    def can_catch_fish(self, fish: FishItem) -> StardewRule:
+    def can_catch_fish(self, fish: FishItem | str) -> StardewRule:
+        if isinstance(fish, str):
+            fish = self.content.fishes[fish]
         quest_rule = True_()
         if fish.extended_family:
             quest_rule = self.logic.fishing.can_start_extended_family_quest()
