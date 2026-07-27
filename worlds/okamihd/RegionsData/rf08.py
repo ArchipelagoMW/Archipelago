@@ -35,7 +35,7 @@ events = {
 locations = {
     RegionNames.TAKA_PASS: {
         "Taka Pass - Chest under leaf pile near Guardian Sapling": LocData(container_check_id(MapIds.HEALED_TAKA, 42),
-                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE,
+                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE,
                                                                            required_items_events=[
                                                                                "Taka pass - Restore Bridge to Guardian Sapling"]),
         "Taka Pass - Chest on top of big rock above ledge": LocData(container_check_id(MapIds.HEALED_TAKA, 0),
@@ -43,12 +43,12 @@ locations = {
                                                                         BrushTechniques.GREENSPROUT_VINE]),
         # Find better names for those 2 a
         "Taka Pass - Chest under leaf pile after cave": LocData(container_check_id(MapIds.HEALED_TAKA, 41),
-                                                                type=LocationType.BURIED_UNDER_LEAF_PILE),
+                                                                type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
         "Taka Pass - Chest under leaf pile near cave west": LocData(container_check_id(MapIds.HEALED_TAKA, 62),
-                                                                    type=LocationType.BURIED_UNDER_LEAF_PILE),
+                                                                    type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
 
         "Taka Pass - Chest under leaf pile near Ultimate Origin mirror": LocData(
-            container_check_id(MapIds.HEALED_TAKA, 60), type=LocationType.BURIED_UNDER_LEAF_PILE),
+            container_check_id(MapIds.HEALED_TAKA, 60), type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
         "Taka Pass - Chest on top of Cutters' House": LocData(container_check_id(MapIds.HEALED_TAKA, 1),
                                                               required_brush_techniques=[
                                                                   BrushTechniques.GREENSPROUT_VINE]),
@@ -65,16 +65,16 @@ locations = {
                                                                  type=LocationType.BURIED_CHEST),
         # Find a better name
         "Taka Pass - Buried under leaf pile near city checkpoint exit": LocData(
-            container_check_id(MapIds.HEALED_TAKA, 38), type=LocationType.BURIED_UNDER_LEAF_PILE),
+            container_check_id(MapIds.HEALED_TAKA, 38), type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
         # Find out which house
         "Taka Pass - Chest under leaf pile behind Cutters' House": LocData(container_check_id(MapIds.HEALED_TAKA, 43),
-                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE),
+                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
         "Taka Pass - Chest under leaf pile near mermaid spring": LocData(container_check_id(MapIds.HEALED_TAKA, 44),
-                                                                         type=LocationType.BURIED_UNDER_LEAF_PILE),
+                                                                         type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
         "Taka Pass - Chest under leaf pile near agata forest entrance": LocData(
-            container_check_id(MapIds.HEALED_TAKA, 59), type=LocationType.BURIED_UNDER_LEAF_PILE),
+            container_check_id(MapIds.HEALED_TAKA, 59), type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
         "Taka Pass - Chest under leaf pile near moles gang": LocData(container_check_id(MapIds.HEALED_TAKA, 61),
-                                                                     type=LocationType.BURIED_UNDER_LEAF_PILE),
+                                                                     type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
     }
 
 }
