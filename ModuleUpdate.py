@@ -74,7 +74,7 @@ def update_command():
     for file in requirements_files:
         if shutil.which("uv") is not None:
             subprocess.call(['uv', 'pip', 'install',"--python", sys.executable,
-                             "--break-system-packages",'-r', file, '--constraint'])
+                             "--break-system-packages",'-r', file, '--constraint',core_constraints])
         else:
             subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--constraint", core_constraints])
 
