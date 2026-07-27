@@ -73,8 +73,8 @@ def update_command():
     check_pip()
     for file in requirements_files:
         if shutil.which("uv") is not None:
-            subprocess.call(['uv', 'pip', 'install',"--python", sys.executable,
-                             "--break-system-packages",'-r', file, '--constraint',core_constraints])
+            subprocess.call(["uv", "pip", "install", "--python", sys.executable,
+                             "--break-system-packages", '-r', file, '--constraint', core_constraints])
         else:
             subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--constraint", core_constraints])
 
@@ -87,8 +87,8 @@ def install_pkg_resources(yes=False):
         if not yes:
             confirm("pkg_resources not found, press enter to install it")
         if shutil.which("uv") is not None:
-            subprocess.call(['uv', 'pip', 'install','--python', sys.executable,
-                             '--break-system-packages', 'setuptools>=75,<81'])
+            subprocess.call(["uv", "pip", "install","--python", sys.executable,
+                             "--break-system-packages", "setuptools>=75,<81"])
         else:
             subprocess.call([sys.executable, "-m", "pip", "install", "setuptools>=75,<81"])
 

@@ -46,8 +46,8 @@ if install_cx_freeze:
     if shutil.which("uv") is not None:
         if '--yes' not in sys.argv and '-y' not in sys.argv:
             input(f'Requirement {requirement} is not satisfied, press enter to install it')
-        subprocess.call(['uv', 'pip', 'install', "--python", sys.executable,
-                             "--break-system-packages", requirement, '--upgrade'])
+        subprocess.call(["uv", "pip", "install", "--python", sys.executable,
+                         "--break-system-packages", requirement, "--upgrade"])
     else:
         # check if pip is available, if uv not available
         try:
@@ -57,7 +57,7 @@ if install_cx_freeze:
         # install and import cx_freeze
         if '--yes' not in sys.argv and '-y' not in sys.argv:
             input(f'Requirement {requirement} is not satisfied, press enter to install it')
-        subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
+        subprocess.call([sys.executable, "-m", "pip", "install", requirement, "--upgrade"])
     import pkg_resources
 
 
