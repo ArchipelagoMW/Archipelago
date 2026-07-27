@@ -1,9 +1,3 @@
-"""Access rules for every "Deep Jungle"-prefixed location, including the Jungle Slider minigame.
-
-`jungle_slider` stays a plain Python condition rather than an OptionFilter: its 5 locations are
-conditionally created in Regions.py, not just conditionally required.
-"""
-
 from rule_builder.rules import Has, Or, Rule, True_
 
 from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL

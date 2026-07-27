@@ -1,6 +1,3 @@
-"""Custom Rule Builder rules for things the built-in primitives can't express (or, for AtLeast,
-can't express yet on the AP release this repo targets - see its docstring below)."""
-
 import dataclasses
 from collections.abc import Iterable, Mapping
 from typing import TYPE_CHECKING, Any, Self
@@ -18,14 +15,7 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass()
 class HasCappedSum(Rule["KH1World"], game="Kingdom Hearts"):
-    """Checks if the sum of per-item counts (each capped at a max) reaches a threshold.
-
-    No built-in Rule expresses this: HasAllCounts/HasAnyCount apply each item's threshold
-    independently (AND/OR), and HasFromList sums counts across items but without a per-item cap,
-    so e.g. 20 of a single item would satisfy it - which isn't what Rules.py's
-    `min(state.count(...), 9) + min(state.count(...), 9) >= 15` (Synth 15 Items) means.
-    """
-
+    
     item_caps: Mapping[str, int]
     threshold: int
 
@@ -60,13 +50,6 @@ class HasCappedSum(Rule["KH1World"], game="Kingdom Hearts"):
 
 @dataclasses.dataclass(init=False)
 class AtLeast(NestedRule["KH1World"], game="Kingdom Hearts"):
-    """A rule that returns true when at least N child rules evaluate as true.
-
-    Vendored here because rule_builder.rules.AtLeast doesn't exist yet on the AP release this repo
-    targets (it landed on AP main after that release was cut). Used by has_x_worlds_rule for
-    partial-credit world counting - see _helpers.py. Switch back to the upstream import once a
-    release containing it ships.
-    """
 
     count: int
 

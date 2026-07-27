@@ -1,12 +1,3 @@
-"""
-Rule-tree factories mirroring the helper functions in Rules.py.
-
-Unlike Rules.py's helpers (which take already-resolved option values and branch on them in plain
-Python), these read options live at `.resolve(world)` time via OptionFilter/FromOption, so the
-returned Rule trees are reusable across any options - the same tree built once is valid whether or
-not, say, hundred_acre_wood ends up on or off. See _option_filters.py for why that matters.
-"""
-
 from rule_builder.field_resolvers import FromOption
 from rule_builder.rules import Has, HasAll, HasAllCounts, HasAny, HasAnyCount, HasGroup, Or, Rule, True_
 

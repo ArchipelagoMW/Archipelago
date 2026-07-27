@@ -1,10 +1,3 @@
-"""Access rules for every "Hollow Bastion"-prefixed location, including the (super bosses/Unknown
-final rest door key) Defeat Unknown events.
-
-`super_bosses`/`final_rest_door_key` stay a plain Python condition rather than an OptionFilter: the
-Unknown locations are conditionally created in Regions.py, not just conditionally required.
-"""
-
 from rule_builder.rules import Has, HasAll, Or, Rule, True_
 
 from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD

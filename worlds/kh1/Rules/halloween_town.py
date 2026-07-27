@@ -1,5 +1,3 @@
-"""Access rules for every "Halloween Town"-prefixed location."""
-
 from rule_builder.rules import Or, Has, Rule, True_
 
 from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD

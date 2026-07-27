@@ -1,11 +1,3 @@
-"""
-Standalone script: exports KH1's access rules as JSON, for consumption by external tools (e.g. a
-pop tracker). Builds a throwaway KH1World with every togglable area on (so the exported location/
-entrance set is the maximal one) and dumps Rules.export_rules_to_dict() to a file.
-
-Usage: python -m worlds.kh1.test.export_rules_json [output_path]
-(default output_path: kh1_rules.json in the current directory)
-"""
 import json
 import sys
 

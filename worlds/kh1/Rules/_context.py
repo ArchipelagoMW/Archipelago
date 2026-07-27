@@ -1,16 +1,3 @@
-"""
-A bag of commonly-reused Rule trees, shared across every per-area rule builder. Keeps each area
-module focused on the rules unique to it rather than re-deriving things like `has_x_worlds_rule(3)`
-or `Has("High Jump", count=2)` itself.
-
-Every field here is now fully option-generic (built from OptionFilter/FromOption, not from
-already-resolved option values - see _helpers.py/_option_filters.py), so build_context() no longer
-needs a specific world to build these from; the same RuleContext is valid for any world.
-
-Values used by exactly one area (e.g. `footprints`, which only Wonderland needs) are intentionally
-NOT here - those are computed locally inside that area's own module instead.
-"""
-
 import dataclasses
 
 from rule_builder.rules import Has, HasAll, HasAny, Rule

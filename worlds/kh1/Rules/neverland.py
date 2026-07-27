@@ -1,9 +1,3 @@
-"""Access rules for every "Neverland"-prefixed location, including the (super bosses) Phantom event.
-
-`super_bosses` stays a plain Python condition rather than an OptionFilter: the Phantom location is
-conditionally created in Regions.py, not just conditionally required.
-"""
-
 from rule_builder.rules import Has, HasAll, HasAny, Or, Rule, True_
 
 from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD

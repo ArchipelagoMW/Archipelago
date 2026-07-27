@@ -1,13 +1,3 @@
-"""Access rules for "Olympus Coliseum"-prefixed locations and the (unprefixed) Cup completion/event
-locations, which are logically part of Olympus Coliseum.
-
-`cups`/`super_bosses`/`final_rest_door_key` all stay plain Python conditions rather than
-OptionFilters: per Regions.py, the Cup/Hades Cup/Ice Titan/Sephiroth locations are conditionally
-*created* based on these options, not just conditionally required. `cups == "hades_cup"` implies
-`cups != "off"`, so the groups below don't need to nest - they're independent conditional splices
-into the same dict literal.
-"""
-
 from rule_builder.rules import Has, HasAll, Or, Rule, True_
 
 from ._constants import THREE_CUPS

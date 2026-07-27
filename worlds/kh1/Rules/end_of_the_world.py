@@ -1,5 +1,3 @@
-"""Access rules for every "End of the World"-prefixed location."""
-
 from rule_builder.rules import Has, Or, Rule, True_
 
 from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD

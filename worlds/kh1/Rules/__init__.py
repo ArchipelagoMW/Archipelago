@@ -1,66 +1,3 @@
-"""
-KH1's access rules, built with Rule Builder. Originally a from-scratch Rule Builder port written
-side-by-side with the old hand-written Rules.py (a `state.has(...)`/`add_rule(...)` style module),
-verified equivalent to it across a representative matrix of player options and item states, then
-wired in to replace it once that equivalence was proven by tests. Rules.py no longer exists in this
-repo; the "Translation notes" below are kept as historical context for why some rules look the way
-they do (preserved quirks, past crash-bug fixes) even though there's nothing left to diff against.
-
-Layout: each KH1 world area gets its own module (traverse_town.py, wonderland.py, ...) exposing a
-`build_rules(ctx, ...)` function that returns a `dict[str, Rule]` for that area's locations.
-`build_rule_dicts()` below builds the shared `RuleContext` (see `_context.py`), calls each area
-module, and merges everything plus the handful of rules that don't belong to one area (level
-checks, Final Ansem, accessories, the generic "behind boss"/"keyblade-locked chest" pass over every
-location, entrances). `set_rules2()` is a thin wrapper that applies the result via `world.set_rule`
-and sets the completion condition.
-
-Every rule this package builds is option-generic: branches on difficulty/toggles/choices are
-expressed as `OptionFilter`s (see `_option_filters.py`) and option-derived counts as `FromOption`/
-custom `FieldResolver`s (see `_field_resolvers.py`) rather than as Python `if`s over an
-already-resolved value. That means the *unresolved* `Rule` trees `build_rule_dicts()` returns -
-notably via `export_rules_to_dict()` in `_export.py` - are valid regardless of what options the
-world that happened to build them had; only `.resolve(world)` (called by `world.set_rule`, or by a
-JSON consumer re-checking the OptionFilters/FieldResolvers) is where a specific world's options
-actually get read. The one thing that can't be made generic this way is which locations/entrances
-*exist* at all (`super_bosses`/`cups`/`hundred_acre_wood`/`atlantica`/`destiny_islands`/
-`jungle_slider`/`final_rest_door_key` per Regions.py) - that's decided by plain Python conditions,
-same as today, since it's a Locations/Regions concept Rule Builder doesn't model.
-
-Translation notes / known quirks intentionally preserved from the original Rules.py (do not "fix"
-these without confirming with the user which behavior is actually wanted - they may be deliberate):
-
-  * "Traverse Town 1st District Accessory Shop Roof Chest" - the original has
-    `add_rule(loc, lambda state: ...) or difficulty > LOGIC_BEGINNER` - the `or` is OUTSIDE the
-    add_rule() call and so is dead code (it operates on add_rule's return value, not the rule).
-    The actual rule is just `Has("High Jump")`, ungated by difficulty. Replicated as-is here.
-  * has_oogie_manor / "Traverse Town Mystical House Yellow Trinity Chest" - `and` binds tighter
-    than `or` in Python, so a couple of sub-clauses that look indented under a
-    `difficulty > LOGIC_X and (...)` guard are actually NOT gated by that guard. Replicated as-is
-    (see comments in _helpers.py and traverse_town.py).
-  * "Halloween Town Oogie's Manor Upper Iron Cage Chest" and "Hollow Bastion Rising Falls Floating
-    Platform Near Bubble Chest" used to have actual crash bugs in Rules.py (missing `player`
-    arguments to `state.has_all(...)` / `state.has(...)`, raising TypeError/KeyError when that
-    branch was reached - this equivalence test suite is what caught them). Both were fixed directly
-    in Rules.py; this package already had the intended behavior.
-  * `magic_costs` / dynamic per-seed `spell_costs` are intentionally NOT ported: every call site in
-    Rules.py that would use them is commented out in favor of `has_offensive_magic`, so they are
-    dead code as of this writing.
-  * `has_basic_tools` calls `has_offensive_magic(state, player, LOGIC_BEGINNER)` - i.e. it always
-    passes the *constant* LOGIC_BEGINNER, not the world's configured difficulty. Replicated as-is
-    (see _helpers.py's has_basic_tools_rule).
-  * "Traverse Town Magician's Study Obtained All Arts Items" similarly pins its has_x_worlds check
-    to LOGIC_BEGINNER regardless of configured difficulty (softlock prevention) - see
-    has_x_worlds_rule_pinned_to_beginner in _helpers.py.
-  * "Traverse Town Synth 15 Items" uses a min-capped sum (`HasCappedSum`, see _custom_rules.py) -
-    no built-in Rule expresses that.
-  * `add_item_rule` (item placement rules, as opposed to access rules) has no Rule Builder
-    equivalent, so those calls are left untouched, using the original `worlds.generic.Rules` helper.
-    The per-location item_rule on each "Traverse Town Synth Item NN" location (forbidding
-    Orichalcum/Mythril from being placed there, see traverse_town.py) was initially missed in this
-    port - the original equivalence tests only ever compared access_rule, never item_rule, so this
-    went undetected until the test suite was extended to check item_rule too.
-"""
-
 from rule_builder.field_resolvers import FromOption
 from rule_builder.rules import Has, Or, Rule, True_
 
@@ -125,7 +62,6 @@ def build_rule_dicts(kh1world) -> tuple[dict[str, Rule], dict[str, Rule]]:
     location_rules.update(atlantica.build_rules(ctx, bool(options.atlantica)))
     location_rules.update(destiny_islands.build_rules(ctx, bool(options.destiny_islands)))
 
-    # ---- rules that don't belong to one area ----
     for i in range(1, options.level_checks + 1):
         level_world_rule = has_x_worlds_rule(min(((i // 10) * 2), 8))
         location_rules[f"Level {i + 1:03} (Slot 1)"] = level_world_rule
@@ -197,6 +133,4 @@ def set_rules(kh1world) -> None:
     kh1world.multiworld.completion_condition[kh1world.player] = lambda state: state.has("Victory", kh1world.player)
 
 
-# Imported last - _export.py imports build_rule_dicts from this module, so this must come after
-# build_rule_dicts is defined above to avoid a circular-import error on partial initialization.
-from ._export import export_rules_to_dict  # noqa: E402
+from ._export import export_rules_to_dict

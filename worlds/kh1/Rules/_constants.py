@@ -1,6 +1,3 @@
-"""Shared game-data constants used across the Rules package. See _option_filters.py for the
-shared OptionFilter constants."""
-
 WORLDS = ["Destiny Islands", "Traverse Town", "Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",
           "Monstro", "Atlantica", "Halloween Town", "Neverland", "Hollow Bastion", "End of the World",
           "100 Acre Wood"]

@@ -1,5 +1,3 @@
-"""Access (and one item) rule for every "Traverse Town"-prefixed location."""
-
 from rule_builder.rules import Has, HasAll, HasAllCounts, Or, Rule
 
 from worlds.generic.Rules import add_item_rule
@@ -37,8 +35,6 @@ def build_rules(ctx: RuleContext, kh1world) -> dict[str, Rule]:
 
     return {
         "Traverse Town 1st District Candle Puzzle Chest": Has("Progressive Blizzard"),
-        # NOTE: Rules.py has `add_rule(loc, lambda state: ...) or difficulty > LOGIC_BEGINNER` here -
-        # the `or` is OUTSIDE the add_rule() call and so is dead code. The real rule is just this.
         "Traverse Town 1st District Accessory Shop Roof Chest": ctx.hj1,
         "Traverse Town Secret Waterway White Trinity Chest": Has("White Trinity"),
         "Traverse Town Geppetto's House Chest": ctx.parasite_cage,
@@ -75,14 +71,11 @@ def build_rules(ctx: RuleContext, kh1world) -> dict[str, Rule]:
         ),
         "Traverse Town Kairi Secret Waterway Oathkeeper Event": oathkeeper_event_rule,
         "Traverse Town Secret Waterway Navi Gummi Event": oathkeeper_event_rule,
-        # NOTE: Rules.py's parens bundle `has_all_summons(...)` into the "worlds" arg of has_parasite_cage
-        # via `... and has_all_summons(...)`, which ANDs it in alongside the x_worlds_3 check.
         "Traverse Town Geppetto's House Geppetto All Summons Reward": ctx.parasite_cage & HasAll(*ALL_SUMMONS),
         "Traverse Town Geppetto's House Talk to Pinocchio": ctx.parasite_cage,
         "Traverse Town Magician's Study Obtained All Arts Items": (
             has_all_magic_lvx_rule(1)
             & HasAll(*ALL_ARTS)
-            # forced to LOGIC_BEGINNER regardless of configured difficulty (softlock prevention), per Rules.py
             & has_x_worlds_rule_pinned_to_beginner(8)
         ),
         "Traverse Town Synth 15 Items": HasCappedSum({"Orichalcum": 9, "Mythril": 9}, threshold=15) & item_workshop,

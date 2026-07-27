@@ -1,9 +1,3 @@
-"""Access rules for every "Atlantica"-prefixed location.
-
-`enabled` stays a plain Python condition rather than an OptionFilter: every location in this module
-is conditionally created in Regions.py, not just conditionally required.
-"""
-
 from rule_builder.rules import Has, Rule
 
 from ._context import RuleContext

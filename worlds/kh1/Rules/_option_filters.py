@@ -1,17 +1,3 @@
-"""
-Shared OptionFilter constants, built once at import time and reused across the whole package.
-
-Using OptionFilter (instead of branching on an already-resolved Python value at construction time)
-is what makes a Rule tree option-generic: the condition becomes data inside the tree, checked at
-`.resolve(world)` time against whatever world is being resolved, rather than being baked in when
-the tree was built. That's what lets `Rule.to_dict()` exported JSON stay valid across any options.
-
-Don't use these for conditions that gate whether a *location* is created at all (e.g. super_bosses/
-cups/hundred_acre_wood/atlantica/jungle_slider/destiny_islands/final_rest_door_key, per Regions.py)
-- those must stay a plain Python condition, since OptionFilter only affects rule resolution, not
-location existence.
-"""
-
 from rule_builder.options import OptionFilter
 
 from ..Data import LOGIC_BEGINNER, LOGIC_NORMAL, LOGIC_PROUD, LOGIC_MINIMAL

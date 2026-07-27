@@ -1,9 +1,3 @@
-"""Access rules for every "100 Acre Wood"-prefixed location.
-
-`enabled` stays a plain Python condition rather than an OptionFilter: every location in this module
-is conditionally created in Regions.py, not just conditionally required.
-"""
-
 from rule_builder.rules import Has, Or, Rule, True_
 
 from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD
