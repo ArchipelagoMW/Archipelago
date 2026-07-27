@@ -80,7 +80,6 @@ class FactorioBobs(World):
     if Utils.version_tuple < required_client_version:
         raise Exception(f"Update Archipelago to use this world ({game}).")
     tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
-    skip_silo: bool = False
     origin_region_name = "Nauvis"
     science_locations: typing.List[FactorioScienceLocation]
     removed_technologies: typing.Set[str]
@@ -153,7 +152,6 @@ class FactorioBobs(World):
         if self.options.max_tech_cost < self.options.min_tech_cost:
             self.options.min_tech_cost.value, self.options.max_tech_cost.value = \
                 self.options.max_tech_cost.value, self.options.min_tech_cost.value
-        self.skip_silo = self.options.silo.value == Silo.option_spawn
         self.want_progressives = collections.defaultdict(
             lambda: self.options.progressive.want_progressives(self.random))
 
@@ -220,7 +218,9 @@ class FactorioBobs(World):
         player = self.player
         nauvis = Region(self.origin_region_name, player, self.multiworld)
 
-        location_count = len(self.modpack.base_technology_table) - len(self.modpack.removed_technologies) - self.skip_silo
+        location_count = len(self.modpack.base_technology_table) - len(self.modpack.removed_technologies)
+        if self.options.silo.value == Silo.option_spawn:
+            location_count -= 1
 
         for name in self.trap_names:
             name = name.replace(" ", "_").lower()+"_traps"
@@ -299,8 +299,10 @@ class FactorioBobs(World):
             # mark all locations as pre-hinted
             for loc in self.science_locations:
                 loc.revealed = True
-        if self.skip_silo:
+        if self.options.silo.value == Silo.option_spawn:
             self.removed_technologies |= {"rocket-silo"}
+            silo_item = self.create_item("rocket-silo")
+            self.push_precollected(silo_item)
         for tech_name in self.modpack.base_technology_table.keys():
             if tech_name not in self.removed_technologies:
                 progressive_item_name = self.modpack.tech_to_progressive_lookup.get(tech_name, tech_name)
