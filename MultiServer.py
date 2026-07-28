@@ -1810,12 +1810,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 if for_location:
                     self.output(
                         f"Recognized location \"{hint_name}\" does not exist for your slot. "
-                        f"This is may be due to your options."
+                        f"This may be due to your options."
                     )
                 else:
                     self.output(
                         f"Recognized item \"{hint_name}\" does not exist for your slot. "
-                        f"This is may be due to your options."
+                        f"This may be due to your options."
                     )
             else:
                 self.output(f"You can't afford the hint. "
@@ -2467,7 +2467,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 else:
                     self.output(
                         f"Recognized item \"{item}\" does not exist for this slot. "
-                        "This is may be due to this slot's options."
+                        "This may be due to this slot's options."
                     )
                 return True
             else:
@@ -2509,7 +2509,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 else:
                     self.output(
                         f"Recognized location \"{location}\" does not exist for this slot. "
-                        "This is may be due to this slot's options."
+                        "This may be due to this slot's options."
                     )
                 return True
             else:
