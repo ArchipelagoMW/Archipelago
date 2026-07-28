@@ -321,6 +321,7 @@ def create_regular_locations(world: BATIMWorld) -> None:
         "CH3 Bacon Soup 38",
         "CH3 Audio Log Crooked Smile",
         "CH3 Audio Log Everything is Coming Apart",
+        "CH3 Audio Log Time to Believe",
         "CH3 Audio Log Ink Pressure",
         "CH3 Audio Log Cutting Corners",
         "CH3 Audio Log Lunch with Joey",
