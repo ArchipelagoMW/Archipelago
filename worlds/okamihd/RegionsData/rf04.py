@@ -124,7 +124,7 @@ locations = {
     RegionNames.AGATA_FOREST_TAKA: {
         "Agata Forest - Chest near Taka Entrance": LocData(container_check_id(MapIds.HEALED_AGATA, 47)),
         "Agata Forest - Chest under leaf pile near Taka Entrance": LocData(container_check_id(MapIds.HEALED_AGATA, 45),
-                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE)
+                                                                           type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE)
 
     }
 }

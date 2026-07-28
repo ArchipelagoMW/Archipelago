@@ -70,7 +70,7 @@ locations = {
                                                                     cherry_bomb_level=1),
         "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(
             container_check_id(MapIds.HEALED_SHINSHU, 86),
-            type=LocationType.BURIED_UNDER_LEAF_PILE),
+            type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE),
         "Shinshu Field - Chest on Big Torii": LocData(container_check_id(MapIds.HEALED_SHINSHU, 89),
                                                       required_brush_techniques=[BrushTechniques.WATERSPOUT]),
         "Shinshu Field - Freestanding chest in front of guardian sapling": LocData(
@@ -79,7 +79,7 @@ locations = {
             container_check_id(MapIds.HEALED_SHINSHU, 96)),
         "Shinshu Field - Freestanding chest near Tama's house": LocData(container_check_id(MapIds.HEALED_SHINSHU, 117)),
         "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(
-            container_check_id(MapIds.HEALED_SHINSHU, 118), type=LocationType.BURIED_UNDER_LEAF_PILE)
+            container_check_id(MapIds.HEALED_SHINSHU, 118), type=LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE)
     },
 
     RegionNames.TAMA_HOUSE: {

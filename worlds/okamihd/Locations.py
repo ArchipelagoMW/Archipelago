@@ -1,8 +1,8 @@
 from BaseClasses import Region, Location, ItemClassification, LocationProgressType
-from rule_builder.rules import Rule, HasAny, Has, HasAll, And
+from rule_builder.rules import Rule, HasAny, Has, HasAll, And, Or
 from .Enums.BrushTechniques import BrushTechniques
 from .Enums.LocationType import LocationType
-from .Rules import has_divine_instrument_tier, long_swim_rule
+from .Rules import has_divine_instrument_tier, long_swim_rule, has_portable_fire_source
 from .Types import LocData, OkamiLocation, OkamiItem, resolve_option_callable, EventData
 from typing import TYPE_CHECKING, List
 from .RegionsData import okami_locations, okami_events, okami_shop_locations
@@ -143,7 +143,9 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         case LocationType.TREASURE_BUD:
             required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
         case LocationType.BURIED_UNDER_LEAF_PILE:
-            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WHIRLWIND))
+            rules.append(HasAny(BrushTechniques.GALESTORM, BrushTechniques.WHIRLWIND,BrushTechniques.INFERNO,BrushTechniques.FIREBURST))
+        case LocationType.BURIED_UNDER_LEAF_PILE_NO_FIRE_SOURCE:
+            rules.append(Or(HasAny(BrushTechniques.GALESTORM,BrushTechniques.WHIRLWIND),has_portable_fire_source))
         case LocationType.BURIED_CHEST:
             if world.options.NightTimeChecksRequireCrescent:
                 required_techinques += [BrushTechniques.CRESCENT]
