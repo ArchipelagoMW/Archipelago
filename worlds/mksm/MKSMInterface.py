@@ -354,3 +354,13 @@ class MKSMInterface(GameInterface):
         inst_addr = self.addresses.get("FORCE_UI_INST")
 
         self._write32(inst_addr, 0)
+
+    def get_current_area(self):
+        area_addr = self.addresses.get("CURRENT_AREA")
+
+        return self._read32(area_addr)
+
+    def is_currently_saving(self):
+        saving_addr = self.addresses.get("IS_CURRENTLY_SAVING")
+
+        return bool(self._read8(saving_addr))

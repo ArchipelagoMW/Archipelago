@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
 from .consts import GameState, DEFAULT_EVENT_ARRAY, EVENTS_TO_LOCATION_NAME, ANIMATIONS_TO_LOCATION_NAME, \
-    ROOM_EVENT_GATES, XC1_EVENTS, MAIN_BOSS_EVENTS, GORO_DEFEATED_EVENTS
+    FOUNDRY_DOOR_EVENTS
 from .items import ITEM_NAME_TO_ID
 from .locations import LOCATION_NAME_TO_ID
 from .options import BossGoal
@@ -54,7 +54,7 @@ async def game_watcher(ctx: MKSMContext) -> None:
     read_game_state(ctx)
     ctx.is_paused = ctx.game_interface.is_paused()
     clear_events(ctx)
-    add_xc1_events_after_bosses(ctx)
+    open_foundry_door_after_bosses(ctx)
     clear_xp(ctx)
 
     set_character(ctx)
@@ -92,7 +92,7 @@ def clear_events(ctx: MKSMContext):
         ctx.game_interface.clear_event_log(bytes(server_array))
 
 
-def add_xc1_events_after_bosses(ctx: MKSMContext) -> None:
+def open_foundry_door_after_bosses(ctx: MKSMContext) -> None:
     """Room 0xc1's events (XC1_EVENTS) only show up in a real playthrough once every main
     boss is dead (MAIN_BOSS_EVENTS/GORO_DEFEATED_EVENTS) - once the server confirms that,
     merge whichever of them aren't in the live event log yet. Checking against the server's
@@ -101,16 +101,7 @@ def add_xc1_events_after_bosses(ctx: MKSMContext) -> None:
     if not ctx.game_state == GameState.GAMEPLAY:
         return
 
-    if "EVENT_ARRAY" not in ctx.stored_data:
-        return  # haven't heard back from the server yet - don't guess
-
-    server_array = ctx.stored_data["EVENT_ARRAY"] or []
-    server_events = {tuple(server_array[i:i + 8]) for i in range(0, len(server_array), 8)}
-
-    bosses_defeated = (
-            all(event in server_events for event in MAIN_BOSS_EVENTS)
-            and any(event in server_events for event in GORO_DEFEATED_EVENTS)
-    )
+    bosses_defeated = all(LOCATION_NAME_TO_ID[name] in ctx.checked_locations for name in MAIN_BOSS_LOCATIONS)
 
     if not bosses_defeated:
         return
@@ -118,13 +109,14 @@ def add_xc1_events_after_bosses(ctx: MKSMContext) -> None:
     current_events = list(ctx.game_interface.get_event_block())
     live_events = {tuple(current_events[i:i + 8]) for i in range(0, len(current_events), 8)}
 
-    xc1_events = [tuple(XC1_EVENTS[i:i + 8]) for i in range(0, len(XC1_EVENTS), 8)]
-    missing_events = [event for event in xc1_events if event not in live_events]
+    foundry_door_events = [tuple(FOUNDRY_DOOR_EVENTS[i:i + 8]) for i in range(0, len(FOUNDRY_DOOR_EVENTS), 8)]
+    missing_events = [event for event in foundry_door_events if event not in live_events]
 
     if not missing_events:
         return
 
-    new_array = current_events + [byte for event in missing_events for byte in event]
+    # putting missing events at the start of the log array to not mess with the autosave system
+    new_array = [byte for event in missing_events for byte in event] + current_events
     ctx.game_interface.clear_event_log(bytes(new_array))
 
 
@@ -140,30 +132,18 @@ async def update_events_in_server(ctx: MKSMContext) -> None:
         return
 
     current_events = list(ctx.game_interface.get_event_block())
+    current_area = ctx.game_interface.get_current_area()
+
     events = [tuple(current_events[i:i + 8]) for i in range(0, len(current_events), 8)]
-
-    # withhold a gated room's events from the server (and thus from EVENT_ARRAY, and thus
-    # from ever being replayed back into game memory by clear_events) until its gate is
-    # satisfied - see ROOM_EVENT_GATES.
-    open_gated_rooms = {
-        room for room, (gate_room, gate_event) in ROOM_EVENT_GATES.items()
-        if any(event[0] == gate_room and (gate_event is None or event[4] == gate_event) for event in events)
-    }
-    filtered_events = [
-        event for event in events
-        if event[0] not in ROOM_EVENT_GATES or event[0] in open_gated_rooms
-    ]
-    filtered_array = [byte for event in filtered_events for byte in event]
-
     server_array = ctx.stored_data.get("EVENT_ARRAY") or []
-    if filtered_array == server_array:
-        return  # already in sync with the server, nothing to push
 
-    if len(filtered_array) < len(server_array):
-        # the live event log only ever grows during real play - a shrink means we just read
-        # a spurious/incomplete event block (e.g. right after an emulator reset zeroed it out
-        # before the game finished booting), not real lost progress. Never push that to the
-        # server, or it permanently erases everything already recorded.
+    if not ctx.game_interface.is_currently_saving():
+        while len(events) > len(server_array) // 8 and events[-1][0] == current_area:
+            events.pop()
+
+    filtered_array = [byte for event in events for byte in event]
+
+    if filtered_array == server_array or len(filtered_array) < len(server_array):
         return
 
     await ctx.send_msgs([{"cmd": "Set",
@@ -500,6 +480,7 @@ def update_message(ctx: MKSMContext) -> None:
     else:
         ctx.print_start_time = None
         ctx.game_interface.set_default_exp_string()
+
 
 def force_ui(ctx: MKSMContext):
     ctx.game_interface.force_ui()
