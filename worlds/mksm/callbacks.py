@@ -470,11 +470,11 @@ def update_message(ctx: MKSMContext) -> None:
         ctx.game_interface.set_default_exp_string()
         return
 
-    if ctx.print_start_time is not None and time.time() - ctx.print_start_time < 5:
+    if ctx.print_start_time is not None and time.monotonic() - ctx.print_start_time < 5:
         return  # still showing the current message
 
     if ctx.message_queue:
-        ctx.print_start_time = time.time()
+        ctx.print_start_time = time.monotonic()
         ctx.game_interface.set_message(ctx.message_queue.popleft())
     else:
         ctx.print_start_time = None
