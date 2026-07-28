@@ -269,10 +269,10 @@ DEFAULT_EVENT_ARRAY = [
     *_make_event(0x8f, 0x21),
 ]
 
-# room 0xc1's events only ever show up in a real playthrough after every main boss above is
-# dead, so granting them earlier doesn't match any real game state - kept out of
-# DEFAULT_EVENT_ARRAY and merged in once that's confirmed (see add_xc1_events_after_bosses in
-# callbacks.py).
+# these events open the door to the foundry.
+# we want to inject the events once we detect the player beat every main boss.
+# because the events for beating bosses might not save correctly in the event array due to quitting the game,
+# the foundry door to not open properly
 FOUNDRY_DOOR_EVENTS = [
     *_make_event(0xc1, 0x4a),
     *_make_event(0xc1, 0x4c),

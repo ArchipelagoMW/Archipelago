@@ -38,6 +38,7 @@ class RedKoinPercent(Range):
 
 
 class BossGoal(Choice):
+    #TODO rework this, you need to beat all main bosses anyway to access final boss
     """
     What bosses are needed for goal completion.
     The goal also includes getting enough Red Koins, set in the red_koin_need_percent option.
