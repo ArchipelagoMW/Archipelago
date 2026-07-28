@@ -89,20 +89,6 @@ def clear_events(ctx: MKSMContext):
         else:
             server_array = list(ctx.stored_data["EVENT_ARRAY"])
 
-        # a still-gated room's event can be sitting in live memory without having made it
-        # into the server's array yet (update_events_in_server withholds it until its gate
-        # opens) - preserve it here instead of stomping it with the server's array, or it
-        # gets erased before the gate ever gets a chance to open.
-        live_events_raw = list(ctx.game_interface.get_event_block())
-        live_events = [tuple(live_events_raw[i:i + 8]) for i in range(0, len(live_events_raw), 8)]
-        server_events = {tuple(server_array[i:i + 8]) for i in range(0, len(server_array), 8)}
-
-        pending_gated_events = [
-            event for event in live_events
-            if event[0] in ROOM_EVENT_GATES and event not in server_events
-        ]
-
-        restored = server_array + [byte for event in pending_gated_events for byte in event]
         ctx.game_interface.clear_event_log(bytes(server_array))
 
 
