@@ -439,11 +439,8 @@ async def check_death(ctx: MKSMContext) -> None:
 
 
 async def set_xp_items(ctx: MKSMContext) -> None:
-    if ctx.game_state != GameState.GAMEPLAY:
+    if ctx.game_state != GameState.GAMEPLAY or "XP_ITEMS_GIVEN" not in ctx.stored_data:
         return
-
-    if "XP_ITEMS_GIVEN" not in ctx.stored_data:
-        return  # initial value hasn't come back from the server yet - don't re-grant on a guess
 
     xp_items = sum(item.item == ITEM_NAME_TO_ID[f"{FILLER_EXP} XP"] for item in ctx.items_received)
     # stored_data is the cross-restart source of truth; ctx.xp_items_given is an
