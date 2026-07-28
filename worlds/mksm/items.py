@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from .consts import CHARACTER_PURCHASE_AMOUNTS, HEALTH_UPGRADE_AMOUNT, BLOOD_BAR_AMOUNT
+from .consts import CHARACTER_PURCHASE_AMOUNTS, HEALTH_UPGRADE_AMOUNT, BLOOD_BAR_AMOUNT, FILLER_EXP
 
 if TYPE_CHECKING:
     from .world import MKSMWorld
@@ -28,7 +28,7 @@ ITEM_NAME_TO_ID = {
     "Red Koin": 17,
     "Health upgrade": 18,
     "Blood bar": 19,
-    "2000 XP": 20,
+    f"{FILLER_EXP} XP": 20,
 }
 
 DEFAULT_ITEM_CLASSIFICATIONS = {
@@ -51,7 +51,7 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Circle special upgrade": ItemClassification.filler,
     "R2 special upgrade": ItemClassification.filler,
     "Health upgrade": ItemClassification.filler,
-    "2000 XP": ItemClassification.filler,
+    f"{FILLER_EXP} XP": ItemClassification.filler,
 }
 
 

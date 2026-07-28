@@ -8,6 +8,7 @@ from worlds.AutoWorld import World
 from . import items, locations, regions, rules  # , web_world
 
 from . import options as mksm_options  # rename due to a name conflict with World.options
+from .consts import FILLER_EXP
 
 
 class MKSMWorld(World):
@@ -45,7 +46,7 @@ class MKSMWorld(World):
         return items.create_item_with_correct_classification(self, name)
 
     def get_filler_item_name(self) -> str:
-        return "2000 XP"
+        return f"{FILLER_EXP} XP"
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         return {

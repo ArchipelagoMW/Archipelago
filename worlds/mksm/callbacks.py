@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
 from .consts import GameState, DEFAULT_EVENT_ARRAY, EVENTS_TO_LOCATION_NAME, ANIMATIONS_TO_LOCATION_NAME, \
-    FOUNDRY_DOOR_EVENTS
+    FOUNDRY_DOOR_EVENTS, FILLER_EXP
 from .items import ITEM_NAME_TO_ID
 from .locations import LOCATION_NAME_TO_ID
 from .options import BossGoal
@@ -439,13 +439,13 @@ async def check_death(ctx: MKSMContext) -> None:
 
 
 async def set_xp_items(ctx: MKSMContext) -> None:
-    if not ctx.game_state == GameState.GAMEPLAY:
+    if ctx.game_state != GameState.GAMEPLAY:
         return
 
     if "XP_ITEMS_GIVEN" not in ctx.stored_data:
         return  # initial value hasn't come back from the server yet - don't re-grant on a guess
 
-    xp_items = sum(item.item == ITEM_NAME_TO_ID["2000 XP"] for item in ctx.items_received)
+    xp_items = sum(item.item == ITEM_NAME_TO_ID[f"{FILLER_EXP} XP"] for item in ctx.items_received)
     # stored_data is the cross-restart source of truth; ctx.xp_items_given is an
     # optimistic same-session cache so we don't re-grant while a Set is still in flight.
     xp_items_given = max(ctx.stored_data.get("XP_ITEMS_GIVEN") or 0, ctx.xp_items_given)
@@ -454,7 +454,7 @@ async def set_xp_items(ctx: MKSMContext) -> None:
         return
 
     delta = xp_items - xp_items_given
-    ctx.game_interface.add_xp(delta * 2000)
+    ctx.game_interface.add_xp(delta * FILLER_EXP)
     ctx.xp_items_given = xp_items
 
     await ctx.send_msgs([{"cmd": "Set",
