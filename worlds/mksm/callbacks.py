@@ -405,9 +405,11 @@ async def check_completed_game(ctx: MKSMContext):
     current = sum(item.item == ITEM_NAME_TO_ID["Red Koin"] for item in ctx.items_received)
 
     boss_goal = ctx.slot_data["boss_goal"]
-    required_boss_locations = ["F: Shao Kahn defeated"]
+    required_boss_locations = []
+
     if boss_goal >= BossGoal.option_main_bosses:
         required_boss_locations += MAIN_BOSS_LOCATIONS
+        required_boss_locations.append("F: Shao Kahn defeated")
     if boss_goal >= BossGoal.option_main_and_secret_bosses:
         required_boss_locations += SECRET_BOSS_LOCATIONS
 

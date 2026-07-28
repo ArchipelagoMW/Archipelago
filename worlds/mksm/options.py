@@ -38,21 +38,18 @@ class RedKoinPercent(Range):
 
 
 class BossGoal(Choice):
-    #TODO rework this, you need to beat all main bosses anyway to access final boss
     """
     What bosses are needed for goal completion.
     The goal also includes getting enough Red Koins, set in the red_koin_need_percent option.
-    shao_kahn_only: only the final boss of the game is needed for the goal.
-    main_bosses: all main bosses (Kitana, Reptile, Baraka, Goro and Scorpion) and the final boss.
+    main_bosses (default): all main bosses (Kitana, Reptile, Baraka, Goro and Scorpion) and the final boss.
     main_and_secret_bosses: all previously mentioned bosses and all secret bosses (Ermac, Mileena and Kano).
     """
     display_name = "Boss Goal"
 
-    option_shao_kahn_only = 0
-    option_main_bosses = 1
+    option_main_bosses = 0
     option_main_and_secret_bosses = 2
 
-    default = option_shao_kahn_only
+    default = option_main_bosses
 
 
 class Fatalitysanity(DefaultOnToggle):

@@ -190,6 +190,7 @@ def set_finishing_moves_rules(world: MKSMWorld) -> None:
     for loc_name in flattened_dict.keys():
 
         try:
+            # finishing moves from other characters other than the chosen one will not be in the world
             loc = world.get_location(loc_name)
         except KeyError:
             continue
@@ -208,11 +209,8 @@ def set_completion_condition(world: MKSMWorld) -> None:
 
     goal_rule = enough_red_koins
 
-    if world.options.boss_goal >= BossGoal.option_shao_kahn_only:
-        goal_rule = goal_rule & SHAO_KAHN
-
     if world.options.boss_goal >= BossGoal.option_main_bosses:
-        goal_rule = goal_rule & KITANA & REPTILE & BARAKA & GORO & SCORPION
+        goal_rule = goal_rule & KITANA & REPTILE & BARAKA & GORO & SCORPION & SHAO_KAHN
 
     if world.options.boss_goal >= BossGoal.option_main_and_secret_bosses:
         goal_rule = goal_rule & ERMAC & MILEENA & KANO
