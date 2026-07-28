@@ -236,13 +236,8 @@ EVENTS_TO_LOCATION_NAME = {
 
 }
 
-# Some rooms have event bytes that can show up in the event log before the real story
-# event has actually happened (stale/leftover log entries). For a room listed here, no
-# event from that room is saved to the server until its gate is satisfied. A gate is a
-# (gate_room, gate_event) pair: if gate_event is None, any event from gate_room satisfies
-# it; otherwise that exact room/event pair must show up (gate_room may be the same as the
-# gated room itself).
-
+# events that we want to automatically insert into every new run to avoid softlocks
+# for example reaching the fatality room without a bloodbar will softlock the game
 DEFAULT_EVENT_ARRAY = [
     # skip fatality event
     *_make_event(0x63, 0x15),
@@ -270,7 +265,7 @@ DEFAULT_EVENT_ARRAY = [
     *_make_event(0x8e, 0x41),
     *_make_event(0x8e, 0x26),
 
-    # event of cutscene after reptile, enables the brutality room red koin
+    # event of cutscene after reptile, enables the brutality room red koin without needing to beat reptile
     *_make_event(0x8f, 0x21),
 ]
 
