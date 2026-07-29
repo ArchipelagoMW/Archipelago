@@ -28,7 +28,7 @@ ITEM_NAME_TO_ID = {
     "Red Koin": 17,
     "Health upgrade": 18,
     "Blood bar": 19,
-    f"{FILLER_EXP} XP": 20,
+    f"{FILLER_EXP} EXP": 20,
 }
 
 DEFAULT_ITEM_CLASSIFICATIONS = {
@@ -51,7 +51,7 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Circle special upgrade": ItemClassification.filler,
     "R2 special upgrade": ItemClassification.filler,
     "Health upgrade": ItemClassification.filler,
-    f"{FILLER_EXP} XP": ItemClassification.filler,
+    f"{FILLER_EXP} EXP": ItemClassification.filler,
 }
 
 

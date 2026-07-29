@@ -237,11 +237,11 @@ class MKSMInterface(GameInterface):
         self._write8(self.addresses.get("SWING"), swing)
         self._write8(self.addresses.get("FIST_OF_RUIN"), fist_of_ruin)
 
-    def add_xp(self, xp_to_add):
-        addr = self.addresses.get("XP")
-        current_xp = self._read32(addr)
-        current_xp += xp_to_add
-        self._write32(addr, current_xp)
+    def add_exp(self, exp_to_add):
+        addr = self.addresses.get("EXP")
+        current_exp = self._read32(addr)
+        current_exp += exp_to_add
+        self._write32(addr, current_exp)
 
     def set_health_upgrades(self, health_upgrades: int) -> None:
         max_health = health_upgrades * 100 + 200
@@ -300,13 +300,13 @@ class MKSMInterface(GameInterface):
         character_addr = self.addresses.get("CURRENT_CHARACTER")
         self._write8(character_addr, character_value)
 
-    def get_current_xp(self) -> int:
-        addr = self.addresses.get("XP")
+    def get_current_exp(self) -> int:
+        addr = self.addresses.get("EXP")
         return self._read32(addr)
 
-    def set_xp(self, xp: int) -> None:
-        addr = self.addresses.get("XP")
-        self._write32(addr, xp)
+    def set_exp(self, exp: int) -> None:
+        addr = self.addresses.get("EXP")
+        self._write32(addr, exp)
 
     def toggle_debug_menu(self) -> bool:
         debug_1, debug_2 = self.addresses.get("DEBUG_MENU")

@@ -160,7 +160,7 @@ ADDRESSES = {
                                                             0x005d82a6: [6]},
         },
         "GAME_STATE": 0x5e1650,
-        "XP": 0xc2e224,
+        "EXP": 0xc2e224,
         "TOTAL_EVENTS": 0xc2def0,
         "EVENT_LOG_ARRAY": 0xc2a070,
         "PAUSE_FLAG": 0x4c49e8,

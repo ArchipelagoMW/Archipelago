@@ -11,6 +11,8 @@ from __future__ import annotations
 import time
 from typing import TYPE_CHECKING
 
+from Demos.security.get_policy_info import server_role
+
 from NetUtils import ClientStatus
 from .consts import GameState, DEFAULT_EVENT_ARRAY, EVENTS_TO_LOCATION_NAME, ANIMATIONS_TO_LOCATION_NAME, \
     FOUNDRY_DOOR_EVENTS, FILLER_EXP
@@ -55,7 +57,7 @@ async def game_watcher(ctx: MKSMContext) -> None:
     ctx.is_paused = ctx.game_interface.is_paused()
     clear_events(ctx)
     open_foundry_door_after_bosses(ctx)
-    clear_xp(ctx)
+    clear_exp(ctx)
 
     set_character(ctx)
     set_move_upgrades(ctx)
@@ -70,8 +72,8 @@ async def game_watcher(ctx: MKSMContext) -> None:
     await check_move_upgrades(ctx)
     await sync_red_koins(ctx)
     await update_events_in_server(ctx)
-    await update_xp_in_server(ctx)
-    await set_xp_items(ctx)
+    await update_exp_in_server(ctx)
+    await set_exp_items(ctx)
     await check_red_koins(ctx)
     await check_events(ctx)
     await check_finishing_moves(ctx)
@@ -120,11 +122,11 @@ def open_foundry_door_after_bosses(ctx: MKSMContext) -> None:
     ctx.game_interface.clear_event_log(bytes(new_array))
 
 
-def clear_xp(ctx: MKSMContext) -> None:
+def clear_exp(ctx: MKSMContext) -> None:
     if ctx.game_state != GameState.GAMEPLAY:
-        if "CURRENT_XP" not in ctx.stored_data:
+        if "CURRENT_EXP" not in ctx.stored_data:
             return  # haven't heard back from the server yet - don't zero it on a guess
-        ctx.game_interface.set_xp(ctx.stored_data["CURRENT_XP"] or 0)
+        ctx.game_interface.set_exp(ctx.stored_data["CURRENT_EXP"] or 0)
 
 
 async def update_events_in_server(ctx: MKSMContext) -> None:
@@ -157,26 +159,29 @@ async def update_events_in_server(ctx: MKSMContext) -> None:
                           }])
 
 
-async def update_xp_in_server(ctx: MKSMContext) -> None:
+async def update_exp_in_server(ctx: MKSMContext) -> None:
     if not ctx.game_state == GameState.GAMEPLAY:
         return
 
-    current_xp = ctx.game_interface.get_current_xp()
-    server_xp = ctx.stored_data.get("CURRENT_XP") or 0
+    current_exp = ctx.game_interface.get_current_exp()
+    server_exp = ctx.stored_data.get("CURRENT_EXP") or 0
 
-    if current_xp == 0 and server_xp > 0:
-        # spending xp on upgrades legitimately lowers it, so a drop alone isn't suspicious -
+    if current_exp == 0 and server_exp > 0:
+        # spending exp on upgrades legitimately lowers it, so a drop alone isn't suspicious -
         # but a hard drop to exactly 0 means we just read a spurious/incomplete value (e.g.
         # right after an emulator reset zeroed it before the game finished booting), not a
         # real purchase. Never push that to the server.
+        # TODO this might result in an infinite exp situation if i have e.g 5000 exp buy a combo
+        #  and restart the game, the server will say i have 5000 exp
+        #  its an exploit but not too harsh
         return
 
     await ctx.send_msgs([{"cmd": "Set",
-                          "key": "CURRENT_XP",
+                          "key": "CURRENT_EXP",
                           "operations": [
                               {
                                   "operation": "replace",
-                                  "value": current_xp
+                                  "value": current_exp
                               }
                           ],
                           }])
@@ -438,28 +443,28 @@ async def check_death(ctx: MKSMContext) -> None:
     ctx.was_dead = is_dead
 
 
-async def set_xp_items(ctx: MKSMContext) -> None:
-    if ctx.game_state != GameState.GAMEPLAY or "XP_ITEMS_GIVEN" not in ctx.stored_data:
+async def set_exp_items(ctx: MKSMContext) -> None:
+    if ctx.game_state != GameState.GAMEPLAY or "EXP_ITEMS_GIVEN" not in ctx.stored_data:
         return
 
-    xp_items = sum(item.item == ITEM_NAME_TO_ID[f"{FILLER_EXP} XP"] for item in ctx.items_received)
-    # stored_data is the cross-restart source of truth; ctx.xp_items_given is an
+    exp_items = sum(item.item == ITEM_NAME_TO_ID[f"{FILLER_EXP} EXP"] for item in ctx.items_received)
+    # stored_data is the cross-restart source of truth; ctx.exp_items_given is an
     # optimistic same-session cache so we don't re-grant while a Set is still in flight.
-    xp_items_given = max(ctx.stored_data.get("XP_ITEMS_GIVEN") or 0, ctx.xp_items_given)
+    exp_items_given = max(ctx.stored_data.get("EXP_ITEMS_GIVEN") or 0, ctx.exp_items_given)
 
-    if xp_items == xp_items_given:
+    if exp_items == exp_items_given:
         return
 
-    delta = xp_items - xp_items_given
-    ctx.game_interface.add_xp(delta * FILLER_EXP)
-    ctx.xp_items_given = xp_items
+    delta = exp_items - exp_items_given
+    ctx.game_interface.add_exp(delta * FILLER_EXP)
+    ctx.exp_items_given = exp_items
 
     await ctx.send_msgs([{"cmd": "Set",
-                          "key": "XP_ITEMS_GIVEN",
+                          "key": "EXP_ITEMS_GIVEN",
                           "operations": [
                               {
                                   "operation": "replace",
-                                  "value": xp_items
+                                  "value": exp_items
                               }
                           ],
                           }])

@@ -34,12 +34,12 @@ EMULATOR_RECONNECT_DELAY = 5  # seconds between PCSX2 connection attempts
 class MKSMCommandProcessor(ClientCommandProcessor):
     ctx: MKSMContext
 
-    # def _cmd_xp(self, value: str = "1000") -> bool:
-    #     """Add given xp
-    #     Usage: /xp   or   /xp 5000"""
+    # def _cmd_exp(self, value: str = "1000") -> bool:
+    #     """Add given exp
+    #     Usage: /exp   or   /exp 5000"""
     #     ctx: MKSMContext = self.ctx
-    #     ctx.game_interface.add_xp(int(value))
-    #     self.output(f"Added {value} XP")
+    #     ctx.game_interface.add_exp(int(value))
+    #     self.output(f"Added {value} EXP")
     #     return True
 
     # def _cmd_health(self):
@@ -176,7 +176,7 @@ class MKSMContext(CommonContext):
     is_paused: bool
     set_upgrades_in_pause: bool = False
     health_upgrades: int = 0
-    xp_items_given: int = 0
+    exp_items_given: int = 0
     first_loop: bool
     pending_server_address: str | None
     emulator_settled: bool
@@ -280,8 +280,8 @@ async def main(args) -> None:
         ctx.run_cli()
 
     ctx.set_notify("EVENT_ARRAY")
-    ctx.set_notify("CURRENT_XP")
-    ctx.set_notify("XP_ITEMS_GIVEN")
+    ctx.set_notify("CURRENT_EXP")
+    ctx.set_notify("EXP_ITEMS_GIVEN")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="MKSMGameWatcher")
 
     await ctx.exit_event.wait()
