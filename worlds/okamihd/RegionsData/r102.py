@@ -21,6 +21,7 @@ exits = {
                                  ExitData(RegionNames.SUSANOS_HOUSE),
                                  ExitData(RegionNames.KUSHIS_HOUSE),
                                  ExitData(RegionNames.ORANGES_HOUSE),
+                                 ExitData(RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
                                  ExitData(RegionNames.CURSED_SHINSHU_FIELD,
                                           required_items_events=["Kamiki Village - Help Susano Train/Break the boulder"]),
                                  ExitData(RegionNames.SHINSHU_FIELD,
