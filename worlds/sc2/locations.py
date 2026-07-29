@@ -249,7 +249,6 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             LocationType.VICTORY,
             lambda state: (
                 logic.terran_common_unit(state)
-                and logic.terran_defense_rating(state, True) >= 2
                 and (adv_tactics or logic.terran_basic_anti_air(state))
             ),
         ),
@@ -271,10 +270,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Third Group Rescued",
             SC2WOL_LOC_ID_OFFSET + 303,
             LocationType.VANILLA,
-            lambda state: (
-                logic.terran_common_unit(state)
-                and logic.terran_defense_rating(state, True) >= 2
-            ),
+            logic.terran_common_unit,
         ),
         make_location_data(
             SC2Mission.ZERO_HOUR.mission_name,
@@ -320,20 +316,14 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Hold Just a Little Longer",
             SC2WOL_LOC_ID_OFFSET + 309,
             LocationType.EXTRA,
-            lambda state: (
-                logic.terran_common_unit(state)
-                and logic.terran_defense_rating(state, True) >= 2
-            ),
+            logic.terran_common_unit,
         ),
         make_location_data(
             SC2Mission.ZERO_HOUR.mission_name,
             "Cavalry's on the Way",
             SC2WOL_LOC_ID_OFFSET + 310,
             LocationType.EXTRA,
-            lambda state: (
-                logic.terran_common_unit(state)
-                and logic.terran_defense_rating(state, True) >= 2
-            ),
+            logic.terran_common_unit,
         ),
         make_location_data(
             SC2Mission.EVACUATION.mission_name,
@@ -3950,8 +3940,11 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Victory",
             SC2LOTV_LOC_ID_OFFSET + 500,
             LocationType.VICTORY,
-            lambda state: logic.protoss_common_unit(state)
-            and (adv_tactics or logic.protoss_moderate_anti_air(state)),
+            lambda state: (
+                logic.protoss_common_unit(state)
+                and logic.protoss_moderate_anti_air(state)
+            ),
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa,
         ),
         make_location_data(
             SC2Mission.THE_GROWING_SHADOW.mission_name,
@@ -3986,8 +3979,11 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Templar Base",
             SC2LOTV_LOC_ID_OFFSET + 505,
             LocationType.EXTRA,
-            lambda state: logic.protoss_common_unit(state)
-            and (adv_tactics or logic.protoss_moderate_anti_air(state)),
+            lambda state: (
+                logic.protoss_common_unit(state)
+                and logic.protoss_moderate_anti_air(state)
+            ),
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa,
         ),
         make_location_data(
             SC2Mission.THE_SPEAR_OF_ADUN.mission_name,
@@ -12170,8 +12166,9 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             LocationType.VICTORY,
             lambda state: (
                 logic.terran_common_unit(state)
-                and (adv_tactics or logic.terran_moderate_anti_air(state))
+                and logic.terran_moderate_anti_air(state)
             ),
+            hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(
             SC2Mission.THE_GROWING_SHADOW_T.mission_name,
@@ -12218,8 +12215,9 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             LocationType.EXTRA,
             lambda state: (
                 logic.terran_common_unit(state)
-                and (adv_tactics or logic.terran_moderate_anti_air(state))
+                and logic.terran_moderate_anti_air(state)
             ),
+            hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(
             SC2Mission.THE_GROWING_SHADOW_Z.mission_name,

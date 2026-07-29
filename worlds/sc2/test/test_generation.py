@@ -1,36 +1,40 @@
 """
 Unit tests for world generation
 """
-from typing import *
-
+from typing import Any
 from .test_base import Sc2SetupTestBase
 
-from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items, \
-    RequiredTactics
+from .. import (
+    mission_groups, mission_tables, options, locations,
+    SC2Mission, SC2Campaign, SC2Race, unreleased_items,
+    RequiredTactics,
+)
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
-from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems, \
-    VanillaItemsOnly, MaximumCampaignSize
+from ..options import (
+    EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems,
+    VanillaItemsOnly, MaximumCampaignSize,
+)
 
 
 class TestItemFiltering(Sc2SetupTestBase):
-    def test_explicit_locks_excludes_interact_and_set_flags(self):
+    def test_explicit_locks_excludes_interact_and_set_flags(self) -> None:
         world_options = {
             **self.ALL_CAMPAIGNS,
             'locked_items': {
-                item_names.MARINE: 0,
-                item_names.MARAUDER: 0,
+                item_names.MARINE: -1,
+                item_names.MARAUDER: -1,
                 item_names.MEDIVAC: 1,
                 item_names.FIREBAT: 1,
-                item_names.ZEALOT: 0,
+                item_names.ZEALOT: -1,
                 item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL: 2,
             },
             'excluded_items': {
-                item_names.MARINE: 0,
-                item_names.MARAUDER: 0,
-                item_names.MEDIVAC: 0,
+                item_names.MARINE: -1,
+                item_names.MARAUDER: -1,
+                item_names.MEDIVAC: -1,
                 item_names.FIREBAT: 1,
-                item_names.ZERGLING: 0,
+                item_names.ZERGLING: -1,
                 item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL: 2,
             }
         }
@@ -46,42 +50,42 @@ class TestItemFiltering(Sc2SetupTestBase):
         regen_biosteel_items = [x for x in itempool if x == item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
         self.assertEqual(len(regen_biosteel_items), 2)
 
-    def test_unexcludes_cancel_out_excludes(self):
+    def test_unexcludes_cancel_out_excludes(self) -> None:
         world_options = {
             'grant_story_tech': options.GrantStoryTech.option_grant,
             'excluded_items': {
-                item_groups.ItemGroupNames.NOVA_EQUIPMENT: 15,
+                item_groups.ItemGroupNames.NOVA_EQUIPMENT: -1,
                 item_names.MARINE_PROGRESSIVE_STIMPACK: 1,
                 item_names.MARAUDER_PROGRESSIVE_STIMPACK: 2,
-                item_names.MARINE: 0,
-                item_names.MARAUDER: 0,
+                item_names.MARINE: -1,
+                item_names.MARAUDER: -1,
                 item_names.REAPER: 1,
-                item_names.DIAMONDBACK: 0,
+                item_names.DIAMONDBACK: -1,
                 item_names.HELLION: 1,
                 # Additional excludes to increase the likelihood that unexcluded items actually appear
-                item_groups.ItemGroupNames.STARPORT_UNITS: 0,
-                item_names.WARHOUND: 0,
-                item_names.VULTURE: 0,
-                item_names.WIDOW_MINE: 0,
-                item_names.THOR: 0,
-                item_names.GHOST: 0,
-                item_names.SPECTRE: 0,
-                item_groups.ItemGroupNames.MENGSK_UNITS: 0,
-                item_groups.ItemGroupNames.TERRAN_VETERANCY_UNITS: 0,
+                item_groups.ItemGroupNames.STARPORT_UNITS: -1,
+                item_names.WARHOUND: -1,
+                item_names.VULTURE: -1,
+                item_names.WIDOW_MINE: -1,
+                item_names.THOR: -1,
+                item_names.GHOST: -1,
+                item_names.SPECTRE: -1,
+                item_groups.ItemGroupNames.MENGSK_UNITS: -1,
+                item_groups.ItemGroupNames.TERRAN_VETERANCY_UNITS: -1,
             },
             'unexcluded_items': {
-                item_names.NOVA_PLASMA_RIFLE: 1,      # Necessary to pass logic
-                item_names.NOVA_PULSE_GRENADES: 0,    # Necessary to pass logic
-                item_names.NOVA_JUMP_SUIT_MODULE: 0,  # Necessary to pass logic
-                item_groups.ItemGroupNames.BARRACKS_UNITS: 0,
+                item_names.NOVA_PLASMA_RIFLE: 1,       # Necessary to pass logic
+                item_names.NOVA_PULSE_GRENADES: -1,    # Necessary to pass logic
+                item_names.NOVA_JUMP_SUIT_MODULE: -1,  # Necessary to pass logic
+                item_groups.ItemGroupNames.BARRACKS_UNITS: -1,
                 item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: 1,
                 item_names.HELLION: 1,
                 item_names.MARINE_PROGRESSIVE_STIMPACK: 1,
-                item_names.MARAUDER_PROGRESSIVE_STIMPACK: 0,
+                item_names.MARAUDER_PROGRESSIVE_STIMPACK: -1,
                 # Additional unexcludes for logic
-                item_names.MEDIVAC: 0,
-                item_names.BATTLECRUISER: 0,
-                item_names.SCIENCE_VESSEL: 0,
+                item_names.MEDIVAC: -1,
+                item_names.BATTLECRUISER: -1,
+                item_names.SCIENCE_VESSEL: -1,
             },
             # Terran-only
             'enabled_campaigns': {
@@ -103,11 +107,29 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(item_names.NOVA_BLAZEFIRE_GUNBLADE, itempool)
         self.assertNotIn(item_names.NOVA_ENERGY_SUIT_MODULE, itempool)
 
-    def test_excluding_groups_excludes_all_items_in_group(self):
+    def test_exclude_2_beats_unexclude_1(self) -> None:
         world_options = {
-            'excluded_items': [
-                item_groups.ItemGroupNames.BARRACKS_UNITS.lower(),
-            ]
+            options.OPTION_NAME[options.ExcludedItems]: {
+                item_names.MARINE: 2,
+            },
+            options.OPTION_NAME[options.UnexcludedItems]: {
+                item_names.MARINE: 1,
+            },
+            # Ensure enough locations that marine doesn't get culled
+            options.OPTION_NAME[options.SelectedRaces]: {
+                SC2Race.TERRAN.get_title(),
+            },
+            options.OPTION_NAME[options.VictoryCache]: 9,
+        }
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        self.assertNotIn(item_names.MARINE, itempool)
+
+    def test_excluding_groups_excludes_all_items_in_group(self) -> None:
+        world_options = {
+            'excluded_items': {
+                item_groups.ItemGroupNames.BARRACKS_UNITS.lower(): -1,
+            },
         }
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -115,7 +137,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         for item_name in item_groups.barracks_units:
             self.assertNotIn(item_name, itempool)
 
-    def test_excluding_mission_groups_excludes_all_missions_in_group(self):
+    def test_excluding_mission_groups_excludes_all_missions_in_group(self) -> None:
         world_options = {
             **self.ZERG_CAMPAIGNS,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
@@ -146,7 +168,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             self.assertNotEqual(item_data.type, item_tables.TerranItemType.Nova_Gear)
             self.assertNotEqual(item_name, item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE)
 
-    def test_starter_unit_populates_start_inventory(self):
+    def test_starter_unit_populates_start_inventory(self) -> None:
         world_options = {
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
@@ -290,7 +312,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         self.assertTrue(world_items)
-        occurrences: Dict[str, int] = {}
+        occurrences: dict[str, int] = {}
         for item_name, _ in world_items:
             if item_name in item_groups.terran_progressive_items:
                 if item_name in item_groups.nova_equipment:
@@ -325,6 +347,53 @@ class TestItemFiltering(Sc2SetupTestBase):
             if item_data.quantity == 0:
                 continue
             self.assertIn(item_name, item_groups.vanilla_items + item_groups.nova_equipment)
+    
+    def test_vanilla_items_only_can_unexclude_items(self) -> None:
+        world_options = {
+            # Ensuring an excess of locations so expected items don't get culled
+            **self.ALL_CAMPAIGNS,
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': {SC2Race.TERRAN.get_title()},
+            # Options under test
+            'vanilla_items_only': True,
+            'unexcluded_items': {
+                item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM: -1,
+                item_names.WARHOUND: 1,
+                item_groups.ItemGroupNames.TERRAN_STIMPACKS: -1,
+            },
+            # Avoid options that lock non-vanilla items for logic
+            'required_tactics': options.RequiredTactics.option_any_units,
+            'mastery_locations': options.MasteryLocations.option_disabled,
+            # Move the unit nerf items from the start inventory to the pool,
+            # else this option could push non-vanilla items past this test
+            'war_council_nerfs': True,
+        }
+        self.generate_world(world_options)
+        world_items = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(world_items)
+        self.assertNotIn(item_names.MARAUDER_MAGRAIL_MUNITIONS, world_items)
+        self.assertEqual(world_items.count(item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM), 2)
+        self.assertIn(item_names.WARHOUND, world_items)
+        self.assertIn(item_names.MARAUDER_PROGRESSIVE_STIMPACK, world_items)
+        self.assertIn(item_names.REAPER_PROGRESSIVE_STIMPACK, world_items)
+    
+    def test_vanilla_items_only_and_exclude_op_items_together_allow_one_level_of_regen_biosteel(self) -> None:
+        world_options = {
+            # Ensuring an excess of locations so expected items don't get culled
+            **self.ALL_CAMPAIGNS,
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': {SC2Race.TERRAN.get_title()},
+            # Options under test
+            'vanilla_items_only': True,
+            'exclude_overpowered_items': True,
+        }
+        self.generate_world(world_options)
+        world_items = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(world_items.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL), 1)
 
     def test_evil_awoken_with_vanilla_items_only_generates(self) -> None:
         world_options = {
@@ -416,12 +485,12 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'required_tactics': options.RequiredTactics.option_no_logic,
             'enable_morphling': options.EnableMorphling.option_true,
-            'excluded_items': [
-                item_groups.ItemGroupNames.ZERG_UNITS.lower()
-            ],
-            'unexcluded_items': [
-                item_groups.ItemGroupNames.ZERG_MORPHS.lower()
-            ]
+            'excluded_items': {
+                item_groups.ItemGroupNames.ZERG_UNITS.lower(): -1,
+            },
+            'unexcluded_items': {
+                item_groups.ItemGroupNames.ZERG_MORPHS.lower(): -1,
+            },
         }
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -439,12 +508,12 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'required_tactics': options.RequiredTactics.option_no_logic,
             'enable_morphling': options.EnableMorphling.option_false,
-            'excluded_items': [
-                item_groups.ItemGroupNames.ZERG_UNITS.lower()
-            ],
-            'unexcluded_items': [
-                item_groups.ItemGroupNames.ZERG_MORPHS.lower()
-            ]
+            'excluded_items': {
+                item_groups.ItemGroupNames.ZERG_UNITS.lower(): -1,
+            },
+            'unexcluded_items': {
+                item_groups.ItemGroupNames.ZERG_MORPHS.lower(): -1,
+            },
         }
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -463,7 +532,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         Orbital command got replaced. The item is still there for backwards compatibility.
         It shouldn't be generated.
         """
-        world_options = {}
+        world_options: dict[str, Any] = {}
 
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -473,14 +542,14 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_planetary_orbital_module_not_present_without_cc_spells(self) -> None:
         world_options = {
-            "excluded_items": [
-                item_names.COMMAND_CENTER_MULE,
-                item_names.COMMAND_CENTER_SCANNER_SWEEP,
-                item_names.COMMAND_CENTER_EXTRA_SUPPLIES
-            ],
-            "locked_items": [
-                item_names.PLANETARY_FORTRESS
-            ]
+            "excluded_items": {
+                item_names.COMMAND_CENTER_MULE: -1,
+                item_names.COMMAND_CENTER_SCANNER_SWEEP: -1,
+                item_names.COMMAND_CENTER_EXTRA_SUPPLIES: -1,
+            },
+            "locked_items": {
+                item_names.PLANETARY_FORTRESS: -1,
+            }
         }
 
         self.generate_world(world_options)
@@ -530,7 +599,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(speedrun_location_name, all_location_names)
         self.assertNotIn(speedrun_location_name, world_location_names)
 
-    def test_nco_and_wol_picks_correct_starting_mission(self):
+    def test_nco_and_wol_picks_correct_starting_mission(self) -> None:
         world_options = {
             'mission_order': MissionOrder.option_vanilla,
             'enabled_campaigns': {
@@ -541,7 +610,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         self.assertEqual(get_random_first_mission(self.world, self.world.custom_mission_order), mission_tables.SC2Mission.LIBERATION_DAY)
 
-    def test_excluding_mission_short_name_excludes_all_variants_of_mission(self):
+    def test_excluding_mission_short_name_excludes_all_variants_of_mission(self) -> None:
         world_options = {
             'excluded_missions': [
                 mission_tables.SC2Mission.ZERO_HOUR.mission_name.split(" (")[0]
@@ -560,7 +629,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR_Z, missions)
         self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR_P, missions)
 
-    def test_excluding_mission_variant_excludes_just_that_variant(self):
+    def test_excluding_mission_variant_excludes_just_that_variant(self) -> None:
         world_options = {
             'excluded_missions': [
                 mission_tables.SC2Mission.ZERO_HOUR.mission_name
@@ -579,7 +648,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(mission_tables.SC2Mission.ZERO_HOUR_Z, missions)
         self.assertIn(mission_tables.SC2Mission.ZERO_HOUR_P, missions)
 
-    def test_weapon_armor_upgrades(self):
+    def test_weapon_armor_upgrades(self) -> None:
         world_options = {
             # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_vanilla,
@@ -617,7 +686,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertGreaterEqual(len(vehicle_weapon_items), 3)
         self.assertEqual(len(other_bundle_items), 0)
 
-    def test_weapon_armor_upgrades_with_bundles(self):
+    def test_weapon_armor_upgrades_with_bundles(self) -> None:
         world_options = {
             # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_vanilla,
@@ -655,7 +724,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertGreaterEqual(len(vehicle_upgrade_items), 3)
         self.assertEqual(len(other_bundle_items), 0)
 
-    def test_weapon_armor_upgrades_all_in_air(self):
+    def test_weapon_armor_upgrades_all_in_air(self) -> None:
         world_options = {
             # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_vanilla,
@@ -688,7 +757,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertGreaterEqual(len(vehicle_weapon_items), 3)
         self.assertGreaterEqual(len(ship_weapon_items), 3)
 
-    def test_weapon_armor_upgrades_generic_upgrade_missions(self):
+    def test_weapon_armor_upgrades_generic_upgrade_missions(self) -> None:
         """
         Tests the case when there aren't enough missions in order to get required weapon/armor upgrades
         for logic requirements.
@@ -717,7 +786,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         # Under standard tactics you need to place L3 upgrades for available unit classes
         self.assertEqual(len(upgrade_items), 3)
 
-    def test_weapon_armor_upgrades_generic_upgrade_missions_no_logic(self):
+    def test_weapon_armor_upgrades_generic_upgrade_missions_no_logic(self) -> None:
         """
         Tests the case when there aren't enough missions in order to get required weapon/armor upgrades
         for logic requirements.
@@ -748,7 +817,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         # No logic won't take the fallback to trigger
         self.assertEqual(len(upgrade_items), 0)
 
-    def test_weapon_armor_upgrades_generic_upgrade_missions_no_countermeasure_needed(self):
+    def test_weapon_armor_upgrades_generic_upgrade_missions_no_countermeasure_needed(self) -> None:
         world_options = {
             # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_vanilla,
@@ -772,7 +841,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         # No additional starting inventory item placement is needed
         self.assertEqual(len(upgrade_items), 0)
 
-    def test_kerrigan_levels_per_mission_triggering_pre_fill(self):
+    def test_kerrigan_levels_per_mission_triggering_pre_fill(self) -> None:
         world_options = {
             **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
@@ -813,7 +882,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         self.assertGreater(len(kerrigan_1_stacks), 0)
 
-    def test_kerrigan_levels_per_mission_and_generic_upgrades_both_triggering_pre_fill(self):
+    def test_kerrigan_levels_per_mission_and_generic_upgrades_both_triggering_pre_fill(self) -> None:
         world_options = {
             **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
@@ -860,7 +929,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(item_names.KERRIGAN_LEVELS_70, itempool)
         self.assertNotIn(item_names.KERRIGAN_LEVELS_70, starting_inventory)
 
-    def test_locking_required_items(self):
+    def test_locking_required_items(self) -> None:
         world_options = {
             **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
@@ -884,10 +953,10 @@ class TestItemFiltering(Sc2SetupTestBase):
                 }
             },
             'grant_story_levels': options.GrantStoryLevels.option_additive,
-            'excluded_items': [
-                item_names.KERRIGAN_LEAPING_STRIKE,
-                item_names.KERRIGAN_MEND,
-            ]
+            'excluded_items': {
+                item_names.KERRIGAN_LEAPING_STRIKE: -1,
+                item_names.KERRIGAN_MEND: -1,
+            }
         }
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -897,7 +966,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(item_names.KERRIGAN_MEND, itempool)
 
     
-    def test_fully_balanced_mission_races(self):
+    def test_fully_balanced_mission_races(self) -> None:
         """
         Tests whether fully balanced mission race balancing actually is fully balanced.
         """
@@ -1015,7 +1084,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
-        upgrade_item_counts: Dict[str, int] = {}
+        upgrade_item_counts: dict[str, int] = {}
         for item_name in itempool:
             if item_tables.item_table[item_name].type in (
                 item_tables.TerranItemType.Upgrade,
@@ -1161,7 +1230,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
-            'locked_items': [locked_item],
+            'locked_items': {locked_item: -1},
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'selected_races': [SC2Race.TERRAN.get_title()],
         }
@@ -1187,7 +1256,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
 
-        items_to_check: List[str] = unreleased_items
+        items_to_check: list[str] = unreleased_items
         for item in items_to_check:
             self.assertNotIn(item, itempool)
 
@@ -1202,13 +1271,13 @@ class TestItemFiltering(Sc2SetupTestBase):
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
-            'locked_items': {item_name: 0 for item_name in unreleased_items},
+            'locked_items': {item_name: -1 for item_name in unreleased_items},
         }
 
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
 
-        items_to_check: List[str] = unreleased_items
+        items_to_check: list[str] = unreleased_items
         for item in items_to_check:
             self.assertIn(item, itempool)
 
@@ -1217,7 +1286,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
-            'excluded_items': [item_name for item_name in item_groups.terran_mercenaries],
+            'excluded_items': {item_name: -1 for item_name in item_groups.terran_mercenaries},
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'selected_races': [SC2Race.TERRAN.get_title()],
         }
@@ -1233,7 +1302,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
-            'unexcluded_items': [item_names.SOA_TIME_STOP],
+            'unexcluded_items': {item_names.SOA_TIME_STOP: -1},
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
 
@@ -1275,7 +1344,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name
             },
-            'excluded_items': [item_names.MARINE, item_names.MEDIC],
+            'excluded_items': {item_names.MARINE: -1, item_names.MEDIC: -1},
             'shuffle_no_build': False,
             'required_tactics': RequiredTactics.option_standard
         }
