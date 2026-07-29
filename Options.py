@@ -956,7 +956,7 @@ class OptionCounter(OptionDict):
 
         if invalid_value_errors:
             type_errors = [f"For option {self.__class__.__name__}:"] + invalid_value_errors
-            raise TypeError("\n".join(invalid_value_errors))
+            raise TypeError("\n".join(type_errors))
 
         self.value = collections.Counter(cleaned_dict)
 
