@@ -617,9 +617,7 @@ class KH1World(World):
                 mp_costs = copy.deepcopy(VANILLA_SPELL_COSTS_LVL)
                 mp_costs_spell = copy.deepcopy(VANILLA_SPELL_COSTS_SPELL)
                 possible_costs = copy.deepcopy(POSSIBLE_SPELL_COSTS)
-                for cost in possible_costs:
-                    if cost < min_spell_mp_cost or cost > max_spell_mp_cost:
-                        possible_costs.remove(cost)
+                possible_costs = [cost for cost in possible_costs if min_spell_mp_cost <= cost <= max_spell_mp_cost]
                 if self.options.randomize_spell_mp_costs.current_key == "shuffle":
                     if self.options.individual_spell_level_costs:
                         self.random.shuffle(mp_costs)
