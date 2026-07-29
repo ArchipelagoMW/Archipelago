@@ -1,6 +1,7 @@
+import base64
 import os
 import zipfile
-import base64
+from argparse import Namespace
 from collections.abc import Set
 
 from flask import request, flash, redirect, url_for, render_template
@@ -10,7 +11,7 @@ from WebHostLib import app
 from WebHostLib.upload import allowed_options, allowed_options_extensions, banned_file
 
 from Generate import roll_settings, PlandoOptions
-from Utils import parse_yamls
+from Utils import parse_configs
 
 
 @app.route('/check', methods=['GET', 'POST'])
@@ -84,30 +85,29 @@ def get_yaml_data(files) -> dict[str, str] | str | Markup:
     return options
 
 
-def roll_options(options: dict[str, dict | str],
+def roll_options(options: dict[str, str],
                  plando_options: Set[str] = frozenset({"bosses", "items", "connections", "texts"})) -> \
-        tuple[dict[str, str | bool], dict[str, dict]]:
-    plando_options = PlandoOptions.from_set(set(plando_options))
+        tuple[dict[str, str | bool], dict[str, Namespace]]:
+    plando = PlandoOptions.from_set(set(plando_options))
     results: dict[str, str | bool] = {}
-    rolled_results: dict[str, dict] = {}
+    rolled_results: dict[str, Namespace] = {}
     for filename, text in options.items():
+        _, sep, extension = filename.rpartition(".")
+        if not sep:
+            extension = ""
+
         try:
-            if type(text) is dict:
-                yaml_datas = (text, )
-            else:
-                yaml_datas = tuple(parse_yamls(text))
+            documents = parse_configs(text, extension)
         except Exception as e:
             results[filename] = f"Failed to parse YAML data in {filename}: {e}"
         else:
             try:
-                if len(yaml_datas) == 1:
-                    rolled_results[filename] = roll_settings(yaml_datas[0],
-                                                             plando_options=plando_options)
+                if len(documents) == 1:
+                    rolled_results[filename] = roll_settings(documents[0], plando_options=plando)
                 else:
-                    for i, yaml_data in enumerate(yaml_datas):
-                        if yaml_data is not None:
-                            rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
-                                                                                  plando_options=plando_options)
+                    for i, document in enumerate(documents):
+                        if document is not None:
+                            rolled_results[f"{filename}/{i + 1}"] = roll_settings(document, plando_options=plando)
             except Exception as e:
                 if e.__cause__:
                     results[filename] = f"Failed to generate options in {filename}: {e} - {e.__cause__}"

@@ -1,43 +1,46 @@
 from __future__ import annotations
 
 import asyncio
-import concurrent.futures
-import json
-import typing
 import builtins
-import os
+import collections
+import concurrent.futures
+import functools
+import importlib
+import io
 import itertools
+import json
+import logging
+import os
+import pickle
 import subprocess
 import sys
-import pickle
-import functools
-import io
-import collections
-import importlib
-import logging
+import typing
+import urllib.parse
+import urllib.request
 import warnings
-
 from argparse import Namespace
 from collections.abc import Collection, Iterable
 from datetime import datetime, timezone
-
-from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Generic, Mapping, Optional, Set, Dict, Any, TypeVar, Union, TypeGuard
-from yaml import load, load_all, dump
+
+import tomlkit as toml
 from pathspec import PathSpec, GitIgnoreSpec
 from typing_extensions import deprecated
+from yaml import load, load_all, dump
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
 except ImportError:
     from yaml import Loader as UnsafeLoader, SafeLoader, Dumper
 
+from settings import Settings, get_settings
+
 if typing.TYPE_CHECKING:
-    import tkinter
-    import pathlib
-    from BaseClasses import Region
     import multiprocessing
+    import pathlib
+    import tkinter
+    from BaseClasses import Region
 
 
 def tuplize_version(version: str) -> Version:
@@ -262,6 +265,72 @@ parse_yamls = functools.partial(load_all, Loader=UniqueKeyLoader)
 unsafe_parse_yaml = functools.partial(load, Loader=UnsafeLoader)
 
 del load, load_all  # should not be used. don't leak their names
+
+
+def parse_weights_yamls(data: str) -> tuple[Any, ...]:
+    from yaml.error import MarkedYAMLError
+    try:
+        return tuple(parse_yamls(data))
+    except MarkedYAMLError as ex:
+        if ex.problem_mark:
+            lines = data.splitlines()
+            if ex.context_mark:
+                relevant_lines = "\n".join(lines[ex.context_mark.line:ex.problem_mark.line+1])
+            else:
+                relevant_lines = lines[ex.problem_mark.line]
+            error_line = " " * ex.problem_mark.column + "^"
+            raise Exception(f"{ex.context} {ex.problem} on line {ex.problem_mark.line}:"
+                            f"\n{relevant_lines}\n{error_line}")
+        raise ex
+
+
+def parse_weights_toml(data: str, native=True) -> tuple[Any]:
+    # toml can only have a single document in it, but give tuple since that's expected for yamls
+    doc = toml.loads(data)
+    if native:
+        return (doc.unwrap(),)
+    return (doc,)
+
+
+def parse_weights_json(data: str) -> tuple[Any]:
+    return (json.loads(data),)
+
+
+def parse_configs(data: str, extension: str, native=True) -> tuple[Any, ...]:
+    """
+    Read a configuration document in a format determined by given extension.
+
+    If native is set, this will return standard python values instead of possibly giving subclasses.
+    """
+    # include txt for yamls since webhost accepts it
+    if extension in {"yaml", "yml", "txt"}:
+        return parse_weights_yamls(data)
+    if extension == "toml":
+        return parse_weights_toml(data, native=native)
+    # enforce json syntax with json extension
+    if extension == "json":
+        return parse_weights_json(data)
+    raise ValueError(f"Unrecognized file extension ({extension}) for weights file")
+
+
+def read_configs(path: str, native=True) -> tuple[Any, ...]:
+    """Wrapper for parse_configs that takes in a filepath to read from."""
+    _, sep, extension = path.rpartition(".")
+    if not sep:
+        extension = ""
+
+    with open(path, encoding="utf-8-sig") as file:
+        data = file.read()
+    return parse_configs(data, extension, native=native)
+
+
+def read_config(path: str, native=True):
+    """Wrapper for read_configs that errors in the case of multiple documents being present."""
+    res = read_configs(path, native=native)
+    if len(res) != 1:
+        # message doesn't really match for length 0, but there should always be some document
+        raise ValueError("File has multiple documents when it should only contain one")
+    return res[0]
 
 
 def get_cert_none_ssl_context():
