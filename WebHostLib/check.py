@@ -85,7 +85,7 @@ def get_yaml_data(files) -> dict[str, str] | str | Markup:
     return options
 
 
-def roll_options(options: dict[str, str],
+def roll_options(options: dict[str, str | dict],
                  plando_options: Set[str] = frozenset({"bosses", "items", "connections", "texts"})) -> \
         tuple[dict[str, str | bool], dict[str, Namespace]]:
     plando = PlandoOptions.from_set(set(plando_options))
@@ -97,7 +97,10 @@ def roll_options(options: dict[str, str],
             extension = ""
 
         try:
-            documents = parse_configs(text, extension)
+            if isinstance(text, dict):
+                documents = (text,)
+            else:
+                documents = parse_configs(text, extension)
         except Exception as e:
             results[filename] = f"Failed to parse YAML data in {filename}: {e}"
         else:
