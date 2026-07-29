@@ -1,7 +1,7 @@
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld
 
-# from .options import option_groups, option_presets
+from .options import option_presets
 GAME_NAME = "EV Nova"
 
 # For our game to display correctly on the website, we need to define a WebWorld subclass.
@@ -26,25 +26,23 @@ class EVNWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["NewSoupVi"],
+        ["Dorrulf"],
     )
-    # Let's have our setup guide in German as well.
-    # Do not translate the title and description!
-    # WebHost needs them to be the same to identify that it is the same tutorial.
-    # This lets it display the tutorials more compactly.
-    # setup_de = Tutorial(
-    #     "Multiworld Setup Guide",
-    #     "A guide to setting up APQuest for MultiWorld.",
-    #     "German",
-    #     "setup_de.md",
-    #     "setup/de",
-    #     ["NewSoupVi"],
-    # )
 
     # We add these tutorials to our WebWorld by overriding the "tutorials" field.
     # tutorials = [setup_en, setup_de]
     tutorials = [setup_en]
 
+    # docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'
+    game_info_languages = ["en"]
+
+    # display a link to a bug report page, most likely a link to a GitHub issue page.
+    bug_report_page = "https://github.com/Dorrulf/EVNovaAP/issues"
+
     # If we have option groups and/or option presets, we need to specify these here as well.
-    # option_groups = option_groups
-    # options_presets = option_presets
+    options_presets = option_presets
+
+    # Huh, we could add further location and item descriptions here...
+    # With EVN, they're pretty descriptive already. Mostly would be clarifying IDs w/ duplicate names.
+    # location_descriptions = {}     # dict[str, str]
+    # item_descriptions = {}        # dict[str, str]
