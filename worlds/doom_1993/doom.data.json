@@ -8813,6 +8813,10 @@
 				{
 					"_target": "Against Thee Wickedly (E4M6) @ Pink",
 					"requires": [ "deathlogic", "trick_pro" ]
+				},
+				{
+					"_target": "Against Thee Wickedly (E4M6) @ Magenta",
+					"requires": [ "trick_pro" ]
 				}
 			],
 			"exmx": [ 4, 6 ]
@@ -9042,6 +9046,10 @@
 							]
 						}
 					]
+				},
+				{
+					"_target": "Unto the Cruel (E4M8) @ Rocket Jump",
+					"requires": [ "trick_extreme" ]
 				}
 			],
 			"exmx": [ 4, 8 ]
@@ -9072,6 +9080,22 @@
 			[
 				{
 					"_target": "Unto the Cruel (E4M8) @ Main"
+				}
+			],
+			"exmx": [ 4, 8 ]
+		},
+		{
+			"_name": "Unto the Cruel (E4M8) @ Rocket Jump",
+			"connections": 
+			[
+				{
+					"_target": "Unto the Cruel (E4M8) @ Orange",
+					"rules": 
+					[
+						{
+							"and": [ "Rocket launcher", "Unto the Cruel (E4M8) - Yellow skull key" ]
+						}
+					]
 				}
 			],
 			"exmx": [ 4, 8 ]
