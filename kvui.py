@@ -611,8 +611,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             ctx.update_hint(self.hint["location"],
                             self.hint["finding_player"],
                             data)
-
-        self.dropdown.bind(on_release=self.dropdown.dismiss)
+            self.dropdown.dismiss()
 
     def set_height(self, instance, value):
         self.height = max([child.texture_size[1] for child in self.children])
