@@ -43,7 +43,7 @@ if install_cx_freeze:
     # install and import cx_freeze
     if '--yes' not in sys.argv and '-y' not in sys.argv:
         input(f'Requirement {requirement} is not satisfied, press enter to install it')
-    subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
+    subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '-c', 'setup_constraints.txt'])
     import pkg_resources
 
 import cx_Freeze
