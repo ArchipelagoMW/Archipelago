@@ -521,6 +521,101 @@ class MarkupDropdown(MDDropdownMenu):
             self.menu.data = self._items
 
 
+class ToggleDropdownItem(RecycleDataViewBehavior, MDBoxLayout):
+    text = StringProperty("")
+    active = BooleanProperty(False)
+    padding_x = NumericProperty(dp(15))
+    index = None
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.toggle_text = MDButtonText(self.text, size_hint_x=1, size_hint_y=None)
+        self.toggle = ToggleButton(self.toggle_text, theme_width="Custom", size_hint_x=1,
+                                   radius=[dp(0),dp(0),dp(0),dp(0)])
+
+        self.padding = [0]
+        self.toggle_text.padding = [0]
+
+        def update_text(instance, value):
+            instance.toggle_text.text = value
+
+        def update_padding(instance, value):
+            instance.toggle._text_right_pad = value
+            instance.toggle._text_left_pad = value
+        self.bind(padding_x=update_padding)
+        self.bind(text=update_text)
+        update_padding(self, self.padding_x)
+        update_text(self, self.text)
+        self.toggle.bind(state=self._on_toggle)
+        self.rv = None
+        self.add_widget(self.toggle)
+
+    def refresh_view_attrs(self, rv, index, data):
+        self.index = index
+        self.rv = rv
+        self.text = data.get("text", "")
+        self.toggle.state = "down" if data.get("active") else "normal"
+        return super().refresh_view_attrs(rv, index, data)
+
+    def _on_toggle(self, toggle, new_state):
+        self.active = new_state == "down"
+        if self.rv is not None and self.index is not None:
+            self.rv.data[self.index]["active"] = self.active
+
+
+Factory.register("ToggleDropdownItem", ToggleDropdownItem)
+
+
+class ToggleDropdown(MDDropdownMenu):
+    def open(self) -> None:
+        self.set_menu_properties()
+        Window.add_widget(self)
+        self.position = self.adjust_position()
+        
+        # Create dummy items for layout calculation to determine dropdown width
+        width_calculated = dp(20)
+        for item in self.items:
+            viewclass = Factory.get(item.get("viewclass", "ToggleDropdownItem"))
+            kwargs = {}
+            kwargs.update(item)
+            kwargs.pop("viewclass")
+            temp = viewclass(**kwargs)
+            temp.size_hint_x = None
+            temp.width = dp(1000)
+            if isinstance(temp, ToggleDropdownItem):
+                temp.toggle_text.texture_update()
+                temp.toggle.theme_width = "Primary"
+                temp.toggle.adjust_width()
+
+            temp.do_layout()
+
+            width_calculated = max(width_calculated, temp.minimum_width)
+
+        self.width = width_calculated
+
+        self.height = self.target_height
+        self._tar_x, self._tar_y = self.get_target_pos()
+        self.x = self._tar_x
+        self.y = self._tar_y - self.target_height
+        self.scale_value_center = self.caller.center
+        self.set_menu_pos()
+        self.on_open()
+
+    def on_items(self, instance, value: list) -> None:
+        items = []
+
+        for data in value:
+            if "viewclass" not in data:
+                data["viewclass"] = "ToggleDropdownItem"
+
+            items.append(data)
+
+        self._items = items
+        # Update items in view
+        if hasattr(self, "menu"):
+            self.menu.data = self._items
+
+
 class AutocompleteHintInput(ResizableTextField):
     min_chars = NumericProperty(3)
 
@@ -662,7 +757,13 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             # find correct column
             for child in self.children:
                 if child.collide_point(*touch.pos):
-                    if parent.sort_by_key(child.sort_key):
+                    if touch.button == 'right':
+                        for key,val in self.ids.items():
+                            if val == child:
+                                parent.pop_filter_dropdown_for(key, parent.data[1:], child, MDApp.get_running_app().update_hints)
+                                return True
+                        return False
+                    elif parent.sort_by_key(child.sort_key):
                         MDApp.get_running_app().update_hints()
                         return True
                     return False
@@ -1225,7 +1326,8 @@ class ColumnSorter:
 class ColumnSortMixin:
     column_sorters: list[ColumnSorter]
 
-    def __init__(self):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.column_sorters = []
 
     def sort_by_key(self, key: str) -> bool:
@@ -1248,7 +1350,112 @@ class ColumnSortMixin:
             sorter.sort(data)
 
 
-class HintLog(MDRecycleView, ColumnSortMixin):
+class ColumnFilter:
+    key: str  # Which column key this filter belongs to
+    str_conv_func: typing.Callable[[typing.Any], str | None] | None  # How to turn the data into simple strings
+    filter_denylist: set[str]  # Strings to disallow / hide
+    filter_allowlist: set[str]  # Strings to allow. If non-empty, disallows all not in this list.
+    option_list: set[str]  # Strings to show, whether they are currently in the data or not
+
+    def __init__(self, key: str, conv_func: typing.Callable[[typing.Any], str | None] | None = None):
+        self.key = key
+        self.str_conv_func = conv_func
+        self.filter_denylist = set()
+        self.filter_allowlist = set()
+        self.option_list = set()
+
+    def filter_str(self, value: str) -> bool:
+        if self.filter_allowlist and value not in self.filter_allowlist:
+            return False
+        if value in self.filter_denylist:
+            return False
+        return True
+
+    def filter_data(self, value: typing.Any) -> bool:
+        if self.str_conv_func:
+            value = self.str_conv_func(value)
+        if isinstance(value, str):
+            return self.filter_str(value)
+        return not self.filter_allowlist
+
+    def get_basic_menu_names(self, data: list[typing.Any]) -> list[str]:
+        # Based on denylist
+        shown_values = (self.option_list | self.filter_denylist)
+
+        for value in data:
+            str_value: str
+            if self.str_conv_func:
+                v = self.str_conv_func(value)
+                if v is None:
+                    continue
+                str_value = v
+            elif value is str:
+                str_value = value
+            else:
+                continue
+
+            shown_values.add(str_value)
+
+        return list(sorted(shown_values))
+
+    def build_menu_items(self, data: list[typing.Any]) -> list:
+        menu_items = []
+        for str_value in self.get_basic_menu_names(data):
+            item_data = {
+                "text": str_value,
+                "active": str_value not in self.filter_denylist,
+            }
+
+            item_data["on_dropdown_closed"] = (lambda name=str_value, idat=item_data:
+                                               self.filter_denylist.discard(name) if idat.get("active")
+                                               else self.filter_denylist.add(name))
+
+            menu_items.append(item_data)
+        return menu_items
+
+    def pop_filter_dropdown(self, data: list[typing.Any], caller, after_dropdown_closed: typing.Callable[[], None] | None = None):
+        menu_items = self.build_menu_items(data)
+        if not menu_items:
+            if after_dropdown_closed:
+                after_dropdown_closed()
+            return
+
+        dropdown = ToggleDropdown(caller=caller, items=menu_items, border_margin=0)
+
+        def handle_closing(instance):
+            for item in instance.items:
+                on_closed: typing.Callable[[], None] = item.get("on_dropdown_closed")
+                if on_closed:
+                    on_closed()
+            if after_dropdown_closed:
+                after_dropdown_closed()
+        dropdown.bind(on_dismiss=handle_closing)
+        dropdown.open()
+
+
+class ColumnFilterMixin:
+    column_filters: list[ColumnFilter]
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.column_filters = []
+
+    def pop_filter_dropdown_for(self, key: str, data: list[typing.Any], caller, after_dropdown_closed: typing.Callable[[], None] | None = None) -> bool:
+        found_filter: ColumnFilter | None = None
+        for filt in self.column_filters:
+            if filt.key == key:
+                found_filter = filt
+                break
+        if found_filter:
+            found_filter.pop_filter_dropdown(data, caller, after_dropdown_closed)
+            return True
+        return False
+
+    def filter_columns(self, data: list[typing.Any]) -> list[typing.Any]:
+        return [datum for datum in data if all(filt.filter_data(datum) for filt in self.column_filters)]
+
+
+class HintLog(MDRecycleView, ColumnSortMixin, ColumnFilterMixin):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
         "item": {"text": "[u]Item[/u]"},
@@ -1278,6 +1485,16 @@ class HintLog(MDRecycleView, ColumnSortMixin):
             lambda element: status_sort_weights[element["status"]["hint"]["status"]],
             True
         ))
+
+        # Filter order is irrelevant. Set up basic filters for each column.
+        for key in ["entrance", "receiving", "finding", "item", "location", "status"]:
+            cls = ColumnFilter
+            # TODO: add more advanced filters (ex. item classification)
+            filt = cls(key, lambda element, k=key: remove_between_brackets.sub("", element[k]["text"]))
+            if key == "status":
+                filt.filter_denylist.add(status_names[HintStatus.HINT_FOUND])  # filter out already-found hints by default
+                filt.option_list.update(status_names.values())
+            self.column_filters.append(filt)
 
     def refresh_hints(self, hints):
         if not hints:  # Fix the scrolling looking visually wrong in some edge cases
@@ -1315,6 +1532,7 @@ class HintLog(MDRecycleView, ColumnSortMixin):
                 },
             })
 
+        data = self.filter_columns(data)
         self.sort_columns(data)
 
         for i in range(0, len(data), 2):
