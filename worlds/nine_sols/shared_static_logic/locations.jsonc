@@ -878,9 +878,9 @@
     },
     {
         "address": 1904, "name": "OW: Enemy Gauntlet Room",
-        "region": "OW - Outside Enemy Gauntlet Room", "requires": [
-            { "item": "Charged Strike" } // to defeat the very last enemy, which happens to be a shielded beetle
-        ]
+        "region": "OW - Outside Enemy Gauntlet Room",
+        "requires": [ { "item": "Charged Strike" } ], // to defeat the very last enemy, which happens to be a shielded beetle
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ] // Cloud Piercer S/X works on the beetle too
     },
     {
         "address": 1905, "name": "OW: Vents Above Robot",
