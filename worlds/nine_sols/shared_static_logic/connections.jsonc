@@ -1251,6 +1251,17 @@
     }, // I suspect this is possible without wall climb, but the crushers and unsafe crates make it totally impractical.
     { "from": "OW - Shortcut Elevator", "to": "OW - Root Node & Middle Exits", "requires": [] }, // hacking
     {
+        "from": "OW - Root Node & Middle Exits", "to": "OW - Outside Enemy Gauntlet Room",
+        "requires": [ { "anyOf": [
+            { "location": "OW: Crusher Gauntlet" }, // one-way door
+            { "item": "Wall Climb" }, // simply ride any box with a green side all the way
+            [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] // or ride a safe-top box to the crusher,
+            // Air Dash between the two crates to the left (assume both are red) and Cloud Leap to reach the ledge
+        ] } ]
+        // this can be done itemless by waiting for two safe-top crates in a row and hopping between them
+        // after the first crush, but I'd rather not require players to figure that out
+    },
+    {
         "from": "OW - Shortcut Elevator", "to": "OW - Robot",
         "requires": [
             { "item": "Grapple" },
