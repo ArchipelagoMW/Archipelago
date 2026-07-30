@@ -583,14 +583,16 @@ class ToggleDropdown(MDDropdownMenu):
             kwargs.update(item)
             kwargs.pop("viewclass")
             temp = viewclass(**kwargs)
+            if not hasattr(temp, "minimum_width"):
+                continue
             temp.size_hint_x = None
             temp.width = dp(1000)
             if isinstance(temp, ToggleDropdownItem):
                 temp.toggle_text.texture_update()
                 temp.toggle.theme_width = "Primary"
                 temp.toggle.adjust_width()
-
-            temp.do_layout()
+            if hasattr(temp, "do_layout"):
+                temp.do_layout()
 
             width_calculated = max(width_calculated, temp.minimum_width)
 
@@ -1362,9 +1364,9 @@ class ColumnFilter:
     filter_allowlist: set[str]  # Strings to allow. If non-empty, disallows all not in this list.
     option_list: set[str]  # Strings to show, whether they are currently in the data or not
 
-    def __init__(self, key: str, conv_func: typing.Callable[[typing.Any], str | None] | None = None):
+    def __init__(self, key: str, str_conv_func: typing.Callable[[typing.Any], str | None] | None = None):
         self.key = key
-        self.str_conv_func = conv_func
+        self.str_conv_func = str_conv_func
         self.filter_denylist = set()
         self.filter_allowlist = set()
         self.option_list = set()
@@ -1478,6 +1480,84 @@ class ColumnFilterMixin:
         return [datum for datum in data if all(filt.filter_data(datum) for filt in self.column_filters)]
 
 
+class ColumnFilterItemClassification(ColumnFilter):
+    req_flags: int = 0
+    hide_flags: int = 0
+    hide_filler: bool = False
+    iclass_conv_func: typing.Callable[[typing.Any], int | None] | None  # How to turn the data into item classification
+
+    def __init__(self, key: str, str_conv_func: typing.Callable[[typing.Any], str | None] | None = None,
+                 iclass_conv_func: typing.Callable[[typing.Any], int | None] | None = None):
+        super().__init__(key, str_conv_func)
+        self.iclass_conv_func = iclass_conv_func
+
+    def build_menu_items(self, data: list[typing.Any]) -> list:
+        flags = (
+            ("Progression", 0b001),
+            ("Useful", 0b010),
+            ("Trap", 0b100),
+        )
+        menu_items = []
+        for name, bit in flags:
+            def toggle(val: bool, b=bit) -> None:
+                if val:
+                    self.req_flags |= b
+                else:
+                    self.req_flags &= ~b
+            menu_items.append({
+                "text": f'Req. {name}',
+                "active": (self.req_flags & bit) != 0,
+                "on_toggle": toggle,
+            })
+        for name, bit in flags:
+            def toggle(val: bool, b=bit) -> None:
+                if val:
+                    self.hide_flags |= b
+                else:
+                    self.hide_flags &= ~b
+            menu_items.append({
+                "text": f'Hide {name}',
+                "active": (self.hide_flags & bit) != 0,
+                "on_toggle": toggle,
+            })
+        menu_items.append({
+            "text": "Hide Filler",
+            "active": self.hide_filler,
+            "on_toggle": lambda val: setattr(self, "hide_filler", val)
+        })
+
+        base_menu_items = super().build_menu_items(data)
+        if base_menu_items:
+            menu_items.append({
+                "viewclass": "MDLabel",
+                "text": "----",
+                "size_hint_x": 1,
+                "theme_width": "Custom",
+                "halign": "center",
+            })
+            menu_items.extend(base_menu_items)
+
+        return menu_items
+
+    def filter_classification(self, value: int) -> bool:
+        if self.hide_filler and not value:
+            return False
+        if value & self.req_flags != self.req_flags:
+            return False
+        if value & self.hide_flags != 0:
+            return False
+        return True
+
+    def filter_data(self, value: typing.Any) -> bool:
+        if self.iclass_conv_func:
+            c = self.iclass_conv_func(value)
+            if c is None:
+                c = 0
+            if not self.filter_classification(c):
+                return False
+        return super().filter_data(value)
+
+
 class HintLog(MDRecycleView, ColumnSortMixin, ColumnFilterMixin):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
@@ -1512,8 +1592,14 @@ class HintLog(MDRecycleView, ColumnSortMixin, ColumnFilterMixin):
         # Filter order is irrelevant. Set up basic filters for each column.
         for key in ["entrance", "receiving", "finding", "item", "location", "status"]:
             cls = ColumnFilter
-            # TODO: add more advanced filters (ex. item classification)
-            filt = cls(key, lambda element, k=key: remove_between_brackets.sub("", element[k]["text"]))
+            kwargs = {
+                "key": key,
+                "str_conv_func": lambda element, k=key: remove_between_brackets.sub("", element[k]["text"]),
+            }
+            if key == "item":
+                cls = ColumnFilterItemClassification
+                kwargs["iclass_conv_func"] = lambda element: element["item"]["flags"]
+            filt = cls(**kwargs)
             if key == "status":
                 filt.filter_denylist.add(status_names[HintStatus.HINT_FOUND])  # filter out already-found hints by default
                 filt.option_list.update(status_names.values())
@@ -1534,12 +1620,15 @@ class HintLog(MDRecycleView, ColumnSortMixin, ColumnFilterMixin):
                 hint_status_node = f"[u]{hint_status_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
-                "item": {"text": self.parser.handle_node({
-                    "type": "item_id",
-                    "text": hint["item"],
-                    "flags": hint["item_flags"],
-                    "player": hint["receiving_player"],
-                })},
+                "item": {
+                    "text": self.parser.handle_node({
+                        "type": "item_id",
+                        "text": hint["item"],
+                        "flags": hint["item_flags"],
+                        "player": hint["receiving_player"],
+                    }),
+                    "flags": hint["item_flags"]
+                },
                 "finding": {"text": self.parser.handle_node({"type": "player_id", "text": hint["finding_player"]})},
                 "location": {"text": self.parser.handle_node({
                     "type": "location_id",
