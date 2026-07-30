@@ -1,5 +1,6 @@
 import logging
 from typing import Callable, Dict, List, Set, Tuple, TYPE_CHECKING, Iterable
+from collections import Counter
 
 from BaseClasses import Location, ItemClassification
 from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
@@ -110,7 +111,7 @@ class ValidInventory:
         self.player = world.player
         self.world: 'SC2World' = world
         # Track all Progression items and those with complex rules for filtering
-        self.logical_inventory: Dict[str, int] = {}
+        self.logical_inventory: Counter[str] = Counter()
         for item in item_pool:
             if not item_table[item.name].is_important_for_filtering():
                 continue
@@ -125,13 +126,13 @@ class ValidInventory:
                 self.item_name_to_child_items.setdefault(parent_item, []).append(item)
 
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.logical_inventory.get(item, 0) >= count
+        return self.logical_inventory[item] >= count
 
     def has_any(self, items: Set[str], player: int) -> bool:
-        return any(self.logical_inventory.get(item) for item in items)
+        return any(self.logical_inventory[item] for item in items)
 
     def has_all(self, items: Set[str], player: int) -> bool:
-        return all(self.logical_inventory.get(item) for item in items)
+        return all(self.logical_inventory[item] for item in items)
 
     def has_group(self, item_group: str, player: int, count: int = 1) -> bool:
         return False  # Deliberately fails here, as item pooling is not aware about mission layout
@@ -140,17 +141,17 @@ class ValidInventory:
         return 0  # For item filtering assume no missions are beaten
 
     def count(self, item: str, player: int) -> int:
-        return self.logical_inventory.get(item, 0)
+        return self.logical_inventory[item]
 
     def count_from_list(self, items: Iterable[str], player: int) -> int:
-        return sum(self.logical_inventory.get(item, 0) for item in items)
+        return sum(self.logical_inventory[item] for item in items)
 
     def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
         result = 0
         for item in items:
             if self.logical_inventory[item] > 0:
                 result += 1
-        return result 
+        return result
 
     def generate_reduced_inventory(self, inventory_size: int, filler_amount: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
