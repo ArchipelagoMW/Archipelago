@@ -561,6 +561,9 @@ class ToggleDropdownItem(RecycleDataViewBehavior, MDBoxLayout):
         self.active = new_state == "down"
         if self.rv is not None and self.index is not None:
             self.rv.data[self.index]["active"] = self.active
+            toggle_func: typing.Callable[[bool], None] | None = self.rv.data[self.index].get("on_toggle")
+            if toggle_func:
+                toggle_func(self.active)
 
 
 Factory.register("ToggleDropdownItem", ToggleDropdownItem)
@@ -760,7 +763,9 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                     if touch.button == 'right':
                         for key,val in self.ids.items():
                             if val == child:
-                                parent.pop_filter_dropdown_for(key, parent.data[1:], child, MDApp.get_running_app().update_hints)
+                                parent.pop_filter_dropdown_for(key, parent.data[1:], child,
+                                                               None,
+                                                               lambda _: MDApp.get_running_app().update_hints())
                                 return True
                         return False
                     elif parent.sort_by_key(child.sort_key):
@@ -1401,34 +1406,49 @@ class ColumnFilter:
     def build_menu_items(self, data: list[typing.Any]) -> list:
         menu_items = []
         for str_value in self.get_basic_menu_names(data):
-            item_data = {
+            def toggle(val: bool, name = str_value) -> None:
+                if val:
+                    self.filter_denylist.discard(name)
+                else:
+                    self.filter_denylist.add(name)
+            menu_items.append({
                 "text": str_value,
                 "active": str_value not in self.filter_denylist,
-            }
-
-            item_data["on_dropdown_closed"] = (lambda name=str_value, idat=item_data:
-                                               self.filter_denylist.discard(name) if idat.get("active")
-                                               else self.filter_denylist.add(name))
-
-            menu_items.append(item_data)
+                "on_toggle": toggle
+            })
         return menu_items
 
-    def pop_filter_dropdown(self, data: list[typing.Any], caller, after_dropdown_closed: typing.Callable[[], None] | None = None):
+    def pop_filter_dropdown(self, data: list[typing.Any], caller,
+                            after_dropdown_closed: typing.Callable[[], None] | None = None,
+                            after_toggle: typing.Callable[[bool], None] | None = None):
         menu_items = self.build_menu_items(data)
         if not menu_items:
             if after_dropdown_closed:
                 after_dropdown_closed()
             return
 
+        if after_toggle:
+            # Add the 'after_toggle' function to every item
+            for item in menu_items:
+                func = item.get("on_toggle")
+                if func is None:
+                    item["on_toggle"] = after_toggle
+                else:
+                    def toggle(val, fn=func):
+                        fn(val)
+                        after_toggle(val)
+                    item["on_toggle"] = toggle
+
         dropdown = ToggleDropdown(caller=caller, items=menu_items, border_margin=0)
 
         def handle_closing(instance):
-            for item in instance.items:
-                on_closed: typing.Callable[[], None] = item.get("on_dropdown_closed")
+            for mitem in instance.items:
+                on_closed: typing.Callable[[], None] = mitem.get("on_dropdown_closed")
                 if on_closed:
                     on_closed()
             if after_dropdown_closed:
                 after_dropdown_closed()
+
         dropdown.bind(on_dismiss=handle_closing)
         dropdown.open()
 
@@ -1440,14 +1460,17 @@ class ColumnFilterMixin:
         super().__init__(**kwargs)
         self.column_filters = []
 
-    def pop_filter_dropdown_for(self, key: str, data: list[typing.Any], caller, after_dropdown_closed: typing.Callable[[], None] | None = None) -> bool:
+    def pop_filter_dropdown_for(self, key: str, data: list[typing.Any], caller,
+                                after_dropdown_closed: typing.Callable[[], None] | None = None,
+                                after_toggle: typing.Callable[[bool], None] | None = None
+                                ) -> bool:
         found_filter: ColumnFilter | None = None
         for filt in self.column_filters:
             if filt.key == key:
                 found_filter = filt
                 break
         if found_filter:
-            found_filter.pop_filter_dropdown(data, caller, after_dropdown_closed)
+            found_filter.pop_filter_dropdown(data, caller, after_dropdown_closed, after_toggle)
             return True
         return False
 
