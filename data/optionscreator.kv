@@ -119,6 +119,7 @@
     add: add
     save: save
     input: input
+    key_picker: key_picker
     focus_behavior: False
 
     MDDialogHeadlineText:
@@ -138,6 +139,17 @@
                 height: "20dp"
 
             MDIconButton:
+                id: key_picker
+                icon: "menu-down"
+                theme_width: "Custom"
+                width: dp(48) if root.picker_enabled else 0
+                theme_height: "Custom"
+                height: "20dp"
+                disabled: not root.picker_enabled
+                opacity: 1 if root.picker_enabled else 0
+                on_press: root.show_valid_keys()
+
+            MDIconButton:
                 id: add
                 icon: "plus"
                 theme_height: "Custom"
@@ -147,7 +159,9 @@
         ScrollBox:
             id: scrollbox
             size_hint_y: None
+            height: dp(320)
             adapt_minimum: False
+            box_height: dp(320)
 
         MDButton:
             id: save
