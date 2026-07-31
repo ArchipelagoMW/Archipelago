@@ -11,10 +11,10 @@ Known interim policies (deliberate, revisit before release):
     boss still awards its vanilla weapon in addition to the AP item at that
     location. Pure randomization needs either a separate boss-defeated record
     or vanilla-grant suppression (ASM/overlay work).
-  * Heart tank items are applied incrementally per session (client-side received
-    index); totals can drift if reconnecting into an older save. Proper fix:
-    persist the processed-count inside spare save-struct bytes once a safe spot
-    is verified.
+  * Processed-items count persists in spare save bytes (u16 0x800D1C4E,
+    memcard-persisted, savestate-coherent) - reconnects/restarts no longer
+    re-apply grants. First connect on a pre-scheme save applies everything
+    once (count reads 0), then stabilizes. Wrong-save/seed stamping still TODO.
   * Armor capsules/tanks: locations exist but detection/grants are TODO until
     their bit layouts are verified.
   * Victory detection (Sigma) TODO.
@@ -44,6 +44,11 @@ SAVE_LEN = 0x60
 OFF_MAX_HP_X = 0x0D1C47 - SAVE_BASE
 OFF_WEAPONS = 0x0D1C4C - SAVE_BASE      # vanilla weapons/boss-beaten record
 OFF_AP_WEAPONS = 0x0D1C4D - SAVE_BASE   # AP-owned capability byte (patched disc)
+# Processed-items count, u16 LE in spare memcard-persisted save bytes
+# (0x1C4D-0x1C50 run, never written by the game). Survives client restarts,
+# rides the memory card, and rewinds coherently with savestates - fixing the
+# reconnect re-grant drift (hearts +2 each on every fresh session).
+OFF_PROCESSED = 0x0D1C4E - SAVE_BASE
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
@@ -166,49 +171,67 @@ class MMX5Client(BizHawkClient):
 
             # ---- Item grants (only while the save struct is live) ----
             if in_gameplay:
-                grant_weapons = 0
-                new_hearts = 0
-                for item in ctx.items_received[self.items_processed:]:
-                    item_name = ctx.item_names.lookup_in_game(item.item)
-                    if item_name in WEAPON_TO_BIT:
-                        grant_weapons |= 1 << WEAPON_TO_BIT[item_name]
-                    elif item_name == names.HEART_TANK:
-                        new_hearts += 1
-                    # TODO: armor parts, tanks, filler energy
+                # Source of truth for "how many received items are already
+                # applied to THIS save" lives IN the save (u16 at 0x1C4E):
+                # memcard-persisted, savestate-coherent, restart-proof.
+                # The old in-memory counter re-applied everything each
+                # session (the +2-max-HP-per-heart reconnect drift).
+                processed = save[OFF_PROCESSED] | (save[OFF_PROCESSED + 1] << 8)
+                total = len(ctx.items_received)
+                if processed > total:
+                    # More applied than the server knows: rewound-to-newer
+                    # save vs older seed state, or a foreign save. Clamp and
+                    # warn; proper wrong-save protection = seed stamp (A3).
+                    logger.warning(f"MMX5: save says {processed} items applied but server sent {total} - clamping")
+                    processed = total
 
-                writes = []
-                # Weapons: OR received bits into the capability byte.
-                # AP-patched disc: 0x1C4D (AP-owned; 0x1C4C keeps recording
-                # kills and MUST NOT be written - story chapters advance on
-                # its popcount). Vanilla disc: hybrid mode, write 0x1C4C.
-                wep_off = OFF_AP_WEAPONS if self.ap_patched else OFF_WEAPONS
-                capability = save[wep_off]
-                all_received_weapon_bits = 0
-                for item in ctx.items_received:
-                    item_name = ctx.item_names.lookup_in_game(item.item)
-                    if item_name in WEAPON_TO_BIT:
-                        all_received_weapon_bits |= 1 << WEAPON_TO_BIT[item_name]
-                merged = capability | all_received_weapon_bits
-                if merged != capability:
-                    writes.append((SAVE_BASE + wep_off, [merged], "MainRAM"))
+                if processed < total:
+                    new_hearts = 0
+                    for item in ctx.items_received[processed:]:
+                        item_name = ctx.item_names.lookup_in_game(item.item)
+                        if item_name == names.HEART_TANK:
+                            new_hearts += 1
+                        # weapons handled cumulatively below; TODO: armor,
+                        # tanks, filler energy once their state is AP-owned
 
-                if new_hearts:
-                    new_max = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
-                    writes.append((SAVE_BASE + OFF_MAX_HP_X, [new_max], "MainRAM"))
+                    writes = []
+                    # Weapons: OR ALL received bits into the capability byte
+                    # (idempotent). AP-patched disc: 0x1C4D (0x1C4C keeps
+                    # recording kills - story chapters advance on its
+                    # popcount). Vanilla disc: hybrid mode, write 0x1C4C.
+                    wep_off = OFF_AP_WEAPONS if self.ap_patched else OFF_WEAPONS
+                    capability = save[wep_off]
+                    all_received_weapon_bits = 0
+                    for item in ctx.items_received:
+                        item_name = ctx.item_names.lookup_in_game(item.item)
+                        if item_name in WEAPON_TO_BIT:
+                            all_received_weapon_bits |= 1 << WEAPON_TO_BIT[item_name]
+                    merged = capability | all_received_weapon_bits
+                    if merged != capability:
+                        writes.append((SAVE_BASE + wep_off, [merged], "MainRAM"))
 
-                # Only mark items processed after a successful write, so a
-                # failed guard retries next cycle instead of losing grants.
-                success = True
-                if writes:
+                    if new_hearts:
+                        new_max = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
+                        writes.append((SAVE_BASE + OFF_MAX_HP_X, [new_max], "MainRAM"))
+
+                    # Commit the new processed-count in the SAME guarded
+                    # batch as the effects it accounts for.
+                    writes.append((SAVE_BASE + OFF_PROCESSED,
+                                   [total & 0xFF, (total >> 8) & 0xFF], "MainRAM"))
+
+                    # Guard on the count we based the batch on: retries
+                    # cleanly if anything moved between read and write.
                     success = await bizhawk.guarded_write(
                         ctx.bizhawk_ctx, writes,
-                        [(SAVE_BASE + wep_off, bytes([capability]), "MainRAM")],
+                        [(SAVE_BASE + OFF_PROCESSED,
+                          bytes([processed & 0xFF, (processed >> 8) & 0xFF]), "MainRAM")],
                     )
                     logger.info(f"MMX5: grants {'applied' if success else 'guard-failed, retrying'}: "
+                                f"items {processed}->{total}, "
                                 f"weapons({'AP' if self.ap_patched else 'vanilla'})={merged:02X} hearts+={new_hearts}")
-                if success:
-                    self.items_processed = len(ctx.items_received)
-                    self.hearts_applied += new_hearts
+                    if success:
+                        self.items_processed = total
+                        self.hearts_applied += new_hearts
 
             # TODO: victory detection (Sigma defeat address unknown) ->
             #   await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
