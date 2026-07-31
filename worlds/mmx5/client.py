@@ -19,9 +19,12 @@ Known interim policies (deliberate, revisit before release):
     their bit layouts are verified.
   * Victory detection (Sigma) TODO.
 """
+import logging
 from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
+
+logger = logging.getLogger("Client")
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -44,8 +47,10 @@ OFF_INTRO = 0x0D1C79 - SAVE_BASE
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
 
-GAMEPLAY_GATE_ADDR = 0x0D4F64  # 3 bytes, all 0x01 during active gameplay
-GAMEPLAY_GATE_LEN = 3
+# NOTE: 0x0D4F5x "enables" bytes proved stage-specific (00 during Izzy Glow
+# gameplay) - NOT usable as a gameplay gate. Since we only write the persistent
+# save struct, the write-safety condition is just "save struct initialized":
+# max HP within its legal range (base 0x20 .. capped 0x40, 0x10 safety floor).
 
 # Weapon bit order in 0x0D1C4C (bits 0-1 verified, 2-7 inferred from ammo-slot
 # order — see RAM notes).
@@ -71,6 +76,7 @@ class MMX5Client(BizHawkClient):
         super().__init__()
         self.items_processed = 0
         self.hearts_applied = 0
+        self.last_gate_state = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -92,11 +98,13 @@ class MMX5Client(BizHawkClient):
             return
 
         try:
-            gate, save = await bizhawk.read(ctx.bizhawk_ctx, [
-                (GAMEPLAY_GATE_ADDR, GAMEPLAY_GATE_LEN, "MainRAM"),
+            save = (await bizhawk.read(ctx.bizhawk_ctx, [
                 (SAVE_BASE, SAVE_LEN, "MainRAM"),
-            ])
-            in_gameplay = all(b == 1 for b in gate)
+            ]))[0]
+            in_gameplay = 0x10 <= save[OFF_MAX_HP_X] <= 0x40
+            if in_gameplay != self.last_gate_state:
+                logger.info(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
+                self.last_gate_state = in_gameplay
 
             # ---- Check detection (safe to do from any state: save struct
             # persists and only ever gains bits during legitimate play) ----
@@ -136,7 +144,6 @@ class MMX5Client(BizHawkClient):
                     elif item_name == names.HEART_TANK:
                         new_hearts += 1
                     # TODO: armor parts, tanks, filler energy
-                self.items_processed = len(ctx.items_received)
 
                 writes = []
                 # Weapons: OR received bits into the persistent bitfield
@@ -153,13 +160,20 @@ class MMX5Client(BizHawkClient):
                 if new_hearts:
                     new_max = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
                     writes.append((SAVE_BASE + OFF_MAX_HP_X, [new_max], "MainRAM"))
-                    self.hearts_applied += new_hearts
 
+                # Only mark items processed after a successful write, so a
+                # failed guard retries next cycle instead of losing grants.
+                success = True
                 if writes:
-                    await bizhawk.guarded_write(
+                    success = await bizhawk.guarded_write(
                         ctx.bizhawk_ctx, writes,
                         [(SAVE_BASE + OFF_WEAPONS, bytes([weapons_owned]), "MainRAM")],
                     )
+                    logger.info(f"MMX5: grants {'applied' if success else 'guard-failed, retrying'}: "
+                                f"weapons={merged:02X} hearts+={new_hearts}")
+                if success:
+                    self.items_processed = len(ctx.items_received)
+                    self.hearts_applied += new_hearts
 
             # TODO: victory detection (Sigma defeat address unknown) ->
             #   await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
