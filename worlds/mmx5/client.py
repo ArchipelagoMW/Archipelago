@@ -114,10 +114,12 @@ class MMX5Client(BizHawkClient):
 
         # Hybrid-mode fallback on vanilla discs stays supported during
         # development; the AP disc patch decouples weapon capability.
-        self.ap_patched = probe == PATCH_PROBE_PATCHED
-        if not self.ap_patched and probe != PATCH_PROBE_VANILLA:
-            logger.warning(f"MMX5: unexpected code at patch probe site: {probe.hex()}")
-        logger.info(f"MMX5: disc mode = {'AP-PATCHED (capability byte 0x1C4D)' if self.ap_patched else 'vanilla (hybrid grants)'}")
+        # None = undetermined (validate can race the EXE still streaming in
+        # from disc - the probe reads zeros during boot); game_watcher
+        # re-probes before granting anything.
+        self.ap_patched = self._classify_probe(probe)
+        if self.ap_patched is None:
+            logger.info(f"MMX5: disc mode undetermined at boot (probe {probe.hex()}) - will re-probe in-game")
 
         ctx.game = self.game
         ctx.items_handling = 0b111  # remote items, own-world items, starting inventory
@@ -125,6 +127,16 @@ class MMX5Client(BizHawkClient):
         self.items_processed = 0
         self.hearts_applied = 0
         return True
+
+    @staticmethod
+    def _classify_probe(probe: bytes):
+        if probe == PATCH_PROBE_PATCHED:
+            logger.info("MMX5: disc mode = AP-PATCHED (capability byte 0x1C4D)")
+            return True
+        if probe == PATCH_PROBE_VANILLA:
+            logger.info("MMX5: disc mode = vanilla (hybrid grants)")
+            return False
+        return None
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if ctx.server is None or ctx.slot is None:
@@ -141,6 +153,12 @@ class MMX5Client(BizHawkClient):
             if in_gameplay != self.last_gate_state:
                 logger.info(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
                 self.last_gate_state = in_gameplay
+                # Savestates restore ALL of RAM including the loaded EXE, so
+                # the disc mode can CHANGE mid-session (e.g. a state made on
+                # an unpatched boot loaded over a patched one). Re-probe on
+                # every gate rising edge rather than trusting boot-time.
+                if in_gameplay:
+                    self.ap_patched = None
 
             # ---- Check detection (safe to do from any state: save struct
             # persists and only ever gains bits during legitimate play) ----
@@ -171,6 +189,15 @@ class MMX5Client(BizHawkClient):
 
             # ---- Item grants (only while the save struct is live) ----
             if in_gameplay:
+                # Resolve disc mode if boot raced the EXE load; in gameplay
+                # the EXE is fully resident, so this settles on first cycle.
+                if self.ap_patched is None:
+                    probe = (await bizhawk.read(
+                        ctx.bizhawk_ctx, [(PATCH_PROBE_ADDR, 4, "MainRAM")]))[0]
+                    self.ap_patched = self._classify_probe(probe)
+                    if self.ap_patched is None:
+                        logger.warning(f"MMX5: probe still unrecognized in-game ({probe.hex()}) - grants held")
+                        return
                 # Source of truth for "how many received items are already
                 # applied to THIS save" lives IN the save (u16 at 0x1C4E):
                 # memcard-persisted, savestate-coherent, restart-proof.
