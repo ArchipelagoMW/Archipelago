@@ -4,8 +4,10 @@ Scaffold status: generates. Client (BizHawkClient) and real reachability rules
 are the next phases. RAM interface documentation lives outside the repo in the
 project workspace (Reference/mmx5-ram-notes.md).
 """
+import os
 from typing import Any, ClassVar, Dict
 
+import settings
 from BaseClasses import ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
@@ -14,6 +16,17 @@ from .client import MMX5Client  # noqa: F401  (import registers the client)
 from .items import BASE_ID, MMX5Item, event_table, item_groups, item_table
 from .locations import MMX5Location, event_location_table, location_groups, location_table
 from .options import MMX5Options
+from .Rom import HASH_US, MMX5ProcedurePatch, patch_rom
+
+
+class MMX5Settings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File path of the Mega Man X5 (USA) disc image (raw 2352-byte .bin)."""
+        description = "Mega Man X5 (USA) disc image"
+        copy_to = "Megaman X5.bin"
+        md5s = [HASH_US]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class MMX5Web(WebWorld):
@@ -40,6 +53,9 @@ class MMX5World(World):
 
     options_dataclass = MMX5Options
     options: MMX5Options
+
+    settings: ClassVar[MMX5Settings]
+    settings_key = "mmx5_options"
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = location_table
@@ -112,6 +128,14 @@ class MMX5World(World):
 
     def get_filler_item_name(self) -> str:
         return names.SMALL_ENERGY
+
+    def generate_output(self, output_directory: str) -> None:
+        patch = MMX5ProcedurePatch(player=self.player,
+                                   player_name=self.multiworld.player_name[self.player])
+        patch_rom(self, patch)
+        patch.write(os.path.join(
+            output_directory,
+            f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}"))
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {"goal": self.options.goal.value}

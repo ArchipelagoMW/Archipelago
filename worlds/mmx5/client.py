@@ -42,10 +42,19 @@ EXE_SIG = bytes([0x70, 0xE9, 0x0E, 0x80]) + b"\\ROCK_X5.DAT"
 SAVE_BASE = 0x0D1C40          # save struct block we read each cycle
 SAVE_LEN = 0x60
 OFF_MAX_HP_X = 0x0D1C47 - SAVE_BASE
-OFF_WEAPONS = 0x0D1C4C - SAVE_BASE
+OFF_WEAPONS = 0x0D1C4C - SAVE_BASE      # vanilla weapons/boss-beaten record
+OFF_AP_WEAPONS = 0x0D1C4D - SAVE_BASE   # AP-owned capability byte (patched disc)
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
+
+# AP disc-patch detection: the first stage-load weapon-repopulation site.
+# Vanilla: lbu $v0,0x4C($a1) = 90 A2 00 4C; AP patch changes the offset byte
+# to 0x4D so capability derives from the AP byte while 0x1C4C keeps
+# recording kills (story chapters advance on its popcount - never suppress).
+PATCH_PROBE_ADDR = 0x03C324
+PATCH_PROBE_VANILLA = bytes.fromhex("4C00A290")
+PATCH_PROBE_PATCHED = bytes.fromhex("4D00A290")
 
 # NOTE: 0x0D4F5x "enables" bytes proved stage-specific (00 during Izzy Glow
 # gameplay) - NOT usable as a gameplay gate. Since we only write the persistent
@@ -85,14 +94,25 @@ class MMX5Client(BizHawkClient):
         self.items_processed = 0
         self.hearts_applied = 0
         self.last_gate_state = None
+        self.ap_patched = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
-            sig = (await bizhawk.read(ctx.bizhawk_ctx, [(EXE_SIG_ADDR, len(EXE_SIG), "MainRAM")]))[0]
+            sig, probe = await bizhawk.read(ctx.bizhawk_ctx, [
+                (EXE_SIG_ADDR, len(EXE_SIG), "MainRAM"),
+                (PATCH_PROBE_ADDR, 4, "MainRAM"),
+            ])
             if sig != EXE_SIG:
                 return False
         except bizhawk.RequestFailedError:
             return False
+
+        # Hybrid-mode fallback on vanilla discs stays supported during
+        # development; the AP disc patch decouples weapon capability.
+        self.ap_patched = probe == PATCH_PROBE_PATCHED
+        if not self.ap_patched and probe != PATCH_PROBE_VANILLA:
+            logger.warning(f"MMX5: unexpected code at patch probe site: {probe.hex()}")
+        logger.info(f"MMX5: disc mode = {'AP-PATCHED (capability byte 0x1C4D)' if self.ap_patched else 'vanilla (hybrid grants)'}")
 
         ctx.game = self.game
         ctx.items_handling = 0b111  # remote items, own-world items, starting inventory
@@ -157,16 +177,20 @@ class MMX5Client(BizHawkClient):
                     # TODO: armor parts, tanks, filler energy
 
                 writes = []
-                # Weapons: OR received bits into the persistent bitfield
-                # (guarded so we only commit against the value we just read).
+                # Weapons: OR received bits into the capability byte.
+                # AP-patched disc: 0x1C4D (AP-owned; 0x1C4C keeps recording
+                # kills and MUST NOT be written - story chapters advance on
+                # its popcount). Vanilla disc: hybrid mode, write 0x1C4C.
+                wep_off = OFF_AP_WEAPONS if self.ap_patched else OFF_WEAPONS
+                capability = save[wep_off]
                 all_received_weapon_bits = 0
                 for item in ctx.items_received:
                     item_name = ctx.item_names.lookup_in_game(item.item)
                     if item_name in WEAPON_TO_BIT:
                         all_received_weapon_bits |= 1 << WEAPON_TO_BIT[item_name]
-                merged = weapons_owned | all_received_weapon_bits
-                if merged != weapons_owned:
-                    writes.append((SAVE_BASE + OFF_WEAPONS, [merged], "MainRAM"))
+                merged = capability | all_received_weapon_bits
+                if merged != capability:
+                    writes.append((SAVE_BASE + wep_off, [merged], "MainRAM"))
 
                 if new_hearts:
                     new_max = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
@@ -178,10 +202,10 @@ class MMX5Client(BizHawkClient):
                 if writes:
                     success = await bizhawk.guarded_write(
                         ctx.bizhawk_ctx, writes,
-                        [(SAVE_BASE + OFF_WEAPONS, bytes([weapons_owned]), "MainRAM")],
+                        [(SAVE_BASE + wep_off, bytes([capability]), "MainRAM")],
                     )
                     logger.info(f"MMX5: grants {'applied' if success else 'guard-failed, retrying'}: "
-                                f"weapons={merged:02X} hearts+={new_hearts}")
+                                f"weapons({'AP' if self.ap_patched else 'vanilla'})={merged:02X} hearts+={new_hearts}")
                 if success:
                     self.items_processed = len(ctx.items_received)
                     self.hearts_applied += new_hearts
