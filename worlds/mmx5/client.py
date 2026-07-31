@@ -98,10 +98,13 @@ class MMX5Client(BizHawkClient):
             return
 
         try:
-            save = (await bizhawk.read(ctx.bizhawk_ctx, [
+            mode, save = await bizhawk.read(ctx.bizhawk_ctx, [
+                (0x0D1C00, 1, "MainRAM"),  # game-mode controller: 0x0A gameplay / 0x0C results
                 (SAVE_BASE, SAVE_LEN, "MainRAM"),
-            ]))[0]
-            in_gameplay = 0x10 <= save[OFF_MAX_HP_X] <= 0x40
+            ])
+            # Grants are safe whenever the save struct is live: gameplay or
+            # results mode, plus a sanity floor on max HP against garbage states.
+            in_gameplay = mode[0] in (0x0A, 0x0C) and 0x10 <= save[OFF_MAX_HP_X] <= 0x40
             if in_gameplay != self.last_gate_state:
                 logger.info(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
                 self.last_gate_state = in_gameplay
