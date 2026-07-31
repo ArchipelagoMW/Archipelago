@@ -52,27 +52,10 @@ class SM64World(World):
     filler_count: int
     star_costs: typing.Dict[str, int]
 
-    slot_option_names = (
-        "area_rando",
-        "buddy_checks",
-        "exclamation_boxes",
-        "progressive_keys",
-        "enable_coin_stars",
-        "enable_locked_paintings",
-        "enable_move_rando",
-        "move_rando_actions",
-        "strict_cap_requirements",
-        "strict_cannon_requirements",
-        "strict_move_requirements",
-        "amount_of_stars",
-        "first_bowser_star_door_cost",
-        "basement_star_door_cost",
-        "second_floor_star_door_cost",
-        "mips1_cost",
-        "mips2_cost",
-        "stars_to_finish",
-        "death_link",
-        "completion_type",
+    slot_option_names = tuple(
+        option_name
+        for option_name, option_class in options_dataclass.type_hints.items()
+        if getattr(option_class, "include_in_slot_data", False)
     )
 
     # Spoiler specific variable(s)
