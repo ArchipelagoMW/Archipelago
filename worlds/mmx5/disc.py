@@ -68,9 +68,10 @@ PICKUP_STUB = bytes.fromhex(
     "0c1c6c91"  # lbu   t4, 0x1C0C(t3)     ; stage id (spawn engine's input;
                 #   0x1C41 disproven live - read 0xE4 mid-stage)
     "20004ca1"  # sb    t4, 0x20(t2)       ; slot+0: stage
-    "82006c92"  # lbu   t4, 0x82(s1)       ; item kind
+    "82002c92"  # lbu   t4, 0x82(s1)       ; item kind (0x922C: rs=s1 - the
+                #   v3/v4 stubs shipped 0x926C = s3, recording garbage)
     "21004ca1"  # sb    t4, 0x21(t2)       ; slot+1: kind
-    "02006c92"  # lbu   t4, 0x02(s1)       ; item id
+    "02002c92"  # lbu   t4, 0x02(s1)       ; item id (same s1 fix)
     "22004ca1"  # sb    t4, 0x22(t2)       ; slot+2: id
     "7f002c31"  # andi  t4, t1, 0x7F
     "80008c35"  # ori   t4, t4, 0x80       ; seq = (count & 0x7F) | 0x80
