@@ -733,4 +733,12 @@ SONG_DATA: Dict[str, SongData] = {
     "What-If Box": SongData(2900857, "43-79", "MD Plus Project", True, 5, 8, 10),
     "SATERiTE": SongData(2900858, "43-80", "MD Plus Project", True, 7, 9, 11),
     "Shakkiiiin!!": SongData(2900859, "43-81", "MD Plus Project", False, 5, 8, 11),
+    "Death By Glamour": SongData(2900860, "99-0", "Song of Determination & Power", False, 4, 7, 9),
+    "Last Goodbye": SongData(2900861, "99-1", "Song of Determination & Power", False, 3, 6, 9),
+    "Battle Against A True Hero": SongData(2900862, "99-2", "Song of Determination & Power", False, 3, 6, 9),
+    "MEGALOVANIA": SongData(2900863, "99-3", "Song of Determination & Power", False, 6, 9, 11),
+    "Attack of the Killer Queen": SongData(2900864, "99-4", "Song of Determination & Power", False, 5, 7, 10),
+    "It's TV Time!": SongData(2900865, "99-5", "Song of Determination & Power", False, 5, 7, 9),
+    "BIG SHOT": SongData(2900866, "99-6", "Song of Determination & Power", False, 3, 5, 8),
+    "GUARDIAN": SongData(2900867, "99-7", "Song of Determination & Power", False, 5, 7, 9),
 }
