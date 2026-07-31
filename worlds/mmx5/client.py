@@ -52,16 +52,24 @@ OFF_HEARTS = 0x0D1C80 - SAVE_BASE
 # save struct, the write-safety condition is just "save struct initialized":
 # max HP within its legal range (base 0x20 .. capped 0x40, 0x10 safety floor).
 
-# Weapon bit order in 0x0D1C4C (bits 0-1 verified, 2-7 inferred from ammo-slot
-# order — see RAM notes).
+# Weapon bit order in 0x0D1C4C (bits 0, 1, 5 verified in-game; rest inferred
+# from ammo-slot order — see RAM notes).
 WEAPON_BITS = [names.CSHOT, names.DARK_HOLD, names.GOO_SHAVER, names.GROUND_FIRE,
                names.TRI_THUNDER, names.F_LASER, names.SPIKE_BALL, names.WING_SPIRAL]
 WEAPON_TO_BIT = {name: i for i, name in enumerate(WEAPON_BITS)}
 
-# Heart-tank bitfield stage mapping — only bit 6 verified so far. Unknown bits
-# are logged but not sent as checks until mapped.
+# Heart-tank bitfield stage mapping — complete via placement-record harvest
+# 2026-07-31 (Scripts/mmx5_placement_dump.lua); bits 2 and 6 also live-verified.
+# NOT stage-id order: the bit is the placement record's id byte.
 HEART_BIT_TO_STAGE = {
-    6: names.NECROBAT,  # Dark Dizzy — verified 2026-07-30
+    0: names.GRIZZLY,
+    1: names.KRAKEN,    # Squid Adler
+    2: names.FIREFLY,   # Izzy Glow — live-verified (pickup, 0x40->0x44)
+    3: names.WHALE,     # Duff McWhalen
+    4: names.PEGASUS,   # The Skiver
+    5: names.ROSERED,   # Axle the Red (unique ungated record + elimination)
+    6: names.NECROBAT,  # Dark Dizzy — live-verified 2026-07-30
+    7: names.DINOREX,   # Mattrex
 }
 
 BASE_MAX_HP = 0x20
