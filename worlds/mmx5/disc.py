@@ -47,10 +47,49 @@ def addr_to_disc(addr: int, region_name: str) -> int:
 # save weapons 0x1C4C into the live player struct. Changing each lbu's offset
 # byte 0x4C -> 0x4D derives capability from 0x800D1C4D (unused save byte,
 # memory-card-persisted) = the AP-owned weapons byte the client writes.
+# Pickup check-record stub (patch spec item 2, proto v3): one shared stub in
+# EXE free space serves every randomized pickup kind - the dispatcher enters
+# handlers via `lw a0,table[kind]; jr a0` with s1 = the item object, so the
+# stub reads kind (s1+0x82) and id (s1+2) itself. It appends
+# {stage 0x800D1C41, kind, id, seq} to the mailbox ring (16 slots at
+# 0x801FA020, monotonic count u32 at 0x801FA080, seq bit7 = record valid) and
+# exits through the consume-only tail j 0x800543C8 (li v0,3 = item consumed,
+# no vanilla effect - the client owns all grants; the item respawns until the
+# server confirms the check, which the client then acks by zeroing seq).
+PICKUP_STUB_ADDR = 0x800776A0          # free-space run A (zero in file, canaried)
+PICKUP_STUB = bytes.fromhex(
+    "1f80083c"  # lui   t0, 0x801F
+    "00a00835"  # ori   t0, t0, 0xA000     ; t0 = mailbox 0x801FA000
+    "8000098d"  # lw    t1, 0x80(t0)       ; t1 = monotonic pickup count
+    "0f002a31"  # andi  t2, t1, 0xF        ; ring slot index
+    "80500a00"  # sll   t2, t2, 2
+    "21500a01"  # addu  t2, t0, t2
+    "0d800b3c"  # lui   t3, 0x800D
+    "411c6c91"  # lbu   t4, 0x1C41(t3)     ; current stage id
+    "20004ca1"  # sb    t4, 0x20(t2)       ; slot+0: stage
+    "82006c92"  # lbu   t4, 0x82(s1)       ; item kind
+    "21004ca1"  # sb    t4, 0x21(t2)       ; slot+1: kind
+    "02006c92"  # lbu   t4, 0x02(s1)       ; item id
+    "22004ca1"  # sb    t4, 0x22(t2)       ; slot+2: id
+    "7f002c31"  # andi  t4, t1, 0x7F
+    "80008c35"  # ori   t4, t4, 0x80       ; seq = (count & 0x7F) | 0x80
+    "23004ca1"  # sb    t4, 0x23(t2)       ; slot+3: seq
+    "01002925"  # addiu t1, t1, 1
+    "f2500108"  # j     0x800543C8         ; consume item, no vanilla effect
+    "800009ad"  # sw    t1, 0x80(t0)       ; (delay slot) commit count
+)
+RANDOMIZED_KINDS = (0x0, 0x1, 0x9, 0xA, 0xB)  # heart, EX, sub/W/EX-tank
+
 BASE_EDITS: List[Tuple[int, bytes, str]] = [
     (0x8003C324, b"\x4D", "SLUS exe"),
     (0x8003D660, b"\x4D", "SLUS exe"),
     (0x8003D814, b"\x4D", "SLUS exe"),
+    (PICKUP_STUB_ADDR, PICKUP_STUB, "SLUS exe"),
+] + [
+    # Jump-table redirects for the randomized kinds. Base-patch for now;
+    # becomes per-seed edits once options can keep kinds vanilla.
+    (0x80011068 + kind * 4, PICKUP_STUB_ADDR.to_bytes(4, "little"), "SLUS exe")
+    for kind in RANDOMIZED_KINDS
 ]
 
 

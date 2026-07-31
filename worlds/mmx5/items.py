@@ -30,6 +30,9 @@ item_table: Dict[str, ItemData] = {
     names.WING_SPIRAL: ItemData(BASE_ID + 7, ItemClassification.progression),
 
     names.HEART_TANK:  ItemData(BASE_ID + 10, ItemClassification.useful, 8),
+    names.SUB_TANK:    ItemData(BASE_ID + 11, ItemClassification.useful, 2),
+    names.W_TANK:      ItemData(BASE_ID + 12, ItemClassification.useful),
+    names.EX_TANK:     ItemData(BASE_ID + 13, ItemClassification.useful),
 
     names.FALCON_HEAD: ItemData(BASE_ID + 20, ItemClassification.progression),
     names.FALCON_BODY: ItemData(BASE_ID + 21, ItemClassification.progression),

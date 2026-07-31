@@ -15,8 +15,13 @@ Known interim policies (deliberate, revisit before release):
     memcard-persisted, savestate-coherent) - reconnects/restarts no longer
     re-apply grants. First connect on a pre-scheme save applies everything
     once (count reads 0), then stabilizes. Wrong-save/seed stamping still TODO.
-  * Armor capsules/tanks: locations exist but detection/grants are TODO until
-    their bit layouts are verified.
+  * Pickup checks are dual-path: save-struct bits (vanilla/v2 discs, hybrid)
+    or the stub's mailbox ring (proto v3+ discs, where vanilla pickup effects
+    are suppressed and save bits never set themselves). Ring records are
+    consumed only after the server confirms the location.
+  * Tanks: locations + ring detection + grants (u16 0x1C7E bits 12-15) done.
+    Armor capsules: locations exist but detection/grants are TODO (spec
+    item 6 hook not built yet).
   * Victory detection (Sigma) TODO.
 """
 import logging
@@ -61,6 +66,43 @@ PATCH_PROBE_ADDR = 0x03C324
 PATCH_PROBE_VANILLA = bytes.fromhex("4C00A290")
 PATCH_PROBE_PATCHED = bytes.fromhex("4D00A290")
 
+# Pickup-stub detection (proto v3+ discs): the jump-table entry for pickup
+# kind 0 at 0x80011068 either holds the vanilla heart handler or the shared
+# check-record stub at 0x800776A0 (patch spec item 2).
+STUB_PROBE_ADDR = 0x011068
+STUB_PROBE_VANILLA = bytes.fromhex("A0400580")   # 0x800540A0 LE
+STUB_PROBE_STUBBED = bytes.fromhex("A0760780")   # 0x800776A0 LE
+
+# Mailbox check-record ring, written by the stub on every randomized pickup:
+# 16 slots of {stage u8, kind u8, id u8, seq u8} at 0x801FA020, monotonic
+# pickup count u32 at 0x801FA080. seq bit7 marks a valid record (a zeroed
+# slot is never one); the client consumes a record by zeroing its seq byte.
+# The whole region is plain RAM: savestates wipe it, which only loses
+# records in the sub-second window between pickup and this poll.
+RING_ADDR = 0x1FA020
+RING_SLOTS = 16
+RING_COUNT_ADDR = 0x1FA080
+
+# Ring record stage byte (0x800D1C41) -> stage name, verified stage-id order.
+STAGE_ID_TO_NAME = {
+    1: names.GRIZZLY, 2: names.NECROBAT, 3: names.WHALE, 4: names.DINOREX,
+    5: names.KRAKEN, 6: names.FIREFLY, 7: names.ROSERED, 8: names.PEGASUS,
+}
+
+# Ring record (kind, id) -> tank location stage. Placement harvest 2026-07-31:
+# sub-tanks are kind 9 with globally-unique ids; W/EX tanks are unique kinds.
+TANK_RECORD_TO_STAGE = {
+    (0x9, 0x27): names.GRIZZLY,    # Sub-Tank #1
+    (0x9, 0x28): names.NECROBAT,   # Sub-Tank #2
+    (0xA, 0x29): names.PEGASUS,    # W-Tank
+    (0xB, 0x2A): names.FIREFLY,    # EX-Tank
+}
+
+# Tank bits in save u16 0x800D1C7E live in the HIGH byte 0x1C7F (bits 12-15
+# of the u16 = bits 4-7 of the byte): sub1/sub2/W/EX.
+TANK_ITEM_BYTE_BITS = {names.W_TANK: 0x40, names.EX_TANK: 0x80}
+SUB_TANK_BYTE_BITS = [0x10, 0x20]  # first, second received Sub-Tank
+
 # NOTE: 0x0D4F5x "enables" bytes proved stage-specific (00 during Izzy Glow
 # gameplay) - NOT usable as a gameplay gate. Since we only write the persistent
 # save struct, the write-safety condition is just "save struct initialized":
@@ -100,12 +142,15 @@ class MMX5Client(BizHawkClient):
         self.hearts_applied = 0
         self.last_gate_state = None
         self.ap_patched = False
+        self.stub_present = False
+        self.unknown_records_logged = set()
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
-            sig, probe = await bizhawk.read(ctx.bizhawk_ctx, [
+            sig, probe, stub_probe = await bizhawk.read(ctx.bizhawk_ctx, [
                 (EXE_SIG_ADDR, len(EXE_SIG), "MainRAM"),
                 (PATCH_PROBE_ADDR, 4, "MainRAM"),
+                (STUB_PROBE_ADDR, 4, "MainRAM"),
             ])
             if sig != EXE_SIG:
                 return False
@@ -118,6 +163,7 @@ class MMX5Client(BizHawkClient):
         # from disc - the probe reads zeros during boot); game_watcher
         # re-probes before granting anything.
         self.ap_patched = self._classify_probe(probe)
+        self.stub_present = self._classify_stub_probe(stub_probe)
         if self.ap_patched is None:
             logger.info(f"MMX5: disc mode undetermined at boot (probe {probe.hex()}) - will re-probe in-game")
 
@@ -138,14 +184,25 @@ class MMX5Client(BizHawkClient):
             return False
         return None
 
+    @staticmethod
+    def _classify_stub_probe(probe: bytes):
+        if probe == STUB_PROBE_STUBBED:
+            logger.info("MMX5: pickup stub RESIDENT - checks come from the mailbox ring")
+            return True
+        if probe == STUB_PROBE_VANILLA:
+            logger.info("MMX5: pickup stub absent - pickup checks from save-struct bits")
+            return False
+        return None
+
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if ctx.server is None or ctx.slot is None:
             return
 
         try:
-            mode, save = await bizhawk.read(ctx.bizhawk_ctx, [
+            mode, save, ring = await bizhawk.read(ctx.bizhawk_ctx, [
                 (0x0D1C00, 1, "MainRAM"),  # game-mode controller: 0x0A gameplay / 0x0C results
                 (SAVE_BASE, SAVE_LEN, "MainRAM"),
+                (RING_ADDR, RING_SLOTS * 4, "MainRAM"),  # pickup-stub check records
             ])
             # Grants are safe whenever the save struct is live: gameplay or
             # results mode, plus a sanity floor on max HP against garbage states.
@@ -159,6 +216,7 @@ class MMX5Client(BizHawkClient):
                 # every gate rising edge rather than trusting boot-time.
                 if in_gameplay:
                     self.ap_patched = None
+                    self.stub_present = None
 
             # ---- Check detection (safe to do from any state: save struct
             # persists and only ever gains bits during legitimate play) ----
@@ -184,6 +242,48 @@ class MMX5Client(BizHawkClient):
                         check(names.heart_location(stage), True)
                     # Unmapped bits: intentionally unsent until verified.
 
+            # ---- Pickup-stub ring (stub discs only): the stub suppresses
+            # vanilla pickup effects, so heart/tank save bits never set
+            # themselves - the ring records ARE the checks there. ----
+            if self.stub_present:
+                ack_writes, ack_guards = [], []
+                for slot in range(RING_SLOTS):
+                    rec = ring[slot * 4:slot * 4 + 4]
+                    stage_id, kind, rec_id, seq = rec
+                    if not seq & 0x80:
+                        continue  # empty/consumed slot
+                    stage = STAGE_ID_TO_NAME.get(stage_id)
+                    loc_name = None
+                    if kind == 0x0 and stage is not None \
+                            and HEART_BIT_TO_STAGE.get(rec_id) == stage:
+                        loc_name = names.heart_location(stage)
+                    elif (kind, rec_id) in TANK_RECORD_TO_STAGE:
+                        loc_name = names.tank_location(TANK_RECORD_TO_STAGE[(kind, rec_id)])
+
+                    if loc_name is not None:
+                        check(loc_name, True)
+                        # Consume only once the server has confirmed the
+                        # location; until then the record persists and the
+                        # (idempotent) check is simply re-sent each poll.
+                        consume = location_table[loc_name] in ctx.checked_locations
+                    else:
+                        # Kind 1 (EX energy-up) has no locations yet; kind-0
+                        # stage mismatches are Axle's armor-gated decoy heart
+                        # records. Either way: log once, consume, don't send.
+                        rec_key = (stage_id, kind, rec_id)
+                        if rec_key not in self.unknown_records_logged:
+                            self.unknown_records_logged.add(rec_key)
+                            logger.info(f"MMX5: unmapped pickup record stage={stage_id} "
+                                        f"kind={kind:X} id={rec_id:02X} - ignored")
+                        consume = True
+                    if consume:
+                        # Zero the seq byte, guarded on the whole slot so a
+                        # concurrent stub overwrite loses cleanly (retry next poll).
+                        ack_writes.append((RING_ADDR + slot * 4 + 3, [0], "MainRAM"))
+                        ack_guards.append((RING_ADDR + slot * 4, rec, "MainRAM"))
+                if ack_writes:
+                    await bizhawk.guarded_write(ctx.bizhawk_ctx, ack_writes, ack_guards)
+
             if new_checks:
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new_checks}])
 
@@ -191,10 +291,13 @@ class MMX5Client(BizHawkClient):
             if in_gameplay:
                 # Resolve disc mode if boot raced the EXE load; in gameplay
                 # the EXE is fully resident, so this settles on first cycle.
-                if self.ap_patched is None:
-                    probe = (await bizhawk.read(
-                        ctx.bizhawk_ctx, [(PATCH_PROBE_ADDR, 4, "MainRAM")]))[0]
+                if self.ap_patched is None or self.stub_present is None:
+                    probe, stub_probe = await bizhawk.read(ctx.bizhawk_ctx, [
+                        (PATCH_PROBE_ADDR, 4, "MainRAM"),
+                        (STUB_PROBE_ADDR, 4, "MainRAM"),
+                    ])
                     self.ap_patched = self._classify_probe(probe)
+                    self.stub_present = self._classify_stub_probe(stub_probe)
                     if self.ap_patched is None:
                         logger.warning(f"MMX5: probe still unrecognized in-game ({probe.hex()}) - grants held")
                         return
@@ -229,13 +332,28 @@ class MMX5Client(BizHawkClient):
                     wep_off = OFF_AP_WEAPONS if self.ap_patched else OFF_WEAPONS
                     capability = save[wep_off]
                     all_received_weapon_bits = 0
+                    tank_bits = 0
+                    sub_tanks_received = 0
                     for item in ctx.items_received:
                         item_name = ctx.item_names.lookup_in_game(item.item)
                         if item_name in WEAPON_TO_BIT:
                             all_received_weapon_bits |= 1 << WEAPON_TO_BIT[item_name]
+                        elif item_name == names.SUB_TANK and sub_tanks_received < 2:
+                            tank_bits |= SUB_TANK_BYTE_BITS[sub_tanks_received]
+                            sub_tanks_received += 1
+                        elif item_name in TANK_ITEM_BYTE_BITS:
+                            tank_bits |= TANK_ITEM_BYTE_BITS[item_name]
                     merged = capability | all_received_weapon_bits
                     if merged != capability:
                         writes.append((SAVE_BASE + wep_off, [merged], "MainRAM"))
+
+                    # Tanks: same idempotent OR into the u16 0x1C7E high byte
+                    # (bits 12-15: sub1/sub2/W/EX - engine-honored, appear in
+                    # the pause menu immediately). Granted sub-tanks start
+                    # empty, exactly like a vanilla save-reload after pickup.
+                    merged_tanks = save[OFF_TANKS] | tank_bits
+                    if merged_tanks != save[OFF_TANKS]:
+                        writes.append((SAVE_BASE + OFF_TANKS, [merged_tanks], "MainRAM"))
 
                     if new_hearts:
                         new_max = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
@@ -255,7 +373,8 @@ class MMX5Client(BizHawkClient):
                     )
                     logger.info(f"MMX5: grants {'applied' if success else 'guard-failed, retrying'}: "
                                 f"items {processed}->{total}, "
-                                f"weapons({'AP' if self.ap_patched else 'vanilla'})={merged:02X} hearts+={new_hearts}")
+                                f"weapons({'AP' if self.ap_patched else 'vanilla'})={merged:02X} "
+                                f"tanks={merged_tanks:02X} hearts+={new_hearts}")
                     if success:
                         self.items_processed = total
                         self.hearts_applied += new_hearts

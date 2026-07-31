@@ -19,7 +19,9 @@ for i, stage in enumerate(names.STAGES):
     location_table[names.boss_location(stage)] = base + 0
     location_table[names.heart_location(stage)] = base + 1
     location_table[names.capsule_location(stage)] = base + 2
-    # +3.. reserved: sub/W/EX tank pickups, energy-ups, rank rewards (later)
+    if stage in names.STAGE_TANK:
+        location_table[names.tank_location(stage)] = base + 3
+    # +4.. reserved: energy-ups, rank rewards (later)
 
 event_location_table: Dict[str, Optional[int]] = {
     names.VICTORY: None,
@@ -29,4 +31,5 @@ location_groups = {
     "Bosses": {names.boss_location(s) for s in names.STAGES},
     "Heart Tanks": {names.heart_location(s) for s in names.STAGES},
     "Armor Capsules": {names.capsule_location(s) for s in names.STAGES},
+    "Tanks": {names.tank_location(s) for s in names.STAGE_TANK},
 }

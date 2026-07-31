@@ -54,6 +54,19 @@ ARMOR_PARTS = [FALCON_HEAD, FALCON_BODY, FALCON_ARM, FALCON_LEG,
 
 SMALL_ENERGY = "Small Energy"
 
+# Tanks (vanilla stage homes from the placement-record harvest 2026-07-31:
+# Sub-Tank #1 = Grizzly Slash, Sub-Tank #2 = Dark Dizzy, W-Tank = The Skiver,
+# EX-Tank = Izzy Glow)
+SUB_TANK = "Sub-Tank"
+W_TANK = "W-Tank"
+EX_TANK = "EX-Tank"
+STAGE_TANK = {
+    GRIZZLY: SUB_TANK,
+    NECROBAT: SUB_TANK,
+    PEGASUS: W_TANK,
+    FIREFLY: EX_TANK,
+}
+
 # Locations
 INTRO_CLEAR = "Intro Stage - Clear"
 
@@ -68,6 +81,10 @@ def heart_location(stage: str) -> str:
 
 def capsule_location(stage: str) -> str:
     return f"{stage} - Armor Capsule"
+
+
+def tank_location(stage: str) -> str:
+    return f"{stage} - {STAGE_TANK[stage]}"
 
 
 VICTORY = "Sigma Defeated"

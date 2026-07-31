@@ -88,11 +88,14 @@ class MMX5World(World):
         for stage in names.STAGES:
             region = Region(stage, self.player, self.multiworld)
             self.multiworld.regions.append(region)
-            region.add_locations({
+            stage_locations = {
                 names.boss_location(stage): location_table[names.boss_location(stage)],
                 names.heart_location(stage): location_table[names.heart_location(stage)],
                 names.capsule_location(stage): location_table[names.capsule_location(stage)],
-            }, MMX5Location)
+            }
+            if stage in names.STAGE_TANK:
+                stage_locations[names.tank_location(stage)] = location_table[names.tank_location(stage)]
+            region.add_locations(stage_locations, MMX5Location)
             # All 8 stages are open from the start in X5.
             stage_select.connect(region)
 
