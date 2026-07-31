@@ -14,7 +14,9 @@ Known interim policies (deliberate, revisit before release):
   * Processed-items count persists in spare save bytes (u16 0x800D1C4E,
     memcard-persisted, savestate-coherent) - reconnects/restarts no longer
     re-apply grants. First connect on a pre-scheme save applies everything
-    once (count reads 0), then stabilizes. Wrong-save/seed stamping still TODO.
+    once (count reads 0), then stabilizes. Wrong-save protection: seed/slot
+    stamp byte at 0x800D1C50 (see OFF_STAMP) halts checks+grants on a save
+    stamped for a different seed/slot.
   * Pickup checks are dual-path: save-struct bits (vanilla/v2 discs, hybrid)
     or the stub's mailbox ring (proto v3+ discs, where vanilla pickup effects
     are suppressed and save bits never set themselves). Ring records are
@@ -54,6 +56,12 @@ OFF_AP_WEAPONS = 0x0D1C4D - SAVE_BASE   # AP-owned capability byte (patched disc
 # rides the memory card, and rewinds coherently with savestates - fixing the
 # reconnect re-grant drift (hearts +2 each on every fresh session).
 OFF_PROCESSED = 0x0D1C4E - SAVE_BASE
+# Seed/slot stamp in the LAST spare persisted byte (0x1C4D weapons,
+# 0x1C4E/4F processed count, 0x1C50 stamp): 1-byte hash of seed+slot,
+# 0 = unstamped. A sane save stamped for a DIFFERENT seed/slot halts both
+# checks and grants (wrong-save protection, A3). Adopted (written) with the
+# first grant batch on an unstamped save.
+OFF_STAMP = 0x0D1C50 - SAVE_BASE
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
@@ -144,6 +152,7 @@ class MMX5Client(BizHawkClient):
         self.ap_patched = False
         self.stub_present = False
         self.unknown_records_logged = set()
+        self.stamp_warned = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -185,6 +194,15 @@ class MMX5Client(BizHawkClient):
         return None
 
     @staticmethod
+    def _seed_stamp(ctx: "BizHawkClientContext") -> int:
+        # Deterministic 1-byte hash of seed+slot (never 0 = unstamped).
+        # Python's hash() is salted per-process - roll our own.
+        h = 0
+        for ch in f"{ctx.seed_name}:{ctx.auth}":
+            h = (h * 31 + ord(ch)) & 0xFF
+        return h or 1
+
+    @staticmethod
     def _classify_stub_probe(probe: bytes):
         if probe == STUB_PROBE_STUBBED:
             logger.info("MMX5: pickup stub RESIDENT - checks come from the mailbox ring")
@@ -206,7 +224,8 @@ class MMX5Client(BizHawkClient):
             ])
             # Grants are safe whenever the save struct is live: gameplay or
             # results mode, plus a sanity floor on max HP against garbage states.
-            in_gameplay = mode[0] in (0x0A, 0x0C) and 0x10 <= save[OFF_MAX_HP_X] <= 0x40
+            save_sane = 0x10 <= save[OFF_MAX_HP_X] <= 0x40
+            in_gameplay = mode[0] in (0x0A, 0x0C) and save_sane
             if in_gameplay != self.last_gate_state:
                 logger.info(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
                 self.last_gate_state = in_gameplay
@@ -217,6 +236,24 @@ class MMX5Client(BizHawkClient):
                 if in_gameplay:
                     self.ap_patched = None
                     self.stub_present = None
+
+            # ---- Wrong-save protection (A3): a sane save stamped for a
+            # DIFFERENT seed/slot halts checks AND grants - its bits belong
+            # to another game. Swap saves, or deliberately reuse this one by
+            # zeroing 0x1C4D-0x1C50 in the Lua console. Unstamped saves (0)
+            # pass and get stamped with their first grant batch. ----
+            if save_sane and ctx.seed_name:
+                if save[OFF_STAMP] not in (0, self._seed_stamp(ctx)):
+                    if not self.stamp_warned:
+                        self.stamp_warned = True
+                        logger.warning(
+                            f"MMX5: save is stamped {save[OFF_STAMP]:02X} but this seed/slot "
+                            f"expects {self._seed_stamp(ctx):02X} - WRONG SAVE, checks and "
+                            f"grants held (zero 0x1C4D-0x1C50 via Lua to deliberately reuse it)")
+                    return
+                if self.stamp_warned:
+                    self.stamp_warned = False
+                    logger.info("MMX5: save stamp OK - resuming")
 
             # ---- Check detection (safe to do from any state: save struct
             # persists and only ever gains bits during legitimate play) ----
@@ -358,6 +395,11 @@ class MMX5Client(BizHawkClient):
                     if new_hearts:
                         new_max = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
                         writes.append((SAVE_BASE + OFF_MAX_HP_X, [new_max], "MainRAM"))
+
+                    # Adopt an unstamped save on its first grant batch.
+                    if ctx.seed_name and save[OFF_STAMP] == 0:
+                        writes.append((SAVE_BASE + OFF_STAMP,
+                                       [self._seed_stamp(ctx)], "MainRAM"))
 
                     # Commit the new processed-count in the SAME guarded
                     # batch as the effects it accounts for.
