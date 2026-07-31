@@ -88,7 +88,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3330: {
         "resource_type": "desc",
         "id": "3330",
-        "name": "Unlock 175k",
+        "name": "Unlock 125k",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -98,7 +98,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3331: {
         "resource_type": "desc",
         "id": "3331",
-        "name": "Unlock 200k",
+        "name": "Unlock 150k",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -108,7 +108,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3332: {
         "resource_type": "desc",
         "id": "3332",
-        "name": "Unlock 250k",
+        "name": "Unlock 175k",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -118,7 +118,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3333: {
         "resource_type": "desc",
         "id": "3333",
-        "name": "Unlock 500k",
+        "name": "Unlock 200k",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -128,7 +128,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3334: {
         "resource_type": "desc",
         "id": "3334",
-        "name": "Unlock 750k",
+        "name": "Unlock 250k",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -138,7 +138,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3335: {
         "resource_type": "desc",
         "id": "3335",
-        "name": "Unlock 1M",
+        "name": "Unlock 500k",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -148,7 +148,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3336: {
         "resource_type": "desc",
         "id": "3336",
-        "name": "Unlock 1.25M",
+        "name": "Unlock 750k",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -158,7 +158,47 @@ cust_desc_table: Dict[int, DescDict] = {
     3337: {
         "resource_type": "desc",
         "id": "3337",
+        "name": "Unlock 1M",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3338: {
+        "resource_type": "desc",
+        "id": "3338",
+        "name": "Unlock 1.25M",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3339: {
+        "resource_type": "desc",
+        "id": "3339",
         "name": "Unlock 1.5M",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3340: {
+        "resource_type": "desc",
+        "id": "3340",
+        "name": "Unlock 1.75M",
+        "text": "[player_name]'s [item_name]", # we'll overwrite, just leave blank. But I left this as template example.
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3341: {
+        "resource_type": "desc",
+        "id": "3341",
+        "name": "Unlock 2M",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -168,8 +208,8 @@ cust_desc_table: Dict[int, DescDict] = {
     3342: {
         "resource_type": "desc",
         "id": "3342",
-        "name": "Unlock 1.75M",
-        "text": "[player_name]'s [item_name]", # we'll overwrite, just leave blank. But I left this as template example.
+        "name": "Unlock 2.25M",
+        "text": "", 
         "graphics": "0",
         "movie_file": "",
         "flags": "0x0000",
@@ -178,7 +218,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3343: {
         "resource_type": "desc",
         "id": "3343",
-        "name": "Unlock 2M",
+        "name": "Unlock 2.5M",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -188,7 +228,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3344: {
         "resource_type": "desc",
         "id": "3344",
-        "name": "Unlock 2.25M",
+        "name": "Unlock 5M",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -198,7 +238,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3345: {
         "resource_type": "desc",
         "id": "3345",
-        "name": "Unlock 2.5M",
+        "name": "Unlock 500k B",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -208,7 +248,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3346: {
         "resource_type": "desc",
         "id": "3346",
-        "name": "Unlock 5M",
+        "name": "Unlock 500k C",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -218,7 +258,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3347: {
         "resource_type": "desc",
         "id": "3347",
-        "name": "Unlock 500k B",
+        "name": "Unlock 500k D",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -228,7 +268,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3348: {
         "resource_type": "desc",
         "id": "3348",
-        "name": "Unlock 500k C",
+        "name": "Unlock 1M B",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -238,7 +278,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3349: {
         "resource_type": "desc",
         "id": "3349",
-        "name": "Unlock 500k D",
+        "name": "Unlock 1M C",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -248,7 +288,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3350: {
         "resource_type": "desc",
         "id": "3350",
-        "name": "Unlock 1M B",
+        "name": "Unlock 1M D",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -258,7 +298,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3351: {
         "resource_type": "desc",
         "id": "3351",
-        "name": "Unlock 1M C",
+        "name": "Unlock 1M E",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -268,7 +308,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3352: {
         "resource_type": "desc",
         "id": "3352",
-        "name": "Unlock 1M D",
+        "name": "Unlock 1M F",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -278,7 +318,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3353: {
         "resource_type": "desc",
         "id": "3353",
-        "name": "Unlock 1M E",
+        "name": "Unlock 1M G",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -288,7 +328,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3354: {
         "resource_type": "desc",
         "id": "3354",
-        "name": "Unlock 1M F",
+        "name": "Unlock 1M H",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -298,7 +338,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3355: {
         "resource_type": "desc",
         "id": "3355",
-        "name": "Unlock 1M G",
+        "name": "Unlock 1M I",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -308,7 +348,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3356: {
         "resource_type": "desc",
         "id": "3356",
-        "name": "Unlock 1M H",
+        "name": "Unlock 1M J",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -318,7 +358,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3357: {
         "resource_type": "desc",
         "id": "3357",
-        "name": "Unlock 1M I",
+        "name": "Unlock 2.5M B",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -328,7 +368,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3358: {
         "resource_type": "desc",
         "id": "3358",
-        "name": "Unlock 1M J",
+        "name": "Unlock 2.5M C",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -338,7 +378,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3359: {
         "resource_type": "desc",
         "id": "3359",
-        "name": "Unlock 2.5M B",
+        "name": "Unlock 2.5M D",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -348,7 +388,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3360: {
         "resource_type": "desc",
         "id": "3360",
-        "name": "Unlock 2.5M C",
+        "name": "Unlock 2.5M E",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -358,7 +398,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3361: {
         "resource_type": "desc",
         "id": "3361",
-        "name": "Unlock 2.5M D",
+        "name": "Unlock 2.5M F",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -368,7 +408,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3362: {
         "resource_type": "desc",
         "id": "3362",
-        "name": "Unlock 2.5M E",
+        "name": "Unlock 5M B",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -378,7 +418,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3363: {
         "resource_type": "desc",
         "id": "3363",
-        "name": "Unlock 2.5M F",
+        "name": "Unlock 5M C",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -388,7 +428,7 @@ cust_desc_table: Dict[int, DescDict] = {
     3364: {
         "resource_type": "desc",
         "id": "3364",
-        "name": "Unlock 5M B",
+        "name": "Unlock 5M D",
         "text": "", 
         "graphics": "0",
         "movie_file": "",
@@ -398,26 +438,6 @@ cust_desc_table: Dict[int, DescDict] = {
     3365: {
         "resource_type": "desc",
         "id": "3365",
-        "name": "Unlock 5M C",
-        "text": "", 
-        "graphics": "0",
-        "movie_file": "",
-        "flags": "0x0000",
-        "end_of_resource": "EOR"
-    },
-    3366: {
-        "resource_type": "desc",
-        "id": "3366",
-        "name": "Unlock 5M D",
-        "text": "", 
-        "graphics": "0",
-        "movie_file": "",
-        "flags": "0x0000",
-        "end_of_resource": "EOR"
-    },
-    3366: {
-        "resource_type": "desc",
-        "id": "3366",
         "name": "Unlock 5M E",
         "text": "", 
         "graphics": "0",
