@@ -10,6 +10,7 @@ from BaseClasses import ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
 from . import names
+from .client import MMX5Client  # noqa: F401  (import registers the client)
 from .items import BASE_ID, MMX5Item, event_table, item_groups, item_table
 from .locations import MMX5Location, event_location_table, location_groups, location_table
 from .options import MMX5Options
