@@ -65,7 +65,8 @@ PICKUP_STUB = bytes.fromhex(
     "80500a00"  # sll   t2, t2, 2
     "21500a01"  # addu  t2, t0, t2
     "0d800b3c"  # lui   t3, 0x800D
-    "411c6c91"  # lbu   t4, 0x1C41(t3)     ; current stage id
+    "0c1c6c91"  # lbu   t4, 0x1C0C(t3)     ; stage id (spawn engine's input;
+                #   0x1C41 disproven live - read 0xE4 mid-stage)
     "20004ca1"  # sb    t4, 0x20(t2)       ; slot+0: stage
     "82006c92"  # lbu   t4, 0x82(s1)       ; item kind
     "21004ca1"  # sb    t4, 0x21(t2)       ; slot+1: kind
