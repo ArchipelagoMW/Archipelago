@@ -78,6 +78,14 @@ class SM64World(World):
                 int(entrance): int(destination)
                 for entrance, destination in slot_data.get("AreaRando", {}).items()
             }
+            self.star_costs = {
+                cost_name: slot_data[cost_name]
+                for cost_name in ("FirstBowserDoorCost", "BasementDoorCost", "SecondFloorDoorCost",
+                                  "MIPS1Cost", "MIPS2Cost", "StarsToFinish")
+            }
+            self.move_rando_bitvec = slot_data["MoveRandoVec"]
+            self.topology_present = self.options.area_rando
+            return
 
         max_stars = 120
         if (not self.options.enable_coin_stars):
@@ -105,12 +113,6 @@ class SM64World(World):
         # Nudge MIPS 1 to match vanilla on default percentage
         if self.number_of_stars == 120 and self.options.mips1_cost == 12:
             self.star_costs['MIPS1Cost'] = 15
-        for cost_name in ("FirstBowserDoorCost", "BasementDoorCost", "SecondFloorDoorCost",
-                          "MIPS1Cost", "MIPS2Cost", "StarsToFinish"):
-            if cost_name in slot_data:
-                self.star_costs[cost_name] = slot_data[cost_name]
-        if "MoveRandoVec" in slot_data:
-            self.move_rando_bitvec = slot_data["MoveRandoVec"]
         self.topology_present = self.options.area_rando
 
     def create_regions(self):
@@ -133,6 +135,9 @@ class SM64World(World):
         return item
 
     def create_items(self):
+        if self.get_re_gen_slot_data():
+            return
+
         # 1Up Mushrooms
         self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(0,self.filler_count)]
         # Power Stars
