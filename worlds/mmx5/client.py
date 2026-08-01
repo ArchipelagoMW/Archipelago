@@ -22,8 +22,13 @@ Known interim policies (deliberate, revisit before release):
     are suppressed and save bits never set themselves). Ring records are
     consumed only after the server confirms the location.
   * Tanks: locations + ring detection + grants (u16 0x1C7E bits 12-15) done.
-    Armor capsules: locations exist but detection/grants are TODO (spec
-    item 6 hook not built yet).
+  * Armor capsules (proto v9+): the capsule stub records {stage, kind 0x20,
+    id} to the ring and suppresses the vanilla part grant; the disc patch
+    also makes randomized capsules (ids 0-7) always spawn, so granted armor
+    parts never hide an unchecked capsule. Grants OR part bits into 0x1CA1;
+    set-completion flags (0x1C4A) follow at the next results screen
+    (vanilla logic). No capsule detection on vanilla discs (0x1CA1 bits
+    would conflate AP grants with local pickups).
   * Victory detection (Sigma) TODO.
 """
 import logging
@@ -66,6 +71,7 @@ OFF_STAMP = 0x0D1C50 - SAVE_BASE
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
+OFF_ARMOR = 0x0D1CA1 - SAVE_BASE       # armor parts byte (Falcon 0-3, Gaea 4-7)
 # Launch machinery (overlay-findings 11). Score = 2*sum(0x1CC2..C5) + 0x1CCA;
 # on the patched disc the roll is `li v1,0`, so success <=> score > 0. The
 # client PINS these every cycle from AP part-item state - vanilla accrual
@@ -122,6 +128,28 @@ TANK_RECORD_TO_STAGE = {
 # of the u16 = bits 4-7 of the byte): sub1/sub2/W/EX.
 TANK_ITEM_BYTE_BITS = {names.W_TANK: 0x40, names.EX_TANK: 0x80}
 SUB_TANK_BYTE_BITS = [0x10, 0x20]  # first, second received Sub-Tank
+
+# Capsule ring records carry the SYNTHETIC kind byte 0x20 (written by the
+# capsule stub only - real dispatcher kinds stop well below it). The stage
+# byte identifies the location; the id (0-7) is part of the de-dupe key.
+CAPSULE_KIND = 0x20
+# Armor part item -> 0x1CA1 bit, taken from the game's own capsule mask table
+# at 0x8007C370 (selftested in the disc builder). The table is a PERMUTATION,
+# not 1<<i - it swaps body/arm within each set, so the old `1 << i` guess
+# mislabelled 4 of the 8 parts on the status screen.
+#
+# Derivation (live capture 2026-08-01): capsule id == part index. Two ground
+# truths, each a capsule whose id we read off the live object while its known
+# vanilla part is documented - Tidal Whale = id 1 = Falcon Body = ARMOR_PARTS[1],
+# Dark Necrobat = id 4 = Gaea Head = ARMOR_PARTS[4]. So part i is granted by
+# capsule i, which ORs maskTable[i].
+#
+# Nibble membership (0x0F Falcon / 0xF0 Gaea) is what the results overlay
+# checks for set completion, so this only affects which part the status screen
+# shows - but it now matches the game instead of guessing.
+ARMOR_MASK_TABLE = (0x01, 0x04, 0x02, 0x08, 0x10, 0x40, 0x20, 0x80)
+ARMOR_ITEM_BITS = {name: ARMOR_MASK_TABLE[i]
+                   for i, name in enumerate(names.ARMOR_PARTS)}
 
 # NOTE: 0x0D4F5x "enables" bytes proved stage-specific (00 during Izzy Glow
 # gameplay) - NOT usable as a gameplay gate. Since we only write the persistent
@@ -327,6 +355,9 @@ class MMX5Client(BizHawkClient):
                         loc_name = names.energy_up_location(stage)
                     elif (kind, rec_id) in TANK_RECORD_TO_STAGE:
                         loc_name = names.tank_location(TANK_RECORD_TO_STAGE[(kind, rec_id)])
+                    elif kind == CAPSULE_KIND and stage is not None and rec_id <= 7:
+                        # Armor capsule (proto v9 stub): one per stage.
+                        loc_name = names.capsule_location(stage)
 
                     if loc_name is not None:
                         check(loc_name, True)
@@ -422,8 +453,8 @@ class MMX5Client(BizHawkClient):
                         item_name = ctx.item_names.lookup_in_game(item.item)
                         if item_name == names.HEART_TANK:
                             new_hearts += 1
-                        # weapons handled cumulatively below; TODO: armor,
-                        # tanks, filler energy once their state is AP-owned
+                        # weapons/tanks/armor handled cumulatively below;
+                        # TODO: filler energy once designed
 
                     writes = []
                     # Weapons: OR ALL received bits into the capability byte
@@ -434,6 +465,7 @@ class MMX5Client(BizHawkClient):
                     capability = save[wep_off]
                     all_received_weapon_bits = 0
                     tank_bits = 0
+                    armor_bits = 0
                     sub_tanks_received = 0
                     for item in ctx.items_received:
                         item_name = ctx.item_names.lookup_in_game(item.item)
@@ -444,6 +476,8 @@ class MMX5Client(BizHawkClient):
                             sub_tanks_received += 1
                         elif item_name in TANK_ITEM_BYTE_BITS:
                             tank_bits |= TANK_ITEM_BYTE_BITS[item_name]
+                        elif item_name in ARMOR_ITEM_BITS:
+                            armor_bits |= ARMOR_ITEM_BITS[item_name]
                     merged = capability | all_received_weapon_bits
                     if merged != capability:
                         writes.append((SAVE_BASE + wep_off, [merged], "MainRAM"))
@@ -455,6 +489,17 @@ class MMX5Client(BizHawkClient):
                     merged_tanks = save[OFF_TANKS] | tank_bits
                     if merged_tanks != save[OFF_TANKS]:
                         writes.append((SAVE_BASE + OFF_TANKS, [merged_tanks], "MainRAM"))
+
+                    # Armor parts: idempotent OR into 0x1CA1 (memcard-
+                    # persisted). Individual parts do nothing in X5 until a
+                    # set completes; the results overlay sets the completion
+                    # flags (0x1C4A |= 2/4) at the next results screen, which
+                    # unlocks the armor at character select. On the v9+ disc
+                    # this can never hide an unchecked capsule: randomized
+                    # capsules always spawn (spawn-gate retarget).
+                    merged_armor = save[OFF_ARMOR] | armor_bits
+                    if merged_armor != save[OFF_ARMOR]:
+                        writes.append((SAVE_BASE + OFF_ARMOR, [merged_armor], "MainRAM"))
 
                     if new_hearts:
                         # BOTH characters (design decision 2026-08-01):
@@ -484,7 +529,8 @@ class MMX5Client(BizHawkClient):
                     logger.info(f"MMX5: grants {'applied' if success else 'guard-failed, retrying'}: "
                                 f"items {processed}->{total}, "
                                 f"weapons({'AP' if self.ap_patched else 'vanilla'})={merged:02X} "
-                                f"tanks={merged_tanks:02X} hearts+={new_hearts}")
+                                f"tanks={merged_tanks:02X} armor={merged_armor:02X} "
+                                f"hearts+={new_hearts}")
                     if success:
                         self.items_processed = total
                         self.hearts_applied += new_hearts

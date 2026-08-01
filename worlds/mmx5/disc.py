@@ -91,6 +91,39 @@ PICKUP_STUB = bytes.fromhex(
 )
 RANDOMIZED_KINDS = (0x0, 0x1, 0x9, 0xA, 0xB)  # heart, EX, sub/W/EX-tank
 
+# Armor-capsule check-record stub (patch spec item 6, proto v9). The capsule
+# grant fn (static EXE, s1 = capsule object, id at s1+2) splits at 0x80055D60:
+# id 8 (Zero-space Ultimate/Black-Zero capsule, not a location) keeps its
+# vanilla path; ids 0-7 reach the parts RMW `lbu/or/sb 0xA1(a1)` at
+# 0x80055DB8-DC8 and rejoin at 0x80055DCC (state advance + epilogue, all
+# t-regs dead). The hook replaces the RMW head with `j stub; nop`; the stub
+# appends {stage, kind 0x20 (synthetic - real dispatcher kinds stop well
+# below), id, seq} to the same mailbox ring and rejoins - grant suppressed,
+# capsule dialog untouched. Suppressed capsules re-record on revisit; the
+# client de-dupes and maps stage -> capsule location.
+CAPSULE_STUB_ADDR = 0x80077700         # free-space run A, after the pickup stub
+CAPSULE_STUB = bytes.fromhex(
+    "1f80083c"  # lui   t0, 0x801F
+    "00a00835"  # ori   t0, t0, 0xA000     ; t0 = mailbox 0x801FA000
+    "8000098d"  # lw    t1, 0x80(t0)       ; t1 = monotonic pickup count
+    "0d800b3c"  # lui   t3, 0x800D         ; (fills t1's load delay slot)
+    "0f002a31"  # andi  t2, t1, 0xF        ; ring slot index
+    "80500a00"  # sll   t2, t2, 2
+    "21500a01"  # addu  t2, t0, t2         ; t2 = mailbox + slot*4
+    "0c1c6c91"  # lbu   t4, 0x1C0C(t3)     ; stage id (spawn engine's input)
+    "02002e92"  # lbu   t6, 0x02(s1)       ; capsule id (fills t4's delay)
+    "20000d24"  # addiu t5, zero, 0x20     ; kind 0x20 (ALU, fills t6's delay)
+    "20004ca1"  # sb    t4, 0x20(t2)       ; slot+0: stage
+    "21004da1"  # sb    t5, 0x21(t2)       ; slot+1: kind
+    "22004ea1"  # sb    t6, 0x22(t2)       ; slot+2: id
+    "7f002c31"  # andi  t4, t1, 0x7F
+    "80008c35"  # ori   t4, t4, 0x80       ; seq = (count & 0x7F) | 0x80
+    "23004ca1"  # sb    t4, 0x23(t2)       ; slot+3: seq
+    "01002925"  # addiu t1, t1, 1
+    "73570108"  # j     0x80055DCC         ; rejoin: state advance + return
+    "800009ad"  # sw    t1, 0x80(t0)       ; (delay slot) commit count
+)
+
 BASE_EDITS: List[Tuple[int, bytes, str]] = [
     (0x8003C324, b"\x4D", "SLUS exe"),
     (0x8003D660, b"\x4D", "SLUS exe"),
@@ -101,6 +134,19 @@ BASE_EDITS: List[Tuple[int, bytes, str]] = [
     # becomes per-seed edits once options can keep kinds vanilla.
     (0x80011068 + kind * 4, PICKUP_STUB_ADDR.to_bytes(4, "little"), "SLUS exe")
     for kind in RANDOMIZED_KINDS
+] + [
+    # Armor-capsule hook (spec item 6): stub, grant-RMW-head redirect, and
+    # the spawn-gate retarget (id!=8 branch at 0x80055018 jumps past the
+    # despawn ladder to its JOIN 0x80055130, where a3=0 from the prologue
+    # takes the spawn branch) so an AP-GRANTED armor part can never despawn
+    # an unchecked capsule (missable-check hazard). NOT 0x80055148 directly
+    # (the v10 fix for the v9 area-entry freeze): the join beq's delay slot
+    # `addiu a0,zero,0x86` feeds the spawn path's jal at 0x8005518C -
+    # skipping it passes the capsule object pointer as a0 and the game
+    # hangs when the capsule spawns.
+    (CAPSULE_STUB_ADDR, CAPSULE_STUB, "SLUS exe"),
+    (0x80055DB8, bytes.fromhex("c0dd010800000000"), "SLUS exe"),  # j stub; nop
+    (0x80055018, bytes.fromhex("4500c214"), "SLUS exe"),          # bne -> join
 ] + [
     # Launch determinism (research overlay-findings 11): the resolution
     # roll `andi v1,v0,0xF` -> `li v1,0`; success <=> score > 0, and the
