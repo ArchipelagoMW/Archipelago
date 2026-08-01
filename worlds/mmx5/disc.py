@@ -24,6 +24,9 @@ USER_LEN = 2048
 REGIONS: List[Tuple[str, int, int, int, int]] = [
     ("SLUS exe", 0x80010000, 0x80092000, 23433, 0),
     ("results overlay", 0x800EE970, 0x800F9000, 24073, 0),
+    # Launch cutscene module: resolution fn's only on-disc copy; mapping
+    # disc-scan verified (RAM 0x800FA000 = sector 24319 user offset 0).
+    ("launch overlay", 0x800FA000, 0x800FB000, 24319, 0),
 ]
 
 
@@ -98,6 +101,12 @@ BASE_EDITS: List[Tuple[int, bytes, str]] = [
     # becomes per-seed edits once options can keep kinds vanilla.
     (0x80011068 + kind * 4, PICKUP_STUB_ADDR.to_bytes(4, "little"), "SLUS exe")
     for kind in RANDOMIZED_KINDS
+] + [
+    # Launch determinism (research overlay-findings 11): the resolution
+    # roll `andi v1,v0,0xF` -> `li v1,0`; success <=> score > 0, and the
+    # client owns the score bytes (pinned each cycle from AP part items).
+    # Never ship this word without the client's score pinning.
+    (0x800FA0D4, (0x24030000).to_bytes(4, "little"), "launch overlay"),
 ]
 
 

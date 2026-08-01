@@ -34,6 +34,12 @@ item_table: Dict[str, ItemData] = {
     names.W_TANK:      ItemData(BASE_ID + 12, ItemClassification.useful),
     names.EX_TANK:     ItemData(BASE_ID + 13, ItemClassification.useful),
 
+    # Launcher parts: progression under the launch goal (completion requires
+    # all 8); useful otherwise (they still power launches for story flavor).
+    # Classification resolved per-seed in create_item via options.
+    names.ENIGMA_PART:  ItemData(BASE_ID + 14, ItemClassification.useful, 4),
+    names.SHUTTLE_PART: ItemData(BASE_ID + 15, ItemClassification.useful, 4),
+
     names.FALCON_HEAD: ItemData(BASE_ID + 20, ItemClassification.progression),
     names.FALCON_BODY: ItemData(BASE_ID + 21, ItemClassification.progression),
     names.FALCON_ARM:  ItemData(BASE_ID + 22, ItemClassification.progression),

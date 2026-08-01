@@ -21,7 +21,11 @@ for i, stage in enumerate(names.STAGES):
     location_table[names.capsule_location(stage)] = base + 2
     if stage in names.STAGE_TANK:
         location_table[names.tank_location(stage)] = base + 3
-    # +4.. reserved: energy-ups, rank rewards (later)
+    # Energy-Up pickups (kind 1, ids 0x10-0x17): stub records them; exact
+    # per-stage coords still filling in via the harvester, but the ring
+    # record's stage byte identifies the location regardless.
+    location_table[names.energy_up_location(stage)] = base + 4
+    # +5.. reserved: rank rewards (later)
 
 event_location_table: Dict[str, Optional[int]] = {
     names.VICTORY: None,
@@ -32,4 +36,5 @@ location_groups = {
     "Heart Tanks": {names.heart_location(s) for s in names.STAGES},
     "Armor Capsules": {names.capsule_location(s) for s in names.STAGES},
     "Tanks": {names.tank_location(s) for s in names.STAGE_TANK},
+    "Energy Ups": {names.energy_up_location(s) for s in names.STAGES},
 }

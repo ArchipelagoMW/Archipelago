@@ -67,6 +67,12 @@ STAGE_TANK = {
     FIREFLY: EX_TANK,
 }
 
+# Launcher parts (spec item 4 / overlay-findings §11): no vanilla storage
+# exists (parts are the kill bits) - these are AP-only items the client
+# turns into launch-score sourcing. 4 + 4; generic names on purpose.
+ENIGMA_PART = "Enigma Part"
+SHUTTLE_PART = "Shuttle Part"
+
 # Locations
 INTRO_CLEAR = "Intro Stage - Clear"
 
@@ -85,6 +91,10 @@ def capsule_location(stage: str) -> str:
 
 def tank_location(stage: str) -> str:
     return f"{stage} - {STAGE_TANK[stage]}"
+
+
+def energy_up_location(stage: str) -> str:
+    return f"{stage} - Energy Up"
 
 
 VICTORY = "Sigma Defeated"

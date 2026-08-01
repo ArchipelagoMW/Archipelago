@@ -67,7 +67,12 @@ class MMX5World(World):
     def create_item(self, name: str) -> MMX5Item:
         if name in item_table:
             data = item_table[name]
-            return MMX5Item(name, data.classification, data.code, self.player)
+            classification = data.classification
+            # Launcher parts carry completion under the launch goal.
+            if name in (names.ENIGMA_PART, names.SHUTTLE_PART) \
+                    and self.options.goal == "launch":
+                classification = ItemClassification.progression
+            return MMX5Item(name, classification, data.code, self.player)
         data = event_table[name]
         return MMX5Item(name, data.classification, None, self.player)
 
@@ -95,6 +100,7 @@ class MMX5World(World):
             }
             if stage in names.STAGE_TANK:
                 stage_locations[names.tank_location(stage)] = location_table[names.tank_location(stage)]
+            stage_locations[names.energy_up_location(stage)] = location_table[names.energy_up_location(stage)]
             region.add_locations(stage_locations, MMX5Location)
             # All 8 stages are open from the start in X5.
             stage_select.connect(region)
@@ -126,8 +132,16 @@ class MMX5World(World):
         # specific weapons or armor (e.g. Gaea sections, Falcon flight). Until
         # mapped, they are considered always reachable - fine for scaffold.
 
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has(names.VICTORY, self.player)
+        if self.options.goal == "launch":
+            # Victory = a successful launch, which the client only powers
+            # once ALL 8 parts are received (score stays 0 otherwise, and
+            # the game's own score<=0 gate fails the launch cleanly).
+            self.multiworld.completion_condition[self.player] = \
+                lambda state: state.has(names.ENIGMA_PART, self.player, 4) \
+                    and state.has(names.SHUTTLE_PART, self.player, 4)
+        else:
+            self.multiworld.completion_condition[self.player] = \
+                lambda state: state.has(names.VICTORY, self.player)
 
     def get_filler_item_name(self) -> str:
         return names.SMALL_ENERGY

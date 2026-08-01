@@ -47,8 +47,9 @@ EXE_SIG_ADDR = 0x010000
 EXE_SIG = bytes([0x70, 0xE9, 0x0E, 0x80]) + b"\\ROCK_X5.DAT"
 
 SAVE_BASE = 0x0D1C40          # save struct block we read each cycle
-SAVE_LEN = 0x60
+SAVE_LEN = 0xA0               # extended to cover launch score/flags/countdown
 OFF_MAX_HP_X = 0x0D1C47 - SAVE_BASE
+OFF_MAX_HP_Z = 0x0D1C48 - SAVE_BASE
 OFF_WEAPONS = 0x0D1C4C - SAVE_BASE      # vanilla weapons/boss-beaten record
 OFF_AP_WEAPONS = 0x0D1C4D - SAVE_BASE   # AP-owned capability byte (patched disc)
 # Processed-items count, u16 LE in spare memcard-persisted save bytes
@@ -65,6 +66,17 @@ OFF_STAMP = 0x0D1C50 - SAVE_BASE
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
+# Launch machinery (overlay-findings 11). Score = 2*sum(0x1CC2..C5) + 0x1CCA;
+# on the patched disc the roll is `li v1,0`, so success <=> score > 0. The
+# client PINS these every cycle from AP part-item state - vanilla accrual
+# must never decide a launch. 0x1CCB bit7 = launch-success flag (victory
+# marker for the launch goal). 0x1CAC u32 = collision countdown in frames.
+OFF_SCORE_ACC = 0x0D1CC2 - SAVE_BASE   # 4 accumulator bytes
+OFF_SCORE_MOD = 0x0D1CCA - SAVE_BASE   # additive modifier byte
+OFF_LAUNCH_FLAGS = 0x0D1CCB - SAVE_BASE
+OFF_COUNTDOWN = 0x0D1CAC - SAVE_BASE
+COUNTDOWN_FROZEN = 8 * 0x34BC0         # 8 hours, pinned (design answer 5)
+GOAL_LAUNCH = 1
 
 # AP disc-patch detection: the first stage-load weapon-repopulation site.
 # Vanilla: lbu $v0,0x4C($a1) = 90 A2 00 4C; AP patch changes the offset byte
@@ -153,6 +165,7 @@ class MMX5Client(BizHawkClient):
         self.stub_present = False
         self.unknown_records_logged = set()
         self.stamp_warned = False
+        self.victory_sent = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -294,6 +307,11 @@ class MMX5Client(BizHawkClient):
                     if kind == 0x0 and stage is not None \
                             and HEART_BIT_TO_STAGE.get(rec_id) == stage:
                         loc_name = names.heart_location(stage)
+                    elif kind == 0x1 and stage is not None and 0x10 <= rec_id <= 0x17:
+                        # Energy-Ups: one per stage; the stage byte alone
+                        # identifies the location (ids are globally unique
+                        # bits but their stage map is still being harvested).
+                        loc_name = names.energy_up_location(stage)
                     elif (kind, rec_id) in TANK_RECORD_TO_STAGE:
                         loc_name = names.tank_location(TANK_RECORD_TO_STAGE[(kind, rec_id)])
 
@@ -304,9 +322,9 @@ class MMX5Client(BizHawkClient):
                         # (idempotent) check is simply re-sent each poll.
                         consume = location_table[loc_name] in ctx.checked_locations
                     else:
-                        # Kind 1 (EX energy-up) has no locations yet; kind-0
-                        # stage mismatches are Axle's armor-gated decoy heart
-                        # records. Either way: log once, consume, don't send.
+                        # Kind-0 stage mismatches are Axle's armor-gated
+                        # decoy heart records; anything else is unmapped.
+                        # Either way: log once, consume, don't send.
                         rec_key = (stage_id, kind, rec_id)
                         if rec_key not in self.unknown_records_logged:
                             self.unknown_records_logged.add(rec_key)
@@ -320,6 +338,43 @@ class MMX5Client(BizHawkClient):
                         ack_guards.append((RING_ADDR + slot * 4, rec, "MainRAM"))
                 if ack_writes:
                     await bizhawk.guarded_write(ctx.bizhawk_ctx, ack_writes, ack_guards)
+
+            # ---- Launch control (patched discs only): pin the score bytes
+            # so launches succeed exactly when AP part state allows (the
+            # disc patch turns the roll into `li v1,0`, so success <=>
+            # score > 0), freeze the countdown (design answer 5), and
+            # detect launch-goal victory (0x1CCB bit7). Pinning runs every
+            # cycle - vanilla accrual must never decide a launch. ----
+            if self.ap_patched and save_sane:
+                lookup = ctx.item_names.lookup_in_game
+                enigma = sum(1 for i in ctx.items_received if lookup(i.item) == names.ENIGMA_PART)
+                shuttle = sum(1 for i in ctx.items_received if lookup(i.item) == names.SHUTTLE_PART)
+                goal = (ctx.slot_data or {}).get("goal", 0)
+                if goal == GOAL_LAUNCH:
+                    # Launch goal: nothing fires until every part is in hand.
+                    powered = enigma >= 4 and shuttle >= 4
+                else:
+                    # Story flavor: power whichever launcher the chapter
+                    # offers (shuttle era begins at 6 recorded kills).
+                    kills = bin(save[OFF_WEAPONS]).count("1")
+                    powered = (shuttle >= 4) if kills >= 6 else (enigma >= 4)
+                pin = []
+                if save[OFF_SCORE_ACC:OFF_SCORE_ACC + 4] != b"\x00\x00\x00\x00":
+                    pin.append((SAVE_BASE + OFF_SCORE_ACC, [0, 0, 0, 0], "MainRAM"))
+                want_mod = 1 if powered else 0
+                if save[OFF_SCORE_MOD] != want_mod:
+                    pin.append((SAVE_BASE + OFF_SCORE_MOD, [want_mod], "MainRAM"))
+                countdown = int.from_bytes(save[OFF_COUNTDOWN:OFF_COUNTDOWN + 4], "little")
+                if countdown != COUNTDOWN_FROZEN:
+                    pin.append((SAVE_BASE + OFF_COUNTDOWN,
+                                list(COUNTDOWN_FROZEN.to_bytes(4, "little")), "MainRAM"))
+                if pin:
+                    await bizhawk.write(ctx.bizhawk_ctx, pin)
+                if goal == GOAL_LAUNCH and not self.victory_sent \
+                        and save[OFF_LAUNCH_FLAGS] & 0x80:
+                    self.victory_sent = True
+                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                    logger.info("MMX5: launch succeeded - GOAL complete!")
 
             if new_checks:
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new_checks}])
@@ -393,8 +448,12 @@ class MMX5Client(BizHawkClient):
                         writes.append((SAVE_BASE + OFF_TANKS, [merged_tanks], "MainRAM"))
 
                     if new_hearts:
-                        new_max = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
-                        writes.append((SAVE_BASE + OFF_MAX_HP_X, [new_max], "MainRAM"))
+                        # BOTH characters (design decision 2026-08-01):
+                        # vanilla hearts only boost the collector, but an AP
+                        # heart item shouldn't shortchange whoever's benched.
+                        new_max_x = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
+                        new_max_z = min(0x40, save[OFF_MAX_HP_Z] + HP_PER_HEART * new_hearts)
+                        writes.append((SAVE_BASE + OFF_MAX_HP_X, [new_max_x, new_max_z], "MainRAM"))
 
                     # Adopt an unstamped save on its first grant batch.
                     if ctx.seed_name and save[OFF_STAMP] == 0:
