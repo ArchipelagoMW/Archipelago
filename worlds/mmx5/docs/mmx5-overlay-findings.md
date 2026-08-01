@@ -559,8 +559,12 @@ Caught live via write-watchpoint on 0x800D1C1D â†’ read-watchpoint on
 0x800D1C4C during an Enigma launch; code captured in `enigmaRAM.bin`
 (workspace root; mid-cutscene dump). Function at **RAM 0x800FA000 region**
 (launch cutscene module), ON DISC exactly once: **sector 24319** (ROCK_X5.BIN
-tail; sector's user data = RAM 0x800FA000+, so RAM addr âˆ’ 0x800FA000 + 208
-+24 = raw offset within sector... use region mapping base below).
+tail). Mapping CORRECTED by disc scan 2026-08-01: RAM 0x800FA000 = sector
+24319 **user-data offset 0** (raw = 24319Ã—2352 + 24 + (addr âˆ’ 0x800FA000));
+the andi word sits at user offset 0xD4 = RAM 0x800FA0D4 exactly. The old
+"+208" note here was wrong. Note: `jal 0x8002DF78` + `andi v1,v0,0xF`
+appears at 8 disc sites total (RNG masking is a common idiom) â€” the launch
+resolution copy is the sector-24319 one; the others are other modules.
 
 Decode (fn body ~0x800FA020-0x800FA17C in enigmaRAM.bin):
 1. **Score** `s0 = 2 Ã— (sum of s8 bytes 0x800D1CC2..0x1CC5) + s8 0x800D1CCA`
