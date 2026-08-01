@@ -188,7 +188,7 @@ exes = [
         script=f"{c.script_name}.py",
         target_name=c.frozen_name + (".exe" if is_windows else ""),
         icon=resolve_icon(c.icon),
-        base="Win32GUI" if is_windows and not c.cli else None
+        base="gui" if is_windows and not c.cli else None
     ) for c in components if c.script_name and c.frozen_name
 ]
 
