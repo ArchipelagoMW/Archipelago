@@ -167,7 +167,8 @@ class EVNWorld(World):
     def fill_slot_data(self) -> Mapping[str, Any]:
         # If you need access to the player's chosen options on the client side, there is a helper for that.
         return self.options.as_dict(
-            "shuffle_systems" 
+            #"shuffle_systems" 
+            "chosen_string"
         ) # otherwise, I'll need to finish adding the options / details.
     
     # This function is called to generate the output mod file (plugin) for the player.

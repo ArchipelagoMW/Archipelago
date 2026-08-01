@@ -974,7 +974,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312] },
+        "region_connections": { 0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201] },
         "final_mission": 417,
         "cust_outfs": [
             450, 454, 455, 456, 457, 458, 459, 462, 463, 464, 465
@@ -1000,7 +1000,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312], 2: [4], 4: [5], 5: [7], 7: [9] },
+        "region_connections": { 0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 102, 103, 104, 201], 2: [4], 4: [5], 5: [7], 7: [9] },
         "final_mission": 887,
         #"use_extended_checks": True, # due to how short this path is, we'll need to utilize extended checks to make sure players don't jump into the endgame too early.
         "cust_outfs": [
@@ -1027,7 +1027,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312], 3: [4], 4: [6], 6: [7], 7: [8] },
+        "region_connections": { 0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201], 3: [4], 4: [6], 6: [7], 7: [8] },
         "final_mission": 887,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1054,7 +1054,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312], 10: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 103, 104, 201], 10: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1085,7 +1085,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [21, 23, 27, 300, 301, 302, 310, 311, 312], 21: [11], 11: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 0: [21, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 21: [11], 11: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1116,7 +1116,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1150,7 +1150,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312], 30: [32], 32: [34] },
+        "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312, 100, 101, 102, 104, 201], 30: [32], 32: [34] },
         "final_mission": 712,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1183,7 +1183,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [22, 23, 27, 300, 301, 302, 310, 311, 312], 22: [31], 31: [32], 32: [34] },
+        "region_connections": { 0: [22, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 22: [31], 31: [32], 32: [34] },
         "final_mission": 712,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1216,7 +1216,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 23, 27, 40, 300, 301, 302, 310, 311, 312], 40: [42] },
+        "region_connections": { 0: [20, 23, 27, 40, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 201], 40: [42] },
         "final_mission": 474,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1249,7 +1249,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312], 23: [26], 26: [51], 51: [53] },
+        "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 23: [26], 26: [51], 51: [53] },
         "final_mission": 354,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1282,7 +1282,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312], 23: [26], 26: [51], 51: [54] },
+        "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 23: [26], 26: [51], 51: [54] },
         "final_mission": 381,
         #"use_extended_checks": True, 
         "cust_outfs": [
