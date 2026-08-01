@@ -33,6 +33,8 @@ from .Tracker import LocationTracker, MagpieBridge, Check
 
 links_awakening_location_id_to_meta = {v:k for k,v in links_awakening_location_meta_to_id.items()}
 
+def clamp(minimum, number, maximum):
+    return max(minimum, min(maximum, number))
 
 class GameboyException(Exception):
     pass
@@ -50,8 +52,8 @@ class BadRetroArchResponse(GameboyException):
     pass
 
 
-def clamp(minimum, number, maximum):
-    return max(minimum, min(maximum, number))
+class VersionError(Exception):
+    pass
 
 
 class LAClientConstants:
@@ -157,7 +159,7 @@ class RAGameboy():
         return response
 
     async def async_recv(self, timeout=1.0):
-        response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), timeout)
+        response = await asyncio.wait_for(asyncio.get_running_loop().sock_recv(self.socket, 4096), timeout)
         return response
 
     async def check_safe_gameplay(self, throw=True):
@@ -634,7 +636,7 @@ class LinksAwakeningContext(CommonContext):
                 ("Client", "Archipelago"),
                 ("Tracker", "Tracker"),
             ]
-            base_title = "Archipelago Links Awakening DX Client"
+            base_title = f"Links Awakening DX Client {LinksAwakeningWorld.world_version.as_simple_string()} | Archipelago"
 
             def build(self):
                 b = super().build()
@@ -733,11 +735,20 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
+            generated_version = Utils.tuplize_version(self.slot_data.get("world_version", "2.0.0"))
+            client_version = LinksAwakeningWorld.world_version
+            if generated_version.major != client_version.major:
+                self.disconnected_intentionally = True
+                raise VersionError(
+                    f"The installed world ({client_version.as_simple_string()}) is incompatible with "
+                    f"the world this game was generated on ({generated_version.as_simple_string()})"
+                )
             # This is sent to magpie over local websocket to make its own connection
             self.slot_data.update({
                 "server_address": self.server_address,
                 "slot_name": self.player_names[self.slot],
                 "password": self.password,
+                "client_version": client_version.as_simple_string(),
             })
             if self.slot_data.get("death_link"):
                 Utils.async_start(self.update_death_link(True))

@@ -23,7 +23,7 @@ players to rely upon each other to complete their game.
 While a multiworld game traditionally requires all players to be playing the same game, a multi-game multiworld allows
 players to randomize any of the supported games, and send items between them. This allows players of different
 games to interact with one another in a single multiplayer environment.  Archipelago supports multi-game multiworlds.
-Here is a list of our [Supported Games](https://archipelago.gg/games).
+Here is a list of our [Supported Games](/games).
 
 ## Can I generate a single-player game with Archipelago?
 
@@ -33,7 +33,7 @@ play, open the Settings Page, pick your settings, and click Generate Game.
 
 ## How do I get started?
 
-We have a [Getting Started](https://archipelago.gg/tutorial/Archipelago/setup/en) guide that will help you get the
+We have a [Getting Started](/tutorial/Archipelago/setup/en) guide that will help you get the
 software set up. You can use that guide to learn how to generate multiworlds. There are also basic instructions for
 including multiple games, and hosting multiworlds on the website for ease and convenience.
 
@@ -57,7 +57,7 @@ their multiworld.
 
 If a player must leave early, they can use Archipelago's release system. When a player releases their game, all items
 in that game belonging to other players are sent out automatically. This allows other players to continue to play
-uninterrupted. Here is a list of all of our [Server Commands](https://archipelago.gg/tutorial/Archipelago/commands/en).
+uninterrupted. Here is a list of all of our [Server Commands](/tutorial/Archipelago/commands/en).
 
 ## What happens if an item is placed somewhere it is impossible to get?
 

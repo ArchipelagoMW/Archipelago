@@ -17,7 +17,8 @@ it will not be detailed here.
 The client is an intermediary program between the game and the Archipelago server. This can either be a direct
 modification to the game, an external program, or both. This can be implemented in nearly any modern language, but it
 must fulfill a few requirements in order to function as expected. Libraries for most modern languages and the spec for 
-various packets can be found in the [network protocol](/docs/network%20protocol.md) API reference document.
+various packets can be found in the [network protocol](/docs/network%20protocol.md) API reference document. Additional help with specific game
+engines and rom formats can be found in the #ap-modding-help channel in the [Discord](https://archipelago.gg/discord).
 
 ### Hard Requirements
 
@@ -86,12 +87,14 @@ The world is your game integration for the Archipelago generator, webhost, and m
 information necessary for creating the items and locations to be randomized, the logic for item placement, the 
 datapackage information so other game clients can recognize your game data, and documentation. Your world must be
 written as a Python package to be loaded by Archipelago. This is currently done by creating a fork of the Archipelago
-repository and creating a new world package in `/worlds/`. 
+repository and creating a new world package in `/worlds/` (see [running from source](/docs/running%20from%20source.md)
+for setup).
 
 The base World class can be found in [AutoWorld](/worlds/AutoWorld.py). Methods available for your world to call 
 during generation can be found in [BaseClasses](/BaseClasses.py) and [Fill](/Fill.py). Some examples and documentation 
-regarding the API can be found in the [world api doc](/docs/world%20api.md). Before publishing, make sure to also 
-check out [world maintainer.md](/docs/world%20maintainer.md).
+regarding the API can be found in the [world api doc](/docs/world%20api.md), and the [APQuest](/worlds/apquest/) world
+is a complete world implementation that functions as an introduction to world development. Before publishing, make sure
+to also check out [world maintainer.md](/docs/world%20maintainer.md).
 
 ### Hard Requirements
 
@@ -139,8 +142,8 @@ if possible.
 
 * An implementation of
   [get_filler_item_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L473)
-  * By default, this function chooses any item name from `item_name_to_id`, so you want to limit it to only the true
-    filler items.
+  * By default, this function chooses any item name from `item_name_to_id`, which may include items you consider
+  "non-repeatable".
 * An `options_dataclass` defining the options players have available to them
   * This should be accompanied by a type hint for `options` with the same class name
 * A [bug report page](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L220)
