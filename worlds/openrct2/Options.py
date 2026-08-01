@@ -426,7 +426,7 @@ class SelectedVisibility(Choice):
     option_full = Visibility.full.value
     default = Visibility.recipient.value
 
-class Awards(Choice):
+class SelectedAwards(Choice):
     """Choose what types (if any) of awards will have checks behind them. 
     Negative awards will always reward a trap item, even if they're otherwise disabled!
 
@@ -719,8 +719,13 @@ class RequiredUniqueRides(Range):
     It's highly recommended to have this set to at least 1!"""
     display_name = "Unique Ride Requirement"
     range_start = 0
-    range_end = 10
+    range_end = 20
     default = 5
+
+class IncludeStalls(DefaultOnToggle):
+    """Select whether shops and stalls should elligible to be included in the required rides list for completion.
+    """
+    display_name = "Include Shops for Goal"
 
 class LocalityOfUniqueRides(Choice):
     """No-op; still here to prevent old YAMLs from breaking"""
@@ -870,6 +875,7 @@ openrct2_option_groups = [
         RollerCoasterIntensity,
         RollerCoasterNausea,
         RequiredUniqueRides,
+        IncludeStalls,
         LocalityOfUniqueRides,
         ParkRatingObjective,
         PayOffLoan,
@@ -897,7 +903,7 @@ openrct2_option_groups = [
         ShopMaximumTotalCustomers,
         BalanceGuestCounts,
         SelectedVisibility,
-        Awards,
+        SelectedAwards,
         ExcludeSafestPark
     ]),
     OptionGroup("Item & Trap Options", [
@@ -948,6 +954,7 @@ class openRCT2Options(PerGameCommonOptions):
     roller_coaster_intensity: RollerCoasterIntensity
     roller_coaster_nausea: RollerCoasterNausea
     required_unique_rides: RequiredUniqueRides
+    include_stalls: IncludeStalls
     unique_rides_placement: LocalityOfUniqueRides
     # include_park_rating_objective: Include_Park_Rating_Objective
     park_rating_objective: ParkRatingObjective
@@ -976,7 +983,7 @@ class openRCT2Options(PerGameCommonOptions):
     shop_maximum_total_customers: ShopMaximumTotalCustomers
     balance_guest_counts: BalanceGuestCounts
     visibility: SelectedVisibility
-    awards: Awards
+    selected_awards: SelectedAwards
     exclude_safest_park: ExcludeSafestPark
 
     #Item and Trap Options

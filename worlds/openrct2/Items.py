@@ -2,7 +2,7 @@ from BaseClasses import Item
 import copy
 from .Constants import Scenario_Items
 from .data.item_info import item_info
-from .Options import *
+from . import Options
 from random import Random
 from typing import Tuple
 
@@ -11,11 +11,11 @@ class OpenRCT2Item(Item):
     game: str = "OpenRCT2"
 
 
-def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[str],str]:
+def set_openRCT2_items(options: Options.openRCT2Options, random: Random) -> tuple[list[str],str]:
     if(options.all_rides_and_scenery_expansion):
-        openRCT2_items = copy.deepcopy(Scenario_Items[152]) # Archipelago Madness has every ride in the game. We can go off that
+        openRCT2_items = copy.deepcopy(Scenario_Items[Options.Scenario.archipelago_madness_expansions]) # Archipelago Madness has every ride in the game. We can go off that
     elif(options.all_rides_and_scenery_base):
-        openRCT2_items = copy.deepcopy(Scenario_Items[151]) # Archipelago Madness, but without the expansion stuff
+        openRCT2_items = copy.deepcopy(Scenario_Items[Options.Scenario.archipelago_madness_vanilla]) # Archipelago Madness, but without the expansion stuff
     else:
         openRCT2_items = copy.deepcopy(Scenario_Items[options.scenario.value])
     rules = [options.difficult_guest_generation.value,
@@ -25,9 +25,7 @@ def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[s
                  options.forbid_marketing_campaigns.value,
                  options.forbid_tree_removal.value]
 
-    locked = 2 # For clarity in the next if statement
-
-    if options.forbid_high_construction == locked:
+    if options.forbid_high_construction == Options.ForbidHighConstruction.on:
         for item in openRCT2_items:
             if item in item_info["requires_height"]:
                 openRCT2_items.remove(item)
@@ -93,7 +91,7 @@ def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[s
         count += 1
 
     # Add extra traps if there's not enough for the negative awards.
-    if options.awards == 0: # 0: all awards
+    if options.selected_awards == Options.Awards.all_awards: # 0: all awards
         #Add extra traps if there's fewer than 5.
         if(sum(1 for item in openRCT2_items if item in item_info["trap_items"]) < 5):
             openRCT2_items.append("Bathroom Trap")
