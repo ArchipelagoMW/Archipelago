@@ -76,6 +76,8 @@ PICKUP_STUB = bytes.fromhex(
     "7f002c31"  # andi  t4, t1, 0x7F
     "80008c35"  # ori   t4, t4, 0x80       ; seq = (count & 0x7F) | 0x80
     "23004ca1"  # sb    t4, 0x23(t2)       ; slot+3: seq
+    "a00051ad"  # sw    s1, 0xA0(t2)       ; v6 DEBUG: captured-object ptr ring
+                #   at mailbox+0xA0 (remove before ship; harmless plain RAM)
     "01002925"  # addiu t1, t1, 1
     "f2500108"  # j     0x800543C8         ; consume item, no vanilla effect
     "800009ad"  # sw    t1, 0x80(t0)       ; (delay slot) commit count
