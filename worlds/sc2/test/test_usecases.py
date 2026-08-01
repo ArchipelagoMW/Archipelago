@@ -35,10 +35,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                 SC2Campaign.NCO.campaign_name
             },
             'excluded_items': {
-                item_groups.ItemGroupNames.TERRAN_UNITS: 0,
+                item_groups.ItemGroupNames.TERRAN_UNITS: -1,
             },
             'unexcluded_items': {
-                item_groups.ItemGroupNames.NCO_UNITS: 0,
+                item_groups.ItemGroupNames.NCO_UNITS: -1,
             },
             'max_number_of_upgrades': 2,
         }
@@ -81,10 +81,10 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             },
             'mission_order': options.MissionOrder.option_vanilla_shuffled,
             'excluded_items': {
-                item_groups.ItemGroupNames.TERRAN_ITEMS: 0,
+                item_groups.ItemGroupNames.TERRAN_ITEMS: -1,
             },
             'unexcluded_items': {
-                item_groups.ItemGroupNames.NCO_MAX_PROGRESSIVE_ITEMS: 0,
+                item_groups.ItemGroupNames.NCO_MAX_PROGRESSIVE_ITEMS: -1,
                 item_groups.ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS: 1,
             },
             'excluded_missions': [
@@ -271,9 +271,19 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_regions.remove('Menu')
 
         for region in world_regions:
-            self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
-                             ([mission_tables.SC2Campaign.EPILOGUE]),
-                             f"{region} is an epilogue mission!")
+            self.assertNotIn(
+                mission_tables.lookup_name_to_mission[region].campaign,
+                ([mission_tables.SC2Campaign.EPILOGUE]),
+                f"{region} is an epilogue mission!"
+            )
+
+    def test_excluding_all_factions_and_campaigns_still_generates(self) -> None:
+        world_options = {
+            'selected_races': set(),
+            'enabled_campaigns': set(),
+        }
+        # asserting no exception is thrown
+        self.generate_world(world_options)
 
     def test_race_swap_pick_one_has_correct_length_and_includes_swaps(self) -> None:
         world_options = {
@@ -398,7 +408,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
-        spear_of_adun_actives = [item_name for item_name in world_item_names if item_name in item_tables.spear_of_adun_calldowns]
+        spear_of_adun_actives = [item_name for item_name in world_item_names if item_name in item_groups.spear_of_adun_actives]
 
         self.assertLessEqual(len(spear_of_adun_actives), target_number)
 
@@ -418,7 +428,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
-        spear_of_adun_autocasts = [item_name for item_name in world_item_names if item_name in item_tables.spear_of_adun_castable_passives]
+        spear_of_adun_autocasts = [
+            item_name for item_name in world_item_names if item_name in item_groups.spear_of_adun_passives
+        ]
 
         self.assertLessEqual(len(spear_of_adun_autocasts), target_number)
 
@@ -471,12 +483,12 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             ],
             'required_tactics': options.RequiredTactics.option_any_units,
             'excluded_items': {
-                item_groups.ItemGroupNames.TERRAN_UNITS: 0,
-                item_groups.ItemGroupNames.ZERG_UNITS: 0,
+                item_groups.ItemGroupNames.TERRAN_UNITS: -1,
+                item_groups.ItemGroupNames.ZERG_UNITS: -1,
             },
             'unexcluded_items': {
-                item_groups.ItemGroupNames.TERRAN_MERCENARIES: 0,
-                item_groups.ItemGroupNames.ZERG_MERCENARIES: 0,
+                item_groups.ItemGroupNames.TERRAN_MERCENARIES: -1,
+                item_groups.ItemGroupNames.ZERG_MERCENARIES: -1,
             },
             'start_inventory': {
                 item_names.PROGRESSIVE_FAST_DELIVERY: 1,

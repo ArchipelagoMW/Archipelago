@@ -5,6 +5,8 @@ def is_auto_scroll(state, player, level):
     level_id = level_name_to_id[level]
     if state.has_any(["Cancel Auto Scroll", f"Cancel Auto Scroll - {level}"], player):
         return False
+    if state.has("ut_glitch", player) and state.multiworld.worlds[player].auto_scroll_levels[level_id] == 3:
+        return state.has(f"Auto Scroll - {level}", player)
     return state.multiworld.worlds[player].auto_scroll_levels[level_id] > 0
 
 
@@ -106,26 +108,38 @@ def tree_zone_4_midway_bell(state, player):
 
 def tree_zone_4_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Tree Zone 4")
-    reachable_coins = 0
+    entryway = 14
+    hall = 4
+    first_trip_downstairs = 31
+    second_trip_downstairs = 15
+    downstairs_with_auto_scroll = 12
+    final_room = 10
+
+    reachable_coins_from_start = 0
+    reachable_coins_from_bell = 0
+
     if has_pipe_up(state, player):
-        reachable_coins += 14
+        reachable_coins_from_start += entryway
         if has_pipe_right(state, player):
-            reachable_coins += 4
+            reachable_coins_from_start += hall
             if has_pipe_down(state, player):
-                reachable_coins += 10
-                if not auto_scroll:
-                    reachable_coins += 46
-    elif state.has("Tree Zone 4 Midway Bell", player):
-        if not auto_scroll:
-            if has_pipe_left(state, player):
-                reachable_coins += 18
-                if has_pipe_down(state, player):
-                    reachable_coins += 10
+                if auto_scroll:
+                    reachable_coins_from_start += downstairs_with_auto_scroll
+                else:
+                    reachable_coins_from_start += final_room + first_trip_downstairs + second_trip_downstairs
+    if state.has("Tree Zone 4 Midway Bell", player):
+        if has_pipe_down(state, player) and (auto_scroll or not has_pipe_left(state, player)):
+            reachable_coins_from_bell += final_room
+        elif has_pipe_left(state, player) and not auto_scroll:
+            if has_pipe_down(state, player):
+                reachable_coins_from_bell += first_trip_downstairs
+                if has_pipe_right(state, player):
+                    reachable_coins_from_bell += entryway + hall
                     if has_pipe_up(state, player):
-                        reachable_coins += 46
-        elif has_pipe_down(state, player):
-            reachable_coins += 10
-    return coins <= reachable_coins
+                        reachable_coins_from_bell += second_trip_downstairs + final_room
+            else:
+                reachable_coins_from_bell += entryway + hall
+    return coins <= max(reachable_coins_from_start, reachable_coins_from_bell)
 
 
 def tree_zone_5_boss(state, player):
@@ -239,12 +253,9 @@ def pumpkin_zone_4_coins(state, player, coins):
 
 
 def mario_zone_1_normal_exit(state, player):
-    if has_pipe_right(state, player):
-        if state.has_any(["Mushroom", "Fire Flower", "Carrot", "Mario Zone 1 Midway Bell"], player):
-            return True
-        if is_auto_scroll(state, player, "Mario Zone 1"):
-            return True
-    return False
+    return has_pipe_right(state, player) and (not is_auto_scroll(state, player, "Mario Zone 1")
+                                              or state.has_any(["Mushroom", "Fire Flower", "Carrot",
+                                                                "Mario Zone 1 Midway Bell"], player))
 
 
 def mario_zone_1_midway_bell(state, player):
@@ -278,8 +289,12 @@ def mario_zone_3_coins(state, player, coins):
     if state.has("Carrot", player):
         reachable_spike_coins = 15
     else:
-        sprites = state.multiworld.worlds[player].sprite_data["Mario Zone 3"]
-        reachable_spike_coins = min(3, len({sprites[i]["sprite"] == "Claw Grabber" for i in (17, 18, 25)})
+        if state.multiworld.worlds[player].ut:
+            claw_grabbers = state.multiworld.worlds[player].mario_zone_3_crane_count
+        else:
+            sprites = state.multiworld.worlds[player].sprite_data["Mario Zone 3"]
+            claw_grabbers = len({sprites[i]["sprite"] == "Claw Grabber" for i in (17, 18, 25)})
+        reachable_spike_coins = min(3, claw_grabbers
                                     + state.has("Mushroom", player) + state.has("Fire Flower", player)) * 5
     reachable_coins += reachable_spike_coins
     if not auto_scroll:
@@ -300,8 +315,11 @@ def mario_zone_4_coins(state, player, coins):
 
 
 def not_blocked_by_sharks(state, player):
-    sharks = [state.multiworld.worlds[player].sprite_data["Turtle Zone 1"][i]["sprite"]
-              for i in (27, 28)].count("Shark")
+    if state.multiworld.worlds[player].ut:
+        sharks = state.multiworld.worlds[player].turtle_zone_1_shark_count
+    else:
+        sharks = [state.multiworld.worlds[player].sprite_data["Turtle Zone 1"][i]["sprite"]
+                  for i in (27, 28)].count("Shark")
     if state.has("Carrot", player) or not sharks:
         return True
     if sharks == 2:
@@ -469,7 +487,7 @@ def space_zone_2_boss(state, player):
 
 def space_zone_2_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Space Zone 2")
-    reachable_coins = 12
+    reachable_coins = 9
     if state.has_any(["Mushroom", "Fire Flower", "Carrot", "Space Physics"], player):
         reachable_coins += 15
         if state.has("Space Physics", player) or not auto_scroll:
@@ -478,7 +496,7 @@ def space_zone_2_coins(state, player, coins):
             state.has("Mushroom", player) and state.has_any(["Fire Flower", "Carrot"], player))):
         reachable_coins += 3
     if state.has("Space Physics", player):
-        reachable_coins += 79
+        reachable_coins += 82
         if not auto_scroll:
             reachable_coins += 21
     return coins <= reachable_coins
@@ -595,8 +613,8 @@ def macro_zone_4_coins(state, player, coins):
 
 
 def marios_castle_wario(state, player):
-    return ((has_pipe_right(state, player) and has_pipe_left(state, player))
-            or state.has("Mario's Castle Midway Bell", player))
+    return (has_pipe_right(state, player) and 
+           (has_pipe_left(state, player) or state.has("Mario's Castle Midway Bell", player)))
 
 
 def marios_castle_midway_bell(state, player):

@@ -1,4 +1,5 @@
-# This workflow will build a release-like distribution when manually dispatched
+# This workflow will build a release-like distribution when manually dispatched:
+# a Windows x64 7zip, a Windows x64 Installer, a Linux AppImage and a Linux binary .tar.gz.
 
 name: Build
 
@@ -9,22 +10,25 @@ on:
       - 'setup.py'
       - 'requirements.txt'
       - '*.iss'
+      - 'worlds/*/archipelago.json'
   pull_request:
     paths:
       - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
       - '*.iss'
+      - 'worlds/*/archipelago.json'
   workflow_dispatch:
 
 env:
   ENEMIZER_VERSION: 7.1
   # NOTE: since appimage/appimagetool and appimage/type2-runtime does not have tags anymore,
   #       we check the sha256 and require manual intervention if it was updated.
-  APPIMAGETOOL_VERSION: continuous
-  APPIMAGETOOL_X86_64_HASH: '29348a20b80827cd261c28e95172ff828b69d43d4e4e18e3fd069e2c8693c94e'
-  APPIMAGE_RUNTIME_VERSION: continuous
-  APPIMAGE_RUNTIME_X86_64_HASH: 'e70ffa9b69b211574d0917adc482dd66f25a0083427b5945783965d55b0b0a8b'
+  APPIMAGE_FORK: 'PopTracker'
+  APPIMAGETOOL_VERSION: 'r-2025-11-18'
+  APPIMAGETOOL_X86_64_HASH: '4577a452b30af2337123fbb383aea154b618e51ad5448c3b62085cbbbfbfd9a2'
+  APPIMAGE_RUNTIME_VERSION: 'r-2025-11-07'
+  APPIMAGE_RUNTIME_X86_64_HASH: '27ddd3f78e483fc5f7856e413d7c17092917f8c35bfe3318a0d378aa9435ad17'
 
 permissions:  # permissions required for attestation
   id-token: 'write'
@@ -37,9 +41,9 @@ jobs:
     runs-on: windows-latest
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       - name: Install python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: '~3.12.7'
           check-latest: true
@@ -47,7 +51,7 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://github.com/Ijwu/Enemizer/releases/download/${Env:ENEMIZER_VERSION}/win-x64.zip -OutFile enemizer.zip
           Expand-Archive -Path enemizer.zip -DestinationPath EnemizerCLI -Force
-          choco install innosetup --version=6.2.2 --allow-downgrade
+          choco install innosetup --version=6.7.0 --allow-downgrade
       - name: Build
         run: |
           python -m pip install --upgrade pip
@@ -78,7 +82,7 @@ jobs:
       # - copy code above to release.yml -
       - name: Attest Build
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest@v4.1.0
         with:
           subject-path: |
             build/exe.*/ArchipelagoLauncher.exe
@@ -106,18 +110,17 @@ jobs:
           cp Players/Templates/VVVVVV.yaml Players/
           timeout 30 ./ArchipelagoGenerate
       - name: Store 7z
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.ZIP_NAME }}
           path: dist/${{ env.ZIP_NAME }}
-          compression-level: 0  # .7z is incompressible by zip
+          archive: false
           if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
       - name: Store Setup
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.SETUP_NAME }}
           path: setups/${{ env.SETUP_NAME }}
+          archive: false
           if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
 
@@ -125,23 +128,23 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: '~3.12.7'
           check-latest: true
       - name: Install build-time dependencies
         run: |
           echo "PYTHON=python3.12" >> $GITHUB_ENV
-          wget -nv https://github.com/AppImage/appimagetool/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
+          wget -nv https://github.com/$APPIMAGE_FORK/appimagetool/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
           echo "$APPIMAGETOOL_X86_64_HASH appimagetool-x86_64.AppImage" | sha256sum -c
-          wget -nv https://github.com/AppImage/type2-runtime/releases/download/$APPIMAGE_RUNTIME_VERSION/runtime-x86_64
+          wget -nv https://github.com/$APPIMAGE_FORK/type2-runtime/releases/download/$APPIMAGE_RUNTIME_VERSION/runtime-x86_64
           echo "$APPIMAGE_RUNTIME_X86_64_HASH runtime-x86_64" | sha256sum -c
           chmod a+rx appimagetool-x86_64.AppImage
           ./appimagetool-x86_64.AppImage --appimage-extract
@@ -169,7 +172,7 @@ jobs:
       # - copy code above to release.yml -
       - name: Attest Build
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest@v4.1.0
         with:
           subject-path: |
             build/exe.*/ArchipelagoLauncher
@@ -200,17 +203,17 @@ jobs:
           cp Players/Templates/VVVVVV.yaml Players/
           timeout 30 ./ArchipelagoGenerate
       - name: Store AppImage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.APPIMAGE_NAME }}
           path: dist/${{ env.APPIMAGE_NAME }}
+          archive: false
+          # TODO: decide if we want to also upload the zsync
           if-no-files-found: error
           retention-days: 7
       - name: Store .tar.gz
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.TAR_NAME }}
           path: dist/${{ env.TAR_NAME }}
-          compression-level: 0  # .gz is incompressible by zip
+          archive: false
           if-no-files-found: error
           retention-days: 7

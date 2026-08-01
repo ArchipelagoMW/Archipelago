@@ -12,9 +12,10 @@ class KH2CommandProcessor(ClientCommandProcessor):
     ctx: KH2Context
 
     def _cmd_receive_notif(self, notification_type=""):
-        """Change receive notification type.Valid Inputs:Puzzle, Info and None
+        """Change receive notification type.Valid Inputs:Puzzle, Info, Chest and None
         Puzzle: Puzzle Piece Popup when you receive an item.
         Info: Displays the Information notification when you receive an item.
+        Chest: Displays the Chest notification when you receive an item.
         None: Toggle off any of the receiving notifications.
         """
         notification_type = notification_type.lower()
@@ -26,9 +27,10 @@ class KH2CommandProcessor(ClientCommandProcessor):
             self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, Chest, None")
 
     def _cmd_send_notif(self, notification_type=""):
-        """Change receive notification type.Valid Inputs:Puzzle, Info and None
-        Puzzle: Puzzle Piece Popup when you receive an item.
-        Info: Displays the Information notification when you receive an item.
+        """Change send notification type.Valid Inputs:Puzzle, Info, Chest and None
+        Puzzle: Puzzle Piece Popup when you send an item.
+        Info: Displays the Information notification when you send an item.
+        Chest: Displays the Chest notification when you send an item.
         None: Toggle off any of the receiving notifications.
         """
         notification_type = notification_type.lower()
@@ -36,27 +38,27 @@ class KH2CommandProcessor(ClientCommandProcessor):
             temp_client_settings = self.ctx.client_settings["send_popup_type"]
             self.ctx.client_settings["send_popup_type"] = notification_type
             # doing it in this order to make sure it actually changes
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['send_popup_type']}")
+            self.output(f"Changed send notification type from {temp_client_settings} to {self.ctx.client_settings['send_popup_type']}")
         else:
             self.output(f"Unknown send notification type:{notification_type}. Valid Inputs: Puzzle, Info, Chest, None")
 
     def _cmd_change_send_truncation_priority(self, priority=""):
-        """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
+        """Change what gets truncated first when using Chest or Puzzle piece send notification. Playername min is 5 and ItemName is 15"""
         priority = priority.lower()
         if priority in {"playername", "itemname"}:
             temp_client_settings = self.ctx.client_settings["send_truncate_first"]
             self.ctx.client_settings["send_truncate_first"] = priority
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['send_truncate_first']}")
+            self.output(f"Changed receive notification type truncation from {temp_client_settings} to {self.ctx.client_settings['send_truncate_first']}")
         else:
             self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
 
     def _cmd_change_receive_truncation_priority(self, priority=""):
-        """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
+        """Change what gets truncated first when using Chest or Puzzle piece receive notification. Playername min is 5 and ItemName is 15"""
         priority = priority.lower()
         if priority in {"playername", "itemname"}:
             temp_client_settings = self.ctx.client_settings["receive_truncate_first"]
             self.ctx.client_settings["receive_truncate_first"] = priority
-            self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_truncate_first']}")
+            self.output(f"Changed receive notification truncation type from {temp_client_settings} to {self.ctx.client_settings['receive_truncate_first']}")
         else:
             self.output(f"Unknown priority: {priority}. Valid Inputs: PlayerName, ItemName")
 

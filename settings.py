@@ -98,6 +98,8 @@ class Group:
                     self._changed = True
                     attr = new
             # resolve the path immediately when accessing it
+            if attr.exists():
+                attr.__class__.validate(attr.resolve())
             return attr.__class__(attr.resolve())
         return attr
 
@@ -579,6 +581,17 @@ class ServerOptions(Group):
         "goal" -> Client can ask for remaining items after goal completion
         """
 
+    class CountdownMode(str):
+        """
+        Countdown modes
+        Determines whether or not a player can initiate a countdown with !countdown
+        Note that /countdown is always available to the host.
+
+        "enabled" -> Client can always initiate a countdown with !countdown.
+        "disabled" -> Client can never initiate a countdown with !countdown.
+        "auto" -> !countdown will be available for any room with less than 30 slots.
+        """
+
     class AutoShutdown(int):
         """Automatically shut down the server after this many seconds without new location checks, 0 to keep running"""
 
@@ -613,6 +626,7 @@ class ServerOptions(Group):
     release_mode: ReleaseMode = ReleaseMode("auto")
     collect_mode: CollectMode = CollectMode("auto")
     remaining_mode: RemainingMode = RemainingMode("goal")
+    countdown_mode: CountdownMode = CountdownMode("auto")
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
     log_network: LogNetwork = LogNetwork(0)
@@ -621,16 +635,18 @@ class ServerOptions(Group):
 class GeneratorOptions(Group):
     """Options for Generation"""
 
-    class EnemizerPath(LocalFilePath):
-        """Location of your Enemizer CLI, available here: https://github.com/Ijwu/Enemizer/releases"""
-        is_exe = True
-
     class PlayerFilesPath(OptionalUserFolderPath):
         """Folder from which the player yaml files are pulled from"""
         # created on demand, so marked as optional
 
     class Players(int):
         """amount of players, 0 to infer from player files"""
+
+    class AllowQuantity(Bool):
+        """
+        allow players to set an individual quantity for their yaml settings
+        with 'false' any amounts from the players will be ignored and set to 1
+        """
 
     class WeightsFilePath(str):
         """
@@ -675,9 +691,9 @@ class GeneratorOptions(Group):
         start_inventory -> Move remaining items to start_inventory, generate additional filler items to fill locations.
         """
 
-    enemizer_path: EnemizerPath = EnemizerPath("EnemizerCLI/EnemizerCLI.Core")  # + ".exe" is implied on Windows
     player_files_path: PlayerFilesPath = PlayerFilesPath("Players")
     players: Players = Players(0)
+    allow_quantity: AllowQuantity | bool = False
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")
     meta_file_path: MetaFilePath = MetaFilePath("meta.yaml")
     spoiler: Spoiler = Spoiler(3)

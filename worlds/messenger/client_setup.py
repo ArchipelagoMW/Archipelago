@@ -28,6 +28,8 @@ def create_yes_no_popup(title: str, text: str, callback: Callable[[str], None]) 
 
 def launch_game(*args) -> None:
     """Check the game installation, then launch it"""
+    prompt: ButtonsPrompt | None = None
+
     def courier_installed() -> bool:
         """Check if Courier is installed"""
         assembly_path = os.path.join(game_folder, "TheMessenger_Data", "Managed", "Assembly-CSharp.dll")
@@ -190,7 +192,7 @@ def launch_game(*args) -> None:
 
     def launch(answer: str | None = None) -> None:
         """Launch the game."""
-        nonlocal args
+        nonlocal args, prompt
 
         if prompt:
             prompt.dismiss()
@@ -256,3 +258,5 @@ def launch_game(*args) -> None:
         prompt = create_yes_no_popup("Launch Game",
                                      "Mod installed and up to date. Would you like to launch the game now?",
                                      launch)
+    else:
+        launch()

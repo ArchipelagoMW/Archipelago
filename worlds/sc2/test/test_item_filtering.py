@@ -11,7 +11,7 @@ class ItemFilterTests(Sc2SetupTestBase):
     def test_excluding_all_barracks_units_excludes_infantry_upgrades(self) -> None:
         world_options = {
             'excluded_items': {
-                item_groups.ItemGroupNames.BARRACKS_UNITS: 0
+                item_groups.ItemGroupNames.BARRACKS_UNITS: -1,
             },
             'required_tactics': 'standard',
             'min_number_of_upgrades': 1,

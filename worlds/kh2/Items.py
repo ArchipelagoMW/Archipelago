@@ -580,7 +580,6 @@ visit_locking_dict = {
         ItemName.IceCream,
         ItemName.WaytotheDawn,
         ItemName.IdentityDisk,
-        ItemName.IceCream,
         ItemName.NamineSketches
     ],
     "AllVisitLocking": {

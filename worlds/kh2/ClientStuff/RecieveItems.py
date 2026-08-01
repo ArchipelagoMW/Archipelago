@@ -426,9 +426,9 @@ async def displayChestTextInGame(self, string_to_display):
         print("wrote item picture")
         self.kh2_write_bytes(0x800154, displayed_string)  # text
         print("wrote text")
+        await asyncio.sleep(1)
         self.kh2_write_byte(0x800000, 3)  # displaying chest popup
         print("called chest popup")
-        await asyncio.sleep(1)
 
         self.queued_chest_popup.remove(string_to_display)
         await asyncio.sleep(0.5)

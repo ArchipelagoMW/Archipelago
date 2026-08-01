@@ -29,6 +29,8 @@ on:
       - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
 
+permissions: {}
+
 jobs:
   unit:
     runs-on: ${{ matrix.os }}
@@ -51,15 +53,15 @@ jobs:
             os: macos-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6.0.2
     - name: Set up Python ${{ matrix.python.version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6.2.0
       with:
         python-version: ${{ matrix.python.version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-subtests pytest-xdist
+        pip install -r ci-requirements.txt
         python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
         python Launcher.py --update_settings  # make sure host.yaml exists for tests
     - name: Unittests
@@ -78,9 +80,9 @@ jobs:
           - {version: '3.13'}  # current
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6.0.2
     - name: Set up Python ${{ matrix.python.version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6.2.0
       with:
         python-version: ${{ matrix.python.version }}
     - name: Install dependencies

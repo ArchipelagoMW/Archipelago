@@ -5,6 +5,8 @@
 * A legal copy of Hollow Knight.
     * Steam, Gog, and Xbox Game Pass versions of the game are supported.
     * Windows, Mac, and Linux (including Steam Deck) are supported.
+ 
+**Do NOT** install BepInEx, it is not required and is incompatible with most mods. Archipelago, along with the majority of mods use custom tooling pre-dating BepInEx, and they are only available through Lumafly and similar installers rather than sites like Nexus Mods.
 
 ## Installing the Archipelago Mod using Lumafly
 1. Launch Lumafly and ensure it locates your Hollow Knight installation directory.

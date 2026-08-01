@@ -277,7 +277,7 @@ class BountyRequired(Range):
     If Goal is not Hitlist or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Bounties Required"
     range_start = 1
-    range_end = 26
+    range_end = 42
     default = 7
 
 
@@ -287,13 +287,19 @@ class BountyAmount(Range):
     If Goal is not Hitlist or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Bounties Available"
     range_start = 1
-    range_end = 26
+    range_end = 42
     default = 10
 
 
 class BountyStartHint(Toggle):
     """Start with Bounties Hinted"""
     display_name = "Start with Bounties Hinted"
+    default = False
+
+
+class CasualBounties(Toggle):
+    """Adds more casual and generic locations that aren't superbosses to expand the bounty pool. (World Bosses, etc.)"""
+    display_name = "Add Casual Bounties"
     default = False
 
 
@@ -389,6 +395,7 @@ class KingdomHearts2Options(PerGameCommonOptions):
     Visitlocking: Visitlocking
     RandomVisitLockingItem: RandomVisitLockingItem
     SuperBosses: SuperBosses
+    CasualBounties: CasualBounties
     Cups: Cups
     SummonLevelLocationToggle: SummonLevelLocationToggle
     AtlanticaToggle: AtlanticaToggle

@@ -64,7 +64,7 @@ Si vous voulez valider votre fichier de configuration pour être sûr qu'il fonc
 2. Il vous sera alors présenté une page d'informations sur la seed
 3. Cliquez sur le lien "Create New Room".
 4. Vous verrez s'afficher la page du server, de laquelle vous pourrez télécharger votre fichier patch `.apmq`.
-5. Rendez-vous sur le [site FFMQR](https://ffmqrando.net/Archipelago).
+5. Rendez-vous sur le [site FFMQR](https://ap.ffmqrando.net/Archipelago).
 Sur cette page, sélectionnez votre ROM Final Fantasy Mystic Quest original dans le boîte "ROM", puis votre ficher patch `.apmq` dans la boîte "Load Archipelago Config File".
 Cliquez sur "Generate". Un téléchargement avec votre ROM aléatoire devrait s'amorcer.
 6. Puisque cette partie est à un seul joueur, vous n'avez plus besoin du client Archipelago ni du serveur, sentez-vous libre de les fermer.
@@ -77,7 +77,7 @@ Quand vous rejoignez un multiworld, il vous sera demandé de fournir votre fichi
 s'occupe de la génération. Une fois cela fait, l'hôte vous fournira soit un lien pour télécharger votre patch, soit un
 fichier `.zip` contenant les patchs de tous les joueurs. Votre patch devrait avoir l'extension `.apmq`.
 
-Allez au [site FFMQR](https://ffmqrando.net/Archipelago) et sélectionnez votre ROM Final Fantasy Mystic Quest original dans le boîte "ROM", puis votre ficher patch `.apmq` dans la boîte "Load Archipelago Config File".
+Allez au [site FFMQR](https://ap.ffmqrando.net/Archipelago) et sélectionnez votre ROM Final Fantasy Mystic Quest original dans le boîte "ROM", puis votre ficher patch `.apmq` dans la boîte "Load Archipelago Config File".
 Cliquez sur "Generate". Un téléchargement avec votre ROM aléatoire devrait s'amorcer.
 
 Ouvrez le client SNI (sur Windows ArchipelagoSNIClient.exe, sur Linux ouvrez le `.appImage` puis cliquez sur SNI Client), puis ouvrez le ROM téléchargé avec votre émulateur choisi.
@@ -123,10 +123,8 @@ Vous ne devez faire ces étapes qu'une fois. À noter que RetroArch 1.9.x ne fon
 1. Entrez dans le menu principal de RetroArch.
 2. Allez dans Settings --> User Interface. Activez l'option "Show Advanced Settings".
 3. Allez dans Settings --> Network. Activez l'option "Network Commands", qui se trouve sous "Request Device 16". 
-   Laissez le "Network Command Port" à sa valeur par defaut, qui devrait être 55355.
-
-
-![Capture d'écran du menu Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
+   Laissez le "Network Command Port" à sa valeur par defaut, qui devrait être 55355. \
+   ![Capture d'écran du menu Network Commands setting](../../generic/docs/retroarch-network-commands-fr.png)
 4. Allez dans le Menu Principal --> Online Updater --> Core Downloader. Trouvez et sélectionnez "Nintendo - SNES / SFC (bsnes-mercury
    Performance)".
 

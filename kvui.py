@@ -19,6 +19,7 @@ os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
+os.environ["SDL_MOUSE_FOCUS_CLICKTHROUGH"] = "1"
 
 import Utils
 
@@ -34,6 +35,28 @@ from kivy.config import Config
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
+
+# Workaround for Kivy issue #9226.
+# caused by kivy by default using probesysfs,
+# which assumes all multi touch deviecs are touch screens. 
+# workaround provided by Snu of the kivy commmunity c:
+from kivy.utils import platform
+if platform == "linux":
+    options = Config.options("input")
+    for option in options:
+        if Config.get("input", option) == "probesysfs":
+            Config.remove_option("input", option)
+
+# Workaround for an issue where importing kivy.core.window before loading sounds
+# will hang the whole application on Linux once the first sound is loaded.
+# kivymd imports kivy.core.window, so we have to do this before the first kivymd import.
+# No longer necessary when we switch to kivy 3.0.0, which fixes this issue.
+from kivy.core.audio import SoundLoader
+for classobj in SoundLoader._classes:
+    # The least invasive way to force a SoundLoader class to load its audio engine seems to be calling
+    # .extensions(), which e.g. in audio_sdl2.pyx then calls a function called "mix_init()"
+    classobj.extensions()
+
 from kivymd.uix.divider import MDDivider
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
@@ -99,6 +122,22 @@ class ThemedApp(MDApp):
         self.theme_cls.dynamic_scheme_contrast = text_colors.dynamic_scheme_contrast
 
 
+class LogtoLoadingScreen(logging.Handler):
+    def __init__(self, on_log):
+        super().__init__()
+        self.on_log = on_log
+
+    def handle(self, record: logging.LogRecord):
+        self.on_log(record.getMessage())
+
+
+class LoadingScreen(MDScreen):
+    label = ObjectProperty(None)
+
+    def update_text(self, text):
+        self.label.text = text
+
+
 class ImageIcon(MDButtonIcon, AsyncImage):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -116,7 +155,7 @@ class ImageButton(MDIconButton):
             val = kwargs.pop(kwarg, "None")
             if val != "None":
                 image_args[kwarg.replace("image_", "")] = val
-        super().__init__()
+        super().__init__(**kwargs)
         self.image = ApAsyncImage(**image_args)
 
         def set_center(button, center):
@@ -132,6 +171,7 @@ class ImageButton(MDIconButton):
 
 class ScrollBox(MDScrollView):
     layout: MDBoxLayout = ObjectProperty(None)
+    box_height: int = NumericProperty(dp(100))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -142,6 +182,7 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
     def __init__(self, *args, **kwargs):
         super(ToggleButton, self).__init__(*args, **kwargs)
         self.bind(state=self._update_bg)
+        self._update_bg(self, self.state)
 
     def _update_bg(self, _, state: str):
         if self.disabled:
@@ -159,7 +200,7 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
                 child.text_color = self.theme_cls.onPrimaryColor
                 child.icon_color = self.theme_cls.onPrimaryColor
         else:
-            self.md_bg_color = self.theme_cls.surfaceContainerLowestColor
+            self.md_bg_color = self.theme_cls.surfaceContainerLowColor
             for child in self.children:
                 if child.theme_text_color == "Primary":
                     child.theme_text_color = "Custom"
@@ -173,7 +214,6 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
 class ResizableTextField(MDTextField):
     """
     Resizable MDTextField that manually overrides the builtin sizing.
-
     Note that in order to use this, the sizing must be specified from within a .kv rule.
     """
     def __init__(self, *args, **kwargs):
@@ -237,7 +277,7 @@ Factory.register("HoverBehavior", HoverBehavior)
 
 
 class ToolTip(MDTooltipPlain):
-    pass
+    markup = True
 
 
 class ServerToolTip(ToolTip):
@@ -272,6 +312,8 @@ class TooltipLabel(HovererableLabel, MDTooltip):
     def on_mouse_pos(self, window, pos):
         if not self.get_root_window():
             return  # Abort if not displayed
+        if self.disabled:
+            return
         super().on_mouse_pos(window, pos)
         if self.refs and self.hovered:
 
@@ -337,15 +379,16 @@ class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
                     text += "\nPermissions:"
                     for permission_name, permission_data in ctx.permissions.items():
                         text += f"\n    {permission_name}: {permission_data}"
-                if ctx.hint_cost is not None and ctx.total_locations:
-                    min_cost = int(ctx.server_version >= (0, 3, 9))
-                    text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
-                            f"For you this means every " \
-                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
-                            "location checks." \
-                            f"\nYou currently have {ctx.hint_points} points."
-                elif ctx.hint_cost == 0:
-                    text += "\n!hint is free to use."
+                if ctx.total_locations and ctx.hint_cost is not None:
+                    if ctx.hint_cost == 0:
+                        text += "\n!hint is free to use."
+                    else:
+                        min_cost = int(ctx.server_version >= (0, 3, 9))
+                        text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
+                                f"For you this means every " \
+                                f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
+                                "location checks." \
+                                f"\nYou currently have {ctx.hint_points} points."
                 if ctx.stored_data and "_read_race_mode" in ctx.stored_data:
                     text += "\nRace mode is enabled." \
                         if ctx.stored_data["_read_race_mode"] else "\nRace mode is disabled."

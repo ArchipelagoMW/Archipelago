@@ -463,13 +463,13 @@ class MMBN3World(World):
         rompath: str = ""
 
         try:
-            world = self.multiworld
+            multiworld = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
 
             for location_name in location_table.keys():
-                location = world.get_location(location_name, player)
+                location = multiworld.get_location(location_name, player)
                 ap_item = location.item
                 item_id = ap_item.code
                 if item_id is not None:
@@ -511,7 +511,7 @@ class MMBN3World(World):
 
                         rom.insert_hint_text(location_data, item_name_text, long_item_text)
 
-            rom.inject_name(world.player_name[player])
+            rom.inject_name(self.player_name)
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
 
@@ -519,7 +519,7 @@ class MMBN3World(World):
             rom.write_to_file(rompath)
 
             patch = MMBN3DeltaPatch(os.path.splitext(rompath)[0]+MMBN3DeltaPatch.patch_file_ending, player=player,
-                                    player_name=world.player_name[player], patched_path=rompath)
+                                    player_name=self.player_name, patched_path=rompath)
             patch.write()
         except:
             raise

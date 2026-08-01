@@ -586,16 +586,18 @@ class KH2Context(CommonContext):
         if self.deathlink_toggle and self.kh2_read_byte(0x810000) == 0 and self.kh2_read_byte(0x810001) != 0:
             # set deathlink flag so it doesn't send out bunch
             # basically making the game think it got its death from a deathlink instead of from the game
-            self.kh2_write_byte(0x810000, 1)
+            self.kh2_write_byte(0x810000, 0)
             # 0x810001 is set to 1 when you die via the goa script. This is done because the polling rate for the client can miss a death
             # but the lua script runs eveery frame so we cant miss them now
             self.kh2_write_byte(0x810001, 0)
-            Room = self.kh2_read_byte(self.Now + 0x01)
-            Event = self.kh2_read_byte(self.Now + 0x08)
-            if (Room, Event) in DeathLinkPair.keys():
-                # remove the logger.info after testing phase/is in pr
-                logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(Room, Event)]}.")
-                await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(Room, Event)]}.")
+            #todo: read these from the goa lua instead since the deathlink is after they contiune which means that its just before they would've gotten into the fight
+            Room = self.kh2_read_byte(0x810002)
+            Event = self.kh2_read_byte(0x810003)
+            World = self.kh2_read_byte(0x810004)
+            if (World, Room, Event) in DeathLinkPair.keys():
+
+                logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(World,Room, Event)]}.")
+                await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(World,Room, Event)]}.")
             else:
                 logger.info(f"Deathlink: {self.player_names[self.slot]} lost their heart to darkness.")
                 await self.send_death(death_text=f"{self.player_names[self.slot]} lost their heart to darkness.")
@@ -705,6 +707,8 @@ async def kh2_watcher(ctx: KH2Context):
             elif not ctx.kh2connected and ctx.serverconnected:
                 logger.info("Game Connection lost. trying to reconnect.")
                 ctx.kh2 = None
+                #todo: change this to be an option for the client to auto reconnect with the default being yes
+                # reason is because the await sleep causes the client to hang if you close the game then the client without disconnecting.
                 while not ctx.kh2connected and ctx.serverconnected:
                     try:
                         ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")

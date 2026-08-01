@@ -23,6 +23,7 @@ def setup_options_from_slot_data(world: "TunicWorld") -> None:
             world.options.maskless.value = world.passthrough["maskless"]
             world.options.hexagon_quest.value = world.passthrough["hexagon_quest"]
             world.options.hexagon_quest_ability_type.value = world.passthrough.get("hexagon_quest_ability_type", 0)
+            world.options.hexagon_goal.value = world.passthrough["Hexagon Quest Goal"]
             world.options.entrance_rando.value = world.passthrough["entrance_rando"]
             world.options.shuffle_ladders.value = world.passthrough["shuffle_ladders"]
             world.options.shuffle_fuses.value = world.passthrough.get("shuffle_fuses", 0)
