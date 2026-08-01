@@ -243,12 +243,25 @@ class MMX5Client(BizHawkClient):
                 logger.info(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
                 self.last_gate_state = in_gameplay
                 # Savestates restore ALL of RAM including the loaded EXE, so
-                # the disc mode can CHANGE mid-session (e.g. a state made on
-                # an unpatched boot loaded over a patched one). Re-probe on
-                # every gate rising edge rather than trusting boot-time.
-                if in_gameplay:
-                    self.ap_patched = None
-                    self.stub_present = None
+                # the disc mode can CHANGE mid-session. Re-probe on EVERY
+                # gate transition (stage entry AND exit-to-hub).
+                self.ap_patched = None
+                self.stub_present = None
+
+            # Resolve the probes whenever unresolved - NOT just in-stage.
+            # Launches happen at the HUB (modes 0x13-0x15); the old
+            # in-gameplay-only resolution left ap_patched unresolved on a
+            # boot-to-hub path and score pinning silently no-oped (live
+            # 2026-08-01: an unpinned Enigma launch succeeded off vanilla
+            # accrual + the zeroed roll). During boot the EXE reads as
+            # zeros -> classify returns None -> retried next cycle.
+            if self.ap_patched is None or self.stub_present is None:
+                probe, stub_probe = await bizhawk.read(ctx.bizhawk_ctx, [
+                    (PATCH_PROBE_ADDR, 4, "MainRAM"),
+                    (STUB_PROBE_ADDR, 4, "MainRAM"),
+                ])
+                self.ap_patched = self._classify_probe(probe)
+                self.stub_present = self._classify_stub_probe(stub_probe)
 
             # ---- Wrong-save protection (A3): a sane save stamped for a
             # DIFFERENT seed/slot halts checks AND grants - its bits belong
@@ -383,16 +396,12 @@ class MMX5Client(BizHawkClient):
             if in_gameplay:
                 # Resolve disc mode if boot raced the EXE load; in gameplay
                 # the EXE is fully resident, so this settles on first cycle.
-                if self.ap_patched is None or self.stub_present is None:
-                    probe, stub_probe = await bizhawk.read(ctx.bizhawk_ctx, [
-                        (PATCH_PROBE_ADDR, 4, "MainRAM"),
-                        (STUB_PROBE_ADDR, 4, "MainRAM"),
-                    ])
-                    self.ap_patched = self._classify_probe(probe)
-                    self.stub_present = self._classify_stub_probe(stub_probe)
-                    if self.ap_patched is None:
-                        logger.warning(f"MMX5: probe still unrecognized in-game ({probe.hex()}) - grants held")
-                        return
+                # Probes resolve at the top of every cycle now; in-stage the
+                # EXE is fully resident so an unresolved probe here is
+                # genuinely abnormal - hold grants.
+                if self.ap_patched is None:
+                    logger.warning("MMX5: disc mode unresolved in-game - grants held")
+                    return
                 # Source of truth for "how many received items are already
                 # applied to THIS save" lives IN the save (u16 at 0x1C4E):
                 # memcard-persisted, savestate-coherent, restart-proof.
