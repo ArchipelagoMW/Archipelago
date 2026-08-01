@@ -57,26 +57,30 @@ def addr_to_disc(addr: int, region_name: str) -> int:
 # no vanilla effect - the client owns all grants; the item respawns until the
 # server confirms the check, which the client then acks by zeroing seq).
 PICKUP_STUB_ADDR = 0x800776A0          # free-space run A (zero in file, canaried)
+# v7: R3000 LOAD-DELAY-SLOT SAFE. A loaded value is not available to the
+# very next instruction on the PS1 CPU; the v3..v6 stubs did lbu/sb pairs
+# back-to-back and recorded every field one store late (live-diagnosed via
+# the s1 capture). Loads now interleave through t4/t5/t6 with their first
+# uses at least one instruction away - same layout the game's own compiled
+# code achieves with explicit NOPs (see the dispatcher's lbu; nop; sltiu).
 PICKUP_STUB = bytes.fromhex(
     "1f80083c"  # lui   t0, 0x801F
     "00a00835"  # ori   t0, t0, 0xA000     ; t0 = mailbox 0x801FA000
     "8000098d"  # lw    t1, 0x80(t0)       ; t1 = monotonic pickup count
+    "0d800b3c"  # lui   t3, 0x800D         ; (fills t1's load delay slot)
     "0f002a31"  # andi  t2, t1, 0xF        ; ring slot index
     "80500a00"  # sll   t2, t2, 2
-    "21500a01"  # addu  t2, t0, t2
-    "0d800b3c"  # lui   t3, 0x800D
-    "0c1c6c91"  # lbu   t4, 0x1C0C(t3)     ; stage id (spawn engine's input;
-                #   0x1C41 disproven live - read 0xE4 mid-stage)
+    "21500a01"  # addu  t2, t0, t2         ; t2 = mailbox + slot*4
+    "0c1c6c91"  # lbu   t4, 0x1C0C(t3)     ; stage id (spawn engine's input)
+    "82002d92"  # lbu   t5, 0x82(s1)       ; item kind (fills t4's delay)
+    "02002e92"  # lbu   t6, 0x02(s1)       ; item id   (fills t5's delay)
     "20004ca1"  # sb    t4, 0x20(t2)       ; slot+0: stage
-    "82002c92"  # lbu   t4, 0x82(s1)       ; item kind (0x922C: rs=s1 - the
-                #   v3/v4 stubs shipped 0x926C = s3, recording garbage)
-    "21004ca1"  # sb    t4, 0x21(t2)       ; slot+1: kind
-    "02002c92"  # lbu   t4, 0x02(s1)       ; item id (same s1 fix)
-    "22004ca1"  # sb    t4, 0x22(t2)       ; slot+2: id
+    "21004da1"  # sb    t5, 0x21(t2)       ; slot+1: kind
+    "22004ea1"  # sb    t6, 0x22(t2)       ; slot+2: id
     "7f002c31"  # andi  t4, t1, 0x7F
     "80008c35"  # ori   t4, t4, 0x80       ; seq = (count & 0x7F) | 0x80
     "23004ca1"  # sb    t4, 0x23(t2)       ; slot+3: seq
-    "a00051ad"  # sw    s1, 0xA0(t2)       ; v6 DEBUG: captured-object ptr ring
+    "a00051ad"  # sw    s1, 0xA0(t2)       ; DEBUG: captured-object ptr ring
                 #   at mailbox+0xA0 (remove before ship; harmless plain RAM)
     "01002925"  # addiu t1, t1, 1
     "f2500108"  # j     0x800543C8         ; consume item, no vanilla effect
