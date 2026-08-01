@@ -41,9 +41,9 @@ if install_cx_freeze:
     except ImportError:
         raise RuntimeError("pip not available. Please install pip.")
     # install and import cx_freeze
-    if '--yes' not in sys.argv and '-y' not in sys.argv:
-        input(f'Requirement {requirement} is not satisfied, press enter to install it')
-    subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '-c', 'setup_constraints.txt'])
+    if "--yes" not in sys.argv and "-y" not in sys.argv:
+        input(f"Requirement {requirement} is not satisfied, press enter to install it")
+    subprocess.call([sys.executable, "-m", "pip", "install", requirement, "-c", "setup_constraints.txt"])
     import pkg_resources
 
 import cx_Freeze
