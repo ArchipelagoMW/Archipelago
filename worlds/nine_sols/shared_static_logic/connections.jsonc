@@ -1317,15 +1317,34 @@
     },
     {
         "from": "IW - Upper Right Statue", "to": "IW - Above Frogs",
-        "requires": [ { "anyOf": [
-            { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Ledge Grab" }
+        "requires": [ { "anyOf": [ // to cross the gap after dropping down through the grapple platform
+            { "item": "Cloud Leap" },
+            { "item": "Air Dash" },
+            { "item": "Ledge Grab" }
         ] } ],
         "medium_requires": [] // T-dash
     },
     {
         "from": "IW - Above Frogs", "to": "IW - Upper Right Statue",
-        "requires": [ { "item": "Grapple" } ],
-        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // CL + LS vault
+        "requires": [
+            { "anyOf": [ // to cross the gap on the right side of the central platforms
+                { "item": "Cloud Leap" },
+                { "item": "Air Dash" },
+                { "item": "Ledge Grab" }
+            ] },
+            { "item": "Grapple" }
+        ],
+        "medium_requires": [ // T-dash to cross the gap
+            { "item": "Grapple" }
+        ],
+        "ls_requires": [
+            { "item": "Ledge Grab" }, // wall slide to bypass the grapple target
+            { "anyOf": [ // still need to 1) set up LS and 2) cross the gap
+                { "item": "Cloud Leap" }, // solves both, also allows triple jump instead of wall slide
+                { "item": "Air Dash" }, // solves both
+                { "item": "Trick - Long Jump with Swift Runner" } // solves the gap, allowing T-dash LS setup
+            ] }
+        ]
     },
     { "from": "IW - Above Frogs", "to": "IW - Root Node", "requires": [] }, // fall
     { "from": "IW - Above Frogs", "to": "IW - Bottom Left", "requires": [ { "item": "Wall Climb" } ] },
