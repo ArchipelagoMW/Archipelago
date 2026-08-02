@@ -1981,7 +1981,7 @@ class Rac3Interface(GameInterface):
             wrench_level = wrench_func + RAC3WRENCH.UPGRADE_ID_OFFSET
             target_id = UPGRADE_DICT[RAC3ITEM.WRENCH][prog_wrench.status]    
             logger.info (f"Wrench current level:{hex(current_wrench_level)}")
-            if current_wrench_level != 0x09:       
+            if current_wrench_level == 0x09:       
                 self._write8(RAC3STATUS.WRENCH_LEVEL, target_id)
             else:
                 self._write8(wrench_level, target_id)
