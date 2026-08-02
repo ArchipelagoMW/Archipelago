@@ -171,7 +171,18 @@ generally. Endgame bosses do NOT route through the 0x0C results screen at all,
 which is why the existing patchless kill detect (mode 0x0C + sortie id 1-8)
 cannot see them.
 
-### ✅ SIGMA VICTORY DETECTION — SOLVED 2026-08-01
+### ✅ SIGMA VICTORY DETECTION — SOLVED **AND LIVE-VALIDATED** 2026-08-01
+
+**End-to-end proof (2026-08-01 23:02):** loaded a savestate from just before the
+Sigma kill, landed the final blow, mode walked `0A→13→14` then (≈4700 frames /
+78 s of cutscene later) `14→10→11`. The client fired `CLIENT_GOAL`, the server
+committed it (smoke.apsave 3870→4010 bytes, written the same minute), and AP
+auto-released the slot's remaining items — that release only happens on a
+genuine goal status, so it is independent confirmation the server processed it,
+not just a client-side log line.
+⚠️ **The cutscene delay is real**: ~78 seconds elapse between the kill
+(`13→14`) and the ending modes. Do not conclude the detection failed during
+that window — wait for `14→10`.
 
 Five RAM dumps bracketing a real Sigma kill (fight start ×2, post-kill,
 cutscene, credits) plus the mode log give the full sequence after the final
