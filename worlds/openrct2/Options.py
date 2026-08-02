@@ -446,6 +446,7 @@ class ExcludeSafestPark(Toggle):
     """Exclude the Safest Park Award from having a check. This may be useful depending on deathlink settings."""
     display_name = "Exclude Safest Park Award"
 
+
 class SelectedDifficulty(Choice):
     """Choose a difficulty for the randomization. This will make rides have more difficult stat results (If that's enabled), as well as affect
     things such as the loan interest rate.
@@ -707,6 +708,74 @@ class ShopMaximumTotalCustomers(Range):
     range_end = 1000
     default = 400
 
+class ShopMaximumRollerCoasters(Range):
+    """When the shop requires multiple roller coasters, sets the maximum 
+    it can ask for. The default is the reccomended value.
+    """
+    display_name = "Maximum Roller Coasters Required"
+    range_start = 1
+    range_end = 10
+    default = 3
+
+class ShopMaximumTrackedRides(Range):
+    """When the shop requires multiple tracked rides, sets the maximum 
+    it can ask for. The default is the reccomended value.
+    """
+    display_name = "Maximum Tracked Rides Required"
+    range_start = 1
+    range_end = 10
+    default = 4
+
+class ShopMaximumSpecificRidesEarly(Range):
+    """When the shop requires a specific, trackless ride 
+    early in the game, sets the maximum it can ask for. The 
+    default is the reccomended value.
+    """
+    display_name = "Maximum Specific Rides (Early) Required"
+    range_start = 1
+    range_end = 10
+    default = 3
+
+class ShopMaximumSpecificRides(Range):
+    """When the shop requires a specific, trackless ride 
+    later in the game, sets the maximum it can ask for. 
+    The default is the reccomended value.
+    """
+    display_name = "Maximum Specific Rides Required"
+    range_start = 1
+    range_end = 10
+    default = 7
+
+class ShopMaximumTransportWater(Range):
+    """When the shop requires transport rides, water rides, 
+    and unwieldy roller coasters, sets the maximum it can ask 
+    for. The default is the reccomended value.
+    """
+    display_name = "Maximum Transport/Water Rides Required"
+    range_start = 1
+    range_end = 10
+    default = 3
+
+class ShopMaximumStalls(Range):
+    """When the shop requires shops and stalls, sets the 
+    maximum it can ask for. The default is the 
+    reccomended value.
+    """
+    display_name = "Maximum Stalls Required"
+    range_start = 1
+    range_end = 10
+    default = 10
+
+class ShopMaximumOtherRides(Range):
+    """When the shop requires other rides and categories, 
+    (Mostly flat rides) sets the maximum it can ask for. 
+    The default is the reccomended value.
+    """
+    display_name = "Maximum Other Rides Required"
+    range_start = 1
+    range_end = 10
+    default = 10
+
 class BalanceGuestCounts(DefaultOnToggle):
     """Attempts to balance the minimum guest requirements to the ride they're attached to. Low throughput rides
     like Spiral Slides will tend towards the minimum, while high throughput rides like roller coasters will 
@@ -891,6 +960,10 @@ openrct2_option_groups = [
         SelectedForbidTreeRemoval
     ]),
     OptionGroup("Shop Options", [
+        BalanceGuestCounts,
+        SelectedVisibility,
+        SelectedAwards,
+        ExcludeSafestPark,
         ShopMinimumExcitement,
         ShopMaximumExcitement,
         ShopMinimumIntensity,
@@ -901,10 +974,13 @@ openrct2_option_groups = [
         ShopMaximumLength,
         ShopMinimumTotalCustomers,
         ShopMaximumTotalCustomers,
-        BalanceGuestCounts,
-        SelectedVisibility,
-        SelectedAwards,
-        ExcludeSafestPark
+        ShopMaximumRollerCoasters,
+        ShopMaximumTrackedRides,
+        ShopMaximumSpecificRidesEarly,
+        ShopMaximumSpecificRides,
+        ShopMaximumTransportWater,
+        ShopMaximumStalls,
+        ShopMaximumOtherRides
     ]),
     OptionGroup("Item & Trap Options", [
         Filler,
@@ -971,6 +1047,10 @@ class openRCT2Options(PerGameCommonOptions):
     forbid_tree_removal: SelectedForbidTreeRemoval
 
     #Shop Options
+    balance_guest_counts: BalanceGuestCounts
+    visibility: SelectedVisibility
+    selected_awards: SelectedAwards
+    exclude_safest_park: ExcludeSafestPark
     shop_minimum_excitement: ShopMinimumExcitement
     shop_maximum_excitement: ShopMaximumExcitement
     shop_minimum_intensity: ShopMinimumIntensity
@@ -981,10 +1061,14 @@ class openRCT2Options(PerGameCommonOptions):
     shop_maximum_length: ShopMaximumLength
     shop_minimum_total_customers: ShopMinimumTotalCustomers
     shop_maximum_total_customers: ShopMaximumTotalCustomers
-    balance_guest_counts: BalanceGuestCounts
-    visibility: SelectedVisibility
-    selected_awards: SelectedAwards
-    exclude_safest_park: ExcludeSafestPark
+    shop_maximum_roller_coasters: ShopMaximumRollerCoasters
+    shop_maximum_tracked_rides: ShopMaximumTrackedRides
+    shop_maximum_specific_rides_early: ShopMaximumSpecificRidesEarly
+    shop_maximum_specific_rides: ShopMaximumSpecificRides
+    shop_maximum_transport_water_rides: ShopMaximumTransportWater
+    shop_maximum_stalls: ShopMaximumStalls
+    shop_maximum_other_rides: ShopMaximumOtherRides
+    
 
     #Item and Trap Options
     filler: Filler
