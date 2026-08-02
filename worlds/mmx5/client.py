@@ -82,13 +82,11 @@ OFF_SCORE_MOD = 0x0D1CCA - SAVE_BASE   # additive modifier byte
 OFF_LAUNCH_FLAGS = 0x0D1CCB - SAVE_BASE
 OFF_COUNTDOWN = 0x0D1CAC - SAVE_BASE
 COUNTDOWN_FROZEN = 8 * 0x34BC0         # 8 hours, pinned (design answer 5)
-# ⚠️ THIS PIN MAY BE LOAD-BEARING FOR THE DNA REWARD LOCATIONS - do not
-# remove or retune it as "cleanup" without reading the note in game_watcher.
-# Alia offers the DNA choice only for a boss of LEVEL 4+, bosses do NOT
-# respawn, and boss level appears to track elapsed time. Forcing 8 h from the
-# first stage may be the only reason every boss clears that bar - and if so,
-# unpinning would silently make 8 checks permanently MISSABLE.
-# (Whether boss level actually derives from this is still unverified.)
+# (This pin was briefly load-bearing for the DNA reward checks - Alia's prompt
+# needs a boss of level 4+ and boss level appears to track elapsed time. That
+# coupling is GONE: DNA checks now ride the boss kill itself, so the pin is
+# back to being purely about sortie budget / time pressure and can be retuned
+# on its own merits.)
 GOAL_SIGMA = 0
 GOAL_LAUNCH = 1
 
@@ -217,7 +215,6 @@ class MMX5Client(BizHawkClient):
         self.unknown_records_logged = set()
         self.stamp_warned = False
         self.victory_sent = False
-        self.dna_seen = {}   # stage id -> logged once (first-observation aid)
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -362,7 +359,19 @@ class MMX5Client(BizHawkClient):
             weapons_owned = save[OFF_WEAPONS]
             for bit, weapon in enumerate(WEAPON_BITS):
                 stage = next(s for s, w in names.BOSS_WEAPON.items() if w == weapon)
-                check(names.boss_location(stage), bool(weapons_owned & (1 << bit)))
+                beaten = bool(weapons_owned & (1 << bit))
+                check(names.boss_location(stage), beaten)
+                # The DNA reward check rides the BOSS KILL, not the reward
+                # prompt. Vanilla only offers Alia's "Weapon + Life/Energy"
+                # choice for a boss of level 4+, and bosses do NOT respawn
+                # (live: entering a cleared boss room just ends the stage), so
+                # keying off the prompt would make this check permanently
+                # MISSABLE for anyone who killed a Maverick early. Keying off
+                # the kill makes it unmissable and independent of boss level,
+                # the countdown pin, and whether the player even noticed the
+                # prompt. The vanilla stat gain still happens when the prompt
+                # does appear - it is simply no longer what we detect.
+                check(names.dna_location(stage), beaten)
 
             hearts = save[OFF_HEARTS]
             for bit in range(8):
@@ -372,49 +381,15 @@ class MMX5Client(BizHawkClient):
                         check(names.heart_location(stage), True)
                     # Unmapped bits: intentionally unsent until verified.
 
-            # ---- DNA reward choice (post-boss "Weapon + Life" / "Weapon +
-            # Energy"). Replaces the old kind-1 "Energy Up pickup" detection,
-            # which was dead code: Energy Ups are NOT stage items and the stub
-            # never once recorded a kind-1 pickup.
-            # The reward lands in the SAME u32 as heart tanks (0x800D1C80):
-            # reward ids 0-7 set bits 8-15 (+2 max HP, Life Up), ids 8-15 set
-            # bits 24-31 (+2 max WE, Energy Up), applier ~0x800EFB40 with the
-            # mask table at 0x800F4ED0. Reward id = stage id - 1 for Life Ups
-            # and 8 + (stage id - 1) for Energy Ups, so both land on bit
-            # (stage id - 1) of their respective BYTE. Either choice checks the
-            # same location - the player made the choice, which is the event.
-            # The vanilla stat grant is deliberately NOT suppressed - this
-            # detection reads the bits the vanilla applier writes, so
-            # suppressing it would silently kill the check.
-            # ⚠️ TWO things here are unverified:
-            #   1. The id == stage-1 relation rests on ONE observation
-            #      (2026-07-31: Life Up id 5 on stage 6 -> u32 bit 13). Wrong
-            #      => checks land on the WRONG stage's location.
-            #   2. Alia only offers the choice for a boss of LEVEL 4+, and
-            #      BOSSES DO NOT RESPAWN (live 2026-08-02: entering a cleared
-            #      boss room just ends the stage). So a Maverick killed below
-            #      level 4 loses its DNA reward PERMANENTLY - these checks may
-            #      be MISSABLE, which is worse than merely absent: generation
-            #      will place progression on them regardless.
-            #      The countdown pin may be what saves this - it forces 8 h
-            #      from the first stage, so if boss level derives from elapsed
-            #      time every boss sits at "8 hours" level. IF THAT IS THE
-            #      MECHANISM, removing the pin silently makes 8 checks
-            #      missable. See COUNTDOWN_FROZEN.
-            # The logger below fires once per stage to make both cheap to
-            # check on the next playthrough.
-            life_ups = save[OFF_HEARTS + 1]     # 0x1C81, u32 bits 8-15
-            energy_ups = save[OFF_HEARTS + 3]   # 0x1C83, u32 bits 24-31
-            for stage_id, stage_name in STAGE_ID_TO_NAME.items():
-                got = (life_ups | energy_ups) & (1 << (stage_id - 1))
-                if got:
-                    if not self.dna_seen.get(stage_id):
-                        self.dna_seen[stage_id] = True
-                        logger.info(
-                            f"MMX5: DNA reward taken for {stage_name} "
-                            f"(stage id {stage_id}: life={life_ups:02X} "
-                            f"energy={energy_ups:02X})")
-                    check(names.dna_location(stage_name), True)
+            # NOTE: the DNA reward locations are checked with the boss kill
+            # above, NOT from the reward bits in 0x800D1C80 (Life-Up bits
+            # 8-15 / Energy-Up bits 24-31, applier ~0x800EFB40). Detecting the
+            # actual reward was tried and rejected: the prompt only appears
+            # for a boss of level 4+ and bosses never respawn, so it would
+            # make the check permanently missable. Those bits remain useful
+            # for RESEARCH - Scripts/mmx5_dna_watch.lua decodes them - but the
+            # client no longer depends on them, which is also what frees
+            # COUNTDOWN_FROZEN from being load-bearing.
 
             # ---- Pickup-stub ring (stub discs only): the stub suppresses
             # vanilla pickup effects, so heart/tank save bits never set
