@@ -82,6 +82,13 @@ OFF_SCORE_MOD = 0x0D1CCA - SAVE_BASE   # additive modifier byte
 OFF_LAUNCH_FLAGS = 0x0D1CCB - SAVE_BASE
 OFF_COUNTDOWN = 0x0D1CAC - SAVE_BASE
 COUNTDOWN_FROZEN = 8 * 0x34BC0         # 8 hours, pinned (design answer 5)
+# ⚠️ THIS PIN MAY BE LOAD-BEARING FOR THE DNA REWARD LOCATIONS - do not
+# remove or retune it as "cleanup" without reading the note in game_watcher.
+# Alia offers the DNA choice only for a boss of LEVEL 4+, bosses do NOT
+# respawn, and boss level appears to track elapsed time. Forcing 8 h from the
+# first stage may be the only reason every boss clears that bar - and if so,
+# unpinning would silently make 8 checks permanently MISSABLE.
+# (Whether boss level actually derives from this is still unverified.)
 GOAL_SIGMA = 0
 GOAL_LAUNCH = 1
 
@@ -384,9 +391,16 @@ class MMX5Client(BizHawkClient):
             #      (2026-07-31: Life Up id 5 on stage 6 -> u32 bit 13). Wrong
             #      => checks land on the WRONG stage's location.
             #   2. Alia only offers the choice for a boss of LEVEL 4+, and
-            #      boss level rises with elapsed time while we PIN the
-            #      countdown. If pinning keeps levels below 4 the prompt never
-            #      appears and all 8 of these are phantoms.
+            #      BOSSES DO NOT RESPAWN (live 2026-08-02: entering a cleared
+            #      boss room just ends the stage). So a Maverick killed below
+            #      level 4 loses its DNA reward PERMANENTLY - these checks may
+            #      be MISSABLE, which is worse than merely absent: generation
+            #      will place progression on them regardless.
+            #      The countdown pin may be what saves this - it forces 8 h
+            #      from the first stage, so if boss level derives from elapsed
+            #      time every boss sits at "8 hours" level. IF THAT IS THE
+            #      MECHANISM, removing the pin silently makes 8 checks
+            #      missable. See COUNTDOWN_FROZEN.
             # The logger below fires once per stage to make both cheap to
             # check on the next playthrough.
             life_ups = save[OFF_HEARTS + 1]     # 0x1C81, u32 bits 8-15
