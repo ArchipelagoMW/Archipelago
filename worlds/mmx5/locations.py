@@ -1,5 +1,3 @@
-from typing import Dict, Optional
-
 from BaseClasses import Location
 
 from . import names
@@ -12,7 +10,7 @@ class MMX5Location(Location):
 
 # Location ids: intro at +0; per-stage blocks of 10 starting at +100.
 # Stage order here fixes the id layout - append only, never reorder.
-location_table: Dict[str, int] = {names.INTRO_CLEAR: BASE_ID + 0}
+location_table: dict[str, int] = {names.INTRO_CLEAR: BASE_ID + 0}
 
 for i, stage in enumerate(names.STAGES):
     base = BASE_ID + 100 + i * 10
@@ -32,7 +30,7 @@ for i, stage in enumerate(names.STAGES):
     location_table[names.dna_part_location(stage)] = base + 5
     # +6.. reserved
 
-event_location_table: Dict[str, Optional[int]] = {
+event_location_table: dict[str, int | None] = {
     names.VICTORY: None,
 }
 

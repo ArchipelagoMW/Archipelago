@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 
@@ -12,14 +12,14 @@ class MMX5Item(Item):
 
 
 class ItemData(NamedTuple):
-    code: Optional[int]
+    code: int | None
     classification: ItemClassification
     count: int = 1  # copies placed in the pool
 
 
 # Weapons are progression: weakness-based boss logic and several collectibles
 # gated behind specific weapons will use them once rules are fleshed out.
-item_table: Dict[str, ItemData] = {
+item_table: dict[str, ItemData] = {
     names.CSHOT:       ItemData(BASE_ID + 0, ItemClassification.progression),
     names.DARK_HOLD:   ItemData(BASE_ID + 1, ItemClassification.progression),
     names.GOO_SHAVER:  ItemData(BASE_ID + 2, ItemClassification.progression),
@@ -53,7 +53,7 @@ item_table: Dict[str, ItemData] = {
     names.SMALL_ENERGY: ItemData(BASE_ID + 40, ItemClassification.filler, 0),
 }
 
-event_table: Dict[str, ItemData] = {
+event_table: dict[str, ItemData] = {
     names.VICTORY: ItemData(None, ItemClassification.progression),
 }
 
@@ -62,4 +62,9 @@ item_groups = {
                 names.TRI_THUNDER, names.F_LASER, names.SPIKE_BALL, names.WING_SPIRAL},
     "Falcon Armor": {names.FALCON_HEAD, names.FALCON_BODY, names.FALCON_ARM, names.FALCON_LEG},
     "Gaea Armor": {names.GAEA_HEAD, names.GAEA_BODY, names.GAEA_ARM, names.GAEA_LEG},
+    # Hint/item-link aliases.
+    "Armor": {names.FALCON_HEAD, names.FALCON_BODY, names.FALCON_ARM, names.FALCON_LEG,
+              names.GAEA_HEAD, names.GAEA_BODY, names.GAEA_ARM, names.GAEA_LEG},
+    "Tanks": {names.SUB_TANK, names.W_TANK, names.EX_TANK},
+    "Launcher Parts": {names.ENIGMA_PART, names.SHUTTLE_PART},
 }

@@ -1,10 +1,12 @@
 """BizHawkClient for Mega Man X5 (PS1, SLUS-01334, NTSC-U).
 
-Skeleton status — working core:
+Working core:
   * validates the game via the boot-EXE signature at 0x80010000
   * detects checks from the persistent save struct (weapons, heart tanks, intro)
   * grants received weapons and heart tanks by writing the save struct
-All addresses verified in the workspace RAM notes (Reference/mmx5-ram-notes.md).
+All addresses verified in the research notes (mmx5-ram-notes.md, in
+worlds/mmx5/docs/ on the author's fork: github.com/Shinnuu/Archipelago,
+branch mmx5-apworld).
 
 Known interim policies (deliberate, revisit before release):
   * HYBRID grants: locally-earned weapon bits are never cleared, so beating a
@@ -29,7 +31,10 @@ Known interim policies (deliberate, revisit before release):
     set-completion flags (0x1C4A) follow at the next results screen
     (vanilla logic). No capsule detection on vanilla discs (0x1CA1 bits
     would conflate AP grants with local pickups).
-  * Victory detection (Sigma) TODO.
+  * Victory detection: sigma goal fires on the ending mode bytes
+    (0x800D1C00 walks 0x10 -> 0x11/credits after the final blow — allow the
+    ~78 s cutscene gap); launch goal fires on the launch-success flag
+    (0x1CCB bit 7) once all 8 parts are in hand. Both observed live.
 """
 import logging
 from typing import TYPE_CHECKING
@@ -82,7 +87,7 @@ OFF_SCORE_MOD = 0x0D1CCA - SAVE_BASE   # additive modifier byte
 OFF_LAUNCH_FLAGS = 0x0D1CCB - SAVE_BASE
 OFF_COUNTDOWN = 0x0D1CAC - SAVE_BASE
 # Countdown pin, in HOURS, per the boss_difficulty option. The hours remaining
-# set the BOSS LEVEL BASE (Reference/mmx5-ram-notes.md "Boss Level formula"):
+# set the BOSS LEVEL BASE (mmx5-ram-notes.md "Boss Level formula"):
 #   16-17 -> 1, 14-15 -> 3, 12-13 -> 5, 10-11 -> 7, 8-9 -> 9,
 #    6-7  -> 11, 4-5 -> 13, 2-3 -> 15, 0-1 -> 17
 # Level 4+ unlocks the Life/Energy Up choice, 8+ the Life+/Energy+ tier with an
@@ -113,7 +118,7 @@ GOAL_SIGMA = 0
 GOAL_LAUNCH = 1
 
 # Sigma victory detection (live-captured 2026-08-01, five RAM dumps bracketing
-# a real Sigma kill; see Reference/mmx5-ram-notes.md "Endgame / Zero Space").
+# a real Sigma kill; see mmx5-ram-notes.md "Endgame / Zero Space").
 # Endgame bosses do NOT route through the 0x0C results screen, so the patchless
 # maverick kill detect (mode 0x0C + sortie id 1-8) can never see Sigma. What
 # the mode byte 0x800D1C00 does after the final blow is:
@@ -397,7 +402,7 @@ class MMX5Client(BizHawkClient):
                 # the countdown pin, and whether the player noticed the prompt.
                 # The vanilla stat gain still happens when the prompt appears -
                 # it is simply no longer what we detect.
-                # (Boss level formula: Reference/mmx5-ram-notes.md.)
+                # (Boss level formula: mmx5-ram-notes.md.)
                 check(names.dna_location(stage), beaten)
                 # Third reward from the same kill: the equippable Part granted
                 # with the level-8+ Life+/Energy+ tier (DNA parts u32

@@ -92,7 +92,7 @@ class MMX5ProcedurePatch(APProcedurePatch):
 
 
 def patch_rom(world: "MMX5World", patch: MMX5ProcedurePatch) -> None:
-    """Collect per-seed edits. The scaffold ships none - option-driven edits
+    """Collect per-seed edits. v0.1.0 ships none - option-driven edits
     (countdown behavior, launch determinism, seed/slot stamp once a canary-
     validated free-space home exists) land here as {addr, hex, region} rows."""
     seed_edits: list = []

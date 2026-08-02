@@ -4,14 +4,15 @@ Self-contained: PS1-RAM-address -> raw .bin offset mapping, Mode2 Form1
 EDC/ECC regeneration, and the AP basepatch edit list. Everything the patch
 does to the image funnels through apply_basepatch() so that parity
 regeneration ALWAYS runs last over every touched sector - BizHawk's disc
-layer error-corrects un-reparitied edits back to vanilla (workspace
-Reference/mmx5-overlay-findings.md §9.0 documents the live failure).
+layer error-corrects un-reparitied edits back to vanilla
+(mmx5-overlay-findings.md §9.0 documents the live failure).
 
-Research provenance for every address lives in the project workspace
-(mmx5-overlay-findings.md, mmx5-ram-notes.md); this module only carries
-what the shipping patch needs.
+Research provenance for every address lives in the project's research notes
+(mmx5-overlay-findings.md, mmx5-ram-notes.md - found in worlds/mmx5/docs/ on
+the author's fork: github.com/Shinnuu/Archipelago, branch mmx5-apworld); this
+module only carries what the shipping patch needs.
 """
-from typing import Dict, Iterable, List, Tuple
+from collections.abc import Iterable
 
 SECTOR_RAW = 2352
 USER_OFF = 24          # Mode2 Form1: 12 sync + 4 header + 8 subheader
@@ -21,7 +22,7 @@ USER_LEN = 2048
 # in that sector's user data). SLUS text/data begins at sector 23433 (23432 is
 # the 2048-byte PS-EXE header); the results-screen overlay module streams from
 # sector 24073 to its EXE-descriptor dest 0x800EE970.
-REGIONS: List[Tuple[str, int, int, int, int]] = [
+REGIONS: list[tuple[str, int, int, int, int]] = [
     ("SLUS exe", 0x80010000, 0x80092000, 23433, 0),
     ("results overlay", 0x800EE970, 0x800F9000, 24073, 0),
     # Launch cutscene module: resolution fn's only on-disc copy; mapping
@@ -128,7 +129,7 @@ CAPSULE_STUB = bytes.fromhex(
     "800009ad"  # sw    t1, 0x80(t0)       ; (delay slot) commit count
 )
 
-BASE_EDITS: List[Tuple[int, bytes, str]] = [
+BASE_EDITS: list[tuple[int, bytes, str]] = [
     (0x8003C324, b"\x4D", "SLUS exe"),
     (0x8003D660, b"\x4D", "SLUS exe"),
     (0x8003D814, b"\x4D", "SLUS exe"),
@@ -213,11 +214,11 @@ def regenerate_sector(image: bytearray, sector: int) -> None:
     image[base:base + SECTOR_RAW] = sec
 
 
-def apply_basepatch(rom: bytes, extra_edits: Iterable[Tuple[int, bytes, str]] = ()) -> bytes:
+def apply_basepatch(rom: bytes, extra_edits: Iterable[tuple[int, bytes, str]] = ()) -> bytes:
     """Apply BASE_EDITS (+ per-seed extras), then regenerate EDC/ECC for every
     touched sector. The single funnel for all image modification."""
     image = bytearray(rom)
-    touched: Dict[int, None] = {}
+    touched: dict[int, None] = {}
     for addr, payload, region in list(BASE_EDITS) + list(extra_edits):
         for i, b in enumerate(payload):
             off = addr_to_disc(addr + i, region)

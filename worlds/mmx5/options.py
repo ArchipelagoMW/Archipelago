@@ -18,29 +18,26 @@ class Goal(Choice):
 
 
 class BossDifficulty(Choice):
-    """Boss Level base, set by pinning the collision countdown.
+    """Starting Boss Level, set via the frozen collision countdown.
 
-    X5 computes Boss Level as: a BASE from hours remaining on the countdown,
-    +1 per Maverick defeated, +1 per special weapon owned, plus a Hunter Rank
-    bonus - recalculated at the start of every stage. It scales boss HP (not
-    attack patterns) and gates the post-boss reward: level 4+ gives the
-    Life/Energy Up choice, level 8+ gives Life+/Energy+ AND an equippable Part.
+    X5 scales boss HP (not attack patterns) with a Boss Level: a base from the
+    countdown, plus 1 per Maverick defeated and per special weapon owned.
+    Higher levels also unlock better post-boss rewards in-game.
 
-    The client pins the countdown, so the BASE is fixed for the whole run while
-    the Maverick and weapon terms still climb - bosses still get stronger as
-    you progress, they just start from the base you pick here.
+    relaxed: base 1. Gentlest bosses; the better vanilla reward tiers arrive
+    only late in the run.
+    standard: base 9. Every boss offers the top vanilla reward tier.
+    intense: base 17. Hardest bosses; top reward tier throughout.
 
-    relaxed: 17 hours -> base 1. Gentlest bosses; the Life/Energy Up choice
-    only starts appearing once you have a few Mavericks and weapons, and the
-    Part tier arrives late.
-    standard: 8 hours -> base 9. Every boss offers the top reward tier from the
-    very first fight. (This was the previous hardcoded behaviour.)
-    intense: 1 hour -> base 17. Hardest bosses; top reward tier throughout.
-
-    Note: AP checks never depend on this - the DNA reward locations are checked
-    when the boss dies, not when the reward prompt appears - so any setting is
-    safe for seed completion. It changes difficulty and vanilla stat pacing.
+    Any setting is safe for seed completion - Archipelago checks never depend
+    on Boss Level (DNA locations are checked on the boss kill itself).
     """
+    # Implementation: the client pins the countdown frames (relaxed 17 h,
+    # standard 8 h, intense 1 h; hours-remaining -> base per the formula in
+    # the research notes, mmx5-ram-notes.md). The base stays fixed all run
+    # while the Maverick
+    # and weapon terms still climb. "standard" reproduces the previously
+    # hardcoded 8-hour pin.
     display_name = "Boss Difficulty"
     option_relaxed = 0
     option_standard = 1

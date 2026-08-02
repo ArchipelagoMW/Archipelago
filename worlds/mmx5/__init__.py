@@ -1,11 +1,12 @@
 """Archipelago world for Mega Man X5 (PS1, NTSC-U, SLUS-01334).
 
-Scaffold status: generates. Client (BizHawkClient) and real reachability rules
-are the next phases. RAM interface documentation lives outside the repo in the
-project workspace (Reference/mmx5-ram-notes.md).
+Feature-complete: generation, reachability rules, disc patch (via Rom.py /
+disc.py) and the BizHawkClient are all wired. The RAM interface research notes
+(mmx5-ram-notes.md and friends) live in worlds/mmx5/docs/ on the author's
+fork: github.com/Shinnuu/Archipelago, branch mmx5-apworld.
 """
 import os
-from typing import Any, ClassVar, Dict
+from typing import Any, ClassVar
 
 import settings
 from BaseClasses import ItemClassification, Region, Tutorial
@@ -33,6 +34,7 @@ class MMX5Settings(settings.Group):
 
 class MMX5Web(WebWorld):
     theme = "grassFlowers"
+    bug_report_page = "https://github.com/Shinnuu/Archipelago/issues"
     setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Mega Man X5 with Archipelago.",
@@ -64,7 +66,8 @@ class MMX5World(World):
     item_name_groups = item_groups
     location_name_groups = location_groups
 
-    required_client_version = (0, 6, 0)
+    # Matches minimum_ap_version in archipelago.json.
+    required_client_version = (0, 6, 8)
 
     def create_item(self, name: str) -> MMX5Item:
         if name in item_table:
@@ -213,7 +216,7 @@ class MMX5World(World):
             output_directory,
             f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}"))
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return {
             "goal": self.options.goal.value,
             "boss_difficulty": self.options.boss_difficulty.value,
