@@ -210,6 +210,7 @@ class MMX5Client(BizHawkClient):
         self.unknown_records_logged = set()
         self.stamp_warned = False
         self.victory_sent = False
+        self.dna_seen = {}   # stage id -> logged once (first-observation aid)
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -364,6 +365,34 @@ class MMX5Client(BizHawkClient):
                         check(names.heart_location(stage), True)
                     # Unmapped bits: intentionally unsent until verified.
 
+            # ---- DNA reward choice (post-boss "Weapon + Life" / "Weapon +
+            # Energy"). Replaces the old kind-1 "Energy Up pickup" detection,
+            # which was dead code: Energy Ups are NOT stage items and the stub
+            # never once recorded a kind-1 pickup.
+            # The reward lands in the SAME u32 as heart tanks (0x800D1C80):
+            # reward ids 0-7 set bits 8-15 (+2 max HP, Life Up), ids 8-15 set
+            # bits 24-31 (+2 max WE, Energy Up), applier ~0x800EFB40 with the
+            # mask table at 0x800F4ED0. Reward id = stage id - 1 for Life Ups
+            # and 8 + (stage id - 1) for Energy Ups, so both land on bit
+            # (stage id - 1) of their respective BYTE. Either choice checks the
+            # same location - the player made the choice, which is the event.
+            # ⚠️ The id == stage-1 relation rests on ONE observation
+            # (2026-07-31: Life Up id 5 on stage 6 -> u32 bit 13). Verify
+            # against a second stage before trusting it; the logger below
+            # makes that cheap.
+            life_ups = save[OFF_HEARTS + 1]     # 0x1C81, u32 bits 8-15
+            energy_ups = save[OFF_HEARTS + 3]   # 0x1C83, u32 bits 24-31
+            for stage_id, stage_name in STAGE_ID_TO_NAME.items():
+                got = (life_ups | energy_ups) & (1 << (stage_id - 1))
+                if got:
+                    if not self.dna_seen.get(stage_id):
+                        self.dna_seen[stage_id] = True
+                        logger.info(
+                            f"MMX5: DNA reward taken for {stage_name} "
+                            f"(stage id {stage_id}: life={life_ups:02X} "
+                            f"energy={energy_ups:02X})")
+                    check(names.dna_location(stage_name), True)
+
             # ---- Pickup-stub ring (stub discs only): the stub suppresses
             # vanilla pickup effects, so heart/tank save bits never set
             # themselves - the ring records ARE the checks there. ----
@@ -379,11 +408,13 @@ class MMX5Client(BizHawkClient):
                     if kind == 0x0 and stage is not None \
                             and HEART_BIT_TO_STAGE.get(rec_id) == stage:
                         loc_name = names.heart_location(stage)
-                    elif kind == 0x1 and stage is not None and 0x10 <= rec_id <= 0x17:
-                        # Energy-Ups: one per stage; the stage byte alone
-                        # identifies the location (ids are globally unique
-                        # bits but their stage map is still being harvested).
-                        loc_name = names.energy_up_location(stage)
+                    # NOTE: there is deliberately NO kind-1 branch here. It
+                    # used to map kind 1 / ids 0x10-0x17 to an "Energy Up"
+                    # pickup location; those pickups do not exist. Across
+                    # every logged session the stub has recorded only kinds
+                    # 0 (heart), 6, 0xB (EX-Tank) and 0x20 (capsule) - kind 1
+                    # never once fired. DNA rewards are detected from the save
+                    # struct above, not from the ring.
                     elif (kind, rec_id) in TANK_RECORD_TO_STAGE:
                         loc_name = names.tank_location(TANK_RECORD_TO_STAGE[(kind, rec_id)])
                     elif kind == CAPSULE_KIND and stage is not None and rec_id <= 7:

@@ -93,8 +93,13 @@ def tank_location(stage: str) -> str:
     return f"{stage} - {STAGE_TANK[stage]}"
 
 
-def energy_up_location(stage: str) -> str:
-    return f"{stage} - Energy Up"
+def dna_location(stage: str) -> str:
+    """The post-boss DNA reward choice (Alia's "Weapon + Life" / "Weapon +
+    Energy" prompt). This REPLACED an earlier `energy_up_location`, which
+    modelled Energy Ups as stage pickups - they are not. MMX5 has no
+    Energy Up items lying in stages; the DNA choice is the only source, one
+    per Maverick. See ai-docs/plans/2026-08-02_mmx5-reachability-rules.md."""
+    return f"{stage} - DNA Reward"
 
 
 VICTORY = "Sigma Defeated"
