@@ -5,6 +5,7 @@ from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
+    world_relevant = True
     gen_steps = (
         "generate_early",
         "create_regions",
@@ -20,10 +21,10 @@ class TestBase(unittest.TestCase):
 
     def test_all_state_is_available(self):
         """Ensure all_state can be created at certain steps."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type, self.gen_steps)
                 for step in self.test_steps:
                     with self.subTest("Step", step=step):
                         call_all(multiworld, step)
-                        self.assertTrue(multiworld.get_all_state(False, allow_partial_entrances=True))
+                        self.assertTrue(multiworld.get_all_state(allow_partial_entrances=True))
