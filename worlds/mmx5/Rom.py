@@ -28,10 +28,22 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger()
 
-# MD5 of the raw 2352-byte NTSC-U image (SLUS-01334) this patch was developed
-# against. Extend the set if other verified dumps (e.g. Redump variants that
-# differ only in pregap handling) surface during testing.
-HASH_US = "09e670f6e666211b7fcdbb7d48b716e1"
+# Accepted MD5s for the raw 2352-byte NTSC-U image (SLUS-01334).
+#
+# REDUMP is the canonical dump and the one players will have. The development
+# image differs from it by EXACTLY ONE trailing all-zero 2352-byte sector
+# (582,957,312 vs 582,954,960 bytes) - verified 2026-08-02 by trimming that
+# sector and reproducing Redump's MD5 byte for byte.
+#
+# Crucially the padding is at the END, not a leading pregap: 'CD001' sits at
+# sector 16 in both, so sector numbering is IDENTICAL and every patch offset
+# in disc.py is valid against either image unchanged. Nothing needed rebasing;
+# the Redump hash simply has to be accepted. All edits land in sectors
+# 23433-24319, nowhere near the tail.
+HASH_US_REDUMP = "98c0d278dc4a795a0a7562d950d37cc9"   # Redump, canonical
+HASH_US_PADDED = "09e670f6e666211b7fcdbb7d48b716e1"   # dev image, +1 zero sector
+ACCEPTED_HASHES = {HASH_US_REDUMP, HASH_US_PADDED}
+HASH_US = HASH_US_REDUMP   # kept for callers importing the old name
 
 
 class MMX5PatchExtension(APPatchExtension):
@@ -50,7 +62,7 @@ class MMX5PatchExtension(APPatchExtension):
 
 
 class MMX5ProcedurePatch(APProcedurePatch):
-    hash = [HASH_US]
+    hash = sorted(ACCEPTED_HASHES)
     game = "Mega Man X5"
     patch_file_ending = ".apmmx5"
     result_file_ending = ".cue"
@@ -96,10 +108,12 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         md5 = hashlib.md5()
         md5.update(base_rom_bytes)
-        if md5.hexdigest() not in {HASH_US}:
-            raise Exception("Supplied base disc image does not match the known "
-                            "MD5 for the US (SLUS-01334) release. Verify your dump "
-                            "(raw 2352-byte .bin, single data track).")
+        if md5.hexdigest() not in ACCEPTED_HASHES:
+            raise Exception("Supplied base disc image does not match a known "
+                            "MD5 for the US (SLUS-01334) release. Expected the "
+                            f"Redump dump ({HASH_US_REDUMP}); a variant with one "
+                            "extra trailing zero sector is also accepted. Verify "
+                            "your dump (raw 2352-byte .bin, single data track).")
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
 

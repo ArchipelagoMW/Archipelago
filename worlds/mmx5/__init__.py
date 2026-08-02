@@ -16,7 +16,7 @@ from .client import MMX5Client  # noqa: F401  (import registers the client)
 from .items import BASE_ID, MMX5Item, event_table, item_groups, item_table
 from .locations import MMX5Location, event_location_table, location_groups, location_table
 from .options import MMX5Options
-from .Rom import HASH_US, MMX5ProcedurePatch, patch_rom
+from .Rom import ACCEPTED_HASHES, MMX5ProcedurePatch, patch_rom
 
 
 class MMX5Settings(settings.Group):
@@ -24,7 +24,9 @@ class MMX5Settings(settings.Group):
         """File path of the Mega Man X5 (USA) disc image (raw 2352-byte .bin)."""
         description = "Mega Man X5 (USA) disc image"
         copy_to = "Megaman X5.bin"
-        md5s = [HASH_US]
+        # Both the Redump dump and the +1-trailing-zero-sector variant; they
+        # are byte-identical up to that pad, so patch offsets are unaffected.
+        md5s = sorted(ACCEPTED_HASHES)
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
