@@ -44,6 +44,12 @@ def set_openRCT2_items(options: Options.openRCT2Options, random: Random) -> tupl
     if ("Merry Go Round" not in openRCT2_items): # Necessary to not break the Best Gentle Rides location
         openRCT2_items.append("Merry Go Round")
 
+    if ("Burger Bar" not in openRCT2_items): # Necessary to not break the Best Food Stalls location
+        openRCT2_items.append("Burger Bar")
+
+    if ("Pizza Stall" not in openRCT2_items): # Necessary to not break the Best Food Stalls location
+        openRCT2_items.append("Pizza Stall")
+
     for each in range(options.land_discounts.value):
         openRCT2_items.append("Land Discount")
     
