@@ -22,10 +22,15 @@ def set_rules(world: "MLSSWorld", excluded):
                 world.get_location(location.name),
                 lambda state: StateLogic.canDig(state, world.player),
             )
-        if "Beanstone" in location.name:
+        if "Beanstone" in location.name and location.name != "Beanstone Reward":
             add_rule(
                 world.get_location(location.name),
                 lambda state: StateLogic.canDig(state, world.player),
+            )
+        elif location.name == "Beanstone Reward":
+            add_rule(
+                world.get_location(location.name),
+                lambda state: StateLogic.beanstones(state, world.player),
             )
         if "Shop" in location.name and "Coffee" not in location.name and location.name not in excluded:
             if "Badge" in location.name or "Pants" in location.name:

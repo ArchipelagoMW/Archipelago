@@ -90,6 +90,11 @@ def winkle(state, player):
     return state.has("Winkle Card", player)
 
 
+def beanstones(state, player):
+    beanstones = ["Beanstone " + str(i) for i in range(1, 11)]
+    return all(state.has(beanstone, player) for beanstone in beanstones)
+
+
 def beanFruit(state, player):
     return (
         state.has("Bean Fruit 1", player)
