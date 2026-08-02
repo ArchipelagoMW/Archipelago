@@ -81,12 +81,34 @@ OFF_SCORE_ACC = 0x0D1CC2 - SAVE_BASE   # 4 accumulator bytes
 OFF_SCORE_MOD = 0x0D1CCA - SAVE_BASE   # additive modifier byte
 OFF_LAUNCH_FLAGS = 0x0D1CCB - SAVE_BASE
 OFF_COUNTDOWN = 0x0D1CAC - SAVE_BASE
-COUNTDOWN_FROZEN = 8 * 0x34BC0         # 8 hours, pinned (design answer 5)
-# (This pin was briefly load-bearing for the DNA reward checks - Alia's prompt
-# needs a boss of level 4+ and boss level appears to track elapsed time. That
-# coupling is GONE: DNA checks now ride the boss kill itself, so the pin is
-# back to being purely about sortie budget / time pressure and can be retuned
-# on its own merits.)
+# Countdown pin, in HOURS, per the boss_difficulty option. The hours remaining
+# set the BOSS LEVEL BASE (Reference/mmx5-ram-notes.md "Boss Level formula"):
+#   16-17 -> 1, 14-15 -> 3, 12-13 -> 5, 10-11 -> 7, 8-9 -> 9,
+#    6-7  -> 11, 4-5 -> 13, 2-3 -> 15, 0-1 -> 17
+# Level 4+ unlocks the Life/Energy Up choice, 8+ the Life+/Energy+ tier with an
+# equippable Part. Pinning fixes only the BASE; +1 per Maverick and +1 per
+# weapon still accumulate, so bosses keep scaling across a run.
+#
+# HISTORY: this used to be a bare `8 * 0x34BC0` attributed to "design answer
+# 5". That answer only said "frozen" - it specified no value - so the 8 was an
+# undocumented implementer's choice made before the boss-level formula was
+# known, i.e. before anyone realised the number sets difficulty. It happens to
+# land well (base 9 clears both reward thresholds); that was luck. Now explicit.
+#
+# Never pin at 0: the colony crash triggers on the countdown expiring.
+COUNTDOWN_HOURS_BY_DIFFICULTY = {
+    0: 17,   # relaxed  -> base 1
+    1: 8,    # standard -> base 9   (the old hardcoded value)
+    2: 1,    # intense  -> base 17
+}
+COUNTDOWN_HOURS_DEFAULT = 8
+
+
+def countdown_frozen_value(ctx) -> int:
+    """Pinned countdown in FRAMES for this seed's boss_difficulty option."""
+    difficulty = (ctx.slot_data or {}).get("boss_difficulty", 1)
+    hours = COUNTDOWN_HOURS_BY_DIFFICULTY.get(difficulty, COUNTDOWN_HOURS_DEFAULT)
+    return hours * 0x34BC0
 GOAL_SIGMA = 0
 GOAL_LAUNCH = 1
 
@@ -394,7 +416,8 @@ class MMX5Client(BizHawkClient):
             # make the check permanently missable. Those bits remain useful
             # for RESEARCH - Scripts/mmx5_dna_watch.lua decodes them - but the
             # client no longer depends on them, which is also what frees
-            # COUNTDOWN_FROZEN from being load-bearing.
+            # the countdown pin from being load-bearing - it is now a plain
+            # difficulty knob (see the boss_difficulty option).
 
             # ---- Pickup-stub ring (stub discs only): the stub suppresses
             # vanilla pickup effects, so heart/tank save bits never set
@@ -474,9 +497,10 @@ class MMX5Client(BizHawkClient):
                 if save[OFF_SCORE_MOD] != want_mod:
                     pin.append((SAVE_BASE + OFF_SCORE_MOD, [want_mod], "MainRAM"))
                 countdown = int.from_bytes(save[OFF_COUNTDOWN:OFF_COUNTDOWN + 4], "little")
-                if countdown != COUNTDOWN_FROZEN:
+                frozen = countdown_frozen_value(ctx)
+                if countdown != frozen:
                     pin.append((SAVE_BASE + OFF_COUNTDOWN,
-                                list(COUNTDOWN_FROZEN.to_bytes(4, "little")), "MainRAM"))
+                                list(frozen.to_bytes(4, "little")), "MainRAM"))
                 if pin:
                     await bizhawk.write(ctx.bizhawk_ctx, pin)
                 if goal == GOAL_LAUNCH and not self.victory_sent \

@@ -210,4 +210,7 @@ class MMX5World(World):
             f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}"))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return {"goal": self.options.goal.value}
+        return {
+            "goal": self.options.goal.value,
+            "boss_difficulty": self.options.boss_difficulty.value,
+        }
