@@ -5,12 +5,13 @@
 - **Archipelago** 0.6.8 or later
   ([releases](https://github.com/ArchipelagoMW/Archipelago/releases)), and the
   `mmx5.apworld` file.
-- **BizHawk 2.10**
-  ([download](https://github.com/TASEmulators/BizHawk/releases/tag/2.10)).
-  Use this exact version — Archipelago's BizHawk connector does not support
-  newer releases, and a later BizHawk will fail to connect. On first install,
-  run BizHawk's prerequisites installer if EmuHawk won't start. The PSX core
-  is **NymaShock** (BizHawk's default for PS1).
+- **BizHawk 2.7 or newer**
+  ([releases](https://github.com/TASEmulators/BizHawk/releases)) — 2.7.0 is
+  the minimum Archipelago's connector script accepts. This world was tested
+  on **2.10**; versions newer than that print an untested-version warning
+  from the connector but are expected to work. On first install, run
+  BizHawk's prerequisites installer if EmuHawk won't start. The PSX core is
+  **NymaShock** (BizHawk's default for PS1).
 - A **US-region PS1 BIOS** (e.g. SCPH-5501), dumped from your own console. In
   EmuHawk: **Config → Firmware**, find the PSX (U) entry and point it at your
   BIOS file — or drop the file into BizHawk's `Firmware` folder and let it
@@ -59,7 +60,7 @@ expectations.
 
 ## Playing
 
-1. Open **BizHawk 2.10** and load the patched **`.cue`** (not the original, and
+1. Open **BizHawk** and load the patched **`.cue`** (not the original, and
    not the `.bin` directly).
 2. Open **Tools → Lua Console**, then **Script → Open Script**, and load
    `data/lua/connector_bizhawk_generic.lua` from your Archipelago install.
@@ -99,7 +100,7 @@ connected, play normally — checks send themselves and items arrive as you go.
 ## Troubleshooting
 
 **The client connects to the room but never sees the game.** The connector Lua
-is not running in BizHawk, or you are on a BizHawk newer than 2.10.
+is not running in BizHawk, or your BizHawk is older than 2.7.
 
 **The patcher rejects my disc image.** Check its MD5 against the table above.
 The usual cause is a 2048-byte-per-sector dump rather than raw 2352.

@@ -16,4 +16,4 @@ First distributable release.
   dump and its one-extra-trailing-sector variant.
 - BizHawkClient: save-struct check detection, idempotent item grants persisted
   in spare save bytes, wrong-save seed stamp, launch scoring, Sigma ending
-  detection. Requires BizHawk 2.10.
+  detection. Requires BizHawk 2.7+ (tested on 2.10).
