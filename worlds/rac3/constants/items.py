@@ -231,6 +231,7 @@ class RAC3ITEM:
     PROGRESSIVE_VIDCOMIC = "Progressive VidComic"
     PROGRESSIVE_ARMOR = "Progressive Armor"
     PROGRESSIVE_PACK = "Progressive Pack"
+    PROGRESSIVE_WRENCH = "Progressive Omniwrench"
 
     VELDIN = "Infobot: Veldin"
     FLORANA = "Infobot: Florana"

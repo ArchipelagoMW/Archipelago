@@ -21,6 +21,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.starting_weapons.value = world.passthrough[RAC3OPTION.STARTING_WEAPONS]
             world.options.bolt_and_xp_multiplier.value = world.passthrough[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
             world.options.progressive_weapons.value = world.passthrough[RAC3OPTION.PROGRESSIVE_WEAPONS]
+            world.options.progressive_wrench.value = world.passthrough[RAC3OPTION.PROGRESSIVE_WRENCH]
             world.options.armor_upgrade.value = world.passthrough[RAC3OPTION.ARMOR_UPGRADE]
             world.options.skill_points.value = world.passthrough[RAC3OPTION.SKILL_POINTS]
             world.options.trophies.value = world.passthrough[RAC3OPTION.TROPHIES]

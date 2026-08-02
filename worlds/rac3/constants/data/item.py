@@ -166,6 +166,16 @@ class RAC3ITEMDATA:
         else:
             tags: list[str] = [RAC3ITEMTAG.VIDCOMIC]
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.progression, tags=tags)
+    
+    @staticmethod
+    def construct_wrench(idx: int,
+                           tag: list[str] | None = None):
+        """Construct a progressive OmniWrench item"""
+        if tag:
+            tags: list[str] = [*tag, RAC3ITEMTAG.PROG_WRENCH]
+        else:
+            tags: list[str] = [RAC3ITEMTAG.PROG_WRENCH]
+        return RAC3ITEMDATA(idx, ap_classification=ItemClassification.progression, tags=tags)
 
     @staticmethod
     def construct_trap(idx: int,
@@ -438,6 +448,8 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
         RAC3ITEMDATA.construct_weapon_prog(0xDD, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_RY3N0:
         RAC3ITEMDATA.construct_weapon_prog(0xDE, ItemClassification.progression_skip_balancing, [RAC3ITEMTAG.NGPLUS]),
+    RAC3ITEM.PROGRESSIVE_WRENCH:
+        RAC3ITEMDATA.construct_wrench(0xDF, [RAC3ITEMTAG.PROG_WRENCH]),
     # Infobots
     RAC3ITEM.VELDIN: RAC3ITEMDATA.construct_infobot(0xE1, ItemClassification.progression),
     RAC3ITEM.FLORANA: RAC3ITEMDATA.construct_infobot(0xE2, ItemClassification.progression),
@@ -526,6 +538,7 @@ infobot_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.INFOBOT)
 ngplus_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.NGPLUS)
 non_prog_weapon_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.NON_PROG_WEAPON)
 prog_weapon_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.PROG_WEAPON)
+prog_wrench_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.PROG_WRENCH)
 progressive_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.PROGRESSIVE)
 trap_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.TRAP)
 unused_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.UNUSED)
@@ -542,6 +555,7 @@ NAME_TO_PROG_DICT: dict[str, str] = dict(zip(non_prog_weapon_data.keys(), prog_w
 item_counts: dict[str, int] = {
     **dict.fromkeys(non_prog_weapon_data.keys(), 1),
     **dict.fromkeys(prog_weapon_data.keys(), 5),
+    **dict.fromkeys(prog_wrench_data.keys(), 5),
     **dict.fromkeys(gadget_data.keys(), 1),
     **dict.fromkeys(cheat_data.keys(), 1),
     RAC3ITEM.CLANK: 1,
@@ -555,6 +569,7 @@ item_counts: dict[str, int] = {
 ngplus_item_counts: dict[str, int] = {
     **dict.fromkeys(non_prog_weapon_data.keys(), 1),
     **dict.fromkeys(prog_weapon_data.keys(), 8),
+    **dict.fromkeys(prog_wrench_data.keys(), 8),    
     **dict.fromkeys(gadget_data.keys(), 1),
     **dict.fromkeys(cheat_data.keys(), 1),
     RAC3ITEM.CLANK: 1,
@@ -599,6 +614,7 @@ item_groups: dict[str, set[str]] = {
     RAC3ITEMTAG.NGPLUS: set(ngplus_data.keys()),
     RAC3ITEMTAG.NON_PROG_WEAPON: set(non_prog_weapon_data.keys()),
     RAC3ITEMTAG.PROG_WEAPON: set(prog_weapon_data.keys()),
+    RAC3ITEMTAG.PROG_WEAPON: set(prog_wrench_data.keys()),
     RAC3ITEMTAG.PROGRESSIVE: set(progressive_data.keys()),
     RAC3ITEMTAG.TRAP: set(trap_data.keys()),
     RAC3ITEMTAG.UNUSED: set(unused_data.keys()),

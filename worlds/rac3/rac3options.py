@@ -19,6 +19,7 @@ from worlds.rac3.options.ngplus_start_options import NGPlusStart
 from worlds.rac3.options.ngplus_vendor_options import NGPlusVendor
 from worlds.rac3.options.one_hp_options import OneHpChallenge
 from worlds.rac3.options.prog_weapons_options import ProgressiveWeapons
+from worlds.rac3.options.prog_wrench_options import ProgressiveWrench
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
 from worlds.rac3.options.scout_vendors_options import ScoutVendors
@@ -60,6 +61,7 @@ class RaC3Options(PerGameCommonOptions):
     starting_weapons: StartingWeapons
     bolt_and_xp_multiplier: BoltAndXPMultiplier
     progressive_weapons: ProgressiveWeapons
+    progressive_wrench: ProgressiveWrench
     armor_upgrade: ArmorUpgrade
     filler_weight: FillerWeight
     traps_enabled: EnableTraps
@@ -113,6 +115,7 @@ rac3_option_groups = [
         StartingWeapons,
         NGPlusItems,
         ProgressiveWeapons,
+        ProgressiveWrench,
         ArmorUpgrade,
         ClankOptions,
         EnableTraps,
@@ -159,6 +162,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.STARTING_WEAPONS,
     RAC3OPTION.BOLT_AND_XP_MULTIPLIER,
     RAC3OPTION.PROGRESSIVE_WEAPONS,
+    RAC3OPTION.PROGRESSIVE_WRENCH,
     RAC3OPTION.NGPLUS_ITEMS,
     RAC3OPTION.NGPLUS_START,
     RAC3OPTION.ARMOR_UPGRADE,

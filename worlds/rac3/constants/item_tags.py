@@ -12,6 +12,7 @@ class RAC3ITEMTAG:
     NGPLUS = "NG+"
     NON_PROG_WEAPON = "Non-Progressive Weapon"
     PROG_WEAPON = "Progressive Weapon"
+    PROG_WRENCH = "Progressive Wrench"
     PROGRESSIVE = "Progressive"
     TRAP = "Trap"
     UNUSED = "Unused"
