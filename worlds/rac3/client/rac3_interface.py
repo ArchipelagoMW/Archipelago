@@ -1976,15 +1976,11 @@ class Rac3Interface(GameInterface):
     def wrench_cycler(self):
             """Cycle through the wrench properties and update its state"""
             prog_wrench = self.UnlockItem[RAC3ITEM.PROGRESSIVE_WRENCH]
-            current_wrench_level = self._read8(RAC3STATUS.WRENCH_LEVEL)
-            wrench_func = RAC3WRENCH.get_wrench_property_address(self.planet)
-            wrench_level = wrench_func + RAC3WRENCH.UPGRADE_ID_OFFSET
-            target_id = UPGRADE_DICT[RAC3ITEM.WRENCH][prog_wrench.status]    
-            logger.info (f"Wrench current level:{hex(current_wrench_level)}")
-            if current_wrench_level == 0x09:       
-                self._write8(RAC3STATUS.WRENCH_LEVEL, target_id)
-            else:
-                self._write8(wrench_level, target_id)
+            wrench_level_instruction = RAC3WRENCH.get_wrench_property_address(self.planet) + RAC3WRENCH.BASE_ITEM_ID_OFFSET
+            target_id = UPGRADE_DICT[RAC3ITEM.WRENCH][prog_wrench.status]
+            self._write8(wrench_level_instruction, 0)    
+            self._write8(RAC3STATUS.WRENCH_LEVEL, target_id)
+
 
     def update_weapon_equip(self, equip: int | None, last_0: int | None,
                             last_1: int | None, last_2: int | None):
