@@ -56,3 +56,5 @@ complete armor set unlocks at character select after the next results screen.
   stronger as you defeat more Mavericks and collect more weapons.
 - **Checks appear a few seconds after a boss dies**, not instantly — the game
   commits the kill shortly after the results screen.
+- **"Small Energy" filler items do nothing in-game** — they pad the item pool
+  when there are more locations than real items.

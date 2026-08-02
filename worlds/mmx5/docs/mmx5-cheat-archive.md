@@ -1,4 +1,4 @@
-﻿> Research notes mirrored from the mmx5-ap-research workspace (2026-08-01).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-02).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -11,28 +11,28 @@ mode research started from. Kept verbatim below; annotations first.
 
 | Code | Confirms |
 |---|---|
-| `800D1CA0 FFFF` Have All Armor Parts | armor-parts u16 = 0x1CA0 (client TODO map âœ“) |
-| `800D1C84 FFFF / 800D1C86 000F` All Power-Up Parts | parts words 0x1C84/86 (ramwatch give_all_parts âœ“) |
-| `300D1C7F 00FF` All Sub/W/EX tanks | tank byte 0x1C7F (client grant byte âœ“) |
-| `300D1C47 0040` Max Energy X | max-HP byte 0x1C47 âœ“ |
+| `800D1CA0 FFFF` Have All Armor Parts | armor-parts u16 = 0x1CA0 (client TODO map ✓) |
+| `800D1C84 FFFF / 800D1C86 000F` All Power-Up Parts | parts words 0x1C84/86 (ramwatch give_all_parts ✓) |
+| `300D1C7F 00FF` All Sub/W/EX tanks | tank byte 0x1C7F (client grant byte ✓) |
+| `300D1C47 0040` Max Energy X | max-HP byte 0x1C47 ✓ |
 | `300D1C49 00??` Character & Armor Modifier | 0x1C49 = character/armor selector |
 | `800D1CB4 ????` Mavericks Defeated modifier | 0x1CB4 = kill counter (seen ticking in diff log) |
-| `300D1C0C 00??` Level Modifier | stage id 0x1C0C âœ“ (spawner input) |
-| `300D4F56..67 0001` "Enable ..." family | the 0x0D4F5x block = PAUSE-MENU row enable flags (X-Buster/weapons/EX/exit-level...) â€” explains why they were 00 during Izzy gameplay; they are not a gameplay gate âœ“ |
-| `800D1C76 A0A0 / 800D1C78 0920` (sub-tank fill) | 0x1C76/77 = sub-tank fill bytes, 0x1C78 = W-tank fill âœ“ |
-| `8009A0FC 2020` Infinite Health | live HP 0x9A0FC âœ“ |
-| `800920EC 0000` (kill boss, conditional) | boss HP 0x920EC âœ“ |
+| `300D1C0C 00??` Level Modifier | stage id 0x1C0C ✓ (spawner input) |
+| `300D4F56..67 0001` "Enable ..." family | the 0x0D4F5x block = PAUSE-MENU row enable flags (X-Buster/weapons/EX/exit-level...) — explains why they were 00 during Izzy gameplay; they are not a gameplay gate ✓ |
+| `800D1C76 A0A0 / 800D1C78 0920` (sub-tank fill) | 0x1C76/77 = sub-tank fill bytes, 0x1C78 = W-tank fill ✓ |
+| `8009A0FC 2020` Infinite Health | live HP 0x9A0FC ✓ |
+| `800920EC 0000` (kill boss, conditional) | boss HP 0x920EC ✓ |
 | `8009A0C4/C6` moon-jump/fly writes | player x/y VELOCITY words at +0x24/+0x26 |
-| `800D1CAE 0040` Infinite Hours To Collision | countdown u16 0x1CAE (notes said 0x1CAC region â€” recheck which) |
+| `800D1CAE 0040` Infinite Hours To Collision | countdown u16 0x1CAE (notes said 0x1CAC region — recheck which) |
 
 ## Tooling adopted into mmx5_ramwatch.lua
 
 * **Get Items From Anywhere** `80054066 2400` -> `magnet_on()`/`magnet_off()`.
   NOPs the touch-test beqz at 0x80054064 in the collect routine (our
-  disassembly region) â€” on-screen items self-collect. Perfect for stub/ring
+  disassembly region) — on-screen items self-collect. Perfect for stub/ring
   testing without navigation deaths.
 * **Float Jump** `D00C931C 0040 / 8009A0C6 0001` -> `float_on()` (hold X).
-* Walk Through Walls / Fly / Moon Jump variants below if ever needed â€”
+* Walk Through Walls / Fly / Moon Jump variants below if ever needed —
   note "Press Select For Suicide" exists (`D00C931E 0100 / 8009A0FC 0000`),
   which is what a mislabeled web copy sold us as "air walk". Never trust
   unverified mirrors; this file is the authority now.
