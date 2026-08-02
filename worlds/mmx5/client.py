@@ -82,7 +82,23 @@ OFF_SCORE_MOD = 0x0D1CCA - SAVE_BASE   # additive modifier byte
 OFF_LAUNCH_FLAGS = 0x0D1CCB - SAVE_BASE
 OFF_COUNTDOWN = 0x0D1CAC - SAVE_BASE
 COUNTDOWN_FROZEN = 8 * 0x34BC0         # 8 hours, pinned (design answer 5)
+GOAL_SIGMA = 0
 GOAL_LAUNCH = 1
+
+# Sigma victory detection (live-captured 2026-08-01, five RAM dumps bracketing
+# a real Sigma kill; see Reference/mmx5-ram-notes.md "Endgame / Zero Space").
+# Endgame bosses do NOT route through the 0x0C results screen, so the patchless
+# maverick kill detect (mode 0x0C + sortie id 1-8) can never see Sigma. What
+# the mode byte 0x800D1C00 does after the final blow is:
+#     0x0A -> 0x13 -> 0x14 -> 0x10 -> 0x11(credits)
+# The X-vs-Zero duel produces 0x13 -> 0x14 as well, so those two are generic
+# story-cutscene modes and are NOT usable alone. 0x10 and 0x11 appeared only
+# after Sigma, and 0x11 persists through the credits. 0x0D is the death /
+# game-over screen (seen oscillating during failed attempts) - deliberately
+# excluded.
+ENDING_MODES = frozenset({0x10, 0x11})
+SIGMA_STAGE_ID = 0x0C                  # read live on entry; endgame ids are
+                                       # NOT contiguous (ZS1=0x10, duel=0x12)
 
 # AP disc-patch detection: the first stage-load weapon-repopulation site.
 # Vanilla: lbu $v0,0x4C($a1) = 90 A2 00 4C; AP patch changes the offset byte
@@ -263,6 +279,21 @@ class MMX5Client(BizHawkClient):
                 (SAVE_BASE, SAVE_LEN, "MainRAM"),
                 (RING_ADDR, RING_SLOTS * 4, "MainRAM"),  # pickup-stub check records
             ])
+            # ---- Sigma goal: victory on the post-Sigma ending modes ----
+            # Deliberately BEFORE the save-struct gate below: the ending modes
+            # are neither gameplay (0x0A) nor results (0x0C), so that gate is
+            # False all the way through the credits and would swallow the goal.
+            # Sequence after the final blow (live-captured): 0A -> 13 -> 14 ->
+            # 10 -> 11. 0x13/0x14 also fire for the X-vs-Zero duel, so only
+            # 0x10/0x11 are treated as the ending.
+            if not self.victory_sent \
+                    and (ctx.slot_data or {}).get("goal", GOAL_SIGMA) == GOAL_SIGMA \
+                    and mode[0] in ENDING_MODES:
+                self.victory_sent = True
+                await ctx.send_msgs([{"cmd": "StatusUpdate",
+                                      "status": ClientStatus.CLIENT_GOAL}])
+                logger.info(f"MMX5: ending reached (mode {mode[0]:02X}) - GOAL complete!")
+
             # Grants are safe whenever the save struct is live: gameplay or
             # results mode, plus a sanity floor on max HP against garbage states.
             save_sane = 0x10 <= save[OFF_MAX_HP_X] <= 0x40
@@ -535,9 +566,13 @@ class MMX5Client(BizHawkClient):
                         self.items_processed = total
                         self.hearts_applied += new_hearts
 
-            # TODO: victory detection (Sigma defeat address unknown) ->
-            #   await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-            # TODO: DeathLink via damage/death flag 0x800D1C1C once tested.
+            # Sigma victory detection now lives at the top of this method
+            # (ending modes 0x10/0x11) - it must run outside the save-struct
+            # gate, which is False during the credits.
+            # TODO: DeathLink via damage/death flag 0x800D1C1C - CAUTION, that
+            # byte went 00 -> 01 across BOTH the X-vs-Zero duel and the Sigma
+            # fight, so it is not obviously "player died"; disambiguate before
+            # wiring it up.
 
         except bizhawk.RequestFailedError:
             pass

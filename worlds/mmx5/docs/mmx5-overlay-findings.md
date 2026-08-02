@@ -19,7 +19,7 @@ chain. The "save struct" is simply this object's fields. Key header fields:
 | 0x800D1C00 | Main game-mode byte (0x0A = in-stage gameplay, 0x0C = results sequence) | G=0x0A, R=0x0C; dispatchers index handler tables by +0/+1/+2 |
 | 0x800D1C01 | Sub-mode | results sub-dispatcher 0x800EFF14 (table 0x800F4FF8) |
 | 0x800D1C02 | Sub-state | results sub-sub-dispatcher 0x800EFFBC (table 0x800F5024); R=07 |
-| 0x800D1C0C | **Active stage id used by the spawn engine** (1..8 mavericks, 0 intro, 9/10 Dynamo?, 0x0A-0x0C Zero Space, 0x0F = transition) | G=06 (Izzy Glow ✓), R=0x0F |
+| 0x800D1C0C | **Active stage id used by the spawn engine** (1..8 mavericks, 0 intro, 9/10 Dynamo?, ~~0x0A-0x0C Zero Space~~ **0x10 = Zero Space 1 — live-read 2026-08-01, the 0x0A-0x0C range was a guess and is WRONG**, 0x0F = transition) | G=06 (Izzy Glow ✓), R=0x0F, ZS1=0x10 ✓ |
 | 0x800D1C0D | Active area/section index within stage | G=00 |
 | 0x800D1C0F | "boss already beaten" flag for current stage (set from 0x1C4C bit, see §2) | |
 | 0x800D1C26 | **Stage id of the just-completed sortie** (results input) | R=02 (Dark Dizzy ✓), G=00 |
