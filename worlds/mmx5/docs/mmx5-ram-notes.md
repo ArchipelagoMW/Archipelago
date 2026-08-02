@@ -129,11 +129,24 @@ struct, or rely on the game's own restore (stage load repopulates from 0x0D1C4C)
 
 - [x] Heart-tank stage→bit map — COMPLETE 2026-07-31 (see 0x800D1C80 row). Energy-Up (EX item) stage map still open: EX items live in later stage areas, not captured by entry-area harvest — upgraded harvester will catch them during normal play
 - [ ] Weapon bitfield bit→boss map beyond bits 0–1 — kill remaining 6 mavericks
-- [ ] Does granting a weapon in 0x0D1C4C make the stage count as "beaten"
-      (stage select / ending gates)? Critical for goal logic.
+- [x] Does granting a weapon in 0x0D1C4C make the stage count as "beaten"
+      (stage select / ending gates)? **YES — ANSWERED 2026-08-01.** The hub fn
+      0x800EEF14 derives the story chapter 0x800D1D0F from popcount(0x1C4C),
+      and a save with 0x1C4C = FF walked the full colony-resolution → Zero
+      Space → Sigma path to the credits. The bitfield IS the endgame gate,
+      which is exactly why the AP patch must never suppress its commit (it
+      moves capability to 0x1C4D instead). Caveat: stage select shows no
+      per-stage beaten indicator, so nothing reads it for UI.
 - [ ] Real parts storage (0x0D1D38+ hypothesis) + what 0x0D1C84/86 actually are
-- [ ] Armor capsule pickup: which bits in 0x0D1CA0 per capsule; does armor
-      activate immediately or need stage re-entry?
+- [x] Armor capsule pickup: which bits in 0x0D1CA0 per capsule; does armor
+      activate immediately or need stage re-entry? **ANSWERED 2026-08-01.**
+      Bits are in 0x1CA1 (0x1CA0 low byte is the armor LEVEL), one per capsule
+      via maskTable[id] at 0x8007C370, and **capsule id == part index** (live:
+      Whale = id 1 = Falcon Body, Necrobat = id 4 = Gaea Head). Activation is
+      NOT immediate: the results overlay sets the set-completion flag
+      (0x1C4A |= 2/4) at the next results screen once a nibble fills, and only
+      then is the armor offered at character select — gated additionally by
+      the 0x1CCC ack latch. See §3.1.
 - [ ] Sub/W/E-tank pickup events (which bit in 0x0D1C7F per pickup location)
 - [ ] Zero's weapon/technique grants (same 0x0D1C4C or separate?)
 - [ ] 0x0D1C79 intro flag — reconfirm; relation to 0x0D1D0F counter
