@@ -180,10 +180,32 @@ class MMX5World(World):
               lambda state: state.has(names.GROUND_FIRE, player))
         # Grizzly Slash sub-tank and The Skiver W-Tank need nothing.
 
-        # Energy-Ups are intentionally unrestricted: their per-stage
-        # requirements have never been surveyed (the harvester is still
-        # filling in coordinates). Flagged in the reachability plan - do NOT
-        # read this absence as "verified free".
+        # --- Energy Ups: PHANTOM LOCATIONS, excluded from progression -------
+        # These 8 locations are almost certainly not obtainable in game.
+        # MMX5 Energy Ups are NOT stage pickups: they are the post-boss DNA
+        # reward choice ("Weapon + Energy"), applied to whoever finishes the
+        # NEXT stage. Four independent lines of evidence agree:
+        #   1. No "EX item" pickup category exists in any guide - the only EX
+        #      thing in a stage is the single EX-Tank (already a tank location).
+        #   2. The pickup stub has NEVER recorded a kind-1 item across every
+        #      logged session (kinds seen: 0 heart, 6, 0xB EX-Tank, 0x20
+        #      capsule). The client's kind-1 branch has never fired.
+        #   3. The placement harvest contains no ids 0x10-0x17.
+        #   4. Series knowledge (Ivor, 2026-08-02).
+        # ⚠️ UNRESOLVED - THESE LOCATIONS CAN STILL TAKE PROGRESSION.
+        # The obvious guard (LocationProgressType.EXCLUDED on all 8) does NOT
+        # work here: excluded locations may only hold filler, and the pool has
+        # exactly ONE filler slot (36 items vs 37 locations), so generation
+        # dies with "7 more excluded locations than excludable items".
+        # Deleting the 8 locations outright fails too - 36 items would not fit
+        # in 29 locations. Either fix therefore requires a POOL change, i.e. a
+        # design decision, which is why this is left flagged rather than
+        # silently half-fixed. Options are written up in
+        # ai-docs/plans/2026-08-02_mmx5-reachability-rules.md; the leading one
+        # is to replace these with the 8 per-boss DNA-reward choices, which are
+        # real, player-facing, and keep the balance intact.
+        # SEVERITY: in a multiworld an unreachable location strands ANOTHER
+        # player's item and breaks THEIR seed, not just ours.
 
         if self.options.goal == "launch":
             # Victory = a successful launch, which the client only powers
