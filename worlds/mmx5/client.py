@@ -362,15 +362,20 @@ class MMX5Client(BizHawkClient):
                 beaten = bool(weapons_owned & (1 << bit))
                 check(names.boss_location(stage), beaten)
                 # The DNA reward check rides the BOSS KILL, not the reward
-                # prompt. Vanilla only offers Alia's "Weapon + Life/Energy"
-                # choice for a boss of level 4+, and bosses do NOT respawn
-                # (live: entering a cleared boss room just ends the stage), so
-                # keying off the prompt would make this check permanently
-                # MISSABLE for anyone who killed a Maverick early. Keying off
-                # the kill makes it unmissable and independent of boss level,
-                # the countdown pin, and whether the player even noticed the
-                # prompt. The vanilla stat gain still happens when the prompt
-                # does appear - it is simply no longer what we detect.
+                # prompt. Alia offers the choice only for a boss of level 4+,
+                # and bosses do NOT respawn (live: entering a cleared boss room
+                # just ends the stage), so keying off the prompt would make
+                # this check permanently MISSABLE. Two ways that would have
+                # bitten, both now moot:
+                #   - a Maverick killed early, before the level-4 threshold;
+                #   - EASY MODE, which locks every boss at level 1 => no
+                #     Life/Energy Up prompt EVER => all 8 checks unobtainable
+                #     for the whole run.
+                # Keying off the kill is immune to boss level, difficulty,
+                # the countdown pin, and whether the player noticed the prompt.
+                # The vanilla stat gain still happens when the prompt appears -
+                # it is simply no longer what we detect.
+                # (Boss level formula: Reference/mmx5-ram-notes.md.)
                 check(names.dna_location(stage), beaten)
 
             hearts = save[OFF_HEARTS]

@@ -155,6 +155,47 @@ struct, or rely on the game's own restore (stage load repopulates from 0x0D1C4C)
       event.on_bus_write to catch the writer PC)
 - [ ] Enigma/shuttle RNG state addresses (needed for countdown-mechanic options)
 
+## Boss Level formula (game mechanic, 2026-08-02)
+
+Recalculated at the START OF EACH STAGE. Mainly scales boss HP; does not change
+attack patterns or damage.
+
+**Base, from HOURS REMAINING on the collision countdown** (u32 0x800D1CAC):
+
+| hours left | 16-17 | 14-15 | 12-13 | 10-11 | 8-9 | 6-7 | 4-5 | 2-3 | 0-1 |
+|---|---|---|---|---|---|---|---|---|---|
+| base | 1 | 3 | 5 | 7 | **9** | 11 | 13 | 15 | 17 |
+
+**Modifiers:**
+- **+1 per Maverick defeated** (max +8)
+- **Hunter Rank** of the character in use: E/C/B/A +0, SA +2, GA +4, PA +8,
+  MEH/MMH +16
+- **+1 per Special Weapon/Technique owned** (max +8) — ignored when fighting
+  Dynamo, and while using Gaea Armor
+
+**Reward thresholds:** level **4+** → Life Up / Energy Up choice; level **8+**
+→ Life+ / Energy+ choice, which ALSO grants an equippable Part.
+**Easy mode locks every boss at Level 1** ⇒ no Life/Energy Ups and no Parts at
+all. (This is why speedrunners deliberately burn hours early — dying out of a
+stage back to stage select — to raise the base before the first bosses.)
+
+### AP consequences
+
+- **The countdown pin (8 h) fixes the base at 9**, which is above BOTH
+  thresholds — so on a pinned seed every boss offers the level-8+ tier
+  (Life+/Energy+ AND a Part). The prompt can never fail for time reasons.
+- **Bosses still scale despite the freeze**: base is fixed but +1/Maverick and
+  +1/weapon keep climbing, roughly level 9 on the first boss to ~25 on the
+  last. Freezing the countdown does NOT flatten difficulty.
+- **Easy mode would have broken prompt-based DNA detection completely**
+  (level 1 ⇒ no prompt ⇒ 8 unobtainable checks). The client checks DNA
+  locations off the BOSS KILL instead, so it is immune — worth remembering
+  before anyone "improves" that back to reading the reward.
+- Verified against a live reading: The Skiver at **level 19** with the
+  countdown pinned at 8 h ⇒ base 9 + 5 Mavericks + 5 weapons = 19. ✓
+- Level 8+ also grants **equippable DNA Parts** (u32 0x800D1C84, §3.3) — an
+  entire reward stream we do not model. Candidate future locations.
+
 ## Endgame / Zero Space — live capture 2026-08-01
 
 Groundwork for (a) Sigma victory detection and (b) treating endgame stage
