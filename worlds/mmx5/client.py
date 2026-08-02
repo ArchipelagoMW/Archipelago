@@ -376,10 +376,19 @@ class MMX5Client(BizHawkClient):
             # and 8 + (stage id - 1) for Energy Ups, so both land on bit
             # (stage id - 1) of their respective BYTE. Either choice checks the
             # same location - the player made the choice, which is the event.
-            # ⚠️ The id == stage-1 relation rests on ONE observation
-            # (2026-07-31: Life Up id 5 on stage 6 -> u32 bit 13). Verify
-            # against a second stage before trusting it; the logger below
-            # makes that cheap.
+            # The vanilla stat grant is deliberately NOT suppressed - this
+            # detection reads the bits the vanilla applier writes, so
+            # suppressing it would silently kill the check.
+            # ⚠️ TWO things here are unverified:
+            #   1. The id == stage-1 relation rests on ONE observation
+            #      (2026-07-31: Life Up id 5 on stage 6 -> u32 bit 13). Wrong
+            #      => checks land on the WRONG stage's location.
+            #   2. Alia only offers the choice for a boss of LEVEL 4+, and
+            #      boss level rises with elapsed time while we PIN the
+            #      countdown. If pinning keeps levels below 4 the prompt never
+            #      appears and all 8 of these are phantoms.
+            # The logger below fires once per stage to make both cheap to
+            # check on the next playthrough.
             life_ups = save[OFF_HEARTS + 1]     # 0x1C81, u32 bits 8-15
             energy_ups = save[OFF_HEARTS + 3]   # 0x1C83, u32 bits 24-31
             for stage_id, stage_name in STAGE_ID_TO_NAME.items():
