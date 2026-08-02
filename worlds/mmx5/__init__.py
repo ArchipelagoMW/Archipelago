@@ -101,6 +101,8 @@ class MMX5World(World):
             if stage in names.STAGE_TANK:
                 stage_locations[names.tank_location(stage)] = location_table[names.tank_location(stage)]
             stage_locations[names.dna_location(stage)] = location_table[names.dna_location(stage)]
+            stage_locations[names.dna_part_location(stage)] = \
+                location_table[names.dna_part_location(stage)]
             region.add_locations(stage_locations, MMX5Location)
             # All 8 stages are open from the start in X5.
             stage_select.connect(region)

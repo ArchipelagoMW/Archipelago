@@ -93,6 +93,20 @@ def tank_location(stage: str) -> str:
     return f"{stage} - {STAGE_TANK[stage]}"
 
 
+def dna_part_location(stage: str) -> str:
+    """The equippable Part granted alongside the level-8+ DNA reward tier.
+
+    A Maverick at boss level 8+ gives THREE things: the weapon, the
+    Life+/Energy+ boost, and an equippable Part (DNA parts bitfield u32
+    0x800D1C84). Checked on the BOSS KILL like dna_location, deliberately NOT
+    on the Part actually dropping - Parts only appear at level 8+, so on
+    `relaxed` boss_difficulty (base 1) early bosses grant none and a
+    grant-based check would be permanently MISSABLE.
+
+    Not to be confused with the Enigma/Shuttle launcher part ITEMS."""
+    return f"{stage} - DNA Part"
+
+
 def dna_location(stage: str) -> str:
     """The post-boss DNA reward choice (Alia's "Weapon + Life" / "Weapon +
     Energy" prompt). This REPLACED an earlier `energy_up_location`, which

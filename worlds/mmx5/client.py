@@ -399,6 +399,13 @@ class MMX5Client(BizHawkClient):
                 # it is simply no longer what we detect.
                 # (Boss level formula: Reference/mmx5-ram-notes.md.)
                 check(names.dna_location(stage), beaten)
+                # Third reward from the same kill: the equippable Part granted
+                # with the level-8+ Life+/Energy+ tier (DNA parts u32
+                # 0x800D1C84). Also keyed on the kill rather than the Part
+                # actually dropping - Parts require boss level 8+, so on
+                # `relaxed` difficulty (base 1) early bosses grant none and a
+                # grant-based check would be permanently missable.
+                check(names.dna_part_location(stage), beaten)
 
             hearts = save[OFF_HEARTS]
             for bit in range(8):

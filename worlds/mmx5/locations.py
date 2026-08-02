@@ -26,7 +26,11 @@ for i, stage in enumerate(names.STAGES):
     # items at all (the stub never once recorded a kind-1 pickup). Reusing the
     # id keeps every other location id stable.
     location_table[names.dna_location(stage)] = base + 4
-    # +5.. reserved: rank rewards (later)
+    # The equippable Part from the level-8+ reward tier - the THIRD thing a
+    # Maverick grants (weapon, Life+/Energy+, Part). Uses the slot previously
+    # reserved for "rank rewards".
+    location_table[names.dna_part_location(stage)] = base + 5
+    # +6.. reserved
 
 event_location_table: Dict[str, Optional[int]] = {
     names.VICTORY: None,
@@ -38,4 +42,5 @@ location_groups = {
     "Armor Capsules": {names.capsule_location(s) for s in names.STAGES},
     "Tanks": {names.tank_location(s) for s in names.STAGE_TANK},
     "DNA Rewards": {names.dna_location(s) for s in names.STAGES},
+    "DNA Parts": {names.dna_part_location(s) for s in names.STAGES},
 }
