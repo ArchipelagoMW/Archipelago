@@ -123,14 +123,67 @@ class MMX5World(World):
 
     def set_rules(self) -> None:
         # Sigma stages open once all eight Maverick weapons are in hand.
-        # NOTE: weapons are the proxy for "boss defeated" pending verification of
-        # how the game gates its endgame (see workspace notes, open questions).
+        # This is deliberately STRICTER than the game, which only requires the
+        # Eurasia colony situation to resolve (story chapter derives from
+        # popcount of 0x800D1C4C; the endgame opens after the Enigma/Shuttle
+        # sequence plays out either way). Stricter is safe - it only narrows
+        # placement, it can never strand progression - so it stays for v1.
         self.multiworld.get_entrance("Stage Select -> Sigma Stages", self.player).access_rule = \
             lambda state: state.has_all(item_groups["Weapons"], self.player)
 
-        # TODO real reachability rules: several heart tanks / capsules need
-        # specific weapons or armor (e.g. Gaea sections, Falcon flight). Until
-        # mapped, they are considered always reachable - fine for scaffold.
+        player = self.player
+        falcon = names.ARMOR_PARTS[0:4]
+        gaea = names.ARMOR_PARTS[4:8]
+
+        # Armor is usable only as a COMPLETE set, and in AP the parts are
+        # shuffled away from their vanilla capsules - so these must key on the
+        # part ITEMS, never on "reached the capsule that vanilla-holds them".
+        def has_falcon(state) -> bool:
+            return state.has_all(falcon, player)
+
+        def has_gaea(state) -> bool:
+            return state.has_all(gaea, player)
+
+        def needs(location: str, rule) -> None:
+            self.multiworld.get_location(location, player).access_rule = rule
+
+        # --- Armor capsules -------------------------------------------------
+        # Stage<->part mapping cross-validated at two points against live
+        # capsule-object id reads (Duff McWhalen = id 1 = Falcon Body,
+        # Dark Dizzy = id 4 = Gaea Head), which also confirms capsule id ==
+        # part index. NOTE no FALCON part requires Falcon Armor - the three
+        # that do are all GAEA parts, which is sequential, not circular.
+        needs(names.capsule_location(names.WHALE),
+              lambda state: state.has(names.GOO_SHAVER, player))
+        needs(names.capsule_location(names.FIREFLY),
+              lambda state: state.has(names.CSHOT, player))
+        needs(names.capsule_location(names.NECROBAT),
+              lambda state: state.has(names.F_LASER, player))
+        needs(names.capsule_location(names.PEGASUS), has_falcon)
+        needs(names.capsule_location(names.DINOREX), has_falcon)
+        needs(names.capsule_location(names.ROSERED), has_falcon)
+        # Falcon Leg (Grizzly Slash) and Falcon Head (Squid Adler) need no
+        # items - the latter is gated on collecting 8 energy balls during the
+        # jet-bike section, which is execution, not inventory.
+
+        # --- Heart tanks ----------------------------------------------------
+        for stage in (names.GRIZZLY, names.KRAKEN, names.FIREFLY, names.ROSERED):
+            needs(names.heart_location(stage), has_gaea)
+        needs(names.heart_location(names.WHALE), has_falcon)
+        # Dark Dizzy / The Skiver / Mattrex hearts need nothing.
+
+        # --- Sub / W / EX tanks ---------------------------------------------
+        # Stage assignment matches the client's TANK_RECORD_TO_STAGE, itself
+        # derived from the placement harvest - four more agreement points.
+        needs(names.tank_location(names.NECROBAT), has_falcon)
+        needs(names.tank_location(names.FIREFLY),
+              lambda state: state.has(names.GROUND_FIRE, player))
+        # Grizzly Slash sub-tank and The Skiver W-Tank need nothing.
+
+        # Energy-Ups are intentionally unrestricted: their per-stage
+        # requirements have never been surveyed (the harvester is still
+        # filling in coordinates). Flagged in the reachability plan - do NOT
+        # read this absence as "verified free".
 
         if self.options.goal == "launch":
             # Victory = a successful launch, which the client only powers
