@@ -730,7 +730,8 @@ def set_walnut_puzzle_rules(logic: StardewLogic, rule_collector: StardewRuleColl
 def set_walnut_bushes_rules(logic, rule_collector: StardewRuleCollector, world_options):
     if WalnutsanityOptionName.bushes not in world_options.walnutsanity:
         return
-    # I don't think any of the bushes require something special, but that might change with ER
+    
+    rule_collector.set_location_rule("Walnutsanity: Cliff Edge Bush", logic.tool.has(Tool.pickaxe))
     return
 
 
