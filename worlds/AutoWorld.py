@@ -363,7 +363,6 @@ class World(metaclass=AutoWorldRegister):
         self.multiworld = multiworld
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
-        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
