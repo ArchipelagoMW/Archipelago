@@ -66,8 +66,15 @@ class MMX5World(World):
     item_name_groups = item_groups
     location_name_groups = location_groups
 
-    # Matches minimum_ap_version in archipelago.json.
-    required_client_version = (0, 6, 8)
+    # The OLDEST client this world is known to work with - NOT the version it
+    # was developed against. The server refuses any client below this
+    # (MultiServer enforces it from the multidata), so an over-high value
+    # locks everyone out: v0.1.0 shipped (0, 6, 8) and no released client
+    # could connect, because 0.6.8 is an unreleased development version.
+    # 0.6.7 is verified: generation and live client play both confirmed.
+    # Lower it if an older client is actually tested, never to match a
+    # development checkout's version string.
+    required_client_version = (0, 6, 7)
 
     def create_item(self, name: str) -> MMX5Item:
         if name in item_table:

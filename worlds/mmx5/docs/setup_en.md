@@ -2,7 +2,7 @@
 
 ## Required software
 
-- **Archipelago** 0.6.8 or later
+- **Archipelago** 0.6.7 or later
   ([releases](https://github.com/ArchipelagoMW/Archipelago/releases)), and the
   `mmx5.apworld` file.
 - **BizHawk 2.7 or newer**
@@ -80,6 +80,10 @@ connected, play normally — checks send themselves and items arrive as you go.
   commits it. Nothing is wrong if they do not appear instantly. One boss kill
   sends **three** checks at once (boss, DNA reward, DNA Part) — that is
   intended.
+- **Received items appear at the next stage load, not instantly.** Items are
+  written into your save data, and the game builds its live weapon/armor state
+  when a stage or character loads. If a weapon arrives while you are in a
+  stage, expect it once you next enter one — it is not lost.
 - **"Small Energy" filler items currently do nothing in-game.** They exist to
   pad the item pool; receiving one is not a bug.
 - **Save often, and be aware of BizHawk's memory-card handling.** BizHawk only

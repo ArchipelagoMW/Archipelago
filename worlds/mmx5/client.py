@@ -231,6 +231,13 @@ HP_PER_HEART = 2
 class MMX5Client(BizHawkClient):
     game = "Mega Man X5"
     system = "PSX"
+    # Registers ".apmmx5" with the BizHawk Client launcher component
+    # (worlds/_bizhawk/client.py reads this attribute). WITHOUT it the
+    # Launcher's Open Patch dialog does not list the extension and
+    # "open with -> Archipelago Launcher" cannot route the file to a
+    # handler, so the player is never prompted for their disc image -
+    # reported by a tester on the v0.1.0 release.
+    patch_suffix = ".apmmx5"
 
     def __init__(self) -> None:
         super().__init__()
@@ -263,7 +270,7 @@ class MMX5Client(BizHawkClient):
         self.ap_patched = self._classify_probe(probe)
         self.stub_present = self._classify_stub_probe(stub_probe)
         if self.ap_patched is None:
-            logger.info(f"MMX5: disc mode undetermined at boot (probe {probe.hex()}) - will re-probe in-game")
+            logger.debug(f"MMX5: disc mode undetermined at boot (probe {probe.hex()}) - will re-probe in-game")
 
         ctx.game = self.game
         ctx.items_handling = 0b111  # remote items, own-world items, starting inventory
@@ -275,10 +282,10 @@ class MMX5Client(BizHawkClient):
     @staticmethod
     def _classify_probe(probe: bytes):
         if probe == PATCH_PROBE_PATCHED:
-            logger.info("MMX5: disc mode = AP-PATCHED (capability byte 0x1C4D)")
+            logger.debug("MMX5: disc mode = AP-PATCHED (capability byte 0x1C4D)")
             return True
         if probe == PATCH_PROBE_VANILLA:
-            logger.info("MMX5: disc mode = vanilla (hybrid grants)")
+            logger.debug("MMX5: disc mode = vanilla (hybrid grants)")
             return False
         return None
 
@@ -294,10 +301,10 @@ class MMX5Client(BizHawkClient):
     @staticmethod
     def _classify_stub_probe(probe: bytes):
         if probe == STUB_PROBE_STUBBED:
-            logger.info("MMX5: pickup stub RESIDENT - checks come from the mailbox ring")
+            logger.debug("MMX5: pickup stub RESIDENT - checks come from the mailbox ring")
             return True
         if probe == STUB_PROBE_VANILLA:
-            logger.info("MMX5: pickup stub absent - pickup checks from save-struct bits")
+            logger.debug("MMX5: pickup stub absent - pickup checks from save-struct bits")
             return False
         return None
 
@@ -331,7 +338,7 @@ class MMX5Client(BizHawkClient):
             save_sane = 0x10 <= save[OFF_MAX_HP_X] <= 0x40
             in_gameplay = mode[0] in (0x0A, 0x0C) and save_sane
             if in_gameplay != self.last_gate_state:
-                logger.info(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
+                logger.debug(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
                 self.last_gate_state = in_gameplay
                 # Savestates restore ALL of RAM including the loaded EXE, so
                 # the disc mode can CHANGE mid-session. Re-probe on EVERY
@@ -370,10 +377,9 @@ class MMX5Client(BizHawkClient):
                     return
                 if self.stamp_warned:
                     self.stamp_warned = False
-                    logger.info("MMX5: save stamp OK - resuming")
+                    logger.debug("MMX5: save stamp OK - resuming")
 
-            # ---- Check detection (safe to do from any state: save struct
-            # persists and only ever gains bits during legitimate play) ----
+            # ---- Check detection ----
             new_checks = []
 
             def check(location_name: str, condition: bool) -> None:
@@ -381,13 +387,28 @@ class MMX5Client(BizHawkClient):
                 if condition and loc_id not in ctx.checked_locations:
                     new_checks.append(loc_id)
 
-            check(names.INTRO_CLEAR, save[OFF_INTRO] != 0)
+            # Save-struct reads are meaningful ONLY once a save is actually
+            # resident. Before that - boot, title, training mode - the region
+            # holds stale bytes from the previous session, and reading them
+            # anyway fired a phantom "Intro Stage - Clear" on a tester's
+            # machine while max HP still read 0x00 (the save-struct gate was
+            # logging False at that very moment). An earlier comment here
+            # claimed detection was "safe from any state because the save
+            # struct persists"; that is true of a LOADED save, not of the
+            # window before one exists. Recovery on connect is unaffected: a
+            # loaded save reads sane in menus and the hub, not just in-stage.
+            # The mailbox ring below is deliberately NOT gated - it lives in
+            # its own free-RAM block and carries a per-record validity bit.
+            def save_check(location_name: str, condition: bool) -> None:
+                check(location_name, condition and save_sane)
+
+            save_check(names.INTRO_CLEAR, save[OFF_INTRO] != 0)
 
             weapons_owned = save[OFF_WEAPONS]
             for bit, weapon in enumerate(WEAPON_BITS):
                 stage = next(s for s, w in names.BOSS_WEAPON.items() if w == weapon)
                 beaten = bool(weapons_owned & (1 << bit))
-                check(names.boss_location(stage), beaten)
+                save_check(names.boss_location(stage), beaten)
                 # The DNA reward check rides the BOSS KILL, not the reward
                 # prompt. Alia offers the choice only for a boss of level 4+,
                 # and bosses do NOT respawn (live: entering a cleared boss room
@@ -403,21 +424,21 @@ class MMX5Client(BizHawkClient):
                 # The vanilla stat gain still happens when the prompt appears -
                 # it is simply no longer what we detect.
                 # (Boss level formula: mmx5-ram-notes.md.)
-                check(names.dna_location(stage), beaten)
+                save_check(names.dna_location(stage), beaten)
                 # Third reward from the same kill: the equippable Part granted
                 # with the level-8+ Life+/Energy+ tier (DNA parts u32
                 # 0x800D1C84). Also keyed on the kill rather than the Part
                 # actually dropping - Parts require boss level 8+, so on
                 # `relaxed` difficulty (base 1) early bosses grant none and a
                 # grant-based check would be permanently missable.
-                check(names.dna_part_location(stage), beaten)
+                save_check(names.dna_part_location(stage), beaten)
 
             hearts = save[OFF_HEARTS]
             for bit in range(8):
                 if hearts & (1 << bit):
                     stage = HEART_BIT_TO_STAGE.get(bit)
                     if stage is not None:
-                        check(names.heart_location(stage), True)
+                        save_check(names.heart_location(stage), True)
                     # Unmapped bits: intentionally unsent until verified.
 
             # NOTE: the DNA reward locations are checked with the boss kill
@@ -472,7 +493,7 @@ class MMX5Client(BizHawkClient):
                         rec_key = (stage_id, kind, rec_id)
                         if rec_key not in self.unknown_records_logged:
                             self.unknown_records_logged.add(rec_key)
-                            logger.info(f"MMX5: unmapped pickup record stage={stage_id} "
+                            logger.debug(f"MMX5: unmapped pickup record stage={stage_id} "
                                         f"kind={kind:X} id={rec_id:02X} - ignored")
                         consume = True
                     if consume:
@@ -627,7 +648,7 @@ class MMX5Client(BizHawkClient):
                         [(SAVE_BASE + OFF_PROCESSED,
                           bytes([processed & 0xFF, (processed >> 8) & 0xFF]), "MainRAM")],
                     )
-                    logger.info(f"MMX5: grants {'applied' if success else 'guard-failed, retrying'}: "
+                    logger.debug(f"MMX5: grants {'applied' if success else 'guard-failed, retrying'}: "
                                 f"items {processed}->{total}, "
                                 f"weapons({'AP' if self.ap_patched else 'vanilla'})={merged:02X} "
                                 f"tanks={merged_tanks:02X} armor={merged_armor:02X} "

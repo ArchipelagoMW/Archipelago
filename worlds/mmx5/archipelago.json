@@ -1,6 +1,6 @@
 {
   "game": "Mega Man X5",
   "authors": ["Shinnuu"],
-  "world_version": "0.1.0",
-  "minimum_ap_version": "0.6.8"
+  "world_version": "0.1.1",
+  "minimum_ap_version": "0.6.7"
 }

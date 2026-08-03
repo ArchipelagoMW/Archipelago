@@ -1,5 +1,30 @@
 # Mega Man X5 apworld changelog
 
+## 0.1.1 — 2026-08-03
+
+Fixes for everything the first testers hit. v0.1.0 could not be used without
+hand-editing the apworld; replace it.
+
+- **The world now loads.** v0.1.0 declared `minimum_ap_version: 0.6.8`, but
+  0.6.8 is an unreleased development version, so Archipelago rejected the
+  world outright and it never appeared in the game list. The floor is 0.6.7,
+  the newest release, verified by generating on it.
+- **Seeds now accept released clients.** `required_client_version` was also
+  0.6.8; the server enforces that value and would have refused every existing
+  client. It is 0.6.7 — the oldest version actually tested.
+- **`.apmmx5` is registered with the Launcher.** The client never declared
+  `patch_suffix`, so Open Patch did not list the extension and "open with →
+  Archipelago Launcher" could not route the file, leaving players unable to
+  patch their disc.
+- **No more phantom checks from stale memory.** Check detection read the save
+  struct even before a save was resident, so leftover bytes from a previous
+  session could complete locations — one tester received a spurious "Intro
+  Stage - Clear", which then swallowed the real one. Save-derived checks now
+  require a resident save; the mailbox ring is unaffected.
+- Client logging is much quieter: repeated disc-mode, save-gate and grant
+  diagnostics moved to debug level.
+- Setup guide documents that received items apply at the next stage load.
+
 ## 0.1.0 — 2026-08-02
 
 First distributable release.
