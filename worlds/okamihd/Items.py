@@ -74,7 +74,6 @@ def create_static_precollected_item_list(world: "OkamiWorld") -> List[Item]:
     return precollected_items
 
 
-
 brush_techniques_items = {
     # Brush Techniques — item codes = 0x100 + game bitfield index (from BrushOverlay enum)
     BrushTechniques.GREENSPROUT_BLOOM.value: ItemData(0x104, ItemClassification.progression),  # bit 4
@@ -117,13 +116,13 @@ equips = {
 
 quest_items = {
     # Quest Items
-    "Canine Tracker": ItemData(0x42, ItemClassification.progression,count_in_pool=0),
+    "Canine Tracker": ItemData(0x42, ItemClassification.progression, count_in_pool=0),
     "Lucky Mallet": ItemData(0x43, ItemClassification.progression),
-    "Border Key": ItemData(0x44, ItemClassification.progression,count_in_pool=0),
-    "Dragon Orb": ItemData(0x45, ItemClassification.progression,count_in_pool=0),
-    "Fox Rods": ItemData(0x46, ItemClassification.progression,count_in_pool=0),
+    "Border Key": ItemData(0x44, ItemClassification.progression, count_in_pool=0),
+    "Dragon Orb": ItemData(0x45, ItemClassification.progression, count_in_pool=0),
+    "Fox Rods": ItemData(0x46, ItemClassification.progression, count_in_pool=0),
     "Thunder Brew": ItemData(0x47, ItemClassification.progression),
-    "Shell Amulet": ItemData(0x48, ItemClassification.progression,count_in_pool=0),
+    "Shell Amulet": ItemData(0x48, ItemClassification.progression, count_in_pool=0),
 
     "Mask": ItemData(0x49, ItemClassification.progression),
     "Golden Mushroom": ItemData(0x5f, ItemClassification.progression),
@@ -132,7 +131,7 @@ quest_items = {
     "Sewaprolo": ItemData(0x63, ItemClassification.progression),
     "Charcoal": ItemData(0x71, ItemClassification.progression),
     "Blinding Snow": ItemData(0x72, ItemClassification.progression),
-    "Treasure Box": ItemData(0x73, ItemClassification.progression,count_in_pool=0),
+    "Treasure Box": ItemData(0x73, ItemClassification.progression, count_in_pool=0),
     "Herbal Medicine": ItemData(0x75, ItemClassification.progression),
     "Pinwheel": ItemData(0x76, ItemClassification.progression),
     "Marlin Rod": ItemData(0x77, ItemClassification.progression),
@@ -152,16 +151,20 @@ bitable_items = {
 }
 useful_items = {
     # Useful items - Counts here are invalid, it's intended, to not fille the item pool with these
-    "Sun Fragment": ItemData(0x05, ItemClassification.useful,count_in_pool=9), # Should be 15
-    "Astral Pouch": ItemData(0x06, ItemClassification.useful,count_in_pool=0),# Intended
-    "Stray Bead": ItemData(0xCC, ItemClassification.useful,count_in_pool=0),# Should be 99, set to 0 for now cause they mess with container collection states
+    "Sun Fragment": ItemData(0x05, ItemClassification.useful, count_in_pool=9),  # Should be 15
+    "Astral Pouch": ItemData(0x06, ItemClassification.useful, count_in_pool=0),  # Intended
+    "Stray Bead": ItemData(0xCC, ItemClassification.useful, count_in_pool=0),
+    # Should be 99, set to 0 for now cause they mess with container collection states
     # probably will have to be changed to progession_skip balancing once DF shops get randomized
     "Demon Fang": ItemData(0x1F, ItemClassification.useful, count_in_pool=0),  # to see when DF shops get randomized
     # Technically a filler item, but useful feels more appropriate. Warping with those without Fountain will probably be out of logic.
-    "Mermaid Coin": ItemData(0x0e, ItemClassification.useful,count_in_pool=5),#Accurate count, kept it since it isn't too much
-    "Golden Peach": ItemData(0x0f, ItemClassification.useful,count_in_pool=10), # 14 in total... Probably not useful to have THAT many?,
-    "Gold Dust": ItemData(0x9e, ItemClassification.useful,count_in_pool=11), # 15 if we count the ones sold by merchants, which we may randomize, only 1 in a chest if we don't count those...
-    "Praise": ItemData(0x59,ItemClassification.useful,count_in_pool=0) #Here for testing for now; Doesn't work
+    "Mermaid Coin": ItemData(0x0e, ItemClassification.useful, count_in_pool=5),
+    # Accurate count, kept it since it isn't too much
+    "Golden Peach": ItemData(0x0f, ItemClassification.useful, count_in_pool=10),
+    # 14 in total... Probably not useful to have THAT many?,
+    "Gold Dust": ItemData(0x9e, ItemClassification.useful, count_in_pool=11),
+    # 15 if we count the ones sold by merchants, which we may randomize, only 1 in a chest if we don't count those...
+    "Praise": ItemData(0x59, ItemClassification.useful, count_in_pool=0)  # Here for testing for now; Doesn't work
 }
 
 filler_items = {
@@ -276,6 +279,42 @@ karmic_transformers = {
     "Karmic Transformer 9": ItemData(0x7c, ItemClassification.useful, count_in_pool=0)
 }
 
+mist_warp_unlocks = {
+    # MIST WARPS POINTS
+    "Mist Warp Unlock - Kamiki Village": ItemData(0x500, ItemClassification.progression),
+    "Mist Warp Unlock - Shinshu Field": ItemData(0x501, ItemClassification.progression),
+    "Mist Warp Unlock - Cursed Agata Forest": ItemData(0x502, ItemClassification.progression),
+    "Mist Warp Unlock - Cursed Taka Pass": ItemData(0x503, ItemClassification.progression),
+    "Mist Warp Unlock - Kusa Village": ItemData(0x504, ItemClassification.progression),
+    "Mist Warp Unlock - Sasa Sanctuary": ItemData(0x505, ItemClassification.progression),
+    "Mist Warp Unlock - City Checkpoint": ItemData(0x506, ItemClassification.progression),
+    "Mist Warp Unlock - Cursed Ryoshima Coast": ItemData(0x507, ItemClassification.progression),
+    "Mist Warp Unlock - North Ryoshima Coast": ItemData(0x508, ItemClassification.progression),
+    "Mist Warp Unlock - North Ryoshima Coast (Rocky Area)": ItemData(0x509, ItemClassification.progression),
+    "Mist Warp Unlock - Dragon Palace": ItemData(0x50A, ItemClassification.progression),
+    ## ARC 3 WARPS
+    # "Mist Warp Unlock - Kamui": ItemData(0x50B, ItemClassification.progression),
+    # "Mist Warp Unlock - Wep'keer": ItemData(0x50C, ItemClassification.progression),
+    # "Mist Warp Unlock - Inner Yoshpet": ItemData(0x50D, ItemClassification.progression),
+    # "Mist Warp Unlock - Kamui(Ezofuji - Rocky Area)": ItemData(0x50E, ItemClassification.progression),
+
+}
+mermaid_spring_unlocks = {
+
+    # MERMAID SPRINGS
+    "Mermaid Sping Unlock - Shinshu Field": ItemData(0x510, ItemClassification.progression),
+    "Mermaid Sping Unlock - Agata Forest": ItemData(0x511, ItemClassification.progression),
+    "Mermaid Sping Unlock - Taka Pass": ItemData(0x512, ItemClassification.progression),
+    "Mermaid Sping Unlock - Sasa Sanctuary": ItemData(0x513, ItemClassification.progression),
+    "Mermaid Sping Unlock - Ryoshima Coast": ItemData(0x514, ItemClassification.progression),
+    "Mermaid Sping Unlock - Sei-an City": ItemData(0x515, ItemClassification.progression),
+    "Mermaid Sping Unlock - Northen Ryoshima Coast": ItemData(0x516, ItemClassification.progression),
+    "Mermaid Sping Unlock - Catcall Tower": ItemData(0x517, ItemClassification.progression),
+    "Mermaid Sping Unlock - Dragon Palace": ItemData(0x518, ItemClassification.progression),
+    ## ARC 3 SPRINGS
+    # "Mermaid Sping Unlock - Kamui": ItemData(0x519, ItemClassification.progression),
+}
+
 item_table = {
     **brush_techniques_items,
     **equips,
@@ -288,6 +327,8 @@ item_table = {
     **weapons_items,
     **progressive_weapons,
     **karmic_transformers,
+    **mist_warp_unlocks,
+    **mermaid_spring_unlocks
 }
 junk_weights = {
     # TODO: Junk items weight - Based of the number of times it appears in chests in vanilla

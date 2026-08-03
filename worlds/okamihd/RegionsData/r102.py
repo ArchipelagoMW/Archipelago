@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from rule_builder.rules import True_
+from rule_builder.rules import True_, Has
 from ..CheckIds import brush_check_id, collected_object_check_id, container_check_id, shop_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -16,20 +16,23 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.STONE_KAMIKI: [
-        ExitData(RegionNames.KAMIKI_VILLAGE, required_items_events=["Kamiki Village - Fight with Mr.Orange"], one_way=True)],
+        ExitData(RegionNames.KAMIKI_VILLAGE, required_items_events=["Kamiki Village - Fight with Mr.Orange"],
+                 one_way=True)],
     RegionNames.KAMIKI_VILLAGE: [ExitData(RegionNames.KAMIKI_ISLANDS, needs_long_swim=True, loading_screen=False),
                                  ExitData(RegionNames.SUSANOS_HOUSE),
                                  ExitData(RegionNames.KUSHIS_HOUSE),
                                  ExitData(RegionNames.ORANGES_HOUSE),
                                  ExitData(RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
                                  ExitData(RegionNames.CURSED_SHINSHU_FIELD,
-                                          required_items_events=["Kamiki Village - Help Susano Train/Break the boulder"]),
+                                          required_items_events=[
+                                              "Kamiki Village - Help Susano Train/Break the boulder"]),
                                  ExitData(RegionNames.SHINSHU_FIELD,
                                           required_items_events=["Kamiki Village - Help Susano Train/Break the boulder",
-                                                      "Shinshu Field - Restore Guardian Sapling"]),
+                                                                 "Shinshu Field - Restore Guardian Sapling"]),
                                  # One way bc this is not a logical access.
                                  ExitData(RegionNames.KAMIKI_MERCHANT,
-                                          required_items_events=["Kamiki Village - Help Susano Train/Break the boulder"],
+                                          required_items_events=[
+                                              "Kamiki Village - Help Susano Train/Break the boulder"],
                                           one_way=True, loading_screen=False)],
     RegionNames.SUSANOS_HOUSE: [ExitData(RegionNames.SUSANOS_UNDERGROUD)]
 }
@@ -77,7 +80,8 @@ events = {
 }
 locations = {
     RegionNames.STONE_KAMIKI: {
-        "Kamiki Village - Sunrise": LocData(brush_check_id(27), type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED),
+        "Kamiki Village - Sunrise": LocData(brush_check_id(27), type=LocationType.CONSTELLATION,
+                                            progress_type=LocationProgressType.EXCLUDED),
         # Brush acquisition (bit 27)
     },
     RegionNames.KAMIKI_VILLAGE: {
@@ -96,7 +100,9 @@ locations = {
             container_check_id(MapIds.KAMIKI_VILLAGE, 32), type=LocationType.UNDERWATER_CHEST),  # spawn_idx=32, Vase
         "Kamiki Village - Hasugami": LocData(brush_check_id(5),
                                              required_items_events=["Kamiki Village - Restore Sakuya's Tree"],
-                                             type=LocationType.CONSTELLATION,progress_type=LocationProgressType.EXCLUDED),  # Brush acquisition (Waterlily)
+                                             type=LocationType.CONSTELLATION,
+                                             progress_type=LocationProgressType.EXCLUDED),
+        # Brush acquisition (Waterlily)
         "Kamiki Village - Buried chest in field": LocData(container_check_id(MapIds.KAMIKI_VILLAGE, 13),
                                                           type=LocationType.BURIED_CHEST),
         # spawn_idx=13, Dragonfly Bead
@@ -126,7 +132,8 @@ locations = {
         # Kushi's Gift is not a container - it's an event/NPC reward. Keep old ID for now.
         "Kamiki Village - Kushi's Gift": LocData(collected_object_check_id(MapIndexes.KAMIKI_VILLAGE, 11),
                                                  # mapId=3 (KamikiVillage enum index)
-                                                 required_items_events=["Kamiki Village - Repair Kushi's Watermill"],progress_type=LocationProgressType.EXCLUDED),
+                                                 required_items_events=["Kamiki Village - Repair Kushi's Watermill"],
+                                                 progress_type=LocationProgressType.EXCLUDED),
     },
     RegionNames.KAMIKI_ISLANDS: {
         "Kamiki Village - East Islands Sun fragment chest": LocData(container_check_id(MapIds.KAMIKI_VILLAGE, 42)),
@@ -160,6 +167,6 @@ shop_locations = {
 
 warps = {
     RegionNames.STONE_KAMIKI: [
-        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=Has("Mist Warp Unlock - Kamiki Village"), trigger_warp_from=True_)
     ]
 }

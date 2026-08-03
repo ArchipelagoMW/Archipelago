@@ -180,7 +180,7 @@ locations = {
 }
 warps = {
     RegionNames.SEIAN_CITY_ARISTOCRATIC: [
-        WarpData(WarpType.MERMAID_SPRING, Has("Imperial Palace - Defeat Blight"),
+        WarpData(WarpType.MERMAID_SPRING, Has("Mermaid Sping Unlock - Sei-an City"),
                  Has("Imperial Palace - Defeat Blight"))
     ]
 }

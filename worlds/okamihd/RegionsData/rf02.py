@@ -16,16 +16,19 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.SHINSHU_FIELD: [
-        ExitData(RegionNames.SHINSHU_LOGIC_COMMON,one_way=True,loading_screen=False),
+        ExitData(RegionNames.SHINSHU_LOGIC_COMMON, one_way=True, loading_screen=False),
         ExitData(RegionNames.SHINSHU_FIELD_AGATA_CAVE, needs_long_swim=True, loading_screen=False),
         ExitData(RegionNames.TAMA_HOUSE),
         ExitData(RegionNames.MOON_CAVE_OUTSIDE),
-        ExitData(RegionNames.SHINSHU_PLATEAU, required_items_events=["Shinshu Field - Climb on plateau"], loading_screen=False)],
+        ExitData(RegionNames.SHINSHU_PLATEAU, required_items_events=["Shinshu Field - Climb on plateau"],
+                 loading_screen=False)],
     RegionNames.SHINSHU_FIELD_AGATA_CAVE: [ExitData(RegionNames.CURSED_AGATA_FOREST,
-                                                    required_items_events=["Shinshu Field - Open Entrance to Agata Forest"]),
+                                                    required_items_events=[
+                                                        "Shinshu Field - Open Entrance to Agata Forest"]),
                                            ExitData(RegionNames.AGATA_FOREST,
-                                                    required_items_events=["Shinshu Field - Open Entrance to Agata Forest",
-                                                                "Agata Forest - Restore Guardian Sapling"]),
+                                                    required_items_events=[
+                                                        "Shinshu Field - Open Entrance to Agata Forest",
+                                                        "Agata Forest - Restore Guardian Sapling"]),
                                            ],
     RegionNames.SHINSHU_AGATA_SHORTCUT_LEDGE: [ExitData(RegionNames.SHINSHU_FIELD, one_way=True, loading_screen=False)]
 }
@@ -35,7 +38,8 @@ events = {
     },
     RegionNames.SHINSHU_FIELD: {
         "Shinshu Field - Climb on plateau": EventData(required_items_events=[BrushTechniques.CATWALK]),
-        "Shinshu Field - Clear Devil gate near Dojo": EventData(mandatory_enemies=[OkamiEnemies.YELLOW_IMP,OkamiEnemies.GREEN_IMP])
+        "Shinshu Field - Clear Devil gate near Dojo": EventData(
+            mandatory_enemies=[OkamiEnemies.YELLOW_IMP, OkamiEnemies.GREEN_IMP])
     }
 }
 locations = {
@@ -84,7 +88,8 @@ locations = {
 
     RegionNames.TAMA_HOUSE: {
         "Shinshu Field - Bakugami": LocData(brush_check_id(25), type=LocationType.CONSTELLATION,
-                                            special_rule=night_time_check_rule,progress_type=LocationProgressType.EXCLUDED)  # bit 25
+                                            special_rule=night_time_check_rule,
+                                            progress_type=LocationProgressType.EXCLUDED)  # bit 25
     },
 
     RegionNames.SHINSHU_PLATEAU: {
@@ -119,8 +124,9 @@ shop_locations = {
 
 warps = {
     RegionNames.SHINSHU_FIELD: [
-        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_),
-        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Shinshu Field - Clear Devil gate near Dojo"),
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=Has("Mist Warp Unlock - Shinshu Field"),
+                 trigger_warp_from=True_),
+        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Mermaid Sping Unlock - Shinshu Field"),
                  trigger_warp_from=Has("Shinshu Field - Clear Devil gate near Dojo"))
     ]
 }

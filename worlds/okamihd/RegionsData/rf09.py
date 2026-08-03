@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from rule_builder.rules import True_
+from rule_builder.rules import True_, Has
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.WarpType import WarpType
 from ..Types import ExitData, EventData, WarpData
@@ -34,6 +34,6 @@ locations = {
 }
 warps = {
     RegionNames.CURSED_RYOSHIMA_COAST: [
-        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=Has("Mist Warp Unlock - Cursed Ryoshima Coast"), trigger_warp_from=True_)
     ]
 }

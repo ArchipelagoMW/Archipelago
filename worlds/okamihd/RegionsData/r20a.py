@@ -55,6 +55,6 @@ locations = {
 }
 warps = {
     RegionNames.CATCALL_TOWER_TOP: [
-        WarpData(WarpType.MERMAID_SPRING, Has("Catcall Tower - Unlock warp"), Has("Catcall Tower - Unlock warp"))
+        WarpData(WarpType.MERMAID_SPRING, Has("Mermaid Sping Unlock - Catcall Tower"), Has("Catcall Tower - Unlock warp"))
     ]
 }

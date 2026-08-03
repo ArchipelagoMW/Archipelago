@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from rule_builder.rules import True_
+from rule_builder.rules import True_, Has
 from ..CheckIds import container_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -61,6 +61,6 @@ locations = {
 
 warps = {
     RegionNames.CURSED_TAKA_PASS: [
-        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=True_, trigger_warp_from=True_)
+        WarpData(type=WarpType.MIST_WARP, trigger_warp_to=Has("Mist Warp Unlock - Cursed Taka Pass"), trigger_warp_from=True_)
     ]
 }

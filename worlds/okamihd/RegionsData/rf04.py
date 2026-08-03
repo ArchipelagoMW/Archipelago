@@ -147,7 +147,7 @@ shop_locations = {
 }
 warps = {
     RegionNames.AGATA_FOREST: [
-        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Agata Forest - Unlock Mermaid Spring"),
+        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Mermaid Sping Unlock - Agata Forest"),
                  trigger_warp_from=Has("Agata Forest - Unlock Mermaid Spring"))
     ]
 }

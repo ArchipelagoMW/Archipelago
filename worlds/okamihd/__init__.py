@@ -5,7 +5,7 @@ from .Enums.LocationType import excluded_biteable_location_types
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, get_item_name_to_id_dict, \
     karmic_transformers, \
     progressive_weapons, create_standard_item, create_static_precollected_item_list, global_local_items, \
-    soup_ingredient_local_items
+    soup_ingredient_local_items, mist_warp_unlocks, mermaid_spring_unlocks
 from .Regions import create_regions, get_region_name
 from .Locations import get_location_names, get_total_locations, get_unfilled_locations_count
 from .RegionsData import okami_events, okami_locations, okami_shop_locations
@@ -31,6 +31,7 @@ class OkamiWebWolrd(WebWorld):
     )]
 
 
+
 class OkamiWorld(World):
     """
     Okami HD
@@ -43,6 +44,8 @@ class OkamiWorld(World):
     options: OkamiOptions
     web = OkamiWebWolrd()
     local_items = []
+    initial_mist_warp = None
+    initial_mermaid_spring = None
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -52,10 +55,11 @@ class OkamiWorld(World):
 
         create_regions(self)
         # DEBUG
-        #visualize_regions(self.multiworld.get_region("Menu", self.player),"G:\projets\OkamiAP\worlds\okamihd\docs\OkamiHD.puml")
+        # visualize_regions(self.multiworld.get_region("Menu", self.player),"G:\projets\OkamiAP\worlds\okamihd\docs\OkamiHD.puml")
 
     def create_items(self):
         self.prepare_local_items()
+        self.prepare_starting_warps()
         self.multiworld.itempool += self.create_itempool()
 
     def prepare_local_items(self):
@@ -84,6 +88,26 @@ class OkamiWorld(World):
             slot_data[name] = value
 
         return slot_data
+
+
+    # Give the player 1 mermaid sping and 1 mist warp point, so they can get some use of the powers when they unlock them
+    def prepare_starting_warps(self):
+        mist_warps = list(mist_warp_unlocks.keys()).copy()
+        self.random.shuffle(mist_warps)
+        self.initial_mist_warp = mist_warps[0]
+
+        mermaid_springs = list(mermaid_spring_unlocks.keys()).copy()
+        self.random.shuffle(mermaid_springs)
+        self.initial_mermaid_spring = mermaid_springs[0]
+
+        mist_warp_entry = mist_warp_unlocks.get(self.initial_mist_warp)
+        self.push_precollected(create_item(self.initial_mist_warp,mist_warp_entry.code,mist_warp_entry.classification,self))
+
+        mermaid_spring_entry = mermaid_spring_unlocks.get(self.initial_mermaid_spring)
+        self.push_precollected(
+            create_item(self.initial_mermaid_spring, mermaid_spring_entry.code, mermaid_spring_entry.classification, self))
+
+
 
     def get_local_items_name(self) -> List[str]:
         local_items_names: List[str] = []
@@ -197,8 +221,8 @@ class OkamiWorld(World):
         for name in item_table.keys():
             item_type: ItemClassification = item_table.get(name).classification
             item_count: int = resolve_option_callable(item_table.get(name).count_in_pool, self)
-            # If the item is locally randomized we have to put one less
-            if name in self.get_local_items_name():
+            # If the item is locally randomized or precollected we have to put one less
+            if (name in self.get_local_items_name() ) or name == self.initial_mermaid_spring or name == self.initial_mist_warp :
                 item_count -= 1
             if item_type != ItemClassification.filler and item_count > 0:
                 itempool += create_multiple_items(self, name, item_count, item_type)

@@ -99,7 +99,7 @@ shop_locations = {
 
 warps = {
     RegionNames.TAKA_PASS: [
-        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Taka Pass - Clear Devil gate near waterfall"),
+        WarpData(type=WarpType.MERMAID_SPRING, trigger_warp_to=Has("Mermaid Sping Unlock - Taka Pass"),
                  trigger_warp_from=Has("Taka Pass - Clear Devil gate near waterfall"))
     ]
 }

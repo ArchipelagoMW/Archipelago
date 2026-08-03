@@ -210,7 +210,7 @@ shop_locations = {
 warps = {
     RegionNames.RYOSHIMA_COAST: [
         WarpData(type=WarpType.MERMAID_SPRING,
-                 trigger_warp_to=Has("Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance"),
+                 trigger_warp_to=Has("Mermaid Sping Unlock - Ryoshima Coast"),
                  trigger_warp_from=Has("Ryoshima Coast - Clear Devil Gate near North Ryoshima Coast Entrance")),
     ]
 }

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import LocationProgressType
-from rule_builder.rules import Has
+from rule_builder.rules import Has, True_
 from ..CheckIds import container_check_id, shop_check_id, brush_check_id
 from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
@@ -18,7 +18,8 @@ exits = {
                  required_items_events=["Dragon Palace - Get Shell Amulet from Otohime"]),
         ExitData(RegionNames.DRAGON_PALACE_GARDEN, one_way=True,
                  required_items_events=["Dragon Palace - Get Shell Amulet from Otohime"]),
-        ExitData(RegionNames.DRAGON_PALACE_CAVE, required_items_events=["Dragon Palace - Open Treasure Cave behind stairs"])
+        ExitData(RegionNames.DRAGON_PALACE_CAVE,
+                 required_items_events=["Dragon Palace - Open Treasure Cave behind stairs"])
     ],
     RegionNames.DRAGON_PALACE_SPRING: [
         ExitData(RegionNames.DRAGON_PALACE, one_way=True)
@@ -34,7 +35,8 @@ events = {
         # FIXME: This should give shell amulet, and it should be removed from pool since it can't be picked up rn
         # FIXME: Change this to a location later
         "Dragon Palace - Get Shell Amulet from Otohime": EventData(),
-        "Dragon Palace - Give Dragon Orb to Otohime": EventData(required_items_events=["Inside the dragon - Get Dragon Orb"])
+        "Dragon Palace - Give Dragon Orb to Otohime": EventData(
+            required_items_events=["Inside the dragon - Get Dragon Orb"])
     },
     RegionNames.DRAGON_PALACE_SPRING: {
         "Dragon Palace - Restore the soothing spring": EventData(type=LocationType.DIGGING_MINIGAME_HARD,
@@ -87,7 +89,10 @@ shop_locations = {
 }
 warps = {
     RegionNames.DRAGON_PALACE_SPRING: [
-        WarpData(WarpType.MERMAID_SPRING, Has("Dragon Palace - Restore the soothing spring"),
+        WarpData(WarpType.MERMAID_SPRING, Has("Mermaid Sping Unlock - Dragon Palace"),
                  Has("Dragon Palace - Restore the soothing spring"))
+    ],
+    RegionNames.DRAGON_PALACE: [
+        WarpData(WarpType.MIST_WARP, Has("Mist Warp Unlock - Dragon Palace"), True_)
     ]
 }
