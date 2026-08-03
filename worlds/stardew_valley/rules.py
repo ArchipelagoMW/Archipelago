@@ -731,7 +731,7 @@ def set_walnut_bushes_rules(logic, rule_collector: StardewRuleCollector, world_o
     if WalnutsanityOptionName.bushes not in world_options.walnutsanity:
         return
     
-    rule_collector.set_location_rule("Walnutsanity: Cliff Edge Bush", logic.tool.has(Tool.pickaxe))
+    rule_collector.set_location_rule("Walnutsanity: Cliff Edge Bush", logic.tool.has_tool(Tool.pickaxe))
     return
 
 
