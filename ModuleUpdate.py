@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 import subprocess
 import multiprocessing
@@ -53,10 +54,11 @@ if not update_ran:
 
 def check_pip():
     # detect if pip is available
-    try:
-        import pip  # noqa: F401
-    except ImportError:
-        raise RuntimeError("pip not available. Please install pip.")
+    if shutil.which("uv") is None:   
+        try:
+            import pip  # noqa: F401
+        except ImportError:
+            raise RuntimeError("uv and pip are not available. Please install uv or pip.")
 
 
 def confirm(msg: str):
@@ -70,7 +72,11 @@ def confirm(msg: str):
 def update_command():
     check_pip()
     for file in requirements_files:
-        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--constraint", core_constraints])
+        if shutil.which("uv") is not None:
+            subprocess.call(["uv", "pip", "install", "--python", sys.executable,
+                             "-r", file, "--constraint", core_constraints])
+        else:
+            subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--constraint", core_constraints])
 
 
 def install_pkg_resources(yes=False):
@@ -80,7 +86,10 @@ def install_pkg_resources(yes=False):
         check_pip()
         if not yes:
             confirm("pkg_resources not found, press enter to install it")
-        subprocess.call([sys.executable, "-m", "pip", "install", "setuptools>=75,<81"])
+        if shutil.which("uv") is not None:
+            subprocess.call(["uv", "pip", "install","--python", sys.executable, "setuptools>=75,<81"])
+        else:
+            subprocess.call([sys.executable, "-m", "pip", "install", "setuptools>=75,<81"])
 
 
 def update(yes: bool = False, force: bool = False) -> None:

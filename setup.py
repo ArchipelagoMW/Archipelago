@@ -1,3 +1,10 @@
+# /// script
+# requires-python = ">=3.11.9,<3.14.0"
+# dependencies = [
+#     "cx-Freeze==8.4.0",
+# ]
+# ///
+
 import base64
 import datetime
 import io
@@ -35,16 +42,23 @@ except (AttributeError, ImportError):
     pkg_resources = None  # type: ignore[assignment]
 
 if install_cx_freeze:
-    # check if pip is available
-    try:
-        import pip  # noqa: F401
-    except ImportError:
-        raise RuntimeError("pip not available. Please install pip.")
-    # install and import cx_freeze
-    if '--yes' not in sys.argv and '-y' not in sys.argv:
-        input(f'Requirement {requirement} is not satisfied, press enter to install it')
-    subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
+    # check if uv is available
+    if shutil.which("uv") is not None:
+        if '--yes' not in sys.argv and '-y' not in sys.argv:
+            input(f'Requirement {requirement} is not satisfied, press enter to install it')
+        subprocess.call(["uv", "pip", "install", "--python", sys.executable, requirement, "--upgrade"])
+    else:
+        # check if pip is available, if uv not available
+        try:
+            import pip  # noqa: F401
+        except ImportError:
+            raise RuntimeError("uv and pip are not available. Please install one or the other.")
+        # install and import cx_freeze
+        if '--yes' not in sys.argv and '-y' not in sys.argv:
+            input(f'Requirement {requirement} is not satisfied, press enter to install it')
+        subprocess.call([sys.executable, "-m", "pip", "install", requirement, "--upgrade"])
     import pkg_resources
+
 
 import cx_Freeze
 
@@ -527,7 +541,10 @@ $APPDIR/$exe "$@"
         except ModuleNotFoundError:
             if not self.yes:
                 input("Requirement PIL is not satisfied, press enter to install it")
-            subprocess.call([sys.executable, '-m', 'pip', 'install', 'Pillow', '--upgrade'])
+            if shutil.which("uv") is not None:
+                subprocess.call(["uv", "pip", "install","--python", sys.executable, "Pillow", "--upgrade"])
+            else:
+                subprocess.call([sys.executable, '-m', 'pip', 'install', 'Pillow', '--upgrade'])
             from PIL import Image
         im = Image.open(src)
         res, _ = im.size
