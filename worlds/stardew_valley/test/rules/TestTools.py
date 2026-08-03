@@ -4,7 +4,6 @@ from ..bases import SVTestBase
 from ... import options
 from ...options import ToolProgression, SeasonRandomization, Secretsanity
 from ...strings.entrance_names import Entrance
-from ...strings.region_names import Region
 from ...strings.tool_names import Tool, ToolMaterial, FishingRod
 
 
@@ -95,14 +94,16 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
     options = {
         options.EntranceRandomization: options.EntranceRandomization.option_buildings,
         options.ToolProgression: options.ToolProgression.option_vanilla,
+        options.EntrancePlando: {Entrance.enter_mens_locker_room: Entrance.town_to_blacksmith,
+                                 Entrance.enter_womens_locker_room: Entrance.beach_to_willy_fish_cabin,
+                                 Entrance.fish_cabin_to_boat_tunnel: Entrance.enter_sunroom},
     }
-    seed = 4111845104987680263
-
-    # Seed is hardcoded to make sure the ER is a valid roll that actually locks the doors behind the Railroad Boulder Removed.
+    seed = 4111845104983680263
+    # Seed is hardcoded to make sure the ER is a valid roll that actually locks the doors behind the Keys
 
     def test_cannot_get_any_tool_without_blacksmith_access(self):
         mens_locker_item = "Men's Locker Key"
-        place_region_at_entrance(self.multiworld, self.player, Region.blacksmith_house, Entrance.enter_mens_locker_room)
+        # place_region_at_entrance(self.multiworld, self.player, Region.blacksmith_house, Entrance.enter_mens_locker_room)
         self.collect_all_except(mens_locker_item)
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
@@ -116,10 +117,10 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
                 self.assert_rule_true(self.world.logic.tool.has_tool(tool, material))
 
     def test_cannot_get_fishing_rod_without_willy_access(self):
-        mens_locker_item = "Men's Locker Key"
+        mens_locker_item = "Women's Locker Key"
         # place_region_at_entrance(self.multiworld, self.player, Region.sunroom, Entrance.fish_cabin_to_boat_tunnel)
         # place_region_at_entrance(self.multiworld, self.player, Region.fish_cabin, Entrance.leave_sunroom)
-        place_region_at_entrance(self.multiworld, self.player, Region.fish_cabin, Entrance.enter_mens_locker_room)
+        # place_region_at_entrance(self.multiworld, self.player, Region.fish_cabin, Entrance.enter_mens_locker_room)
         self.collect_all_except(mens_locker_item)
         self.collect("Fishing Level", 10)
         self.collect("Fishing Mastery")
