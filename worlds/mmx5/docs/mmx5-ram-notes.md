@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-02).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-03).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -47,7 +47,7 @@ Survives death and stage exit; the AP client's primary read/write surface.
 | `0x800D1C47` | u8 | **Max HP — X** (base 0x20; +2 per heart tank) | ✅ |
 | `0x800D1C48` | u8 | Max HP — Zero (per Ghidra; char-selected) | ⚠️ |
 | `0x800D1C4C` | u8 | **Weapons owned bitfield** (persistent), ammo-slot order. Confirmed: bit0 C-Shot, bit1 Dark Hold, bit5 F-Laser (Izzy kill 2026-07-31: 0x03→0x23 at results commit — validates the inferred ammo-slot order). Remaining inferred: bit2 Goo Shaver, bit3 Ground Fire, bit4 Tri-Thunder, bit6 Spike Ball, bit7 Wing Spiral. Written at results screen ~25s after boss death. The Izzy results ALSO granted Zero's C-Flasher + the Laser Device (Enigma part) with NO other save-struct bit changing → one boss bit appears to drive all three rewards (X weapon / Zero technique / Enigma part) — big implication for randomization design | ✅/⚠️ |
-| `0x800D1C79` | u8 | **Story ACT counter** (not just intro-clear): 0→1 at intro victory; launch resolution writes 5 on Eurasia destruction; results tail checks `< 5`. Treat as act progression | ✅ upgraded 2026-07-31 |
+| `0x800D1C79` | u8 | **Story ACT counter** (not just intro-clear): 0→1 at intro victory; launch resolution writes 5 on Eurasia destruction; results tail checks `< 5`. Treat as act progression. **TRAINING MODE writes `0x0A` here** — out of band vs the campaign range, and it lands in the SAME frame as max HP `0x20`, so a "is a save resident" test alone cannot tell training from a real save. Campaign value read live off a 3-boss save: `0x02`. See §Training mode below | ✅ live 2026-08-03 |
 | `0x800D1C7F` | u8 | Tank ownership bitfield (sub/W/spare-life tanks); 0xFF grants all (menu shows them). As u16 0x0D1C7E bits 12–15; stage attribution (harvest 2026-07-31): bit12 Sub-Tank #1 = Grizzly Slash, bit13 Sub-Tank #2 = Dark Dizzy (harvest-confirmed 2026-07-31), bit14 W-Tank = The Skiver, bit15 EX-Tank = Izzy Glow — **tank map COMPLETE** | ✅ write-tested |
 | `0x800D1C52/53` | u16 | **Max weapon energy** (+2 per "Energy Up"; 0x3230 observed after one) | ✅ |
 | `0x800D1C80` | u8 | **Heart tanks collected bitfield — COMPLETE** (placement harvest 2026-07-31): bit0 Grizzly Slash, bit1 Squid Adler, bit2 Izzy Glow (live-verified), bit3 Duff McWhalen, bit4 The Skiver, bit5 Axle the Red (unique ungated record + elimination; stage also has 11 phantom heart records gated on nonexistent armor level 5), bit6 Dark Dizzy (live-verified), bit7 Mattrex. NOT stageId−1 order. Izzy live pickup: X max HP +2 same frame, Zero's max HP (0x0D1C48) unchanged → supports per-character hearts | ✅ |
@@ -149,7 +149,9 @@ struct, or rely on the game's own restore (stage load repopulates from 0x0D1C4C)
       the 0x1CCC ack latch. See §3.1.
 - [ ] Sub/W/E-tank pickup events (which bit in 0x0D1C7F per pickup location)
 - [ ] Zero's weapon/technique grants (same 0x0D1C4C or separate?)
-- [ ] 0x0D1C79 intro flag — reconfirm; relation to 0x0D1D0F counter
+- [x] 0x0D1C79 intro flag — **RESOLVED 2026-08-03** (live): it is the story
+      ACT counter and Training mode stamps `0x0A` into it. Relation to
+      0x0D1D0F still unexamined.
 - [ ] Memory-card save format vs RAM struct (persistence verification)
 - [ ] Resolve 0x8009A0FC write-discrepancy (overlay writer? re-test with
       event.on_bus_write to catch the writer PC)
@@ -291,3 +293,42 @@ AFTER the mode settles** — the persistent marker most likely lands there.
 **If endgame clears become AP locations**, the detection shape is probably
 (stage id, mode transition) rather than the results-screen path used for
 mavericks — see the mode note above.
+
+---
+
+## Training mode — a pseudo-save in the campaign struct (live 2026-08-03)
+
+Training mode does **not** use a separate memory region. It populates the same
+save struct at `0x800D1C40+` that the campaign uses, which makes it
+indistinguishable from a real save unless you test the ACT byte.
+
+Captured with `Scripts/mmx5_act_watch.lua` (log: `Scripts/mmx5_act_log.txt`),
+cold boot → Training → boss kill → exit → load a real save:
+
+| Frame | Event | ACT `1C79` | maxHP `1C47` | kills `1C4C` | stage `1C0C` |
+|---|---|---|---|---|---|
+| 2060 | Training selected in menu | `00`→**`0A`** | `00`→`20` | `00` | `0E` |
+| 2453 | Training stage loads | `0A` | `20` | `00` | **`16`** |
+| 2906 | mode → `0A` (gameplay) | `0A` | `20` | `00` | `16` |
+| ~25000 | **training boss killed** | `0A` | `20` | **`00`** | `16` |
+| 25905 | exit to menu | `0A`→`00` | `20`→`00` | `00` | `0E` |
+| 34756 | real save loaded | `00`→**`02`** | `00`→`2E` | `00`→`23` | `0E` |
+
+Consequences, all load-bearing for the AP client:
+
+1. **ACT `0x0A` is the training marker.** The campaign range is small — 1 at
+   the intro, 5 at Eurasia, `02` observed on a 3-boss save — so `0x0A` is out
+   of band and is the only signal that covers the *whole* training session.
+   The training stage id `0x16` does not: ACT is already `0x0A` while still in
+   the menu at stage `0x0E`.
+2. **Max HP becomes `0x20` in the same frame as ACT.** Any "is a save
+   resident?" heuristic based on max HP alone passes during training. This is
+   exactly how the phantom `Intro Stage - Clear` check reached a tester.
+3. **The training boss kill sets NO progress bits.** `0x1C4C`, hearts, armor
+   and the AP capability byte recorded zero transitions across the entire
+   session including the kill — so training can never fire boss/DNA/heart
+   checks, only the ACT-keyed intro one.
+4. **Everything is torn down on exit** (ACT and max HP both → `00`), so
+   training leaves no residue for a later session.
+5. At the title screen *after* training, max HP reads `0x20` while ACT is
+   `00` — another reason max HP alone is not a "real save" test.

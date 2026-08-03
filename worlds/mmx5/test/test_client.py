@@ -106,6 +106,39 @@ class TestCheckDetectionGating(unittest.IsolatedAsyncioTestCase):
         self.assertIn(location_table[names.dna_location(stage)], sent)
 
 
+class TestTrainingMode(unittest.IsolatedAsyncioTestCase):
+    """Training mode builds a pseudo-save in the same struct. Byte values here
+    are taken from a live capture (Scripts/mmx5_act_log.txt, 2026-08-03):
+    selecting Training wrote ACT=0x0A and max HP=0x20 in one frame, which
+    satisfied the 0.1.1 residency gate and sent a phantom Intro Clear."""
+
+    async def test_no_checks_in_training_mode(self) -> None:
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=0x0A))
+        self.assertEqual(ctx.checked_location_ids(), set(),
+                         "training mode sent checks into a real seed")
+
+    async def test_real_save_still_sends_intro(self) -> None:
+        # The same capture read ACT=0x02 / maxhp=0x2E / kills=0x23 off a
+        # genuine mid-game save. That must keep working.
+        ctx = await run_watcher(make_save(max_hp=0x2E, intro=0x02, weapons=0x23))
+        self.assertIn(location_table[names.INTRO_CLEAR], ctx.checked_location_ids(),
+                      "a real campaign save stopped sending the intro check")
+
+    async def test_fresh_post_intro_save_still_sends_intro(self) -> None:
+        # The tightest case: just after the intro, a real save looks like
+        # training except for the ACT value (1 vs 0x0A) - kills are 0 in both.
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=0x01))
+        self.assertIn(location_table[names.INTRO_CLEAR], ctx.checked_location_ids(),
+                      "training detection swallowed a legitimate intro check")
+
+    async def test_training_act_with_progress_is_not_treated_as_training(self) -> None:
+        # Guard on the belt-and-braces term: if some late-game state ever did
+        # reach ACT 0x0A, a save carrying real kills must NOT be suppressed.
+        ctx = await run_watcher(make_save(max_hp=0x2E, intro=0x0A, weapons=0x23))
+        self.assertIn(location_table[names.INTRO_CLEAR], ctx.checked_location_ids(),
+                      "a save with real progress was misread as training")
+
+
 class TestLauncherRegistration(unittest.TestCase):
     """v0.1.0 never registered its patch suffix, so the Launcher's Open Patch
     dialog did not list .apmmx5 and could not route the file to a handler."""

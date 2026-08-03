@@ -1,5 +1,26 @@
 # Mega Man X5 apworld changelog
 
+## 0.1.2 — 2026-08-03
+
+**Training mode no longer sends checks.** 0.1.1 claimed to have fixed the
+phantom "Intro Stage - Clear"; it did not, and this release corrects both the
+bug and that claim.
+
+A live capture settled it: selecting Training writes story ACT `0x0A` **and**
+max HP `0x20` into the ordinary save struct in the same frame. 0.1.1 only
+required the save to look resident, which training satisfies — so the phantom
+check still went out. The client now recognises the training pseudo-save
+(ACT `0x0A` with no boss kills recorded) and suspends **all** checks, item
+grants and launch pinning until you leave it.
+
+Scope, from the same capture: the training boss kill sets no progress bits at
+all, so only the intro location was ever affected — no boss, DNA or Heart Tank
+check could fire from training. Everything is torn down when you exit, so no
+residue carries into a real session.
+
+0.1.1's gating fix is still correct and still needed; it addressed a different
+failure (reading the save area before any save is resident, e.g. at boot).
+
 ## 0.1.1 — 2026-08-03
 
 Fixes for everything the first testers hit. v0.1.0 could not be used without

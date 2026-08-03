@@ -74,6 +74,11 @@ OFF_PROCESSED = 0x0D1C4E - SAVE_BASE
 # first grant batch on an unstamped save.
 OFF_STAMP = 0x0D1C50 - SAVE_BASE
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
+# Story ACT value Training mode stamps into the save struct (live-captured
+# 2026-08-03). The campaign uses a small range - 1 at intro victory, 5 at
+# Eurasia, 2 read off a real mid-game save - so 0x0A is out of band and
+# identifies the training pseudo-save. See the `training` check below.
+TRAINING_ACT = 0x0A
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
 OFF_ARMOR = 0x0D1CA1 - SAVE_BASE       # armor parts byte (Falcon 0-3, Gaea 4-7)
@@ -249,6 +254,7 @@ class MMX5Client(BizHawkClient):
         self.unknown_records_logged = set()
         self.stamp_warned = False
         self.victory_sent = False
+        self.last_training_state = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -333,9 +339,31 @@ class MMX5Client(BizHawkClient):
                                       "status": ClientStatus.CLIENT_GOAL}])
                 logger.info(f"MMX5: ending reached (mode {mode[0]:02X}) - GOAL complete!")
 
-            # Grants are safe whenever the save struct is live: gameplay or
-            # results mode, plus a sanity floor on max HP against garbage states.
-            save_sane = 0x10 <= save[OFF_MAX_HP_X] <= 0x40
+            # TRAINING MODE builds a PSEUDO-SAVE in this very struct. Live
+            # capture 2026-08-03: selecting Training writes ACT=0x0A and max
+            # HP=0x20 in the SAME frame, so a residency check alone is
+            # satisfied and the intro check fires - this is the phantom
+            # "Intro Stage - Clear" a tester reported, and the residency gate
+            # added in 0.1.1 did NOT stop it. A campaign save never holds ACT
+            # 0x0A: the same capture read 0x02 on a real save, and the story
+            # writes 1 at the intro and 5 at Eurasia. The kills term is
+            # belt-and-braces so no conceivable late-game save can trip this
+            # rule - training set NO kill bit across a whole session
+            # including a boss kill (0x1C4C stayed 0x00 throughout), while
+            # any save deep enough to matter necessarily has some.
+            training = (save[OFF_INTRO] == TRAINING_ACT
+                        and save[OFF_WEAPONS] == 0)
+            # Deliberately folded into save_sane rather than guarded
+            # separately: every consumer - check detection, item grants and
+            # launch pinning - already keys off this one flag, so training is
+            # inert everywhere at once instead of in three places that could
+            # drift apart.
+            save_sane = 0x10 <= save[OFF_MAX_HP_X] <= 0x40 and not training
+            if training != self.last_training_state:
+                self.last_training_state = training
+                if training:
+                    logger.info("MMX5: training mode detected - checks and "
+                                "grants suspended until you leave it")
             in_gameplay = mode[0] in (0x0A, 0x0C) and save_sane
             if in_gameplay != self.last_gate_state:
                 logger.debug(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
