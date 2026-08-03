@@ -52,7 +52,11 @@ vanilla_regions: tuple[RegionData, ...] = (
     ),
     RegionData(
         RegionName.backwoods,
-        (Entrance.backwoods_to_farm, Entrance.backwoods_tunnel_shortcut, Entrance.backwoods_to_mountain),
+        (Entrance.backwoods_to_farm,
+         Entrance.backwoods_tunnel_shortcut,
+         Entrance.backwoods_to_mountain,
+         LogicEntrance.forage_in_backwoods,
+         ),
     ),
     RegionData(
         RegionName.bus_stop,
@@ -64,6 +68,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.minecart_bus_stop_to_mines,
             Entrance.minecart_bus_stop_to_quarry,
             Entrance.minecart_bus_stop_to_town,
+            LogicEntrance.forage_in_bus_stop,
         ),
     ),
     RegionData(LogicRegion.bus_stop_krobus_cutscene, (Entrance.bus_stop_cutscene_to_bus_stop,)),
@@ -88,7 +93,8 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.place_crab_pot_in_forest,
             LogicEntrance.attend_trout_derby,
             LogicEntrance.buy_from_hat_mouse,
-            LogicEntrance.forest_cutscenes_from_forest
+            LogicEntrance.forest_cutscenes_from_forest,
+            LogicEntrance.forage_in_forest,
         ),
     ),
     RegionData(
@@ -124,7 +130,8 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_lake_to_outside_adventure_guild_shortcut,  # can't randomize
             LogicEntrance.mountain_shortcut_fence_entrance,
             LogicEntrance.place_crab_pot_in_mountain,
-            LogicEntrance.mountain_cutscenes_from_mountain
+            LogicEntrance.mountain_cutscenes_from_mountain,
+            LogicEntrance.forage_in_mountain,
         ),
     ),
     RegionData(
@@ -182,6 +189,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.town_shortcut_fence_entrance,
             LogicEntrance.place_crab_pot_in_town,
             LogicEntrance.town_cutscenes_from_town,
+            LogicEntrance.forage_in_town,
         ),
     ),
     RegionData(
@@ -214,6 +222,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.attend_squidfest,
             LogicEntrance.place_crab_pot_in_ocean,
             LogicEntrance.beach_cutscenes_from_beach,
+            LogicEntrance.forage_in_beach,
         ),
     ),
     RegionData(
@@ -444,6 +453,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.crafting),
     RegionData(LogicRegion.eating),
     RegionData(LogicRegion.hats),
+    RegionData(LogicRegion.foraging),
     RegionData(LogicRegion.spring_farming),
     RegionData(LogicRegion.summer_farming, (LogicEntrance.grow_summer_fall_crops_in_summer,)),
     RegionData(LogicRegion.fall_farming, (LogicEntrance.grow_summer_fall_crops_in_fall,)),
@@ -1555,6 +1565,15 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.buy_from_raccoon_6, LogicRegion.raccoon_shop_6),
     ConnectionData(LogicEntrance.farmhouse_cooking, LogicRegion.kitchen),
     ConnectionData(LogicEntrance.watch_queen_of_sauce, LogicRegion.queen_of_sauce),
+    ConnectionData(LogicEntrance.forage_in_forest, LogicRegion.foraging),
+    ConnectionData(LogicEntrance.forage_in_backwoods, LogicRegion.foraging),
+    ConnectionData(LogicEntrance.forage_in_bus_stop, LogicRegion.foraging),
+    ConnectionData(LogicEntrance.forage_in_town, LogicRegion.foraging),
+    ConnectionData(LogicEntrance.forage_in_mountain, LogicRegion.foraging),
+    ConnectionData(LogicEntrance.forage_in_beach, LogicRegion.foraging),
+    ConnectionData(LogicEntrance.forage_in_island_west, LogicRegion.foraging),
+    ConnectionData(LogicEntrance.forage_in_island_north, LogicRegion.foraging),
+    ConnectionData(LogicEntrance.forage_in_island_jungle, LogicRegion.foraging),
     ConnectionData(LogicEntrance.grow_spring_crops, LogicRegion.spring_farming),
     ConnectionData(LogicEntrance.grow_summer_crops, LogicRegion.summer_farming),
     ConnectionData(LogicEntrance.grow_fall_crops, LogicRegion.fall_farming),

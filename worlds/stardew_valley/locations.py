@@ -151,6 +151,17 @@ class LocationTags(enum.Enum):
     REQUIRES_FRIENDSANITY_MARRIAGE = enum.auto()
     MEET_VILLAGER = enum.auto()
     MEET_VILLAGER_ALWAYS = enum.auto()
+    FORAGING = enum.auto()
+    SPRING_FORAGING = enum.auto()
+    SUMMER_FORAGING = enum.auto()
+    FALL_FORAGING = enum.auto()
+    WINTER_FORAGING = enum.auto()
+    BEACH_FORAGING = enum.auto()
+    MINES_FORAGING = enum.auto()
+    DESERT_FORAGING = enum.auto()
+    ISLAND_FORAGING = enum.auto()
+    BASIC_FORAGING = enum.auto()
+    TOOL_FORAGING = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods

@@ -10,4 +10,4 @@ from .options import (StardewValleyOption, Goal, FarmType, StartingMoney, Profit
                       FriendshipMultiplier, DebrisMultiplier, BackpackSize, QuickStart, Gifting, Mods,
                       BundlePlando, BundleWhitelist, BundleBlacklist, AllowedFillerItems,
                       enabled_mods, enabled_mods_except_invalid_combinations, all_mods_except_invalid_combinations, disabled_mods, all_mods,
-                      TrapDistribution, TrapItems, StardewValleyOptions)
+                      TrapDistribution, TrapItems, EntrancePlando, StardewValleyOptions)

@@ -195,6 +195,8 @@ class LogicRegion:
     indoor_farming = "Indoor Farming"
     summer_or_fall_farming = "Summer or Fall Farming"
 
+    foraging = "Foraging"
+
     fishing = "Fishing"
     crafting = "Crafting"
     eating = "Eating"

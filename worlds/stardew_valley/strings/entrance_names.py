@@ -413,6 +413,16 @@ class LogicEntrance:
     grow_summer_fall_crops_in_summer = "Grow Summer Fall Crops in Summer"
     grow_summer_fall_crops_in_fall = "Grow Summer Fall Crops in Fall"
 
+    forage_in_forest = "Forage in Forest"
+    forage_in_backwoods = "Forage in Backwoods"
+    forage_in_bus_stop = "Forage in Bus Stop"
+    forage_in_town = "Forage in Town"
+    forage_in_mountain = "Forage in Mountain"
+    forage_in_beach = "Forage in Beach"
+    forage_in_island_west = "Forage in Island West"
+    forage_in_island_north = "Forage in Island North"
+    forage_in_island_jungle = "Forage in Island Jungle"
+
     fishing = "Start Fishing"
     wearing_hats = "Wearing Hats"
     crafting = "Crafting"
