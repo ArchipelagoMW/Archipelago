@@ -125,8 +125,7 @@ class KH2Context(CommonContext):
 
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
-            self.kh2_client_settings = f"kh2_client_settings.json"
-            self.kh2_client_settings_join = os.path.join(self.game_communication_path, self.kh2_client_settings)
+            self.kh2_client_settings_join = os.path.join(self.game_communication_path,f"kh2_client_settings.json")
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
             if not os.path.exists(self.kh2_client_settings_join):
@@ -138,7 +137,7 @@ class KH2Context(CommonContext):
                     # if the file isnt empty load it
                     # this is the best I could fine to valid json stuff https://stackoverflow.com/questions/23344948/validate-and-format-json-files
                     try:
-                        self.kh2_seed_save = json.load(f)
+                        self.client_settings = json.load(f)
                     except json.decoder.JSONDecodeError:
                         pass
                         # this is what is effectively doing on
@@ -490,7 +489,7 @@ class KH2Context(CommonContext):
                             self.queued_info_popup += [temp_length[:90]]  # slice it to be 90
                         else:
                             self.queued_info_popup += [temp_length]
-                    else:  # either chest or puzzle. they are handled the same length wise
+                    elif receive_popup_type != "none":  # either chest or puzzle. they are handled the same length wise
                         totalLength = len(itemName) + len(playerName)
                         while totalLength > 25:
                             if receive_truncate_first == "playername":
@@ -520,7 +519,7 @@ class KH2Context(CommonContext):
                             self.queued_info_popup += [temp_length[:90]]  #slice it to be 90
                         else:
                             self.queued_info_popup += [f"Sent {itemName} to {playerName}"]
-                    else:  # else chest or puzzle. they are handled the same length wise
+                    elif send_popup_type != "none":  # else chest or puzzle. they are handled the same length wise
                         while totalLength > 27:
                             if send_truncate_first == "playername":
                                 if len(playerName) > 5: #limit player name to at least be 5 characters
