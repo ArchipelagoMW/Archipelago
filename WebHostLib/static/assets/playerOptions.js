@@ -100,6 +100,11 @@ window.addEventListener('load', async () => {
   // Handle changes to presets select
   document.getElementById('game-options-preset').addEventListener('change', choosePreset);
 
+  // Do length check for player name
+  const nameInput = document.getElementById('player-name');
+  nameInput.removeAttribute('maxlength');
+  nameInput.addEventListener('change', checkName);
+
   // Save settings to localStorage when form is submitted
   document.getElementById('options-form').addEventListener('submit', (evt) => {
     const playerName = document.getElementById('player-name');
@@ -324,6 +329,26 @@ const applyPresets = (presetName) => {
   });
 
   saveSettings();
+};
+
+/**
+ * Set the player name warning message to display or not depending on length check
+ * @param evt
+ */
+const checkName = (evt) => {
+  const name = evt.target.value;
+  const warning = document.getElementById('name-warning');
+  warning.hidden = minNameLength(name) <= 16;
+};
+
+/**
+ * Calculate how long the player name may be if each tag like {player} is replaced by a single char
+ * @param {string} name The name to be checked
+ * @returns {number} Computed lower bound on character length of name
+ */
+const minNameLength = (name) => {
+  const replaced = name.replaceAll(/{(player|PLAYER|number|NUMBER)}/g, '0');
+  return replaced.length;
 };
 
 const showUserMessage = (text) => {
