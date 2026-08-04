@@ -1,6 +1,7 @@
 import unittest
 from typing import ClassVar, Set
 
+from worlds.stardew_valley import SeasonRandomization
 from .assertion import WorldAssertMixin
 from .bases import SVTestBase
 from ..content.feature import fishsanity
@@ -410,6 +411,7 @@ class TestFishsanityMasterAnglerSVEWithoutQuests(WorldAssertMixin, SVTestBase):
 
 class TestNeedCrabPotToCatchCrab(SVTestBase):
     options = {
+        SeasonRandomization: SeasonRandomization.option_disabled,
         Fishsanity: Fishsanity.option_all,
         DataRandomization: frozenset({}),
         SkillProgression: SkillProgression.option_progressive,

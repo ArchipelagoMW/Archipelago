@@ -3,6 +3,7 @@ from ... import StardewItem, StartWithoutOptionName
 from ...options import (ElevatorProgression, ExcludeGingerIsland, Fishsanity, SeasonRandomization, SkillProgression, SpecialOrderLocations, StartWithout,
                         ToolProgression)
 from ...options.options import DataRandomization, DataRandomizationBehavior
+from ...strings.ap_names.ap_option_names import DataRandomizationOptionName
 from ...strings.ap_names.transport_names import Transportation
 from ...strings.fish_names import Fish
 
@@ -82,7 +83,7 @@ class TestNeedLevelsToCatchFish(SVTestBase):
         Fishsanity.internal_name: Fishsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-        DataRandomization.internal_name: frozenset(DataRandomization.preset_all),
+        DataRandomization.internal_name: frozenset(DataRandomization.preset_all - {DataRandomizationOptionName.fish_catch_method}),
         DataRandomizationBehavior.internal_name: DataRandomizationBehavior.option_weighted_randomized,
     }
 
