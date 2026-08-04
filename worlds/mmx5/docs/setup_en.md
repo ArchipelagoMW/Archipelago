@@ -84,6 +84,18 @@ connected, play normally — checks send themselves and items arrive as you go.
   written into your save data, and the game builds its live weapon/armor state
   when a stage or character loads. If a weapon arrives while you are in a
   stage, expect it once you next enter one — it is not lost.
+- **If a tank or an armor part is briefly missing from your menu, that is
+  deliberate.** The original game hides a pickup — or the route to it — once
+  you already own what it gives. Since Archipelago can hand you that item
+  early, the client temporarily withholds it while you are in the stage
+  holding its check, so the check stays collectable. You get the item back as
+  soon as you collect that check or leave the stage. This affects tanks (on
+  discs patched before the fix — re-patching removes it) and Falcon Armor Head
+  while you are in Squid Adler's stage, whose energy balls the game hides once
+  you own the part its capsule grants. **Armor you have equipped keeps
+  working** — the game decides which armor to wear when the stage loads, and
+  the client only withholds afterwards — so this costs you nothing beyond the
+  pause menu showing one fewer part until you collect that check.
 - **"Small Energy" filler items currently do nothing in-game.** They exist to
   pad the item pool; receiving one is not a bug.
 - **Save often, and be aware of BizHawk's memory-card handling.** BizHawk only

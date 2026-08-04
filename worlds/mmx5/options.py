@@ -18,26 +18,41 @@ class Goal(Choice):
 
 
 class BossDifficulty(Choice):
-    """Starting Boss Level, set via the frozen collision countdown.
+    """How hard bosses start out.
 
-    X5 scales boss HP (not attack patterns) with a Boss Level: a base from the
-    countdown, plus 1 per Maverick defeated and per special weapon owned.
-    Higher levels also unlock better post-boss rewards in-game.
+    Mega Man X5 scales bosses with a "Boss Level" derived from how many hours
+    remain on the colony countdown. The randomizer freezes that countdown, so
+    this option chooses what it freezes at - which fixes where the difficulty
+    curve begins.
 
-    relaxed: base 1. Gentlest bosses; the better vanilla reward tiers arrive
-    only late in the run.
-    standard: base 9. Every boss offers the top vanilla reward tier.
-    intense: base 17. Hardest bosses; top reward tier throughout.
+    relaxed: 17 hours remaining, starting Boss Level 1. The gentlest bosses.
+    standard: 8 hours remaining, starting Boss Level 9. The default.
+    intense: 1 hour remaining, starting Boss Level 17. The hardest bosses.
 
-    Any setting is safe for seed completion - Archipelago checks never depend
-    on Boss Level (DNA locations are checked on the boss kill itself).
+    Note that FEWER hours means a HIGHER level - the game ramps up as the
+    crisis deepens, so "intense" is the one-hour setting.
+
+    Boss Level scales boss HP, not their attack patterns, so higher settings
+    make fights longer rather than smarter. It also decides the reward a boss
+    gives in the original game: level 4+ offers the Life Up / Energy Up
+    choice, and level 8+ upgrades that and adds an equippable Part. On
+    "standard" you are past both thresholds from the very first fight; on
+    "relaxed" they arrive partway through the run.
+
+    Whatever you pick, the level still climbs as you play - +1 for each
+    Maverick defeated and each special weapon you own, recalculated when you
+    enter a stage. This only sets the starting point.
+
+    This can never make a seed unbeatable: Archipelago's checks do not depend
+    on Boss Level. The DNA reward locations are checked when the boss dies
+    rather than when the reward appears, precisely so a low setting cannot
+    make them unobtainable.
     """
-    # Implementation: the client pins the countdown frames (relaxed 17 h,
-    # standard 8 h, intense 1 h; hours-remaining -> base per the formula in
-    # the research notes, mmx5-ram-notes.md). The base stays fixed all run
-    # while the Maverick
-    # and weapon terms still climb. "standard" reproduces the previously
-    # hardcoded 8-hour pin.
+    # Implementation: the client pins the countdown in frames (relaxed 17 h,
+    # standard 8 h, intense 1 h); hours-remaining -> base follows the formula
+    # in the research notes, mmx5-ram-notes.md. The base stays fixed all run
+    # while the Maverick and weapon terms still climb. "standard" reproduces
+    # the 8-hour pin the world used before this became an option.
     display_name = "Boss Difficulty"
     option_relaxed = 0
     option_standard = 1

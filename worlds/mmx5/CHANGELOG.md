@@ -1,5 +1,63 @@
 # Mega Man X5 apworld changelog
 
+## 0.1.3 — 2026-08-03
+
+**Tank locations could become permanently uncollectable, which could make a
+seed unwinnable.** This is the most serious bug found so far. Re-patch your
+disc with this version.
+
+Mega Man X5 deletes any pickup you already own — one frame after it spawns.
+The client granted tanks by setting exactly those ownership bits, because that
+is what makes a tank appear in the pause menu. So a Sub-Tank, W-Tank or
+EX-Tank arriving from the multiworld destroyed the vanilla pickup that *is*
+that location's check, and the location could never be collected again. With
+progression items able to land there, a seed could be stranded.
+
+Measured live in Grizzly Slash, one pass, three items: a consumable's object
+lived 251 frames, an un-owned Heart Tank 47, and an **owned Sub-Tank exactly
+2** — constructed and then destroyed on the next frame. Heart Tanks were never
+affected, because the client grants those by raising max HP instead of setting
+the heart bits.
+
+Two fixes, and the client picks the right one automatically:
+
+- **Disc patch (rev 12):** the item's already-owned test in the init handler
+  now ignores tanks, so their pickups always appear. Hearts, EX items and
+  consumables keep their vanilla behaviour.
+- **Client fallback for older discs:** if the disc predates the fix, the
+  client holds back that one tank bit while you are in the stage that owns an
+  unchecked tank location, so the pickup survives. You get the tank as soon as
+  the check is collected or you leave. It detects the patched disc and does
+  nothing there, so re-patching removes the trade-off entirely.
+
+**Squid Adler's armor capsule could become uncollectable** — the same trap in
+another form. That capsule is gated on collecting energy balls in the jet-bike
+section, and owning the part it grants (Falcon Head) makes those balls stop
+appearing. Anyone who received Falcon Head from the multiworld before visiting
+the stage could never open the capsule. The client now withholds that one part
+while you are in that stage with the capsule unchecked, and returns it the
+moment you collect the check or leave. **This costs you nothing in play**:
+verified live with a complete Falcon set, X still wears the armor in that
+stage and the energy balls are present at the same time. The game decides
+which armor to equip when the stage loads and the balls consult ownership
+during play, so withholding only during play lands neatly between the two.
+A disc-level fix would remove
+the withhold entirely and is the intended follow-up; the gate is evaluated per
+ball as you ride, not at stage load, so it has to be found in stage overlay
+code with a debugger BizHawk cannot provide.
+
+**The launch goal could complete without the parts.** Vanilla launches the
+shuttle by itself once all eight Mavericks are down, and the client fired the
+goal on that success flag alone — one tester finished holding 3 of 8 parts.
+The world's own logic always required all 8, so the client was disagreeing
+with itself. It now needs a successful launch *and* the full set, and says so
+in the log when the story's own launch goes off early.
+
+Also: the `boss_difficulty` option is now properly documented — what relaxed /
+standard / intense actually mean, and why fewer countdown hours means harder
+bosses. The Enigma/Shuttle parts screen showing more parts than you have
+received is a known cosmetic issue, now documented rather than surprising.
+
 ## 0.1.2 — 2026-08-03
 
 **Training mode no longer sends checks.** 0.1.1 claimed to have fixed the

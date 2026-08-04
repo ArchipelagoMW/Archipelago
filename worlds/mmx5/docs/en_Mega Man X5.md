@@ -50,11 +50,25 @@ complete armor set unlocks at character select after the next results screen.
   correct — the capsule is the *check*; the armor part itself comes from the
   multiworld. You must walk fully into a capsule, not merely stand beside it,
   or the sequence will not start.
-- **Boss difficulty is an option.** Boss Level in X5 scales with the time
-  remaining on the countdown, and since that countdown is frozen, the
-  `boss_difficulty` option decides what the fixed base is. Bosses still get
-  stronger as you defeat more Mavericks and collect more weapons.
+- **Boss difficulty is an option.** X5 scales bosses with a "Boss Level" taken
+  from the hours left on the colony countdown, and the randomizer freezes that
+  countdown — so `boss_difficulty` picks what it freezes at. **relaxed** is 17
+  hours (starting level 1), **standard** is 8 hours (level 9, the default), and
+  **intense** is 1 hour (level 17). Fewer hours means a *higher* level, because
+  the game ramps up as the crisis deepens. It scales boss HP rather than their
+  attack patterns, and it decides which reward a boss gives in the original
+  game — level 4+ offers the Life/Energy Up choice, level 8+ upgrades it and
+  adds a Part. Bosses keep getting stronger either way as you collect Mavericks
+  and weapons; this only sets the starting point, and no setting can make a
+  seed unbeatable.
 - **Checks appear a few seconds after a boss dies**, not instantly — the game
   commits the kill shortly after the results screen.
 - **"Small Energy" filler items do nothing in-game** — they pad the item pool
   when there are more locations than real items.
+- **The Enigma/Shuttle parts screen lies to you.** It shows parts the original
+  game hands out for beating Mavericks, not the ones Archipelago sent you.
+  Only the parts you actually received count toward the **launch** goal, and
+  the client will tell you your real count in its log. Under the launch goal
+  the story's own shuttle launch — which happens automatically once all eight
+  Mavericks are down — does **not** finish your run; you still need all 8
+  parts.

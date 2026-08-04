@@ -716,3 +716,157 @@ different module phase than the dump; find its disc home when needed).
 `scan_save.py` (register-tracking EA scanner for RAM dumps), `scan_rmw.py`
 (same-offset load/store pair finder), `disasm_dump.py` (capstone disasm at
 0x80000000 base), plus scan outputs `scan_gameplay.txt` / `scan_results.txt`.
+
+---
+
+## 12. Item already-owned despawn — why AP tank locations were missable
+
+**Live-proven 2026-08-03** (`Scripts/mmx5_item_spawn_watch.lua`, one pass
+through Grizzly Slash on a VANILLA disc):
+
+| item | owned? | object lifetime |
+|---|---|---|
+| consumable (id 0x21) | n/a | 251 frames |
+| Heart Tank (id 0x00) | no | 47 frames |
+| **Sub-Tank #1 (id 0x27)** | **yes** | **2 frames** |
+
+All three are constructed normally (`obj+0x00` goes `0x41` -> `0x21`). The
+owned one is destroyed on the very next frame. The layout spawner is NOT
+involved — it marks the placement record identically either way.
+
+### The check, in the item init `0x800535C8`
+
+The tail of the init dispatches an "already own this?" test by KIND through a
+**second jump table at `0x80011038`** (distinct from the collect-handler table
+at `0x80011068`). Each handler ANDs the relevant save bit and leaves `a2 = 1`
+when owned:
+
+```
+80053800: (kind 9  sub-tank) addiu v0,zero,0x1000 ; lhu v1,0x7E(a1) ; sllv/and
+80053838: (kind A  W-tank)   andi  v0,v0,0x4000
+80053848: (kind B  EX-tank)  andi  v0,v0,0x8000
+800537B8: (kind 0  heart)    lw v0,0x80(a1) ; 1 << id
+...
+8005384C: beq v0,zero,0x80053858     # bit clear -> not owned
+80053854: addiu a2,zero,1            # owned
+80053858: beq a2,zero,0x8005386C     # not owned -> normal init
+80053868: sb v0,0x0004(s0)           # OWNED -> obj+0x04 = 3 = destroy me
+```
+
+### Consequence for Archipelago
+
+The client grants tanks by setting those very bits (they are what shows a tank
+in the pause menu), so receiving a tank **deleted the pickup that is its own
+check** — permanently, and those locations can hold progression. Hearts were
+never affected because the client grants those by raising max HP and never
+touches the heart bits.
+
+### The fix (disc rev 12)
+
+Zero the three per-kind mask constants, which defeats the test for tanks only:
+
+| addr | vanilla | patched |
+|---|---|---|
+| `0x80053804` | `24021000` addiu v0,zero,0x1000 | `24020000` |
+| `0x80053838` | `30424000` andi v0,v0,0x4000 | `30420000` |
+| `0x80053848` | `30428000` andi v0,v0,0x8000 | `30420000` |
+
+The sub-tank word zeroes the shift BASE (`0x1000 << (id-0x27)`), and `0 << n`
+is still 0, so one word covers both sub-tanks. `0x80053804` doubles as the
+client's probe for "does this disc have the fix?".
+
+### 12.1 The same trap on ARMOR — Squid Adler's energy balls
+
+**Live-proven 2026-08-03**, one session, one stage, one variable
+(`Scripts/mmx5_item_spawn_log.txt`, AP-patched disc v12):
+
+| frame | 0x800D1CA1 | jet-bike energy balls |
+|---|---|---|
+| f46382 | `00` none owned | **present and collectable** |
+| f57354 | `01` FalconHead | **gone** |
+
+Squid Adler's capsule is id 0 = Falcon Armor Head. Granting the part it
+grants makes the balls that GATE it disappear, so the capsule can never be
+opened - the AP location `Squid Adler - Armor Capsule` becomes uncollectable
+for anyone who receives Falcon Head before visiting the stage.
+
+Notes:
+
+- This is a **second, independent gate** on that location. The v9 spawn-gate
+  retarget already forces capsule objects (ids 0-7) to spawn, so the capsule
+  is sitting there while the mechanism that opens it is not. The v9 fix was
+  incomplete rather than wrong.
+- The balls are **not** item placement records (Squid Adler area 0 walks 119
+  records and contains exactly one item, the Heart Tank at x=8256) and they
+  do **not** go through the AP pickup stub (stub verified RESIDENT, ring
+  count stayed 0 across several balls collected). So neither the pickup
+  redirect nor the tank mask patch is involved - this is vanilla logic
+  reacting to an ownership bit, exactly like the tank despawn.
+- Reported first by a tester as "the blue balls aren't in the level"; his
+  item log shows `Falcon Armor Head (Duff McWhalen - DNA Part)` received
+  before he reached the stage, which matches.
+
+**Current mitigation is client-side** (withhold that one bit while the player
+is in the stage with the capsule unchecked) because the gate has not been
+located in code yet. A disc patch, as done for tanks at 0x80053804/38/48,
+would be the proper fix and would cost the player nothing.
+
+**Stage -> capsule part map is only partly verified**: Squid Adler = Falcon
+Head, Duff McWhalen = Falcon Body, Grizzly Slash = Falcon Leg, Dark Dizzy =
+Gaea Head. The other four are unknown, so other stages may hide the same trap.
+Do not guess entries - a wrong one withholds armor a player needs to REACH a
+capsule, which is worse than the bug.
+
+#### 12.1.1 When the gate runs — and why the fix has to be client-side for now
+
+Attempted to find the gating instruction and failed; recording both the result
+and the dead ends so nobody repeats them.
+
+**BizHawk cannot do this.** Nymashock implements neither memory callbacks nor
+`GetCpuFlagsAndRegisters()`, so read-watchpoints and PC capture are both
+unavailable. An earlier run that logged "0 reads of 0x800D1CA1" was therefore
+meaningless — registration silently succeeds, delivery never happens. Any
+future watchpoint work needs DuckStation's debugger (path in CLAUDE.md).
+
+**Static scanning did not find it either.** The full EXE (0x80010000-0x80092000)
+contains 30 load/stores touching the armor bytes; the only one in a spawn path
+is the capsule despawn ladder at 0x80055114, which the v9 retarget already
+bypasses. The layout spawner's own armor gate at 0x8002AFCC reads `0x1CA0` —
+the LOW byte of the u16 — while parts live in `0x1CA1`, so that is a different
+field. Stage overlays are not a single mapped region and several modules load
+at overlapping RAM addresses from different disc locations, so extrapolating
+from one anchor stops being trustworthy quickly. (Useful anchor found on the
+way: **Squid Adler's overlay has RAM 0x80100170 at disc sector 23911, user
+byte 0**, located by searching for a placement record identified live.)
+
+**Timing was established instead**, by holding the bit clear over different
+windows and looking (`Scripts/mmx5_armor_window_test.lua`):
+
+| bit held clear | energy balls |
+|---|---|
+| last ~5 frames of loading | gone |
+| whole transition + 600 frames of gameplay | **present** |
+| whole transition, restored as gameplay begins | gone |
+
+So the check is **not** a one-shot at stage load — it happens during gameplay,
+per ball, as the screen scan reaches each one. That matches how ordinary item
+records spawn. There is consequently no load-time window to exploit, and the
+armor bit must stay clear for as long as the player is in the stage.
+
+**And it costs the player nothing** (verified live with a complete Falcon set):
+the game decides which armor to EQUIP from the parts byte at stage LOAD, while
+the balls consult ownership during GAMEPLAY. Withholding only during gameplay
+therefore lands between the two - X wears the armor and the balls are present
+at the same time. Set-completion (0x1C4A) was also observed NOT to be cleared
+when the parts byte goes incomplete, so nothing is lost when the bit returns.
+
+Two ways to get this wrong, both hit while testing: withholding across stage
+LOADING strips the armor for that stage, and withholding regardless of stage
+strips it everywhere (a harness doing that lost armor in Grizzly Slash, which
+the fix never touches).
+
+**Conclusion:** the client-side gameplay-only withhold is the correct fix and
+is free. A disc patch would still be tidier - it would remove the pause menu
+showing one fewer part - but it is now a cosmetic improvement, not a
+correctness one, and it needs the per-spawn check located in stage overlay
+code with a debugger BizHawk cannot provide.
