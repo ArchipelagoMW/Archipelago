@@ -50,6 +50,34 @@ class FakeContext:
         return ids
 
 
+def seed_edits_for(**overrides) -> list:
+    """Run patch_rom against a fake world and return its seed edits.
+
+    ONE builder for every test that needs this. Two classes previously rolled
+    their own, and both broke the moment a new option was added, because
+    patch_rom reads options they had never heard of. Defaults live here so a
+    new option needs updating in exactly one place."""
+    from .. import Rom
+    from ..options import Goal, LaunchOdds, TextSkip
+
+    opts = {"goal": Goal(Goal.option_sigma),
+            "launch_odds": LaunchOdds(LaunchOdds.option_deterministic),
+            "text_skip": TextSkip(0)}
+    for key, value in overrides.items():
+        cls = {"goal": Goal, "launch_odds": LaunchOdds, "text_skip": TextSkip}[key]
+        opts[key] = cls(value)
+
+    captured = {}
+
+    class FakePatch:
+        @staticmethod
+        def write_file(name, data):
+            captured[name] = data
+
+    Rom.patch_rom(SimpleNamespace(options=SimpleNamespace(**opts)), FakePatch())
+    return json.loads(captured["seed_edits.json"].decode("utf-8"))
+
+
 def make_save(max_hp: int, intro: int = 0, weapons: int = 0, hearts: int = 0,
               tanks: int = 0) -> bytes:
     save = bytearray(mmx5_client.SAVE_LEN)
@@ -505,20 +533,7 @@ class TestShuttleGateSeedEdit(unittest.TestCase):
 
     @staticmethod
     def edits_for(goal_value: int) -> list:
-        from ..options import Goal
-        from .. import Rom
-        captured = {}
-
-        class FakePatch:
-            @staticmethod
-            def write_file(name, data):
-                captured[name] = data
-
-        from ..options import TextSkip
-        world = SimpleNamespace(options=SimpleNamespace(
-            goal=Goal(goal_value), text_skip=TextSkip(0)))
-        Rom.patch_rom(world, FakePatch())
-        return json.loads(captured["seed_edits.json"].decode("utf-8"))
+        return seed_edits_for(goal=goal_value)
 
     def test_all_mavericks_moves_the_shuttle_era_to_eight(self) -> None:
         from ..options import Goal
@@ -555,21 +570,10 @@ class TestTextSkipSeedEdits(unittest.TestCase):
 
     @staticmethod
     def edits_for(text_skip: int, goal_value: int | None = None) -> list:
-        from ..options import Goal, TextSkip
-        from .. import Rom
-        captured = {}
-
-        class FakePatch:
-            @staticmethod
-            def write_file(name, data):
-                captured[name] = data
-
-        from ..options import Goal as G
-        world = SimpleNamespace(options=SimpleNamespace(
-            goal=G(goal_value if goal_value is not None else G.option_sigma),
-            text_skip=TextSkip(text_skip)))
-        Rom.patch_rom(world, FakePatch())
-        return json.loads(captured["seed_edits.json"].decode("utf-8"))
+        from ..options import Goal
+        return seed_edits_for(
+            text_skip=text_skip,
+            goal=goal_value if goal_value is not None else Goal.option_sigma)
 
     def test_off_emits_no_text_edits(self) -> None:
         from .. import Rom
@@ -601,6 +605,81 @@ class TestTextSkipSeedEdits(unittest.TestCase):
         from .. import Rom
         self.assertEqual(Rom.TEXT_INSTANT_VANILLA, bytes.fromhex("02006010"))
         self.assertEqual(Rom.TEXT_ADVANCE_VANILLA, bytes.fromhex("ec006010"))
+
+
+class TestLaunchOdds(unittest.IsolatedAsyncioTestCase):
+    """`vanilla` restores the game's own roll and hands it a SCORE in the band
+    matching the parts held, instead of the flat 0/1 that deterministic odds
+    use. Bands (resolution ladder at 0x800FA0D8): 0x01-0x14 6.25%,
+    0x15-0x28 12.5%, 0x29-0x3C 37.5%, 0x3D-0x50 75%, <=0 never."""
+
+    @staticmethod
+    async def score_for(goal: int, odds: int, weapons: int,
+                        enigma: int = 0, shuttle: int = 0) -> int:
+        ctx = FakeContext()
+        ctx.slot_data = {"goal": goal, "boss_difficulty": 1, "launch_odds": odds}
+        from ..items import item_table
+        code_of = {n: d.code for n, d in item_table.items()}
+        id_to_name = {d.code: n for n, d in item_table.items()}
+        ctx.items_received = (
+            [SimpleNamespace(item=code_of[names.ENIGMA_PART])] * enigma +
+            [SimpleNamespace(item=code_of[names.SHUTTLE_PART])] * shuttle)
+        ctx.item_names = SimpleNamespace(lookup_in_game=lambda c: id_to_name[c])
+        client = MMX5Client()
+        client.ap_patched = True
+        save = bytearray(make_save(max_hp=0x20, weapons=weapons))
+        save[mmx5_client.OFF_SCORE_MOD] = 0xFF   # forces a pin every time
+        await run_watcher(bytes(save), client=client, ctx=ctx)
+        addr = mmx5_client.SAVE_BASE + mmx5_client.OFF_SCORE_MOD
+        writes = [w[1][0] for w in ctx.writes if w[0] == addr]
+        return writes[-1] if writes else 0xFF
+
+    async def test_deterministic_is_still_a_flat_flag(self) -> None:
+        score = await self.score_for(mmx5_client.GOAL_SIGMA, 0, 0x03, enigma=4)
+        self.assertEqual(score, 1, "deterministic odds should pin a flat 1")
+
+    async def test_enigma_bands(self) -> None:
+        # No parts -> 6.25%; any parts -> 12.5% (extra Enigma parts add
+        # nothing in the original game either).
+        V = mmx5_client.LAUNCH_ODDS_VANILLA
+        none = await self.score_for(mmx5_client.GOAL_SIGMA, V, 0x03)
+        some = await self.score_for(mmx5_client.GOAL_SIGMA, V, 0x03, enigma=1)
+        self.assertEqual(none, mmx5_client.LAUNCH_SCORE_6)
+        self.assertEqual(some, mmx5_client.LAUNCH_SCORE_12)
+
+    async def test_shuttle_bands(self) -> None:
+        V = mmx5_client.LAUNCH_ODDS_VANILLA
+        SIX = 0x3F   # 6 kills -> shuttle era
+        self.assertEqual(await self.score_for(mmx5_client.GOAL_SIGMA, V, SIX),
+                         mmx5_client.LAUNCH_SCORE_12)
+        self.assertEqual(await self.score_for(mmx5_client.GOAL_SIGMA, V, SIX, shuttle=2),
+                         mmx5_client.LAUNCH_SCORE_37)
+        self.assertEqual(await self.score_for(mmx5_client.GOAL_SIGMA, V, SIX, shuttle=3),
+                         mmx5_client.LAUNCH_SCORE_75)
+
+    async def test_all_mavericks_gate_beats_vanilla_odds(self) -> None:
+        # A successful launch before 8 kills would open the endgame ahead of
+        # the goal, so the gate has to win over any odds setting.
+        score = await self.score_for(mmx5_client.GOAL_ALL_MAVERICKS,
+                                     mmx5_client.LAUNCH_ODDS_VANILLA,
+                                     0x3F, shuttle=4)
+        self.assertEqual(score, 0,
+                         "a launch could succeed before all 8 Mavericks were down")
+
+    def test_vanilla_restores_the_disc_roll(self) -> None:
+        from ..options import LaunchOdds
+        from .. import Rom
+        edits = {e["addr"]: e for e in
+                 seed_edits_for(launch_odds=LaunchOdds.option_vanilla)}
+        self.assertIn(Rom.LAUNCH_ROLL_ADDR, edits)
+        self.assertEqual(bytes.fromhex(edits[Rom.LAUNCH_ROLL_ADDR]["hex"]),
+                         Rom.LAUNCH_ROLL_VANILLA)
+        self.assertEqual(edits[Rom.LAUNCH_ROLL_ADDR]["region"], "launch overlay")
+
+    def test_deterministic_leaves_the_roll_neutralised(self) -> None:
+        from .. import Rom
+        addrs = {e["addr"] for e in seed_edits_for()}
+        self.assertNotIn(Rom.LAUNCH_ROLL_ADDR, addrs)
 
 
 class TestGoalOptionWiring(unittest.TestCase):

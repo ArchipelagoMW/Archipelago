@@ -68,6 +68,37 @@ class BossDifficulty(Choice):
     default = 1
 
 
+class LaunchOdds(Choice):
+    """Whether a launch is a sure thing or a gamble.
+
+    deterministic: the launch succeeds exactly when you hold all 8 Enigma and
+    Shuttle Parts, and fails otherwise. No dice. The default.
+
+    vanilla: restores the original game's gamble - more parts means better
+    odds, but never certainty. Mega Man X5 rolls against a score derived from
+    the parts you hold:
+
+      Enigma   - no parts 6.25%, any parts 12.5% (extra Enigma parts add
+                 nothing in the original game either)
+      Shuttle  - no parts 12.5%, 1-2 parts 37.5%, 3-4 parts 75%
+
+    WARNING - under the `launch` goal this can make a seed unwinnable. That
+    goal needs a SUCCESSFUL launch, you only get two attempts (the Enigma,
+    then the Shuttle), and even a full set of parts tops out at 75%. Fail both
+    and the colony falls with no third chance. This combination is allowed on
+    purpose, but it is a real gamble with your whole run, not a difficulty
+    slider.
+
+    Under the `all_mavericks` goal no launch can succeed before all 8 Mavericks
+    are down, whatever this is set to - otherwise an early success would open
+    the endgame ahead of the goal.
+    """
+    display_name = "Launch Odds"
+    option_deterministic = 0
+    option_vanilla = 1
+    default = 0
+
+
 class TextSkip(Toggle):
     """Make dialogue get out of the way.
 
@@ -94,4 +125,5 @@ class MMX5Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     goal: Goal
     boss_difficulty: BossDifficulty
+    launch_odds: LaunchOdds
     text_skip: TextSkip

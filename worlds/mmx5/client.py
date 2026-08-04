@@ -136,6 +136,20 @@ GOAL_LAUNCH = 1
 # 0x1C4D, not 0x1C4C, so received items never advance that ladder; only real
 # kills do. See overlay-findings 10.
 GOAL_ALL_MAVERICKS = 2
+
+# launch_odds option. `vanilla` puts the game's own roll back (the disc keeps
+# its vanilla `andi` at 0x800FA0D4) and the client writes a SCORE in the band
+# matching the parts held, rather than the flat 0/1 that deterministic odds
+# use. Bands come from the resolution ladder at 0x800FA0D8 (see Rom.py):
+#   0x01-0x14 -> 6.25%   0x15-0x28 -> 12.5%
+#   0x29-0x3C -> 37.5%   0x3D-0x50 -> 75%
+# One representative value per band; the exact number inside a band does not
+# matter, only which band it lands in.
+LAUNCH_ODDS_VANILLA = 1
+LAUNCH_SCORE_6 = 0x0A     # 6.25%
+LAUNCH_SCORE_12 = 0x20    # 12.5%
+LAUNCH_SCORE_37 = 0x30    # 37.5%
+LAUNCH_SCORE_75 = 0x45    # 75%
 # Goals that end on the post-Sigma ending modes rather than the launch flag.
 ENDING_GOALS = frozenset({GOAL_SIGMA, GOAL_ALL_MAVERICKS})
 
@@ -699,7 +713,25 @@ class MMX5Client(BizHawkClient):
                 enigma = sum(1 for i in ctx.items_received if lookup(i.item) == names.ENIGMA_PART)
                 shuttle = sum(1 for i in ctx.items_received if lookup(i.item) == names.SHUTTLE_PART)
                 goal = (ctx.slot_data or {}).get("goal", 0)
-                if goal == GOAL_LAUNCH:
+                kills_now = bin(save[OFF_WEAPONS]).count("1")
+                if (ctx.slot_data or {}).get("launch_odds", 0) == LAUNCH_ODDS_VANILLA:
+                    # Vanilla odds: hand the game a SCORE in the band that
+                    # matches the parts held and let its own roll decide.
+                    # (Roll ladder in Rom.py; the disc keeps its vanilla andi
+                    # under this option, so 0x800FA0D4 is not neutralised.)
+                    # The all_mavericks gate still wins: a successful launch
+                    # before 8 kills would open the endgame ahead of the goal.
+                    if goal == GOAL_ALL_MAVERICKS and kills_now < 8:
+                        want_mod = 0
+                    elif kills_now >= 6:
+                        want_mod = (LAUNCH_SCORE_75 if shuttle >= 3
+                                    else LAUNCH_SCORE_37 if shuttle >= 1
+                                    else LAUNCH_SCORE_12)
+                    else:
+                        want_mod = (LAUNCH_SCORE_12 if enigma >= 1
+                                    else LAUNCH_SCORE_6)
+                    powered = want_mod > 0
+                elif goal == GOAL_LAUNCH:
                     # Launch goal: nothing fires until every part is in hand.
                     powered = enigma >= 4 and shuttle >= 4
                 else:
@@ -720,7 +752,11 @@ class MMX5Client(BizHawkClient):
                 pin = []
                 if save[OFF_SCORE_ACC:OFF_SCORE_ACC + 4] != b"\x00\x00\x00\x00":
                     pin.append((SAVE_BASE + OFF_SCORE_ACC, [0, 0, 0, 0], "MainRAM"))
-                want_mod = 1 if powered else 0
+                # Deterministic odds reduce to a flat 0/1, because the disc's
+                # roll is neutralised and any score > 0 succeeds. Vanilla odds
+                # already chose a banded score above - do not flatten it.
+                if (ctx.slot_data or {}).get("launch_odds", 0) != LAUNCH_ODDS_VANILLA:
+                    want_mod = 1 if powered else 0
                 if save[OFF_SCORE_MOD] != want_mod:
                     pin.append((SAVE_BASE + OFF_SCORE_MOD, [want_mod], "MainRAM"))
                 countdown = int.from_bytes(save[OFF_COUNTDOWN:OFF_COUNTDOWN + 4], "little")

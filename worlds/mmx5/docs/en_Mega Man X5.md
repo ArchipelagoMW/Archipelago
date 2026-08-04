@@ -66,6 +66,19 @@ complete armor set unlocks at character select after the next results screen.
   adds a Part. Bosses keep getting stronger either way as you collect Mavericks
   and weapons; this only sets the starting point, and no setting can make a
   seed unbeatable.
+- **`launch_odds` decides whether a launch is a sure thing.** By default it
+  succeeds exactly when you hold all 8 Enigma and Shuttle Parts and fails
+  otherwise. Set it to **vanilla** and the original game's gamble comes back:
+  the Enigma is 6.25% with no parts and 12.5% with any (extra Enigma parts do
+  nothing in the original either), and the Shuttle is 12.5% / 37.5% / 75% for
+  0, 1–2, and 3–4 parts.
+  **Under the `launch` goal, vanilla odds can make a seed unwinnable** — that
+  goal needs a successful launch, you get two attempts, and a full part set is
+  still only 75%. Fail both and the colony falls with no third chance. The
+  combination is allowed on purpose and warns at generation. Under
+  `all_mavericks`, no launch can succeed before all 8 Mavericks are down
+  whatever this is set to, or an early success would open the endgame ahead of
+  the goal.
 - **`text_skip` makes dialogue get out of the way.** X5 types text out one
   character every 5 frames and then waits for a button on every box — a single
   line can run past 200 characters, roughly 20 seconds before you can even

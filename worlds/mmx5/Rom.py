@@ -136,9 +136,32 @@ TEXT_NOP = bytes(4)
 TEXT_REGION = "SLUS exe"
 
 
+# Launch resolution roll (launch overlay, disassembled from the disc):
+#   0x800FA0C8  jal  0x8002df78     RNG
+#   0x800FA0D0  sra  $v0, $v0, 2
+#   0x800FA0D4  andi $v1, $v0, 0xf  roll = (rand>>2) & 0xF -> 0..15
+#   0x800FA0D8  slti $v0, $s0, 0x51 s0 = score, then a band ladder:
+#     <=0 never | 0x01-0x14 roll==0 6.25% | 0x15-0x28 roll<2 12.5%
+#     | 0x29-0x3C roll<6 37.5% | 0x3D-0x50 roll<12 75% | >=0x51 roll<15 93.75%
+#
+# BASE_EDITS replaces the andi with `li $v1,0` so the roll is always 0 and
+# success reduces to score > 0. Under `vanilla` launch odds we put the andi
+# BACK - seed edits are applied after BASE_EDITS into the same image, so this
+# restore wins - and the client then writes a score that lands in the band
+# matching the player's part count instead of a flat 0/1.
+LAUNCH_ROLL_ADDR = 0x800FA0D4
+LAUNCH_ROLL_VANILLA = bytes.fromhex("0f004330")   # andi $v1, $v0, 0xf
+LAUNCH_ROLL_REGION = "launch overlay"
+
+
 def patch_rom(world: "MMX5World", patch: MMX5ProcedurePatch) -> None:
     """Collect per-seed edits as {addr, hex, region} rows."""
     seed_edits: list = []
+
+    if world.options.launch_odds == "vanilla":
+        seed_edits.append({"addr": LAUNCH_ROLL_ADDR,
+                           "hex": LAUNCH_ROLL_VANILLA.hex(),
+                           "region": LAUNCH_ROLL_REGION})
 
     if world.options.text_skip:
         # One toggle drives both: anyone who wants instant text wants it to

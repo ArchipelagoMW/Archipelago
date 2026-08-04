@@ -23,6 +23,22 @@ says so in the log rather than failing silently.
 `sigma` is unchanged and still available for anyone who prefers vanilla's
 timing.
 
+**New option: `launch_odds`.** By default a launch succeeds exactly when you
+hold all 8 Enigma and Shuttle Parts. Set this to `vanilla` and the original
+game's gamble comes back — more parts means better odds, never certainty:
+
+- Enigma: 6.25% with no parts, 12.5% with any (extra Enigma parts do nothing
+  in the original game either)
+- Shuttle: 12.5% / 37.5% / 75% for 0, 1–2, and 3–4 parts
+
+**Under the `launch` goal this can make a seed unwinnable**, and that is
+deliberate rather than an oversight: the goal needs a *successful* launch, you
+only get two attempts, and even a full set of parts tops out at 75%. Fail both
+and the colony falls with no third chance. Generation warns loudly when you
+pick this combination. Under `all_mavericks`, no launch can succeed before all
+8 Mavericks are down whatever this is set to, since an early success would open
+the endgame ahead of the goal.
+
 **New option: `text_skip`.** Mega Man X5 types dialogue out one character every
 5 frames and then waits for a button on every box — a single line can run past
 200 characters, about 20 seconds of typing before you can even press advance.

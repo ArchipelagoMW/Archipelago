@@ -5,6 +5,7 @@ disc.py) and the BizHawkClient are all wired. The RAM interface research notes
 (mmx5-ram-notes.md and friends) live in worlds/mmx5/docs/ on the author's
 fork: github.com/Shinnuu/Archipelago, branch mmx5-apworld.
 """
+import logging
 import os
 from typing import Any, ClassVar
 
@@ -75,6 +76,22 @@ class MMX5World(World):
     # Lower it if an older client is actually tested, never to match a
     # development checkout's version string.
     required_client_version = (0, 6, 7)
+
+    def generate_early(self) -> None:
+        # vanilla launch odds + the launch goal is a genuine gamble with the
+        # whole run: that goal needs a SUCCESSFUL launch, there are only two
+        # attempts (Enigma, then Shuttle), and even a full part set tops out at
+        # 75%. Fail both and the colony falls with no third chance, so the goal
+        # can never complete. Allowed deliberately - but nobody should meet it
+        # as a surprise, so it is said out loud at generation.
+        if self.options.launch_odds == "vanilla" and self.options.goal == "launch":
+            logging.warning(
+                "Mega Man X5 (%s): launch_odds=vanilla with goal=launch. This "
+                "seed CAN become unwinnable - the goal needs a successful "
+                "launch, there are only two attempts, and a full set of parts "
+                "is still only 75%%. This combination was chosen on purpose; "
+                "use launch_odds=deterministic if that is not what you want.",
+                self.player_name)
 
     def create_item(self, name: str) -> MMX5Item:
         if name in item_table:
@@ -241,4 +258,5 @@ class MMX5World(World):
         return {
             "goal": self.options.goal.value,
             "boss_difficulty": self.options.boss_difficulty.value,
+            "launch_odds": self.options.launch_odds.value,
         }
