@@ -4,21 +4,19 @@
 
 **New goal: `all_mavericks` — defeat all 8 Mavericks, then Sigma. This is now
 the default.** Seeds generated without an explicit `goal:` line change
-behaviour, and this goal patches the disc, so re-patch when it releases.
+behaviour. This goal makes **no disc changes**, so it works on a disc you have
+already patched.
 
-Mega Man X5 does not normally require the full set. It opens the endgame once
-the Eurasia colony situation resolves, and two separate paths could resolve it
-early: the shuttle becomes available at 6 Maverick kills, so failing both
-launches there reaches Sigma two Mavericks short; and a *successful* Enigma
-resolves the colony on its own from as few as 2 kills, which randomized
-launcher parts could power. Either one strands a run under this goal, because
-Sigma does not respawn — beat him early and the goal can never complete.
+Mega Man X5 does not normally require the full set — it opens the endgame as
+soon as the Eurasia colony situation resolves, which can happen well before
+the eighth Maverick. That matters here because Sigma does not respawn: reach
+him early, beat him, and the goal can never complete.
 
-Both doors are now closed. The disc moves the shuttle era to 8 kills (a
-goal-conditional edit — the `launch` goal still needs it at 6, and `sigma`
-still permits finishing short), and the client will not power a launch before
-the full set is down. If an ending is somehow reached early anyway, the client
-says so in the log rather than failing silently.
+So the client now holds the endgame shut until all 8 Mavericks are down, and
+opens it on the eighth kill. It also refuses to power a launch before the full
+set is down, since a successful launch resolves the colony by itself. If an
+ending is somehow reached early anyway, the client says so in the log rather
+than failing silently.
 
 `sigma` is unchanged and still available for anyone who prefers vanilla's
 timing.

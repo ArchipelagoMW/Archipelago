@@ -91,25 +91,22 @@ class MMX5ProcedurePatch(APProcedurePatch):
             f.write(cue)
 
 
-# Story-chapter function in the hub module (disassembled from
-# ramdump_hub_f22905.bin, mapping proven byte-for-byte against the disc):
-#   0x800EEF38  lbu  a2, 0x4c(a0)     a0 = save base 0x800D1C00, so this is the
-#                                     vanilla Maverick kill record 0x800D1C4C
-#   0x800EEF44..60                    popcount loop over its 8 bits
-#   0x800EEF68  addiu v0, zero, 2     Enigma threshold - 2 kills
-#   0x800EEF7C  sb   a1, 0x10f(a0)    chapter = THE COUNT ITSELF
-#   0x800EEFBC  addiu v0, zero, 6     shuttle threshold - 6 kills
-#   0x800EEFC4  addiu v0, zero, 4     chapter = literal 4
-# Both tests are `bne` (exact equality), and 8 is exactly reachable.
+# REMOVED 2026-08-04 - do not re-add: the story-chapter shuttle threshold.
 #
-# Only the SHUTTLE threshold is safe to move. The Enigma branch stores the
-# popcount as the chapter number, so raising its threshold would also set the
-# chapter to that number and derail the ladder; the shuttle branch stores a
-# literal, so its threshold is independent of what it writes.
-SHUTTLE_THRESHOLD_ADDR = 0x800EEFBC
-SHUTTLE_THRESHOLD_REGION = "hub overlay"
-SHUTTLE_THRESHOLD_VANILLA = bytes.fromhex("06000224")   # addiu v0, zero, 6
-SHUTTLE_THRESHOLD_ALL_8 = bytes.fromhex("08000224")     # addiu v0, zero, 8
+# 0x800EEFBC held `addiu v0, zero, 6`, the kill count at which the chapter
+# ladder advances to the shuttle era, and all_mavericks used to raise it to 8.
+# It was disassembled correctly, mapped correctly, and verified live to move
+# the chapter transition from 6 kills to 8 - and it still did NOT gate the
+# endgame, because the ladder never controlled access in the first place. The
+# Enigma/Shuttle menu entries are always present, the shuttle appears once the
+# Enigma has been used, and a player at 6 kills reached Zero Space on a disc
+# carrying this edit.
+#
+# All it actually did was delay the story announcement and Dynamo (who is tied
+# to chapter 4) by two Mavericks, so it was dropped.
+#
+# The real gate is ACT 0x800D1C79 >= 5, handled by the client - see
+# ENDGAME_ACT in client.py. Full account in mmx5-ram-notes.md.
 
 
 # Text skip. Both sites are in the message STATE MACHINE in the static EXE -
@@ -170,22 +167,8 @@ def patch_rom(world: "MMX5World", patch: MMX5ProcedurePatch) -> None:
             seed_edits.append({"addr": addr, "hex": TEXT_NOP.hex(),
                                "region": TEXT_REGION})
 
-    if world.options.goal == "all_mavericks":
-        # Vanilla opens the endgame when the Eurasia situation resolves, and
-        # the only resolution available with the countdown pinned is a launch
-        # attempt. The shuttle era starting at 6 kills therefore lets a player
-        # reach Sigma two Mavericks short - and since Sigma does not respawn,
-        # arriving early under this goal strands the run. Move the shuttle era
-        # to the full set so the endgame cannot open before then.
-        #
-        # This edit is deliberately goal-conditional: the launch goal NEEDS the
-        # shuttle at 6, and the sigma goal explicitly permits finishing without
-        # all 8. Only all_mavericks asks for the stricter game.
-        seed_edits.append({
-            "addr": SHUTTLE_THRESHOLD_ADDR,
-            "hex": SHUTTLE_THRESHOLD_ALL_8.hex(),
-            "region": SHUTTLE_THRESHOLD_REGION,
-        })
+    # NOTE: all_mavericks emits NO disc edit. Its endgame gate is entirely
+    # client-side (ACT 0x800D1C79) - see the removal note above.
 
     patch.write_file("seed_edits.json", json.dumps(seed_edits).encode("utf-8"))
 

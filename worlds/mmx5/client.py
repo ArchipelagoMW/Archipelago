@@ -82,6 +82,18 @@ OFF_INTRO = 0x0D1C79 - SAVE_BASE
 # Eurasia, 2 read off a real mid-game save - so 0x0A is out of band and
 # identifies the training pseudo-save. See the `training` check below.
 TRAINING_ACT = 0x0A
+# ACT value the colony resolution writes, and the real ENDGAME GATE: with ACT
+# >= this, stage select offers Zero Space; below it, Zero Space is absent.
+# Live-verified 2026-08-04 - poking ACT from 5 down to 2 made Zero Space
+# disappear from a save that had it. Corroborated by the results tail, which
+# tests 0x800D1C79 < 5 for its bonus lines.
+#
+# This is what actually controls endgame access. The story-chapter ladder does
+# NOT: the Enigma/Shuttle menu entries are always present, the shuttle simply
+# appears once the Enigma has been used, and a player at 6 kills reached Zero
+# Space on a disc whose shuttle-era threshold had been moved to 8. Moving that
+# threshold only delays the story ANNOUNCEMENT (and Dynamo).
+ENDGAME_ACT = 5
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
 OFF_ARMOR = 0x0D1CA1 - SAVE_BASE       # armor parts byte (Falcon 0-3, Gaea 4-7)
@@ -332,6 +344,12 @@ class MMX5Client(BizHawkClient):
         # which is exactly how the phantom intro check happened in 0.1.1.
         self.mavericks_defeated = 0
         self.short_ending_warned = False
+        # Endgame withholding (all_mavericks). Remember the last legitimate
+        # pre-endgame ACT so it can be restored exactly, rather than guessing a
+        # value the story never had.
+        self.last_pre_endgame_act = None
+        self.act_withheld = False
+        self.act_withheld_warned = False
         self.last_training_state = None
         self.tank_fix_present = None    # None = not yet probed
         self.tank_workaround_warned = False
@@ -583,6 +601,42 @@ class MMX5Client(BizHawkClient):
                 check(location_name, condition and save_sane)
 
             save_check(names.INTRO_CLEAR, save[OFF_INTRO] != 0)
+
+            # ---- all_mavericks: hold the endgame shut until 8 kills --------
+            # The colony resolution writes ACT = ENDGAME_ACT, which is what
+            # opens Zero Space. Under this goal that must not happen early, or
+            # a player reaches Sigma short of the full set, kills him, and the
+            # goal can never fire - and Sigma does NOT respawn, so the run is
+            # over. Withhold the value and hand it back at 8.
+            #
+            # Client-side on purpose: the disc shuttle-era edit turned out to
+            # gate only the story announcement, not access. This gates access.
+            if save_sane and (ctx.slot_data or {}).get("goal", GOAL_SIGMA) == GOAL_ALL_MAVERICKS:
+                act_now = save[OFF_INTRO]
+                kills_for_act = bin(save[OFF_WEAPONS]).count("1")
+                if act_now < ENDGAME_ACT and act_now != TRAINING_ACT:
+                    self.last_pre_endgame_act = act_now
+                if kills_for_act < 8 and act_now >= ENDGAME_ACT:
+                    # Restore the exact value the story last legitimately held.
+                    restore = (self.last_pre_endgame_act
+                               if self.last_pre_endgame_act is not None
+                               else ENDGAME_ACT - 1)
+                    await bizhawk.write(ctx.bizhawk_ctx,
+                                        [(SAVE_BASE + OFF_INTRO, [restore], "MainRAM")])
+                    self.act_withheld = True
+                    if not self.act_withheld_warned:
+                        self.act_withheld_warned = True
+                        logger.info(
+                            f"MMX5: the colony resolved with only {kills_for_act}/8 "
+                            f"Mavericks down - holding the endgame shut until all 8 "
+                            f"are defeated. Zero Space opens on the eighth kill.")
+                elif kills_for_act >= 8 and self.act_withheld and act_now < ENDGAME_ACT:
+                    # Full set: give back what was withheld, or the player
+                    # could never reach Sigma at all.
+                    await bizhawk.write(ctx.bizhawk_ctx,
+                                        [(SAVE_BASE + OFF_INTRO, [ENDGAME_ACT], "MainRAM")])
+                    self.act_withheld = False
+                    logger.info("MMX5: all 8 Mavericks down - Zero Space is open.")
 
             weapons_owned = save[OFF_WEAPONS]
             # Maverick tally for the all_mavericks goal. 0x1C4C is the VANILLA

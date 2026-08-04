@@ -526,41 +526,32 @@ class TestAllMavericksEndgameGate(unittest.IsolatedAsyncioTestCase):
                          "the sigma goal stopped powering the Enigma early")
 
 
-class TestShuttleGateSeedEdit(unittest.TestCase):
-    """The disc half of the gate. Goal-conditional: the launch goal NEEDS the
-    shuttle at 6 kills and the sigma goal permits finishing short, so only
-    all_mavericks gets the stricter disc."""
+class TestGoalEmitsNoDiscEdit(unittest.TestCase):
+    """all_mavericks used to raise the story-chapter shuttle threshold from 6
+    kills to 8. That edit worked exactly as disassembled and STILL did not gate
+    the endgame - the chapter ladder never controlled access, so a player at 6
+    kills reached Zero Space on a disc carrying it. It only delayed the story
+    announcement and Dynamo. The gate is now ACT, client-side.
 
-    @staticmethod
-    def edits_for(goal_value: int) -> list:
-        return seed_edits_for(goal=goal_value)
+    This test exists to stop it coming back: no goal may emit a disc edit."""
 
-    def test_all_mavericks_moves_the_shuttle_era_to_eight(self) -> None:
+    def test_no_goal_emits_a_disc_edit(self) -> None:
         from ..options import Goal
-        from .. import Rom
-        edits = self.edits_for(Goal.option_all_mavericks)
-        self.assertEqual(len(edits), 1, "expected exactly the shuttle-era edit")
-        self.assertEqual(edits[0]["addr"], Rom.SHUTTLE_THRESHOLD_ADDR)
-        self.assertEqual(edits[0]["region"], "hub overlay")
-        self.assertEqual(bytes.fromhex(edits[0]["hex"]),
-                         Rom.SHUTTLE_THRESHOLD_ALL_8)
+        for goal in (Goal.option_sigma, Goal.option_launch,
+                     Goal.option_all_mavericks):
+            self.assertEqual(seed_edits_for(goal=goal), [],
+                             f"goal {goal} emitted a disc edit; the endgame "
+                             f"gate belongs in the client (ACT), not the disc")
 
-    def test_other_goals_leave_the_disc_alone(self) -> None:
-        from ..options import Goal
-        for goal in (Goal.option_sigma, Goal.option_launch):
-            self.assertEqual(self.edits_for(goal), [],
-                             f"goal {goal} emitted a disc edit it did not ask for")
-
-    def test_the_edit_resolves_through_the_hub_module(self) -> None:
-        # The hub and results overlays load at the SAME RAM base from
-        # DIFFERENT sectors, so naming the wrong region silently patches
-        # unrelated code. These must not resolve to the same disc offset.
-        from .. import disc, Rom
-        hub = disc.addr_to_disc(Rom.SHUTTLE_THRESHOLD_ADDR, "hub overlay")
-        results = disc.addr_to_disc(Rom.SHUTTLE_THRESHOLD_ADDR, "results overlay")
-        self.assertNotEqual(hub, results,
-                            "hub and results overlays resolved to one offset - "
-                            "the region map no longer distinguishes them")
+    def test_the_hub_region_still_resolves_separately(self) -> None:
+        # Kept even though nothing patches there now: the hub and results
+        # overlays share a RAM base and differ only by sector, and that mapping
+        # is load-bearing research. If they ever collapse to one offset, a
+        # future edit would silently land in unrelated code.
+        from .. import disc
+        hub = disc.addr_to_disc(0x800EEFBC, "hub overlay")
+        results = disc.addr_to_disc(0x800EEFBC, "results overlay")
+        self.assertNotEqual(hub, results)
 
 
 class TestTextSkipSeedEdits(unittest.TestCase):
@@ -589,14 +580,13 @@ class TestTextSkipSeedEdits(unittest.TestCase):
             self.assertEqual(bytes.fromhex(edits[addr]["hex"]), Rom.TEXT_NOP)
             self.assertEqual(edits[addr]["region"], "SLUS exe")
 
-    def test_it_composes_with_the_goal_edit(self) -> None:
-        # Independent features: the all_mavericks shuttle gate and both text
-        # NOPs must all survive together.
+    def test_the_goal_adds_nothing_to_the_disc(self) -> None:
+        # all_mavericks is entirely client-side now, so a seed with it plus
+        # text skip carries exactly the two text NOPs and nothing else.
         from ..options import Goal
         from .. import Rom
         addrs = {e["addr"] for e in self.edits_for(1, Goal.option_all_mavericks)}
-        self.assertEqual(addrs, {Rom.SHUTTLE_THRESHOLD_ADDR,
-                                 Rom.TEXT_INSTANT_ADDR, Rom.TEXT_ADVANCE_ADDR})
+        self.assertEqual(addrs, {Rom.TEXT_INSTANT_ADDR, Rom.TEXT_ADVANCE_ADDR})
 
     def test_the_patched_sites_hold_the_expected_vanilla_branches(self) -> None:
         # Guards against the addresses drifting: these are the two `beqz $v1`
@@ -680,6 +670,69 @@ class TestLaunchOdds(unittest.IsolatedAsyncioTestCase):
         from .. import Rom
         addrs = {e["addr"] for e in seed_edits_for()}
         self.assertNotIn(Rom.LAUNCH_ROLL_ADDR, addrs)
+
+
+class TestEndgameWithholding(unittest.IsolatedAsyncioTestCase):
+    """ACT (0x800D1C79) is what actually opens Zero Space - live-verified by
+    poking it from 5 to 2 and watching Zero Space vanish. The story-chapter
+    ladder does NOT gate access; the disc edit that moved the shuttle era to 8
+    kills only delayed the announcement, and a player at 6 kills still reached
+    Zero Space. This is the real gate, and it matters because Sigma does not
+    respawn: reach him short of 8 and the goal can never fire."""
+
+    @staticmethod
+    def ctx_for(goal: int) -> FakeContext:
+        ctx = FakeContext()
+        ctx.slot_data = {"goal": goal, "boss_difficulty": 1}
+        return ctx
+
+    @staticmethod
+    def act_writes(ctx: FakeContext) -> list:
+        addr = mmx5_client.SAVE_BASE + mmx5_client.OFF_INTRO
+        return [w[1][0] for w in ctx.writes if w[0] == addr]
+
+    async def test_endgame_is_withheld_below_eight_kills(self) -> None:
+        client = MMX5Client()
+        ctx = self.ctx_for(mmx5_client.GOAL_ALL_MAVERICKS)
+        # Establish a legitimate pre-endgame ACT, then resolve the colony early.
+        await run_watcher(make_save(max_hp=0x20, intro=2, weapons=0x3F),
+                          client=client, ctx=ctx)
+        await run_watcher(make_save(max_hp=0x20, intro=mmx5_client.ENDGAME_ACT,
+                                    weapons=0x3F), client=client, ctx=ctx)
+        self.assertIn(2, self.act_writes(ctx),
+                      "Zero Space was left open at 6 kills - a player can reach "
+                      "Sigma, kill him, and strand the run")
+
+    async def test_it_is_given_back_at_eight(self) -> None:
+        client = MMX5Client()
+        ctx = self.ctx_for(mmx5_client.GOAL_ALL_MAVERICKS)
+        await run_watcher(make_save(max_hp=0x20, intro=2, weapons=0x3F),
+                          client=client, ctx=ctx)
+        await run_watcher(make_save(max_hp=0x20, intro=mmx5_client.ENDGAME_ACT,
+                                    weapons=0x3F), client=client, ctx=ctx)
+        await run_watcher(make_save(max_hp=0x20, intro=2, weapons=0xFF),
+                          client=client, ctx=ctx)
+        self.assertIn(mmx5_client.ENDGAME_ACT, self.act_writes(ctx),
+                      "the endgame was never handed back - Sigma unreachable")
+
+    async def test_other_goals_are_untouched(self) -> None:
+        for goal in (mmx5_client.GOAL_SIGMA, mmx5_client.GOAL_LAUNCH):
+            client = MMX5Client()
+            ctx = self.ctx_for(goal)
+            await run_watcher(make_save(max_hp=0x20, intro=mmx5_client.ENDGAME_ACT,
+                                        weapons=0x3F), client=client, ctx=ctx)
+            self.assertEqual(self.act_writes(ctx), [],
+                             f"goal {goal} had its story ACT rewritten")
+
+    async def test_training_act_is_never_stored_as_a_restore_value(self) -> None:
+        # Training stamps 0x0A into the same byte. It must not be remembered as
+        # a legitimate pre-endgame value and written back into a real save.
+        client = MMX5Client()
+        ctx = self.ctx_for(mmx5_client.GOAL_ALL_MAVERICKS)
+        await run_watcher(make_save(max_hp=0x20, intro=mmx5_client.TRAINING_ACT),
+                          client=client, ctx=ctx)
+        self.assertNotEqual(client.last_pre_endgame_act,
+                            mmx5_client.TRAINING_ACT)
 
 
 class TestGoalOptionWiring(unittest.TestCase):
