@@ -496,6 +496,13 @@ a first randomizer pass (leave vanilla).
 - Zero Space access gating: NOT found — neither dump has the stage-select
   overlay resident. (Sorties counter 0x800D1D0F and countdown u32 0x1CAC are
   the candidates its logic would read.)
+  **2026-08-03: no longer blocking.** Gating entry at the door turned out to be
+  unnecessary — the endgame can only open once the colony resolves, and with
+  the countdown pinned the ONLY resolution is a launch attempt. Controlling
+  when launchers become available (§10 chapter fn, shuttle threshold) and
+  whether they can succeed (client score pin) closes both paths without ever
+  finding the door. Still worth locating if a future feature needs to gate
+  stage-select entry directly.
 
 ## 8. Not found / next steps
 
@@ -635,6 +642,62 @@ the controller pointer (reg = 0x800D1C00, field offsets), not absolute EAs.
   (as the game-written check-record, MMX4-style) and decouple the
   CAPABILITY readers instead** (stage-load 0x9A169 repopulation, parts
   display, launch check). The 0x800EECCC NOP stays a research tool only.
+- **Story-chapter fn fully decoded + LOCATED ON DISC (2026-08-03)** — this is
+  what gates the endgame, so it is the lever for an "all 8 Mavericks" goal.
+  **The function lives in the HUB module, which loads at the SAME RAM base as
+  the results overlay (0x800EE970) from a DIFFERENT sector.** A RAM address
+  alone therefore does NOT identify this code: reading 0x800EEF14 through the
+  "results overlay" mapping returns unrelated code that disassembles perfectly
+  and looks plausible. Always name the region.
+  **Hub module: sector 24048 user offset 0 = RAM 0x800EE970.** Found by a
+  unique disc scan for the function's bytes taken from `ramdump_hub_f22905.bin`,
+  then confirmed by comparing all 0x140 bytes of the function disc-vs-dump:
+  exact match. Now in `mmx5_build_patch.py` REGIONS + 5 SELFTEST rows.
+
+  | RAM | instruction | meaning |
+  |---|---|---|
+  | 0x800EEF28 | `lbu v0,0x10F(a0)` | chapter byte (a0 = save base 0x800D1C00) |
+  | 0x800EEF38 | `lbu a2,0x4C(a0)` | vanilla kill record 0x800D1C4C |
+  | 0x800EEF44-60 | shift/mask/add loop | popcount over 8 bits |
+  | **0x800EEF68** | **`addiu v0,zero,2`** | **Enigma threshold** |
+  | 0x800EEF6C | `bne a1,v0` | EXACT equality, not >= |
+  | 0x800EEF7C | `sb a1,0x10F(a0)` | chapter = **the popcount itself** |
+  | **0x800EEFBC** | **`addiu v0,zero,6`** | **shuttle threshold** |
+  | 0x800EEFC4 | `addiu v0,zero,4` | chapter = **literal 4** |
+
+  **Only the shuttle threshold is safely movable.** The Enigma branch stores
+  the popcount AS the chapter number, so raising its threshold to 8 would also
+  write chapter 8 and derail the ladder (the next rung tests chapter == 3). The
+  shuttle branch writes a literal, so its threshold is independent of its
+  effect - `06000224` -> `08000224` is a clean one-word edit. Shipped as a
+  GOAL-CONDITIONAL seed edit (all_mavericks only; the launch goal needs the
+  shuttle at 6, and the sigma goal deliberately permits finishing short).
+  Caveat, pre-existing and NOT introduced by that edit: the ladder needs the
+  Enigma actually fired to reach chapter 3, and the countdown is pinned so it
+  never forces a resolution - a player who declines the Enigma forever cannot
+  reach the shuttle under any goal.
+
+  **LIVE-VERIFIED 2026-08-03** (harness `Scripts/mmx5_chapter_gate_test.lua`,
+  log `Scripts/mmx5_chapter_gate_log.txt`):
+
+  | disc | instruction | kills | chapter 3→4 |
+  |---|---|---|---|
+  | v12 (ungated) | `06000224` | 6 | **yes** (f11892) |
+  | v12-allmav (gated) | `08000224` | 6 | no |
+  | v12-allmav (gated) | `08000224` | 8 | **yes** (f60966) |
+
+  On firing it writes chapter 4 AND event byte 0x800D1C01 = 0x0E, exactly as
+  disassembled. **The fn runs ~309 frames after hub entry (mode -> 0x04), not
+  continuously** - identical delay in both firing runs, so a test must do a
+  hub round trip, and poking alone proves nothing. Route does not matter: one
+  run went through deaths, mode 0x0D and a DNA screen at 0x0E and landed on
+  the same frame offset.
+  **0x800D1C01 is NOT a dedicated story-event byte** - it cycles through
+  0x01-0x08 constantly as a sub-mode/screen-state value. 0x0E is simply what
+  the chapter fn writes there; do not treat the byte as an event flag.
+  **Dynamo is gated on chapter 4, not on the kill count** - he spawned in the
+  ungated run at 6 kills and the gated run at 8. The shuttle gate therefore
+  delays him rather than being bypassed by him.
 - **Launch flow**: prompt runs in the hub module (dumps `launch` =
   hub code + data deltas); confirming streams a cutscene module into
   0x800EC000-0x800F3000 and sets mode 0x14, stage id 0x0B,

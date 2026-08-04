@@ -71,7 +71,7 @@ Survives death and stage exit; the AP client's primary read/write surface.
 | `0x800D1C88–9F` | — | Suspected reploid-rescue bitfields (overlay analysis) — **DISPROVEN as rescue record**: 2 live Izzy Glow rescues + the results commit wrote NOTHING here (2026-07-31). Rescue effect = lives +1 (0x0D1C45) only. No persistent rescue record exists in the save struct → Reploid checks need live per-stage spawn-slot detection with the AP server as the permanent record | ❌ disproven |
 | `0x800D1D0F` | u8 | Increments per stage completion ("stages cleared" count?) | ⚠️ |
 | `0x800D1D38–3A` | 3×u8 | **Pending DNA-reward buffer**: written at DNA select (C0 4B 03 = "weapons and energy"), zeroed when the reward is granted after the next sortie (Dynamo fight → Energy Up) | ✅ |
-| `0x800D1D0F` | u8 | Sorties-completed counter (increments for mavericks AND Dynamo fights) | ✅ |
+| `0x800D1D0F` | u8 | ~~Sorties-completed counter (increments for mavericks AND Dynamo fights)~~ **REFUTED 2026-08-03** — it is the STORY CHAPTER (see the 0x800D1D0F row above). Live: it held at 3 across TWO complete stage-plus-results sequences in one session (`mmx5_chapter_gate_log.txt`), so it does not tally sorties. The early coincidence that made this look like a counter is that chapter and kill count track each other at the start — the chapter-1 rung literally stores the popcount as the chapter number. Do not reason about progress from this byte as if it counted anything. | ❌ refuted |
 | `0x800D1CAA` | u8 | Decremented after Dynamo sortie (05→04) — encounters-remaining? countdown-linked? | ❓ |
 | `0x800D1C41` | u8 | Changed 02→09 entering Dynamo sortie — stage/mode id? | ❓ |
 
