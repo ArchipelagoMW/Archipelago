@@ -128,6 +128,16 @@ def countdown_frozen_value(ctx) -> int:
     return hours * 0x34BC0
 GOAL_SIGMA = 0
 GOAL_LAUNCH = 1
+# Defeat all 8 Mavericks, THEN Sigma. Distinct from GOAL_SIGMA because vanilla
+# does not require the full set: the endgame opens when the colony situation
+# resolves, and the story ladder (fn 0x800EEF14, popcount of 0x800D1C4C) hands
+# out the Enigma at 2 kills and the shuttle at 6 - so a double failure at 6
+# kills opens Zero Space two Mavericks early. AP-granted weapons land in
+# 0x1C4D, not 0x1C4C, so received items never advance that ladder; only real
+# kills do. See overlay-findings 10.
+GOAL_ALL_MAVERICKS = 2
+# Goals that end on the post-Sigma ending modes rather than the launch flag.
+ENDING_GOALS = frozenset({GOAL_SIGMA, GOAL_ALL_MAVERICKS})
 
 # Sigma victory detection (live-captured 2026-08-01, five RAM dumps bracketing
 # a real Sigma kill; see mmx5-ram-notes.md "Endgame / Zero Space").
@@ -300,6 +310,14 @@ class MMX5Client(BizHawkClient):
         self.unknown_records_logged = set()
         self.stamp_warned = False
         self.victory_sent = False
+        # Highest Maverick kill count seen while the save read SANE. The
+        # all_mavericks goal needs this at the ENDING, where the save-struct
+        # gate is False (see the victory block) - so it cannot be read then.
+        # Tracked during play instead, and deliberately never sourced from an
+        # ungated read: a stale 0xFF would score 8 and hand out a false goal,
+        # which is exactly how the phantom intro check happened in 0.1.1.
+        self.mavericks_defeated = 0
+        self.short_ending_warned = False
         self.last_training_state = None
         self.tank_fix_present = None    # None = not yet probed
         self.tank_workaround_warned = False
@@ -431,13 +449,27 @@ class MMX5Client(BizHawkClient):
             # Sequence after the final blow (live-captured): 0A -> 13 -> 14 ->
             # 10 -> 11. 0x13/0x14 also fire for the X-vs-Zero duel, so only
             # 0x10/0x11 are treated as the ending.
+            ending_goal = (ctx.slot_data or {}).get("goal", GOAL_SIGMA)
             if not self.victory_sent \
-                    and (ctx.slot_data or {}).get("goal", GOAL_SIGMA) == GOAL_SIGMA \
+                    and ending_goal in ENDING_GOALS \
                     and mode[0] in ENDING_MODES:
-                self.victory_sent = True
-                await ctx.send_msgs([{"cmd": "StatusUpdate",
-                                      "status": ClientStatus.CLIENT_GOAL}])
-                logger.info(f"MMX5: ending reached (mode {mode[0]:02X}) - GOAL complete!")
+                # all_mavericks additionally requires the full set of kills.
+                # The count comes from play (self.mavericks_defeated), never
+                # from a read taken here - the save struct is not sane during
+                # the ending.
+                if ending_goal == GOAL_ALL_MAVERICKS and self.mavericks_defeated < 8:
+                    if not self.short_ending_warned:
+                        self.short_ending_warned = True
+                        logger.warning(
+                            f"MMX5: ending reached with only {self.mavericks_defeated}/8 "
+                            f"Mavericks defeated - the all_mavericks goal is NOT complete. "
+                            f"Vanilla can open the endgame at 6 kills; this seed's goal "
+                            f"needs all 8.")
+                else:
+                    self.victory_sent = True
+                    await ctx.send_msgs([{"cmd": "StatusUpdate",
+                                          "status": ClientStatus.CLIENT_GOAL}])
+                    logger.info(f"MMX5: ending reached (mode {mode[0]:02X}) - GOAL complete!")
 
             # TRAINING MODE builds a PSEUDO-SAVE in this very struct. Live
             # capture 2026-08-03: selecting Training writes ACT=0x0A and max
@@ -539,6 +571,13 @@ class MMX5Client(BizHawkClient):
             save_check(names.INTRO_CLEAR, save[OFF_INTRO] != 0)
 
             weapons_owned = save[OFF_WEAPONS]
+            # Maverick tally for the all_mavericks goal. 0x1C4C is the VANILLA
+            # kill record - AP grants go to 0x1C4D - so its popcount is real
+            # kills and nothing else. Gated on save_sane and monotonic, so a
+            # transient bad read can never lower a count already earned.
+            if save_sane:
+                self.mavericks_defeated = max(self.mavericks_defeated,
+                                              bin(weapons_owned).count("1"))
             for bit, weapon in enumerate(WEAPON_BITS):
                 stage = next(s for s, w in names.BOSS_WEAPON.items() if w == weapon)
                 beaten = bool(weapons_owned & (1 << bit))
@@ -667,7 +706,17 @@ class MMX5Client(BizHawkClient):
                     # Story flavor: power whichever launcher the chapter
                     # offers (shuttle era begins at 6 recorded kills).
                     kills = bin(save[OFF_WEAPONS]).count("1")
-                    powered = (shuttle >= 4) if kills >= 6 else (enigma >= 4)
+                    if goal == GOAL_ALL_MAVERICKS and kills < 8:
+                        # A SUCCESSFUL Enigma resolves the colony on its own,
+                        # and the Enigma is offered from 2 kills - so lucky
+                        # early parts could open the endgame six Mavericks
+                        # short, without the shuttle ever being involved. The
+                        # disc gate moves the shuttle era to 8; this closes the
+                        # other door. Both are needed: neither covers the
+                        # other's path.
+                        powered = False
+                    else:
+                        powered = (shuttle >= 4) if kills >= 6 else (enigma >= 4)
                 pin = []
                 if save[OFF_SCORE_ACC:OFF_SCORE_ACC + 4] != b"\x00\x00\x00\x00":
                     pin.append((SAVE_BASE + OFF_SCORE_ACC, [0, 0, 0, 0], "MainRAM"))

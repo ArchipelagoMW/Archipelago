@@ -25,6 +25,13 @@ USER_LEN = 2048
 REGIONS: list[tuple[str, int, int, int, int]] = [
     ("SLUS exe", 0x80010000, 0x80092000, 23433, 0),
     ("results overlay", 0x800EE970, 0x800F9000, 24073, 0),
+    # Hub module. Loads at the SAME RAM base as the results overlay from a
+    # DIFFERENT sector - so a RAM address alone does not identify the code, and
+    # every edit here must name its region explicitly. Base back-computed from
+    # a unique disc scan for the story-chapter function's bytes (RAM 0x800EEF14
+    # -> sector 24048 user offset 0x05A4), then confirmed by comparing all
+    # 0x140 bytes of that function against ramdump_hub_f22905.bin: exact match.
+    ("hub overlay", 0x800EE970, 0x800F9000, 24048, 0),
     # Launch cutscene module: resolution fn's only on-disc copy; mapping
     # disc-scan verified (RAM 0x800FA000 = sector 24319 user offset 0).
     ("launch overlay", 0x800FA000, 0x800FB000, 24319, 0),

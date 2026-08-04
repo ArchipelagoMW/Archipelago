@@ -142,6 +142,13 @@ class MMX5World(World):
         # popcount of 0x800D1C4C; the endgame opens after the Enigma/Shuttle
         # sequence plays out either way). Stricter is safe - it only narrows
         # placement, it can never strand progression - so it stays for v1.
+        #
+        # Note this rule is about WEAPONS (items, receivable from any world),
+        # while the all_mavericks goal is about KILLS (popcount of 0x1C4C, only
+        # ever set locally). They are not the same requirement and neither
+        # implies the other. The goal's kill requirement is enforced by the
+        # client, and every boss is reachable and killable with no items at
+        # all, so it adds no logical constraint here.
         self.multiworld.get_entrance("Stage Select -> Sigma Stages", self.player).access_rule = \
             lambda state: state.has_all(item_groups["Weapons"], self.player)
 
@@ -209,6 +216,13 @@ class MMX5World(World):
                 lambda state: state.has(names.ENIGMA_PART, self.player, 4) \
                     and state.has(names.SHUTTLE_PART, self.player, 4)
         else:
+            # sigma and all_mavericks both complete on the VICTORY event, which
+            # sits behind the all-8-weapons entrance rule above. all_mavericks
+            # needs no extra rule: every Maverick is reachable from the start
+            # and killable with no items, so "defeat all 8" is satisfiable
+            # wherever VICTORY is. The difference between the two goals is
+            # in-game timing, which logic does not model - the client holds the
+            # goal until the kill count reaches 8.
             self.multiworld.completion_condition[self.player] = \
                 lambda state: state.has(names.VICTORY, self.player)
 

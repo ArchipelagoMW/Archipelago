@@ -14,10 +14,15 @@ reach what you missed.
 
 ## What is the goal?
 
-Two options:
+Three options:
 
-- **sigma** (default) — reach and defeat Sigma. Victory is detected from the
-  ending itself, so the credits rolling completes your goal.
+- **all_mavericks** (default) — defeat all 8 Mavericks, then reach and defeat
+  Sigma. Mega Man X5 does not normally require the full set: it opens the
+  endgame once the Eurasia colony situation resolves, which can happen with
+  only 6 Mavericks defeated. This goal requires all eight.
+- **sigma** — defeat Sigma, however you got there. Victory is detected from the
+  ending itself, so the credits rolling completes your goal, whether or not you
+  fought every Maverick.
 - **launch** — collect all 8 Enigma/Shuttle Parts and complete a successful
   launch. The launch only succeeds once every part is in hand; partial sets
   fail, vanilla-style.

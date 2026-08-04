@@ -3,11 +3,13 @@
 Each test here corresponds to a failure a tester actually hit. They are
 written to FAIL against v0.1.0 and pass after the fixes.
 """
+import json
 import unittest
 from types import SimpleNamespace
 from unittest import mock
 
 import worlds._bizhawk as bizhawk
+from NetUtils import ClientStatus
 from worlds.LauncherComponents import components
 
 from .. import client as mmx5_client
@@ -350,6 +352,213 @@ class TestLauncherRegistration(unittest.TestCase):
     def test_suffix_matches_the_patch_file_ending(self) -> None:
         from ..Rom import MMX5ProcedurePatch
         self.assertEqual(MMX5Client.patch_suffix, MMX5ProcedurePatch.patch_file_ending)
+
+
+class TestAllMavericksGoal(unittest.IsolatedAsyncioTestCase):
+    """The all_mavericks goal must not fire on an endgame the player reached
+    early. Vanilla opens Zero Space when the colony situation resolves, and the
+    story ladder (fn 0x800EEF14, popcount of 0x800D1C4C) offers the Enigma at 2
+    kills and the shuttle at 6 - so failing both at 6 kills reaches Sigma two
+    Mavericks short. Sigma does not respawn, so firing the goal there, or
+    quietly doing nothing, both end the run: the first wrongly, the second
+    permanently. The client holds the goal and says why."""
+
+    @staticmethod
+    def ctx_for(goal: int) -> FakeContext:
+        ctx = FakeContext()
+        ctx.slot_data = {"goal": goal, "boss_difficulty": 1}
+        return ctx
+
+    @staticmethod
+    def goal_sent(ctx: FakeContext) -> bool:
+        return any(m.get("cmd") == "StatusUpdate"
+                   and m.get("status") == ClientStatus.CLIENT_GOAL
+                   for m in ctx.sent_msgs)
+
+    async def test_all_eight_then_the_ending_completes_the_goal(self) -> None:
+        # The tally is taken during play and must survive into the ending,
+        # where the save struct no longer reads sane.
+        client = MMX5Client()
+        ctx = self.ctx_for(mmx5_client.GOAL_ALL_MAVERICKS)
+        await run_watcher(make_save(max_hp=0x20, weapons=0xFF), client=client, ctx=ctx)
+        await run_watcher(make_save(max_hp=0x00), mode=0x10, client=client, ctx=ctx)
+        self.assertTrue(self.goal_sent(ctx),
+                        "goal did not fire after 8 kills - the tally did not "
+                        "survive the ending, where the save reads insane")
+
+    async def test_six_kills_does_not_complete_the_goal(self) -> None:
+        client = MMX5Client()
+        ctx = self.ctx_for(mmx5_client.GOAL_ALL_MAVERICKS)
+        await run_watcher(make_save(max_hp=0x20, weapons=0x3F), client=client, ctx=ctx)
+        await run_watcher(make_save(max_hp=0x00), mode=0x10, client=client, ctx=ctx)
+        self.assertFalse(self.goal_sent(ctx),
+                         "all_mavericks completed from a 6-kill endgame")
+
+    async def test_the_sigma_goal_still_ignores_the_kill_count(self) -> None:
+        # The permissive goal is unchanged: reaching the ending is the whole
+        # requirement, however the player got there.
+        client = MMX5Client()
+        ctx = self.ctx_for(mmx5_client.GOAL_SIGMA)
+        await run_watcher(make_save(max_hp=0x20, weapons=0x3F), client=client, ctx=ctx)
+        await run_watcher(make_save(max_hp=0x00), mode=0x10, client=client, ctx=ctx)
+        self.assertTrue(self.goal_sent(ctx),
+                        "the sigma goal stopped firing on a valid ending")
+
+    async def test_stale_ram_at_the_ending_cannot_fake_a_full_set(self) -> None:
+        # Same failure shape as the phantom intro check: 0xFF in an unloaded
+        # save struct scores 8. The tally only ever advances from a sane read.
+        client = MMX5Client()
+        ctx = self.ctx_for(mmx5_client.GOAL_ALL_MAVERICKS)
+        await run_watcher(make_save(max_hp=0x00, weapons=0xFF), mode=0x10,
+                          client=client, ctx=ctx)
+        self.assertFalse(self.goal_sent(ctx),
+                         "stale 0xFF in the weapons byte completed the goal")
+
+
+class TestAllMavericksEndgameGate(unittest.IsolatedAsyncioTestCase):
+    """Two independent doors open the endgame early, and each needs its own
+    fix. The disc edit moves the shuttle era from 6 kills to 8. This covers the
+    other one: a SUCCESSFUL Enigma resolves the colony by itself and is offered
+    from 2 kills, so early launcher parts could open Zero Space without the
+    shuttle ever being reached."""
+
+    @staticmethod
+    def ctx_with_parts(goal: int, part_name: str, count: int = 4,
+                       noise: int = 3) -> FakeContext:
+        """Build a context from the world's REAL item ids and a REAL name
+        lookup, not a stub that answers every code with one name.
+
+        A constant lambda hides the failure that actually matters: the client
+        counts parts by mapping received item CODES through lookup_in_game, so
+        a wrong id or a lookup that answers differently than expected breaks
+        the count while a stubbed test still passes. The inventory below also
+        carries unrelated items, because "count only the right ones" is the
+        real job."""
+        from ..items import item_table
+        code_of = {name: data.code for name, data in item_table.items()}
+        id_to_name = {data.code: name for name, data in item_table.items()}
+
+        received = [SimpleNamespace(item=code_of[part_name])] * count
+        # Unrelated items that must NOT be counted as launcher parts.
+        for filler in (names.CSHOT, names.DARK_HOLD, names.SMALL_ENERGY)[:noise]:
+            received.append(SimpleNamespace(item=code_of[filler]))
+        # The OTHER launcher part must not be counted as this one either.
+        other = (names.SHUTTLE_PART if part_name == names.ENIGMA_PART
+                 else names.ENIGMA_PART)
+        received.append(SimpleNamespace(item=code_of[other]))
+
+        ctx = FakeContext()
+        ctx.slot_data = {"goal": goal, "boss_difficulty": 1}
+        ctx.items_received = received
+        ctx.item_names = SimpleNamespace(
+            lookup_in_game=lambda code: id_to_name[code])
+        return ctx
+
+    @staticmethod
+    def score_mod_writes(ctx: FakeContext) -> list:
+        addr = mmx5_client.SAVE_BASE + mmx5_client.OFF_SCORE_MOD
+        return [w[1][0] for w in ctx.writes if w[0] == addr]
+
+    async def run_powered(self, ctx: FakeContext, weapons: int,
+                          score_mod: int) -> int:
+        """Effective launch-score modifier after one cycle: the last value the
+        client pinned, or the starting value if it left the byte alone. The
+        client only writes on a difference, so "no write" is a RESULT, not an
+        absence of one - asserting on writes alone would misread it."""
+        client = MMX5Client()
+        client.ap_patched = True
+        save = bytearray(make_save(max_hp=0x20, weapons=weapons))
+        save[mmx5_client.OFF_SCORE_MOD] = score_mod
+        await run_watcher(bytes(save), client=client, ctx=ctx)
+        writes = self.score_mod_writes(ctx)
+        return writes[-1] if writes else score_mod
+
+    async def test_enigma_is_not_powered_before_all_eight(self) -> None:
+        ctx = self.ctx_with_parts(mmx5_client.GOAL_ALL_MAVERICKS, names.ENIGMA_PART)
+        # 2 kills, full Enigma set, and the score already powered - the client
+        # must pin it back down.
+        powered = await self.run_powered(ctx, weapons=0x03, score_mod=1)
+        self.assertEqual(powered, 0,
+                         "a full Enigma set powered a launch at 2 kills, which "
+                         "resolves the colony and opens the endgame early")
+
+    async def test_the_full_set_still_powers_a_launch(self) -> None:
+        # Positive control: at 8 kills the shuttle era is live and a complete
+        # shuttle set must still work, or the goal becomes unreachable.
+        ctx = self.ctx_with_parts(mmx5_client.GOAL_ALL_MAVERICKS, names.SHUTTLE_PART)
+        powered = await self.run_powered(ctx, weapons=0xFF, score_mod=0)
+        self.assertEqual(powered, 1,
+                         "a full shuttle set did not power a launch at 8 kills")
+
+    async def test_the_sigma_goal_still_powers_the_enigma_early(self) -> None:
+        # The permissive goal keeps vanilla's story flavour untouched.
+        ctx = self.ctx_with_parts(mmx5_client.GOAL_SIGMA, names.ENIGMA_PART)
+        powered = await self.run_powered(ctx, weapons=0x03, score_mod=0)
+        self.assertEqual(powered, 1,
+                         "the sigma goal stopped powering the Enigma early")
+
+
+class TestShuttleGateSeedEdit(unittest.TestCase):
+    """The disc half of the gate. Goal-conditional: the launch goal NEEDS the
+    shuttle at 6 kills and the sigma goal permits finishing short, so only
+    all_mavericks gets the stricter disc."""
+
+    @staticmethod
+    def edits_for(goal_value: int) -> list:
+        from ..options import Goal
+        from .. import Rom
+        captured = {}
+
+        class FakePatch:
+            @staticmethod
+            def write_file(name, data):
+                captured[name] = data
+
+        world = SimpleNamespace(options=SimpleNamespace(goal=Goal(goal_value)))
+        Rom.patch_rom(world, FakePatch())
+        return json.loads(captured["seed_edits.json"].decode("utf-8"))
+
+    def test_all_mavericks_moves_the_shuttle_era_to_eight(self) -> None:
+        from ..options import Goal
+        from .. import Rom
+        edits = self.edits_for(Goal.option_all_mavericks)
+        self.assertEqual(len(edits), 1, "expected exactly the shuttle-era edit")
+        self.assertEqual(edits[0]["addr"], Rom.SHUTTLE_THRESHOLD_ADDR)
+        self.assertEqual(edits[0]["region"], "hub overlay")
+        self.assertEqual(bytes.fromhex(edits[0]["hex"]),
+                         Rom.SHUTTLE_THRESHOLD_ALL_8)
+
+    def test_other_goals_leave_the_disc_alone(self) -> None:
+        from ..options import Goal
+        for goal in (Goal.option_sigma, Goal.option_launch):
+            self.assertEqual(self.edits_for(goal), [],
+                             f"goal {goal} emitted a disc edit it did not ask for")
+
+    def test_the_edit_resolves_through_the_hub_module(self) -> None:
+        # The hub and results overlays load at the SAME RAM base from
+        # DIFFERENT sectors, so naming the wrong region silently patches
+        # unrelated code. These must not resolve to the same disc offset.
+        from .. import disc, Rom
+        hub = disc.addr_to_disc(Rom.SHUTTLE_THRESHOLD_ADDR, "hub overlay")
+        results = disc.addr_to_disc(Rom.SHUTTLE_THRESHOLD_ADDR, "results overlay")
+        self.assertNotEqual(hub, results,
+                            "hub and results overlays resolved to one offset - "
+                            "the region map no longer distinguishes them")
+
+
+class TestGoalOptionWiring(unittest.TestCase):
+    """The option values and the client's goal constants are declared in two
+    places and must agree - slot_data carries the raw int between them."""
+
+    def test_default_goal_is_all_mavericks(self) -> None:
+        from ..options import Goal
+        self.assertEqual(Goal.default, Goal.option_all_mavericks)
+
+    def test_client_constants_match_the_option_values(self) -> None:
+        from ..options import Goal
+        self.assertEqual(mmx5_client.GOAL_SIGMA, Goal.option_sigma)
+        self.assertEqual(mmx5_client.GOAL_LAUNCH, Goal.option_launch)
+        self.assertEqual(mmx5_client.GOAL_ALL_MAVERICKS, Goal.option_all_mavericks)
 
 
 if __name__ == "__main__":

@@ -6,7 +6,14 @@ from Options import Choice, PerGameCommonOptions, StartInventoryPool
 class Goal(Choice):
     """Victory condition.
 
-    sigma: reach and defeat Sigma after defeating all 8 Mavericks.
+    all_mavericks: defeat all 8 Mavericks, then reach and defeat Sigma. The
+    default, and the way most people want to play.
+
+    sigma: defeat Sigma, however you got there. Mega Man X5 opens the endgame
+    when the Eurasia colony situation resolves, and that can happen with only 6
+    Mavericks down - so under this goal a run can legitimately finish without
+    fighting all eight.
+
     launch: collect all 8 Enigma/Shuttle Parts and complete a successful
     launch (the client only powers a launch once every part is in hand -
     partial part sets always fail the launch, vanilla-style).
@@ -14,7 +21,8 @@ class Goal(Choice):
     display_name = "Goal"
     option_sigma = 0
     option_launch = 1
-    default = 0
+    option_all_mavericks = 2
+    default = 2
 
 
 class BossDifficulty(Choice):

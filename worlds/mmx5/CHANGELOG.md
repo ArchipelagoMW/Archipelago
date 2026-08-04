@@ -1,5 +1,28 @@
 # Mega Man X5 apworld changelog
 
+## Unreleased
+
+**New goal: `all_mavericks` — defeat all 8 Mavericks, then Sigma. This is now
+the default.** Seeds generated without an explicit `goal:` line change
+behaviour, and this goal patches the disc, so re-patch when it releases.
+
+Mega Man X5 does not normally require the full set. It opens the endgame once
+the Eurasia colony situation resolves, and two separate paths could resolve it
+early: the shuttle becomes available at 6 Maverick kills, so failing both
+launches there reaches Sigma two Mavericks short; and a *successful* Enigma
+resolves the colony on its own from as few as 2 kills, which randomized
+launcher parts could power. Either one strands a run under this goal, because
+Sigma does not respawn — beat him early and the goal can never complete.
+
+Both doors are now closed. The disc moves the shuttle era to 8 kills (a
+goal-conditional edit — the `launch` goal still needs it at 6, and `sigma`
+still permits finishing short), and the client will not power a launch before
+the full set is down. If an ending is somehow reached early anyway, the client
+says so in the log rather than failing silently.
+
+`sigma` is unchanged and still available for anyone who prefers vanilla's
+timing.
+
 ## 0.1.3 — 2026-08-03
 
 **Tank locations could become permanently uncollectable, which could make a
