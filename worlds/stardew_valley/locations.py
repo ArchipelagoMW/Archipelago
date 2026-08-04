@@ -11,6 +11,7 @@ from .bundles.bundle_room import BundleRoom
 from .content.game_content import StardewContent
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
+from .data.fish_data import FishItem, crab_pot_difficulty
 from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
@@ -290,6 +291,18 @@ def extend_quests_locations(randomized_locations: List[LocationData], options: S
             randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
 
+def modify_region_according_to_data_randomization(location_data: LocationData, fish: FishItem) -> LocationData:
+    new_region = location_data.region
+    if fish.difficulty == crab_pot_difficulty:
+        if LogicRegion.crab_pot_seawater in fish.locations:
+            new_region = LogicRegion.crab_pot_seawater
+        else:
+            new_region = LogicRegion.crab_pot_freshwater
+    else:
+        new_region = LogicRegion.fishing
+    return LocationData(location_data.code, new_region, location_data.name, location_data.content_packs, location_data.tags)
+
+
 def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random):
     fishsanity = content.features.fishsanity
     if not fishsanity.is_enabled:
@@ -302,7 +315,9 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], conten
         if fishsanity.is_randomized and random.random() >= fishsanity.randomization_ratio:
             continue
 
-        randomized_locations.append(location_table[fishsanity.to_location_name(fish.name)])
+        location_data = location_table[fishsanity.to_location_name(fish.name)]
+        modified_location_data = modify_region_according_to_data_randomization(location_data, fish)
+        randomized_locations.append(location_data)
 
 
 def extend_museumsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
