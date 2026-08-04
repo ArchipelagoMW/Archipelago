@@ -26,11 +26,14 @@ Known interim policies (deliberate, revisit before release):
   * Tanks: locations + ring detection + grants (u16 0x1C7E bits 12-15) done.
   * Armor capsules (proto v9+): the capsule stub records {stage, kind 0x20,
     id} to the ring and suppresses the vanilla part grant; the disc patch
-    also makes randomized capsules (ids 0-7) always spawn, so granted armor
-    parts never hide an unchecked capsule. Grants OR part bits into 0x1CA1;
-    set-completion flags (0x1C4A) follow at the next results screen
-    (vanilla logic). No capsule detection on vanilla discs (0x1CA1 bits
-    would conflate AP grants with local pickups).
+    also makes randomized capsules (ids 0-7) always spawn. Grants OR part
+    bits into 0x1CA1; set-completion flags (0x1C4A) follow at the next
+    results screen (vanilla logic). No capsule detection on vanilla discs
+    (0x1CA1 bits would conflate AP grants with local pickups).
+    NOTE the always-spawn patch is necessary but NOT sufficient: a capsule
+    can have a SECOND gate on the route to it. Squid Adler's is opened by
+    collecting energy balls, and owning the part it grants hides those balls
+    - so the capsule sits there unopenable. See STAGE_CAPSULE_ARMOR_BIT.
   * Victory detection: sigma goal fires on the ending mode bytes
     (0x800D1C00 walks 0x10 -> 0x11/credits after the final blow — allow the
     ~78 s cutscene gap); launch goal fires on the launch-success flag
@@ -82,6 +85,10 @@ TRAINING_ACT = 0x0A
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
 OFF_ARMOR = 0x0D1CA1 - SAVE_BASE       # armor parts byte (Falcon 0-3, Gaea 4-7)
+# Armor SET-COMPLETION flags: bit1 Falcon complete, bit2 Gaea complete.
+# Capability comes from a complete set, so this - not the parts byte -
+# is what must survive while a part is withheld.
+OFF_SETFLAGS = 0x0D1C4A - SAVE_BASE
 # Launch machinery (overlay-findings 11). Score = 2*sum(0x1CC2..C5) + 0x1CCA;
 # on the patched disc the roll is `li v1,0`, so success <=> score > 0. The
 # client PINS these every cycle from AP part-item state - vanilla accrual
@@ -148,6 +155,15 @@ PATCH_PROBE_PATCHED = bytes.fromhex("4D00A290")
 # Pickup-stub detection (proto v3+ discs): the jump-table entry for pickup
 # kind 0 at 0x80011068 either holds the vanilla heart handler or the shared
 # check-record stub at 0x800776A0 (patch spec item 2).
+# Tank already-owned despawn fix (disc rev 12+). The item init at
+# 0x800535C8 destroys a pickup you already own; the patch zeroes the sub-tank
+# mask word so the test can never fire for tanks. Probing it tells a fixed
+# disc from an older one, so the client's own workaround below runs ONLY
+# where it is actually needed.
+TANK_FIX_PROBE_ADDR = 0x053804
+TANK_FIX_VANILLA = bytes.fromhex("00100224")   # addiu v0,zero,0x1000
+TANK_FIX_PATCHED = bytes.fromhex("00000224")   # addiu v0,zero,0
+
 STUB_PROBE_ADDR = 0x011068
 STUB_PROBE_VANILLA = bytes.fromhex("A0400580")   # 0x800540A0 LE
 STUB_PROBE_STUBBED = bytes.fromhex("A0760780")   # 0x800776A0 LE
@@ -181,6 +197,36 @@ TANK_RECORD_TO_STAGE = {
 # of the u16 = bits 4-7 of the byte): sub1/sub2/W/EX.
 TANK_ITEM_BYTE_BITS = {names.W_TANK: 0x40, names.EX_TANK: 0x80}
 SUB_TANK_BYTE_BITS = [0x10, 0x20]  # first, second received Sub-Tank
+
+# Which tank bit each tank LOCATION's vanilla pickup sets. Used by the
+# unpatched-disc workaround: while standing in a stage whose tank location is
+# still unchecked, that bit must be clear or the game deletes the pickup.
+STAGE_TANK_BIT = {
+    names.GRIZZLY: 0x10,    # Sub-Tank #1
+    names.NECROBAT: 0x20,   # Sub-Tank #2
+    names.PEGASUS: 0x40,    # W-Tank
+    names.FIREFLY: 0x80,    # EX-Tank
+}
+STAGE_ID_BY_NAME = {name: sid for sid, name in STAGE_ID_TO_NAME.items()}
+
+# Armor part each stage's CAPSULE grants, as an 0x1CA1 mask. Owning the part
+# can suppress the vanilla mechanism that opens its own capsule - live-proven
+# 2026-08-03 in Squid Adler: with 0x1CA1 = 00 the jet-bike energy balls that
+# gate that capsule are present and collectable; granting Falcon Head (0x01)
+# and re-entering makes them vanish. Same family as the tank despawn - an
+# AP-granted item hiding the route to its own check - but a SECOND gate on a
+# location whose capsule object the v9 spawn-gate patch already forces to
+# spawn. The capsule sits there; the thing that opens it does not.
+#
+# Only Squid Adler is listed because only Squid Adler is proven. The stage ->
+# capsule-part map is verified for four stages (Squid Adler = Falcon Head 0x01,
+# Duff McWhalen = Falcon Body, Grizzly = Falcon Leg, Dark Dizzy = Gaea Head)
+# and unverified for the rest, and a wrong entry here would withhold armor a
+# player needs to REACH a capsule - worse than the bug. Add entries only with
+# the same kind of live evidence.
+STAGE_CAPSULE_ARMOR_BIT = {
+    names.KRAKEN: 0x01,     # Squid Adler -> Falcon Armor Head
+}
 
 # Capsule ring records carry the SYNTHETIC kind byte 0x20 (written by the
 # capsule stub only - real dispatcher kinds stop well below it). The stage
@@ -255,13 +301,20 @@ class MMX5Client(BizHawkClient):
         self.stamp_warned = False
         self.victory_sent = False
         self.last_training_state = None
+        self.tank_fix_present = None    # None = not yet probed
+        self.tank_workaround_warned = False
+        self.unpowered_launch_warned = False
+        self.armor_workaround_warned = False
+        self.armor_setflags_pin = None
+        self.tanks_withheld = 0         # bits held back this stage visit
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
-            sig, probe, stub_probe = await bizhawk.read(ctx.bizhawk_ctx, [
+            sig, probe, stub_probe, tank_probe = await bizhawk.read(ctx.bizhawk_ctx, [
                 (EXE_SIG_ADDR, len(EXE_SIG), "MainRAM"),
                 (PATCH_PROBE_ADDR, 4, "MainRAM"),
                 (STUB_PROBE_ADDR, 4, "MainRAM"),
+                (TANK_FIX_PROBE_ADDR, 4, "MainRAM"),
             ])
             if sig != EXE_SIG:
                 return False
@@ -275,6 +328,7 @@ class MMX5Client(BizHawkClient):
         # re-probes before granting anything.
         self.ap_patched = self._classify_probe(probe)
         self.stub_present = self._classify_stub_probe(stub_probe)
+        self.tank_fix_present = self._classify_tank_fix(tank_probe)
         if self.ap_patched is None:
             logger.debug(f"MMX5: disc mode undetermined at boot (probe {probe.hex()}) - will re-probe in-game")
 
@@ -305,6 +359,43 @@ class MMX5Client(BizHawkClient):
         return h or 1
 
     @staticmethod
+    def _classify_tank_fix(probe: bytes):
+        if probe == TANK_FIX_PATCHED:
+            return True
+        if probe == TANK_FIX_VANILLA:
+            return False
+        return None      # boot race: EXE not resident yet, re-probe later
+
+    def _tank_bit_to_withhold(self, ctx, stage_name: str) -> int:
+        """Tank bit that must stay CLEAR to keep this stage's pickup alive.
+
+        Only meaningful on a disc without the tank fix. Returns 0 once the
+        location is checked - at that point the pickup no longer matters and
+        the player should have their tank.
+        """
+        bit = STAGE_TANK_BIT.get(stage_name, 0)
+        if not bit:
+            return 0
+        loc = location_table.get(names.tank_location(stage_name))
+        if loc is None or loc in ctx.checked_locations:
+            return 0
+        return bit
+
+    def _armor_bit_to_withhold(self, ctx, stage_name: str) -> int:
+        """Armor bit that must stay CLEAR to keep this stage's capsule openable.
+
+        Returns 0 once the capsule location is checked - after that the route
+        no longer matters and the player should have their armor back.
+        """
+        bit = STAGE_CAPSULE_ARMOR_BIT.get(stage_name, 0)
+        if not bit:
+            return 0
+        loc = location_table.get(names.capsule_location(stage_name))
+        if loc is None or loc in ctx.checked_locations:
+            return 0
+        return bit
+
+    @staticmethod
     def _classify_stub_probe(probe: bytes):
         if probe == STUB_PROBE_STUBBED:
             logger.debug("MMX5: pickup stub RESIDENT - checks come from the mailbox ring")
@@ -319,11 +410,20 @@ class MMX5Client(BizHawkClient):
             return
 
         try:
+            # 0x0D1C00..0x0D1C0F in one read: mode at +0, and the spawn
+            # engine's stage id at +0x0C (below SAVE_BASE, so it is not in the
+            # save block). The tank protection needs to know which stage the
+            # player is standing in.
             mode, save, ring = await bizhawk.read(ctx.bizhawk_ctx, [
-                (0x0D1C00, 1, "MainRAM"),  # game-mode controller: 0x0A gameplay / 0x0C results
+                (0x0D1C00, 0x10, "MainRAM"),  # game-mode controller: 0x0A gameplay / 0x0C results
                 (SAVE_BASE, SAVE_LEN, "MainRAM"),
                 (RING_ADDR, RING_SLOTS * 4, "MainRAM"),  # pickup-stub check records
             ])
+            # NOT `stage_id`: the mailbox-ring loop below unpacks each record
+            # into a local of that name, which would clobber this before the
+            # tank protection reads it (it did - the bit silently never got
+            # withheld because the last empty ring slot left it 0).
+            cur_stage_id = mode[0x0C]
             # ---- Sigma goal: victory on the post-Sigma ending modes ----
             # Deliberately BEFORE the save-struct gate below: the ending modes
             # are neither gameplay (0x0A) nor results (0x0C), so that gate is
@@ -373,6 +473,9 @@ class MMX5Client(BizHawkClient):
                 # gate transition (stage entry AND exit-to-hub).
                 self.ap_patched = None
                 self.stub_present = None
+                # Savestates restore the EXE, so the tank fix can appear or
+                # vanish mid-session exactly like the other two.
+                self.tank_fix_present = None
 
             # Resolve the probes whenever unresolved - NOT just in-stage.
             # Launches happen at the HUB (modes 0x13-0x15); the old
@@ -381,11 +484,14 @@ class MMX5Client(BizHawkClient):
             # 2026-08-01: an unpinned Enigma launch succeeded off vanilla
             # accrual + the zeroed roll). During boot the EXE reads as
             # zeros -> classify returns None -> retried next cycle.
-            if self.ap_patched is None or self.stub_present is None:
-                probe, stub_probe = await bizhawk.read(ctx.bizhawk_ctx, [
+            if self.ap_patched is None or self.stub_present is None \
+                    or self.tank_fix_present is None:
+                probe, stub_probe, tank_probe = await bizhawk.read(ctx.bizhawk_ctx, [
                     (PATCH_PROBE_ADDR, 4, "MainRAM"),
                     (STUB_PROBE_ADDR, 4, "MainRAM"),
+                    (TANK_FIX_PROBE_ADDR, 4, "MainRAM"),
                 ])
+                self.tank_fix_present = self._classify_tank_fix(tank_probe)
                 self.ap_patched = self._classify_probe(probe)
                 self.stub_present = self._classify_stub_probe(stub_probe)
 
@@ -507,6 +613,17 @@ class MMX5Client(BizHawkClient):
                     elif kind == CAPSULE_KIND and stage is not None and rec_id <= 7:
                         # Armor capsule (proto v9 stub): one per stage.
                         loc_name = names.capsule_location(stage)
+                        # Capsule id == armor part index, so every capsule
+                        # anyone opens reveals one entry of the stage -> part
+                        # map. Only four of eight are verified, and that map is
+                        # what STAGE_CAPSULE_ARMOR_BIT needs before it can
+                        # protect any stage other than Squid Adler. Logging it
+                        # here means ordinary play fills the map in for free
+                        # rather than anyone hand-testing seven stages.
+                        if rec_id < len(names.ARMOR_PARTS):
+                            logger.info(
+                                f"MMX5: capsule map - {stage} grants "
+                                f"{names.ARMOR_PARTS[rec_id]} (capsule id {rec_id})")
 
                     if loc_name is not None:
                         check(loc_name, True)
@@ -564,11 +681,25 @@ class MMX5Client(BizHawkClient):
                                 list(frozen.to_bytes(4, "little")), "MainRAM"))
                 if pin:
                     await bizhawk.write(ctx.bizhawk_ctx, pin)
+                # Goal requires BOTH a successful launch and the parts that
+                # were supposed to power it. The flag alone is not enough:
+                # vanilla launches the shuttle by itself once all eight
+                # Mavericks are down, which completed the launch goal for a
+                # tester holding only 3 of 8 parts. The world's own
+                # completion_condition already demands all 8, so firing on the
+                # flag alone had the client disagreeing with its own logic.
                 if goal == GOAL_LAUNCH and not self.victory_sent \
-                        and save[OFF_LAUNCH_FLAGS] & 0x80:
+                        and save[OFF_LAUNCH_FLAGS] & 0x80 and powered:
                     self.victory_sent = True
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                    logger.info("MMX5: launch succeeded - GOAL complete!")
+                    logger.info("MMX5: launch succeeded with all 8 parts - GOAL complete!")
+                elif goal == GOAL_LAUNCH and not self.victory_sent \
+                        and save[OFF_LAUNCH_FLAGS] & 0x80 and not self.unpowered_launch_warned:
+                    self.unpowered_launch_warned = True
+                    logger.info(
+                        f"MMX5: a launch succeeded, but this is the story's own launch - "
+                        f"you have {enigma}/4 Enigma and {shuttle}/4 Shuttle parts. "
+                        f"The goal needs all 8, so keep collecting.")
 
             if new_checks:
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new_checks}])
@@ -583,6 +714,99 @@ class MMX5Client(BizHawkClient):
                 if self.ap_patched is None:
                     logger.warning("MMX5: disc mode unresolved in-game - grants held")
                     return
+
+                # ---- Tank-pickup protection (discs WITHOUT the tank fix) ----
+                # The item init deletes any pickup you already own, so an
+                # AP-granted tank bit destroys the vanilla pickup that IS that
+                # location's check - permanently, and those locations can hold
+                # progression, so it can strand a seed. While the player is in
+                # the stage owning an UNCHECKED tank location, hold that one
+                # bit clear. The check still lands normally: the pickup stub
+                # records it to the ring, so the game and the client never
+                # fight over the bit. The tank returns as soon as the location
+                # is checked or the player leaves.
+                # Runs EVERY cycle, not inside the grant batch below - a
+                # player who already received their tank has nothing new to
+                # grant, and is exactly the person this protects.
+                # Gated on the probe: a patched disc needs none of this, and
+                # withholding a tank there would be a pure downgrade.
+                stage_name = STAGE_ID_TO_NAME.get(cur_stage_id)
+                withhold = 0
+                if self.tank_fix_present is False and stage_name:
+                    withhold = self._tank_bit_to_withhold(ctx, stage_name)
+
+                # Same protection for armor: owning the part a capsule grants
+                # can hide the vanilla route to that capsule (proven for Squid
+                # Adler's energy balls). Unlike tanks there is no disc fix yet,
+                # so this is unconditional rather than probe-gated.
+                #
+                # It has to cover the WHOLE stage visit, not just loading.
+                # Measured 2026-08-03 by holding the bit clear over different
+                # windows: clear across the entire load but restored as
+                # gameplay begins -> balls still gone; clear for the first 600
+                # frames of gameplay -> balls present. The check runs per ball
+                # as the screen scan reaches it, exactly like ordinary item
+                # spawns, so there is no load-time window to restore in.
+                armor_withhold = 0
+                if stage_name:
+                    armor_withhold = self._armor_bit_to_withhold(ctx, stage_name)
+                if armor_withhold and (save[OFF_ARMOR] & armor_withhold):
+                    # Pin the set-completion flags (0x1C4A) while the part
+                    # bit is withheld.
+                    #
+                    # MEASURED 2026-08-03 with a real complete Falcon set: the
+                    # game did NOT clear the flag when it saw an incomplete
+                    # parts byte (0x1C4A held 03 throughout), so this write is
+                    # normally a no-op - it is insurance, not the mechanism.
+                    #
+                    # WHY THIS COSTS THE PLAYER NOTHING (verified live with a
+                    # complete Falcon set): the game decides which armor to
+                    # EQUIP from the parts byte when the stage LOADS, while the
+                    # energy balls consult ownership during GAMEPLAY. This
+                    # withhold runs only inside the in_gameplay branch, so it
+                    # lands between the two - X wears the armor and the balls
+                    # are present at the same time.
+                    #
+                    # So do NOT move it earlier. Withholding across stage
+                    # loading strips the armor for that stage, and doing it
+                    # regardless of stage strips it everywhere: a test harness
+                    # made exactly that mistake and lost armor in Grizzly
+                    # Slash, a stage this never touches.
+                    #
+                    # Because the flag survives, the armor returns as soon as
+                    # the bit is restored - no results screen needed, nothing
+                    # lost permanently. Nothing in that stage requires Falcon
+                    # armor to reach, so this costs convenience, not access.
+                    writes = [(SAVE_BASE + OFF_ARMOR,
+                               [save[OFF_ARMOR] & ~armor_withhold], "MainRAM")]
+                    if self.armor_setflags_pin is None:
+                        self.armor_setflags_pin = save[OFF_SETFLAGS]
+                    if save[OFF_SETFLAGS] != self.armor_setflags_pin:
+                        writes.append((SAVE_BASE + OFF_SETFLAGS,
+                                       [self.armor_setflags_pin], "MainRAM"))
+                    await bizhawk.write(ctx.bizhawk_ctx, writes)
+                    if not self.armor_workaround_warned:
+                        self.armor_workaround_warned = True
+                        logger.info(
+                            "MMX5: holding back an armor part while you are in this stage - "
+                            "owning it hides the route to that stage's capsule. You get it "
+                            "back once the capsule check is collected or you leave.")
+                    return   # re-read next cycle with the bit actually clear
+                if withhold != self.tanks_withheld:
+                    self.tanks_withheld = withhold
+                    logger.debug(f"MMX5: tank protection -> withhold {withhold:02X}")
+                if withhold and (save[OFF_TANKS] & withhold):
+                    await bizhawk.write(ctx.bizhawk_ctx, [(
+                        SAVE_BASE + OFF_TANKS,
+                        [save[OFF_TANKS] & ~withhold], "MainRAM")])
+                    if not self.tank_workaround_warned:
+                        self.tank_workaround_warned = True
+                        logger.info(
+                            "MMX5: this disc predates the tank fix, so a tank is being held "
+                            "back to keep its pickup from being deleted. You get it once "
+                            "that check is collected. Re-patch with the current apworld to "
+                            "remove this entirely.")
+                    return   # re-read next cycle with the bit actually clear
                 # Source of truth for "how many received items are already
                 # applied to THIS save" lives IN the save (u16 at 0x1C4E):
                 # memcard-persisted, savestate-coherent, restart-proof.
@@ -636,7 +860,11 @@ class MMX5Client(BizHawkClient):
                     # (bits 12-15: sub1/sub2/W/EX - engine-honored, appear in
                     # the pause menu immediately). Granted sub-tanks start
                     # empty, exactly like a vanilla save-reload after pickup.
-                    merged_tanks = save[OFF_TANKS] | tank_bits
+                    # `withhold` is computed once per cycle further down (the
+                    # unpatched-disc tank protection) and applied here too, so
+                    # a grant batch cannot re-set a bit the protection just
+                    # cleared.
+                    merged_tanks = (save[OFF_TANKS] | tank_bits) & ~withhold
                     if merged_tanks != save[OFF_TANKS]:
                         writes.append((SAVE_BASE + OFF_TANKS, [merged_tanks], "MainRAM"))
 
@@ -647,7 +875,7 @@ class MMX5Client(BizHawkClient):
                     # unlocks the armor at character select. On the v9+ disc
                     # this can never hide an unchecked capsule: randomized
                     # capsules always spawn (spawn-gate retarget).
-                    merged_armor = save[OFF_ARMOR] | armor_bits
+                    merged_armor = (save[OFF_ARMOR] | armor_bits) & ~armor_withhold
                     if merged_armor != save[OFF_ARMOR]:
                         writes.append((SAVE_BASE + OFF_ARMOR, [merged_armor], "MainRAM"))
 

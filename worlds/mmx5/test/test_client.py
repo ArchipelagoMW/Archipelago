@@ -30,9 +30,15 @@ class FakeContext:
         self.items_received = []
         self.item_names = SimpleNamespace(lookup_in_game=lambda code: "")
         self.sent_msgs = []
+        self.writes = []
 
     async def send_msgs(self, msgs) -> None:
         self.sent_msgs.extend(msgs)
+
+    def tank_writes(self):
+        """Values written to the tank-ownership byte, in order."""
+        addr = mmx5_client.SAVE_BASE + mmx5_client.OFF_TANKS
+        return [w[1][0] for w in self.writes if w[0] == addr]
 
     def checked_location_ids(self) -> set:
         ids = set()
@@ -42,27 +48,46 @@ class FakeContext:
         return ids
 
 
-def make_save(max_hp: int, intro: int = 0, weapons: int = 0, hearts: int = 0) -> bytes:
+def make_save(max_hp: int, intro: int = 0, weapons: int = 0, hearts: int = 0,
+              tanks: int = 0) -> bytes:
     save = bytearray(mmx5_client.SAVE_LEN)
     save[mmx5_client.OFF_MAX_HP_X] = max_hp
     save[mmx5_client.OFF_INTRO] = intro
     save[mmx5_client.OFF_WEAPONS] = weapons
     save[mmx5_client.OFF_HEARTS] = hearts
+    save[mmx5_client.OFF_TANKS] = tanks
     return bytes(save)
 
 
-async def run_watcher(save: bytes, mode: int = 0x0A) -> FakeContext:
-    ctx = FakeContext()
-    client = MMX5Client()
+async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
+                      client: MMX5Client | None = None,
+                      ctx: FakeContext | None = None) -> FakeContext:
+    ctx = ctx or FakeContext()
+    client = client or MMX5Client()
     ring = bytes(mmx5_client.RING_SLOTS * 4)
+    # The mode read covers 0x0D1C00..0x0D1C0F: mode at +0, stage id at +0x0C.
+    mode_block = bytearray(0x10)
+    mode_block[0] = mode
+    mode_block[0x0C] = stage_id
+
+    # Dispatch on the requested ADDRESS, not the request count - the main
+    # cycle and the probe read are both three-wide, so counting would confuse
+    # them (and silently did, until a tank test caught it).
+    PROBE_REPLY = {
+        mmx5_client.PATCH_PROBE_ADDR: mmx5_client.PATCH_PROBE_PATCHED,
+        mmx5_client.STUB_PROBE_ADDR: mmx5_client.STUB_PROBE_STUBBED,
+        mmx5_client.TANK_FIX_PROBE_ADDR: (
+            mmx5_client.TANK_FIX_PATCHED if getattr(client, "tank_fix_present", None)
+            else mmx5_client.TANK_FIX_VANILLA),
+    }
 
     async def fake_read(_ctx, requests):
-        # 3 reads = the main (mode, save, ring) cycle; 2 = the disc-mode probes.
-        if len(requests) == 3:
-            return [bytes([mode]), save, ring]
-        return [b"\x00\x00\x00\x00"] * len(requests)
+        if requests[0][0] == 0x0D1C00:
+            return [bytes(mode_block), save, ring]
+        return [PROBE_REPLY.get(r[0], b"\x00\x00\x00\x00") for r in requests]
 
-    async def fake_write(*_args, **_kwargs):
+    async def fake_write(_ctx, writes, *_args, **_kwargs):
+        ctx.writes.extend(writes)
         return True
 
     with mock.patch.object(bizhawk, "read", fake_read), \
@@ -137,6 +162,168 @@ class TestTrainingMode(unittest.IsolatedAsyncioTestCase):
         ctx = await run_watcher(make_save(max_hp=0x2E, intro=0x0A, weapons=0x23))
         self.assertIn(location_table[names.INTRO_CLEAR], ctx.checked_location_ids(),
                       "a save with real progress was misread as training")
+
+
+class TestTankPickupProtection(unittest.IsolatedAsyncioTestCase):
+    """A tank you already own is deleted by the item init one frame after it
+    spawns (live capture 2026-08-03: owned Sub-Tank lived 2 frames, an un-owned
+    Heart Tank 47). The client grants tanks by setting exactly those ownership
+    bits, so receiving a tank destroyed the pickup that IS its check - making
+    the location permanently uncollectable, and it can hold progression.
+
+    On a disc carrying the fix none of this is needed. On an older disc the
+    client withholds the one bit while the player stands in that stage."""
+
+    GRIZZLY_ID = 1          # STAGE_ID_TO_NAME[1] == Grizzly Slash
+    SUB1 = 0x10             # its tank bit
+
+    async def _run(self, tank_fix: bool, stage_id: int, tanks: int,
+                   checked=()) -> FakeContext:
+        client = MMX5Client()
+        client.ap_patched = True
+        client.stub_present = True
+        client.tank_fix_present = tank_fix
+        ctx = FakeContext()
+        ctx.checked_locations = set(checked)
+        return await run_watcher(make_save(max_hp=0x20, tanks=tanks),
+                                 stage_id=stage_id, client=client, ctx=ctx)
+
+    async def test_bit_withheld_in_the_stage_that_owns_an_unchecked_tank(self) -> None:
+        ctx = await self._run(tank_fix=False, stage_id=self.GRIZZLY_ID, tanks=self.SUB1)
+        self.assertIn(0x00, ctx.tank_writes(),
+                      "tank bit was not cleared, so the pickup will be deleted")
+
+    async def test_not_withheld_once_the_location_is_checked(self) -> None:
+        checked = {location_table[names.tank_location(names.GRIZZLY)]}
+        ctx = await self._run(tank_fix=False, stage_id=self.GRIZZLY_ID,
+                              tanks=self.SUB1, checked=checked)
+        self.assertNotIn(0x00, ctx.tank_writes(),
+                         "tank was withheld even though its check is already collected")
+
+    async def test_not_withheld_in_a_different_stage(self) -> None:
+        ctx = await self._run(tank_fix=False, stage_id=3, tanks=self.SUB1)
+        self.assertNotIn(0x00, ctx.tank_writes(),
+                         "tank withheld in a stage that does not own that pickup")
+
+    async def test_patched_disc_never_withholds(self) -> None:
+        # The whole point of the probe: on a fixed disc, withholding a tank
+        # would be a pure downgrade for no benefit.
+        ctx = await self._run(tank_fix=True, stage_id=self.GRIZZLY_ID, tanks=self.SUB1)
+        self.assertNotIn(0x00, ctx.tank_writes(),
+                         "patched disc should never withhold a tank")
+
+
+class TestTankFixProbe(unittest.TestCase):
+    def test_probe_words_match_the_disc_patch(self) -> None:
+        from .. import disc
+        patched = dict((a, p) for a, p, _r in disc.BASE_EDITS)
+        addr = 0x80000000 + mmx5_client.TANK_FIX_PROBE_ADDR
+        self.assertIn(addr, patched,
+                      "client probes an address the disc patch does not touch")
+        self.assertEqual(patched[addr], mmx5_client.TANK_FIX_PATCHED,
+                         "probe's 'patched' word disagrees with what disc.py writes")
+
+    def test_all_three_tank_masks_are_zeroed(self) -> None:
+        from .. import disc
+        patched = dict((a, p) for a, p, _r in disc.BASE_EDITS)
+        for addr, why in ((0x80053804, "sub-tanks"), (0x80053838, "W-Tank"),
+                          (0x80053848, "EX-Tank")):
+            self.assertIn(addr, patched, f"{why} ownership mask not patched")
+            word = int.from_bytes(patched[addr], "little")
+            self.assertEqual(word & 0xFFFF, 0,
+                             f"{why} mask immediate is not zero: {word:08X}")
+
+
+class TestCapsuleArmorProtection(unittest.IsolatedAsyncioTestCase):
+    """Owning the armor part a capsule grants can hide the vanilla route to
+    that capsule. Live-proven 2026-08-03 in Squid Adler: with 0x1CA1 = 00 the
+    jet-bike energy balls gating the capsule are present; granting Falcon Head
+    (0x01) and re-entering makes them vanish, so the check is uncollectable."""
+
+    SQUID_ID = 5            # STAGE_ID_TO_NAME[5] == Squid Adler
+    FALCON_HEAD = 0x01
+
+    async def _run(self, stage_id: int, armor: int, checked=()) -> FakeContext:
+        client = MMX5Client()
+        client.ap_patched = True
+        client.stub_present = True
+        client.tank_fix_present = True
+        ctx = FakeContext()
+        ctx.checked_locations = set(checked)
+        save = bytearray(make_save(max_hp=0x20))
+        save[mmx5_client.OFF_ARMOR] = armor
+        return await run_watcher(bytes(save), stage_id=stage_id,
+                                 client=client, ctx=ctx)
+
+    def _armor_writes(self, ctx):
+        addr = mmx5_client.SAVE_BASE + mmx5_client.OFF_ARMOR
+        return [w[1][0] for w in ctx.writes if w[0] == addr]
+
+    async def test_part_withheld_in_the_stage_its_capsule_belongs_to(self) -> None:
+        ctx = await self._run(self.SQUID_ID, self.FALCON_HEAD)
+        self.assertIn(0x00, self._armor_writes(ctx),
+                      "Falcon Head not withheld - the capsule route stays hidden")
+
+    async def test_not_withheld_once_the_capsule_is_checked(self) -> None:
+        checked = {location_table[names.capsule_location(names.KRAKEN)]}
+        ctx = await self._run(self.SQUID_ID, self.FALCON_HEAD, checked=checked)
+        self.assertNotIn(0x00, self._armor_writes(ctx),
+                         "armor withheld even though the capsule is already collected")
+
+    async def test_not_withheld_in_other_stages(self) -> None:
+        ctx = await self._run(1, self.FALCON_HEAD)     # Grizzly Slash
+        self.assertNotIn(0x00, self._armor_writes(ctx),
+                         "armor withheld in a stage whose capsule does not grant it")
+
+    async def test_other_parts_are_left_alone(self) -> None:
+        # Only the one bit may be cleared: stripping armor a player needs to
+        # REACH a capsule would be worse than the bug being fixed.
+        ctx = await self._run(self.SQUID_ID, 0xFF)
+        for value in self._armor_writes(ctx):
+            self.assertEqual(value, 0xFF & ~self.FALCON_HEAD,
+                             f"withheld more than Falcon Head: {value:02X}")
+
+
+class TestLaunchGoal(unittest.IsolatedAsyncioTestCase):
+    """Vanilla launches the shuttle by itself once all eight Mavericks are
+    down. The client used to fire the launch goal on that success flag alone,
+    so a tester completed the goal holding 3 of 8 parts - contradicting the
+    world's own completion_condition, which requires all 8."""
+
+    def _save(self):
+        save = bytearray(make_save(max_hp=0x20))
+        save[mmx5_client.OFF_LAUNCH_FLAGS] = 0x80    # a launch succeeded
+        return bytes(save)
+
+    async def _run(self, enigma: int, shuttle: int) -> FakeContext:
+        client = MMX5Client()
+        client.ap_patched = True
+        client.stub_present = True
+        client.tank_fix_present = True
+        ctx = FakeContext()
+        ctx.slot_data = {"goal": mmx5_client.GOAL_LAUNCH, "boss_difficulty": 1}
+        parts = ([names.ENIGMA_PART] * enigma) + ([names.SHUTTLE_PART] * shuttle)
+        ctx.items_received = [SimpleNamespace(item=i) for i in range(len(parts))]
+        ctx.item_names = SimpleNamespace(lookup_in_game=lambda code: parts[code])
+        return await run_watcher(self._save(), client=client, ctx=ctx)
+
+    def _goal_sent(self, ctx) -> bool:
+        return any(m.get("cmd") == "StatusUpdate" for m in ctx.sent_msgs)
+
+    async def test_story_launch_without_the_parts_does_not_complete(self) -> None:
+        ctx = await self._run(enigma=2, shuttle=1)   # the tester's 3 of 8
+        self.assertFalse(self._goal_sent(ctx),
+                         "launch goal completed without collecting the 8 parts")
+
+    async def test_launch_with_all_eight_parts_completes(self) -> None:
+        ctx = await self._run(enigma=4, shuttle=4)
+        self.assertTrue(self._goal_sent(ctx),
+                        "launch goal did not complete with all 8 parts in hand")
+
+    async def test_partial_set_still_not_enough(self) -> None:
+        ctx = await self._run(enigma=4, shuttle=3)
+        self.assertFalse(self._goal_sent(ctx),
+                         "7 of 8 parts should not complete the launch goal")
 
 
 class TestLauncherRegistration(unittest.TestCase):
