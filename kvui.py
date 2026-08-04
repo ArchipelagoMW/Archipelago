@@ -122,6 +122,22 @@ class ThemedApp(MDApp):
         self.theme_cls.dynamic_scheme_contrast = text_colors.dynamic_scheme_contrast
 
 
+class LogtoLoadingScreen(logging.Handler):
+    def __init__(self, on_log):
+        super().__init__()
+        self.on_log = on_log
+
+    def handle(self, record: logging.LogRecord):
+        self.on_log(record.getMessage())
+
+
+class LoadingScreen(MDScreen):
+    label = ObjectProperty(None)
+
+    def update_text(self, text):
+        self.label.text = text
+
+
 class ImageIcon(MDButtonIcon, AsyncImage):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -363,15 +379,16 @@ class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
                     text += "\nPermissions:"
                     for permission_name, permission_data in ctx.permissions.items():
                         text += f"\n    {permission_name}: {permission_data}"
-                if ctx.hint_cost is not None and ctx.total_locations:
-                    min_cost = int(ctx.server_version >= (0, 3, 9))
-                    text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
-                            f"For you this means every " \
-                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
-                            "location checks." \
-                            f"\nYou currently have {ctx.hint_points} points."
-                elif ctx.hint_cost == 0:
-                    text += "\n!hint is free to use."
+                if ctx.total_locations and ctx.hint_cost is not None:
+                    if ctx.hint_cost == 0:
+                        text += "\n!hint is free to use."
+                    else:
+                        min_cost = int(ctx.server_version >= (0, 3, 9))
+                        text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
+                                f"For you this means every " \
+                                f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
+                                "location checks." \
+                                f"\nYou currently have {ctx.hint_points} points."
                 if ctx.stored_data and "_read_race_mode" in ctx.stored_data:
                     text += "\nRace mode is enabled." \
                         if ctx.stored_data["_read_race_mode"] else "\nRace mode is disabled."

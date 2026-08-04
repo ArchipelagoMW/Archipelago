@@ -28,7 +28,9 @@ class InvalidItemError(KeyError):
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    world_types: dict[str, Type[World]] = {}
+    testable_worlds: dict[str, Type[World]] = world_types
+    """worlds under test; scoped to AP_TEST_WORLDS by worlds/__init__"""
     __file__: str
     zip_path: Optional[str]
     settings_key: str
@@ -353,13 +355,14 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
     world_version: ClassVar[Version] = Version(0, 0, 0)
     """Optional world version loaded from archipelago.json"""
+    manifest: ClassVar[dict[str, Any]] = {}
+    """Mapping of the world's archipelago.json manifest. Use game and world_version attrs instead for those values."""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
-        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
