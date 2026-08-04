@@ -23,6 +23,17 @@ says so in the log rather than failing silently.
 `sigma` is unchanged and still available for anyone who prefers vanilla's
 timing.
 
+**New option: `text_skip`.** Mega Man X5 types dialogue out one character every
+5 frames and then waits for a button on every box — a single line can run past
+200 characters, about 20 seconds of typing before you can even press advance.
+Turn this on and boxes appear instantly and advance themselves, so cutscenes
+and Alia's in-stage calls play through with no input.
+
+Choices are not skipped. Alia's Life Up / Energy Up prompt still stops and
+waits for you to pick, and the Enigma/Shuttle launch decision is a stage-select
+menu this never touches — so nothing that affects your run gets answered for
+you. Off by default, since at this speed the story is unreadable.
+
 ## 0.1.3 — 2026-08-03
 
 **Tank locations could become permanently uncollectable, which could make a

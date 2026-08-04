@@ -112,9 +112,40 @@ SHUTTLE_THRESHOLD_VANILLA = bytes.fromhex("06000224")   # addiu v0, zero, 6
 SHUTTLE_THRESHOLD_ALL_8 = bytes.fromhex("08000224")     # addiu v0, zero, 8
 
 
+# Text skip. Both sites are in the message STATE MACHINE in the static EXE -
+# NOT the render loop. Four attempts at the render loop failed (one killed the
+# advance button, one broke the box display entirely); the working layer is the
+# one the game's own Y/advance handling uses. Full account, including the dead
+# ends and why each failed, in mmx5-ram-notes.md "Text control".
+#
+#   0x80023D48  beqz $v1, 0x80023d54   guards `sb $zero, 0xf($s0)` - zeroing
+#                                      that flag is exactly what Y does, so
+#                                      NOPping the guard completes every box
+#   0x80023D84  beqz $v1, 0x80024138   guards the end-of-box "return unless a
+#                                      button is down" wait
+#
+# Both read the pad word 0x800C9320 (bit 0x10 = confirm, live-verified).
+# Choice prompts are NOT affected - tested live: Alia's DNA reward prompt
+# pauses and waits, and the Enigma/Shuttle launch is a stage-select menu that
+# never routes through here.
+TEXT_INSTANT_ADDR = 0x80023D48
+TEXT_INSTANT_VANILLA = bytes.fromhex("02006010")   # beqz $v1, +2
+TEXT_ADVANCE_ADDR = 0x80023D84
+TEXT_ADVANCE_VANILLA = bytes.fromhex("ec006010")   # beqz $v1, +0xEC
+TEXT_NOP = bytes(4)
+TEXT_REGION = "SLUS exe"
+
+
 def patch_rom(world: "MMX5World", patch: MMX5ProcedurePatch) -> None:
     """Collect per-seed edits as {addr, hex, region} rows."""
     seed_edits: list = []
+
+    if world.options.text_skip:
+        # One toggle drives both: anyone who wants instant text wants it to
+        # advance too, and instant-without-advance just moves the waiting.
+        for addr in (TEXT_INSTANT_ADDR, TEXT_ADVANCE_ADDR):
+            seed_edits.append({"addr": addr, "hex": TEXT_NOP.hex(),
+                               "region": TEXT_REGION})
 
     if world.options.goal == "all_mavericks":
         # Vanilla opens the endgame when the Eurasia situation resolves, and

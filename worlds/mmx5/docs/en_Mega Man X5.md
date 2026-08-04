@@ -66,6 +66,16 @@ complete armor set unlocks at character select after the next results screen.
   adds a Part. Bosses keep getting stronger either way as you collect Mavericks
   and weapons; this only sets the starting point, and no setting can make a
   seed unbeatable.
+- **`text_skip` makes dialogue get out of the way.** X5 types text out one
+  character every 5 frames and then waits for a button on every box — a single
+  line can run past 200 characters, roughly 20 seconds before you can even
+  press advance. With this on, boxes appear instantly and advance themselves,
+  so cutscenes and Alia's in-stage calls play through without input.
+  **Choices are not skipped**: Alia's Life Up / Energy Up prompt still stops
+  and waits for you to pick, and the Enigma/Shuttle launch decision is a
+  stage-select menu that this does not touch. Nothing that affects your run is
+  answered for you. You will not be able to read the story at this speed, so
+  leave it off for a first playthrough.
 - **Checks appear a few seconds after a boss dies**, not instantly — the game
   commits the kill shortly after the results screen.
 - **"Small Energy" filler items do nothing in-game** — they pad the item pool

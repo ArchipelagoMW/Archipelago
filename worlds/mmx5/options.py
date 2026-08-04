@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle
 
 
 class Goal(Choice):
@@ -68,8 +68,30 @@ class BossDifficulty(Choice):
     default = 1
 
 
+class TextSkip(Toggle):
+    """Make dialogue get out of the way.
+
+    Mega Man X5 types dialogue out one character every 5 frames and then waits
+    for a button on every box. A single line can run past 200 characters, which
+    is about 20 seconds of typing before you can even press advance.
+
+    With this on, each box appears instantly and advances by itself, so
+    cutscenes and Alia's in-stage calls play through without input.
+
+    Choices are NOT skipped. Alia's Life Up / Energy Up reward prompt still
+    stops and waits for you to pick, and the Enigma / Shuttle launch decision
+    is a stage-select menu that this does not touch at all. Nothing that
+    affects your run gets answered for you.
+
+    You will not be able to read the story at this speed. Leave it off for a
+    first playthrough.
+    """
+    display_name = "Text Skip"
+
+
 @dataclass
 class MMX5Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     goal: Goal
     boss_difficulty: BossDifficulty
+    text_skip: TextSkip

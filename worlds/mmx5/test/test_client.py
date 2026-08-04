@@ -514,7 +514,9 @@ class TestShuttleGateSeedEdit(unittest.TestCase):
             def write_file(name, data):
                 captured[name] = data
 
-        world = SimpleNamespace(options=SimpleNamespace(goal=Goal(goal_value)))
+        from ..options import TextSkip
+        world = SimpleNamespace(options=SimpleNamespace(
+            goal=Goal(goal_value), text_skip=TextSkip(0)))
         Rom.patch_rom(world, FakePatch())
         return json.loads(captured["seed_edits.json"].decode("utf-8"))
 
@@ -544,6 +546,61 @@ class TestShuttleGateSeedEdit(unittest.TestCase):
         self.assertNotEqual(hub, results,
                             "hub and results overlays resolved to one offset - "
                             "the region map no longer distinguishes them")
+
+
+class TestTextSkipSeedEdits(unittest.TestCase):
+    """Text skip is two NOPs in the message state machine. Both must be emitted
+    together - instant text without auto-advance just moves the waiting - and
+    neither may appear when the option is off."""
+
+    @staticmethod
+    def edits_for(text_skip: int, goal_value: int | None = None) -> list:
+        from ..options import Goal, TextSkip
+        from .. import Rom
+        captured = {}
+
+        class FakePatch:
+            @staticmethod
+            def write_file(name, data):
+                captured[name] = data
+
+        from ..options import Goal as G
+        world = SimpleNamespace(options=SimpleNamespace(
+            goal=G(goal_value if goal_value is not None else G.option_sigma),
+            text_skip=TextSkip(text_skip)))
+        Rom.patch_rom(world, FakePatch())
+        return json.loads(captured["seed_edits.json"].decode("utf-8"))
+
+    def test_off_emits_no_text_edits(self) -> None:
+        from .. import Rom
+        addrs = {e["addr"] for e in self.edits_for(0)}
+        self.assertNotIn(Rom.TEXT_INSTANT_ADDR, addrs)
+        self.assertNotIn(Rom.TEXT_ADVANCE_ADDR, addrs)
+
+    def test_on_emits_both_nops(self) -> None:
+        from .. import Rom
+        edits = {e["addr"]: e for e in self.edits_for(1)}
+        for addr in (Rom.TEXT_INSTANT_ADDR, Rom.TEXT_ADVANCE_ADDR):
+            self.assertIn(addr, edits, f"0x{addr:08X} missing")
+            self.assertEqual(bytes.fromhex(edits[addr]["hex"]), Rom.TEXT_NOP)
+            self.assertEqual(edits[addr]["region"], "SLUS exe")
+
+    def test_it_composes_with_the_goal_edit(self) -> None:
+        # Independent features: the all_mavericks shuttle gate and both text
+        # NOPs must all survive together.
+        from ..options import Goal
+        from .. import Rom
+        addrs = {e["addr"] for e in self.edits_for(1, Goal.option_all_mavericks)}
+        self.assertEqual(addrs, {Rom.SHUTTLE_THRESHOLD_ADDR,
+                                 Rom.TEXT_INSTANT_ADDR, Rom.TEXT_ADVANCE_ADDR})
+
+    def test_the_patched_sites_hold_the_expected_vanilla_branches(self) -> None:
+        # Guards against the addresses drifting: these are the two `beqz $v1`
+        # branches the whole feature depends on. Ground truth is also checked
+        # against the real disc by mmx5_build_patch.py's selftest.
+        from .. import Rom
+        self.assertEqual(Rom.TEXT_INSTANT_VANILLA, bytes.fromhex("02006010"))
+        self.assertEqual(Rom.TEXT_ADVANCE_VANILLA, bytes.fromhex("ec006010"))
 
 
 class TestGoalOptionWiring(unittest.TestCase):
