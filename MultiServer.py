@@ -2183,9 +2183,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = copy.copy(value)
             args["slot"] = client.slot
-            # logging.warning("Processing key: "+ args["key"] +" with current value: "+ str(value))
             for operation in args["operations"]:
-                # logging.warning("Processing operation: "+ operation["operation"] +" with current value: "+ str(operation["value"]))
                 func = modify_functions[operation["operation"]]
                 value = func(value, operation["value"])
             ctx.stored_data[args["key"]] = args["value"] = value
