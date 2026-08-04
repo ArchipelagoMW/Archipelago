@@ -279,7 +279,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                                   f"(name: {args.name.get(player, name)})")
                 player_errors.append(
                     f"{len(player_errors) + 1}. "
-                    f"File {path} document #{doc_index + 1} (name: {args.name.get(player, name)}) is invalid. "
+                    f"File {path} document #{doc_index + 1} (with name: {args.name.get(player, name)}) is invalid. "
                     f"Please fix your yaml.\n{Utils.get_all_causes(e)}")
 
             # increment for each yaml document in the file
