@@ -8,6 +8,7 @@ from ..data.villagers_data import Villager
 from ..stardew_rule import StardewRule, True_, false_
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName, StartWithoutOptionName
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
+from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
@@ -196,6 +197,7 @@ class RelationshipLogic(BaseLogic):
 
         elif npc == ModNPC.goblin:
             rules.append(self.logic.region.can_reach_all(Region.witch_hut, Region.wizard_tower))
+            rules.append(self.logic.has(ArtisanGood.void_mayonnaise))
 
         elif npc == ModNPC.juna:
             rules.append(self.logic.region.can_reach_all(Region.farm, Region.forest))
