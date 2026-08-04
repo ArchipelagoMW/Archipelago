@@ -123,12 +123,19 @@ class TestCheckDetectionGating(unittest.IsolatedAsyncioTestCase):
                       "intro check was not sent from a valid save")
 
     async def test_boss_checks_from_a_resident_save(self) -> None:
+        # One kill sends THREE checks - boss, DNA reward, DNA Part - all keyed
+        # on the weapon bit alone. The reward prompt needs boss level 4+ and the
+        # Part needs level 8+, so anything keyed on those would go missable on
+        # an early kill or a `relaxed` seed. Hunter Rank feeds that same level
+        # (SA +2 / GA +4 / PA +8), which is why it cannot gate a check either.
         ctx = await run_watcher(make_save(max_hp=0x20, weapons=0x01))
         sent = ctx.checked_location_ids()
         stage = next(s for s, w in names.BOSS_WEAPON.items()
                      if w == mmx5_client.WEAPON_BITS[0])
         self.assertIn(location_table[names.boss_location(stage)], sent)
         self.assertIn(location_table[names.dna_location(stage)], sent)
+        self.assertIn(location_table[names.dna_part_location(stage)], sent,
+                      "the level-8+ Part check did not ride the boss kill")
 
 
 class TestTrainingMode(unittest.IsolatedAsyncioTestCase):
