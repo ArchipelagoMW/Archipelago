@@ -1,11 +1,12 @@
 from ..bases import SVTestBase
-from ... import StardewItem, StartWithoutOptionName
+from ... import StardewItem, StartWithoutOptionName, EntranceRandomization, BuildingProgression
 from ...options import (ElevatorProgression, ExcludeGingerIsland, Fishsanity, SeasonRandomization, SkillProgression, SpecialOrderLocations, StartWithout,
-                        ToolProgression)
-from ...options.options import DataRandomization, DataRandomizationBehavior
-from ...strings.ap_names.ap_option_names import DataRandomizationOptionName
+                        ToolProgression, Mods)
+from ...options.options import DataRandomization, DataRandomizationBehavior, Shipsanity, CustomLogic
+from ...strings.ap_names.ap_option_names import DataRandomizationOptionName, CustomLogicOptionName
 from ...strings.ap_names.transport_names import Transportation
 from ...strings.fish_names import Fish
+from ...strings.tv_channel_names import Channel
 
 
 class TestNeedRegionToCatchFish(SVTestBase):
@@ -114,3 +115,117 @@ class TestNeedLevelsToCatchFish(SVTestBase):
                     self.collect(item)
                 for item in items:
                     self.remove(item)
+
+
+weapons = ["Progressive Weapon"] * 5
+fishing_items = ["Beach Bridge", "Rusty Key", "Wizard Invitation", "Island Obelisk", "Bus Repair", "Dark Talisman", "Island Resort",
+                "Island West Turtle", "Qi Walnut Room", "Shipping Bin", "Railroad Boulder Removed", "Nexus: Farm Runes", "Nexus: Outpost Runes",
+                "Marlon's Boat Paddle", "Fable Reef Portal", "Kittyfish Spell", *weapons ]
+
+class TestNeedFIBSToCatchDRFish(SVTestBase):
+    options = {
+        EntranceRandomization.internal_name: EntranceRandomization.option_disabled,
+        SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
+        ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
+        SkillProgression.internal_name: SkillProgression.option_vanilla,
+        BuildingProgression.internal_name: BuildingProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_vanilla,
+        Fishsanity.internal_name: Fishsanity.option_all,
+        Shipsanity.internal_name: Shipsanity.option_everything,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        DataRandomization.internal_name: frozenset(DataRandomization.preset_all - {DataRandomizationOptionName.shop_currencies}),
+        DataRandomizationBehavior.internal_name: DataRandomizationBehavior.option_shuffled,
+        Mods.internal_name: frozenset(Mods.valid_keys),
+        CustomLogic.internal_name: frozenset({}),
+    }
+
+    def test_fish_require_fibs(self):
+        collected_items = [self.collect(item) for item in fishing_items]
+        content = self.world.content
+        self.collect_all_the_money()
+        for fish_name in content.fishes:
+            fish = content.fishes[fish_name]
+            fishsanity_location = f"Fishsanity: {fish_name}"
+            shipsanity_location = f"Shipsanity: {fish_name}"
+            is_crab_pot = fish.is_crab_pot()
+            if is_crab_pot:
+                with self.subTest(f"{fish_name} does not require FIBS"):
+                    self.assert_can_reach_location(fishsanity_location)
+                    self.assert_can_reach_location(shipsanity_location)
+            else:
+                with self.subTest(f"{fish_name} requires FIBS"):
+                    self.assert_cannot_reach_location(fishsanity_location)
+                    self.assert_cannot_reach_location(shipsanity_location)
+
+                    fibs = self.create_item(Channel.fibs)
+                    self.collect(fibs)
+
+                    self.assert_can_reach_location(fishsanity_location)
+                    self.assert_can_reach_location(shipsanity_location)
+
+                    self.remove(fibs)
+
+
+class TestDontNeedFIBSToCatchDRFishWithCustomLogic(SVTestBase):
+    options = {
+        EntranceRandomization.internal_name: EntranceRandomization.option_disabled,
+        SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
+        ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
+        SkillProgression.internal_name: SkillProgression.option_vanilla,
+        BuildingProgression.internal_name: BuildingProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_vanilla,
+        Fishsanity.internal_name: Fishsanity.option_all,
+        Shipsanity.internal_name: Shipsanity.option_everything,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        DataRandomization.internal_name: frozenset(DataRandomization.preset_all - {DataRandomizationOptionName.shop_currencies}),
+        DataRandomizationBehavior.internal_name: DataRandomizationBehavior.option_shuffled,
+        Mods.internal_name: frozenset(Mods.valid_keys),
+        CustomLogic.internal_name: frozenset({CustomLogicOptionName.no_fibs}),
+    }
+
+    def test_fish_require_fibs(self):
+        collected_items = [self.collect(item) for item in fishing_items]
+        content = self.world.content
+        self.collect_all_the_money()
+        for fish_name in content.fishes:
+            fish = content.fishes[fish_name]
+            fishsanity_location = f"Fishsanity: {fish_name}"
+            shipsanity_location = f"Shipsanity: {fish_name}"
+            is_crab_pot = fish.is_crab_pot()
+            with self.subTest(f"{fish_name} does not require FIBS"):
+                self.assert_can_reach_location(fishsanity_location)
+                self.assert_can_reach_location(shipsanity_location)
+
+
+class TestDontNeedFIBSToCatchNonDRFish(SVTestBase):
+    options = {
+        EntranceRandomization.internal_name: EntranceRandomization.option_disabled,
+        SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
+        ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
+        SkillProgression.internal_name: SkillProgression.option_vanilla,
+        BuildingProgression.internal_name: BuildingProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_vanilla,
+        Fishsanity.internal_name: Fishsanity.option_all,
+        Shipsanity.internal_name: Shipsanity.option_everything,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        DataRandomization.internal_name: frozenset(DataRandomization.preset_none),
+        DataRandomizationBehavior.internal_name: DataRandomizationBehavior.option_shuffled,
+        Mods.internal_name: frozenset(Mods.valid_keys),
+        CustomLogic.internal_name: frozenset({}),
+    }
+
+    def test_fish_require_fibs(self):
+        collected_items = [self.collect(item) for item in fishing_items]
+        content = self.world.content
+        self.collect_all_the_money()
+        for fish_name in content.fishes:
+            fish = content.fishes[fish_name]
+            fishsanity_location = f"Fishsanity: {fish_name}"
+            shipsanity_location = f"Shipsanity: {fish_name}"
+            is_crab_pot = fish.is_crab_pot()
+            with self.subTest(f"{fish_name} does not require FIBS"):
+                self.assert_can_reach_location(fishsanity_location)
+                self.assert_can_reach_location(shipsanity_location)

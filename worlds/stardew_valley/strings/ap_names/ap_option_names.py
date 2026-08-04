@@ -111,6 +111,8 @@ class CustomLogicOptionName:
     bomb_hoeing = "Bomb Hoeing"
     rain_watering = "Rain Watering"
     critical_free_samples = "Critical Free Samples"
+    fibs_only_for_hard_to_find = "FIBS Only For Hard To Find"
+    no_fibs = "No FIBS"
 
 
 class DataRandomizationOptionName:

@@ -15,8 +15,9 @@ from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, FestivalLocations, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     ElevatorProgression, BackpackProgression, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, Moviesanity
-from ..options.options import IncludeEndgameLocations, Friendsanity, JunimoKart, JourneyOfThePrairieKing
-from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName
+from ..options.options import IncludeEndgameLocations, Friendsanity, JunimoKart, JourneyOfThePrairieKing, DataRandomizationBehavior
+from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
+    StartWithoutOptionName, DataRandomizationOptionName, CustomLogicOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade, Bookseller
@@ -25,6 +26,7 @@ from ..strings.backpack_tiers import Backpack
 from ..strings.building_names import Building
 from ..strings.currency_names import Currency
 from ..strings.tool_names import Tool
+from ..strings.tv_channel_names import Channel
 from ..strings.wallet_item_names import Wallet
 
 logger = logging.getLogger(__name__)
@@ -486,7 +488,15 @@ def create_tv_channels(item_factory: StardewItemFactory, options: StardewValleyO
     channels = [channel for channel in items_by_group[Group.TV_CHANNEL]]
     if options.entrance_randomization == EntranceRandomization.option_disabled:
         channels = [channel for channel in channels if channel.name != "The Gateway Gazette"]
-    items.extend([item_factory(item) for item in channels])
+    fibs_classification = ItemClassification.useful
+    if options.data_randomization_behavior != DataRandomizationBehavior.option_off and CustomLogicOptionName.no_fibs not in options.custom_logic:
+        if DataRandomizationOptionName.fish_season in options.data_randomization or DataRandomizationOptionName.fish_location in options.data_randomization or DataRandomizationOptionName.fish_weather in options.data_randomization:
+            fibs_classification = ItemClassification.progression
+    for item in channels:
+        if item.name == Channel.fibs:
+            items.append(item_factory(item, classification_pre_fill=fibs_classification))
+        else:
+            items.append(item_factory(item))
 
 
 def create_crafting_recipes(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):

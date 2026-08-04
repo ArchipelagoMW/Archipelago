@@ -1077,6 +1077,7 @@ class CustomLogic(OptionSet):
         CustomLogicOptionName.easy_money, CustomLogicOptionName.hard_money, CustomLogicOptionName.extreme_money, CustomLogicOptionName.nightmare_money,
         CustomLogicOptionName.bomb_hoeing, CustomLogicOptionName.rain_watering,
         CustomLogicOptionName.critical_free_samples,
+        CustomLogicOptionName.fibs_only_for_hard_to_find, CustomLogicOptionName.no_fibs,
     })
     preset_none = frozenset()
     preset_all = valid_keys

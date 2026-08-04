@@ -36,6 +36,9 @@ class FishItem:
                f" Difficulty: {self.difficulty}) |" \
                f"Mod: {self.mod_name}"
 
+    def is_crab_pot(self) -> bool:
+        return self.difficulty == crab_pot_difficulty
+
 
 crab_pot_difficulty = -1
 
