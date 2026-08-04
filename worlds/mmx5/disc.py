@@ -84,7 +84,8 @@ PICKUP_STUB = bytes.fromhex(
     "7f002c31"  # andi  t4, t1, 0x7F
     "80008c35"  # ori   t4, t4, 0x80       ; seq = (count & 0x7F) | 0x80
     "23004ca1"  # sb    t4, 0x23(t2)       ; slot+3: seq
-    # v11: the debug s1-capture (`sw s1,0xA0(t2)`) that sat here is STRIPPED.
+    # Since disc rev 11: the debug s1-capture (`sw s1,0xA0(t2)`) that sat
+    # here is STRIPPED. (Current disc revision is 12 - the tank fix.)
     # It mirrored the item object pointer into 0x801FA0A0+slot*4 solely so the
     # research Lua could dump object headers; nothing in the client read it,
     # and the capsule stub never wrote it - which is why capsule records
@@ -152,6 +153,24 @@ BASE_EDITS: list[tuple[int, bytes, str]] = [
     (CAPSULE_STUB_ADDR, CAPSULE_STUB, "SLUS exe"),
     (0x80055DB8, bytes.fromhex("c0dd010800000000"), "SLUS exe"),  # j stub; nop
     (0x80055018, bytes.fromhex("4500c214"), "SLUS exe"),          # bne -> join
+] + [
+    # Tank already-owned despawn (disasm + live capture 2026-08-03). The item
+    # init 0x800535C8 tests "do I already own this?" per kind and, when the
+    # answer is yes, writes 3 to obj+0x04 which destroys the object one frame
+    # after construction. The AP client grants tanks by setting exactly those
+    # ownership bits (that is what shows a tank in the pause menu), so a tank
+    # arriving from the multiworld DELETED the pickup that is its own check -
+    # permanently, and those locations can hold progression.
+    # Measured in Grizzly Slash, one pass: consumable object lived 251
+    # frames, an un-owned Heart Tank 47, the OWNED Sub-Tank exactly 2.
+    # Zeroing the three per-kind masks defeats the test for tanks only;
+    # hearts (kind 0), EX items (kind 1) and consumables are untouched, and
+    # hearts never needed it because the client grants those via max HP.
+    # The client reads TANK_FIX_PROBE_ADDR to tell a fixed disc from an old
+    # one and only applies its own workaround when this patch is absent.
+    (0x80053804, (0x24020000).to_bytes(4, "little"), "SLUS exe"),  # sub-tanks
+    (0x80053838, (0x30420000).to_bytes(4, "little"), "SLUS exe"),  # W-Tank
+    (0x80053848, (0x30420000).to_bytes(4, "little"), "SLUS exe"),  # EX-Tank
 ] + [
     # Launch determinism (research overlay-findings 11): the resolution
     # roll `andi v1,v0,0xF` -> `li v1,0`; success <=> score > 0, and the
