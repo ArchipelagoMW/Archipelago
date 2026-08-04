@@ -114,15 +114,14 @@ class PreCalculatedWeights:
             if not is_xarion_flooded:
                 present_teleportation_gates.append("GateXarion")
 
-            # Prevent going past the militairy gate lazers without a way to the past timezone (as you loose access to the vanry timespinner warp)
+            # Prevent going past the militairy gate lasers without a way to the past timezone (as you loose access to the varny timespinner warp)
             if options.unchained_keys or options.prism_break or not options.pyramid_start:
                 if not is_lab_flooded:
                     present_teleportation_gates.append("GateLabEntrance")
 
-                # Prevent going backwards from Emperors tower to lab due to a lab lazer blocking the path
-                if options.lock_key_amadeus or (options.back_to_the_future and (not options.pyramid_start or options.unchained_keys)):    
+                # Prevent going backwards from Emperors tower to lab due to a lab laser blocking the path
+                if options.lock_key_amadeus or (options.back_to_the_future and (not options.pyramid_start or options.unchained_keys)):
                     present_teleportation_gates.append("GateDadsTower")
-
 
         # Prevent getting stuck in the past without a way back to the future
         if options.inverted or (options.pyramid_start and not options.back_to_the_future):
