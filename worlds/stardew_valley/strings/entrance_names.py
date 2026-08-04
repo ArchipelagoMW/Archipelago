@@ -412,6 +412,12 @@ class LogicEntrance:
     grow_indoor_crops_on_island = "Grow Indoor Crops on Island"
     grow_summer_fall_crops_in_summer = "Grow Summer Fall Crops in Summer"
     grow_summer_fall_crops_in_fall = "Grow Summer Fall Crops in Fall"
+    grow_spring_crops_in_not_winter_season = "Grow Spring Crops In Not Winter Season"
+    grow_summer_crops_in_not_winter_season = "Grow Summer Crops In Not Winter Season"
+    grow_fall_crops_in_not_winter_season = "Grow Fall Crops In Not Winter Season"
+    grow_winter_crops_in_any_season = "Grow Winter Crops Any Season"
+    grow_not_winter_crops_in_any_season = "Grow Not Winter Crops Any Season"
+    grow_indoor_crops_in_any_season = "Grow Indoor Crops Any Season"
 
     forage_in_forest = "Forage in Forest"
     forage_in_backwoods = "Forage in Backwoods"

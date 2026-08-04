@@ -12,19 +12,23 @@ from .content.game_content import StardewContent
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
 from .data.fish_data import FishItem, crab_pot_difficulty
-from .data.game_item import ItemTag
+from .data.game_item import ItemTag, GameItem
+from .data.harvest import HarvestCropSource
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity, Fishsanity, SkillProgression, Cropsanity, JunimoKart, \
-    JourneyOfThePrairieKing
-from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName
+    JourneyOfThePrairieKing, DataRandomizationBehavior
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName, \
+    DataRandomizationOptionName
 from .strings.backpack_tiers import Backpack
+from .strings.crop_names import Fruit
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
 from .strings.region_names import Region, LogicRegion
+from .strings.season_names import Season
 from .strings.villager_names import NPC
 
 LOCATION_CODE_OFFSET = 717000
@@ -260,13 +264,15 @@ def initialize_groups():
 initialize_groups()
 
 
-def extend_cropsanity_locations(randomized_locations: List[LocationData], content: StardewContent):
+def extend_cropsanity_locations(randomized_locations: List[LocationData], content: StardewContent, options: StardewValleyOptions):
     cropsanity = content.features.cropsanity
     if not cropsanity.is_enabled:
         return
 
-    randomized_locations.extend(location_table[cropsanity.to_location_name(item.name)]
-                                for item in content.find_tagged_items(ItemTag.CROPSANITY))
+    tagged_items = content.find_tagged_items(ItemTag.CROPSANITY)
+    location_datas = {location_table[cropsanity.to_location_name(item.name)]: item for item in tagged_items}
+    modified_locations_data = [modify_crop_region_according_to_data_randomization(location_data, item, options) for location_data, item in location_datas.items()]
+    randomized_locations.extend(modified_locations_data)
 
 
 def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
@@ -291,18 +297,6 @@ def extend_quests_locations(randomized_locations: List[LocationData], options: S
             randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
 
-def modify_region_according_to_data_randomization(location_data: LocationData, fish: FishItem) -> LocationData:
-    new_region = location_data.region
-    if fish.difficulty == crab_pot_difficulty:
-        if LogicRegion.crab_pot_seawater in fish.locations:
-            new_region = LogicRegion.crab_pot_seawater
-        else:
-            new_region = LogicRegion.crab_pot_freshwater
-    else:
-        new_region = LogicRegion.fishing
-    return LocationData(location_data.code, new_region, location_data.name, location_data.content_packs, location_data.tags)
-
-
 def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random):
     fishsanity = content.features.fishsanity
     if not fishsanity.is_enabled:
@@ -316,8 +310,8 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], conten
             continue
 
         location_data = location_table[fishsanity.to_location_name(fish.name)]
-        modified_location_data = modify_region_according_to_data_randomization(location_data, fish)
-        randomized_locations.append(location_data)
+        modified_location_data = modify_fish_region_according_to_data_randomization(location_data, fish)
+        randomized_locations.append(modified_location_data)
 
 
 def extend_museumsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
@@ -779,7 +773,7 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_arcade_locations(options, randomized_locations)
 
-    extend_cropsanity_locations(randomized_locations, content)
+    extend_cropsanity_locations(randomized_locations, content, options)
     extend_fishsanity_locations(randomized_locations, content, random)
     extend_museumsanity_locations(randomized_locations, options, random)
     extend_friendsanity_locations(randomized_locations, content)
@@ -885,3 +879,44 @@ def filter_disabled_locations(options: StardewValleyOptions, content: StardewCon
     locations_masteries_filter = filter_masteries_locations(content, locations_qi_filter)
     locations_mod_filter = filter_modded_locations(locations_masteries_filter, content)
     return locations_mod_filter
+
+
+def modify_fish_region_according_to_data_randomization(location_data: LocationData, fish: FishItem) -> LocationData:
+    new_region = location_data.region
+    if fish.difficulty == crab_pot_difficulty:
+        if LogicRegion.crab_pot_seawater in fish.locations:
+            new_region = LogicRegion.crab_pot_seawater
+        else:
+            new_region = LogicRegion.crab_pot_freshwater
+    else:
+        new_region = LogicRegion.fishing
+    return LocationData(location_data.code, new_region, location_data.name, location_data.content_packs, location_data.tags)
+
+
+def modify_crop_region_according_to_data_randomization(location_data: LocationData, crop_item: GameItem, options: StardewValleyOptions) -> LocationData:
+    if options.data_randomization_behavior == DataRandomizationBehavior.option_off or DataRandomizationOptionName.growth_season not in options.data_randomization:
+        return location_data
+
+    harvest_sources = [source for source in crop_item.sources if isinstance(source, HarvestCropSource)]
+    if not any(harvest_sources):
+        return location_data
+
+    harvest_source = harvest_sources[0]
+    new_region = location_data.region
+    if crop_item.name == Fruit.qi_fruit or harvest_source.growth_time > 20:
+        new_region = LogicRegion.indoor_farming
+    elif len(harvest_source.seasons) >= 4:
+        new_region = LogicRegion.any_farming
+    elif len(harvest_source.seasons) == 3 and Season.winter not in harvest_source.seasons:
+        new_region = LogicRegion.not_winter_farming
+    elif len(harvest_source.seasons) == 2 and Season.summer in harvest_source.seasons and Season.fall in harvest_source.seasons:
+        new_region = LogicRegion.summer_or_fall_farming
+    elif Season.spring in harvest_source.seasons:
+        new_region = LogicRegion.spring_farming
+    elif Season.summer in harvest_source.seasons:
+        new_region = LogicRegion.summer_farming
+    elif Season.fall in harvest_source.seasons:
+        new_region = LogicRegion.fall_farming
+    elif Season.winter in harvest_source.seasons:
+        new_region = LogicRegion.winter_farming
+    return LocationData(location_data.code, new_region, location_data.name, location_data.content_packs, location_data.tags)

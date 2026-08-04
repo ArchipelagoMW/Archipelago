@@ -194,6 +194,8 @@ class LogicRegion:
     winter_farming = "Winter Farming"
     indoor_farming = "Indoor Farming"
     summer_or_fall_farming = "Summer or Fall Farming"
+    any_farming = "Any Farming"
+    not_winter_farming = "Not Winter Farming"
 
     foraging = "Foraging"
 
