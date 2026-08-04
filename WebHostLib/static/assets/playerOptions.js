@@ -348,7 +348,7 @@ const checkName = (evt) => {
  */
 const minNameLength = (name) => {
   const replaced = name.replaceAll(/{(player|PLAYER|number|NUMBER)}/g, '0');
-  return replaced.length;
+  return replaced.trim().length;
 };
 
 const showUserMessage = (text) => {
