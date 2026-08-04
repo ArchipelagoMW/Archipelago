@@ -297,7 +297,7 @@ def extend_quests_locations(randomized_locations: List[LocationData], options: S
             randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
 
-def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random):
+def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random, options: StardewValleyOptions):
     fishsanity = content.features.fishsanity
     if not fishsanity.is_enabled:
         return
@@ -310,7 +310,7 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], conten
             continue
 
         location_data = location_table[fishsanity.to_location_name(fish.name)]
-        modified_location_data = modify_fish_region_according_to_data_randomization(location_data, fish)
+        modified_location_data = modify_fish_region_according_to_data_randomization(location_data, fish, options)
         randomized_locations.append(modified_location_data)
 
 
@@ -774,7 +774,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_arcade_locations(options, randomized_locations)
 
     extend_cropsanity_locations(randomized_locations, content, options)
-    extend_fishsanity_locations(randomized_locations, content, random)
+    extend_fishsanity_locations(randomized_locations, content, random, options)
     extend_museumsanity_locations(randomized_locations, options, random)
     extend_friendsanity_locations(randomized_locations, content)
 
@@ -881,7 +881,13 @@ def filter_disabled_locations(options: StardewValleyOptions, content: StardewCon
     return locations_mod_filter
 
 
-def modify_fish_region_according_to_data_randomization(location_data: LocationData, fish: FishItem) -> LocationData:
+def modify_fish_region_according_to_data_randomization(location_data: LocationData, fish: FishItem, options: StardewValleyOptions) -> LocationData:
+    if options.data_randomization_behavior == DataRandomizationBehavior.option_off:
+        return location_data
+
+    if DataRandomizationOptionName.fish_catch_method not in options.data_randomization:
+        return location_data
+
     new_region = location_data.region
     if fish.difficulty == crab_pot_difficulty:
         if LogicRegion.crab_pot_seawater in fish.locations:
