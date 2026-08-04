@@ -181,6 +181,29 @@ Reached via the results state machine:
 - The helper 0x800F0C00 allocates a 0x60-byte popup object from the pool at
   0x800D1F40 (allocator 0x8002D27C) and tags it {0x41, 0x2D, textId}; it never
   touches the save block.
+- **Popup object layout + scope, 2026-08-04.** The tag really is three
+  CONTIGUOUS bytes at obj+0x00/01/02. Verified by scanning every RAM dump we
+  hold for the `41 2D` pair at 4-byte alignment:
+
+  | dump | hits |
+  |---|---|
+  | `ramdump_stage_f174001` (Dark Dizzy **results screen**) | **7**, all inside the pool |
+  | every other dump — hub, parts menu, gameplay, launch cutscene ×2, pre/post Sigma, credits | **0** |
+
+  Layout common to all seven: `+00` 0x41, `+01` 0x2D, **`+02` textId**,
+  `+04` init=1, `+05` state 0/1, `+0A` u16 X, `+0E` u16 Y,
+  **`+30` = 0x800F560C, the shared main/update fn pointer**, `+34` per-object
+  data pointer into 0x800F539C-0x800F5484, `+3C` = 0x80105008.
+  Observed textIds: 0x00, 0x81, 0x84, 0x8F, 0x92, 0x93, 0xDD.
+
+  **SCOPE WARNING - this is the RESULTS-SCREEN BANNER system, not "text".**
+  It is absent from every cutscene dump, and a live sweep during the intro
+  story cutscene (2026-08-04, `mmx5_text_watch.lua`) found nothing. So the
+  dialogue that actually makes the game yap — Alia's in-stage calls and story
+  cutscenes — is a DIFFERENT, still-undiscovered system. Do not plan a
+  "global text skip" around 0x800F0C00; it would cover the least annoying
+  third of the problem. The null result above is trustworthy specifically
+  because the results-screen dump provides a positive control for the sweep.
 - **One bit serves X weapon + Zero technique + boss-beaten.** No other
   boss-record store was found in either dump.
 - The tail of the function (0x800EED60-0x800EEDCC) queues the full results

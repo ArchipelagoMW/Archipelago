@@ -332,3 +332,105 @@ Consequences, all load-bearing for the AP client:
    training leaves no residue for a later session.
 5. At the title screen *after* training, max HP reads `0x20` while ACT is
    `00` — another reason max HP alone is not a "real save" test.
+
+## Cutscene text / dialogue system — live 2026-08-04
+
+Found while scoping the text-skip feature. **This is the CUTSCENE dialogue
+path — the one that makes the game yap.** It is NOT the `{0x41,0x2D}` popup
+system in overlay-findings §2.1, which is results-screen banners and is absent
+from every cutscene dump (see the scope warning there).
+
+| addr | type | meaning | status |
+|---|---|---|---|
+| `0x800E8380` | u16 | **Text progress counter** = characters revealed in the current box. Resets per message, climbs while typing, freezes at the message's end value when complete | ✅ live |
+| `0x800E8538` | u16 | Mirror of the above, `0x1B8` away — second view of the message state, always identical | ✅ live |
+| `0x80091C38` | u32 | Render-buffer write pointer into `0x8010A7xx+`. Advances **+2 bytes per counter step** (16-bit characters) and runs CONTINUOUSLY across messages while the counter resets | ✅ live |
+
+**Cadence: exactly +1 character per 5 frames**, measured across three separate
+messages with no drift — so the pacing is a GLOBAL constant, not a per-message
+script value. That is what makes a one-constant patch plausible. At 5 frames a
+character, an observed 235-character box takes **~20 seconds** to type out.
+
+**The game already has a working instant-complete path.** Y completes the
+current box; A advances to the next — two DIFFERENT buttons, so forcing the
+complete path cannot cause auto-advance, and cutscene flow (and anything it
+commits) stays untouched. Live capture of a Y press:
+
+```
+f159990  ctr=23  ptr=0x8010A97E
+f159995  ctr=56  ptr=0x8010A9C0    <- Y: +33 chars, ptr +0x42 = 33*2
+```
+
+One frame, landing exactly on the message's true end (56). So Y runs the same
+per-character loop with the delay removed, walking to the terminator.
+
+**Stopping is TERMINATOR-driven, not length-compare.** Writing the counter
+forward by hand (+200) rendered garbage until it happened to hit another
+terminator — there is no clamp to message length. Consequence for the feature:
+**never patch the VALUE, patch the pacing/branch.** The renderer still walks
+every character either way and still meets the terminator.
+
+**Next step: the writer is unlocated.** BizHawk cannot find it (Nymashock has
+no memory callbacks and no CPU registers). Needs a DuckStation watchpoint on
+writes to `0x800E8380`, pressing Y to catch the instant path, then the
+conditional guarding it.
+
+### Text control — the patch sites (live-verified 2026-08-04)
+
+**Pad state: `0x800C9320`, u16 bitfield.** Bit **`0x10` = confirm/complete**
+(live: the byte read `0x10` for exactly ONE frame on a Y press, and the text
+counter jumped 14 -> 37 on that same frame). Read from ~18 sites across the
+static EXE, so it is the global pad word, not text-specific.
+
+**The message STATE MACHINE is at `0x80023Dxx` in the static EXE** — NOT the
+render loop at `0x8002414C`. Both features are one NOP each, both verified
+identical disc-vs-dump:
+
+| what | RAM | vanilla | patch | disc offset |
+|---|---|---|---|---|
+| **instant text** | `0x80023D48` `beqz $v1, 0x80023d54` | `10600002` | `00000000` | `0x34A6660` |
+| **auto-advance** | `0x80023D84` `beqz $v1, 0x80024138` | `106000EC` | `00000000` | `0x34A669C` |
+
+- `0x80023D48` guards `sb $zero, 0xf($s0)` — **Y ZEROES the pacing flag**.
+  NOP the guard and every box completes immediately.
+- `0x80023D84` guards the end-of-box wait (`return unless a button is down`).
+  NOP it and boxes advance with no input.
+
+**FOUR APPROACHES FAILED FIRST. Do not retry them:**
+
+1. NOP the pacing branch `0x80024360` — text goes instant, but **A dies**: the
+   only thing that counts `msg+0x0F` down lives inside the `0x1000` exit that
+   patch makes unreachable. Bypassing a check is not satisfying it.
+2. Store 0 to `msg+0x0F` at end-of-box (`0x800243F4`) — instant from box 2
+   onward; the first box of a sequence stays paced (an initialiser elsewhere
+   sets the flag, still unfound).
+3. Drop `0x2000` from the loop-exit mask (`0x80024380`) — **breaks display
+   entirely**: that path also allocates and positions the box objects, so the
+   sequence is consumed with nothing drawn and player control locked out.
+4. Force the pad read at `0x800243B8` to 1 — **no effect at all**. That path
+   only DECREMENTS the flag by 1; Y zeroes it. Wrong reader of the right byte.
+
+All four rewrote the RENDER LOOP. The mash instrument
+(`mmx5_text_watch.lua`, `mash_on()`) worked from the first correct button name
+because it drove the game's own complete/advance handling — that was the
+signal the patch had to target the STATE MACHINE, and it was missed for four
+attempts.
+
+**Method note:** these are RAM writes to code, and **a savestate load reverts
+them**. Combined with forgetting an `_off()`, patch state becomes unknowable by
+memory — several confusing results came from stacked or silently-reverted
+patches. `patches()` reports every site; `all_off()` resets. Apply ONE, test,
+re-check.
+
+**PROMPTS ARE SAFE — tested live 2026-08-04, this was the last blocker.**
+The worry was that auto-advance would auto-answer choice prompts, firing the
+Enigma/shuttle by itself and making a `launch` seed unwinnable. It does not:
+
+- **The Enigma/shuttle launch choice is a MENU on stage select, not this text
+  system.** Auto-advance never touches it.
+- **Alia's DNA reward choice (Life Up / Energy Up) PAUSES auto-advance** and
+  waits for a real selection.
+
+So both features are safe to ship, and no goal-conditional restriction is
+needed. Instant text was never at risk either way: it completes the current
+box and never advances.
