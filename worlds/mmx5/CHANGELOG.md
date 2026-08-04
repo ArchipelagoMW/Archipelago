@@ -1,6 +1,10 @@
 # Mega Man X5 apworld changelog
 
-## Unreleased
+## 0.2.0 — 2026-08-04
+
+Three new options and a new default goal. **`text_skip` and `launch_odds`
+change the disc, so re-patch if you use either.** The new goal does not — it is
+entirely client-side and works on the disc you already have.
 
 **New goal: `all_mavericks` — defeat all 8 Mavericks, then Sigma. This is now
 the default.** Seeds generated without an explicit `goal:` line change

@@ -18,14 +18,16 @@ Three options:
 
 - **all_mavericks** (default) — defeat all 8 Mavericks, then reach and defeat
   Sigma. Mega Man X5 does not normally require the full set: it opens the
-  endgame once the Eurasia colony situation resolves, which can happen with
-  only 6 Mavericks defeated. This goal requires all eight.
+  endgame as soon as the Eurasia colony situation resolves, which can happen
+  well before the eighth Maverick. Under this goal the endgame stays shut
+  until all eight are down and opens on the eighth kill. This is enforced by
+  the client, so it needs no disc change.
 - **sigma** — defeat Sigma, however you got there. Victory is detected from the
   ending itself, so the credits rolling completes your goal, whether or not you
   fought every Maverick.
 - **launch** — collect all 8 Enigma/Shuttle Parts and complete a successful
-  launch. The launch only succeeds once every part is in hand; partial sets
-  fail, vanilla-style.
+  launch. By default the launch succeeds exactly when every part is in hand and
+  partial sets always fail; see `launch_odds` if you would rather gamble.
 
 ## What items and locations get shuffled?
 
