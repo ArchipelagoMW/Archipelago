@@ -700,6 +700,21 @@ the controller pointer (reg = 0x800D1C00, field offsets), not absolute EAs.
   never forces a resolution - a player who declines the Enigma forever cannot
   reach the shuttle under any goal.
 
+  > **RETRACTED 2026-08-04 — THIS EDIT DID NOT GATE ANYTHING AND HAS BEEN
+  > REMOVED FROM THE WORLD.** Everything below is accurate: the threshold
+  > really is at 0x800EEFBC, the edit really moved the chapter transition from
+  > 6 kills to 8, and the three runs really happened. It simply does not
+  > control ACCESS. The Enigma/Shuttle menu entries are ALWAYS present, the
+  > shuttle appears once the Enigma has been used, and a player at 6 kills
+  > reached Zero Space on a disc carrying this edit. All it did was delay the
+  > story announcement and Dynamo (who is tied to chapter 4).
+  > **The real gate is ACT `0x800D1C79` >= 5** (see mmx5-ram-notes.md), and it
+  > is handled client-side, so no disc edit is involved at all.
+  > The mistake worth not repeating: "the chapter transition moved" was
+  > treated as "access moved" without ever testing whether a player could
+  > still walk in. A positive control proved the edit worked; nothing tested
+  > what it was FOR.
+
   **LIVE-VERIFIED 2026-08-03** (harness `Scripts/mmx5_chapter_gate_test.lua`,
   log `Scripts/mmx5_chapter_gate_log.txt`):
 
