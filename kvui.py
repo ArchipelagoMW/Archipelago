@@ -225,7 +225,7 @@ MDButton.on_release = on_release
 class HoverBehavior(object):
     """originally from https://stackoverflow.com/a/605348110"""
     hovered = BooleanProperty(False)
-    border_point = ObjectProperty(None)
+    border_point = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         self.register_event_type("on_enter")
@@ -234,27 +234,38 @@ class HoverBehavior(object):
         Window.bind(on_cursor_leave=self.on_cursor_leave)
         super(HoverBehavior, self).__init__(**kwargs)
 
-    def on_mouse_pos(self, window, pos):
-        if not self.get_root_window():
-            return  # Abort if not displayed
+    def _find_top_widget(self, widget, pos):
+        if hasattr(widget, "children"):
+            for child in widget.children:
+                res = self._find_top_widget(child, pos)
+                if res is not None:
+                    return res
+        if hasattr(widget, "collide_point") and hasattr(widget, "to_widget"):
+            if widget.collide_point(*widget.to_widget(*pos)):
+                return widget
+        return None
 
-        # to_widget translates window pos to within widget pos
-        inside = self.collide_point(*self.to_widget(*pos))
-        if self.hovered == inside:
-            return  # We have already done what was needed
+    def set_hovered(self, state, pos):
+        if self.hovered == state:
+            return
+        self.hovered = state
         self.border_point = pos
-        self.hovered = inside
-
-        if inside:
+        if state:
             self.dispatch("on_enter")
         else:
             self.dispatch("on_leave")
 
+    def on_mouse_pos(self, window, pos):
+        root_window = self.get_root_window()
+        if not root_window:
+            return  # Abort if not displayed
+
+        hovered_widget = self._find_top_widget(root_window, pos)
+        self.set_hovered(hovered_widget is self, pos)
+
     def on_cursor_leave(self, *args):
         # if the mouse left the window, it is obviously no longer inside the hover label.
-        self.hovered = BooleanProperty(False)
-        self.border_point = ObjectProperty(None)
-        self.dispatch("on_leave")
+        self.set_hovered(False, None)
 
 
 Factory.register("HoverBehavior", HoverBehavior)
