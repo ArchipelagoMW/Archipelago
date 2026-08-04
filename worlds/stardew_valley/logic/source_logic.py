@@ -7,8 +7,7 @@ from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
 from ..data.fish_data import FishingSource
 from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource, AllRegionsSource
-from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
-    HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
+from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.monster_data import MonsterSource
 from ..data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource, SpecialOrderSource, MasterySource, QuestSource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource, HatMouseSource
@@ -78,11 +77,6 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: ForagingSource):
         return self.logic.harvesting.can_forage_from(source)
-
-    @has_access_to.register
-    def _(self, source: SeasonalForagingSource):
-        # Implementation could be different with some kind of "calendar shuffle"
-        return self.logic.harvesting.can_forage_from(source.as_foraging_source())
 
     @has_access_to.register
     def _(self, _: FruitBatsSource):

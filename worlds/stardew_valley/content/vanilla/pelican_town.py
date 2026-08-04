@@ -5,7 +5,7 @@ from ...data.cooking_recipe import CookingRecipe
 from ...data.craftable_data import CraftingRecipe
 from ...data.festival_data import all_festival_data
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource, AllRegionsSource
-from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
+from ...data.harvest import ForagingSource, ArtifactSpotSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
 from ...data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource, SpecialOrderSource, ArchipelagoSource, CutsceneSource, \
@@ -89,7 +89,7 @@ pelican_town = ContentPack(
         ),
         Forageable.salmonberry: (
             Tag(ItemTag.FORAGE),
-            SeasonalForagingSource(season=Season.spring, days=(15, 16, 17, 18),
+            ForagingSource(seasons=(Season.spring,), days=(15, 16, 17, 18),
                                    regions=(Region.backwoods, Region.mountain, Region.town, Region.forest, Region.tunnel_entrance, Region.railroad)),
         ),
         Forageable.spring_onion: (
@@ -119,7 +119,7 @@ pelican_town = ContentPack(
         Forageable.blackberry: (
             Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.fall,), regions=(Region.backwoods, Region.town, Region.forest, Region.railroad)),
-            SeasonalForagingSource(season=Season.fall, days=(8, 9, 10, 11),
+            ForagingSource(seasons=(Season.fall,), days=(8, 9, 10, 11),
                                    regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.tunnel_entrance,
                                             Region.railroad)),
         ),
@@ -186,7 +186,7 @@ pelican_town = ContentPack(
         WaterItem.coral: (
             Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.tide_pools,)),
-            SeasonalForagingSource(season=Season.summer, days=(12, 13, 14), regions=(Region.beach,)),
+            ForagingSource(seasons=(Season.summer,), days=(12, 13, 14), regions=(Region.beach,)),
         ),
         WaterItem.nautilus_shell: (
             Tag(ItemTag.FORAGE),
@@ -199,6 +199,22 @@ pelican_town = ContentPack(
         WaterItem.sea_urchin: (
             Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.tide_pools,)),
+        ),
+        Fish.mussel: (
+            Tag(ItemTag.FORAGE),
+            ForagingSource(regions=(Region.beach,)),
+        ),
+        Fish.clam: (
+            Tag(ItemTag.FORAGE),
+            ForagingSource(regions=(Region.beach,)),
+        ),
+        Fish.cockle: (
+            Tag(ItemTag.FORAGE),
+            ForagingSource(regions=(Region.beach,)),
+        ),
+        Fish.oyster: (
+            Tag(ItemTag.FORAGE),
+            ForagingSource(regions=(Region.beach,)),
         ),
 
         Seed.mixed: (
@@ -401,6 +417,8 @@ pelican_town = ContentPack(
                                       other_requirements=(SkillRequirement(Skill.fishing, 3),)),),
         Fishing.lead_bobber: (ShopSource(price=200, currency=Currency.money, shop_region=Region.fish_shop,
                                          other_requirements=(SkillRequirement(Skill.fishing, 6),)),),
+        Fishing.bait: (ShopSource(price=5, currency=Currency.money, shop_region=Region.fish_shop,
+                                         other_requirements=(SkillRequirement(Skill.fishing, 2),)),),
 
         "Energy Tonic": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital_shop),),
         "Muscle Remedy": (ShopSource(price=1000, currency=Currency.money, shop_region=Region.hospital_shop),),

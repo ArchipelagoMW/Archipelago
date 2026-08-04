@@ -5,8 +5,10 @@ from .assertion import WorldAssertMixin
 from .bases import SVTestBase
 from ..content.feature import fishsanity
 from ..mods.mod_data import ModNames
-from ..options import Fishsanity, ExcludeGingerIsland, Mods, SpecialOrderLocations, Goal, QuestLocations
+from ..options import Fishsanity, ExcludeGingerIsland, Mods, SpecialOrderLocations, Goal, QuestLocations, SkillProgression
+from ..options.options import DataRandomization
 from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
+from ..strings.region_names import Region
 
 pelican_town_legendary_fishes = {Fish.angler, Fish.crimsonfish, Fish.glacierfish, Fish.legend, Fish.mutant_carp, }
 pelican_town_hard_special_fishes = {Fish.lava_eel, Fish.octopus, Fish.scorpion_carp, Fish.ice_pip, Fish.super_cucumber, }
@@ -404,3 +406,19 @@ class TestFishsanityMasterAnglerSVEWithoutQuests(WorldAssertMixin, SVTestBase):
 
     def test_fill(self):
         self.assert_basic_checks(self.multiworld)
+
+
+class TestNeedCrabPotToCatchCrab(SVTestBase):
+    options = {
+        Fishsanity: Fishsanity.option_all,
+        DataRandomization: frozenset({}),
+        SkillProgression: SkillProgression.option_progressive,
+    }
+
+    def test_require_crab_pot_for_crabs(self):
+        location_name = "Fishsanity: Crab"
+        self.assert_can_reach_region(Region.beach, self.multiworld.state)
+        self.assert_cannot_reach_location(location_name, self.multiworld.state)
+
+        self.collect("Fishing Level", 3)
+        self.assert_can_reach_location(location_name, self.multiworld.state)

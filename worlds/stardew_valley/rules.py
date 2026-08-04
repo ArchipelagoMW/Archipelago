@@ -13,7 +13,7 @@ from .content.feature import friendsanity
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
 from .data.game_item import ItemTag
-from .data.harvest import HarvestCropSource, HarvestFruitTreeSource
+from .data.harvest import HarvestCropSource, HarvestFruitTreeSource, ForagingSource
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, \
     all_museum_items_by_name, all_museum_minerals, \
     all_museum_artifacts, Artifact
@@ -147,6 +147,7 @@ def set_rules(world):
     set_skills_rules(logic, rule_collector, world_content)
     set_bundle_rules(bundle_rooms, logic, rule_collector, world_options)
     set_building_rules(logic, rule_collector, world_content)
+    set_foraging_rules(all_location_names, logic, rule_collector, world_content)
     set_cropsanity_rules(logic, rule_collector, world_content)
     set_story_quests_rules(all_location_names, logic, rule_collector, world_options)
     set_special_order_rules(all_location_names, logic, rule_collector, world_options, world_content)
@@ -759,6 +760,20 @@ def set_walnut_repeatable_rules(logic, rule_collector: StardewRuleCollector, wor
         rule_collector.set_location_rule(f"Walnutsanity: Volcano Monsters Walnut {i}", logic.combat.has_galaxy_weapon)
         rule_collector.set_location_rule(f"Walnutsanity: Volcano Crates Walnut {i}", logic.combat.has_any_weapon)
     rule_collector.set_location_rule(f"Walnutsanity: Tiger Slime Walnut", logic.monster.can_kill(Monster.tiger_slime))
+
+
+def set_foraging_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_content: StardewContent):
+    foraging_prefix = "Forage "
+    for location_name in all_location_names:
+        if not location_name.startswith(foraging_prefix):
+            continue
+
+        item_name = location_name[len(foraging_prefix):]
+        item = world_content.game_items[item_name]
+        item_sources = item.sources
+        foraging_sources = [source for source in item_sources if isinstance(source, ForagingSource)]
+        assert any(foraging_sources), f"Requires at least one foraging source on item [{item_name}] to set a foraging rule"
+        rule_collector.set_location_rule(location_name, logic.or_(*[logic.harvesting.can_forage_from(source) for source in foraging_sources]))
 
 
 def set_cropsanity_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_content: StardewContent):

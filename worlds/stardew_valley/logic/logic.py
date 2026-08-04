@@ -76,7 +76,6 @@ from ..strings.fish_names import Fish, Trash, WaterItem, WaterChest
 from ..strings.flower_names import Flower
 from ..strings.food_names import Beverage
 from ..strings.forageable_names import Forageable
-from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
 from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
@@ -213,9 +212,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fish.crab: self.fishing.can_crab_pot_at(Region.beach),
             Fish.crayfish: self.fishing.can_crab_pot_at(Region.town),
             Fish.lobster: self.fishing.can_crab_pot_at(Region.beach),
-            Fish.mussel: self.tool.can_forage(Generic.any, Region.beach) or self.has(Fish.mussel_node),
+            Fish.mussel: self.has(Fish.mussel_node),
             Fish.mussel_node: self.region.can_reach(Region.island_west),
-            Fish.oyster: self.tool.can_forage(Generic.any, Region.beach),
             Fish.periwinkle: self.fishing.can_crab_pot_at(Region.town),
             Fish.shrimp: self.fishing.can_crab_pot_at(Region.beach),
             Fish.snail: self.fishing.can_crab_pot_at(Region.town),
@@ -296,8 +294,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             TreeSeed.maple: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             TreeSeed.pine: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             TreeSeed.mossy: self.ability.can_chop_trees() & self.season.has(Season.summer),
-            Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
-            Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
             WaterItem.green_algae: self.fishing.can_fish_in_freshwater(),
             WaterItem.cave_jelly: self.fishing.can_fish_at(Region.mines_floor_100) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WaterItem.river_jelly: self.fishing.can_fish_at(Region.town) & self.tool.has_fishing_rod(FishingRod.bamboo),
