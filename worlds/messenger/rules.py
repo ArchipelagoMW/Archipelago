@@ -255,7 +255,7 @@ class MessengerRules:
             "Howling Grotto Seal - Windy Saws and Balls":
                 self.has_wingsuit,
             "Howling Grotto Seal - Crushing Pits":
-                self.has_wingsuit & self.has_dart,
+                self.has_dart,
             "Howling Grotto - Emerald Golem":
                 self.has_wingsuit,
             # searing crags
@@ -312,9 +312,9 @@ class MessengerRules:
             "Elemental Skylands Seal - Air":
                 self.has_wingsuit,
             "Elemental Skylands Seal - Water":
-                self.has_dart & Has("Currents Master"),
+                Has("Currents Master"),
             "Elemental Skylands Seal - Fire":
-                self.has_dart & self.can_destroy_projectiles & self.is_aerobatic,
+                self.can_destroy_projectiles & self.is_aerobatic,
             "Earth Mega Shard":
                 self.has_dart,
         }

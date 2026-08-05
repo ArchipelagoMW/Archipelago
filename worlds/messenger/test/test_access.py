@@ -68,7 +68,6 @@ class AccessTest(MessengerTestBase):
             "Bamboo Creek Seal - Spike Crushers and Doors",
             "Bamboo Creek Seal - Spike Ball Pits",
             "Bamboo Creek Seal - Spike Crushers and Doors v2",
-            "Howling Grotto Seal - Crushing Pits",
             "Howling Grotto Seal - Windy Saws and Balls",
             "Tower of Time Seal - Lantern Climb",
             "Forlorn Temple - Demon King",
