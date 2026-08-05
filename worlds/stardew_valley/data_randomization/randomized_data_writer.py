@@ -109,7 +109,7 @@ def prepare_fish_season_data(content: StardewContent, data_to_randomize: set[str
     prepare_fish_data_aspect(content, data_to_randomize, prepared_data,
                              DataRandomizationOptionName.fish_season,
                              lambda fish: len(fish.seasons) > 0 and fish.difficulty != crab_pot_difficulty,
-                             lambda fish: list(fish.seasons),
+                             lambda fish: list(sorted(fish.seasons)),
                              "Season")
 
 
@@ -169,7 +169,7 @@ def prepare_crop_growth_season_data(content: StardewContent, data_to_randomize: 
     prepare_crop_data_aspect(content, data_to_randomize, prepared_data,
                              DataRandomizationOptionName.growth_season,
                              lambda crop: any(isinstance(source, HarvestCropSource) and len(source.seasons) >= 1 for source in crop.sources),
-                             lambda crop: [source.seasons for source in crop.sources if isinstance(source, HarvestCropSource)],
+                             lambda crop: [list(sorted(source.seasons)) for source in crop.sources if isinstance(source, HarvestCropSource)],
                              "Season")
 
 

@@ -363,6 +363,9 @@ class And(AggregatingStardewRule):
     symbol = " & "
 
     def __call__(self, state: CollectionState) -> bool:
+        # stack_size = stack_size2a()
+        # if stack_size > 100:
+        #     print(self)
         return self.evaluate_while_simplifying(state)[1]
 
     def __and__(self, other):

@@ -14,6 +14,7 @@ from ..strings.metal_names import Mineral
 from ..strings.performance_names import Performance
 from ..strings.quality_names import ForageQuality
 from ..strings.region_names import Region, LogicRegion
+from ..strings.seed_names import DistantLandsSeed
 from ..strings.skill_names import Skill, all_mod_skills, all_vanilla_skills
 from ..strings.tool_names import ToolMaterial, Tool, FishingRod
 from ..strings.wallet_item_names import Wallet
@@ -172,6 +173,8 @@ class SkillLogic(BaseLogic):
         sources = self.content.find_sources_of_type(HarvestCropSource)
         crop_rules = []
         for crop_source in sources:
+            if crop_source.seed in [DistantLandsSeed.vile_ancient_fruit, DistantLandsSeed.void_mint]:
+                continue # These seeds require farming levels to reach, so they can't be used to earn farming levels
             crop_rules.append(self.logic.harvesting.can_harvest_crop_from(crop_source))
         return self.logic.or_(*crop_rules)
 
