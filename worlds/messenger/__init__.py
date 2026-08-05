@@ -42,6 +42,7 @@ from .universal_tracker import (
     TRACKER_PACK_CONFIG,
     MessengerGlitchedRules,
     reverse_portal_exits_into_portal_plando,
+    reverse_shop_prices,
     reverse_transitions_into_plando_connections,
 )
 
@@ -209,7 +210,11 @@ class MessengerWorld(World):
         if self.options.early_meditation:
             self.multiworld.early_items[self.player]["Meditation"] = 1
 
-        self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
+        if not hasattr(self.multiworld, "re_gen_passthrough"):
+            self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
+        else:
+            if slot_data := self.multiworld.re_gen_passthrough.get(self.game):
+                self.shop_prices, self.figurine_prices = reverse_shop_prices(slot_data["shop"], slot_data["figures"])
 
         starting_portals = ["Autumn Hills", "Howling Grotto", "Glacial Peak", "Riviere Turquoise", "Sunken Shrine",
                             "Searing Crags"]
@@ -314,6 +319,10 @@ class MessengerWorld(World):
         filler = [self.create_filler() for _ in range(remaining_fill)]
 
         self.multiworld.itempool += filler
+
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if slot_data := self.multiworld.re_gen_passthrough.get(self.game):
+                self.total_shards = slot_data["max_price"]
 
     def set_rules(self) -> None:
         logic = self.options.logic_level

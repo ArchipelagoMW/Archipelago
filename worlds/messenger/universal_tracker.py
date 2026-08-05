@@ -6,12 +6,14 @@ from Options import PlandoConnection
 from .connections import RANDOMIZED_CONNECTIONS
 from .portals import CHECKPOINTS, REGION_ORDER, SHOP_POINTS
 from .rules import MessengerHardRules, MessengerRules
+from .shop import FIGURINES, SHOP_ITEMS
 from .transitions import TRANSITIONS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
 
 REVERSED_RANDOMIZED_CONNECTIONS = {v: k for k, v in RANDOMIZED_CONNECTIONS.items()}
+REVERSED_SHOP_ITEMS = {v.internal_name: k for k, v in (SHOP_ITEMS | FIGURINES).items()}
 GLITCHED_ITEM = "Glitched Item"
 
 
@@ -86,6 +88,14 @@ def reverse_portal_exits_into_portal_plando(portal_exits: list[int]) -> list[Pla
         PlandoConnection("Searing Crags", find_spot(portal_exits[4]), "both"),
         PlandoConnection("Glacial Peak", find_spot(portal_exits[5]), "both"),
     ]
+
+def reverse_shop_prices(
+    shop_prices: dict[str, int], figures_prices: dict[str, int]
+) -> tuple[dict[str, int], dict[str, int]]:
+    return (
+        {REVERSED_SHOP_ITEMS[item_internal_name]: price for item_internal_name, price in shop_prices.items()},
+        {REVERSED_SHOP_ITEMS[item_internal_name]: price for item_internal_name, price in figures_prices.items()},
+    )
 
 
 def reverse_transitions_into_plando_connections(transitions: list[list[int]]) -> list[PlandoConnection]:

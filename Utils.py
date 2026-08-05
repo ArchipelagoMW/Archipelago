@@ -1012,23 +1012,6 @@ def deprecate(message: str, add_stacklevels: int = 0):
     warnings.warn(message, stacklevel=2 + add_stacklevels)
 
 
-class DeprecateDict(dict):
-    log_message: str
-    should_error: bool
-
-    def __init__(self, message: str, error: bool = False) -> None:
-        self.log_message = message
-        self.should_error = error
-        super().__init__()
-
-    def __getitem__(self, item: Any) -> Any:
-        if self.should_error:
-            deprecate(self.log_message, add_stacklevels=1)
-        elif __debug__:
-            warnings.warn(self.log_message, stacklevel=2)
-        return super().__getitem__(item)
-
-
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows and without setting spawn method first."""
     # original upstream issue: https://github.com/python/cpython/issues/76327
@@ -1088,6 +1071,7 @@ def visualize_regions(
         file_name: str,
         *,
         show_entrance_names: bool = False,
+        show_entrance_rules: bool = False,
         show_locations: bool = True,
         show_other_regions: bool = True,
         linetype_ortho: bool = True,
@@ -1100,6 +1084,7 @@ def visualize_regions(
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
     :param file_name: The name of the destination .puml file.
     :param show_entrance_names: (default False) If enabled, the name of the entrance will be shown near each connection.
+    :param show_entrance_rules: (default False) If enabled, the Rule Builder explanation of the entrance's access rule will be shown near each connection.
     :param show_locations: (default True) If enabled, the locations will be listed inside each region.
             Priority locations will be shown in bold.
             Excluded locations will be stricken out.
@@ -1189,13 +1174,22 @@ def visualize_regions(
         return re.sub("[\".:]", "", name)
 
     def visualize_exits(region: Region) -> None:
+        import rule_builder.rules
         for exit_ in region.exits:
             color_code: str = ""
             if exit_.randomization_group in entrance_highlighting:
                 color_code = f" #{entrance_highlighting[exit_.randomization_group]:0>6X}"
             if exit_.connected_region:
+                label = ""
                 if show_entrance_names:
-                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"{color_code}")
+                    label += fmt(exit_)
+                if show_entrance_rules:
+                    if isinstance(exit_.access_rule, rule_builder.rules.Rule.Resolved):
+                        if label:
+                            label += "\\n"
+                        label += exit_.access_rule.explain_str()
+                if label:
+                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{label}\"{color_code}")
                 else:
                     try:
                         uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"{color_code}")
