@@ -170,7 +170,29 @@ def _object_hook(o: typing.Any) -> typing.Any:
     return o
 
 
-decode = JSONDecoder(object_hook=_object_hook).decode
+_decode = JSONDecoder(object_hook=_object_hook).decode
+
+
+def _check_depth(s: str, limit: int = 16) -> None:
+    depth = 1
+    in_quotes = False
+    for c in s:
+        if c == '"':
+            in_quotes = not in_quotes
+        elif not in_quotes:
+            if c in "[{":
+                depth += 1
+                if depth > limit:
+                    raise ValueError("JSON document too complex")
+            elif c in "}]":
+                depth -= 1
+    if depth != 1:  # free check
+        raise ValueError("JSON document malformed")
+
+
+def decode(s: str) -> typing.Any:
+    _check_depth(s)  # raises ValueError
+    return _decode(s)
 
 
 class Endpoint:
