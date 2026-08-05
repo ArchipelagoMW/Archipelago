@@ -130,7 +130,7 @@ class MessengerRules:
                 self.has_vertical,
             "Glacial Peak - Left -> Elemental Skylands - Air Shmup":
                 Has("Magic Firefly") & CanReachLocation("Quillshroom Marsh - Queen of Quills"),
-            "Glacial Peak - Tower Entrance Shop -> Glacial Peak - Top":
+            "Glacial Peak - Top -> Cloud Ruins - Left":
                 Has("Ruxxtin's Amulet"),
             "Glacial Peak - Projectile Spike Pit Checkpoint -> Glacial Peak - Left":
                 self.has_dart | (self.can_dboost & self.has_wingsuit),
@@ -172,7 +172,7 @@ class MessengerRules:
                 self.has_wingsuit & self.can_dboost,
             # Underworld
             "Underworld - Left -> Underworld - Left Shop":
-                self.has_tabi,
+                self.has_tabi | self.has_vertical,
             "Underworld - Left Shop -> Underworld - Left":
                 self.has_tabi,
             "Underworld - Hot Dip Checkpoint -> Underworld - Lava Run Checkpoint":
@@ -207,6 +207,10 @@ class MessengerRules:
                 self.has_wingsuit,
             "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
                 self.has_wingsuit,
+            "Elemental Skylands - Earth Intro Shop -> Elemental Skylands - Earth Generator Shop":
+                self.has_dart,
+            "Elemental Skylands - Water Generator Shop -> Elemental Skylands - Water Intro Shop":
+                self.can_destroy_projectiles,
             # Sunken Shrine
             "Sunken Shrine - Portal -> Sunken Shrine - Sun Path Shop":
                 self.has_tabi,
@@ -305,8 +309,6 @@ class MessengerRules:
             "Riviere Turquoise Seal - Launch of Faith":
                 self.has_vertical,
             # elemental skylands
-            "Elemental Skylands - Key of Symbiosis":
-                self.has_dart,
             "Elemental Skylands Seal - Air":
                 self.has_wingsuit,
             "Elemental Skylands Seal - Water":
@@ -314,8 +316,6 @@ class MessengerRules:
             "Elemental Skylands Seal - Fire":
                 self.has_dart & self.can_destroy_projectiles & self.is_aerobatic,
             "Earth Mega Shard":
-                self.has_dart,
-            "Water Mega Shard":
                 self.has_dart,
         }
         # fmt: on
@@ -446,6 +446,8 @@ class MessengerHardRules(MessengerRules):
                 # Elemental Skylands
                 "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
                     self.true,
+                "Elemental Skylands - Earth Intro Shop -> Elemental Skylands - Earth Generator Shop":
+                    self.true,
                 # Riviere Turquoise
                 "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                     self.true,
@@ -461,25 +463,25 @@ class MessengerHardRules(MessengerRules):
         self.location_rules.update(
             {
                 "Autumn Hills Seal - Spike Ball Darts":
-                    self.has_vertical & self.has_windmill | self.is_aerobatic,
+                    (self.has_vertical & self.has_windmill) | self.is_aerobatic,
                 "Autumn Hills Seal - Double Swing Saws":
                     self.has_vertical | self.can_destroy_projectiles,
                 "Bamboo Creek - Claustro":
                     self.has_wingsuit,
                 "Bamboo Creek Seal - Spike Ball Pits":
                     self.true,
+                "Above Entrance Mega Shard": # Just reset to the menu and you can get it with full health
+                    self.true,
                 "Howling Grotto Seal - Windy Saws and Balls":
                     self.true,
+                "Howling Grotto Seal - Crushing Pits":
+                    self.has_vertical,
                 "Searing Crags Seal - Triple Ball Spinner":
                     self.true,
                 "Glacial Peak Seal - Ice Climbers":
                     self.has_vertical | self.can_dboost,
                 "Glacial Peak Seal - Projectile Spike Pit":
                     self.can_dboost | self.can_destroy_projectiles,
-                "Glacial Peak Seal - Glacial Air Swag":
-                    self.has_windmill | self.has_vertical,
-                "Glacial Peak Mega Shard":
-                    self.has_windmill | self.has_vertical,
                 "Cloud Ruins Seal - Ghost Pit":
                     self.true,
                 "Cloud Ruins Seal - Toothbrush Alley":
@@ -492,15 +494,11 @@ class MessengerHardRules(MessengerRules):
                     self.true,
                 "Riviere Turquoise Seal - Launch of Faith":
                     self.can_dboost | self.has_vertical,
-                "Elemental Skylands - Key of Symbiosis":
-                    self.has_dart | self.can_dboost | self.has_windmill,
                 "Elemental Skylands Seal - Water":
-                    self.has_dart | self.can_dboost | self.has_windmill,
+                    self.true,
                 "Elemental Skylands Seal - Fire":
-                    (self.has_dart | self.can_dboost | self.has_windmill) & self.can_destroy_projectiles,
+                    self.can_destroy_projectiles,
                 "Earth Mega Shard":
-                    self.has_dart | self.can_dboost | self.has_windmill,
-                "Water Mega Shard":
                     self.has_dart | self.can_dboost | self.has_windmill,
             }
         )
