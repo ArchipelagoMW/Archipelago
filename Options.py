@@ -1522,6 +1522,13 @@ class DeathLink(Toggle):
     rich_text_doc = True
 
 
+class DeathLinkGroup(FreeText):
+    """Death Link only applies to players with an identical Group name.
+    Games that don't support the Group option count as having an empty group name."""
+    display_name = "Death Link Group"
+    rich_text_doc = True
+
+
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     display_name = "Item Links"
@@ -1750,6 +1757,11 @@ class PerGameCommonOptions(CommonOptions):
 @dataclass
 class DeathLinkMixin:
     death_link: DeathLink
+
+
+@dataclass
+class DeathLinkGroupMixin(DeathLinkMixin):
+    death_link_group: DeathLinkGroup
 
 
 class OptionGroup(typing.NamedTuple):
