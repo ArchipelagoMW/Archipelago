@@ -3,8 +3,10 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 import typing
 import enum
+import functools
 import warnings
-from json import JSONEncoder, JSONDecoder
+
+import queson
 
 if typing.TYPE_CHECKING:
     from websockets import WebSocketServerProtocol as ServerConnection
@@ -128,11 +130,7 @@ def convert_to_base_types(obj: typing.Any) -> _base_types:
         raise Exception(f"Cannot handle {type(obj)}")
 
 
-_encode = JSONEncoder(
-    ensure_ascii=False,
-    check_circular=False,
-    separators=(',', ':'),
-).encode
+_encode = functools.partial(queson.dumps, object_hook=None, check_circular=False)
 
 
 def encode(obj: typing.Any) -> str:
@@ -170,36 +168,7 @@ def _object_hook(o: typing.Any) -> typing.Any:
     return o
 
 
-_decode = JSONDecoder(object_hook=_object_hook).decode
-
-
-def _check_depth(s: str, limit: int = 16) -> None:
-    depth = 1
-    in_quotes = False
-    escape = False
-    for c in s:
-        if c == "\\" and not escape:
-            escape = True
-            continue
-        if c == '"' and not escape:
-            in_quotes = not in_quotes
-            continue
-        if not in_quotes:
-            if c in "[{":
-                depth += 1
-                if depth > limit:
-                    raise ValueError("JSON document too complex")
-            elif c in "}]":
-                depth -= 1
-        escape = False
-
-    if depth != 1:  # free check
-        raise ValueError("JSON document malformed")
-
-
-def decode(s: str) -> typing.Any:
-    _check_depth(s)  # raises ValueError
-    return _decode(s)
+decode = functools.partial(queson.loads, object_hook=_object_hook, depth_limit=17)
 
 
 class Endpoint:
