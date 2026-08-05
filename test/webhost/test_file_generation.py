@@ -7,6 +7,8 @@ import WebHost
 
 
 class TestFileGeneration(unittest.TestCase):
+    world_relevant = True
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.correct_path = os.path.join(os.path.dirname(WebHost.__file__), "WebHostLib")
