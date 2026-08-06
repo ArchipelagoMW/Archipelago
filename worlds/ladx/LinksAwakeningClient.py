@@ -458,7 +458,7 @@ class LinksAwakeningClient():
     async def collect(self, ctx):
         if not self.gps_tracker.room or self.gps_tracker.is_transitioning:
             return
-        current_room = '0x' + hex(self.gps_tracker.room)[2:].zfill(3).upper()
+        current_room = f"0x{self.gps_tracker.room:03X}"
         for id in ctx.checked_locations:
             meta_id = links_awakening_location_id_to_meta[id]
             is_checked = next(x for x in self.tracker.all_checks if x.id == meta_id).value
