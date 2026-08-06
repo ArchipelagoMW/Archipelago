@@ -124,7 +124,8 @@ BOSS_HP_BANDS = {
 # silent no-op; write the real id back and it works again. An exhaustive
 # immediate scan of the hub module found this handler to be the table's ONLY
 # reader, so zeroing a slot changes nothing else on screen. Details, including
-# the slot -> boss layout, in docs/mmx5-ghidra-findings.md §9.14.
+# the slot -> boss layout, in mmx5-ghidra-findings.md §9.14 (research notes,
+# fork branch mmx5-apworld - not present on the upstream PR branch).
 SLOT_TABLE_ADDR = 0x0F5050
 # slot order is the screen's: four icons down the left column, four down the
 # right. Slot 8 (the Enigma / Shuttle / Zero Space / Sigma entry) does NOT go
@@ -177,7 +178,7 @@ ENDGAME_CLEAR_ACT = {
 # ---- DNA Parts -----------------------------------------------------------
 # u32 bitfield, Parts in bits 2..17. Bit numbers read off the game's own Parts
 # screen with every bit forced on (2026-08-06); provenance and the full table
-# in docs/mmx5-ghidra-findings.md §9.15. Corroborating pattern: bits 11-16 are
+# in mmx5-ghidra-findings.md §9.15 (fork branch). Corroborating pattern: 11-16 are
 # exactly the six character-locked Parts, X's three then Zero's three.
 OFF_PARTS = 0x0D1C84 - SAVE_BASE        # u32
 PART_TO_BIT = {

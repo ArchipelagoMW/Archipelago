@@ -1,6 +1,13 @@
 # Mega Man X5 apworld changelog
 
-## Unreleased
+## 0.3.0 — 2026-08-06
+
+Seven new options, every one exercised in a live game before release.
+**One default changed: `endgame_checks` is ON**, so a seed generated
+without touching it now has 48 locations instead of 45.
+
+`pickupsanity` changes the disc; nothing else new here does, so the rest
+work on a disc you have already patched.
 
 **New option: `randomize_options`** (off by default) — let the seed pick your
 gameplay options for you. It rolls `goal`, `boss_difficulty`, `launch_odds`,
@@ -57,9 +64,10 @@ Implementation note: Parts live in bits 2..17 of the u32 `0x800D1C84`. The
 name-to-bit map was read out of the game itself, by forcing every bit on and
 reading the Parts screen, because X5 stores UI text as font-tile indices and
 web sources return Mega Man X6 Part facts for X5 queries constantly. Full table
-in `worlds/mmx5/docs/mmx5-ghidra-findings.md` §9.15. One write does both halves
-of the feature each cycle: OR in what the player received, clear what the game
-granted.
+in `mmx5-ghidra-findings.md` §9.15 — the research notes on the author's fork
+(github.com/Shinnuu/Archipelago, branch `mmx5-apworld`). One write does both
+halves of the feature each cycle: OR in what the player received, clear what
+the game granted.
 
 **New option: `endgame_checks` (ON by default)** — clearing a Zero Space stage
 now sends a check. Three locations: Zero Space 1, Zero Space 2 and the X vs
@@ -169,7 +177,9 @@ consumable kinds); seeds without the option produce a disc byte-identical to
 location — the intro cannot be revisited, so it would be permanently missable.
 
 The full pickup inventory was extracted statically from the disc and is
-fully provenance-tracked (worlds/mmx5/docs/mmx5-ghidra-findings.md §9.13).
+fully provenance-tracked (`mmx5-ghidra-findings.md` §9.13, in the research
+notes on the author's fork (github.com/Shinnuu/Archipelago, branch
+mmx5-apworld)).
 Consumables are identified by their placement-record address (their id byte
 is a type, not an identity — three Izzy Glow capsules share one id), which
 the game's own spawner stores in the item object and the new stub reports.

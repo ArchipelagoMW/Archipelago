@@ -17,7 +17,7 @@ ROCK_X5.BIN:
 
 Validated against the live placement harvest (identical on every stage it
 covered), a live-dump anchor for Dark Dizzy area 1 (chunk3) and one for the
-X-vs-Zero duel (chunk28). Full account: docs/mmx5-ghidra-findings.md 9.13,
+X-vs-Zero duel (chunk28). Full account: mmx5-ghidra-findings.md 9.13 (fork),
 row-level data in docs/mmx5-placements.csv.
 
 LOCATION IDENTITY. Consumable ids are TYPE ids and collide (three Izzy Glow
