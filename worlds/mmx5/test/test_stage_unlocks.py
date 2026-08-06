@@ -94,6 +94,37 @@ class TestStageUnlocksOn(MMX5TestBase):
                         f"{stage}'s boss check stayed unreachable with its codes")
 
 
+class TestStageUnlocksFill(MMX5TestBase):
+    """A stage's codes must never end up inside that stage, directly or behind
+    a chain that needs them.
+
+    The rules make this structurally impossible - every requirement in this
+    world is an ITEM, so the whole graph is one dependency AP's fill respects -
+    but the invariant is worth pinning, because it is what a future rules
+    change would quietly break. Run with pickupsanity on: that adds 32
+    locations inside the locked regions, which is where a self-lock would hide.
+    """
+    options = {"stage_unlocks": True, "pickupsanity": True}
+
+    def test_no_stage_holds_its_own_codes(self) -> None:
+        from Fill import distribute_items_restrictive
+        distribute_items_restrictive(self.multiworld)
+        for loc in self.multiworld.get_locations(self.player):
+            item = loc.item
+            if item is None or item.name not in names.ACCESS_ITEMS:
+                continue
+            stage = item.name.removesuffix(" Access Codes")
+            self.assertFalse(
+                loc.name.startswith(stage + " -"),
+                f"{item.name} was placed at {loc.name}, inside the stage it unlocks")
+
+    def test_seed_is_beatable_from_nothing(self) -> None:
+        from Fill import distribute_items_restrictive
+        distribute_items_restrictive(self.multiworld)
+        self.assertTrue(self.multiworld.can_beat_game(),
+                        "stage locks made the seed unwinnable")
+
+
 class TestAccessItemIds(unittest.TestCase):
     def test_ids_are_stable_and_unique(self) -> None:
         for i, name in enumerate(names.ACCESS_ITEMS):
