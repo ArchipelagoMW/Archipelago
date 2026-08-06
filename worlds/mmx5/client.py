@@ -135,6 +135,15 @@ OFF_ARMOR = 0x0D1CA1 - SAVE_BASE       # armor parts byte (Falcon 0-3, Gaea 4-7)
 # Capability comes from a complete set, so this - not the parts byte -
 # is what must survive while a part is withheld.
 OFF_SETFLAGS = 0x0D1C4A - SAVE_BASE
+# Secret armors from the Zero Space capsule (id 8). Its grant code, disasm'd
+# 2026-08-01 (overlay-findings 2.x): char 0 (X) -> 0x800D1C4B = 1 (Ultimate),
+# otherwise 0x800D1C4A |= 0x10 (Black Zero). Both memcard-persisted, and the
+# stage-load character init mirrors 0x1C4B into the live player struct
+# (`lbu 0x4B(ctrl); sb 0x14A(player)`), so a grant applies at the next stage
+# load exactly like the weapons byte.
+OFF_ULTIMATE = 0x0D1C4B - SAVE_BASE
+ULTIMATE_ON = 1
+BLACK_ZERO_BIT = 0x10           # into 0x1C4A (OFF_SETFLAGS)
 # Launch machinery (overlay-findings 11). Score = 2*sum(0x1CC2..C5) + 0x1CCA;
 # on the patched disc the roll is `li v1,0`, so success <=> score > 0. The
 # client PINS these every cycle from AP part-item state - vanilla accrual
@@ -1182,9 +1191,15 @@ class MMX5Client(BizHawkClient):
                     tank_bits = 0
                     armor_bits = 0
                     sub_tanks_received = 0
+                    want_ultimate = False
+                    want_black_zero = False
                     for item in ctx.items_received:
                         item_name = ctx.item_names.lookup_in_game(item.item)
-                        if item_name in WEAPON_TO_BIT:
+                        if item_name == names.ULTIMATE_ARMOR:
+                            want_ultimate = True
+                        elif item_name == names.BLACK_ZERO:
+                            want_black_zero = True
+                        elif item_name in WEAPON_TO_BIT:
                             all_received_weapon_bits |= 1 << WEAPON_TO_BIT[item_name]
                         elif item_name == names.SUB_TANK and sub_tanks_received < 2:
                             tank_bits |= SUB_TANK_BYTE_BITS[sub_tanks_received]
@@ -1219,6 +1234,18 @@ class MMX5Client(BizHawkClient):
                     merged_armor = (save[OFF_ARMOR] | armor_bits) & ~armor_withhold
                     if merged_armor != save[OFF_ARMOR]:
                         writes.append((SAVE_BASE + OFF_ARMOR, [merged_armor], "MainRAM"))
+
+                    # Secret armors: two independent flags, both idempotent.
+                    # Black Zero shares 0x1C4A with the Falcon/Gaea
+                    # set-completion bits the results overlay owns, so it is
+                    # OR-ed in rather than assigned.
+                    if want_ultimate and save[OFF_ULTIMATE] != ULTIMATE_ON:
+                        writes.append((SAVE_BASE + OFF_ULTIMATE,
+                                       [ULTIMATE_ON], "MainRAM"))
+                    if want_black_zero and not (save[OFF_SETFLAGS] & BLACK_ZERO_BIT):
+                        writes.append((SAVE_BASE + OFF_SETFLAGS,
+                                       [save[OFF_SETFLAGS] | BLACK_ZERO_BIT],
+                                       "MainRAM"))
 
                     if new_hearts:
                         # BOTH characters (design decision 2026-08-01):

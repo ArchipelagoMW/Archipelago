@@ -49,6 +49,13 @@ item_table: dict[str, ItemData] = {
     names.GAEA_ARM:    ItemData(BASE_ID + 26, ItemClassification.progression),
     names.GAEA_LEG:    ItemData(BASE_ID + 27, ItemClassification.progression),
 
+    # Secret armors (Zero Space capsule id 8), option-gated: count is set to 0
+    # here and raised to 1 per item in create_items when the option is on.
+    # `useful`, never progression - no location requires them, and each only
+    # benefits one of the two characters.
+    names.ULTIMATE_ARMOR: ItemData(BASE_ID + 28, ItemClassification.useful, 0),
+    names.BLACK_ZERO:     ItemData(BASE_ID + 29, ItemClassification.useful, 0),
+
     # filler
     names.SMALL_ENERGY: ItemData(BASE_ID + 40, ItemClassification.filler, 0),
 }
@@ -67,4 +74,5 @@ item_groups = {
               names.GAEA_HEAD, names.GAEA_BODY, names.GAEA_ARM, names.GAEA_LEG},
     "Tanks": {names.SUB_TANK, names.W_TANK, names.EX_TANK},
     "Launcher Parts": {names.ENIGMA_PART, names.SHUTTLE_PART},
+    "Secret Armors": {names.ULTIMATE_ARMOR, names.BLACK_ZERO},
 }

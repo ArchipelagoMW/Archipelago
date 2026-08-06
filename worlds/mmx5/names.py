@@ -52,6 +52,12 @@ GAEA_LEG = "Gaea Armor Leg"
 ARMOR_PARTS = [FALCON_HEAD, FALCON_BODY, FALCON_ARM, FALCON_LEG,
                GAEA_HEAD, GAEA_BODY, GAEA_ARM, GAEA_LEG]
 
+# The two secret armors from the Zero Space capsule (id 8). Unlike the eight
+# Falcon/Gaea parts these are NOT collected in pieces - one flag each, and
+# each is tied to a character: Ultimate is X's, Black Zero is Zero's.
+ULTIMATE_ARMOR = "Ultimate Armor"
+BLACK_ZERO = "Black Zero"
+
 SMALL_ENERGY = "Small Energy"
 
 # Tanks (vanilla stage homes from the placement-record harvest 2026-07-31:

@@ -120,6 +120,26 @@ class TextSkip(Toggle):
     display_name = "Text Skip"
 
 
+class SecretArmorsInPool(Toggle):
+    """Add Ultimate Armor and Black Zero to the item pool.
+
+    In the base game both come from a single hidden capsule in Zero Space, so
+    you only ever see them right at the end. With this on they are shuffled
+    into the multiworld and can turn up at any point in the run.
+
+    Ultimate Armor is X's (unlimited Giga Attack, air dash in any direction);
+    Black Zero is Zero's (stronger, faster, and his Z-Saber techniques cost no
+    weapon energy). Each only does anything for its own character, so on a
+    seed where you stick to one of them the other is dead weight - they are
+    never required for anything.
+
+    The Zero Space capsule still works normally, so you can also just find
+    them the vanilla way. Receiving an armor first makes that capsule vanish,
+    since the game hides a capsule whose armor you already have.
+    """
+    display_name = "Secret Armors In Pool"
+
+
 class BossHPRandomization(Choice):
     """Randomize how much HP bosses have.
 
@@ -177,3 +197,4 @@ class MMX5Options(PerGameCommonOptions):
     text_skip: TextSkip
     pickupsanity: PickupSanity
     boss_hp_randomization: BossHPRandomization
+    secret_armors_in_pool: SecretArmorsInPool

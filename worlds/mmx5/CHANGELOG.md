@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+**New option: `secret_armors_in_pool`** (off by default) — puts Ultimate Armor
+and Black Zero into the item pool. In the base game both come from one hidden
+capsule in Zero Space, so you only ever see them at the very end; shuffled into
+the multiworld they can turn up at any point.
+
+Client-side only, **no disc change**. Each armor only does anything for its own
+character (Ultimate is X's, Black Zero is Zero's), so neither is ever required
+for anything — on a seed played as one character the other is dead weight. The
+Zero Space capsule still works normally, though receiving an armor makes it
+vanish, since the game hides a capsule whose armor you already hold.
+
+**Not yet live-tested.** One thing to confirm on the first run: whether Ultimate
+Armor needs more than `0x800D1C4B`. The capsule sets only that byte for X, but
+its despawn ladder also reads `0x800D1C4A & 8`, which may be a separate
+"has Ultimate" flag.
+
 **New option: `boss_hp_randomization`** (off by default) — randomizes how much
 HP bosses have: `weak` 40-80%, `regular` 70-130%, `strong` 120-200%, `chaotic`
 25-250%. The roll SCALES what the game would normally give, so Boss Level still

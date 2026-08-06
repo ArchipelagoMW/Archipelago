@@ -163,6 +163,14 @@ class MMX5World(World):
         for name, data in item_table.items():
             pool += [self.create_item(name) for _ in range(data.count)]
 
+        # Secret armors: option-gated, so their table count is 0 and they are
+        # added here instead. They take filler slots rather than adding
+        # locations - the Zero Space capsule that vanilla-holds them is not a
+        # check (see the option text).
+        if self.options.secret_armors_in_pool:
+            pool.append(self.create_item(names.ULTIMATE_ARMOR))
+            pool.append(self.create_item(names.BLACK_ZERO))
+
         # Top up with filler to match unfilled locations.
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
         while len(pool) < unfilled:
