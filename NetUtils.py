@@ -168,7 +168,7 @@ def _object_hook(o: typing.Any) -> typing.Any:
     return o
 
 
-decode = functools.partial(queson.loads, object_hook=_object_hook, depth_limit=17)
+decode = functools.partial(queson.loads, object_hook=_object_hook, depth_limit=16)
 
 
 class Endpoint:
