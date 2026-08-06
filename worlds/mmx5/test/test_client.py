@@ -94,7 +94,12 @@ def make_save(max_hp: int, intro: int = 0, weapons: int = 0, hearts: int = 0,
 async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                       client: MMX5Client | None = None,
                       ctx: FakeContext | None = None,
-                      ring2: bytes | None = None) -> FakeContext:
+                      ring2: bytes | None = None,
+                      hub_resident: bool = False,
+                      slot_table: bytes | None = None) -> FakeContext:
+    """`hub_resident` makes the stage-select slot table's instruction anchor
+    read as present, so the stage-unlock writer engages; `slot_table` seeds what
+    that table currently holds (defaults to the vanilla ids)."""
     ctx = ctx or FakeContext()
     client = client or MMX5Client()
     ring = bytes(mmx5_client.RING_SLOTS * 4)
@@ -116,6 +121,11 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
         mmx5_client.RING2_PROBE_ADDR: (
             mmx5_client.RING2_PROBE_STUBBED if getattr(client, "ring2_present", None)
             else mmx5_client.RING2_PROBE_VANILLA),
+        mmx5_client.SLOT_TABLE_ANCHOR_ADDR: (
+            mmx5_client.SLOT_TABLE_ANCHOR if hub_resident else b"\x00\x00\x00\x00"),
+        mmx5_client.SLOT_TABLE_ADDR: (
+            slot_table if slot_table is not None
+            else bytes(mmx5_client.SLOT_TO_STAGE)),
     }
 
     async def fake_read(_ctx, requests):

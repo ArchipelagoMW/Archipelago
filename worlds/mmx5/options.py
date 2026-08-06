@@ -136,6 +136,11 @@ class SecretArmorsInPool(Toggle):
     The Zero Space capsule still works normally, so you can also just find
     them the vanilla way. Receiving an armor first makes that capsule vanish,
     since the game hides a capsule whose armor you already have.
+
+    The two arrive on different schedules: Ultimate Armor shows up at your next
+    stage entry, not in the stage you are standing in when it arrives, because
+    the game decides which armor X wears as the stage loads. Black Zero applies
+    on the spot.
     """
     display_name = "Secret Armors In Pool"
 
@@ -188,6 +193,26 @@ class PickupSanity(Toggle):
     display_name = "Pickupsanity"
 
 
+class StageUnlocks(Toggle):
+    """Lock the eight Maverick stages behind items.
+
+    Normally all eight are open from the moment the intro ends. With this on
+    exactly ONE of them is open at the start - which one is decided by the seed
+    - and each of the others needs its own "<Boss> Access Codes" item, shuffled
+    into the multiworld like anything else.
+
+    A locked stage still shows on the stage-select screen and the cursor still
+    moves onto it; pressing confirm simply does nothing until you hold its
+    codes. Nothing else about the screen changes - the countdown, the
+    Enigma/Shuttle/Zero Space entry and the endgame all behave exactly as they
+    normally would.
+
+    Client-side, so it needs no disc change and works on a disc you have
+    already patched.
+    """
+    display_name = "Stage Unlocks"
+
+
 @dataclass
 class MMX5Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -198,3 +223,4 @@ class MMX5Options(PerGameCommonOptions):
     pickupsanity: PickupSanity
     boss_hp_randomization: BossHPRandomization
     secret_armors_in_pool: SecretArmorsInPool
+    stage_unlocks: StageUnlocks

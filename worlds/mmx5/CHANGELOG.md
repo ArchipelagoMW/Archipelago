@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+**New option: `stage_unlocks`** (off by default) — the eight Maverick stages
+become progression. Exactly one is open at the start (the seed decides which)
+and each of the other seven needs its own "&lt;Boss&gt; Access Codes" item,
+shuffled into the multiworld like anything else.
+
+A locked stage still shows on the stage-select screen and the cursor still
+moves onto it; pressing confirm just does nothing until its codes arrive. The
+countdown, the Enigma/Shuttle/Zero Space entry and the whole endgame are
+untouched.
+
+**Client-side only — no disc change**, so it works on any already-patched disc.
+
+Implementation note: the hub turns a cursor slot into a stage id through an
+8-byte table at `0x800F5050` and then refuses to act on a zero
+(`beqz` at `0x800EFCA4`), so the entire in-game half is writing 0 over the
+slots you have not unlocked. That handler is the table's only reader in the
+whole hub module, so nothing else on the screen changes. The table is overlay
+data reloaded from disc on every hub entry, so the client re-asserts it each
+cycle and verifies an instruction anchor first — it never writes into whatever
+module occupies that address during a stage. One more wrinkle worth knowing:
+the store at `0x800EFC98` lands *before* the game's own zero test, so a blocked
+confirm parks 0 in `0x800D1C0C`; the client puts the hub's id back, since an
+in-hub save would otherwise commit that 0 to the memory card.
+
+Live-tested 2026-08-06: on a seed starting with Grizzly Slash, that stage
+entered normally and the other seven did nothing on confirm; sending Duff
+McWhalen Access Codes opened that stage immediately, without leaving the stage
+select.
+
 **New option: `secret_armors_in_pool`** (off by default) — puts Ultimate Armor
 and Black Zero into the item pool. In the base game both come from one hidden
 capsule in Zero Space, so you only ever see them at the very end; shuffled into
@@ -13,10 +42,14 @@ for anything — on a seed played as one character the other is dead weight. The
 Zero Space capsule still works normally, though receiving an armor makes it
 vanish, since the game hides a capsule whose armor you already hold.
 
-**Not yet live-tested.** One thing to confirm on the first run: whether Ultimate
-Armor needs more than `0x800D1C4B`. The capsule sets only that byte for X, but
-its despawn ladder also reads `0x800D1C4A & 8`, which may be a separate
-"has Ultimate" flag.
+Both live-tested 2026-08-06, and they arrive on different schedules. **Ultimate
+Armor shows up at your next stage entry**, not in the stage you are standing in
+when it arrives — the game decides which armor X wears as the stage loads.
+**Black Zero applies immediately**: Zero turns black on the spot.
+
+This also settles an open question from the build: `0x800D1C4B` alone is enough
+for Ultimate, and the `0x800D1C4A & 8` bit the Zero Space capsule's despawn
+ladder reads is not a second "has Ultimate" flag.
 
 **New option: `boss_hp_randomization`** (off by default) — randomizes how much
 HP bosses have: `weak` 40-80%, `regular` 70-130%, `strong` 120-200%, `chaotic`

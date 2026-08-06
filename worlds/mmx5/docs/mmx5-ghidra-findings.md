@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-05).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-06).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -851,3 +851,96 @@ table-driven result with every row carrying its provenance.
 `Reference/mmx5-placements.csv` (v5) is the durable artifact: every item record
 with stage, area, table, record index, proven type name, gate, coordinates and
 source chunk.
+
+## 9.14 Stage select FULLY MAPPED — the lock hook is one 8-byte table, `0x800F5050`
+
+Hub overlay, all addresses valid while the hub module (base `0x800EE970`) is
+resident. Derived statically from `Scripts/ramdump_hub_f22905.bin`; identical in
+`ramdump_partsmenu_f23591` / `launch_f46926` / `launchfired_f49125`.
+
+### The confirm handler `0x800EFBE8` — where a cursor slot becomes a stage id
+
+```
+800EFBE8  lhu   $a0, 0x4($a1)          ; a1 = 0x800C931C -> newly-pressed pad
+800EFBF0  andi  $v1, $a0, 0x840        ; confirm buttons
+800EFBF4  beqz  $v1, 800EFCE8          ;   not pressed -> cancel/other handling
+800EFBFC  lb    $a0, 0x28($v0)         ; $v0 = 0x800D1C00; CURSOR = 0x800D1C28
+800EFC04  bne   $a0, 8, 800EFC88       ;   slot 8 = the special entry
+          ; --- slot 8: chapter/ACT decide the destination ---
+          chapter(0x1D0F)==2 -> stage 0x09 (Enigma)
+          chapter        ==4 -> stage 0x0A (Shuttle)
+          ACT(0x1C79)    ==5 -> 0x10   ==6 -> 0x11   ==7 -> 0x12   else 0x0C
+800EFC88: addiu $v0, $v0, 0x5050       ; $v0 = 0x800F5050
+800EFC8C  addu  $v0, $a0, $v0
+800EFC90  lbu   $v1, 0x0($v0)          ; stageId = SLOT_TO_STAGE[cursor]
+800EFC98  sb    $v1, 0xc($s0)          ; 0x800D1C0C = stage id
+800EFC9C  lb    $v0, 0xc($s0)
+800EFCA4  beqz  $v0, 800EFD40          ; *** stage id 0 -> DO NOTHING ***
+          ; else: 0x1C0D = area, play confirm SFX, advance the screen state
+```
+
+**`0x800F5050` is an 8-byte slot -> stage-id table and the confirm handler is its
+only reader in the whole hub module** (verified by an exhaustive immediate scan
+of `0x800EE970..0x800FA800`). Contents, and the on-screen layout from the icon
+XY table `0x800F5108`:
+
+| slot | byte | stage | boss | icon XY |
+|---|---|---|---|---|
+| 0 | 01 | 1 | Grizzly Slash | 0x290,0x000 |
+| 1 | 05 | 5 | Squid Adler | 0x290,0x040 |
+| 2 | 06 | 6 | Izzy Glow | 0x290,0x070 |
+| 3 | 03 | 3 | Duff McWhalen | 0x290,0x0B0 |
+| 4 | 08 | 8 | The Skiver | 0x370,0x000 |
+| 5 | 07 | 7 | Axle the Red | 0x370,0x040 |
+| 6 | 02 | 2 | Dark Dizzy | 0x370,0x070 |
+| 7 | 04 | 4 | Mattrex | 0x370,0x0B0 |
+| 8 | — | chapter/ACT | Enigma / Shuttle / Zero Space / Sigma | 0x300,0x040 |
+
+Two columns of four plus a centre entry — the vanilla screen exactly.
+
+**Consequence: stage locking needs NO disc patch.** Write `0` over a slot's byte
+and the game's own `beqz` at `0x800EFCA4` makes confirming that icon a silent
+no-op; restore the real id to unlock. Client-side, same shape as MMX4's
+`ADDRESS_STAGE_ACCESS` (its `Client.py:1016` writes 9 bytes every poll). The
+table is overlay data reloaded from disc on every hub entry, so the client must
+re-assert it each time the hub becomes resident — and must tolerate `0x800D1C0C`
+reading **0** after a blocked confirm, since `0x800EFC98` stores before the test.
+
+### Other stage-select internals found on the way
+
+| Address | What |
+|---|---|
+| `0x800D1C28` | **stage-select cursor** (0..8). Moved by `0x800EF858`: left/right wrap within a row of 4, i.e. slot 0<->3 and 4<->7 |
+| `0x800F5FE0[0..8]` | per-slot **"icon already revealed"** flags for the fly-in animation — NOT access control. `0x800EF2AC` picks a random unrevealed slot every 4 frames |
+| `0x800F5FE9` | number of stage-select entries: **8**, or **9** when `ACT>=5` or chapter is 2 or 4. Written by `0x800F0DC0` (all hidden), `0x800F1914` (slots 0-3), `0x800F1B0C` (slots 4-7) — the three phases of the reveal |
+| `0x800F5108` | per-slot icon XY, 4 bytes/entry |
+| `0x800F5194` | per-slot **weapon-bit index** `[0,4,5,2,7,6,1,3]`; `0x800EF440` tests `0x800D1C4C >> bit & 1` and picks sprite table `0x800F50B0` (beaten) over `0x800F5058` (not beaten). The same table the Parts screen uses |
+| `0x800C9320` / `0x800C931C` | pad state / newly-pressed (the hub's `lui 0x800D; ... -0x6ce0` idiom) |
+
+**Correction to overlay-findings line 216** ("stage select shows NO visual beaten
+indicator, so no checkmark reader exists to patch"): a beaten reader **does**
+exist — `0x800EF440` — and it swaps the icon's sprite descriptor table. The live
+observation that suppressing Izzy's bit produced no visible change is still true
+as an observation; the two tables evidently differ subtly, or the sprite ids
+coincide. Do not cite that line as evidence that nothing reads `0x1C4C` here.
+
+### Correction to §9.6
+
+`0x800F26C0` is **not** a stage-select availability gate. Its enclosing function
+`0x800F2560` is the stage-select **HUD/decoration** object: index byte `obj+0x2`
+selects among 10 instances, index 0 spawns the other nine, and **indices 1 and 2
+are the two digits of the countdown clock** — `0x800F2814` divides
+`0x800D1CAC` by 216000 (60 fps x 3600) for hours, then splits tens and ones.
+Index 3 is the map marker gated on `ACT>=5 && !(0x1CCB & 0x80)`, i.e. shown once
+the colony has resolved *and* the shuttle launch did **not** succeed — a colony
+crash-site marker, not a Zero Space entry. Indices 5-9 are positioned from the
+table `0x800F54FC`. Keep §9.6's disassembly; discard its label.
+
+### Hub top-level menu (found alongside, unrelated to stage locking)
+
+`0x800EEDE0` builds a menu list at `0x800F6DF0` (cursor `0x800F6DF7`, count
+`0x800F6DFB`): entry 0 always, then entries 1/3/2 on bits 0/2/1 of `0x800D1C4A`,
+entry 5 when `ACT>=5` or the launch succeeded, entry 4 on bit 3. `0x800F111C`
+commits `list[cursor]` to `0x800D1C2A`, which the Parts (`0x800F3E30`) and launch
+screens read. `0x800D1C29` gates all three list builders and appears to be a
+screen-mode flag.

@@ -73,6 +73,16 @@ STAGE_TANK = {
     FIREFLY: EX_TANK,
 }
 
+# Stage access items (option-gated). The lock is client-side: the hub's
+# slot -> stage-id table at 0x800F5050 gets a 0 written over any stage you do
+# not hold the codes for, and the game's own `stage id == 0 -> do nothing`
+# branch at 0x800EFCA4 swallows the confirm. See ghidra-findings §9.14.
+def access_item(stage: str) -> str:
+    return f"{stage} Access Codes"
+
+
+ACCESS_ITEMS = [access_item(s) for s in STAGES]
+
 # Launcher parts (spec item 4 / overlay-findings §11): no vanilla storage
 # exists (parts are the kill bits) - these are AP-only items the client
 # turns into launch-score sourcing. 4 + 4; generic names on purpose.

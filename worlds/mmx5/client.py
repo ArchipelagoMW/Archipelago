@@ -111,6 +111,38 @@ BOSS_HP_BANDS = {
     3: (1.20, 2.00),    # strong
     4: (0.25, 2.50),    # chaotic
 }
+# ---- Stage unlocks -------------------------------------------------------
+# The hub overlay turns a stage-select cursor slot into a stage id through an
+# 8-byte table, then refuses to act on a zero:
+#
+#   800EFC88  addiu $v0, $v0, 0x5050    ; $v0 = 0x800F5050
+#   800EFC90  lbu   $v1, 0x0($v0)       ; stageId = SLOT_TO_STAGE[cursor]
+#   800EFC98  sb    $v1, 0xc($s0)       ; 0x800D1C0C = stage id
+#   800EFCA4  beqz  $v0, 800EFD40       ; *** id 0 -> do nothing ***
+#
+# That `beqz` is the whole feature. Zero a slot and confirming its icon is a
+# silent no-op; write the real id back and it works again. An exhaustive
+# immediate scan of the hub module found this handler to be the table's ONLY
+# reader, so zeroing a slot changes nothing else on screen. Details, including
+# the slot -> boss layout, in docs/mmx5-ghidra-findings.md §9.14.
+SLOT_TABLE_ADDR = 0x0F5050
+# slot order is the screen's: four icons down the left column, four down the
+# right. Slot 8 (the Enigma / Shuttle / Zero Space / Sigma entry) does NOT go
+# through this table - it resolves from chapter and ACT - and stays vanilla.
+SLOT_TO_STAGE = (1, 5, 6, 3, 8, 7, 2, 4)
+# Anchor word proving the hub overlay is the resident module before we write
+# into its data: `addiu $v0, $v0, 0x5050` at 0x800EFC88. Every other overlay
+# maps different code there, and the table is reloaded from disc on each hub
+# entry, so the client must re-assert the lock every time rather than once.
+SLOT_TABLE_ANCHOR_ADDR = 0x0EFC88
+SLOT_TABLE_ANCHOR = bytes.fromhex("50504224")   # 0x24425050 LE
+# 0x800EFC98 stores the id BEFORE the zero test, so a blocked confirm leaves
+# 0x800D1C0C reading 0 while the player sits in the hub - a value vanilla never
+# writes there, and one that would be committed to the memory card by an
+# in-hub save. The client puts the hub's own id back; HUB_STAGE_ID is only the
+# fallback for "we have not seen a real one yet" (0x0D in every hub capture).
+HUB_STAGE_ID = 0x0D
+
 # Story ACT value Training mode stamps into the save struct (live-captured
 # 2026-08-03). The campaign uses a small range - 1 at intro victory, 5 at
 # Eurasia, 2 read off a real mid-game save - so 0x0A is out of band and
@@ -141,6 +173,18 @@ OFF_SETFLAGS = 0x0D1C4A - SAVE_BASE
 # stage-load character init mirrors 0x1C4B into the live player struct
 # (`lbu 0x4B(ctrl); sb 0x14A(player)`), so a grant applies at the next stage
 # load exactly like the weapons byte.
+#
+# Both armors LIVE-CONFIRMED 2026-08-06, and they apply on DIFFERENT schedules:
+#   * Ultimate (0x1C4B) needs a stage load. X wore it on the entry AFTER the
+#     grant landed, not the stage he was standing in - exactly what the mirror
+#     above predicts, since the copy into the player struct happens once at
+#     character init.
+#   * Black Zero (0x1C4A bit 4) applied IMMEDIATELY - Zero turned black with no
+#     further stage entry. No mirror instruction was ever found for this bit,
+#     so its consumer evidently reads the save byte live. [INFER on mechanism;
+#     the timing itself is observed.]
+# Also settled: writing ONLY 0x1C4B is enough for Ultimate. The capsule's
+# despawn ladder reads `0x1C4A & 8`, but that is not a second ownership flag.
 OFF_ULTIMATE = 0x0D1C4B - SAVE_BASE
 ULTIMATE_ON = 1
 BLACK_ZERO_BIT = 0x10           # into 0x1C4A (OFF_SETFLAGS)
@@ -423,6 +467,11 @@ class MMX5Client(BizHawkClient):
         self.armor_workaround_warned = False
         self.armor_setflags_pin = None
         self.tanks_withheld = 0         # bits held back this stage visit
+        # Stage unlocks: last slot table we wrote, the set of stages we have
+        # announced as unlocked, and the last real hub stage id seen.
+        self.slot_table_written = None
+        self.stages_unlocked_logged = set()
+        self.hub_stage_id = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -598,6 +647,58 @@ class MMX5Client(BizHawkClient):
             # same stage id (re-entering a stage recomputes 0x1CA2).
             self.boss_hp_stage = None
 
+    async def _stage_unlocks_apply(self, ctx, cur_stage_id: int) -> None:
+        """Zero the hub's slot -> stage-id entries for stages not yet unlocked.
+
+        Re-asserted every cycle rather than once: the table is overlay data,
+        reloaded from disc on every hub entry, and a savestate can swap it under
+        us too. Guarded by an instruction anchor so we never write into whatever
+        module happens to occupy that address in a stage.
+        """
+        if not (ctx.slot_data or {}).get("stage_unlocks", 0):
+            return
+        try:
+            anchor, table = await bizhawk.read(ctx.bizhawk_ctx, [
+                (SLOT_TABLE_ANCHOR_ADDR, len(SLOT_TABLE_ANCHOR), "MainRAM"),
+                (SLOT_TABLE_ADDR, len(SLOT_TO_STAGE), "MainRAM"),
+            ])
+        except bizhawk.RequestFailedError:
+            return
+        if anchor != SLOT_TABLE_ANCHOR:
+            # Not in the hub - forget what we wrote so the next hub entry is
+            # treated as fresh (the reload will have restored vanilla bytes).
+            self.slot_table_written = None
+            return
+
+        unlocked = {name for name in
+                    (ctx.item_names.lookup_in_game(item.item)
+                     for item in ctx.items_received)
+                    if name in names.ACCESS_ITEMS}
+        want = bytes(sid if names.access_item(STAGE_ID_TO_NAME[sid]) in unlocked
+                     else 0
+                     for sid in SLOT_TO_STAGE)
+        if bytes(table) != want:
+            await bizhawk.write(ctx.bizhawk_ctx,
+                                [(SLOT_TABLE_ADDR, list(want), "MainRAM")])
+        if self.slot_table_written != want:
+            self.slot_table_written = want
+            newly = unlocked - self.stages_unlocked_logged
+            if newly:
+                self.stages_unlocked_logged |= newly
+                logger.info(f"MMX5: stages unlocked ({len(unlocked)}/8): "
+                            + ", ".join(sorted(
+                                n.removesuffix(" Access Codes") for n in unlocked)))
+
+        # A blocked confirm leaves 0x800D1C0C = 0 (the store at 0x800EFC98
+        # happens before the game's own zero test). Vanilla never leaves 0
+        # there, and an in-hub save would commit it to the memory card, so put
+        # the hub's own id back.
+        if cur_stage_id:
+            self.hub_stage_id = cur_stage_id
+        else:
+            await bizhawk.write(ctx.bizhawk_ctx, [(
+                0x0D1C0C, [self.hub_stage_id or HUB_STAGE_ID], "MainRAM")])
+
     @staticmethod
     def _classify_stub_probe(probe: bytes):
         if probe == STUB_PROBE_STUBBED:
@@ -747,6 +848,15 @@ class MMX5Client(BizHawkClient):
                 if self.stamp_warned:
                     self.stamp_warned = False
                     logger.debug("MMX5: save stamp OK - resuming")
+
+            # ---- Stage unlocks: hold locked slots at 0 in the hub's
+            # slot -> stage-id table. AFTER the stamp gate on purpose - locking
+            # is the inverse of granting, so a save belonging to another seed
+            # should not have this seed's locks imposed on it either. Safe to
+            # skip: the table is overlay data and reloads vanilla on the next
+            # hub entry, so bailing out never leaves a stage stuck shut. ----
+            if save_sane:
+                await self._stage_unlocks_apply(ctx, cur_stage_id)
 
             # ---- Check detection ----
             new_checks = []

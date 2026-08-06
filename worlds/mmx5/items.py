@@ -56,6 +56,13 @@ item_table: dict[str, ItemData] = {
     names.ULTIMATE_ARMOR: ItemData(BASE_ID + 28, ItemClassification.useful, 0),
     names.BLACK_ZERO:     ItemData(BASE_ID + 29, ItemClassification.useful, 0),
 
+    # Stage access (option-gated, count 0 here). Progression whenever they
+    # exist - with the option on, every location in a stage sits behind its
+    # codes, so a seed is only beatable if fill respects them. One is
+    # precollected as the starting stage; the other seven go in the pool.
+    **{name: ItemData(BASE_ID + 30 + i, ItemClassification.progression, 0)
+       for i, name in enumerate(names.ACCESS_ITEMS)},
+
     # filler
     names.SMALL_ENERGY: ItemData(BASE_ID + 40, ItemClassification.filler, 0),
 }
@@ -75,4 +82,5 @@ item_groups = {
     "Tanks": {names.SUB_TANK, names.W_TANK, names.EX_TANK},
     "Launcher Parts": {names.ENIGMA_PART, names.SHUTTLE_PART},
     "Secret Armors": {names.ULTIMATE_ARMOR, names.BLACK_ZERO},
+    "Access Codes": set(names.ACCESS_ITEMS),
 }

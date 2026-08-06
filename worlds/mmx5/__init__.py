@@ -77,7 +77,14 @@ class MMX5World(World):
     # development checkout's version string.
     required_client_version = (0, 6, 7)
 
+    # Which stage is open at the start under stage_unlocks. Chosen in
+    # generate_early so create_items and set_rules see the same answer.
+    starting_stage: str | None = None
+
     def generate_early(self) -> None:
+        if self.options.stage_unlocks:
+            self.starting_stage = self.random.choice(names.STAGES)
+
         # vanilla launch odds + the launch goal is a genuine gamble with the
         # whole run: that goal needs a SUCCESSFUL launch, there are only two
         # attempts (Enigma, then Shuttle), and even a full part set tops out at
@@ -133,7 +140,8 @@ class MMX5World(World):
             stage_locations[names.dna_part_location(stage)] = \
                 location_table[names.dna_part_location(stage)]
             region.add_locations(stage_locations, MMX5Location)
-            # All 8 stages are open from the start in X5.
+            # All 8 stages are open from the start in X5; stage_unlocks puts
+            # each entrance behind its Access Codes item (rule in set_rules).
             stage_select.connect(region)
 
         if self.options.pickupsanity:
@@ -171,6 +179,18 @@ class MMX5World(World):
             pool.append(self.create_item(names.ULTIMATE_ARMOR))
             pool.append(self.create_item(names.BLACK_ZERO))
 
+        # Stage access: the starting stage's codes are precollected (the player
+        # holds them from frame one), the other seven are shuffled. Precollected
+        # deliberately rather than placed locally - the starting stage must be
+        # open before ANY location is reachable, so it cannot itself be a check.
+        if self.options.stage_unlocks:
+            for stage in names.STAGES:
+                item = self.create_item(names.access_item(stage))
+                if stage == self.starting_stage:
+                    self.multiworld.push_precollected(item)
+                else:
+                    pool.append(item)
+
         # Top up with filler to match unfilled locations.
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
         while len(pool) < unfilled:
@@ -193,6 +213,18 @@ class MMX5World(World):
         # all, so it adds no logical constraint here.
         self.multiworld.get_entrance("Stage Select -> Sigma Stages", self.player).access_rule = \
             lambda state: state.has_all(item_groups["Weapons"], self.player)
+
+        # Stage access. Enforced in-game by the client zeroing the hub's
+        # slot -> stage-id table (0x800F5050), which makes confirming a locked
+        # icon a no-op; here it is only the logic half. Every location in a
+        # stage lives in that stage's region, so one entrance rule covers the
+        # boss, heart, capsule, tank, DNA and pickupsanity checks at once.
+        if self.options.stage_unlocks:
+            for stage in names.STAGES:
+                codes = names.access_item(stage)
+                self.multiworld.get_entrance(f"Stage Select -> {stage}",
+                                             self.player).access_rule = \
+                    lambda state, codes=codes: state.has(codes, self.player)
 
         player = self.player
         falcon = names.ARMOR_PARTS[0:4]
@@ -286,4 +318,5 @@ class MMX5World(World):
             "launch_odds": self.options.launch_odds.value,
             "pickupsanity": self.options.pickupsanity.value,
             "boss_hp_randomization": self.options.boss_hp_randomization.value,
+            "stage_unlocks": self.options.stage_unlocks.value,
         }
