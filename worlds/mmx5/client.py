@@ -482,6 +482,7 @@ class MMX5Client(BizHawkClient):
         self.boss_hp_stage = None
         self.boss_hp_logged = set()
         self.stamp_warned = False
+        self.unpatched_warned = False
         self.victory_sent = False
         # Highest Maverick kill count seen while the save read SANE. The
         # all_mavericks goal needs this at the ENDING, where the save-struct
@@ -926,6 +927,38 @@ class MMX5Client(BizHawkClient):
             if save_sane:
                 await self._stage_unlocks_apply(ctx, cur_stage_id)
 
+            # ---- UNPATCHED DISC: hold everything ---------------------------
+            # BEFORE check detection on purpose, so this holds checks as well
+            # as grants. The old "hybrid mode" wrote AP-granted weapons into
+            # 0x1C4C, which is the VANILLA kill record - the same byte the 24
+            # boss / DNA Reward / DNA Part checks read as ground truth. Every
+            # weapon the multiworld sent you therefore marked its boss
+            # defeated and fired three checks, releasing items to everyone
+            # else. Reported by a tester 2026-08-06 ("it sends all those checks
+            # before I even started playing") and reproduced exactly: 8 weapons
+            # received, zero bosses beaten, 24 checks sent.
+            #
+            # Detection is gated too, not just grants, because a save already
+            # poisoned by a hybrid session still holds those bits and would
+            # fire them again on the next connect.
+            #
+            # Hybrid dates from before the disc patch existed; the module
+            # header always flagged it as interim. Every supported flow
+            # produces a patched disc - the .apmmx5 IS the delivery mechanism -
+            # so this is unreachable in correct use and corrupts a multiworld
+            # in incorrect use.
+            if self.ap_patched is False:
+                if not self.unpatched_warned:
+                    self.unpatched_warned = True
+                    logger.error(
+                        "MMX5: this disc is NOT AP-patched - checks and items are "
+                        "HELD. On an unpatched disc the weapons you receive get "
+                        "written into the byte the game uses to record boss kills, "
+                        "which would send false checks to everyone in your "
+                        "multiworld. Patch your disc: open your .apmmx5 with the "
+                        "Archipelago Launcher, then load the .cue it produces.")
+                return
+
             # ---- Check detection ----
             new_checks = []
 
@@ -1254,6 +1287,7 @@ class MMX5Client(BizHawkClient):
                 if self.ap_patched is None:
                     logger.warning("MMX5: disc mode unresolved in-game - grants held")
                     return
+
 
                 # ---- Tank-pickup protection (discs WITHOUT the tank fix) ----
                 # The item init deletes any pickup you already own, so an

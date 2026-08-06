@@ -1,5 +1,39 @@
 # Mega Man X5 apworld changelog
 
+## 0.3.1 — 2026-08-06
+
+**Fixes a bug that could corrupt a multiworld for everyone in it. Update before
+you play, and check your disc is actually patched.**
+
+**If you play on a disc you never patched, the client used to mark every boss
+defeated as soon as the weapons arrived.** It wrote the weapons you received
+into the same byte the game uses to record boss kills — which is also the byte
+the client reads to decide what you have beaten. So each weapon sent to you
+completed that boss's three checks (Boss Defeated, DNA Reward, DNA Part)
+without you fighting anything. Eight weapons meant 24 false checks, and in a
+multiworld those checks released items to everybody else.
+
+Reported by a tester on 2026-08-06 whose world sent items to seven other
+players before they had started; reproduced exactly. The first guess was a
+reused save — it was not, and a brand new save does this every time on an
+unpatched disc.
+
+**An unpatched disc now holds all checks and items and tells you why**, instead
+of playing on and quietly breaking things. If you see that message: open your
+`.apmmx5` with the Archipelago Launcher and load the `.cue` it produces.
+
+This also covers a save already spoiled by an earlier session — the old bug
+leaves those bits in your save file, and they would otherwise fire again the
+next time you connected.
+
+Nothing changes for a correctly patched disc. Real boss kills still send their
+checks exactly as before.
+
+Why it lasted this long: the "unpatched disc" mode predates the disc patch
+entirely and the code called it interim. Nothing removed it once the patch
+became the only supported route — and no test could reach it, because the test
+harness always pretended the disc was patched. Both are fixed.
+
 ## 0.3.0 — 2026-08-06
 
 Seven new options, every one exercised in a live game before release.

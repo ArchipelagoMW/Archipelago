@@ -96,10 +96,16 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                       ctx: FakeContext | None = None,
                       ring2: bytes | None = None,
                       hub_resident: bool = False,
-                      slot_table: bytes | None = None) -> FakeContext:
+                      slot_table: bytes | None = None,
+                      patch_probe: bytes | None = None) -> FakeContext:
     """`hub_resident` makes the stage-select slot table's instruction anchor
     read as present, so the stage-unlock writer engages; `slot_table` seeds what
-    that table currently holds (defaults to the vanilla ids)."""
+    that table currently holds (defaults to the vanilla ids).
+
+    `patch_probe` overrides the AP-patch probe reply. It defaults to PATCHED,
+    which is what normal play looks like - but that default also meant no test
+    could reach the unpatched-disc path, and a real bug lived there unnoticed
+    until a tester hit it (see test_unpatched_disc.py)."""
     ctx = ctx or FakeContext()
     client = client or MMX5Client()
     ring = bytes(mmx5_client.RING_SLOTS * 4)
@@ -113,7 +119,8 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
     # cycle and the probe read are both three-wide, so counting would confuse
     # them (and silently did, until a tank test caught it).
     PROBE_REPLY = {
-        mmx5_client.PATCH_PROBE_ADDR: mmx5_client.PATCH_PROBE_PATCHED,
+        mmx5_client.PATCH_PROBE_ADDR: (patch_probe if patch_probe is not None
+                                       else mmx5_client.PATCH_PROBE_PATCHED),
         mmx5_client.STUB_PROBE_ADDR: mmx5_client.STUB_PROBE_STUBBED,
         mmx5_client.TANK_FIX_PROBE_ADDR: (
             mmx5_client.TANK_FIX_PATCHED if getattr(client, "tank_fix_present", None)
