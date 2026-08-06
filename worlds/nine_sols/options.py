@@ -109,8 +109,8 @@ class LogicDifficulty(Choice):
     - "Pseudo Air Dashes" using either a talisman ("T-dash") or Charged Strike ("CS-dash")
     - Using a Cloud Piercer S (or X) arrow to break Charged Strike barriers without Charged Strike
     - Using a Thunder Buster arrow (any level) to break one-way barriers from the "wrong" side
-    - "Bow Hover": Press and hold jump, shoot the bow immediately (during the first half of Yi's upward movement) with
-    any arrow equipped, and then simply never let go of the jump button until you're done hovering.
+    - "Bow Hover" glitch: Press and hold jump, shoot the bow immediately (during the first half of Yi's upward movement)
+    with any arrow equipped, and then simply never let go of the jump button until you're done hovering.
     - Using the Swift Runner skill to jump with extra horizontal momentum
 
     `ledge_storage` adds the following LS-related glitches to logic:
