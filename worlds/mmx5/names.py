@@ -73,6 +73,53 @@ STAGE_TANK = {
     FIREFLY: EX_TANK,
 }
 
+# ---- DNA Parts ----------------------------------------------------------
+# The 16 equippable Parts, stored as bits 2..17 of the u32 0x800D1C84. Bit
+# numbers were read from the game itself (Parts screen with every bit forced
+# on, 2026-08-06) rather than from the web, which returns Mega Man X6 Part
+# facts for X5 queries constantly. Full provenance: ghidra-findings §9.15.
+#
+# Each Maverick offers TWO Parts and you get exactly one, decided by whether
+# you pick Life+ or Energy+ at Alia's prompt - so vanilla yields 8 of the 16
+# per playthrough. PART_PAIRS keeps that pairing; the shuffle picks one from
+# each pair so a seed's Part economy matches the base game's.
+SHOCK_BUFFER = "Shock Buffer"
+HYPER_DASH = "Hyper Dash"
+SUPER_RECOVER = "Super Recover"
+W_ENERGY_SAVER = "W-Energy Saver"
+QUICK_CHARGE = "Quick Charge"
+Z_SABER_EXTEND = "Z-Saber Extend"
+BURST_SHOTS = "Burst Shots"
+SHOT_ERASER = "Shot Eraser"
+ANTI_VIRUS_GUARD = "Anti-Virus Guard"
+VIRUS_BUSTER = "Virus Buster"
+JUMPER = "Jumper"
+SPEEDSTER = "Speedster"
+SPEED_SHOT = "Speed Shot"
+BUSTER_PLUS = "Buster Plus"
+ULTIMATE_BUSTER = "Ultimate Buster"
+Z_SABER_PLUS = "Z-Saber Plus"
+
+# boss -> (Life+ Part, Energy+ Part)
+PART_PAIRS = {
+    GRIZZLY:  (SHOCK_BUFFER, HYPER_DASH),
+    WHALE:    (SUPER_RECOVER, W_ENERGY_SAVER),
+    KRAKEN:   (QUICK_CHARGE, Z_SABER_EXTEND),
+    FIREFLY:  (BURST_SHOTS, SHOT_ERASER),
+    NECROBAT: (ANTI_VIRUS_GUARD, VIRUS_BUSTER),
+    PEGASUS:  (JUMPER, SPEEDSTER),
+    DINOREX:  (SPEED_SHOT, BUSTER_PLUS),
+    ROSERED:  (ULTIMATE_BUSTER, Z_SABER_PLUS),
+}
+DNA_PARTS = [p for pair in PART_PAIRS.values() for p in pair]
+
+# Six Parts only do anything for one character. Never progression: a run
+# played entirely as the other character must not be stranded behind one.
+# Note bits 11-16 are exactly these six - Capcom grouped them, which is what
+# corroborates the name/bit mapping in §9.15.
+X_ONLY_PARTS = {BURST_SHOTS, ULTIMATE_BUSTER, QUICK_CHARGE}
+ZERO_ONLY_PARTS = {Z_SABER_PLUS, Z_SABER_EXTEND, SHOT_ERASER}
+
 # Stage access items (option-gated). The lock is client-side: the hub's
 # slot -> stage-id table at 0x800F5050 gets a 0 written over any stage you do
 # not hold the codes for, and the game's own `stage id == 0 -> do nothing`

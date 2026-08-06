@@ -2,6 +2,45 @@
 
 ## Unreleased
 
+**New option: `dna_parts_in_pool`** (off by default) — the equippable DNA Parts
+become multiworld items.
+
+Mega Man X5 has 16 Parts but a playthrough only ever yields 8: each Maverick
+offers two, and Alia's Life+ / Energy+ prompt makes you give up the other
+permanently. With this on, the seed picks one Part from each pair and shuffles
+those 8, so which Part you end up with no longer depends on which prompt you
+answered. The Parts the game would have handed you are suppressed — Parts
+arrive only from the multiworld. The "DNA Part" locations are unchanged and
+still check on the boss kill; that check was always there, only its reward was
+static.
+
+Six Parts do nothing for the wrong character (Burst Shots, Ultimate Buster and
+Quick Charge are X's; Z-Saber Plus, Z-Saber Extend and Shot Eraser are Zero's),
+so none is ever required for anything.
+
+**Client-side only — no disc change.**
+
+**Generation now refuses option sets that do not fit.** Every item needs a
+location, and the world had no check on that: `dna_parts_in_pool` +
+`stage_unlocks` + `secret_armors_in_pool` produced 53 items for 48 locations,
+generated without complaint, and silently dropped Ultimate Armor and a DNA
+Part. That combination now fails at generation with a message naming the fix
+(usually `pickupsanity`, which adds 32 locations). If you hit it, nothing was
+wrong with your seed before — it was quietly losing items.
+
+Live-tested 2026-08-06: with all 16 Parts force-granted by a research
+script, the client cleared them continuously (that is the suppression,
+visible in its log), and `Hyper Dash` sent from the multiworld appeared on
+the Parts screen as the only Part held.
+
+Implementation note: Parts live in bits 2..17 of the u32 `0x800D1C84`. The
+name-to-bit map was read out of the game itself, by forcing every bit on and
+reading the Parts screen, because X5 stores UI text as font-tile indices and
+web sources return Mega Man X6 Part facts for X5 queries constantly. Full table
+in `worlds/mmx5/docs/mmx5-ghidra-findings.md` §9.15. One write does both halves
+of the feature each cycle: OR in what the player received, clear what the game
+granted.
+
 **New option: `endgame_checks` (ON by default)** — clearing a Zero Space stage
 now sends a check. Three locations: Zero Space 1, Zero Space 2 and the X vs
 Zero fight. Sigma is not one, because beating him is the goal.

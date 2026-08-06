@@ -174,6 +174,21 @@ ENDGAME_CLEAR_ACT = {
     names.ZERO_SPACE_2: 7,
     names.ZERO_SPACE_X_VS_ZERO: 8,
 }
+# ---- DNA Parts -----------------------------------------------------------
+# u32 bitfield, Parts in bits 2..17. Bit numbers read off the game's own Parts
+# screen with every bit forced on (2026-08-06); provenance and the full table
+# in docs/mmx5-ghidra-findings.md §9.15. Corroborating pattern: bits 11-16 are
+# exactly the six character-locked Parts, X's three then Zero's three.
+OFF_PARTS = 0x0D1C84 - SAVE_BASE        # u32
+PART_TO_BIT = {
+    names.SPEEDSTER: 2, names.JUMPER: 3, names.HYPER_DASH: 4,
+    names.W_ENERGY_SAVER: 5, names.SUPER_RECOVER: 6,
+    names.ANTI_VIRUS_GUARD: 7, names.BUSTER_PLUS: 8, names.SPEED_SHOT: 9,
+    names.VIRUS_BUSTER: 10, names.BURST_SHOTS: 11, names.ULTIMATE_BUSTER: 12,
+    names.QUICK_CHARGE: 13, names.Z_SABER_PLUS: 14, names.Z_SABER_EXTEND: 15,
+    names.SHOT_ERASER: 16, names.SHOCK_BUFFER: 17,
+}
+PARTS_MASK = 0x0003FFFC                 # bits 2..17
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
 OFF_ARMOR = 0x0D1CA1 - SAVE_BASE       # armor parts byte (Falcon 0-3, Gaea 4-7)
@@ -875,6 +890,31 @@ class MMX5Client(BizHawkClient):
                 if self.stamp_warned:
                     self.stamp_warned = False
                     logger.debug("MMX5: save stamp OK - resuming")
+
+            # ---- DNA Parts: the AP-granted set, and nothing else -----------
+            # One write covers both halves of the feature. Parts the player
+            # received are OR-ed in; Parts the GAME granted are cleared, which
+            # is the suppression - X5 delivers a Part at the results screen
+            # after a level-8+ Maverick kill, and with this option on that
+            # reward comes from the multiworld instead.
+            #
+            # Only bits 2..17 are touched. The rest of the word has no known
+            # meaning, and assuming it is spare is exactly the kind of guess
+            # this project has been bitten by.
+            if save_sane and (ctx.slot_data or {}).get("dna_parts_in_pool", 0):
+                want = 0
+                for item in ctx.items_received:
+                    bit = PART_TO_BIT.get(ctx.item_names.lookup_in_game(item.item))
+                    if bit is not None:
+                        want |= 1 << bit
+                cur = int.from_bytes(save[OFF_PARTS:OFF_PARTS + 4], "little")
+                merged = (cur & ~PARTS_MASK) | want
+                if merged != cur:
+                    await bizhawk.write(ctx.bizhawk_ctx, [(
+                        SAVE_BASE + OFF_PARTS,
+                        list(merged.to_bytes(4, "little")), "MainRAM")])
+                    if (cur & PARTS_MASK) & ~want:
+                        logger.debug("MMX5: suppressed a vanilla DNA Part grant")
 
             # ---- Stage unlocks: hold locked slots at 0 in the hub's
             # slot -> stage-id table. AFTER the stamp gate on purpose - locking

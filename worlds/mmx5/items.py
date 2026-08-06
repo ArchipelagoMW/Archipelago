@@ -63,6 +63,13 @@ item_table: dict[str, ItemData] = {
     **{name: ItemData(BASE_ID + 30 + i, ItemClassification.progression, 0)
        for i, name in enumerate(names.ACCESS_ITEMS)},
 
+    # DNA Parts (option-gated, count 0 here). `useful`, never progression:
+    # six of the sixteen only work for one character, so requiring any of them
+    # could strand a single-character run - same rule as the secret armors.
+    # Ids follow names.DNA_PARTS order, which is PART_PAIRS order. Append only.
+    **{name: ItemData(BASE_ID + 50 + i, ItemClassification.useful, 0)
+       for i, name in enumerate(names.DNA_PARTS)},
+
     # filler
     names.SMALL_ENERGY: ItemData(BASE_ID + 40, ItemClassification.filler, 0),
 }
@@ -83,4 +90,5 @@ item_groups = {
     "Launcher Parts": {names.ENIGMA_PART, names.SHUTTLE_PART},
     "Secret Armors": {names.ULTIMATE_ARMOR, names.BLACK_ZERO},
     "Access Codes": set(names.ACCESS_ITEMS),
+    "DNA Parts": set(names.DNA_PARTS),
 }

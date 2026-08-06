@@ -944,3 +944,45 @@ entry 5 when `ACT>=5` or the launch succeeded, entry 4 on bit 3. `0x800F111C`
 commits `list[cursor]` to `0x800D1C2A`, which the Parts (`0x800F3E30`) and launch
 screens read. `0x800D1C29` gates all three list builders and appears to be a
 screen-mode flag.
+
+## 9.15 DNA Parts — full name/bit map, read from the game
+
+The 16 Parts of `0x800D1C84` (bits 2..17), paired to the mask table
+`0x800F51F0` by reading the Parts screen with every bit forced on
+(`Scripts/mmx5_parts_reveal.lua`, 2026-08-06). Names are the US localization
+read off the screen, NOT from the web - X5 stores UI text as font-tile
+indices, and web sources return Mega Man X6 Part facts for X5 queries
+constantly.
+
+| bit | slot | Part | Boss | Choice |
+|---|---|---|---|---|
+|  2 |  2 | Speedster        | Spiral Pegasus (The Skiver)   | Energy+ |
+|  3 |  3 | Jumper           | Spiral Pegasus (The Skiver)   | Life+ |
+|  4 |  4 | Hyper Dash       | Crescent Grizzly (Grizzly Slash) | Energy+ |
+|  5 |  5 | W-Energy Saver   | Tidal Whale (Duff McWhalen)   | Energy+ |
+|  6 |  6 | Super Recover    | Tidal Whale (Duff McWhalen)   | Life+ |
+|  7 |  7 | Anti-Virus Guard | Dark Necrobat (Dark Dizzy)    | Life+ |
+|  8 |  8 | Buster Plus      | Burn Dinorex (Mattrex)        | Energy+ |
+|  9 |  9 | Speed Shot       | Burn Dinorex (Mattrex)        | Life+ |
+| 10 |  1 | Virus Buster     | Dark Necrobat (Dark Dizzy)    | Energy+ |
+| 11 | 10 | Burst Shots      | Shining Firefly (Izzy Glow)   | Life+ **X only** |
+| 12 | 11 | Ultimate Buster  | Spike Rosered (Axle the Red)  | Life+ **X only** |
+| 13 | 12 | Quick Charge     | Volt Kraken (Squid Adler)     | Life+ **X only** |
+| 14 | 13 | Z-Saber Plus     | Spike Rosered (Axle the Red)  | Energy+ **Zero only** |
+| 15 | 14 | Z-Saber Extend   | Volt Kraken (Squid Adler)     | Energy+ **Zero only** |
+| 16 | 15 | Shot Eraser      | Shining Firefly (Izzy Glow)   | Energy+ **Zero only** |
+| 17 |  0 | Shock Buffer     | Crescent Grizzly (Grizzly Slash) | Life+ |
+
+**Corroboration that this is the real mapping and not a lucky alignment:**
+bits 11-16 are exactly the six character-locked Parts, X's three at 11-13 and
+Zero's three at 14-16. That grouping falls out of the data; nothing in the
+reading procedure would have produced it by accident.
+
+**Vanilla economy (Ivor, 2026-08-06):** 16 Parts exist, but only **8 are
+obtainable per playthrough** - each Maverick offers one of its two depending
+on whether you pick Life+ or Energy+ at Alia's DNA prompt. A boss's two Parts
+are NOT adjacent on the screen (Grizzly's are slots 0 and 4), so screen order
+carries no boss grouping.
+
+**Screen slot order is not bit order.** The mask table is the authority; slot
+is only how the Parts menu lays them out.

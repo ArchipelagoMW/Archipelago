@@ -11,6 +11,7 @@ from typing import Any, ClassVar
 
 import settings
 from BaseClasses import ItemClassification, Region, Tutorial
+from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 
 from . import names, pickups
@@ -80,10 +81,55 @@ class MMX5World(World):
     # Which stage is open at the start under stage_unlocks. Chosen in
     # generate_early so create_items and set_rules see the same answer.
     starting_stage: str | None = None
+    # Which Part of each boss's Life+/Energy+ pair this seed uses.
+    chosen_parts: list[str] = []
+
+    # Item/location arithmetic, kept here so generate_early can check capacity
+    # before any of it is built. Every item needs a location; overshooting used
+    # to pass SILENTLY and lose items - parts + stage_unlocks + secret_armors
+    # generated "fine" with 53 items for 48 locations and simply dropped
+    # Ultimate Armor and a DNA Part. The check has to live in generate_early
+    # because Generate.py retries a world that raises later, so an error from
+    # create_items spins instead of surfacing.
+    BASE_ITEMS = 36
+    BASE_LOCATIONS = 45
+
+    def _capacity(self) -> tuple[int, int]:
+        items = self.BASE_ITEMS
+        locations = self.BASE_LOCATIONS
+        if self.options.dna_parts_in_pool:
+            items += len(names.PART_PAIRS)          # one per Life+/Energy+ pair
+        if self.options.stage_unlocks:
+            items += len(names.STAGES) - 1          # one is precollected
+        if self.options.secret_armors_in_pool:
+            items += 2
+        if self.options.endgame_checks:
+            locations += len(names.ENDGAME_STAGES)
+        if self.options.pickupsanity:
+            locations += len(pickups.PICKUPS)
+        return items, locations
 
     def generate_early(self) -> None:
+        items, locations = self._capacity()
+        if items > locations:
+            raise OptionError(
+                f"Mega Man X5 ({self.player_name}): these options need "
+                f"{items} items but the seed only has {locations} locations, "
+                f"so {items - locations} would be silently dropped. Add "
+                f"locations with `pickupsanity` (+{len(pickups.PICKUPS)}) or "
+                f"`endgame_checks` (+{len(names.ENDGAME_STAGES)}), or turn off "
+                f"one of `dna_parts_in_pool` (+{len(names.PART_PAIRS)}), "
+                f"`stage_unlocks` (+{len(names.STAGES) - 1}) or "
+                f"`secret_armors_in_pool` (+2).")
+
         if self.options.stage_unlocks:
             self.starting_stage = self.random.choice(names.STAGES)
+        if self.options.dna_parts_in_pool:
+            # One per pair, mirroring vanilla's 8-of-16 economy. Picking any 8
+            # of the 16 instead would let a seed hold both halves of a boss's
+            # pair, which the base game never allows.
+            self.chosen_parts = [self.random.choice(pair)
+                                 for pair in names.PART_PAIRS.values()]
 
         # vanilla launch odds + the launch goal is a genuine gamble with the
         # whole run: that goal needs a SUCCESSFUL launch, there are only two
@@ -189,6 +235,14 @@ class MMX5World(World):
             pool.append(self.create_item(names.ULTIMATE_ARMOR))
             pool.append(self.create_item(names.BLACK_ZERO))
 
+        # DNA Parts: one from each boss's Life+/Energy+ pair, chosen in
+        # generate_early. They take filler slots rather than adding locations -
+        # the "DNA Part" locations already exist and already check on the boss
+        # kill, which is the point: the check was always there, only the reward
+        # was static.
+        if self.options.dna_parts_in_pool:
+            pool += [self.create_item(p) for p in self.chosen_parts]
+
         # Stage access: the starting stage's codes are precollected (the player
         # holds them from frame one), the other seven are shuffled. Precollected
         # deliberately rather than placed locally - the starting stage must be
@@ -201,8 +255,11 @@ class MMX5World(World):
                 else:
                     pool.append(item)
 
-        # Top up with filler to match unfilled locations.
+        # Top up with filler. The over-full direction is caught in
+        # generate_early - by here it is too late to report cleanly, because
+        # Generate.py RETRIES a failed world rather than surfacing the error.
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
+        assert len(pool) <= unfilled, "pool overflow should have been caught in generate_early"
         while len(pool) < unfilled:
             pool.append(self.create_item(self.get_filler_item_name()))
         self.multiworld.itempool += pool
@@ -330,4 +387,5 @@ class MMX5World(World):
             "boss_hp_randomization": self.options.boss_hp_randomization.value,
             "stage_unlocks": self.options.stage_unlocks.value,
             "endgame_checks": self.options.endgame_checks.value,
+            "dna_parts_in_pool": self.options.dna_parts_in_pool.value,
         }

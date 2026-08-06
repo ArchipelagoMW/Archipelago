@@ -52,6 +52,12 @@ Three options change those totals, and they stack:
 | `stage_unlocks` | **+8 items**, seven of them shuffled — one Access Codes item per Maverick stage, and you begin the run holding the eighth |
 | `secret_armors_in_pool` | **+2 items** — Ultimate Armor and Black Zero |
 | `endgame_checks` (**on by default**) | **+3 locations** (45 → 48) — the Zero Space stage clears |
+| `dna_parts_in_pool` | **+8 items** — one DNA Part from each Maverick's pair |
+
+Every item needs a location, so option sets that ask for more items than the
+seed has locations are **refused at generation** with a message naming the fix.
+If you want several item-adding options at once, turn on `pickupsanity` — it
+adds 32 locations and comfortably covers all of them.
 
 Items and locations have to balance, so an option that adds items without
 adding locations displaces filler rather than growing the pool.
@@ -124,6 +130,17 @@ entirely by the client, so it works on a disc you have already patched.
   moves onto it; pressing confirm simply does nothing until its codes arrive.
   The Enigma, Space Shuttle and Zero Space entries are untouched and behave
   exactly as they normally would.
+- **`dna_parts_in_pool` shuffles the equippable Parts.** X5 has 16 Parts but a
+  playthrough only yields 8 — each Maverick offers two, and Alia's Life+ /
+  Energy+ prompt makes you give up the other for good. With this on, the seed
+  picks one Part from each pair and shuffles those 8 into the multiworld, so
+  the Part you get no longer depends on which prompt you answered. The Parts
+  the game would have given you are suppressed, so they arrive only from the
+  multiworld. The "DNA Part" checks are unchanged and still fire on the boss
+  kill. Six of the sixteen only work for one character — Burst Shots, Ultimate
+  Buster and Quick Charge are X's, Z-Saber Plus, Z-Saber Extend and Shot Eraser
+  are Zero's — so none of them is ever required for anything, and on a
+  single-character run the other's are dead weight.
 - **`endgame_checks` puts checks in Zero Space, and is on by default.**
   Clearing Zero Space 1, Zero Space 2 or the X vs Zero fight each sends a
   check. Without it the endgame contains nothing to find outside pickupsanity

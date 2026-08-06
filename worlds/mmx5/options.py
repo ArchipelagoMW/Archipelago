@@ -214,6 +214,30 @@ class StageUnlocks(Toggle):
     display_name = "Stage Unlocks"
 
 
+class DNAPartsInPool(Toggle):
+    """Shuffle the equippable DNA Parts into the item pool.
+
+    Mega Man X5 has 16 Parts, but a normal playthrough only ever yields 8 of
+    them: each Maverick offers two — one for Life+, one for Energy+ — and
+    Alia's prompt makes you give up the other permanently. With this on the
+    seed picks one Part from each pair and shuffles those 8 into the
+    multiworld, so the Part you end up with has nothing to do with which
+    prompt you answered.
+
+    The Parts the game would have handed you are suppressed, so Parts arrive
+    only from the multiworld. The "DNA Part" locations are unchanged and still
+    check on the boss kill.
+
+    Six Parts only do anything for one character (Burst Shots, Ultimate Buster
+    and Quick Charge are X's; Z-Saber Plus, Z-Saber Extend and Shot Eraser are
+    Zero's), so none of them is ever required for anything — on a run played as
+    one character the other's are dead weight.
+
+    Client-side, so it needs no disc change.
+    """
+    display_name = "DNA Parts In Pool"
+
+
 class EndgameChecks(DefaultOnToggle):
     """Clearing a Zero Space stage sends a check.
 
@@ -241,3 +265,4 @@ class MMX5Options(PerGameCommonOptions):
     secret_armors_in_pool: SecretArmorsInPool
     stage_unlocks: StageUnlocks
     endgame_checks: EndgameChecks
+    dna_parts_in_pool: DNAPartsInPool
