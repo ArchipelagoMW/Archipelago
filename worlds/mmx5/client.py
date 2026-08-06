@@ -39,6 +39,7 @@ Known interim policies (deliberate, revisit before release):
     ~78 s cutscene gap); launch goal fires on the launch-success flag
     (0x1CCB bit 7) once all 8 parts are in hand. Both observed live.
 """
+import hashlib
 import logging
 from typing import TYPE_CHECKING
 
@@ -84,6 +85,32 @@ OFF_CHAR = 0x0D1C44 - SAVE_BASE         # 0 = X, 1 = Zero
 # engine-native way to deliver received filler energy.
 OFF_REFILL = 0x0D1C76 - SAVE_BASE
 SMALL_ENERGY_HEAL = 4                   # matches the small HP capsule (kind 2)
+
+# ---- Boss HP randomization -------------------------------------------------
+# 0x800D1CA2 IS boss max HP - live-proven 2026-08-05: pinned to 40, the next
+# boss spawned with exactly 40 (its intro fill ramp shortened 73f -> 38f to
+# match). It doubles as the Boss-Level accumulator: fn 0x80024594 runs at each
+# stage start and does `0x1CA2 = min(0x1CA2 + level_raw, 0x7F)`, which is how
+# bosses gain HP over a run.
+#
+# THAT ACCUMULATION IS WHY WE RESTORE. Overwriting the byte makes OUR value the
+# base for the next stage's accumulate, so the multiplier compounds and pins to
+# the 0x7F ceiling within a few stages. Instead: write the rolled value on
+# gameplay entry, put the vanilla value back on exit, and the game's own
+# arithmetic stays exactly vanilla.
+#
+# One global byte means bosses met during the SAME stage visit (mid-boss and
+# stage boss) share that visit's roll. Inherent to the lever, documented in the
+# option text.
+OFF_BOSS_HP = 0x0D1CA2 - SAVE_BASE
+BOSS_HP_MIN, BOSS_HP_MAX = 1, 0x7F      # engine clamp
+# option value -> (low, high) multiplier applied to the game's own value
+BOSS_HP_BANDS = {
+    1: (0.40, 0.80),    # weak
+    2: (0.70, 1.30),    # regular
+    3: (1.20, 2.00),    # strong
+    4: (0.25, 2.50),    # chaotic
+}
 # Story ACT value Training mode stamps into the save struct (live-captured
 # 2026-08-03). The campaign uses a small range - 1 at intro victory, 5 at
 # Eurasia, 2 read off a real mid-game save - so 0x0A is out of band and
@@ -358,6 +385,12 @@ class MMX5Client(BizHawkClient):
         self.stub_present = False
         self.ring2_present = False
         self.unknown_records_logged = set()
+        # Boss HP: the vanilla accumulator value the game last computed, and
+        # what we last wrote over it. Both in-memory only - see _boss_hp_apply.
+        self.boss_hp_vanilla = None
+        self.boss_hp_written = None
+        self.boss_hp_stage = None
+        self.boss_hp_logged = set()
         self.stamp_warned = False
         self.victory_sent = False
         # Highest Maverick kill count seen while the save read SANE. The
@@ -468,6 +501,93 @@ class MMX5Client(BizHawkClient):
         if loc is None or loc in ctx.checked_locations:
             return 0
         return bit
+
+    def _boss_hp_roll(self, ctx, stage_id: int, vanilla: int) -> int:
+        """Rolled boss HP for this stage visit. Deterministic per
+        (seed, slot, stage, vanilla) so a retry is the same fight."""
+        band = BOSS_HP_BANDS.get(
+            (ctx.slot_data or {}).get("boss_hp_randomization", 0))
+        if band is None:
+            return vanilla
+        if vanilla <= 0:
+            # Callers must not reach here (see the current == 0 guard), but a
+            # 0 would mean an instant-death boss, so refuse it outright.
+            return vanilla
+        seed = f"{ctx.seed_name}:{ctx.slot}:{stage_id}:{vanilla}"
+        # Stable across sessions and machines - hash() is salted per process.
+        digest = hashlib.sha256(seed.encode("utf-8")).digest()
+        frac = int.from_bytes(digest[:4], "big") / 0xFFFFFFFF
+        lo, hi = band
+        rolled = round(vanilla * (lo + frac * (hi - lo)))
+        return max(BOSS_HP_MIN, min(BOSS_HP_MAX, rolled))
+
+    async def _boss_hp_apply(self, ctx, save: bytes, in_gameplay: bool,
+                             stage_id: int) -> None:
+        """Hold rolled boss HP during gameplay; restore vanilla on the way out.
+
+        The restore is not cosmetic: 0x1CA2 accumulates at each stage start, so
+        leaving our value in place would compound the multiplier every stage.
+        """
+        if not (ctx.slot_data or {}).get("boss_hp_randomization", 0):
+            return
+        current = save[OFF_BOSS_HP]
+        # 0 is never a real baseline. The stage id (0x800D1C0C) changes during
+        # the stage load, but the Boss Level function has not necessarily
+        # recomputed 0x1CA2 yet, so sampling here can catch a zeroed byte.
+        # Adopting that would (a) roll 0 -> 0, and 0 IS the kill-boss value,
+        # and (b) make the restore-on-exit write 0 over a legitimate number and
+        # poison the game's own accumulator. Wait for a real value instead.
+        # Seen live 2026-08-05: "boss HP stage 1: 0 -> 0".
+        if current == 0:
+            return
+        if in_gameplay:
+            # Adopt a vanilla baseline ONLY on a stage transition, because the
+            # game only recomputes 0x1CA2 at stage start.
+            #
+            # The obvious "anything I did not write is vanilla" rule is WRONG
+            # here: savestates restore 0x1CA2 along with the rest of RAM, so
+            # loading a state taken earlier in the same stage hands us a stale
+            # value that is not a fresh recompute. Trusting it would reroll
+            # from the wrong base, and - worse - that wrong number is what gets
+            # restored on the way out, corrupting the game's own accumulator.
+            # Keying on the stage id means state loads inside a stage simply
+            # get our rolled value re-applied, which is what a player expects.
+            if self.boss_hp_stage != stage_id:
+                self.boss_hp_stage = stage_id
+                self.boss_hp_vanilla = current
+                self.boss_hp_written = None
+            if self.boss_hp_vanilla is None:
+                return
+            rolled = self._boss_hp_roll(ctx, stage_id, self.boss_hp_vanilla)
+            if current != rolled:
+                await bizhawk.write(ctx.bizhawk_ctx,
+                                    [(SAVE_BASE + OFF_BOSS_HP, [rolled], "MainRAM")])
+                self.boss_hp_written = rolled
+            else:
+                # Roll landed on the value already there. Remember it as ours
+                # so the restore path still hands the game back its own number.
+                self.boss_hp_written = rolled
+            # Log the DECISION, not just writes: a roll that happens to equal
+            # the baseline produces no write, and logging only on writes made
+            # a correctly-working feature look inert during testing.
+            key = (stage_id, self.boss_hp_vanilla, rolled)
+            if key not in self.boss_hp_logged:
+                self.boss_hp_logged.add(key)
+                logger.info(
+                    f"MMX5: boss HP stage {stage_id}: {self.boss_hp_vanilla} "
+                    f"-> {rolled}"
+                    + (" (unchanged - roll matched)"
+                       if rolled == self.boss_hp_vanilla else ""))
+        elif self.boss_hp_vanilla is not None and current == self.boss_hp_written:
+            # Left gameplay with our value still in place: hand the game back
+            # its own number so the next stage accumulates from vanilla.
+            await bizhawk.write(ctx.bizhawk_ctx,
+                                [(SAVE_BASE + OFF_BOSS_HP,
+                                  [self.boss_hp_vanilla], "MainRAM")])
+            self.boss_hp_written = None
+            # Force a fresh baseline on the next stage entry even if it is the
+            # same stage id (re-entering a stage recomputes 0x1CA2).
+            self.boss_hp_stage = None
 
     @staticmethod
     def _classify_stub_probe(probe: bytes):
@@ -591,6 +711,15 @@ class MMX5Client(BizHawkClient):
                     self.ring2_present = False
                 else:
                     self.ring2_present = None   # boot zeros - retry next cycle
+
+            # ---- Boss HP randomization: hold the rolled value while in a
+            # stage, hand the vanilla number back on the way out (0x1CA2
+            # accumulates, so leaving ours in place would compound). Runs
+            # before the stamp gate deliberately - the restore must happen
+            # even on a save we are otherwise refusing to touch, or a
+            # mid-session save swap could strand our value in the struct. ----
+            if save_sane:
+                await self._boss_hp_apply(ctx, save, mode[0] == 0x0A, cur_stage_id)
 
             # ---- Wrong-save protection (A3): a sane save stamped for a
             # DIFFERENT seed/slot halts checks AND grants - its bits belong

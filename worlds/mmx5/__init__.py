@@ -277,4 +277,5 @@ class MMX5World(World):
             "boss_difficulty": self.options.boss_difficulty.value,
             "launch_odds": self.options.launch_odds.value,
             "pickupsanity": self.options.pickupsanity.value,
+            "boss_hp_randomization": self.options.boss_hp_randomization.value,
         }

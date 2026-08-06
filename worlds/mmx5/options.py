@@ -120,6 +120,36 @@ class TextSkip(Toggle):
     display_name = "Text Skip"
 
 
+class BossHPRandomization(Choice):
+    """Randomize how much HP bosses have.
+
+    Every boss is affected - Mavericks, mid-bosses, Dynamo, Sigma, the Zero
+    duel. The roll SCALES what the game would normally give, so Boss Level
+    still matters: a tough setting on `intense` boss difficulty compounds.
+
+    off: bosses keep their normal HP
+    weak: 40-80% of normal
+    regular: 70-130% of normal
+    strong: 120-200% of normal
+    chaotic: 25-250% of normal
+
+    Each stage rolls once per visit, and the roll is fixed for a given seed
+    and situation - dying and retrying gives you the same fight. Bosses met
+    during the same visit to a stage (a mid-boss and the stage boss) share
+    that stage's roll.
+
+    HP is capped at 127 by the game, so very high rolls on a late-game boss
+    can hit that ceiling and come out lower than the multiplier suggests.
+    """
+    display_name = "Boss HP Randomization"
+    option_off = 0
+    option_weak = 1
+    option_regular = 2
+    option_strong = 3
+    option_chaotic = 4
+    default = 0
+
+
 class PickupSanity(Toggle):
     """Freestanding pickups become checks.
 
@@ -146,3 +176,4 @@ class MMX5Options(PerGameCommonOptions):
     launch_odds: LaunchOdds
     text_skip: TextSkip
     pickupsanity: PickupSanity
+    boss_hp_randomization: BossHPRandomization

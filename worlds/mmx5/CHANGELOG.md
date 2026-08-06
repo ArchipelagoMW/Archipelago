@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+**New option: `boss_hp_randomization`** (off by default) — randomizes how much
+HP bosses have: `weak` 40-80%, `regular` 70-130%, `strong` 120-200%, `chaotic`
+25-250%. The roll SCALES what the game would normally give, so Boss Level still
+matters and a tough setting on `intense` boss difficulty compounds. Affects
+every boss (Mavericks, mid-bosses, Dynamo, Sigma, the Zero duel).
+
+**Client-side only — no disc change**, so it works on any already-patched disc.
+Rolls are deterministic per seed, stage and situation, so dying and retrying
+gives you the identical fight. Bosses met during the same visit to a stage
+share that stage's roll, and the game caps HP at 127, so very high rolls on a
+late-game boss can hit that ceiling.
+
+Live-tested 2026-08-05: Grizzly Slash rolled 70 -> 75 and spawned with exactly
+75 HP.
+
+Implementation note for future work: the lever is `0x800D1CA2`, proven live to
+be boss max HP. It is also the Boss-Level accumulator (`0x1CA2 += level_raw` at
+each stage start), so the client restores the vanilla value on leaving a stage
+— without that the multiplier compounds and pins every boss to 127 within a few
+stages. It also refuses a zero baseline: the stage id flips during a stage load
+before that byte is recomputed, and 0 is the instant-death value.
+
 **New option: `pickupsanity`** (off by default) — the 32 freestanding Life
 Energy, Weapon Energy and 1-UP capsules become checks, including the ones in
 Zero Space and Sigma's stage. **Changes the disc when on** (a per-seed patch:
@@ -22,9 +44,11 @@ queued-refill counter (the sub-tank drain path) instead of doing nothing.
 **Live-tested 2026-08-05** (first pickupsanity seed, BizHawk + real server):
 capsule check sent and confirmed, vanilla effect suppressed, savestate
 re-loot produced no duplicate check, and an old-ring Sub-Tank check fired
-cleanly on the same disc — the two rings coexist as designed. Still untested:
-the Zero Space / Sigma pickups (same mechanism, different lists) and
-receiving a pickup check's item from another world's slot.
+cleanly on the same disc — the two rings coexist as designed. Later the same
+session: **Zero Space 1's 1-UP check fired live** (stage id 0x10 — the
+non-contiguous endgame id path), validating the statically-derived endgame
+list attributions in the running game. Still untested: receiving a pickup
+check's item from another world's slot.
 
 Design decision (Ivor, 2026-08-05): checked capsules stay inert for the
 whole seed — no vanilla-healing revival. Considered and declined: reverting
