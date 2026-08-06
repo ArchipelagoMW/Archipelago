@@ -258,7 +258,7 @@ class ReduceRaspberries(Toggle):
     """
     Reduces the number of Raspberries in the item pool
     """
-    display_name = "Reduce Rapsberries"
+    display_name = "Reduce Raspberries"
 
 class TrapFillPercentage(Range):
     """

@@ -377,7 +377,7 @@ class CelesteOpenWorld(World):
             self.multiworld.push_precollected(item_pool.pop())
 
         # Strawberries
-        real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - goal_area_location_count - len(item_pool))
+        real_total_strawberries: int = max(0, min(self.options.total_strawberries.value, location_count - goal_area_location_count - len(item_pool)))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
 
         menu_region = self.get_region("Menu")
