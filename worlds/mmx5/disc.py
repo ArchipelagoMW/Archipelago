@@ -137,6 +137,70 @@ CAPSULE_STUB = bytes.fromhex(
     "800009ad"  # sw    t1, 0x80(t0)       ; (delay slot) commit count
 )
 
+# ---- Pickupsanity (PER-SEED, option-gated - deliberately NOT a base edit) ---
+# Consumable pickups (kinds 0x02-0x08: small/large/full HP, weapon energy x3,
+# 1-UP) become checks. Design mirrors the proven kind-0/1/9/A/B flow but is
+# fully isolated from it: its own stub, its own ring, applied only when the
+# option is on, so seeds without pickupsanity run byte-identical discs to
+# v0.2.0 and none of the live-validated base behavior is touched.
+#
+# Identity: consumable ids are TYPE ids and collide (three Izzy capsules are
+# all id 0x24), so the stub also records the placement-record pointer the
+# spawner stored at obj+0x10 (sw $s2,0x10($s1) @ 0x8002B2B8). List bases are
+# static EXE data, so the pointer uniquely names the pickup on every disc -
+# the client resolves it via pickups.RECORD_TO_LOCATION.
+#
+# Ring 2 layout (plain RAM, no overlap with the 16x4B ring at 0x801FA020/
+# count 0x801FA080): 32 slots x 8 bytes at 0x801FA100..0x801FA1FF =
+# {stage u8, kind u8, id u8, seq u8, record_ptr u32}, monotonic count u32 at
+# 0x801FA200. seq bit7 = record valid; client acks by zeroing seq. 32 held
+# (un-acked) records before overwrite - an entire stage's consumables fit.
+#
+# Consumables have NO ownership test (init table 0x80011038 gives kinds
+# 0x00-0x08 the shared generic init 0x80053858), so the tank-style
+# already-owned despawn cannot occur; the vanilla respawn-on-revisit is what
+# makes "record until server confirms, then ack" safe here too.
+PICKUPSANITY_STUB_ADDR = 0x80077760    # free-space run A after the capsule
+                                       # stub (zeros 0x80077760-0x800777FF
+                                       # verified in the vanilla EXE)
+# R3000 LOAD-DELAY-SLOT SAFE (the v3..v6 lesson): every load's value is first
+# used at least 2 instructions later - audit in the word comments.
+PICKUPSANITY_STUB = bytes.fromhex(
+    "1f80083c"  # lui   t0, 0x801F
+    "00a10835"  # ori   t0, t0, 0xA100     ; t0 = ring2 base 0x801FA100
+    "0001098d"  # lw    t1, 0x100(t0)      ; t1 = monotonic count (0x801FA200)
+    "0d800b3c"  # lui   t3, 0x800D         ; (fills t1's load delay slot)
+    "1f002a31"  # andi  t2, t1, 0x1F       ; ring slot index (32 slots)
+    "c0500a00"  # sll   t2, t2, 3          ; *8 bytes per slot
+    "21500a01"  # addu  t2, t0, t2         ; t2 = slot address
+    "0c1c6c91"  # lbu   t4, 0x1C0C(t3)     ; stage id (spawn engine's input)
+    "10002f8e"  # lw    t7, 0x10(s1)       ; record ptr (fills t4's delay)
+    "82002d92"  # lbu   t5, 0x82(s1)       ; item kind (fills t7's delay)
+    "02002e92"  # lbu   t6, 0x02(s1)       ; item id   (fills t5's delay)
+    "00004ca1"  # sb    t4, 0x00(t2)       ; slot+0: stage
+    "01004da1"  # sb    t5, 0x01(t2)       ; slot+1: kind
+    "02004ea1"  # sb    t6, 0x02(t2)       ; slot+2: id
+    "04004fad"  # sw    t7, 0x04(t2)       ; slot+4: record ptr
+    "7f002c31"  # andi  t4, t1, 0x7F
+    "80008c35"  # ori   t4, t4, 0x80       ; seq = (count & 0x7F) | 0x80
+    "03004ca1"  # sb    t4, 0x03(t2)       ; slot+3: seq
+    "01002925"  # addiu t1, t1, 1
+    "f2500108"  # j     0x800543C8         ; consume item, no vanilla effect
+    "000109ad"  # sw    t1, 0x100(t0)      ; (delay slot) commit count
+)
+DISPATCH_TABLE_ADDR = 0x80011068       # collect jump table, one word per kind
+CONSUMABLE_KINDS = (0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8)
+
+
+def pickupsanity_edits() -> list[tuple[int, bytes, str]]:
+    """Per-seed edit rows for Rom.patch_rom when the option is on."""
+    return [(PICKUPSANITY_STUB_ADDR, PICKUPSANITY_STUB, "SLUS exe")] + [
+        (DISPATCH_TABLE_ADDR + kind * 4,
+         PICKUPSANITY_STUB_ADDR.to_bytes(4, "little"), "SLUS exe")
+        for kind in CONSUMABLE_KINDS
+    ]
+
+
 BASE_EDITS: list[tuple[int, bytes, str]] = [
     (0x8003C324, b"\x4D", "SLUS exe"),
     (0x8003D660, b"\x4D", "SLUS exe"),

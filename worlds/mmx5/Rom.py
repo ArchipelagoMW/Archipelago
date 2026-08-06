@@ -167,6 +167,14 @@ def patch_rom(world: "MMX5World", patch: MMX5ProcedurePatch) -> None:
             seed_edits.append({"addr": addr, "hex": TEXT_NOP.hex(),
                                "region": TEXT_REGION})
 
+    if world.options.pickupsanity:
+        # Consumable-pickup stub + jump-table redirects for kinds 0x02-0x08.
+        # Per-seed on purpose: without the option the disc stays byte-identical
+        # to the validated base, and consumables keep their vanilla effects.
+        for addr, payload, region in disc.pickupsanity_edits():
+            seed_edits.append({"addr": addr, "hex": payload.hex(),
+                               "region": region})
+
     # NOTE: all_mavericks emits NO disc edit. Its endgame gate is entirely
     # client-side (ACT 0x800D1C79) - see the removal note above.
 

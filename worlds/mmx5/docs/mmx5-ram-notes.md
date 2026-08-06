@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-03).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-05).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -52,9 +52,12 @@ Survives death and stage exit; the AP client's primary read/write surface.
 | `0x800D1C52/53` | u16 | **Max weapon energy** (+2 per "Energy Up"; 0x3230 observed after one) | ✅ |
 | `0x800D1C80` | u8 | **Heart tanks collected bitfield — COMPLETE** (placement harvest 2026-07-31): bit0 Grizzly Slash, bit1 Squid Adler, bit2 Izzy Glow (live-verified), bit3 Duff McWhalen, bit4 The Skiver, bit5 Axle the Red (unique ungated record + elimination; stage also has 11 phantom heart records gated on nonexistent armor level 5), bit6 Dark Dizzy (live-verified), bit7 Mattrex. NOT stageId−1 order. Izzy live pickup: X max HP +2 same frame, Zero's max HP (0x0D1C48) unchanged → supports per-character hearts | ✅ |
 | `0x800D1C83` | u8 | **Energy-Up/EX collected bitfield** (bit1 set by Dynamo-sortie DNA reward) | ✅ (bit 1) |
-| `0x800D1C84/86` | u16×2 | "Parts bitfields" per cheat archive — did NOT change on DNA part award; labels dubious | ❓ |
+| `0x800D1C84` | **u32** | **DNA Parts owned bitfield — CONFIRMED IN CODE 2026-08-05.** Hub-overlay Parts screen (fn `0x800F3E30`) does `lw 0x84($s0)` and ANDs it with `maskTable[0x800F51F0][selected]`; blank slot if zero, draw part if set. **16 parts = bits 2..17** (mask table is 16 single-bit entries). The old "did NOT change on DNA part award" observation was a TIMING artifact: no gameplay writer exists in the static EXE (only save load `0x8001C964`/`0x8001CC90`, save store `0x8001CFA0`), because DNA rewards are BUFFERED and delivered at the *next results screen* (`0x1D28-2A`/`0x1D38-3A`). Recheck across a results screen, not across the award prompt. `0x1C86` is simply the u32's high half | ✅ code 2026-08-05 |
+| `0x800D1C88–9F` | 6×u32 | Persisted (save file `+0x08..+0x1F`, block-copied by the save loader `0x8001C904`) but **ZERO individual field references in the static EXE or the hub overlay** — nothing reads or writes them by field. Disproven as reploid-rescue record (see below). Any consumer must live in another overlay (stage code). Candidate for a per-stage/area "visited" record, unproven either way — not decidable statically from the images we hold | ❓ 2026-08-05 |
 | `0x800D1CA0` | u16 | Armor parts bitfield (Falcon/Gaea); 0xFFFF grants all | ✅ write-tested |
-| `0x800D1CAA` | u8 | Decremented 0x04→0x03 at Izzy results commit (same frame as weapons bitfield). Hypothesis: hours-until-collision or sorties-remaining counter — candidate rival to the cheat-archive 0x0D1CAE claim | ❓ new obs. 2026-07-31 |
+| `0x800D1CA2` | u8 | **Boss-Level accumulator.** Fn `0x80024594` does `0x1CA2 = min(0x1CA2 + level_raw, 0x7F)`. Consumed as **`(value − 0x20) / 2`** at `0x800259E0`, `0x8002617C` (EXE) and `0x800F7564` (hub) — a stat-scaling factor. Consumer fns `0x80025828`, `0x80026080` | ✅ code 2026-08-05 |
+| `0x800D1CAA` (+charIdx) | u8×2 | **Hunter Rank index, per character** — indexes the rank-modifier table `0x800717EC` in the Boss Level formula. Index runs **best-first**: 0 = MEH/MMH (+16), 1 = PA (+8), 2 = GA (+4), 3 = SA (+2), 4–7 = A/B/C/E (+0). Supersedes the earlier "decremented 0x04→0x03 … hours/sorties counter" guess | ✅ code 2026-08-05 |
+| `0x800D1CC0` | u8 | **Computed Boss Level** = `min(level_raw + 1, 0x60)`, written by fn `0x80024594` (sites `0x80024574`/`0x80024588`/`0x8002465C`). **No reader in the EXE or hub** ⇒ consumed by overlay code. Pinning this would set difficulty *directly*, instead of indirectly via the countdown | ✅ code 2026-08-05 |
 | `0x800D1CAC` | u32 | **Countdown timer in FRAMES**; one hour = 0x34BC0 (216,000 = 60 fps × 3600). Hub overlay hourly-tick handler subtracts an hour at 0x800EFF18; an hour-RESTORE site at 0x800F01D8 adds one back (Dynamo/event candidate). Old "0x1CAC/AD u16 + 0x1CAE u16 hours" = low/high halves of this u32 | ✅ decoded 2026-07-31 |
 | `0x800D1CB0–B3` | u32? | Clear-time counter (constant tick; logger-muted) | ✅ ticks |
 | `0x800D1CB4` | u8 | Slow event counter, unidentified | ❓ |
@@ -137,7 +140,12 @@ struct, or rely on the game's own restore (stage load repopulates from 0x0D1C4C)
       which is exactly why the AP patch must never suppress its commit (it
       moves capability to 0x1C4D instead). Caveat: stage select shows no
       per-stage beaten indicator, so nothing reads it for UI.
-- [ ] Real parts storage (0x0D1D38+ hypothesis) + what 0x0D1C84/86 actually are
+- [x] Real parts storage + what 0x0D1C84/86 actually are — **ANSWERED 2026-08-05
+      (static analysis).** `0x800D1C84` IS the u32 DNA Parts bitfield, 16 parts
+      in bits 2..17; proven by the hub Parts screen `0x800F3E30` masking it
+      against table `0x800F51F0`. The `0x0D1D38+` hypothesis is dead — that is
+      the pending-DNA-reward buffer, which is also *why* `0x1C84` looked inert
+      at award time. See `mmx5-ghidra-findings.md` §9.1.
 - [x] Armor capsule pickup: which bits in 0x0D1CA0 per capsule; does armor
       activate immediately or need stage re-entry? **ANSWERED 2026-08-01.**
       Bits are in 0x1CA1 (0x1CA0 low byte is the armor LEVEL), one per capsule
@@ -174,6 +182,31 @@ attack patterns or damage.
   MEH/MMH +16
 - **+1 per Special Weapon/Technique owned** (max +8) — ignored when fighting
   Dynamo, and while using Gaea Armor
+
+### The actual function — `0x80024594` (disassembled 2026-08-05)
+
+The table above came from community sources. This is what the code does:
+
+```
+level_raw = 2 * floor(elapsed / 432000)          ; 432000 frames = 2 h
+          + popcount(player+0xC9)                ; weapons byte (copy of 0x1C4C)
+          + rankTable[ 0x800D1CAA + charIdx ]    ; table 0x800717EC, u16
+elapsed   = 0x34BC00 - 0x800D1CAC                ; 0x34BC00 = 16 h in frames
+            (clamped >= 0)
+0x800D1CC0 = min(level_raw + 1, 0x60)            ; the Boss Level, 96 cap
+0x800D1CA2 = min(0x800D1CA2 + level_raw, 0x7F)   ; accumulator, 127 cap
+```
+
+Two corrections this forces on the prose above:
+
+1. **The rank table index runs best-first.** `0x800717EC` = `[+16, +8, +4, +2,
+   0, 0, 0, 0]`, so index 0 is MEH/MMH and index 7 is E. The *values* were
+   right; the implied ordering was backwards.
+2. **"+1 per Maverick" and "+1 per weapon" are ONE term in code**, not two —
+   a single popcount of the weapons byte, which is also the Maverick-kill
+   record. Do not model them as separable.
+
+The hours→base table is reproduced exactly by `2 * floor(elapsed / 2h) + 1`.
 
 **Reward thresholds:** level **4+** → Life Up / Energy Up choice; level **8+**
 → Life+ / Energy+ choice, which ALSO grants an equippable Part.

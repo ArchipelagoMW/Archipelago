@@ -49,7 +49,7 @@ logger = logging.getLogger("Client")
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
-from . import names
+from . import names, pickups
 from .locations import location_table
 
 if TYPE_CHECKING:
@@ -77,6 +77,13 @@ OFF_PROCESSED = 0x0D1C4E - SAVE_BASE
 # first grant batch on an unstamped save.
 OFF_STAMP = 0x0D1C50 - SAVE_BASE
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
+OFF_CHAR = 0x0D1C44 - SAVE_BASE         # 0 = X, 1 = Zero
+# Queued-refill counters the engine drains 1 HP/tick during gameplay
+# (FUN_80034140): X at 0x1C76, Zero at 0x1C77. value & 0x7F = pending amount,
+# bit 7 = active. Sub-tank and pickup heals go through these, so they are the
+# engine-native way to deliver received filler energy.
+OFF_REFILL = 0x0D1C76 - SAVE_BASE
+SMALL_ENERGY_HEAL = 4                   # matches the small HP capsule (kind 2)
 # Story ACT value Training mode stamps into the save struct (live-captured
 # 2026-08-03). The campaign uses a small range - 1 at intro victory, 5 at
 # Eurasia, 2 read off a real mid-game save - so 0x0A is out of band and
@@ -214,6 +221,22 @@ RING_ADDR = 0x1FA020
 RING_SLOTS = 16
 RING_COUNT_ADDR = 0x1FA080
 
+# Pickupsanity ring (per-seed stub, option-gated): 32 slots of
+# {stage u8, kind u8, id u8, seq u8, record_ptr u32} at 0x801FA100, count
+# u32 at 0x801FA200. The record pointer is the placement-record address the
+# spawner stored at itemObj+0x10 - the only unique identity consumables have
+# (their id byte is a TYPE and collides). Resolved via
+# pickups.RECORD_TO_LOCATION; list bases are static EXE data so the
+# addresses are stable across discs and sessions.
+RING2_ADDR = 0x1FA100
+RING2_SLOTS = 32
+RING2_COUNT_ADDR = 0x1FA200
+# Stub-presence probe: the kind-2 (small HP) dispatch entry. Vanilla points
+# at the small-HP collect handler; a pickupsanity disc points at the stub.
+RING2_PROBE_ADDR = 0x011070
+RING2_PROBE_VANILLA = bytes.fromhex("64410580")   # 0x80054164 LE
+RING2_PROBE_STUBBED = bytes.fromhex("60770780")   # 0x80077760 LE
+
 # Ring record stage byte (0x800D1C41) -> stage name, verified stage-id order.
 STAGE_ID_TO_NAME = {
     1: names.GRIZZLY, 2: names.NECROBAT, 3: names.WHALE, 4: names.DINOREX,
@@ -333,6 +356,7 @@ class MMX5Client(BizHawkClient):
         self.last_gate_state = None
         self.ap_patched = False
         self.stub_present = False
+        self.ring2_present = False
         self.unknown_records_logged = set()
         self.stamp_warned = False
         self.victory_sent = False
@@ -464,10 +488,11 @@ class MMX5Client(BizHawkClient):
             # engine's stage id at +0x0C (below SAVE_BASE, so it is not in the
             # save block). The tank protection needs to know which stage the
             # player is standing in.
-            mode, save, ring = await bizhawk.read(ctx.bizhawk_ctx, [
+            mode, save, ring, ring2 = await bizhawk.read(ctx.bizhawk_ctx, [
                 (0x0D1C00, 0x10, "MainRAM"),  # game-mode controller: 0x0A gameplay / 0x0C results
                 (SAVE_BASE, SAVE_LEN, "MainRAM"),
                 (RING_ADDR, RING_SLOTS * 4, "MainRAM"),  # pickup-stub check records
+                (RING2_ADDR, RING2_SLOTS * 8, "MainRAM"),  # pickupsanity records
             ])
             # NOT `stage_id`: the mailbox-ring loop below unpacks each record
             # into a local of that name, which would clobber this before the
@@ -540,6 +565,7 @@ class MMX5Client(BizHawkClient):
                 # Savestates restore the EXE, so the tank fix can appear or
                 # vanish mid-session exactly like the other two.
                 self.tank_fix_present = None
+                self.ring2_present = None
 
             # Resolve the probes whenever unresolved - NOT just in-stage.
             # Launches happen at the HUB (modes 0x13-0x15); the old
@@ -549,15 +575,22 @@ class MMX5Client(BizHawkClient):
             # accrual + the zeroed roll). During boot the EXE reads as
             # zeros -> classify returns None -> retried next cycle.
             if self.ap_patched is None or self.stub_present is None \
-                    or self.tank_fix_present is None:
-                probe, stub_probe, tank_probe = await bizhawk.read(ctx.bizhawk_ctx, [
+                    or self.tank_fix_present is None or self.ring2_present is None:
+                probe, stub_probe, tank_probe, ring2_probe = await bizhawk.read(ctx.bizhawk_ctx, [
                     (PATCH_PROBE_ADDR, 4, "MainRAM"),
                     (STUB_PROBE_ADDR, 4, "MainRAM"),
                     (TANK_FIX_PROBE_ADDR, 4, "MainRAM"),
+                    (RING2_PROBE_ADDR, 4, "MainRAM"),
                 ])
                 self.tank_fix_present = self._classify_tank_fix(tank_probe)
                 self.ap_patched = self._classify_probe(probe)
                 self.stub_present = self._classify_stub_probe(stub_probe)
+                if ring2_probe == RING2_PROBE_STUBBED:
+                    self.ring2_present = True
+                elif ring2_probe == RING2_PROBE_VANILLA:
+                    self.ring2_present = False
+                else:
+                    self.ring2_present = None   # boot zeros - retry next cycle
 
             # ---- Wrong-save protection (A3): a sane save stamped for a
             # DIFFERENT seed/slot halts checks AND grants - its bits belong
@@ -753,6 +786,44 @@ class MMX5Client(BizHawkClient):
                         # concurrent stub overwrite loses cleanly (retry next poll).
                         ack_writes.append((RING_ADDR + slot * 4 + 3, [0], "MainRAM"))
                         ack_guards.append((RING_ADDR + slot * 4, rec, "MainRAM"))
+                if ack_writes:
+                    await bizhawk.guarded_write(ctx.bizhawk_ctx, ack_writes, ack_guards)
+
+            # ---- Pickupsanity ring (per-seed stub): consumable pickups.
+            # Identity comes from the RECORD POINTER the stub copied out of
+            # itemObj+0x10 - the id byte is a type and collides. Same
+            # record-until-confirmed/ack discipline as the main ring. ----
+            if self.ring2_present and (ctx.slot_data or {}).get("pickupsanity", 0):
+                ack_writes, ack_guards = [], []
+                for slot in range(RING2_SLOTS):
+                    rec = ring2[slot * 8:slot * 8 + 8]
+                    stage_id, kind, rec_id, seq = rec[0], rec[1], rec[2], rec[3]
+                    if not seq & 0x80:
+                        continue  # empty/consumed slot
+                    recptr = int.from_bytes(rec[4:8], "little")
+                    loc_name = pickups.RECORD_TO_LOCATION.get(recptr)
+                    # The stage byte is a corruption check on the pointer, not
+                    # the identity: a stale/garbage record whose pointer
+                    # happens to hit the map must not send a wrong check.
+                    if loc_name is not None \
+                            and pickups.LOCATION_STAGE_ID[loc_name] != stage_id:
+                        loc_name = None
+                    if loc_name is not None:
+                        check(loc_name, True)
+                        consume = location_table[loc_name] in ctx.checked_locations
+                    else:
+                        # The intro capsule (deliberately not a location) and
+                        # anything unmapped: log once, consume, don't send.
+                        rec_key = ("ring2", stage_id, kind, rec_id, recptr)
+                        if rec_key not in self.unknown_records_logged:
+                            self.unknown_records_logged.add(rec_key)
+                            logger.debug(
+                                f"MMX5: unmapped pickupsanity record stage={stage_id} "
+                                f"kind={kind:X} id={rec_id:02X} rec=0x{recptr:08X} - ignored")
+                        consume = True
+                    if consume:
+                        ack_writes.append((RING2_ADDR + slot * 8 + 3, [0], "MainRAM"))
+                        ack_guards.append((RING2_ADDR + slot * 8, rec, "MainRAM"))
                 if ack_writes:
                     await bizhawk.guarded_write(ctx.bizhawk_ctx, ack_writes, ack_guards)
 
@@ -962,12 +1033,14 @@ class MMX5Client(BizHawkClient):
 
                 if processed < total:
                     new_hearts = 0
+                    new_energy = 0
                     for item in ctx.items_received[processed:]:
                         item_name = ctx.item_names.lookup_in_game(item.item)
                         if item_name == names.HEART_TANK:
                             new_hearts += 1
-                        # weapons/tanks/armor handled cumulatively below;
-                        # TODO: filler energy once designed
+                        elif item_name == names.SMALL_ENERGY:
+                            new_energy += 1
+                        # weapons/tanks/armor handled cumulatively below
 
                     writes = []
                     # Weapons: OR ALL received bits into the capability byte
@@ -1025,6 +1098,19 @@ class MMX5Client(BizHawkClient):
                         new_max_x = min(0x40, save[OFF_MAX_HP_X] + HP_PER_HEART * new_hearts)
                         new_max_z = min(0x40, save[OFF_MAX_HP_Z] + HP_PER_HEART * new_hearts)
                         writes.append((SAVE_BASE + OFF_MAX_HP_X, [new_max_x, new_max_z], "MainRAM"))
+
+                    if new_energy:
+                        # Filler energy heals via the engine's own queued-
+                        # refill counter for the CURRENT character (drained
+                        # 1 HP/tick during gameplay, sub-tank style; persists
+                        # in the save until drained, so a grant landing at
+                        # the hub is delivered at the next stage). value &
+                        # 0x7F = pending, bit 7 = active.
+                        char = 1 if save[OFF_CHAR] else 0
+                        pending = save[OFF_REFILL + char] & 0x7F
+                        amount = min(0x7F, pending + SMALL_ENERGY_HEAL * new_energy)
+                        writes.append((SAVE_BASE + OFF_REFILL + char,
+                                       [amount | 0x80], "MainRAM"))
 
                     # Adopt an unstamped save on its first grant batch.
                     if ctx.seed_name and save[OFF_STAMP] == 0:

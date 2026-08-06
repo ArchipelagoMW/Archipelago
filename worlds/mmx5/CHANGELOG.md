@@ -1,5 +1,37 @@
 # Mega Man X5 apworld changelog
 
+## Unreleased
+
+**New option: `pickupsanity`** (off by default) — the 32 freestanding Life
+Energy, Weapon Energy and 1-UP capsules become checks, including the ones in
+Zero Space and Sigma's stage. **Changes the disc when on** (a per-seed patch:
+its own record stub and mailbox ring, plus dispatch redirects for the seven
+consumable kinds); seeds without the option produce a disc byte-identical to
+0.2.0. Enemy drops are untouched. The intro capsule is deliberately not a
+location — the intro cannot be revisited, so it would be permanently missable.
+
+The full pickup inventory was extracted statically from the disc and is
+fully provenance-tracked (worlds/mmx5/docs/mmx5-ghidra-findings.md §9.13).
+Consumables are identified by their placement-record address (their id byte
+is a type, not an identity — three Izzy Glow capsules share one id), which
+the game's own spawner stores in the item object and the new stub reports.
+
+Received **Small Energy** filler now heals 4 HP through the engine's own
+queued-refill counter (the sub-tank drain path) instead of doing nothing.
+
+**Live-tested 2026-08-05** (first pickupsanity seed, BizHawk + real server):
+capsule check sent and confirmed, vanilla effect suppressed, savestate
+re-loot produced no duplicate check, and an old-ring Sub-Tank check fired
+cleanly on the same disc — the two rings coexist as designed. Still untested:
+the Zero Space / Sigma pickups (same mechanism, different lists) and
+receiving a pickup check's item from another world's slot.
+
+Design decision (Ivor, 2026-08-05): checked capsules stay inert for the
+whole seed — no vanilla-healing revival. Considered and declined: reverting
+a capsule kind to vanilla healing once all its checks are collected (only
+per-KIND would be possible anyway — all capsules of a type share one
+dispatch entry, so per-capsule restoration cannot be built on this hook).
+
 ## 0.2.0 — 2026-08-04
 
 Three new options and a new default goal. **`text_skip` and `launch_odds`

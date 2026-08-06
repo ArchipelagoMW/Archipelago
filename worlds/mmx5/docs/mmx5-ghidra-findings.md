@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-03).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-05).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -239,3 +239,615 @@ cheat sites listing it as health).
 `extract_iso.py`, `scan_refs.py`/`scan_refs2.py` (MIPS lui/imm effective-address
 scanner), `disasm.py` (capstone), Ghidra project `MMX5.gpr` +
 `ghidra_scripts/DecompTargets*.java`, extracted disc files.
+
+
+---
+
+# 2026-08-05 — Static analysis session 2 (autonomous): item kinds, Boss Level, Parts storage, stage-select gate
+
+Re-done from scratch: the 2026-07-30 Ghidra project lived in a session
+scratchpad and is gone. Re-extracted and re-analysed with a purpose-built MIPS
+xref scanner (also scratchpad-local; rebuild recipe in §9.8).
+
+## 9.0 Provenance of the three images used
+
+| Image | What it actually is | How verified |
+|---|---|---|
+| `SLUS_text.bin` | vanilla boot EXE .text, base `0x80010000`, `0x82000` bytes | re-extracted from `Games\MegamanX5\Megaman X5.bin` LBA 23432; PS-EXE header `pc0=0x8005894C t_addr=0x80010000 t_size=0x82000` — identical to the 2026-07-30 extraction |
+| `enigmaRAM.bin` (workspace root) | **VANILLA disc**, hub overlay resident | parts table at `0x800F5194` reads `00 04 05 02 07 06 01 03`, exact match for the documented `[0,4,5,2,7,6,1,3]`; contains none of the AP patch sites |
+| `Scripts\ramdump_cut1_f124157.bin` | **AP PROTO disc** | its diffs vs the vanilla EXE are *exactly* our patch set: `0x80011069`/`0x8001108C` (jump-table redirects), `0x8003C324`/`0x8003D660`/`0x8003D814` (1 byte each, `0x4C`→`0x4D`), `0x80053805`/`0x80053839`/`0x80053849` (tank fix), `0x80055018` (capsule spawn gate), `0x80055DB8` (capsule hook), `0x800776A0` +76 B (pickup stub), `0x80077700` +76 B (capsule stub). A different overlay occupies the `0x800EC000` window — it is NOT the hub |
+
+**CORRECTION 2026-08-05 (same day):** an earlier draft of this section claimed
+`enigmaRAM.bin` was *the only* local image containing the hub module. **That was
+wrong** — it came from a file survey truncated by `head -30`. `Scripts/` holds
+~20 more RAM dumps, including `ramdump_hub_f22905.bin` (the hub dump this
+document's §10 was originally written from), `ramdump_partsmenu_f23591.bin`,
+two **in-stage gameplay dumps** (`ramdump_stage_f174001.bin`,
+`ramdump_stage_f284694.bin`), launch, and endgame captures. Enumerate
+`Scripts/ramdump_*.bin` in full before concluding an overlay is unavailable.
+
+Both dumps also differ from the disc EXE across `0x8006F000-0x80092000`. That is
+initialised data the game mutates at runtime (e.g. the 16×u16 ammo array at
+`0x8006FAE4` in the save map), not code. Not a concern.
+
+## 9.1 Q_A RESOLVED — `0x800D1C84` **is** the DNA Parts bitfield
+
+The RAM-notes row calling it "dubious" and the matching open checklist item are
+both superseded. Proof is a live reader in the hub overlay, function `0x800F3E30`:
+
+```
+800F3E34  lui   $s0, 0x800d
+800F3E38  addiu $s0, $s0, 0x1c00      ; $s0 = 0x800D1C00
+800F3E50  lb    $v0, 0x32($s0)        ; selected part index (0x800D1C32)
+800F3E54  addiu $a0, $a0, 0x51f0      ; mask table 0x800F51F0
+800F3E58  sll   $v0, $v0, 2
+800F3E60  lw    $v1, ($v0)            ; mask = table[index]
+800F3E64  lw    $a0, 0x84($s0)        ; <-- 0x800D1C84, parts owned
+800F3E6C  and   $v1, $v1, $a0
+800F3E70  beqz  $v1, 800F3E88         ; not owned -> sb $zero,3($s1) = blank slot
+800F3E78  jal   0x8002D89C            ; owned -> draw the part
+```
+
+**Mask table `0x800F51F0`** (hub overlay), index to bit:
+
+| idx | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| bit | 17 | 10 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 11 | 12 | 13 | 14 | 15 | 16 |
+
+16 single-bit entries covering **bits 2..17** of the u32; bits 0/1 unused here.
+(Indices 16-17 hold multi-bit values `0x00020204` / `0x00000402`; index >= 18 is
+`0x01010101` filler — the table is 16 entries, treat >15 as out of bounds.)
+
+**Why the live observation said otherwise.** The static EXE contains *no*
+gameplay writer of `0x800D1C84` — only the save loader (`0x8001C964`,
+`0x8001CC90`, both `sw`) and the save store (`0x8001CFA0`, `lw`). The grant
+therefore happens in overlay code, and X5 **buffers DNA rewards** and delivers
+them at the *next* results sequence (`0x800D1D28-2A` / `0x800D1D38-3A`, already
+documented). Watching `0x1C84` at award time was always going to show nothing.
+**[MECH]** — recheck by reading `0x1C84` before/after a **results screen**, not
+before/after the award prompt.
+
+## 9.2 Q_D — the six u32s at `0x800D1C88-9F`: persisted, untouched by all visible code
+
+The save loader at **`0x8001C904`** block-copies them in a fused loop:
+
+```
+8001C910  addiu $t0, $v0, 0x1c00     ; $t0 = 0x800D1C00
+8001C914  addiu $t6, $t0, 0x88       ; dest = 0x800D1C88
+8001C948  addiu $t3, $a2, 8          ; src  = savefile + 0x08
+   loop:  $v0 = $t3 + i*4 ; $v1 = $t6 + i*4 ; lw ($v0) ; sw ($v1)   (6 iterations)
+```
+
+confirming the save-format map (`+0x08..+0x1F` to `0x800D1C88..`). The same loop
+also carries `file+0x4B -> 0x800D1C4D` and `file+0x52 -> 0x800D1CA3` byte arrays.
+
+**There are ZERO individual field references to `0x800D1C88-0x800D1C9F` in the
+static EXE or in the hub overlay.** They are touched only as a block, by save
+load/store.
+
+For the Alia-suppression idea (#8) this is neither support nor refutation: an
+in-stage visit record would be read by *stage* overlay code, which is in neither
+local image. It does mean the question **cannot be closed statically** with the
+images we have — it needs the RAM-diff test across a first vs repeat entry.
+
+## 9.3 Q_B RESOLVED — item-kind tables, and which kinds are safe for pickupsanity
+
+Two dispatch tables, adjacent:
+
+| Table | Address | Entries | Referenced from |
+|---|---|---|---|
+| **collect** (on pickup) | `0x80011068` | 28 (kinds `0x00-0x1B`) | `0x80054084` |
+| **init** (spawn / ownership) | `0x80011038` | 12 (kinds `0x00-0x0B`) | `0x8005379C` |
+
+The collect table ends at `0x800110D8` where ASCII strings begin (`"SPU:"`,
+`"wait (reset)"` ...) — a hard end at 28 kinds.
+
+| kind | init | collect | identity | evidence |
+|---|---|---|---|---|
+| `0x00` | `0x800537B8` | `0x800540A0` | **Heart Tank** | writes `0x800D1C80` |
+| `0x01` | `0x800537D4` | `0x80054100` | **EX item** | writes `0x800D1C80` |
+| `0x02` | `0x80053858` | `0x80054164` | **small HP** | heals 4, or 5 if `player+0xFC & 0x40` |
+| `0x03` | `0x80053858` | `0x80054198` | **large HP** | heals 16, or 20 with the same flag |
+| `0x04` | `0x80053858` | `0x800541D8` | **full HP** | amount = max HP `0x800D1C47 + charIdx` |
+| `0x05`/`0x06`/`0x07` | `0x80053858` | `0x80054204` (shared) | **weapon energy** | passes its own kind byte `obj+0x82` to `0x80053B68` |
+| `0x08` | `0x80053858` | `0x80054218` | **1-UP** | `0x800D1C45 += 1`, clamped at 10 |
+| `0x09` | `0x80053800` | `0x80054264` | Sub-Tank | the three tank-fix sites |
+| `0x0A` | `0x8005382C` | `0x800542D0` | W-Tank | " |
+| `0x0B` | `0x8005383C` | `0x80054310` | EX-Tank | " |
+
+**Kinds `0x00`-`0x08` all share the generic init `0x80053858`** — no per-kind
+ownership test, therefore no already-owned despawn. Only `0x09`/`0x0A`/`0x0B`
+carry one, which is exactly what the tank fix patches.
+
+This is **code-level confirmation that consumables cannot hit the "X5 deletes
+what you already own" trap**, closing that question for pickupsanity.
+
+=> **Pickupsanity kind set = `0x02` .. `0x08` (seven kinds).**
+
+## 9.4 Q_B identity — pickup `id` is a TYPE id and COLLIDES; position is the stable key
+
+From `Scripts\mmx5_placement_log.txt`, deduplicated on `(stage, area, id, x, y)`.
+The raw log accumulates across repeat visits, so **undeduped counts are
+meaningless** — 145 raw lines collapse to 50 unique placements over 10 stages
+(partial coverage: mostly entry areas).
+
+Genuine same-`(stage, area, id)` collisions at distinct coordinates:
+
+| stage | area | id | n | coords |
+|---|---|---|---|---|
+| Dark Dizzy | 1 | `0x06` | 2 | (2440,384) (2440,752) |
+| Duff McWhalen | 0 | `0x20` | 3 | (2992,744) (3104,912) (4864,712) |
+| Izzy Glow | 1 | `0x24` | 3 | (2392,2016) (2912,1728) (3456,1328) |
+| Axle the Red | 0 | `0x00` | 4 | y~1136 cluster |
+| Axle the Red | 0 | `0x01` | 4 | y~1136 cluster |
+| Zero Space 3 | 0 | `0x22` | 3 | (1576,2224) (3376,2088) (4384,2088) |
+
+`(x, y)` is unique within a `(stage, area)` across every deduped placement.
+
+**Design consequence for pickupsanity:** the mailbox record `{stage, kind, id,
+seq}` **cannot identify a consumable pickup** — three Izzy Glow capsules are all
+`id=0x24`. The stub must also record position (or the placement-record index)
+for consumable kinds. That is a **stub change, not a table change**, and it is
+the largest remaining unknown on the feature.
+
+Consumable id space seen so far: `0x20 0x21 0x22 0x24 0x25 0x26` (`0x23` not yet
+observed). Heart/tank ids: `0x00-0x07` hearts, `0x27`/`0x28` Sub-Tanks, `0x29`
+W-Tank, `0x2A` EX-Tank.
+
+**Caveat on the harvester's labels.** `mmx5_placement_dump.lua` labels ids
+`0x00-0x07` as "HEART TANK (bit n)" *by assumption*. Axle the Red area 0 shows
+four `id=0x00` and four `id=0x01` records in a horizontal row — that is not four
+heart tanks. Treat the id-to-label mapping below `0x20` as unverified.
+
+## 9.5 Q_F — the **Boss Level formula function** located: `0x80024594`
+
+Decoded from disassembly:
+
+```
+level_raw = 2 * floor(elapsed / 432000)          ; 432000 frames = 2 h
+          + popcount(player+0xC9)                ; weapons byte (copy of save 0x1C4C)
+          + rankTable[ 0x800D1CAA + charIdx ]
+elapsed   = 0x34BC00 - 0x800D1CAC                ; 0x34BC00 = 16 h in frames
+            (clamped >= 0)
+0x800D1CC0 = min(level_raw + 1, 0x60)            ; 96 cap
+0x800D1CA2 = min(0x800D1CA2 + level_raw, 0x7F)   ; accumulator, 127 cap
+```
+
+- the 2-hour divide is the standard signed-division-by-constant idiom (`mult` by
+  `0x9B583739`, `mfhi`, `sra 0x12`), divisor 432000
+- **rank modifier table `0x800717EC`** (u16): `[0]=+16 [1]=+8 [2]=+4 [3]=+2
+  [4..7]=+0`. The index runs **best-first**: index 0 is MEH/MMH, not E. The
+  ram-notes list the same values in the opposite order — the *values* were
+  right, the implied index order was not.
+- `0x800D1CC0` is written only at `0x80024574` / `0x80024588` / `0x8002465C` and
+  **read by nothing** in the EXE or hub => consumed by overlay code.
+- `0x800D1CA2` is read at `0x800259E0`, `0x8002617C` (EXE) and `0x800F7564`
+  (hub), each time as **`(value - 0x20) / 2`** — a scaling factor. Consumer
+  functions: `0x80025828` (called from `0x8002475C`) and `0x80026080` (many
+  callers in `0x80025xxx`).
+
+**Design consequence for `boss_difficulty` and tester request #2:** the client
+currently sets difficulty *indirectly*, by pinning the countdown — the same byte
+the endgame interlock depends on. `0x800D1CC0` is the computed level itself.
+Pinning it directly would decouple difficulty from the collision deadline: the
+countdown pin stays (the endgame gate still needs it), but the two stop being
+one knob. **[INFER]** — the write sites are proven, the effect of *overriding*
+the value is not, because the consumer is in overlay code we cannot see. Needs a
+live test before being designed around.
+
+## 9.6 Q_G — first located **stage-select availability gate**: `0x800F26C0` (hub)
+
+```
+800F26C0  lui   $v1, 0x800d
+800F26C4  addiu $v1, $v1, 0x1c00     ; $v1 = 0x800D1C00
+800F26CC  lbu   $v0, 0x79($v1)       ; ACT  (0x800D1C79)
+800F26D4  sltiu $v0, $v0, 5          ; ACT < 5 ?
+800F26D8  bnez  $v0, 800F2714        ;   -> UNAVAILABLE path
+800F26E0  lbu   $v0, 0xcb($v1)       ; launch flags (0x800D1CCB)
+800F26E8  andi  $v0, $v0, 0x80       ; bit7 = launch already succeeded
+800F26EC  bnez  $v0, 800F2714        ;   -> UNAVAILABLE path
+800F26F4  addiu $v0, $zero, 0x788c   ; AVAILABLE   entry sprite
+800F2714: addiu $v0, $zero, 0x7880   ; UNAVAILABLE entry sprite
+          sh    $v0, 0x42($s1)       ; entry sprite id
+          jal   0x80017214           ; (obj, 2, a2)   a2 = 2 available / 0 not
+```
+
+This is the **`ACT >= 5` rule that puts Zero Space on stage select**, now located
+in code rather than inferred from live pokes — and it shows the shape a stage-lock
+hook needs: an availability predicate feeding a sprite id at `obj+0x42` plus an
+`a2` enable flag.
+
+Caveats before building on it:
+
+- `0x80017214` is a **generic sprite/animation setter** — 40 call sites in the
+  hub. It is not a stage-select API; only the predicate above is specific.
+- This is *one* entry's gate. Whether the eight Maverick entries have their own
+  predicates (hookable) or are unconditionally enabled (a predicate must be
+  *added*) is **[OPEN]** — the next question for feature #7.
+- `0x800F2C94` reads `0x800D1C2A` while setting up another entry; unidentified.
+
+## 9.7 Q_E — damage table NOT found
+
+No weapon/weakness damage table located. **Ruled out:** the
+`0x80074000-0x80075200` band is animation/state tables — it holds the known
+knockback (`0x80074778`) and i-frame (`0x80074818`) tables and ~55 others of the
+same character, none damage-shaped.
+
+Best remaining lead is the level-scaled stat family `0x80024594` ->
+`0x80025828` / `0x80026080`, all consuming `0x800D1CA2` as `(x-0x20)/2`; that is
+where per-encounter stats are computed. A DuckStation write-watchpoint on boss HP
+`0x800920EC` during a weakness hit remains the fastest route. Static analysis did
+not close this one.
+
+## 9.8 Rebuilding the toolkit
+
+Scratchpad-local (session-lived), so the recipe matters more than the files:
+
+1. Extract `SLUS_013.34`: MODE2/2352, user bytes 24..2071, ISO9660 PVD at LBA 16
+   -> root dir -> `SLUS_013.34;1` at LBA 23432. Strip the 0x800-byte PS-EXE
+   header => `.text` at base `0x80010000`.
+2. Scanner: decode words; for each `lui rX,hi` (accept only
+   `0x8000 <= hi <= 0x801F`) look ahead ~12 instructions for `lw/lbu/sb/sw/...`
+   with `rs == rX`, or `addiu`/`ori` on `rX`; effective address =
+   `hi<<16 + simm`. Stop on redefinition of `rX`.
+3. Save-struct fields need a **second** mode: seed on materialisations of
+   `0x800D1C00`, then track that register forward and resolve `off(reg)`.
+   Without it most save-struct accesses are invisible — the game addresses the
+   block via a base pointer, not absolute effective addresses.
+4. Ghidra 12.1.2 headless works if decompilation is wanted:
+   `analyzeHeadless <proj> MMX5 -import SLUS_text.bin -processor MIPS:LE:32:default
+   -loader BinaryLoader -loader-baseAddr 0x80010000` (JDK 21 on PATH, ~2 min).
+   The Python scanner answered every question above faster, so the project is
+   optional.
+
+**Known scanner limitation:** it misses accesses where the struct base arrives as
+a *function parameter* — the three stage-load sites `0x8003C324` / `0x8003D660` /
+`0x8003D814` do **not** appear in a `0x800D1C00` field scan because `ctrl` is
+passed in. **Absence of a hit is not absence of a reference.**
+
+
+## 9.9 Q_B identity RESOLVED — the item object back-points to its placement record
+
+Supersedes §9.4's "needs position" conclusion. **`itemObj+0x10` = pointer to the
+placement record that spawned it.** This was already stated in
+`mmx5-overlay-findings.md` §1.4; it is now verified in the disassembly of the
+per-record spawner `0x8002B070`:
+
+```
+8002B28C  sb  $v0, 0x00($s1)     ; type
+8002B298  sb  $v1, 0x01($s1)     ; minor  (0x2F = item)
+8002B2A4  sb  $v0, 0x02($s1)     ; id
+8002B2B0  sh  $v1, 0x0A($s1)     ; x
+8002B2B8  sw  $s2, 0x10($s1)     ; <-- RECORD POINTER  ($s2 walks the list)
+8002B2BC  sh  $a0, 0x0E($s1)     ; y
+...
+8002B42C  sb  $v0, 0x03($s2)     ; mark record spawned (sub += 0x10)
+```
+
+**This is the stable unique location key pickupsanity needs**, and it is the same
+concept the MMX4 apworld client keys on. Colliding type-`id`s stop mattering.
+
+Design that falls out of it:
+
+- the stub reads `lw $t?, 0x10($s1)` and records the **u32 record pointer**
+- the client computes `index = (recptr - listbase) / 8`, where
+  `listbase = *(0x80072EAC + stage*8 + area*4)` — the same table the placement
+  harvester already uses
+- location identity = `(stage, area, index)`: stable across runs, unique by
+  construction, independent of coordinates
+
+The mailbox slot must widen from 4 bytes to 8 to carry the pointer — which is the
+same change the **ring-overflow fix** already required, so the two land together.
+
+## 9.10 Alia visit-record hypothesis (#8) — DEAD
+
+`0x800D1C88-0x800D1C9F` reads **all-zero in every RAM dump available**, including
+a mid-run save at `weapons=0x3F` (six Mavericks defeated, ACT=5). Six u32s still
+zero that deep into a run are not a per-stage visit record. Combined with §9.2
+(no field references anywhere in the EXE or the hub overlay), the suspect is
+**dead**, not "unproven".
+
+Live behaviour observed 2026-08-05 (Ivor): Alia is **silent on re-entry after a
+clean stage-select round trip**, and silent across death/respawn. So visit state
+*is* tracked somewhere — just not in that region, and not anywhere in
+`0x800D1C00-0x800D1D60`: the save-block watcher logged zero relevant changes
+across a full visit (only lives, countdown, clear-time, damage-stat and mode
+bytes moved).
+
+**A wide RAM diff at stage select was attempted and failed** — ~89,000 candidate
+bytes. Stage select is not quiescent (audio and graphics scratch churn
+constantly), so that method cannot isolate the flag. **Do not retry it without a
+fundamentally different filter.**
+
+The only remaining route is to find the code that *gates the dialogue*, in stage
+overlay code — two in-stage gameplay dumps exist, see the §9.0 correction —
+rather than hunting its flag in RAM. Given the cost already sunk and that the
+payoff is purely cosmetic, **the recommendation is to drop #8.**
+
+## 9.11 Method note — what went wrong in this session
+
+Two avoidable detours, recorded so they are not repeated:
+
+1. **A truncated file listing became a stated conclusion.** `head -30` on a
+   `find` over `*.bin` cut off before the stage and hub dumps, and the missing
+   files were then reported as non-existent. Two live tests were requested that
+   existing dumps already covered. **Enumerate fully before concluding absence.**
+2. **A documented answer was re-derived as an open question.** `itemObj+0x10`
+   was in overlay-findings §1.4 the whole time, while §9.4 called pickup identity
+   "the largest remaining unknown". **Grep the research docs for the structure
+   before designing an experiment to find it.**
+
+Both had the same shape: acting on an incomplete search instead of an exhausted
+one. The static-analysis findings in §9.1–9.7 were unaffected — those came from
+disassembly, not from file surveys — but the experiment design that followed
+cost live testing time that was not needed.
+
+
+## 9.12 Placement data is on the DISC — full pickup inventory extracted statically
+
+**The runtime placement harvest is unnecessary.** Stage overlay *data* is raw in
+`ROCK_X5.BIN`, exactly as code overlays are (CLAUDE.md already recorded that the
+recomp project's "overlays are compressed" claim is wrong for code). Every
+stage's placement record list is therefore readable straight off the disc.
+
+Result: **all 17 lists resolved, 50 item records, 26 consumables**, for every
+stage and area including ones nobody has ever walked into.
+Inventory: **`Reference/mmx5-placements.csv`**.
+
+### Why this is exact rather than heuristic
+
+Two facts remove all guessing:
+
+1. **The list-pointer table `0x80072EAC` is STATIC EXE DATA.** It is *not*
+   repointed at stage load, contrary to the note in overlay-findings §1.4 —
+   verified byte-identical in the stage-6 and stage-7 RAM dumps. So every
+   `(stage, area)` list RAM address is known up front:
+   `list_ram = *(0x80072EAC + stage*8 + area*4)`.
+2. **Every stage overlay chunk streams to RAM base `0x800EE970`** — the same
+   base the hub and results modules use. Derived from the stage-7 anchor
+   (list RAM `0x800FA618` ↔ disc `0x8D4A8`, chunk 10 base `0x81800`).
+
+Hence `disc_off = chunk_base + (list_ram - 0x800EE970)`, with the chunk
+identified by checking that the parsed list contains that stage's documented
+heart bit.
+
+`ROCK_X5.BIN` itself is a container of `(u32 sector, u32 size)` pairs, sector
+(2048 B) aligned, 59 chunks.
+
+### Validation — two independent methods agree exactly
+
+Per-stage consumable counts, disc extraction vs the live harvest log:
+
+| | Intro | Grizzly | Dizzy | Duff | Mattrex | Squid | Izzy | Axle | Skiver | ZS3 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| harvest | 1 | 1 | 2 | 4 | 3 | 0 | 4 | 2 | 1 | 8 |
+| **disc** | 1 | 1 | 2 | 4 | 3 | 0 | 4 | 2 | 1 | 8 |
+
+Stage 7's list resolves to `0x8D4A8`, matching the RAM anchor exactly, and its
+parse reproduces the harvested records byte for byte — including the eleven
+armor-gated phantom hearts and the single ungated `id=0x05` heart (stage 7 =
+bit 5, as documented).
+
+### The list table
+
+| stage | area | list RAM | where | disc | recs | items | cons |
+|---|---|---|---|---|---|---|---|
+| Intro | 0 | `0x80073748` | EXE | `0x063748` | 58 | 1 | 1 |
+| Grizzly Slash | 0 | `0x800FBD3C` | chunk1 | `0x01ABCC` | 72 | 3 | 1 |
+| Dark Dizzy | 0 | `0x800F37E0` | chunk2 | `0x021E70` | 175 | 2 | 1 |
+| Dark Dizzy | 1 | `0x800F8B4C` | chunk3 | `0x02D1DC` | 116 | 3 | 1 |
+| Duff McWhalen | 0 | `0x80100BB0` | chunk4 | `0x041240` | 53 | 5 | 4 |
+| Mattrex | 0 | `0x800F4558` | chunk5 | `0x0493E8` | 73 | 4 | 3 |
+| Mattrex | 1 | `0x800FDB7C` | chunk6 | `0x059A0C` | 91 | 0 | 0 |
+| Squid Adler | 0 | `0x80100078` | chunk7 | `0x06CF08` | 119 | 1 | 0 |
+| Izzy Glow | 0 | `0x800F326C` | chunk8 | `0x0738FC` | 54 | 2 | 0 |
+| Izzy Glow | 1 | `0x800F9E48` | chunk9 | `0x07FCD8` | 62 | 4 | 4 |
+| Axle the Red | 0 | `0x800FA618` | chunk10 | `0x08D4A8` | 113 | 14 | 2 |
+| The Skiver | 0 | `0x800F8C64` | chunk11 | `0x099AF4` | 89 | 3 | 1 |
+| Dynamo | 0 | `0x800F166C` | chunk12 | `0x09DCFC` | 1 | 0 | 0 |
+| Zero Space 1 | 0 | `0x800739C4` | EXE | `0x0639C4` | 1 | 0 | 0 |
+| Zero Space 2 | 0 | `0x80073A8C` | EXE | `0x063A8C` | 20 | 0 | 0 |
+| Zero Space 2 | 1 | `0x80073B5C` | EXE | `0x063B5C` | 46 | 0 | 0 |
+| Zero Space 3 | 0 | `0x80074140` | EXE | `0x064140` | 113 | 8 | 8 |
+
+Intro and Zero Space lists live in the static EXE, as overlay-findings §1.5
+already noted. **Mattrex area 1 and Dynamo area 0 contain no items at all** —
+they parse cleanly with 91 and 1 records respectively. That is a real result,
+not a failure to resolve; the harvest never reached Mattrex area 1 either.
+
+### The pickupsanity location set (26)
+
+| stage | area | record indices (id) |
+|---|---|---|
+| Intro | 0 | 47 (`0x21`) |
+| Grizzly Slash | 0 | 60 (`0x21`) |
+| Dark Dizzy | 0 | 173 (`0x21`) |
+| Dark Dizzy | 1 | 12 (`0x24`) |
+| Duff McWhalen | 0 | 21 (`0x21`), 22–24 (`0x20`) |
+| Mattrex | 0 | 38 (`0x21`), 39 (`0x24`), 40 (`0x26`) |
+| Izzy Glow | 1 | 58, 59, 61 (`0x24`), 60 (`0x21`) |
+| Axle the Red | 0 | 109, 110 (`0x21`) |
+| The Skiver | 0 | 86 (`0x21`) |
+| Zero Space 3 | 0 | 36 (`0x26`), 37–39 (`0x21`), 40/41/43 (`0x22`), 42 (`0x25`) |
+
+**26 new locations** — the concrete headroom figure for the location budget that
+the chips, Ultimate/Black Zero and stage-unlock features all depend on.
+
+Caveat worth carrying: the CSV lists **20 heart-class records (id < 0x10) for 8
+real Heart Tanks**. The surplus are armor-gated phantom placements (Axle the Red
+alone has eleven, `armorgate=5`). Filter on `gate == 0` before treating a
+heart-class record as a real pickup, and do not assume `id < 0x10` means Heart
+Tank.
+
+### Method note
+
+This was reached only after two failed attempts — a structural pattern scan that
+mis-based stage 7 by one record (an off-by-one that would have corrupted every
+location id), and a self-pointer calibration that mismatched by `0x14` and lost
+the anchor stage entirely. Both failed for the same reason: inferring layout from
+shape instead of reading the game's own pointer table. **When the game has a
+table, read the table.**
+
+
+### 9.12.1 CORRECTION — the table has 26 stage entries, not 13
+
+The first pass looped `stage in range(0, 13)` and so read only stage ids
+`0x00-0x0C`. **The pointer table actually holds 26 populated stage entries:**
+
+| range | what |
+|---|---|
+| `0x00-0x0C` | Intro, the 8 Mavericks, Dynamo, two unused slots, **Sigma = `0x0C`** |
+| `0x10-0x12` | **Zero Space 1 = `0x10`**, Zero Space 2 = `0x11`, X-vs-Zero duel = `0x12` |
+| `0x16-0x1F` | post-Eurasia-crash stage variants, at a consistent **+0x17** offset from the originals (`0x02→0x19`, `0x04→0x1B`, `0x06→0x1D` — the area1 slots line up exactly) |
+
+This was avoidable: `mmx5-ram-notes.md` already records **"Endgame stage ids are
+NOT contiguous — Zero Space 1 = 0x10, X-vs-Zero duel = 0x12, Sigma = 0x0C —
+never infer one from sequence"**, and CLAUDE.md repeats it. The loop bound
+assumed contiguity anyway.
+
+Consequences of the fix:
+
+- **Zero Space 1 was never read.** It has **4 consumables** (area 0, record
+  indices 69–72). Ivor flagged this from memory — "there's static energy in Zero
+  Space first stage" — against an extraction that claimed zero.
+- Zero Space 2 has 3 more.
+- What the first pass labelled "Zero Space 3" (index `0x0C`) is the **Sigma
+  stage**; its 8 consumables were real but misattributed.
+- The alt stage set is nearly empty of pickups — only Dark Dizzy (alt) carries
+  one — which is consistent with revisited stages having their collectibles
+  already taken.
+
+**Corrected totals: 33 lists, 59 item records, 34 consumables.** The
+per-stage breakdown lives in `Reference/mmx5-placements.csv`.
+
+The earlier cross-validation against the live harvest still holds — the harvest
+only ever covered stages `0x00-0x0C`, which is exactly the range the first pass
+read, so the two agreeing proved that range correct and said nothing about the
+rest. **An agreement between two methods only validates the ground they both
+cover.**
+
+### 9.12.2 Consumable location set (34)
+
+| stage id | stage | area/record indices |
+|---|---|---|
+| `0x00` | Intro | a0: 47 |
+| `0x01` | Grizzly Slash | a0: 60 |
+| `0x02` | Dark Dizzy | a0: 173 · a1: 12 |
+| `0x03` | Duff McWhalen | a0: 21, 22, 23, 24 |
+| `0x04` | Mattrex | a0: 38, 39, 40 |
+| `0x06` | Izzy Glow | a1: 58, 59, 60, 61 |
+| `0x07` | Axle the Red | a0: 109, 110 |
+| `0x08` | The Skiver | a0: 86 |
+| `0x0C` | **Sigma** | a0: 36–43 |
+| `0x10` | **Zero Space 1** | a0: 69, 70, 71, 72 |
+| `0x11` | **Zero Space 2** | a0: 78, 79, 80 |
+| `0x19` | Dark Dizzy (alt) | a1: 4 |
+
+Squid Adler and the Skiver/Axle alt variants carry none.
+
+**Still unverified: the record-`id` → capsule-type mapping.** overlay-findings
+§1.4 guesses `0x21` life, `0x22` large life?, `0x24/0x25` weapon energy, `0x26`
+special-gfx variant — with question marks. `0x21` is the most common by far (12
+of 34). This matters for naming the locations and for telling small from large
+and life from weapon energy. It is resolvable from the item constructor
+(`0x800535C8`) and the collect handlers (§9.3), which is where the record id must
+turn into the kind byte at `obj+0x82` — **not** by guessing from the ids.
+
+Also unresolved and worth stating plainly: **X5's freestanding capsules are
+sparse because most life and weapon energy comes from enemy drops**, which are
+not placement records at all. 34 is the freestanding count, and that is the
+scope lx5's pickupsanity uses too — but it should be sanity-checked against
+someone's memory of the game before the location table ships.
+
+
+## 9.13 FINAL placement inventory — fully table-driven, all attributions proven
+
+Supersedes §9.12 and §9.12.1's counts and their remaining uncertainty. Three
+discoveries closed everything:
+
+### (a) The overlay loader table: `0x8006FD50`
+
+EXE data, `u8[stage*2 + area]` → ROCK_X5.BIN chunk id (0 = none/EXE-resident):
+
+```
+Intro (–,–)   Grizzly (1,–)   Dizzy (2,3)    Duff (4,–)    Mattrex (5,6)
+Squid (7,–)   Izzy (8,9)      Axle (10,–)    Skiver (11,–) Dynamo (12,13)
+0x0A (14,15)  0x0B (16,17)    Sigma (18,19)  0x0D (20,21)  0x0E (22,23)
+0x0F (24,25)  ZS1 (26,–)      ZS2 (27,–)     duel (28,–)   stage-16 (29,–)
+```
+
+Validated three independent ways: all 8 heart anchors, the Dark Dizzy area-1
+live-dump anchor (chunk3, 116 records byte-matched from
+`ramdump_stage_f174001.bin`), and the **X-vs-Zero duel live-dump anchor**
+(chunk28 @ `0xF3E0C`, 75 records matched from the `pre/post_zero` dumps). The
+table agreed with every anchor it did not produce. **Zero Space 1 = chunk26 and
+Zero Space 2 = chunk27 are proven**, closing the last inferred attributions.
+
+Two matching notes for anyone repeating this:
+- **Live lists do not byte-match the disc**: the spawner mutates records in RAM
+  (`sub += 0x10` spawn mark at `0x8002B42C`, plus flags churn). Match on
+  `(minor, id, x, y)` per record and wildcard bytes 0 and 3.
+- The v4 "prefer the longest parse" disambiguation picked WRONG chunks (Dizzy
+  a1 → chunk11's 124-record garbage over chunk3's correct 116). Plausible
+  garbage parses are common at wrong deltas. Only anchors or the loader table
+  decide.
+
+### (b) Record id → item type, PROVEN from the ctor (`0x8005367C-0x80053714`)
+
+```
+id < 0x10 → kind 0 heart      id < 0x20 → kind 1 EX item
+id 0x20-0x26 → kind = id - 0x1E:
+  0x20 Small Life   0x21 Large Life   0x22 Full Life
+  0x23 Small Weapon 0x24 Large Weapon 0x25 Full Weapon   0x26 1-UP
+id 0x27/28 → kind 9 (Sub-Tanks)   0x29 → kind 0xA (W)   0x2A → kind 0xB (EX)
+id 0x2B/2C → kinds 0xC/0xD (misc) id >= 0x2D → generic path
+```
+
+The overlay-findings §1.4 guesses ("0x21 life, 0x22 large life?, 0x26
+special-gfx") are superseded: **0x21 is LARGE life, 0x26 is the 1-UP** (its
+"special gfx" is the 1-UP sprite `0x780B`, set in the ctor). Small/large/full
+amounts for weapon energy (kinds 5/6/7) are by analogy with the proven HP kinds
+(heal 4 / heal 16 / heal to max); amounts unverified, identities firm.
+
+### (c) The secondary record table (`0x80072F64`) holds NO items
+
+Same 23-stage × 2-area layout as the primary table, lists handed to a second
+spawner via `0x8002B61C` (v3 misread its entries as "alt stages 0x17-0x1F").
+Every secondary list resolves and parses via the loader table — and none
+contains a single `minor 0x2F` item record. **Every pickup in the game lives in
+the primary table.** (A third parallel table exists at `0x80072DD4`, byte lists,
+role unidentified — no item relevance found.)
+
+### Final numbers
+
+**33 consumable pickups** (gate 0), plus 9 real heart records (8 Heart Tanks —
+Dark Dizzy's heart legitimately has TWO candidate placements in area 1 at
+(2440,384)/(2440,752), also present in the live harvest; collecting one sets the
+bit and the other despawns), 4 tanks, 11 never-spawning phantoms (all Axle,
+gate 5), and zero EX items (Energy Ups are DNA rewards, not stage pickups —
+`names.py` was right).
+
+| stage | consumables |
+|---|---|
+| Intro | Large Life ×1 |
+| Grizzly Slash | Large Life ×1 |
+| Dark Dizzy | Large Life ×1 · Large Weapon ×1 |
+| Duff McWhalen | Large Life ×1 · Small Life ×3 |
+| Mattrex | Large Life ×1 · Large Weapon ×1 · 1-UP ×1 |
+| Squid Adler | — |
+| Izzy Glow | Large Weapon ×3 · Large Life ×1 |
+| Axle the Red | Large Life ×2 |
+| The Skiver | Large Life ×1 |
+| Sigma | 1-UP ×1 · Large Life ×3 · Full Life ×3 · Full Weapon ×1 |
+| Zero Space 1 | 1-UP ×2 · Large Weapon ×2 |
+| Zero Space 2 | Large Life ×1 · Full Life ×1 · 1-UP ×1 |
+| X-vs-Zero duel | — (75 records, no items) |
+
+The count moved 26 → 34 → 33 across the session: 26 missed the endgame stages
+(loop bound bug, §9.12.1); 34 included two garbage rows from wrong-chunk parses
+("ZS1 secondary" and "Dark Dizzy alt", both chunk11 ghosts); 33 is the
+table-driven result with every row carrying its provenance.
+
+`Reference/mmx5-placements.csv` (v5) is the durable artifact: every item record
+with stage, area, table, record index, proven type name, gate, coordinates and
+source chunk.

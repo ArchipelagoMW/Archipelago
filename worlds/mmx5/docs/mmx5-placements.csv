@@ -1,0 +1,71 @@
+# MMX5 pickup placement inventory - extracted statically from the disc (v5, final)
+# Deterministic chain: loader table 0x8006FD50 (EXE, u8[stage*2+area] -> ROCK chunk),
+#   record tables 0x80072EAC (primary) / 0x80072F64 (secondary) (u32[stage*8+area*4]),
+#   module RAM base 0x800EE970, disc = chunk_base + (list_ram - base).
+# Validated by: 8 heart anchors, Dizzy-a1 live-dump anchor (chunk3),
+#   X-vs-Zero duel live-dump anchor (chunk28). See mmx5-ghidra-findings.md 9.13.
+# Location identity = (stage, area, table, rec_index). The AP stub reads the record
+#   pointer from itemObj+0x10; both list bases are known statically.
+# gate!=0 records NEVER SPAWN (spawner rejects gate>=3 before reading armor level;
+#   the only nonzero gates in the data are 5). Excluded from location counts.
+# Type names PROVEN from ctor 0x8005367C: 0x20 small life, 0x21 large life,
+#   0x22 full life, 0x23 small weapon, 0x24 large weapon, 0x25 full weapon, 0x26 1-UP.
+
+stage_id,stage_name,area,table,rec_index,item_id,type,gate,x,y,source
+0x00,Intro,0,primary,47,0x21,Large Life Energy,0,1432,1120,EXE
+0x01,Grizzly Slash,0,primary,37,0x00,Heart Tank,0,3488,80,chunk1
+0x01,Grizzly Slash,0,primary,60,0x21,Large Life Energy,0,3200,240,chunk1
+0x01,Grizzly Slash,0,primary,61,0x27,Sub-Tank,0,6896,376,chunk1
+0x02,Dark Dizzy,0,primary,173,0x21,Large Life Energy,0,3200,392,chunk2
+0x02,Dark Dizzy,0,primary,174,0x28,Sub-Tank,0,5296,256,chunk2
+0x02,Dark Dizzy,1,primary,10,0x06,Heart Tank,0,2440,384,chunk3
+0x02,Dark Dizzy,1,primary,11,0x06,Heart Tank,0,2440,752,chunk3
+0x02,Dark Dizzy,1,primary,12,0x24,Large Weapon Energy,0,4040,664,chunk3
+0x03,Duff McWhalen,0,primary,20,0x03,Heart Tank,0,3648,560,chunk4
+0x03,Duff McWhalen,0,primary,21,0x21,Large Life Energy,0,2336,400,chunk4
+0x03,Duff McWhalen,0,primary,22,0x20,Small Life Energy,0,2992,744,chunk4
+0x03,Duff McWhalen,0,primary,23,0x20,Small Life Energy,0,3104,912,chunk4
+0x03,Duff McWhalen,0,primary,24,0x20,Small Life Energy,0,4864,712,chunk4
+0x04,Mattrex,0,primary,37,0x07,Heart Tank,0,1120,3072,chunk5
+0x04,Mattrex,0,primary,38,0x21,Large Life Energy,0,224,1936,chunk5
+0x04,Mattrex,0,primary,39,0x24,Large Weapon Energy,0,256,1936,chunk5
+0x04,Mattrex,0,primary,40,0x26,1-UP,0,1216,2976,chunk5
+0x05,Squid Adler,0,primary,50,0x01,Heart Tank,0,8256,1120,chunk7
+0x06,Izzy Glow,0,primary,18,0x02,Heart Tank,0,768,640,chunk8
+0x06,Izzy Glow,0,primary,19,0x2A,EX-Tank,0,1800,224,chunk8
+0x06,Izzy Glow,1,primary,58,0x24,Large Weapon Energy,0,2392,2016,chunk9
+0x06,Izzy Glow,1,primary,59,0x24,Large Weapon Energy,0,2912,1728,chunk9
+0x06,Izzy Glow,1,primary,60,0x21,Large Life Energy,0,3136,1792,chunk9
+0x06,Izzy Glow,1,primary,61,0x24,Large Weapon Energy,0,3456,1328,chunk9
+0x07,Axle the Red,0,primary,24,0x00,Heart Tank,5,5504,1136,chunk10
+0x07,Axle the Red,0,primary,25,0x00,Heart Tank,5,5232,1136,chunk10
+0x07,Axle the Red,0,primary,26,0x00,Heart Tank,5,4800,1056,chunk10
+0x07,Axle the Red,0,primary,27,0x00,Heart Tank,5,4512,1072,chunk10
+0x07,Axle the Red,0,primary,28,0x01,Heart Tank,5,5744,1136,chunk10
+0x07,Axle the Red,0,primary,29,0x01,Heart Tank,5,5440,1136,chunk10
+0x07,Axle the Red,0,primary,30,0x01,Heart Tank,5,4800,1072,chunk10
+0x07,Axle the Red,0,primary,31,0x01,Heart Tank,5,4592,1136,chunk10
+0x07,Axle the Red,0,primary,32,0x02,Heart Tank,5,5616,1136,chunk10
+0x07,Axle the Red,0,primary,33,0x02,Heart Tank,5,4384,1136,chunk10
+0x07,Axle the Red,0,primary,34,0x02,Heart Tank,5,4448,1136,chunk10
+0x07,Axle the Red,0,primary,54,0x05,Heart Tank,0,3824,992,chunk10
+0x07,Axle the Red,0,primary,109,0x21,Large Life Energy,0,4296,712,chunk10
+0x07,Axle the Red,0,primary,110,0x21,Large Life Energy,0,7344,992,chunk10
+0x08,The Skiver,0,primary,36,0x04,Heart Tank,0,3984,640,chunk11
+0x08,The Skiver,0,primary,85,0x29,W-Tank,0,2128,1664,chunk11
+0x08,The Skiver,0,primary,86,0x21,Large Life Energy,0,2280,1424,chunk11
+0x0C,Sigma,0,primary,36,0x26,1-UP,0,3728,1240,EXE
+0x0C,Sigma,0,primary,37,0x21,Large Life Energy,0,3776,1240,EXE
+0x0C,Sigma,0,primary,38,0x21,Large Life Energy,0,3376,1464,EXE
+0x0C,Sigma,0,primary,39,0x21,Large Life Energy,0,3448,1464,EXE
+0x0C,Sigma,0,primary,40,0x22,Full Life Energy,0,1576,2224,EXE
+0x0C,Sigma,0,primary,41,0x22,Full Life Energy,0,3376,2088,EXE
+0x0C,Sigma,0,primary,42,0x25,Full Weapon Energy,0,3408,2088,EXE
+0x0C,Sigma,0,primary,43,0x22,Full Life Energy,0,4384,2088,EXE
+0x10,Zero Space 1,0,primary,69,0x26,1-UP,0,80,288,chunk26
+0x10,Zero Space 1,0,primary,70,0x26,1-UP,0,264,1616,chunk26
+0x10,Zero Space 1,0,primary,71,0x24,Large Weapon Energy,0,56,1856,chunk26
+0x10,Zero Space 1,0,primary,72,0x24,Large Weapon Energy,0,1000,3336,chunk26
+0x11,Zero Space 2,0,primary,78,0x21,Large Life Energy,0,4224,1064,chunk27
+0x11,Zero Space 2,0,primary,79,0x22,Full Life Energy,0,4064,88,chunk27
+0x11,Zero Space 2,0,primary,80,0x26,1-UP,0,4088,88,chunk27

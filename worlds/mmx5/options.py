@@ -120,6 +120,24 @@ class TextSkip(Toggle):
     display_name = "Text Skip"
 
 
+class PickupSanity(Toggle):
+    """Freestanding pickups become checks.
+
+    Every loose Life Energy, Weapon Energy and 1-UP capsule sitting in a stage
+    becomes an Archipelago location - 32 in total, including the ones in Zero
+    Space and Sigma's stage. Energy dropped by defeated enemies is unaffected.
+
+    On these seeds a freestanding capsule no longer restores anything when
+    touched: collecting it sends its check instead, and the energy it held is
+    in the item pool as filler. A capsule keeps respawning until its check is
+    confirmed, so nothing is lost to a drop or disconnect.
+
+    The intro stage's single capsule is deliberately NOT a location - the
+    intro cannot be revisited, which would make it permanently missable.
+    """
+    display_name = "Pickupsanity"
+
+
 @dataclass
 class MMX5Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -127,3 +145,4 @@ class MMX5Options(PerGameCommonOptions):
     boss_difficulty: BossDifficulty
     launch_odds: LaunchOdds
     text_skip: TextSkip
+    pickupsanity: PickupSanity

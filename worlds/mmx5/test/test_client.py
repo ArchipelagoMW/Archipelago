@@ -58,13 +58,15 @@ def seed_edits_for(**overrides) -> list:
     patch_rom reads options they had never heard of. Defaults live here so a
     new option needs updating in exactly one place."""
     from .. import Rom
-    from ..options import Goal, LaunchOdds, TextSkip
+    from ..options import Goal, LaunchOdds, PickupSanity, TextSkip
 
     opts = {"goal": Goal(Goal.option_sigma),
             "launch_odds": LaunchOdds(LaunchOdds.option_deterministic),
-            "text_skip": TextSkip(0)}
+            "text_skip": TextSkip(0),
+            "pickupsanity": PickupSanity(0)}
     for key, value in overrides.items():
-        cls = {"goal": Goal, "launch_odds": LaunchOdds, "text_skip": TextSkip}[key]
+        cls = {"goal": Goal, "launch_odds": LaunchOdds, "text_skip": TextSkip,
+               "pickupsanity": PickupSanity}[key]
         opts[key] = cls(value)
 
     captured = {}
@@ -91,10 +93,12 @@ def make_save(max_hp: int, intro: int = 0, weapons: int = 0, hearts: int = 0,
 
 async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                       client: MMX5Client | None = None,
-                      ctx: FakeContext | None = None) -> FakeContext:
+                      ctx: FakeContext | None = None,
+                      ring2: bytes | None = None) -> FakeContext:
     ctx = ctx or FakeContext()
     client = client or MMX5Client()
     ring = bytes(mmx5_client.RING_SLOTS * 4)
+    ring2 = ring2 or bytes(mmx5_client.RING2_SLOTS * 8)
     # The mode read covers 0x0D1C00..0x0D1C0F: mode at +0, stage id at +0x0C.
     mode_block = bytearray(0x10)
     mode_block[0] = mode
@@ -109,11 +113,14 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
         mmx5_client.TANK_FIX_PROBE_ADDR: (
             mmx5_client.TANK_FIX_PATCHED if getattr(client, "tank_fix_present", None)
             else mmx5_client.TANK_FIX_VANILLA),
+        mmx5_client.RING2_PROBE_ADDR: (
+            mmx5_client.RING2_PROBE_STUBBED if getattr(client, "ring2_present", None)
+            else mmx5_client.RING2_PROBE_VANILLA),
     }
 
     async def fake_read(_ctx, requests):
         if requests[0][0] == 0x0D1C00:
-            return [bytes(mode_block), save, ring]
+            return [bytes(mode_block), save, ring, ring2]
         return [PROBE_REPLY.get(r[0], b"\x00\x00\x00\x00") for r in requests]
 
     async def fake_write(_ctx, writes, *_args, **_kwargs):

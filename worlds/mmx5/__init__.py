@@ -13,7 +13,7 @@ import settings
 from BaseClasses import ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
-from . import names
+from . import names, pickups
 from .client import MMX5Client  # noqa: F401  (import registers the client)
 from .items import BASE_ID, MMX5Item, event_table, item_groups, item_table
 from .locations import MMX5Location, event_location_table, location_groups, location_table
@@ -135,6 +135,23 @@ class MMX5World(World):
             region.add_locations(stage_locations, MMX5Location)
             # All 8 stages are open from the start in X5.
             stage_select.connect(region)
+
+        if self.options.pickupsanity:
+            # Maverick-stage pickups join their stage's region (same
+            # reachability as its other locations); Sigma / Zero Space
+            # pickups live in Sigma Stages, whose entrance already carries
+            # the all-8-weapons rule - deliberately stricter than the game
+            # opens the endgame, same reasoning as that entrance.
+            by_region: dict[str, dict[str, int]] = {}
+            for stage_id, _area, _idx, _iid, loc_name in pickups.PICKUPS:
+                region_name = ("Sigma Stages"
+                               if stage_id in pickups.ENDGAME_STAGE_IDS
+                               else pickups.STAGE_PREFIX[stage_id])
+                by_region.setdefault(region_name, {})[loc_name] = \
+                    location_table[loc_name]
+            for region_name, locs in by_region.items():
+                self.multiworld.get_region(region_name, self.player) \
+                    .add_locations(locs, MMX5Location)
 
         victory = MMX5Location(self.player, names.VICTORY, None, sigma_stages)
         victory.place_locked_item(self.create_item(names.VICTORY))
@@ -259,4 +276,5 @@ class MMX5World(World):
             "goal": self.options.goal.value,
             "boss_difficulty": self.options.boss_difficulty.value,
             "launch_odds": self.options.launch_odds.value,
+            "pickupsanity": self.options.pickupsanity.value,
         }
