@@ -1086,7 +1086,11 @@ class MMX5Client(BizHawkClient):
             # kill record - AP grants go to 0x1C4D - so its popcount is real
             # kills and nothing else. Gated on save_sane and monotonic, so a
             # transient bad read can never lower a count already earned.
-            if save_sane:
+            # Trusted, not merely sane - this LATCHES, and it decides the
+            # all_mavericks goal. A stale 0xFF read would score 8 permanently
+            # and hand out a false victory, which no later good read can undo.
+            # Same hazard as max_act_seen; both now use the same gate.
+            if save_trusted:
                 self.mavericks_defeated = max(self.mavericks_defeated,
                                               bin(weapons_owned).count("1"))
             for bit, weapon in enumerate(WEAPON_BITS):
