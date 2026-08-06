@@ -13,10 +13,18 @@ completed that boss's three checks (Boss Defeated, DNA Reward, DNA Part)
 without you fighting anything. Eight weapons meant 24 false checks, and in a
 multiworld those checks released items to everybody else.
 
-Reported by a tester on 2026-08-06 whose world sent items to seven other
-players before they had started; reproduced exactly. The first guess was a
-reused save — it was not, and a brand new save does this every time on an
-unpatched disc.
+Found on 2026-08-06 while investigating a tester report of exactly this
+symptom. **Whether it caused that particular incident is not established** —
+they believe their disc was patched, and the same symptom is reachable
+another way (see below). This bug is real and reproducible on its own terms:
+8 weapons received, zero bosses beaten, 24 checks sent.
+
+**Still open, and not fixed here:** the only test for "is a save actually
+loaded" is that max HP reads between 0x10 and 0x40. RAM left over from a
+previous game satisfies that — and RAM survives a soft reset — so stale
+progress can still be read as real. If you hit this on a patched disc,
+please send the client log from `Archipelago/logs/`; that is the thing that
+will identify it.
 
 **An unpatched disc now holds all checks and items and tells you why**, instead
 of playing on and quietly breaking things. If you see that message: open your
