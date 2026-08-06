@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+**New option: `randomize_options`** (off by default) — let the seed pick your
+gameplay options for you. It rolls `goal`, `boss_difficulty`, `launch_odds`,
+`text_skip`, `pickupsanity`, `boss_hp_randomization`, `secret_armors_in_pool`,
+`stage_unlocks` and `dna_parts_in_pool`, ignoring whatever you wrote for those.
+`endgame_checks` is left alone, since it only ever adds checks.
+
+Two results are corrected after the roll, because they are traps rather than
+interesting outcomes:
+
+- **The `launch` goal with vanilla odds can be unwinnable** — that goal needs a
+  successful launch, you get two attempts, and a full part set is still only
+  75%. Choosing it deliberately is your call; having a coin flip hand it to you
+  is just a broken seed, so the odds are forced back to deterministic.
+- **If the roll asks for more items than the seed has locations**,
+  `pickupsanity` is switched on to make room rather than refusing to generate.
+
+What you got is written to the spoiler log. Note the roll can enable options
+that change the disc (`pickupsanity`, `text_skip`, `launch_odds`), so patch
+from the generated file rather than reusing an old disc.
+
 **New option: `dna_parts_in_pool`** (off by default) — the equippable DNA Parts
 become multiworld items.
 

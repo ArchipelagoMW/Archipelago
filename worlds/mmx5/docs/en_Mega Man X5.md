@@ -130,6 +130,16 @@ entirely by the client, so it works on a disc you have already patched.
   moves onto it; pressing confirm simply does nothing until its codes arrive.
   The Enigma, Space Shuttle and Zero Space entries are untouched and behave
   exactly as they normally would.
+- **`randomize_options` lets the seed choose your settings.** It rolls every
+  gameplay option — goal, boss difficulty, launch odds, text skip,
+  pickupsanity, boss HP, secret armors, stage unlocks and DNA Parts — and
+  ignores what you wrote for them. `endgame_checks` is left on, since it only
+  adds checks. Two results are corrected rather than left to chance: the
+  `launch` goal never comes out paired with vanilla odds (that combination can
+  be unwinnable), and if the roll wants more items than there are locations,
+  `pickupsanity` is turned on to make room. Your rolled settings appear in the
+  spoiler log. Since the roll can enable disc-changing options, patch your disc
+  from the file this generates rather than reusing an old one.
 - **`dna_parts_in_pool` shuffles the equippable Parts.** X5 has 16 Parts but a
   playthrough only yields 8 — each Maverick offers two, and Alia's Life+ /
   Energy+ prompt makes you give up the other for good. With this on, the seed

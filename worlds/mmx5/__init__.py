@@ -18,7 +18,7 @@ from . import names, pickups
 from .client import MMX5Client  # noqa: F401  (import registers the client)
 from .items import BASE_ID, MMX5Item, event_table, item_groups, item_table
 from .locations import MMX5Location, event_location_table, location_groups, location_table
-from .options import MMX5Options
+from .options import RANDOMIZED_OPTIONS, LaunchOdds, MMX5Options
 from .Rom import ACCEPTED_HASHES, MMX5ProcedurePatch, patch_rom
 
 
@@ -109,7 +109,41 @@ class MMX5World(World):
             locations += len(pickups.PICKUPS)
         return items, locations
 
+    def _roll_options(self) -> None:
+        """Pick the gameplay options for the player, then fix the two
+        combinations that are traps rather than interesting outcomes."""
+        for name in RANDOMIZED_OPTIONS:
+            option = getattr(self.options, name)
+            # Choice exposes its valid values; Toggle is just 0/1.
+            values = sorted(set(type(option).options.values())) \
+                if getattr(type(option), "options", None) else [0, 1]
+            option.value = self.random.choice(values)
+
+        # A `launch` goal with vanilla odds can be unwinnable - the goal needs
+        # a SUCCESSFUL launch, there are two attempts, and a full part set is
+        # still only 75%. Deliberate when a player asks for it (generate_early
+        # warns below); a coin flip handing it to them is just a broken seed.
+        if self.options.goal == "launch" and self.options.launch_odds == "vanilla":
+            self.options.launch_odds.value = LaunchOdds.option_deterministic
+
+        # Make room rather than refusing. The roll can ask for more items than
+        # the seed has locations; pickupsanity adds 32, which covers every
+        # combination (max is 53 items against 45 + 3 + 32).
+        items, locations = self._capacity()
+        if items > locations and not self.options.pickupsanity:
+            self.options.pickupsanity.value = 1
+            items, locations = self._capacity()
+
+        logging.info(
+            "Mega Man X5 (%s): randomize_options rolled %s",
+            self.player_name,
+            ", ".join(f"{n}={getattr(self.options, n).value}"
+                      for n in RANDOMIZED_OPTIONS))
+
     def generate_early(self) -> None:
+        if self.options.randomize_options:
+            self._roll_options()
+
         items, locations = self._capacity()
         if items > locations:
             raise OptionError(

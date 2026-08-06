@@ -214,6 +214,33 @@ class StageUnlocks(Toggle):
     display_name = "Stage Unlocks"
 
 
+class RandomizeOptions(Toggle):
+    """Let the seed pick your gameplay options for you.
+
+    Rolls `goal`, `boss_difficulty`, `launch_odds`, `text_skip`,
+    `pickupsanity`, `boss_hp_randomization`, `secret_armors_in_pool`,
+    `stage_unlocks` and `dna_parts_in_pool`. Whatever you wrote for those in
+    your YAML is ignored. `endgame_checks` is left alone — it only ever adds
+    checks, so there is nothing to gamble on.
+
+    Two combinations are corrected after the roll, because they are traps
+    rather than interesting outcomes:
+
+    - `launch` goal with vanilla launch odds can produce a seed nobody can
+      finish (two attempts, 75% at best), so the odds are forced back to
+      deterministic if the goal lands on `launch`.
+    - If the options rolled add more items than the seed has locations,
+      `pickupsanity` is switched on to make room rather than failing.
+
+    The result is written to the spoiler log, so you can see what you got.
+
+    Note this can turn on options that change the disc (`pickupsanity`,
+    `text_skip`, `launch_odds`), so patch your disc from the generated file
+    rather than reusing an old one.
+    """
+    display_name = "Randomize Options"
+
+
 class DNAPartsInPool(Toggle):
     """Shuffle the equippable DNA Parts into the item pool.
 
@@ -253,9 +280,20 @@ class EndgameChecks(DefaultOnToggle):
     display_name = "Endgame Checks"
 
 
+# Options RandomizeOptions rolls. endgame_checks is deliberately absent (it
+# only adds checks) and so are start_inventory_from_pool and randomize_options
+# itself. Kept next to the option so the two cannot drift apart.
+RANDOMIZED_OPTIONS = (
+    "goal", "boss_difficulty", "launch_odds", "text_skip", "pickupsanity",
+    "boss_hp_randomization", "secret_armors_in_pool", "stage_unlocks",
+    "dna_parts_in_pool",
+)
+
+
 @dataclass
 class MMX5Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+    randomize_options: RandomizeOptions
     goal: Goal
     boss_difficulty: BossDifficulty
     launch_odds: LaunchOdds
@@ -266,3 +304,4 @@ class MMX5Options(PerGameCommonOptions):
     stage_unlocks: StageUnlocks
     endgame_checks: EndgameChecks
     dna_parts_in_pool: DNAPartsInPool
+
