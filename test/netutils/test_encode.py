@@ -22,3 +22,7 @@ class EncodeTest(unittest.TestCase):
         self.assertEqual(expected, encode(obj))
         # compare to legacy json
         self.assertEqual(expected, json.dumps(_scan_for_TypedTuples(obj), separators=(",", ":")))
+
+    def test_bigint(self) -> None:
+        n = 2**64
+        self.assertEqual(f"{n}", encode(n))
