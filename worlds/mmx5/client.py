@@ -483,6 +483,11 @@ class MMX5Client(BizHawkClient):
         self.boss_hp_logged = set()
         self.stamp_warned = False
         self.unpatched_warned = False
+        # Save-derived checks are believed only while in gameplay AND only
+        # once the check-driving bytes repeat across two polls. See the
+        # save_trusted block for why save_sane alone is not enough.
+        self.last_check_sig = None
+        self.last_trust_state = None
         self.victory_sent = False
         # Highest Maverick kill count seen while the save read SANE. The
         # all_mavericks goal needs this at the ENDING, where the save-struct
@@ -979,8 +984,47 @@ class MMX5Client(BizHawkClient):
             # loaded save reads sane in menus and the hub, not just in-stage.
             # The mailbox ring below is deliberately NOT gated - it lives in
             # its own free-RAM block and carries a per-record validity bit.
+            # ---- What it takes to BELIEVE the save struct -------------------
+            # `save_sane` alone is far too weak: its only residency test is
+            # 0x10 <= maxHP <= 0x40, which RAM left over from a previous game
+            # satisfies exactly - and RAM survives a soft reset, so "I started
+            # a new save" does not mean the struct held that new save when we
+            # read it. A tester's world sent 24 phantom checks to an 8-player
+            # multiworld on 2026-08-06; on a patched disc the client cannot
+            # have written those bits, so something was read that was not a
+            # live save. Rather than guess which, close the class.
+            #
+            # Two additional requirements, both cheap:
+            #
+            #  (a) IN GAMEPLAY. Modes 0x0A/0x0C mean a save is definitionally
+            #      resident. The title screen, the data-select menu and the
+            #      attract demo are not gameplay, and those are exactly where
+            #      leftover RAM gets read as progress. Costs nothing: boss
+            #      kills commit at the results screen (0x0C), and any check
+            #      detected elsewhere fires on the next gameplay cycle anyway,
+            #      because detection is level-triggered, not edge-triggered.
+            #
+            #  (b) STABLE across two consecutive polls. A struct being written
+            #      during a load can read as a plausible half-state for a
+            #      frame; requiring the check-driving bytes to repeat costs one
+            #      poll and removes that whole window.
+            #
+            # Deliberately NOT relying on internal consistency (e.g. "8 kills
+            # implies ACT >= 5"): the all_mavericks goal makes that briefly
+            # false ON PURPOSE by withholding ACT, so it would reject real
+            # saves.
+            check_sig = (save[OFF_INTRO], save[OFF_WEAPONS], save[OFF_HEARTS],
+                         save[OFF_TANKS], save[OFF_ARMOR])
+            stable = check_sig == self.last_check_sig
+            self.last_check_sig = check_sig
+            save_trusted = in_gameplay and stable
+            if save_trusted != self.last_trust_state:
+                self.last_trust_state = save_trusted
+                logger.debug(f"MMX5: save trusted -> {save_trusted} "
+                             f"(gameplay {in_gameplay}, stable {stable})")
+
             def save_check(location_name: str, condition: bool) -> None:
-                check(location_name, condition and save_sane)
+                check(location_name, condition and save_trusted)
 
             save_check(names.INTRO_CLEAR, save[OFF_INTRO] != 0)
 
@@ -991,7 +1035,10 @@ class MMX5Client(BizHawkClient):
             # threshold here and would fire all three checks at once. save_sane
             # already excludes training; the explicit test is belt-and-braces,
             # the same way the Maverick tally guards itself.
-            if save_sane and save[OFF_INTRO] != TRAINING_ACT:
+            # Latched only from a TRUSTED read - a high-water mark taken from
+            # stale RAM would be permanent, and would fire all three Zero
+            # Space checks on a save that never cleared them.
+            if save_trusted and save[OFF_INTRO] != TRAINING_ACT:
                 self.max_act_seen = max(self.max_act_seen, save[OFF_INTRO])
             if (ctx.slot_data or {}).get("endgame_checks", 0):
                 for stage, act in ENDGAME_CLEAR_ACT.items():

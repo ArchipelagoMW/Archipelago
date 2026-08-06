@@ -97,7 +97,8 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                       ring2: bytes | None = None,
                       hub_resident: bool = False,
                       slot_table: bytes | None = None,
-                      patch_probe: bytes | None = None) -> FakeContext:
+                      patch_probe: bytes | None = None,
+                      settled: bool = True) -> FakeContext:
     """`hub_resident` makes the stage-select slot table's instruction anchor
     read as present, so the stage-unlock writer engages; `slot_table` seeds what
     that table currently holds (defaults to the vanilla ids).
@@ -105,7 +106,13 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
     `patch_probe` overrides the AP-patch probe reply. It defaults to PATCHED,
     which is what normal play looks like - but that default also meant no test
     could reach the unpatched-disc path, and a real bug lived there unnoticed
-    until a tester hit it (see test_unpatched_disc.py)."""
+    until a tester hit it (see test_unpatched_disc.py).
+
+    `settled=True` (the default) pre-seeds the check-stability signature, so a
+    single cycle behaves like a client that has already been polling - which is
+    what the real one does, and what almost every test here means to simulate.
+    Pass `settled=False` to exercise the first-read-after-connect path, where
+    the save is deliberately NOT believed until its bytes repeat."""
     ctx = ctx or FakeContext()
     client = client or MMX5Client()
     ring = bytes(mmx5_client.RING_SLOTS * 4)
@@ -143,6 +150,13 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
     async def fake_write(_ctx, writes, *_args, **_kwargs):
         ctx.writes.extend(writes)
         return True
+
+    if settled:
+        # Stand in for the previous poll: same bytes, so this cycle counts as
+        # stable. Without this a one-cycle test can never trust the save.
+        client.last_check_sig = (save[mmx5_client.OFF_INTRO], save[mmx5_client.OFF_WEAPONS],
+                                 save[mmx5_client.OFF_HEARTS], save[mmx5_client.OFF_TANKS],
+                                 save[mmx5_client.OFF_ARMOR])
 
     with mock.patch.object(bizhawk, "read", fake_read), \
             mock.patch.object(bizhawk, "write", fake_write), \
