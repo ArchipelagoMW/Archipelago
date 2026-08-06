@@ -161,6 +161,16 @@ class MMX5World(World):
                 self.multiworld.get_region(region_name, self.player) \
                     .add_locations(locs, MMX5Location)
 
+        if self.options.endgame_checks:
+            # Zero Space clears live in Sigma Stages, whose entrance already
+            # carries the all-8-weapons rule. They add locations without adding
+            # items, so they also hand the pool three filler slots back - the
+            # only option so far that widens capacity instead of consuming it.
+            sigma_stages.add_locations(
+                {names.endgame_clear_location(s): location_table[
+                    names.endgame_clear_location(s)]
+                 for s in names.ENDGAME_STAGES}, MMX5Location)
+
         victory = MMX5Location(self.player, names.VICTORY, None, sigma_stages)
         victory.place_locked_item(self.create_item(names.VICTORY))
         sigma_stages.locations.append(victory)
@@ -319,4 +329,5 @@ class MMX5World(World):
             "pickupsanity": self.options.pickupsanity.value,
             "boss_hp_randomization": self.options.boss_hp_randomization.value,
             "stage_unlocks": self.options.stage_unlocks.value,
+            "endgame_checks": self.options.endgame_checks.value,
         }

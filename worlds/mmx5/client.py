@@ -160,6 +160,20 @@ TRAINING_ACT = 0x0A
 # Space on a disc whose shuttle-era threshold had been moved to 8. Moving that
 # threshold only delays the story ANNOUNCEMENT (and Dynamo).
 ENDGAME_ACT = 5
+# ACT doubles as the endgame progress counter. The hub's stage-select confirm
+# handler picks the Zero Space destination straight off it (0x800EFC0C):
+# 5 -> 0x10, 6 -> 0x11, 7 -> 0x12, anything else -> 0x0C (Sigma). So the value
+# only advances by clearing the stage it currently points at, and the ACT a
+# clear produces is the threshold for that clear's check.
+#
+# CONFIRMED LIVE 2026-08-06: clearing Zero Space 1 stepped ACT 5 -> 6 on the
+# frame the stage ended (`[f323080] savestruct 800D1C79: 05 -> 06`). The ladder
+# reads as progress, not just as a destination lookup.
+ENDGAME_CLEAR_ACT = {
+    names.ZERO_SPACE_1: 6,
+    names.ZERO_SPACE_2: 7,
+    names.ZERO_SPACE_X_VS_ZERO: 8,
+}
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
 OFF_ARMOR = 0x0D1CA1 - SAVE_BASE       # armor parts byte (Falcon 0-3, Gaea 4-7)
@@ -185,6 +199,13 @@ OFF_SETFLAGS = 0x0D1C4A - SAVE_BASE
 #     the timing itself is observed.]
 # Also settled: writing ONLY 0x1C4B is enough for Ultimate. The capsule's
 # despawn ladder reads `0x1C4A & 8`, but that is not a second ownership flag.
+#
+# 0x1C4B IS NOT A BOOLEAN, though. Observed live 2026-08-06: the game moved
+# it 01 -> 02 at a results screen, and Ultimate remained selectable at the
+# armor picker afterwards. So 1 grants it, but 1 is not the only value that
+# means "owned" - possibly a selection index. The grant below therefore
+# writes only when the byte is ZERO, which is the one value we know means
+# "no Ultimate". Never restore it to 1 from some other non-zero value.
 OFF_ULTIMATE = 0x0D1C4B - SAVE_BASE
 ULTIMATE_ON = 1
 BLACK_ZERO_BIT = 0x10           # into 0x1C4A (OFF_SETFLAGS)
@@ -472,6 +493,12 @@ class MMX5Client(BizHawkClient):
         self.slot_table_written = None
         self.stages_unlocked_logged = set()
         self.hub_stage_id = None
+        # Highest story ACT seen while the save read SANE. A high-water mark
+        # rather than a live read, for two reasons: the all_mavericks goal
+        # WRITES this byte (it holds the endgame shut by pushing ACT back below
+        # 5), and training mode parks 0x0A in it. The withhold only ever lowers
+        # ACT, so a peak is immune to it; training is excluded explicitly.
+        self.max_act_seen = 0
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -882,6 +909,20 @@ class MMX5Client(BizHawkClient):
                 check(location_name, condition and save_sane)
 
             save_check(names.INTRO_CLEAR, save[OFF_INTRO] != 0)
+
+            # ---- Zero Space clears -----------------------------------------
+            # Latched at a high-water mark, NOT read live. Two things move this
+            # byte other than progress: the all_mavericks withhold below pushes
+            # it back under 5, and training parks 0x0A in it - which is >= every
+            # threshold here and would fire all three checks at once. save_sane
+            # already excludes training; the explicit test is belt-and-braces,
+            # the same way the Maverick tally guards itself.
+            if save_sane and save[OFF_INTRO] != TRAINING_ACT:
+                self.max_act_seen = max(self.max_act_seen, save[OFF_INTRO])
+            if (ctx.slot_data or {}).get("endgame_checks", 0):
+                for stage, act in ENDGAME_CLEAR_ACT.items():
+                    save_check(names.endgame_clear_location(stage),
+                               self.max_act_seen >= act)
 
             # ---- all_mavericks: hold the endgame shut until 8 kills --------
             # The colony resolution writes ACT = ENDGAME_ACT, which is what
@@ -1349,7 +1390,17 @@ class MMX5Client(BizHawkClient):
                     # Black Zero shares 0x1C4A with the Falcon/Gaea
                     # set-completion bits the results overlay owns, so it is
                     # OR-ed in rather than assigned.
-                    if want_ultimate and save[OFF_ULTIMATE] != ULTIMATE_ON:
+                    # Ultimate: grant ONLY from zero. `!= ULTIMATE_ON` was
+                    # wrong - the game writes 0x1C4B itself (observed live
+                    # 2026-08-06: 01 -> 02 at a results screen, with Ultimate
+                    # still selectable afterwards), so this byte is not the
+                    # boolean it was taken for. Under the old test every later
+                    # item batch would have stomped the game's value back to 1,
+                    # and if 0x1C4B is a SELECTION rather than a flag that
+                    # silently resets the player's armor choice. Zero is the
+                    # only value we know means "no Ultimate", so it is the only
+                    # one we overwrite.
+                    if want_ultimate and save[OFF_ULTIMATE] == 0:
                         writes.append((SAVE_BASE + OFF_ULTIMATE,
                                        [ULTIMATE_ON], "MainRAM"))
                     if want_black_zero and not (save[OFF_SETFLAGS] & BLACK_ZERO_BIT):

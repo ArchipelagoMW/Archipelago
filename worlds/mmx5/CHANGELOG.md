@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+**New option: `endgame_checks` (ON by default)** — clearing a Zero Space stage
+now sends a check. Three locations: Zero Space 1, Zero Space 2 and the X vs
+Zero fight. Sigma is not one, because beating him is the goal.
+
+**This changes the default seed**, which went from 45 locations to 48. Until
+now every check in a normal seed sat in the eight Maverick stages, so the whole
+last stretch of a run was pure travel with nothing to find.
+
+**Client-side only — no disc change.** Detection rides the story ACT byte
+(`0x800D1C79`), which the hub's stage-select confirm handler already uses to
+pick the endgame destination — so ACT doubles as the endgame progress counter.
+Confirmed live 2026-08-06, one step per clear: `5 -> 6`, `6 -> 7`, `7 -> 8`.
+
+It is also the first option that gives the item pool *more* room rather than
+less: three locations and no new items, so filler goes from 9 to 12.
+
+Implementation note: the client latches the highest ACT it has seen rather than
+reading it live, because two other things write that byte — the `all_mavericks`
+goal pushes it back below 5 to hold the endgame shut, and training mode parks
+`0x0A` in it, which is above all three thresholds and would otherwise fire
+every check at once.
+
 **New option: `stage_unlocks`** (off by default) — the eight Maverick stages
 become progression. Exactly one is open at the start (the seed decides which)
 and each of the other seven needs its own "&lt;Boss&gt; Access Codes" item,
@@ -50,6 +72,12 @@ when it arrives — the game decides which armor X wears as the stage loads.
 This also settles an open question from the build: `0x800D1C4B` alone is enough
 for Ultimate, and the `0x800D1C4A & 8` bit the Zero Space capsule's despawn
 ladder reads is not a second "has Ultimate" flag.
+
+One fix came out of watching it in play: the game writes `0x800D1C4B` itself
+(it moved from 1 to 2 at a results screen, with Ultimate still selectable), so
+the client now only sets that byte when it reads zero. Before, every later
+item you received would have rewritten it, which could have reset your armor
+choice.
 
 **New option: `boss_hp_randomization`** (off by default) — randomizes how much
 HP bosses have: `weak` 40-80%, `regular` 70-130%, `strong` 120-200%, `chaotic`

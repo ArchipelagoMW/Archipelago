@@ -92,6 +92,28 @@ SHUTTLE_PART = "Shuttle Part"
 # Locations
 INTRO_CLEAR = "Intro Stage - Clear"
 
+# Endgame stage clears. The hub's stage-select confirm handler picks the Zero
+# Space destination straight off the story ACT byte (0x800D1C79):
+#
+#   ACT == 5 -> stage 0x10 (Zero Space 1)
+#   ACT == 6 -> stage 0x11 (Zero Space 2)
+#   ACT == 7 -> stage 0x12 (X vs Zero)
+#   else     -> stage 0x0C (Sigma)
+#
+# so ACT doubles as the endgame progress counter and each clear is detectable
+# from a byte the client already reads. Before these, the entire endgame held
+# no checks at all outside pickupsanity capsules.
+#
+# Confirmed live 2026-08-06: clearing Zero Space 1 stepped ACT 5 -> 6.
+ZERO_SPACE_1 = "Zero Space 1"
+ZERO_SPACE_2 = "Zero Space 2"
+ZERO_SPACE_X_VS_ZERO = "X vs Zero"
+ENDGAME_STAGES = [ZERO_SPACE_1, ZERO_SPACE_2, ZERO_SPACE_X_VS_ZERO]
+
+
+def endgame_clear_location(stage: str) -> str:
+    return f"{stage} - Clear"
+
 
 def boss_location(stage: str) -> str:
     return f"{stage} - Boss Defeated"

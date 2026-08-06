@@ -51,6 +51,7 @@ Three options change those totals, and they stack:
 | `pickupsanity` | **+32 locations** (45 → 77) — every freestanding energy and 1-UP capsule |
 | `stage_unlocks` | **+8 items**, seven of them shuffled — one Access Codes item per Maverick stage, and you begin the run holding the eighth |
 | `secret_armors_in_pool` | **+2 items** — Ultimate Armor and Black Zero |
+| `endgame_checks` (**on by default**) | **+3 locations** (45 → 48) — the Zero Space stage clears |
 
 Items and locations have to balance, so an option that adds items without
 adding locations displaces filler rather than growing the pool.
@@ -123,6 +124,12 @@ entirely by the client, so it works on a disc you have already patched.
   moves onto it; pressing confirm simply does nothing until its codes arrive.
   The Enigma, Space Shuttle and Zero Space entries are untouched and behave
   exactly as they normally would.
+- **`endgame_checks` puts checks in Zero Space, and is on by default.**
+  Clearing Zero Space 1, Zero Space 2 or the X vs Zero fight each sends a
+  check. Without it the endgame contains nothing to find outside pickupsanity
+  capsules — every check in a normal seed sits in the eight Maverick stages, so
+  the last stretch of the run is pure travel. Sigma is not a location, since
+  beating him is the goal.
 - **`pickupsanity` turns loose capsules into checks.** Every freestanding Life
   Energy, Weapon Energy and 1-UP capsule sitting in a stage becomes a location
   — 32 in all, including the ones in Zero Space and Sigma's stage. Energy

@@ -32,6 +32,12 @@ for i, stage in enumerate(names.STAGES):
     location_table[names.dna_part_location(stage)] = base + 5
     # +6.. reserved
 
+# Endgame stage clears, ids +180. Always in the id map (the datapackage carries
+# every location the game can define); only created as real locations when the
+# option is on, so seeds without it stay identical to 0.2.0.
+for i, stage in enumerate(names.ENDGAME_STAGES):
+    location_table[names.endgame_clear_location(stage)] = BASE_ID + 180 + i
+
 # Pickupsanity: 32 freestanding consumables, ids +200 in pickups.PICKUPS
 # order (the dataset's docstring fixes that order as append-only). Always in
 # the id map - the datapackage carries every location the game can define -
@@ -51,4 +57,5 @@ location_groups = {
     "DNA Rewards": {names.dna_location(s) for s in names.STAGES},
     "DNA Parts": {names.dna_part_location(s) for s in names.STAGES},
     "Pickups": {name for _s, _a, _i, _d, name in PICKUPS},
+    "Zero Space": {names.endgame_clear_location(s) for s in names.ENDGAME_STAGES},
 }

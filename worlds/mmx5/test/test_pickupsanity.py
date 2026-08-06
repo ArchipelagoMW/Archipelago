@@ -23,7 +23,10 @@ class TestPickupsanityOff(MMX5TestBase):
 
 
 class TestPickupsanityOn(MMX5TestBase):
-    options = {"pickupsanity": True}
+    # endgame_checks off on purpose: this class pins the 45 + 32 arithmetic, so
+    # it has to hold the rest of the world still. Its own count is covered in
+    # test_endgame_checks.
+    options = {"pickupsanity": True, "endgame_checks": False}
 
     def test_pickup_locations_created(self) -> None:
         placed = {loc.name for loc in self.multiworld.get_locations(self.player)}

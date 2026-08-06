@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle
+from Options import (Choice, DefaultOnToggle, PerGameCommonOptions,
+                     StartInventoryPool, Toggle)
 
 
 class Goal(Choice):
@@ -213,6 +214,21 @@ class StageUnlocks(Toggle):
     display_name = "Stage Unlocks"
 
 
+class EndgameChecks(DefaultOnToggle):
+    """Clearing a Zero Space stage sends a check.
+
+    Adds three locations — Zero Space 1, Zero Space 2 and the X vs Zero fight.
+    Without this the entire endgame contains nothing to find: every check in a
+    normal seed sits in the eight Maverick stages, so the last stretch of the
+    run is pure travel.
+
+    Sigma himself is not a location, because beating him is the goal.
+
+    Client-side, so it needs no disc change.
+    """
+    display_name = "Endgame Checks"
+
+
 @dataclass
 class MMX5Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -224,3 +240,4 @@ class MMX5Options(PerGameCommonOptions):
     boss_hp_randomization: BossHPRandomization
     secret_armors_in_pool: SecretArmorsInPool
     stage_unlocks: StageUnlocks
+    endgame_checks: EndgameChecks

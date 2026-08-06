@@ -104,6 +104,19 @@ class TestSecretArmorGrants(unittest.IsolatedAsyncioTestCase):
                                 client=MMX5Client(), ctx=self._ctx())
         self.assertEqual(self._writes(ctx, c.OFF_ULTIMATE), [])
 
+    async def test_does_not_stomp_a_nonzero_value_the_game_wrote(self) -> None:
+        # 0x1C4B is NOT a boolean. Live 2026-08-06 the game moved it 01 -> 02
+        # at a results screen and Ultimate stayed selectable. Granting on
+        # "!= 1" would rewrite it to 1 on every later item batch - and if the
+        # byte is a selection rather than a flag, that resets the player's
+        # armor choice. Only a zero means "no Ultimate".
+        save = bytearray(make_save(max_hp=0x20, intro=2, weapons=1))
+        save[c.OFF_ULTIMATE] = 2
+        ctx = await run_watcher(bytes(save), client=MMX5Client(),
+                                ctx=self._ctx(1))
+        self.assertEqual(self._writes(ctx, c.OFF_ULTIMATE), [],
+                         "clobbered a value the game owns")
+
     async def test_idempotent_when_already_set(self) -> None:
         save = bytearray(make_save(max_hp=0x20, intro=2, weapons=1))
         save[c.OFF_ULTIMATE] = c.ULTIMATE_ON
