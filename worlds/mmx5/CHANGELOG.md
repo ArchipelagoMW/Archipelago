@@ -1,5 +1,50 @@
 # Mega Man X5 apworld changelog
 
+## 0.3.2 — 2026-08-06
+
+**Second and larger pass at the phantom-check problem. Update over 0.3.1.**
+
+0.3.1 closed one route to "checks fire for things you never did". Reviewing it
+turned up two more, and a hole in the fix itself.
+
+**A save carrying progress this seed has never seen is now held.** This is the
+one most likely to have caused the original report. A memory card copied from
+another playthrough, hitting Continue on the wrong slot, or a savestate made
+before you first connected are all *genuinely loaded saves* — so nothing about
+"is this real data" catches them, and everything in them would be reported as
+your progress and sent to the multiworld.
+
+If you see **"this save has progress but has never been used with this seed"**,
+that is this. Start a new game on a fresh slot, or — if you really do mean to
+bring that save into this multiworld — the message gives you the exact one-line
+command to adopt it.
+
+A brand new save is adopted silently the first time it is seen, so a normal run
+never notices this. Having cleared the intro does not count as progress, so
+starting the game before you open the client is still fine.
+
+**The "is a save actually loaded" test is much stricter.** It now needs the game
+to be in gameplay, the previous poll to have been gameplay too, the relevant
+bytes to be identical across both, and a results screen is only believed after
+real gameplay has been seen. 0.3.1 required only the first of those, which was
+weaker than it looked: leftover RAM never changes, so a single poll landing in
+the right mode was enough.
+
+**An unpatched disc now really does hold everything.** In 0.3.1 the refusal sat
+after the code that grants DNA Parts, locks stages and rerolls boss HP, so an
+unpatched disc was still being written to. It now happens before anything
+touches the game, and an unpatched disc can no longer complete the goal either —
+finishing releases every remaining location, which is the same damage as the
+phantom checks.
+
+**Nothing here costs a correctly patched disc anything.** Real progress reports
+exactly as before.
+
+Honest limitation: the original report was never traced, because the client log
+that would have named the mechanism was not collected. These are three closed
+routes to the same symptom, not a confirmed diagnosis. If phantom checks ever
+happen to you, the log in `Archipelago/logs/` is what identifies it.
+
 ## 0.3.1 — 2026-08-06
 
 **Fixes a bug that could corrupt a multiworld for everyone in it. Update before

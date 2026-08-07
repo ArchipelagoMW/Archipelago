@@ -187,6 +187,15 @@ entirely by the client, so it works on a disc you have already patched.
   capsule still works normally, so you can also find them the vanilla way;
   receiving an armor first makes that capsule vanish, since the game hides a
   capsule whose armor you already hold.
+- **Use a fresh save file, and patch your disc.** The client works out what
+  you have done by reading the game's memory, so it has to be sure it is
+  reading *your* run. Two things it will refuse: a disc that was never patched
+  (weapons you receive would be mistaken for boss kills), and a save that
+  already has progress the seed has never seen — a copied memory card, the
+  wrong Continue slot, or a savestate from before you connected. In both cases
+  it holds everything and tells you what to do rather than reporting progress
+  you did not make. Starting a new game and clearing the intro before you open
+  the client is fine.
 - **Checks appear a few seconds after a boss dies**, not instantly — the game
   commits the kill shortly after the results screen.
 - **"Small Energy" filler items heal 4 HP** and pad the item pool when there

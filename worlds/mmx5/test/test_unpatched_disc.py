@@ -90,6 +90,47 @@ class TestUnpatchedDiscHoldsEverything(unittest.IsolatedAsyncioTestCase):
         self.assertIn(".apmmx5", joined)   # names the remedy, not just the fault
 
 
+class TestUnpatchedDiscWritesNothing(unittest.IsolatedAsyncioTestCase):
+    """The hard stop must precede every writer. It used to sit BELOW the
+    boss-HP / DNA-Part / stage-unlock blocks, so an unpatched disc still had
+    Parts granted, vanilla Parts suppressed and stages locked - "holds all
+    checks and items" was not actually true."""
+
+    async def test_no_writes_at_all(self) -> None:
+        ctx = ctx_with_all_weapons()
+        ctx.slot_data = {"goal": 0, "boss_difficulty": 1,
+                         "dna_parts_in_pool": 1, "stage_unlocks": 1,
+                         "boss_hp_randomization": 1}
+        # A received DNA Part is what the parts writer would commit to
+        # 0x1C84 if it still ran ahead of the stop.
+        part_code = item_table[names.SPEEDSTER].code
+        lookup = dict(WEAPON_CODES)
+        lookup[part_code] = names.SPEEDSTER
+        ctx.item_names = SimpleNamespace(
+            lookup_in_game=lambda code: lookup.get(code, ""))
+        ctx.items_received.append(SimpleNamespace(item=part_code))
+        await run_watcher(make_save(max_hp=0x20, intro=2),
+                          client=MMX5Client(), ctx=ctx,
+                          patch_probe=c.PATCH_PROBE_VANILLA)
+        self.assertEqual(ctx.writes, [],
+                         "an unpatched disc still wrote into the game")
+
+    async def test_cannot_goal(self) -> None:
+        # A goal can RELEASE every remaining location in this world - the
+        # same blast radius as the phantom-check incident - so an unpatched
+        # playthrough must not complete it.
+        client = MMX5Client()
+        ctx = FakeContext()
+        # First poll resolves the probe to vanilla; second is the ending.
+        await run_watcher(make_save(max_hp=0x20, intro=2), client=client,
+                          ctx=ctx, patch_probe=c.PATCH_PROBE_VANILLA)
+        await run_watcher(make_save(max_hp=0x00), mode=0x10, client=client,
+                          ctx=ctx, patch_probe=c.PATCH_PROBE_VANILLA)
+        self.assertFalse(
+            any(m.get("cmd") == "StatusUpdate" for m in ctx.sent_msgs),
+            "an unpatched disc completed the goal")
+
+
 class TestPatchedDiscIsUnaffected(unittest.IsolatedAsyncioTestCase):
     """The fix must not cost a correctly-patched player anything."""
 

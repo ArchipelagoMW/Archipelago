@@ -80,14 +80,25 @@ def seed_edits_for(**overrides) -> list:
     return json.loads(captured["seed_edits.json"].decode("utf-8"))
 
 
+# The stamp FakeContext's seed/slot hashes to - what a save this seed has
+# already adopted carries.
+TEST_SEED_STAMP = MMX5Client._seed_stamp(
+    SimpleNamespace(seed_name="TESTSEED", auth="Player1"))
+
+
 def make_save(max_hp: int, intro: int = 0, weapons: int = 0, hearts: int = 0,
-              tanks: int = 0) -> bytes:
+              tanks: int = 0, stamp: int | None = None) -> bytes:
+    """`stamp` defaults to TEST_SEED_STAMP - the faithful state of any save
+    the client has seen before, since adoption happens at the first trusted
+    poll. Pass `stamp=0` to model a save AP has never touched (the A3b hold
+    is exactly about those - see test_save_trust.py)."""
     save = bytearray(mmx5_client.SAVE_LEN)
     save[mmx5_client.OFF_MAX_HP_X] = max_hp
     save[mmx5_client.OFF_INTRO] = intro
     save[mmx5_client.OFF_WEAPONS] = weapons
     save[mmx5_client.OFF_HEARTS] = hearts
     save[mmx5_client.OFF_TANKS] = tanks
+    save[mmx5_client.OFF_STAMP] = TEST_SEED_STAMP if stamp is None else stamp
     return bytes(save)
 
 
@@ -98,6 +109,7 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                       hub_resident: bool = False,
                       slot_table: bytes | None = None,
                       patch_probe: bytes | None = None,
+                      stub_probe: bytes | None = None,
                       settled: bool = True) -> FakeContext:
     """`hub_resident` makes the stage-select slot table's instruction anchor
     read as present, so the stage-unlock writer engages; `slot_table` seeds what
@@ -106,13 +118,18 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
     `patch_probe` overrides the AP-patch probe reply. It defaults to PATCHED,
     which is what normal play looks like - but that default also meant no test
     could reach the unpatched-disc path, and a real bug lived there unnoticed
-    until a tester hit it (see test_unpatched_disc.py).
+    until a tester hit it (see test_unpatched_disc.py). `stub_probe` is the
+    same override for the pickup-stub probe (default STUBBED), added so the
+    stub-absent fallback path is not structurally untestable the way the
+    unpatched path was.
 
-    `settled=True` (the default) pre-seeds the check-stability signature, so a
-    single cycle behaves like a client that has already been polling - which is
-    what the real one does, and what almost every test here means to simulate.
-    Pass `settled=False` to exercise the first-read-after-connect path, where
-    the save is deliberately NOT believed until its bytes repeat."""
+    `settled=True` (the default) pre-seeds the full trust state - the
+    check-stability signature, the previous-poll-was-gameplay flag and the
+    0x0A gameplay anchor - so a single cycle behaves like a client that has
+    already been polling in gameplay, which is what the real one does and what
+    almost every test here means to simulate. Pass `settled=False` to exercise
+    the connect/entry path, where the save is deliberately NOT believed until
+    its bytes repeat across two gameplay polls."""
     ctx = ctx or FakeContext()
     client = client or MMX5Client()
     ring = bytes(mmx5_client.RING_SLOTS * 4)
@@ -128,7 +145,8 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
     PROBE_REPLY = {
         mmx5_client.PATCH_PROBE_ADDR: (patch_probe if patch_probe is not None
                                        else mmx5_client.PATCH_PROBE_PATCHED),
-        mmx5_client.STUB_PROBE_ADDR: mmx5_client.STUB_PROBE_STUBBED,
+        mmx5_client.STUB_PROBE_ADDR: (stub_probe if stub_probe is not None
+                                      else mmx5_client.STUB_PROBE_STUBBED),
         mmx5_client.TANK_FIX_PROBE_ADDR: (
             mmx5_client.TANK_FIX_PATCHED if getattr(client, "tank_fix_present", None)
             else mmx5_client.TANK_FIX_VANILLA),
@@ -152,11 +170,15 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
         return True
 
     if settled:
-        # Stand in for the previous poll: same bytes, so this cycle counts as
-        # stable. Without this a one-cycle test can never trust the save.
+        # Stand in for the previous polls: same bytes (stable), taken in
+        # gameplay (prev-poll flag), with a trusted 0x0A already seen this
+        # session (the anchor 0x0C trust requires). Without these a one-cycle
+        # test can never trust the save.
         client.last_check_sig = (save[mmx5_client.OFF_INTRO], save[mmx5_client.OFF_WEAPONS],
                                  save[mmx5_client.OFF_HEARTS], save[mmx5_client.OFF_TANKS],
                                  save[mmx5_client.OFF_ARMOR])
+        client.last_in_gameplay = True
+        client.gameplay_anchored = True
 
     with mock.patch.object(bizhawk, "read", fake_read), \
             mock.patch.object(bizhawk, "write", fake_write), \
@@ -771,6 +793,24 @@ class TestEndgameWithholding(unittest.IsolatedAsyncioTestCase):
                           client=client, ctx=ctx)
         self.assertNotEqual(client.last_pre_endgame_act,
                             mmx5_client.TRAINING_ACT)
+
+
+class TestStubAbsentFallback(unittest.IsolatedAsyncioTestCase):
+    """`run_watcher` used to hard-code the stub probe to STUBBED, which made
+    the stub-absent fallback structurally untestable - the same harness
+    default that hid the hybrid-mode bug for four releases (see
+    test_unpatched_disc.py)."""
+
+    async def test_hearts_come_from_save_bits_without_the_stub(self) -> None:
+        client = MMX5Client()
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, hearts=0x01),
+                                client=client,
+                                stub_probe=mmx5_client.STUB_PROBE_VANILLA)
+        self.assertFalse(client.stub_present)
+        stage = mmx5_client.HEART_BIT_TO_STAGE[0]
+        self.assertIn(location_table[names.heart_location(stage)],
+                      ctx.checked_location_ids(),
+                      "without the stub, heart checks must come from save bits")
 
 
 class TestGoalOptionWiring(unittest.TestCase):

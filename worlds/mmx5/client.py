@@ -74,8 +74,11 @@ OFF_PROCESSED = 0x0D1C4E - SAVE_BASE
 # Seed/slot stamp in the LAST spare persisted byte (0x1C4D weapons,
 # 0x1C4E/4F processed count, 0x1C50 stamp): 1-byte hash of seed+slot,
 # 0 = unstamped. A sane save stamped for a DIFFERENT seed/slot halts both
-# checks and grants (wrong-save protection, A3). Adopted (written) with the
-# first grant batch on an unstamped save.
+# checks and grants (wrong-save protection, A3). Written at the first
+# TRUSTED sight of a fresh (progress-free) save; an unstamped save that
+# already HAS progress is held instead (A3b, see game_watcher) - it is
+# either another playthrough's save or offline progress, and both need the
+# player to say adopting it is deliberate.
 OFF_STAMP = 0x0D1C50 - SAVE_BASE
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
 OFF_CHAR = 0x0D1C44 - SAVE_BASE         # 0 = X, 1 = Zero
@@ -471,7 +474,11 @@ class MMX5Client(BizHawkClient):
         self.items_processed = 0
         self.hearts_applied = 0
         self.last_gate_state = None
-        self.ap_patched = False
+        # None = unknown. validate_rom classifies before the watcher ever
+        # runs; False specifically means "probe read the exact vanilla word",
+        # and the victory hold below keys on that distinction - a fresh
+        # client must not read as "known vanilla".
+        self.ap_patched = None
         self.stub_present = False
         self.ring2_present = False
         self.unknown_records_logged = set()
@@ -483,11 +490,26 @@ class MMX5Client(BizHawkClient):
         self.boss_hp_logged = set()
         self.stamp_warned = False
         self.unpatched_warned = False
+        self.last_probe_word = None
         # Save-derived checks are believed only while in gameplay AND only
         # once the check-driving bytes repeat across two polls. See the
         # save_trusted block for why save_sane alone is not enough.
         self.last_check_sig = None
         self.last_trust_state = None
+        # Whether the PREVIOUS poll's gate was open. Trust requires two
+        # consecutive gameplay polls: the stability signature is also
+        # recorded on menu polls, and stale RAM never changes, so without
+        # this a single poll landing in a gameplay mode (e.g. the 0x0C that
+        # appears mid stage-load) would be trusted instantly off a signature
+        # the title screen established.
+        self.last_in_gameplay = False
+        # Set once a 0x0A poll has been trusted this session. 0x0C is only
+        # believed AFTER that: results screens always follow real gameplay,
+        # but 0x0C also appears in the stage-LOAD mode walk
+        # (0A->0B->0C->0E->..., ram-notes), where the struct may still hold
+        # the previous session's bytes.
+        self.gameplay_anchored = False
+        self.unstamped_warned = False
         self.victory_sent = False
         # Highest Maverick kill count seen while the save read SANE. The
         # all_mavericks goal needs this at the ENDING, where the save-struct
@@ -535,12 +557,13 @@ class MMX5Client(BizHawkClient):
         except bizhawk.RequestFailedError:
             return False
 
-        # Hybrid-mode fallback on vanilla discs stays supported during
-        # development; the AP disc patch decouples weapon capability.
+        # False = known vanilla; the watcher REFUSES to run on it (hybrid
+        # mode is gone - see the unpatched-disc block in game_watcher).
         # None = undetermined (validate can race the EXE still streaming in
         # from disc - the probe reads zeros during boot); game_watcher
         # re-probes before granting anything.
         self.ap_patched = self._classify_probe(probe)
+        self.last_probe_word = bytes(probe)
         self.stub_present = self._classify_stub_probe(stub_probe)
         self.tank_fix_present = self._classify_tank_fix(tank_probe)
         if self.ap_patched is None:
@@ -786,8 +809,15 @@ class MMX5Client(BizHawkClient):
             # 10 -> 11. 0x13/0x14 also fire for the X-vs-Zero duel, so only
             # 0x10/0x11 are treated as the ending.
             ending_goal = (ctx.slot_data or {}).get("goal", GOAL_SIGMA)
+            # `is not False` on purpose: an unpatched disc must not goal
+            # (a goal can RELEASE every remaining location in this world,
+            # the same blast radius as the phantom-check incident), but an
+            # UNREADABLE probe must not swallow a legitimate ending - the
+            # credits could clobber the probe region and None means only
+            # "retry", never "vanilla".
             if not self.victory_sent \
                     and ending_goal in ENDING_GOALS \
+                    and self.ap_patched is not False \
                     and mode[0] in ENDING_MODES:
                 # all_mavericks additionally requires the full set of kills.
                 # The count comes from play (self.mavericks_defeated), never
@@ -833,6 +863,11 @@ class MMX5Client(BizHawkClient):
                     logger.info("MMX5: training mode detected - checks and "
                                 "grants suspended until you leave it")
             in_gameplay = mode[0] in (0x0A, 0x0C) and save_sane
+            # Recorded HERE, before any early return below, so "was the
+            # previous read taken in gameplay" always refers to the previous
+            # read of the struct, not the previous poll that got this far.
+            was_in_gameplay = self.last_in_gameplay
+            self.last_in_gameplay = in_gameplay
             if in_gameplay != self.last_gate_state:
                 logger.debug(f"MMX5: save-struct gate -> {in_gameplay} (maxhp: {save[OFF_MAX_HP_X]:02X})")
                 self.last_gate_state = in_gameplay
@@ -863,6 +898,7 @@ class MMX5Client(BizHawkClient):
                 ])
                 self.tank_fix_present = self._classify_tank_fix(tank_probe)
                 self.ap_patched = self._classify_probe(probe)
+                self.last_probe_word = bytes(probe)   # for the refusal message
                 self.stub_present = self._classify_stub_probe(stub_probe)
                 if ring2_probe == RING2_PROBE_STUBBED:
                     self.ring2_present = True
@@ -870,6 +906,49 @@ class MMX5Client(BizHawkClient):
                     self.ring2_present = False
                 else:
                     self.ring2_present = None   # boot zeros - retry next cycle
+
+            # ---- UNPATCHED DISC: hold everything ---------------------------
+            # Directly after probe resolution, BEFORE every block that writes
+            # the save struct or reads it for checks. It used to sit below the
+            # boss-HP / DNA-Part / stage-unlock writers, so an unpatched disc
+            # still had Parts granted, vanilla Parts suppressed, stages locked
+            # and boss HP rerolled - "holds all checks and items" was not
+            # actually true. Nothing above this line touches the game.
+            #
+            # Why refuse at all: the old "hybrid mode" wrote AP-granted
+            # weapons into 0x1C4C, which is the VANILLA kill record - the same
+            # byte the 24 boss / DNA Reward / DNA Part checks read as ground
+            # truth. Every weapon the multiworld sent you therefore marked its
+            # boss defeated and fired three checks, releasing items to
+            # everyone else. Reported by a tester 2026-08-06 ("it sends all
+            # those checks before I even started playing") and reproduced
+            # exactly: 8 weapons received, zero bosses beaten, 24 checks sent.
+            #
+            # Detection is gated too, not just grants, because a save already
+            # poisoned by a hybrid session still holds those bits and would
+            # fire them again on the next connect. The goal is held separately
+            # at the top of this method (an unpatched playthrough must not
+            # RELEASE this world's locations either).
+            #
+            # Hybrid dates from before the disc patch existed; the module
+            # header always flagged it as interim. Every supported flow
+            # produces a patched disc - the .apmmx5 IS the delivery mechanism -
+            # so this is unreachable in correct use and corrupts a multiworld
+            # in incorrect use.
+            if self.ap_patched is False:
+                if not self.unpatched_warned:
+                    self.unpatched_warned = True
+                    probe_note = (f" (probe read {self.last_probe_word.hex()})"
+                                  if self.last_probe_word else "")
+                    logger.error(
+                        "MMX5: this disc is NOT AP-patched - checks and items are "
+                        "HELD. On an unpatched disc the weapons you receive get "
+                        "written into the byte the game uses to record boss kills, "
+                        "which would send false checks to everyone in your "
+                        "multiworld. Patch your disc: open your .apmmx5 with the "
+                        "Archipelago Launcher, then load the .cue it produces."
+                        + probe_note)
+                return
 
             # ---- Boss HP randomization: hold the rolled value while in a
             # stage, hand the vanilla number back on the way out (0x1CA2
@@ -884,7 +963,8 @@ class MMX5Client(BizHawkClient):
             # DIFFERENT seed/slot halts checks AND grants - its bits belong
             # to another game. Swap saves, or deliberately reuse this one by
             # zeroing 0x1C4D-0x1C50 in the Lua console. Unstamped saves (0)
-            # pass and get stamped with their first grant batch. ----
+            # pass HERE; the A3b hold below decides whether they are fresh
+            # (stamp them) or progressed (hold them). ----
             if save_sane and ctx.seed_name:
                 if save[OFF_STAMP] not in (0, self._seed_stamp(ctx)):
                     if not self.stamp_warned:
@@ -932,38 +1012,6 @@ class MMX5Client(BizHawkClient):
             if save_sane:
                 await self._stage_unlocks_apply(ctx, cur_stage_id)
 
-            # ---- UNPATCHED DISC: hold everything ---------------------------
-            # BEFORE check detection on purpose, so this holds checks as well
-            # as grants. The old "hybrid mode" wrote AP-granted weapons into
-            # 0x1C4C, which is the VANILLA kill record - the same byte the 24
-            # boss / DNA Reward / DNA Part checks read as ground truth. Every
-            # weapon the multiworld sent you therefore marked its boss
-            # defeated and fired three checks, releasing items to everyone
-            # else. Reported by a tester 2026-08-06 ("it sends all those checks
-            # before I even started playing") and reproduced exactly: 8 weapons
-            # received, zero bosses beaten, 24 checks sent.
-            #
-            # Detection is gated too, not just grants, because a save already
-            # poisoned by a hybrid session still holds those bits and would
-            # fire them again on the next connect.
-            #
-            # Hybrid dates from before the disc patch existed; the module
-            # header always flagged it as interim. Every supported flow
-            # produces a patched disc - the .apmmx5 IS the delivery mechanism -
-            # so this is unreachable in correct use and corrupts a multiworld
-            # in incorrect use.
-            if self.ap_patched is False:
-                if not self.unpatched_warned:
-                    self.unpatched_warned = True
-                    logger.error(
-                        "MMX5: this disc is NOT AP-patched - checks and items are "
-                        "HELD. On an unpatched disc the weapons you receive get "
-                        "written into the byte the game uses to record boss kills, "
-                        "which would send false checks to everyone in your "
-                        "multiworld. Patch your disc: open your .apmmx5 with the "
-                        "Archipelago Launcher, then load the .cue it produces.")
-                return
-
             # ---- Check detection ----
             new_checks = []
 
@@ -994,7 +1042,7 @@ class MMX5Client(BizHawkClient):
             # have written those bits, so something was read that was not a
             # live save. Rather than guess which, close the class.
             #
-            # Two additional requirements, both cheap:
+            # Four additional requirements, all cheap:
             #
             #  (a) IN GAMEPLAY. Modes 0x0A/0x0C mean a save is definitionally
             #      resident. The title screen, the data-select menu and the
@@ -1009,19 +1057,103 @@ class MMX5Client(BizHawkClient):
             #      frame; requiring the check-driving bytes to repeat costs one
             #      poll and removes that whole window.
             #
+            #  (c) THE PREVIOUS POLL WAS ALSO GAMEPLAY. (b) alone buys nothing
+            #      against stale RAM, because the signature is recorded on
+            #      menu polls too and stale RAM never changes - so a single
+            #      poll landing in a gameplay mode would be trusted instantly
+            #      off a signature the title screen established. Two
+            #      consecutive gameplay reads close that.
+            #
+            #      NB an earlier draft justified (d) by citing a stage-load
+            #      mode walk '0A->0B->0C->0E' from ram-notes. That sequence is
+            #      NOT the mode byte - it is 0x800D1CB4, the fast per-stage
+            #      COUNTER documented there as a known decoy. The only mode
+            #      walk actually on record is 0A->13->14 at the Sigma kill.
+            #      (c) and (d) are kept anyway, as cheap conservatism, but
+            #      they rest on 'we have not mapped this byte', not on
+            #      evidence that 0x0C occurs mid-load.
+            #
+            #  (d) 0x0C ONLY AFTER A TRUSTED 0x0A. A results screen always
+            #      follows real gameplay; the 0x0C in the stage-LOAD walk does
+            #      not necessarily, and if the loader parks there with the
+            #      previous session's struct still in RAM, (b)+(c) could both
+            #      pass.
+            #      Requiring one trusted gameplay poll first makes 0x0C an
+            #      extension of a live session, never the start of one.
+            #
             # Deliberately NOT relying on internal consistency (e.g. "8 kills
             # implies ACT >= 5"): the all_mavericks goal makes that briefly
             # false ON PURPOSE by withholding ACT, so it would reject real
             # saves.
+            #
+            # The signature is WIDER than the bytes save_checks read (tanks
+            # and armor feed only the mailbox ring): breadth is deliberate.
+            # The signature's job is evidence the struct is not mid-write,
+            # and more bytes is more evidence. The cost is that our own grant
+            # writes flip it and delay save checks by one poll - accepted.
             check_sig = (save[OFF_INTRO], save[OFF_WEAPONS], save[OFF_HEARTS],
                          save[OFF_TANKS], save[OFF_ARMOR])
             stable = check_sig == self.last_check_sig
             self.last_check_sig = check_sig
-            save_trusted = in_gameplay and stable
+            results_ok = mode[0] != 0x0C or self.gameplay_anchored
+            save_trusted = in_gameplay and was_in_gameplay and stable and results_ok
+            if save_trusted and mode[0] == 0x0A:
+                self.gameplay_anchored = True
             if save_trusted != self.last_trust_state:
                 self.last_trust_state = save_trusted
                 logger.debug(f"MMX5: save trusted -> {save_trusted} "
-                             f"(gameplay {in_gameplay}, stable {stable})")
+                             f"(gameplay {in_gameplay}, prev {was_in_gameplay}, "
+                             f"stable {stable}, results_ok {results_ok})")
+
+            # ---- Unstamped save with pre-existing progress: hold (A3b) -----
+            # Fix B stops STALE RAM; it deliberately trusts a genuinely
+            # resident save - and a save with pre-AP progress is exactly that.
+            # A vanilla playthrough on a cloned memcard, "Continue" on the
+            # wrong slot, or a savestate from before this seed's first
+            # connect all read as real progress and would fire every check it
+            # contains into the multiworld. The A3 stamp gate above cannot
+            # catch them: a save this seed never touched is stamped 0, which
+            # passes.
+            #
+            # So the stamp is now written on the FIRST TRUSTED SIGHT of a
+            # fresh save (not with the first grant batch - a player who never
+            # receives an item would stay unstamped forever and trip this on
+            # their next session), and a save that arrives at its first
+            # trusted poll unstamped but already progressed is held until the
+            # player says it is deliberate. Trusted, not merely sane, on
+            # purpose: evaluating this on stale RAM would hold (and warn
+            # about) bytes that are not a save at all.
+            if save_trusted and ctx.seed_name and save[OFF_STAMP] == 0:
+                # ACT (OFF_INTRO) is deliberately NOT progress here.
+                # Including it locked out an ordinary flow: boot the game,
+                # start playing, THEN open the client - the moment the intro
+                # clears, ACT is 1 and the save was held behind a Lua command.
+                # The asymmetry is worth it. ACT alone claims exactly ONE
+                # location (Intro Clear); weapons/hearts/tanks/armor are where
+                # the 24-check blast radius lives, and those still hold.
+                progressed = (save[OFF_WEAPONS] or save[OFF_HEARTS]
+                              or save[OFF_TANKS] or save[OFF_ARMOR])
+                if progressed:
+                    if not self.unstamped_warned:
+                        self.unstamped_warned = True
+                        logger.error(
+                            f"MMX5: this save has progress but has never been used "
+                            f"with this seed - checks and grants are HELD so it "
+                            f"cannot flood the multiworld. If this is leftover or "
+                            f"vanilla progress, start a NEW GAME on a fresh slot. "
+                            f"If you really mean to bring this save into this "
+                            f"multiworld, run this in BizHawk's Lua console: "
+                            f"mainmemory.writebyte(0x{SAVE_BASE + OFF_STAMP:06X}, "
+                            f"0x{self._seed_stamp(ctx):02X})")
+                    return
+                await bizhawk.write(ctx.bizhawk_ctx, [(
+                    SAVE_BASE + OFF_STAMP, [self._seed_stamp(ctx)], "MainRAM")])
+                logger.debug("MMX5: fresh save adopted (stamped "
+                             f"{self._seed_stamp(ctx):02X})")
+            if self.unstamped_warned and save_trusted \
+                    and save[OFF_STAMP] == self._seed_stamp(ctx):
+                self.unstamped_warned = False
+                logger.info("MMX5: save adopted into this seed - resuming")
 
             def save_check(location_name: str, condition: bool) -> None:
                 check(location_name, condition and save_trusted)
@@ -1328,8 +1460,15 @@ class MMX5Client(BizHawkClient):
             if new_checks:
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new_checks}])
 
-            # ---- Item grants (only while the save struct is live) ----
-            if in_gameplay:
+            # ---- Item grants (only while the save struct is TRUSTED) ----
+            # Same bar as reading it: never write items into a struct we
+            # would not believe - a grant landing in stale or mid-load RAM is
+            # at best lost and at worst mutates bytes the real load then
+            # inherits. Level-triggered like everything else, so the
+            # one-poll delay this adds after entering gameplay is invisible;
+            # the withhold protections below re-engage on the next trusted
+            # poll for the same reason.
+            if save_trusted:
                 # Resolve disc mode if boot raced the EXE load; in gameplay
                 # the EXE is fully resident, so this settles on first cycle.
                 # Probes resolve at the top of every cycle now; in-stage the
@@ -1555,10 +1694,10 @@ class MMX5Client(BizHawkClient):
                         writes.append((SAVE_BASE + OFF_REFILL + char,
                                        [amount | 0x80], "MainRAM"))
 
-                    # Adopt an unstamped save on its first grant batch.
-                    if ctx.seed_name and save[OFF_STAMP] == 0:
-                        writes.append((SAVE_BASE + OFF_STAMP,
-                                       [self._seed_stamp(ctx)], "MainRAM"))
+                    # (Stamping happens at first trusted sight of a fresh
+                    # save, up with the unstamped-progress hold - NOT here.
+                    # Stamping in the grant batch could land before the first
+                    # trusted poll and blind that hold.)
 
                     # Commit the new processed-count in the SAME guarded
                     # batch as the effects it accounts for.
