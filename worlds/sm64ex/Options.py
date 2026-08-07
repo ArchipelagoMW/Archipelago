@@ -170,10 +170,6 @@ class MoveRandomizerActions(OptionSet):
     valid_keys = [action for action in action_item_data_table if action != 'Double Jump']
     default = valid_keys
 
-
-class SM64DeathLink(DeathLink):
-    include_in_slot_data = True
-
 sm64_options_groups = [
     OptionGroup("Logic Options", [
         AreaRandomizer,
@@ -221,5 +217,5 @@ class SM64Options(PerGameCommonOptions):
     mips1_cost: MIPS1Cost
     mips2_cost: MIPS2Cost
     stars_to_finish: StarsToFinish
-    death_link: SM64DeathLink
+    death_link: DeathLink
     completion_type: CompletionType
