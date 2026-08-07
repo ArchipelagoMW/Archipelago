@@ -377,8 +377,6 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PLASMA_COIL_V2: RAC3ITEMDATA.construct_weapon_level(0xA0, 3000, 15, 8000),
     RAC3ITEM.LAVA_GUN_V2: RAC3ITEMDATA.construct_weapon_level(0xA1, 240, 150, 600),
     RAC3ITEM.MINI_TURRET_V2: RAC3ITEMDATA.construct_weapon_level(0xA2, 800, 10, 400),
-    RAC3ITEM.WRENCH_V2: RAC3ITEMDATA.construct_unused(0xA4),
-    RAC3ITEM.WRENCH_V3: RAC3ITEMDATA.construct_unused(0xA5),
     RAC3ITEM.BOUNCER_V2: RAC3ITEMDATA.construct_weapon_level(0xA6, 1400, 10, 2500),
     RAC3ITEM.SHIELD_CHARGER_V2: RAC3ITEMDATA.construct_weapon_level(0xA7, 100, 3, 2200),
     RAC3ITEM.MINI_TURRET_V3: RAC3ITEMDATA.construct_weapon_level(0xA8, 1000, 12, 1000),
@@ -411,11 +409,6 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.TESLA_BARRIER_V6: RAC3ITEMDATA.construct_weapon_level(0xC3, 300, 4, tags=[RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.TESLA_BARRIER_V7: RAC3ITEMDATA.construct_weapon_level(0xC4, 400, 5, 12000, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.TESLA_BARRIER_V8: RAC3ITEMDATA.construct_weapon_level(0xC5, 500, 5, 30000, [RAC3ITEMTAG.NGPLUS]),
-    RAC3ITEM.WRENCH_V4: RAC3ITEMDATA.construct_unused(0xC6),
-    RAC3ITEM.WRENCH_V5: RAC3ITEMDATA.construct_unused(0xC7),
-    RAC3ITEM.WRENCH_V6: RAC3ITEMDATA.construct_unused(0xC8),
-    RAC3ITEM.WRENCH_V7: RAC3ITEMDATA.construct_unused(0xC9),
-    RAC3ITEM.WRENCH_V8: RAC3ITEMDATA.construct_unused(0xCA),
     # Progressive
     RAC3ITEM.PROGRESSIVE_PLASMA_COIL: RAC3ITEMDATA.construct_rac2_prog(0xCB, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_LAVA_GUN: RAC3ITEMDATA.construct_rac2_prog(0xCC, ItemClassification.progression_skip_balancing),
@@ -449,7 +442,14 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PROGRESSIVE_RY3N0:
         RAC3ITEMDATA.construct_weapon_prog(0xDE, ItemClassification.progression_skip_balancing, [RAC3ITEMTAG.NGPLUS]),
     RAC3ITEM.PROGRESSIVE_WRENCH:
-        RAC3ITEMDATA.construct_wrench(0xDF, [RAC3ITEMTAG.PROG_WRENCH]),
+        RAC3ITEMDATA.construct_wrench(0xDF, [RAC3ITEMTAG.PROGRESSIVE]),
+    RAC3ITEM.WRENCH_V2: RAC3ITEMDATA.construct_wrench(0xA4),
+    RAC3ITEM.WRENCH_V3: RAC3ITEMDATA.construct_wrench(0xA5),
+    RAC3ITEM.WRENCH_V4: RAC3ITEMDATA.construct_wrench(0xC6),
+    RAC3ITEM.WRENCH_V5: RAC3ITEMDATA.construct_wrench(0xC7),
+    RAC3ITEM.WRENCH_V6: RAC3ITEMDATA.construct_wrench(0xC8),
+    RAC3ITEM.WRENCH_V7: RAC3ITEMDATA.construct_wrench(0xC9),
+    RAC3ITEM.WRENCH_V8: RAC3ITEMDATA.construct_wrench(0xCA),
     # Infobots
     RAC3ITEM.VELDIN: RAC3ITEMDATA.construct_infobot(0xE1, ItemClassification.progression),
     RAC3ITEM.FLORANA: RAC3ITEMDATA.construct_infobot(0xE2, ItemClassification.progression),

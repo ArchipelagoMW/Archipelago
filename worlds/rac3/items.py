@@ -43,12 +43,16 @@ def create_itempool(world: "RaC3World") -> list[Item]:
         if options.ngplus_items.value:
             if name == RAC3ITEM.PROGRESSIVE_RY3N0:
                 item_amount: int = 5
+            if name == RAC3ITEM.PROGRESSIVE_WRENCH:
+                item_amount: int = 7
             else:
                 item_amount: int = ngplus_item_counts.get(name, 1)
         elif name != RAC3ITEM.PROGRESSIVE_RY3N0:
             item_amount: int = item_counts.get(name, 1)
         else:
             continue
+        if not options.ngplus_items.value and name == RAC3ITEM.PROGRESSIVE_WRENCH:
+                item_amount: int = 4
         # Already placed items (Starting items and vanilla)
         if name in world.preplaced_items:
             count = world.preplaced_items.count(name)
@@ -61,10 +65,10 @@ def create_itempool(world: "RaC3World") -> list[Item]:
             continue
         if RAC3ITEMTAG.NON_PROG_WEAPON in item_tags and options.progressive_weapons.value:
             continue
-        if RAC3ITEMTAG.PROG_WRENCH in item_tags:
-            if name != RAC3ITEM.PROGRESSIVE_WRENCH:
-                continue
-            item_amount = options.progressive_wrench.value
+
+        # Progressive Wrench option
+        if RAC3ITEMTAG.PROG_WRENCH in item_tags and not options.progressive_wrench.value:
+            continue   
 
         # NG+ Item option
         if RAC3ITEMTAG.NGPLUS in item_tags:
