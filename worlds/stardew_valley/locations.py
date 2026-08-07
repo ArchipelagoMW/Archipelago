@@ -81,6 +81,11 @@ class LocationTags(enum.Enum):
     JUNIMO_KART = enum.auto()
     JUNIMO_KART_VICTORY = enum.auto()
     HELP_WANTED = enum.auto()
+    HELP_WANTED_ITEM_DELIVERY = enum.auto()
+    HELP_WANTED_GATHERING = enum.auto()
+    HELP_WANTED_SLAYING = enum.auto()
+    HELP_WANTED_FISHING = enum.auto()
+    HELP_WANTED_HELLO = enum.auto()
     TRAVELING_MERCHANT = enum.auto()
     FISHSANITY = enum.auto()
     MUSEUM_MILESTONES = enum.auto()
@@ -275,7 +280,12 @@ def extend_cropsanity_locations(randomized_locations: List[LocationData], conten
     randomized_locations.extend(modified_locations_data)
 
 
-def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent, help_wanted_quests: Dict[str, str]):
+    extend_story_quests_locations(randomized_locations, options, content)
+    extend_help_wanted_quests_locations(randomized_locations, options, content, help_wanted_quests)
+
+
+def extend_story_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     if options.quest_locations.has_no_story_quests():
         return
 
@@ -283,19 +293,10 @@ def extend_quests_locations(randomized_locations: List[LocationData], options: S
     story_quest_locations = filter_disabled_locations(options, content, story_quest_locations)
     randomized_locations.extend(story_quest_locations)
 
-    for i in range(0, options.quest_locations.value):
-        batch = i // 7
-        index_this_batch = i % 7
-        if index_this_batch < 4:
-            randomized_locations.append(
-                location_table[f"Help Wanted: Item Delivery {(batch * 4) + index_this_batch + 1}"])
-        elif index_this_batch == 4:
-            randomized_locations.append(location_table[f"Help Wanted: Fishing {batch + 1}"])
-        elif index_this_batch == 5:
-            randomized_locations.append(location_table[f"Help Wanted: Slay Monsters {batch + 1}"])
-        elif index_this_batch == 6:
-            randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
+def extend_help_wanted_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent, help_wanted_quests: Dict[str, str]):
+    for location_name in help_wanted_quests:
+        randomized_locations.append(location_table[location_name])
 
 def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random, options: StardewValleyOptions):
     fishsanity = content.features.fishsanity
@@ -747,6 +748,7 @@ def extend_filler_locations(randomized_locations: List[LocationData], options: S
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      trash_bear_requests: Dict[str, List[str]],
+                     help_wanted_quests: Dict[str, str],
                      options: StardewValleyOptions,
                      content: StardewContent,
                      random: Random):
@@ -787,7 +789,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_cooksanity_locations(randomized_locations, options, content)
     extend_chefsanity_locations(randomized_locations, options, content)
     extend_craftsanity_locations(randomized_locations, options, content)
-    extend_quests_locations(randomized_locations, options, content)
+    extend_quests_locations(randomized_locations, options, content, help_wanted_quests)
     extend_book_locations(randomized_locations, content)
     extend_walnutsanity_locations(randomized_locations, options)
     extend_movies_locations(randomized_locations, options, content)

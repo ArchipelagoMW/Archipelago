@@ -12,7 +12,7 @@ from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 from .bundles.bundle_room import BundleRoom
-from .bundles.bundles import get_all_bundles, get_trash_bear_requests
+from .bundles.bundles import get_all_bundles, get_trash_bear_requests, get_help_wanted_quests
 from .content import StardewContent, create_content
 from .content.feature.special_order_locations import get_qi_gem_amount
 from .content.feature.walnutsanity import get_walnut_amount
@@ -130,6 +130,7 @@ class StardewValleyWorld(World):
     randomized_entrances: None | Dict[str, str] = None
     forced_entrances: dict[str, str]
     trash_bear_requests: Dict[str, List[str]]
+    help_wanted_quests: Dict[str, str]
 
     total_progression_items: int
     classifications_to_override_post_fill: list[tuple[StardewItem, ItemClassification]]
@@ -202,6 +203,7 @@ class StardewValleyWorld(World):
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options, self.player_name)
         self.trash_bear_requests = get_trash_bear_requests(self.random, self.content, self.options)
+        self.help_wanted_quests = get_help_wanted_quests(self.random, self.content, self.options)
         if self.options.entrance_randomization_behavior.is_chaos():
             self.randomized_entrances = randomized_connections
         else:
@@ -216,7 +218,7 @@ class StardewValleyWorld(World):
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 
-        create_locations(add_location, self.modified_bundles, self.trash_bear_requests, self.options, self.content, self.random)
+        create_locations(add_location, self.modified_bundles, self.trash_bear_requests, self.help_wanted_quests, self.options, self.content, self.random)
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
@@ -598,6 +600,7 @@ class StardewValleyWorld(World):
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
             "trash_bear_requests": self.trash_bear_requests,
+            "help_wanted_quests": self.help_wanted_quests,
             "modified_bundles": bundles,
             "randomized_data": randomized_data,
             "client_version": self.world_version.as_simple_string(),

@@ -14,9 +14,14 @@ from ..data.bundles_data.meme_bundles import community_center_meme_bundles, pant
     boiler_room_meme, vault_meme
 from ..data.bundles_data.remixed_anywhere_bundles import community_center_remixed_anywhere
 from ..data.game_item import ItemTag
+from ..locations import LocationTags, locations_by_tag
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization, StardewValleyOptions
+from ..strings.animal_product_names import AnimalProduct
 from ..strings.bundle_names import CCRoom
+from ..strings.material_names import Material
+from ..strings.metal_names import MetalBar, Mineral
+from ..strings.villager_names import NPC
 
 
 def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent, options: StardewValleyOptions, player_name: str) -> List[BundleRoom]:
@@ -159,3 +164,39 @@ def get_trash_bear_requests(random: Random, content: StardewContent, options: St
 def pick_trash_bear_items(item_tag: ItemTag, content: StardewContent, number_items: int, random: Random):
     forage_items = [item.name for item in content.find_tagged_items(item_tag)]
     return random.sample(forage_items, number_items)
+
+def get_help_wanted_quests(random: Random, content: StardewContent, options: StardewValleyOptions) -> Dict[str, str]:
+    help_wanted_quests = dict()
+    if options.quest_locations.value <= 0:
+        return help_wanted_quests
+
+    num_help_wanteds = options.quest_locations.value
+    available_locations = locations_by_tag[LocationTags.HELP_WANTED]
+    picked_locations = random.sample(available_locations, num_help_wanteds)
+
+    slaying_requesters = [NPC.clint, NPC.lewis, NPC.demetrius, NPC.wizard]
+
+    forages = [item.name for item in content.find_tagged_items(ItemTag.FORAGE)]
+    crops = [item.name for item in content.find_tagged_items(ItemTag.CROPSANITY)]
+    minerals = [MetalBar.copper, MetalBar.iron, MetalBar.gold, MetalBar.iridium, Mineral.quartz, Mineral.amethyst, Mineral.topaz, Mineral.emerald, Mineral.ruby, Mineral.earth_crystal, Mineral.aquamarine, Mineral.diamond, Mineral.fire_quartz, Mineral.frozen_tear, Mineral.jade]
+    animal_prodcts = [AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.milk, AnimalProduct.goat_milk, AnimalProduct.wool, AnimalProduct.duck_egg, AnimalProduct.truffle]
+    all_fish = [fish for fish in content.fishes]
+    item_delivery_items = list(sorted({*forages, *crops, *minerals, *animal_prodcts, *all_fish}))
+
+    for location in picked_locations:
+        location_name = location.name
+        if LocationTags.HELP_WANTED_HELLO in location.tags:
+            help_wanted_quests[location_name] = NPC.emily
+        elif LocationTags.HELP_WANTED_SLAYING in location.tags:
+            help_wanted_quests[location_name] = random.choice(slaying_requesters)
+        elif LocationTags.HELP_WANTED_GATHERING in location.tags:
+            requester = NPC.robin if (Material.wood in location_name or Material.stone in location_name) else NPC.clint
+            help_wanted_quests[location_name] = requester
+        elif LocationTags.HELP_WANTED_FISHING in location.tags:
+            season = location_name.split(" ")[-1]
+            seasonal_fish = [fish for fish in all_fish if season in content.fishes[fish].seasons]
+            help_wanted_quests[location_name] = random.choice(seasonal_fish)
+        elif LocationTags.HELP_WANTED_ITEM_DELIVERY in location.tags:
+            help_wanted_quests[location_name] = random.choice(item_delivery_items)
+
+    return help_wanted_quests

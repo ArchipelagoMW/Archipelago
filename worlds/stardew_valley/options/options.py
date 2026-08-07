@@ -513,22 +513,20 @@ class QuestLocations(NamedRange):
     """Include location checks for quests
     None: No quests are checks
     Story: Only story quests are checks
-    Number: Story quests and help wanted quests are checks up to the specified amount. Multiple of 7 recommended
-    Out of every 7 help wanted quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
-    Extra Help wanted quests might be added if current settings don't have enough locations"""
+    Number: Story quests and help wanted quests are checks up to the specified amount.
+    Random Help Wanted Quests will be picked from the pool of 56 available ones"""
     internal_name = "quest_locations"
     default = 7
     range_start = 0
     range_end = 56
-    # step = 7
     display_name = "Quest Locations"
 
     special_range_names = {
         "none": -1,
-        "story": 0,
-        "minimum": 7,
-        "normal": 14,
-        "lots": 28,
+        "story_only": 0,
+        "few": 8,
+        "medium": 16,
+        "lots": 24,
         "maximum": 56,
     }
 

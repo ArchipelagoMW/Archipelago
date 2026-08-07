@@ -51,6 +51,8 @@ class Monster:
     magma_sparker = "Magma Sparker"
     metal_head = "Metal Head"
     haunted_skull = "Haunted Skull"
+    squid_kid = "Squid Kid"
+    ghost = "Ghost"
 
 
 class MonsterCategory:

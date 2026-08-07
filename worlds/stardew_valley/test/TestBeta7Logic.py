@@ -141,11 +141,13 @@ class TestGatheringQuestsWithStartingToolsRequiresMinesAccess(SVTestBase):
     options = {
         ToolProgression: ToolProgression.option_progressive,
         StartWithout: frozenset({StartWithoutOptionName.landslide}),
-        QuestLocations: 7,
+        QuestLocations: 56,
     }
 
     def test_gathering_quest_requires_landslide(self):
-        gathering_location = "Help Wanted: Gathering 1"
+        gathering_location = "Help Wanted: Gathering Copper Ore"
+        self.assert_cannot_reach_location(gathering_location)
+        self.collect("Progressive Weapon")
         self.assert_cannot_reach_location(gathering_location)
         self.collect("Landslide Removed")
         self.assert_can_reach_location(gathering_location)
@@ -155,18 +157,40 @@ class TestGatheringQuestsWithoutStartingToolsRequiresMinesAndAxeAndPickaxe(SVTes
     options = {
         ToolProgression: ToolProgression.option_progressive,
         StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
-        QuestLocations: 7,
+        QuestLocations: 56,
     }
 
-    def test_gathering_quest_requires_landslide_axe_and_pickaxe(self):
-        gathering_location = "Help Wanted: Gathering 1"
+    def test_gathering_copper_requires_landslide_pickaxe_and_no_axe(self):
+        gathering_location = "Help Wanted: Gathering Copper Ore"
+        pickaxe = self.create_item("Progressive Pickaxe")
         axe = self.create_item("Progressive Axe")
+        landslide = self.create_item("Landslide Removed")
         self.assert_cannot_reach_location(gathering_location)
-        self.collect("Landslide Removed")
+        self.collect("Progressive Weapon")
         self.assert_cannot_reach_location(gathering_location)
         self.collect(axe)
         self.assert_cannot_reach_location(gathering_location)
-        self.collect("Progressive Pickaxe")
+        self.collect(landslide)
+        self.assert_cannot_reach_location(gathering_location)
+        self.collect(pickaxe)
+        self.assert_can_reach_location(gathering_location)
+        self.remove(axe)
+        self.assert_can_reach_location(gathering_location)
+        self.remove(landslide)
+        self.assert_cannot_reach_location(gathering_location)
+        self.remove(pickaxe)
+        self.assert_cannot_reach_location(gathering_location)
+
+    def test_gathering_wood_requires_axe_and_no_landslide(self):
+        gathering_location = "Help Wanted: Gathering Wood"
+        axe = self.create_item("Progressive Axe")
+        landslide = self.create_item("Landslide Removed")
+        self.assert_cannot_reach_location(gathering_location)
+        self.collect(landslide)
+        self.assert_cannot_reach_location(gathering_location)
+        self.collect(axe)
+        self.assert_can_reach_location(gathering_location)
+        self.remove(landslide)
         self.assert_can_reach_location(gathering_location)
         self.remove(axe)
         self.assert_cannot_reach_location(gathering_location)

@@ -137,6 +137,7 @@ def set_rules(world):
     logic = world.logic
     bundle_rooms: List[BundleRoom] = world.modified_bundles
     trash_bear_requests: Dict[str, List[str]] = world.trash_bear_requests
+    help_wanted_quests: Dict[str, str] = world.help_wanted_quests
 
     all_location_names = set(location.name for location in world.multiworld.get_locations(world.player))
 
@@ -151,7 +152,7 @@ def set_rules(world):
     set_cropsanity_rules(logic, rule_collector, world_content)
     set_story_quests_rules(all_location_names, logic, rule_collector, world_options)
     set_special_order_rules(all_location_names, logic, rule_collector, world_options, world_content)
-    set_help_wanted_quests_rules(logic, rule_collector, world_options)
+    set_help_wanted_quests_rules(logic, rule_collector, world_options, help_wanted_quests)
     set_fishsanity_rules(all_location_names, logic, rule_collector)
     set_museumsanity_rules(all_location_names, logic, rule_collector, world_options)
 
@@ -821,44 +822,64 @@ fishing = "Fishing"
 slay_monsters = "Slay Monsters"
 
 
-def set_help_wanted_quests_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+def set_help_wanted_quests_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions, help_wanted_quests: Dict[str, str]):
     if world_options.quest_locations.has_no_story_quests():
         return
-    help_wanted_number = world_options.quest_locations.value
-    for i in range(0, help_wanted_number):
-        set_number = i // 7
-        month_rule = logic.time.has_lived_months(set_number)
-        quest_number = set_number + 1
-        quest_number_in_set = i % 7
-        if quest_number_in_set < 4:
-            quest_number = set_number * 4 + quest_number_in_set + 1
-            set_help_wanted_delivery_rule(logic, rule_collector, month_rule, quest_number)
-        elif quest_number_in_set == 4:
-            set_help_wanted_fishing_rule(logic, rule_collector, month_rule, quest_number)
-        elif quest_number_in_set == 5:
-            set_help_wanted_slay_monsters_rule(logic, rule_collector, month_rule, quest_number)
-        elif quest_number_in_set == 6:
-            set_help_wanted_gathering_rule(logic, rule_collector, month_rule, quest_number)
+
+    for help_wanted_quest_name in help_wanted_quests:
+        extra_info = help_wanted_quests[help_wanted_quest_name]
+        location_tags = locations.location_table[help_wanted_quest_name].tags
+
+        if LocationTags.HELP_WANTED_HELLO in location_tags:
+            set_help_wanted_hello_rule(logic, rule_collector, help_wanted_quest_name, extra_info)
+        elif LocationTags.HELP_WANTED_SLAYING in location_tags:
+            set_help_wanted_slaying_rule(logic, rule_collector, help_wanted_quest_name, extra_info)
+        elif LocationTags.HELP_WANTED_GATHERING in location_tags:
+            set_help_wanted_gathering_rule(logic, rule_collector, help_wanted_quest_name, extra_info)
+        elif LocationTags.HELP_WANTED_FISHING in location_tags:
+            set_help_wanted_fishing_rule(logic, rule_collector, help_wanted_quest_name, extra_info)
+        elif LocationTags.HELP_WANTED_ITEM_DELIVERY in location_tags:
+            set_help_wanted_delivery_rule(logic, rule_collector, help_wanted_quest_name, extra_info)
+        else:
+            raise "Tried to set a rule for a help wanted quest but couldn't figure out its type"
 
 
-def set_help_wanted_delivery_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, month_rule, quest_number):
-    location_name = f"{help_wanted_prefix} {item_delivery} {quest_number}"
-    rule_collector.set_location_rule(location_name, logic.quest.can_do_item_delivery_quest() & month_rule)
+def set_help_wanted_hello_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, location_name: str, requester: str):
+    rule_collector.set_location_rule(location_name, logic.region.can_reach(Region.town) &
+                                     logic.relationship.can_meet(requester) &
+                                     logic.quest.can_complete_quest(Quest.introductions))
 
 
-def set_help_wanted_gathering_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, month_rule, quest_number):
-    location_name = f"{help_wanted_prefix} {gathering} {quest_number}"
-    rule_collector.set_location_rule(location_name, logic.quest.can_do_gathering_quest() & month_rule)
+def set_help_wanted_slaying_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, location_name: str, requester: str):
+    prefix = "Help Wanted: Slay "
+    monster_name = location_name[len(prefix):]
+    rule_collector.set_location_rule(location_name, logic.region.can_reach(Region.town) &
+                                     logic.relationship.can_meet(requester) &
+                                     logic.monster.can_kill(monster_name))
 
 
-def set_help_wanted_fishing_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, month_rule, quest_number):
-    location_name = f"{help_wanted_prefix} {fishing} {quest_number}"
-    rule_collector.set_location_rule(location_name, logic.quest.can_do_fishing_quest() & month_rule)
+def set_help_wanted_gathering_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, location_name: str, requester: str):
+    prefix = "Help Wanted: Gathering "
+    item_name = location_name[len(prefix):]
+    rule_collector.set_location_rule(location_name, logic.region.can_reach(Region.town) &
+                                     logic.relationship.can_meet(requester) &
+                                     logic.has(item_name))
 
 
-def set_help_wanted_slay_monsters_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, month_rule, quest_number):
-    location_name = f"{help_wanted_prefix} {slay_monsters} {quest_number}"
-    rule_collector.set_location_rule(location_name, logic.quest.can_do_slaying_quest() & month_rule)
+def set_help_wanted_fishing_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, location_name: str, fish: str):
+    requester = NPC.willy if "Art" in location_name else NPC.demetrius
+    season = location_name.split(" ")[-1]
+    rule_collector.set_location_rule(location_name, logic.region.can_reach(Region.town) &
+                                     logic.season.has(season) &
+                                     logic.relationship.can_meet(requester) &
+                                     logic.fishing.can_catch_fish(fish))
+
+
+def set_help_wanted_delivery_rule(logic: StardewLogic, rule_collector: StardewRuleCollector, location_name: str, item: str):
+    requester = location_name.split(" ")[-1]
+    rule_collector.set_location_rule(location_name, logic.region.can_reach(Region.town) &
+                                     logic.relationship.can_meet(requester) &
+                                     logic.has(item))
 
 
 def set_fishsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector):
