@@ -47,7 +47,8 @@
 <SelectableLabel>:
     size_hint: 1, None
     theme_text_color: "Custom"
-    text_color: self.theme_cls.onBackgroundColor
+    text_color: self.theme_cls.onSurfaceColor
+    md_bg_color: self.theme_cls.surfaceContainerColor
     canvas.before:
         Color:
             rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerLowestColor
