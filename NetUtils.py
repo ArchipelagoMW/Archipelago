@@ -3,8 +3,10 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 import typing
 import enum
+import functools
 import warnings
-from json import JSONEncoder, JSONDecoder
+
+import queson
 
 if typing.TYPE_CHECKING:
     from websockets import WebSocketServerProtocol as ServerConnection
@@ -128,11 +130,7 @@ def convert_to_base_types(obj: typing.Any) -> _base_types:
         raise Exception(f"Cannot handle {type(obj)}")
 
 
-_encode = JSONEncoder(
-    ensure_ascii=False,
-    check_circular=False,
-    separators=(',', ':'),
-).encode
+_encode = functools.partial(queson.dumps, object_hook=None, check_circular=False)
 
 
 def encode(obj: typing.Any) -> str:
@@ -170,7 +168,7 @@ def _object_hook(o: typing.Any) -> typing.Any:
     return o
 
 
-decode = JSONDecoder(object_hook=_object_hook).decode
+decode = functools.partial(queson.loads, object_hook=_object_hook, depth_limit=16)
 
 
 class Endpoint:
