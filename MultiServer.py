@@ -2657,7 +2657,7 @@ async def auto_shutdown(ctx: Context, to_cancel=None):
     with contextlib.suppress(asyncio.TimeoutError):
         await asyncio.wait_for(ctx.exit_event.wait(), ctx.auto_shutdown)
 
-    async def inactivity_shutdown():
+    def inactivity_shutdown():
         ctx.exit_event.set()
         if to_cancel:
             for task in to_cancel:
@@ -2666,13 +2666,13 @@ async def auto_shutdown(ctx: Context, to_cancel=None):
 
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
-            await inactivity_shutdown()
+            inactivity_shutdown()
         else:
             newest_activity = max(ctx.client_activity_timers.values())
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
-                await inactivity_shutdown()
+                inactivity_shutdown()
             else:
                 with contextlib.suppress(asyncio.TimeoutError):
                     await asyncio.wait_for(ctx.exit_event.wait(), seconds)
