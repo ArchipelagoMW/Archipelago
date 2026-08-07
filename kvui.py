@@ -904,12 +904,6 @@ class GameManager(ThemedApp):
             return max(1, len(self.tabs.children))
         return 1
 
-    def on_start(self):
-        def on_start(*args):
-            self.root.md_bg_color = self.theme_cls.backgroundColor
-        super().on_start()
-        Clock.schedule_once(on_start)
-
     def build(self) -> Layout:
         self.set_colors()
         self.container = ContainerLayout()

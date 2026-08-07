@@ -31,7 +31,7 @@
         text: root.text
         theme_text_color: "Custom"
         text_color_active: self.theme_cls.primaryColor
-        text_color_normal: 1, 1, 1, 1
+        text_color_normal: self.theme_cls.onSurfaceVariantColor
         # indicator is on icon only for some reason
         canvas.before:
             Color:
@@ -47,7 +47,7 @@
 <SelectableLabel>:
     size_hint: 1, None
     theme_text_color: "Custom"
-    text_color: 1, 1, 1, 1
+    text_color: self.theme_cls.onBackgroundColor
     canvas.before:
         Color:
             rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerLowestColor
@@ -171,6 +171,7 @@
     size_hint_x: 1
     size_hint_y: 1
     pos: (0, 0)
+    md_bg_color: self.theme_cls.backgroundColor
 <ToolTip>:
     size: self.texture_size
     size_hint: None, None
@@ -242,4 +243,3 @@
     halign: "center"
     text_size: self.width, None
     height: self.texture_size[1]
-
