@@ -2658,12 +2658,10 @@ async def auto_shutdown(ctx: Context, to_cancel=None):
         await asyncio.wait_for(ctx.exit_event.wait(), ctx.auto_shutdown)
 
     async def inactivity_shutdown():
-        ctx.server.ws_server.close()
         ctx.exit_event.set()
         if to_cancel:
             for task in to_cancel:
                 task.cancel()
-        await ctx.server.ws_server.wait_closed()
         ctx.logger.info("Shutting down due to inactivity.")
 
     while not ctx.exit_event.is_set():
