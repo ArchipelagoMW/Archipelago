@@ -12,7 +12,7 @@ from BaseClasses import CollectionState, ItemClassification
 import worlds.mmx5.client as c
 from worlds.mmx5 import names
 from worlds.mmx5.client import MMX5Client
-from worlds.mmx5.items import BASE_ID, item_table
+from worlds.mmx5.items import BASE_ID, item_groups, item_table
 
 from . import MMX5TestBase
 from .test_client import FakeContext, make_save, run_watcher
@@ -123,6 +123,76 @@ class TestStageUnlocksFill(MMX5TestBase):
         distribute_items_restrictive(self.multiworld)
         self.assertTrue(self.multiworld.can_beat_game(),
                         "stage locks made the seed unwinnable")
+
+
+class TestEndgameCannotStrandStageAccess(MMX5TestBase):
+    """A tester's seed (2026-08-06) was UNBEATABLE: Dark Dizzy's and Axle the
+    Red's Access Codes were placed in Sigma's stage. Reaching Sigma needs 8
+    Maverick kills; killing those two needs their codes; the codes were behind
+    Sigma.
+
+    Logic never saw it, because the Sigma entrance only required the 8 weapon
+    ITEMS - and its comment said that added no constraint since "every boss is
+    reachable and killable with no items at all". True until stage_unlocks
+    shipped, and nobody revisited the rule. The generated playthrough "won"
+    after entering four stages.
+
+    The tester's exact option set, so this reproduces the real seed shape.
+    """
+    options = {"goal": "all_mavericks", "stage_unlocks": True,
+               "pickupsanity": True, "dna_parts_in_pool": True,
+               "secret_armors_in_pool": True}
+
+    def _endgame_locations(self):
+        return [l for l in self.multiworld.get_locations(self.player)
+                if l.parent_region and l.parent_region.name == "Sigma Stages"]
+
+    def test_endgame_needs_every_access_code(self) -> None:
+        from BaseClasses import CollectionState
+        entrance = self.multiworld.get_entrance("Stage Select -> Sigma Stages",
+                                                self.player)
+        world = self.multiworld.worlds[self.player]
+        state = CollectionState(self.multiworld)
+        state.prog_items[self.player].clear()
+        for w in item_groups["Weapons"]:
+            state.collect(world.create_item(w), True)
+        self.assertFalse(entrance.access_rule(state),
+                         "8 weapons alone opened the endgame with stages locked")
+        for stage in names.STAGES:
+            state.collect(world.create_item(names.access_item(stage)), True)
+        self.assertTrue(entrance.access_rule(state),
+                        "weapons + every Access Codes item still did not open it")
+
+    def test_no_access_code_is_placed_in_the_endgame(self) -> None:
+        from Fill import distribute_items_restrictive
+        distribute_items_restrictive(self.multiworld)
+        stranded = [l.name for l in self._endgame_locations()
+                    if l.item and l.item.name in names.ACCESS_ITEMS]
+        self.assertEqual(stranded, [],
+                         f"Access Codes stranded behind the endgame: {stranded}")
+
+    def test_seed_is_beatable(self) -> None:
+        from Fill import distribute_items_restrictive
+        distribute_items_restrictive(self.multiworld)
+        self.assertTrue(self.multiworld.can_beat_game())
+
+
+class TestEndgameRuleWithoutStageUnlocks(MMX5TestBase):
+    """Without stage_unlocks the endgame must NOT demand Access Codes - they
+    do not exist in that pool, so requiring them would make every seed
+    unwinnable."""
+    options = {"stage_unlocks": False, "pickupsanity": True}
+
+    def test_weapons_alone_open_the_endgame(self) -> None:
+        from BaseClasses import CollectionState
+        world = self.multiworld.worlds[self.player]
+        state = CollectionState(self.multiworld)
+        state.prog_items[self.player].clear()
+        for w in item_groups["Weapons"]:
+            state.collect(world.create_item(w), True)
+        self.assertTrue(
+            self.multiworld.get_entrance("Stage Select -> Sigma Stages",
+                                         self.player).access_rule(state))
 
 
 class TestAccessItemIds(unittest.TestCase):

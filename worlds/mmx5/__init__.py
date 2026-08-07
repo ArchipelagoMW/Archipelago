@@ -309,11 +309,30 @@ class MMX5World(World):
         # Note this rule is about WEAPONS (items, receivable from any world),
         # while the all_mavericks goal is about KILLS (popcount of 0x1C4C, only
         # ever set locally). They are not the same requirement and neither
-        # implies the other. The goal's kill requirement is enforced by the
-        # client, and every boss is reachable and killable with no items at
-        # all, so it adds no logical constraint here.
+        # implies the other.
+        #
+        # That USED to add no logical constraint, because "every boss is
+        # reachable and killable with no items at all" - and that assumption
+        # died the day `stage_unlocks` shipped without anyone revisiting this
+        # rule. A tester's seed (2026-08-06, goal all_mavericks + stage_unlocks
+        # + pickupsanity) put Dark Dizzy's and Axle the Red's Access Codes in
+        # SIGMA'S STAGE. Reaching Sigma needs 8 kills; killing those two needs
+        # their codes; their codes are behind Sigma. Hard deadlock, and the
+        # playthrough happily "won" after entering four stages, because logic
+        # only ever checked the 8 weapon ITEMS.
+        #
+        # So with stages locked, the endgame additionally requires every
+        # Access Codes item. Applied for EVERY goal, not just all_mavericks:
+        # reaching the endgame in-game needs the colony to resolve, which needs
+        # story progress, which needs kills, which needs stage access - and the
+        # exact kill count the story wants is not something logic models. Being
+        # stricter than necessary only narrows placement; being looser strands
+        # seeds, which is what just happened.
+        endgame_needs = set(item_groups["Weapons"])
+        if self.options.stage_unlocks:
+            endgame_needs |= set(names.ACCESS_ITEMS)
         self.multiworld.get_entrance("Stage Select -> Sigma Stages", self.player).access_rule = \
-            lambda state: state.has_all(item_groups["Weapons"], self.player)
+            lambda state: state.has_all(endgame_needs, self.player)
 
         # Stage access. Enforced in-game by the client zeroing the hub's
         # slot -> stage-id table (0x800F5050), which makes confirming a locked

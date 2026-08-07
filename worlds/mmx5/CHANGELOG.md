@@ -1,5 +1,31 @@
 # Mega Man X5 apworld changelog
 
+## 0.3.3 — 2026-08-06
+
+**`stage_unlocks` could generate an unbeatable seed. Regenerate any seed you
+have not finished that uses it.** A client update cannot rescue an affected
+seed — the item placement itself is wrong.
+
+A tester's seed put **Dark Dizzy's and Axle the Red's Access Codes inside
+Sigma's stage**. To kill those two Mavericks you need their codes; to reach
+Sigma's stage you need every Maverick dead. There is no way out of that, and
+generation did not notice: the spoiler's own playthrough "completed" the seed
+after entering four stages.
+
+The cause was a stale assumption. Reaching the endgame required the 8 weapon
+items, and that rule was written when every boss could be reached with no items
+at all — so weapons were a fine stand-in for progress. Locking the stages broke
+that, and the rule was never revisited when `stage_unlocks` shipped.
+
+**Now the endgame also requires every Access Codes item**, for every goal. Being
+stricter than the game only limits where items can go; being looser stranded a
+seed.
+
+How to tell if a seed you already have is affected: open its spoiler log and
+look at what is placed on the `Sigma - ...` and `Zero Space ... - ...`
+locations. If any of them holds an Access Codes item, that seed cannot be
+finished. Seeds without `stage_unlocks` were never at risk.
+
 ## 0.3.2 — 2026-08-06
 
 **Second and larger pass at the phantom-check problem. Update over 0.3.1.**
