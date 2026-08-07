@@ -2257,10 +2257,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        try:
-            self.ctx.server.ws_server.close()
-        finally:
-            self.ctx.exit_event.set()
+        self.ctx.exit_event.set()
         return True
 
     @mark_raw
@@ -2768,7 +2765,9 @@ async def main(args: argparse.Namespace):
             signal(sig, shutdown)
 
     await ctx.exit_event.wait()
+    ctx.server.ws_server.close()
     console_task.cancel()
+    await ctx.server.ws_server.wait_closed()
     if ctx.shutdown_task:
         await ctx.shutdown_task
 
