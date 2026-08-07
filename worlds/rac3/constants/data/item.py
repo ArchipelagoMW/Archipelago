@@ -614,7 +614,7 @@ item_groups: dict[str, set[str]] = {
     RAC3ITEMTAG.NGPLUS: set(ngplus_data.keys()),
     RAC3ITEMTAG.NON_PROG_WEAPON: set(non_prog_weapon_data.keys()),
     RAC3ITEMTAG.PROG_WEAPON: set(prog_weapon_data.keys()),
-    RAC3ITEMTAG.PROG_WEAPON: set(prog_wrench_data.keys()),
+    RAC3ITEMTAG.PROG_WRENCH: set(prog_wrench_data.keys()),
     RAC3ITEMTAG.PROGRESSIVE: set(progressive_data.keys()),
     RAC3ITEMTAG.TRAP: set(trap_data.keys()),
     RAC3ITEMTAG.UNUSED: set(unused_data.keys()),

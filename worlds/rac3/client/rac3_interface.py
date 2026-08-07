@@ -1932,8 +1932,6 @@ class Rac3Interface(GameInterface):
         for name in non_prog_weapon_data.keys():
             unlock_addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
             ammo_addr = non_prog_weapon_data[name].AMMO_ADDRESS
-            xp_addr = non_prog_weapon_data[name].XP_ADDRESS
-            level_addr = non_prog_weapon_data[name].LEVEL_ADDRESS
             if self.UnlockItem[name].status:
                 if self.UnlockItem[name].unlock_delay:
                     self._write8(unlock_addr, 1)
@@ -1951,8 +1949,6 @@ class Rac3Interface(GameInterface):
                 # Prevent the player from using locked weapons and leveling them to accidentally break vendors
                 self._write8(unlock_addr, 0)
                 self._write32(ammo_addr, 0)
-                self._write32(xp_addr, 0)
-                self._write8(level_addr, UPGRADE_DICT[name][0])
 
         if self.equipped_item > 1 and self.UnlockItem[ITEM_NAME_FROM_ID[self.equipped_item]].status == 0:
             if self.last_used_1 == 0:
@@ -1976,6 +1972,9 @@ class Rac3Interface(GameInterface):
     def wrench_cycler(self):
         """Cycle through the wrench properties and update its state"""
         prog_wrench = self.UnlockItem[RAC3ITEM.PROGRESSIVE_WRENCH]
+        if not prog_wrench:
+            return
+        
         if self.planet != RAC3REGION.MENU and self.between_planets is False:
             wrench_instruction = RAC3WRENCH.get_wrench_property_address(self.planet) + RAC3WRENCH.BASE_ITEM_ID_OFFSET
             wrench_upgrade = RAC3WRENCH.get_wrench_property_address(self.planet) + RAC3WRENCH.UPGRADE_ID_OFFSET         
