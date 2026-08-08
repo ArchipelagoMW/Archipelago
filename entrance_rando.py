@@ -236,8 +236,11 @@ class ERPlacementState:
         copied_state.reachable_regions[self.world.player].add(target_entrance.connected_region)
         copied_state.blocked_connections[self.world.player].remove(source_exit)
         copied_state.blocked_connections[self.world.player].update(target_entrance.connected_region.exits)
-        copied_state.update_reachable_regions(self.world.player)
-        copied_state.sweep_for_advancements(self.world.get_locations())
+        stale = True
+        while stale:
+            copied_state.update_reachable_regions(self.world.player)
+            copied_state.sweep_for_advancements(self.world.get_locations())
+            stale = copied_state.stale[self.world.player]
         # test that at there are newly reachable randomized exits that are ACTUALLY reachable
         available_randomized_exits = copied_state.blocked_connections[self.world.player]
         for _exit in available_randomized_exits:
@@ -412,13 +415,17 @@ def randomize_entrances(
     def do_placement(source_exit: Entrance, target_entrance: Entrance) -> None:
         placed_exits, paired_entrances = er_state.connect(source_exit, target_entrance)
         # propagate new connections
-        er_state.collection_state.update_reachable_regions(world.player)
-        er_state.collection_state.sweep_for_advancements(world.get_locations())
+        stale = True
+        while stale:
+            er_state.collection_state.update_reachable_regions(world.player)
+            er_state.collection_state.sweep_for_advancements(world.get_locations())
+            stale = er_state.collection_state.stale[world.player]
         if on_connect:
-            change = on_connect(er_state, placed_exits, paired_entrances)
-            if change:
+            stale = on_connect(er_state, placed_exits, paired_entrances)
+            while stale:
                 er_state.collection_state.update_reachable_regions(world.player)
                 er_state.collection_state.sweep_for_advancements()
+                stale = er_state.collection_state.stale[world.player]
 
     def needs_speculative_sweep(dead_end: bool, require_new_exits: bool, placeable_exits: list[Entrance]) -> bool:
         # speculative sweep is expensive. We currently only do it as a last resort, if we might cap off the graph
