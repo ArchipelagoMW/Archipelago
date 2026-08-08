@@ -351,11 +351,45 @@ RING_COUNT_ADDR = 0x1FA080
 RING2_ADDR = 0x1FA100
 RING2_SLOTS = 32
 RING2_COUNT_ADDR = 0x1FA200
-# Stub-presence probe: the kind-2 (small HP) dispatch entry. Vanilla points
-# at the small-HP collect handler; a pickupsanity disc points at the stub.
+# Stub-presence probe. Two words, because ONE is not enough any more:
+#
+#   RING2_STUB_PROBE_ADDR - the stub's own first instruction, in EXE free
+#     space. This is the authority. The client never writes here, so it stays
+#     true no matter what the dispatch table currently says.
+#   RING2_PROBE_ADDR - the kind-2 (small HP) dispatch entry, kept only to tell
+#     a real vanilla disc (EXE loaded, table holds the vanilla handler) from
+#     boot (everything reads zero).
+#
+# The dispatch entry ALONE used to be the probe, and that stopped being safe
+# the moment _pickup_dispatch_apply started rewriting it: hand a cleared stage
+# its vanilla capsules back, walk out, and the gate-transition re-probe would
+# read "vanilla" and turn pickupsanity check detection off for the rest of the
+# session. Presence of the stub is a property of the DISC; what the table
+# points at right now is a property of where the player is standing.
 RING2_PROBE_ADDR = 0x011070
 RING2_PROBE_VANILLA = bytes.fromhex("64410580")   # 0x80054164 LE
 RING2_PROBE_STUBBED = bytes.fromhex("60770780")   # 0x80077760 LE
+RING2_STUB_PROBE_ADDR = 0x077760                  # PICKUPSANITY_STUB_ADDR
+RING2_STUB_WORD = bytes.fromhex("1f80083c")       # lui $t0, 0x801F
+
+# The whole collect dispatch table, so the client can hand a cleared stage its
+# vanilla capsules back (_pickup_dispatch_apply). Kinds and stub address match
+# disc.py's CONSUMABLE_KINDS / PICKUPSANITY_STUB_ADDR - the same table it
+# patches at build time; these are the runtime override of those same words.
+# Vanilla handler addresses read out of the unmodified SLUS_013.34 (2026-08-08);
+# kinds 5/6/7 genuinely share one handler.
+DISPATCH_TABLE_ADDR = 0x011068
+CONSUMABLE_KINDS = (0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8)
+PICKUPSANITY_STUB_ADDR = 0x80077760
+VANILLA_DISPATCH = {
+    0x2: 0x80054164,   # small HP
+    0x3: 0x80054198,   # large HP
+    0x4: 0x800541D8,   # full HP
+    0x5: 0x80054204,   # small weapon
+    0x6: 0x80054204,   # large weapon  (same handler)
+    0x7: 0x80054204,   # full weapon   (same handler)
+    0x8: 0x80054218,   # 1-UP
+}
 
 # Ring record stage byte (0x800D1C41) -> stage name, verified stage-id order.
 STAGE_ID_TO_NAME = {
@@ -440,6 +474,22 @@ WEAPON_BITS = [names.CSHOT, names.DARK_HOLD, names.GOO_SHAVER, names.GROUND_FIRE
                names.TRI_THUNDER, names.F_LASER, names.SPIKE_BALL, names.WING_SPIRAL]
 WEAPON_TO_BIT = {name: i for i, name in enumerate(WEAPON_BITS)}
 
+# Live (volatile) weapons-owned bitfield, zeroed on death and stage exit and
+# repopulated at stage load. Writing the SAVE byte alone is why a weapon used
+# to sit unusable until the player left and re-entered the stage (reported by
+# a tester 2026-08-08): the save byte is what a stage load reads, not what the
+# pause menu reads mid-stage.
+#
+# The restore is `0x8003C324`: `lbu $v0, 0x4C($a1)` / `sb $v0, 0xC9($s0)` with
+# $s0 = the player struct 0x8009A0A0, so $s0+0xC9 IS this address. That store
+# is one of the three the AP disc patch retargets 0x4C -> 0x4D, which is why a
+# patched disc restores from the AP capability byte rather than the kill
+# record. Verified statically 2026-08-08 (ghidra-findings 9.16).
+#
+# Only ever OR-ed, and only during gameplay: X5 never takes a weapon away, and
+# the 0x9Axxx region is garbage outside gameplay.
+LIVE_WEAPONS_ADDR = 0x09A169
+
 # Heart-tank bitfield stage mapping — complete via placement-record harvest
 # 2026-07-31 (Scripts/mmx5_placement_dump.lua); bits 2 and 6 also live-verified.
 # NOT stage-id order: the bit is the placement record's id byte.
@@ -482,6 +532,10 @@ class MMX5Client(BizHawkClient):
         self.stub_present = False
         self.ring2_present = False
         self.unknown_records_logged = set()
+        # Last (vanilla?, stage) the collect dispatch table was set for. None
+        # means "unknown", so the first cycle always writes - a savestate or a
+        # reload can put the disc's own (stubbed) words back under us.
+        self.pickup_dispatch_vanilla = None
         # Boss HP: the vanilla accumulator value the game last computed, and
         # what we last wrote over it. Both in-memory only - see _boss_hp_apply.
         self.boss_hp_vanilla = None
@@ -771,6 +825,106 @@ class MMX5Client(BizHawkClient):
             await bizhawk.write(ctx.bizhawk_ctx, [(
                 0x0D1C0C, [self.hub_stage_id or HUB_STAGE_ID], "MainRAM")])
 
+    async def _live_weapons_apply(self, ctx, save: bytes, in_gameplay: bool) -> None:
+        """Mirror granted weapons into the LIVE bitfield so they work now.
+
+        Grants land in the save struct, which is what a stage LOAD reads - so
+        before this, a weapon received mid-stage did nothing until the player
+        left and came back (tester report, 2026-08-08). The live byte is the
+        one the pause menu and the fire button consult.
+
+        Idempotent OR of bits that are already committed to the save struct,
+        never a source of truth in its own right: if the save byte does not
+        have the bit, neither does this. That keeps the write strictly
+        downstream of the grant path's own guards rather than adding a second
+        place where an item can be conjured.
+        """
+        if not in_gameplay:
+            # 0x9Axxx is garbage outside gameplay; the stage load will restore
+            # this byte from the save struct anyway.
+            return
+        wep_off = OFF_AP_WEAPONS if self.ap_patched else OFF_WEAPONS
+        capability = save[wep_off]
+        if not capability:
+            return
+        try:
+            live = await bizhawk.read(ctx.bizhawk_ctx,
+                                      [(LIVE_WEAPONS_ADDR, 1, "MainRAM")])
+        except bizhawk.RequestFailedError:
+            return
+        merged = live[0][0] | capability
+        if merged != live[0][0]:
+            await bizhawk.write(ctx.bizhawk_ctx,
+                                [(LIVE_WEAPONS_ADDR, [merged], "MainRAM")])
+            logger.debug(f"MMX5: live weapons {live[0][0]:02X} -> {merged:02X} "
+                         f"(save {capability:02X})")
+
+    async def _pickup_dispatch_apply(self, ctx, cur_stage_id: int,
+                                     in_gameplay: bool) -> None:
+        """Let already-cleared stages heal from their capsules again.
+
+        Pickupsanity redirects the collect dispatch table by ITEM KIND, so a
+        randomized capsule is inert for the whole run - including on a revisit
+        after its check is long since sent. In the Boss Rush that is a real
+        cost (tester report, 2026-08-08).
+
+        Only one stage's placement list is live at a time, so per-stage is as
+        fine-grained as a kind-indexed table allows: if every pickupsanity
+        location in the stage the player is standing in has been CONFIRMED by
+        the server, nothing there is left to record and the vanilla handlers
+        go back. Anywhere else - and any stage with a check still outstanding,
+        including one merely sent and not yet acknowledged - keeps the stub.
+
+        Fails safe in both directions: the stub is the default, the disc's own
+        bytes are the stub, and a reload restores them.
+        """
+        if not (ctx.slot_data or {}).get("pickupsanity", 0):
+            return
+        if self.ring2_present is not True:
+            return
+
+        stage_locs = [location_table[name]
+                      for stage, _area, _idx, _iid, name in pickups.PICKUPS
+                      if stage == cur_stage_id]
+        # Vanilla only where we are certain: in gameplay, in a stage whose
+        # every pickup check is confirmed. A stage with no pickup locations at
+        # all (Squid Adler, and the intro, whose single capsule is
+        # deliberately not a location) qualifies too - suppressing those was
+        # never intended.
+        vanilla = in_gameplay and all(loc in ctx.checked_locations
+                                      for loc in stage_locs)
+        if self.pickup_dispatch_vanilla == (vanilla, cur_stage_id):
+            return
+
+        writes = [(DISPATCH_TABLE_ADDR + kind * 4,
+                   list((VANILLA_DISPATCH[kind] if vanilla
+                         else PICKUPSANITY_STUB_ADDR).to_bytes(4, "little")),
+                   "MainRAM")
+                  for kind in CONSUMABLE_KINDS]
+        try:
+            await bizhawk.write(ctx.bizhawk_ctx, writes)
+        except bizhawk.RequestFailedError:
+            return
+        self.pickup_dispatch_vanilla = (vanilla, cur_stage_id)
+        if vanilla and stage_locs:
+            logger.info("MMX5: every pickup check in this stage is collected - "
+                        "its capsules restore energy normally again")
+
+    @staticmethod
+    def _classify_ring2(stub_probe: bytes, dispatch_probe: bytes):
+        """Is this a pickupsanity disc? True / False / None (retry).
+
+        The stub's own bytes decide it, because the client rewrites the
+        dispatch table at runtime and so cannot read its own override back as
+        evidence about the disc. The dispatch entry only distinguishes a
+        loaded vanilla EXE from boot, where everything reads zero.
+        """
+        if bytes(stub_probe) == RING2_STUB_WORD:
+            return True
+        if bytes(dispatch_probe) == RING2_PROBE_VANILLA:
+            return False
+        return None                    # boot zeros - retry next cycle
+
     @staticmethod
     def _classify_stub_probe(probe: bytes):
         if probe == STUB_PROBE_STUBBED:
@@ -880,6 +1034,10 @@ class MMX5Client(BizHawkClient):
                 # vanish mid-session exactly like the other two.
                 self.tank_fix_present = None
                 self.ring2_present = None
+                # Same reason: a savestate can put the disc's own (stubbed)
+                # dispatch words back under an override we think is still
+                # applied. Forget it so the next cycle re-decides.
+                self.pickup_dispatch_vanilla = None
 
             # Resolve the probes whenever unresolved - NOT just in-stage.
             # Launches happen at the HUB (modes 0x13-0x15); the old
@@ -890,22 +1048,19 @@ class MMX5Client(BizHawkClient):
             # zeros -> classify returns None -> retried next cycle.
             if self.ap_patched is None or self.stub_present is None \
                     or self.tank_fix_present is None or self.ring2_present is None:
-                probe, stub_probe, tank_probe, ring2_probe = await bizhawk.read(ctx.bizhawk_ctx, [
-                    (PATCH_PROBE_ADDR, 4, "MainRAM"),
-                    (STUB_PROBE_ADDR, 4, "MainRAM"),
-                    (TANK_FIX_PROBE_ADDR, 4, "MainRAM"),
-                    (RING2_PROBE_ADDR, 4, "MainRAM"),
-                ])
+                probe, stub_probe, tank_probe, ring2_probe, ring2_stub = \
+                    await bizhawk.read(ctx.bizhawk_ctx, [
+                        (PATCH_PROBE_ADDR, 4, "MainRAM"),
+                        (STUB_PROBE_ADDR, 4, "MainRAM"),
+                        (TANK_FIX_PROBE_ADDR, 4, "MainRAM"),
+                        (RING2_PROBE_ADDR, 4, "MainRAM"),
+                        (RING2_STUB_PROBE_ADDR, 4, "MainRAM"),
+                    ])
                 self.tank_fix_present = self._classify_tank_fix(tank_probe)
                 self.ap_patched = self._classify_probe(probe)
                 self.last_probe_word = bytes(probe)   # for the refusal message
                 self.stub_present = self._classify_stub_probe(stub_probe)
-                if ring2_probe == RING2_PROBE_STUBBED:
-                    self.ring2_present = True
-                elif ring2_probe == RING2_PROBE_VANILLA:
-                    self.ring2_present = False
-                else:
-                    self.ring2_present = None   # boot zeros - retry next cycle
+                self.ring2_present = self._classify_ring2(ring2_stub, ring2_probe)
 
             # ---- UNPATCHED DISC: hold everything ---------------------------
             # Directly after probe resolution, BEFORE every block that writes
@@ -1011,6 +1166,17 @@ class MMX5Client(BizHawkClient):
             # hub entry, so bailing out never leaves a stage stuck shut. ----
             if save_sane:
                 await self._stage_unlocks_apply(ctx, cur_stage_id)
+
+            # ---- Live weapon mirror, and handing cleared stages their
+            # capsules back. Both are conveniences layered on state that is
+            # already decided elsewhere: the first only re-states weapon bits
+            # the save struct already holds, the second only relaxes
+            # suppression for locations the SERVER has already confirmed. Both
+            # after the stamp gate, for the same reason stage unlocks are. ----
+            if save_sane:
+                await self._live_weapons_apply(ctx, save, mode[0] == 0x0A)
+                await self._pickup_dispatch_apply(ctx, cur_stage_id,
+                                                  mode[0] == 0x0A)
 
             # ---- Check detection ----
             new_checks = []

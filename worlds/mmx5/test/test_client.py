@@ -42,6 +42,22 @@ class FakeContext:
         addr = mmx5_client.SAVE_BASE + mmx5_client.OFF_TANKS
         return [w[1][0] for w in self.writes if w[0] == addr]
 
+    def live_weapon_writes(self):
+        """Values written to the volatile in-stage weapons bitfield."""
+        return [w[1][0] for w in self.writes
+                if w[0] == mmx5_client.LIVE_WEAPONS_ADDR]
+
+    def dispatch_writes(self):
+        """{kind: word} last written to the collect dispatch table."""
+        out = {}
+        for addr, data, _dom in self.writes:
+            kind = (addr - mmx5_client.DISPATCH_TABLE_ADDR) // 4
+            if addr >= mmx5_client.DISPATCH_TABLE_ADDR and \
+                    kind in mmx5_client.CONSUMABLE_KINDS and \
+                    (addr - mmx5_client.DISPATCH_TABLE_ADDR) % 4 == 0:
+                out[kind] = int.from_bytes(bytes(data), "little")
+        return out
+
     def checked_location_ids(self) -> set:
         ids = set()
         for msg in self.sent_msgs:
@@ -110,6 +126,7 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                       slot_table: bytes | None = None,
                       patch_probe: bytes | None = None,
                       stub_probe: bytes | None = None,
+                      live_weapons: int = 0,
                       settled: bool = True) -> FakeContext:
     """`hub_resident` makes the stage-select slot table's instruction anchor
     read as present, so the stage-unlock writer engages; `slot_table` seeds what
@@ -153,6 +170,16 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
         mmx5_client.RING2_PROBE_ADDR: (
             mmx5_client.RING2_PROBE_STUBBED if getattr(client, "ring2_present", None)
             else mmx5_client.RING2_PROBE_VANILLA),
+        # The pickupsanity stub's own first word is the authority on whether
+        # this is a pickupsanity disc; the dispatch entry above only separates
+        # a loaded vanilla EXE from boot. Both have to agree here or the
+        # classifier correctly reports "retry".
+        mmx5_client.RING2_STUB_PROBE_ADDR: (
+            mmx5_client.RING2_STUB_WORD if getattr(client, "ring2_present", None)
+            else b"\x00\x00\x00\x00"),
+        # Live weapons byte: zero unless a test seeds it, which models the
+        # game having just rebuilt it at stage load.
+        mmx5_client.LIVE_WEAPONS_ADDR: bytes([live_weapons]),
         mmx5_client.SLOT_TABLE_ANCHOR_ADDR: (
             mmx5_client.SLOT_TABLE_ANCHOR if hub_resident else b"\x00\x00\x00\x00"),
         mmx5_client.SLOT_TABLE_ADDR: (

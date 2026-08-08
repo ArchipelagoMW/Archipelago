@@ -1,5 +1,51 @@
 # Mega Man X5 apworld changelog
 
+## 0.3.4 — 2026-08-08
+
+Quality-of-life, all from one tester's completed solo run (`stage_unlocks` +
+`dna_parts_in_pool` + `pickupsanity`, every check fired correctly). **Client
+only — no disc change, so your existing patched disc and your save carry
+straight over.**
+
+**Weapons now work the moment they arrive.** Previously a weapon received
+mid-stage did nothing until you left and re-entered, which read exactly like a
+lost item. Grants are written to your save struct, and that is what the game
+reads when a stage *loads* — the pause menu and the fire button consult a
+separate live copy that nothing was updating. The client now mirrors granted
+weapons into it during play.
+
+Armor is still the exception, and that one is the game's design rather than a
+delay in delivery: X5 decides which armor X wears while the stage is loading,
+so armor parts and the secret armors take effect at your next stage entry.
+**Ultimate Armor in particular needs one armorless stage entry to appear** —
+jumping into a cleared stage and leaving again is enough. That has caught
+several people out and is now written down in the setup guide instead of
+living only in a YAML tooltip.
+
+**Cleared stages get their capsules back (`pickupsanity`).** A randomized
+capsule sends its check instead of restoring energy, and it used to keep doing
+that for the rest of the run — so revisiting a stage you had already emptied,
+the Boss Rush above all, meant walking past capsules that did nothing at all.
+Now, once **every** pickup check in a stage has been confirmed by the server,
+that stage's capsules restore energy normally again. A stage with any check
+still outstanding keeps recording, and the first collection still never heals
+you: that energy is in the item pool as filler, which has not changed.
+
+Stages that hold no pickup locations at all — Squid Adler, and the intro,
+whose single capsule is deliberately never a location — now behave like
+vanilla too. Suppressing those was never intended.
+
+Also in this release:
+
+* The pickupsanity presence probe now reads the **stub's own bytes** rather
+  than the dispatch table entry. The client rewrites that table at runtime for
+  the change above, and reading its own override back would have switched
+  pickupsanity check detection off for the rest of the session on the next
+  stage exit.
+* The setup guide's "received items appear at the next stage load" and
+  "Small Energy does nothing" notes were both stale; they now describe what
+  the client actually does.
+
 ## 0.3.3 — 2026-08-06
 
 **`stage_unlocks` could generate an unbeatable seed. Regenerate any seed you

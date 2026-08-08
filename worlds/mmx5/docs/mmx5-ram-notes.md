@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-06).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-08).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -74,9 +74,9 @@ Survives death and stage exit; the AP client's primary read/write surface.
 | `0x800D1CB4` | u8 | **Fast per-stage counter — NOT a progress record.** Ran `04->05->08->09->0A->0B->0C->0D->0E` during ordinary play in one stage and resets to 0 on stage entry. Logged 1208 changes in one session. Mistaken for a boss-rematch tally once; check its history before reading meaning into a single step | ⚠️ noise, identified 2026-08-06 |
 | Zero Space boss rematches | — | **NO persistent defeat record exists.** Full-RAM before/after diff across two rematch kills (2026-08-06): nothing latches. `0x1C2F` moved on one kill and not the other, `0x1CB4` is a general counter, `0x1C25`/`0x1C1C` toggle rather than set. Per-rematch AP checks therefore need a disc stub on the boss-death path (pickupsanity-shaped), not a save read | ❌ ruled out 2026-08-06 |
 | `0x800D1C0C` (Zero Space) | u8 | **Zero Space stage 1 = stage id `0x10`** — live-read 2026-08-01 standing in the Shadow Devil stage (mode 0x0A). The older "0x0A-0x0C = Zero Space" note in overlay-findings was a GUESS and is wrong. Consequence for the client: Zero Space records arrive with an unmapped stage byte and are correctly ignored by `STAGE_ID_TO_NAME` | ✅ live 2026-08-01 |
-| `0x800D1C1D` | u8 | Launch-event state byte: 0 → 4 when the Enigma firing cutscene starts (mode 0x14, stage id 0x0B) | ⚠️ single obs. |
+| `0x800D1C1D` | u8 | **SUB-STAGE ID** (superseded the "launch-event state byte" reading; the 0→4 Enigma observation was one value of it). In the Zero Space boss rush it holds the Maverick's stage id while `0x1C0C` stays on the containing stage — this is how a rematch is identified. Values seen across the 24 dumps: `00, 02, 04, 0C, 10, 11, 15`. **Its ONLY writer is overlay code** (`0x800EF924`, Sigma/rush overlay); the EXE only reads it (2 sites, block-aware scan 2026-08-08) | ✅ 2026-08-06, writer located 2026-08-08 |
 | `0x800D1D28–2A` | u8×3 | **Pending DNA-reward buffer**: written at the DNA-select screen (observed `C0 4B 03` after choosing a Life Up at an Izzy kill), delivered + zeroed at the NEXT results sequence — even a stage-escape results (observed 2026-07-31: +2 max HP and hearts-u32 bit 13 = Life Up id 5 = stage−1 applied on escape-exit). Supersedes "Dynamo consumes 0x0D1D38" as the general mechanism | ✅ |
-| `0x800D1C88–9F` | — | Suspected reploid-rescue bitfields (overlay analysis) — **DISPROVEN as rescue record**: 2 live Izzy Glow rescues + the results commit wrote NOTHING here (2026-07-31). Rescue effect = lives +1 (0x0D1C45) only. No persistent rescue record exists in the save struct → Reploid checks need live per-stage spawn-slot detection with the AP server as the permanent record | ❌ disproven |
+| `0x800D1C88–9F` | — | Suspected reploid-rescue bitfields (overlay analysis) — **DISPROVEN as rescue record**: 2 live Izzy Glow rescues + the results commit wrote NOTHING here (2026-07-31). Rescue effect = lives +1 (0x0D1C45) only. No persistent rescue record exists in the save struct → Reploid checks need live per-stage spawn-slot detection with the AP server as the permanent record. **2026-08-08: the rescue HANDLER is now located** — `0x800F167C` in Izzy Glow's overlay (collision test, lives +1 clamped to 9, sound 21), reached from a 6-state table at `0x800F3E1C`; and per-stage object types are now statically enumerable via the `0x80072DD4` manifest. The reploid's `minor` is still unproven — see ghidra-findings §9.16.4 | ❌ disproven (handler located 2026-08-08) |
 | `0x800D1D0F` | u8 | Increments per stage completion ("stages cleared" count?) | ⚠️ |
 | `0x800D1D38–3A` | 3×u8 | **Pending DNA-reward buffer**: written at DNA select (C0 4B 03 = "weapons and energy"), zeroed when the reward is granted after the next sortie (Dynamo fight → Energy Up) | ✅ |
 | `0x800D1D0F` | u8 | ~~Sorties-completed counter (increments for mavericks AND Dynamo fights)~~ **REFUTED 2026-08-03** — it is the STORY CHAPTER (see the 0x800D1D0F row above). Live: it held at 3 across TWO complete stage-plus-results sequences in one session (`mmx5_chapter_gate_log.txt`), so it does not tally sorties. The early coincidence that made this look like a counter is that chapter and kill count track each other at the start — the chapter-1 rung literally stores the popcount as the chapter number. Do not reason about progress from this byte as if it counted anything. | ❌ refuted |
@@ -122,6 +122,14 @@ struct, or rely on the game's own restore (stage load repopulates from 0x0D1C4C)
 
 ## Engine facts that shape the AP client
 
+0. **Memory layout (static, 2026-08-08).** EXE `.text` = `0x80010000`–
+   `0x80092000` (`0x82000`, from the PS-EXE header). **EXE BSS ends at
+   `0x800EE970`; stage/hub overlays stream in from `0x800EE974` upward** — read
+   off the BSS-clear loop at `0x8005894C`, and the same constant `pickups.py`
+   uses for its disc-offset arithmetic. Practical consequence: **an EXE-only
+   disassembly cannot see boss code, stage object code, or most save-struct
+   writers.** Scan the RAM dumps in `Scripts/` instead — each carries the
+   resident overlay. See ghidra-findings §9.16.
 1. **Write persistent, read live.** Grants → save struct (`0x0D1Cxx`); check
    detection → save struct bits; the live block self-restores on stage load.
 2. Results screen (not the kill moment) commits weapon/boss state — detection of
@@ -258,7 +266,29 @@ wrong. Never infer an endgame id from sequence — read 0x800D1C0C on entry.
 IS an endgame stage. That range was just incomplete, not purely wrong, and it
 does not cover 0x10/0x12.) `0x11` still unread.
 
-**Game modes (0x800D1C00)** — beyond the known 0x0A gameplay / 0x0C results:
+**Game modes (0x800D1C00) — writers enumerated statically 2026-08-08.** Every
+store to this byte in the EXE (7, found base-agnostically so the list is
+complete for the EXE): `0x8001DD0C`→3, `0x8001DD30`→0x13, `0x8001E4A4`→0,
+`0x8001E4FC`→0, `0x8001FC54`→3, `0x8001FC68`→3, `0x80034FC8`→0x0B. **The EXE
+only ever writes 0, 3, 0x0B and 0x13** — every other mode (0x04, 0x0A, 0x0C,
+0x10, 0x11, 0x14, 0x15) is written by OVERLAY code, which is why EXE-only
+scans never found them. Values observed across the 24 RAM dumps, context taken
+from what each capture was:
+
+| mode | context | status |
+|---|---|---|
+| `0x04` | **hub / stage select / Parts menu / launch menu** (stage 0x0D) | ✅ **new 2026-08-08** |
+| `0x0A` | in-stage gameplay (stages 0x06/0x07/0x0C/0x12) | ✅ |
+| `0x0C` | stage 0x0F | ✅ |
+| `0x11` | credits | ✅ |
+| `0x14` | story cutscene (stage 0x0B) | ✅ |
+
+The client's gameplay gate is `mode in (0x0A, 0x0C)`; the hub being `0x04`
+means that gate excludes the hub **by construction**, not by luck. Still
+unmeasured: the title → data-select → new-game walk, and which mode holds
+while ACT steps on a Zero Space clear. Full derivation: ghidra-findings §9.16.5.
+
+Older observations, kept — beyond the known 0x0A gameplay / 0x0C results:
 the stage-entry sequence logged as `0A→0B→0C→0E→12→03→04→07→08→09→0A`, and
 **after the Zero duel was won: `0A→13→14`**. Mode `0x14` is the same mode the
 Enigma firing cutscene uses (see 0x800D1C1D row), so 0x14 = "story cutscene"

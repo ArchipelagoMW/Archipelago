@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-06).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-08).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -986,3 +986,224 @@ carries no boss grouping.
 
 **Screen slot order is not bit order.** The mask table is the authority; slot
 is only how the Parts menu lays them out.
+
+# 2026-08-08 — Static analysis session 3 (offline only): object-type manifest, overlay ownership, and a scanner correction
+
+No emulator was used. Everything below comes from the disc image and the 24
+MainRAM dumps already in `Scripts/`. Purpose was to answer as much of the
+feature backlog as possible without burning live-session time
+(`ai-docs/plans/2026-08-08_mmx5-feature-backlog.md`).
+
+## 9.16.0 Toolkit, and the one genuinely new capability
+
+Extraction re-run from the recipe in §9.8: `SLUS_013.34` (534,528 bytes,
+PS-EXE header says `.text` base `0x80010000`, size `0x82000`, so the EXE
+occupies `0x80010000-0x80092000`) and `ROCK_X5.BIN` (1,384,448 bytes) both pull
+cleanly out of the MODE2/2352 image.
+
+**The new capability is scanning the RAM dumps, not just `SLUS_text.bin`.** A
+dump carries the resident overlay as well as the EXE, so stage code becomes
+visible without unpacking ROCK chunks at all. This is why previous EXE-only
+scans kept returning "no references" for boss code — the code was never in the
+image being searched. The 24 dumps cover stages `0x06`, `0x07`, `0x0B`, `0x0C`,
+`0x0D`, `0x0F` and `0x12`.
+
+**EXE BSS ends at `0x800EE970`; overlays stream in from `0x800EE974`.** Read
+off the BSS-clear loop at `0x8005894C` (`sw $zero` from `0x80091C30` up to
+`0x800EE970`), and it agrees with the constant `pickups.py` already uses for
+`disc_offset = chunk_base + (list_ram - 0x800EE970)`.
+
+## 9.16.1 METHOD CORRECTION — hi/lo scanners must respect basic blocks
+
+**This invalidates a class of result, so it comes first.** A `lui rX,hi` +
+later `op rt,off(rX)` scanner that does not model control flow will pair a
+`lui` in one basic block with a store in another that is only ever reached by a
+different path.
+
+Measured on the save struct across the whole EXE: the naive scan reports **376**
+accesses, the block-aware one **202**. **174 of them — 46% — were false.**
+
+Concrete casualty: `0x8001FCD0` appeared to be a write to `save+0x4C`, i.e. the
+Maverick kill record. It is not. The `lui $v0,0x800D; addiu $v0,$v0,0x1C00` that
+seemed to establish its base is in a block that jumps away at `0x8001FCB4`;
+`0x8001FCBC` re-bases `$v0` by `-24072` on a different path entirely.
+
+A second, independent trap: matching on the *immediate alone*. `lbu $a0,
+0x1C45($v0)` at `0x80051378` is not the lives byte — the paired `lui` is
+`0x8009`, so the address is `0x80091C45`.
+
+Rules now enforced by the scanner: stop tracking at any branch or jump; stop
+when the pc is the target of a branch from elsewhere; treat
+`addiu rBase,rBase,n` as moving the base rather than ignoring it.
+
+**Any conclusion drawn from an immediate-only or non-block-aware scan should be
+re-derived before it is trusted.** That includes conclusions in this document
+predating this section.
+
+## 9.16.2 `0x80072DD4` RESOLVED — the per-(stage,area) object-type manifest
+
+§9.13(c) left this as "a third parallel table at `0x80072DD4`, byte lists, role
+unidentified — no item relevance found". Its role is now read straight off
+`0x8002B5B4`:
+
+```
+8002B5B4  andi $a3, $a0, 255        ; a3 = minor
+8002B5C4  addiu $a1, $a1, 0x2DD4    ; a1 = 0x80072DD4
+8002B5D0  lb $v0, 0x000D($v1)       ; area   (0x800D1C0D)
+8002B5D4  lb $a0, 0x000C($v1)       ; stage  (0x800D1C0C)
+8002B5E8  lw $v1, 0x0000($v0)       ; list = *(0x80072DD4 + stage*8 + area*4)
+          ... linear search, 0xFF terminates ...
+8002B60C  jr $ra                    ; returns the INDEX of the match
+```
+
+So `0x80072DD4` is a per-(stage,area) pointer to a **`0xFF`-terminated byte
+list of the object-type (`minor`) values that stage instantiates**, and
+`0x8002B5B4` maps a `minor` to its index in that list. The spawner consumes the
+index twice: `*(0x1F800020)` table → `obj+0x3C`, and `*(0x800A8118)` table
+→ `obj+0x40` (`>>7`).
+
+Example, Izzy Glow (stage 6, area 0), manifest at `0x800F3130`:
+`[0x02, 0x85, 0x04, 0x8F, 0x90, 0x91, 0x19]` — 7 types.
+
+**Why this matters:** the set of object types per stage/area is now
+enumerable statically, which is the missing half of any "make object X a
+check" feature (Reploids, mid-bosses).
+
+## 9.16.3 The EXE contains NO boss, kill-record or boss-HP code
+
+Block-aware save-struct scan of the entire EXE: **zero accesses to
+`0x800D1C4C`**, read or write. The kill record is committed by the results
+overlay (`0x800EECCC`, already known from `disc.py`) and by nothing else.
+
+Equally, no reference anywhere — EXE *or* resident overlay, in any dump — takes
+boss HP `0x800920EC` as an absolute address. The 9 references to the
+`0x80092090` struct are all in the EXE and none touch `+0x5C`. This
+independently re-confirms the 2026-08-05 ram-notes scan with a different tool.
+
+Save fields the **overlays** write (block-aware scan of the resident overlay,
+four dumps):
+
+| overlay | save bytes written |
+|---|---|
+| hub `0x0D` | `1C24 1C25 1C26 1C27 1C2B 1C2C 1C30 1C31 1C32 1CA2` |
+| Izzy Glow `0x06` | `1C10-1C17, 1C24, 1C25, 1C27, 1C45, 1CA2, 1D0D` |
+| Sigma / boss rush `0x0C` | `1C0F, 1C11, 1C14, 1C16, 1C1D, 1C20, 1C24, 1C25, 1CA2, 1D0D` |
+
+Two consequences worth pinning:
+
+- **`0x1CA2` (boss max HP) is written by overlay code** — `0x800FACBC` in both
+  the Izzy Glow and hub dumps, `0x800FABEC` in the Sigma one. Same routine
+  compiled into multiple overlays at different addresses, not one shared site.
+- **`0x800D1C1D`'s only writer is overlay code** (`0x800EF924`, Sigma/rush
+  overlay). The EXE only ever reads it.
+
+**Consequence for mid-boss and rematch checks:** there is no shared boss-death
+path in the EXE to hook. A disc stub would have to be applied **per stage
+overlay** — the same wall that turned boss-HP randomization into a client-side
+pin instead of a patch (§ram-notes, scan 2026-08-05). The 2026-08-05 estimate
+of "pickupsanity-sized" is therefore too low; pickupsanity was one stub on one
+shared dispatcher.
+
+## 9.16.4 Reploid rescue handler located — but the `minor` is NOT proven
+
+Traced by direct reference in `ramdump_stage_f284694.bin` (Izzy Glow, stage 6
+area 0), which is the stage where the two live rescues of 2026-07-31 were done:
+
+- **`0x800F167C` — the rescue itself.** Requires a collision test
+  (`jal 0x8002E804`), then **lives (`0x800D1C45`) += 1, clamped to 9**, then
+  sound 21 (`jal 0x80016490`), then a 1-of-4 random pick
+  (`jal 0x8002DF78`, `& 3`) indexing `0x800F3E04` into `0x800F12EC` — the
+  thank-you animation.
+- called from `0x800F14D8`, which is entry **1** of a 6-entry state table at
+  `0x800F3E1C`
+- that table's owner/update function is `0x800F146C`
+- `0x800F146C` is the only overlay pointer in a 7-entry hook table whose other
+  six entries are `jr $ra` no-op stubs in the EXE (`0x800586B4 + 8*i`)
+
+This confirms the rescue effect the overlay-findings recorded (lives +1, no
+persistent record) and locates the code, which was previously unknown.
+
+**What is NOT established: the reploid's `minor`.** The hook table's base is
+under-determined by ±1 word — several candidate bases satisfy the
+stub-progression constraint, exactly the "plausible garbage parse" hazard
+§9.13 warns about. If the base is `0x800F3804` the index is 6 and the minor is
+**`0x19`**, which is attractive: `0x19` occurs exactly once in Izzy Glow area
+0's record list. But it is not confirmed, and one cross-check went the wrong
+way — Axle the Red's overlay (stage `0x07` area 0) contains **no** write to
+`0x1C45` at all, despite its manifest also listing `0x19`. Either `0x19` is
+not the reploid, or Axle's reploids are in area 1 (not covered by any dump).
+
+**Cheapest way to close it** (one short BizHawk session): stand next to a
+reploid in Izzy Glow and read the live object's `+0x01`; or capture a dump of
+Izzy Glow area 1 and of stage `0x07` area 1. Do NOT build on `0x19` before
+that.
+
+## 9.16.5 Game-mode byte `0x800D1C00` — EXE writers enumerated, mode `0x04` identified
+
+Every store to the mode byte in the EXE, found base-agnostically so the list is
+complete for the EXE (7 total):
+
+| site | value written |
+|---|---|
+| `0x8001DD0C` | `3` |
+| `0x8001DD30` | `0x13` |
+| `0x8001E4A4` | `0` |
+| `0x8001E4FC` | `0` |
+| `0x8001FC54` | `3` |
+| `0x8001FC68` | `3` |
+| `0x80034FC8` | `0x0B` |
+
+So the EXE only ever writes `0`, `3`, `0x0B` and `0x13`. **Modes `0x0A`, `0x0C`,
+`0x04`, `0x10`, `0x11`, `0x14` and `0x15` are written by overlay code**, which
+is why they could never be found in the EXE.
+
+Observed values across the 24 dumps, context taken from what each capture was
+(so this is **[LIVE]**, not inference):
+
+| mode | context |
+|---|---|
+| `0x04` | **hub / stage select / Parts menu / launch menu** (stage `0x0D`) — **NEW**, absent from the previously documented set |
+| `0x0A` | in-stage gameplay (stages `0x06`, `0x07`, `0x0C`, `0x12`) |
+| `0x0C` | stage `0x0F` |
+| `0x11` | credits |
+| `0x14` | story cutscene (stage `0x0B`) |
+
+**Client relevance:** the gameplay gate is `mode in (0x0A, 0x0C)`. The hub is
+`0x04`, so the gate excludes the hub by construction rather than by accident —
+one of the two guards that the 0.3.2 review flagged as resting on an asserted
+whitelist now has a measured basis. Still unmeasured: the title/data-select
+walk, and which mode holds while ACT steps on a Zero Space clear.
+
+## 9.16.6 Independent re-derivation of the placement inventory
+
+The 2026-08-05 static extraction was re-run from scratch with the new tools and
+**agrees exactly**: Axle the Red (stage `0x07` area 0) has precisely **11 item
+records with spawn gate 5**, ids `0x00`-`0x02` (heart-range), which can never
+spawn — the spawner rejects `gate > armor level` (`0x800D1CA0`, which reads `1`
+in all 24 dumps) and rejects `gate >= 3` outright at `0x8002AFC0`. Izzy Glow
+area 0 (2 item records) and Sigma area 0 (8 item records) are all gate 0.
+
+That is an end-to-end validation of disc extraction → loader table → list table
+→ record parse against a previously published result, using an independently
+written parser.
+
+**Pickupsanity safety check, partial:** no pickupsanity location in the three
+stages readable from dumps carries a nonzero spawn gate, so none of them can be
+silently unspawnable. Worth completing for the remaining stages once the ROCK
+chunks are unpacked — a gated pickupsanity location would be an unobtainable
+check, the exact failure class that stranded a seed on 2026-08-06.
+
+## 9.16.7 Record byte 3 has no spare bits
+
+Relevant to giving the pickupsanity stub an "already checked" marker. Record
+byte 3 is fully occupied: the **low nibble is the spawn gate** (compared against
+`0x800D1CA0` at `0x8002AFCC`, rejected outright if `>= 3` at `0x8002AFC0`) and
+the **high nibble is a runtime state machine** — `0x8002B3F0`-`0x8002B42C`
+tests it against `0x30`, `0x10` and `0x50` and writes it back. There is no free
+bit to borrow.
+
+The workable alternative needs no spare bit: only one stage's list is live at a
+time, so the client can write a per-stage bitmap into EXE free space at stage
+entry, and the stub can index it with
+`(recptr - *(0x80072EAC + stage*8 + area*4)) / 8` — roughly six instructions,
+using a table the client already reads.

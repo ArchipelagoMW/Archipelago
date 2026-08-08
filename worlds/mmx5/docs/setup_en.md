@@ -80,10 +80,16 @@ connected, play normally — checks send themselves and items arrive as you go.
   commits it. Nothing is wrong if they do not appear instantly. One boss kill
   sends **three** checks at once (boss, DNA reward, DNA Part) — that is
   intended.
-- **Received items appear at the next stage load, not instantly.** Items are
-  written into your save data, and the game builds its live weapon/armor state
-  when a stage or character loads. If a weapon arrives while you are in a
-  stage, expect it once you next enter one — it is not lost.
+- **Weapons work the moment they arrive.** Armor is the exception, and it is a
+  limitation of the game rather than a delay in delivery: X5 decides which
+  armor X wears while the stage is loading, so armor parts and the secret
+  armors only take effect at your **next stage entry**. Nothing is lost in the
+  meantime — it is written to your save immediately.
+- **Ultimate Armor needs one armorless stage entry to show up.** If you
+  receive it as an item, enter a stage as X with no armor equipped and it will
+  be there; jumping into an already-cleared stage and leaving again is enough.
+  This catches people out, because until you do it the armor looks like it
+  never arrived. Black Zero, by contrast, applies on the spot.
 - **If a tank or an armor part is briefly missing from your menu, that is
   deliberate.** The original game hides a pickup — or the route to it — once
   you already own what it gives. Since Archipelago can hand you that item
@@ -96,8 +102,17 @@ connected, play normally — checks send themselves and items arrive as you go.
   working** — the game decides which armor to wear when the stage loads, and
   the client only withholds afterwards — so this costs you nothing beyond the
   pause menu showing one fewer part until you collect that check.
-- **"Small Energy" filler items currently do nothing in-game.** They exist to
-  pad the item pool; receiving one is not a bug.
+- **"Small Energy" filler heals 4 HP**, delivered through the game's own
+  refill counter — the same trickle a sub-tank uses. One that arrives while
+  you are in the hub is applied when you next enter a stage.
+- **With Pickupsanity on, a capsule you have already collected gives nothing —
+  until you have cleared the whole stage's checks.** Collecting a randomized
+  capsule sends its check instead of restoring energy, and it keeps doing that
+  while any check in that stage is still outstanding. Once **every** pickup
+  check in a stage has been collected, its capsules go back to restoring
+  energy normally on a revisit, which matters most in the Boss Rush. The very
+  first collection never heals you — that energy is in the item pool as filler
+  instead.
 - **Save often, and be aware of BizHawk's memory-card handling.** BizHawk only
   writes the card to disk on a clean close, or when you press its
   **Flush SaveRAM** hotkey (`Ctrl+S` by default), unless you enable autosave
