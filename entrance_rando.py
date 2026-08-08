@@ -4,6 +4,7 @@ import random
 import time
 from collections import deque
 from collections.abc import Callable, Iterable
+from enum import IntEnum
 
 from BaseClasses import CollectionState, Entrance, Region, EntranceType
 from Options import Accessibility
@@ -229,7 +230,7 @@ class ERPlacementState:
         self.entrance_lookup.remove(target_entrance)
 
     def test_speculative_connection(self, source_exit: Entrance, target_entrance: Entrance,
-                                    usable_exits: set[Entrance]) -> bool:
+                                    usable_exits: set[Entrance], required_exit_count: int) -> bool:
         copied_state = self.collection_state.copy()
         # simulated connection. A real connection is unsafe because the region graph is shallow-copied and would
         # propagate back to the real multiworld.
@@ -241,7 +242,8 @@ class ERPlacementState:
             copied_state.update_reachable_regions(self.world.player)
             copied_state.sweep_for_advancements(self.world.get_locations())
             stale = copied_state.stale[self.world.player]
-        # test that at there are newly reachable randomized exits that are ACTUALLY reachable
+        # test that at there are at least required_exit_count placable randomized exits
+        placeable_exit_count = 0
         available_randomized_exits = copied_state.blocked_connections[self.world.player]
         for _exit in available_randomized_exits:
             if _exit.connected_region:
@@ -256,7 +258,9 @@ class ERPlacementState:
             # on_connect, which have not happened here (because we didn't do a real connection, and if we did, we would
             # not want them to persist). can_reach is a close enough approximation most of the time.
             if _exit.can_reach(copied_state):
-                return True
+                placeable_exit_count += 1
+                if placeable_exit_count >= required_exit_count:
+                    return True
         return False
 
     def connect(
@@ -412,6 +416,11 @@ def randomize_entrances(
     # place the menu region and connected start region(s)
     er_state.collection_state.update_reachable_regions(world.player)
 
+    class ExitRequirement(IntEnum):
+        NONE = 1
+        NEW_REGIONS = 2
+        MORE_EXITS = 3
+
     def do_placement(source_exit: Entrance, target_entrance: Entrance) -> None:
         placed_exits, paired_entrances = er_state.connect(source_exit, target_entrance)
         # propagate new connections
@@ -427,55 +436,43 @@ def randomize_entrances(
                 er_state.collection_state.sweep_for_advancements()
                 stale = er_state.collection_state.stale[world.player]
 
-    def needs_speculative_sweep(dead_end: bool, require_new_exits: bool, placeable_exits: list[Entrance]) -> bool:
-        # speculative sweep is expensive. We currently only do it as a last resort, if we might cap off the graph
-        # entirely
-        if len(placeable_exits) > 1:
-            return False
-
+    def needs_speculative_sweep(dead_end: bool, exit_requirement: ExitRequirement, placeable_exits: list[Entrance]) -> bool:
         # in certain stages of randomization we either expect or don't care if the search space shrinks.
         # we should never speculative sweep here.
-        if dead_end or not require_new_exits or not perform_validity_check:
+        if dead_end or exit_requirement == ExitRequirement.NONE or not perform_validity_check:
             return False
 
-        # edge case - if all dead ends have pre-placed progression or indirect connections, they are pulled forward
-        # into the non dead end stage. In this case, and only this case, it's possible that the last connection may
-        # actually be placeable in stage 1. We need to skip speculative sweep in this case because we expect the graph
-        # to get capped off.
+        # speculative sweep is expensive. Don't use speculative sweep if there are more placable exits than remaining
+        # entrances to place.
+        return len(placeable_exits) < len(er_state.entrance_lookup.others)
 
-        # check to see if we are proposing the last placement
-        if not coupled:
-            # in uncoupled, this check is easy as there will only be one target.
-            is_last_placement = len(er_state.entrance_lookup) == 1
-        else:
-            # a bit harder, there may be 1 or 2 targets depending on if the exit to place is one way or two way.
-            # if it is two way, we can safely assume that one of the targets is the logical pair of the exit.
-            desired_target_count = 2 if placeable_exits[0].randomization_type == EntranceType.TWO_WAY else 1
-            is_last_placement = len(er_state.entrance_lookup) == desired_target_count
-        # if it's not the last placement, we need a sweep
-        return not is_last_placement
-
-    def find_pairing(dead_end: bool, require_new_exits: bool) -> bool:
+    def find_pairing(dead_end: bool, exit_requirement: ExitRequirement) -> bool:
         nonlocal perform_validity_check
         placeable_exits = er_state.find_placeable_exits(perform_validity_check, exits)
         for source_exit in placeable_exits:
             target_groups = target_group_lookup[source_exit.randomization_group]
             for target_entrance in er_state.entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
                 # when requiring new exits, ideally we would like to make it so that every placement increases
-                # (or keeps the same number of) reachable exits. The goal is to continue to expand the search space
-                # so that we do not crash. In the interest of performance and bias reduction, generally, just checking
-                # that we are going to a new region is a good approximation. however, we should take extra care on the
-                # very last exit and check whatever exits we open up are functionally accessible.
-                # this requirement can be ignored on a beaten minimal, islands are no issue there.
-                exit_requirement_satisfied = (not perform_validity_check or not require_new_exits
+                # (or keeps the same number of) reachable exits (MORE_EXITS mode). The goal is to continue to expand the
+                # search space so that we do not crash. However, there are some cases where we need to place entrances
+                # that decrease reachable exits in order to satisfy future entrance access rules. If there are no valid
+                # placements in MORE_EXITS mode, we switch to NEW_REGIONS mode that just checks that we are going to a
+                # new region and that we have at least one reachable exit.
+                exit_requirement_satisfied = (not perform_validity_check or exit_requirement == ExitRequirement.NONE
                                               or target_entrance.connected_region not in er_state.placed_regions)
                 if exit_requirement_satisfied and source_exit.can_connect_to(target_entrance, dead_end, er_state):
-                    if (needs_speculative_sweep(dead_end, require_new_exits, placeable_exits)
-                            and not er_state.test_speculative_connection(source_exit, target_entrance, exits_set)):
+                    required_exit_count = len(placeable_exits) if exit_requirement == ExitRequirement.MORE_EXITS else 1
+                    if (needs_speculative_sweep(dead_end, exit_requirement, placeable_exits)
+                            and not er_state.test_speculative_connection(source_exit, target_entrance, exits_set, required_exit_count)):
                         continue
                     do_placement(source_exit, target_entrance)
                     return True
         else:
+            # in the stage where we are looking for more (or the same number of) reachable exits, just move on to the
+            # next stage.
+            if exit_requirement == ExitRequirement.MORE_EXITS:
+                return False
+
             # no source exits had any valid target so this stage is deadlocked. retries may be implemented if early
             # deadlocking is a frequent issue.
             lookup = er_state.entrance_lookup.dead_ends if dead_end else er_state.entrance_lookup.others
@@ -483,7 +480,7 @@ def randomize_entrances(
             # if we're in a stage where we're trying to get to new regions, we could also enter this
             # branch in a success state (when all regions of the preferred type have been placed, but there are still
             # additional unplaced entrances into those regions)
-            if require_new_exits:
+            if exit_requirement == ExitRequirement.NEW_REGIONS:
                 if all(e.connected_region in er_state.placed_regions for e in lookup):
                     return False
 
@@ -513,7 +510,7 @@ def randomize_entrances(
             unplaced_exits = [exit_ for region in world.multiworld.get_regions(world.player)
                               for exit_ in region.exits if not exit_.connected_region]
             entrance_kind = "dead ends" if dead_end else "non-dead ends"
-            region_access_requirement = "requires" if require_new_exits else "does not require"
+            region_access_requirement = "requires" if exit_requirement == ExitRequirement.NEW_REGIONS else "does not require"
             raise EntranceRandomizationError(
                 f"None of the available entrances are valid targets for the available exits.\n"
                 f"Randomization stage is placing {entrance_kind} and {region_access_requirement} "
@@ -525,21 +522,22 @@ def randomize_entrances(
 
     # stage 1 - try to place all the non-dead-end entrances
     while er_state.entrance_lookup.others:
-        if not find_pairing(dead_end=False, require_new_exits=True):
-            break
+        if not find_pairing(dead_end=False, exit_requirement=ExitRequirement.MORE_EXITS):
+            if not find_pairing(dead_end=False, exit_requirement=ExitRequirement.NEW_REGIONS):
+                break
     # stage 2 - try to place all the dead-end entrances
     while er_state.entrance_lookup.dead_ends:
-        if not find_pairing(dead_end=True, require_new_exits=True):
+        if not find_pairing(dead_end=True, exit_requirement=ExitRequirement.NEW_REGIONS):
             break
     # stage 3 - all the regions should be placed at this point. We now need to connect dangling edges
     # stage 3a - get the rest of the dead ends (e.g. second entrances into already-visited regions)
     #            doing this before the non-dead-ends is important to ensure there are enough connections to
     #            go around
     while er_state.entrance_lookup.dead_ends:
-        find_pairing(dead_end=True, require_new_exits=False)
+        find_pairing(dead_end=True, exit_requirement=ExitRequirement.NONE)
     # stage 3b - tie all the other loose ends connecting visited regions to each other
     while er_state.entrance_lookup.others:
-        find_pairing(dead_end=False, require_new_exits=False)
+        find_pairing(dead_end=False, exit_requirement=ExitRequirement.NONE)
 
     running_time = time.perf_counter() - start_time
     if running_time > 1.0:
