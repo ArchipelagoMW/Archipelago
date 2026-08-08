@@ -198,12 +198,33 @@ def user_path(*path: str) -> str:
                     not os.path.exists(local_path("manifest.json")) or \
                     not filecmp.cmp(local_path("manifest.json"), user_path("manifest.json"), shallow=True):
                 import shutil
+                import stat
+
+                def _make_writable(target_path: str) -> None:
+                    if os.path.exists(target_path):
+                        try:
+                            os.chmod(target_path, os.stat(target_path).st_mode | stat.S_IWUSR)
+                        except OSError:
+                            pass
+                        for root, dirs, files in os.walk(target_path):
+                            for item in dirs + files:
+                                p = os.path.join(root, item)
+                                try:
+                                    os.chmod(p, os.stat(p).st_mode | stat.S_IWUSR)
+                                except OSError:
+                                    pass
+
                 for dn in ("Players", "data/sprites", "data/lua"):
-                    shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
+                    if os.path.exists(local_path(dn)):
+                        target = user_path(dn)
+                        shutil.copytree(local_path(dn), target, dirs_exist_ok=True)
+                        _make_writable(target)
+
                 if not os.path.exists(local_path("manifest.json")):
                     warnings.warn(f"Upgrading {user_path()} from something that is not a proper install")
                 else:
                     shutil.copy2(local_path("manifest.json"), user_path("manifest.json"))
+                    _make_writable(user_path("manifest.json"))
             os.makedirs(user_path("worlds"), exist_ok=True)
 
     return os.path.join(user_path.cached_path, *path)
@@ -770,7 +791,7 @@ def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
     res.put(save_filename(*args))
-    
+
 def _run_for_stdout(*args: str):
     env = env_cleared_lib_path()
     return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
