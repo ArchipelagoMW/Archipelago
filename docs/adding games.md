@@ -17,7 +17,7 @@ it will not be detailed here.
 The client is an intermediary program between the game and the Archipelago server. This can either be a direct
 modification to the game, an external program, or both. This can be implemented in nearly any modern language, but it
 must fulfill a few requirements in order to function as expected. Libraries for most modern languages can be found in
-the [client libraries](docs/client_libraries.md) list and the spec for various packets can be found in the
+the [client libraries](/docs/client_libraries.md) list and the spec for various packets can be found in the
 [network protocol](/docs/network%20protocol.md) API reference document. Additional help with specific game engines and
 rom formats can be found in the #ap-modding-help channel in the [Discord](https://archipelago.gg/discord).
 
