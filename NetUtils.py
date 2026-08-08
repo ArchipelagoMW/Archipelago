@@ -173,28 +173,31 @@ def _object_hook(o: typing.Any) -> typing.Any:
 _decode = JSONDecoder(object_hook=_object_hook).decode
 
 
-def _check_depth(s: str, limit: int = 16) -> None:
-    depth = 1
-    in_quotes = False
-    escape = False
-    for c in s:
-        if c == "\\" and not escape:
-            escape = True
-            continue
-        if c == '"' and not escape:
-            in_quotes = not in_quotes
-            continue
-        if not in_quotes:
-            if c in "[{":
-                depth += 1
-                if depth > limit:
-                    raise ValueError("JSON document too complex")
-            elif c in "}]":
-                depth -= 1
+try:
+    from _speedups import check_json_depth as _check_depth
+except ImportError:
+    def _check_depth(s: str, limit: int = 16) -> None:
+        depth = 1
+        in_quotes = False
         escape = False
+        for c in s:
+            if c == "\\" and not escape:
+                escape = True
+                continue
+            if c == '"' and not escape:
+                in_quotes = not in_quotes
+                continue
+            if not in_quotes:
+                if c in "[{":
+                    depth += 1
+                    if depth > limit:
+                        raise ValueError("JSON document too complex")
+                elif c in "}]":
+                    depth -= 1
+            escape = False
 
-    if depth != 1:  # free check
-        raise ValueError("JSON document malformed")
+        if depth != 1:  # free check
+            raise ValueError("JSON document malformed")
 
 
 def decode(s: str) -> typing.Any:
