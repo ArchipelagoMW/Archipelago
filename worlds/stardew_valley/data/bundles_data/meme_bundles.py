@@ -275,7 +275,7 @@ lingo_homophone_items = [shorts, shirt]
 lingo_synonym_items = []
 lingo_reversed_items = []
 lingo_antonym_items = []
-lingo_add_subtract_items = [acorn, corn, coal, coral, ancient_seed, ancient_seeds]  # Could add bait here, for bat -> bait, but honestly too hard to draw a bat in the menu
+lingo_add_subtract_items = [acorn, corn, coal, coral, ancient_seed, ancient_seeds, frozen_tear, green_tea]  # Could add bait here, for bat -> bait, but honestly too hard to draw a bat in the menu
 lingo_lesser_items = [blueberry, blackberry, carp, salmon, rhubarb, eel, rice, pumpkin, cranberries, shrimp]
 # [blueberry_tart, blackberry_cobbler, omelet, carp_surprise, salmon_dinner, rhubarb_pie, fried_eel, rice_pudding, pumpkin_soup, cranberry_sauce, shrimp_cocktail]
 lingo_greater_items = [copper_bar, iron_bar, gold_bar, iridium_bar, radioactive_bar]
