@@ -18,11 +18,12 @@ import logging
 import warnings
 
 from argparse import Namespace
+from collections.abc import Collection, Iterable
 from datetime import datetime, timezone
 
 from settings import Settings, get_settings
 from time import sleep
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
+from typing import BinaryIO, Coroutine, Generic, Mapping, Optional, Set, Dict, Any, TypeVar, Union, TypeGuard
 from yaml import load, load_all, dump
 from pathspec import PathSpec, GitIgnoreSpec
 from typing_extensions import deprecated
@@ -52,7 +53,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.7"
+__version__ = "0.6.8"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -236,10 +237,7 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
 
-        env = os.environ
-        if "LD_LIBRARY_PATH" in env:
-            env = env.copy()
-            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        env = env_cleared_lib_path()
         subprocess.call([open_command, filename], env=env)
 
 
@@ -345,6 +343,9 @@ def persistent_load() -> Dict[str, Dict[str, Any]]:
         try:
             with open(path, "r") as f:
                 storage = unsafe_parse_yaml(f.read())
+            if "datapackage" in storage:
+                del storage["datapackage"]
+                logging.debug("Removed old datapackage from persistent storage")
         except Exception as e:
             logging.debug(f"Could not read store: {e}")
     if storage is None:
@@ -368,11 +369,6 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) ->
                     return json.load(f)
             except Exception as e:
                 logging.debug(f"Could not load data package: {e}")
-
-    # fall back to old cache
-    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
-    if cache.get("checksum") == checksum:
-        return cache
 
     # cache does not match
     return {}
@@ -455,13 +451,10 @@ safe_builtins = frozenset((
 
 
 class RestrictedUnpickler(pickle.Unpickler):
-    generic_properties_module: Optional[object]
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
-        self.generic_properties_module = None
 
     def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
@@ -475,10 +468,6 @@ class RestrictedUnpickler(pickle.Unpickler):
                                              "SlotType", "NetworkSlot", "HintStatus"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
-        if module == "worlds.generic" and name == "PlandoItem":
-            if not self.generic_properties_module:
-                self.generic_properties_module = importlib.import_module("worlds.generic")
-            return getattr(self.generic_properties_module, name)
         # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
         if module.lower().endswith("options"):
             if module == "Options":
@@ -758,6 +747,19 @@ def is_kivy_running() -> bool:
     return False
 
 
+def env_cleared_lib_path() -> Mapping[str, str]:
+    """
+    Creates a copy of the current environment vars with the LD_LIBRARY_PATH removed if set, as this can interfere when
+    launching something in a subprocess.
+    """
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]
+
+    return env
+
+
 def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
@@ -770,10 +772,7 @@ def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(save_filename(*args))
     
 def _run_for_stdout(*args: str):
-    env = os.environ
-    if "LD_LIBRARY_PATH" in env:
-        env = env.copy()
-        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    env = env_cleared_lib_path()
     return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
 
 
@@ -1013,23 +1012,6 @@ def deprecate(message: str, add_stacklevels: int = 0):
     warnings.warn(message, stacklevel=2 + add_stacklevels)
 
 
-class DeprecateDict(dict):
-    log_message: str
-    should_error: bool
-
-    def __init__(self, message: str, error: bool = False) -> None:
-        self.log_message = message
-        self.should_error = error
-        super().__init__()
-
-    def __getitem__(self, item: Any) -> Any:
-        if self.should_error:
-            deprecate(self.log_message, add_stacklevels=1)
-        elif __debug__:
-            warnings.warn(self.log_message, stacklevel=2)
-        return super().__getitem__(item)
-
-
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows and without setting spawn method first."""
     # original upstream issue: https://github.com/python/cpython/issues/76327
@@ -1089,6 +1071,7 @@ def visualize_regions(
         file_name: str,
         *,
         show_entrance_names: bool = False,
+        show_entrance_rules: bool = False,
         show_locations: bool = True,
         show_other_regions: bool = True,
         linetype_ortho: bool = True,
@@ -1101,6 +1084,7 @@ def visualize_regions(
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
     :param file_name: The name of the destination .puml file.
     :param show_entrance_names: (default False) If enabled, the name of the entrance will be shown near each connection.
+    :param show_entrance_rules: (default False) If enabled, the Rule Builder explanation of the entrance's access rule will be shown near each connection.
     :param show_locations: (default True) If enabled, the locations will be listed inside each region.
             Priority locations will be shown in bold.
             Excluded locations will be stricken out.
@@ -1190,13 +1174,22 @@ def visualize_regions(
         return re.sub("[\".:]", "", name)
 
     def visualize_exits(region: Region) -> None:
+        import rule_builder.rules
         for exit_ in region.exits:
             color_code: str = ""
             if exit_.randomization_group in entrance_highlighting:
                 color_code = f" #{entrance_highlighting[exit_.randomization_group]:0>6X}"
             if exit_.connected_region:
+                label = ""
                 if show_entrance_names:
-                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"{color_code}")
+                    label += fmt(exit_)
+                if show_entrance_rules:
+                    if isinstance(exit_.access_rule, rule_builder.rules.Rule.Resolved):
+                        if label:
+                            label += "\\n"
+                        label += exit_.access_rule.explain_str()
+                if label:
+                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{label}\"{color_code}")
                 else:
                     try:
                         uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"{color_code}")
@@ -1272,8 +1265,11 @@ def visualize_regions(
         f.write("\n".join(uml))
 
 
-class RepeatableChain:
-    def __init__(self, iterable: typing.Iterable):
+_T_co = TypeVar("_T_co", covariant=True)
+
+
+class RepeatableChain(Generic[_T_co]):
+    def __init__(self, iterable: Iterable[Collection[_T_co]]):
         self.iterable = iterable
 
     def __iter__(self):
@@ -1284,6 +1280,9 @@ class RepeatableChain:
 
     def __len__(self):
         return sum(len(iterable) for iterable in self.iterable)
+
+    def __contains__(self, o: object) -> bool:
+        return any(o in sub_iterable for sub_iterable in self.iterable)
 
 
 def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:

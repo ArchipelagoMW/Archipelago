@@ -1,5 +1,6 @@
 import logging
 from typing import Callable, Dict, List, Set, Tuple, TYPE_CHECKING, Iterable
+from collections import Counter
 
 from BaseClasses import Location, ItemClassification
 from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
@@ -110,7 +111,7 @@ class ValidInventory:
         self.player = world.player
         self.world: 'SC2World' = world
         # Track all Progression items and those with complex rules for filtering
-        self.logical_inventory: Dict[str, int] = {}
+        self.logical_inventory: Counter[str] = Counter()
         for item in item_pool:
             if not item_table[item.name].is_important_for_filtering():
                 continue
@@ -125,13 +126,13 @@ class ValidInventory:
                 self.item_name_to_child_items.setdefault(parent_item, []).append(item)
 
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.logical_inventory.get(item, 0) >= count
+        return self.logical_inventory[item] >= count
 
     def has_any(self, items: Set[str], player: int) -> bool:
-        return any(self.logical_inventory.get(item) for item in items)
+        return any(self.logical_inventory[item] for item in items)
 
     def has_all(self, items: Set[str], player: int) -> bool:
-        return all(self.logical_inventory.get(item) for item in items)
+        return all(self.logical_inventory[item] for item in items)
 
     def has_group(self, item_group: str, player: int, count: int = 1) -> bool:
         return False  # Deliberately fails here, as item pooling is not aware about mission layout
@@ -140,13 +141,17 @@ class ValidInventory:
         return 0  # For item filtering assume no missions are beaten
 
     def count(self, item: str, player: int) -> int:
-        return self.logical_inventory.get(item, 0)
+        return self.logical_inventory[item]
 
     def count_from_list(self, items: Iterable[str], player: int) -> int:
-        return sum(self.logical_inventory.get(item, 0) for item in items)
+        return sum(self.logical_inventory[item] for item in items)
 
     def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
-        return sum(item in self.logical_inventory for item in items)
+        result = 0
+        for item in items:
+            if self.logical_inventory[item] > 0:
+                result += 1
+        return result
 
     def generate_reduced_inventory(self, inventory_size: int, filler_amount: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
@@ -182,7 +187,7 @@ class ValidInventory:
                     del self.logical_inventory[item.name]
             item.filter_flags |= remove_flag
             return ""
-        
+
         def remove_child_items(
             parent_item: StarcraftItem,
             remove_flag: ItemFilterFlags = ItemFilterFlags.FilterExcluded,
@@ -247,13 +252,13 @@ class ValidInventory:
 
         # Limit the maximum number of upgrades
         if max_upgrades_per_unit != -1:
-            for group_name, group_items in group_to_item.items():
-                self.world.random.shuffle(group_to_item[group])
+            for group_items in group_to_item.values():
+                self.world.random.shuffle(group_items)
                 cull_items_over_maximum(group_items, max_upgrades_per_unit)
-        
+
         # Requesting minimum upgrades for items that have already been locked/placed when minimum required
         if min_upgrades_per_unit != -1:
-            for group_name, group_items in group_to_item.items():
+            for group_items in group_to_item.values():
                 self.world.random.shuffle(group_items)
                 request_minimum_items(group_items, min_upgrades_per_unit)
 
@@ -349,7 +354,7 @@ class ValidInventory:
                 ItemFilterFlags.Removed not in item.filter_flags
                 and ((ItemFilterFlags.Unexcludable|ItemFilterFlags.Excluded) & item.filter_flags) != ItemFilterFlags.Excluded
             )
-        
+
         # Actually remove culled items; we won't re-add them
         inventory = [
             item for item in inventory
@@ -373,7 +378,7 @@ class ValidInventory:
                 item for item in cullable_items
                 if not ((ItemFilterFlags.Removed|ItemFilterFlags.Uncullable) & item.filter_flags)
             ]
-        
+
         # Handle too many requested
         if current_inventory_size - start_inventory_size > inventory_size - filler_amount:
             for item in inventory:
@@ -414,7 +419,7 @@ class ValidInventory:
             removable_transport_hooks = [item for item in inventory_transport_hooks if not (ItemFilterFlags.Unexcludable & item.filter_flags)]
             if len(inventory_transport_hooks) > 1 and removable_transport_hooks:
                 inventory.remove(removable_transport_hooks[0])
-        
+
         # Weapon/Armour upgrades
         def exclude_wa(prefix: str) -> List[StarcraftItem]:
             return [
@@ -439,7 +444,7 @@ class ValidInventory:
             inventory = exclude_wa(item_names.PROTOSS_GROUND_UPGRADE_PREFIX)
         if used_item_names.isdisjoint(item_groups.protoss_air_wa):
             inventory = exclude_wa(item_names.PROTOSS_AIR_UPGRADE_PREFIX)
-        
+
         # Part 4: Last-ditch effort to reduce inventory size; upgrades can go in start inventory
         current_inventory_size = len(inventory)
         precollect_items = current_inventory_size - inventory_size - start_inventory_size - filler_amount
@@ -453,7 +458,7 @@ class ValidInventory:
             for item in promotable[:precollect_items]:
                 item.filter_flags |= ItemFilterFlags.StartInventory
                 start_inventory_size += 1
-        
+
         assert current_inventory_size - start_inventory_size <= inventory_size - filler_amount, (
             f"Couldn't reduce inventory to fit. target={inventory_size}, poolsize={current_inventory_size}, "
             f"start_inventory={starcraft_item}, filler_amount={filler_amount}"

@@ -4,6 +4,7 @@ import asyncio
 import collections
 import datetime
 import functools
+import itertools
 import logging
 import multiprocessing
 import pickle
@@ -14,7 +15,9 @@ import time
 import typing
 import sys
 from asyncio import AbstractEventLoop
+from collections.abc import Iterable
 
+import psutil
 import websockets
 from pony.orm import commit, db_session, select
 
@@ -27,6 +30,7 @@ from MultiServer import (
 from Utils import restricted_loads, cache_argsless
 from NetUtils import GamesPackage
 from apmw.webhost.customserver.gamespackagecache import DBGamesPackageCache
+
 from .locker import Locker
 from .models import Command, Room, db
 
@@ -100,12 +104,8 @@ class WebHostContext(Context):
         self.games_package_cache = games_package_cache
 
     def __del__(self):
-        try:
-            import psutil
-            from Utils import format_SI_prefix
-            self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
-        except ImportError:
-            self.logger.debug("Context destroyed")
+        from Utils import format_SI_prefix
+        self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
 
     async def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -133,7 +133,7 @@ class WebHostContext(Context):
         if room.last_port:
             self.port = room.last_port
         else:
-            self.port = get_random_port()
+            self.port = 0
 
         multidata = self.decompress(room.seed.multidata)
         return self._load(multidata, True)
@@ -175,8 +175,97 @@ class WebHostContext(Context):
         return d
 
 
-def get_random_port():
-    return random.randint(49152, 65535)
+class GameRangePorts(typing.NamedTuple):
+    valid_ports: list[int]
+    ephemeral_allowed: bool
+
+
+class RandomPortSocketCreator:
+    """ Creates server sockets on random available ports from a configured range. """
+
+    _next_port_index: int
+    _used_ports_cache: tuple[frozenset[int], int] | None
+    _parsed_ports: GameRangePorts
+
+    def __init__(self, game_ports: Iterable[str | int]) -> None:
+        self._next_port_index = 0
+        self._used_ports_cache = None
+        self._parsed_ports = self._parse_game_ports(game_ports)
+
+    @staticmethod
+    def _parse_game_ports(game_ports: Iterable[str | int]) -> GameRangePorts:
+        """ Parse the game ports configuration into a structured format. """
+        valid_ports: list[int] = []
+        ephemeral_allowed = False
+
+        for item in game_ports:
+            if isinstance(item, str) and "-" in item:
+                start, end = map(int, item.split("-"))
+                x = range(start, end + 1)
+                valid_ports.extend(x)
+            elif int(item) == 0:
+                ephemeral_allowed = True
+            else:
+                valid_ports.append(int(item))
+
+        random.shuffle(valid_ports)
+        return GameRangePorts(valid_ports, ephemeral_allowed)
+
+    @staticmethod
+    def _try_conns_per_process(p: psutil.Process) -> Iterable[int]:
+        """ Get ports from a single process's connections. """
+        try:
+            return (c.laddr.port for c in p.net_connections("tcp4") if c.laddr)
+        except psutil.AccessDenied:
+            return ()
+
+    @staticmethod
+    def _get_active_net_connections() -> Iterable[int]:
+        """ Get all active TCP4 connections on the system. """
+        # Don't even try to check if system using AIX
+        if psutil.AIX:
+            return ()
+
+        try:
+            return (c.laddr.port for c in psutil.net_connections("tcp4") if c.laddr)
+        # raises AccessDenied when done on macOS
+        except psutil.AccessDenied:
+            # flatten the list of iterables
+            return itertools.chain.from_iterable(map(
+                RandomPortSocketCreator._try_conns_per_process,
+                psutil.process_iter(["net_connections"])
+            ))
+
+    def _get_used_ports(self) -> frozenset[int]:
+        """ Get currently used ports with 90-second caching. """
+        t_hash = round(time.monotonic() / 90)
+        if self._used_ports_cache is None or self._used_ports_cache[1] != t_hash:
+            self._used_ports_cache = (frozenset(self._get_active_net_connections()), t_hash)
+
+        return self._used_ports_cache[0]
+
+    def create(self, host: str) -> socket.socket:
+        """ Create a server socket on an available port. """
+        valid_ports, ephemeral_allowed = self._parsed_ports
+        used_ports = self._get_used_ports()
+
+        next_index = self._next_port_index
+        for i, port in enumerate(itertools.chain(valid_ports[next_index:], valid_ports[:next_index])):
+            if port in used_ports:
+                continue
+
+            try:
+                res = socket.create_server((host, port))
+                next_index = (next_index + i + 1) % len(valid_ports)
+                self._next_port_index = next_index
+                return res
+            except OSError:
+                pass
+
+        if ephemeral_allowed:
+            return socket.create_server((host, 0))
+
+        raise OSError(98, "No available ports")
 
 
 class StaticServerData(typing.TypedDict, total=True):
@@ -233,9 +322,10 @@ def run_server_process(
         name: str,
         ponyconfig: dict[str, typing.Any],
         static_server_data: StaticServerData,
-        cert_file: typing.Optional[str],
-        cert_key_file: typing.Optional[str],
+        cert_file: str | None,
+        cert_key_file: str | None,
         host: str,
+        game_ports: Iterable[str | int],
         rooms_to_run: multiprocessing.Queue,
         rooms_shutting_down: multiprocessing.Queue,
 ) -> None:
@@ -285,6 +375,7 @@ def run_server_process(
     gc.collect()  # free intermediate objects used during setup
 
     loop = asyncio.get_event_loop()
+    socket_creator = RandomPortSocketCreator(game_ports)
 
     async def start_room(room_id):
         with Locker(f"RoomLocker {room_id}"):
@@ -294,19 +385,25 @@ def run_server_process(
                 ctx.load(room_id)
                 ctx.init_save()
                 assert ctx.server is None
-                try:
+                if ctx.port != 0:
+                    try:
+                        ctx.server = websockets.serve(
+                            functools.partial(server, ctx=ctx),
+                            ctx.host,
+                            ctx.port,
+                            ssl=get_ssl_context(),
+                            extensions=[server_per_message_deflate_factory],
+                        )
+                        await ctx.server
+                    except OSError:
+                        ctx.port = 0
+                if ctx.port == 0:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx),
-                        ctx.host,
-                        ctx.port,
+                        sock=socket_creator.create(ctx.host),
                         ssl=get_ssl_context(),
                         extensions=[server_per_message_deflate_factory],
                     )
-                    await ctx.server
-                except OSError:  # likely port in use
-                    ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=get_ssl_context())
-
                     await ctx.server
                 port = 0
                 for wssocket in ctx.server.ws_server.sockets:
@@ -382,7 +479,7 @@ def run_server_process(
 
         def run(self):
             while 1:
-                next_room = rooms_to_run.get(block=True,  timeout=None)
+                next_room = rooms_to_run.get(block=True, timeout=None)
                 gc.collect()
                 task = asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
                 self._tasks.append(task)

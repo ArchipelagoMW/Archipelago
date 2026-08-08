@@ -1069,13 +1069,17 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if "players" in args:
             ctx.consume_players_package(args["players"])
         if "hint_points" in args:
-            ctx.hint_points = args['hint_points']
+            ctx.hint_points = args["hint_points"]
         if "checked_locations" in args:
             checked = set(args["checked_locations"])
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
         if "permissions" in args:
             ctx.update_permissions(args["permissions"])
+
+        # Update hint info for local display
+        if "hint_cost" in args:
+            ctx.hint_cost = int(args["hint_cost"])
 
     elif cmd == 'Print':
         ctx.on_print(args)
@@ -1088,9 +1092,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "Bounced":
         tags = args.get("tags", [])
-        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
-        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
-            ctx.on_deathlink(args["data"])
+        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been sent this
+        if "DeathLink" in tags:
+            data = args.get("data", {})
+            time = data.get("time")
+            if time is not None and ctx.last_death_link != time:
+                ctx.on_deathlink(args["data"])
 
     elif cmd == "Retrieved":
         ctx.stored_data.update(args["keys"])
