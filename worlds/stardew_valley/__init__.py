@@ -550,6 +550,7 @@ class StardewValleyWorld(World):
         """Write to the spoiler "middle", this is after the per-player options and before locations,
         meant for useful or interesting info."""
         self.add_bundles_to_spoiler_log(spoiler_handle)
+        self.add_help_wanted_to_spoiler_log(spoiler_handle)
         add_randomized_data_to_spoiler_log(spoiler_handle, self.multiworld.get_player_name(self.player), self.content, self.options)
 
     def add_bundles_to_spoiler_log(self, spoiler_handle: TextIO):
@@ -566,6 +567,14 @@ class StardewValleyWorld(World):
                     else:
                         quality = f" ({item.quality.split(' ')[0]})"
                     spoiler_handle.write(f"\t\t{item.amount}x {item.get_item()}{quality}\n")
+
+    def add_help_wanted_to_spoiler_log(self, spoiler_handle: TextIO):
+        if self.options.quest_locations <= 0 or len(self.help_wanted_quests) <= 0:
+            return
+        player_name = self.multiworld.get_player_name(self.player)
+        spoiler_handle.write(f"\n\nHelp Wanted Quests ({player_name}):\n")
+        for quest_name in self.help_wanted_quests:
+            spoiler_handle.write(f"\t{quest_name}: {self.help_wanted_quests[quest_name]}\n")
 
     def add_entrances_to_spoiler_log(self):
         if self.options.entrance_randomization == EntranceRandomization.option_disabled:
