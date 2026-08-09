@@ -63,7 +63,7 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.lupini_tropical_fish: self.logic.time.has_year_three & self.logic.money.can_spend(1200),
             FestivalCheck.lupini_land_of_clay: self.logic.time.has_year_three & self.logic.money.can_spend(1200),
             FestivalCheck.secret_santa: self.logic.gifts.has_any_universal_love & self.logic.relationship.people_exist(5),
-            FestivalCheck.legend_of_the_winter_star: self.logic.relationship.exists(NPC.willy),
+            FestivalCheck.legend_of_the_winter_star: self.logic.relationship.exists(NPC.willy) & self.logic.relationship.people_exist(5),
             FestivalCheck.rarecrow_3: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_3),
             FestivalCheck.all_rarecrows: self.logic.region.can_reach(Region.farm) & self.logic.festival.has_all_rarecrows(),
             FestivalCheck.calico_race: self.logic.true_,
