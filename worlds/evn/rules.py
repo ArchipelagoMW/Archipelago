@@ -22,6 +22,15 @@ def _ship_id_rule(ship_id: int) -> str:
     ship_data = ship_table[ship_id]
     return ship_data["name"].strip() + ship_data["id"]
 
+def _ship_list_rule(ship_list: List[int]) -> List[str]:
+    core_list = []
+    for list_id in ship_list.items():
+        for ship_id, ship_data in ship_table.items():
+            if ship_id == list_id:
+                # If ship data ID no longer matches ship index ID, this would be a problem
+                core_list.append(ship_data["name"].strip() + ship_data["id"])
+    return core_list
+
 def _min_cargo_rule(min_weight: int) -> List[str]:
     ship_offset = loc_type_offset["ship"]
     core_list = []
@@ -38,6 +47,15 @@ def _min_ship_str_rule(min_str: int) -> List[str]:
         ship_stat = ship_data["strength"]
         if int(ship_stat) >= min_str:
             #logger.info(f"Ship str rule, adding {min_str}, {ship_stat}, {ship_data['id']}")
+            core_list.append(ship_data["name"].strip() + ship_data["id"])
+    return core_list
+
+def _faction_ship_list_rule(faction_id: int, min_str: int) -> List[str]:
+    core_list = []
+    for ship_id, ship_data in ship_table.items():
+        ship_stat = ship_data["strength"]
+        ship_gov = ship_data["government"]
+        if int(ship_stat) >= min_str and int(ship_gov) == faction_id:
             core_list.append(ship_data["name"].strip() + ship_data["id"])
     return core_list
 
@@ -79,11 +97,28 @@ def set_all_entrance_rules(world: EVNWorld) -> None:
                         #logger.info(f"Ship rule for: {temp_ship_id}")
                         # state.has wants name, not id
                         set_rule(region_entrance, lambda state: state.has(temp_ship_id, world.player))
+                    case "any_ships":
+                        temp_list = _ship_list_rule(rule_value)
+                        set_rule(region_entrance, lambda state: state.has_any(temp_list, world.player))
+                    case "all_ships":
+                        temp_list = _ship_list_rule(rule_value)
+                        set_rule(region_entrance, lambda state: state.has_all(temp_list, world.player))
                     case "min_cargo":
                         temp_list = _min_cargo_rule(rule_value)
                         set_rule(region_entrance, lambda state: state.has_any(temp_list, world.player))
                     case "min_ship_str": # Note: Ship str is arbitrary number designers added, but fits our purposes well enough here
+                        # 60 - vipers, 75 - fighters, 200 - valk/starbridge, 325 - cruiser/destroyer, 475 - carriers, # 600+ - polaris
                         temp_list = _min_ship_str_rule(rule_value)
+                        set_rule(region_entrance, lambda state: state.has_any(temp_list, world.player))
+                    case "faction_ships":
+                        # 128 - Fed, 129 - auroran, 130 - polaris, 136 - vell-os, 137 - Pirate, 141 - rebels, 
+                        temp_list = _faction_ship_list_rule(rule_value, 100) # Skip fighters, except vell-os and polaris
+                        set_rule(region_entrance, lambda state: state.has_any(temp_list, world.player))
+                    case "faction_capital_ships": 
+                        # I want to do a higher value, but fed and rebels so damn weak (according to this value)
+                        # I would need to do a switch based on gov to be more accurate, which I really don't like.
+                        # TODO: Make these two rules more mod/TC friendly. Dunno what scaling they use...
+                        temp_list = _faction_ship_list_rule(rule_value, 325) # destroyer + carries, vell-os arrow + jav, half of polaris fleet...
                         set_rule(region_entrance, lambda state: state.has_any(temp_list, world.player))
                     #case "min_checks":
                         # apparently this doesn't update how we would expect. Advice was to not use it.
