@@ -21,6 +21,7 @@ from ..strings.animal_product_names import AnimalProduct
 from ..strings.bundle_names import CCRoom
 from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar, Mineral
+from ..strings.monster_names import Monster
 from ..strings.villager_names import NPC
 
 
@@ -188,7 +189,12 @@ def get_help_wanted_quests(random: Random, content: StardewContent, options: Sta
         if LocationTags.HELP_WANTED_HELLO in location.tags:
             help_wanted_quests[location_name] = NPC.emily
         elif LocationTags.HELP_WANTED_SLAYING in location.tags:
-            help_wanted_quests[location_name] = random.choice(slaying_requesters)
+            if "Crab" in location_name:
+                help_wanted_quests[location_name] = NPC.demetrius
+            elif Monster.green_slime in location_name or Monster.blue_slime in location_name or Monster.red_slime in location_name:
+                help_wanted_quests[location_name] = random.choice(slaying_requesters)
+            else:
+                help_wanted_quests[location_name] = NPC.wizard
         elif LocationTags.HELP_WANTED_GATHERING in location.tags:
             requester = NPC.robin if (Material.wood in location_name or Material.stone in location_name) else NPC.clint
             help_wanted_quests[location_name] = requester

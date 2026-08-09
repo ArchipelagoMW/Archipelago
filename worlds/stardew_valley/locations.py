@@ -898,7 +898,7 @@ def modify_fish_region_according_to_data_randomization(location_data: LocationDa
             new_region = LogicRegion.crab_pot_freshwater
     else:
         new_region = LogicRegion.fishing
-    return LocationData(location_data.code, new_region, location_data.name, location_data.content_packs, location_data.tags)
+    return LocationData(location_data.code_without_offset, new_region, location_data.name, location_data.content_packs, location_data.tags)
 
 
 def modify_crop_region_according_to_data_randomization(location_data: LocationData, crop_item: GameItem, options: StardewValleyOptions) -> LocationData:
@@ -927,4 +927,4 @@ def modify_crop_region_according_to_data_randomization(location_data: LocationDa
         new_region = LogicRegion.fall_farming
     elif Season.winter in harvest_source.seasons:
         new_region = LogicRegion.winter_farming
-    return LocationData(location_data.code, new_region, location_data.name, location_data.content_packs, location_data.tags)
+    return LocationData(location_data.code_without_offset, new_region, location_data.name, location_data.content_packs, location_data.tags)
