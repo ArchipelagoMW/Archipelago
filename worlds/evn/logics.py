@@ -52,6 +52,9 @@ misns_to_ignore: List[int] = [
 
     # Avoid x force or fleet misns
     614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 626, 627, 628, 629, 
+
+    # UN refusals
+    520, 
 ]
 
 # Conversely, we now need to try and trim down on the number of items.
@@ -189,6 +192,14 @@ possible_regions: Dict[int, EVNRegionData] = {
         # This is an attempt at pushing some missions into later spheres so they aren't required
         # by other players in the early game... Partial success.
         # Refer to rules.py -> set_all_entrance_rules
+        # Important:
+        #  - Stacking rules *should* push this further than just having 1 rule (deeper sphere?)
+        #  - Just because a rule (ex: all_ships) says they *should* have something doesn't
+        #    actually mean they will! This is useful for tricking logic, but letting the player still
+        #    go at their pace. Ex: Fed mid region should have *all* fed ships is logic pushing BUT
+        #    the player will hardly likely actually have all fed ships. Thematic push.
+        #    Ex 2: Fed final mission: *any* (or maybe all) capital ships. This should also just
+        #    help make sure they have at least 1 capital ship to do this mission with.
         "entrance_rules": {},
     },
     1: {
@@ -835,7 +846,7 @@ possible_regions: Dict[int, EVNRegionData] = {
             834, 835, # "meh" cunjo hunt branch
             597, # fed req glitechnia mission
             758, # Huh, you can abort Barry (kinda)
-            577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, # second half of United Shipping due to polaris req :(
+            #577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, # second half of United Shipping due to polaris req :(
         ],
         "misn_edits": {
         },
@@ -852,12 +863,20 @@ possible_regions: Dict[int, EVNRegionData] = {
             597: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             },
-            577: {
-                "available_bits": f"b{MISSION_BLOCKING_BIT}"
-            },
             756: {
                 "on_abort": ""
             }
+        },
+        "entrance_rules": {},
+    },
+    202: {
+        "id": 202,
+        "name": "Side Misn - Block UN Path B",
+        "missions": [],
+        "misn_edits": {
+            577: {
+                "available_bits": f"b{MISSION_BLOCKING_BIT}"
+            },
         },
         "entrance_rules": {},
     },
@@ -887,6 +906,13 @@ possible_regions: Dict[int, EVNRegionData] = {
         },
         "entrance_rules": {
             "min_cargo": 300,
+            # Stacking rules (read below)
+            # Also, "any" is easier than "all"
+            "any_ships": [
+                132, # pegasus
+                146, # huh, manticore has 500 cargo, that's enough
+                182, # sprite
+            ]
         },
     },
     302: {
@@ -899,6 +925,95 @@ possible_regions: Dict[int, EVNRegionData] = {
         },
         "entrance_rules": {
             "min_cargo": 1250,
+            # Stacking rules *should* push these into later spheres, or make gen think it's harder
+            # to get here, and thus less *early* progressive items
+            "all_ships": [
+                # These 3 don't qualify, BUT, adding them as an additional filter to make
+                # the rando think it's even harder to get here.
+                132, # pegasus
+                146, # huh, manticore has 500 cargo, that's enough
+                182, # sprite
+                # Actually valid ships
+                160, # cambrian
+                131, # leviathan
+            ]
+        },
+    },
+    303: {
+        "id": 303,
+        "name": "Side Misn String - United Shipping - Part A",
+        "missions": [
+            504, 517, 518, 
+            519, 533, 
+        ],
+        "misn_edits": {
+            518: {
+                "on_refuse": "", # So they can get again, and doesn't go to alt route
+            }
+        },
+        "entrance_rules": {
+            "min_ship_str": 75,  # fighters
+            "min_cargo": 5, # dunno if this will actually do much of anything
+        },
+    },
+    304: {
+        "id": 304,
+        "name": "Side Misn String - UN - Mission BBS",
+        "missions": [
+            505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+        },
+    },
+    305: {
+        "id": 305,
+        "name": "Side Misn String - UN - Auroran BBS",
+        "missions": [
+            521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "min_ship_str": 200, #valk/SB +
+        },
+    },
+    306: {
+        "id": 306,
+        "name": "Side Misn String - UN - Fed to Aur",
+        "missions": [
+            534, 535, 536, 537, 538,
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "min_ship_str": 200, #valk/SB +
+        },
+    },
+    307: {
+        "id": 307,
+        "name": "Side Misn String - UN - Part B (Polaris Req)",
+        "missions": [
+            577, 578, 581, 
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "faction_ships": 130, 
+        },
+    },
+    308: {
+        "id": 308,
+        "name": "Side Misn String - UN - (Polaris Req) Long Delivery",
+        "missions": [
+            579, 580, 
+            582, 583, 584, 585, 
+            586, 587, 588, 589, 
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
         },
     },
     310: {
@@ -973,8 +1088,12 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, 23, 27, # WG + BH
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201] },
+        "region_connections": { 
+            0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201, 202, 303], 
+            303: [304, 305, 306],
+        },
         "final_mission": 417,
         "cust_outfs": [
             450, 454, 455, 456, 457, 458, 459, 462, 463, 464, 465
@@ -999,8 +1118,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, 23, 27, # WG + BH
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 307, 308, # UN - w/ polaris
         ],
-        "region_connections": { 0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 102, 103, 104, 201], 2: [4], 4: [5], 5: [7], 7: [9] },
+        "region_connections": { 
+            0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 102, 103, 104, 201, 303], 
+            2: [4], 4: [5], 5: [7], 7: [9],
+            303: [304, 305, 306, 307], 307: [308],
+        },
         "final_mission": 887,
         #"use_extended_checks": True, # due to how short this path is, we'll need to utilize extended checks to make sure players don't jump into the endgame too early.
         "cust_outfs": [
@@ -1026,8 +1150,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, 23, 27, # WG + BH
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 307, 308, # UN - w/ polaris
         ],
-        "region_connections": { 0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201], 3: [4], 4: [6], 6: [7], 7: [8] },
+        "region_connections": { 
+            0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201], 
+            3: [4], 4: [6], 6: [7], 7: [8], 
+            303: [304, 305, 306, 307], 307: [308],
+        },
         "final_mission": 887,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1053,8 +1182,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, 23, 27, # WG + BH
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 103, 104, 201], 10: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 
+            0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 103, 104, 201, 202, 303], 
+            10: [12], 12: [14], 14: [15], 15: [16],
+            303: [304, 305, 306], 
+        },
         "final_mission": 686,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1084,8 +1218,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             23, 27, # BH 
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [21, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 21: [11], 11: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 
+            0: [21, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            21: [11], 11: [12], 12: [14], 14: [15], 15: [16],
+            303: [304, 305, 306],
+        },
         "final_mission": 686,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1115,8 +1254,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, # WG good ending
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 
+            0: [20, 24, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            24: [13], 13: [12], 12: [14], 14: [15], 15: [16],
+            303: [304, 305, 306],
+        },
         "final_mission": 686,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1149,8 +1293,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, 23, 27, # WG + BH
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312, 100, 101, 102, 104, 201], 30: [32], 32: [34] },
+        "region_connections": { 
+            0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312, 100, 101, 102, 104, 201, 202, 303], 
+            30: [32], 32: [34],
+            303: [304, 305, 306],
+        },
         "final_mission": 712,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1182,8 +1331,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             23, 27, # BH
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [22, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 22: [31], 31: [32], 32: [34] },
+        "region_connections": { 
+            0: [22, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            22: [31], 31: [32], 32: [34],
+            303: [304, 305, 306],
+        },
         "final_mission": 712,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1215,8 +1369,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, 23, 27, # BH
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [20, 23, 27, 40, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 201], 40: [42] },
+        "region_connections": { 
+            0: [20, 23, 27, 40, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 201, 202, 303], 
+            40: [42],
+            303: [304, 305, 306],
+        },
         "final_mission": 474,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1248,8 +1407,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, # WG
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 23: [26], 26: [51], 51: [53] },
+        "region_connections": { 
+            0: [20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            23: [26], 26: [51], 51: [53],
+            303: [304, 305, 306],
+        },
         "final_mission": 354,
         #"use_extended_checks": True, 
         "cust_outfs": [
@@ -1281,8 +1445,13 @@ story_routes: Dict[int, EVNStoryRoute] = {
             20, # WG
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
+            303, 304, 305, 306, 202, # UN - non polaris
         ],
-        "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201], 23: [26], 26: [51], 51: [54] },
+        "region_connections": { 
+            0: [20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            23: [26], 26: [51], 51: [54],
+            303: [304, 305, 306],
+        },
         "final_mission": 381,
         #"use_extended_checks": True, 
         "cust_outfs": [
