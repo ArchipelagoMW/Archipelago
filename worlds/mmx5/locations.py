@@ -3,6 +3,7 @@ from BaseClasses import Location
 from . import names
 from .items import BASE_ID
 from .pickups import PICKUPS
+from .reploids import REPLOIDS
 
 
 class MMX5Location(Location):
@@ -30,7 +31,11 @@ for i, stage in enumerate(names.STAGES):
     # Maverick grants (weapon, Life+/Energy+, Part). Uses the slot previously
     # reserved for "rank rewards".
     location_table[names.dna_part_location(stage)] = base + 5
-    # +6.. reserved
+    # Boss Rush rematch (Zero Space). Always in the id map - the datapackage
+    # carries every location the game can define - but only created as real
+    # locations when the option is on.
+    location_table[names.rematch_location(stage)] = base + 6
+    # +7.. reserved
 
 # Endgame stage clears, ids +180. Always in the id map (the datapackage carries
 # every location the game can define); only created as real locations when the
@@ -45,6 +50,12 @@ for i, stage in enumerate(names.ENDGAME_STAGES):
 for i, (_stage, _area, _idx, _iid, name) in enumerate(PICKUPS):
     location_table[name] = BASE_ID + 200 + i
 
+# Reploid rescues: 14 real Reploids (disc census + live gate-rule proof, see
+# reploids.py), ids +250 in REPLOIDS order (append-only). Always in the id
+# map; real locations only when the option is on.
+for i, (_stage, _idx, _x, _y, name) in enumerate(REPLOIDS):
+    location_table[name] = BASE_ID + 250 + i
+
 event_location_table: dict[str, int | None] = {
     names.VICTORY: None,
 }
@@ -58,4 +69,6 @@ location_groups = {
     "DNA Parts": {names.dna_part_location(s) for s in names.STAGES},
     "Pickups": {name for _s, _a, _i, _d, name in PICKUPS},
     "Zero Space": {names.endgame_clear_location(s) for s in names.ENDGAME_STAGES},
+    "Rematches": {names.rematch_location(s) for s in names.STAGES},
+    "Reploids": {name for _s, _i, _x, _y, name in REPLOIDS},
 }

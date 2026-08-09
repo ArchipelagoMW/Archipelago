@@ -1,5 +1,47 @@
 # Mega Man X5 apworld changelog
 
+## 0.4.0 — 2026-08-08
+
+Three new options, all funded by one evening of live measurement (research
+notes: the 2026-08-08 session). **Client only — no disc change.**
+
+**Boss Rush rematch checks (`rematch_checks`).** Defeating a Maverick's
+rematch in Zero Space sends a check — eight new locations, and the
+most-requested thing testers have asked for: the rush finally rewards
+something. Nothing is ever lost there: a cleared teleporter stays closed for
+that visit, but leaving the stage and re-entering resets all eight, so a
+missed or lost fight can always be redone. Detection is client-side — the
+rematch runs in the game's standard boss-HP slot, and the fight is identified
+by a fingerprint of the boss module the portal streams into RAM (the
+sub-stage byte turned out to be a route-dependent room counter, measured
+reading DIFFERENT values for the same rematch in different sessions).
+Off by default for its first release: three of the eight fingerprints are
+live-verified so far, and an unrecognized fight deliberately sends nothing
+rather than guessing.
+
+**All 16 DNA Parts (`dna_parts_in_pool: all`).** The option is now a choice:
+`vanilla_pairs` (the previous behavior — one Part from each boss's
+Life+/Energy+ pair, `true` still means this) or `all`, which shuffles every
+one of the 16 Parts into the pool — both halves of every pair, an economy the
+base game never allows. `all` adds 16 items, so the seed must have the
+location budget for it: `rematch_checks` and/or `pickupsanity` make room, and
+generation refuses loudly (rather than dropping items silently) if it
+doesn't fit.
+
+**Reploid rescue checks (`reploid_checks`).** Rescuing an injured Reploid
+sends a check — 14 locations (Squid Adler 6, Izzy Glow 3, The Skiver 5).
+Which records are real Reploids was pinned down live: of the 33 Reploid-type
+placement records on the disc, the rescueable ones are exactly the `gate 4,
+id 0x00` records — proven by four on-screen rescues across two stages, a
+phantom record caught not-existing 95px from a real rescue, and a prediction
+the data made against the player's own memory (Izzy has a third Reploid
+nobody remembered; the record said where; it was there). Reploids respawn on
+every stage re-entry, so nothing is permanently missable — the one quirk is
+that a rescue at the 9-life cap can't be detected (re-enter under 9 and
+rescue again). Izzy's and The Skiver's are sighted on-screen; Squid Adler's
+six ship from disc data with the same signature (bike stage — deliberate
+call to ship and fix if one misbehaves, rather than withhold the stage).
+
 ## 0.3.4 — 2026-08-08
 
 Quality-of-life, all from one tester's completed solo run (`stage_unlocks` +

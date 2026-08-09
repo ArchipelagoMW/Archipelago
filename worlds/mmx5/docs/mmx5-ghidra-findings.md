@@ -978,6 +978,96 @@ bits 11-16 are exactly the six character-locked Parts, X's three at 11-13 and
 Zero's three at 14-16. That grouping falls out of the data; nothing in the
 reading procedure would have produced it by accident.
 
+
+## 9.17 Live measurement session 2026-08-08 — §9.16's open questions closed
+
+One evening of play against `Scripts/mmx5_testprep_watch.lua` plus targeted
+RAM dumps. Every finding below is live-observed unless marked; full narrative
+in `ai-docs/handoffs/2026-08-08_mmx5-live-session-results.md`, RAM-map
+consequences already folded into `mmx5-ram-notes.md`.
+
+### 9.17.1 The Reploid is `minor 0x04` — §9.16.4's `0x19` candidate is DEAD
+
+A live rescue (lives 2→3, Izzy Glow area 0) fired with exactly ONE placement
+record inside the match radius: `minor=0x04, id=0x00, x=384, y=651` — dx=24,
+dy=0 from the player. That record byte-matches the disc list (chunk8 +
+record 20). Counter-evidence against `0x19` is equally direct: Izzy area 1
+carries six `0x19` records and the player saw zero rescueable NPCs there, and
+Axle a0 carries three with none visible either — `0x19` is an ordinary enemy
+type. This also dissolves §9.16.4's "cross-check went the wrong way": Axle's
+overlay has no `0x1C45` writer because Axle simply HAS no reploids.
+
+**Disc census of `minor==0x04`** (same §9.13 chain, all 26 stage entries):
+Squid Adler a0 = **14**, Izzy Glow a0 = **14**, The Skiver a0 = **5**, all
+other lists 0. Total **33**.
+
+**GATE RULE RESOLVED, empirically, later the same night.** The rescueable
+Reploids are exactly the **`gate 4, id 0x00`** records — **inverted** vs the
+pickup rule (where gate≥3 means never-spawns); do not unify the two. Counts:
+Squid 6 (records 60-65), Izzy 3 (20-22), Skiver 5 (37-41) — note each set is
+CONTIGUOUS in its stage's list, itself corroborating a designed set. Proof:
+four live rescues each overlapping its record ≤25px — including Izzy record
+22 at x=3432, a Reploid the player was sure didn't exist until the data
+predicted it — plus a negative control (`id 0x11` record 95px from a real
+rescue, no NPC present). The 19 low-gate / id-0x10/0x11 records never
+manifest on screen. Duff McWhalen's U-555 emits reploids dynamically (no
+records — which is why its stage counts 0 here despite wiki reports).
+Shipped as `reploid_checks` (worlds/mmx5/reploids.py); Squid's six carry the
+signature but no on-screen sighting — accepted-risk call by Ivor 2026-08-08.
+What remains genuinely unknown is what gates 0-2 MEAN for object records —
+the spawner disassembly question stands, it just no longer blocks anything.
+
+### 9.17.2 Stage 0x07 (Axle) has NO area 1 — a §9.16 list entry was a misread
+
+All three tables — primary `0x80072EAC`, secondary `0x80072F64`, manifest
+`0x80072DD4` — hold NULL for (0x07, 1), read live from in-stage RAM. The
+player also traversed the full stage with the area byte pinned at 0. The
+"only two areas with unresolved gate data" line in the backlog should have
+said one (Izzy a1, now dumped clean: 62 records, 10-type manifest).
+
+### 9.17.3 Boss code streams as per-boss modules; fingerprint at `0x800FA300`
+
+The rush (stage 0x0C) streams the rematch Maverick's boss module to RAM base
+`0x800FA000` from ROCK chunk **`29 + stage_id`** (Squid → chunk 34, proven by
+byte-match against a mid-fight dump; Duff→32 and Axle→36 corroborated by
+their code appearing inside stage chunks 4 and 10 respectively). ⚠️ The
+module PERSISTS until the next portal replaces it — the Aug-6 corridor dumps
+hold Izzy's and Dark Dizzy's modules respectively, which is also what makes
+those two fingerprints live-verified alongside Squid's (3 of 8). An earlier
+"unloaded after the fight" reading of the 0/99-block diff was wrong: the
+after-dump differs because it holds the NEXT module, not none. The
+fingerprint is **16 bytes** at `0x800FA300` (a single u32 there can be a
+common instruction — collision risk with Sigma's own modules, whose dumps
+match none of the 8 at 16 bytes) — full table + client protocol in ram-notes
+§Boss fights. This replaces `0x1C1D` as rematch identity (same rematch read
+0x05 and 0x06 in different sessions — it is a route-dependent sub-room
+counter).
+
+Mid-bosses do NOT run in the boss-HP slot `0x800920EC` (fought and killed
+with the byte frozen) — §9.16.3's per-overlay wall stands for them, while
+rematches escape it entirely via the client-side watcher (HP fill → 0,
+persists; rush resets on stage re-entry).
+
+### 9.17.4 Streaming vs settled — the live-read version of §9.16.1
+
+The §9.13 tables' pointed-at overlay data streams in DURING door transitions.
+Two failure modes observed live: an all-zero read (Izzy a1, 1 frame after the
+area byte flipped) and — worse — a **plausible partial parse**: Axle a0 read
+90 records with a valid-looking terminator while the true list is 113. A
+"nonzero bytes" readiness test passed on the garbage. Only stability across
+frames is a safe readiness signal for streamed data, exactly as §9.16.1's
+block-awareness is for scans. (`mmx5_testprep_watch.lua` now waits on
+populated data with a timeout; a stability wait is the remaining upgrade.)
+
+### 9.17.5 Refill-queue delivery is NOT mid-gameplay
+
+The engine never consumed the AP-queued refill (`0x1C76`) during gameplay:
+frozen through HP dips, deaths, respawns, savestate loads, and a stage load
+at full HP with a full sub-tank. No overcap occurred in any observed state
+and nothing in `0x1C70-90` moved. The consumption moment — and the tester's
+reported sub-tank overcap — remains unobserved; the untested case is a stage
+load with HP below max. The overcap fix stays blocked on seeing that once.
+
 **Vanilla economy (Ivor, 2026-08-06):** 16 Parts exist, but only **8 are
 obtainable per playthrough** - each Maverick offers one of its two depending
 on whether you pick Life+ or Energy+ at Alia's DNA prompt. A boss's two Parts

@@ -13,6 +13,16 @@ established: `ai-docs/handoffs/`.
 Legend: ✅ = verified in-emulator/disassembly · ⚠️ = partially verified / caveat ·
 ❓ = unverified hypothesis (from cheat archives or single observation)
 
+> **2026-08-08 live-session update:** four corrections land in this file today.
+> (1) `0x800D1C1D` is a sub-room counter, NOT a rematch identifier — the same
+> rematch read 0x05 and 0x06 in different sessions; rematch identity now comes
+> from the boss-module fingerprint u32 at `0x800FA300` (§Boss fights).
+> (2) Rematch checks need NO disc stub — boss HP `0x800920EC` reaches 0 visibly
+> and persists, and the rush resets on stage re-entry (both live-proven).
+> (3) The Reploid object type is **`minor 0x04`**, proven by a live rescue that
+> byte-matches the disc; the `0x19` candidate is dead. Census: 33 records
+> (Squid 14 / Izzy 14 / Skiver 5). (4) Mid-bosses do NOT use the boss-HP slot.
+
 > **2026-07-31 stub-validation update:** `0x800D1C41` is NOT a reliable
 > gameplay-time stage id — the pickup stub read **0xE4** from it mid-stage in
 > Grizzly Slash (live, proto v3). Its 02/06/09 readings were hub/menu-time.
@@ -69,14 +79,14 @@ Survives death and stage exit; the AP client's primary read/write surface.
 | `0x800D1CC7/C9` | u8 | Counters bumped at results/DNA screens, unidentified | ❓ |
 | `0x800D1CD1` | u8 | bit7 toggles during play — noise? | ❓ |
 | `0x800D1D0F` | u8 | **Story chapter** (not just a sortie tally): hub fn 0x800EEF14 advances it on popcount(0x800D1C4C) — 2 boss kills → chapter 2 (Enigma event), 6 → chapter 4 (shuttle). Endgame gating hangs off this — see overlay-findings §10. **Live 2026-08-01: reads 0x03 while standing in Zero Space 1**, so the endgame does NOT simply continue the 2/4 ladder — the colony resolution sets its own chapter. Do not assume monotonic chapter == progress | ✅ 2026-07-31, endgame value ⚠️ single obs. |
-| `0x800D1C1D` | u8 | **Sub-stage id — the stage you are actually IN when it differs from `0x1C0C`.** Live 2026-08-06 in the Zero Space boss rush: entering the Squid Adler rematch wrote `0x0C -> 0x05` (Sigma's stage id -> Squid Adler's), leaving wrote `0x05 -> 0x0E`. This is how a rematch is IDENTIFIED; `0x1C0C` stays on the containing stage | ✅ live 2026-08-06 |
+| `0x800D1C1D` | u8 | **Sub-room / segment id — NOT a boss identifier. CORRECTED 2026-08-08.** The 2026-08-06 reading ("holds the Maverick's stage id during a rematch") is refuted: the SAME Squid Adler rematch read `0x05` on 2026-08-06 and `0x06` on 2026-08-08 (player-confirmed squid both times), and Axle the Red's own-stage boss room ALSO reads `0x06`. It tracks the current sub-room and its arena value is route-dependent: rush corridors read `0x10/0x13/0x14`, post-kill `0x0C/0x0E/0x0F`, Izzy's post-midboss warp stepped `0x00→0x01`. Useful as a "you changed rooms" signal only. Rematch identity comes from the boss-module fingerprint instead (see §Boss rush) | ✅ corrected 2026-08-08 |
 | `0x800D1C79` (endgame) | u8 | **ACT doubles as the Zero Space progress counter.** Confirmed live 2026-08-06, one step per clear: Zero Space 1 `5->6` (f323080), Zero Space 2 `6->7` (f341110), X vs Zero `7->8` (f353000), and it continues to `9`. The hub confirm handler `0x800EFC0C` reads it to pick the destination (5->0x10, 6->0x11, 7->0x12, else 0x0C). Basis for the `endgame_checks` locations | ✅ live 2026-08-06 |
 | `0x800D1CB4` | u8 | **Fast per-stage counter — NOT a progress record.** Ran `04->05->08->09->0A->0B->0C->0D->0E` during ordinary play in one stage and resets to 0 on stage entry. Logged 1208 changes in one session. Mistaken for a boss-rematch tally once; check its history before reading meaning into a single step | ⚠️ noise, identified 2026-08-06 |
-| Zero Space boss rematches | — | **NO persistent defeat record exists.** Full-RAM before/after diff across two rematch kills (2026-08-06): nothing latches. `0x1C2F` moved on one kill and not the other, `0x1CB4` is a general counter, `0x1C25`/`0x1C1C` toggle rather than set. Per-rematch AP checks therefore need a disc stub on the boss-death path (pickupsanity-shaped), not a save read | ❌ ruled out 2026-08-06 |
+| Zero Space boss rematches | — | **NO persistent defeat record exists** (full-RAM before/after diff across two rematch kills, 2026-08-06: nothing latches — `0x1C2F` moved on one kill and not the other, `0x1CB4` is a general counter, `0x1C25`/`0x1C1C` toggle rather than set). **2026-08-08: a disc stub is NOT needed after all — the client-side watcher route is live-proven.** A rematch runs in the standard boss-HP slot `0x800920EC` (Squid: fill to 58, stepped to 0 on the kill, and **0 persisted 600+ frames** until the room transition — comfortably poll-visible). Portal state survives death-respawn within the visit but the whole rush RESETS on a full stage exit + re-entry (portal live again, player-confirmed), so a missed check is always refightable. Boss identity comes from the module fingerprint, not `0x1C1D` (see §Boss rush) | ✅ watcher route proven 2026-08-08 |
 | `0x800D1C0C` (Zero Space) | u8 | **Zero Space stage 1 = stage id `0x10`** — live-read 2026-08-01 standing in the Shadow Devil stage (mode 0x0A). The older "0x0A-0x0C = Zero Space" note in overlay-findings was a GUESS and is wrong. Consequence for the client: Zero Space records arrive with an unmapped stage byte and are correctly ignored by `STAGE_ID_TO_NAME` | ✅ live 2026-08-01 |
-| `0x800D1C1D` | u8 | **SUB-STAGE ID** (superseded the "launch-event state byte" reading; the 0→4 Enigma observation was one value of it). In the Zero Space boss rush it holds the Maverick's stage id while `0x1C0C` stays on the containing stage — this is how a rematch is identified. Values seen across the 24 dumps: `00, 02, 04, 0C, 10, 11, 15`. **Its ONLY writer is overlay code** (`0x800EF924`, Sigma/rush overlay); the EXE only reads it (2 sites, block-aware scan 2026-08-08) | ✅ 2026-08-06, writer located 2026-08-08 |
+| `0x800D1C1D` | u8 | **SUB-ROOM / SEGMENT ID** (superseded the "launch-event state byte" reading; the 0→4 Enigma observation was one value of it). ~~In the rush it holds the Maverick's stage id~~ — refuted 2026-08-08, see the corrected row above: same rematch produced `0x05` and `0x06` across sessions, so it cannot identify a boss. Values seen across the 24 dumps: `00, 02, 04, 0C, 10, 11, 15`; live 2026-08-08 added `01, 02` (Izzy segments), `06` (two different boss rooms), `0F, 13, 14` (rush). **Its ONLY writer is overlay code** (`0x800EF924`, Sigma/rush overlay); the EXE only reads it (2 sites, block-aware scan 2026-08-08) | ✅ corrected 2026-08-08 |
 | `0x800D1D28–2A` | u8×3 | **Pending DNA-reward buffer**: written at the DNA-select screen (observed `C0 4B 03` after choosing a Life Up at an Izzy kill), delivered + zeroed at the NEXT results sequence — even a stage-escape results (observed 2026-07-31: +2 max HP and hearts-u32 bit 13 = Life Up id 5 = stage−1 applied on escape-exit). Supersedes "Dynamo consumes 0x0D1D38" as the general mechanism | ✅ |
-| `0x800D1C88–9F` | — | Suspected reploid-rescue bitfields (overlay analysis) — **DISPROVEN as rescue record**: 2 live Izzy Glow rescues + the results commit wrote NOTHING here (2026-07-31). Rescue effect = lives +1 (0x0D1C45) only. No persistent rescue record exists in the save struct → Reploid checks need live per-stage spawn-slot detection with the AP server as the permanent record. **2026-08-08: the rescue HANDLER is now located** — `0x800F167C` in Izzy Glow's overlay (collision test, lives +1 clamped to 9, sound 21), reached from a 6-state table at `0x800F3E1C`; and per-stage object types are now statically enumerable via the `0x80072DD4` manifest. The reploid's `minor` is still unproven — see ghidra-findings §9.16.4 | ❌ disproven (handler located 2026-08-08) |
+| `0x800D1C88–9F` | — | Suspected reploid-rescue bitfields (overlay analysis) — **DISPROVEN as rescue record**: 2 live Izzy Glow rescues + the results commit wrote NOTHING here (2026-07-31). Rescue effect = lives +1 (0x0D1C45) only. No persistent rescue record exists in the save struct → Reploid checks need live detection with the AP server as the permanent record. **2026-08-08: the rescue HANDLER is located** (`0x800F167C`, Izzy overlay, collision test → lives +1 clamped to 9 → sound 21) **and the Reploid's `minor` is PROVEN = `0x04`**: a live rescue fired the lives-up with exactly one placement record under the player (dx=24, dy=0), and that record byte-matches the disc (Izzy a0, x=384, y=651). The old `0x19` candidate is DEAD — it is an ordinary enemy type (6 in Izzy a1 where the player saw zero rescueable NPCs, 3 in Axle a0 — no reploids there either, which also explains Axle's overlay having no `0x1C45` writer). **Disc census of `minor==0x04` records: Squid Adler a0 = 14, Izzy Glow a0 = 14, The Skiver a0 = 5, everywhere else 0 — 33 total. GATE RULE RESOLVED (later the same night): the REAL rescueable Reploids are exactly the `gate 4, id 0x00` records — Squid 6, Izzy 3, Skiver 5, 14 total — INVERTED vs the pickup rule (gate≥3 = never-spawn for pickups, gate 4 = real for reploids; do not unify).** Proof: 4 live rescues each overlapping its record ≤25px (Izzy records 20/21/22 incl. one at x=3432 the player didn't know existed, Skiver 37), plus an `id 0x11` record 95px from a real rescue with no NPC present. The 19 low-gate / id-0x10/0x11 records never manifest. Duff McWhalen's U-555 mid-boss also emits reploids dynamically — no records, not locations. Shipped as `reploid_checks` (Squid's 6 by accepted risk, same signature, no on-screen sighting) | ✅ gate rule proven 2026-08-08 |
 | `0x800D1D0F` | u8 | Increments per stage completion ("stages cleared" count?) | ⚠️ |
 | `0x800D1D38–3A` | 3×u8 | **Pending DNA-reward buffer**: written at DNA select (C0 4B 03 = "weapons and energy"), zeroed when the reward is granted after the next sortie (Dynamo fight → Energy Up) | ✅ |
 | `0x800D1D0F` | u8 | ~~Sorties-completed counter (increments for mavericks AND Dynamo fights)~~ **REFUTED 2026-08-03** — it is the STORY CHAPTER (see the 0x800D1D0F row above). Live: it held at 3 across TWO complete stage-plus-results sequences in one session (`mmx5_chapter_gate_log.txt`), so it does not tally sorties. The early coincidence that made this look like a counter is that chapter and kill count track each other at the start — the chapter-1 rung literally stores the popcount as the chapter number. Do not reason about progress from this byte as if it counted anything. | ❌ refuted |
@@ -245,6 +255,109 @@ stage back to stage select — to raise the base before the first bosses.)
 - Level 8+ also grants **equippable DNA Parts** (u32 0x800D1C84, §3.3) — an
   entire reward stream we do not model. Candidate future locations.
 
+## Boss fights, the rush, and the refill queue — live session 2026-08-08
+
+Source: `Scripts/mmx5_testprep_watch.lua` log + `ramdump_squid_rematch_f430014.bin`
+(mid-fight, player-confirmed Squid Adler) + disc analysis. Handoff:
+`ai-docs/handoffs/2026-08-08_mmx5-live-session-results.md`.
+
+### Boss HP slot `0x800920EC` (mirror `0x800920ED`)
+
+- **Real Maverick fights use it, both in their own stage and in the rush.**
+  Axle (own stage): fill ramp to 53, stepped down per hit, `3→0` on the kill.
+  Squid (rush rematch): fill to 58, stepped to 0. The displayed-bar mirror
+  chases one step behind.
+- **HP 0 PERSISTS after the kill** — Squid's zero held 600+ frames until the
+  room transition; Axle's held minutes. A client poll cannot miss a kill that
+  happens while it is connected. This is the basis of client-side rematch checks.
+- **Mid-bosses do NOT use this slot** (Izzy's mid-boss fought and killed with
+  the byte frozen on a stale value the whole time). Mid-boss HP lives in the
+  generic enemy object pool — client-side mid-boss detection needs different
+  work, and the cheap watcher explicitly does NOT extend to them.
+- Outside fights the byte holds **stale garbage** (leftover 16 observed at
+  stage entry). Gate any use on a observed fill ramp or a known fight state.
+
+### Rush structure (stage `0x0C`)
+
+- Portal rooms walk sub-room ids (`0x13`, `0x14` observed this route; `0x10`,
+  `0x0C` on the 2026-08-06 route); a fight room read `0x06`; post-kill `0x0F`.
+  Route-dependent — see the corrected `0x1C1D` row. NOT a boss identifier.
+- **Within a visit**: a killed rematch's portal goes dead and STAYS dead across
+  death-respawn (respawn is at the portal room, cleared portals still cleared).
+- **Across visits**: running out of lives → stage select → re-enter = the whole
+  rush RESETS, portals live again (player-confirmed). No persistence anywhere,
+  consistent with the 2026-08-06 no-latch diff.
+
+### Rematch boss identity — module fingerprint (replaces the `0x1C1D` reading)
+
+Entering a rush portal streams that Maverick's boss module to **RAM base
+`0x800FA000`** from ROCK_X5.BIN **chunk `29 + stage_id`** (Grizzly `0x01`→30 …
+Skiver `0x08`→37). Proven: the live Squid dump byte-matches chunk 34 at that
+base (probes at +0x370…+0x5370); chunk 32 code appears inside Duff's stage
+chunk 4 and chunk 36 inside Axle's chunk 10 (boss code is embedded in stage
+chunks too, which is how own-stage fights work). ⚠️ **The module PERSISTS
+after the fight** — it stays resident through the post-kill corridor until
+the next portal replaces it. (An earlier "unloaded after the fight" reading
+of the after-dump was wrong: that dump doesn't match Squid because it holds
+the NEXT boss's module — Dark Dizzy's.) A resident fingerprint therefore
+means "most recently loaded fight", never "fight in progress"; liveness must
+come from mode/stage/HP, see the protocol below.
+
+**Fingerprint: 16 bytes at `0x800FA300`** — pairwise-distinct across all 8
+boss modules; a 4-byte word is NOT enough (offset +0x300 can hold common
+instructions like `lw $s0,0x10($sp)`, inviting collisions with whatever
+module Sigma's own fights load — the Sigma-fight dumps match none of the 8
+at 16 bytes). **Three of eight are live-verified**: Squid (mid-fight dump),
+Izzy Glow and Dark Dizzy (resident in the 2026-08-06 corridor dumps).
+
+| boss | stage id | fp16 @0x800FA300 (hex) |
+|---|---|---|
+| Grizzly Slash | 0x01 | `060020a1180023ad0800e0031c0024ad` |
+| Dark Dizzy | 0x02 | `540002ae0780023c150000a2670000a2` ✅ live |
+| Duff McWhalen | 0x03 | `5e0102240d006214001c82260c008380` |
+| Mattrex | 0x04 | `801f053c3000a58c04000624ceb0000c` |
+| Squid Adler | 0x05 | `01000324020004241aa143a0040004a2` ✅ live |
+| Izzy Glow | 0x06 | `b8fcc3a4040002921600062401004224` ✅ live |
+| Axle the Red | 0x07 | `0780023c05000324050003a28000038e` |
+| The Skiver | 0x08 | `1000b08f0800e0032800bd27e0ffbd27` |
+
+Client protocol: in stage `0x0C`, mode `0x0A`, with the fingerprint matching
+a boss, track the boss-HP peak; credit the rematch only when HP reads 0 with
+a peak ≥ 8 (rush-corridor idle blips reach 6, real fights fill to 40+) AND
+the **player's own HP is nonzero** — a mid-fight player death must never read
+as a boss kill, whatever the engine does to the boss-HP byte on respawn.
+Reset all fight state whenever mode or stage leaves the fight. **Unknown
+fingerprint ⇒ unidentified fight, send nothing** — never guess. (5 of 8
+values are chunk-derived; the safety rule makes a surprise harmless.)
+
+### Refill queue `0x800D1C76` (+1 for Zero) — delivery semantics
+
+The AP client queues granted energy here (4 per Small Energy, bit7 = active,
+cap 0x7F). Live, multi-trial: **the queue NEVER drains during gameplay** — it
+sat frozen through HP dips to 14/46 and 45/46, through multiple deaths and
+respawns (HP restored to full by respawn with the queue untouched), through
+savestate loads, and through a stage load at full HP with a full sub-tank
+(nothing spilled anywhere; no overcap occurred in any observed state). The
+sub-tank charge byte also never moved anywhere in `0x1C70–0x1C90` during any
+of it. ⚠️ Where/when the engine consumes this queue — and where the tester's
+reported overcap (bug (c)) actually happens — is still UNOBSERVED; the one
+untested delivery moment is a stage load with HP *below* max. Do not design
+the overcap fix until that is seen once.
+
+### Odds and ends
+
+- **Axle the Red has NO area 1** — the (stage 0x07, area 1) entries in all
+  three tables (primary/secondary/manifest) are null. The backlog's "dump
+  stage 0x07 area 1" item was a static misread.
+- **Lava kills through pinned i-frames** (player-confirmed in Mattrex) — the
+  god-mode pin `0x8009A101=2` does not protect against it; it is not routed
+  through the contact-collision skip. Pit deaths likewise.
+- The `0x80072DD4` manifests + `0x80072EAC` lists stream in DURING the door
+  transition — a reader must wait for the data to settle, and "nonzero" is NOT
+  settled (a partially-streamed Axle a0 list parsed plausibly with a fake
+  terminator at 90 of 113 records). Stability across frames is the only safe
+  readiness test. See ghidra-findings §9.16.1 for the scanner equivalent.
+
 ## Endgame / Zero Space — live capture 2026-08-01
 
 Groundwork for (a) Sigma victory detection and (b) treating endgame stage
@@ -277,16 +390,21 @@ from what each capture was:
 
 | mode | context | status |
 |---|---|---|
+| `0x00` | title / boot (also transiently between menus) | ✅ live 2026-08-08 |
+| `0x01` | data select (held while choosing new game / load) | ✅ live 2026-08-08 |
 | `0x04` | **hub / stage select / Parts menu / launch menu** (stage 0x0D) | ✅ **new 2026-08-08** |
+| `0x07`–`0x09` | stage-entry chain (`07→08→09` right before gameplay; `0x09` also blips on any room/door transition as `0A→09→0A`) | ✅ live 2026-08-08 |
 | `0x0A` | in-stage gameplay (stages 0x06/0x07/0x0C/0x12) | ✅ |
 | `0x0C` | stage 0x0F | ✅ |
 | `0x11` | credits | ✅ |
-| `0x14` | story cutscene (stage 0x0B) | ✅ |
+| `0x13`/`0x14` | story cutscene handoff (new-game → intro used `01→13→14` with the stage flipping to cutscene stage `0x0B`, then `14→07→08→09→0A` into intro gameplay) | ✅ live 2026-08-08 |
 
 The client's gameplay gate is `mode in (0x0A, 0x0C)`; the hub being `0x04`
-means that gate excludes the hub **by construction**, not by luck. Still
-unmeasured: the title → data-select → new-game walk, and which mode holds
-while ACT steps on a Zero Space clear. Full derivation: ghidra-findings §9.16.5.
+means that gate excludes the hub **by construction**, not by luck.
+**The title → data-select → new-game walk is now measured (2026-08-08):**
+`0x00 → 0x01 → 0x13 → 0x14 → 0x07 → 0x08 → 0x09 → 0x0A`. None of the menu
+modes collide with the gameplay gate. Which mode holds while ACT steps on a
+Zero Space clear remains unmeasured. Full derivation: ghidra-findings §9.16.5.
 
 Older observations, kept — beyond the known 0x0A gameplay / 0x0C results:
 the stage-entry sequence logged as `0A→0B→0C→0E→12→03→04→07→08→09→0A`, and

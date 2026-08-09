@@ -103,7 +103,8 @@ TEST_SEED_STAMP = MMX5Client._seed_stamp(
 
 
 def make_save(max_hp: int, intro: int = 0, weapons: int = 0, hearts: int = 0,
-              tanks: int = 0, stamp: int | None = None) -> bytes:
+              tanks: int = 0, stamp: int | None = None,
+              lives: int = 2) -> bytes:
     """`stamp` defaults to TEST_SEED_STAMP - the faithful state of any save
     the client has seen before, since adoption happens at the first trusted
     poll. Pass `stamp=0` to model a save AP has never touched (the A3b hold
@@ -115,6 +116,7 @@ def make_save(max_hp: int, intro: int = 0, weapons: int = 0, hearts: int = 0,
     save[mmx5_client.OFF_HEARTS] = hearts
     save[mmx5_client.OFF_TANKS] = tanks
     save[mmx5_client.OFF_STAMP] = TEST_SEED_STAMP if stamp is None else stamp
+    save[mmx5_client.OFF_LIVES] = lives
     return bytes(save)
 
 
@@ -127,6 +129,11 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                       patch_probe: bytes | None = None,
                       stub_probe: bytes | None = None,
                       live_weapons: int = 0,
+                      rush_hp: int = 0,
+                      rush_fp: bytes | None = None,
+                      player_hp: int = 0x20,
+                      player_x: int = 0,
+                      player_y: int = 0,
                       settled: bool = True) -> FakeContext:
     """`hub_resident` makes the stage-select slot table's instruction anchor
     read as present, so the stage-unlock writer engages; `slot_table` seeds what
@@ -189,7 +196,19 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
 
     async def fake_read(_ctx, requests):
         if requests[0][0] == 0x0D1C00:
-            return [bytes(mode_block), save, ring, ring2]
+            # The main cycle read: mode block, save struct, both rings, then
+            # the rush-watcher trio (boss HP, module fingerprint, player HP).
+            # `rush_fp` defaults to zeros = no recognizable boss module,
+            # `player_hp` to a healthy value so the alive-gate is neutral in
+            # tests that are not about it.
+            return [bytes(mode_block), save, ring, ring2,
+                    bytes([rush_hp]),
+                    rush_fp if rush_fp is not None
+                    else bytes(mmx5_client.RUSH_FP_LEN),
+                    bytes([player_hp]),
+                    # player x/y block (0x09A0AA..): x s16 at +0, y at +4
+                    (player_x.to_bytes(2, "little", signed=True) + b"\x00\x00"
+                     + player_y.to_bytes(2, "little", signed=True) + b"\x00\x00")]
         return [PROBE_REPLY.get(r[0], b"\x00\x00\x00\x00") for r in requests]
 
     async def fake_write(_ctx, writes, *_args, **_kwargs):

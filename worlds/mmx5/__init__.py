@@ -14,11 +14,11 @@ from BaseClasses import ItemClassification, Region, Tutorial
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 
-from . import names, pickups
+from . import names, pickups, reploids
 from .client import MMX5Client  # noqa: F401  (import registers the client)
 from .items import BASE_ID, MMX5Item, event_table, item_groups, item_table
 from .locations import MMX5Location, event_location_table, location_groups, location_table
-from .options import RANDOMIZED_OPTIONS, LaunchOdds, MMX5Options
+from .options import RANDOMIZED_OPTIONS, DNAPartsInPool, LaunchOdds, MMX5Options
 from .Rom import ACCEPTED_HASHES, MMX5ProcedurePatch, patch_rom
 
 
@@ -97,7 +97,9 @@ class MMX5World(World):
     def _capacity(self) -> tuple[int, int]:
         items = self.BASE_ITEMS
         locations = self.BASE_LOCATIONS
-        if self.options.dna_parts_in_pool:
+        if self.options.dna_parts_in_pool == DNAPartsInPool.option_all:
+            items += len(names.DNA_PARTS)           # both halves of every pair
+        elif self.options.dna_parts_in_pool:
             items += len(names.PART_PAIRS)          # one per Life+/Energy+ pair
         if self.options.stage_unlocks:
             items += len(names.STAGES) - 1          # one is precollected
@@ -105,6 +107,10 @@ class MMX5World(World):
             items += 2
         if self.options.endgame_checks:
             locations += len(names.ENDGAME_STAGES)
+        if self.options.rematch_checks:
+            locations += len(names.STAGES)
+        if self.options.reploid_checks:
+            locations += len(reploids.REPLOIDS)
         if self.options.pickupsanity:
             locations += len(pickups.PICKUPS)
         return items, locations
@@ -128,7 +134,8 @@ class MMX5World(World):
 
         # Make room rather than refusing. The roll can ask for more items than
         # the seed has locations; pickupsanity adds 32, which covers every
-        # combination (max is 53 items against 45 + 3 + 32).
+        # combination (max is 61 items - all-16 parts + unlocks + armors -
+        # against 45 + 32, before endgame/rematch checks add any more).
         items, locations = self._capacity()
         if items > locations and not self.options.pickupsanity:
             self.options.pickupsanity.value = 1
@@ -150,15 +157,23 @@ class MMX5World(World):
                 f"Mega Man X5 ({self.player_name}): these options need "
                 f"{items} items but the seed only has {locations} locations, "
                 f"so {items - locations} would be silently dropped. Add "
-                f"locations with `pickupsanity` (+{len(pickups.PICKUPS)}) or "
-                f"`endgame_checks` (+{len(names.ENDGAME_STAGES)}), or turn off "
-                f"one of `dna_parts_in_pool` (+{len(names.PART_PAIRS)}), "
+                f"locations with `pickupsanity` (+{len(pickups.PICKUPS)}), "
+                f"`endgame_checks` (+{len(names.ENDGAME_STAGES)}) or "
+                f"`rematch_checks` (+{len(names.STAGES)}) or "
+                f"`reploid_checks` (+{len(reploids.REPLOIDS)}), or turn off "
+                f"one of `dna_parts_in_pool` "
+                f"(+{len(names.DNA_PARTS) if self.options.dna_parts_in_pool == DNAPartsInPool.option_all else len(names.PART_PAIRS)}), "
                 f"`stage_unlocks` (+{len(names.STAGES) - 1}) or "
                 f"`secret_armors_in_pool` (+2).")
 
         if self.options.stage_unlocks:
             self.starting_stage = self.random.choice(names.STAGES)
-        if self.options.dna_parts_in_pool:
+        if self.options.dna_parts_in_pool == DNAPartsInPool.option_all:
+            # Every Part, both halves of every pair - the one economy the
+            # base game never allows, bought with the extra location budget
+            # the option help text demands.
+            self.chosen_parts = list(names.DNA_PARTS)
+        elif self.options.dna_parts_in_pool:
             # One per pair, mirroring vanilla's 8-of-16 economy. Picking any 8
             # of the 16 instead would let a seed hold both halves of a boss's
             # pair, which the base game never allows.
@@ -250,6 +265,29 @@ class MMX5World(World):
                 {names.endgame_clear_location(s): location_table[
                     names.endgame_clear_location(s)]
                  for s in names.ENDGAME_STAGES}, MMX5Location)
+
+        if self.options.rematch_checks:
+            # Rematches happen in Zero Space's Boss Rush, so they live in
+            # Sigma Stages and inherit the all-8-weapons entrance rule, same
+            # as the endgame clears. Like those, they add locations without
+            # adding items - more filler headroom for the pool.
+            sigma_stages.add_locations(
+                {names.rematch_location(s): location_table[
+                    names.rematch_location(s)]
+                 for s in names.STAGES}, MMX5Location)
+
+        if self.options.reploid_checks:
+            # Each Reploid joins its stage's region: same reachability as the
+            # stage's other locations (including the Access Codes entrance
+            # rule under stage_unlocks). No item rules - walking into them is
+            # execution, not inventory. Locations without items, like the
+            # rematches.
+            for region_name in reploids.REPLOID_STAGES:
+                self.multiworld.get_region(region_name, self.player) \
+                    .add_locations(
+                        {name: location_table[name]
+                         for stage, _i, _x, _y, name in reploids.REPLOIDS
+                         if stage == region_name}, MMX5Location)
 
         victory = MMX5Location(self.player, names.VICTORY, None, sigma_stages)
         victory.place_locked_item(self.create_item(names.VICTORY))
@@ -440,5 +478,7 @@ class MMX5World(World):
             "boss_hp_randomization": self.options.boss_hp_randomization.value,
             "stage_unlocks": self.options.stage_unlocks.value,
             "endgame_checks": self.options.endgame_checks.value,
+            "rematch_checks": self.options.rematch_checks.value,
+            "reploid_checks": self.options.reploid_checks.value,
             "dna_parts_in_pool": self.options.dna_parts_in_pool.value,
         }

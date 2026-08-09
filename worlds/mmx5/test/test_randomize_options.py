@@ -116,8 +116,12 @@ class TestRandomizedOptionList(unittest.TestCase):
         from worlds.mmx5.options import MMX5Options
         import dataclasses
         declared = {f.name for f in dataclasses.fields(MMX5Options)}
+        # endgame_checks, rematch_checks and reploid_checks only ever ADD
+        # locations, so there is nothing to gamble on - deliberately not
+        # rolled (see options.py).
         excluded = {"start_inventory_from_pool", "randomize_options",
-                    "endgame_checks", "progression_balancing", "accessibility",
+                    "endgame_checks", "rematch_checks", "reploid_checks",
+                    "progression_balancing", "accessibility",
                     "local_items", "non_local_items", "start_inventory",
                     "start_hints", "start_location_hints", "exclude_locations",
                     "priority_locations", "item_links", "death_link",

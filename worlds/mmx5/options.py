@@ -241,15 +241,24 @@ class RandomizeOptions(Toggle):
     display_name = "Randomize Options"
 
 
-class DNAPartsInPool(Toggle):
+class DNAPartsInPool(Choice):
     """Shuffle the equippable DNA Parts into the item pool.
 
     Mega Man X5 has 16 Parts, but a normal playthrough only ever yields 8 of
     them: each Maverick offers two — one for Life+, one for Energy+ — and
-    Alia's prompt makes you give up the other permanently. With this on the
-    seed picks one Part from each pair and shuffles those 8 into the
-    multiworld, so the Part you end up with has nothing to do with which
-    prompt you answered.
+    Alia's prompt makes you give up the other permanently.
+
+    off: Parts work like the base game.
+
+    vanilla_pairs: the seed picks one Part from each boss's pair and shuffles
+    those 8 into the multiworld, mirroring vanilla's 8-of-16 economy — the
+    Part you end up with has nothing to do with which prompt you answered.
+    (`true` in an older YAML means this.)
+
+    all: every one of the 16 Parts enters the pool, including both halves of
+    each pair — something the base game never allows. This adds 16 items
+    instead of 8, so the seed needs the location budget for it: turn on
+    `rematch_checks` and/or `pickupsanity` to make room.
 
     The Parts the game would have handed you are suppressed, so Parts arrive
     only from the multiworld. The "DNA Part" locations are unchanged and still
@@ -263,6 +272,12 @@ class DNAPartsInPool(Toggle):
     Client-side, so it needs no disc change.
     """
     display_name = "DNA Parts In Pool"
+    option_off = 0
+    option_vanilla_pairs = 1
+    option_all = 2
+    alias_false = 0
+    alias_true = 1
+    default = 0
 
 
 class EndgameChecks(DefaultOnToggle):
@@ -280,9 +295,57 @@ class EndgameChecks(DefaultOnToggle):
     display_name = "Endgame Checks"
 
 
+class RematchChecks(Toggle):
+    """Boss Rush rematch kills send checks.
+
+    Adds eight locations, one per Maverick, for defeating their rematch in
+    Zero Space's Boss Rush. Together with Endgame Checks this gives the last
+    stretch of a run something to find - and it finally makes the rush pay
+    for its trouble, which is the most-requested thing testers have asked for.
+
+    Nothing is ever lost in the rush: a killed rematch's teleporter stays
+    closed for the rest of that visit, but leaving the stage and re-entering
+    resets all eight, so a check you missed (or a fight you lost) can always
+    be redone.
+
+    Client-side, so it needs no disc change.
+
+    NEW in this release: the detection mechanism is live-verified for three
+    of the eight bosses so far. An unrecognized fight sends nothing rather
+    than guessing, so the worst a surprise can do is leave a rematch check
+    uncollected until the following release - consider that before placing
+    must-have progression on these on a race seed.
+    """
+    display_name = "Rematch Checks"
+
+
+class ReploidChecks(Toggle):
+    """Rescuing an injured Reploid sends a check.
+
+    Adds 14 locations: 6 in Squid Adler, 3 in Izzy Glow, 5 in The Skiver -
+    the yellow injured Reploids you walk into for an extra life. (Duff
+    McWhalen's submarine also spits out Reploids, but those are conjured by
+    the mid-boss rather than placed in the stage, so they are not checks.)
+
+    Reploids reappear every time you re-enter a stage, so nothing is ever
+    permanently missed. One quirk to know: a rescue at the 9-life cap cannot
+    be detected (the game has no room to count it) - if that happens, re-enter
+    the stage with fewer than 9 lives and rescue again.
+
+    Client-side, so it needs no disc change.
+
+    NEW in this release: Izzy Glow's and The Skiver's Reploids are verified
+    on-screen; Squid Adler's six are shipped from disc data with the same
+    signature but without an eyeball on each. If one of them misbehaves it
+    will be fixed in a release - flag it if you see it.
+    """
+    display_name = "Reploid Checks"
+
+
 # Options RandomizeOptions rolls. endgame_checks is deliberately absent (it
 # only adds checks) and so are start_inventory_from_pool and randomize_options
-# itself. Kept next to the option so the two cannot drift apart.
+# itself, and rematch_checks / reploid_checks for the same only-adds-checks
+# reason. Kept next to the option so the two cannot drift apart.
 RANDOMIZED_OPTIONS = (
     "goal", "boss_difficulty", "launch_odds", "text_skip", "pickupsanity",
     "boss_hp_randomization", "secret_armors_in_pool", "stage_unlocks",
@@ -303,5 +366,7 @@ class MMX5Options(PerGameCommonOptions):
     secret_armors_in_pool: SecretArmorsInPool
     stage_unlocks: StageUnlocks
     endgame_checks: EndgameChecks
+    rematch_checks: RematchChecks
+    reploid_checks: ReploidChecks
     dna_parts_in_pool: DNAPartsInPool
 

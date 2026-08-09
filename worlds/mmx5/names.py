@@ -192,6 +192,17 @@ def dna_part_location(stage: str) -> str:
     return f"{stage} - DNA Part"
 
 
+def rematch_location(stage: str) -> str:
+    """Boss Rush rematch kill (Zero Space, stage 0x0C).
+
+    Detection is a pure client-side watcher: the rematch runs in the standard
+    boss-HP slot and the portal streams that Maverick's own boss module into
+    RAM, which is what identifies the fight (16-byte fingerprint - see
+    ram-notes §Boss fights). Nothing persists in the rush, so a missed check
+    is always refightable by re-entering the stage."""
+    return f"{stage} - Rematch"
+
+
 def dna_location(stage: str) -> str:
     """The post-boss DNA reward choice (Alia's "Weapon + Life" / "Weapon +
     Energy" prompt). This REPLACED an earlier `energy_up_location`, which

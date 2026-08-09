@@ -60,6 +60,39 @@ class TestPartsOn(MMX5TestBase):
             self.assertFalse(world.create_item(p).advancement, f"{p} is progression")
 
 
+class TestPartsAll(MMX5TestBase):
+    # +16 items needs room: rematch_checks (+8) and pickupsanity (+32) fund it.
+    options = {"dna_parts_in_pool": 2, "rematch_checks": True}
+
+    def test_all_sixteen_in_pool(self) -> None:
+        pool = [i.name for i in self.multiworld.itempool]
+        for p in names.DNA_PARTS:
+            self.assertIn(p, pool)
+        self.assertEqual(sum(1 for n in pool if n in names.DNA_PARTS), 16)
+
+    def test_both_halves_of_every_pair(self) -> None:
+        # The economy vanilla never allows - the entire point of `all`.
+        pool = {i.name for i in self.multiworld.itempool}
+        for boss, pair in names.PART_PAIRS.items():
+            for p in pair:
+                self.assertIn(p, pool, f"{boss}'s {p} missing under `all`")
+
+    def test_pool_still_matches_locations(self) -> None:
+        real = [l for l in self.multiworld.get_locations(self.player)
+                if l.address is not None]
+        self.assertEqual(len(self.multiworld.itempool), len(real))
+
+
+class TestPartsAliasCompat(MMX5TestBase):
+    # Old YAMLs say `dna_parts_in_pool: true`; that must still mean the
+    # vanilla-pairs economy after the Toggle -> Choice conversion.
+    options = {"dna_parts_in_pool": True}
+
+    def test_true_still_means_vanilla_pairs(self) -> None:
+        pool = [i.name for i in self.multiworld.itempool]
+        self.assertEqual(sum(1 for n in pool if n in names.DNA_PARTS), 8)
+
+
 class TestPoolCapacity(unittest.TestCase):
     """Every item needs a location, and overshooting used to pass silently.
 
@@ -92,6 +125,16 @@ class TestPoolCapacity(unittest.TestCase):
         self._assert_balanced(dna_parts_in_pool=True, secret_armors_in_pool=True)
         self._assert_balanced(dna_parts_in_pool=True, stage_unlocks=True,
                               secret_armors_in_pool=True, pickupsanity=True)
+        self._assert_balanced(dna_parts_in_pool=2, rematch_checks=True)
+        self._assert_balanced(dna_parts_in_pool=2, stage_unlocks=True,
+                              secret_armors_in_pool=True, pickupsanity=True,
+                              rematch_checks=True)
+
+    def test_all_sixteen_overflow_is_refused(self) -> None:
+        # `all` without funding: 36+16 = 52 items vs 48 default locations.
+        from Options import OptionError
+        with self.assertRaises(OptionError):
+            self._build(dna_parts_in_pool=2)
 
     def test_overflow_is_refused_not_silently_dropped(self) -> None:
         from Options import OptionError

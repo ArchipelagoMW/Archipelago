@@ -52,7 +52,10 @@ Three options change those totals, and they stack:
 | `stage_unlocks` | **+8 items**, seven of them shuffled — one Access Codes item per Maverick stage, and you begin the run holding the eighth |
 | `secret_armors_in_pool` | **+2 items** — Ultimate Armor and Black Zero |
 | `endgame_checks` (**on by default**) | **+3 locations** (45 → 48) — the Zero Space stage clears |
-| `dna_parts_in_pool` | **+8 items** — one DNA Part from each Maverick's pair |
+| `rematch_checks` | **+8 locations** — defeating each Maverick's rematch in Zero Space's Boss Rush. The rush resets when you leave the stage, so a missed one can always be redone |
+| `reploid_checks` | **+14 locations** — rescuing the injured Reploids (6 in Squid Adler, 3 in Izzy Glow, 5 in The Skiver). They respawn on stage re-entry; a rescue while you already have 9 lives cannot be detected, so redo those with an open life slot |
+| `dna_parts_in_pool: vanilla_pairs` | **+8 items** — one DNA Part from each Maverick's pair (`true` also means this) |
+| `dna_parts_in_pool: all` | **+16 items** — every DNA Part, both halves of each pair; needs the location budget from `rematch_checks`, `reploid_checks` or `pickupsanity` |
 
 Every item needs a location, so option sets that ask for more items than the
 seed has locations are **refused at generation** with a message naming the fix.
@@ -80,8 +83,9 @@ X wears as the stage loads. **Black Zero** applies on the spot.
 Only three: **`text_skip`**, **`launch_odds`** and **`pickupsanity`**. If you
 change any of those, re-patch your disc — the `.apmmx5` you generate carries
 the difference. Everything else, including all three goals, `boss_difficulty`,
-`boss_hp_randomization`, `secret_armors_in_pool` and `stage_unlocks`, is done
-entirely by the client, so it works on a disc you have already patched.
+`boss_hp_randomization`, `secret_armors_in_pool`, `stage_unlocks`,
+`rematch_checks`, `reploid_checks` and `dna_parts_in_pool`, is done entirely
+by the client, so it works on a disc you have already patched.
 
 ## Anything unusual I should know?
 

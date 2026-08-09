@@ -307,6 +307,67 @@ ENDING_MODES = frozenset({0x10, 0x11})
 SIGMA_STAGE_ID = 0x0C                  # read live on entry; endgame ids are
                                        # NOT contiguous (ZS1=0x10, duel=0x12)
 
+# ---- Boss Rush rematch checks (live session 2026-08-08) --------------------
+# A rush rematch runs in the standard boss-HP slot: the bar fills, steps to 0
+# on the kill, and the 0 PERSISTS 600+ frames, so polling cannot miss it.
+# WHICH boss is fighting comes from the boss module the portal streamed to
+# RAM 0x800FA000 (ROCK chunk 29+stage_id): 16 bytes at +0x300 are
+# pairwise-distinct across the 8 modules. Sixteen bytes and not a word,
+# because a single word there can be a common instruction (`lw $s0,0x10($sp)`)
+# and collide with whatever module Sigma's own fights load; the Sigma-fight
+# dumps match none of the 8 at 16 bytes. Three fingerprints are live-verified
+# (Squid mid-fight; Izzy and Dark Dizzy resident in corridor dumps), five are
+# chunk-derived - which is safe because an unknown fingerprint sends NOTHING.
+#
+# The module PERSISTS after a fight until the next portal replaces it, so a
+# matching fingerprint means "most recently loaded", never "in progress".
+# Liveness comes from stage+mode+the HP fill, and the kill send additionally
+# requires the player alive: after a mid-fight player death the module is
+# still resident, and however the engine treats the boss-HP byte across the
+# respawn, a zero there must not read as a kill.
+#
+# The sub-stage byte 0x1C1D is deliberately NOT used: the same Squid rematch
+# read 0x05 and 0x06 in different sessions (route-dependent room counter).
+# Full derivation: mmx5-ram-notes.md §Boss fights (fork branch).
+RUSH_BOSS_HP_ADDR = 0x0920EC
+RUSH_FP_ADDR = 0x0FA300
+RUSH_FP_LEN = 16
+RUSH_FP_TO_STAGE = {
+    bytes.fromhex("060020a1180023ad0800e0031c0024ad"): names.GRIZZLY,
+    bytes.fromhex("540002ae0780023c150000a2670000a2"): names.NECROBAT,   # live-verified
+    bytes.fromhex("5e0102240d006214001c82260c008380"): names.WHALE,
+    bytes.fromhex("801f053c3000a58c04000624ceb0000c"): names.DINOREX,
+    bytes.fromhex("01000324020004241aa143a0040004a2"): names.KRAKEN,     # live-verified
+    bytes.fromhex("b8fcc3a4040002921600062401004224"): names.FIREFLY,    # live-verified
+    bytes.fromhex("0780023c05000324050003a28000038e"): names.ROSERED,
+    bytes.fromhex("1000b08f0800e0032800bd27e0ffbd27"): names.PEGASUS,
+}
+# The boss-HP byte idles at small stale values in the rush corridors (blips
+# to 6 observed); every real fight fills to 40+. A kill only counts if the
+# fight's observed peak cleared this.
+RUSH_MIN_PEAK = 8
+PLAYER_HP_ADDR = 0x09A0FC       # live player HP; bit7 = just-damaged flag
+
+# ---- Reploid rescue checks (live session 2026-08-08) -----------------------
+# A rescue's only footprint is lives (0x0D1C45) += 1, clamped to 9 - no
+# persistent record exists (disproven 2026-07-31), so the AP server IS the
+# record and detection is live: when lives rise during trusted gameplay in a
+# Reploid stage, the player is standing ON the Reploid (rescue requires
+# overlap), so the nearest Reploid record to the player names the check.
+# Live rescues overlapped their record within ~25px; the radius is generous
+# because the CLIENT polls sparsely and the player walks after rescuing.
+# Position is also the guard against the other things that raise lives:
+# a 1-UP pickup away from any record matches nothing and sends nothing.
+# (Izzy and Squid area 0 have no freestanding consumables at all.)
+#
+# Misses are recoverable: Reploids respawn on every stage re-entry. The one
+# blind spot is a rescue AT the 9-life cap (no increment to see) - documented
+# in the option text; re-entering under 9 lives redoes it.
+# (REPLOID_RECORDS_BY_STAGE is built below STAGE_ID_BY_NAME.)
+REPLOID_MATCH_RADIUS = 0x180
+OFF_LIVES = 0x0D1C45 - SAVE_BASE
+PLAYER_XY_ADDR = 0x09A0AA       # player struct +0x0A: x s16, +0x0E: y s16
+
 # AP disc-patch detection: the first stage-load weapon-repopulation site.
 # Vanilla: lbu $v0,0x4C($a1) = 90 A2 00 4C; AP patch changes the offset byte
 # to 0x4D so capability derives from the AP byte while 0x1C4C keeps
@@ -421,6 +482,14 @@ STAGE_TANK_BIT = {
     names.FIREFLY: 0x80,    # EX-Tank
 }
 STAGE_ID_BY_NAME = {name: sid for sid, name in STAGE_ID_TO_NAME.items()}
+
+# stage id -> [(x, y, location name)] for the Reploid watcher (see the
+# constants block above for the detection rationale).
+from .reploids import REPLOIDS as _REPLOIDS  # noqa: E402
+REPLOID_RECORDS_BY_STAGE: dict[int, list[tuple[int, int, str]]] = {}
+for _stage, _idx, _x, _y, _name in _REPLOIDS:
+    REPLOID_RECORDS_BY_STAGE.setdefault(
+        STAGE_ID_BY_NAME[_stage], []).append((_x, _y, _name))
 
 # Armor part each stage's CAPSULE grants, as an 0x1CA1 mask. Owning the part
 # can suppress the vanilla mechanism that opens its own capsule - live-proven
@@ -565,6 +634,17 @@ class MMX5Client(BizHawkClient):
         self.gameplay_anchored = False
         self.unstamped_warned = False
         self.victory_sent = False
+        # Boss Rush rematch tracking: which boss the resident module names
+        # (None outside the rush / unknown module), and the highest boss HP
+        # seen for that boss while the fight conditions held. Peak >=
+        # RUSH_MIN_PEAK is what separates a real fight's kill from the
+        # corridor's stale-byte blips.
+        self.rush_boss = None
+        self.rush_peak = 0
+        # Reploid watcher: (stage id, lives) from the last poll that was
+        # trusted gameplay in a Reploid stage - None anywhere else, so a
+        # menu, savestate load or stage change can never fake an increment.
+        self.reploid_lives = None
         # Highest Maverick kill count seen while the save read SANE. The
         # all_mavericks goal needs this at the ENDING, where the save-struct
         # gate is False (see the victory block) - so it cannot be read then.
@@ -944,12 +1024,17 @@ class MMX5Client(BizHawkClient):
             # engine's stage id at +0x0C (below SAVE_BASE, so it is not in the
             # save block). The tank protection needs to know which stage the
             # player is standing in.
-            mode, save, ring, ring2 = await bizhawk.read(ctx.bizhawk_ctx, [
-                (0x0D1C00, 0x10, "MainRAM"),  # game-mode controller: 0x0A gameplay / 0x0C results
-                (SAVE_BASE, SAVE_LEN, "MainRAM"),
-                (RING_ADDR, RING_SLOTS * 4, "MainRAM"),  # pickup-stub check records
-                (RING2_ADDR, RING2_SLOTS * 8, "MainRAM"),  # pickupsanity records
-            ])
+            mode, save, ring, ring2, rush_hp, rush_fp, player_hp, player_xy = \
+                await bizhawk.read(ctx.bizhawk_ctx, [
+                    (0x0D1C00, 0x10, "MainRAM"),  # game-mode controller: 0x0A gameplay / 0x0C results
+                    (SAVE_BASE, SAVE_LEN, "MainRAM"),
+                    (RING_ADDR, RING_SLOTS * 4, "MainRAM"),  # pickup-stub check records
+                    (RING2_ADDR, RING2_SLOTS * 8, "MainRAM"),  # pickupsanity records
+                    (RUSH_BOSS_HP_ADDR, 1, "MainRAM"),    # live boss HP (rush watcher)
+                    (RUSH_FP_ADDR, RUSH_FP_LEN, "MainRAM"),  # boss-module fingerprint
+                    (PLAYER_HP_ADDR, 1, "MainRAM"),       # player HP (rush kill gate)
+                    (PLAYER_XY_ADDR, 8, "MainRAM"),       # player x/y (reploid watcher)
+                ])
             # NOT `stage_id`: the mailbox-ring loop below unpacks each record
             # into a local of that name, which would clobber this before the
             # tank protection reads it (it did - the bit silently never got
@@ -1342,6 +1427,91 @@ class MMX5Client(BizHawkClient):
                 for stage, act in ENDGAME_CLEAR_ACT.items():
                     save_check(names.endgame_clear_location(stage),
                                self.max_act_seen >= act)
+
+            # ---- Reploid rescues (client-side watcher) ---------------------
+            # A rescue is lives rising during trusted gameplay in a Reploid
+            # stage while the player stands on a Reploid record (rescue
+            # requires overlap; live rescues matched within ~25px). Position
+            # is the discriminator against 1-UP pickups, and the tracker is
+            # None outside trusted gameplay so menus, savestate loads and
+            # stage transitions can never fake an increment. Two rescues
+            # inside one poll window send the two nearest records (the only
+            # adjacent pair, Skiver's x=896/984, is 88px apart - well inside
+            # one radius).
+            if (ctx.slot_data or {}).get("reploid_checks", 0):
+                records = REPLOID_RECORDS_BY_STAGE.get(cur_stage_id)
+                lives_now = save[OFF_LIVES]
+                trusted_here = (save_trusted and mode[0] == 0x0A
+                                and records is not None)
+                prev = self.reploid_lives
+                if trusted_here and prev is not None \
+                        and prev[0] == cur_stage_id and lives_now > prev[1]:
+                    px = int.from_bytes(player_xy[0:2], "little", signed=True)
+                    py = int.from_bytes(player_xy[4:6], "little", signed=True)
+                    near = sorted(
+                        (max(abs(x - px), abs(y - py)), name)
+                        for x, y, name in records
+                        if abs(x - px) <= REPLOID_MATCH_RADIUS
+                        and abs(y - py) <= REPLOID_MATCH_RADIUS)
+                    for _dist, name in near[:lives_now - prev[1]]:
+                        check(name, True)
+                    if not near:
+                        # 1-UP pickup or enemy drop away from any Reploid -
+                        # correct silence; logged at debug for diagnosability.
+                        logger.debug(
+                            f"MMX5: lives +{lives_now - prev[1]} at "
+                            f"({px},{py}) with no Reploid record in range - "
+                            f"treated as a 1-UP, no check")
+                self.reploid_lives = ((cur_stage_id, lives_now)
+                                      if trusted_here else None)
+
+            # ---- Boss Rush rematch kills (client-side watcher) -------------
+            # Fight state machine per ram-notes §Boss fights. Every condition
+            # must hold at the SAME poll:
+            #   stage 0x0C + mode 0x0A - the rush, in gameplay. The stage
+            #       gate alone keeps own-stage Maverick fights out (their
+            #       modules carry the same fingerprints).
+            #   fingerprint matches    - the resident module names the fight;
+            #       Sigma forms and half-streamed garbage match nothing and
+            #       send nothing. NOT 0x1C1D, which is route-dependent.
+            #   peak >= RUSH_MIN_PEAK  - a real HP fill happened; the byte
+            #       idles at small stale blips (<= 6 observed) in corridors,
+            #       and the module persists there after a fight.
+            #   boss HP == 0           - the kill. It persists 600+ frames,
+            #       so a poll cannot miss it.
+            #   player HP > 0          - a player death mid-fight must never
+            #       read as a boss kill, whatever the respawn does to the
+            #       boss-HP byte (the module stays resident through it).
+            # Deliberately NOT save_trusted: nothing here reads the save
+            # struct, and the server is the permanent record - the rush
+            # resets on stage re-entry, so a send missed by a disconnect is
+            # refightable, the same shape as pickupsanity's ring.
+            if (ctx.slot_data or {}).get("rematch_checks", 0):
+                in_rush = cur_stage_id == SIGMA_STAGE_ID and mode[0] == 0x0A
+                fp_boss = RUSH_FP_TO_STAGE.get(bytes(rush_fp)) if in_rush else None
+                if fp_boss != self.rush_boss:
+                    # Fight identity changed: new portal, module replaced, or
+                    # we left the rush. Start the peak over - a previous
+                    # fight's fill must never validate a different fight.
+                    self.rush_boss = fp_boss
+                    self.rush_peak = 0
+                if fp_boss is not None:
+                    if (player_hp[0] & 0x7F) == 0:
+                        # Player down mid-fight. Death costs seconds of
+                        # non-gameplay modes, but polls are sparse - relying
+                        # on catching one of those frames would leave a
+                        # window where "boss 0 + player respawned" still
+                        # carried the dead fight's peak. Dropping the peak
+                        # here closes it: a surviving boss re-arms only via
+                        # HP actually observed again.
+                        self.rush_peak = 0
+                    else:
+                        self.rush_peak = max(self.rush_peak, rush_hp[0])
+                        if rush_hp[0] == 0 and self.rush_peak >= RUSH_MIN_PEAK:
+                            check(names.rematch_location(fp_boss), True)
+                            # One send per observed fill; re-arms only via a
+                            # new fill (or `check`'s dedup if already sent).
+                            self.rush_peak = 0
 
             # ---- all_mavericks: hold the endgame shut until 8 kills --------
             # The colony resolution writes ACT = ENDGAME_ACT, which is what
