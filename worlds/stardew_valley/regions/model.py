@@ -4,7 +4,7 @@ from collections.abc import Container
 from dataclasses import dataclass, field
 from enum import IntFlag
 
-from ..strings.entrance_names import Entrance, LogicEntrance
+from ..strings.entrance_names import Entrance
 
 connector_keyword = " to "
 
@@ -56,18 +56,15 @@ class RandomizationFlag(IntFlag):
 class GroupFlag(IntFlag):
     TO_ANY = 0b0
 
-    UP = 0b00001
-    DOWN = 0b00010
-    LEFT = 0b00100
-    RIGHT = 0b01000
-    DOOR = 0b10000  # doors/ladders etc.
-
-    FROM_INDOOR = 0b0100000
-    FROM_OUTDOOR = 0b1000000
-
-    TO_INDOOR = 0b010000000
-    TO_OUTDOOR = 0b100000000
-
+    UP =             0b00000000001
+    DOWN =           0b00000000010
+    LEFT =           0b00000000100
+    RIGHT =          0b00000001000
+    DOOR =           0b00000010000  # doors/ladders etc.
+    FROM_INDOOR =    0b00000100000
+    FROM_OUTDOOR =   0b00001000000
+    TO_INDOOR =      0b00010000000
+    TO_OUTDOOR =     0b00100000000
     FROM_FARMHOUSE = 0b01000000000
 
     IN_TO_OUT = FROM_INDOOR | TO_OUTDOOR
