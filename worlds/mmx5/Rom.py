@@ -191,6 +191,25 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         md5 = hashlib.md5()
         md5.update(base_rom_bytes)
         if md5.hexdigest() not in ACCEPTED_HASHES:
+            # Say WHY, not just "wrong hash". The overwhelmingly common case
+            # (tester report, 2026-08-09) is pointing the base-image setting
+            # at an ALREADY-PATCHED disc from an earlier seed - the refusal
+            # is correct, but a bare mismatch error sent people off deleting
+            # every X5 file they had instead of fixing the setting. The probe
+            # is the first capability retarget's offset byte (0x4C vanilla,
+            # 0x4D on every AP disc revision) - same site the client probes
+            # in RAM (client.PATCH_PROBE_*), needing no vanilla data.
+            probe_off = disc.addr_to_disc(0x8003C324, "SLUS exe")
+            if len(base_rom_bytes) > probe_off and base_rom_bytes[probe_off] == 0x4D:
+                raise Exception(
+                    "The supplied base disc image is an ALREADY AP-PATCHED "
+                    "Mega Man X5 disc, not the clean dump. Patching always "
+                    "starts from the clean US (SLUS-01334) image: point the "
+                    "Mega Man X5 rom_file setting (host.yaml / the file "
+                    "prompt) at your original dump. If you no longer have "
+                    "it, the standalone MMX5-Unpatcher tool on the apworld's "
+                    "release page can restore a verified clean copy from "
+                    "this file.")
             raise Exception("Supplied base disc image does not match a known "
                             "MD5 for the US (SLUS-01334) release. Expected the "
                             f"Redump dump ({HASH_US_REDUMP}); a variant with one "

@@ -1,5 +1,30 @@
 # Mega Man X5 apworld changelog
 
+## 0.4.1 — 2026-08-09
+
+Patching quality-of-life, from a tester's report that failed re-patches sent
+him deleting every X5 file he had. **No disc change.**
+
+**MMX5-Unpatcher.** A standalone tool (an .exe on the release page — not
+part of Archipelago, no install needed) that restores any AP-patched X5
+disc to a byte-verified clean dump, for anyone who lost track of their
+original. Drag a patched .bin onto it, or run it for a file picker. Every
+edit the patcher can make is at a known site, so it writes the recorded
+vanilla bytes back, regenerates the sector parity, and md5-verifies the
+result before writing anything (a wrong input fails loudly; your file is
+never overwritten — the restored copy lands next to it).
+
+**The patcher now tells you when it was handed an already-patched disc** —
+the single most common cause of "recent patches don't work" — instead of a
+bare hash-mismatch error, and points at the setting to fix and at the
+MMX5-Unpatcher.
+
+**Setup guide: re-patching explained.** New troubleshooting entries cover
+the already-patched trap and a fact worth knowing: the disc only changes
+with `pickupsanity`, `text_skip` and `launch_odds` — same values, same disc,
+so most new seeds don't need a re-patch at all (and reusing a disc keeps its
+memory card, since BizHawk keys saves to the disc filename).
+
 ## 0.4.0 — 2026-08-08
 
 Three new options, all funded by one evening of live measurement (research

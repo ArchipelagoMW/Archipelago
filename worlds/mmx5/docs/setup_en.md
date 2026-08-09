@@ -136,6 +136,22 @@ is not running in BizHawk, or your BizHawk is older than 2.7.
 **The patcher rejects my disc image.** Check its MD5 against the table above.
 The usual cause is a 2048-byte-per-sector dump rather than raw 2352.
 
+**The patcher says my disc is "already AP-patched".** Patching always starts
+from your CLEAN dump — never from a disc a previous seed produced. Point the
+Mega Man X5 base-image setting (the file prompt, or `rom_file` under
+`mmx5_options` in `host.yaml`) back at your original dump. There is no need
+to delete anything. If you no longer have the clean dump, download the
+standalone **MMX5-Unpatcher** from the apworld's release page and drag any
+AP-patched X5 .bin onto it — it restores a byte-verified clean copy next to
+the file.
+
+**Do I have to re-patch for every seed?** Usually no. The disc only changes
+with three options — `pickupsanity`, `text_skip` and `launch_odds`. Two seeds
+with the same values for those produce byte-identical discs, so you can keep
+one patched disc per option combo and reuse it. This is also kinder to your
+saves: BizHawk keys memory cards to the disc's filename, so a reused disc
+keeps its memory card.
+
 **I loaded a save from a different seed.** The client refuses to touch a save
 stamped for another seed, to avoid corrupting it. Start a new game for a new
 seed.

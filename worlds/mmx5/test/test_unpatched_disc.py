@@ -159,3 +159,29 @@ class TestPatchedDiscIsUnaffected(unittest.IsolatedAsyncioTestCase):
         vanilla = [w for w in ctx.writes if w[0] == c.SAVE_BASE + c.OFF_WEAPONS]
         self.assertTrue(ap, "weapons were not granted on a patched disc")
         self.assertEqual(vanilla, [], "granted weapons touched the kill byte")
+
+
+class TestSmartBaseRejection(unittest.TestCase):
+    def test_already_patched_base_names_the_problem(self) -> None:
+        # Pointing the base-image setting at an already-patched disc is THE
+        # tester-reported failure loop (2026-08-09); the refusal must say
+        # what is wrong and where to go, not just report a hash mismatch.
+        import os
+        import tempfile
+        from worlds.mmx5 import Rom, disc
+        off = disc.addr_to_disc(0x8003C324, "SLUS exe")
+        fake = bytearray(((off // disc.SECTOR_RAW) + 2) * disc.SECTOR_RAW)
+        fake[off] = 0x4D                       # the AP retarget byte
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".bin") as f:
+            f.write(fake)
+            path = f.name
+        Rom.get_base_rom_bytes.base_rom_bytes = None   # defeat the cache
+        try:
+            with self.assertRaises(Exception) as cm:
+                Rom.get_base_rom_bytes(path)
+            msg = str(cm.exception)
+            self.assertIn("ALREADY AP-PATCHED", msg)
+            self.assertIn("MMX5-Unpatcher", msg)
+        finally:
+            Rom.get_base_rom_bytes.base_rom_bytes = None
+            os.unlink(path)
