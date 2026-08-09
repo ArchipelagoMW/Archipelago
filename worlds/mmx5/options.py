@@ -149,9 +149,17 @@ class SecretArmorsInPool(Toggle):
 class BossHPRandomization(Choice):
     """Randomize how much HP bosses have.
 
-    Every boss is affected - Mavericks, mid-bosses, Dynamo, Sigma, the Zero
-    duel. The roll SCALES what the game would normally give, so Boss Level
-    still matters: a tough setting on `intense` boss difficulty compounds.
+    Mavericks in their own stages, mid-bosses, Dynamo and the Zero duel are
+    affected. The roll SCALES what the game would normally give, so Boss
+    Level still matters: a tough setting on `intense` boss difficulty
+    compounds.
+
+    The Zero Space stage - the Boss Rush rematches and Sigma - is deliberately
+    left alone. The rematch bosses do not take their HP from the byte this
+    option changes (they read 127 there while fighting with 58 HP), so
+    randomizing it would not change those fights, it would only make their
+    health bars disagree with their actual health. Sigma shares that stage and
+    so keeps his normal HP too.
 
     off: bosses keep their normal HP
     weak: 40-80% of normal
@@ -166,6 +174,13 @@ class BossHPRandomization(Choice):
 
     HP is capped at 127 by the game, so very high rolls on a late-game boss
     can hit that ceiling and come out lower than the multiplier suggests.
+    There is a floor at 32 for the same reason in reverse: the game draws the
+    boss health bar from a set of pre-rendered pieces that only go down to 32
+    HP, and below that the bar renders as garbage. The floor never raises a
+    boss above the HP it would have had normally, so `weak` stays weak.
+
+    A boss with less HP can also start below its own phase-change threshold,
+    so a low roll may put a boss straight into its more aggressive behaviour.
     """
     display_name = "Boss HP Randomization"
     option_off = 0
@@ -310,11 +325,17 @@ class RematchChecks(Toggle):
 
     Client-side, so it needs no disc change.
 
-    NEW in this release: the detection mechanism is live-verified for three
-    of the eight bosses so far. An unrecognized fight sends nothing rather
-    than guessing, so the worst a surprise can do is leave a rematch check
-    uncollected until the following release - consider that before placing
-    must-have progression on these on a race seed.
+    The first release of this option could award the wrong boss's check: it
+    identified fights by a 16-byte fingerprint of the boss's code, and two of
+    those fingerprints turned out to be ordinary compiler boilerplate that
+    occurs all over the game. That is fixed - fights are now identified by a
+    256-byte window verified to occur exactly once on the entire disc, for all
+    eight bosses, and a kill only counts if the client actually watched that
+    boss's health bar fill first.
+
+    An unrecognized fight still sends nothing rather than guessing, so the
+    worst a surprise can do is leave a rematch check uncollected - consider
+    that before placing must-have progression on these on a race seed.
     """
     display_name = "Rematch Checks"
 

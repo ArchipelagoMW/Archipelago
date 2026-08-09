@@ -185,8 +185,20 @@ class TestRing2Classifier(unittest.TestCase):
         self.assertEqual(mmx5_client.RING2_STUB_WORD,
                          disc.PICKUPSANITY_STUB[:4],
                          "probe word drifted from the stub the patcher writes")
+
         self.assertEqual(mmx5_client.PICKUPSANITY_STUB_ADDR,
                          disc.PICKUPSANITY_STUB_ADDR)
         self.assertEqual(mmx5_client.CONSUMABLE_KINDS, disc.CONSUMABLE_KINDS)
         self.assertEqual(mmx5_client.RING2_STUB_PROBE_ADDR,
                          disc.PICKUPSANITY_STUB_ADDR - 0x80000000)
+
+    def test_older_stub_discs_are_still_recognised(self) -> None:
+        """A disc patched before 0.5.0 carries the v1 stub, whose first word
+        differs. If the probe stopped accepting it, pickupsanity check
+        detection would silently switch OFF for anyone mid-run on an older
+        disc - much worse than their not having the enemy-drop fix."""
+        self.assertIn(mmx5_client.RING2_STUB_WORD_V1, mmx5_client.RING2_STUB_WORDS)
+        self.assertIs(
+            MMX5Client._classify_ring2(mmx5_client.RING2_STUB_WORD_V1,
+                                       mmx5_client.RING2_PROBE_VANILLA),
+            True)

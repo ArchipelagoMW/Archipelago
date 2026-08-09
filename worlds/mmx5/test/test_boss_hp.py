@@ -57,8 +57,49 @@ class TestBossHPRoll(unittest.TestCase):
         for vanilla in (1, 2, 120, 127):
             for stage in range(1, 20):
                 r = self.client._boss_hp_roll(self.ctx, stage, vanilla)
-                self.assertGreaterEqual(r, c.BOSS_HP_MIN)
+                # The floor is min(BOSS_HP_MIN, vanilla), not BOSS_HP_MIN -
+                # see test_floor_never_buffs_a_boss_vanilla_left_weak.
+                self.assertGreaterEqual(r, min(c.BOSS_HP_MIN, vanilla))
                 self.assertLessEqual(r, c.BOSS_HP_MAX)
+
+    def test_floor_keeps_the_lifebar_in_its_artwork(self) -> None:
+        """0x1CA2 draws the bar as well as scaling HP.
+
+        `0x800259E0` picks the bar sprite as `0xA3 + (v - 0x20)/2` and
+        `0x8002617C` offsets the bar's screen position by `(v - 0x20)`; both
+        clamp above and NEITHER clamps below. Under 0x20 the sprite index runs
+        backwards out of the bar artwork. A tester's Izzy Glow rolled 25 and
+        drew a broken bar, which is what this floor exists to prevent.
+        """
+        for band in (1, CHAOTIC):          # weak and chaotic reach lowest
+            self.ctx.slot_data["boss_hp_randomization"] = band
+            for vanilla in range(0x20, 0x80):
+                for stage in range(1, 12):
+                    r = self.client._boss_hp_roll(self.ctx, stage, vanilla)
+                    self.assertGreaterEqual(
+                        r, 0x20,
+                        f"band {band} vanilla {vanilla} rolled {r} - below the "
+                        f"bar artwork's domain")
+
+    def test_floor_never_buffs_a_boss_vanilla_left_weak(self) -> None:
+        """The floor must never RAISE a boss above its vanilla HP.
+
+        0x1CA2 accumulates from 0, so early in a run vanilla genuinely sits
+        under 0x20. A bare `max(0x20, rolled)` would turn `weak` into a 2x
+        buff exactly there - fixing a cosmetic bug by inventing a difficulty
+        one. Where vanilla is already below the artwork's domain we simply do
+        not make it worse.
+        """
+        for band in (1, 2, 3, CHAOTIC):
+            self.ctx.slot_data["boss_hp_randomization"] = band
+            for vanilla in range(1, 0x20):
+                for stage in range(1, 12):
+                    r = self.client._boss_hp_roll(self.ctx, stage, vanilla)
+                    self.assertGreaterEqual(r, 1, "a 0 is the kill-boss value")
+                    if band == 1:          # weak must never exceed vanilla
+                        self.assertLessEqual(
+                            r, vanilla,
+                            f"weak raised a {vanilla} HP boss to {r}")
 
     def test_never_zero(self) -> None:
         # A 0 would make bosses die instantly - the kill-boss cheat value.
@@ -92,6 +133,48 @@ class TestBossHPApply(unittest.IsolatedAsyncioTestCase):
         ctx = await run_watcher(save_with_boss_hp(75), mode=0x0A, stage_id=1,
                                 client=MMX5Client(), ctx=self._ctx(mode=0))
         self.assertEqual(self._writes_to_boss_hp(ctx), [])
+
+    async def test_zero_space_stage_is_never_randomized(self) -> None:
+        """Stage 0x0C is excluded - measured 2026-08-09.
+
+        0x1CA2 scales the lifebar for EVERY boss but sets HP for only SOME.
+        Axle reads 53 and fills 53, Sigma reads 80 and fills 80, but the Squid
+        rematch reads 127 and fills to 58 - rush rematches take their HP
+        elsewhere. Rolling the byte there cannot change those fights, it can
+        only desynchronize the bar from the boss's real health, at any roll
+        value. A tester saw exactly that on three rematches.
+        """
+        ctx = await run_watcher(save_with_boss_hp(80), mode=0x0A,
+                                stage_id=c.SIGMA_STAGE_ID,
+                                client=MMX5Client(), ctx=self._ctx())
+        self.assertEqual(self._writes_to_boss_hp(ctx), [],
+                         "boss HP was rolled inside the Zero Space stage")
+
+    async def test_entering_zero_space_hands_back_the_vanilla_value(self) -> None:
+        # The exclusion must not strand our value in the accumulator: 0x1CA2
+        # is summed at every stage start, so leaving our number in place would
+        # compound it. Entering 0x0C has to restore vanilla like any other
+        # exit from gameplay.
+        client = MMX5Client()
+        await run_watcher(save_with_boss_hp(75), mode=0x0A, stage_id=1,
+                          client=client, ctx=self._ctx())
+        rolled = client.boss_hp_written
+        self.assertIsNotNone(rolled)
+        ctx2 = self._ctx()
+        await run_watcher(save_with_boss_hp(rolled), mode=0x0A,
+                          stage_id=c.SIGMA_STAGE_ID, client=client, ctx=ctx2)
+        self.assertIn(75, self._writes_to_boss_hp(ctx2),
+                      "walking into Zero Space left our rolled value in the "
+                      "accumulator, which compounds every stage after it")
+
+    async def test_other_stages_still_randomize(self) -> None:
+        # Guard against the exclusion being written too broadly.
+        for stage_id in (1, 4, 8):
+            ctx = await run_watcher(save_with_boss_hp(75), mode=0x0A,
+                                    stage_id=stage_id, client=MMX5Client(),
+                                    ctx=self._ctx())
+            self.assertTrue(self._writes_to_boss_hp(ctx),
+                            f"stage {stage_id} stopped being randomized")
 
     async def test_restores_vanilla_on_leaving_gameplay(self) -> None:
         client = MMX5Client()

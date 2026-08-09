@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-08).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-09).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -12,6 +12,45 @@ established: `ai-docs/handoffs/`.
 
 Legend: ✅ = verified in-emulator/disassembly · ⚠️ = partially verified / caveat ·
 ❓ = unverified hypothesis (from cheat archives or single observation)
+
+> **2026-08-09 tester-report update — THREE CORRECTIONS, read before using
+> the boss-rush or boss-HP rows.** All settled offline from the disc, the EXE
+> and the existing `Scripts/ramdump_*.bin`; plan:
+> `ai-docs/plans/2026-08-09_mmx5-tester-bug-triage.md`.
+> (1) **The boss-module fingerprint scheme below is REFUTED.** A 16-byte
+> window at one fixed offset is a sample, not an identity: The Skiver's value
+> occurs **40× on the disc — 12 of them in the base EXE**, so it is resident
+> in every state including the title screen; Squid Adler's occurs **11×**,
+> twice inside the Sigma-area module itself (`0x800FA2E0`, `0x800FA350` —
+> `0x20` below and `0x50` above the probe). Only **Izzy Glow's is unique**.
+> The two non-unique values are exactly the two bosses a tester received
+> phantom rematch checks for. See §Boss rush for what replaces it.
+> (2) **`0x800D1CA2` is not simply "boss max HP"** — the accumulator starts
+> at 0 on a new game, so a base or floor exists elsewhere that we have not
+> located. Its two `(value − 0x20)/2` consumers ARE now identified: both are
+> lifebar display code, and both corrupt below 32. Row rewritten.
+> (4) **NEW — the object allocator wipes the slot, and that is load-bearing.**
+> `0x8002C938` (the gate-0/1/2 spawn path, reached via the category table at
+> `0x80072E8C`) zeroes **156 (0x9C) bytes** of the object-pool slot on every
+> allocation — `sb $zero,($v0)` loop at `0x8002C97C`, counter `0x9B`..−1, pool
+> based at `0x80092090`. `obj+0x10` is inside that wipe, and the ONLY writer of
+> a placement-record pointer there is the spawner's `sw $s2,0x10($s1)` at
+> `0x8002B2B8`. Therefore **an object not created from a placement record
+> carries 0 at `+0x10`, and no stale pointer can survive slot reuse** — which
+> is what makes "enemy drop vs placed pickup" decidable inside the
+> pickupsanity stub (v0.5.0). 5 call sites: `0x80054530` (EXE) plus four in
+> overlays.
+>
+> (3) **Rematch bosses do not take their HP from `0x1CA2`** —
+> `ramdump_squid_rematch_f430014` reads `0x1CA2 = 127` while its boss-HP byte
+> reads 46 mid-fight; the 58 fill peak for that same rematch comes from the
+> watcher log, not the dump. Either figure makes the point.
+>
+> **The fingerprint is FIXED, and the address was never the problem — the
+> LENGTH was.** Widening the same `0x800FA300` window from 16 to **256
+> bytes** makes all 8 bosses unique across the entire disc, zero duplicates,
+> with all three live-verified modules still matching. Client-side constant
+> change, no disc revision. Table and method in §Boss rush.
 
 > **2026-08-08 live-session update:** four corrections land in this file today.
 > (1) `0x800D1C1D` is a sub-room counter, NOT a rematch identifier — the same
@@ -65,7 +104,8 @@ Survives death and stage exit; the AP client's primary read/write surface.
 | `0x800D1C84` | **u32** | **DNA Parts owned bitfield — CONFIRMED IN CODE 2026-08-05.** Hub-overlay Parts screen (fn `0x800F3E30`) does `lw 0x84($s0)` and ANDs it with `maskTable[0x800F51F0][selected]`; blank slot if zero, draw part if set. **16 parts = bits 2..17** (mask table is 16 single-bit entries). The old "did NOT change on DNA part award" observation was a TIMING artifact: no gameplay writer exists in the static EXE (only save load `0x8001C964`/`0x8001CC90`, save store `0x8001CFA0`), because DNA rewards are BUFFERED and delivered at the *next results screen* (`0x1D28-2A`/`0x1D38-3A`). Recheck across a results screen, not across the award prompt. `0x1C86` is simply the u32's high half | ✅ code 2026-08-05 |
 | `0x800D1C88–9F` | 6×u32 | Persisted (save file `+0x08..+0x1F`, block-copied by the save loader `0x8001C904`) but **ZERO individual field references in the static EXE or the hub overlay** — nothing reads or writes them by field. Disproven as reploid-rescue record (see below). Any consumer must live in another overlay (stage code). Candidate for a per-stage/area "visited" record, unproven either way — not decidable statically from the images we hold | ❓ 2026-08-05 |
 | `0x800D1CA0` | u16 | Armor parts bitfield (Falcon/Gaea); 0xFFFF grants all | ✅ write-tested |
-| `0x800D1CA2` | u8 | **BOSS MAX HP — live-PROVEN 2026-08-05.** Pinned to 40 with the AP client attached ⇒ the next boss spawned with exactly 40 max HP (fill ramp shortened 73f → 38f to match); vanilla read 75 ⇒ 75 HP. Also the Boss-Level accumulator: fn `0x80024594` does `0x1CA2 = min(0x1CA2 + level_raw, 0x7F)` at each stage start, which is *how* bosses gain HP across a run. Range 1..0x7F. Memcard-persisted. **This is the lever for boss-HP randomization** — one save-struct byte, no polling. ⚠️ It is ALSO consumed as `(value − 0x20) / 2` at `0x800259E0`, `0x8002617C` (EXE) and `0x800F7564` (hub, fns `0x80025828` / `0x80026080`) — those consumers are unidentified, so overriding it may move something besides HP. The DNA reward tier is believed to key on `0x1CC0` (a separately computed byte) and our DNA checks ride the KILL, not the reward, so checks cannot be stranded either way | ✅ live 2026-08-05 |
+| `0x800D1CA2` | u8 | **Boss HP scale + Boss-Level accumulator.** Pinned to 40 with the AP client attached ⇒ the next boss spawned with exactly 40 max HP (fill ramp shortened 73f → 38f to match); vanilla read 75 ⇒ 75 HP. Accumulator: fn `0x80024594` does `0x1CA2 = min(0x1CA2 + level_raw, 0x7F)` at each stage start (stores at `0x8002468C`/`0x80024694`; the `$a0 < 0` shortcut at `0x80024590` slams it to `0x7F`). Never decreases. Memcard-persisted. **This is the lever for boss-HP randomization** — one save-struct byte, no polling. ⚠️ **The label "BOSS MAX HP" is over-stated (corrected 2026-08-09):** the accumulator starts at **0** on a new game (`"boss HP stage 1: 0 -> 0"`, live 2026-08-05) yet the first boss plainly does not have 0 HP, so a per-boss base or a floor exists that is NOT located. Treat it as the dominant term at mid-run values, not the whole story. ⚠️ **Rematches do not use it at all — and this DESYNCS THE BAR (2026-08-09)**: 0x1CA2 scales the lifebar for EVERY boss but sets HP for only some (Axle 53==53, Sigma 80==80, but Squid rematch 127 vs a 58 fill), so randomizing it makes rematch bars disagree with rematch HP at ANY value, clamp or no clamp.  — `ramdump_squid_rematch_f430014` reads `0x1CA2 = 127` for a fight that filled to 58, so `boss_hp_randomization` likely does not touch the Boss Rush. **VALID RANGE FOR WRITES IS 0x20..0x7F — see the lifebar row below.** The DNA reward tier is believed to key on `0x1CC0` (a separately computed byte) and our DNA checks ride the KILL, not the reward, so checks cannot be stranded either way | ✅ live 2026-08-05, corrected 2026-08-09 |
+| `0x800D1CA2` consumers — **the lifebar** | — | **Identified 2026-08-09** (they were the "unidentified consumers" this row used to warn about). Both are display code and both compute `f(0x1CA2 − 0x20)` with **an upper clamp only**: `0x800259E0` (in fn `0x80025828`) picks the bar **sprite** as `0xA3 + (v − 0x20)/2`, clamped above at `0xD3` — i.e. sprites `0xA3..0xD3` cover HP `32..128`, one per 2 HP; `0x8002617C` (in fn `0x80026080`) adds `(v − 0x20)` rounded down to even to the bar's **screen coordinate**. **Below `v = 0x20` the sprite index runs backwards out of the bar artwork and the position offset goes negative — the bar renders as garbage.** Live-corroborated: a tester's Izzy Glow rolled 25 and drew a broken bar (2026-08-09). `lb` is a SIGNED load, so `v ≥ 0x80` would be far worse — the existing `0x7F` ceiling is load-bearing. Third site `0x800F7564` (hub) not yet disassembled | ✅ disasm 2026-08-09 |
 | `0x800920EC` boss-HP **fill ramp** | — | A boss's intro bar-fill writes `0x800920EC` **+1 per frame** from 1 to max (75 frames for a 75-HP boss). Any client-side write to live boss HP during the intro is overwritten every frame; the earliest safe pin is ~10 frames after the fill stops climbing. Irrelevant if `0x1CA2` is used instead, which is why it is preferred | ✅ live 2026-08-05 |
 | `0x800D1CAA` (+charIdx) | u8×2 | **Hunter Rank index, per character** — indexes the rank-modifier table `0x800717EC` in the Boss Level formula. Index runs **best-first**: 0 = MEH/MMH (+16), 1 = PA (+8), 2 = GA (+4), 3 = SA (+2), 4–7 = A/B/C/E (+0). Supersedes the earlier "decremented 0x04→0x03 … hours/sorties counter" guess | ✅ code 2026-08-05 |
 | `0x800D1CC0` | u8 | **Computed Boss Level** = `min(level_raw + 1, 0x60)`, written by fn `0x80024594` (sites `0x80024574`/`0x80024588`/`0x8002465C`). **No reader in the EXE or hub** ⇒ consumed by overlay code. Pinning this would set difficulty *directly*, instead of indirectly via the countdown | ✅ code 2026-08-05 |
@@ -303,32 +343,116 @@ the NEXT boss's module — Dark Dizzy's.) A resident fingerprint therefore
 means "most recently loaded fight", never "fight in progress"; liveness must
 come from mode/stage/HP, see the protocol below.
 
-**Fingerprint: 16 bytes at `0x800FA300`** — pairwise-distinct across all 8
-boss modules; a 4-byte word is NOT enough (offset +0x300 can hold common
-instructions like `lw $s0,0x10($sp)`, inviting collisions with whatever
-module Sigma's own fights load — the Sigma-fight dumps match none of the 8
-at 16 bytes). **Three of eight are live-verified**: Squid (mid-fight dump),
-Izzy Glow and Dark Dizzy (resident in the 2026-08-06 corridor dumps).
+> ## ⛔ REFUTED 2026-08-09 — do not build on the table below
+>
+> The 16-byte window at `0x800FA300` is **not an identity**, and shipping it
+> produced phantom rematch checks in a tester's run. Counting each pattern
+> across the whole 583 MB disc image:
+>
+> | boss | occurrences on disc | |
+> |---|---|---|
+> | Izzy Glow | **1** | the only true identity |
+> | Dark Dizzy / Grizzly / McWhalen / Axle | 2 | boss module + the copy embedded in a stage chunk |
+> | Mattrex | 3 | also at `0x800FA0BC` in `post_sigma` |
+> | **Squid Adler** | **11** | hub overlay, Axle's stage, the X-vs-Zero duel, **and twice inside the Sigma-area module** |
+> | **The Skiver** | **40** | **12 of them in the base EXE** — resident in every dump, including title/hub/cutscenes |
+>
+> The Skiver's bytes disassemble to `lw $s0,0x10($sp)` / `jr $ra` /
+> `addiu $sp,$sp,0x28` / `addiu $sp,$sp,-0x20` — a function epilogue followed
+> by the next prologue, i.e. ordinary compiler boilerplate.
+>
+> Squid's sits at `0x800FA350` in `pre_sigma` and `0x800FA2E0` in
+> `post_sigma` — the same routine linked `0x50` above and `0x20` below the
+> probe, so a different route through that stage puts it *on* the probe.
+>
+> **The error was in the test, not the measurement.** "Pairwise-distinct
+> across the 8 boss modules" was true and irrelevant: the competing values
+> are not the other seven modules, they are everything else that can be
+> resident at `0x800FA000`. The "Sigma-fight dumps match none of the 8" check
+> is also literally true *at `0x800FA300` exactly* — and the neighbourhood is
+> full of matches.
+>
+> **Replacement rule: a window must be verified to occur EXACTLY ONCE on the
+> whole disc before it may name a boss.** Identity alone is still not enough
+> — see the protocol note below.
+>
+> ### ✅ RESOLVED — use **256 bytes at `0x800FA300`** (measured 2026-08-09)
+>
+> Boss modules are `ROCK_X5.BIN` chunk `29 + stage_id` (directory = 59
+> `(u32 sector, u32 size)` pairs; extract via Mode2 Form1 payloads, 2048 B at
+> +0x18 of each 2352 B sector). All 8 chunks' bytes at +0x300 match the
+> shipped 16-byte values, confirming extraction and chunk mapping together.
+> Occurrences of the window across the whole disc **payload stream**:
+>
+> | boss | chunk | 16 B | 32 B | 64 B | 128 B | 256 B |
+> |---|---|---|---|---|---|---|
+> | Grizzly Slash | 30 | 2 | 2 | 2 | **1** | 1 |
+> | Dark Dizzy | 31 | 2 | 2 | **1** | 1 | 1 |
+> | Duff McWhalen | 32 | 2 | 2 | **1** | 1 | 1 |
+> | Mattrex | 33 | 3 | 2 | 2 | **1** | 1 |
+> | Squid Adler | 34 | 11 | **1** | 1 | 1 | 1 |
+> | Izzy Glow | 35 | **1** | 1 | 1 | 1 | 1 |
+> | Axle the Red | 36 | 2 | 2 | **1** | 1 | 1 |
+> | The Skiver | 37 | 40 | 2 | 2 | **1** | 1 |
+>
+> Unique for every boss at **128 B**; **256 B** ships for margin. Scan the
+> payload stream, not the raw image — a raw scan drops patterns straddling a
+> sector boundary (~12% at 256 B, ~0.7% at 16 B, which is why the earlier
+> raw 16-byte counts were still sound).
+>
+> Corpus regression: at 16/128/256 B the three live-verified modules match in
+> exactly the dumps where they are resident, and nothing else matches.
+> ⚠️ That check proves widening loses no true positives; it CANNOT show the
+> false positive, because the collisions sit beside the probe rather than on
+> it. Disc-wide uniqueness is the evidence that matters.
+>
+> **This also closes the Sigma route**, which the arming rules below cannot:
+> entering the Sigma-area module IS a fingerprint change (so it arms) and
+> Sigma's own 0→80→0 IS a genuine rising edge (so it fires). Only a
+> disc-unique window stops it.
 
-| boss | stage id | fp16 @0x800FA300 (hex) |
-|---|---|---|
-| Grizzly Slash | 0x01 | `060020a1180023ad0800e0031c0024ad` |
-| Dark Dizzy | 0x02 | `540002ae0780023c150000a2670000a2` ✅ live |
-| Duff McWhalen | 0x03 | `5e0102240d006214001c82260c008380` |
-| Mattrex | 0x04 | `801f053c3000a58c04000624ceb0000c` |
-| Squid Adler | 0x05 | `01000324020004241aa143a0040004a2` ✅ live |
-| Izzy Glow | 0x06 | `b8fcc3a4040002921600062401004224` ✅ live |
-| Axle the Red | 0x07 | `0780023c05000324050003a28000038e` |
-| The Skiver | 0x08 | `1000b08f0800e0032800bd27e0ffbd27` |
+**Fingerprint (REFUTED — historical record): 16 bytes at `0x800FA300`.**
+Pairwise-distinct across the 8 boss modules. Three were live-verified: Squid
+(mid-fight dump), Izzy Glow and Dark Dizzy (resident in the 2026-08-06
+corridor dumps).
 
-Client protocol: in stage `0x0C`, mode `0x0A`, with the fingerprint matching
-a boss, track the boss-HP peak; credit the rematch only when HP reads 0 with
-a peak ≥ 8 (rush-corridor idle blips reach 6, real fights fill to 40+) AND
-the **player's own HP is nonzero** — a mid-fight player death must never read
-as a boss kill, whatever the engine does to the boss-HP byte on respawn.
-Reset all fight state whenever mode or stage leaves the fight. **Unknown
-fingerprint ⇒ unidentified fight, send nothing** — never guess. (5 of 8
-values are chunk-derived; the safety rule makes a surprise harmless.)
+| boss | stage id | fp16 @0x800FA300 (hex) | unique on disc? |
+|---|---|---|---|
+| Grizzly Slash | 0x01 | `060020a1180023ad0800e0031c0024ad` | no (2) |
+| Dark Dizzy | 0x02 | `540002ae0780023c150000a2670000a2` ✅ live | no (2) |
+| Duff McWhalen | 0x03 | `5e0102240d006214001c82260c008380` | no (2) |
+| Mattrex | 0x04 | `801f053c3000a58c04000624ceb0000c` | no (3) |
+| Squid Adler | 0x05 | `01000324020004241aa143a0040004a2` ✅ live | ⛔ **no (11)** |
+| Izzy Glow | 0x06 | `b8fcc3a4040002921600062401004224` ✅ live | ✅ **yes (1)** |
+| Axle the Red | 0x07 | `0780023c05000324050003a28000038e` | no (2) |
+| The Skiver | 0x08 | `1000b08f0800e0032800bd27e0ffbd27` | ⛔ **no (40)** |
+
+Client protocol as shipped in v0.4.0: in stage `0x0C`, mode `0x0A`, with the
+fingerprint matching a boss, track the boss-HP peak; credit the rematch only
+when HP reads 0 with a peak ≥ 8 AND the **player's own HP is nonzero** — a
+mid-fight player death must never read as a boss kill. Unknown fingerprint ⇒
+send nothing.
+
+⚠️ **Three further holes in that protocol, all confirmed 2026-08-09 —
+fixing the fingerprint alone is NOT sufficient:**
+
+1. **Idle corridors already satisfy every other term.**
+   `ramdump_rematch_before_f369766` (Izzy resident) and
+   `ramdump_rematch_after_f372037` (Dizzy resident) both read stage `0x0C`,
+   mode `0x0A`, **boss HP 0, player alive** with no fight happening. Only the
+   client-side peak counter stands between those states and a send.
+2. **Non-rematch bosses share the slot in the same stage.**
+   `ramdump_pre_sigma_f3336354/f3344787`: stage `0x0C`, mode `0x0A`,
+   **boss HP 80** — that is Sigma. His death zeroes the byte with a large
+   peak and credits whichever module happens to be resident. Stage `0x0C` is
+   the whole final stage (rush corridors, its own pickups, and Sigma), not
+   "the rush".
+3. **The peak threshold is below a value this very file documents.**
+   `RUSH_MIN_PEAK = 8`, but §Boss HP slot records *"leftover 16 observed at
+   stage entry"*. Real fights fill to 40+; use ~24.
+
+Minimum safe protocol: unique window **plus** one send per observed *module
+change* **plus** an observed low→high fill edge inside that arming.
 
 ### Refill queue `0x800D1C76` (+1 for Zero) — delivery semantics
 

@@ -1,12 +1,12 @@
 ﻿"""Boss Rush rematch checks.
 
 Detection is a client-side watcher (live session 2026-08-08): a rematch runs
-in the standard boss-HP slot 0x800920EC, and the fight is IDENTIFIED by the
-16-byte fingerprint of the boss module the portal streamed to 0x800FA000.
-The kill condition is a conjunction - rush stage + gameplay mode + known
-fingerprint + observed HP fill + HP zero + player alive - and every term
-exists because dropping it produced (or would produce) a concrete false
-check. Those are the traps this file pins:
+in the standard boss-HP slot 0x800920EC, and the fight is IDENTIFIED by a
+fingerprint of the boss module the portal streamed to 0x800FA000. The kill
+condition is a conjunction - rush stage + gameplay mode + known fingerprint +
+observed HP fill + HP zero + player alive + not already sent this arming -
+and every term exists because dropping it produced (or would produce) a
+concrete false check. Those are the traps this file pins:
 
 - the module PERSISTS after a fight, so fingerprint-present must not mean
   fight-in-progress (corridor blips on the stale HP byte);
@@ -16,8 +16,29 @@ check. Those are the traps this file pins:
   the stage gate is what keeps normal boss kills from firing rematches;
 - Sigma's own fights happen in the SAME stage, so an unknown fingerprint
   must send nothing.
+
+REGRESSION, 2026-08-09 - the phantom-check report. v0.4.0 shipped a 16-byte
+fingerprint, and a tester received Squid Adler's and The Skiver's rematch
+checks without fighting either. Those two values turned out to occur 11 and
+40 times on the disc (Skiver's 12 times in the base EXE alone - it is a
+function epilogue followed by the next prologue). The window is now 256
+bytes, verified unique across the whole disc for all eight bosses, and the
+kill additionally requires that the client SAW the bar fill during the
+current arming. `test_derives_the_table_from_a_real_disc` re-derives the
+shipped table from a disc when one is available.
+
+NOTE ON FIXTURES. The real fingerprints are 256 bytes of verbatim game code
+each, so they are stored as sha256 digests in client.py and are NOT
+reproduced here - shipping 2 KB of the game's own code in the Archipelago
+repo is the same thing the unpatcher's vanilla manifest was kept out for.
+The detection tests below therefore run against a SYNTHETIC table; the real
+one is covered structurally, and against a disc when present.
 """
+import hashlib
+import os
+import struct
 import unittest
+from unittest import mock
 
 import worlds.mmx5.client as c
 from worlds.mmx5 import names
@@ -27,7 +48,15 @@ from worlds.mmx5.locations import location_table
 from . import MMX5TestBase
 from .test_client import FakeContext, make_save, run_watcher
 
-FP = {stage: fp for fp, stage in c.RUSH_FP_TO_STAGE.items()}
+
+def _fake_module(index: int) -> bytes:
+    """A stand-in for one boss module's 256-byte window. Distinct per boss and
+    deliberately not derived from any real module."""
+    return bytes(((index * 37 + i * 5) & 0xFF) for i in range(c.RUSH_FP_LEN))
+
+
+FP = {stage: _fake_module(i) for i, stage in enumerate(names.STAGES)}
+FAKE_TABLE = {hashlib.sha256(b).hexdigest(): stage for stage, b in FP.items()}
 
 
 class TestRematchChecksOff(MMX5TestBase):
@@ -89,12 +118,85 @@ class TestRematchIds(unittest.TestCase):
 
     def test_fingerprints_cover_all_eight_and_are_distinct(self) -> None:
         self.assertEqual(set(c.RUSH_FP_TO_STAGE.values()), set(names.STAGES))
-        self.assertEqual(len(c.RUSH_FP_TO_STAGE), 8)
-        for fp in c.RUSH_FP_TO_STAGE:
-            self.assertEqual(len(fp), c.RUSH_FP_LEN)
+        self.assertEqual(len(c.RUSH_FP_TO_STAGE), 8,
+                         "a duplicate digest would silently drop a boss")
+        for digest in c.RUSH_FP_TO_STAGE:
+            self.assertRegex(digest, r"^[0-9a-f]{64}$",
+                             "table keys are sha256 hexdigests of the window")
+
+    def test_window_is_wide_enough_to_be_an_identity(self) -> None:
+        # The v0.4.0 phantom-check bug in one assertion. 16 bytes at a fixed
+        # offset is a sample of whatever code sits there: two of the eight
+        # shipped values were ordinary function epilogue/prologue boilerplate
+        # occurring 11 and 40 times on the disc. Everything is unique from 128
+        # bytes; 256 is what ships.
+        self.assertGreaterEqual(c.RUSH_FP_LEN, 128)
+
+    def test_peak_threshold_clears_the_documented_stale_value(self) -> None:
+        # ram-notes records the boss-HP byte holding stale garbage outside
+        # fights, with 16 observed at stage entry. The original threshold of 8
+        # sat BELOW that, so a stale byte could validate a kill on its own.
+        # Real fights fill to 40+ (Squid 58, Axle 53).
+        self.assertGreater(c.RUSH_MIN_PEAK, 16)
+        self.assertLess(c.RUSH_MIN_PEAK, 40)
+
+    @unittest.skipUnless(os.environ.get("MMX5_DISC"),
+                         "set MMX5_DISC to a Megaman X5 .bin to re-derive")
+    def test_derives_the_table_from_a_real_disc(self) -> None:
+        """Rebuild RUSH_FP_TO_STAGE from the disc and demand it match.
+
+        This is the only test that can catch a transcription error in the
+        shipped digests, because the window is not otherwise reproducible from
+        anything in this repo. Skipped by default - a disc is not (and must
+        not be) checked in.
+
+        ROCK_X5.BIN: ISO LBA 23693, 676 sectors, Mode2 Form1 (2048 payload
+        bytes at +0x18 of each 2352-byte sector). Its directory is 59
+        (u32 sector, u32 size) pairs. Boss module = chunk 29 + stage_id,
+        loaded at RAM 0x800FA000, so the probe is at module offset 0x300.
+        """
+        path = os.environ["MMX5_DISC"]
+        sector, payload, poff = 2352, 2048, 0x18
+        with open(path, "rb") as f:
+            f.seek(23693 * sector)
+            raw = f.read(676 * sector)
+        rock = b"".join(raw[i * sector + poff: i * sector + poff + payload]
+                        for i in range(676))
+
+        chunks = []
+        for i in range(64):
+            sec, size = struct.unpack_from("<II", rock, i * 8)
+            if sec == 0 and size == 0:
+                break
+            chunks.append((sec, size))
+        self.assertEqual(len(chunks), 59, "unexpected ROCK_X5.BIN directory")
+
+        probe = c.RUSH_FP_ADDR - 0x0FA000
+        derived = {}
+        # STAGE_ID_TO_NAME, never enumerate(names.STAGES): that tuple is in
+        # stage-SELECT order (Grizzly, Duff, Squid, Izzy, Dizzy, Skiver,
+        # Mattrex, Axle), not stage-id order. Writing this test the obvious
+        # way mismapped four bosses and it took a disc to notice - the same
+        # "never infer a stage id from sequence" trap ram-notes records for
+        # the endgame ids.
+        for stage_id in range(1, 9):
+            stage = c.STAGE_ID_TO_NAME[stage_id]
+            sec, size = chunks[29 + stage_id]
+            base = sec * payload
+            window = rock[base + probe: base + probe + c.RUSH_FP_LEN]
+            self.assertEqual(len(window), c.RUSH_FP_LEN)
+            derived[hashlib.sha256(window).hexdigest()] = stage
+        self.assertEqual(derived, c.RUSH_FP_TO_STAGE,
+                         "shipped table does not match this disc")
 
 
 class TestRematchDetection(unittest.IsolatedAsyncioTestCase):
+    """Runs against FAKE_TABLE - see the fixtures note in the module docstring."""
+
+    def setUp(self) -> None:
+        patcher = mock.patch.dict(c.RUSH_FP_TO_STAGE, FAKE_TABLE, clear=True)
+        patcher.start()
+        self.addCleanup(patcher.stop)
     def _ctx(self, enabled=1) -> FakeContext:
         ctx = FakeContext()
         ctx.slot_data = {"goal": 0, "boss_difficulty": 1,
@@ -110,6 +212,15 @@ class TestRematchDetection(unittest.IsolatedAsyncioTestCase):
         all_rematch = {self._loc(s) for s in names.STAGES}
         return ctx.checked_location_ids() & all_rematch
 
+    def _send_count(self, ctx, stage) -> int:
+        """How many times this rematch was SENT, not whether it is checked.
+        The distinction matters for the one-send-per-arming rule: the id stays
+        in the checked set forever, so only counting messages can show a
+        resident module re-firing."""
+        loc = self._loc(stage)
+        return sum(msg["locations"].count(loc) for msg in ctx.sent_msgs
+                   if msg.get("cmd") == "LocationChecks" and loc in msg["locations"])
+
     @staticmethod
     def _save() -> bytes:
         # A late-game save: all weapons, deep ACT. What a player in the rush
@@ -122,7 +233,15 @@ class TestRematchDetection(unittest.IsolatedAsyncioTestCase):
                                  stage_id=c.SIGMA_STAGE_ID, **kw)
 
     async def test_fill_then_zero_sends_that_boss(self) -> None:
+        # TIGHTENED 2026-08-09: this used to be two polls, a filled value then
+        # zero. That is no longer a kill, deliberately - the first poll after a
+        # module loads is a BASELINE, not evidence, and "arrived at a high
+        # value, then zero" is precisely the stale-byte false positive that
+        # sent a tester phantom checks. A real fight is observably preceded by
+        # a low reading (the byte sits at 0 after the previous kill) or by a
+        # rise, so the sequence below is what play actually looks like.
         client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
         await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
         self.assertNotIn(self._loc(names.KRAKEN), ctx.checked_location_ids())
         await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
@@ -131,6 +250,18 @@ class TestRematchDetection(unittest.IsolatedAsyncioTestCase):
         for stage in names.STAGES:
             if stage != names.KRAKEN:
                 self.assertNotIn(self._loc(stage), got)
+
+    async def test_fill_completed_between_polls_still_counts(self) -> None:
+        # The ramp is ~1 second and polls are sparser, so the client will
+        # often never see an intermediate value. Arming at 0 (where the byte
+        # sits after the previous kill) and then seeing fight-scale HP is
+        # enough - otherwise the strict-rise rule would silently drop real
+        # kills, and a missed rematch is only recoverable by redoing the rush.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.DINOREX])
+        await self._poll(client, ctx, rush_hp=53, rush_fp=FP[names.DINOREX])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.DINOREX])
+        self.assertEqual(self._rematch_ids(ctx), {self._loc(names.DINOREX)})
 
     async def test_zero_without_fill_sends_nothing(self) -> None:
         # Entering the corridor with a module resident and the stale HP byte
@@ -198,8 +329,125 @@ class TestRematchDetection(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self._rematch_ids(ctx), set())
 
     async def test_already_checked_is_not_resent(self) -> None:
+        # A full, legitimate fill-and-kill on a location the server already
+        # has: the dedup must hold on its own, not because the fill rule
+        # happened to reject the sequence.
         client, ctx = MMX5Client(), self._ctx()
         ctx.checked_locations.add(self._loc(names.KRAKEN))
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
         await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
         await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
         self.assertEqual(self._rematch_ids(ctx), set())
+
+    # ---- the 2026-08-09 phantom-check regressions -----------------------
+    # Each of these is a state the client was actually observed (or proven)
+    # to sit in, which the shipped v0.4.0 watcher would have sent a check
+    # from. They are the reason the fill and one-send-per-arming terms exist.
+
+    async def test_stale_high_byte_then_zero_sends_nothing(self) -> None:
+        # ram-notes: the boss-HP byte holds stale garbage outside fights, 16
+        # observed at stage entry. The old threshold was 8, so a stale byte
+        # that later dropped to 0 cleared every term on its own. A stale value
+        # does not CLIMB, so there is no fill and there must be no check -
+        # even when the stale value is above the new threshold.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=40, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=40, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._rematch_ids(ctx), set(),
+                         "a stale byte dropping to zero read as a kill")
+
+    async def test_corridor_dump_state_sends_nothing(self) -> None:
+        # ramdump_rematch_before_f369766 / _after_f372037, exactly as captured:
+        # stage 0x0C, mode 0x0A, a known module resident, boss HP 0, player
+        # alive - and no fight happening. Every term of the v0.4.0 conjunction
+        # except the peak holds here while simply walking between portals.
+        client, ctx = MMX5Client(), self._ctx()
+        for _ in range(5):
+            await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.FIREFLY],
+                             player_hp=40)
+        self.assertEqual(self._rematch_ids(ctx), set())
+
+    async def test_one_send_per_arming(self) -> None:
+        # After a kill the module STAYS resident and the byte STAYS 0 for
+        # 600+ frames. Every later poll must be silent rather than re-firing.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=20, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 1)
+        for _ in range(3):
+            await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 1,
+                         "resident module re-fired without a new portal")
+
+    async def test_rearming_requires_a_module_change(self) -> None:
+        # The rush resets on stage re-entry, so a refight is legitimate - but
+        # only after a portal streams the module in again. Same module, second
+        # fill, must still be one send; a genuine reload then re-arms.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=20, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 1)
+        # A different module loads (another portal), then Squid's again.
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.GRIZZLY])
+        await self._poll(client, ctx, rush_hp=20, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 2,
+                         "a genuine refight after a module reload was lost")
+
+    async def test_fill_below_threshold_sends_nothing(self) -> None:
+        # A real rise, but nowhere near fight scale. Rematches fill to 40+.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=4, rush_fp=FP[names.PEGASUS])
+        await self._poll(client, ctx, rush_hp=12, rush_fp=FP[names.PEGASUS])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.PEGASUS])
+        self.assertEqual(self._rematch_ids(ctx), set())
+
+    async def test_death_drops_the_fill_not_just_the_peak(self) -> None:
+        # A player death mid-fight must retire the WHOLE arming, the observed
+        # fill included - not merely the peak.
+        #
+        # The sequence that separates the two: the player dies, respawns at
+        # the portal room with the boss still alive and its bar still high
+        # (peak recovers on its own from that reading), then runs out of lives
+        # and leaves, which clears the byte without anybody killing anything.
+        # If the death only reset the peak, the dead fight's fill would still
+        # be on record and that final zero would send a check for a boss that
+        # is alive and unbeaten.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=20, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN],
+                         player_hp=0)
+        # Respawned; boss untouched and still at fight scale.
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._rematch_ids(ctx), set(),
+                         "a dead fight's observed fill validated a later zero")
+
+    async def test_death_then_a_real_refight_still_counts(self) -> None:
+        # The mirror of the above: retiring the arming must not make the boss
+        # permanently undetectable. Dying and beating it properly still sends.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=20, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN],
+                         player_hp=0)
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._rematch_ids(ctx), {self._loc(names.KRAKEN)},
+                         "a legitimate kill after a death was lost")
+
+    async def test_every_boss_can_be_detected(self) -> None:
+        # A per-boss smoke test: no boss is structurally undetectable (a
+        # typo'd or duplicated table entry would drop one silently).
+        for stage in names.STAGES:
+            client, ctx = MMX5Client(), self._ctx()
+            await self._poll(client, ctx, rush_hp=20, rush_fp=FP[stage])
+            await self._poll(client, ctx, rush_hp=58, rush_fp=FP[stage])
+            await self._poll(client, ctx, rush_hp=0, rush_fp=FP[stage])
+            self.assertEqual(self._rematch_ids(ctx), {self._loc(stage)},
+                             f"{stage} rematch was not detectable")

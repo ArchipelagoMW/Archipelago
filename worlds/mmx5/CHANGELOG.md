@@ -1,5 +1,53 @@
 # Mega Man X5 apworld changelog
 
+## 0.5.0 — 2026-08-09
+
+Four bug fixes from a tester's completed run on 0.4.1.
+
+**Re-patch needed only if you use `pickupsanity`** — that option's disc edit
+changed. Every other seed produces a byte-identical disc to 0.4.1, and your
+save carries over either way.
+
+**Enemy health drops work again under `pickupsanity`.** Health and weapon
+energy dropped by enemies did nothing for most of a stage, and mysteriously
+started working once you had collected every pickup in it. The randomizer
+hooks item collection by item TYPE, and an enemy's health drop is the same
+type as a placed capsule, so the hook was swallowing both — it only got out
+of the way once a stage had no checks left to record. It now tells the two
+apart (a placed pickup is spawned from a record in the stage's layout; a drop
+is not) and hands anything an enemy dropped straight back to the game. Note
+this is why `pickupsanity` felt so much harsher than intended: for most of
+every stage you were playing with enemy healing switched off.
+
+**Rematch checks no longer credit the wrong boss.** Two testers' Boss Rush
+runs handed out Squid Adler's and The Skiver's rematch checks for fights that
+never happened, and then gave nothing when those bosses were actually beaten.
+The client identified a rematch by a 16-byte fingerprint of the boss's code,
+and those two values turned out not to be unique to their bosses at all — The
+Skiver's is an ordinary function ending followed by the next function's
+beginning, which occurs 40 times on the disc and sits permanently in memory.
+Fights are now identified by a 256-byte window, checked to occur exactly once
+on the entire disc for all eight bosses, and a kill only counts if the client
+watched that boss's health bar fill first. Standing in a corridor next to a
+module left over from the last fight can no longer look like a victory.
+
+**Boss health bars stop breaking on low rolls.** With `boss_hp_randomization`
+on, a boss rolled below 32 HP drew a corrupt health bar: the game builds the
+bar out of pre-rendered pieces that only reach down to 32, and below that it
+indexes off the front of the artwork. Rolls now stop at 32 — and never above
+the HP the boss would have had anyway, so `weak` cannot accidentally make a
+low-HP boss tougher.
+
+**Zero Space is no longer touched by boss HP randomization.** The Boss Rush
+rematches do not read their HP from the byte this option changes — they run at
+their own HP while that byte says something else entirely — so randomizing it
+never altered those fights, it only made their health bars disagree with their
+actual health (a tester saw this on three rematches). Sigma shares that stage
+and so keeps his normal HP too.
+
+Also: the client now says so at the normal log level when it sees a pickup
+record it cannot place, instead of hiding it behind debug logging.
+
 ## 0.4.1 — 2026-08-09
 
 Patching quality-of-life, from a tester's report that failed re-patches sent

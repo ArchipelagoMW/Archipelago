@@ -106,7 +106,25 @@ SMALL_ENERGY_HEAL = 4                   # matches the small HP capsule (kind 2)
 # stage boss) share that visit's roll. Inherent to the lever, documented in the
 # option text.
 OFF_BOSS_HP = 0x0D1CA2 - SAVE_BASE
-BOSS_HP_MIN, BOSS_HP_MAX = 1, 0x7F      # engine clamp
+# LOW BOUND IS 0x20, NOT 1 - corrected 2026-08-09 from a tester's corrupt
+# lifebars. 0x1CA2 does not only scale HP, it drives the bar GRAPHIC, and the
+# two consumers that read it are clamped above and not below:
+#
+#   0x800259E0  sprite = 0xA3 + (v - 0x20)/2, clamped above at 0xD3
+#               (sprites 0xA3..0xD3 cover 32..128 HP, one per 2 HP)
+#   0x8002617C  screen coord += (v - 0x20) rounded down to even
+#
+# Below v = 0x20 the subtraction goes negative: the sprite index runs
+# backwards out of the bar artwork and the bar's anchor shifts the wrong way.
+# A tester's Izzy Glow rolled 25 and drew a broken bar. The 0x7F ceiling is
+# separately load-bearing - `lb` is a SIGNED load, so v >= 0x80 reads
+# negative and is far worse.
+#
+# The floor is applied as min(BOSS_HP_MIN, vanilla), NEVER as a bare
+# max(0x20, rolled): 0x1CA2 accumulates from 0, so an early-run vanilla of 16
+# under `weak` rolls 6-13, and a bare floor would clamp that UP to 32 - a 2x
+# boss buff from the option named "weak". See _boss_hp_roll.
+BOSS_HP_MIN, BOSS_HP_MAX = 0x20, 0x7F
 # option value -> (low, high) multiplier applied to the game's own value
 BOSS_HP_BANDS = {
     1: (0.40, 0.80),    # weak
@@ -331,21 +349,62 @@ SIGMA_STAGE_ID = 0x0C                  # read live on entry; endgame ids are
 # Full derivation: mmx5-ram-notes.md §Boss fights (fork branch).
 RUSH_BOSS_HP_ADDR = 0x0920EC
 RUSH_FP_ADDR = 0x0FA300
-RUSH_FP_LEN = 16
+# 256 BYTES, NOT 16 - corrected 2026-08-09 after a tester received rematch
+# checks for bosses he never fought (Squid Adler and The Skiver).
+#
+# The probe ADDRESS was never wrong; the LENGTH was. A 16-byte window at a
+# fixed offset is a sample, not an identity, and the old table's own values
+# prove it - counted across the whole disc:
+#
+#   The Skiver   40 occurrences (12 of them in the base EXE, so it is
+#                resident in EVERY state including the title screen). Its
+#                bytes are `lw $s0,0x10($sp)` / `jr $ra` / `addiu $sp,0x28` /
+#                `addiu $sp,-0x20` - a function epilogue followed by the next
+#                prologue, i.e. ordinary compiler boilerplate.
+#   Squid Adler  11 occurrences, TWO of them inside the Sigma-area module at
+#                0x800FA350 and 0x800FA2E0 - the same routine linked 0x50
+#                above and 0x20 below this probe, so a different route
+#                through that stage lands it exactly on the probe.
+#   Izzy Glow     1 occurrence - the only one of the eight that was ever an
+#                identity, and the only one that never misfired.
+#
+# "Pairwise-distinct across the 8 boss modules" was true and irrelevant: the
+# competing values are not the other seven modules, they are everything else
+# that can be resident at 0x800FA000.
+#
+# At 256 bytes all eight are unique across the entire disc, zero duplicates
+# (unique from 128 already; 256 is margin). Derivation and the full count
+# table: ai-docs/plans/2026-08-09_mmx5-tester-bug-triage.md 2a, ram-notes
+# section Boss rush. test_rematch_checks.py re-derives this table from the
+# disc when one is available and skips when it is not.
+RUSH_FP_LEN = 256
+# sha256 of the 256 bytes, rather than the bytes themselves: 8 x 512 hex
+# characters of boilerplate in the source would be unreadable and unreviewable.
+# A torn read of a mid-stream module hashes to nothing in this table, which is
+# the safe direction - an unknown module sends NOTHING.
 RUSH_FP_TO_STAGE = {
-    bytes.fromhex("060020a1180023ad0800e0031c0024ad"): names.GRIZZLY,
-    bytes.fromhex("540002ae0780023c150000a2670000a2"): names.NECROBAT,   # live-verified
-    bytes.fromhex("5e0102240d006214001c82260c008380"): names.WHALE,
-    bytes.fromhex("801f053c3000a58c04000624ceb0000c"): names.DINOREX,
-    bytes.fromhex("01000324020004241aa143a0040004a2"): names.KRAKEN,     # live-verified
-    bytes.fromhex("b8fcc3a4040002921600062401004224"): names.FIREFLY,    # live-verified
-    bytes.fromhex("0780023c05000324050003a28000038e"): names.ROSERED,
-    bytes.fromhex("1000b08f0800e0032800bd27e0ffbd27"): names.PEGASUS,
+    "07213d14ef50d9015a6765bafb8db0e74207d17ca0ffa6f5781fbbdeb1c613fb":
+        names.GRIZZLY,          # ROCK chunk 30, head 060020a1180023ad...
+    "8cc2552329764e86ddfd25a7206516b8a839845ea2796f1859647aa70cff2a66":
+        names.NECROBAT,         # ROCK chunk 31, head 540002ae0780023c...
+    "20f34a69a417bf6a8e39c901f28aaff8edbd260dedd00dbc16efc63860811b8c":
+        names.WHALE,            # ROCK chunk 32, head 5e0102240d006214...
+    "51e9a73507986e4ae4a139e7aa98b1eb4fd8e69c2bb814391c15e0d029223753":
+        names.DINOREX,          # ROCK chunk 33, head 801f053c3000a58c...
+    "18b43b831fc1ec46a4222803e867a346180d29e5d96ebf87fd8ac41581e945ed":
+        names.KRAKEN,           # ROCK chunk 34, head 0100032402000424...
+    "a62d57fc6199e45ac975e8232fa4c340783de559d8d117029406f65ef47cff7b":
+        names.FIREFLY,          # ROCK chunk 35, head b8fcc3a404000292...
+    "9bb05e09c42291fa06252979b88cea0054968d8dd006f91695bef92dc8670aea":
+        names.ROSERED,          # ROCK chunk 36, head 0780023c05000324...
+    "7996f8efc130ef48254bd51771bb9b101e132185d6037be8eca7982924550400":
+        names.PEGASUS,          # ROCK chunk 37, head 1000b08f0800e003...
 }
-# The boss-HP byte idles at small stale values in the rush corridors (blips
-# to 6 observed); every real fight fills to 40+. A kill only counts if the
-# fight's observed peak cleared this.
-RUSH_MIN_PEAK = 8
+# Real fights fill to 40+ (Squid 58, Axle 53). The old value of 8 was set
+# from "corridor blips reach 6" while ram-notes simultaneously recorded
+# "leftover 16 observed at stage entry" - the threshold sat BELOW a
+# documented stale value.
+RUSH_MIN_PEAK = 24
 PLAYER_HP_ADDR = 0x09A0FC       # live player HP; bit7 = just-damaged flag
 
 # ---- Reploid rescue checks (live session 2026-08-08) -----------------------
@@ -431,7 +490,16 @@ RING2_PROBE_ADDR = 0x011070
 RING2_PROBE_VANILLA = bytes.fromhex("64410580")   # 0x80054164 LE
 RING2_PROBE_STUBBED = bytes.fromhex("60770780")   # 0x80077760 LE
 RING2_STUB_PROBE_ADDR = 0x077760                  # PICKUPSANITY_STUB_ADDR
-RING2_STUB_WORD = bytes.fromhex("1f80083c")       # lui $t0, 0x801F
+# The stub's first instruction, used to prove a disc carries the pickupsanity
+# stub at all. BOTH generations are accepted on purpose: the v2 stub (0.5.0)
+# starts by loading the placement-record pointer so it can tell an enemy drop
+# from a placed pickup, while v1 (<= 0.4.2) started by building the ring base.
+# Recognising only the current one would make every disc patched before 0.5.0
+# read as "not stubbed" and silently turn pickupsanity check detection OFF
+# mid-run - a far worse failure than not having the enemy-drop fix.
+RING2_STUB_WORD = bytes.fromhex("10002f8e")       # v2: lw $t7, 0x10($s1)
+RING2_STUB_WORD_V1 = bytes.fromhex("1f80083c")    # v1: lui $t0, 0x801F
+RING2_STUB_WORDS = (RING2_STUB_WORD, RING2_STUB_WORD_V1)
 
 # The whole collect dispatch table, so the client can hand a cleared stage its
 # vanilla capsules back (_pickup_dispatch_apply). Kinds and stub address match
@@ -641,6 +709,18 @@ class MMX5Client(BizHawkClient):
         # corridor's stale-byte blips.
         self.rush_boss = None
         self.rush_peak = 0
+        # Arming state, added 2026-08-09. A resident module means "most
+        # recently loaded", never "in progress", so identity alone must not
+        # arm a kill. Within one arming (one observed module load) we need to
+        # SEE the intro fill happen - the bar ramps +1/frame from 1 to max -
+        # before a zero may be read as a kill, and we send at most once.
+        # This rejects the two no-fight paths the corridor dumps sit in:
+        # a stale byte >= the threshold that later drops to 0, and a module
+        # resident with the byte already 0.
+        self.rush_prev_hp = None
+        self.rush_saw_low = False
+        self.rush_saw_fill = False
+        self.rush_sent = False
         # Reploid watcher: (stage id, lives) from the last poll that was
         # trusted gameplay in a Reploid stage - None anywhere else, so a
         # menu, savestate load or stage change can never fake an increment.
@@ -783,7 +863,12 @@ class MMX5Client(BizHawkClient):
         frac = int.from_bytes(digest[:4], "big") / 0xFFFFFFFF
         lo, hi = band
         rolled = round(vanilla * (lo + frac * (hi - lo)))
-        return max(BOSS_HP_MIN, min(BOSS_HP_MAX, rolled))
+        # The floor is min(BOSS_HP_MIN, vanilla), not BOSS_HP_MIN: it must
+        # never RAISE a boss above what vanilla would have given, or `weak`
+        # becomes a buff wherever vanilla already sits under 0x20 (which it
+        # does early in a run - the accumulator starts at 0). Where vanilla is
+        # already below the artwork's domain we simply do not make it worse.
+        return max(min(BOSS_HP_MIN, vanilla), min(BOSS_HP_MAX, rolled))
 
     async def _boss_hp_apply(self, ctx, save: bytes, in_gameplay: bool,
                              stage_id: int) -> None:
@@ -794,6 +879,23 @@ class MMX5Client(BizHawkClient):
         """
         if not (ctx.slot_data or {}).get("boss_hp_randomization", 0):
             return
+        # STAGE 0x0C IS EXCLUDED (2026-08-09). 0x1CA2 scales the lifebar for
+        # EVERY boss but sets HP for only SOME. Measured: Axle 53 -> fills 53
+        # and Sigma 80 -> fills 80 (both driven by it), but the Squid rematch
+        # reads 0x1CA2 = 127 and fills to 58 - rush rematches take their HP
+        # somewhere else. Randomizing the byte there therefore does not change
+        # the fight at all, it only desynchronizes the bar from the boss's
+        # real HP, at ANY roll value - the 0x20 floor does not help. A tester
+        # saw exactly that on three rematches ("the Max is low but the HP they
+        # get is higher than the max").
+        #
+        # Cost of this exclusion, accepted deliberately: Sigma himself IS
+        # 0x1CA2-driven and lives in this stage, so he stops being
+        # randomized. Eight visibly broken rematch bars is the worse trade.
+        # Treating the stage as "not gameplay" reuses the restore path below,
+        # so entering it hands the game its own number back.
+        if stage_id == SIGMA_STAGE_ID:
+            in_gameplay = False
         current = save[OFF_BOSS_HP]
         # 0 is never a real baseline. The stage id (0x800D1C0C) changes during
         # the stage load, but the Boss Level function has not necessarily
@@ -999,7 +1101,7 @@ class MMX5Client(BizHawkClient):
         evidence about the disc. The dispatch entry only distinguishes a
         loaded vanilla EXE from boot, where everything reads zero.
         """
-        if bytes(stub_probe) == RING2_STUB_WORD:
+        if bytes(stub_probe) in RING2_STUB_WORDS:
             return True
         if bytes(dispatch_probe) == RING2_PROBE_VANILLA:
             return False
@@ -1468,50 +1570,94 @@ class MMX5Client(BizHawkClient):
             # ---- Boss Rush rematch kills (client-side watcher) -------------
             # Fight state machine per ram-notes §Boss fights. Every condition
             # must hold at the SAME poll:
-            #   stage 0x0C + mode 0x0A - the rush, in gameplay. The stage
-            #       gate alone keeps own-stage Maverick fights out (their
-            #       modules carry the same fingerprints).
-            #   fingerprint matches    - the resident module names the fight;
-            #       Sigma forms and half-streamed garbage match nothing and
-            #       send nothing. NOT 0x1C1D, which is route-dependent.
-            #   peak >= RUSH_MIN_PEAK  - a real HP fill happened; the byte
-            #       idles at small stale blips (<= 6 observed) in corridors,
-            #       and the module persists there after a fight.
+            #   stage 0x0C + mode 0x0A - the rush, in gameplay.
+            #   fingerprint matches    - the resident module names the fight
+            #       (256 bytes, disc-unique - see RUSH_FP_LEN for why 16 was
+            #       not). An unknown module sends NOTHING.
+            #   saw the fill          - the intro bar ramps +1/frame from 1 to
+            #       max, so a real fight is VISIBLE as a rise. Required
+            #       because identity alone cannot mean "in progress".
+            #   peak >= RUSH_MIN_PEAK  - the rise reached fight scale.
             #   boss HP == 0           - the kill. It persists 600+ frames,
             #       so a poll cannot miss it.
             #   player HP > 0          - a player death mid-fight must never
             #       read as a boss kill, whatever the respawn does to the
             #       boss-HP byte (the module stays resident through it).
+            #
+            # WHY THE FILL AND THE ONE-SEND RULE EXIST (2026-08-09). Two
+            # captured corridor states - ramdump_rematch_before_f369766 (Izzy
+            # resident) and _after_f372037 (Dizzy resident) - satisfy stage,
+            # mode, identity, boss HP 0 and player alive with NO fight
+            # happening. Every term except the fill is true while simply
+            # walking between portals. Requiring an observed rise inside the
+            # current arming rejects both no-fight paths: a stale byte that
+            # later drops to 0 (ram-notes records 16 at stage entry), and a
+            # resident module with the byte already 0.
+            #
             # Deliberately NOT save_trusted: nothing here reads the save
             # struct, and the server is the permanent record - the rush
             # resets on stage re-entry, so a send missed by a disconnect is
             # refightable, the same shape as pickupsanity's ring.
             if (ctx.slot_data or {}).get("rematch_checks", 0):
                 in_rush = cur_stage_id == SIGMA_STAGE_ID and mode[0] == 0x0A
-                fp_boss = RUSH_FP_TO_STAGE.get(bytes(rush_fp)) if in_rush else None
+                fp_boss = (RUSH_FP_TO_STAGE.get(hashlib.sha256(bytes(rush_fp)).hexdigest())
+                           if in_rush else None)
                 if fp_boss != self.rush_boss:
-                    # Fight identity changed: new portal, module replaced, or
-                    # we left the rush. Start the peak over - a previous
-                    # fight's fill must never validate a different fight.
+                    # Identity changed: a new portal streamed a module in, or
+                    # we left the rush. This is the ONLY thing that arms a
+                    # fight - a module that has merely stayed resident since
+                    # the last kill can never credit again.
                     self.rush_boss = fp_boss
                     self.rush_peak = 0
+                    self.rush_prev_hp = None
+                    self.rush_saw_low = False
+                    self.rush_saw_fill = False
+                    self.rush_sent = False
                 if fp_boss is not None:
                     if (player_hp[0] & 0x7F) == 0:
                         # Player down mid-fight. Death costs seconds of
                         # non-gameplay modes, but polls are sparse - relying
                         # on catching one of those frames would leave a
                         # window where "boss 0 + player respawned" still
-                        # carried the dead fight's peak. Dropping the peak
-                        # here closes it: a surviving boss re-arms only via
-                        # HP actually observed again.
+                        # carried the dead fight's peak. Dropping the whole
+                        # arming here closes it: the boss must be seen to
+                        # fill again before another kill can count.
                         self.rush_peak = 0
+                        self.rush_prev_hp = None
+                        self.rush_saw_low = False
+                        self.rush_saw_fill = False
                     else:
-                        self.rush_peak = max(self.rush_peak, rush_hp[0])
-                        if rush_hp[0] == 0 and self.rush_peak >= RUSH_MIN_PEAK:
+                        hp_now = rush_hp[0]
+                        # "The bar was seen to fill" - two ways to establish
+                        # it, because polls are far sparser than the ~1s ramp
+                        # and one rule alone is either brittle or leaky:
+                        #
+                        #   a strict rise      - stale bytes do not climb, so
+                        #       any increase is the engine filling the bar;
+                        #   low THEN >= peak   - covers the common case where
+                        #       the ramp completes entirely between two polls;
+                        #       the arming poll supplies the low reading, and
+                        #       after a kill the byte sits at 0, which is low.
+                        #
+                        # Neither admits the two no-fight states: a stale byte
+                        # at or above the threshold never rises and was never
+                        # seen low, and a resident module with the byte at 0
+                        # never reaches the threshold.
+                        if self.rush_prev_hp is not None and hp_now > self.rush_prev_hp:
+                            self.rush_saw_fill = True
+                        if hp_now < RUSH_MIN_PEAK:
+                            self.rush_saw_low = True
+                        elif self.rush_saw_low:
+                            self.rush_saw_fill = True
+                        self.rush_prev_hp = hp_now
+                        self.rush_peak = max(self.rush_peak, hp_now)
+                        if (hp_now == 0 and self.rush_saw_fill
+                                and self.rush_peak >= RUSH_MIN_PEAK
+                                and not self.rush_sent):
                             check(names.rematch_location(fp_boss), True)
-                            # One send per observed fill; re-arms only via a
-                            # new fill (or `check`'s dedup if already sent).
-                            self.rush_peak = 0
+                            # One send per arming. Re-arming needs a module
+                            # change, i.e. an actual new portal.
+                            self.rush_sent = True
 
             # ---- all_mavericks: hold the endgame shut until 8 kills --------
             # The colony resolution writes ACT = ENDGAME_ACT, which is what
@@ -1696,7 +1842,29 @@ class MMX5Client(BizHawkClient):
                     else:
                         # The intro capsule (deliberately not a location) and
                         # anything unmapped: log once, consume, don't send.
-                        rec_key = ("ring2", stage_id, kind, rec_id, recptr)
+                        # Two keys on purpose. The info line is deduped
+                        # WITHOUT the record pointer, because enemy-dropped
+                        # consumables come through this same branch with a
+                        # different pointer every time - keying on it would
+                        # turn an info-level line into a spam firehose. The
+                        # debug line keeps the pointer for every record.
+                        #
+                        # The info line still SHOWS one example pointer, and
+                        # that sample is load-bearing: the disc-side fix for
+                        # "enemy drops do nothing under pickupsanity" needs to
+                        # know what a dropped item carries at obj+0x10 (a zero,
+                        # a stale pooled value, or something else), and this is
+                        # the only place that value surfaces without an
+                        # emulator session. One line per kind per stage.
+                        info_key = ("ring2", stage_id, kind, rec_id)
+                        if info_key not in self.unknown_records_logged:
+                            self.unknown_records_logged.add(info_key)
+                            logger.info(
+                                f"MMX5: unmapped pickupsanity record stage={stage_id} "
+                                f"kind={kind:X} id={rec_id:02X} rec=0x{recptr:08X} "
+                                f"- ignored (further records of this kind in this "
+                                f"stage are silent)")
+                        rec_key = ("ring2ptr", stage_id, kind, rec_id, recptr)
                         if rec_key not in self.unknown_records_logged:
                             self.unknown_records_logged.add(rec_key)
                             logger.debug(

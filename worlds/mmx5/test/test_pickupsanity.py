@@ -81,14 +81,20 @@ class TestPickupData(MMX5TestBase):
             self.assertEqual(pickups.LOCATION_STAGE_ID[name], stage)
 
     def test_stub_and_edits(self) -> None:
-        # 21 words, ends with j 0x800543C8 (consume tail) + delay-slot commit.
-        self.assertEqual(len(disc.PICKUPSANITY_STUB), 21 * 4)
+        # v2 (0.5.0): 45 instruction words + a 7-word vanilla-handler jump
+        # table. Was 21 words while the stub ate every consumable.
+        self.assertEqual(len(disc.PICKUPSANITY_STUB), 52 * 4)
         self.assertEqual(len(disc.PICKUPSANITY_STUB) % 4, 0)
-        tail_j = int.from_bytes(disc.PICKUPSANITY_STUB[-8:-4], "little")
-        self.assertEqual(tail_j, 0x08000000 | ((0x800543C8 >> 2) & 0x03FFFFFF))
-        # Stub must fit inside the verified free-space run (zeros to 0x77800).
+        # The consume tail is no longer the last word - the jump table is - so
+        # look for it where the placed-pickup path actually ends (word 30).
+        consume_j = 0x08000000 | ((0x800543C8 >> 2) & 0x03FFFFFF)
+        self.assertEqual(
+            int.from_bytes(disc.PICKUPSANITY_STUB[30 * 4:31 * 4], "little"),
+            consume_j, "placed pickups must still consume with no vanilla effect")
+        # Stub must fit the free-space run measured in the vanilla EXE:
+        # 0x800776A0..0x800778F8 is zero, i.e. 102 words from the stub base.
         self.assertLessEqual(disc.PICKUPSANITY_STUB_ADDR + len(disc.PICKUPSANITY_STUB),
-                             0x80077800)
+                             0x800778F8)
         edits = disc.pickupsanity_edits()
         # stub + 7 dispatch redirects, every redirect pointing at the stub.
         self.assertEqual(len(edits), 1 + len(disc.CONSUMABLE_KINDS))
@@ -178,3 +184,34 @@ class TestPickupsanityClient(unittest.IsolatedAsyncioTestCase):
         ack_addrs = [w[0] for w in ctx.writes]
         self.assertIn(c.RING2_ADDR + 0 * 8 + 3, ack_addrs,
                       "confirmed record was not acked")
+
+    async def test_unmapped_records_log_once_per_kind_not_per_pointer(self) -> None:
+        """Enemy-dropped consumables land in the unmapped branch.
+
+        The pickupsanity stub is indexed by ITEM KIND, so while it is
+        installed EVERY consumable goes through it - including the ones
+        enemies drop, which have no placement record and so never resolve to
+        a location (tester report 2026-08-09: enemy health drops do nothing
+        until every pickup in the stage is checked and the client hands the
+        vanilla handlers back).
+
+        That branch was raised to `info` so the situation is visible in a
+        player's log at the default level. It therefore MUST NOT be deduped on
+        the record pointer: drops carry a different pointer every time, so a
+        pointer-keyed dedup emits a fresh line per drop and buries the log.
+        """
+        import logging
+        import worlds.mmx5.client as c
+        stage, area, idx, iid, name = self.PICKUP
+        client, ctx = self._client(), self._ctx()
+        with self.assertLogs("Client", level="INFO") as caught:
+            for ptr in range(0x800F4000, 0x800F4000 + 40 * 8, 8):
+                ring2 = ring2_with([(stage, 0x3, iid, ptr)])
+                await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                  client=client, ctx=ctx, ring2=ring2)
+            # assertLogs fails if nothing is emitted, so guarantee one line.
+            logging.getLogger("Client").info("sentinel")
+        unmapped = [m for m in caught.output if "unmapped pickupsanity" in m]
+        self.assertEqual(len(unmapped), 1,
+                         f"40 distinct garbage pointers produced {len(unmapped)} "
+                         f"info lines - the dedup key still includes the pointer")

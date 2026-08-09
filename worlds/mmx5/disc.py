@@ -161,33 +161,119 @@ CAPSULE_STUB = bytes.fromhex(
 # already-owned despawn cannot occur; the vanilla respawn-on-revisit is what
 # makes "record until server confirms, then ack" safe here too.
 PICKUPSANITY_STUB_ADDR = 0x80077760    # free-space run A after the capsule
-                                       # stub (zeros 0x80077760-0x800777FF
-                                       # verified in the vanilla EXE)
+                                       # stub. The vanilla EXE holds 600
+                                       # contiguous zero bytes from
+                                       # 0x800776A0 to 0x800778F8, i.e. 102
+                                       # free words from here (measured
+                                       # 2026-08-09 off the disc; the older
+                                       # "...-0x800777FF" note was cautious,
+                                       # not the actual extent). This stub
+                                       # uses 52.
+#
+# v2 (2026-08-09) - THE STUB NO LONGER EATS EVERY CONSUMABLE.
+#
+# Tester report: with pickupsanity on, health dropped by enemies did nothing
+# until every pickup in the stage was checked. Cause: the collect dispatcher
+# at 0x80054084 indexes by ITEM KIND, and kinds 0x02-0x08 are the same whether
+# an item was placed in the stage or dropped by an enemy. The v1 stub ended in
+# an unconditional `j 0x800543C8` (consume, no effect), so it ate the lot.
+# `_pickup_dispatch_apply` restoring the vanilla handlers once a stage was
+# fully checked is what made drops start working "later".
+#
+# The fix: work out whether the collected object is a spawner-PLACED pickup
+# and, if not, hand it to the real vanilla handler for its kind.
+#
+# WHY obj+0x10 IS A SOUND TEST. The object allocator 0x8002C938 zeroes 156
+# (0x9C) bytes of the pool slot on every allocation (`sb zero,(v0)` loop at
+# 0x8002C97C, counter 0x9B..-1), and obj+0x10 is inside that wipe. The ONLY
+# writer of a record pointer there is the placement spawner
+# (`sw s2,0x10(s1)` @ 0x8002B2B8). So a dropped item carries 0, and no stale
+# pointer can survive in a recycled slot - which was the one thing that could
+# have made this approach silently useless.
+#
+# The minor/id checks are defence in depth on top of that, using facts the
+# static extraction already proved (pickups.py): a placement record is
+# {flags, minor, id, sub, s16 x, s16 y} with minor 0x2F = item, and the ctor
+# at 0x8005367C maps id 0x20->kind 0x02 ... id 0x26->kind 0x08, i.e.
+# id == kind + 0x1E. Verified to accept all 32 real records (test_disc.py).
+#
+# Falling through to a vanilla handler is register-safe: 0x80054164/98/D8,
+# 0x80054204 and 0x80054218 read only s0 and s1 and rebuild v0/v1/a0/a1
+# themselves - none of them read the t-registers this stub uses as scratch.
+#
 # R3000 LOAD-DELAY-SLOT SAFE (the v3..v6 lesson): every load's value is first
-# used at least 2 instructions later - audit in the word comments.
+# used at least 2 instructions later - audit in the word comments, and
+# machine-checked in test_disc.py along with every branch target.
 PICKUPSANITY_STUB = bytes.fromhex(
+    # ---- is this a spawner-placed pickup, or something an enemy dropped? --
+    "10002f8e"  # lw    t7, 0x10(s1)      ; record ptr - 0 unless placed
+    "82002d92"  # lbu   t5, 0x82(s1)      ; item kind (fills t7's delay)
+    "00000000"  # nop                     ; (fills t5's delay)
+    "1c00e011"  # beqz  t7, 0x800777E0    ; no record => enemy drop, go vanilla
+    "00000000"  # nop
+    "0100ee91"  # lbu   t6, 0x01(t7)      ; record minor
+    "2f001824"  # addiu t8, zero, 0x2F    ; (fills t6's delay)
+    "1800d815"  # bne   t6, t8, 0x800777E0; minor != 0x2F => not an item record
+    "00000000"  # nop
+    "0200ee91"  # lbu   t6, 0x02(t7)      ; record id
+    "1e00b825"  # addiu t8, t5, 0x1E      ; expected id = kind + 0x1E
+    "1400d815"  # bne   t6, t8, 0x800777E0; mismatch => stale/foreign record
+    "00000000"  # nop
+    # ---- placed pickup: record the check and consume (v1, unchanged) ------
     "1f80083c"  # lui   t0, 0x801F
-    "00a10835"  # ori   t0, t0, 0xA100     ; t0 = ring2 base 0x801FA100
-    "0001098d"  # lw    t1, 0x100(t0)      ; t1 = monotonic count (0x801FA200)
-    "0d800b3c"  # lui   t3, 0x800D         ; (fills t1's load delay slot)
-    "1f002a31"  # andi  t2, t1, 0x1F       ; ring slot index (32 slots)
-    "c0500a00"  # sll   t2, t2, 3          ; *8 bytes per slot
-    "21500a01"  # addu  t2, t0, t2         ; t2 = slot address
-    "0c1c6c91"  # lbu   t4, 0x1C0C(t3)     ; stage id (spawn engine's input)
-    "10002f8e"  # lw    t7, 0x10(s1)       ; record ptr (fills t4's delay)
-    "82002d92"  # lbu   t5, 0x82(s1)       ; item kind (fills t7's delay)
-    "02002e92"  # lbu   t6, 0x02(s1)       ; item id   (fills t5's delay)
-    "00004ca1"  # sb    t4, 0x00(t2)       ; slot+0: stage
-    "01004da1"  # sb    t5, 0x01(t2)       ; slot+1: kind
-    "02004ea1"  # sb    t6, 0x02(t2)       ; slot+2: id
-    "04004fad"  # sw    t7, 0x04(t2)       ; slot+4: record ptr
+    "00a10835"  # ori   t0, t0, 0xA100    ; t0 = ring2 base 0x801FA100
+    "0001098d"  # lw    t1, 0x100(t0)     ; t1 = monotonic count (0x801FA200)
+    "0d800b3c"  # lui   t3, 0x800D        ; (fills t1's load delay slot)
+    "1f002a31"  # andi  t2, t1, 0x1F      ; ring slot index (32 slots)
+    "c0500a00"  # sll   t2, t2, 3         ; *8 bytes per slot
+    "21500a01"  # addu  t2, t0, t2        ; t2 = slot address
+    "0c1c6c91"  # lbu   t4, 0x1C0C(t3)    ; stage id (spawn engine's input)
+    "02002e92"  # lbu   t6, 0x02(s1)      ; item id (fills t4's delay)
+    "00004ca1"  # sb    t4, 0x00(t2)      ; slot+0: stage
+    "01004da1"  # sb    t5, 0x01(t2)      ; slot+1: kind
+    "02004ea1"  # sb    t6, 0x02(t2)      ; slot+2: id
+    "04004fad"  # sw    t7, 0x04(t2)      ; slot+4: record ptr
     "7f002c31"  # andi  t4, t1, 0x7F
-    "80008c35"  # ori   t4, t4, 0x80       ; seq = (count & 0x7F) | 0x80
-    "03004ca1"  # sb    t4, 0x03(t2)       ; slot+3: seq
+    "80008c35"  # ori   t4, t4, 0x80      ; seq = (count & 0x7F) | 0x80
+    "03004ca1"  # sb    t4, 0x03(t2)      ; slot+3: seq
     "01002925"  # addiu t1, t1, 1
-    "f2500108"  # j     0x800543C8         ; consume item, no vanilla effect
-    "000109ad"  # sw    t1, 0x100(t0)      ; (delay slot) commit count
+    "f2500108"  # j     0x800543C8        ; consume item, no vanilla effect
+    "000109ad"  # sw    t1, 0x100(t0)     ; (delay slot) commit count
+    # ---- not placed: run the vanilla handler for this kind ----------------
+    "feffae25"  # addiu t6, t5, -2        ; kind - 2
+    "0700d82d"  # sltiu t8, t6, 7         ; kinds 0x02..0x08 only
+    "08000013"  # beqz  t8, 0x8007780C    ; anything else: consume as before
+    "80700e00"  # sll   t6, t6, 2         ; (delay slot) *4
+    "0780183c"  # lui   t8, 0x8007
+    "14781827"  # addiu t8, t8, 0x7814    ; t8 = VANILLA_HANDLERS table
+    "21c00e03"  # addu  t8, t8, t6
+    "0000198f"  # lw    t9, 0x00(t8)      ; handler address
+    "00000000"  # nop                     ; (t9's load delay slot)
+    "08002003"  # jr    t9                ; enter it with s0/s1 untouched
+    "00000000"  # nop
+    "f2500108"  # j     0x800543C8        ; out-of-range kind: consume
+    "00000000"  # nop
+    # ---- VANILLA_HANDLERS table @0x80077814, one word per kind 0x02..0x08 -
+    "64410580"  # 0x80054164  kind 0x02  small HP
+    "98410580"  # 0x80054198  kind 0x03  large HP
+    "d8410580"  # 0x800541D8  kind 0x04  full HP
+    "04420580"  # 0x80054204  kind 0x05  small weapon
+    "04420580"  # 0x80054204  kind 0x06  large weapon  (shared)
+    "04420580"  # 0x80054204  kind 0x07  full weapon   (shared)
+    "18420580"  # 0x80054218  kind 0x08  1-UP
 )
+# Where the jump table lands inside the stub, and what it must contain. Kept
+# next to the blob so the test can check both without re-deriving them.
+PICKUPSANITY_VANILLA_TABLE_ADDR = 0x80077814
+VANILLA_DISPATCH = {
+    0x2: 0x80054164,   # small HP
+    0x3: 0x80054198,   # large HP
+    0x4: 0x800541D8,   # full HP
+    0x5: 0x80054204,   # small weapon
+    0x6: 0x80054204,   # large weapon  (same handler)
+    0x7: 0x80054204,   # full weapon   (same handler)
+    0x8: 0x80054218,   # 1-UP
+}
 DISPATCH_TABLE_ADDR = 0x80011068       # collect jump table, one word per kind
 CONSUMABLE_KINDS = (0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8)
 
