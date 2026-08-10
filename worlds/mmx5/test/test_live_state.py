@@ -56,6 +56,41 @@ class TestLiveWeaponMirror(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(ctx.live_weapon_writes(), [],
                          "wrote the live byte with nothing to change")
 
+    async def test_gaea_armor_is_never_re_armed(self) -> None:
+        """CRASH REGRESSION (tester report on 0.4.1, 2026-08-10).
+
+        Gaea Armor cannot use special weapons, and the engine enforces it at
+        stage load: 0x8003C2D4 branches on the character/armor selector
+        0x800D1C49 == 3, zeroes the live weapons byte (player+0xC9, which IS
+        LIVE_WEAPONS_ADDR) and skips the repopulation entirely.
+
+        Mirroring the granted weapons back in re-arms a state the game
+        guarantees never happens; cycling to one of them with L1/R1 crashed
+        the game. The mirror must stay out of Gaea's way.
+        """
+        client = MMX5Client()
+        client.ap_patched = True
+        save = bytearray(make_save(max_hp=0x20))
+        save[mmx5_client.OFF_AP_WEAPONS] = 0xFF
+        save[mmx5_client.OFF_ARMOR_SELECT] = mmx5_client.ARMOR_SELECT_GAEA
+        ctx = await run_watcher(bytes(save), client=client, live_weapons=0x00)
+        self.assertEqual(ctx.live_weapon_writes(), [],
+                         "re-armed special weapons under Gaea Armor - this is "
+                         "the L1/R1 crash")
+
+    async def test_other_armors_still_get_their_weapons(self) -> None:
+        # The guard must be Gaea-specific: normal X, Falcon and Ultimate all
+        # use special weapons, and the mid-stage grant fix must still work.
+        for selector in (0, 1, 2, 4):
+            client = MMX5Client()
+            client.ap_patched = True
+            save = bytearray(make_save(max_hp=0x20))
+            save[mmx5_client.OFF_AP_WEAPONS] = 0x05
+            save[mmx5_client.OFF_ARMOR_SELECT] = selector
+            ctx = await run_watcher(bytes(save), client=client, live_weapons=0x00)
+            self.assertIn(0x05, ctx.live_weapon_writes(),
+                          f"armor selector {selector} lost its weapons")
+
     async def test_never_invents_a_weapon_the_save_lacks(self) -> None:
         # The whole safety argument: this mirror is strictly downstream of the
         # grant path. An empty capability byte must produce no write at all.

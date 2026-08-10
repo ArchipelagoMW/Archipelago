@@ -1,5 +1,21 @@
 # Mega Man X5 apworld changelog
 
+## 0.5.1 — 2026-08-10
+
+**Fixes a crash.** Client only — no disc change, no re-patch, saves carry over.
+
+**Gaea Armor no longer crashes the game when you press L1/R1.** Gaea Armor
+cannot use special weapons — the game enforces that by clearing your equipped
+weapon list when a stage loads. Since 0.3.4 the client has been mirroring your
+received weapons into that list so a weapon that arrives mid-stage works
+immediately, and it was doing so under Gaea too, putting the game into a state
+it is never meant to reach; switching weapons from there crashed it. The
+mirror now leaves Gaea Armor alone. Your weapons are untouched and work
+normally again the moment you use any other armor.
+
+This affects any seed where you collect all four Gaea parts — it is not
+limited to `secret_armors_in_pool`. Reported by a tester on 0.4.1.
+
 ## 0.5.0 — 2026-08-09
 
 Four bug fixes from a tester's completed run on 0.4.1.

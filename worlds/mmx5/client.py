@@ -214,6 +214,21 @@ PARTS_MASK = 0x0003FFFC                 # bits 2..17
 OFF_TANKS = 0x0D1C7F - SAVE_BASE
 OFF_HEARTS = 0x0D1C80 - SAVE_BASE
 OFF_ARMOR = 0x0D1CA1 - SAVE_BASE       # armor parts byte (Falcon 0-3, Gaea 4-7)
+# Character/armor SELECTOR (community cheat archive: "Character & Armor
+# Modifier", 300D1C49 00??). The stage-load weapon repopulation branches on
+# it at 0x8003C2D4:
+#
+#   8003C2B4  lbu   $a0, 0x49($a1)        ; a1 = 0x800D1C00
+#   8003C2D0  addiu $v0, $zero, 3
+#   8003C2D4  bne   $a0, $v0, 0x8003C324  ; not 3 -> normal repopulation
+#   8003C2EC  sb    $zero, 0xc9($s0)      ; 3 -> ZERO the live weapons byte
+#   8003C31C  j     0x8003C33C            ; ...and skip repopulation
+#
+# player+0xC9 is LIVE_WEAPONS_ADDR. Selector 3 is Gaea Armor: it is the only
+# X form that cannot use special weapons, and a tester's crash reproduced
+# exactly on Gaea + L1/R1 (weapon cycle). See _live_weapons_apply.
+OFF_ARMOR_SELECT = 0x0D1C49 - SAVE_BASE
+ARMOR_SELECT_GAEA = 3
 # Armor SET-COMPLETION flags: bit1 Falcon complete, bit2 Gaea complete.
 # Capability comes from a complete set, so this - not the parts byte -
 # is what must survive while a part is withheld.
@@ -1024,6 +1039,18 @@ class MMX5Client(BizHawkClient):
         if not in_gameplay:
             # 0x9Axxx is garbage outside gameplay; the stage load will restore
             # this byte from the save struct anyway.
+            return
+        if save[OFF_ARMOR_SELECT] == ARMOR_SELECT_GAEA:
+            # GAEA ARMOR CANNOT USE SPECIAL WEAPONS, and the engine enforces
+            # that by zeroing this very byte at stage load and skipping the
+            # repopulation (0x8003C2D4, quoted at OFF_ARMOR_SELECT). Writing
+            # the weapons back in re-arms a state the game guarantees never
+            # happens, and cycling to one with L1/R1 CRASHES THE GAME
+            # (tester report on 0.4.1, 2026-08-10).
+            #
+            # Nothing is lost by skipping: the weapons are already committed
+            # to the save struct, so they return the moment the player leaves
+            # Gaea - which is the only way they were ever usable anyway.
             return
         wep_off = OFF_AP_WEAPONS if self.ap_patched else OFF_WEAPONS
         capability = save[wep_off]
