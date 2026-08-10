@@ -122,6 +122,22 @@ class ThemedApp(MDApp):
         self.theme_cls.dynamic_scheme_contrast = text_colors.dynamic_scheme_contrast
 
 
+class LogtoLoadingScreen(logging.Handler):
+    def __init__(self, on_log):
+        super().__init__()
+        self.on_log = on_log
+
+    def handle(self, record: logging.LogRecord):
+        self.on_log(record.getMessage())
+
+
+class LoadingScreen(MDScreen):
+    label = ObjectProperty(None)
+
+    def update_text(self, text):
+        self.label.text = text
+
+
 class ImageIcon(MDButtonIcon, AsyncImage):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
