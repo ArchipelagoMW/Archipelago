@@ -53,12 +53,12 @@ def create_player_randomization_flag(
 
 def get_target_groups(entrance_randomization_behavior: EntranceRandomizationBehavior):
     direction_matching_group_lookup = {
-        GroupFlag.TO_ANY: [GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT],
-        GroupFlag.UP: [GroupFlag.DOWN],
-        GroupFlag.DOWN: [GroupFlag.UP, GroupFlag.DOOR],
-        GroupFlag.LEFT: [GroupFlag.RIGHT],
-        GroupFlag.RIGHT: [GroupFlag.LEFT],
-        GroupFlag.DOOR: [GroupFlag.DOWN],
+        GroupFlag.TO_ANY: [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT],
+        GroupFlag.UP: [GroupFlag.DOWN, GroupFlag.TO_ANY],
+        GroupFlag.DOWN: [GroupFlag.UP, GroupFlag.DOOR, GroupFlag.TO_ANY],
+        GroupFlag.LEFT: [GroupFlag.RIGHT, GroupFlag.TO_ANY],
+        GroupFlag.RIGHT: [GroupFlag.LEFT, GroupFlag.TO_ANY],
+        GroupFlag.DOOR: [GroupFlag.DOWN, GroupFlag.TO_ANY],
     }
 
     area_matching_group_lookup = {
@@ -67,11 +67,12 @@ def get_target_groups(entrance_randomization_behavior: EntranceRandomizationBeha
             GroupFlag.IN_TO_OUT,
             GroupFlag.OUT_TO_IN,
             GroupFlag.OUT_TO_OUT,
+            GroupFlag.TO_ANY,
         ],
-        GroupFlag.IN_TO_IN: [GroupFlag.IN_TO_IN],
-        GroupFlag.IN_TO_OUT: [GroupFlag.IN_TO_OUT],
-        GroupFlag.OUT_TO_IN: [GroupFlag.OUT_TO_IN],
-        GroupFlag.OUT_TO_OUT: [GroupFlag.OUT_TO_OUT],
+        GroupFlag.IN_TO_IN: [GroupFlag.IN_TO_IN, GroupFlag.TO_ANY],
+        GroupFlag.IN_TO_OUT: [GroupFlag.IN_TO_OUT, GroupFlag.TO_ANY],
+        GroupFlag.OUT_TO_IN: [GroupFlag.OUT_TO_IN, GroupFlag.TO_ANY],
+        GroupFlag.OUT_TO_OUT: [GroupFlag.OUT_TO_OUT, GroupFlag.TO_ANY],
     }
 
     dir_mask = 0b0
