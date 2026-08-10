@@ -152,7 +152,7 @@ def create_entrance_rando_target(origin: Region, destination: Region, connection
         exit.randomization_group = connection_data.group
         er_target = destination.create_er_target(f"{connection_data.name} Exit")
         er_target.randomization_type = EntranceType.ONE_WAY
-        er_target.randomization_group = connection_data.group
+        # er_target.randomization_group = connection_data.group
         return exit
 
     rev = connection_data.reverse
@@ -163,7 +163,7 @@ def create_entrance_rando_target(origin: Region, destination: Region, connection
     exit.randomization_group = connection_data.group
     er_target = origin.create_er_target(connection_data.name)
     er_target.randomization_type = EntranceType.TWO_WAY
-    er_target.randomization_group = connection_data.group
+    # er_target.randomization_group = connection_data.group
     return exit
 
 
