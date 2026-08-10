@@ -173,6 +173,19 @@ class Condition:
         self.condition = condition
         self.argument = argument
 
+    def __str__(self):
+        prefix = "NOT " if not self.sign else ""
+        if type(self.condition) is str:
+            return prefix + str(self.condition)
+        operator, cond_group = self.condition
+        if operator:
+            prefix += "ANY "
+        elif operator is not None:
+            prefix += "ALL "
+        return prefix + str(cond_group)
+
+    __repr__ = __str__
+
 
 class Rule:
     def __init__(
@@ -188,6 +201,11 @@ class Rule:
         self.flags = flags
         self.operator = operator
         self.conditions = conditions
+
+    def __str__(self):
+        return self.name
+
+    __repr__ = __str__
 
 
 def validate_conditions(
@@ -209,13 +227,17 @@ def validate_conditions(
         elif condition.type == COND_FN:
             if condition.condition not in {
                 "npc",
+                "npc_rando",
                 "calamity",
-                "grindy",
+                "rare",
+                "time",
                 "pickaxe",
                 "hammer",
                 "mech_boss",
                 "minions",
                 "getfixedboi",
+                "shimmer_skips",
+                "health",
             }:
                 raise Exception(
                     f"function `{condition.condition}` in `{rule}` is not defined"
@@ -223,41 +245,6 @@ def validate_conditions(
         elif condition.type == COND_GROUP:
             _, conditions = condition.condition
             validate_conditions(rule, rule_indices, conditions)
-
-
-def mark_progression(
-    conditions: List[Condition],
-    progression: Set[str],
-    rules: list,
-    rule_indices: dict,
-    loc_to_item: dict,
-):
-    for condition in conditions:
-        if condition.type == COND_ITEM:
-            prog = condition.condition in progression
-            progression.add(loc_to_item[condition.condition])
-            rule = rules[rule_indices[condition.condition]]
-            if (
-                not prog
-                and "Achievement" not in rule.flags
-                and "Location" not in rule.flags
-                and "Item" not in rule.flags
-            ):
-                mark_progression(
-                    rule.conditions, progression, rules, rule_indices, loc_to_item
-                )
-        elif condition.type == COND_LOC:
-
-            mark_progression(
-                rules[rule_indices[condition.condition]].conditions,
-                progression,
-                rules,
-                rule_indices,
-                loc_to_item,
-            )
-        elif condition.type == COND_GROUP:
-            _, conditions = condition.condition
-            mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
 
 
 def read_data() -> Tuple[
@@ -275,6 +262,8 @@ def read_data() -> Tuple[
     Dict[str, int],
     # Location name to ID
     Dict[str, int],
+    # Location name to Item name
+    Dict[str, str],
     # NPCs
     List[str],
     # Pickaxe to pick power
@@ -285,12 +274,14 @@ def read_data() -> Tuple[
     List[str],
     # Calamity final bosses
     List[str],
-    # Progression rules
-    Set[str],
     # Armor to minion count,
-    Dict[str, int],
+    Tuple[Tuple[str, int]],
     # Accessory to minion count,
-    Dict[str, int],
+    Tuple[Tuple[str, int]],
+    # Health upgrades
+    List[str],
+    # Calamity health upgrades that are unordered and give 25 health each
+    List[str],
 ]:
     next_id = 0x7E0000
     item_name_to_id = {}
@@ -308,8 +299,10 @@ def read_data() -> Tuple[
     mech_bosses = []
     final_boss_loc = []
     final_bosses = []
-    armor_minions = {}
-    accessory_minions = {}
+    armor_minions_list = []
+    accessory_minions_list = []
+    health_upgrades = []
+    quarter_fruits = []
 
     progression = set()
 
@@ -552,9 +545,13 @@ def read_data() -> Tuple[
                     "Goal",
                     "Early",
                     "Achievement",
+                    "Rare",
+                    "Time",
+                    "Crafting",
                     "Grindy",
                     "Fishing",
                     "Npc",
+                    "Pet",
                     "Pickaxe",
                     "Hammer",
                     "Minions",
@@ -566,6 +563,9 @@ def read_data() -> Tuple[
                     "Calamity",
                     "Not Calamity",
                     "Not Calamity Getfixedboi",
+                    "Shimmer",
+                    "Health",
+                    "Quarter Fruit",
                 }:
                     raise Exception(
                         f"rule `{name}` on line `{line + 1}` has unrecognized flag `{flag}`"
@@ -584,6 +584,11 @@ def read_data() -> Tuple[
                 loc_to_item[name] = name
 
             if "Npc" in flags:
+                item_name_to_id[name] = next_id
+                next_id += 1
+                loc_to_item[name] = name
+                npcs.append(name)
+            elif "Pet" in flags:
                 npcs.append(name)
 
             if (power := flags.get("Pickaxe")) is not None:
@@ -601,10 +606,16 @@ def read_data() -> Tuple[
                 final_boss_loc.append(name)
 
             if (minions := flags.get("Armor Minions")) is not None:
-                armor_minions[name] = minions
+                armor_minions_list.append((name, minions))
 
             if (minions := flags.get("Minions")) is not None:
-                accessory_minions[name] = minions
+                accessory_minions_list.append((name, minions))
+
+            if "Health" in flags:
+                health_upgrades.append(name)
+
+            if "Quarter Fruit" in flags:
+                quarter_fruits.append(name)
 
         if goal:
             if goal in goal_indices:
@@ -634,27 +645,11 @@ def read_data() -> Tuple[
     _, final_boss_items = goals[goal_indices["calamity_final_bosses"]]
     final_boss_items.update(final_boss_loc)
 
-    for rule in rules:
-        validate_conditions(rule.name, rule_indices, rule.conditions)
+    armor_minions = tuple(sorted(armor_minions_list, key=lambda item: item[1], reverse=True))
+    accessory_minions = tuple(accessory_minions_list)
 
     for rule in rules:
-        prog = False
-        if (
-            "Npc" in rule.flags
-            or "Goal" in rule.flags
-            or "Pickaxe" in rule.flags
-            or "Hammer" in rule.flags
-            or "Mech Boss" in rule.flags
-            or "Final Boss" in rule.flags
-            or "Minions" in rule.flags
-            or "Armor Minions" in rule.flags
-        ):
-            progression.add(loc_to_item[rule.name])
-            prog = True
-        if prog or "Location" in rule.flags or "Achievement" in rule.flags:
-            mark_progression(
-                rule.conditions, progression, rules, rule_indices, loc_to_item
-            )
+        validate_conditions(rule.name, rule_indices, rule.conditions)
 
     # Will be randomized via `slot_randoms` / `self.multiworld.random`
     label = None
@@ -738,7 +733,7 @@ def read_data() -> Tuple[
     location_name_to_id = {}
 
     for rule in rules:
-        if "Location" in rule.flags or "Achievement" in rule.flags:
+        if "Location" in rule.flags or "Achievement" in rule.flags or "Npc" in rule.flags:
             if rule.name in location_name_to_id:
                 raise Exception(f"location `{rule.name}` shadows a previous location")
             location_name_to_id[rule.name] = next_id
@@ -752,14 +747,16 @@ def read_data() -> Tuple[
         rewards,
         item_name_to_id,
         location_name_to_id,
+        loc_to_item,
         npcs,
         pickaxes,
         hammers,
         mech_bosses,
         final_bosses,
-        progression,
         armor_minions,
         accessory_minions,
+        health_upgrades,
+        quarter_fruits,
     )
 
 
@@ -771,12 +768,14 @@ def read_data() -> Tuple[
     rewards,
     item_name_to_id,
     location_name_to_id,
+    loc_to_item,
     npcs,
     pickaxes,
     hammers,
     mech_bosses,
     final_bosses,
-    progression,
     armor_minions,
     accessory_minions,
+    health_upgrades,
+    quarter_fruits,
 ) = read_data()
