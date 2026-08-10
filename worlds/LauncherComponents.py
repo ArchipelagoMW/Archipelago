@@ -7,6 +7,7 @@ import webbrowser
 from enum import Enum
 from typing import Optional, Callable, Iterable, Sequence
 
+from Launcher import launch as launch_exe
 from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore, \
     is_windows
 
@@ -242,7 +243,7 @@ def open_patch():
             if exe is None or not isfile(exe[-1]):
                 exe = get_exe("Launcher")
 
-            launch([*exe, file], component.cli)
+            launch_exe([*exe, file], component.cli)
 
 
 def get_exe(component: str | Component) -> Sequence[str] | None:
