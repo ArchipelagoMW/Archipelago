@@ -1,9 +1,11 @@
 # Mega Man X5 apworld changelog
 
-## Unreleased
+## 0.5.3 — 2026-08-11
 
-**Most seeds need a re-patch** — the two new options below and `pickupsanity`
-all change the disc. A seed with all three off is unchanged.
+**You need to re-patch this time.** Exit Stage Anytime is on by default and
+changes the disc, so a fresh `.apmmx5` and a re-patch are required even if you
+change nothing else. Your save carries over. If you have lost your clean dump,
+MMX5-Unpatcher.exe on the release page will restore any patched disc.
 
 **New: Exit Stage Anytime** (on by default). The pause menu's "Exit Stage"
 normally only appears once you have already beaten that stage's boss, which
@@ -15,8 +17,6 @@ come for. The intro and Zero Space stay excluded, exactly as in the base game.
 **New: Water Stage Speed.** Duff McWhalen's forced-scrolling chase moves at a
 fixed pace you cannot outrun, which is a long wait every time you re-enter
 that stage for a check. Set it to 1.25x, 1.5x or about 1.9x. Off by default.
-
-**`pickupsanity` seeds need a re-patch.** Other seeds are unaffected.
 
 **Capsules you have already checked now heal you instead of doing nothing.**
 Until now the randomizer could only decide this a whole stage at a time: every
