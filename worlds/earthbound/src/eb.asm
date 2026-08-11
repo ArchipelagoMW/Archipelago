@@ -331,6 +331,9 @@ JML GetRemoteMoney
 ORG $C2A03F
 JML ClearStatusVars
 
+ORG $C2038B
+JML ClearBG3Fix
+
 ;new jmls
 
 
@@ -9135,6 +9138,10 @@ ORG $C7AB46
 db $0A
 dl MusicFade_NoSub ; Photo man, preventss script overflow
 
+ORG $C6EA42
+db $0A
+dl Monotoli_SetFoursideFlags
+
 
 ;New data table go here
 
@@ -12752,6 +12759,19 @@ LoadPartyMemberDirectionsFixed:
     plx
     lda #$0000
     jml $C17F0F
+
+ClearBG3Fix:  ; Bg3 can update multiple times per frame, which causes flickering with text. Make it Don't Do that:tm:
+    LDA $00AB
+    BEQ .label
+    RTL
+.label:
+    REP #$31
+    PHD
+    TDC
+    ADC #$FFEE
+    TCD
+    INC $00AB
+    JML $C20393
 
 
 
@@ -18408,8 +18428,19 @@ db $1F, $01, $00
 db $0A
 dl $C7AB4B
 
-;ORG $C7617D
-;dd DisplayAndGetMoney
+Monotoli_SetFoursideFlags:  ; Set various post-Fourside flags after the monotoli event
+db $70, $7C, $17, $37, $50
+db $04, $8F, $00  ; General post-fourside flag
+db $04, $65, $01  ; Delete Sentry robots
+db $04, $66, $01  ; Delete Sentry robots
+db $04, $67, $01  ; Delete Sentry robots
+db $04, $68, $01  ; Delete Sentry robots
+db $04, $69, $01  ; Delete Sentry robots
+db $04, $8F, $00  ; Remove Pokey from Monotoli building
+db $0A
+dl $C6EA47
+
+
 
 ;ORG $C62B87
 ;db $0a, $28, $ca, $ee ; Test, delete later
