@@ -1,7 +1,8 @@
 from BaseClasses import Item, ItemClassification
 import itertools
-from .game_data.local_data import item_id_table, world_version
+from .game_data.local_data import item_id_table
 from Options import OptionError
+from .Items import item_table
 from typing import Dict, TextIO
 import typing
 
@@ -38,12 +39,62 @@ def generate_early(world) -> None:  # Todo: place locked items in generate_early
     create_flavors(world)
     initialize_enemies(world)
 
+    world.pre_fill_count = 0
     if not world.options.character_shuffle:
         world.options.local_items.value.update(["Paula", "Jeff", "Poo", "Flying Man"])
-        world.event_count += 6
+        world.pre_fill_count = 6
 
     if world.options.local_teleports:
         world.options.local_items.value |= world.item_name_groups["PSI"]
+
+
+def pre_fill(world) -> None:
+    from worlds.generic.Rules import add_item_rule
+    from Fill import fill_restrictive
+    from .modules.hint_data import setup_hints
+    prefill_locations = []
+    prefill_items = []
+
+    if not world.options.character_shuffle:
+        main_characters = ["Ness", "Paula", "Jeff", "Poo"]
+        for character in main_characters:
+            if character != world.starting_character:
+                prefill_items.append(world.create_item(character))
+
+        prefill_items.extend([
+            world.create_item("Flying Man"),
+            world.create_item("Teddy Bear"),
+            world.create_item("Super Plush Bear")
+        ])
+
+        prefill_locations.extend([
+            world.get_location("Happy-Happy Village - Prisoner"),
+            world.get_location("Threed - Zombie Prisoner"),
+            world.get_location("Snow Wood - Bedroom"),
+            world.get_location("Monotoli Building - Monotoli Character"),
+            world.get_location("Dalaam - Throne Character"),
+            world.get_location("Deep Darkness - Barf Character"),
+        ])
+        world.random.shuffle(prefill_locations)
+
+        add_item_rule(world.get_location("Happy-Happy Village - Prisoner"), lambda item: item.name in world.item_name_groups["Characters"])
+        add_item_rule(world.get_location("Threed - Zombie Prisoner"), lambda item: item.name in world.item_name_groups["Characters"])
+        add_item_rule(world.get_location("Snow Wood - Bedroom"), lambda item: item.name in world.item_name_groups["Characters"])
+        add_item_rule(world.get_location("Monotoli Building - Monotoli Character"), lambda item: item.name in world.item_name_groups["Characters"])
+        add_item_rule(world.get_location("Dalaam - Throne Character"), lambda item: item.name in world.item_name_groups["Characters"])
+        add_item_rule(world.get_location("Deep Darkness - Barf Character"), lambda item: item.name in world.item_name_groups["Characters"])
+
+    fill_restrictive(world.multiworld, world.multiworld.get_all_state(False, collect_pre_fill_items=False), prefill_locations, prefill_items, True, True)
+    setup_hints(world)
+
+
+def get_pre_fill_items(self) -> list[Item]:
+    characters = ["Ness", "Paula", "Jeff", "Poo"]
+    prefill_items = []
+    for character in characters:
+        if character != self.starting_character:
+            prefill_items.append(self.create_item(f"{character}"))
+    return prefill_items
 
 
 def create_regions(world) -> None:
@@ -56,10 +107,39 @@ def create_regions(world) -> None:
 
 
 def create_items(world) -> None:
-    pool = world.get_item_pool(world.get_excluded_items())
-    world.fill_item_pool(pool)
+    from .generator_items import get_excluded_items, fill_item_pool, get_item_pool
+    pool = get_item_pool(world, get_excluded_items(world))
+    for item in world.item_pool:
+        pool.append(set_classifications(world, item))
 
+    fill_item_pool(world, pool)
     world.multiworld.itempool += pool
+
+
+def create_item(world, name: str) -> EBItem:
+    data = item_table[name]
+    return EBItem(name, data.classification, data.code, world.player)
+
+
+def get_filler_item_name(world) -> str:  # Todo: make this suck less
+    weights = {"rare": world.options.rare_filler_weight.value, "uncommon": world.options.uncommon_filler_weight.value,
+               "common": world.options.common_filler_weight.value,
+               "rare_gear": int(world.options.rare_filler_weight.value * 0.5),
+               "uncommon_gear": int(world.options.uncommon_filler_weight.value * 0.5),
+               "common_gear": int(world.options.common_filler_weight.value * 0.5),
+               "money": world.options.money_weight.value}
+
+    filler_type = world.random.choices(list(weights), weights=list(weights.values()), k=1)[0]
+    weight_table = {
+        "common": world.common_items,
+        "common_gear": world.common_gear,
+        "uncommon": world.uncommon_items,
+        "uncommon_gear": world.uncommon_gear,
+        "rare": world.rare_items,
+        "rare_gear": world.rare_gear,
+        "money": world.money
+    }
+    return world.random.choice(weight_table[filler_type])
 
 
 def set_rules(world) -> None:
@@ -68,7 +148,6 @@ def set_rules(world) -> None:
 
 
 def set_classifications(world, name: str) -> EBItem:
-    from .Items import item_table
     data = item_table[name]
     item = EBItem(name, data.classification, data.code, world.player)
 
