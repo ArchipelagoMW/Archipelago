@@ -35,6 +35,13 @@ REGIONS: list[tuple[str, int, int, int, int]] = [
     # Launch cutscene module: resolution fn's only on-disc copy; mapping
     # disc-scan verified (RAM 0x800FA000 = sector 24319 user offset 0).
     ("launch overlay", 0x800FA000, 0x800FB000, 24319, 0),
+    # Duff McWhalen's STAGE overlay - ROCK_X5.BIN chunk 4, container sector 94,
+    # so absolute disc sector 23693 + 94. Loads at 0x800EE970 like every stage
+    # module, i.e. the SAME base as the results and hub overlays above: three
+    # different code images, one RAM address. Verified by reading the
+    # autoscroll instruction's own bytes out of this chunk in the vanilla
+    # image (`ori $v1,$zero,0x8000` at chunk offset 0x4D4).
+    ("whale stage overlay", 0x800EE970, 0x800FF000, 23787, 0),
 ]
 
 

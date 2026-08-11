@@ -74,15 +74,20 @@ def seed_edits_for(**overrides) -> list:
     patch_rom reads options they had never heard of. Defaults live here so a
     new option needs updating in exactly one place."""
     from .. import Rom
-    from ..options import Goal, LaunchOdds, PickupSanity, TextSkip
+    from ..options import (ExitStageAnytime, Goal, LaunchOdds, PickupSanity,
+                           TextSkip, WaterStageSpeed)
 
     opts = {"goal": Goal(Goal.option_sigma),
             "launch_odds": LaunchOdds(LaunchOdds.option_deterministic),
             "text_skip": TextSkip(0),
-            "pickupsanity": PickupSanity(0)}
+            "pickupsanity": PickupSanity(0),
+            "exit_stage_anytime": ExitStageAnytime(0),
+            "water_stage_speed": WaterStageSpeed(0)}
     for key, value in overrides.items():
         cls = {"goal": Goal, "launch_odds": LaunchOdds, "text_skip": TextSkip,
-               "pickupsanity": PickupSanity}[key]
+               "pickupsanity": PickupSanity,
+               "exit_stage_anytime": ExitStageAnytime,
+               "water_stage_speed": WaterStageSpeed}[key]
         opts[key] = cls(value)
 
     captured = {}

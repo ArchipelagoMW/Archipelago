@@ -150,6 +150,64 @@ LAUNCH_ROLL_ADDR = 0x800FA0D4
 LAUNCH_ROLL_VANILLA = bytes.fromhex("0f004330")   # andi $v1, $v0, 0xf
 LAUNCH_ROLL_REGION = "launch overlay"
 
+# ---- Exit Stage button ------------------------------------------------------
+# Vanilla decides availability in the pause handler at 0x8003322C:
+#
+#   80033454  lbu   $a0, 0xc($v1)      ; $v1 = 0x800D1C00 -> 0x1C0C stage id
+#   8003345C  addiu $v0, $a0, -1
+#   80033460  sltiu $v0, $v0, 8        ; (stage-1) < 8  -> a Maverick stage
+#   80033464  beqz  $v0, 0x80033494    ; ...otherwise: unavailable
+#   8003346C  lbu   $v1, 0x4c($v1)     ; 0x1C4C boss-kill record
+#   80033478  srav  $v1, $v1, $v0      ; >> (stage-1)
+#   8003347C  andi  $v1, $v1, 1        ; THIS stage's boss beaten?
+#   80033480  beqz  $v1, 0x80033490    ; ...otherwise: unavailable
+#   80033484  addiu $v0, $zero, 1
+#   8003348C  sb    $v0, 0x23($s0)     ; available
+#
+# So vanilla only lets you leave a Maverick stage you have ALREADY cleared,
+# which is exactly backwards for a randomizer: the run is full of revisits for
+# a check you can now reach, and of entries into a stage you cannot yet finish.
+#
+# NOPping the SECOND branch is the whole feature - one word. The first branch
+# is deliberately left alone, and that is a safety decision, not laziness:
+# `(stage-1) < 8` already excludes the intro (stage 0) and the endgame stages
+# (0x0C/0x10/0x11). Leaving the intro early would strand ACT progression, and
+# leaving Zero Space is the business of the all_mavericks goal gate. Keeping
+# them out means this edit cannot interact with either.
+#
+# Derived from our own disassembly of the vanilla EXE. The MMX5 Improvement
+# Project Addendum documents a 12-word rewrite of the same routine; we take
+# the location, not their code (Reference/mmx5-external-findings.md).
+EXIT_STAGE_ADDR = 0x80033480
+EXIT_STAGE_VANILLA = bytes.fromhex("03006010")    # beqz $v1, +3
+EXIT_STAGE_ALWAYS = bytes(4)                      # nop -> always available
+EXIT_STAGE_REGION = "SLUS exe"
+
+# ---- Tidal Whale (Duff McWhalen) autoscroll ---------------------------------
+# The horizontal scroll speed of the water chase is a single 16-bit immediate:
+#
+#   800EEE44  ori $v1, $zero, 0x8000    ; horizontal speed, segment 1
+#
+# ⚠️ This lives in DUFF McWHALEN'S STAGE OVERLAY, which loads at 0x800EE970 -
+# the SAME RAM base as the results and hub overlays we already patch. A RAM
+# address alone does not identify it; the edit MUST name its own region (see
+# disc.REGIONS). Getting that wrong would rewrite the results screen.
+WHALE_SCROLL_ADDR = 0x800EEE44
+WHALE_SCROLL_VANILLA = bytes.fromhex("00800334")  # ori $v1, $zero, 0x8000
+WHALE_SCROLL_REGION = "whale stage overlay"
+# option value -> the immediate. Vanilla 0x8000 is 1.0x.
+WHALE_SCROLL_SPEEDS = {
+    1: 0xA000,   # 1.25x
+    2: 0xC000,   # 1.5x
+    3: 0xF000,   # ~1.9x
+}
+
+
+def whale_scroll_word(speed: int) -> bytes:
+    """`ori $v1, $zero, imm` with the immediate swapped."""
+    imm = WHALE_SCROLL_SPEEDS[speed]
+    return (0x34030000 | imm).to_bytes(4, "little")
+
 
 def patch_rom(world: "MMX5World", patch: MMX5ProcedurePatch) -> None:
     """Collect per-seed edits as {addr, hex, region} rows."""
@@ -166,6 +224,22 @@ def patch_rom(world: "MMX5World", patch: MMX5ProcedurePatch) -> None:
         for addr in (TEXT_INSTANT_ADDR, TEXT_ADVANCE_ADDR):
             seed_edits.append({"addr": addr, "hex": TEXT_NOP.hex(),
                                "region": TEXT_REGION})
+
+    if world.options.exit_stage_anytime:
+        # One NOP over the "have you already beaten this stage's boss?"
+        # branch. The Maverick-stage range test above it is left intact, so
+        # the intro and the endgame stages stay excluded exactly as vanilla.
+        seed_edits.append({"addr": EXIT_STAGE_ADDR,
+                           "hex": EXIT_STAGE_ALWAYS.hex(),
+                           "region": EXIT_STAGE_REGION})
+
+    if world.options.water_stage_speed:
+        # Duff McWhalen's stage overlay - NOT the results/hub overlay that
+        # shares its RAM base. The region name is what disambiguates them.
+        seed_edits.append({"addr": WHALE_SCROLL_ADDR,
+                           "hex": whale_scroll_word(
+                               world.options.water_stage_speed.value).hex(),
+                           "region": WHALE_SCROLL_REGION})
 
     if world.options.pickupsanity:
         # Consumable-pickup stub + jump-table redirects for kinds 0x02-0x08.

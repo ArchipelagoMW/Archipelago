@@ -264,3 +264,78 @@ class TestStubAgainstDisc(unittest.TestCase):
         # addiu $v1, $zero, 0x9b  -  the wipe counter
         self.assertEqual(self.exe[off:off + 4], bytes.fromhex("9b000324"))
         self.assertLess(0x10, 0x9B + 1, "obj+0x10 is outside the wipe")
+
+
+class TestQoLDiscEdits(unittest.TestCase):
+    """Exit Stage Anytime and the Tidal Whale autoscroll (0.5.3).
+
+    Both were located with help from the MMX5 Improvement Project Addendum's
+    workbook, but the edits are our own: theirs replaces twelve words of the
+    exit-stage routine, ours is a single NOP over one branch.
+    """
+
+    def test_exit_stage_edit_is_one_branch(self) -> None:
+        from worlds.mmx5 import Rom
+        # Vanilla gates the button on TWO conditions:
+        #   80033464  beqz $v0 -> "not a Maverick stage"
+        #   80033480  beqz $v1 -> "this stage's boss not beaten yet"
+        # Only the second is NOPped. Leaving the first intact is what keeps
+        # the intro and the endgame stages excluded, so this edit cannot
+        # strand ACT progression or interfere with the all_mavericks gate.
+        self.assertEqual(Rom.EXIT_STAGE_ADDR, 0x80033480)
+        self.assertEqual(Rom.EXIT_STAGE_ALWAYS, bytes(4))
+        self.assertEqual(Rom.EXIT_STAGE_REGION, "SLUS exe")
+
+    def test_whale_scroll_word_is_a_valid_ori(self) -> None:
+        from worlds.mmx5 import Rom
+        for speed, imm in Rom.WHALE_SCROLL_SPEEDS.items():
+            word = int.from_bytes(Rom.whale_scroll_word(speed), "little")
+            self.assertEqual(word >> 26, 0x0D, "must stay an ori")
+            self.assertEqual((word >> 21) & 0x1F, 0, "rs must be $zero")
+            self.assertEqual((word >> 16) & 0x1F, 3, "rt must be $v1")
+            self.assertEqual(word & 0xFFFF, imm)
+            self.assertGreater(imm, 0x8000, "must be FASTER than vanilla")
+
+    def test_whale_edit_names_its_own_overlay(self) -> None:
+        """The trap this edit exists inside.
+
+        0x800EE970 is the load base of the results overlay, the hub overlay
+        AND every stage overlay. A RAM address alone does not identify the
+        code, so the edit must carry its own region name - otherwise it lands
+        in the results screen at a plausible-looking address.
+        """
+        from worlds.mmx5 import Rom
+        self.assertEqual(Rom.WHALE_SCROLL_REGION, "whale stage overlay")
+        regions = {r[0] for r in disc.REGIONS}
+        self.assertIn("whale stage overlay", regions)
+        # ...and it must map somewhere DIFFERENT from the overlays it shares a
+        # RAM base with.
+        here = disc.addr_to_disc(Rom.WHALE_SCROLL_ADDR, "whale stage overlay")
+        for other in ("results overlay", "hub overlay"):
+            self.assertNotEqual(
+                here, disc.addr_to_disc(Rom.WHALE_SCROLL_ADDR, other),
+                f"whale edit resolves to the same bytes as the {other}")
+
+
+@unittest.skipUnless(os.environ.get("MMX5_DISC"),
+                     "set MMX5_DISC to a Megaman X5 .bin to verify against one")
+class TestQoLEditsAgainstDisc(unittest.TestCase):
+    """Both sites must hold the exact vanilla bytes we think they do.
+
+    This is the check that a mis-derived address cannot survive: the whale
+    edit in particular is in an overlay that shares its RAM base with two
+    others, so 'it mapped to something' is not evidence.
+    """
+
+    def test_vanilla_bytes_at_both_sites(self) -> None:
+        from worlds.mmx5 import Rom
+        data = open(os.environ["MMX5_DISC"], "rb").read()
+        for addr, region, want, label in (
+            (Rom.EXIT_STAGE_ADDR, Rom.EXIT_STAGE_REGION,
+             Rom.EXIT_STAGE_VANILLA, "exit-stage branch"),
+            (Rom.WHALE_SCROLL_ADDR, Rom.WHALE_SCROLL_REGION,
+             Rom.WHALE_SCROLL_VANILLA, "whale autoscroll"),
+        ):
+            off = disc.addr_to_disc(addr, region)
+            got = bytes(data[off + i] for i in range(4))
+            self.assertEqual(got, want, f"{label} at {addr:#010x}")

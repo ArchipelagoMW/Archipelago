@@ -119,8 +119,14 @@ class TestRandomizedOptionList(unittest.TestCase):
         # endgame_checks, rematch_checks and reploid_checks only ever ADD
         # locations, so there is nothing to gamble on - deliberately not
         # rolled (see options.py).
+        # exit_stage_anytime and water_stage_speed are pure comfort: one
+        # lets you leave a stage you have not cleared, the other shortens a
+        # forced-scroll section. Gambling them would randomly TAKE AWAY
+        # quality of life rather than vary the challenge, which is not what
+        # this option is for.
         excluded = {"start_inventory_from_pool", "randomize_options",
                     "endgame_checks", "rematch_checks", "reploid_checks",
+                    "exit_stage_anytime", "water_stage_speed",
                     "progression_balancing", "accessibility",
                     "local_items", "non_local_items", "start_inventory",
                     "start_hints", "start_location_hints", "exclude_locations",

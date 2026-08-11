@@ -229,6 +229,45 @@ class StageUnlocks(Toggle):
     display_name = "Stage Unlocks"
 
 
+class ExitStageAnytime(DefaultOnToggle):
+    """Let you quit out of a Maverick stage you have not cleared yet.
+
+    Normally the pause menu only offers "Exit Stage" once you have already
+    beaten that stage's boss, which is exactly backwards here: a randomized
+    run is full of trips into a stage for one check you can now reach, and of
+    entries into a stage you cannot finish yet. Without this, leaving means
+    dying repeatedly or clearing a stage you did not come for.
+
+    The intro stage and Zero Space are deliberately still excluded, the same
+    as vanilla - leaving those early has consequences for story progress.
+
+    Changes the disc.
+    """
+    display_name = "Exit Stage Anytime"
+
+
+class WaterStageSpeed(Choice):
+    """Speed up Duff McWhalen's forced-scrolling water section.
+
+    The chase scrolls at a fixed pace you cannot outrun, which is a long wait
+    every time you re-enter the stage for a check. This multiplies the scroll
+    speed; the stage still plays the same, it just stops taking as long.
+
+    off: unchanged
+    fast: 1.25x
+    faster: 1.5x
+    fastest: about 1.9x
+
+    Changes the disc.
+    """
+    display_name = "Water Stage Speed"
+    option_off = 0
+    option_fast = 1
+    option_faster = 2
+    option_fastest = 3
+    default = 0
+
+
 class RandomizeOptions(Toggle):
     """Let the seed pick your gameplay options for you.
 
@@ -385,6 +424,8 @@ RANDOMIZED_OPTIONS = (
 @dataclass
 class MMX5Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+    exit_stage_anytime: ExitStageAnytime
+    water_stage_speed: WaterStageSpeed
     randomize_options: RandomizeOptions
     goal: Goal
     boss_difficulty: BossDifficulty

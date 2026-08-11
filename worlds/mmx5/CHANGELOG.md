@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+**Most seeds need a re-patch** — the two new options below and `pickupsanity`
+all change the disc. A seed with all three off is unchanged.
+
+**New: Exit Stage Anytime** (on by default). The pause menu's "Exit Stage"
+normally only appears once you have already beaten that stage's boss, which
+is backwards for a randomizer — the run is full of trips into a stage for one
+check you can now reach, and entries into a stage you cannot finish yet.
+Without it, leaving means dying on purpose or clearing a stage you did not
+come for. The intro and Zero Space stay excluded, exactly as in the base game.
+
+**New: Water Stage Speed.** Duff McWhalen's forced-scrolling chase moves at a
+fixed pace you cannot outrun, which is a long wait every time you re-enter
+that stage for a check. Set it to 1.25x, 1.5x or about 1.9x. Off by default.
+
 **`pickupsanity` seeds need a re-patch.** Other seeds are unaffected.
 
 **Capsules you have already checked now heal you instead of doing nothing.**
