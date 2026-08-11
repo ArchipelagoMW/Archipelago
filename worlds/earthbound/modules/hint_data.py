@@ -9,12 +9,13 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .. import EarthBoundWorld
     from ..Rom import LocalRom
-    
+
+
 def setup_hints(world: "EarthBoundWorld") -> None:
     hint_types = [
         # gives a hint for a specific out of the way location in this player's world, regardless of what item it is
         "item_at_location",
-        "region_progression_check", # woth or foolish hint, checks specific location groups of this world so as to be more helpful.
+        "region_progression_check",  # woth or foolish hint, checks specific location groups of this world so as to be more helpful.
         "hint_for_good_item",  # gives the exact location and sender of a good item for the local player
         "item_in_local_region",  # Hints a random item that can be found in a specific local location group
         "prog_item_at_region",  # Hints the region that a good item can be found for this player
@@ -254,11 +255,11 @@ def parse_hint_data(world: "EarthBoundWorld", location: Location, rom: "LocalRom
     if hint == "item_at_location":
         if world.player == location.item.player and location.item.name in character_item_table and location.item.name != "Photograph":
             player_text = "your friend "
-            item_text = bytearray([0x1C, 0x02, party_id_nums[location.item.name]]) # In-game text command to display party member names
+            item_text = bytearray([0x1C, 0x02, party_id_nums[location.item.name]])  # In-game text command to display party member names
         elif world.player == location.item.player:
             player_text = "your "
             if location.item.name in item_id_table:
-                item_text = bytearray([0x1C, 0x05, item_id_table[location.item.name]]) # In-game text command to display item names
+                item_text = bytearray([0x1C, 0x05, item_id_table[location.item.name]])  # In-game text command to display item names
             else:
                 # if the item doesn't have a name (e.g it's PSI)
                 item_text = text_encoder(location.item.name, 128)

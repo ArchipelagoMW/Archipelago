@@ -1,4 +1,3 @@
-from typing import Dict
 from collections import Counter
 import struct
 import math
@@ -7,7 +6,6 @@ from logging import warning
 if TYPE_CHECKING:
     from .. import EarthBoundWorld
     from ..Rom import LocalRom
-
 
 
 class EarthBoundEnemy:

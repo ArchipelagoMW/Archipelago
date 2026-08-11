@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from .. import EarthBoundWorld
     from ..Rom import LocalRom
 
+
 @dataclass
 class EBArmor:
     address: int
@@ -974,7 +975,7 @@ def randomize_weapons(world: "EarthBoundWorld", rom: "LocalRom") -> None:
         
         if weapon.miss_rate == 12:
             description += "@If you use this, you might just whiff.\n"
-        elif weapon.miss_rate == 3: #yo-yos
+        elif weapon.miss_rate == 3:  # yo-yos
             description += "@Easy to use, but tricky to aim.\n"
 
         description = text_encoder(description, 0x100)

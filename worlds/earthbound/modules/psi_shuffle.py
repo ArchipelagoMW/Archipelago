@@ -2,8 +2,8 @@ import struct
 from ..Options import PSIShuffle
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from . import EarthBoundWorld
-    from .Rom import LocalRom
+    from .. import EarthBoundWorld
+    from ..Rom import LocalRom
     
 
 def shuffle_psi(world: "EarthBoundWorld") -> None:
@@ -75,7 +75,7 @@ def shuffle_psi(world: "EarthBoundWorld") -> None:
 
         if not world.options.allow_flash_as_favorite_thing:
             if world.offensive_psi_slots[0] == "Flash":
-                adjust_psi_list(world.offensive_psi_slots, "Flash", world.random.randint(1, 5)) # Randomize which slot gets Flash
+                adjust_psi_list(world.offensive_psi_slots, "Flash", world.random.randint(1, 5))  # Randomize which slot gets Flash
 
         world.random.shuffle(world.assist_psi_slots)
 

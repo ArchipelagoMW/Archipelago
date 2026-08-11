@@ -3,7 +3,6 @@ import os
 import Utils
 import typing
 import struct
-import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .game_data import local_data
 from .game_data.battle_bg_data import battle_bg_bpp
@@ -726,7 +725,8 @@ class EBProcPatch(APProcedurePatch, APTokenMixin):
 
     def write_bytes(self, offset: int, value: typing.Iterable[int]) -> None:
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
-    
+
+    @classmethod
     def copy_bytes(self, source: int, amount: int, destination: int) -> None:
         self.write_token(APTokenTypes.COPY, destination, (amount, source))
 

@@ -6,8 +6,8 @@ from BaseClasses import ItemClassification, Location
 import struct
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from . import EarthBoundWorld
-    from .Rom import LocalRom
+    from .. import EarthBoundWorld
+    from ..Rom import LocalRom
 
 high_purchase_areas = {
     "Twoson",
