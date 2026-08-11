@@ -38,6 +38,13 @@ Legend: ✅ = verified in-emulator/disassembly · ⚠️ = partially verified / 
 > cannot use special weapons — and re-arming that byte under it made the game
 > crash on a weapon switch (L1/R1). Any client write to `0x8009A169` MUST
 > respect this branch.
+>
+> **Full value table, CONFIRMED 2026-08-11** (shipped 0.5.1 on the inference
+> alone; the Improvement Project workbook's `Armor-Common` sheet states it
+> outright, so "selector 3 = Gaea" is no longer an inference):
+> `00` X · `01` Fourth Armor · `02` Falcon · `03` **Gaea** · `04` Ultimate ·
+> `05` Zero. The live in-game copy is **`0x8009A19A`** (= `player+0xFA`,
+> written from `0x1C49` at `0x8003C2BC`), and armor PARTS remain `0x800D1CA1`.
 > (b) **The Reploid rescue handler discards the rescue at the 9-life cap.**
 > `lives = 0x800D1C45`; the handler does `lives+1`, and when that reaches 10
 > it clamps back to 9 and **branches past the sound call** while the
