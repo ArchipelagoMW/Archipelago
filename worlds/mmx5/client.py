@@ -523,6 +523,22 @@ RING2_STUB_PROBE_ADDR = 0x077760                  # PICKUPSANITY_STUB_ADDR
 RING2_STUB_WORD = bytes.fromhex("10002f8e")       # v2: lw $t7, 0x10($s1)
 RING2_STUB_WORD_V1 = bytes.fromhex("1f80083c")    # v1: lui $t0, 0x801F
 RING2_STUB_WORDS = (RING2_STUB_WORD, RING2_STUB_WORD_V1)
+# v3 discs additionally carry a CHECKED_TABLE the stub walks: record pointers
+# the client says are already checked, which the stub hands to the vanilla
+# handler instead of recording. That is what lets ONE stage heal some capsules
+# while still recording others - impossible with the kind-indexed dispatch
+# table, and what both the re-collect report and the multiworld-collect report
+# actually needed (a collect marks locations checked in your world without you
+# touching them; those capsules were then eaten with no heal and no check).
+#
+# Probed by the stub's own `addiu $t8, $t8, 0x7858` - the instruction that
+# loads the table address - rather than by the first word, which v2 and v3
+# share. v1/v2 discs simply do not get the table and keep the old whole-stage
+# dispatch toggle.
+RING2_TABLE_PROBE_ADDR = 0x077798
+RING2_TABLE_PROBE_WORD = bytes.fromhex("58781827")   # addiu $t8,$t8,0x7858
+RING2_CHECKED_TABLE_ADDR = 0x077858
+RING2_CHECKED_SLOTS = 12                             # deepest stage holds 8
 
 # The whole collect dispatch table, so the client can hand a cleared stage its
 # vanilla capsules back (_pickup_dispatch_apply). Kinds and stub address match
@@ -696,6 +712,12 @@ class MMX5Client(BizHawkClient):
         # means "unknown", so the first cycle always writes - a savestate or a
         # reload can put the disc's own (stubbed) words back under us.
         self.pickup_dispatch_vanilla = None
+        # v3 disc: the stub decides per capsule from CHECKED_TABLE, so the
+        # whole-stage dispatch toggle stands down entirely - and with it the
+        # message that used to claim a stage was fully collected when a
+        # multiworld collect had merely marked it.
+        self.checked_table_present = False
+        self.checked_table_written = None
         # Boss HP: the vanilla accumulator value the game last computed, and
         # what we last wrote over it. Both in-memory only - see _boss_hp_apply.
         self.boss_hp_vanilla = None
@@ -1079,6 +1101,57 @@ class MMX5Client(BizHawkClient):
             logger.debug(f"MMX5: live weapons {live[0][0]:02X} -> {merged:02X} "
                          f"(save {capability:02X})")
 
+    async def _pickup_checked_table_apply(self, ctx, cur_stage_id: int) -> None:
+        """Tell the stub which of this stage's capsules are already checked.
+
+        The stub hands any record pointer listed here to the real vanilla
+        handler instead of recording it, so one stage can heal some capsules
+        and still record the others. Two reports needed exactly that and
+        neither could be fixed above the disc:
+
+          * a capsule stays inert on a revisit long after its check was sent;
+          * a multiworld COLLECT marks locations checked in this world without
+            the player ever touching them (MultiServer.collect_player), and
+            those capsules were then consumed with no heal and no check.
+
+        Only the CURRENT stage's records are written - one stage's placement
+        list is live at a time, so the table never needs to hold more than
+        that stage's pickups (deepest is 8, against 12 slots).
+
+        Idempotent: keyed on what was last written, so it costs one write per
+        actual change, and it re-writes from scratch after a reload because
+        the cache is cleared with the rest of the disc-derived state.
+        """
+        if not (ctx.slot_data or {}).get("pickupsanity", 0):
+            return
+        if self.ring2_present is not True or not self.checked_table_present:
+            return
+
+        ptrs = sorted(
+            pickups.record_addr(stage, area, idx)
+            for stage, area, idx, _iid, name in pickups.PICKUPS
+            if stage == cur_stage_id
+            and location_table[name] in ctx.checked_locations)
+        if len(ptrs) > RING2_CHECKED_SLOTS:
+            # Cannot happen with the shipped data; truncating rather than
+            # overrunning the table into the code that follows it.
+            logger.warning(f"MMX5: stage {cur_stage_id} has {len(ptrs)} checked "
+                           f"pickups, table holds {RING2_CHECKED_SLOTS}")
+            ptrs = ptrs[:RING2_CHECKED_SLOTS]
+
+        key = (cur_stage_id, tuple(ptrs))
+        if self.checked_table_written == key:
+            return
+        data = b"".join(p.to_bytes(4, "little") for p in ptrs)
+        data += bytes(4 * (RING2_CHECKED_SLOTS + 1 - len(ptrs)))   # terminator
+        try:
+            await bizhawk.write(ctx.bizhawk_ctx,
+                                [(RING2_CHECKED_TABLE_ADDR, list(data),
+                                  "MainRAM")])
+        except bizhawk.RequestFailedError:
+            return
+        self.checked_table_written = key
+
     async def _pickup_dispatch_apply(self, ctx, cur_stage_id: int,
                                      in_gameplay: bool) -> None:
         """Let already-cleared stages heal from their capsules again.
@@ -1101,6 +1174,12 @@ class MMX5Client(BizHawkClient):
         if not (ctx.slot_data or {}).get("pickupsanity", 0):
             return
         if self.ring2_present is not True:
+            return
+        if self.checked_table_present:
+            # v3 disc: the stub reads CHECKED_TABLE and decides per capsule,
+            # which is strictly finer than anything this toggle can do. Two
+            # mechanisms fighting over the same dispatch words would only
+            # reintroduce the all-or-nothing behaviour they replaced.
             return
 
         stage_locs = [location_table[name]
@@ -1263,6 +1342,9 @@ class MMX5Client(BizHawkClient):
                 # dispatch words back under an override we think is still
                 # applied. Forget it so the next cycle re-decides.
                 self.pickup_dispatch_vanilla = None
+                # A reload also restores the disc's own (all-zero) CHECKED
+                # TABLE, so what we think we wrote there is gone too.
+                self.checked_table_written = None
 
             # Resolve the probes whenever unresolved - NOT just in-stage.
             # Launches happen at the HUB (modes 0x13-0x15); the old
@@ -1273,14 +1355,19 @@ class MMX5Client(BizHawkClient):
             # zeros -> classify returns None -> retried next cycle.
             if self.ap_patched is None or self.stub_present is None \
                     or self.tank_fix_present is None or self.ring2_present is None:
-                probe, stub_probe, tank_probe, ring2_probe, ring2_stub = \
+                probes = \
                     await bizhawk.read(ctx.bizhawk_ctx, [
                         (PATCH_PROBE_ADDR, 4, "MainRAM"),
                         (STUB_PROBE_ADDR, 4, "MainRAM"),
                         (TANK_FIX_PROBE_ADDR, 4, "MainRAM"),
                         (RING2_PROBE_ADDR, 4, "MainRAM"),
                         (RING2_STUB_PROBE_ADDR, 4, "MainRAM"),
+                        (RING2_TABLE_PROBE_ADDR, 4, "MainRAM"),
                     ])
+                probe, stub_probe, tank_probe, ring2_probe, ring2_stub, \
+                    table_probe = probes
+                self.checked_table_present = (
+                    bytes(table_probe) == RING2_TABLE_PROBE_WORD)
                 self.tank_fix_present = self._classify_tank_fix(tank_probe)
                 self.ap_patched = self._classify_probe(probe)
                 self.last_probe_word = bytes(probe)   # for the refusal message
@@ -1402,6 +1489,7 @@ class MMX5Client(BizHawkClient):
                 await self._live_weapons_apply(ctx, save, mode[0] == 0x0A)
                 await self._pickup_dispatch_apply(ctx, cur_stage_id,
                                                   mode[0] == 0x0A)
+                await self._pickup_checked_table_apply(ctx, cur_stage_id)
 
             # ---- Check detection ----
             new_checks = []

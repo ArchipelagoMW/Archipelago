@@ -81,7 +81,7 @@ class TestPickupsanityStubEncoding(unittest.TestCase):
             self.assertLess(target, TABLE,
                             f"{i.mnemonic} branches into the jump table")
             self.assertEqual((target - BASE) % 4, 0, "branches mid-instruction")
-        self.assertEqual(found, 4, "expected 4 conditional branches")
+        self.assertEqual(found, 6, "expected 6 conditional branches")
 
     def test_jump_table_matches_the_vanilla_handlers(self) -> None:
         off = TABLE - BASE
@@ -109,7 +109,8 @@ class TestPickupsanityStubEncoding(unittest.TestCase):
                       disc.PICKUPSANITY_STUB)
 
 
-def _stub_decides(recptr: int, kind: int, record: bytes | None):
+def _stub_decides(recptr: int, kind: int, record: bytes | None,
+                  checked: tuple = ()):
     """Model of the stub's routing. Mirrors the encoded logic 1:1.
 
     Returns 'record' (placed pickup: write a ring record, consume),
@@ -117,6 +118,9 @@ def _stub_decides(recptr: int, kind: int, record: bytes | None):
     or 'consume' (kind outside 0x02..0x08).
     """
     if recptr == 0:
+        decision = "vanilla"
+    elif record[1] == 0x2F and record[2] == ((kind + 0x1E) & 0xFF)             and recptr in checked:
+        # v3: listed as already checked -> heal it, do not record it again.
         decision = "vanilla"
     elif record[1] != 0x2F:
         decision = "vanilla"
@@ -152,6 +156,29 @@ class TestStubRouting(unittest.TestCase):
         # A pointer at a real record for a DIFFERENT item type.
         rec = bytes([0x00, 0x2F, 0x26, 0x00, 0, 0, 0, 0])   # 1-UP record
         self.assertEqual(_stub_decides(0x800FBD3C, 0x2, rec), "vanilla")
+
+    def test_already_checked_capsule_heals_instead_of_recording(self) -> None:
+        """v3, and the whole point of the CHECKED_TABLE.
+
+        A capsule whose record pointer the client listed as already checked
+        must go to the vanilla handler - it heals, and nothing is recorded a
+        second time. Without this the same capsule is eaten forever: on a
+        revisit, or after a multiworld collect marked it checked without the
+        player ever touching it.
+        """
+        ptr = 0x800FBD3C
+        rec = bytes([0x00, 0x2F, 0x20, 0x00, 0, 0, 0, 0])
+        self.assertEqual(_stub_decides(ptr, 0x2, rec), "record",
+                         "unlisted capsule should still be a check")
+        self.assertEqual(_stub_decides(ptr, 0x2, rec, checked=(ptr,)), "vanilla",
+                         "listed capsule was recorded again instead of healing")
+
+    def test_listing_one_capsule_does_not_free_its_neighbours(self) -> None:
+        # The granularity that the whole-stage toggle could not express.
+        a, b = 0x800FBD3C, 0x800FBD44
+        rec = bytes([0x00, 0x2F, 0x20, 0x00, 0, 0, 0, 0])
+        self.assertEqual(_stub_decides(a, 0x2, rec, checked=(a,)), "vanilla")
+        self.assertEqual(_stub_decides(b, 0x2, rec, checked=(a,)), "record")
 
     def test_out_of_range_kind_still_just_consumes(self) -> None:
         self.assertEqual(_stub_decides(0, 0x0B, None), "consume")

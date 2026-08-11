@@ -184,6 +184,13 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
         mmx5_client.RING2_STUB_PROBE_ADDR: (
             mmx5_client.RING2_STUB_WORD if getattr(client, "ring2_present", None)
             else b"\x00\x00\x00\x00"),
+        # v3 discs carry the CHECKED_TABLE the stub walks. Off unless a test
+        # opts in, so every existing test keeps modelling a v2 disc and the
+        # whole-stage dispatch toggle stays under test.
+        mmx5_client.RING2_TABLE_PROBE_ADDR: (
+            mmx5_client.RING2_TABLE_PROBE_WORD
+            if getattr(client, "checked_table_present", False)
+            else bytes(4)),
         # Live weapons byte: zero unless a test seeds it, which models the
         # game having just rebuilt it at stage load.
         mmx5_client.LIVE_WEAPONS_ADDR: bytes([live_weapons]),

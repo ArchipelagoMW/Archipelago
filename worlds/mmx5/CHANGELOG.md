@@ -1,5 +1,29 @@
 # Mega Man X5 apworld changelog
 
+## Unreleased
+
+**`pickupsanity` seeds need a re-patch.** Other seeds are unaffected.
+
+**Capsules you have already checked now heal you instead of doing nothing.**
+Until now the randomizer could only decide this a whole stage at a time: every
+energy capsule in a stage stayed inert until *all* of that stage's checks were
+done, and only then did they start working again. That produced two separate
+complaints:
+
+- a capsule you had already collected stayed dead for the rest of the run,
+  which made revisits — and the Boss Rush especially — a slog;
+- in a multiworld, when another player finishes, the server marks the
+  locations holding *their* items as checked in your world too. Those capsules
+  were then eaten with no health and no check, and the client would announce
+  that a stage was fully collected while you were standing next to capsules
+  you had never touched.
+
+The disc now decides capsule by capsule: anything already checked — by you or
+by someone else's collect — behaves like a normal energy capsule again, while
+the ones still worth a check keep being checks. The misleading "every pickup
+check in this stage is collected" message is gone with the mechanism that
+needed it.
+
 ## 0.5.2 — 2026-08-11
 
 **Client only — no disc change, no re-patch, saves carry over.**

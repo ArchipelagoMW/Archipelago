@@ -205,66 +205,87 @@ PICKUPSANITY_STUB_ADDR = 0x80077760    # free-space run A after the capsule
 # used at least 2 instructions later - audit in the word comments, and
 # machine-checked in test_disc.py along with every branch target.
 PICKUPSANITY_STUB = bytes.fromhex(
-    # ---- is this a spawner-placed pickup, or something an enemy dropped? --
-    "10002f8e"  # lw    t7, 0x10(s1)      ; record ptr - 0 unless placed
-    "82002d92"  # lbu   t5, 0x82(s1)      ; item kind (fills t7's delay)
-    "00000000"  # nop                     ; (fills t5's delay)
-    "1c00e011"  # beqz  t7, 0x800777E0    ; no record => enemy drop, go vanilla
+    "10002f8e"  # lw $t7, 0x10($s1)                 ; record ptr - 0 unless spawner-placed
+    "82002d92"  # lbu $t5, 0x82($s1)                ; item kind (fills t7's delay)
     "00000000"  # nop
-    "0100ee91"  # lbu   t6, 0x01(t7)      ; record minor
-    "2f001824"  # addiu t8, zero, 0x2F    ; (fills t6's delay)
-    "1800d815"  # bne   t6, t8, 0x800777E0; minor != 0x2F => not an item record
+    "2600e011"  # beqz $t7, 0x80077808              ; no record => enemy drop, go vanilla
     "00000000"  # nop
-    "0200ee91"  # lbu   t6, 0x02(t7)      ; record id
-    "1e00b825"  # addiu t8, t5, 0x1E      ; expected id = kind + 0x1E
-    "1400d815"  # bne   t6, t8, 0x800777E0; mismatch => stale/foreign record
+    "0100ee91"  # lbu $t6, 1($t7)                   ; record minor
+    "2f001824"  # addiu $t8, $zero, 0x2f
+    "2200d815"  # bne $t6, $t8, 0x80077808          ; minor != 0x2F => not an item record
     "00000000"  # nop
-    # ---- placed pickup: record the check and consume (v1, unchanged) ------
-    "1f80083c"  # lui   t0, 0x801F
-    "00a10835"  # ori   t0, t0, 0xA100    ; t0 = ring2 base 0x801FA100
-    "0001098d"  # lw    t1, 0x100(t0)     ; t1 = monotonic count (0x801FA200)
-    "0d800b3c"  # lui   t3, 0x800D        ; (fills t1's load delay slot)
-    "1f002a31"  # andi  t2, t1, 0x1F      ; ring slot index (32 slots)
-    "c0500a00"  # sll   t2, t2, 3         ; *8 bytes per slot
-    "21500a01"  # addu  t2, t0, t2        ; t2 = slot address
-    "0c1c6c91"  # lbu   t4, 0x1C0C(t3)    ; stage id (spawn engine's input)
-    "02002e92"  # lbu   t6, 0x02(s1)      ; item id (fills t4's delay)
-    "00004ca1"  # sb    t4, 0x00(t2)      ; slot+0: stage
-    "01004da1"  # sb    t5, 0x01(t2)      ; slot+1: kind
-    "02004ea1"  # sb    t6, 0x02(t2)      ; slot+2: id
-    "04004fad"  # sw    t7, 0x04(t2)      ; slot+4: record ptr
-    "7f002c31"  # andi  t4, t1, 0x7F
-    "80008c35"  # ori   t4, t4, 0x80      ; seq = (count & 0x7F) | 0x80
-    "03004ca1"  # sb    t4, 0x03(t2)      ; slot+3: seq
-    "01002925"  # addiu t1, t1, 1
-    "f2500108"  # j     0x800543C8        ; consume item, no vanilla effect
-    "000109ad"  # sw    t1, 0x100(t0)     ; (delay slot) commit count
-    # ---- not placed: run the vanilla handler for this kind ----------------
-    "feffae25"  # addiu t6, t5, -2        ; kind - 2
-    "0700d82d"  # sltiu t8, t6, 7         ; kinds 0x02..0x08 only
-    "08000013"  # beqz  t8, 0x8007780C    ; anything else: consume as before
-    "80700e00"  # sll   t6, t6, 2         ; (delay slot) *4
-    "0780183c"  # lui   t8, 0x8007
-    "14781827"  # addiu t8, t8, 0x7814    ; t8 = VANILLA_HANDLERS table
-    "21c00e03"  # addu  t8, t8, t6
-    "0000198f"  # lw    t9, 0x00(t8)      ; handler address
-    "00000000"  # nop                     ; (t9's load delay slot)
-    "08002003"  # jr    t9                ; enter it with s0/s1 untouched
+    "0200ee91"  # lbu $t6, 2($t7)                   ; record id
+    "1e00b825"  # addiu $t8, $t5, 0x1e              ; expected id = kind + 0x1E
+    "1e00d815"  # bne $t6, $t8, 0x80077808          ; mismatch => stale/foreign record
     "00000000"  # nop
-    "f2500108"  # j     0x800543C8        ; out-of-range kind: consume
+    "0780183c"  # lui $t8, 0x8007                   ; CHECKED_TABLE
+    "58781827"  # addiu $t8, $t8, 0x7858
+    "0000198f"  # lw $t9, ($t8)                     ; SCAN: next checked record ptr
     "00000000"  # nop
-    # ---- VANILLA_HANDLERS table @0x80077814, one word per kind 0x02..0x08 -
+    "05002013"  # beqz $t9, 0x800777bc              ; terminator => nothing matched => record it
+    "04001827"  # addiu $t8, $t8, 4                 ; (delay) advance
+    "fbff2f17"  # bne $t9, $t7, 0x8007779c          ; no match => keep scanning
+    "00000000"  # nop
+    "02de0108"  # j 0x80077808                      ; MATCH => already checked => let it heal
+    "00000000"  # nop
+    "1f80083c"  # lui $t0, 0x801f                   ; RECORD:
+    "00a10835"  # ori $t0, $t0, 0xa100              ; t0 = ring2 base 0x801FA100
+    "0001098d"  # lw $t1, 0x100($t0)                ; t1 = monotonic count
+    "0d800b3c"  # lui $t3, 0x800d                   ; (fills t1's delay)
+    "1f002a31"  # andi $t2, $t1, 0x1f               ; ring slot index (32 slots)
+    "c0500a00"  # sll $t2, $t2, 3                   ; *8 bytes
+    "21500a01"  # addu $t2, $t0, $t2                ; t2 = slot address
+    "0c1c6c91"  # lbu $t4, 0x1c0c($t3)              ; stage id
+    "02002e92"  # lbu $t6, 2($s1)                   ; item id (fills t4's delay)
+    "00004ca1"  # sb $t4, ($t2)                     ; slot+0: stage
+    "01004da1"  # sb $t5, 1($t2)                    ; slot+1: kind
+    "02004ea1"  # sb $t6, 2($t2)                    ; slot+2: id
+    "04004fad"  # sw $t7, 4($t2)                    ; slot+4: record ptr
+    "7f002c31"  # andi $t4, $t1, 0x7f
+    "80008c35"  # ori $t4, $t4, 0x80                ; seq = (count & 0x7F) | 0x80
+    "03004ca1"  # sb $t4, 3($t2)                    ; slot+3: seq
+    "01002925"  # addiu $t1, $t1, 1
+    "f2500108"  # j 0x800543c8                      ; consume, no vanilla effect
+    "000109ad"  # sw $t1, 0x100($t0)                ; (delay) commit count
+    "feffae25"  # addiu $t6, $t5, -2                ; VANILLA: kind - 2
+    "0700d82d"  # sltiu $t8, $t6, 7                 ; kinds 0x02..0x08 only
+    "08000013"  # beqz $t8, 0x80077834              ; out of range: consume as before
+    "80700e00"  # sll $t6, $t6, 2                   ; (delay) *4
+    "0780183c"  # lui $t8, 0x8007
+    "3c781827"  # addiu $t8, $t8, 0x783c            ; t8 = handler jump table
+    "21c00e03"  # addu $t8, $t8, $t6
+    "0000198f"  # lw $t9, ($t8)                     ; handler address
+    "00000000"  # nop                               ; (t9 load delay)
+    "08002003"  # jr $t9                            ; enter it with s0/s1 untouched
+    "00000000"  # nop
+    "f2500108"  # j 0x800543c8                      ; CONSUME:
+    "00000000"  # nop
+    # ---- vanilla handler jump table, one word per kind 0x02..0x08 ----
     "64410580"  # 0x80054164  kind 0x02  small HP
     "98410580"  # 0x80054198  kind 0x03  large HP
-    "d8410580"  # 0x800541D8  kind 0x04  full HP
+    "d8410580"  # 0x800541d8  kind 0x04  full HP
     "04420580"  # 0x80054204  kind 0x05  small weapon
-    "04420580"  # 0x80054204  kind 0x06  large weapon  (shared)
-    "04420580"  # 0x80054204  kind 0x07  full weapon   (shared)
+    "04420580"  # 0x80054204  kind 0x06  large weapon (shared)
+    "04420580"  # 0x80054204  kind 0x07  full weapon (shared)
     "18420580"  # 0x80054218  kind 0x08  1-UP
+    # ---- CHECKED_TABLE @0x80077858: 12 slots + terminator,
+    # written by the client every poll it changes. Zeroed here so a disc
+    # with no client attached behaves exactly like v2.
+    "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 )
 # Where the jump table lands inside the stub, and what it must contain. Kept
 # next to the blob so the test can check both without re-deriving them.
-PICKUPSANITY_VANILLA_TABLE_ADDR = 0x80077814
+PICKUPSANITY_VANILLA_TABLE_ADDR = 0x8007783C
+# The v3 CHECKED_TABLE: record pointers the client considers already checked,
+# zero-terminated. The stub walks it and hands any match to the vanilla
+# handler instead of recording it, so a stage can heal SOME capsules while
+# still recording the others - which the kind-indexed dispatch table can never
+# express. That granularity is what both the re-collect complaint and the
+# multiworld-collect one needed (a collect marks locations checked in YOUR
+# world without you ever touching them, and those capsules were then eaten
+# with no heal and no check).
+PICKUPSANITY_CHECKED_TABLE_ADDR = 0x80077858
+PICKUPSANITY_CHECKED_SLOTS = 12        # deepest stage holds 8
 VANILLA_DISPATCH = {
     0x2: 0x80054164,   # small HP
     0x3: 0x80054198,   # large HP

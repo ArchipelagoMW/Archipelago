@@ -81,15 +81,16 @@ class TestPickupData(MMX5TestBase):
             self.assertEqual(pickups.LOCATION_STAGE_ID[name], stage)
 
     def test_stub_and_edits(self) -> None:
-        # v2 (0.5.0): 45 instruction words + a 7-word vanilla-handler jump
-        # table. Was 21 words while the stub ate every consumable.
-        self.assertEqual(len(disc.PICKUPSANITY_STUB), 52 * 4)
+        # v3: 55 instruction words + a 7-word vanilla-handler jump table +
+        # 13 words of CHECKED_TABLE the client owns. Was 52 words in v2 (which
+        # could only decide per stage) and 21 while the stub ate everything.
+        self.assertEqual(len(disc.PICKUPSANITY_STUB), 75 * 4)
         self.assertEqual(len(disc.PICKUPSANITY_STUB) % 4, 0)
         # The consume tail is no longer the last word - the jump table is - so
         # look for it where the placed-pickup path actually ends (word 30).
         consume_j = 0x08000000 | ((0x800543C8 >> 2) & 0x03FFFFFF)
         self.assertEqual(
-            int.from_bytes(disc.PICKUPSANITY_STUB[30 * 4:31 * 4], "little"),
+            int.from_bytes(disc.PICKUPSANITY_STUB[40 * 4:41 * 4], "little"),
             consume_j, "placed pickups must still consume with no vanilla effect")
         # Stub must fit the free-space run measured in the vanilla EXE:
         # 0x800776A0..0x800778F8 is zero, i.e. 102 words from the stub base.
@@ -215,3 +216,96 @@ class TestPickupsanityClient(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(unmapped), 1,
                          f"40 distinct garbage pointers produced {len(unmapped)} "
                          f"info lines - the dedup key still includes the pointer")
+
+
+class TestCheckedTable(unittest.IsolatedAsyncioTestCase):
+    """v3: the stub decides per capsule from a table the client writes.
+
+    v2 could only flip the whole kind-indexed dispatch table once a stage was
+    fully checked, which cannot express "heal this capsule, record that one".
+    Two reports needed exactly that:
+
+      * a capsule stays inert on a revisit long after its check was sent;
+      * a multiworld COLLECT marks locations checked in this world without the
+        player touching them, and those capsules were then consumed with no
+        heal and no check.
+    """
+    import worlds.mmx5.client as c
+
+    STAGE = 3                       # Duff McWhalen: 4 pickup locations
+
+    def _ctx(self, checked=()) -> FakeContext:
+        ctx = FakeContext()
+        ctx.slot_data = {"goal": 0, "boss_difficulty": 1, "pickupsanity": 1}
+        ctx.checked_locations = set(checked)
+        return ctx
+
+    def _client(self, v3=True) -> MMX5Client:
+        client = MMX5Client()
+        client.ring2_present = True
+        client.checked_table_present = v3
+        return client
+
+    def _table_writes(self, ctx) -> list:
+        import worlds.mmx5.client as c
+        return [bytes(w[1]) for w in ctx.writes
+                if w[0] == c.RING2_CHECKED_TABLE_ADDR]
+
+    def _stage_locs(self):
+        return [(pickups.record_addr(s, a, i), location_table[n])
+                for s, a, i, _iid, n in pickups.PICKUPS if s == self.STAGE]
+
+    async def test_checked_pickups_are_listed_for_the_stub(self) -> None:
+        import worlds.mmx5.client as c
+        locs = self._stage_locs()
+        ptr, loc = locs[0]
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(),
+                                ctx=self._ctx(checked=[loc]))
+        writes = self._table_writes(ctx)
+        self.assertTrue(writes, "no CHECKED_TABLE write at all")
+        words = [int.from_bytes(writes[-1][i:i + 4], "little")
+                 for i in range(0, len(writes[-1]), 4)]
+        self.assertEqual(words[0], ptr, "the checked record was not listed")
+        self.assertEqual(words[1], 0, "list must be zero-terminated")
+
+    async def test_unchecked_pickups_are_not_listed(self) -> None:
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(),
+                                ctx=self._ctx())
+        writes = self._table_writes(ctx)
+        if writes:
+            self.assertEqual(int.from_bytes(writes[-1][0:4], "little"), 0,
+                             "listed a capsule whose check is outstanding")
+
+    async def test_only_the_current_stage_is_listed(self) -> None:
+        # Another stage's checked pickup must not appear - the table is read
+        # against whichever placement list is live.
+        other = [(pickups.record_addr(s, a, i), location_table[n])
+                 for s, a, i, _iid, n in pickups.PICKUPS if s != self.STAGE]
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(),
+                                ctx=self._ctx(checked=[other[0][1]]))
+        writes = self._table_writes(ctx)
+        if writes:
+            self.assertEqual(int.from_bytes(writes[-1][0:4], "little"), 0,
+                             "another stage's record leaked into the table")
+
+    async def test_not_written_on_a_pre_v3_disc(self) -> None:
+        locs = self._stage_locs()
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(v3=False),
+                                ctx=self._ctx(checked=[locs[0][1]]))
+        self.assertEqual(self._table_writes(ctx), [],
+                         "wrote a table the disc has no stub to read")
+
+    async def test_dispatch_toggle_stands_down_on_v3(self) -> None:
+        """The whole-stage toggle - and its misleading message - must not run
+        alongside the per-capsule table, or the all-or-nothing behaviour comes
+        straight back."""
+        locs = self._stage_locs()
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(),
+                                ctx=self._ctx(checked=[l for _p, l in locs]))
+        self.assertEqual(ctx.dispatch_writes(), {},
+                         "v3 disc still had its dispatch table rewritten")
