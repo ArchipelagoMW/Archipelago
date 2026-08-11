@@ -7,18 +7,11 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 import settings
 from .Items import get_item_names_per_category, item_table
-from .Locations import get_locations
-from .Regions import init_areas, connect_area_exits
 from .Options import EBOptions, eb_option_groups
-from .setup_game import setup_gamevars, place_static_items
-from .modules.enemy_data import initialize_enemies
-from .modules.flavor_data import create_flavors
 from .game_data.local_data import item_id_table, world_version
 from .modules.hint_data import setup_hints
-from .game_data.text_data import spoiler_psi, spoiler_starts, spoiler_badges
 from .Client import EarthBoundClient
-from .Rules import set_location_rules
-from .Rom import patch_rom, EBProcPatch, valid_hashes
+from .Rom import valid_hashes
 from .game_data.static_location_data import location_ids, location_groups
 from .modules.equipamizer import EBArmor, EBWeapon
 from .modules.boss_shuffle import BossData, SlotInfo
