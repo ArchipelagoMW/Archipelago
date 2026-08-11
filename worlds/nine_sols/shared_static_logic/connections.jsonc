@@ -1538,10 +1538,15 @@
             ] }
         ]
     },
-    { "from": "AM - Above Root Node", "to": "AM - Bottom Right", "requires": [ { "anyOf": [
-        { "item": "Air Dash" }, { "item": "Cloud Leap" }
-    ] } ] }, // can also fall from the slide/grapple, but I'd rather not include that
-    // T-dash sort of works, but then you need CL OR LG to get back up to use it... will ignore for now
+    { "from": "AM - Above Root Node", "to": "AM - Bottom Right",
+        "requires": [
+            { "anyOf": [
+                { "item": "Air Dash" },
+                { "item": "Cloud Leap" }
+            ] }
+        ],
+       "medium_requires": [ { "item":  "Wall Climb" } ] // T-Dash with Qi from the enemy here requires Wall Climb to get back up
+    },  // can also fall from the slide/grapple, but I'd rather not include that
     { "from": "AM - Bottom Right", "to": "AM - Tao Fruit", "requires": [ { "anyOf": [
         { "item": "Mystic Nymph: Scout Mode" } // to lower rope
     ] } ] },
