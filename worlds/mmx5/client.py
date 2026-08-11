@@ -435,11 +435,19 @@ PLAYER_HP_ADDR = 0x09A0FC       # live player HP; bit7 = just-damaged flag
 # (Izzy and Squid area 0 have no freestanding consumables at all.)
 #
 # Misses are recoverable: Reploids respawn on every stage re-entry. The one
-# blind spot is a rescue AT the 9-life cap (no increment to see) - documented
-# in the option text; re-entering under 9 lives redoes it.
+# blind spot is a rescue AT the 9-life cap, and it is WORSE than "we cannot
+# see it" (which is how this note and the option text used to read). The
+# rescue handler does lives+1, and when that hits 10 it clamps back to 9 and
+# jumps over the sound call, while the thank-you animation after it still
+# runs - so at the cap the player gets no life, no sound, no check, and the
+# Reploid is consumed for that visit. From the player's side it is
+# indistinguishable from a broken check, which is exactly how a tester
+# reported it (2026-08-10, two of The Skiver's five). The watcher now warns
+# while the player can still act on it. Re-entering under 9 lives redoes it.
 # (REPLOID_RECORDS_BY_STAGE is built below STAGE_ID_BY_NAME.)
 REPLOID_MATCH_RADIUS = 0x180
 OFF_LIVES = 0x0D1C45 - SAVE_BASE
+LIVES_CAP = 9                   # engine clamp in the rescue handler
 PLAYER_XY_ADDR = 0x09A0AA       # player struct +0x0A: x s16, +0x0E: y s16
 
 # AP disc-patch detection: the first stage-load weapon-repopulation site.
@@ -740,6 +748,9 @@ class MMX5Client(BizHawkClient):
         # trusted gameplay in a Reploid stage - None anywhere else, so a
         # menu, savestate load or stage change can never fake an increment.
         self.reploid_lives = None
+        # Stage id already warned about the 9-life cap, so the warning
+        # fires once per visit rather than every poll.
+        self.reploid_cap_warned = None
         # Highest Maverick kill count seen while the save read SANE. The
         # all_mavericks goal needs this at the ENDING, where the save-struct
         # gate is False (see the victory block) - so it cannot be read then.
@@ -1591,6 +1602,74 @@ class MMX5Client(BizHawkClient):
                             f"MMX5: lives +{lives_now - prev[1]} at "
                             f"({px},{py}) with no Reploid record in range - "
                             f"treated as a 1-UP, no check")
+                # THE 9-LIFE CAP MAKES A RESCUE DO NOTHING AT ALL, so make
+                # sure the player is never at the cap when it matters.
+                #
+                # The handler grants only when lives+1 < 10; at 9 it clamps
+                # back to 9 and jumps over the sound, while the thank-you
+                # animation after it still runs - the Reploid is consumed and
+                # the player gets no life, no sound and no check. Re-entering
+                # does the same thing until they drop below 9, so the check is
+                # effectively uncollectable (tester report, 2026-08-10: two of
+                # The Skiver's five).
+                #
+                # Fix: make the handler's own precondition true. Hold the
+                # player at 8 - but ONLY while they are actually near a
+                # Reploid they still need, not for the whole stage, so a life
+                # is never taken except in the moment it buys the rescue. The
+                # next rescue puts them straight back to 9, so in practice
+                # this costs nothing; without it the ninth life is what makes
+                # the check unobtainable.
+                #
+                # Idempotent and self-limiting: at 8 there is nothing to do,
+                # once a stage's Reploid checks are all confirmed there is
+                # nothing to do, and the write is the same value the game
+                # itself writes on a death.
+                if trusted_here:
+                    px = int.from_bytes(player_xy[0:2], "little", signed=True)
+                    py = int.from_bytes(player_xy[4:6], "little", signed=True)
+                    approaching = [
+                        n for x, y, n in records
+                        if location_table[n] not in ctx.checked_locations
+                        and abs(x - px) <= REPLOID_MATCH_RADIUS
+                        and abs(y - py) <= REPLOID_MATCH_RADIUS]
+                    # HEADROOM FOR EVERY NEARBY RESCUE, not just one. Reploids
+                    # come in clusters - Squid Adler's 3/4/5 are all within one
+                    # radius of each other, The Skiver's 1/2 are 88px apart -
+                    # and the client polls far more slowly than a player crosses
+                    # 88px. Freeing a single life only covers the first rescue;
+                    # the second lands back at the cap and is discarded exactly
+                    # as before. Sizing to the cluster also fixes a case a
+                    # 9-only test never reaches: at EIGHT lives with two
+                    # adjacent Reploids, the second one is already lost.
+                    #
+                    # Floored at 1 so this can never strand the player on zero
+                    # spare lives; the deepest real cluster is 3 (lives 6).
+                    target = max(LIVES_CAP - len(approaching), 1) if approaching \
+                        else LIVES_CAP
+                    if approaching and lives_now > target:
+                        try:
+                            await bizhawk.write(
+                                ctx.bizhawk_ctx,
+                                [(SAVE_BASE + OFF_LIVES, [target], "MainRAM")])
+                        except bizhawk.RequestFailedError:
+                            pass
+                        else:
+                            # Keep the baseline in step with RAM, or the next
+                            # poll sees the drop and the rescue after it reads
+                            # as no change at all.
+                            lives_now = target
+                            if self.reploid_cap_warned != cur_stage_id:
+                                self.reploid_cap_warned = cur_stage_id
+                                logger.info(
+                                    f"MMX5: set you to {target} lives near "
+                                    f"{len(approaching)} Reploid(s) - at 9 the "
+                                    f"game silently discards a rescue (no life, "
+                                    f"no sound, no check). Rescuing them puts "
+                                    f"the lives straight back.")
+                if not trusted_here or lives_now < LIVES_CAP:
+                    self.reploid_cap_warned = None
+
                 self.reploid_lives = ((cur_stage_id, lives_now)
                                       if trusted_here else None)
 

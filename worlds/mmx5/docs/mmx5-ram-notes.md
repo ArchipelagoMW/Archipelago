@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-09).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-11).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -29,6 +29,27 @@ Legend: ✅ = verified in-emulator/disassembly · ⚠️ = partially verified / 
 > at 0 on a new game, so a base or floor exists elsewhere that we have not
 > located. Its two `(value − 0x20)/2` consumers ARE now identified: both are
 > lifebar display code, and both corrupt below 32. Row rewritten.
+> **2026-08-10/11 tester fixes — two more addresses pinned.**
+> (a) **`0x800D1C49` = character/armor selector** (community cheat archive's
+> "Character & Armor Modifier"). The stage-load weapon repopulation branches
+> on it at `0x8003C2D4`: **selector 3 zeroes the live weapons byte
+> `player+0xC9` (= `0x8009A169`) at `0x8003C2EC` and jumps over the
+> repopulation entirely**. Selector 3 is Gaea Armor — the only X form that
+> cannot use special weapons — and re-arming that byte under it made the game
+> crash on a weapon switch (L1/R1). Any client write to `0x8009A169` MUST
+> respect this branch.
+> (b) **The Reploid rescue handler discards the rescue at the 9-life cap.**
+> `lives = 0x800D1C45`; the handler does `lives+1`, and when that reaches 10
+> it clamps back to 9 and **branches past the sound call** while the
+> thank-you animation after it still runs — so the Reploid is consumed and
+> the player gets no life, no sound and nothing to detect. The clamp is
+> per-overlay and **present identically in all three Reploid stages**
+> (extracted from the disc, one site each, each followed by the same `bnez`):
+> Squid Adler `0x800F9458` (chunk 7), Izzy Glow `0x800F16BC` (chunk 8,
+> cross-checked against a live RAM dump), The Skiver `0x800F0370`
+> (chunk 11). Anything that depends on a rescue being observable must first
+> guarantee `lives + 1 < 10`.
+>
 > (4) **NEW — the object allocator wipes the slot, and that is load-bearing.**
 > `0x8002C938` (the gate-0/1/2 spawn path, reached via the category table at
 > `0x80072E8C`) zeroes **156 (0x9C) bytes** of the object-pool slot on every

@@ -1,5 +1,28 @@
 # Mega Man X5 apworld changelog
 
+## 0.5.2 — 2026-08-11
+
+**Client only — no disc change, no re-patch, saves carry over.**
+
+**Reploid rescues no longer vanish when you are near the life cap.** A tester
+found two Reploids in The Skiver's stage that gave no check — and made no
+rescue sound when touched. That is the game itself: the rescue routine adds a
+life, and if that would take you past 9 it clamps back to 9 and skips the
+sound, while still using the Reploid up for that visit. No life, no sound, no
+check, and re-entering the stage does the same thing again, so the check was
+effectively uncollectable.
+
+The client now keeps just enough room on your life counter as you approach a
+Reploid you still need, so the rescue always registers. Where several sit
+close together — Squid Adler's cluster of three, The Skiver's two pairs — it
+frees enough for all of them, because rescuing two in quick succession would
+otherwise put the second one right back at the cap. Rescuing returns the
+lives immediately, so unless you walk away without taking them you end up
+where you started.
+
+If you have Reploid checks that never fired on an earlier run, they are still
+there: re-enter the stage and rescue again.
+
 ## 0.5.1 — 2026-08-10
 
 **Fixes a crash.** Client only — no disc change, no re-patch, saves carry over.

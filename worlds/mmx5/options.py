@@ -349,9 +349,17 @@ class ReploidChecks(Toggle):
     the mid-boss rather than placed in the stage, so they are not checks.)
 
     Reploids reappear every time you re-enter a stage, so nothing is ever
-    permanently missed. One quirk to know: a rescue at the 9-life cap cannot
-    be detected (the game has no room to count it) - if that happens, re-enter
-    the stage with fewer than 9 lives and rescue again.
+    permanently missed.
+
+    You may notice your life counter dip by one or two as you approach a
+    Reploid. That is deliberate. At the 9-life cap the game has no room to
+    give you the life, so it silently discards the whole rescue - no life, no
+    sound, no check - while still using the Reploid up for that visit, which
+    is indistinguishable from a broken check. The client keeps just enough
+    room free as you get near one (a little more where several sit close
+    together) so the rescue always lands. Rescuing puts the lives straight
+    back, so unless you walk away without taking them you end up exactly where
+    you started.
 
     Client-side, so it needs no disc change.
 
