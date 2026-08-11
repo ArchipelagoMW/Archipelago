@@ -12,6 +12,8 @@ def set_location_rules(world: "EarthBoundWorld") -> None:
     player = world.player
     set_rule = world.set_rule
 
+    world.set_completion_rule(Has("Saved Earth"))
+
     set_rule(world.get_location("Onett - Traveling Entertainer"), Has("Key to the Shack"))
     set_rule(world.get_location("Onett - South Road Present"), Has("Police Badge"))
     set_rule(world.get_location("Onett - Tracy Gift"), Has("Ness"))
