@@ -138,7 +138,7 @@ class TestBase(unittest.TestCase):
         """Test that worlds don't modify the itempool after `create_items`"""
         gen_steps = ("generate_early", "create_regions", "create_items")
         additional_steps = ("set_rules", "connect_entrances", "generate_basic", "pre_fill")
-        excluded_games = ("Links Awakening DX", "Ocarina of Time", "SMZ3")
+        excluded_games = ("Ocarina of Time", "SMZ3")
         worlds_to_test = {game: world
                           for game, world in AutoWorldRegister.testable_worlds.items() if game not in excluded_games}
         for game_name, world_type in worlds_to_test.items():
