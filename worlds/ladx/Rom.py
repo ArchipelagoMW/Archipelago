@@ -8,7 +8,6 @@ import bsdiff4
 import binascii
 import logging
 from typing import TYPE_CHECKING
-from Options import OptionError
 from .Common import *
 from .LADXR import generator
 from .LADXR.main import get_parser
@@ -105,8 +104,11 @@ def get_base_rom_path(file_name: str = "") -> str:
 
 
 def apply_overrides(patch_data: dict) -> None:
-    host_settings = settings.get_settings()
-    option_overrides = host_settings["ladx_options"].get("option_overrides")
+    from Options import OptionError
+    from .Options import convert_ap_options_to_ladxr, Override
+    from . import LinksAwakeningWorld
+    # option_overrides should look like an options block for this game in a player yaml
+    option_overrides = getattr(LinksAwakeningWorld.settings, "option_overrides", None)
     if not option_overrides:
         return
     wrapped_overrides = {
@@ -120,29 +122,9 @@ def apply_overrides(patch_data: dict) -> None:
         logger = logging.getLogger("Link's Awakening Logger")
         logger.warning("Failed to apply option overrides, check that they are formatted correctly.")
         return
-
-    overridable_options = {
-        "gfxmod",
-        "link_palette",
-        "music",
-        "music_change_condition",
-        "palette",
-        "ap_title_screen",
-        "boots_controls",
-        "nag_messages",
-        "text_shuffle",
-        "low_hp_beep",
-        "text_mode",
-        "no_flash",
-        "quickswap",
-    }
-    if not patch_data["is_race"]:
-        overridable_options.update([
-            "trendy_game",
-            "warps",
-        ])
-    for option_name in option_overrides.keys():
-        if (option_name not in patch_data["options"]) or (option_name not in overridable_options):
-            continue
-        patch_data["options"][option_name] = getattr(rolled_settings, option_name).value
-
+    override_level = Override.ALWAYS if patch_data["is_race"] else Override.NOT_RACE
+    # only options specified by player, and only those they are allowed to override
+    override_dict = { k:v for k, v in vars(rolled_settings).items() 
+                      if k in option_overrides.keys() and getattr(v, 'may_override', Override.NEVER) >= override_level}
+    ladxr_overrides = convert_ap_options_to_ladxr(override_dict)
+    patch_data["ladxr_settings_dict"].update(ladxr_overrides)

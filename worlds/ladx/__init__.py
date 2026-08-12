@@ -26,7 +26,8 @@ from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id,
                         links_awakening_location_name_groups)
-from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
+from .Options import (DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups,
+                      convert_ap_options_to_ladxr)
 from .Rom import LADXProcedurePatch, write_patch_data
 
 DEVELOPER_MODE = False
@@ -190,25 +191,6 @@ class LinksAwakeningWorld(World):
         ItemName.RUPEES_500: 500,
     }
 
-    def convert_ap_options_to_ladxr_logic(self):
-        # store a dict of ladxr settings as a middle step so that we can also create a
-        # ladxr settings object on the other side of the patch
-        options_dict = dataclasses.asdict(self.options)
-        self.ladxr_settings_dict = {}
-        for option in options_dict.values():
-            if not hasattr(option, 'to_ladxr_option'):
-                continue
-            name, value = option.to_ladxr_option(options_dict)
-            if name:
-                self.ladxr_settings_dict[name] = value
-        self.ladxr_settings = LADXRSettings(self.ladxr_settings_dict)
-
-        self.ladxr_settings.validate()
-        world_setup = LADXRWorldSetup()
-        world_setup.randomize(self.ladxr_settings, self.random)
-        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=world_setup)
-        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random, bool(self.options.stabilize_item_pool)).toDict()
-
 
     def generate_early(self) -> None:
         self.dungeon_item_types = {
@@ -234,7 +216,15 @@ class LinksAwakeningWorld(World):
 
     def create_regions(self) -> None:
         # Initialize
-        self.convert_ap_options_to_ladxr_logic()
+        self.ladxr_settings_dict = convert_ap_options_to_ladxr(self.options)
+        self.ladxr_settings = LADXRSettings(self.ladxr_settings_dict)
+
+        self.ladxr_settings.validate()
+        world_setup = LADXRWorldSetup()
+        world_setup.randomize(self.ladxr_settings, self.random)
+        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=world_setup)
+        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random, bool(self.options.stabilize_item_pool)).toDict()
+
         regions = create_regions_from_ladxr(self.player, self.multiworld, self.ladxr_logic)
         self.multiworld.regions += regions
 
