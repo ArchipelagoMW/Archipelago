@@ -67,8 +67,8 @@ class Goal(Choice):
     Mystery of the Stardrops: Find every stardrop
     Mad Hatter: Complete all your hatsanity locations. If hatsanity is disabled, will enable it on "Easy+Tailoring"
     Ultimate Foodie: Eat all items in the game. Adapts to Eatsanity
-    Allsanity: Complete every check in your slot
-    Perfection: Attain Perfection
+    Allsanity: Complete every check in your slot - This goal can be blocked by the host
+    Perfection: Attain Perfection - This goal can be blocked by the host
     """
     internal_name = "goal"
     display_name = "Goal"
@@ -186,7 +186,7 @@ class BundlePrice(Choice):
     Normal: Every bundle will require the vanilla number of items
     Expensive: Every bundle will require 1 extra item
     Very Expensive: Every bundle will require 2 extra items
-    Maximum: Every bundle will require many extra items"""
+    Maximum: Every bundle will require many extra items - This option can be blocked by the host"""
     internal_name = "bundle_price"
     display_name = "Bundle Price"
     default = 0
@@ -229,8 +229,8 @@ class EntranceRandomization(Choice):
     Pelican Town: Only doors in the main town area are randomized with each other
     Non Progression: Only entrances that are always available are randomized with each other
     Buildings: All entrances that allow you to enter a building are randomized with each other
-    Overworld: Buildings and all normal overworld map transitions like from the farm to the forest
-    Everywhere: Overworld as well as the special transitions like the minecarts, the bus and warps
+    Overworld: Buildings and all normal overworld map transitions like from the farm to the forest - This option can be blocked by the host
+    Everywhere: Overworld as well as the special transitions like the minecarts, the bus and warps - This option can be blocked by the host
     """
     # Everything: All buildings and areas are randomized with each other
     # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
@@ -254,8 +254,8 @@ class EntranceRandomization(Choice):
 
 class EntranceRandomizationBehavior(OptionSet):
     """Modifications to how ER will behave within the randomized locations.
-    - Chaos: all Enabled entrances are reshuffled every day!
-    - Decoupled: Going into an entrance and going back might bring you somewhere different.
+    - Chaos: all Enabled entrances are reshuffled every day! - This option is blocked by the website, and by the host unless changed
+    - Decoupled: Going into an entrance and going back might bring you somewhere different - This option is blocked by the website, and by the host unless changed
     - Shuffle Farmhouse: shuffles the farmhouse exit to some outside entrance
     - Shuffle Farmhouse Anywhere: Like Shuffle Farmhouse but the farmhouse could end up inside and in any direction
     - Same Direction: Makes entrances you go in towards the top link up with entrances you go in downward etc.
@@ -649,7 +649,7 @@ class Shipsanity(Choice):
     Fish: Every fish being shipped is a check
     Full Shipment: Every item in the Collections page is a check
     Full Shipment With Fish: Every item in the Collections page and every fish is a check
-    Everything: Every item in the game that can be shipped is a check
+    Everything: Every item in the game that can be shipped is a check - This option can be blocked by the host
     """
     internal_name = "shipsanity"
     display_name = "Shipsanity"
@@ -845,7 +845,7 @@ class Moviesanity(Choice):
 class Secretsanity(OptionSet):
     """Add checks for the various secrets and easter eggs present in Stardew Valley. Some of them can be very obscure. If you enable this setting, you should expect to need the wiki a lot.
     Easy: Secrets that can be obtained quickly and easily, if you know what to do
-    Difficult: Includes secrets that require a lot of grinding or a lot of luck. Not for the faint of heart. Enabling this will also modify some secrets from the other categories to require their harder variation, if there is one.
+    Difficult: Includes secrets that require a lot of grinding or a lot of luck. Not for the faint of heart. Enabling this will also modify some secrets from the other categories to require their harder variation, if there is one. - This option can be blocked by the host
     Fishing: Various special items and furniture that can be fished up in specific places
     Secret Notes: Complete tasks described in the various secret notes, when applicable
     """
@@ -877,8 +877,8 @@ class Hatsanity(OptionSet):
     Medium: Locations for wearing the hats that are obtainable through a task that requires a bit of effort
     Difficult: Locations for wearing hats that are difficult to obtain
     RNG: Locations for wearing hats that are extremely rng-dependent to obtain. Generally an unpleasant grind.
-    Near Perfection: Locations for wearing hats that are late game and generally obtained by doing the equivalent of a perfection task
-    Post Perfection: Locations for wearing all hats, including the hyper-late game ones that require more work than perfection itself
+    Near Perfection: Locations for wearing hats that are late game and generally obtained by doing the equivalent of a perfection task - This option can be blocked by the host
+    Post Perfection: Locations for wearing all hats, including the hyper-late game ones that require more work than perfection itself - This option can be blocked by the host
     """
     internal_name = "hatsanity"
     display_name = "Hatsanity"
@@ -976,9 +976,10 @@ class TrapDifficulty(Choice):
     """When rolling filler items, including resource packs, the game can also roll trap items.
     Trap items are negative items that cause problems or annoyances for the player.
     This setting is for choosing how punishing traps will be.
-    Lower difficulties will be on the funny annoyance side, higher difficulty will be on the extreme problems side.
+    Lower difficulties will be funny annoyances, higher difficulties will be big problems.
+    Hell and Nightmare can be blocked by the host
     If you pick Nightmare... good luck.
-    If you pick Eldritch... you will be missed.
+    If you pick Eldritch... you will be missed - This option is blocked by the website, and by the host unless changed
     """
     internal_name = "trap_difficulty"
     display_name = "Trap Difficulty"
@@ -1023,9 +1024,9 @@ class DataRandomizationBehavior(Choice):
         Off: No Data Randomization occurs
         Shuffled: All values are maintained, but shuffled between entries.
         Weighted Randomized: All entries are given a random value from the original pool, weighted from their original distribution, with repeat draws
-        Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws. Can be imbalanced
-        Normal Randomized: All entries are given a random value picked from a Log-Transformed Normal Distribution generated from the original values. Can be imbalanced
-        Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed. Very imbalanced.
+        Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws. Can be imbalanced - This option is blocked by the website, and by the host unless changed
+        Normal Randomized: All entries are given a random value picked from a Log-Transformed Normal Distribution generated from the original values. Can be imbalanced - This option is blocked by the website, and by the host unless changed
+        Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed. Very imbalanced - This option is blocked by the website, and by the host unless changed
     """
     internal_name = "data_randomization_behavior"
     display_name = "Data Randomization Behavior"
@@ -1041,7 +1042,7 @@ class DataRandomizationBehavior(Choice):
 
 class DataRandomization(OptionSet):
     """
-    Enable randomization for various internal game data values. This can invalidate pre-existing game knowledge from you, or the internet.
+    Enable randomization for various internal game data values. This can invalidate pre-existing game knowledge from you, or the internet - This option can be blocked by the host
     Fish Difficulty: Difficulty of fish
     Fish Season: Which seasons fish can be caught in
     Fish Location: Which body of water fish can be caught in
@@ -1078,7 +1079,7 @@ class DataRandomization(OptionSet):
 
 
 class CustomLogic(OptionSet):
-    """Enable various customizations to the logic of the generator.
+    """Enable various customizations to the logic of the generator - This option can be blocked by the host
     Some flags are inherently incompatible with each other, the harder flag takes priority.
     Some of these toggles can, if the player is not careful, force them to reset days.
     Chair Skips: Chair skips are considered in-logic

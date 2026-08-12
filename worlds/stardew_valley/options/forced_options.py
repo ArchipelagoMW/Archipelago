@@ -12,7 +12,11 @@ from ..strings.ap_names.ap_option_names import (
     HatsanityOptionName,
 )
 from . import options
-from .jojapocalypse_options import JojaAreYouSure, Jojapocalypse
+from .jojapocalypse_options import Jojapocalypse, JojaAreYouSure
+from ..mods.mod_data import mod_combination_is_valid, get_invalid_mod_combination
+from ..options.settings import StardewSettings
+from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName, EntranceRandomizationBehaviorOptionName, DataRandomizationOptionName, \
+    SecretsanityOptionName
 
 logger = logging.getLogger(__name__)
 
@@ -39,9 +43,17 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
         world_options.bundle_price.value = options.BundlePrice.option_very_expensive
         message = f"Max Bundles Price {message_template} Replaced with 'Very Expensive'"
         logger.warning(message)
-    if (not settings.allow_chaos_er and EntranceRandomizationBehaviorOptionName.chaos in world_options.entrance_randomization_behavior):
+    if not settings.allow_chaos_er and EntranceRandomizationBehaviorOptionName.chaos in world_options.entrance_randomization_behavior:
         world_options.entrance_randomization_behavior.value.remove(EntranceRandomizationBehaviorOptionName.chaos)
-        message = f"Chaos Entrance Randomization {message_template} removed from Entrance Randomization Behaviour"
+        message = f"Chaos Entrance Randomization {message_template} removed from Entrance Randomization Behavior"
+        logger.warning(message)
+    if not settings.allow_decoupled_er and EntranceRandomizationBehaviorOptionName.decoupled in world_options.entrance_randomization_behavior:
+        world_options.entrance_randomization_behavior.value.remove(EntranceRandomizationBehaviorOptionName.decoupled)
+        message = f"Decoupled Entrance Randomization {message_template} removed from Entrance Randomization Behavior"
+        logger.warning(message)
+    if not settings.allow_overworld_er and world_options.entrance_randomization >= options.EntranceRandomization.option_overworld:
+        world_options.entrance_randomization.value = options.EntranceRandomization.option_buildings
+        message = f"Entrance Randomization {message_template} Replaced with 'Buildings'"
         logger.warning(message)
     if not settings.allow_shipsanity_everything and world_options.shipsanity == options.Shipsanity.option_everything:
         world_options.shipsanity.value = options.Shipsanity.option_full_shipment_with_fish
@@ -59,9 +71,29 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
             world_options.hatsanity.value.add(HatsanityOptionName.difficult)
             message = f"Hatsanity Near or Post Perfection {message_template} Hatsanity setting reduced."
             logger.warning(message)
+    if not settings.allow_secretsanity_difficult and SecretsanityOptionName.difficult in world_options.secretsanity.value:
+        world_options.secretsanity.value.remove(SecretsanityOptionName.difficult)
+        message = f"Secretsanity Difficult {message_template} Secretsanity setting reduced."
+        logger.warning(message)
+    if not settings.allow_eldritch_traps and world_options.trap_difficulty.value >= options.TrapDifficulty.option_eldritch:
+        world_options.trap_difficulty.value = options.TrapDifficulty.option_nightmare
+        message = f"Eldritch Traps {message_template} Replaced with Nightmare"
+        logger.warning(message)
+    if not settings.allow_hell_and_nightmare_traps and world_options.trap_difficulty.value >= options.TrapDifficulty.option_hell:
+        world_options.trap_difficulty.value = options.TrapDifficulty.option_hard
+        message = f"Hell and Nightmare Traps {message_template} Replaced with Hard"
+        logger.warning(message)
     if not settings.allow_custom_logic:
         world_options.custom_logic.value = options.CustomLogic.preset_none
         message = f"Custom Logic {message_template} All flags toggled off."
+        logger.warning(message)
+    if not settings.allow_data_randomization:
+        world_options.data_randomization.value = options.DataRandomization.preset_none
+        message = f"Data Randomization {message_template} All flags toggled off."
+        logger.warning(message)
+    if not settings.allow_unbalanced_data_randomization_behavior and world_options.data_randomization_behavior.value >= options.DataRandomizationBehavior.option_randomized:
+        world_options.data_randomization_behavior.value = options.DataRandomizationBehavior.option_weighted_randomized
+        message = f"Unbalanced Data Randomization Behavior {message_template} Reduced to `Weighted Randomized`"
         logger.warning(message)
     if not settings.allow_jojapocalypse and world_options.jojapocalypse >= options.Jojapocalypse.option_allowed:
         world_options.jojapocalypse.value = options.Jojapocalypse.option_disabled
