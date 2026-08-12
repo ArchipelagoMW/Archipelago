@@ -230,7 +230,7 @@ class ERPlacementState:
         self.entrance_lookup.remove(target_entrance)
 
     def test_speculative_connection(self, source_exit: Entrance, target_entrance: Entrance,
-                                    usable_exits: set[Entrance], required_exit_count: int) -> bool:
+                                    usable_exits: set[Entrance], placeable_exits: set[Entrance]) -> bool:
         copied_state = self.collection_state.copy()
         # simulated connection. A real connection is unsafe because the region graph is shallow-copied and would
         # propagate back to the real multiworld.
@@ -242,8 +242,7 @@ class ERPlacementState:
             copied_state.update_reachable_regions(self.world.player)
             copied_state.sweep_for_advancements(self.world.get_locations())
             stale = copied_state.stale[self.world.player]
-        # test that at there are at least required_exit_count placable randomized exits
-        placeable_exit_count = 0
+        # test that at there is at least one new placeable exit
         available_randomized_exits = copied_state.blocked_connections[self.world.player]
         for _exit in available_randomized_exits:
             if _exit.connected_region:
@@ -254,13 +253,14 @@ class ERPlacementState:
             # make sure we are only paying attention to usable exits
             if _exit not in usable_exits:
                 continue
+            # only check for new placeable exits
+            if _exit in placeable_exits:
+                continue
             # technically this should be is_valid_source_transition, but that may rely on side effects from
             # on_connect, which have not happened here (because we didn't do a real connection, and if we did, we would
             # not want them to persist). can_reach is a close enough approximation most of the time.
             if _exit.can_reach(copied_state):
-                placeable_exit_count += 1
-                if placeable_exit_count >= required_exit_count:
-                    return True
+                return True
         return False
 
     def connect(
@@ -436,19 +436,49 @@ def randomize_entrances(
                 er_state.collection_state.sweep_for_advancements()
                 stale = er_state.collection_state.stale[world.player]
 
-    def needs_speculative_sweep(dead_end: bool, exit_requirement: ExitRequirement, placeable_exits: list[Entrance]) -> bool:
+    def needs_speculative_sweep(dead_end: bool, exit_requirement: ExitRequirement, placeable_exits: set[Entrance]) -> bool:
         # in certain stages of randomization we either expect or don't care if the search space shrinks.
         # we should never speculative sweep here.
         if dead_end or exit_requirement == ExitRequirement.NONE or not perform_validity_check:
             return False
 
-        # speculative sweep is expensive. Don't use speculative sweep if there are more placable exits than remaining
-        # entrances to place.
-        return len(placeable_exits) < len(er_state.entrance_lookup.others)
+        # when in NEW_REGIONS mode, only speculative sweep if we are placing the last exit
+        if exit_requirement == ExitRequirement.NEW_REGIONS:
+            if len(placeable_exits) > 1:
+                return False
+
+            # edge case - if all dead ends have pre-placed progression or indirect connections, they are pulled forward
+            # into the non dead end stage. In this case, and only this case, it's possible that the last connection may
+            # actually be placeable in stage 1. We need to skip speculative sweep in this case because we expect the
+            # graph to get capped off.
+
+            # check to see if we are proposing the last placement
+            if not coupled:
+                # in uncoupled, this check is easy as there will only be one target.
+                is_last_placement = len(er_state.entrance_lookup) == 1
+            else:
+                # a bit harder, there may be 1 or 2 targets depending on if the exit to place is one way or two way.
+                # if it is two way, we can safely assume that one of the targets is the logical pair of the exit.
+                desired_target_count = 2 if next(iter(placeable_exits)).randomization_type == EntranceType.TWO_WAY else 1
+                is_last_placement = len(er_state.entrance_lookup) == desired_target_count
+            # if it's not the last placement, we need a sweep
+            return not is_last_placement
+
+        # when in MORE_EXITS, only speculative sweep if there are more new entrances to place than placable exits
+        if exit_requirement == ExitRequirement.MORE_EXITS:
+            new_entrances = 0
+            for entrance in itertools.chain(er_state.entrance_lookup.others, er_state.entrance_lookup.dead_ends):
+                # only count coupled two way entrances if their matching exit isn't a placeable exit
+                if entrance.connected_region not in er_state.placed_regions:
+                    new_entrances += 1
+                    if new_entrances > len(placeable_exits):
+                        return True
+        return False
 
     def find_pairing(dead_end: bool, exit_requirement: ExitRequirement) -> bool:
         nonlocal perform_validity_check
         placeable_exits = er_state.find_placeable_exits(perform_validity_check, exits)
+        placeable_exits_set = set(placeable_exits)
         for source_exit in placeable_exits:
             target_groups = target_group_lookup[source_exit.randomization_group]
             for target_entrance in er_state.entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
@@ -461,9 +491,8 @@ def randomize_entrances(
                 exit_requirement_satisfied = (not perform_validity_check or exit_requirement == ExitRequirement.NONE
                                               or target_entrance.connected_region not in er_state.placed_regions)
                 if exit_requirement_satisfied and source_exit.can_connect_to(target_entrance, dead_end, er_state):
-                    required_exit_count = len(placeable_exits) if exit_requirement == ExitRequirement.MORE_EXITS else 1
-                    if (needs_speculative_sweep(dead_end, exit_requirement, placeable_exits)
-                            and not er_state.test_speculative_connection(source_exit, target_entrance, exits_set, required_exit_count)):
+                    if (needs_speculative_sweep(dead_end, exit_requirement, placeable_exits_set)
+                            and not er_state.test_speculative_connection(source_exit, target_entrance, exits_set, placeable_exits_set)):
                         continue
                     do_placement(source_exit, target_entrance)
                     return True
