@@ -5,9 +5,9 @@ import os
 import threading
 import typing
 import unittest
-from collections.abc import Iterable
 from contextlib import contextmanager
 from copy import deepcopy
+from typing import Iterable
 
 from BaseClasses import CollectionState, Entrance, Item, Location, MultiWorld, Region, get_seed
 from test.bases import WorldTestBase
@@ -240,6 +240,14 @@ def solo_multiworld(world_options: dict[str | type[StardewValleyOption], typing.
             multiworld.lock.release()
 
 
+def get_permissive_settings(settings):
+    for key in settings:
+        if key.startswith("allow"):
+            settings[key] = True
+
+    return settings
+
+
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
 def setup_solo_multiworld(test_options: dict[str | type[StardewValleyOption], str] | None = None,
                           seed=DEFAULT_TEST_SEED,
@@ -262,6 +270,9 @@ def setup_solo_multiworld(test_options: dict[str | type[StardewValleyOption], st
 
     args = fill_namespace_with_default(test_options)
     multiworld.set_options(args)
+
+    # We want to allow every host.yaml setting when running tests, as we sometimes need to test options that host.yaml might be blocking
+    multiworld.worlds[1].settings = get_permissive_settings(multiworld.worlds[1].settings)
 
     if "start_inventory" in test_options:
         for item, amount in test_options["start_inventory"].items():
