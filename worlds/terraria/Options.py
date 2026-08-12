@@ -1,12 +1,18 @@
 from dataclasses import dataclass
-from Options import Choice, DeathLink, PerGameCommonOptions, Toggle, DefaultOnToggle, Range, OptionGroup
+from Options import Choice, DeathLink, PerGameCommonOptions, Toggle, DefaultOnToggle, Range, OptionSet, OptionGroup
 
 
-class Calamity(Toggle):
-    """Calamity mod bosses and events are shuffled"""
-
-    display_name = "Calamity Mod Integration"
-
+class Mods(OptionSet):
+    """
+    Which content mods to be played with.
+    Valid options are Calamity and Fargo.
+    If both are enabled, it is expected to be played with the Fargo Souls DLC Mod.
+    """
+    display_name = "Mods"
+    valid_keys = {
+        "Calamity",
+        "Fargo"
+    }
 
 class Getfixedboi(Toggle):
     """
@@ -30,24 +36,29 @@ class Goal(Choice):
     """
 
     display_name = "Goal"
-    option_wall_of_flesh = 0
-    option_mechanical_bosses = 1
-    option_calamitas_clone = 2
-    option_plantera = 3
-    option_princess = 4
-    option_golem = 5
-    option_empress_of_light = 6
-    option_lunatic_cultist = 7
-    option_astrum_deus = 8
-    option_moon_lord = 9
-    option_providence_the_profaned_goddess = 10
-    option_devourer_of_gods = 11
-    option_yharon_dragon_of_rebirth = 12
-    option_zenith = 13
-    option_calamity_final_bosses = 14
-    option_primordial_wyrm = 15
-    option_boss_rush = 16
-    default = 0
+    option_deviantt = 0
+    option_wall_of_flesh = 1
+    option_mechanical_bosses = 2
+    option_calamitas_clone = 3
+    option_plantera = 4
+    option_princess = 5
+    option_golem = 6
+    option_empress_of_light = 7
+    option_lunatic_cultist = 8
+    option_astrum_deus = 9
+    option_moon_lord = 10
+    option_providence_the_profaned_goddess = 11
+    option_devourer_of_gods = 12
+    option_eridanus_champion_of_cosmos = 13
+    option_yharon_dragon_of_rebirth = 14
+    option_zenith = 15
+    option_abominationn = 16
+    option_calamity_final_bosses = 17
+    option_primordial_wyrm = 18
+    option_mutant = 19
+    option_boss_rush = 20
+    option_soul_of_eternity = 21
+    default = 1
 
 
 class ShuffleUpTo(Choice):
@@ -163,7 +174,7 @@ class HealthLogicHandicap(Range):
 
 ter_option_groups = [
     OptionGroup("Gamemode and Content", [
-        Calamity,
+        Mods,
         Getfixedboi,
         Goal,
         ShuffleUpTo,
@@ -190,7 +201,7 @@ ter_option_groups = [
 
 @dataclass
 class TerrariaOptions(PerGameCommonOptions):
-    calamity: Calamity
+    mods: Mods
     getfixedboi: Getfixedboi
     goal: Goal
     shuffle_to: ShuffleUpTo

@@ -18,6 +18,7 @@ Fashion Statement;                  Achievement | Early;
 Ooo! Shiny!;                        Achievement | Early;
 No Hobo;                            Achievement;                                @npc(1);
 Merchant;                           Npc;
+Lumberjack;                         Fargo | Npc;
 Bug Net;                            ;                                           Merchant;  // TODO: add angler if fishing logic is enabled
 Heavy Metal;                        Achievement | Early;
 Dye Trader;                         Npc;                                        @npc(4);
@@ -150,6 +151,7 @@ Rock Bottom;                        Achievement;
 Obsidian Rose;
 Havocplate;                         Calamity;
 Magma Stone;
+Obsidian Skull Rose;                ;                                           Tinkerer's Workshop & Lava Charm & Obsidian Skull & Obsidian Rose;
 
 // Evil
 Smashing, Poppet!;                  Achievement;
@@ -160,13 +162,18 @@ Illegal Gun Parts;                  ;                                           
 
 // Abyss
 Ink Bomb;                           Calamity;
+Abyss Layer 2;                      Calamity;                                   Sea King | Tinkerer's Workshop | Victide Armor | #Aquatic Scourge | (#Leviathan and Anahita & Skeletron); // Sea King gives you immunity, Tinkerer's Workshop for diving gear, aquatic scourge for aquatic emblem, leviathan and anahita for Aquatic heart
+Abyss Layer 4;                      Calamity;                                   Abyss Layer 2 & Abyssal Diving Suit; 
+Planty Mush;                        Calamity;                                   Abyss Layer 2;
 
 // King Slime
+Trojan Squirrel;                    Fargo | Location | Item;                    @health(1);
 King Slime;                         Location | Item;                            @health(1);
 Sticky Situation;                   Not Getfixedboi | Achievement | Time;
 The Cavalry;                        Achievement;
 Solidifier;                         ;                                           #King Slime;
 Nerdy Slime;                        Pet;                                        #King Slime;
+Mutant NPC;                         Fargo | Npc;                                King Slime;
 
 // Desert Scourge
 Desert Scourge;                     Calamity | Location | Item;                 @health(1);
@@ -198,9 +205,10 @@ Pumpkin;                            ;                                           
 Purification Powder;                ;                                           (~@getfixedboi & Dryad) | (Shimmer & Evil Powder);
 Mystic Slime;                       Pet;                                        Purification Powder;
 And Good Riddance!;                 Achievement | Grindy;                       Dryad;
-Acid Rain Tier 1;                   Calamity | Location | Item;                 (Eye of Cthulhu | Wall of Flesh | Aquatic Scourge) & @health(1);
+Acid Rain Tier 1;                   Calamity | Location | Item;                 ((@fargo & Abominationn NPC & Acid Rain Tier 1) | (Eye of Cthulhu | Wall of Flesh | Aquatic Scourge)) & @health(1);
 
 // Crabulon
+Cursed Coffin;                      Fargo | Location | Item;                    @health(1);
 Crabulon;                           Calamity | Location | Item;                 @health(1);
 
 // Evil Boss
@@ -226,6 +234,7 @@ Brimstone Slag;                     Calamity;                                   
 // Goblin Army
 Goblin Army;                        Location | Item;                            @health(1);
 Goblin Tinkerer;                    Npc;                                        Goblin Army;
+Abominationn NPC;                   Fargo | Npc;                                Goblin Army;
 Tinkerer's Workshop;                ;                                           Goblin Tinkerer;
 Mana Flower;                        ;                                           (Tinkerer's Workshop & Nature's Gift) | (@calamity & (Shimmer & Ethereal Talisman));
 Silencing Sheath;                   Calamity;                                   (Tinkerer's Workshop & Demonite Bar & Evil Boss Part) | (Shimmer & Dark Matter Sheath);
@@ -263,7 +272,7 @@ Aerospec Armor;                     Calamity | Armor Minions(1);                
 Feather Crown;                      Calamity;                                   Aerialite Bar | (Shimmer & Moonstone Crown);
 
 // Skeletron
-Skeletron;                          Location | Item;                            (~@npc_rando | Clothier) & @health(1); // If NPCs are shuffled, Skeletron cannot be summoned if Post-Skeletron is received & The Clothier is not
+Skeletron;                          Location | Item;                            (~@npc_rando | ((@fargo & Mutant NPC & Skeletron) | Clothier)) & @health(1); // If NPCs are shuffled, Skeletron cannot be summoned if Post-Skeletron is received & The Clothier is not
 Clothier;                           Npc;                                        Skeletron;
 Dungeon;                            ;                                           Skeletron;
 Dungeon Heist;                      Achievement;                                Dungeon;
@@ -290,7 +299,7 @@ Bandit;                             Calamity;                                   
 Deerclops;                          Location | Item;                            @health(1);
 
 // The Slime God
-The Slime God;                      Calamity | Location | Item;                 Blighted Gel & @health(1);
+The Slime God;                      Calamity | Location | Item;                 ((@fargo & Mutant NPC & The Slime God) | Blighted Gel) & @health(1);
 Purified Gel;                       Calamity;                                   #The Slime God | (Shimmer & Jelly-Charged Battery);
 Jelly-Charged Battery;              Calamity;                                   (Wulfrum Battery & Voltaic Jelly & Purified Gel & Stormlion Mandible) | (Shimmer & Star-Tainted Generator);
 Static Refiner;                     Calamity;                                   Purified Gel & Solidifier;
@@ -299,7 +308,10 @@ Statigel Armor;                     Calamity | Armor Minions(1);                
 Night's Edge;                       ;                                           Evil Sword & Muramasa & Blade of Grass & Fiery Greatsword & (~@calamity | Purified Gel);
 
 // Wall of Flesh
-Wall of Flesh;                      Location | Item(Hardmode) | Goal;           Guide & @health(1);
+Deviantt;                           Fargo | Location | Item | Goal;             @health(1);
+# deviantt
+Deviating Energy;                   Fargo;                                      #Deviantt;
+Wall of Flesh;                      Location | Item(Hardmode) | Goal;           ((@fargo & Mutant NPC & Wall of Flesh) | Guide) & @health(1);
 # wall_of_flesh
 Pwnhammer;                          Hammer(80);                                 #Wall of Flesh;
 Emblem;                             ;                                           #Wall of Flesh | (Shimmer & (Avenger Emblem | (@calamity & (Mechanical Glove | Celestial Emblem | Statis' Blessing))));
@@ -307,7 +319,7 @@ Fast Clock;                         ;                                           
 Wizard;                             Npc;                                        Wall of Flesh;
 Titan Glove;                        ;                                           Wall of Flesh | (Shimmer & Power Glove);
 Power Glove;                        ;                                           Tinkerer's Workshop & Titan Glove & Feral Claws;
-Magic Quiver;                       ;                                           Wall of Flesh | (@calamity & Shimmer & Elemental Quiver);
+Magic Quiver;                       ;                                           Wall of Flesh | (@calamity & Shimmer & Planebreaker's Pouch);
 Hallowed Seeds;                     ;                                           (Wall of Flesh & Dryad) | Holy Water;
 Armor Polish;                       ;                                           Wall of Flesh;
 Adhesive Bandage;                   ;                                           Wall of Flesh;
@@ -348,12 +360,12 @@ Blessed Apple;                      ;                                           
 Rod of Discord;                     ;                                           Hallow;
 Gelatin World Tour;                 Achievement | Time | Rare;                  Dungeon & Wall of Flesh & Hallow & #King Slime;
 Soul of Flight;                     ;                                           Wall of Flesh | (@getfixedboi & #Duke Fishron);
-Head in the Clouds;                 Achievement;                                @rare | (Soul of Flight & ((Hardmode Anvil & (Soul of Light | Soul of Night | Pixie Dust | Wall of Flesh | Solar Eclipse | @mech_boss(1) | Plantera | Spectre Bar | #Golem)) | (Shroomite Bar & Autohammer) | #Mourning Wood | #Pumpking)) | Steampunker | (Wall of Flesh & Plantera & Witch Doctor) | (Solar Eclipse & Plantera) | #Everscream | #Old One's Army Tier 3 | #Empress of Light | #Duke Fishron | (Fragment & Luminite Bar & Ancient Manipulator);
+Head in the Clouds;                 Achievement;                                @rare | (Soul of Flight & ((Hardmode Anvil & (Soul of Light | Soul of Night | Pixie Dust | Wall of Flesh | Solar Eclipse | @mech_boss(1) | Plantera | Spectre Bar | #Golem)) | (Shroomite Bar & Autohammer) | #Mourning Wood | #Pumpking)) | Steampunker | (Wall of Flesh & Plantera & Witch Doctor) | (Solar Eclipse & Plantera) | #Everscream | #Betsy | #Empress of Light | #Duke Fishron | (Fragment & Luminite Bar & Ancient Manipulator);
 Bunny;                              Pet;                                        Zoologist & Wall of Flesh; // Extremely simplified
 Forbidden Fragment;                 ;                                           Sandstorm & Wall of Flesh;
 Astral Infection;                   Calamity;                                   Wall of Flesh | Astrum Aureus;
-Stardust;                           Calamity;                                   Astral Infection | #Astrum Aureus | #Astrum Deus | (Shimmer & Eye of Magnus);
-Lunic Eye;                          Calamity;                                   (Cobalt Bar & Stardust) | (Shimmer & Eye of Magnus);
+Starblight Soot;                    Calamity;                                   Astral Infection | #Astrum Aureus | #Astrum Deus | (Shimmer & Eye of Magnus);
+Lunic Eye;                          Calamity;                                   (Cobalt Bar & Starblight Soot) | (Shimmer & Eye of Magnus);
 Titan Heart;                        Calamity;                                   Astral Infection;
 Essence of Sunlight;                Calamity;                                   Wall of Flesh | #Golem | (Shimmer & Core of Calamity);
 Essence of Eleum;                   Calamity;                                   Wall of Flesh | #Frost Legion | Cryogen | #Cryogen | (Shimmer & Core of Calamity);
@@ -366,11 +378,11 @@ It Can Talk?!;                      Achievement;                                
 The First Shadowflame;              Calamity | Minions(1);                      Goblin Army | Wall of Flesh;
 
 // Pirate Invasion
-Pirate Invasion;                    Location | Item;                            Wall of Flesh & @health(1);
+Pirate Invasion;                    Location | Item;                            ((@fargo & Abominationn NPC & Pirate Invasion) | Wall of Flesh) & @health(1);
 Pirate;                             Npc;                                        Pirate Invasion;
 
 // Queen Slime
-Queen Slime;                        Location | Item;                            Hallow & @health(1);
+Queen Slime;                        Location | Item;                            ((@fargo & Mutant NPC & Queen Slime) | Hallow) & @health(1);
 Sparkle Slime Balloon;              ;                                           #Queen Slime;
 Diva Slime;                         Pet;                                        Sparkle Slime Balloon & Aether;
 The Great Slime Mitosis;            Achievement | Time | Rare;                  Nerdy Slime & Cool Slime & Elder Slime & Clumsy Slime & Diva Slime & Surly Slime & Mystic Slime & Squire Slime;
@@ -383,6 +395,7 @@ Mythril Ore;                        ;                                           
 Mythril Bar;                        ;                                           Mythril Ore | Wall of Flesh | (@calamity & Shimmer & Electrician's Glove);
 Hardmode Anvil;                     ;                                           Mythril Bar;
 Mythril Pickaxe;                    Pickaxe(150);                               Hardmode Anvil & Mythril Bar;
+Frost Core;                         ;                                           Wall of Flesh;
 Electrician's Glove;                Calamity;                                   (Hardmode Anvil & Wire & Mythril Bar) | (Shimmer & Nanotech);
 Adamantite Ore;                     ;                                           (((~@calamity & Altar) | (@calamity & @mech_boss(2))) & @pickaxe(150)) | Wall of Flesh | (Shimmer & ((~@calamity & Chlorophyte Ore) | Adamantite Bar | (@calamity & Hallowed Ore)));
 Hardmode Forge;                     ;                                           Hardmode Anvil & Adamantite Ore & Hellforge;
@@ -393,18 +406,19 @@ Infernal Suevite;                   Calamity;                                   
 Unholy Core;                        Calamity;                                   Infernal Suevite & Hellstone;
 Ruin Medallion;                     Calamity;                                   (Hardmode Anvil & Coin of Deceit & Unholy Core & Essence of Havoc) | (Shimmer & Dark Matter Sheath);
 Aquatic Scourge;                    Calamity | Location | Item;                 @health(2);
-Cragmaw Mire;                       Calamity | Location | Item;                 #Acid Rain Tier 2 & @health(2);
+Cragmaw Mire;                       Calamity | Location | Item;                 ((@fargo & Abominationn NPC & Cragmaw Mire) | #Acid Rain Tier 2) & @health(2);
 Nuclear Fuel Rod;                   Calamity | Minions(1);                      #Cragmaw Mire | Star-Tainted Generator;
-Acid Rain Tier 2;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & (Aquatic Scourge | Acid Rain Tier 3) & @health(2);
+Acid Rain Tier 2;                   Calamity | Location | Item;                 (((@fargo & Abominationn NPC & Acid Rain Tier 1) | #Acid Rain Tier 1) & (Aquatic Scourge | Acid Rain Tier 3)) & @health(2);
 Mechanical Eye;                     ;                                           (@calamity | Hardmode Anvil) & Soul of Light;
 Mechanical Worm;                    ;                                           (@calamity | Hardmode Anvil) & Soul of Night;
 Mechanical Skull;                   ;                                           (@calamity | Hardmode Anvil) & Soul of Night & Soul of Light & Bone;
 Ocram's Razor;                      Getfixedboi;                                (@calamity | Hardmode Anvil) & Mechanical Eye & Mechanical Worm & Mechanical Skull;
-The Twins;                          Location | Item | Mech Boss;                ((~@getfixedboi & Mechanical Eye) | (@getfixedboi & Ocram's Razor)) & @health(1);
-Brimstone Elemental;                Calamity | Location | Item;                 Soul of Night & Essence of Havoc & Unholy Core & @health(2);
-The Destroyer;                      Location | Item | Mech Boss;                ((~@getfixedboi & Mechanical Worm) | (@getfixedboi & Ocram's Razor)) & @health(1);
-Cryogen;                            Calamity | Location | Item;                 Soul of Night & Soul of Light & Essence of Eleum & @health(2);
-Skeletron Prime;                    Location | Item | Mech Boss;                ((~@getfixedboi & Mechanical Skull) | (@getfixedboi & Ocram's Razor)) & @health(1);
+The Twins;                          Location | Item | Mech Boss;                ((@fargo & Mutant NPC & The Twins) | (~@getfixedboi & Mechanical Eye) | (@getfixedboi & Ocram's Razor)) & @health(1);
+Banished Baron;                     Fargo | Location | Item | Mech Boss;        ((Mutant NPC & Banished Baron) | Soul of Flight) & @health(2); 
+Brimstone Elemental;                Calamity | Location | Item;                 ((@fargo & Mutant NPC & Brimstone Elemental) | (Soul of Night & Essence of Havoc & Unholy Core)) & @health(2);
+The Destroyer;                      Location | Item | Mech Boss;                ((@fargo & Mutant NPC & The Destroyer) | (~@getfixedboi & Mechanical Worm) | (@getfixedboi & Ocram's Razor)) & @health(1);
+Cryogen;                            Calamity | Location | Item;                 ((@fargo & Mutant NPC & Cryogen) | (Soul of Night & Soul of Light & Essence of Eleum)) & @health(2);
+Skeletron Prime;                    Location | Item | Mech Boss;                ((@fargo & Mutant NPC & Skeletron Prime) | (~@getfixedboi & Mechanical Skull) | (@getfixedboi & Ocram's Razor)) & @health(1);
 # mechanical_bosses
 
 // The Twins
@@ -449,13 +463,15 @@ Light Disc;                         ;                                           
 Chlorophyte Ore;                    ;                                           (Wall of Flesh & @pickaxe(200)) | (Shimmer & ((~@calamity & Luminite) | Chlorophyte Bar | (@calamity & Perennial Ore)));
 Photosynthesis;                     Achievement;                                Chlorophyte Ore;
 Chlorophyte Bar;                    ;                                           (Hardmode Forge & Chlorophyte Ore) | (Shimmer & (Spectre Bar | Shroomite Bar));
+Chlorophyte Armor;                  ;                                           Hardmode Anvil & Chlorophyte Bar;
 True Excalibur;                     ;                                           Hardmode Anvil & Excalibur & Chlorophyte Bar;
 Chlorophyte Pickaxe;                Pickaxe(200);                               Hardmode Anvil & Chlorophyte Bar;
 Chlorophyte Warhammer;              Hammer(90);                                 Hardmode Anvil & Chlorophyte Bar;
 
 // Calamitas Clone
-Calamitas Clone;                    Calamity | Location | Item | Goal;          Hardmode Anvil & Hellstone Bar & Essence of Havoc & @health(3);
-Plantera;                           Location | Item | Goal;                     Wall of Flesh & (@mech_boss(3) | @calamity) & @health(3);  // Vernal Pass
+Lifelight;                          Fargo | Location | Item;                    ((Mutant NPC & Lifelight) | (Hardmode Anvil & Hallow)) & @health(3);
+Calamitas Clone;                    Calamity | Location | Item | Goal;          ((@fargo & Mutant NPC & Calamitas Clone) | (Hardmode Anvil & Hellstone Bar & Essence of Havoc)) & @health(3);
+Plantera;                           Location | Item | Goal;                     ((@fargo & Mutant NPC & Plantera) | (Wall of Flesh & (@mech_boss(3) | @calamity))) & @health(3);  // Vernal Pass
 # calamitas_clone
 # plantera
 Ashes of Calamity;                  Calamity;                                   #Calamitas Clone | (Shimmer & Sigil of Calamitas);
@@ -475,10 +491,10 @@ Shroomite Digging Claw;             Pickaxe(200);                               
 Princess;                           Npc | Goal;                                 Guide & Merchant & Nurse & Demolitionist & Dye Trader & Zoologist & Angler & Painter & Stylist & Golfer & Arms Dealer & Dryad & Party Girl & Tavernkeep & Goblin Tinkerer & Mechanic & Witch Doctor & Clothier & Wizard & Truffle & Tax Collector & Pirate & Steampunker & Cyborg;
 # princess
 Real Estate Agent;                  Achievement;                                #Princess & Princess;
-Ectoplasm;                          ;                                           (Plantera & (Calamitas Clone | (Wall of Flesh & (Skeletron | @calamity)))) | (Shimmer & (Spectre Bar | Core of Calamity | Polterplasm));  // various cores
+Ectoplasm;                          ;                                           (Plantera & (Calamitas Clone | (Wall of Flesh & (Skeletron | @calamity)))) | (Shimmer & (Spectre Bar | Core of Calamity | Necroplasm));  // various cores
 Paladin's Shield;                   ;                                           Dungeon & Wall of Flesh & Plantera;
 Core of Calamity;                   Calamity;                                   (Hardmode Anvil & Essence of Sunlight & Essence of Eleum & Essence of Havoc & Ashes of Calamity & Ectoplasm) | Fleshy Geode | Necromantic Geode | (Shimmer & Deadshot Brooch);
-Deadshot Brooch;                    Calamity;                                   (Hardmode Anvil & Emblem & Core of Calamity) | (Shimmer & Elemental Quiver);
+Deadshot Brooch;                    Calamity;                                   (Hardmode Anvil & Emblem & Core of Calamity) | (Shimmer & Planebreaker's Pouch);
 Spectre Bar;                        ;                                           Hardmode Forge & Chlorophyte Bar & Ectoplasm;
 Spectre Pickaxe;                    Pickaxe(200);                               Hardmode Anvil & Spectre Bar;
 Spectre Hamaxe;                     Hammer(90);                                 Hardmode Anvil & Spectre Bar;
@@ -500,7 +516,7 @@ Temple Raider;                      Achievement;                                
 Lihzahrd Temple;                    ;                                           #Plantera | (Plantera & Actuator) | @pickaxe(210);
 Lihzahrd Furniture;                 ;                                           Lihzahrd Temple;
 Bohldohr;                           Calamity;                                   Lihzahrd Temple;
-Solar Eclipse;                      ;                                           Wall of Flesh & (Lihzahrd Temple | (@time & @mech_boss(1))) & @health(2);
+Solar Eclipse;                      ;                                           ((@fargo & ((Witch Doctor & Golem) | (Abominationn NPC & @mech_boss(1)))) | (Wall of Flesh & (Lihzahrd Temple | (@time & @mech_boss(1))))) & @health(2);
 Broken Hero Sword;                  ;                                           Solar Eclipse & Plantera & @mech_boss(3);
 Terra Blade;                        ;                                           Hardmode Anvil & True Night's Edge & True Excalibur & Broken Hero Sword & (~@calamity | Living Shard);
 Sword of the Hero;                  Achievement | Crafting;                     Terra Blade;
@@ -510,27 +526,27 @@ Solar Veil;                         Calamity;                                   
 Vampiric Talisman;                  Calamity;                                   Hardmode Anvil & Raider's Talisman & Eye of Cthulhu & Solar Veil;
 
 // Great Sand Shark
-Great Sand Shark;                   Calamity | Location | Item;                 (#Plantera | (Hardmode Anvil & Forbidden Fragment & Core of Calamity)) & @health(3);
+Great Sand Shark;                   Calamity | Location | Item;                 ((@fargo & Abominationn NPC & Cragmaw Mire) | (#Plantera | (Hardmode Anvil & Forbidden Fragment & Core of Calamity))) & @health(3);
 Grand Scale;                        Calamity;                                   #Great Sand Shark | (Shimmer & Sand Shark Tooth Necklace);
 Sand Shark Tooth Necklace;          Calamity;                                   (Tinkerer's Workshop & Shark Tooth Necklace & Avenger Emblem & Grand Scale) | (@getfixedboi & #Desert Scourge);
 
 // Leviathan and Anahita
 Leviathan and Anahita;              Calamity | Location | Item;                 @health(3);
-Depth Cells;                        Calamity;                                   Calamitas Clone | (Shimmer & Abyssal Mirror);
-Lumenyl;                            Calamity;                                   Leviathan and Anahita | (Shimmer & Abyssal Mirror);
+Depth Cells;                        Calamity;                                   (Abyss Layer 2 & Calamitas Clone) | (Shimmer & Abyssal Mirror);
+Lumenyl;                            Calamity;                                   (Abyss Layer 2 & Leviathan and Anahita) | (Shimmer & Abyssal Mirror);
 Abyssal Mirror;                     Calamity;                                   (Hardmode Anvil & Mirage Mirror & Ink Bomb & Depth Cells & Lumenyl) | (Shimmer & Eclipse Mirror);
 Fathom Swarmer Armor;               Calamity | Armor Minions(2);                Hardmode Anvil & Sea Remains & Depth Cells;
 
 // Astrum Aureus
-Astrum Aureus;                      Calamity | Location | Item;                 Hardmode Anvil & Stardust & Astral Infection & Decryption Computer & @health(3);
+Astrum Aureus;                      Calamity | Location | Item;                 ((@fargo & Mutant NPC & Astrum Aureus) | (Hardmode Anvil & Starblight Soot & Astral Infection & Decryption Computer)) & @health(3);
 Starbuster Core;                    Calamity | Minions(1);                      Astrum Aureus & Astral Infection;
 
 // Golem
-Golem;                              Location | Item | Goal;                     Wall of Flesh & Lihzahrd Temple & @health(3);
+Golem;                              Location | Item | Goal;                     ((@fargo & Mutant NPC & Golem) | (Wall of Flesh & Lihzahrd Temple)) & @health(3);
 # golem
 Picksaw;                            Pickaxe(210);                               #Golem;
 Lihzahrd Brick;                     ;                                           @pickaxe(210) | (Lihzahrd Furniture & Golem) | Bohldohr;
-Scoria Ore;                         Calamity;                                   Golem | @pickaxe(210) | (Shimmer & (Astral Ore | Luminite | Scoria Bar));
+Scoria Ore;                         Calamity;                                   (Abyss Layer 2 & (Golem | @pickaxe(210))) | (Shimmer & (Astral Ore | Luminite | Scoria Bar));
 Scoria Bar;                         Calamity;                                   (Hardmode Forge & Scoria Ore) | Fleshy Geode | Necromantic Geode | (Shimmer & (Life Alloy | Sigil of Calamitas | Fire Gauntlet));
 Seismic Hampick;                    Calamity | Pickaxe(210) | Hammer(95);       Hardmode Anvil & Scoria Bar;
 Hydrothermic Armor;                 Calamity | Armor Minions(2);                Hardmode Anvil & Scoria Bar;
@@ -541,62 +557,63 @@ Miracle Fruit;                      Calamity | Quarter Fruit;                   
 Advanced Display;                   Calamity;                                   Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Life Alloy & Long Ranged Sensor Array;
 Star-Tainted Generator;             Calamity;                                   (Hardmode Anvil & Jelly-Charged Battery & Nuclear Fuel Rod & Starbuster Core & Life Alloy) | Nucleogenesis;
 Old One's Army Tier 3;              Location | Item;                            #Old One's Army Tier 1 & Wall of Flesh & Golem & @health(4);
+Betsy;                              Location | Item;                            (@fargo & Abominationn NPC & Betsy) | #Old One's Army Tier 3;
 
 // Martian Madness
-Martian Madness;                    Location | Item;                            (Wall of Flesh | (@calamity & Cyborg)) & Golem & @health(4);
+Martian Madness;                    Location | Item;                            ((@fargo & Abominationn NPC) | (Wall of Flesh | (@calamity & Cyborg))) & Golem & @health(4);
 Laser Drill;                        Pickaxe(220);                               #Martian Madness;
 Influx Waver;                       ;                                           #Martian Madness;
 
 // The Plaguebringer Goliath
 Plague Cell Canister;               Calamity;                                   Golem | (Shimmer & Alchemical Flask) | (@getfixedboi & #Queen Bee);
 Alchemical Flask;                   Calamity;                                   (Hardmode Anvil & Bee Wax & Plague Cell Canister) | (@getfixedboi & #Queen Bee);
-The Plaguebringer Goliath;          Calamity | Location | Item;                 Hardmode Anvil & Plague Cell Canister & Long Ranged Sensor Array & @health(4);
+The Plaguebringer Goliath;          Calamity | Location | Item;                 ((@fargo & Mutant NPC & The Plaguebringer Goliath) | (Hardmode Anvil & Plague Cell Canister & Long Ranged Sensor Array)) & @health(4);
 Infected Armor Plating;             Calamity;                                   #The Plaguebringer Goliath;
 Plaguebringer Armor;                Calamity | Armor Minions(3);                Hardmode Anvil & Bee Armor & Alchemical Flask & Plague Cell Canister & Infected Armor Plating;
 
 // Duke Fishron
-Duke Fishron;                       Location | Item;                            ((Bug Net & Wall of Flesh) | (@getfixedboi & @calamity & #Astrum Deus)) & @health(4);
+Duke Fishron;                       Location | Item;                            ((@fargo & Mutant NPC & Duke Fishron) | ((Bug Net | Sea King) & Wall of Flesh) | (@getfixedboi & @calamity & #Astrum Deus)) & @health(4);
 
 // Pumpkin Moon
-Pumpkin Moon;                       ;                                           Hardmode Anvil & Pumpkin & Ectoplasm & (@calamity | Hallowed Bar) & @health(3);
-Spooky Armor;                       Armor Minions(4);                           Pumpkin Moon;
-Mourning Wood;                      Location | Item;                            Pumpkin Moon;
+Pumpkin Moon;                       ;                                           ((@fargo & Abominationn NPC & Pumpking) | (Hardmode Anvil & Pumpkin & Ectoplasm & (@calamity | Hallowed Bar))) & @health(3);
+Spooky Armor;                       Armor Minions(4);                           (@fargo & Lumberjack & Pumpking) | Pumpkin Moon;
+Mourning Wood;                      Location | Item;                            (@fargo & Abominationn NPC & Mourning Wood) | Pumpkin Moon;
 Necromantic Scroll;                 Minions(1);                                 #Mourning Wood;
 Papyrus Scarab;                     Minions(1);                                 (Tinkerer's Workshop & Hercules Beetle & Necromantic Scroll) | (@calamity & Statis' Blessing);
 Statis' Blessing;                   Calamity;                                   (Hardmode Anvil & Papyrus Scarab & Pygmy Necklace & Emblem & Holy Water & Essence of Sunlight) | Statis' Curse;
-Pumpking;                           Location | Item;                            Pumpkin Moon;
+Pumpking;                           Location | Item;                            (@fargo & Abominationn NPC & Pumpking) | Pumpkin Moon;
 The Horseman's Blade;               ;                                           #Pumpking;
 Baleful Harvest;                    Achievement;                                Pumpkin Moon;
 
 // Frost Moon
-Frost Moon;                         ;                                           Hardmode Anvil & Ectoplasm & (@calamity | Soul of Fright) & @health(3);
-Everscream;                         Location | Item;                            Frost Moon;
-Santa-NK1;                          Location | Item;                            Frost Moon;
-Ice Queen;                          Location | Item;                            Frost Moon;
+Frost Moon;                         ;                                           ((@fargo & Abominationn NPC & Ice Queen) | (Hardmode Anvil & Ectoplasm & (@calamity | Soul of Fright))) & @health(3);
+Everscream;                         Location | Item;                            (@fargo & Abominationn NPC & Everscream) | Frost Moon;
+Santa-NK1;                          Location | Item;                            (@fargo & Abominationn NPC & Santa-NK1) | Frost Moon;
+Ice Queen;                          Location | Item;                            (@fargo & Abominationn NPC & Ice Queen) | Frost Moon;
 Ice Scream;                         Achievement;                                Frost Moon;
 Christmas;                          ;                                           Frost Moon;
 
 // Frost Legion
-Frost Legion;                       Location | Item;                            ((Wall of Flesh & Christmas) | (@calamity & Soul of Light & Soul of Night)) & @health(2);
+Frost Legion;                       Location | Item;                            ((Wall of Flesh & ((@fargo & Abominationn NPC) | Christmas)) | (@calamity & Soul of Light & Soul of Night)) & @health(2);
 Santa Claus;                        Npc;                                        Frost Legion & Christmas;
 
 // Ravager
-Ravager;                            Calamity | Location | Item;                 Lihzahrd Temple & Lihzahrd Brick & @health(4);
+Ravager;                            Calamity | Location | Item;                 ((@fargo & Mutant NPC & Ravager) | (Lihzahrd Temple & Lihzahrd Brick)) & @health(4);
 Fleshy Geode;                       Calamity;                                   #Ravager;
 
 // Empress of Light
-Empress of Light;                   Location | Item | Goal;                     (Wall of Flesh & Hallow & (@calamity | Plantera)) & @health(4);
+Empress of Light;                   Location | Item | Goal;                     ((@fargo & Mutant NPC & Empress of Light) | (Wall of Flesh & Hallow & (@calamity | Plantera))) & @health(4);
 # empress_of_light
 
 // Lunatic Cultist
-Lunatic Cultist;                    Location | Item | Goal;                     (((@calamity | (Dungeon & Golem)) & Wall of Flesh) | (@calamity & Calamitas Clone)) & @health(4);
-Astrum Deus;                        Calamity | Location | Item | Goal;          Titan Heart & @health(4);
+Lunatic Cultist;                    Location | Item | Goal;                     ((@fargo & Mutant NPC & Lunatic Cultist) | ((@calamity | (Dungeon & Golem)) & Wall of Flesh) | (@calamity & Calamitas Clone)) & @health(4);
+Astrum Deus;                        Calamity | Location | Item | Goal;          ((@fargo & Mutant NPC & Astrum Deus) | Titan Heart) & @health(4);
 # lunatic_cultist
 # astrum_deus
 Ancient Manipulator;                ;                                           #Lunatic Cultist;
 
 // Lunar Events
-Lunar Events;                       Location | Item;                            #Lunatic Cultist & @health(4);
+Lunar Events;                       Location | Item;                            ((@fargo & Abominationn NPC & Lunar Events) | #Lunatic Cultist) & @health(4);
 Fragment;                           ;                                           #Lunar Events | #Astrum Deus | (Ancient Manipulator & (Nebula Fragment | Stardust Fragment));
 Nebula Fragment;                    ;                                           Fragment | (@calamity & Shimmer & Eye of Magnus);
 Eye of Magnus;                      Calamity;                                   (Ancient Manipulator & Lunic Eye & Nebula Fragment) | (@getfixedboi & #Wall of Flesh);
@@ -607,17 +624,17 @@ Dark Matter Sheath;                 Calamity;                                   
 
 // Astrum Deus
 Astral Ore;                         Calamity;                                   (Astral Infection & Astrum Deus) | (Shimmer & Astral Bar); // No pick needed; Astral Slime drops it
-Astral Bar;                         Calamity;                                   Ancient Manipulator & Stardust & Astral Ore;
+Astral Bar;                         Calamity;                                   Ancient Manipulator & Starblight Soot & Astral Ore;
 Astral Hamaxe;                      Calamity | Hammer(100);                     Ancient Manipulator & Astral Bar;
 Astral Pickaxe;                     Calamity | Pickaxe(220);                    Ancient Manipulator & Astral Bar;
 Astral Armor;                       Calamity | Armor Minions(3);                Ancient Manipulator & Astral Bar;
 
 // Moon Lord
-Moon Lord;                          Location | Item | Goal;                     #Lunar Events & @health(4);
+Moon Lord;                          Location | Item | Goal;                     ((@fargo & Mutant NPC & Moon Lord) | #Lunar Events) & @health(4);
 # moon_lord
 Slayer of Worlds;                   Achievement;                                #Evil Boss & #The Destroyer & #Duke Fishron & #Eye of Cthulhu & #Golem & #King Slime & #Lunatic Cultist & #Moon Lord & #Plantera & #Queen Bee & #Skeletron & #Skeletron Prime & #The Twins & #Wall of Flesh;
 Luminite;                           ;                                           #Moon Lord | (Shimmer & ((@calamity & Exodium Cluster) | Luminite Bar));
-Luminite Bar;                       ;                                           (Ancient Manipulator & Luminite) | (Shimmer & @calamity & (#The Devourer of Gods | Elemental Gauntlet | Elemental Quiver | Nucleogenesis | Moonstone Crown | Ethereal Talisman));
+Luminite Bar;                       ;                                           (Ancient Manipulator & Luminite) | (Shimmer & @calamity & (#The Devourer of Gods | Elemental Gauntlet | Planebreaker's Pouch | Nucleogenesis | Moonstone Crown | Ethereal Talisman));
 Luminite Hamaxe;                    Hammer(100);                                Ancient Manipulator & Fragment & Luminite Bar;
 Luminite Pickaxe;                   Pickaxe(225);                               Ancient Manipulator & Fragment & Luminite Bar;
 Genesis Pickaxe;                    Calamity | Pickaxe(225);                    Ancient Manipulator & Meld Blob & Luminite Bar;
@@ -630,23 +647,23 @@ Star Wrath;                         ;                                           
 Exodium Cluster;                    Calamity;                                   (Moon Lord & (Wall of Flesh | @pickaxe(225))) | (Shimmer & Uelibloom Ore);
 Normality Relocator;                Calamity;                                   Hardmode Anvil & Rod of Discord & Exodium Cluster & Fragment;
 Unholy Essence;                     Calamity;                                   Moon Lord | #Providence, the Profaned Goddess | (@getfixedboi & Plantera);
-Polterplasm;                        Calamity;                                   (Moon Lord & (Dungeon | Wall of Flesh)) | #Polterghast | (Shimmer & #The Devourer of Gods);
-Eldritch Soul Artifact;             Calamity | Minions(1);                      Hardmode Anvil & Exodium Cluster & Navyplate & Polterplasm;
+Necroplasm;                         Calamity;                                   (Moon Lord & (Dungeon | Wall of Flesh)) | #Polterghast | (Shimmer & #The Devourer of Gods);
+Eldritch Soul Artifact;             Calamity | Minions(1);                      Hardmode Anvil & Exodium Cluster & Navyplate & Necroplasm;
 
 // Profaned Guardians
-Profaned Guardians;                 Calamity | Location | Item;                 Hardmode Anvil & Unholy Essence & Luminite Bar & @health(4);
+Profaned Guardians;                 Calamity | Location | Item;                 ((@fargo & Mutant NPC & Profaned Guardians) | (Hardmode Anvil & Unholy Essence & Luminite Bar)) & @health(4);
 
 // Dragonfolly
-The Dragonfolly;                    Calamity | Location | Item;                 Ancient Manipulator & Life Alloy & Fragment;
-Effulgent Feather;                  Calamity;                                   Moon Lord | #The Dragonfolly | (@getfixedboi & #Yharon, Dragon of Rebirth);
+Dragonfolly;                        Calamity | Location | Item;                 ((@fargo & Mutant NPC & Dragonfolly) | (Ancient Manipulator & Life Alloy & Fragment)) & @health(4);
+Effulgent Feather;                  Calamity;                                   Moon Lord | #Dragonfolly | (@getfixedboi & #Yharon, Dragon of Rebirth);
 
 // Providence, the Profaned Goddess
-Providence, the Profaned Goddess;   Calamity | Location | Item | Goal;          #Profaned Guardians;
+Providence, the Profaned Goddess;   Calamity | Location | Item | Goal;          ((@fargo & Mutant NPC & Providence, the Profaned Goddess) | #Profaned Guardians) & @health(4);
 # providence_the_profaned_goddess
 Divine Geode;                       Calamity;                                   #Providence, the Profaned Goddess | (@getfixedboi & #Profaned Guardians);
 Tainted Cloudberry;                 Calamity | Quarter Fruit;                   Hardmode Anvil & Life Fruit & Uelibloom Bar & Divine Geode;
 Profaned Soul Artifact;             Calamity | Minions(1);                      Hardmode Anvil & Exodium Cluster & Havocplate & Divine Geode;
-Rune of Kos;                        Calamity;                                   #Providence, the Profaned Goddess;
+Mark of Providence;                 Calamity;                                   (@fargo & Mutant NPC & (Storm Weaver | Ceaseless Void | Signus, Envoy of the Devourer)) | #Providence, the Profaned Goddess | (Hardmode Anvil & Luminite Bar & Unholy Essence & Fragment);
 Uelibloom Ore;                      Calamity;                                   Providence, the Profaned Goddess | (Shimmer & (Auric Ore | Uelibloom Bar));
 Uelibloom Bar;                      Calamity;                                   (Hardmode Forge & Uelibloom Ore) | Providence, the Profaned Goddess;
 Grax;                               Calamity | Hammer(110);                     Hardmode Anvil & Inferna Cutter & Luminite Hamaxe & Uelibloom Bar;
@@ -656,29 +673,40 @@ Tarragon Armor;                     Calamity | Armor Minions(3);                
 Necromantic Geode;                  Calamity;                                   #Ravager & Providence, the Profaned Goddess;
 Bloodstone;                         Calamity;                                   Providence, the Profaned Goddess | Necromantic Geode;
 
+// Champions
+Sigil of Champions;                 Fargo;                                      Ancient Manipulator & Hellstone Bar & Frost Core & Soul of Light & Soul of Night & Forbidden Fragment & Luminite Bar & (~@calamity | Divine Geode);
+Champion of Timber;                 Fargo | Location | Item;                    Sigil of Champions;
+Champion of Terra;                  Fargo | Location | Item;                    Sigil of Champions;
+Champion of Earth;                  Fargo | Location | Item;                    Sigil of Champions;
+Champion of Nature;                 Fargo | Location | Item;                    Sigil of Champions;
+Champion of Life;                   Fargo | Location | Item;                    Sigil of Champions & Hallow;
+Champion of Death;                  Fargo | Location | Item;                    Sigil of Champions;
+Champion of Spirit;                 Fargo | Location | Item;                    Sigil of Champions;
+Champion of Will;                   Fargo | Location | Item;                    Sigil of Champions;
+
 // Sentinels of the Devourer
-Storm Weaver;                       Calamity | Location | Item;                 Rune of Kos & @health(5);
+Storm Weaver;                       Calamity | Location | Item;                 Mark of Providence & @health(5);
 Armored Shell;                      Calamity;                                   #Storm Weaver;
-Ceaseless Void;                     Calamity | Location | Item;                 Dungeon & Rune of Kos & @health(5);
+Ceaseless Void;                     Calamity | Location | Item;                 Dungeon & Mark of Providence & @health(5);
 Dark Plasma;                        Calamity;                                   #Ceaseless Void;
-Signus, Envoy of the Devourer;      Calamity | Location | Item;                 Rune of Kos & @health(5);
+Signus, Envoy of the Devourer;      Calamity | Location | Item;                 Mark of Providence & @health(5);
 Twisting Nether;                    Calamity;                                   #Signus, Envoy of the Devourer | (Shimmer & Occult Skull Crown);
 
 // Polterghast
-Polterghast;                        Calamity | Location | Item;                 Dungeon & ((Hardmode Anvil & Polterplasm) | Moon Lord) & @health(5);
+Polterghast;                        Calamity | Location | Item;                 ((@fargo & Mutant NPC & Polterghast) | (Dungeon & ((Hardmode Anvil & Necroplasm) | Moon Lord))) & @health(5);
 Ruinous Soul;                       Calamity;                                   #Polterghast;
 Bloodflare Armor;                   Calamity | Armor Minions(3);                Hardmode Anvil & Bloodstone & Blood Moon & Ruinous Soul;
-Reaper Tooth;                       Calamity;                                   Polterghast;
+Reaper Tooth;                       Calamity;                                   Abyss Layer 4 & Polterghast;
 Omega Blue Armor;                   Calamity | Armor Minions(2);                Hardmode Anvil & Reaper Tooth & Depth Cells & Ruinous Soul;
 
 // The Old Duke
-Mauler;                             Calamity | Location | Item;                 Acid Rain Tier 3;
-Nuclear Terror;                     Calamity | Location | Item;                 Acid Rain Tier 3;
-Acid Rain Tier 3;                   Calamity;                                   #Acid Rain Tier 1 & Polterghast & @health(5);
-The Old Duke;                       Calamity | Location | Item;                 (Acid Rain Tier 3 | (Bug Net & Moon Lord) | (Sea King & The Old Duke) | (@getfixedboi & #The Destroyer)) & @health(5);
+Mauler;                             Calamity | Location | Item;                 (@fargo & Abominationn NPC & Cragmaw Mire) | Acid Rain Tier 3;
+Nuclear Terror;                     Calamity | Location | Item;                 (@fargo & Abominationn NPC & Cragmaw Mire) | Acid Rain Tier 3;
+Acid Rain Tier 3;                   Calamity;                                   ((@fargo & Abominationn NPC & Acid Rain Tier 1) | #Acid Rain Tier 1) & Polterghast & @health(5);
+The Old Duke;                       Calamity | Location | Item;                 (Acid Rain Tier 3 | (Bug Net & Moon Lord) | (((@fargo & Mutant NPC) | Sea King) & The Old Duke) | (@getfixedboi & #The Destroyer)) & @health(5);
 
 // The Devourer of Gods
-The Devourer of Gods;               Calamity | Location | Item | Goal;          Hardmode Anvil & ((Armored Shell & Twisting Nether & Dark Plasma) | (Luminite Bar & Fragment & Meld Blob & Polterplasm)) & @health(5);
+The Devourer of Gods;               Calamity | Location | Item | Goal;          ((@fargo & Mutant NPC & The Devourer of Gods) | (Hardmode Anvil & ((Armored Shell & Twisting Nether & Dark Plasma) | (Luminite Bar & Fragment & Meld Blob & Necroplasm)))) & @health(5);
 # the_devourer_of_gods
 Cosmilite Bar;                      Calamity;                                   #The Devourer of Gods;
 Cosmic Anvil;                       Calamity;                                   Ancient Manipulator & Hardmode Anvil & Cosmilite Bar & Luminite Bar & Fragment & Meld Blob & Exodium Cluster;
@@ -688,17 +716,20 @@ Endothermic Energy;                 Calamity;                                   
 Darksun Fragment;                   Calamity;                                   (Solar Eclipse & The Devourer of Gods) | (Shimmer & Eclipse Mirror);
 Dark Sun Ring;                      Calamity;                                   Cosmic Anvil & Uelibloom Bar & Darksun Fragment;
 Eclipse Mirror;                     Calamity;                                   (Cosmic Anvil & Abyssal Mirror & Dark Matter Sheath & Darksun Fragment) | (@getfixedboi & #Ceaseless Void);
-Ascendant Spirit Essence;           Calamity;                                   (Hardmode Anvil & Polterplasm & Nightmare Fuel & Endothermic Energy & Darksun Fragment) | (@getfixedboi & #Providence, the Profaned Goddess) | (Shimmer & (Elemental Gauntlet | Elemental Quiver | Nucleogenesis | Nanotech | Ethereal Talisman));
+Ascendant Spirit Essence;           Calamity;                                   (Hardmode Anvil & Necroplasm & Nightmare Fuel & Endothermic Energy & Darksun Fragment) | (@getfixedboi & #Providence, the Profaned Goddess) | (Shimmer & (Elemental Gauntlet | Planebreaker's Pouch | Nucleogenesis | Nanotech | Ethereal Talisman));
 Fearmonger Armor;                   Calamity | Armor Minions(2);                Cosmic Anvil & Spooky Armor & Cosmilite Bar & Soul of Fright & Ascendant Spirit Essence;
-Silva Armor;                        Calamity | Armor Minions(5);                Cosmic Anvil & Effulgent Feather & Ascendant Spirit Essence;
+Silva Armor;                        Calamity | Armor Minions(5);                Cosmic Anvil & Planty Mush & Effulgent Feather & Ascendant Spirit Essence;
 Elemental Gauntlet;                 Calamity;                                   (Cosmic Anvil & Fire Gauntlet & Ascendant Spirit Essence) | (@getfixedboi & #Storm Weaver);
-Elemental Quiver;                   Calamity;                                   (Cosmic Anvil & Magic Quiver & Deadshot Brooch & Ascendant Spirit Essence) | (@getfixedboi & #Storm Weaver);
+Planebreaker's Pouch;               Calamity;                                   (Cosmic Anvil & Magic Quiver & Deadshot Brooch & Ascendant Spirit Essence) | (@getfixedboi & #Storm Weaver);
 Nucleogenesis;                      Calamity;                                   (Cosmic Anvil & Star-Tainted Generator & Statis' Curse & Ascendant Spirit Essence) | (@getfixedboi & #Ceaseless Void);
 Nanotech;                           Calamity;                                   (Emblem & Vampiric Talisman & Electrician's Glove & Luminite Bar & Ascendant Spirit Essence) | (@getfixedboi & #Signus, Envoy of the Devourer);
 Ethereal Talisman;                  Calamity;                                   (Cosmic Anvil & Sigil of Calamitas & Mana Flower & Ascendant Spirit Essence) | (@getfixedboi & #Signus, Envoy of the Devourer);
+Eridanus, Champion of Cosmos;       Fargo | Location | Item | Goal;             Sigil of Champions;
+# eridanus_champion_of_cosmos
+Eridanium;                          Fargo;                                      #Eridanus, Champion of Cosmos;
 
 // Yharon, Dragon of Rebirth
-Yharon, Dragon of Rebirth;          Calamity | Location | Item | Goal;          Hardmode Anvil & Effulgent Feather & Life Alloy & @health(5);
+Yharon, Dragon of Rebirth;          Calamity | Location | Item | Goal;          ((@fargo & Mutant NPC & Yharon, Dragon of Rebirth) | (Hardmode Anvil & Effulgent Feather & Life Alloy)) & @health(5);
 # yharon_dragon_of_rebirth
 Yharon Soul Fragment;               Calamity;                                   #Yharon, Dragon of Rebirth | (Shimmer & (The Wand | Auric Bar));
 Sacred Strawberry;                  Calamity | Quarter Fruit;                   Cosmic Anvil & Life Fruit & Yharon Soul Fragment & Ascendant Spirit Essence;
@@ -706,14 +737,30 @@ The Wand;                           Calamity;                                   
 Auric Ore;                          Calamity;                                   (Yharon, Dragon of Rebirth & @pickaxe(250)) | (Shimmer & (Auric Bar | Yharon Soul Fragment));
 Auric Bar;                          Calamity;                                   (Hardmode Forge & Auric Ore & Yharon Soul Fragment) | (Shimmer & Shadowspec Bar);
 Auric Tesla Armor;                  Calamity | Armor Minions(6);                Cosmic Anvil & Silva Armor & Bloodflare Armor & Tarragon Armor & Auric Bar;
-Infinity +1 Sword;                  Achievement | Crafting | Item(Has Zenith) | Goal(zenith); Terra Blade & Meowmere & Star Wrath & Influx Waver & The Horseman's Blade & Seedler & Starfury & Bee Keeper & Enchanted Sword & Copper Shortsword & ((~@calamity & Hardmode Anvil) | (@calamity & Cosmic Anvil & Auric Bar));
+Zenith;                             ;                                           Terra Blade & Meowmere & Star Wrath & Influx Waver & The Horseman's Blade & Seedler & Starfury & Bee Keeper & Enchanted Sword & Copper Shortsword & ((~@calamity & Hardmode Anvil) | (@calamity & Cosmic Anvil & Auric Bar));
+Infinity +1 Sword;                  Achievement | Crafting | Item(Has Zenith) | Goal(zenith); Zenith;
 # zenith
+
+// Abominationn
+Golden Dipping Vat;                 Fargo;                                      Pirate & Wall of Flesh;
+Elemental Assembler;                Fargo;                                      Dye Trader & Witch Doctor & Goblin Tinkerer & Dungeon & Hellforge & Steampunker & Solidifier & Evil Boss Part & Bone;
+Multitask Center;                   Fargo;                                      
+Decay Chamber;                      ;                                           Steampunker;
+Steampunk Boiler;                   ;                                           Steampunker & Eye of Cthulhu & Evil Boss & Skeletron;
+Meat Grinder;                       ;                                           Wall of Flesh;
+Blend-O-Matic;                      ;                                           Steampunker;
+Crystal Ball;                       ;                                           Wizard;
+Flesh Cloning Vat;                  ;                                           Steampunker;
+Crucible of the Cosmos;             Fargo;                                      #Eridanus, Champion of Cosmos | (Hardmode Anvil & Hardmode Forge & Golden Dipping Vat & Elemental Assembler & Multitask Center & Decay Chamber & Steampunk Boiler & Meat Grinder & Blend-O-Matic & Autohammer & Crystal Ball & Luminite Bar & Ancient Manipulator & Lihzahrd Furniture & Flesh Cloning Vat);
+Abominationn;                       Fargo | Location | Item | Goal;             (Mutant NPC & Abominationn) | (Crucible of the Cosmos & #Goblin Army & #Pirate Invasion & #Pumpkin Moon & #Frost Moon & #Frost Legion & Tavernkeep & Luminite Bar & (~@calamity | Auric Bar));
+# abominationn
+Abominable Energy;                  Fargo;                                      #Abominationn;
 
 // Exo Mechs
 Auric Quantum Cooling Cell;         Calamity;                                   Cosmic Anvil & Auric Bar & Mysterious Circuitry & Dubious Plating & Endothermic Energy & Essence of Eleum & Voltage Regulation System;
-Exo Mechs;                          Calamity | Location | Item | Final Boss;    Codebreaker Base & Decryption Computer & Auric Quantum Cooling Cell & @health(6);
+Exo Mechs;                          Calamity | Location | Item | Final Boss;    ((@fargo & ((Mutant NPC & Exo Mechs) | Auric Quantum Cooling Cell)) | (Codebreaker Base & Decryption Computer & Auric Quantum Cooling Cell)) & @health(6);
 // XB-Infinity Hekate;                 Getfixedboi | Calamity;                     Codebreaker Base & Decryption Computer & Auric Quantum Cooling Cell & Bloody Vein; // Currently, this boss doesn't affect logic at all
-Supreme Witch, Calamitas;           Calamity | Location | Item | Final Boss;    Hardmode Anvil & Brimstone Slag & Auric Bar & Core of Calamity & Ashes of Calamity & @health(6);
+Supreme Witch, Calamitas;           Calamity | Location | Item | Final Boss;    ((@fargo & ((Mutant NPC & Supreme Witch, Calamitas) | (Ashes of Calamity & Auric Bar))) | (Hardmode Anvil & Brimstone Slag & Auric Bar & Core of Calamity & Ashes of Calamity)) & @health(6);
 THE LORDE;                          Getfixedboi | Calamity;                     Lihzahrd Temple & @health(6);
 # calamity_final_bosses
 Exo Prism;                          Calamity;                                   #Exo Mechs | (Shimmer & Shadowspec Bar);
@@ -730,6 +777,390 @@ Demonshade Armor;                   Calamity | Armor Minions(10);               
 Primordial Wyrm;                    Calamity | Location | Item | Goal;          (Rod of Discord | Normality Relocator) & @health(6);
 # primordial_wyrm
 
+// Mutant
+Mutant;                             Fargo | Location | Item | Goal;             (Mutant NPC & Mutant) | (Crucible of the Cosmos & Abominable Energy);
+# mutant
+Eternal Energy;                     Fargo;                                      #Mutant;
+
 // Boss Rush
 Boss Rush;                          Calamity | Location | Item | Goal;          (Diving Gear | Neptune's Shell | (Aquatic Heart & Skeletron)) & @health(6); // Might be obtainable earlier with Midas' Blessing
 # boss_rush
+Rock;                               Calamity;                                   #Boss Rush;
+
+// Brand of the Brimstone Witch
+Charm of Myths;                     ;                                           Tinkerer's Workshop & Wall of Flesh;
+Chalice of the Blood God;           Calamity;                                   Cosmic Anvil & #Ravager & Charm of Myths & Bloodstone & Blood Orb & Ascendant Spirit Essence;
+The Sponge;                         Calamity;                                   Cosmic Anvil & Cosmilite Bar & Ascendant Spirit Essence;
+Honey Dew;                          Calamity;                                   Bee Wax & Jungle Spores;
+Living Dew;                         Calamity;                                   Hardmode Anvil & Honey Dew & Living Shard & Essence of Sunlight;
+Radiant Ooze;                       Calamity;                                   Blighted Gel & Purified Gel;
+Ambrosial Ampoule;                  Calamity;                                   Ancient Manipulator & Living Dew & Radiant Ooze & Life Alloy & Fragment;
+Aureus Cell;                        Calamity;                                   (@getfixedboi & #King Slime) | Astrum Aureus;
+Infected Jewel;                     Calamity;                                   Hardmode Anvil & #King Slime & Aureus Cell & Starblight Soot;
+Radiance;                           Calamity;                                   Cosmic Anvil & Ambrosial Ampoule & Infected Jewel & Auric Bar & Ascendant Spirit Essence;
+Heart of the Elements;              Calamity;                                   Ancient Manipulator & Wall of Flesh & #Leviathan and Anahita & #Brimstone Elemental & Stardust Fragment;
+Nebulous Core;                      Calamity;                                   #The Devourer of Gods;
+Yharim's Gift;                      Calamity;                                   #Yharon, Dragon of Rebirth;
+Draedon's Heart;                    Calamity;                                   #Exo Mechs;
+Calamity;                           Calamity;                                   #Supreme Witch, Calamitas;
+Brand of the Brimstone Witch;       Calamity | Fargo;                           Crucible of the Cosmos & Chalice of the Blood God & The Sponge & Radiance & Heart of the Elements & Nebulous Core & Yharim's Gift & Draedon's Heart & Calamity & Abominable Energy;
+
+// Soul of the Master
+Lump of Flesh;                      Fargo;                                      Hardmode Anvil & #Wall of Flesh & #Dreadnautilus & #Deerclops & Spectre Bar & Deviating Energy;
+Pure Heart;                         Fargo | Not Getfixedboi;                    Hardmode Anvil & #Evil Boss & #Queen Slime & Purification Powder & Steampunker & Chlorophyte Bar & Deviating Energy; // can't obtain green solution in getfixedboi
+Dubious Circuitry;                  Fargo;                                      Hardmode Anvil & #The Twins & #The Destroyer & #Skeletron Prime & Hallowed Bar & Soul of Fright & Soul of Might & Soul of Sight & Deviating Energy;
+Bionomic Cluster;                   Fargo;                                      Hardmode Anvil & Hallow & Wall of Flesh & Blood Moon & #Pirate Invasion & #Frost Legion & #Goblin Army & Deviating Energy & Mythril Bar;
+Supreme Deathbringer Fairy;         Fargo;                                      #King Slime & #Eye of Cthulhu & #Queen Bee & #Skeletron & Hellstone Bar & Deviating Energy;
+Sinister Icon;                      Fargo;                                      #Skeletron; // dungeon guardian fight
+Heart of the Master;                Fargo;                                      Crucible of the Cosmos & #Pumpking & #Ice Queen & #Martian Madness & #Betsy & #Duke Fishron & #Empress of Light & #Moon Lord & Luminite Bar & Deviating Energy;
+Verdant Doomsayer Mask;             Fargo;                                      Ancient Manipulator & #Plantera & #Golem & #Lunatic Cultist & Fragment & Nebula Fragment & Stardust Fragment & Deviating Energy;
+Soul of the Master;                 Fargo;                                      ((~@calamity & Crucible of the Cosmos) | (@calamity & Draedon's Forge)) & Lump of Flesh & Pure Heart & Dubious Circuitry & Bionomic Cluster & Supreme Deathbringer Fairy & Sinister Icon & Abominable Energy & Deviating Energy & Heart of the Master & Verdant Doomsayer Mask & (~@calamity | (Exo Prism & Ashes of Annihilation));
+
+// Soul of Terraria
+Wood Enchantment;                   Fargo;
+Boreal Wood Enchantment;            Fargo;
+Rich Mahogany Enchantment;          Fargo;
+Ebonwood Enchantment;               Fargo;                                      #Champion of Timber | Painter;
+Shadewood Enchantment;              Fargo;                                      #Champion of Timber | Painter;
+Palm Wood Enchantment;              Fargo;
+Pearlwood Enchantment;              Fargo;                                      #Champion of Timber | (Crystal Ball & Hallow);
+Force of Timber;                    Fargo;                                      Crucible of the Cosmos & Wood Enchantment & Boreal Wood Enchantment & Rich Mahogany Enchantment & Ebonwood Enchantment & Shadewood Enchantment & Palm Wood Enchantment & Pearlwood Enchantment & (~@calamity | Divine Geode);
+
+Copper Enchantment;                 Fargo;
+Tin Enchantment;                    Fargo;                                      #Champion of Terra | Traveling Merchant | (Wall of Flesh & Arms Dealer);
+Iron Enchantment;                   Fargo;
+Lead Enchantment;                   Fargo;                                      #Champion of Terra | Painter;
+Silver Enchantment;                 Fargo;                                      #Champion of Terra | Zoologist;
+Tungsten Enchantment;               Fargo;                                      #Champion of Terra | Goblin Tinkerer | (~@getfixedboi & Traveling Merchant);
+Molten Skull Rose;                  ;                                           Tinkerer's Workshop & Obsidian Skull & Lava Charm & Obsidian Rose;
+Obsidian Enchantment;               Fargo;                                      #Champion of Terra | (Obsidian Armor & Molten Skull Rose);
+Force of Terra;                     Fargo;                                      Crucible of the Cosmos & Copper Enchantment & Tin Enchantment & Iron Enchantment & Lead Enchantment & Silver Enchantment & Tungsten Enchantment & Obsidian Enchantment & (~@calamity | Divine Geode);
+
+Ancient Cobalt Enchantment;         Fargo;                                      Demolitionist;
+Cobalt Enchantment;                 Fargo;                                      #Champion of Earth | (Crystal Ball & Cobalt Bar & Ancient Cobalt Enchantment & Tavernkeep);
+Palladium Enchantment;              Fargo;                                      #Champion of Earth | (Crystal Ball & Cobalt Bar & Wall of Flesh & Painter);
+Onyx Blaster;                       ;                                           Hardmode Anvil & Wall of Flesh & Arms Dealer & Soul of Night;
+Mythril Enchantment;                Fargo;                                      #Champion of Earth | (Crystal Ball & Hardmode Anvil & Mythril Bar & #Wall of Flesh & Wall of Flesh & (@calamity | Traveling Merchant) & Onyx Blaster);
+Orichalcum Enchantment;             Fargo;                                      #Champion of Earth | (Crystal Ball & Hardmode Anvil & Mythril Bar & Wall of Flesh & Wizard & Soul of Night);
+Adamantite Enchantment;             Fargo;                                      #Champion of Earth | (Crystal Ball & Hardmode Anvil & Adamantite Bar & Arms Dealer & Skeletron);
+Titanium Enchantment;               Fargo;                                      #Champion of Earth | (Crystal Ball & Hardmode Anvil & Adamantite Bar & Wizard & Wall of Flesh & Hallow & Soul of Light);
+Force of Earth;                     Fargo;                                      Crucible of the Cosmos & Cobalt Enchantment & Palladium Enchantment & Mythril Enchantment & Orichalcum Enchantment & Adamantite Enchantment & Titanium Enchantment & (~@calamity | Divine Geode);
+
+Crimson Enchantment;                Fargo;                                      #Champion of Nature | Evil Boss Part;
+Molten Enchantment;                 Fargo;                                      #Champion of Nature | (Hellstone Bar & Painter);
+Rain Enchantment;                   Fargo;                                      #Champion of Nature | Traveling Merchant | Wall of Flesh;
+Frost Enchantment;                  Fargo;                                      #Champion of Nature | (Crystal Ball & Wall of Flesh & Hardmode Anvil & Adamantite Bar & Frost Core);
+Chlorophyte Enchantment;            Fargo;                                      #Champion of Nature | (Crystal Ball & Chlorophyte Armor);
+Shroomite Enchantment;              Fargo;                                      #Champion of Nature | (Crystal Ball & Hardmode Anvil & Shroomite Bar & Truffle & @mech_boss(1) & Arms Dealer & Plantera & Wall of Flesh);
+Force of Nature;                    Fargo;                                      Crucible of the Cosmos & Crimson Enchantment & Molten Enchantment & Rain Enchantment & Frost Enchantment & Chlorophyte Enchantment & Shroomite Enchantment & (~@calamity | Divine Geode);
+
+Pumpkin Enchantment;                Fargo;                                      #Champion of Life | (Tavernkeep & Merchant);
+Bee Enchantment;                    Fargo;                                      #Champion of Life | #Queen Bee;
+Spider Enchantment;                 Fargo;                                      #Champion of Life | (Crystal Ball & Spider Armor);
+Cactus Enchantment;                 Fargo;                                      Painter;
+Turtle Enchantment;                 Fargo;                                      #Champion of Life | (Crystal Ball & Chlorophyte Armor & Wall of Flesh & @mech_boss(1));
+Beetle Enchantment;                 Fargo;                                      #Champion of Life | (Crystal Ball & Hardmode Anvil & Chlorophyte Armor & #Golem & Soul of Flight & Wall of Flesh);
+Force of Life;                      Fargo;                                      Crucible of the Cosmos & Pumpkin Enchantment & Bee Enchantment & Spider Enchantment & Turtle Enchantment & Beetle Enchantment & (~@calamity | Divine Geode);
+
+Ninja Enchantment;                  Fargo;                                      #Champion of Death | (#King Slime & Traveling Merchant & Merchant & Blood Moon);
+Shadow Enchantment;                 Fargo;                                      Evil Boss Part;
+Ancient Shadow Enchantment;         Fargo;                                      #Champion of Death | (Crystal Ball & Goblin Army & Wall of Flesh);
+Crystal Assassin Enchantment;       Fargo;                                      #Champion of Death | (Crystal Ball & #Queen Slime & Wall of Flesh & Hallow & Party Girl);
+Spooky Enchantment;                 Fargo;                                      #Champion of Death | (Crystal Ball & Spooky Armor & Wall of Flesh & Plantera & Solar Eclipse & #Pumpking);
+Monk Enchantment;                   Fargo;                                      Crystal Ball & Tavernkeep & Wall of Flesh & @mech_boss(1) & Soul of Night & Soul of Light & #Old One's Army Tier 2;
+Shinobi Infiltrator Enchantment;    Fargo;                                      #Champion of Death | (Crystal Ball & Tavernkeep & Wall of Flesh & Golem & Monk Enchantment & Plantera & Solar Eclipse);
+Apprentice Enchantment;             Fargo;                                      Crystal Ball & Tavernkeep & Wall of Flesh & @mech_boss(1) & #Old One's Army Tier 2;
+Dark Artist Enchantment;            Fargo;                                      #Champion of Death | (Crystal Ball & Tavernkeep & Wall of Flesh & Golem & Apprentice Enchantment & Plantera & Dungeon);
+Necro Enchantment;                  Fargo;                                      #Champion of Death | (Bone & Dungeon & Painter);
+Force of Death;                     Fargo;                                      Crucible of the Cosmos & Ninja Enchantment & Ancient Shadow Enchantment & Crystal Assassin Enchantment & Spooky Enchantment & Shinobi Infiltrator Enchantment & Dark Artist Enchantment & Necro Enchantment & (~@calamity | Divine Geode);
+
+Forbidden Enchantment;              Fargo;                                      #Champion of Spirit | (Crystal Ball & Forbidden Armor & Wall of Flesh & Hardmode Anvil & Soul of Night & Wizard & Soul of Light);
+Hallowed Enchantment;               Fargo;                                      #Champion of Spirit | (Crystal Ball & Hallowed Armor & Wizard & Hallow & Soul of Light & ((Wall of Flesh & Traveling Merchant) | (@calamity & Cobalt Bar)));
+Ancient Hallowed Enchantment;       Fargo;                                      #Champion of Spirit | (Crystal Ball & Hallowed Bar & Rainbow Rod & Hardmode Anvil & Wall of Flesh & Dryad & Pixie Dust);
+Tiki Enchantment;                   Fargo;                                      #Champion of Spirit | (Crystal Ball & Tiki Armor & Witch Doctor & #Plantera & (#Pirate Invasion | (@getfixedboi & Princess & Wall of Flesh & Pirate Invasion)));
+Spectre Enchantment;                Fargo;                                      #Champion of Spirit | (Crystal Ball & Hardmode Anvil & Spectre Bar & Wall of Flesh & Plantera & Dungeon);
+Force of Spirit;                    Fargo;                                      Crucible of the Cosmos & Forbidden Enchantment & Hallowed Enchantment & Ancient Hallowed Enchantment & Tiki Enchantment & Spectre Enchantment & (~@calamity | Divine Geode);
+
+Gold Enchantment;                   Fargo;                                      #Champion of Will | Bug Net;
+Platinum Enchantment;               Fargo;                                      #Champion of Will | Bug Net;
+Gladiator Enchantment;              Fargo;
+Huntress Enchantment;               Fargo;                                      Crystal Ball & Tavernkeep & Wall of Flesh & @mech_boss(1) & #Goblin Army & #Old One's Army Tier 2;
+Red Riding Enchantment;             Fargo;                                      #Champion of Will | (Crystal Ball & Tavernkeep & Wall of Flesh & Golem & Huntress Enchantment & #Betsy);
+Squire Enchantment;                 Fargo;                                      Crystal Ball & Tavernkeep & Wall of Flesh & @mech_boss(1) & Zoologist;
+Valhalla Knight Enchantment;        Fargo;                                      #Champion of Will | (Crystal Ball & Tavernkeep & Wall of Flesh & Golem & Squire Enchantment & Plantera & Dungeon);
+Force of Will;                      Fargo;                                      Crucible of the Cosmos & Gold Enchantment & Platinum Enchantment & Gladiator Enchantment & Red Riding Enchantment & Valhalla Knight Enchantment & (~@calamity | Divine Geode);
+
+Star Cannon;                        ;                                           Arms Dealer & Meteorite Bar;
+Meteor Enchantment;                 Fargo;                                      #Eridanus, Champion of Cosmos | (Evil Boss & Meteorite Bar & Star Cannon & Demonite Bar & Painter);
+Wizard Enchantment;                 Fargo;                                      #Eridanus, Champion of Cosmos | (Crystal Ball & Painter);
+Solar Enchantment;                  Fargo;                                      #Eridanus, Champion of Cosmos | (Ancient Manipulator & Luminite Bar & Fragment & #Moon Lord);
+Vortex Enchantment;                 Fargo;                                      #Eridanus, Champion of Cosmos | (Ancient Manipulator & Luminite Bar & Fragment & #Moon Lord);
+Nebula Enchantment;                 Fargo;                                      #Eridanus, Champion of Cosmos | (Ancient Manipulator & Luminite Bar & Nebula Fragment & #Moon Lord);
+Stardust Enchantment;               Fargo;                                      #Eridanus, Champion of Cosmos | (Ancient Manipulator & Luminite Bar & Stardust Fragment & #Moon Lord);
+Force of Cosmos;                    Fargo;                                      Crucible of the Cosmos & Meteor Enchantment & Wizard Enchantment & Solar Enchantment & Vortex Enchantment & Nebula Enchantment & Stardust Enchantment & Eridanium & (~@calamity | Cosmilite Bar);
+
+Soul of Terraria;                   Fargo;                                      ((~@calamity & Crucible of the Cosmos) | (@calamity & Draedon's Forge)) & Force of Timber & Force of Terra & Force of Earth & Force of Nature & Force of Life & Force of Death & Force of Spirit & Force of Will & Force of Cosmos & Abominable Energy & (~@calamity | (Ashes of Annihilation & Exo Prism));
+
+// Soul of Dimensions
+Obsidian Horseshoe;                 ;                                           Tinkerer's Workshop & Obsidian Skull;
+Bee Cloak;                          ;                                           Tinkerer's Workshop & #Queen Bee & Wall of Flesh;
+Shiny Stone;                        ;                                           #Golem;
+Hero Shield;                        ;                                           Tinkerer's Workshop & Paladin's Shield & Wall of Flesh;
+Chromatic Cloak;                    ;                                           Aether; // shimmer is required for this so if you have shimmer skips off then this will most likely fail if I make the logic set to shimmer.
+Bloody Worm Scarf;                  Calamity;                                   #The Perforators & #Evil Boss & Soul of Night;
+Amalgamated Brain;                  Calamity;                                   #The Hive Mind & #Evil Boss & Soul of Night;
+The Amalgam;                        Calamity;                                   Cosmic Anvil & Amalgamated Brain & Ascendant Spirit Essence & Ashes of Calamity & Essence of Eleum & Plague Cell Canister & Depth Cells & Armored Shell;
+Ornate Shield;                      Calamity;                                   Hardmode Anvil & Cryonic Bar & Crystal Shard;
+Asgard's Valor;                     Calamity;                                   Hardmode Anvil & Ornate Shield & Hallowed Bar & Core of Calamity;
+Elysian Aegis;                      Calamity;                                   #Providence, the Profaned Goddess;
+Asgardian Aegis;                    Calamity;                                   Cosmic Anvil & Asgard's Valor & Elysian Aegis & Cosmilite Bar & Ascendant Spirit Essence;
+Frozen Shield;                      ;                                           Tinkerer's Workshop & Paladin's Shield & Wall of Flesh;
+Deific Amulet;                      Calamity;                                   Tinkerer's Workshop & Bee Cloak & Wall of Flesh & Astral Bar;
+Rampart of Deities;                 Calamity;                                   Cosmic Anvil & Frozen Shield & Deific Amulet & Auric Bar & Ascendant Spirit Essence;
+Colossus Soul;                      Fargo;                                      Crucible of the Cosmos & Obsidian Horseshoe & Bee Cloak & Shiny Stone & Hero Shield & Ankh Shield & Chromatic Cloak & Frozen Shield & (~@calamity | (Bloody Worm Scarf & The Amalgam & Asgardian Aegis & Rampart of Deities & Abominable Energy));
+
+Mechanical Cart;                    ;                                           Hardmode Anvil & #The Twins & #The Destroyer & #Skeletron Prime;
+Shield of Cthulhu;                  ;                                           #Eye of Cthulhu;
+Amber Horseshoe Balloon;            ;                                           Tinkerer's Workshop & #Queen Bee;
+Sweetheart Necklace;                ;                                           Tinkerer's Workshop & #Queen Bee;
+Ancient Horn;                       ;                                           Wall of Flesh;
+Reindeer Bells;                     ;                                           #Ice Queen;
+Brain Scrambler;                    ;                                           Wall of Flesh & Golem & #Martian Madness;
+Green Horseshoe Balloon;            ;                                           Tinkerer's Workshop;
+Zephyr Boots;                       Fargo;                                      Tinkerer's Workshop & Terraspark Boots & Green Horseshoe Balloon & Deviating Energy;
+Angel Treads;                       Calamity;                                   Hardmode Anvil & Aerialite Bar & Essence of Sunlight & Soul of Fright & Soul of Might & Soul of Sight & Terraspark Boots & (~@fargo | Zephyr Boots);
+Amphibian Boots;                    ;                                           Tinkerer's Workshop;
+Fairy Boots;                        ;                                           Tinkerer's Workshop & Spectre Boots & Soul of Light;
+Aeolus Boots;                       Fargo;                                      Hardmode Anvil & Amphibian Boots & Fairy Boots & Deviating Energy & Zephyr Boots & (~@calamity | (Angel Treads & Living Shard));
+Moon Walkers;                       Calamity;                                   Ancient Manipulator & Soul of Flight & Luminite Bar & Angel Treads & (~@fargo | Aeolus Boots);
+Void Strikers;                      Calamity;                                   Ancient Manipulator & Moon Walkers & Armored Shell & Twisting Nether & Dark Plasma;
+Seraph Tracers;                     Calamity;                                   Cosmic Anvil & Void Strikers & Auric Bar & Ascendant Spirit Essence;
+Bundle of Horseshoe Balloons;       ;                                           Tinkerer's Workshop;
+Jetpack;                            ;                                           Steampunker & Wall of Flesh;
+MOAB;                               Calamity;                                   Hardmode Anvil & Bundle of Horseshoe Balloons & Jetpack & Soul of Fright & Soul of Might & Soul of Sight;
+Master Ninja Gear;                  ;                                           Tinkerer's Workshop & Wall of Flesh & Plantera & Dungeon;
+Frog Flipper;                       ;                                           Tinkerer's Workshop; 
+Statis' Ninja Belt;                 Calamity;                                   Hardmode Anvil & Master Ninja Gear & Frog Flipper & Purified Gel & Necroplasm;
+Statis' Void Sash;                  Calamity;                                   Cosmic Anvil & Statis' Ninja Belt & Twisting Nether & Nightmare Fuel;
+Folly Feed;                         Calamity;                                   #Dragonfolly;
+The Cart of Gods;                   Calamity;                                   Cosmic Anvil & Cosmilite Bar & Ascendant Spirit Essence & Wire;
+Supersonic Soul;                    Fargo;                                      Crucible of the Cosmos & Sweetheart Necklace & Amber Horseshoe Balloon & Bundle of Horseshoe Balloons & Shield of Cthulhu & Mechanical Cart & Blessed Apple & Ancient Horn & Reindeer Bells & Brain Scrambler & Master Ninja Gear & Aeolus Boots & (~@calamity | (Seraph Tracers & MOAB & Statis' Void Sash & Folly Feed & The Cart of Gods));
+
+Frozen Wings;                       ;                                           Hardmode Anvil & Soul of Flight & Wall of Flesh;
+Bone Wings;                         ;                                           Hardmode Anvil & Soul of Flight & Wall of Flesh & Plantera & Dungeon;
+Harpy Wings;                        ;                                           Hardmode Anvil & Soul of Flight;
+Fairy Wings;                        ;                                           Hardmode Anvil & Soul of Flight & Pixie Dust;
+Bat Wings;                          ;                                           Hardmode Anvil & Soul of Flight & Solar Eclipse;
+Empress Wings;                      ;                                           #Empress of Light;
+Fishron Wings;                      ;                                           #Duke Fishron;
+Betsy Wings;                        ;                                           #Betsy;
+Festive Wings;                      ;                                           #Everscream;
+Tattered Fairy Wings;               ;                                           Hardmode Anvil & Soul of Flight & #Pumpking;
+Flame Wings;                        ;                                           Hardmode Anvil & Soul of Flight & Wall of Flesh;
+Gravity Globe;                      ;                                           #Moon Lord;
+Celestial Starboard;                ;                                           #Moon Lord;
+Tarragon Wings;                     Calamity;                                   Hardmode Anvil & Soul of Flight & Uelibloom Bar;
+Hadarian Wings;                     Calamity;                                   Wall of Flesh & Astral Infection;
+Skyline Wings;                      Calamity;                                   Aerialite Bar;
+Soaring Insignia;                   ;                                           #Empress of Light;
+Ascendant Insignia;                 Calamity;                                   Hardmode Anvil & Soaring Insignia & Effulgent Feather & Divine Geode & Soul of Flight;
+Silva Wings;                        Calamity;                                   Cosmic Anvil & Soul of Flight & Planty Mush & Effulgent Feather & Ascendant Spirit Essence;     
+Flight Mastery Soul;                Fargo;                                      Crucible of the Cosmos & Frozen Wings & Bone Wings & Harpy Wings & Fairy Wings & Bat Wings & Empress Wings & Fishron Wings & Betsy Wings & Festive Wings & Tattered Fairy Wings & Flame Wings & Soaring Insignia & Gravity Globe & Celestial Starboard & (~@calamity | (Tarragon Wings & Hadarian Wings & Skyline Wings & Ascendant Insignia & Silva Wings));
+
+Lavaproof Tackle Bag;               ;                                           Tinkerer's Workshop & ((@fargo & #Duke Fishron) | (Merchant & Angler));
+Chum Caster;                        ;                                           Blood Moon;
+Angler Enchantment;                 Fargo;                                      (#Duke Fishron | (Clothier & Angler)) & Lavaproof Tackle Bag & Chum Caster;
+Golden Fishing Rod;                 ;                                           (Merchant & Angler & Wall of Flesh) | (@fargo & (#Duke Fishron | #Banished Baron)) | (@calamity & Angler);
+Sitting Duck's Fishing Pole;        ;                                           Traveling Merchant & Skeletron;
+Spore Sac;                          ;                                           #Plantera;
+Volatile Gelatin;                   ;                                           #Queen Slime;
+Pink Horseshoe Balloon;             ;                                           Tinkerer's Workshop;
+Fuzzy Carrot;                       ;                                           Angler | (@fargo & #Duke Fishron);
+Obsidian Swordfish;                 ;                                           Wall of Flesh;
+Bladetongue;                        ;                                           Wall of Flesh;
+The Devour of Cods;                 Calamity;                                   Cosmic Anvil & Cosmilite Bar;
+Sparkling Empress;                  Calamity;                                   Desert Scourge;
+Polaris Parrotfish;                 Calamity;                                   Astral Infection;
+Supreme Bait Tackle Box Fishing Station; Calamity;                              Sea Prism & Sea Remains;
+Arctic Diving Gear;                 ;                                           Tinkerer's Workshop;
+Abyssal Diving Gear;                Calamity;                                   Hardmode Anvil & Arctic Diving Gear & Skeletron & Depth Cells & Lumenyl;
+Mollusk Husk;                       Calamity;                                   Wall of Flesh;
+Abyssal Diving Suit;                Calamity;                                   Hardmode Anvil & Abyssal Diving Gear & Skeletron & Luminite Bar & Mollusk Husk;
+Trawler Soul;                       Fargo;                                      Crucible of the Cosmos & Angler Enchantment & Golden Fishing Rod & Sitting Duck's Fishing Pole & Spore Sac & Volatile Gelatin & Pink Horseshoe Balloon & Fuzzy Carrot & Obsidian Swordfish & Bladetongue & Arctic Diving Gear & (~@calamity | (The Devour of Cods & Sparkling Empress & Polaris Parrotfish & Supreme Bait Tackle Box Fishing Station & Abyssal Diving Suit & Abominable Energy));
+
+Ultrabright Helmet;                 ;                                           Tinkerer's Workshop & Merchant & Cyborg & Martian Madness;
+Miner Enchantment;                  Fargo;                                      Ultrabright Helmet;
+Mechanical Ruler;                   ;                                           Mechanic;
+Presserator;                        ;                                           Traveling Merchant;
+Architect Gizmo Pack;               ;                                           Tinkerer's Workshop & Traveling Merchant;
+Treasure Magnet;                    ;                                           Dungeon;
+Hand Of Creation;                   ;                                           Tinkerer's Workshop & Architect Gizmo Pack & Treasure Magnet;
+Toolbox;                            ;                                           Christmas | (@fargo & Goblin Tinkerer & Mechanic);
+Toolbelt;                           ;                                           Goblin Tinkerer;
+Drill Containment Unit;             Pickaxe(225);                               Hardmode Anvil & Luminite Bar & Chlorophyte Bar & Shroomite Bar & Spectre Bar & Hellstone Bar & Meteorite Bar;
+Royal Gel;                          ;                                           #King Slime;
+Scorched Bone;                      Calamity;                                   Molten Pickaxe | (@fargo & Lumberjack & Skeletron);
+Archaic Powder;                     Calamity;                                   Scorched Bone & Bone;
+Marnite Architect Enchantment;      Calamity | Fargo;
+Onyx Excavator Key;                 Calamity;                                   Wire;
+Spelunker's Amulet;                 Calamity;                                   Merchant & Wall of Flesh;
+World Shaper Soul;                  Fargo;                                      Miner Enchantment & Mechanical Ruler & Presserator & Hand Of Creation & Toolbox & Toolbelt & Drill Containment Unit & Shroomite Digging Claw & Pickaxe Axe & Royal Gel & (~@calamity | (Marnite Architect Enchantment & Onyx Excavator Key & Spelunker's Amulet & Archaic Powder & Blossom Pickaxe & Abominable Energy));
+
+Soul of Dimensions;                 Fargo;                                      ((~@calamity & Crucible of the Cosmos) | (@calamity & Draedon's Forge)) & Colossus Soul & Supersonic Soul & Flight Mastery Soul & Trawler Soul & World Shaper Soul & Abominable Energy & (~@calamity | (Ashes of Annihilation & Exo Prism));
+
+// Soul of the Universe
+Barbarian's Essence;                Fargo;                                      Tinkerer's Workshop & Mechanic & (~@calamity | Pearl Shard) & Emblem & Hallowed Bar;
+Stinger Necklace;                   ;                                           Tinkerer's Workshop & Blood Moon & #Queen Bee;
+Yoyo Bag;                           ;                                           Tinkerer's Workshop & Wall of Flesh;
+Moon Stone;                         ;                                           Solar Eclipse;
+Celestial Stone;                    ;                                           Tinkerer's Workshop & #Golem & Moon Stone;
+Moon Shell;                         ;                                           Tinkerer's Workshop & Wall of Flesh & Solar Eclipse;
+Celestial Shell;                    ;                                           Tinkerer's Workshop & Celestial Stone & Moon Shell;
+Berserker's Glove;                  ;                                           Tinkerer's Workshop & Power Glove & Wall of Flesh;
+KO Cannon;                          ;                                           Wall of Flesh & Blood Moon;
+Ice Sickle;                         ;                                           Wall of Flesh;
+Drippler Crippler;                  ;                                           Wall of Flesh & Blood Moon;
+Scourge of the Corrupter;           ;                                           Dungeon & Evil Key;
+Kraken;                             ;                                           Dungeon & Wall of Flesh & Plantera;
+Sky Dragon's Fury;                  ;                                           #Betsy;
+North Pole;                         ;                                           #Ice Queen;
+Badge of Bravery;                   Calamity;                                   Hardmode Anvil & Emblem & Uelibloom Bar;
+Tainted Blade;                      Calamity;                                   Evil Boss Part;
+Caustic Edge;                       Calamity;                                   Tainted Blade & Wall of Flesh & Spider Fangs;
+Blighted Cleaver;                   Calamity;                                   Hardmode Anvil & Caustic Edge & Broken Hero Sword & Chlorophyte Bar & Witch Doctor & Plantera;
+Defiled Greatsword;                 Calamity;                                   Hardmode Anvil & Blighted Cleaver & Uelibloom Bar & Core of Calamity;
+Abyss Blade;                        Calamity;                                   Hardmode Anvil & Abyss Layer 2 & Depth Cells;
+Neptune's Bounty;                   Calamity;                                   Hardmode Anvil & Abyss Blade & Reaper Tooth & Ruinous Soul;
+Forbidden Oathblade;                Calamity;                                   Hardmode Anvil & Unholy Core & Essence of Havoc;
+Exalted Oathblade;                  Calamity;                                   Hardmode Anvil & Forbidden Oathblade & Broken Hero Sword & Scoria Bar;
+Devil's Devastation;                Calamity;                                   Cosmic Anvil & Exalted Oathblade & Cosmilite Bar & Nightmare Fuel;
+Greatsword of Judgement;            Calamity;                                   Ancient Manipulator & Luminite Bar & Aether & Core of Calamity;
+Orderbringer;                       Calamity;                                   Cosmic Anvil & Greatsword of Judgement & Auric Bar & Life Alloy;
+Mourningstar;                       Calamity;                                   Hardmode Anvil & Ancient Manipulator & Fragment & Divine Geode & Essence of Sunlight & Essence of Havoc;
+Dao of Pow;                         ;                                           Wall of Flesh & Soul of Night & Soul of Light;
+Flower Pow;                         ;                                           #Plantera;
+Flairon;                            ;                                           #Duke Fishron;
+Ball O' Fugu;                       Calamity;                                   Skeletron;
+Tumbleweed;                         Calamity;                                   Dungeon & Wall of Flesh & #Great Sand Shark;
+Dragon Pow;                         Calamity;                                   Cosmic Anvil & Mourningstar & Dao of Pow & Flower Pow & Flairon & Ball O' Fugu & Tumbleweed & Auric Bar & Yharon Soul Fragment;
+Berserker's Soul;                   Fargo;                                      Crucible of the Cosmos & Barbarian's Essence & Stinger Necklace & Yoyo Bag & Celestial Shell & ((~@calamity & Fire Gauntlet & Berserker's Glove & KO Cannon & Ice Sickle & Drippler Crippler & Scourge of the Corrupter & Kraken & Flairon & Sky Dragon's Fury & North Pole & Zenith) | (@calamity & Elemental Gauntlet & Badge of Bravery & Defiled Greatsword & Neptune's Bounty & Devil's Devastation & Orderbringer & Dragon Pow & Abominable Energy));
+
+Phoenix Blaster;                    ;                                           Dungeon & Hellstone Bar;
+Sharpshooter's Essence;             Fargo;                                      Tinkerer's Workshop & Painter & Blood Moon & #Goblin Army & Phoenix Blaster & #Queen Bee & Emblem & Hallowed Bar;
+Recon Scope;                        ;                                           Tinkerer's Workshop & Dungeon & Wall of Flesh & Plantera;
+Molten Quiver;                      ;                                           Tinkerer's Workshop & Magic Quiver & Magma Stone;
+Stalker's Quiver;                   ;                                           Tinkerer's Workshop & Magic Quiver;
+Dart Pistol;                        ;                                           Wall of Flesh;
+Megashark;                          ;                                           Hardmode Anvil & Arms Dealer & Illegal Gun Parts & Soul of Might;
+Pulse Bow;                          ;                                           Hardmode Anvil & Shroomite Bar;
+Nail Gun;                           ;                                           Solar Eclipse & Plantera;
+Piranha Gun;                        ;                                           Dungeon & Jungle Key;
+Sniper Rifle;                       ;                                           Dungeon & Wall of Flesh & Plantera;
+Tsunami;                            ;                                           #Duke Fishron;
+Stake Launcher;                     ;                                           #Mourning Wood;
+Elf Melter;                         ;                                           #Santa-NK1;
+Xenopopper;                         ;                                           #Martian Madness;
+Celebration Mk2;                    ;                                           #Moon Lord;
+Quiver of Nihility;                 Calamity;                                   Hardmode Anvil & Magic Quiver & Fragment & Dark Plasma;
+Archerfish;                         Calamity;                                   Skeletron;
+Megalodon;                          Calamity;                                   Hardmode Anvil & Megashark & Archerfish & Depth Cells & Planty Mush;
+Seadragon;                          Calamity;                                   Hardmode Anvil & Megalodon & Necroplasm & Sea Prism & Armored Shell;
+Thermocline Blaster;                Calamity;                                   Phoenix Blaster & Essence of Havoc & Essence of Eleum;
+Arietes 41;                         Calamity;                                   Hardmode Anvil & Thermocline Blaster & Shroomite Bar;
+Pearl God;                          Calamity;                                   Hardmode Anvil & Arietes 41 & Life Alloy & Ruinous Soul;
+Super Star Shooter;                 ;                                           Hardmode Anvil & Star Cannon & Hallowed Bar;
+Starfleet;                          Calamity;                                   Ancient Manipulator & Super Star Shooter & Ruinous Soul & Stardust Fragment;
+Barracuda Gun;                      Calamity;                                   Hardmode Anvil & Piranha Gun & Luminite Bar;
+Starmageddon;                       Calamity;                                   Cosmic Anvil & Starfleet & Barracuda Gun & Cosmilite Bar & Darksun Fragment & Exodium Cluster;
+Nitro Express Rifle;                Calamity;                                   Essence of Sunlight & Essence of Havoc & Demolitionist & Wall of Flesh;
+Rubico Prime;                       Calamity;                                   Hardmode Anvil & Nitro Express Rifle & Illegal Gun Parts & Scoria Bar;
+Fungicide;                          Calamity;                                   #Crabulon;
+Shroomer;                           Calamity;                                   Ancient Manipulator & Sniper Rifle & Fungicide & Stardust Fragment;
+Anti-material Rifle;                Calamity;                                   Cosmic Anvil & Shroomer & Cosmilite Bar & Nightmare Fuel;
+Tyranny's End;                      Calamity;                                   Cosmic Anvil & Rubico Prime & Anti-material Rifle & Auric Bar & Life Alloy;
+Blossom Flux;                       Calamity;                                   #Plantera;
+Drataliornus;                       Calamity;                                   Cosmic Anvil & Blossom Flux & Auric Bar & Yharon Soul Fragment & Effulgent Feather;
+Sniper's Soul;                      Fargo;                                      Crucible of the Cosmos & Sharpshooter's Essence & Recon Scope & ((~@calamity & Molten Quiver & Stalker's Quiver & Dart Pistol & Megashark & Pulse Bow & Nail Gun & Piranha Gun & Sniper Rifle & Tsunami & Stake Launcher & Elf Melter & Xenopopper & Celebration Mk2) | (@calamity & Planebreaker's Pouch & Quiver of Nihility & Seadragon & Pearl God & Starmageddon & Tyranny's End & Drataliornus & Abominable Energy));
+
+Gray Zapinator;                     ;                                           Traveling Merchant & (Eye of Cthulhu | Evil Boss | Queen Bee | Skeletron | Wall of Flesh);
+Weather Pain;                       ;                                           #Deerclops;
+Water Bolt;                         ;                                           Dungeon;
+Flamelash;                          ;                                           Dungeon;
+Apprentice's Essence;               Fargo;                                      Tinkerer's Workshop & Gray Zapinator & Weather Pain & Water Bolt & Flamelash & Emblem & Hallowed Bar;
+Celestial Cuffs;                    ;                                           Tinkerer's Workshop;
+Mana Cloak;                         ;                                           Tinkerer's Workshop & Mana Flower & Wall of Flesh;
+Magnet Flower;                      ;                                           Tinkerer's Workshop & Mana Flower;
+Arcane Flower;                      ;                                           Tinkerer's Workshop & Mana Flower & Wall of Flesh;
+Medusa Head;                        ;                                           Wall of Flesh;
+Blood Thorn;                        ;                                           Wall of Flesh & Blood Moon;
+Magnet Sphere;                      ;                                           Dungeon & Wall of Flesh & Plantera;
+Betsy's Wrath;                      ;                                           #Betsy;
+Stellar Tune;                       ;                                           #Empress of Light;
+Razorblade Typhoon;                 ;                                           #Duke Fishron;
+Laser Machinegun;                   ;                                           #Martian Madness;
+Last Prism;                         ;                                           #Moon Lord;
+Aether's Whisper;                   Calamity;                                   Hardmode Anvil & Twisting Nether;
+Dark Spark;                         Calamity;                                   Hardmode Anvil & Last Prism & Dark Plasma & Ruinous Soul & Divine Geode;
+Laser Rifle;                        ;                                           #Wall of Flesh;
+Genesis;                            Calamity;                                   Hardmode Anvil & Laser Rifle & Luminite Bar & Life Alloy;
+Wingman;                            Calamity;                                   #Martian Madness;
+Omicron;                            Calamity;                                   Cosmic Anvil & Genesis & Wingman & Cosmilite Bar & Endothermic Energy;
+Star Shower;                        Calamity;                                   #Astrum Deus;
+Poseidon;                           Calamity;                                   Wall of Flesh & #Giant Clam;
+Nuclear Fury;                       Calamity;                                   Razorblade Typhoon & Poseidon & Luminite Bar;
+Relic of Ruin;                      Calamity;                                   Wizard & Adamantite Bar & Forbidden Fragment;
+Event Horizon;                      Calamity;                                   Star Shower & Nuclear Fury & Relic of Ruin & Dark Plasma;
+Magnetic Meltdown;                  Calamity;                                   Hardmode Anvil & Magnet Sphere & Twisting Nether;
+Voltaic Climax;                     Calamity;                                   Cosmic Anvil & Magnetic Meltdown & Cosmilite Bar & Darksun Fragment;
+Void Vortex;                        Calamity;                                   Cosmic Anvil & Voltaic Climax & Auric Bar;
+Arch Wizard's Soul;                 Fargo;                                      Crucible of the Cosmos & Apprentice's Essence & Celestial Cuffs & ((~@calamity & Mana Cloak & Magnet Flower & Arcane Flower & Celestial Emblem & Medusa Head & Blood Thorn & Magnet Sphere & Rainbow Gun & Betsy's Wrath & Stellar Tune & Razorblade Typhoon & Laser Machinegun & Last Prism) | (@calamity & Ethereal Talisman & Aether's Whisper & Dark Spark & Omicron & Event Horizon & Void Vortex & Abominable Energy));
+
+Vampire Frog Staff;                 ;                                           Blood Moon;
+Houndius Shootius;                  ;                                           #Deerclops;
+Hornet Staff;                       ;                                           Bee Wax;
+Imp Staff;                          ;                                           Hellstone Bar;
+Occultist's Essence;                Fargo;                                      Tinkerer's Workshop & Vampire Frog Staff & Houndius Shootius & Hornet Staff & Imp Staff & Emblem & Hallowed Bar;
+Monk's Belt;                        ;                                           #Old One's Army Tier 2;
+Squire's Shield;                    ;                                           #Old One's Army Tier 1;
+Huntress's Buckler;                 ;                                           #Old One's Army Tier 2;
+Apprentice's Scarf;                 ;                                           #Old One's Army Tier 1;
+Blade Staff;                        ;                                           #Queen Slime;
+Optic Staff;                        ;                                           Hardmode Anvil & Soul of Sight;
+Deadly Sphere Staff;                ;                                           Solar Eclipse & Plantera;
+Desert Tiger Staff;                 ;                                           Dungeon & Desert Key;
+Staff of the Frost Hydra;           ;                                           Dungeon & Frozen Key;
+Tempest Staff;                      ;                                           #Duke Fishron;
+Morning Star;                       ;                                           Dungeon & Wall of Flesh & Plantera;
+Xeno Staff;                         ;                                           #Martian Madness;
+Terraprisma;                        ;                                           #Empress of Light;
+Ethereal Subjugator;                Calamity;                                   #Polterghast;
+Cadaverous Carrion;                 Calamity;                                   #The Old Duke;
+Raven Staff;                        ;                                           #Pumpking;
+Corvid Harbringer Staff;            Calamity;                                   Cosmic Anvil & Raven Staff & Cosmilite Bar & Nightmare Fuel;
+Vengeful Sun Staff;                 Calamity;                                   Hardmode Anvil & Moon Stone & Soul of Fright & Soul of Might & Soul of Sight;
+Sirius;                             Calamity;                                   Hardmode Anvil & Vengeful Sun Staff & Lumenyl & Ruinous Soul & Exodium Cluster;
+Saros Possession;                   Calamity;                                   Cosmic Anvil & Sirius & Auric Bar & Darksun Fragment;
+Yharon's Kindle Staff;              Calamity;                                   #Yharon, Dragon of Rebirth;
+Conjurist's Soul;                   Fargo;                                      Crucible of the Cosmos & Occultist's Essence & Monk's Belt & Squire's Shield & Huntress's Buckler & Apprentice's Scarf & ((~@calamity & Pygmy Necklace & Papyrus Scarab & Blade Staff & Optic Staff & Deadly Sphere Staff & Desert Tiger Staff & Staff of the Frost Hydra & Tempest Staff & Morning Star & Xeno Staff & Terraprisma) | (@calamity & Nucleogenesis & Ethereal Subjugator & Cadaverous Carrion & Corvid Harbringer Staff & Saros Possession & Yharon's Kindle Staff & Abominable Energy));
+
+Bouncing Eyeball;                   Calamity;                                   Blood Moon;
+Infested Clawmerang;                Calamity;                                   #Crabulon;
+Meteor Fist;                        Calamity;                                   Meteorite Bar;
+Hardened Honeycomb;                 Calamity;                                   #Queen Bee;
+Infernal Kris;                      Calamity;                                   Hellstone Bar;
+Outlaw's Essence;                   Calamity | Fargo;                           Tinkerer's Workshop & Bouncing Eyeball & Infested Clawmerang & Meteor Fist & Hardened Honeycomb & Infernal Kris & Emblem & Hallowed Bar;
+Valediction;                        Calamity;                                   Abyss Layer 4;
+Gods' Paranoia;                     Calamity;                                   Cosmic Anvil & Cosmilite Bar;
+Dimension-Tearing Disk;             Calamity;                                   #The Devourer of Gods;
+Wrathwing;                          Calamity;                                   #Yharon, Dragon of Rebirth;
+Prismalline;                        Calamity;                                   Mollusk Husk & Sea Prism;
+Radiant Star;                       Calamity;                                   Ancient Manipulator & Prismalline & Astral Bar & Starblight Soot;
+Shattered Dawn;                     Calamity;                                   Hardmode Anvil & Radiant Star & Divine Geode;
+Seraphim;                           Calamity;                                   Cosmic Anvil & Shattered Dawn & Auric Bar;
+Vagabond's Soul;                    Calamity | Fargo;                           Crucible of the Cosmos & Outlaw's Essence & Eclipse Mirror & Nanotech & Valediction & Gods' Paranoia & Dimension-Tearing Disk & Wrathwing & Seraphim & Abominable Energy;
+
+Soul of the Universe;               Fargo;                                      ((~@calamity & Crucible of the Cosmos) | (@calamity & Draedon's Forge)) & Berserker's Soul & Sniper's Soul & Arch Wizard's Soul & Conjurist's Soul & Abominable Energy & (~@calamity | (Vagabond's Soul & Ashes of Annihilation & Exo Prism));
+
+// Soul of Eternity
+Soul of Eternity;                   Achievement | Fargo | Item(Has Soul of Eternity) | Goal(soul_of_eternity); Crucible of the Cosmos & Soul of the Universe & Soul of Dimensions & Soul of Terraria & Soul of the Master & Eternal Energy & (~@calamity | (Brand of the Brimstone Witch & Rock));
+# soul_of_eternity

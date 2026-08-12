@@ -1,4 +1,5 @@
 # Look at `Rules.dsv` first to get an idea for how this works
+
 import dataclasses
 import logging
 from typing import Union, Tuple, List, Dict, Set, override
@@ -35,7 +36,7 @@ from .Checks import (
     health_upgrades,
     quarter_fruits,
 )
-from .Options import TerrariaOptions, Goal, ter_option_groups, RandomizeNPCs, Calamity, RareAchievements, \
+from .Options import TerrariaOptions, Goal, ter_option_groups, RandomizeNPCs, Mods, RareAchievements, \
     TimeAchievements, HealthLogic, Getfixedboi, ShimmerSkips
 
 
@@ -67,6 +68,7 @@ class TerrariaWorld(CachedRuleBuilderWorld):
     location_name_to_id = location_name_to_id
 
     calamity = False
+    fargo = False
     getfixedboi = False
 
     progression = set()
@@ -107,11 +109,16 @@ class TerrariaWorld(CachedRuleBuilderWorld):
                     f"SLOT {slot_name}: goal 'Wall of Flesh' was enabled was selected with NPC Randomization disabled. The resulting game will be goalable from Sphere 1."
                 )
             flags = rules[rule_indices[location]].flags
-            if not self.options.calamity.value and "Calamity" in flags:
+            if "Calamity" not in self.options.mods.value and "Calamity" in flags:
                 logging.warning(
                     f"SLOT {slot_name}: goal `{Goal.name_lookup[self.options.goal.value]}`, which requires Calamity, was selected with Calamity disabled; enabling Calamity"
                 )
-                self.options.calamity.value = 1
+                self.options.mods.value.add("Calamity")
+            if "Fargo" not in self.options.mods.value and "Fargo" in flags:
+                logging.warning(
+                    f"SLOT {slot_name}: goal `{Goal.name_lookup[self.options.goal.value]}`, which requires Fargo, was selected with Fargo disabled; enabling Fargo"
+                )
+                self.options.mods.value.add("Fargo")
 
             if "Npc" in flags:
                 event = location
@@ -158,13 +165,15 @@ class TerrariaWorld(CachedRuleBuilderWorld):
             if (
                     (not self.options.getfixedboi.value and "Getfixedboi" in rule.flags)
                     or (self.options.getfixedboi.value and "Not Getfixedboi" in rule.flags)
-                    or (not self.options.calamity.value and "Calamity" in rule.flags)
-                    or (self.options.calamity.value and "Not Calamity" in rule.flags)
+                    or ("Calamity" not in self.options.mods.value and "Calamity" in rule.flags)
+                    or ("Calamity" in self.options.mods.value and "Not Calamity" in rule.flags)
                     or (
                             self.options.getfixedboi.value
-                            and self.options.calamity.value
+                            and "Calamity" in self.options.mods.value
                             and "Not Calamity Getfixedboi" in rule.flags
                     )
+                    or ("Fargo" not in self.options.mods.value and "Fargo" in rule.flags)
+                    or ("Fargo" in self.options.mods.value and "Not Fargo" in rule.flags)
                     or (not self.options.shimmer_skips.value and "Shimmer" in rule.flags)
                     or (not self.options.early_achievements.value and early)
                     or (
@@ -241,7 +250,8 @@ class TerrariaWorld(CachedRuleBuilderWorld):
         ordered_rewards = [
             reward
             for reward in labels["ordered"]
-            if self.options.calamity.value or "Calamity" not in rewards[reward]
+            if ("Calamity" in self.options.mods.value or "Calamity" not in rewards[reward])
+            and ("Fargo" in self.options.mods.value or "Fargo" not in rewards[reward])
         ]
         while (
                 self.options.fill_extra_checks_with.value == 1
@@ -254,7 +264,8 @@ class TerrariaWorld(CachedRuleBuilderWorld):
         random_rewards = [
             reward
             for reward in labels["random"]
-            if self.options.calamity.value or "Calamity" not in rewards[reward]
+            if ("Calamity" in self.options.mods.value or "Calamity" not in rewards[reward])
+            and ("Fargo" in self.options.mods.value or "Fargo" not in rewards[reward])
         ]
         self.multiworld.random.shuffle(random_rewards)
         while (
@@ -379,7 +390,17 @@ class TerrariaWorld(CachedRuleBuilderWorld):
             elif condition.condition == "npc_rando":
                 return True_(options=[OptionFilter(RandomizeNPCs, condition.sign)])
             elif condition.condition == "calamity":
-                return True_(options=[OptionFilter(Calamity, condition.sign)])
+                calamity_filter = OptionFilter(Mods, "Calamity", operator="contains")
+                if condition.sign:
+                    return True_(options=[calamity_filter])
+                else:
+                    return False_(options=[calamity_filter], filtered_resolution=True)
+            elif condition.condition == "fargo":
+                fargo_filter = OptionFilter(Mods, "Fargo", operator="contains")
+                if condition.sign:
+                    return True_(options=[fargo_filter])
+                else:
+                    return False_(options=[fargo_filter], filtered_resolution=True)
             elif condition.condition == "rare":
                 return True_(options=[OptionFilter(RareAchievements, condition.sign)])
             elif condition.condition == "time":
@@ -427,7 +448,7 @@ class TerrariaWorld(CachedRuleBuilderWorld):
                 quarter_fruits_rule = HasFromList(
                     *quarter_fruits,
                     count=quarter_fruits_required,
-                    options=[OptionFilter(Calamity, Calamity.option_true)],
+                    options=[OptionFilter(Mods, "Calamity", operator="contains")],
                     filtered_resolution=True
                 )
                 return Filtered((highest_base & quarter_fruits_rule), options=[health_option], filtered_resolution=True)
@@ -459,7 +480,7 @@ class TerrariaWorld(CachedRuleBuilderWorld):
             "deathlink": bool(self.options.death_link),
             "version": list(self.required_client_version),
             # The rest of these are included for trackers
-            "calamity": self.options.calamity.value,
+            "mods": list(self.options.mods.value),
             "getfixedboi": self.options.getfixedboi.value,
             "early_achievements": self.options.early_achievements.value,
             "normal_achievements": self.options.normal_achievements.value,
