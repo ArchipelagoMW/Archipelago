@@ -82,9 +82,7 @@ class LinksAwakeningSettings(settings.Group):
     class OptionOverrides(str):
         """
         Provided options will be used as overrides when patching.
-        Pass the options as you would in an options yaml.
-        Always available option overrides: gfxmod, link_palette, music, music_change_condition, palette
-        Non-race option overrides: ap_title_screen, boots_controls, nag_messages, text_shuffle, trendy_game, warps
+        Aesthetic/QoL settings with no logic implications can be overriden. Some overrides are disabled for races.
         Example:
         option_overrides: { palette: { normal: 50, inverted: 50}, boots_controls: bracelet }
         """
