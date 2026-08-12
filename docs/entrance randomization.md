@@ -403,9 +403,9 @@ algorithms are shared
 ER uses a forward fill approach to create the region layout. First, ER collects `all_state` and performs a region sweep
 from Menu, similar to fill. ER then proceeds in stages to complete the randomization:
 1. Attempt to connect all non-dead-end regions.
-    1. Prioritze entrances that don't decrease placeable exits, either by providing a new exit or unblocking the access
+    1. Prioritize entrances that don't decrease placeable exits, either by providing a new exit or unblocking the access
        rule of an existing randomized exit.
-    2. If not such placements are valid or we already have enough placeable entrances, connect an entrance to an
+    2. If no such placements are valid or we already have enough placeable entrances, connect an entrance to an
        unreachable non-dead-end region.
 2. Attempt to connect all dead-end regions, so that all regions will be placed.
 3. Connect all remaining dangling edges now that all regions are placed.
@@ -417,7 +417,7 @@ The process for each connection will do the following:
 2. Get its group and check `target_group_lookup` to determine which groups are valid targets.
 3. Look up ER targets from those groups and find one which is valid according to `can_connect_to`
 4. Connect the source exit to the target's target_region and delete the target.
-   * In stage 1, when necessary an additional speculative sweep is performed to ensure
+   * In stage 1, when necessary, an additional speculative sweep is performed to ensure
      that there will be enough available exits after the placement so randomization can continue.
 5. If it's coupled mode, find the reverse exit and target by name and connect them as well.
 6. Sweep to update reachable regions.
