@@ -63,3 +63,11 @@ un message est affiché à l'écran pour indiquer quel objet a été trouvé et 
 ## Que se passe-t-il lorsque le joueur reçoit un objet ?
 
 Chaque fois qu'un objet est reçu, un message apparaît à l'écran pour en informer le joueur. 
+
+## Utilisation de l'intelligence artificielle
+
+- Le monde d'Aquaria ne contient aucun code généré par un agent ou assistant LLM.
+- Le monde d'Aquaria ne contient aucune ressource (image, son, musique, etc.) générée par intelligence artificielle.
+- L'intelligence artificielle peut avoir été utilisée pour:
+  - Obtenir de la documentation ou de l'information à propos d'outils, de bibliothèques logicielles, etc.
+  - Complétion simple, de ligne seule, dans l'éditeur de code.
