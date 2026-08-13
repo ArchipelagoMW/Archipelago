@@ -56,12 +56,25 @@ class TerrariaWeb(WebWorld):
 
 class TerrariaSpoiler(Spoiler):
     def hidden_locations(self) -> Set[str]:
-        return {
-            str(loc) for loc in self.multiworld.get_filled_locations()
-            if self.multiworld.game[loc.player] == "Terraria Beta" and 
-            self.multiworld.worlds[loc.player].options.compressed_playthrough.value and 
-            loc.is_event
-        }
+        hidden = set()
+
+        for loc in self.multiworld.get_filled_locations():
+            if self.multiworld.game[loc.player] != "Terraria Beta":
+                continue
+
+            options = self.multiworld.worlds[loc.player].options
+            if not options.compressed_playthrough.value or not loc.is_event:
+                continue
+
+            rule = rules[rule_indices[str(loc)]]
+            if options.health_logic.value and (
+                "Health" in rule.flags or "Quarter Fruit" in rule.flags
+            ):
+                continue
+
+            hidden.add(str(loc))
+
+        return hidden
 
     def create_playthrough(self, create_paths: bool = True) -> None:
         super().create_playthrough(create_paths)
