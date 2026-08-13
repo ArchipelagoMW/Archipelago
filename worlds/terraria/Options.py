@@ -178,8 +178,8 @@ class HealthLogicHandicap(Range):
 
 class CompressedPlaythrough(DefaultOnToggle):
     """
-    Turn this on if you want the spoiler playthrough be compressed so it only shows the locations.
-    Turn this off if you want the spoiler playthrough to show both locations and events. 
+    Turn this on if you want the playthrough in the spoiler log to be compressed so it only shows the locations.
+    Turn this off if you want the playthrough in the spoiler log to show both locations and events. 
     """
     display_name = "Compressed Playthrough"
 
