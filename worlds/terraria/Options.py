@@ -146,12 +146,14 @@ class FillExtraChecksWith(Choice):
     option_useful_items = 1
     default = 1
 
+
 class ShimmerSkips(Toggle):
     """
     Enables sequence breaks in logic requiring the use of Shimmer to transmute/uncraft items.
     """
 
     display_name = "Shimmer Skips"
+
 
 class HealthLogic(DefaultOnToggle):
     """
@@ -160,6 +162,7 @@ class HealthLogic(DefaultOnToggle):
     Mainly alters Calamity logic, and is based off the health recommendations made by the official wiki.
     """
     display_name = "Health Logic"
+
 
 class HealthLogicHandicap(Range):
     """
@@ -171,6 +174,14 @@ class HealthLogicHandicap(Range):
     range_start = -6
     range_end = 0
     default = 0
+
+
+class CompressedPlaythrough(DefaultOnToggle):
+    """
+    Turn this on if you want the spoiler playthrough be compressed so it only shows the locations.
+    Turn this off if you want the spoiler playthrough to show both locations and events. 
+    """
+    display_name = "Compressed Playthrough"
 
 ter_option_groups = [
     OptionGroup("Gamemode and Content", [
@@ -217,4 +228,5 @@ class TerrariaOptions(PerGameCommonOptions):
     shimmer_skips: ShimmerSkips
     health_logic: HealthLogic
     health_logic_handicap: HealthLogicHandicap
+    compressed_playthrough: CompressedPlaythrough
     death_link: DeathLink

@@ -8,7 +8,7 @@ from Options import NumericOption
 from rule_builder.cached_world import CachedRuleBuilderWorld
 from rule_builder.field_resolvers import FromWorldAttr
 from worlds.AutoWorld import WebWorld, World
-from BaseClasses import Region, ItemClassification, Tutorial, CollectionState
+from BaseClasses import Region, ItemClassification, Tutorial, CollectionState, Spoiler
 from rule_builder.options import OptionFilter
 from rule_builder.rules import Has, HasAny, HasAll, True_, False_, And, Or, Rule, TWorld, HasFromList, Filtered
 from .Checks import (
@@ -54,6 +54,49 @@ class TerrariaWeb(WebWorld):
     option_groups = ter_option_groups
 
 
+class TerrariaSpoiler(Spoiler):
+    def hidden_locations(self) -> Set[str]:
+        return {
+            str(loc) for loc in self.multiworld.get_filled_locations()
+            if self.multiworld.game[loc.player] == "Terraria Beta" and 
+            self.multiworld.worlds[loc.player].options.compressed_playthrough.value and 
+            loc.is_event
+        }
+
+    def create_playthrough(self, create_paths: bool = True) -> None:
+        super().create_playthrough(create_paths)
+
+        hidden_locs = self.hidden_locations()
+
+        visible_spheres = []
+
+        for sphere in sorted((int(num) for num in self.playthrough if num != "0")):
+            sphere = self.playthrough[str(sphere)]
+            visible = {
+                loc: item
+                for loc, item in sphere.items()
+                if loc not in hidden_locs
+            }
+
+            if visible:
+                visible_spheres.append(visible)
+
+        self.playthrough = {
+            "0": self.playthrough.get("0", []),
+            **{
+                str(num): sphere
+                for num, sphere in enumerate(visible_spheres, start=1)
+            },
+        }
+
+        if create_paths:
+            self.paths = {
+                location: path
+                for location, path in self.paths.items()
+                if location not in hidden_locs
+            }
+
+
 class TerrariaWorld(CachedRuleBuilderWorld):
     """
     Terraria is a 2D multiplayer sandbox game featuring mining, building, exploration, and combat.
@@ -84,6 +127,9 @@ class TerrariaWorld(CachedRuleBuilderWorld):
     required_client_version = (0, 6, 100)
 
     def generate_early(self) -> None:
+        if not isinstance(self.multiworld.spoiler, TerrariaSpoiler):
+            self.multiworld.spoiler = TerrariaSpoiler(self.multiworld)
+
         goal, goal_locations = goals[self.options.goal.value]
         slot_name = self.multiworld.player_name[self.player]
         match self.options.shuffle_to.value:
