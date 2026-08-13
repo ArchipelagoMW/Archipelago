@@ -70,7 +70,7 @@ class TerrariaSpoiler(Spoiler):
 
         visible_spheres = []
 
-        for sphere in sorted((int(num) for num in self.playthrough if num != "0")):
+        for sphere in sorted(int(num) for num in self.playthrough if num != "0"):
             sphere = self.playthrough[str(sphere)]
             visible = {
                 loc: item

@@ -183,6 +183,7 @@ class CompressedPlaythrough(DefaultOnToggle):
     """
     display_name = "Compressed Playthrough"
 
+
 ter_option_groups = [
     OptionGroup("Gamemode and Content", [
         Mods,
