@@ -82,7 +82,6 @@ def fish_is_included(data_to_randomize: set[str], fish_data: FishItem) -> bool:
 
 
 def randomize_fish_cohesive(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
-    data_by_fish = {fish_name: fish_data for fish_name, fish_data in content.fishes.items()}
     include_catch_method = DataRandomizationOptionName.fish_catch_method in data_to_randomize
     include_difficulty = DataRandomizationOptionName.fish_difficulty in data_to_randomize
     include_location = DataRandomizationOptionName.fish_location in data_to_randomize
@@ -93,6 +92,8 @@ def randomize_fish_cohesive(content: StardewContent, data_to_randomize: set[str]
         # We can't cohesively randomize the catch methods without getting these things to follow along
         include_difficulty = True
         include_location = True
+
+    data_by_fish = {fish_name: fish_data for fish_name, fish_data in content.fishes.items() if include_catch_method or fish_data.difficulty != crab_pot_difficulty}
 
     random_data_per_fish = randomizers_per_behavior[behavior](data_by_fish, random)
 
@@ -110,6 +111,10 @@ def randomize_fish_cohesive(content: StardewContent, data_to_randomize: set[str]
         if include_sell_price:
             new_data = override(new_data, sell_price=random_fish_data.sell_price)
         content.fishes[fish_name] = new_data
+    
+    if not include_catch_method and include_location:
+        randomize_crab_pot_fish_location(content, data_to_randomize, behavior, random)
+
 
 def randomize_fish_catch_method(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
     if DataRandomizationOptionName.fish_catch_method not in data_to_randomize:
@@ -171,6 +176,10 @@ def randomize_fish_location(content: StardewContent, data_to_randomize: set[str]
         original_fish = content.fishes[fish_name]
         content.fishes[fish_name] = override(original_fish, locations=fish_location)
 
+    randomize_crab_pot_fish_location(content, data_to_randomize, behavior, random)
+
+
+def randomize_crab_pot_fish_location(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
     locations_by_crab_pot_fish = {fish_name: fish_data.locations for fish_name, fish_data in content.fishes.items()
                                   if len(fish_data.locations) >= 1 and fish_data.difficulty == crab_pot_difficulty}
     randomized_locations_per_crab_pot_fish = randomizers_per_behavior[behavior](locations_by_crab_pot_fish, random)
