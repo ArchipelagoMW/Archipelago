@@ -1111,6 +1111,9 @@ class CustomLogic(OptionSet):
     Bomb Hoeing: Hoeing ground is in logic without a hoe
     Rain Watering: Watering crops is in logic without a watering can
     Critical Free Samples: Free samples of items are considered in logic without a renewable source
+    Normally FIBS is logically required to catch fish if you used DR fish seasons or locations, or weather if the fish ends up with a specific weather.
+    FIBS Only For Hard To Find: This toggle makes it only required for fish that are in less than 4 seasons and less than 3 regions.
+    No FIBS: FIBS is not required in logic for any fish
     """
     internal_name = "custom_logic"
     display_name = "Custom Logic"
