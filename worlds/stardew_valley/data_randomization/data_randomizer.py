@@ -39,12 +39,15 @@ def randomize_data(content: StardewContent, options: StardewValleyOptions, rando
 
 
 def randomize_fish_data(behavior, content, data_to_randomize, random, options: StardewValleyOptions):
-    randomize_fish_catch_method(content, data_to_randomize, behavior, random)
-    randomize_fish_difficulty(content, data_to_randomize, behavior, random)
-    randomize_fish_location(content, data_to_randomize, behavior, random)
-    randomize_fish_season(content, data_to_randomize, behavior, random)
-    randomize_fish_weather(content, data_to_randomize, behavior, random)
-    randomize_fish_sell_prices(content, data_to_randomize, behavior, random)
+    if DataRandomizationOptionName.fish_cohesive in data_to_randomize:
+        randomize_fish_cohesive(content, data_to_randomize, behavior, random)
+    else:
+        randomize_fish_catch_method(content, data_to_randomize, behavior, random)
+        randomize_fish_difficulty(content, data_to_randomize, behavior, random)
+        randomize_fish_location(content, data_to_randomize, behavior, random)
+        randomize_fish_season(content, data_to_randomize, behavior, random)
+        randomize_fish_weather(content, data_to_randomize, behavior, random)
+        randomize_fish_sell_prices(content, data_to_randomize, behavior, random)
     sanitize_fish_data(content, data_to_randomize, behavior, random, options)
 
 
@@ -77,6 +80,36 @@ def fish_is_included(data_to_randomize: set[str], fish_data: FishItem) -> bool:
         return True
     return fish_data.difficulty != crab_pot_difficulty
 
+
+def randomize_fish_cohesive(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    data_by_fish = {fish_name: fish_data for fish_name, fish_data in content.fishes.items()}
+    include_catch_method = DataRandomizationOptionName.fish_catch_method in data_to_randomize
+    include_difficulty = DataRandomizationOptionName.fish_difficulty in data_to_randomize
+    include_location = DataRandomizationOptionName.fish_location in data_to_randomize
+    include_season = DataRandomizationOptionName.fish_season in data_to_randomize
+    include_weather = DataRandomizationOptionName.fish_weather in data_to_randomize
+    include_sell_price = DataRandomizationOptionName.fish_sell_price in data_to_randomize
+    if include_catch_method:
+        # We can't cohesively randomize the catch methods without getting these things to follow along
+        include_difficulty = True
+        include_location = True
+
+    random_data_per_fish = randomizers_per_behavior[behavior](data_by_fish, random)
+
+    for fish_name, random_fish_data in random_data_per_fish.items():
+        original_data = content.fishes[fish_name]
+        new_data = original_data
+        if include_difficulty:
+            new_data = override(new_data, difficulty=random_fish_data.difficulty)
+        if include_location:
+            new_data = override(new_data, locations=random_fish_data.locations)
+        if include_season:
+            new_data = override(new_data, seasons=random_fish_data.seasons)
+        if include_weather:
+            new_data = override(new_data, weather=random_fish_data.weather)
+        if include_sell_price:
+            new_data = override(new_data, sell_price=random_fish_data.sell_price)
+        content.fishes[fish_name] = new_data
 
 def randomize_fish_catch_method(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
     if DataRandomizationOptionName.fish_catch_method not in data_to_randomize:

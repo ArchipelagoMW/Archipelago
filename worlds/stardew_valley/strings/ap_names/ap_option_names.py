@@ -116,6 +116,7 @@ class CustomLogicOptionName:
 
 
 class DataRandomizationOptionName:
+    fish_cohesive = "Cohesive Fish"
     fish_difficulty = "Fish Difficulty"
     fish_season = "Fish Season"
     fish_weather = "Fish Weather"

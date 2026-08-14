@@ -21,7 +21,10 @@ def shuffle_data(existing_values: dict[Any, Any], random: Random, *args, **kwarg
 
 def weight_randomize(existing_values: dict[Any, Any], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
-    values = sorted([val for val in existing_values.values()])
+    try:
+        values = sorted([val for val in existing_values.values()])
+    except TypeError:
+        values = sorted([val for val in existing_values.values()], key=lambda x: id(x))
 
     new_values = dict()
     for i in range(len(keys)):

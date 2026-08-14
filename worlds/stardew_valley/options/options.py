@@ -1043,12 +1043,14 @@ class DataRandomizationBehavior(Choice):
 class DataRandomization(OptionSet):
     """
     Enable randomization for various internal game data values. This can invalidate pre-existing game knowledge from you, or the internet - This option can be blocked by the host
+    Cohesive randomization might automatically bring in more aspects if necessary for technical reasons
+    Fish Cohesive: The aspects of fish that you randomize will be kept together, so every aspect of a given fish will come from the same random other fish
     Fish Difficulty: Difficulty of fish
     Fish Season: Which seasons fish can be caught in
     Fish Location: Which body of water fish can be caught in
     Fish Weather: Which weather fish can be caught in
     Fish Catch Method: Whether fish are caught using fishing rods or crab pots. Only works if you also randomized their locations.
-    Fish Sell Price: Ssell price of all fish
+    Fish Sell Price: Sell price of all fish
     Crop Sell Price: Sell price of all crops and forage
     Growth Time: Time to grow crops from planting to first harvest
     Growth Season: Which seasons various seeds can grow in
@@ -1064,6 +1066,7 @@ class DataRandomization(OptionSet):
     internal_name = "data_randomization"
     display_name = "Data Randomization"
     valid_keys = frozenset({
+        DataRandomizationOptionName.fish_cohesive,
         DataRandomizationOptionName.fish_difficulty, DataRandomizationOptionName.fish_season, DataRandomizationOptionName.fish_location,
         DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_catch_method, DataRandomizationOptionName.fish_sell_price,
         DataRandomizationOptionName.crop_sell_price, DataRandomizationOptionName.growth_time, DataRandomizationOptionName.growth_season,
