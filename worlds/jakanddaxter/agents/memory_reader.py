@@ -321,7 +321,7 @@ class JakAndDaxterMemoryReader:
                 self.connected = True
             else:
                 raise Exception(memory_version_offset, sizeof_uint32)
-        except (PyMemoryEditorError, OSError, Exception) as e:
+        except Exception as e:
             if memory_version is None:
                 msg = (f"Could not find a version number in the OpenGOAL memory structure!\n"
                        f"   Expected Version: {str(expected_memory_version)}\n"
