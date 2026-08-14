@@ -8,7 +8,10 @@ from ..options.options import DataRandomizationBehavior
 
 def shuffle_data(existing_values: dict[Any, Any], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
-    values = sorted([val for val in existing_values.values()])
+    try:
+        values = sorted([val for val in existing_values.values()])
+    except TypeError:
+        values = sorted([val for val in existing_values.values()], key=lambda x: id(x))
 
     random.shuffle(values)
 
@@ -79,7 +82,10 @@ def normal_sample(random: Random, mean: float = 0.0, standard_deviation: float =
 
 def randomize(existing_values: dict[Any, Any], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
-    values = sorted({val for val in existing_values.values()})
+    try:
+        values = sorted({val for val in existing_values.values()})
+    except TypeError:
+        values = sorted({val for val in existing_values.values()}, key=lambda x: id(x))
 
     new_values = dict()
     for i in range(len(keys)):
@@ -115,7 +121,10 @@ def is_all_same_type(iterable_val: Iterable) -> bool:
 
 def range_randomize_numeric(existing_values: dict[Any, Number], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
-    values = sorted({val for val in existing_values.values()})
+    try:
+        values = sorted({val for val in existing_values.values()})
+    except TypeError:
+        values = sorted({val for val in existing_values.values()}, key=lambda x: id(x))
 
     if len(values) < 2:
         return randomize(existing_values, random)
@@ -145,7 +154,10 @@ def range_randomize_numeric(existing_values: dict[Any, Number], random: Random, 
 
 def range_randomize_iterable(existing_values: dict[Any, Iterable], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
-    values = sorted({val for val in existing_values.values()})
+    try:
+        values = sorted({val for val in existing_values.values()})
+    except TypeError:
+        values = sorted({val for val in existing_values.values()}, key=lambda x: id(x))
     value_for_type = values[0]
 
     if len(values) < 2:
