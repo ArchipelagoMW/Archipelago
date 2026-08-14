@@ -11,7 +11,7 @@ from ..data.bundles_data.bundle_data import pantry_remixed, \
 from ..data.bundles_data.bundle_set import vanilla_bundles, remixed_bundles, thematic_bundles
 from ..data.bundles_data.meme_bundles import community_center_meme_bundles, pantry_meme, crafts_room_meme, \
     fish_tank_meme, bulletin_board_meme, \
-    boiler_room_meme, vault_meme
+    boiler_room_meme, vault_meme, community_center_easy_meme_bundles
 from ..data.bundles_data.remixed_anywhere_bundles import community_center_remixed_anywhere
 from ..data.game_item import ItemTag
 from ..locations import LocationTags, locations_by_tag
@@ -37,7 +37,9 @@ def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent
     elif options.bundle_randomization == BundleRandomization.option_shuffled:
         return get_shuffled_bundles(random, logic, content, options)
     elif options.bundle_randomization == BundleRandomization.option_meme:
-        return get_meme_bundles(random, content, options, player_name)
+        return get_meme_bundles(random, content, options, player_name, True)
+    elif options.bundle_randomization == BundleRandomization.option_meme_easy:
+        return get_meme_bundles(random, content, options, player_name, False)
 
     raise NotImplementedError
 
@@ -83,8 +85,12 @@ def get_remixed_bundles_anywhere(random: Random, content: StardewContent, option
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 
 
-def get_meme_bundles(random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str) -> List[BundleRoom]:
-    big_room = community_center_meme_bundles.create_bundle_room(random, content, options, player_name, is_entire_cc=True)
+def get_meme_bundles(random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str, allow_hard_meme_bundles: bool) -> List[BundleRoom]:
+    if allow_hard_meme_bundles:
+        big_room = community_center_meme_bundles.create_bundle_room(random, content, options, player_name, is_entire_cc=True)
+    else:
+        big_room = community_center_easy_meme_bundles.create_bundle_room(random, content, options, player_name, is_entire_cc=True)
+
     all_chosen_bundles = big_room.bundles
     random.shuffle(all_chosen_bundles)
 

@@ -412,4 +412,14 @@ vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 
 all_cc_meme_bundles = [*pantry_bundles_meme, *crafts_room_bundles_meme, *fish_tank_bundles_meme,
                        *boiler_room_bundles_meme, *bulletin_board_bundles_meme, *vault_bundles_meme]
+
 community_center_meme_bundles = BundleRoomTemplate("Community Center", all_cc_meme_bundles, 30)
+
+hard_meme_bundles = [MemeBundleName.algorerhythm, MemeBundleName.burger_king_revenge, MemeBundleName.capitalist, MemeBundleName.commitment,
+                     MemeBundleName.doctor, MemeBundleName.doctor_angler, MemeBundleName.emmalution, MemeBundleName.hats_off_to_you, MemeBundleName.joetg,
+                     MemeBundleName.lingo, MemeBundleName.loser_club, MemeBundleName.ministry_of_madness, MemeBundleName.obelisks, MemeBundleName.permit_a38,
+                     MemeBundleName.screw_you, MemeBundleName.sisyphus, MemeBundleName.trout]
+
+all_easy_meme_bundles = [bundle for bundle in all_cc_meme_bundles if bundle.name not in hard_meme_bundles]
+
+community_center_easy_meme_bundles = BundleRoomTemplate("Community Center", all_easy_meme_bundles, 30)

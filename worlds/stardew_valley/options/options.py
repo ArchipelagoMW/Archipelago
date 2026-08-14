@@ -166,7 +166,9 @@ class BundleRandomization(Choice):
     Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones.
     Remixed Anywhere: Remixed, but bundles are not locked to specific rooms.
     Shuffled: Every bundle will require random items and follow no particular structure.
-    Meme: A set of entirely custom bundles are generated purely based on jokes, references, and trolling. Funny but not balanced at all. Not for the faint of heart."""
+    Meme: A set of entirely custom bundles are generated purely based on jokes, references, and trolling. Funny but not balanced at all. Not for the faint of heart.
+    Meme Easy: Meme bundles, but the ones that are particularly difficult are not included
+    """
     internal_name = "bundle_randomization"
     display_name = "Bundle Randomization"
     option_vanilla = 0
@@ -175,7 +177,11 @@ class BundleRandomization(Choice):
     option_remixed_anywhere = 5
     option_shuffled = 6
     option_meme = 10
+    option_meme_easy = 11
     default = option_remixed
+
+    def is_meme(self) -> bool:
+        return self.value == self.option_meme or self.value == self.option_meme_easy
 
 
 class BundlePrice(Choice):

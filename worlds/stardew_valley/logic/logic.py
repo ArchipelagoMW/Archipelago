@@ -58,7 +58,7 @@ from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..data.museum_data import all_museum_items
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
-from ..options import StardewValleyOptions, BundleRandomization, IncludeEndgameLocations
+from ..options import StardewValleyOptions, IncludeEndgameLocations
 from ..stardew_rule import False_, StardewRule, Or, Reach
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -335,7 +335,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             obtention_rule = self.registry.item_rules[recipe] if recipe in self.registry.item_rules else False_()
             self.registry.item_rules[recipe] = obtention_rule | crafting_rule
 
-        if self.options.bundle_randomization == BundleRandomization.option_meme:
+        if self.options.bundle_randomization.is_meme():
             self.meme.initialize_rules()
             self.registry.item_rules.update(self.registry.meme_item_rules)
 

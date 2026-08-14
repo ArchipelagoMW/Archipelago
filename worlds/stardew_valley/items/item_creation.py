@@ -174,7 +174,7 @@ def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptio
     items.extend(item_factory(item) for item in [APWeapon.slingshot] * 2)
     monstersanity = options.monstersanity
 
-    ring_classification = ItemClassification.progression if options.bundle_randomization == BundleRandomization.option_meme else ItemClassification.useful
+    ring_classification = ItemClassification.progression if options.bundle_randomization.is_meme() else ItemClassification.useful
     rings_items = [item for item in items_by_group[Group.FILLER_RING] if item.classification is not ItemClassification.filler]
 
     if monstersanity == Monstersanity.option_none:  # Without monstersanity, might not be enough checks to split the weapons
@@ -264,7 +264,7 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, options: Starde
 
     for building in content.farm_buildings.values():
         item_name, _ = building_progression.to_progressive_item(building.name)
-        if item_name in [Building.stable, Building.well] and options.bundle_randomization != BundleRandomization.option_meme:
+        if item_name in [Building.stable, Building.well] and not options.bundle_randomization.is_meme():
             items.append(item_factory(item_name, classification_pre_fill=ItemClassification.useful))
         else:
             items.append(item_factory(item_name))
