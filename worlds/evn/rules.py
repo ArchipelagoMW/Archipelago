@@ -24,11 +24,12 @@ def _ship_id_rule(ship_id: int) -> str:
 
 def _ship_list_rule(ship_list: List[int]) -> List[str]:
     core_list = []
-    for list_id in ship_list.items():
+    for list_id in ship_list:
         for ship_id, ship_data in ship_table.items():
             if ship_id == list_id:
                 # If ship data ID no longer matches ship index ID, this would be a problem
                 core_list.append(ship_data["name"].strip() + ship_data["id"])
+    #logger.info(f"Ship list rule, adding {ship_list}, {core_list}")
     return core_list
 
 def _min_cargo_rule(min_weight: int) -> List[str]:

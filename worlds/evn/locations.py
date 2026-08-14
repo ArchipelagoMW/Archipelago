@@ -16,7 +16,7 @@ from .logics import possible_regions, misns_to_ignore
 
 from .apdata.offsets import offsets_table as loc_type_offset
 
-import random
+# import random
 
 if TYPE_CHECKING:
     from .world import EVNWorld
@@ -166,7 +166,7 @@ def create_universe_locations(world: EVNWorld) -> None:
     # and randomly pick them to be added.
     # NOTE: Only added if shuffling outf. Otherwise, don't need for just ships.
     pick_list = chosen_route["cust_outfs"].copy()
-    random.shuffle(pick_list)
+    EVNWorld.random.shuffle(pick_list)
     x = 0
     y = chosen_route["use_cust_outfs_count"]
     while world.options.include_outfits and x < y and len(pick_list) > 0:

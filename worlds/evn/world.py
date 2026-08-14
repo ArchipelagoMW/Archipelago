@@ -1,6 +1,6 @@
 from collections.abc import Mapping
 import os
-import random
+#import random
 from typing import Any, Dict
 import logging
 
@@ -119,7 +119,8 @@ class EVNWorld(World):
             return self._chosen_string
         
         # Other cases failed, so most likely this is the first call and options = 0 ("Surprise Me")
-        self._chosen_string = random.randint(1,len(story_routes)) 
+        #self._chosen_string = random.randint(1,len(story_routes)) 
+        self._chosen_string = self.random.randint(1,len(story_routes)) 
         #logger.info(f"rolled string {self._chosen_string}")
         return self._chosen_string
     

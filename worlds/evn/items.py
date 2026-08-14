@@ -62,6 +62,12 @@ def get_items() -> Dict[int, EVNItemData]:
             code=CREDIT_IDS[credAmount],
         )
 
+    # If we were to randomly pull a few of each as progression (ships) and useful (outf)
+    # then have the rest as filler or skip balancing...
+    # But, would we need to seed the random shuffle of the array with the same
+    # seed that AP uses for generation? Can we even get that?
+    # If not, then we should avoid this route I think...
+
     # ships
     # turns out, the ship names are not unique due to the various models, so we concat ID.
     for ship in ships.ship_table.keys():
@@ -87,7 +93,7 @@ def get_items() -> Dict[int, EVNItemData]:
         item_id = type_offset["outf"] + (int)(temp_outf["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
         ret_bank[item_id] = EVNItemData(
             name=temp_outf["name"].strip() + temp_outf["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
-            classification=ItemClassification.progression | ItemClassification.useful, # or useful?
+            classification=ItemClassification.useful | ItemClassification.skip_balancing, # or useful?
             code=item_id,
             origin="outf"
         )
