@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Optional, TypedDict
+from typing import TYPE_CHECKING, Dict, Optional, TypedDict, Set
 # NOTE: This allows us to log to the console. However, we dev'ed in a venv setup
 # that VSCode setup for python 3.13.11...
 # If we include this import in final build, AP launcher will fail to generate yaml
@@ -93,6 +93,44 @@ def get_location_inverted_lookup() -> Dict[int, str]:
 
 loc_id_to_name = get_location_inverted_lookup()
 
+def get_location_name_groups() -> Dict[str, Set[str]]:
+    """
+    Returns a dictionary of region names (from logics) with their used missions' names.
+    A mission might be in multiple regions, but not all regions are used for every run.
+    Includes a region for custom outfits (shop checks).
+    Does *not* include the universe region at this time (all missions not in other regions).
+    """
+    # NOTE: Our "regions" from logics.py are not inherrently true regions.
+    #       We use them as model data for creating our server regions, and 
+    #       they serve well for location name groups too.
+    # Let's utilize our own id to name lookup
+    global loc_id_to_name
+    # This is the expected structure for worlds.location_name_groups
+    ret_dict: Dict[str, Set[str]] = {}
+    outf_locations: Set[str] = set() # apparently {} is specifically a dictionary
+
+    # Let's loop through our definied regions from logics. Not filtered - all regions.
+    for region_id, region_data in possible_regions.items():
+        region_locations: Set[str] = set()
+        # loop through the missions used by that region.
+        for mission_id in region_data["missions"]:
+            loc_id = mission_id + loc_type_offset["misn"]
+            region_locations.add(loc_id_to_name[loc_id])
+        ret_dict[region_data["name"]] = region_locations
+
+    # Add out custom outf (shop checks)
+    for coutf in cust_outf_table.keys():
+        temp_outf = cust_outf_table[coutf]
+        loc_id = loc_type_offset["outf_cks"] + (int)(temp_outf["id"])
+        outf_locations.add(loc_id_to_name[loc_id])
+
+    ret_dict["Custom Outf (Shop Checks)"] = outf_locations
+
+    return ret_dict
+
+location_name_groups = get_location_name_groups()
+    
+
 def get_location_names_with_ids(world: EVNWorld, location_names: list[str]) -> Dict[str, int | None]:
     ret_dict: Dict[str, int | None] = {}
     for name in location_names:
@@ -102,7 +140,6 @@ def get_location_names_with_ids(world: EVNWorld, location_names: list[str]) -> D
             ret_dict[name] = None
             # logger.info(f"location id not found for {name}")
     return ret_dict
-
 
 def create_all_locations(world: EVNWorld) -> None:
     create_universe_locations(world)

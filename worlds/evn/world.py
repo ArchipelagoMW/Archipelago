@@ -87,6 +87,8 @@ class EVNWorld(World):
     location_name_to_id = locations.loc_name_to_id
     location_id_to_name = locations.loc_id_to_name # dunno if this exists or we are declaring, but I need it.
 
+    location_name_groups = locations.location_name_groups
+
     #TODO: consider this design style
     # are we sure this isn't empty at the time of world class definition? If so, we can just set item_name_to_id = items.item_name_to_id and avoid the redundant lookup in items.py.
     item_name_to_id = items.item_name_to_id
@@ -99,7 +101,7 @@ class EVNWorld(World):
     # As that dictates some of the things we will do, as well as the logic chunk we will refer to in logics.py
     _chosen_string = -1
 
-    # NOTE: the options class may have a built in random feature - let's look at that first!
+    # NOTE: In the original game, story lines were often refered to as story strings.
     # Internal, locally defined function
     def get_chosen_string_id(self) -> int: 
         """
