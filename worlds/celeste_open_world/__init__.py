@@ -491,6 +491,7 @@ class CelesteOpenWorld(World):
             "goal_area": self.goal_area,
             "lock_goal_area": self.options.lock_goal_area.value,
             "strawberries_required": self.strawberries_required,
+            "strawberries_required_percentage": self.options.strawberries_required_percentage.value,
 
             "dash_shuffle": self.options.dash_shuffle.value,
             "climb_shuffle": self.options.climb_shuffle.value,
@@ -585,7 +586,10 @@ class CelesteOpenWorld(World):
 
             for key, value in slot_data.items():
                 if key == "goal_area":
-                    value = goal_area_to_option_name[value]
+                    setattr(self, key, value)
+                    opt: Optional[Option] = getattr(self.options, key, None)
+                    setattr(self.options, key, opt.from_any(goal_area_to_option_name[value]))
+                    continue
 
                 opt: Optional[Option] = getattr(self.options, key, None)
                 if opt is not None:
