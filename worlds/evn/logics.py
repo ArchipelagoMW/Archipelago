@@ -51,10 +51,7 @@ misns_to_ignore: List[int] = [
     133, # derelict decoy - no completion settings
 
     # Avoid x force or fleet misns
-    614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 626, 627, 628, 629, 
-
-    # UN refusals
-    520, 
+    614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 626, 627, 628, 629,
 ]
 
 # Conversely, we now need to try and trim down on the number of items.
@@ -840,13 +837,16 @@ possible_regions: Dict[int, EVNRegionData] = {
         "entrance_rules": {},
     },
     200: {  # Due to checks vs blocking nature of missions, pulling out some paths of side quests
+        # This works, in that if they are listed here, and this region isn't used by the story strings,
+        # then these missions will never get added to the locations index.
+        # But, that walks a line in that they could possibly just be in the missions_to_ignore list instead...
         "id": 200,
         "name": "Side Misn - (NOT USING)",
         "missions": [
             834, 835, # "meh" cunjo hunt branch
             597, # fed req glitechnia mission
             758, # Huh, you can abort Barry (kinda)
-            #577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, # second half of United Shipping due to polaris req :(
+            520, # UN refusals
         ],
         "misn_edits": {
         },
@@ -927,16 +927,18 @@ possible_regions: Dict[int, EVNRegionData] = {
             "min_cargo": 1250,
             # Stacking rules *should* push these into later spheres, or make gen think it's harder
             # to get here, and thus less *early* progressive items
-            "all_ships": [
-                # These 3 don't qualify, BUT, adding them as an additional filter to make
-                # the rando think it's even harder to get here.
-                132, # pegasus
-                146, # huh, manticore has 500 cargo, that's enough
-                182, # sprite
-                # Actually valid ships
-                160, # cambrian
-                131, # leviathan
-            ]
+            # NOTE: With both rules, even with a gen where I verified the two ships were put in,
+            #       these regions weren't getting filled. I'm not sure why though...
+            # "all_ships": [
+            #     # These 3 don't qualify, BUT, adding them as an additional filter to make
+            #     # the rando think it's even harder to get here.
+            #     # 132, # pegasus
+            #     # 146, # huh, manticore has 500 cargo, that's enough
+            #     # 182, # sprite
+            #     # Actually valid ships
+            #     160, # cambrian
+            #     131, # leviathan
+            # ]
         },
     },
     303: {
@@ -1058,6 +1060,26 @@ possible_regions: Dict[int, EVNRegionData] = {
             "ship": 383,
         },
     },
+    999: {
+        "id": 999,
+        "name": "Tutorial Missions",
+        "missions": [
+            251, 630, 631, 632, 633, 754, 756, 757, 
+        ],
+        "misn_edits": {
+            756: {
+                "on_abort": ""
+            },
+            757: {
+                "on_abort": ""
+            }, 
+            758: {
+                "available_bits": f"b{MISSION_BLOCKING_BIT}"
+            },
+        },
+        "entrance_rules": {
+        },
+    },
 }
 
 class EVNStoryRoute(TypedDict, total=False):
@@ -1089,9 +1111,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201, 202, 303], 
+            0: [999, 1, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201, 202, 303], 
             303: [304, 305, 306],
         },
         "final_mission": 417,
@@ -1119,9 +1142,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 307, 308, # UN - w/ polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 102, 103, 104, 201, 303], 
+            0: [999, 2, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 102, 103, 104, 201, 303], 
             2: [4], 4: [5], 5: [7], 7: [9],
             303: [304, 305, 306, 307], 307: [308],
         },
@@ -1151,9 +1175,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 307, 308, # UN - w/ polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201], 
+            0: [999, 3, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201], 
             3: [4], 4: [6], 6: [7], 7: [8], 
             303: [304, 305, 306, 307], 307: [308],
         },
@@ -1183,9 +1208,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 103, 104, 201, 202, 303], 
+            0: [999, 10, 20, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 103, 104, 201, 202, 303], 
             10: [12], 12: [14], 14: [15], 15: [16],
             303: [304, 305, 306], 
         },
@@ -1219,9 +1245,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [21, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            0: [999, 21, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
             21: [11], 11: [12], 12: [14], 14: [15], 15: [16],
             303: [304, 305, 306],
         },
@@ -1255,9 +1282,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [20, 24, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            0: [999, 20, 24, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
             24: [13], 13: [12], 12: [14], 14: [15], 15: [16],
             303: [304, 305, 306],
         },
@@ -1294,9 +1322,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312, 100, 101, 102, 104, 201, 202, 303], 
+            0: [999, 20, 23, 27, 30, 300, 301, 302, 310, 311, 312, 100, 101, 102, 104, 201, 202, 303], 
             30: [32], 32: [34],
             303: [304, 305, 306],
         },
@@ -1312,9 +1341,9 @@ story_routes: Dict[int, EVNStoryRoute] = {
             # Extra 2.5M
             485, 486, 487, 488, 489,
             # Extra 5M
-            490, 491, 492, 493,
+            490, 491, 492, 493, 494,
         ], 
-        "use_cust_outfs_count": 44 # damn this is so short...
+        "use_cust_outfs_count": 45 # damn this is so short...
     },
     8: {   
         "id": 8,
@@ -1332,9 +1361,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [22, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            0: [999, 22, 23, 27, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
             22: [31], 31: [32], 32: [34],
             303: [304, 305, 306],
         },
@@ -1350,9 +1380,9 @@ story_routes: Dict[int, EVNStoryRoute] = {
             # Extra 2.5M
             485, 486, 487, 488, 489,
             # Extra 5M
-            490, 491, 492, 493,
+            490, 491, 492, 493, 494,
         ], 
-        "use_cust_outfs_count": 43
+        "use_cust_outfs_count": 44
     },
     9: {   
         "id": 9,
@@ -1370,9 +1400,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [20, 23, 27, 40, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 201, 202, 303], 
+            0: [999, 20, 23, 27, 40, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 201, 202, 303], 
             40: [42],
             303: [304, 305, 306],
         },
@@ -1408,9 +1439,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            0: [999, 20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
             23: [26], 26: [51], 51: [53],
             303: [304, 305, 306],
         },
@@ -1446,9 +1478,10 @@ story_routes: Dict[int, EVNStoryRoute] = {
             300, 301, 302, # Sigma
             310, 311, 312, # vellos ship misns
             303, 304, 305, 306, 202, # UN - non polaris
+            999, # tutorial
         ],
         "region_connections": { 
-            0: [20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
+            0: [999, 20, 23, 300, 301, 302, 310, 311, 312, 100, 101, 102, 103, 104, 201, 202, 303], 
             23: [26], 26: [51], 51: [54],
             303: [304, 305, 306],
         },
