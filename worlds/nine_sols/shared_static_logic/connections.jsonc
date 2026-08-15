@@ -145,7 +145,7 @@
             { "item": "Trick - Bow Hover" },
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // and T-dash
         ] } ],
-        "ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // LS parry hover
+        "ls_requires": [ { "item": "Ledge Grab" } ] // T-Dash setup at moving boxes, then parry hover
     }, // with precise jumps, TCK alone is enough
     {
         "from": "AF (Elevator) - Lower Left Exit", "to": "AF (Elevator) - Below Root Node",
