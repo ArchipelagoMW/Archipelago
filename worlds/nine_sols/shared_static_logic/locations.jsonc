@@ -1426,8 +1426,9 @@
             { "item": "Cloud Leap" } // from the upper portal
         ],
         "ls_requires": [
-            { "item": "Ledge Grab" } // T-dash setup from the ledge before the 3 wood platforms, falling down to portal
-            // then T-dash from 2nd to 3rd wooden platform, and LS vault to the ropes
+            { "item": "Ledge Grab" }, // T-dash setup from the ledge before the 3 wood platforms, falling down to portal
+            { "item": "Air Dash" } // then AD from 2nd to 3rd wooden platform
+            // and LS vault to the ropes
         ]
     },
     {
