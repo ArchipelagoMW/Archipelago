@@ -116,3 +116,12 @@ class TestRandomizeSkillTree(NineSolsTestBase):
 
     def test_randomize_skill_tree(self):
         pass
+
+
+class TestJadeCostPlando(NineSolsTestBase):
+    options = {
+        "jade_cost_plando": {
+            "Avarice Jade": 2,
+            "Hedgehog Jade": 0
+        }
+    }

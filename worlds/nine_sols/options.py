@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from schema import And, Optional, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, StartInventoryPool, Toggle
+from Options import Choice, DefaultOnToggle, OptionCounter, PerGameCommonOptions, Range, StartInventoryPool, Toggle
 
 from .item_data import jade_items
 
@@ -88,14 +88,12 @@ class JadeCostMax(Range):
     default = 3
 
 
-class JadeCostPlando(OptionDict):
+class JadeCostPlando(OptionCounter):
     """Manually specify the cost of certain jades. For example: { "Stasis Jade": 0, "Steely Jade": 10 }
 
     The costs may be any integer from 0 to 10, even if jade_cost_min and jade_cost_max are set to a narrower range."""
-    schema = Schema({
-        Optional(jade_item_name): And(int, lambda n: n >= 0, lambda n: n <= 10)
-        for jade_item_name in jade_items
-    })
+    min = 0
+    valid_keys = sorted(jade_items)
     display_name = "Jade Cost Plando"
     default = {}
 
