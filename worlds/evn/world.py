@@ -304,38 +304,39 @@ class EVNWorld(World):
                 if col_anno == str:
                     default_val = f'"{current_val}"\t'
 
-                if column == "availability":
-                    # We need to inject our special bit here as well, so the client can know when to unlock the ship.
-                    target_id = offsets_table["ship"] + ship
-                    if target_id in items.ev_item_bank:
-                        # NOTE: "code" is the ID sent to / from the client (the bit ID)
-                        new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
-                        if (new_id is not None):
-                            output_file_string += f'"b{new_id}"\t'
+                match column:
+                    case "availability":
+                        # We need to inject our special bit here as well, so the client can know when to unlock the ship.
+                        target_id = offsets_table["ship"] + ship
+                        if target_id in items.ev_item_bank:
+                            # NOTE: "code" is the ID sent to / from the client (the bit ID)
+                            new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
+                            if (new_id is not None):
+                                output_file_string += f'"b{new_id}"\t'
+                            else:
+                                #logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
+                                output_file_string += default_val
                         else:
-                            #logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
-                            output_file_string += default_val
-                    else:
-                        # If the ship wasn't in the items, we're ignoring it. So, don't make it available in game.
-                        output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
-                elif (column == "buy_random" and self.options.always_avail_shops):
-                    output_file_string += f'100\t' # considering altering hire chance too (chance to show in bar)
-                elif (column == "tech_level" and self.options.ignore_tech):
-                    output_file_string += f'1\t'
-                elif (column == "require_bits"): # and self.options.ignore_tech): 
-                    # ignore license requirements regardless of options. removing licenses from pool.
-                    output_file_string += f"0x0000000000000000\t"
-                elif (column == "flags_3" and (self.options.always_avail_shops or self.options.ignore_tech)):
-                    flag1 = 0x0100
-                    flag2 = 0x0200
-                    current_flag = int(current_val,16)
-                    if (not current_flag & flag1):
-                        current_flag += flag1 # int(flag1,16)
-                    if (not current_flag & flag2):
-                        current_flag += flag2 # int(flag2,16)
-                    output_file_string += f'0x{current_flag:04x}\t'
-                else:
-                    output_file_string += default_val
+                            # If the ship wasn't in the items, we're ignoring it. So, don't make it available in game.
+                            output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
+                    case "buy_random" if self.options.always_avail_shops:
+                        output_file_string += f'100\t' # considering altering hire chance too (chance to show in bar)
+                    case "tech_level" if self.options.ignore_tech:
+                        output_file_string += f'1\t'
+                    case "require_bits": # and self.options.ignore_tech): 
+                        # ignore license requirements regardless of options. removing licenses from pool.
+                        output_file_string += f"0x0000000000000000\t"
+                    case "flags_3" if (self.options.always_avail_shops or self.options.ignore_tech):
+                        flag1 = 0x0100
+                        flag2 = 0x0200
+                        current_flag = int(current_val,16)
+                        if (not current_flag & flag1):
+                            current_flag += flag1 # int(flag1,16)
+                        if (not current_flag & flag2):
+                            current_flag += flag2 # int(flag2,16)
+                        output_file_string += f'0x{current_flag:04X}\t'
+                    case _:
+                        output_file_string += default_val
             output_file_string += "\r\n"
 
         # Outfits
@@ -357,37 +358,41 @@ class EVNWorld(World):
                     if col_anno == str:
                         default_val = f'"{current_val}"\t'
 
-                    if column == "availability":
-                        # We need to inject our special bit here as well, so the client can know when to unlock the outf.
-                        target_id = offsets_table["outf"] + outf
-                        if target_id in items.ev_item_bank:
-                            new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
-                            if (new_id is not None):
-                                output_file_string += f'"b{new_id}"\t'
+                    match column:
+                        case "availability":
+                            # We need to inject our special bit here as well, so the client can know when to unlock the outf.
+                            target_id = offsets_table["outf"] + outf
+                            if target_id in items.ev_item_bank:
+                                new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
+                                if (new_id is not None):
+                                    output_file_string += f'"b{new_id}"\t'
+                                else:
+                                    #logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
+                                    output_file_string += default_val
                             else:
-                                #logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
-                                output_file_string += default_val
-                        else:
-                            # Wasn't included, so don't let it show up in game.
-                            output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
-                    elif (column == "buy_random" and self.options.always_avail_shops):
-                        output_file_string += f'100\t'
-                    elif (column == "tech_level" and self.options.ignore_tech):
-                        output_file_string += f'1\t'
-                    elif (column == "require_bits"): 
-                        # ignore license requirements regardless of options. removing licenses from pool.
-                        output_file_string += f"0x0000000000000001\t"
-                    elif (column == "flags" and (self.options.always_avail_shops or self.options.ignore_tech)):
-                        flag1 = 0x0100  # show only if req bits met (or has 1)
-                        flag2 = 0x4000  # show only if availability is met (or has 1)
-                        current_flag = int(current_val,16)
-                        if (not current_flag & flag1):
-                            current_flag += flag1 # int(flag1,16)
-                        if (not current_flag & flag2):
-                            current_flag += flag2 # int(flag2,16)
-                        output_file_string += f'0x{current_flag:04x}\t'
-                    else:
-                        output_file_string += default_val
+                                # Wasn't included, so don't let it show up in game.
+                                output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
+                        case "buy_random" if self.options.always_avail_shops:
+                            output_file_string += f'100\t'
+                        case "tech_level" if self.options.ignore_tech:
+                            output_file_string += f'1\t'
+                        case "require_bits": 
+                            # ignore license requirements regardless of options. removing licenses from pool.
+                            output_file_string += f"0x0000000000000001\t"
+                        case "flags" if (self.options.always_avail_shops or self.options.ignore_tech or self.options.always_sellable_outfits):
+                            flag1 = 0x0100  # show only if req bits met (or has 1)
+                            flag2 = 0x4000  # show only if availability is met (or has 1)
+                            flag3 = 0x0008  # This item can't be sold
+                            current_flag = int(current_val,16)
+                            if (not current_flag & flag1):
+                                current_flag += flag1 # int(flag1,16)
+                            if (not current_flag & flag2):
+                                current_flag += flag2 # int(flag2,16)
+                            if self.options.always_sellable_outfits and (current_flag & flag3):
+                                current_flag -= flag3 # we want to remove the flag
+                            output_file_string += f'0x{current_flag:04X}\t'
+                        case _:
+                            output_file_string += default_val
                 output_file_string += "\r\n"
 
         # then, custom outfit checks

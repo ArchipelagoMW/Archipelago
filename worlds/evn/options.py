@@ -44,6 +44,15 @@ class IgnoreTechReq(Toggle):
     """
     display_name = "Ignore Tech Requirements"
 
+class AlwaysSellableOutfits(Toggle):
+    """
+    When on, outfits can always be sold, even if they couldn't before.
+    Example: Vell-os abilities can be sold (forgotten).
+    (Mostly abilities, licenses [not used], and retools/ship improvements)
+    """
+    # If it is awkward because of the ship retools and improvements, then just move it into vell-os fixes
+    display_name = "Outfits Always Sellable"
+
 class ChosenString(Choice):
     """
     Pick which major story string the player will follow. Other story strings will be disabled.
@@ -90,6 +99,7 @@ class EVNOptions(PerGameCommonOptions):
     chosen_string: ChosenString
     always_avail_shops: AlwaysAvailableShops
     ignore_tech: IgnoreTechReq
+    always_sellable_outfits: AlwaysSellableOutfits
 
 
 # We could group options usingg option_groups. Review apquest's options.
@@ -101,17 +111,20 @@ option_presets = {
         "chosen_string": ChosenString.option_random_surprise_me,
         "always_avail_shops": True,
         "ignore_tech": True,
+        "always_sellable_outfits": True,
     },
     "original": {
         "include_outfits": True,
         "chosen_string": ChosenString.option_random_surprise_me,
         "always_avail_shops": False,
         "ignore_tech": False,
+        "always_sellable_outfits": False,
     },
     "ships only": {
         "include_outfits": False,
         "chosen_string": ChosenString.option_random_surprise_me,
         "always_avail_shops": False,
         "ignore_tech": False,
+        "always_sellable_outfits": False,
     }
 }
