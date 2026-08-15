@@ -8,17 +8,18 @@ import unittest
 from collections.abc import Iterable
 from contextlib import contextmanager
 from copy import deepcopy
-from typing import Optional, Dict, Union, Any, List, Iterable
 
-from BaseClasses import get_seed, MultiWorld, Location, Item, Region, Entrance, CollectionState
+from BaseClasses import CollectionState, Entrance, Item, Location, MultiWorld, Region, get_seed
 from test.bases import WorldTestBase
-from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
+from test.general import gen_steps
+from test.general import setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
-from .assertion import RuleAssertMixin
-from .options.utils import parse_class_option_keys, fill_namespace_with_default
-from .. import StardewValleyWorld, StardewItem, StardewRule
+
+from .. import StardewItem, StardewRule, StardewValleyWorld
 from ..logic.time_logic import MONTH_COEFFICIENT
 from ..options import StardewValleyOption, options
+from .assertion import RuleAssertMixin
+from .options.utils import fill_namespace_with_default, parse_class_option_keys
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +63,7 @@ class SVTestCase(unittest.TestCase):
 class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     game = "Stardew Valley"
     world: StardewValleyWorld
+    options: dict[str | type[StardewValleyOption], typing.Any]
 
     seed = DEFAULT_TEST_SEED
 

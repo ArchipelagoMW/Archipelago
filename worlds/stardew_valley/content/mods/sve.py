@@ -1,37 +1,41 @@
-from ..game_content import ContentPack, StardewContent
-from ..mod_registry import register_mod_content_pack
-from ..override import override
-from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_content_pack
-from ...data import villagers_data, fish_data
+from ...data import fish_data, villagers_data
 from ...data.cooking_recipe import CookingRecipe
 from ...data.craftable_data import CraftingRecipe
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
-from ...data.requirement import YearRequirement, CombatRequirement, SpecificFriendRequirement, ToolRequirement, SkillRequirement, FishingRequirement
+from ...data.requirement import (
+    CombatRequirement,
+    FishingRequirement,
+    SkillRequirement,
+    SpecificFriendRequirement,
+    ToolRequirement,
+    YearRequirement,
+)
 from ...data.shop import ShopSource
-from ...mods.mod_data import ModNames
+from ...mods.mod_data import SVE_GINGER_ISLAND_PACK, ModNames
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import ModEdible
-from ...strings.crop_names import Fruit, SVEVegetable, SVEFruit
-from ...strings.fish_names import WaterItem, SVEWaterItem, SVEFish, Fish
+from ...strings.crop_names import Fruit, SVEFruit, SVEVegetable
+from ...strings.fish_names import Fish, SVEFish, SVEWaterItem, WaterItem
 from ...strings.flower_names import Flower
-from ...strings.food_names import SVEMeal, SVEBeverage, Meal
-from ...strings.forageable_names import Mushroom, Forageable, SVEForage
+from ...strings.food_names import Meal, SVEBeverage, SVEMeal
+from ...strings.forageable_names import Forageable, Mushroom, SVEForage
 from ...strings.gift_names import SVEGift
 from ...strings.ingredient_names import Ingredient
 from ...strings.metal_names import Fossil
-from ...strings.monster_drop_names import ModLoot, Loot
+from ...strings.monster_drop_names import Loot, ModLoot
 from ...strings.performance_names import Performance
 from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
-from ...strings.villager_names import ModNPC, NPC
-
-# Used to adapt content not yet moved to content packs to easily detect when SVE and Ginger Island are both enabled.
-SVE_GINGER_ISLAND_PACK = ModNames.sve + "+" + ginger_island_content_pack.name
+from ...strings.villager_names import NPC, ModNPC
+from ..game_content import ContentPack, StardewContent
+from ..mod_registry import register_mod_content_pack
+from ..override import override
+from ..vanilla.ginger_island import ginger_island_content_pack
 
 
 class SVEContentPack(ContentPack):

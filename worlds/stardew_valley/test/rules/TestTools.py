@@ -1,14 +1,16 @@
 from collections import Counter
 
-from ..bases import SVTestBase
+from Options import PlandoConnection
+
 from ... import options
-from ...options import ToolProgression, SeasonRandomization, Secretsanity
+from ...options import SeasonRandomization, Secretsanity, ToolProgression
 from ...strings.entrance_names import Entrance
-from ...strings.tool_names import Tool, ToolMaterial, FishingRod
+from ...strings.tool_names import FishingRod, Tool, ToolMaterial
+from ..bases import SVTestBase
 
 
 class TestProgressiveToolsLogic(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         ToolProgression.internal_name: ToolProgression.option_progressive,
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
         Secretsanity.internal_name: Secretsanity.preset_simple,
@@ -91,12 +93,14 @@ class TestProgressiveToolsLogic(SVTestBase):
 
 
 class TestToolVanillaRequiresBlacksmith(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.EntranceRandomization: options.EntranceRandomization.option_buildings,
         options.ToolProgression: options.ToolProgression.option_vanilla,
-        options.EntrancePlando: {Entrance.enter_mens_locker_room: Entrance.town_to_blacksmith,
-                                 Entrance.enter_womens_locker_room: Entrance.beach_to_willy_fish_cabin,
-                                 Entrance.fish_cabin_to_boat_tunnel: Entrance.enter_sunroom},
+        options.EntrancePlando: [
+            PlandoConnection(Entrance.enter_mens_locker_room, Entrance.town_to_blacksmith, "both", 100),
+            PlandoConnection(Entrance.enter_womens_locker_room, Entrance.beach_to_willy_fish_cabin, "both", 100),
+            PlandoConnection(Entrance.fish_cabin_to_boat_tunnel, Entrance.enter_sunroom, "both", 100),
+        ],
     }
     seed = 4111845104983680263
     # Seed is hardcoded to make sure the ER is a valid roll that actually locks the doors behind the Keys
@@ -145,7 +149,7 @@ def place_region_at_entrance(multiworld, player, region, entrance):
 
 
 class TestVanillaFishingRodsRequiresLevelsAndMasteries(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.SeasonRandomization: options.SeasonRandomization.option_disabled,
         options.Cropsanity: options.Cropsanity.option_disabled,
         options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,

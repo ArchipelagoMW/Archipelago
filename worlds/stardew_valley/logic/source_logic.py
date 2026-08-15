@@ -1,19 +1,42 @@
 import functools
-from typing import Any, Iterable, Type
+from collections.abc import Iterable
+from typing import Any
 
-from .base_logic import BaseLogicMixin, BaseLogic
-from .tailoring_logic import TailoringSource
 from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
 from ..data.fish_data import FishingSource
-from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource, AllRegionsSource
-from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
+from ..data.game_item import AllRegionsSource, CustomRuleSource, GameItem, GenericSource, Source
+from ..data.harvest import (
+    ArtifactSpotSource,
+    ForagingSource,
+    FruitBatsSource,
+    HarvestCropSource,
+    HarvestFruitTreeSource,
+    MushroomCaveSource,
+)
 from ..data.monster_data import MonsterSource
-from ..data.recipe_source import FriendshipSource, QueenOfSauceSource, SkillSource, StarterSource, SpecialOrderSource, MasterySource, QuestSource
-from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource, HatMouseSource
+from ..data.recipe_source import (
+    FriendshipSource,
+    MasterySource,
+    QueenOfSauceSource,
+    QuestSource,
+    SkillSource,
+    SpecialOrderSource,
+    StarterSource,
+)
+from ..data.shop import (
+    ArtifactTroveSource,
+    FishingTreasureChestSource,
+    HatMouseSource,
+    MysteryBoxSource,
+    PrizeMachineSource,
+    ShopSource,
+    TailoringSource,
+)
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.skill_names import Skill
 from ..strings.tv_channel_names import Channel
+from .base_logic import BaseLogic, BaseLogicMixin
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -44,7 +67,9 @@ class SourceLogic(BaseLogic):
     def has_access_to_any_without_other_requirements(self, sources: Iterable[Source]):
         return self.logic.or_(*(self.logic.source.has_access_to(source) for source in sources))
 
-    def has_access_to_any_without_other_requirements_of_types(self, sources: Iterable[Source], bypassed_requirement_types: Iterable[Type]):
+    def has_access_to_any_without_other_requirements_of_types(
+        self, sources: Iterable[Source], bypassed_requirement_types: Iterable[type]
+    ):
         if bypassed_requirement_types is None:
             return self.has_access_to_any(sources)
         rules = []

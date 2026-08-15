@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Iterable, Mapping
 from graphlib import TopologicalSorter
-from typing import Iterable, Mapping, Callable
 
-from .game_content import StardewContent, ContentPack, StardewFeatures
+from ..data.game_item import Source
+from ..data.regions import ginger_island_regions, vanilla_regions
+from .game_content import ContentPack, StardewContent, StardewFeatures
 from .override import override
 from .vanilla.base import base_game as base_game_content_pack
 from .vanilla.ginger_island import ginger_island_content_pack
-from ..data.game_item import Source
-from ..regions.vanilla_content_packs import ginger_island_regions
-from ..regions.vanilla_data import vanilla_regions
 
 
 def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> StardewContent:

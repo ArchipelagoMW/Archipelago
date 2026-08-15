@@ -1,13 +1,14 @@
-from .ginger_island import ginger_island_content_pack as ginger_island_content_pack
-from .pelican_town import pelican_town as pelican_town_content_pack
-from ..game_content import ContentPack, StardewContent
 from ...data import fish_data
 from ...data.game_item import GenericSource, ItemTag, Tag
 from ...data.harvest import HarvestCropSource
 from ...data.hats_data import Hats
-from ...data.requirement import DangerousMinesRequirement, CraftedItemsRequirement, ReceivedRequirement, ForgeInfinityWeaponRequirement
-from ...data.shop import HatMouseSource, ShopSource
-from ...logic.tailoring_logic import TailoringSource
+from ...data.requirement import (
+    CraftedItemsRequirement,
+    DangerousMinesRequirement,
+    ForgeInfinityWeaponRequirement,
+    ReceivedRequirement,
+)
+from ...data.shop import HatMouseSource, ShopSource, TailoringSource
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.craftable_names import Furniture
 from ...strings.crop_names import Fruit
@@ -17,6 +18,9 @@ from ...strings.machine_names import Machine
 from ...strings.metal_names import MetalBar
 from ...strings.region_names import Region
 from ...strings.seed_names import Seed, TreeSeed
+from ..game_content import ContentPack, StardewContent
+from .ginger_island import ginger_island_content_pack
+from .pelican_town import pelican_town as pelican_town_content_pack
 
 
 class QiBoardContentPack(ContentPack):

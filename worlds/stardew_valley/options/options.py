@@ -1,17 +1,48 @@
 import sys
 import typing
 from dataclasses import dataclass
-from typing import Protocol, ClassVar
+from typing import ClassVar, Protocol
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, \
-    Visibility, Removed, OptionCounter, OptionDict
-from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
+from Options import (
+    Choice,
+    DeathLink,
+    NamedRange,
+    OptionCounter,
+    OptionList,
+    OptionSet,
+    PerGameCommonOptions,
+    PlandoConnections,
+    Range,
+    Removed,
+    Toggle,
+    Visibility,
+)
+
+from ..data.regions import randomizable_entrances, randomizable_exits
 from ..mods.mod_data import ModNames, invalid_mod_combinations
-from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName, DataRandomizationOptionName, \
-    EntranceRandomizationBehaviorOptionName
-from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
+from ..strings.ap_names.ap_option_names import (
+    AllowedFillerOptionName,
+    BuffOptionName,
+    ChefsanityOptionName,
+    CustomLogicOptionName,
+    DataRandomizationOptionName,
+    EatsanityOptionName,
+    EntranceRandomizationBehaviorOptionName,
+    HatsanityOptionName,
+    SecretsanityOptionName,
+    StartWithoutOptionName,
+    WalnutsanityOptionName,
+)
+from ..strings.bundle_names import MemeBundleName, all_cc_bundle_names
 from ..strings.trap_names import all_traps
+from .jojapocalypse_options import (
+    JojaAreYouSure,
+    JojaEndPrice,
+    Jojapocalypse,
+    JojaPricingPattern,
+    JojaPurchasesForMembership,
+    JojaStartPrice,
+)
 
 
 class StardewValleyOption(Protocol):
@@ -240,8 +271,8 @@ class EntranceRandomizationBehavior(OptionSet):
             EntranceRandomizationBehaviorOptionName.decoupled,
             EntranceRandomizationBehaviorOptionName.shuffle_farmhouse,
             EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere,
-            # EntranceRandomizationBehaviorOptionName.same_direction,
-            # EntranceRandomizationBehaviorOptionName.same_type,
+            EntranceRandomizationBehaviorOptionName.same_direction,
+            EntranceRandomizationBehaviorOptionName.same_type,
         }
     )
 
@@ -253,17 +284,26 @@ class EntranceRandomizationBehavior(OptionSet):
         return EntranceRandomizationBehaviorOptionName.chaos in self.value
 
 
-class EntrancePlando(OptionDict):
+class EntrancePlando(PlandoConnections):
     """Set where specific Entrances go instead of being randomized.
     Should have entries of the format
-    `Farm to Forest: Forest to Town`
-    which will make leaving the farm leads to the town from the left bottom.
-    Note that this even works for entrances that are not randomized by Entrance Randomization,
-    in the example Forest to Farm would also get randomized even if it wasn't before to negate failures.
+    - entrance: "Farm to Bus Stop"
+      exit: "Forest to Town"
+      direction: "both"
+      percentage: 100
+    which will make leaving the farm from the right send you to the town from the left bottom.
+    Note that this even works for entrances that are not randomized by Entrance Randomization. In the example
+    'Town to Forest' would also get randomized even if it wasn't before to negate failures. Creating connections that
+    do not match your other entrance rando options might work but could create errors later on when trying to connect
+    the other entrances. Use at your own risk.
+    Note: The _exit_ direction only works for two-way connections (yes Forest to Farm, no Use Beach Totem)
     """
-    default = {}
     internal_name = "entrance_plando"
     display_name = "Entrance Plando"
+    preset_none = ()
+
+    entrances = randomizable_entrances
+    exits = randomizable_exits
 
     visibility = Visibility.all & ~Visibility.simple_ui
 

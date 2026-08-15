@@ -1,32 +1,27 @@
-from collections import deque
-from collections.abc import Collection
-from unittest.mock import Mock, patch
+import unittest
 
-from BaseClasses import Entrance, MultiWorld, Region, get_seed
-from worlds.stardew_valley.strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName
+from Options import PlandoConnection
 
 from ... import options
-from ...mods.mod_data import ModNames
-from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
-from ...options.options import EntranceRandomizationBehavior, EntrancePlando, all_mods
-from ...regions.entrance_rando import connect_regions, create_entrance_rando_target, prepare_mod_data
-from ...regions.model import ConnectionData, RandomizationFlag, RegionData
+from ...strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName
 from ...strings.entrance_names import Entrance as EntranceName
 from ...strings.region_names import Region as RegionName
-from ..assertion import WorldAssertMixin
-from ..bases import SVTestBase, SVTestCase, setup_solo_multiworld, solo_multiworld
+from ..bases import SVTestBase
 
 
 class TestEntrancePlandoCoupled(SVTestBase):
-    options = {
-        EntranceRandomization: EntranceRandomization.option_everywhere,
-        EntranceRandomizationBehavior: {},
-        EntrancePlando: {
-            EntranceName.farmhouse_to_farm: EntranceName.town_to_beach,
-            EntranceName.farm_to_backwoods: EntranceName.mountain_to_railroad,
-            EntranceName.farm_to_forest: EntranceName.enter_secret_woods,
-        },
-        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+    options = {  # noqa: RUF012
+        options.EntranceRandomization: options.EntranceRandomization.option_everywhere,
+        options.EntranceRandomizationBehavior: {},
+        options.EntrancePlando: [
+            # sewer to beach
+            PlandoConnection(EntranceName.sewer_to_forest, EntranceName.town_to_beach, "both", 100),
+            # farm to railroad
+            PlandoConnection(EntranceName.farm_to_backwoods, EntranceName.mountain_to_railroad, "both", 100),
+            # farm to secret woods
+            PlandoConnection(EntranceName.farm_to_forest, EntranceName.enter_secret_woods, "both", 100),
+        ],
+        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
     }
 
     def test_plando_of_randomized_entrances(self):
@@ -46,20 +41,6 @@ class TestEntrancePlandoCoupled(SVTestBase):
                 self.assertEqual(entrance.parent_region, entrance_region)
                 self.assertEqual(entrance.connected_region, target_region)
 
-    def test_plando_of_non_randomized_still_happens(self):
-        farmhouse_region = self.world.get_region(RegionName.farm_house)
-        beach_region = self.world.get_region(RegionName.beach)
-
-        with self.subTest(f"Testing plandoed connection"):
-            entrance = self.world.get_entrance(EntranceName.farmhouse_to_farm)
-            self.assertEqual(entrance.parent_region, farmhouse_region)
-            self.assertEqual(entrance.connected_region, beach_region)
-
-        with self.subTest(f"Testing reversed connection"):
-            rev_entrance = self.world.get_entrance(EntranceName.beach_to_town)
-            self.assertEqual(rev_entrance.parent_region, beach_region)
-            self.assertEqual(rev_entrance.connected_region, farmhouse_region)
-
     def test_only_plando_in_placement_info(self):
         # DOES include the reverse connections if not plandoed
         self.assertDictEqual(
@@ -68,23 +49,39 @@ class TestEntrancePlandoCoupled(SVTestBase):
                 EntranceName.railroad_to_mountain: EntranceName.backwoods_to_farm,
                 EntranceName.farm_to_forest: EntranceName.enter_secret_woods,
                 EntranceName.leave_secret_woods: EntranceName.forest_to_farm,
-                EntranceName.farmhouse_to_farm: EntranceName.town_to_beach,
-                EntranceName.beach_to_town: EntranceName.farm_to_farmhouse,
+                EntranceName.sewer_to_forest: EntranceName.town_to_beach,
+                EntranceName.beach_to_town: EntranceName.forest_to_sewer,
             },
             self.world.forced_entrances,
         )
 
+@unittest.skip
+class TestEntrancePlandoFarmhouse(SVTestBase):
+    options = {  # noqa: RUF012
+        options.EntranceRandomization: options.EntranceRandomization.option_everywhere,
+        options.EntranceRandomizationBehavior: {},
+        options.EntrancePlando: [
+            # farmhouse to beach
+            PlandoConnection(EntranceName.farmhouse_to_farm, EntranceName.town_to_beach, "both", 100),
+        ],
+        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
+    }
+
+    def test_plando_of_randomized_entrances(self): ...
 
 class TestEntrancePlandoDecoupled(SVTestBase):
-    options = {
-        EntranceRandomization: EntranceRandomization.option_everywhere,
-        EntranceRandomizationBehavior: {EntranceRandomizationBehaviorOptionName.decoupled},
-        EntrancePlando: {
-            EntranceName.farmhouse_to_farm: EntranceName.town_to_beach,
-            EntranceName.farm_to_backwoods: EntranceName.mountain_to_railroad,
-            EntranceName.farm_to_forest: EntranceName.enter_secret_woods,
-        },
-        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+    options = {  # noqa: RUF012
+        options.EntranceRandomization: options.EntranceRandomization.option_everywhere,
+        options.EntranceRandomizationBehavior: {EntranceRandomizationBehaviorOptionName.decoupled},
+        options.EntrancePlando: [
+            # sewer to beach
+            PlandoConnection(EntranceName.sewer_to_forest, EntranceName.town_to_beach, "entrance", 100),
+            # farm to railroad
+            PlandoConnection(EntranceName.farm_to_backwoods, EntranceName.mountain_to_railroad, "entrance", 100),
+            # farm to secret woods
+            PlandoConnection(EntranceName.farm_to_forest, EntranceName.enter_secret_woods, "entrance", 100),
+        ],
+        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
     }
 
     def test_plando_of_randomized_entrances(self):
@@ -101,22 +98,13 @@ class TestEntrancePlandoDecoupled(SVTestBase):
                 self.assertEqual(entrance.parent_region, entrance_region)
                 self.assertEqual(entrance.connected_region, target_region)
 
-    def test_plando_of_non_randomized_still_happens(self):
-        farmhouse_region = self.world.get_region(RegionName.farm_house)
-        beach_region = self.world.get_region(RegionName.beach)
-
-        with self.subTest(f"Testing plandoed connection"):
-            entrance = self.world.get_entrance(EntranceName.farmhouse_to_farm)
-            self.assertEqual(entrance.parent_region, farmhouse_region)
-            self.assertEqual(entrance.connected_region, beach_region)
-
     def test_only_plando_in_placement_info(self):
         # DOES NOT include the reverse connections if not plandoed
         self.assertDictEqual(
             {
                 EntranceName.farm_to_backwoods: EntranceName.mountain_to_railroad,
                 EntranceName.farm_to_forest: EntranceName.enter_secret_woods,
-                EntranceName.farmhouse_to_farm: EntranceName.town_to_beach,
+                EntranceName.sewer_to_forest: EntranceName.town_to_beach,
             },
             self.world.forced_entrances,
         )

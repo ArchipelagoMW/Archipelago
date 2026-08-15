@@ -1,15 +1,12 @@
-from .pelican_town import pelican_town as pelican_town_content_pack
-from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
 from ...data.festival_data import all_festival_data
 from ...data.game_item import CustomRuleSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
-from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement, SpecificFriendRequirement
-from ...data.shop import ShopSource
-from ...logic.tailoring_logic import TailoringSource
-from ...logic.time_logic import MAX_MONTHS
+from ...data.requirement import MeetRequirement, MonsterKillRequirement, RegionRequirement, SpecificFriendRequirement
+from ...data.shop import ShopSource, TailoringSource
+from ...data.time import MAX_MONTHS
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
@@ -21,10 +18,12 @@ from ...strings.gift_names import Gift
 from ...strings.metal_names import Artifact
 from ...strings.monster_drop_names import Loot
 from ...strings.monster_names import Monster
-from ...strings.region_names import Region, LogicRegion
+from ...strings.region_names import LogicRegion, Region
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
 from ...strings.villager_names import NPC
+from ..game_content import ContentPack
+from .pelican_town import pelican_town as pelican_town_content_pack
 
 the_desert = ContentPack(
     "The Desert (Vanilla)",

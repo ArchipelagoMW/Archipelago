@@ -22,7 +22,7 @@ from .data.secret_note_data import gift_requirements, SecretNote
 from .data.tool import get_tool_upgrade_name
 from .locations import LocationTags
 from .logic.logic import StardewLogic
-from .logic.time_logic import MAX_MONTHS
+from .data.time import MAX_MONTHS
 from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, Cooksanity, StardewValleyOptions, Walnutsanity

@@ -7,25 +7,59 @@ from random import Random
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 import entrance_rando
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial, EntranceType
+from BaseClasses import (
+    CollectionState,
+    Entrance,
+    EntranceType,
+    Item,
+    ItemClassification,
+    Location,
+    MultiWorld,
+    Region,
+    Tutorial,
+)
 from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
+from worlds.stardew_valley.data.regions.model import reverse_connection_name
+
 from .bundles.bundle_room import BundleRoom
-from .bundles.bundles import get_all_bundles, get_trash_bear_requests, get_help_wanted_quests
+from .bundles.bundles import get_all_bundles, get_help_wanted_quests, get_trash_bear_requests
 from .content import StardewContent, create_content
 from .content.feature.special_order_locations import get_qi_gem_amount
 from .content.feature.walnutsanity import get_walnut_amount
 from .data_randomization.randomized_data_writer import add_randomized_data_to_spoiler_log, prepare_randomized_data
-from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, \
-    setup_early_items
+from .items import (
+    Group,
+    ItemData,
+    create_items,
+    generate_filler_choice_pool,
+    item_table,
+    items_by_group,
+    setup_early_items,
+)
 from .items.item_data import FILLER_GROUPS
 from .locations import LocationData, create_locations, location_table, locations_by_tag
 from .logic.combat_logic import valid_weapons
 from .logic.logic import StardewLogic
-from .options import (BackpackProgression, BuildingProgression, BundleBlacklist, BundlePerRoom, BundlePrice, BundleRandomization, BundleWhitelist,
-                      EnabledFillerBuffs, EntranceRandomization, FarmType, Goal, NumberOfMovementBuffs, SeasonRandomization, StardewValleyOptions,
-                      ToolProgression, TrapDistribution)
+from .options import (
+    BackpackProgression,
+    BuildingProgression,
+    BundleBlacklist,
+    BundlePerRoom,
+    BundlePrice,
+    BundleRandomization,
+    BundleWhitelist,
+    EnabledFillerBuffs,
+    EntranceRandomization,
+    FarmType,
+    Goal,
+    NumberOfMovementBuffs,
+    SeasonRandomization,
+    StardewValleyOptions,
+    ToolProgression,
+    TrapDistribution,
+)
 from .options.forced_options import force_change_options_if_banned, force_change_options_if_incompatible
 from .options.jojapocalypse_options import JojaAreYouSure
 from .options.option_groups import sv_option_groups
@@ -34,7 +68,6 @@ from .options.settings import StardewSettings
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
 from .regions.entrance_rando import get_target_groups
-from .regions.model import reverse_connection_name
 from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
 from .stardew_rule.rule_explain import RuleExplanation

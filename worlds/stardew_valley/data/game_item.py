@@ -1,8 +1,9 @@
 import enum
 from abc import ABC
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Iterable, ClassVar, Mapping, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from ..stardew_rule.protocol import StardewRule
 

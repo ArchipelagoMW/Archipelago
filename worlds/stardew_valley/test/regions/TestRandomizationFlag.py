@@ -2,9 +2,9 @@ import unittest
 from random import Random
 
 from ... import create_content, options
-from ...regions.entrance_rando import create_player_randomization_flag
-from ...regions.model import ConnectionData, RandomizationFlag
+from ...data.regions.model import ConnectionData, RandomizationFlag
 from ...options import SkillProgression
+from ...regions.entrance_rando import create_player_randomization_flag
 from ..options.utils import fill_dataclass_with_default
 
 

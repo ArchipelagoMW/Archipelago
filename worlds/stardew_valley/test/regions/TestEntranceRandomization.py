@@ -1,18 +1,19 @@
 from collections import deque
 from collections.abc import Collection
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
-from BaseClasses import get_seed, MultiWorld, Entrance, Region
-from ..assertion import WorldAssertMixin
-from ..bases import SVTestCase, solo_multiworld, setup_solo_multiworld
+from BaseClasses import Entrance, MultiWorld, Region, get_seed
+
 from ... import options
+from ...data.regions import ConnectionData, RandomizationFlag, RegionData
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
 from ...options.options import all_mods
-from ...regions.entrance_rando import create_entrance_rando_target, prepare_mod_data, connect_regions
-from ...regions.model import RegionData, ConnectionData, RandomizationFlag
+from ...regions.entrance_rando import connect_regions, create_entrance_rando_target, prepare_mod_data
 from ...strings.entrance_names import Entrance as EntranceName
 from ...strings.region_names import Region as RegionName
+from ..assertion import WorldAssertMixin
+from ..bases import SVTestCase, setup_solo_multiworld, solo_multiworld
 
 
 class TestEntranceRando(SVTestCase):
@@ -35,11 +36,15 @@ class TestEntranceRando(SVTestCase):
         player_randomization_flag = RandomizationFlag.SET_PELICAN_TOWN
 
         with patch("worlds.stardew_valley.regions.entrance_rando.create_entrance_rando_target") as mock_create_entrance_rando_target:
-            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag, {}, False)
+            connect_regions(
+                region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag, [], False
+            )
 
             expected_origin, expected_destination = regions_by_name["Region1"], regions_by_name["Region2"]
             expected_connection = connection_data_by_name["randomized_connection"]
-            mock_create_entrance_rando_target.assert_called_once_with(expected_origin, expected_destination, expected_connection)
+            mock_create_entrance_rando_target.assert_called_once_with(
+                expected_origin, expected_destination, expected_connection, set(), set()
+            )
 
     def test_when_create_entrance_rando_target_both_ways_exits_and_targets_are_correct(self):
         origin = Mock()
@@ -47,8 +52,8 @@ class TestEntranceRando(SVTestCase):
         connection_data = ConnectionData("origin to destination", "destination")
         connection_data_back = ConnectionData("destination to origin", "origin")
 
-        create_entrance_rando_target(origin, destination, connection_data)
-        create_entrance_rando_target(destination, origin, connection_data_back)
+        create_entrance_rando_target(origin, destination, connection_data, set(), set())
+        create_entrance_rando_target(destination, origin, connection_data_back, set(), set())
 
         origin.create_exit.assert_called_once_with("origin to destination")
         origin.create_er_target.assert_called_once_with("origin to destination")

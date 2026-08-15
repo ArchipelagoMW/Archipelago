@@ -1,31 +1,36 @@
-from ..game_content import ContentPack, StardewContent
 from ...data.artisan import MachineSource
-from ...data.game_item import ItemTag, CustomRuleSource, Tag
-from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
+from ...data.game_item import CustomRuleSource, ItemTag, Tag
+from ...data.harvest import HarvestCropSource, HarvestFruitTreeSource
 from ...data.hats_data import Hats
-from ...data.requirement import ToolRequirement, TotalEarningsRequirement, ShipOneCropRequirement, CraftedItemsRequirement, CookedRecipesRequirement, \
-    CaughtFishRequirement
-from ...data.shop import HatMouseSource
+from ...data.requirement import (
+    CaughtFishRequirement,
+    CookedRecipesRequirement,
+    CraftedItemsRequirement,
+    ShipOneCropRequirement,
+    ToolRequirement,
+    TotalEarningsRequirement,
+)
+from ...data.shop import HatMouseSource, TailoringSource
 from ...data.skill import Skill
-from ...logic.tailoring_logic import TailoringSource
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
-from ...strings.craftable_names import WildSeeds, Edible, Consumable, Lighting
+from ...strings.craftable_names import Consumable, Edible, Lighting, WildSeeds
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency, MemeCurrency
 from ...strings.fish_names import Fish, WaterChest
 from ...strings.flower_names import Flower
 from ...strings.food_names import Beverage, Meal
-from ...strings.forageable_names import all_edible_mushrooms, Mushroom, Forageable
+from ...strings.forageable_names import Forageable, Mushroom, all_edible_mushrooms
 from ...strings.fruit_tree_names import Sapling
 from ...strings.gift_names import Gift
 from ...strings.machine_names import Machine
-from ...strings.metal_names import Fossil, Artifact
+from ...strings.metal_names import Artifact, Fossil
 from ...strings.monster_names import Monster
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
 from ...strings.skill_names import Skill as SkillName
 from ...strings.tool_names import Tool, ToolMaterial
+from ..game_content import ContentPack, StardewContent
 
 all_fruits = (
     Fruit.ancient_fruit, Fruit.apple, Fruit.apricot, Fruit.banana, Forageable.blackberry, Fruit.blueberry, Forageable.cactus_fruit, Fruit.cherry,

@@ -1,12 +1,18 @@
 import logging
 
 import Options as ap_options
-from worlds.stardew_valley.regions.model import reverse_connection_name
-from . import options
-from .jojapocalypse_options import Jojapocalypse, JojaAreYouSure
-from ..mods.mod_data import mod_combination_is_valid, get_invalid_mod_combination
+
+from ..data.regions import reverse_connection_name
+from ..mods.mod_data import get_invalid_mod_combination, mod_combination_is_valid
 from ..options.settings import StardewSettings
-from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName, EntranceRandomizationBehaviorOptionName, DataRandomizationOptionName
+from ..strings.ap_names.ap_option_names import (
+    DataRandomizationOptionName,
+    EatsanityOptionName,
+    EntranceRandomizationBehaviorOptionName,
+    HatsanityOptionName,
+)
+from . import options
+from .jojapocalypse_options import JojaAreYouSure, Jojapocalypse
 
 logger = logging.getLogger(__name__)
 
@@ -76,8 +82,8 @@ def force_change_options_if_incompatible(world_options: options.StardewValleyOpt
     force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options, player, player_name)
     force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
-    force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options)
-    force_reverse_entrance_plando_when_not_decoupled(world_options, player, player_name)
+    force_accessibility_to_full_when_goal_requires_all_locations(world_options, player, player_name)
+    warn_suspicious_plando_connections(world_options, player, player_name)
     force_data_randomization_toggles_that_need_each_other(world_options, player, player_name)
 
 
@@ -153,7 +159,9 @@ def force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_optio
                        f"Exclude Ginger Island option forced to 'False' for player {player} ({player_name})")
 
 
-def force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options: options.StardewValleyOptions, player: int, player_name: str):
+def force_walnutsanity_deactivation_when_ginger_island_is_excluded(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
     ginger_island_is_excluded = world_options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
     walnutsanity_is_active = world_options.walnutsanity != options.Walnutsanity.preset_none
 
@@ -163,7 +171,9 @@ def force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options
                        f"Ginger Island was excluded from {player} ({player_name})'s world, so walnutsanity was force disabled")
 
 
-def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options: options.StardewValleyOptions, player: int, player_name: str):
+def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
     ginger_island_is_excluded = world_options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
     qi_board_is_active = world_options.special_order_locations.value & options.SpecialOrderLocations.value_qi
 
@@ -174,30 +184,40 @@ def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_op
                        f"Ginger Island was excluded from {player} ({player_name})'s world, so Special Order Locations was changed from {original_option_name} to {world_options.special_order_locations.current_option_name}")
 
 
-def force_reverse_entrance_plando_when_not_decoupled(world_options: options.StardewValleyOptions, player, player_name):
+def warn_suspicious_plando_connections(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
     if EntranceRandomizationBehaviorOptionName.decoupled in world_options.entrance_randomization_behavior:
         return
     plando_map = world_options.entrance_plando.value
-    to_add = {}
-    for before, after in plando_map.items():
-        after_rev = reverse_connection_name(after)
-        before_rev = reverse_connection_name(before)
+    for plando_connection in plando_map:
+        after_rev = reverse_connection_name(plando_connection.exit)
+        before_rev = reverse_connection_name(plando_connection.entrance)
         if after_rev in plando_map:
             continue
         if after_rev is None and before_rev is None:  # a one-way
             continue
-        if after_rev is None: # A two-way connected to a one-way
-            logger.warning(f"A two-way {before} was connected to a one-way {after}. This might cause issues with GER if not being careful")
+        if after_rev is None:  # A two-way connected to a one-way
+            logger.warning(
+                f"A two-way {plando_connection.entrance} was connected to a one-way {plando_connection.exit}. "
+                f"This might cause issues with GER if not being careful"
+            )
             continue
-        if before_rev is None: # A one-way connected to a two-way
-            logger.warning(f"A one-way {before} was connected to a two-way {after}. This might cause issues with GER if not being careful")
+        if before_rev is None:  # A one-way connected to a two-way
+            logger.warning(
+                f"A one-way {plando_connection.entrance} was connected to a two-way {plando_connection.exit}. "
+                f"This might cause issues with GER if not being careful"
+            )
             continue
-        logger.warning(f"Adding forced connection '{after_rev}: {before_rev}' due to '{before}: {after}' existing for player {player} ({player_name})")
-        to_add[after_rev] = before_rev
-    world_options.entrance_plando.value.update(to_add)
+        logger.warning(
+            f"Adding forced connection '{after_rev}: {before_rev}' due to "
+            f"'{plando_connection.entrance}: {plando_connection.exit}' existing for player {player} ({player_name})"
+        )
 
 
-def force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options):
+def force_accessibility_to_full_when_goal_requires_all_locations(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
     goal_is_allsanity = world_options.goal == options.Goal.option_allsanity
     goal_is_perfection = world_options.goal == options.Goal.option_perfection
     goal_requires_all_locations = goal_is_allsanity or goal_is_perfection
@@ -210,7 +230,9 @@ def force_accessibility_to_full_when_goal_requires_all_locations(player, player_
                        f"Accessibility option forced to 'Full' for player {player} ({player_name})")
 
 
-def force_data_randomization_toggles_that_need_each_other(world_options: options.StardewValleyOptions, player, player_name):
+def force_data_randomization_toggles_that_need_each_other(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
     data_to_randomize = world_options.data_randomization.value
     if len(data_to_randomize) <= 0:
         return

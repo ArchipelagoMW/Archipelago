@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-from .game_item import Source, Requirement
 from ..strings.currency_names import Currency
 from ..strings.season_names import Season
+from .game_item import Requirement, Source
 
 ItemPrice = tuple[int, str]
 
@@ -56,3 +56,7 @@ class HatMouseSource(Source):
     @property
     def all_requirements(self) -> Iterable[Requirement]:
         return self.other_requirements + (self.unlock_requirements or ())
+
+@dataclass(frozen=True, kw_only=True)
+class TailoringSource(Source):
+    tailoring_items: tuple[str, ...]

@@ -1,10 +1,10 @@
 from collections.abc import Mapping
 from types import MappingProxyType
 
+from ...strings.entrance_names import Entrance, LogicEntrance
+from ...strings.region_names import LogicRegion
+from ...strings.region_names import Region as RegionName
 from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData
-from ..strings.entrance_names import Entrance, LogicEntrance
-from ..strings.region_names import LogicRegion
-from ..strings.region_names import Region as RegionName
 
 vanilla_regions: tuple[RegionData, ...] = (
     RegionData(
@@ -575,7 +575,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.cellar_to_downstairs,
-        RegionName.farm_house,
+        RegionName.farm_house_cellar,
         flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
@@ -724,9 +724,14 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         Entrance.minecart_mines_to_quarry,
         RegionName.quarry,
         flag=RandomizationFlag.TRANSITION,
-        group=GroupFlag.OUT_TO_OUT,
+        group=GroupFlag.IN_TO_OUT,
     ),
-    ConnectionData(Entrance.minecart_mines_to_town, RegionName.town, flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_OUT),
+    ConnectionData(
+        Entrance.minecart_mines_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.TRANSITION,
+        group=GroupFlag.IN_TO_OUT,
+    ),
     ConnectionData(
         Entrance.minecart_quarry_to_bus_stop,
         RegionName.bus_stop,
@@ -739,14 +744,24 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_IN,
     ),
-    ConnectionData(Entrance.minecart_quarry_to_town, RegionName.town, flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_OUT),
+    ConnectionData(
+        Entrance.minecart_quarry_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.TRANSITION,
+        group=GroupFlag.OUT_TO_OUT,
+    ),
     ConnectionData(
         Entrance.minecart_town_to_bus_stop,
         RegionName.bus_stop,
         flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_OUT,
     ),
-    ConnectionData(Entrance.minecart_town_to_mines, RegionName.mines, flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_IN),
+    ConnectionData(
+        Entrance.minecart_town_to_mines,
+        RegionName.mines,
+        flag=RandomizationFlag.TRANSITION,
+        group=GroupFlag.OUT_TO_IN,
+    ),
     ConnectionData(
         Entrance.minecart_town_to_quarry,
         RegionName.quarry,
@@ -802,7 +817,12 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT | GroupFlag.RIGHT,
     ),
-    ConnectionData(Entrance.take_bus_to_desert, RegionName.desert, flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_OUT),
+    ConnectionData(
+        Entrance.take_bus_to_desert,
+        RegionName.desert,
+        flag=RandomizationFlag.TRANSITION,
+        group=GroupFlag.OUT_TO_OUT,
+    ),
     ConnectionData(
         Entrance.take_bus_from_desert,
         RegionName.bus_stop,
@@ -857,7 +877,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
-    ConnectionData(Entrance.purchase_from_marnie, RegionName.ranch_shop, ),
+    ConnectionData(Entrance.purchase_from_marnie, RegionName.ranch_shop),
     ConnectionData(
         Entrance.forest_to_leah_cottage,
         RegionName.leah_house,
@@ -970,7 +990,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
-    ConnectionData(Entrance.purchase_from_robin, RegionName.carpenter_shop, ),
+    ConnectionData(Entrance.purchase_from_robin, RegionName.carpenter_shop),
     ConnectionData(
         Entrance.mountain_to_maru_room,
         RegionName.maru_room,
@@ -1070,7 +1090,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
-    ConnectionData(Entrance.purchase_from_hospital, RegionName.hospital_shop, ),
+    ConnectionData(Entrance.purchase_from_hospital, RegionName.hospital_shop),
     ConnectionData(Entrance.hospital_to_hospital_back, RegionName.hospital_back),
     ConnectionData(Entrance.hospital_back_to_hospital, RegionName.hospital),
     ConnectionData(
@@ -1629,7 +1649,6 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.place_crab_pot_in_mountain, LogicRegion.crab_pot_freshwater),
     ConnectionData(LogicEntrance.place_crab_pot_in_forest, LogicRegion.crab_pot_freshwater),
     ConnectionData(LogicEntrance.place_crab_pot_in_ocean, LogicRegion.crab_pot_seawater),
-
     ConnectionData(LogicEntrance.beach_cutscenes_from_beach, LogicRegion.beach_cutscenes),
     ConnectionData(LogicEntrance.beach_cutscenes_from_tide_pools, LogicRegion.beach_cutscenes),
     ConnectionData(LogicEntrance.mountain_cutscenes_from_cave_shortcut, LogicRegion.mountain_cutscenes),
@@ -1647,5 +1666,9 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.town_cutscenes_from_tide_pools_shortcut, LogicRegion.town_cutscenes),
 )
 
-connections_without_ginger_island_by_name: Mapping[str, ConnectionData] = MappingProxyType({connection.name: connection for connection in vanilla_connections})
-regions_without_ginger_island_by_name: Mapping[str, RegionData] = MappingProxyType({region.name: region for region in vanilla_regions})
+connections_without_ginger_island_by_name: Mapping[str, ConnectionData] = MappingProxyType(
+    {connection.name: connection for connection in vanilla_connections}
+)
+regions_without_ginger_island_by_name: Mapping[str, RegionData] = MappingProxyType(
+    {region.name: region for region in vanilla_regions}
+)

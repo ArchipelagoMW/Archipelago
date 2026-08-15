@@ -1,6 +1,6 @@
-from .model import RegionData, ConnectionData, RandomizationFlag, GroupFlag
-from ..strings.entrance_names import Entrance, LogicEntrance
-from ..strings.region_names import Region, LogicRegion
+from ...strings.entrance_names import Entrance, LogicEntrance
+from ...strings.region_names import LogicRegion, Region
+from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData
 
 ginger_island_regions = [
     RegionData(Region.secret_woods, (Entrance.use_island_totem,)),
@@ -55,7 +55,7 @@ ginger_island_regions = [
             LogicEntrance.grow_indoor_crops_on_island,
             LogicEntrance.place_crab_pot_in_island_west,
             LogicEntrance.fish_in_island_west_ocean,
-            LogicEntrance.fish_in_island_west_river
+            LogicEntrance.fish_in_island_west_river,
         ),
     ),
     RegionData(
@@ -72,7 +72,9 @@ ginger_island_regions = [
         ),
     ),
     RegionData(Region.island_shrine, (Entrance.island_shrine_to_island_east,)),
-    RegionData(Region.island_south_east, (Entrance.island_southeast_to_south, Entrance.island_southeast_to_pirate_cove)),
+    RegionData(
+        Region.island_south_east, (Entrance.island_southeast_to_south, Entrance.island_southeast_to_pirate_cove)
+    ),
     RegionData(
         Region.island_north,
         (
@@ -132,7 +134,8 @@ ginger_island_regions = [
     RegionData(Region.professor_snail_cave, (Entrance.professor_snail_cave_to_cave_entrance,)),
     RegionData(Region.dangerous_mines_20),
     RegionData(Region.dangerous_mines_60),
-    RegionData(Region.dangerous_mines_100)]
+    RegionData(Region.dangerous_mines_100),
+]
 
 ginger_island_connections = [
     ConnectionData(
@@ -364,7 +367,7 @@ ginger_island_connections = [
         Entrance.professor_snail_cave_to_cave_entrance,
         Region.professor_snail_cave_entrance,
         flag=RandomizationFlag.BUILDINGS,
-        group=GroupFlag.DOWN | GroupFlag.OUT_TO_IN,
+        group=GroupFlag.DOWN | GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_north_to_island_south_ridge,

@@ -38,6 +38,8 @@ invalid_mod_combinations = [
     # [ModNames.sve, ModNames.distant_lands] # This is going to become banned after Reptar's SVE update. For now, it's fine.
 ]
 
+# Used to adapt content not yet moved to content packs to easily detect when SVE and Ginger Island are both enabled.
+SVE_GINGER_ISLAND_PACK = ModNames.sve + "+" + ModNames.ginger_island
 
 def mod_combination_is_valid(mods: Iterable[str]):
     for mod_combination in invalid_mod_combinations:

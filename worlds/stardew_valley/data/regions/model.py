@@ -4,16 +4,10 @@ from collections.abc import Container
 from dataclasses import dataclass, field
 from enum import IntFlag
 
-from ..strings.entrance_names import Entrance
-
 connector_keyword = " to "
 
 
 def reverse_connection_name(name: str) -> str | None:
-    if name == Entrance.boat_to_ginger_island:
-        return Entrance.boat_from_ginger_island
-    if name == Entrance.boat_from_ginger_island:
-        return Entrance.boat_to_ginger_island
     try:
         origin, destination = name.split(connector_keyword)
     except ValueError:
@@ -72,6 +66,7 @@ class GroupFlag(IntFlag):
     OUT_TO_OUT = FROM_OUTDOOR | TO_OUTDOOR
     OUT_TO_IN = FROM_OUTDOOR | TO_INDOOR
 
+    NO_MASK = 0b0
     DIR_MASK = UP | DOWN | LEFT | RIGHT | DOOR
     AREA_MASK = IN_TO_IN | IN_TO_OUT | OUT_TO_IN | OUT_TO_OUT
 
@@ -113,6 +108,14 @@ class ConnectionData:
         if RandomizationFlag.IS_ONE_WAY in self.flag:
             return None
         return reverse_connection_name(self.name)
+
+    @property
+    def destination_entrance_name(self) -> str:
+        """This is the name of where the connection will lead in the destination region.
+        Eg:
+         - Going to the Town from the Beach lands you at 'Town to Beach' (same name as the exit leaving Town).
+         - Using the Return Scepter lands you at 'Return Scepter exit' since it's a one way entrance."""
+        return self.reverse or f"{self.name} Exit"
 
     def is_eligible_for_randomization(self, chosen_randomization_flag: RandomizationFlag) -> bool:
         return bool(self.flag) and self.flag in chosen_randomization_flag
