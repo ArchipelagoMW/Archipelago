@@ -69,15 +69,18 @@ class ShuffleUpTo(Choice):
     display_name = "Shuffle Up To"
     default = 0
     option_disable = 0
-    option_mechanical_bosses = 1
-    option_plantera = 3
-    option_golem = 5
-    option_lunatic_cultist = 7
-    option_moon_lord = 9
-    option_providence_the_profaned_goddess = 10
-    option_devourer_of_gods = 11
-    option_yharon_dragon_of_rebirth = 12
-    option_calamity_final_bosses = 14
+    option_mechanical_bosses = 2
+    option_plantera = 4
+    option_golem = 6
+    option_lunatic_cultist = 8
+    option_moon_lord = 10
+    option_providence_the_profaned_goddess = 11
+    option_devourer_of_gods = 12
+    option_eridanus_champion_of_cosmos = 13
+    option_yharon_dragon_of_rebirth = 14
+    option_abominationn = 16
+    option_calamity_final_bosses = 17
+    option_mutant = 19
     option_all = -1
 
 class RandomizeNPCs(Toggle):

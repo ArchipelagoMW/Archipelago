@@ -538,6 +538,8 @@ class TerrariaWorld(CachedRuleBuilderWorld):
             "version": list(self.required_client_version),
             # The rest of these are included for trackers
             "mods": list(self.options.mods.value),
+            "calamity": int("Calamity" in self.options.mods.value),
+            "fargo": int("Fargo" in self.options.mods.value),
             "getfixedboi": self.options.getfixedboi.value,
             "early_achievements": self.options.early_achievements.value,
             "normal_achievements": self.options.normal_achievements.value,
