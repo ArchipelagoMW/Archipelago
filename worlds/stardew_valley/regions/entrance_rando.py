@@ -2,15 +2,10 @@ import typing
 
 from BaseClasses import EntranceType, Region
 from entrance_rando import ERPlacementState
+
 from Options import PlandoConnection
 
-from ..data.regions import (
-    ConnectionData,
-    GroupFlag,
-    RandomizationFlag,
-    RegionData,
-    reverse_connection_name,
-)
+from ..data.regions import ConnectionData, GroupFlag, RandomizationFlag, RegionData, reverse_connection_name
 from ..options import EntranceRandomization, EntranceRandomizationBehavior
 from ..strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName
 
@@ -66,14 +61,7 @@ def create_player_randomization_flag(
 
 def get_target_groups(entrance_randomization_behavior: "EntranceRandomizationBehavior"):
     direction_matching_group_lookup = {
-        GroupFlag.TO_ANY: [
-            GroupFlag.TO_ANY,
-            GroupFlag.UP,
-            GroupFlag.DOWN,
-            GroupFlag.LEFT,
-            GroupFlag.RIGHT,
-            GroupFlag.DOOR,
-        ],
+        GroupFlag.TO_ANY: [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT, GroupFlag.DOOR],
         GroupFlag.UP: [GroupFlag.UP, GroupFlag.TO_ANY],
         GroupFlag.DOWN: [GroupFlag.DOWN, GroupFlag.DOOR, GroupFlag.TO_ANY],
         GroupFlag.LEFT: [GroupFlag.LEFT, GroupFlag.TO_ANY],
@@ -82,13 +70,7 @@ def get_target_groups(entrance_randomization_behavior: "EntranceRandomizationBeh
     }
 
     area_matching_group_lookup = {
-        GroupFlag.TO_ANY: [
-            GroupFlag.IN_TO_IN,
-            GroupFlag.IN_TO_OUT,
-            GroupFlag.OUT_TO_IN,
-            GroupFlag.OUT_TO_OUT,
-            GroupFlag.TO_ANY,
-        ],
+        GroupFlag.TO_ANY: [GroupFlag.IN_TO_IN, GroupFlag.IN_TO_OUT, GroupFlag.OUT_TO_IN, GroupFlag.OUT_TO_OUT, GroupFlag.TO_ANY],
         GroupFlag.IN_TO_IN: [GroupFlag.IN_TO_IN, GroupFlag.TO_ANY],
         GroupFlag.IN_TO_OUT: [GroupFlag.IN_TO_OUT, GroupFlag.TO_ANY],
         GroupFlag.OUT_TO_IN: [GroupFlag.OUT_TO_IN, GroupFlag.TO_ANY],
@@ -106,21 +88,8 @@ def get_target_groups(entrance_randomization_behavior: "EntranceRandomizationBeh
 
     groups = {}
 
-    for inorout in [
-        GroupFlag.TO_ANY,
-        GroupFlag.IN_TO_IN,
-        GroupFlag.IN_TO_OUT,
-        GroupFlag.OUT_TO_IN,
-        GroupFlag.OUT_TO_OUT,
-    ]:
-        for direction in [
-            GroupFlag.TO_ANY,
-            GroupFlag.UP,
-            GroupFlag.DOWN,
-            GroupFlag.LEFT,
-            GroupFlag.RIGHT,
-            GroupFlag.DOOR,
-        ]:
+    for inorout in [GroupFlag.TO_ANY, GroupFlag.IN_TO_IN, GroupFlag.IN_TO_OUT, GroupFlag.OUT_TO_IN, GroupFlag.OUT_TO_OUT]:
+        for direction in [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT, GroupFlag.DOOR]:
             direction_group = direction_matching_group_lookup[direction & dir_mask]
             area_group = area_matching_group_lookup[inorout & area_mask]
             group_key = direction | inorout
@@ -209,13 +178,10 @@ def connect_regions(
                 entrance_data = connection_data_by_name[destination_entrance_name]
                 plando_destination = regions_by_name[entrance_data.destination]
                 origin_region.connect(plando_destination, connection_data.name)
-                print(f"setup plando for {connection_data.name}")
                 special_randomized_entrances[connection_data.name] = destination_entrance_name
 
             if eligible:
-                create_entrance_rando_target(
-                    origin_region, destination_region, connection_data, plandoed_exits, plandoed_entrances
-                )
+                create_entrance_rando_target(origin_region, destination_region, connection_data, plandoed_exits, plandoed_entrances)
             elif connection_data.name not in decoupled_plando:
                 origin_region.connect(destination_region, connection_data.name)
 
@@ -253,22 +219,18 @@ def create_entrance_rando_target(
         exit_ = origin.create_exit(connection_data.name)
         exit_.randomization_type = EntranceType.TWO_WAY
         exit_.randomization_group = connection_data.group
-    else:
-        print(f"{connection_data.name} already in plando")
 
     if destination_entrance not in plandoed_entrances:
         # We use the reverse name so GER and find the coupled entrance when connecting the region.
         er_target = destination.create_er_target(destination_entrance)
         er_target.randomization_type = EntranceType.TWO_WAY
         er_target.randomization_group = connection_data.group
-    else:
-        print(f"{destination_entrance} already in plando")
 
 
 def prepare_mod_data(placements: ERPlacementState, forced_placements: dict[str, str]) -> dict[str, str]:
     """Take the placements from GER and prepare the data for the mod.
     The mod require a dictionary detailing which connections need to be swapped. It acts as if the connections are
-    decoupled, so both directions are required.
+     decoupled, so both directions are required.
 
     For instance, GER will provide placements like (Town to Community Center, Hospital to Town), meaning that the door
      of the Community Center will instead lead to the Hospital, and that the exit of the Hospital will lead to the Town
