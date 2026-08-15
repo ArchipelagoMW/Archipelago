@@ -15,7 +15,7 @@ upgrade_rules = [
         # Manor
         ConnectionNames.i020_i021: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
         ConnectionNames.i003_b004: lambda player: lambda state: state.has(ItemNames.SoapPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-        ConnectionNames.i004_o001: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2),
+        ConnectionNames.i004_o001: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.HelmetPower, player, 1),
         ConnectionNames.i006_r001: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
         ConnectionNames.i004_i003: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
 
@@ -88,6 +88,7 @@ upgrade_rules = [
             # Rooftops
             LocationNames.soapammo_r005: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.gumammo_r020: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.soapammo_r021: lambda player: lambda state: (state.has(ItemNames.HelmetPower, player, 1)  or state.can_reach(ConnectionNames.r003_r021, "Entrance", player)) and state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.blackknight_power_r004: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             # Balcony
 
@@ -1502,7 +1503,7 @@ snack_rules = [
             LocationNames.w025_SSBOX01: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.w025_SSBOX02: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.w025_SSBOX04: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.w025_SSBOX06: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.w025_SSBOX06: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) and (state.has(ItemNames.GumPower, player, 1) or state.has(ItemNames.SoapPower, player, 1)),
             LocationNames.w025_SS090: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
 
             LocationNames.w025_SS0410: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PoundPower, player, 1),

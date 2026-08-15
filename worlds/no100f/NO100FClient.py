@@ -8084,6 +8084,45 @@ class NO100FCommandProcessor(ClientCommandProcessor):
         logger.info(f"Shiver Keys {count}/4")
 
 
+    def _cmd_clearconditions(self):
+       """Displays current clear condition counts and the number expected to beat the Mastermind
+       \n NOTE: Bosses Killed only count if you leave the room in a standard way,  loading a savestate will not let you keep the boss kill"""
+
+       bossesKilled = dolphin_memory_engine.read_byte(BOSS_KILLS_ADDR)
+       tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR)
+       snacks = dolphin_memory_engine.read_word(STORED_SNACK_ADDR)
+       sum_tokens = 0
+       for i in range(21):
+           if tokens & 2 ** i == 2 ** i:
+               sum_tokens += 1
+       if isinstance(self.ctx, NO100FContext):
+          if self.ctx.completion_goal == 1:
+             logger.info(f"Boss Kills: {bossesKilled}/{self.ctx.boss_count}")
+
+          if self.ctx.completion_goal == 2:
+              logger.info(f"Token Count: {sum_tokens}/{self.ctx.token_count}")
+
+          if self.ctx.completion_goal == 3:
+              logger.info(f"Boss Kills: {bossesKilled}/{self.ctx.boss_count}")
+              logger.info(f"Token Count: {sum_tokens}/{self.ctx.token_count}")
+
+          if self.ctx.completion_goal == 4:
+              logger.info(f"Snacks Collected: {snacks}/{self.ctx.snack_count}")
+
+          if self.ctx.completion_goal == 5:
+              logger.info(f"Boss Kills: {bossesKilled}/{self.ctx.boss_count}")
+              logger.info(f"Snacks Collected: {snacks}/{self.ctx.snack_count}")
+
+          if self.ctx.completion_goal == 6:
+              logger.info(f"Token Count: {sum_tokens}/{self.ctx.token_count}")
+              logger.info(f"Snacks Collected: {snacks}/{self.ctx.snack_count}")
+
+          if self.ctx.completion_goal == 7:
+              logger.info(f"Boss Kills: {bossesKilled}/{self.ctx.boss_count}")
+              logger.info(f"Token Count: {sum_tokens}/{self.ctx.token_count}")
+              logger.info(f"Snacks Collected: {snacks}/{self.ctx.snack_count}")
+
+
 class NO100FContext(CommonContext):
     command_processor = NO100FCommandProcessor
     game = "Scooby-Doo! Night of 100 Frights"
