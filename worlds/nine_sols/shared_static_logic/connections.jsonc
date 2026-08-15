@@ -121,7 +121,8 @@
         "from": "AF (Elevator) - Moving Boxes Below Root Node", "to": "AF (Elevator) - Statue Chest", // use the moving box as our starting point instead
         "medium_requires": [ { "anyOf": [
             { "item": "Trick - Bow Hover" },
-            { "item": "Air Dash" } // and T-dash
+            { "item": "Air Dash" }, // and T-dash
+            { "item": "Trick - Long Jump with Swift Runner" } // and T-dash
         ] } ],
         "ls_requires": [ { "item": "Ledge Grab" } ] // LS parry hover from the moving box, T-dash setup
     },
