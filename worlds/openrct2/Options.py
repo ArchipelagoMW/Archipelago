@@ -401,7 +401,7 @@ class openRCT2DeathLink(DeathLink):
         + " in the chat tab of the unlock shop.")
 
 class openRCT2TrapLink(Toggle):
-    """When your friends recieve a trap, you get it too! Of course the same is true the other direction. Works with comatible games."""
+    """When your friends receive a trap, you get it too! Of course the same is true the other direction. Works with compatible games."""
     display_name = "Trap Link"
 
 
