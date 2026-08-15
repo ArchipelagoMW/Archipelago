@@ -18,9 +18,9 @@ Fashion Statement;                  Achievement | Early;
 Ooo! Shiny!;                        Achievement | Early;
 No Hobo;                            Achievement;                                @npc(1);
 Merchant;                           Npc;
-Lumberjack;                         Fargo | Npc;
-Deviantt NPC;                       Fargo | Npc;
-Squirrel;                           Fargo | Npc;
+Lumberjack;                         Fargo;
+Deviantt NPC;                       Fargo;
+Squirrel;                           Fargo;
 Bug Net;                            ;                                           Merchant;  // TODO: add angler if fishing logic is enabled
 Heavy Metal;                        Achievement | Early;
 Dye Trader;                         Npc;                                        @npc(4);
@@ -175,7 +175,7 @@ Sticky Situation;                   Not Getfixedboi | Achievement | Time;
 The Cavalry;                        Achievement;
 Solidifier;                         ;                                           #King Slime;
 Nerdy Slime;                        Pet;                                        #King Slime;
-Mutant NPC;                         Fargo | Npc;                                Trojan Squirrel | King Slime | Eye of Cthulhu | Cursed Coffin | Evil Boss | Queen Bee | Skeletron | Deerclops | Deviantt | Wall of Flesh | Queen Slime | Banished Baron | The Twins | The Destroyer | Skeletron Prime | Lifelight | Plantera | Golem | Duke Fishron | Empress of Light | Betsy | Lunatic Cultist | Moon Lord | Champion of Timber | Champion of Terra | Champion of Earth | Champion of Nature | Champion of Life | Champion of Death | Champion of Spirit | Champion of Will | Eridanus, Champion of Cosmos | Abominationn | Mutant | (@calamity & (Desert Scourge | Crabulon | The Hive Mind | The Perforators | The Slime God | Cryogen | Aquatic Scourge | Cragmaw Mire | Brimstone Elemental | Calamitas Clone | Great Sand Shark | Leviathan and Anahita | Astrum Aureus | The Plaguebringer Goliath | Ravager | Astrum Deus | Profaned Guardians | Dragonfolly | Providence, the Profaned Goddess | Ceaseless Void | Storm Weaver | Signus, Envoy of the Devourer | Polterghast | Mauler | Nuclear Terror | The Old Duke | The Devourer of Gods | Yharon, Dragon of Rebirth | Exo Mechs | Supreme Witch, Calamitas));
+Mutant NPC;                         Fargo;                                      Trojan Squirrel | King Slime | Eye of Cthulhu | Cursed Coffin | Evil Boss | Queen Bee | Skeletron | Deerclops | Deviantt | Wall of Flesh | Queen Slime | Banished Baron | The Twins | The Destroyer | Skeletron Prime | Lifelight | Plantera | Golem | Duke Fishron | Empress of Light | Betsy | Lunatic Cultist | Moon Lord | Champion of Timber | Champion of Terra | Champion of Earth | Champion of Nature | Champion of Life | Champion of Death | Champion of Spirit | Champion of Will | Eridanus, Champion of Cosmos | Abominationn | Mutant | (@calamity & (Desert Scourge | Crabulon | The Hive Mind | The Perforators | The Slime God | Cryogen | Aquatic Scourge | Cragmaw Mire | Brimstone Elemental | Calamitas Clone | Great Sand Shark | Leviathan and Anahita | Astrum Aureus | The Plaguebringer Goliath | Ravager | Astrum Deus | Profaned Guardians | Dragonfolly | Providence, the Profaned Goddess | Ceaseless Void | Storm Weaver | Signus, Envoy of the Devourer | Polterghast | Mauler | Nuclear Terror | The Old Duke | The Devourer of Gods | Yharon, Dragon of Rebirth | Exo Mechs | Supreme Witch, Calamitas));
 
 // Desert Scourge
 Desert Scourge;                     Calamity | Location | Item;                 @health(1);
@@ -236,7 +236,7 @@ Brimstone Slag;                     Calamity;                                   
 // Goblin Army
 Goblin Army;                        Location | Item;                            @health(1);
 Goblin Tinkerer;                    Npc;                                        Goblin Army;
-Abominationn NPC;                   Fargo | Npc;                                Goblin Army;
+Abominationn NPC;                   Fargo;                                      Goblin Army;
 Tinkerer's Workshop;                ;                                           Goblin Tinkerer;
 Mana Flower;                        ;                                           (Tinkerer's Workshop & Nature's Gift) | (@calamity & (Shimmer & Ethereal Talisman));
 Silencing Sheath;                   Calamity;                                   (Tinkerer's Workshop & Demonite Bar & Evil Boss Part) | (Shimmer & Dark Matter Sheath);
@@ -559,7 +559,7 @@ Miracle Fruit;                      Calamity | Quarter Fruit;                   
 Advanced Display;                   Calamity;                                   Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Life Alloy & Long Ranged Sensor Array;
 Star-Tainted Generator;             Calamity;                                   (Hardmode Anvil & Jelly-Charged Battery & Nuclear Fuel Rod & Starbuster Core & Life Alloy) | Nucleogenesis;
 Old One's Army Tier 3;              Location | Item;                            #Old One's Army Tier 1 & Wall of Flesh & Golem & @health(4);
-Betsy;                              Location | Item;                            (@fargo & Abominationn NPC & Betsy) | #Old One's Army Tier 3;
+Betsy;                              Fargo | Location | Item;                    (Abominationn NPC & Betsy) | #Old One's Army Tier 3; // added this event only because either fargos souls or calamity acknowledges that Betsy is an actual boss, but only fargo uses it for logic.
 
 // Martian Madness
 Martian Madness;                    Location | Item;                            ((@fargo & Abominationn NPC) | (Wall of Flesh | (@calamity & Cyborg))) & Golem & @health(4);

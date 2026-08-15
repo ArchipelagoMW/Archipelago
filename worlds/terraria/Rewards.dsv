@@ -112,45 +112,62 @@ Red Counterweight;
 Yoyo Glove;
 
 // Vanilla Forced to Calamity
-Diving Helmet;              Calamity;
-Jellyfish Necklace;         Calamity;
+Diving Helmet;                  Calamity;
+Jellyfish Necklace;             Calamity;
 
 
 // Calamity Accessories
-Unholy Tonic;               Calamity;
-Vicious Tonic;              Calamity;
-Craw Carapace;              Calamity;
-Giant Shell;                Calamity;
-Life Jelly;                 Calamity;
-Vital Jelly;                Calamity;
-Cleansing Jelly;            Calamity;
-Giant Tortoise Shell;       Calamity;
-Coin of Deceit;             Calamity;
-Ink Bomb;                   Calamity;
-Voltaic Jelly;              Calamity;
-Wulfrum Battery;            Calamity;
-Luxor's Gift;               Calamity;
-Raider's Talisman;          Calamity;
-Rotten Dogtooth;            Calamity;
-Scuttler's Jewel;           Calamity;
-Unstable Granite Core;      Calamity;
-Ilmeris' Spark;             Calamity;
-Ursa Sergeant;              Calamity;
-Trinket of Chi;             Calamity;
-The Transformer;            Calamity;
-Rover Drive;                Calamity;
-Marnite Repulsion Shield;   Calamity;
-Frost Barrier;              Calamity;
-Ancient Fossil;             Calamity;
-Spelunker's Amulet;         Calamity;
-Fungal Symbiote;            Calamity;
-Gladiator's Locket;         Calamity;
-Wulfrum Acrobatics Pack;    Calamity;
-Depths Charm;               Calamity;
-Anechoic Plating;           Calamity;
-Iron Boots;                 Calamity;
-Sprit Glyph;                Calamity;
-Sea Spirit Amulet;          Calamity;
+Unholy Tonic;                   Calamity;
+Vicious Tonic;                  Calamity;
+Craw Carapace;                  Calamity;
+Giant Shell;                    Calamity;
+Life Jelly;                     Calamity;
+Vital Jelly;                    Calamity;
+Cleansing Jelly;                Calamity;
+Giant Tortoise Shell;           Calamity;
+Coin of Deceit;                 Calamity;
+Ink Bomb;                       Calamity;
+Voltaic Jelly;                  Calamity;
+Wulfrum Battery;                Calamity;
+Luxor's Gift;                   Calamity;
+Raider's Talisman;              Calamity;
+Rotten Dogtooth;                Calamity;
+Scuttler's Jewel;               Calamity;
+Unstable Granite Core;          Calamity;
+Ilmeris' Spark;                 Calamity;
+Ursa Sergeant;                  Calamity;
+Trinket of Chi;                 Calamity;
+The Transformer;                Calamity;
+Rover Drive;                    Calamity;
+Marnite Repulsion Shield;       Calamity;
+Frost Barrier;                  Calamity;
+Ancient Fossil;                 Calamity;
+Spelunker's Amulet;             Calamity;
+Fungal Symbiote;                Calamity;
+Gladiator's Locket;             Calamity;
+Wulfrum Acrobatics Pack;        Calamity;
+Depths Charm;                   Calamity;
+Anechoic Plating;               Calamity;
+Iron Boots;                     Calamity;
+Sprit Glyph;                    Calamity;
+Sea Spirit Amulet;              Calamity;
+
+
+// Fargo Accessories
+Concentrated Rainbow Matter;    Fargo;
+Crystal Skull;                  Fargo;
+Frigid Grasp;                   Fargo;
+Medallion of the Fallen King;   Fargo;
+Mystic Skull;                   Fargo;
+Nymph's Perfume;                Fargo;
+Paradox Wolf Soul;              Fargo;
+Razor Container;                Fargo;
+Squeaky Toy;                    Fargo;
+Tim's Concoction;               Fargo;
+Tribal Charm;                   Fargo;
+Wretched Pouch;                 Fargo;
+
+
 
 # unshuffled
 

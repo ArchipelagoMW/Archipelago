@@ -67,9 +67,7 @@ class TerrariaSpoiler(Spoiler):
                 continue
 
             rule = rules[rule_indices[str(loc)]]
-            if options.health_logic.value and (
-                "Health" in rule.flags or "Quarter Fruit" in rule.flags
-            ):
+            if options.health_logic.value and ("Health" in rule.flags or "Quarter Fruit" in rule.flags):
                 continue
 
             hidden.add(str(loc))
