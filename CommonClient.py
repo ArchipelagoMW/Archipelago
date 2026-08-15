@@ -1092,6 +1092,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "Bounced":
         tags = args.get("tags", [])
+        tags = tags if tags is not None else [] # Some packets don't provide tags at all which is optional / can be None per the docs spec.
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been sent this
         if "DeathLink" in tags:
             data = args.get("data", {})
