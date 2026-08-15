@@ -1089,7 +1089,6 @@ class EVNStoryRoute(TypedDict, total=False):
     regions: List[int] # NOTE: ORDER MATTERS. If we need to, we'll reorg to have each define their entrance and exit regions, but for now, will make the assumption that these are in order and connect in that order.
     region_connections: Dict[int, List[int]] # Dict[FromID, ToIDs] - Use 0 for Universe
     final_mission: int | None # The mission ID that we need to assign the victory condition to
-    cust_outfs: List[int] # List of custom outfit IDs that'll be utilized. NOTE: Only used when outfits are included in shuffle. Not necessary if just ships.
     use_cust_outfs_count: int # the number of custom outfits to randomly pull from cust_outfs. Use these two to make sure there are enough items to fulfill the locations amount.
 
 # Dictionary of our possible storylines / region routes
@@ -1118,9 +1117,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306],
         },
         "final_mission": 417,
-        "cust_outfs": [
-            450, 454, 455, 456, 457, 458, 459, 462, 463, 464, 465
-        ],   # NOTE: This list of IDs are the *possible* custom outfits that could be used for this story route.
         "use_cust_outfs_count": 5, #only 2 needed, 5 to round it out # This isn't how I'd want to do this, but I don't have a great way of determining how many
             # custom outfits we'll actually need without creating circular references.
             # Maybe I'm wrong, and we can fix this later.
@@ -1150,13 +1146,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306, 307], 307: [308],
         },
         "final_mission": 887,
-        #"use_extended_checks": True, # due to how short this path is, we'll need to utilize extended checks to make sure players don't jump into the endgame too early.
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,     
-        ], 
         "use_cust_outfs_count": 22
     },
     3: {    # So, there's 2 starting options, and 2 paths, for 4 combos. May implement all 4, may not.
@@ -1178,18 +1167,11 @@ story_routes: Dict[int, EVNStoryRoute] = {
             999, # tutorial
         ],
         "region_connections": { 
-            0: [999, 3, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201], 
+            0: [999, 3, 20, 23, 27, 300, 301, 302, 310, 311, 312, 101, 102, 103, 104, 201, 303], 
             3: [4], 4: [6], 6: [7], 7: [8], 
             303: [304, 305, 306, 307], 307: [308],
         },
         "final_mission": 887,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-        ], 
         "use_cust_outfs_count": 20 #19
     },
     4: {    # Auroran options
@@ -1216,17 +1198,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306], 
         },
         "final_mission": 686,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-            # Extra 2.5M
-            485, 486, 487, 488, 489,
-            # Extra 5M
-            490, 491,# 492, 493,
-        ], 
         "use_cust_outfs_count": 25 #24
     },
     5: {    # Auroran options
@@ -1253,17 +1224,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306],
         },
         "final_mission": 686,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-            # Extra 2.5M
-            485, 486, 487, 488, 489,
-            # Extra 5M
-            490, 491,# 492, 493,
-        ], 
         "use_cust_outfs_count": 25 #23
     },
     6: {    # Auroran options
@@ -1290,19 +1250,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306],
         },
         "final_mission": 686,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 500k
-            473, 474, 475,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-            # Extra 2.5M
-            485, 486, 487, 488, 489,
-            # Extra 5M
-            490, 491, 492, 493,
-        ], 
         "use_cust_outfs_count": 40 #38 (filler is mostly credits, so helps offset cost?)
     },
     #Once again, too short and not enough locations (even with extended checks). Removing for now, may add back in later.
@@ -1330,19 +1277,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306],
         },
         "final_mission": 712,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 500k
-            473, 474, 475,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-            # Extra 2.5M
-            485, 486, 487, 488, 489,
-            # Extra 5M
-            490, 491, 492, 493, 494,
-        ], 
         "use_cust_outfs_count": 45 # damn this is so short...
     },
     8: {   
@@ -1369,19 +1303,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306],
         },
         "final_mission": 712,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 500k
-            473, 474, 475,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-            # Extra 2.5M
-            485, 486, 487, 488, 489,
-            # Extra 5M
-            490, 491, 492, 493, 494,
-        ], 
         "use_cust_outfs_count": 44
     },
     9: {   
@@ -1408,19 +1329,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306],
         },
         "final_mission": 474,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 500k
-            473, 474, 475,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-            # Extra 2.5M
-            485, 486, 487, 488, 489,
-            # Extra 5M
-            #490, 491, 492, 493,
-        ], 
         "use_cust_outfs_count": 35 #32
     },
     10: {   
@@ -1447,19 +1355,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306],
         },
         "final_mission": 354,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 500k
-            473, 474, 475,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-            # Extra 2.5M
-            485, 486, 487, 488, 489,
-            # Extra 5M
-            490, 491, 492, 493,
-        ], 
         "use_cust_outfs_count": 40 #39
     },
     11: {   
@@ -1486,19 +1381,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
             303: [304, 305, 306],
         },
         "final_mission": 381,
-        #"use_extended_checks": True, 
-        "cust_outfs": [
-            # Core
-            450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472,
-            # Extra 500k
-            473, 474, 475,
-            # Extra 1M
-            476, 477, 478, 479, 480, 481, 482, 483, 484,  
-            # Extra 2.5M
-            485, 486, 487, 488, 489,
-            # Extra 5M
-            #490, 491, 492, 493,
-        ], 
         "use_cust_outfs_count": 35 #34
     }
 }

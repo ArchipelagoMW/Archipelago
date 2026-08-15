@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING, Dict, List, TypedDict
 
 # TODO: Fix this reference. Wtf is flask_caching? It doesn't work with AP Launcher.
 # from flask_caching import logger
+import logging
+logger = logging.getLogger("EV Nova")
 
 from BaseClasses import Item, ItemClassification
 
@@ -70,6 +72,7 @@ def get_items() -> Dict[int, EVNItemData]:
 
     # ships
     # turns out, the ship names are not unique due to the various models, so we concat ID.
+    temp_count = 0
     for ship in ships.ship_table.keys():
         # In logics, we define ship ids we don't want in game.
         # Check for, and skip, as necessary.
@@ -84,8 +87,11 @@ def get_items() -> Dict[int, EVNItemData]:
             code=item_id,
             origin="ship"
         )
+        temp_count += 1
+    #logger.info(f"Added {temp_count} ships to item bank.")
 
     # outf
+    temp_count = 0
     for outf in outfits.outf_table.keys():
         if outf in outf_to_ignore:
             continue
@@ -97,6 +103,8 @@ def get_items() -> Dict[int, EVNItemData]:
             code=item_id,
             origin="outf"
         )
+        temp_count += 1
+    #logger.info(f"Added {temp_count} outf to item bank.")
 
     #logger.info(f"data bank size: {len(ret_bank)}")
     return ret_bank

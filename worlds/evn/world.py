@@ -17,11 +17,11 @@ from .logics import story_routes, possible_regions, EVNStoryRoute, MISSION_BLOCK
 
 # Game specific data imports
 from .rezdata import misns, ships, outfits, desc, chars, crons
-from .apdata.offsets import offsets_table
+from .apdata.offsets import offsets_table, custom_outfits_ratio
 from .apdata.customoutf import cust_outf_table
 from .apdata.customdesc import cust_desc_table
 
-logger = logging.getLogger("Starcraft 2")
+logger = logging.getLogger("EV Nova")
 
 GAME_NAME = "EV Nova"
 
@@ -394,51 +394,75 @@ class EVNWorld(World):
         # these are used as LOCATIONS not ITEMS, even though they are in game items.
         # meaning, use locations.ev_location_bank not items.ev_item_bank.
         # I kinda hate having to check this, but haven't figured out a better way yet
-        our_multiworld_locations = [l.name for l in self.multiworld.get_locations(self.player)]
+        # our_multiworld_locations = [l.name for l in self.multiworld.get_locations(self.player)]
         # NOTE: We have locations in the bank that may not have actually been used / created
         #   So, we'll have to verify they were used before adding the associated game data.
+
+        # TODO: Change to using just the first customoutf as a template, and fill in as we go.
+        #   Can get ID from name lookup anyways
+        # Then do the same for the custom descriptions.
+
+        coutf_offset = offsets_table.get("outf_cks", 0)
+        custom_locations_dict = {key: value for key, value in locations.ev_location_bank.items() if key > coutf_offset}
+        multiworld_dict = {loc.name: loc for loc in self.multiworld.get_locations(self.player)}
+        ref_cust_data_name_to_obj = {data["name"]: data for item_id, data in custom_outfits_ratio.items()}
+        latest_outf_id = max(outfits.outf_table.keys(), default=0)
+
+        # Let's get our template custom outfit for populating game data
+        # We don't care about the id, just grab the first entry.
+        template_outfit = next(iter(cust_outf_table.values()), None) 
+        # TODO: Handle "None" case.
+
         
-        for coutf in cust_outf_table.keys():
-            temp_coutf = cust_outf_table[coutf]
+        # Loop and create game data based on the template, but with our values
+        for loc_id, loc_data in custom_locations_dict.items():
+            loc_name = loc_data.get('name', '')
+            # Whoops... right, only use the ones we actually shoved into AP
+            if loc_name not in multiworld_dict:
+                continue
+
+            latest_outf_id += 1 # offset now as to ensure not reusing an id
+
+            findable_name = loc_name.split(" - (")[0] # cut out ID. Also, care for possible reg use of hyphens
+            reference_custom_data = ref_cust_data_name_to_obj.get(findable_name)
+
             for column in outfits.outf_columns.keys():
-                current_val = temp_coutf[column]
+                current_val = template_outfit[column]
                 default_val = current_val + "\t"
                 col_anno = outfits.OutfDict.__annotations__[column]
                 if col_anno == str:
                     default_val = f'"{current_val}"\t'
 
-                target_id = offsets_table["outf_cks"] + coutf
-
-                # TODO: make the locations.ev_location_bank check once here and reuse below, instead of checking for each column. But for now, this works.
-
-                if column == "on_purchase":
-                    # We need to inject our special bit here as well, so the client can know when to unlock the outf.
-                    if target_id in locations.ev_location_bank:
-                        associated_location = locations.ev_location_bank[target_id]
-                        new_id = associated_location["address"]
-                        if (new_id is not None):
-                            output_file_string += f'"b{new_id}"\t'
-                        else:
-                            #logger.info(f"Warning: availability location {target_id} for outf {temp_coutf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
-                            output_file_string += default_val
-                    else:
-                        #logger.info(f"Outf blocked (must have been ignored): {target_id} for outf {temp_coutf['name']}")
-                        #output_file_string += f'"b{MISSION_BLOCKING_BIT}"' # Don't set that! will make bad misns available!
-                        output_file_string += f'""' # honestly, could just drop the else block
-                elif (column == "buy_random"):
-                    if target_id in locations.ev_location_bank and locations.ev_location_bank[target_id]["name"] in our_multiworld_locations:
+                # NOTE: These ids are already offset! Because we're pulling from the bank, not the raw data like the others before
+                # NOTE 2: The one downside is our IDs will no longer match the game data IDs.
+                #   We'll just use the next game ID, which only matters to the client.
+                #   We no longer have to hide unused items - we simply won't create them in the client data.
+                match column:
+                    case "id":
+                        output_file_string += f'{latest_outf_id}\t'
+                    case "on_purchase":
+                        output_file_string += f'"b{loc_data.get('address', '')}"\t"'
+                    case "lower_case_name" | "lower_case_plural_name": # | "name":
+                        output_file_string += f'{reference_custom_data.get('name', '')}\t'
+                    # This was nice, but too long to display in client. So, splitting up...
+                    case "name":
+                        output_file_string += f'{loc_name}\t'
+                    case "short_name":
+                        # can we get the name of target player
+                        world_item = multiworld_dict.get(loc_name)
+                        # Did not get the part I wanted
+                        #output_file_string += f'{loc_name}\\\\n- {world_item.item.name.rpartition("(")[2].partition(")")[0]} -\t'
+                        # But, we're changing this part to the ID anyways
+                        output_file_string += f'{loc_name.replace(' - ', '\\\\n')}\t'
+                    case "cost":
+                        output_file_string += f'{reference_custom_data.get('cost', 0)}\t'
+                    case "display_weight":
+                        output_file_string += f'{reference_custom_data.get('display_weight')}\t'
+                    case _:
                         output_file_string += default_val
-                    else:
-                        output_file_string += f'0\t' # don't show the item
-                elif (column == "short_name"):
-                    if target_id in locations.ev_location_bank and locations.ev_location_bank[target_id]["name"] in our_multiworld_locations:
-                        mwloc = self.multiworld.get_location(locations.ev_location_bank[target_id]["name"], self.player) # should be the populated items for my seed now (post shuffle and fill)
-                        output_file_string += f'"{temp_coutf["name"]}\\\\n- {mwloc.player} -"\t'
-                    else:
-                        output_file_string += default_val
-                else:
-                    output_file_string += default_val
+
             output_file_string += "\r\n"
+                
 
         # Descriptions
         # column titles
@@ -447,29 +471,41 @@ class EVNWorld(World):
             output_file_string += f'"{desc.desc_columns[column]}"\t'
         output_file_string += "\r\n"
 
-        # finally, custom desc data
-        for cdesc in cust_desc_table.keys():
-            temp_desc = cust_desc_table[cdesc]
+        # We need to get the starting ID of the custom outfits again
+        last_real_outf_id = max(outfits.outf_table.keys(), default=0)
+        starting_desc_id = last_real_outf_id + offsets_table.get('desc_alt', 0)
+        # Let's get our template custom outfit for populating game data
+        # We don't care about the id, just grab the first entry.
+        template_desc = next(iter(cust_desc_table.values()), None) 
+        # TODO: Handle "None" case.
+
+        #while starting_desc_id <= latest_outf_id + offsets_table.get('desc_alt', 0):
+        for loc_id, loc_data in custom_locations_dict.items():
+            loc_name = loc_data.get('name', '')
+            if loc_name not in multiworld_dict:
+                continue
+
+            starting_desc_id += 1 # offset now so we don't reuse an id
+            
             for column in desc.desc_columns.keys():
-                current_val = temp_desc[column]
+                current_val = template_desc.get(column, "")
                 default_val = current_val + "\t"
                 col_anno = desc.DescDict.__annotations__[column]
                 if col_anno == str:
                     default_val = f'"{current_val}"\t'
 
-                target_id = cdesc - offsets_table["desc_alt"] + offsets_table["outf_cks"] # get custom outf id
-                if column == "text":
-                    #logger.info(f'trying to find desc for {target_id}, and I am player {self.player}')
-                    # We need to inject our special bit here as well, so the client can know when to unlock the outf.
-                    if target_id in locations.ev_location_bank and locations.ev_location_bank[target_id]["name"] in our_multiworld_locations:
-                        mwloc = self.multiworld.get_location(locations.ev_location_bank[target_id]["name"], self.player) # should be the populated items for my seed now (post shuffle and fill)
-                        output_file_string += f'"{temp_desc["name"]} will unlock {mwloc.item.name}"\t' # I don't know how to get the player name yet. mwloc.player is just my player id, becuase it it is my check.
-                    else:
-                        #logger.info(f"Outf blocked (must have been ignored): {target_id} for outf {temp_desc['name']}")
+                match column:
+                    case "id":
+                        output_file_string += f'{starting_desc_id}\t'
+                    case "name":
+                        output_file_string += f'{loc_name}\t'
+                    case "text":
+                        world_item = multiworld_dict.get(loc_data.get('name'))
+                        output_file_string += f'{loc_data.get('name', '')} will unlock {world_item.item.name}\t'
+                    case _:
                         output_file_string += default_val
-                else:
-                    output_file_string += default_val
             output_file_string += "\r\n"
+
 
         # Chars
 

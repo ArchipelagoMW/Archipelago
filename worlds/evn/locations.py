@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING, Dict, Optional, TypedDict, Set
 # due to bad reference (it won't have the virtual environment)
 # NOTE: Include only when testing!
 # from venv import logger
+import logging
+logger = logging.getLogger("EV Nova")
 
 from BaseClasses import Location
 
@@ -14,7 +16,7 @@ from .rezdata import misns
 from .apdata.customoutf import cust_outf_table
 from .logics import possible_regions, misns_to_ignore
 
-from .apdata.offsets import offsets_table as loc_type_offset
+from .apdata.offsets import offsets_table as loc_type_offset, STARTING_ID, MAX_OUTFITS, HIGHEST_OUTFIT_ID, custom_outfits_ratio
 
 # import random
 
@@ -28,6 +30,11 @@ GAME_NAME = "EV Nova"
 # Even if a location isn't used based on specific options settings, it must be present in this lookup.
 # "Locations" == "checks". (Namely missions, with additional from custom outfits)
 # We may be able to expand that later, depending on game engine bit setting logic.
+
+# NOTE: A word of caution - the custom locations is... messy.
+#   In an attempt to make them dynamically created, some awkward this have been done
+#   that I generally wouldn't recommend following as a design style.
+#   We lose IDs and have to regularly re-lookup our own locations because of this.
 
 class EVNLocationData(TypedDict, total=False): 
     name: str
@@ -54,7 +61,7 @@ def get_locations() -> Dict[int, EVNLocationData]:
     for mission in misns.misn_table.keys():
         temp_mission = misns.misn_table[mission]
         #logger.info(f"loc type offset {loc_type_offset['misn']}")
-        loc_id = loc_type_offset["misn"] + (int)(temp_mission["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
+        loc_id = loc_type_offset.get("misn", 0) + (int)(temp_mission["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
         #logger.info(f"creating location for mission {temp_mission['name']} with id {loc_id}. final name: {temp_mission['name'].strip() + '-' + temp_mission['id']}")
         ret_data[loc_id] = EVNLocationData(
             # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
@@ -62,17 +69,36 @@ def get_locations() -> Dict[int, EVNLocationData]:
             address=loc_id,
         )
 
-    # Custom outf checks
-    # NOTE: Add info for all our possible custom outfits / checks in customoutf.py
-    # We'll filter to the ones we actually want to use later when creating our multiworld locations. 
-    for coutf in cust_outf_table.keys():
-        temp_outf = cust_outf_table[coutf]
-        loc_id = loc_type_offset["outf_cks"] + (int)(temp_outf["id"])
-        #logger.info(f'adding location (custom outf): {loc_id}, {temp_outf["name"]}')
-        ret_data[loc_id] = EVNLocationData(
-            name=temp_outf["name"].strip() + "-" + temp_outf["id"],
-            address=loc_id
-        )
+    # # Custom outf checks
+
+    # Dynamically fill up on shop checks (custom outfits)
+    # NOTE: The client starts IDs at STARTING_ID and, for this resource, has MAX_OUTFITS of IDs.
+    #   HIGHEST_OUTFIT_ID is the highest ID currently consumed by game data.
+    start_id = HIGHEST_OUTFIT_ID
+    total_entries = STARTING_ID + MAX_OUTFITS - start_id
+    
+    # Calculate how many entries each ShopCheck should get based on chance
+    allocations = []
+    total_allocated = 0
+    for check in custom_outfits_ratio.values():
+        count = int(check["chance"] * total_entries)
+        allocations.append((check, count))
+        total_allocated += count
+    
+    # Handle rounding remainder by adding to the first item
+    remainder = total_entries - total_allocated
+    if remainder > 0 and allocations:
+        allocations[0] = (allocations[0][0], allocations[0][1] + remainder)
+    
+    # Create location entries
+    current_id = start_id + loc_type_offset.get("outf_cks", 0)  # Start after the last outf ID
+    for check, count in allocations:
+        for _ in range(count):
+            ret_data[current_id] = EVNLocationData(
+                name=check["name"].strip() + " - (" + str(current_id) + ")",
+                address=current_id
+            )
+            current_id += 1
 
     return ret_data
     
@@ -118,13 +144,17 @@ def get_location_name_groups() -> Dict[str, Set[str]]:
             region_locations.add(loc_id_to_name[loc_id])
         ret_dict[region_data["name"]] = region_locations
 
-    # Add out custom outf (shop checks)
-    for coutf in cust_outf_table.keys():
-        temp_outf = cust_outf_table[coutf]
-        loc_id = loc_type_offset["outf_cks"] + (int)(temp_outf["id"])
-        outf_locations.add(loc_id_to_name[loc_id])
+    # TODO: 1. No longer using this file
+    #   2. If we still want to include cust_outf name groups, then we should separate based on value
+    #   ex: "Custom Outf - 5k", "Custom Outf - 750k"
+    #   So users can exclude price points they don't want.
+    # # Add out custom outf (shop checks)
+    # for coutf in cust_outf_table.keys():
+    #     temp_outf = cust_outf_table[coutf]
+    #     loc_id = loc_type_offset["outf_cks"] + (int)(temp_outf["id"])
+    #     outf_locations.add(loc_id_to_name[loc_id])
 
-    ret_dict["Custom Outf (Shop Checks)"] = outf_locations
+    # ret_dict["Custom Outf (Shop Checks)"] = outf_locations
 
     return ret_dict
 
@@ -142,11 +172,16 @@ def get_location_names_with_ids(world: EVNWorld, location_names: list[str]) -> D
     return ret_dict
 
 def create_all_locations(world: EVNWorld) -> None:
-    create_universe_locations(world)
-    create_regular_locations(world)
+    total_locations = 0
+    total_locations += create_universe_locations(world)
+    #logger.info(f"Total universe locations created: {total_locations}")
+    total_locations += create_regular_locations(world)
+    #logger.info(f"Total regular locations created: {total_locations}")
+    total_locations += create_custom_locations(world, total_locations)
+    #logger.info(f"Total locations created: {total_locations}")
   
   
-def create_universe_locations(world: EVNWorld) -> None:
+def create_universe_locations(world: EVNWorld) -> int:
     """
     Populates the default universe region with all locations not used by a story string.
     This may not technically need to be separate from create_regular_locations, but it is for now.
@@ -156,32 +191,11 @@ def create_universe_locations(world: EVNWorld) -> None:
     """
     # Get our default region, "Universe", as defined in world (Other games may use a different name)
     universe = world.get_region("Universe")
-    misn_offset = loc_type_offset["misn"]
-    coutf_offset = loc_type_offset["outf_cks"]
+    misn_offset = loc_type_offset.get("misn", 0)
+    coutf_offset = loc_type_offset.get("outf_cks", 0)
+    total_locations = 0
 
     chosen_route = world.get_chosen_string()
-
-    # This could go after the below loop, but for reader's clarity, I'm putting it here.
-    # Check how many additional locations we need to create for the story route
-    # and randomly pick them to be added.
-    # NOTE: Only added if shuffling outf. Otherwise, don't need for just ships.
-    pick_list = chosen_route["cust_outfs"].copy()
-    EVNWorld.random.shuffle(pick_list)
-    x = 0
-    y = chosen_route["use_cust_outfs_count"]
-    while world.options.include_outfits and x < y and len(pick_list) > 0:
-        #logger.info(f"copied chosen route cust out list: {len(pick_list)}; {pick_list}")
-        coutf = pick_list.pop()
-        # The offset is important, otherwise we'd pick the id of a different item
-        loc = ev_location_bank[coutf + loc_type_offset["outf_cks"]]
-        universe.add_locations(
-            get_location_names_with_ids(world, [loc["name"]])
-            , EVNLocation
-        )
-        x += 1
-    # Testing
-    # if x > 0 and x < y:
-    #     logger.warning(f"Ran out of custom items in story route pool before reaching desired count!")
 
     # Check if location used by any story regions
     for key, loc in ev_location_bank.items():
@@ -222,17 +236,21 @@ def create_universe_locations(world: EVNWorld) -> None:
             get_location_names_with_ids(world, [loc["name"]])
             , EVNLocation
         )
+        total_locations += 1
         #logger.info(f"added to universe: {key} - {offset_key} - {loc['name']}")
 
+    return total_locations
 
-def create_regular_locations(world: EVNWorld) -> None:
+
+def create_regular_locations(world: EVNWorld) -> int:
     """
     Populate regions other than the default universe with their defined locations
     based on logics.py
     """
     # Finally, we need to put the Locations ("checks") into their regions.
+    total_locations = 0
 
-    misn_offset = loc_type_offset["misn"]
+    misn_offset = loc_type_offset.get("misn", 0)
 
     chosen_route = world.get_chosen_string()
     for key in chosen_route["regions"]:
@@ -245,3 +263,64 @@ def create_regular_locations(world: EVNWorld) -> None:
                 get_location_names_with_ids(world, [loc["name"]])
                 , EVNLocation
             )
+            total_locations += 1
+    return total_locations
+
+def create_custom_locations(world: EVNWorld, current_location_count: int) -> int:
+    """
+    Populate shop checks
+    """
+    # Finally, we need to put the Locations ("checks") into their regions.
+    total_locations = 0
+
+    coutf_offset = loc_type_offset.get("outf_cks", 0)
+    chosen_route = world.get_chosen_string()
+    universe = world.get_region("Universe")
+
+    # 1. We need to determine how many locations we still need
+    #   This can be affected by multiple things:
+    #   a. We *could* try to get how many items will be in the pool, but that's weird
+    #       cross contamination... For now, we'll stick with chosen_string's "use_cust_outfs_count"
+    #   b. Any excluded locations OR location name groups...
+    #       If we overshoot, it's fine, the filler items can pick up the slack later. We just can't undershoot.
+    chosen_routes_outf_count = chosen_route.get("use_cust_outfs_count", 0)
+
+    exclusions = world.options.exclude_locations
+    total_excluded = 0
+
+    # TODO: Test that this is behaving as expected
+    for ex_loc in exclusions.value:
+        # Is it a name group
+        if ex_loc in location_name_groups:
+            for _ in location_name_groups.get(ex_loc):
+                total_excluded += 1
+        # or just a regular location
+        else:
+            total_excluded += 1
+
+    total_needed = chosen_routes_outf_count + total_excluded
+    # NOTE: Why aren't we using total_locations?
+    #   Well, if we were calculating the actual total items, then it would be
+    #   total_needed = total_excluded + (total_items - total_locations)
+  
+
+    # 2. Get the custom locations from the index and copy into a list we can manipulate
+    #   We know where these start due to the offset.
+    custom_locations_dict = {key: value for key, value in ev_location_bank.items() if key > coutf_offset}
+    custom_locations_list = list(custom_locations_dict.keys())
+
+    # 3. Randomize the list (using world's seeded random) and pull the amount we need.
+    world.random.shuffle(custom_locations_list)
+
+    while world.options.include_outfits and total_locations < total_needed and len(custom_locations_list) > 0:
+        #logger.info(f"copied chosen route cust out list: {len(pick_list)}; {pick_list}")
+        coutf = custom_locations_list.pop()
+        # The offset is important, otherwise we'd pick the id of a different item
+        loc = ev_location_bank[coutf] # + loc_type_offset["outf_cks"]]
+        universe.add_locations(
+            get_location_names_with_ids(world, [loc["name"]])
+            , EVNLocation
+        )
+        total_locations += 1
+
+    return total_locations
