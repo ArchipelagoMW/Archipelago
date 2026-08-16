@@ -268,13 +268,82 @@ class WaterStageSpeed(Choice):
     default = 0
 
 
+class WeaponDamage(Choice):
+    """Randomize how much damage YOUR weapons do.
+
+    Every one of X's and Zero's attacks is rolled separately and then stays
+    that way for the whole seed - so a run is partly about finding out which
+    of your weapons turned out to be the good one.
+
+    off: unchanged
+    weak: 50-90% of normal
+    regular: 80-130% of normal
+    strong: 120-200% of normal
+    chaotic: 25-250% of normal
+
+    Each weapon rolls on its own, but a weapon rolls ONCE: its charged shot
+    scales by the same amount as its uncharged one, so a charged shot can
+    never come out weaker than the plain shot. The same goes for X's buster
+    across all its charge levels.
+
+    Nothing can roll to zero: the game already refuses to deal less than 1
+    damage. Attacks that deal no damage in the first place, and the handful
+    that are instant kills, are left exactly as they are.
+
+    Worth knowing if you also turn on Boss HP Randomization - the two stack,
+    and `weak` weapons against `strong` bosses is a long afternoon.
+
+    Changes the disc.
+    """
+    display_name = "Weapon Damage"
+    option_off = 0
+    option_weak = 1
+    option_regular = 2
+    option_strong = 3
+    option_chaotic = 4
+    default = 0
+
+
+class BossDamage(Choice):
+    """Randomize how much damage the eight Mavericks do to YOU.
+
+    The mirror of Weapon Damage. Each of the eight rolls once and keeps the
+    shape of its own move set, so a boss's light pokes stay light next to its
+    big attack - the whole fight gets more or less dangerous together.
+
+    off: unchanged
+    weak: 50-90% of normal
+    regular: 80-130% of normal
+    strong: 120-200% of normal
+    chaotic: 25-250% of normal
+
+    This covers the Mavericks' own attacks. Attacks they share with ordinary
+    enemies are left alone, and so are the handful of instant kills - a crush
+    or a pit is still a crush or a pit.
+
+    Nothing rolls to zero. Note this is separate from Boss HP Randomization:
+    that one changes how long a boss lasts, this one changes how badly it
+    hurts. Turning on `strong` for both is a considerably harder game.
+
+    Changes the disc.
+    """
+    display_name = "Boss Damage"
+    option_off = 0
+    option_weak = 1
+    option_regular = 2
+    option_strong = 3
+    option_chaotic = 4
+    default = 0
+
+
 class RandomizeOptions(Toggle):
     """Let the seed pick your gameplay options for you.
 
     Rolls `goal`, `boss_difficulty`, `launch_odds`, `text_skip`,
-    `pickupsanity`, `boss_hp_randomization`, `secret_armors_in_pool`,
-    `stage_unlocks` and `dna_parts_in_pool`. Whatever you wrote for those in
-    your YAML is ignored. `endgame_checks` is left alone — it only ever adds
+    `pickupsanity`, `boss_hp_randomization`, `weapon_damage`,
+    `boss_damage`, `secret_armors_in_pool`, `stage_unlocks` and
+    `dna_parts_in_pool`.
+    Whatever you wrote for those in your YAML is ignored. `endgame_checks` is left alone — it only ever adds
     checks, so there is nothing to gamble on.
 
     Two combinations are corrected after the roll, because they are traps
@@ -416,8 +485,9 @@ class ReploidChecks(Toggle):
 # reason. Kept next to the option so the two cannot drift apart.
 RANDOMIZED_OPTIONS = (
     "goal", "boss_difficulty", "launch_odds", "text_skip", "pickupsanity",
-    "boss_hp_randomization", "secret_armors_in_pool", "stage_unlocks",
-    "dna_parts_in_pool",
+    "boss_hp_randomization", "weapon_damage", "boss_damage",
+    "secret_armors_in_pool",
+    "stage_unlocks", "dna_parts_in_pool",
 )
 
 
@@ -433,6 +503,8 @@ class MMX5Options(PerGameCommonOptions):
     text_skip: TextSkip
     pickupsanity: PickupSanity
     boss_hp_randomization: BossHPRandomization
+    weapon_damage: WeaponDamage
+    boss_damage: BossDamage
     secret_armors_in_pool: SecretArmorsInPool
     stage_unlocks: StageUnlocks
     endgame_checks: EndgameChecks

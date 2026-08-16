@@ -83,11 +83,20 @@ class TestRandomizeOn(unittest.TestCase):
             self.assertGreater(len(values), 1, f"{name} never varied across {self.N} seeds")
 
     def test_reaches_every_value_of_each_choice(self) -> None:
-        for name in ("goal", "boss_difficulty", "boss_hp_randomization"):
+        # DERIVED from RANDOMIZED_OPTIONS, not a hand list: this used to name
+        # three options and silently stopped covering the ones added after it
+        # (weapon_damage, boss_damage). Any future Choice is covered for free.
+        checked = 0
+        for name in RANDOMIZED_OPTIONS:
             option = getattr(self._opts(self.worlds[0]), name)
-            expected = set(type(option).options.values())
+            values = getattr(type(option), "options", None)
+            if not values or len(values) < 3:
+                continue                      # Toggle: covered by test_actually_varies
+            expected = set(values.values())
             got = {getattr(self._opts(t), name).value for t in self.worlds}
             self.assertEqual(got, expected, f"{name} never reached some values")
+            checked += 1
+        self.assertGreaterEqual(checked, 5, "the Choice sweep covered almost nothing")
 
     def test_rolls_from_the_world_rng_not_the_global_one(self) -> None:
         # The property that matters is reproducibility: a seed must replay.
