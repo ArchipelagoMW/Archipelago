@@ -866,9 +866,21 @@
             ],
             [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
         ] } ], // AND hacking
-        "medium_requires": [
-            { "item": "Cloud Leap" } // using T-dash for the first big jump off the crates
-        ]
+        "medium_requires": [ { "anyOf": [
+            { "item": "Cloud Leap" }, // using T-dash for the first big jump off the crates
+            [
+                { "anyOf": [
+                    [
+                        { "item": "Trick - Bow Hover"}, // to reach the climbable wall after the first piston
+                        { "item": "Trick - Long Jump With Swift Runner" } // to pass the 4 pistons as well as reach the last climbable wall
+                    ],
+                    { "item": "Charged Strike" } // CS Dash can replace what Bow Hover and SR do here
+                ] },
+                { "item": "Wall Climb" }, // not skippable here because we are not requiring CL
+                { "item": "Ledge Grab" } // and lastly this is needed for the very last jump
+                // the left crate track is mainly solved by WC + T-Dash here but both permutations also present another possible solve
+            ]
+        ] } ]
         // the key constraints here are:
         // - the final jump past the last horizontal red piston requires CL OR LG
         // - the jump up to the horizontal piston's ledge *can* be done with a precise and inconsistent CL,
