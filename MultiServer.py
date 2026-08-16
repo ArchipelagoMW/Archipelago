@@ -2147,9 +2147,36 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            games = set(args.get("games", []))
-            tags = set(args.get("tags", []))
-            slots = set(args.get("slots", []))
+            games = args.get("games", [])
+            if not isinstance(games, (list, set)) or not all(isinstance(entry, str) for entry in games):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Games list provided did not have the correct format.",
+                    "original_cmd": cmd}])
+                return
+
+            games = set(games)
+
+            tags = args.get("tags", [])
+            if not isinstance(tags, (list, set)) or not all(isinstance(entry, str) for entry in tags):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Tags list provided did not have the correct format.",
+                    "original_cmd": cmd}])
+                return
+
+            tags = set(tags)
+
+            slots = args.get("slots", [])
+            if not isinstance(slots, (list, set)) or not all(isinstance(entry, int) for entry in slots):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Slots list provided did not have the correct format.",
+                    "original_cmd": cmd}])
+                return
+
+            slots = set(slots)
+
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
@@ -2541,7 +2568,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
         if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
             self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
         elif option_name in {"hint_cost", "location_check_points"}:
-            self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
+            # Update hint point amounts per slot
+            for team, players in self.ctx.clients.items():
+                for slot, clients in players.items():
+                    self.ctx.broadcast(clients, [{
+                        "cmd": "RoomUpdate",
+                        option_name: getattr(self.ctx, option_name),
+                        "hint_points": get_slot_points(self.ctx, team, slot),
+                    }])
         return True
 
     def _cmd_datastore(self):
