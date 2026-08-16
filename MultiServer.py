@@ -2148,7 +2148,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == "Bounce":
             games = args.get("games", [])
-            if games is None or not isinstance(games, (list, set)) or not all(isinstance(entry, str) for entry in games):
+            if not isinstance(games, (list, set)) or not all(isinstance(entry, str) for entry in games):
                 await ctx.send_msgs(client, [{
                     "cmd": "InvalidPacket", "type": "arguments",
                     "text": "Bounce: Games list provided did not have the correct format.",
@@ -2156,14 +2156,14 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 }])
 
             tags = args.get("tags", [])
-            if tags is None or not isinstance(tags, (list, set)) or not all(isinstance(entry, str) for entry in tags):
+            if not isinstance(tags, (list, set)) or not all(isinstance(entry, str) for entry in tags):
                 await ctx.send_msgs(client, [{
                     "cmd": "InvalidPacket", "type": "arguments",
                     "text": "Bounce: Tags list provided did not have the correct format.",
                     "original_cmd": cmd}])
 
             slots = args.get("slots", [])
-            if slots is None or not isinstance(slots, (list, set)) or not all(isinstance(entry, int) for entry in slots):
+            if not isinstance(slots, (list, set)) or not all(isinstance(entry, int) for entry in slots):
                 await ctx.send_msgs(client, [{
                     "cmd": "InvalidPacket", "type": "arguments",
                     "text": "Bounce: Slots list provided did not have the correct format.",
