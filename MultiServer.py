@@ -2541,7 +2541,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
         if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
             self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
         elif option_name in {"hint_cost", "location_check_points"}:
-            self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
+            # Update hint point amounts per slot
+            for team, players in self.ctx.clients.items():
+                for slot, clients in players.items():
+                    self.ctx.broadcast(clients, [{
+                        "cmd": "RoomUpdate",
+                        option_name: getattr(self.ctx, option_name),
+                        "hint_points": get_slot_points(self.ctx, team, slot),
+                    }])
         return True
 
     def _cmd_datastore(self):
