@@ -1092,9 +1092,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "Bounced":
         tags = args.get("tags", [])
-        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
-        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
-            ctx.on_deathlink(args["data"])
+        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been sent this
+        if "DeathLink" in tags:
+            data = args.get("data", {})
+            time = data.get("time")
+            if time is not None and ctx.last_death_link != time:
+                ctx.on_deathlink(args["data"])
 
     elif cmd == "Retrieved":
         ctx.stored_data.update(args["keys"])
