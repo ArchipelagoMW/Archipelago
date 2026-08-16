@@ -3,6 +3,7 @@
 Each test here corresponds to a failure a tester actually hit. They are
 written to FAIL against v0.1.0 and pass after the fixes.
 """
+import hashlib
 import json
 import unittest
 from types import SimpleNamespace
@@ -33,6 +34,11 @@ class FakeContext:
         self.item_names = SimpleNamespace(lookup_in_game=lambda code: "")
         self.sent_msgs = []
         self.writes = []
+        # Guard lists passed to guarded_write, one entry per guarded batch.
+        # A guard is what makes a read-modify-write safe against the emulator
+        # moving underneath it, so "did this batch guard on X" is a real
+        # assertion, not plumbing.
+        self.write_guards = []
 
     async def send_msgs(self, msgs) -> None:
         self.sent_msgs.extend(msgs)
@@ -73,21 +79,28 @@ def seed_edits_for(**overrides) -> list:
     their own, and both broke the moment a new option was added, because
     patch_rom reads options they had never heard of. Defaults live here so a
     new option needs updating in exactly one place."""
+    import random as _random
+
     from .. import Rom
     from ..options import (ExitStageAnytime, Goal, LaunchOdds, PickupSanity,
-                           TextSkip, WaterStageSpeed)
+                           TextSkip, WaterStageSpeed, WeaponDamage,
+                           BossDamage)
 
     opts = {"goal": Goal(Goal.option_sigma),
             "launch_odds": LaunchOdds(LaunchOdds.option_deterministic),
             "text_skip": TextSkip(0),
             "pickupsanity": PickupSanity(0),
             "exit_stage_anytime": ExitStageAnytime(0),
-            "water_stage_speed": WaterStageSpeed(0)}
+            "water_stage_speed": WaterStageSpeed(0),
+            "weapon_damage": WeaponDamage(0),
+            "boss_damage": BossDamage(0)}
     for key, value in overrides.items():
         cls = {"goal": Goal, "launch_odds": LaunchOdds, "text_skip": TextSkip,
                "pickupsanity": PickupSanity,
                "exit_stage_anytime": ExitStageAnytime,
-               "water_stage_speed": WaterStageSpeed}[key]
+               "water_stage_speed": WaterStageSpeed,
+               "weapon_damage": WeaponDamage,
+               "boss_damage": BossDamage}[key]
         opts[key] = cls(value)
 
     captured = {}
@@ -97,7 +110,12 @@ def seed_edits_for(**overrides) -> list:
         def write_file(name, data):
             captured[name] = data
 
-    Rom.patch_rom(SimpleNamespace(options=SimpleNamespace(**opts)), FakePatch())
+    # Seeded on purpose: a rolled option (weapon_damage) must produce the same
+    # disc for the same seed, and a test that re-rolls each call cannot check
+    # that.
+    world = SimpleNamespace(options=SimpleNamespace(**opts),
+                            random=_random.Random(12345))
+    Rom.patch_rom(world, FakePatch())
     return json.loads(captured["seed_edits.json"].decode("utf-8"))
 
 
@@ -135,6 +153,7 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                       stub_probe: bytes | None = None,
                       live_weapons: int = 0,
                       rush_hp: int = 0,
+                      rush_table: int | None = None,
                       rush_fp: bytes | None = None,
                       player_hp: int = 0x20,
                       player_x: int = 0,
@@ -213,8 +232,22 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
             # `rush_fp` defaults to zeros = no recognizable boss module,
             # `player_hp` to a healthy value so the alive-gate is neutral in
             # tests that are not about it.
+            # Object slot 0: attack-table pointer at +0x58 then HP at +0x5C.
+            # `rush_table=None` means "whatever boss the fingerprint names",
+            # i.e. a REAL fight - so tests written before the identity check
+            # keep exercising the guard they were written for. Pass an
+            # explicit value (0, or another boss's table) to model the slot
+            # holding something that is not this boss.
+            if rush_table is None:
+                fp_bytes = bytes(rush_fp) if rush_fp is not None \
+                    else bytes(mmx5_client.RUSH_FP_LEN)
+                named = mmx5_client.RUSH_FP_TO_STAGE.get(
+                    hashlib.sha256(fp_bytes).hexdigest())
+                slot_table = mmx5_client.RUSH_BOSS_ATTACK_TABLE.get(named, 0)
+            else:
+                slot_table = rush_table
             return [bytes(mode_block), save, ring, ring2,
-                    bytes([rush_hp]),
+                    slot_table.to_bytes(4, "little") + bytes([rush_hp]) + b"\x00\x00\x00",
                     rush_fp if rush_fp is not None
                     else bytes(mmx5_client.RUSH_FP_LEN),
                     bytes([player_hp]),
@@ -223,8 +256,10 @@ async def run_watcher(save: bytes, mode: int = 0x0A, stage_id: int = 0,
                      + player_y.to_bytes(2, "little", signed=True) + b"\x00\x00")]
         return [PROBE_REPLY.get(r[0], b"\x00\x00\x00\x00") for r in requests]
 
-    async def fake_write(_ctx, writes, *_args, **_kwargs):
+    async def fake_write(_ctx, writes, *args, **_kwargs):
         ctx.writes.extend(writes)
+        if args:                      # guarded_write's guard list
+            ctx.write_guards.append(args[0])
         return True
 
     if settled:

@@ -232,6 +232,137 @@ class TestRematchDetection(unittest.IsolatedAsyncioTestCase):
         return await run_watcher(self._save(), client=client, ctx=ctx,
                                  stage_id=c.SIGMA_STAGE_ID, **kw)
 
+    # ---- 2026-08-15 tester report: a rematch credited without a fight -------
+    # A player game-overed out of the Duff McWhalen rematch, came back to the
+    # Sigma stage, picked up an item near the drop-down, and was credited the
+    # McWhalen rematch. Root cause: 0x800920EC is object SLOT 0's HP field in
+    # a shared table, not a boss-only address, so an ordinary object cycling
+    # through the slot (absent -> HP >= threshold -> freed) reproduces the
+    # fill-then-kill shape exactly. Our own dumps contain the pattern:
+    # ramdump_pre_sigma slot 0 holds a non-boss object at HP 0x50 pointing at
+    # table 0x80076600, and ramdump_post_sigma holds one at HP 0x00.
+    #
+    # The fix cross-checks identity: slot 0's attack-table pointer (+0x58)
+    # must be the table belonging to the boss the FINGERPRINT names.
+
+    async def test_a_foreign_object_in_the_slot_never_credits(self) -> None:
+        # The exact reported shape, with the table pointer our own Sigma-stage
+        # dump actually holds.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.WHALE],
+                         rush_table=0x80076600)
+        await self._poll(client, ctx, rush_hp=0x50, rush_fp=FP[names.WHALE],
+                         rush_table=0x80076600)
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.WHALE],
+                         rush_table=0x800766A0)
+        self.assertEqual(self._send_count(ctx, names.WHALE), 0,
+                         "credited a rematch for an object that was not the boss")
+
+    async def test_an_empty_slot_never_credits(self) -> None:
+        # Corridor state: nothing in the slot at all (table pointer 0).
+        client, ctx = MMX5Client(), self._ctx()
+        for hp in (0, 58, 0):
+            await self._poll(client, ctx, rush_hp=hp, rush_fp=FP[names.KRAKEN],
+                             rush_table=0)
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 0)
+
+    async def test_another_bosss_table_never_credits(self) -> None:
+        # Module fingerprint says McWhalen, slot holds Squid Adler's object.
+        # Both signals must name the SAME boss.
+        client, ctx = MMX5Client(), self._ctx()
+        for hp in (0, 58, 0):
+            await self._poll(client, ctx, rush_hp=hp, rush_fp=FP[names.WHALE],
+                             rush_table=c.RUSH_BOSS_ATTACK_TABLE[names.KRAKEN])
+        self.assertEqual(self._send_count(ctx, names.WHALE), 0)
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 0)
+
+    async def test_identity_is_latched_so_teardown_cannot_lose_the_kill(self) -> None:
+        # The object may be torn down or re-pointed on death, so the identity
+        # is latched while the fight is live rather than tested at the zero.
+        # Without the latch a real kill would go uncredited.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN],
+                         rush_table=0)          # slot cleared on death
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 1)
+
+    async def test_identity_must_be_seen_at_fight_scale(self) -> None:
+        # A correct table pointer glimpsed at a LOW HP is not a fight - the
+        # latch requires the boss to be seen at >= RUSH_MIN_PEAK.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=1, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 0)
+
+    def test_the_slot_offsets_still_resolve_to_the_verified_address(self) -> None:
+        # 0x800920EC is the address years of notes and the cheat archive
+        # verified as "boss HP". The watcher now reaches it as slot base +
+        # 0x5C, so pin that the arithmetic still lands on the same byte - a
+        # wrong base or offset would read a neighbouring object silently.
+        self.assertEqual(c.RUSH_OBJ_ADDR + c.RUSH_OBJ_HP_OFF, c.RUSH_BOSS_HP_ADDR)
+        self.assertEqual(c.RUSH_BOSS_HP_ADDR, 0x0920EC)
+        # The read must cover both fields it uses.
+        self.assertGreaterEqual(c.RUSH_OBJ_TABLE_OFF + c.RUSH_OBJ_LEN,
+                                c.RUSH_OBJ_HP_OFF + 1)
+        self.assertEqual(c.RUSH_OBJ_TABLE_OFF, 0x58)
+
+    def test_every_boss_has_a_distinct_attack_table(self) -> None:
+        tables = c.RUSH_BOSS_ATTACK_TABLE
+        self.assertEqual(set(tables), set(names.STAGES),
+                         "a boss without a table can never be identified")
+        self.assertEqual(len(set(tables.values())), len(tables),
+                         "two bosses sharing a table cannot be told apart")
+        for stage, addr in tables.items():
+            self.assertTrue(0x80075C00 <= addr < 0x80076100,
+                            f"{stage}: {addr:#x} outside the boss table block")
+
+    async def test_a_glimpse_of_the_boss_at_low_hp_does_not_identify_it(self) -> None:
+        # The nasty mixed case: a FOREIGN object supplies the fill and the
+        # peak, and the real boss's table is only ever seen at a trivial HP.
+        # Without the fight-scale condition on the latch, the two halves
+        # combine into a credited kill that never happened.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN],
+                         rush_table=0)
+        await self._poll(client, ctx, rush_hp=0x50, rush_fp=FP[names.KRAKEN],
+                         rush_table=0x80076600)      # foreign: fill + peak
+        await self._poll(client, ctx, rush_hp=1, rush_fp=FP[names.KRAKEN],
+                         rush_table=c.RUSH_BOSS_ATTACK_TABLE[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN],
+                         rush_table=0)
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 0,
+                         "identity latched off a low-HP glimpse")
+
+    async def test_identity_does_not_carry_into_the_next_arming(self) -> None:
+        # Kill Squid legitimately, then walk into a DIFFERENT portal where an
+        # ordinary object cycles through the slot. A latch that survives the
+        # re-arm credits the second boss for free.
+        client, ctx = MMX5Client(), self._ctx()
+        for hp in (0, 58, 0):
+            await self._poll(client, ctx, rush_hp=hp, rush_fp=FP[names.KRAKEN])
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 1)
+        for hp, tbl in ((0, 0x80076600), (0x50, 0x80076600), (0, 0x800766A0)):
+            await self._poll(client, ctx, rush_hp=hp, rush_fp=FP[names.WHALE],
+                             rush_table=tbl)
+        self.assertEqual(self._send_count(ctx, names.WHALE), 0,
+                         "the previous fight's identity credited a new boss")
+
+    async def test_a_death_clears_the_identity_too(self) -> None:
+        # Dying mid-fight drops the arming. If the identity latch survives it,
+        # a foreign object cycling afterwards inherits the dead fight's proof.
+        client, ctx = MMX5Client(), self._ctx()
+        await self._poll(client, ctx, rush_hp=0, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN])
+        await self._poll(client, ctx, rush_hp=58, rush_fp=FP[names.KRAKEN],
+                         player_hp=0)                # player down
+        for hp, tbl in ((0, 0), (0x50, 0x80076600), (0, 0x80076600)):
+            await self._poll(client, ctx, rush_hp=hp, rush_fp=FP[names.KRAKEN],
+                             rush_table=tbl)
+        self.assertEqual(self._send_count(ctx, names.KRAKEN), 0,
+                         "identity survived the death that dropped the arming")
+
     async def test_fill_then_zero_sends_that_boss(self) -> None:
         # TIGHTENED 2026-08-09: this used to be two polls, a filled value then
         # zero. That is no longer a kill, deliberately - the first poll after a

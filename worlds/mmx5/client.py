@@ -82,12 +82,28 @@ OFF_PROCESSED = 0x0D1C4E - SAVE_BASE
 OFF_STAMP = 0x0D1C50 - SAVE_BASE
 OFF_INTRO = 0x0D1C79 - SAVE_BASE
 OFF_CHAR = 0x0D1C44 - SAVE_BASE         # 0 = X, 1 = Zero
-# Queued-refill counters the engine drains 1 HP/tick during gameplay
-# (FUN_80034140): X at 0x1C76, Zero at 0x1C77. value & 0x7F = pending amount,
-# bit 7 = active. Sub-tank and pickup heals go through these, so they are the
-# engine-native way to deliver received filler energy.
-OFF_REFILL = 0x0D1C76 - SAVE_BASE
+# SUB-TANK FILL BYTES - Sub-Tank 1 at 0x1C76, Sub-Tank 2 at 0x1C77.
+#
+# These were taken for per-character queued-refill counters (X / Zero) until
+# 2026-08-13, and they are nothing of the kind. The sub-tank PICKUP handler
+# 0x80054264 picks the byte from the pickup RECORD ID - `idx = id - 0x27`,
+# ownership bit `0x1000 << idx` into 0x1C7E, then `0x1C76 = 0x80` for id 0x27
+# and `0x1C77 = 0x80` for id 0x28. Two tanks, shared by both characters.
+#
+# The old reading also mistook the drain routine 0x80034140 for a passive
+# per-tick delivery. It has ZERO `jal` callers in the EXE - it is an object
+# handler that runs only while a tank is being CONSUMED, which is exactly why
+# a live instrument once watched the byte sit frozen through HP dips, deaths,
+# respawns and a stage load (ghidra-findings §9.17.5, recorded as unexplained).
+#
+# Layout: value & 0x7F = fill, bit 7 = tank present. The engine always stores
+# `fill | 0x80` (0x80053FA4 / 0x80053FB4) and caps fill at 0x20
+# (0x80053F6C, 0x80053F84) - NOT 0x7F.
+OFF_SUB_TANK_FILL = (0x0D1C76 - SAVE_BASE, 0x0D1C77 - SAVE_BASE)
+SUB_TANK_FILL_MAX = 0x20                # engine cap per tank
+SUB_TANK_FILL_PER_ENERGY = 2            # what a small capsule adds at full HP
 SMALL_ENERGY_HEAL = 4                   # matches the small HP capsule (kind 2)
+GAMEPLAY_MODE = 0x0A                    # 0x0C (results) is trusted but has no live player
 
 # ---- Boss HP randomization -------------------------------------------------
 # 0x800D1CA2 IS boss max HP - live-proven 2026-08-05: pinned to 40, the next
@@ -362,7 +378,40 @@ SIGMA_STAGE_ID = 0x0C                  # read live on entry; endgame ids are
 # The sub-stage byte 0x1C1D is deliberately NOT used: the same Squid rematch
 # read 0x05 and 0x06 in different sessions (route-dependent room counter).
 # Full derivation: mmx5-ram-notes.md §Boss fights (fork branch).
-RUSH_BOSS_HP_ADDR = 0x0920EC
+# THE BOSS-HP BYTE IS OBJECT SLOT 0, NOT A BOSS-ONLY ADDRESS (2026-08-15).
+# 0x80092090 is entry 0 of a shared object table (stride 0x1D4 - `DmgDef` names
+# 0x80092264 as another entry), and 0x800920EC is that entry's `+0x5C` HP
+# field. During a rematch the boss occupies the slot; the rest of the time
+# ANY object does. A tester was credited a Duff McWhalen rematch he never
+# fought, in the Sigma stage, after picking up an item - an ordinary object
+# cycled through the slot as empty -> HP >= threshold -> freed, which is
+# exactly the fill-then-kill shape the watcher looks for.
+#
+# The fix is an identity cross-check: read the slot's attack-table pointer at
+# `+0x58` and require it to be the table belonging to the boss the FINGERPRINT
+# names. Both signals must agree before a kill counts.
+RUSH_OBJ_ADDR = 0x092090            # object slot 0
+RUSH_OBJ_LEN = 0x08                 # covers +0x58 (table ptr) and +0x5C (HP)
+RUSH_OBJ_TABLE_OFF = 0x58
+RUSH_OBJ_HP_OFF = 0x5C
+RUSH_BOSS_HP_ADDR = 0x0920EC        # = RUSH_OBJ_ADDR + 0x5C, kept for tests
+# Each boss installs its own attack table into `obj+0x58` at init (the same
+# per-entity mechanism the player's 0x80074DA0 table uses). Derived from the
+# eight boss modules' own init code, and CONFIRMED on live rematch data:
+# ramdump_squid_rematch_f430014 has slot 0 pointing at 0x80075D40, which is
+# exactly what Squid Adler's module installs. Ordinary objects point
+# elsewhere - the two Sigma-stage dumps that produced the false-positive
+# shape read 0x80076600 and 0x800766A0, neither of which is a rematch boss.
+RUSH_BOSS_ATTACK_TABLE = {
+    names.GRIZZLY: 0x80075C00,
+    names.NECROBAT: 0x80075E80,
+    names.WHALE: 0x80075CA0,
+    names.DINOREX: 0x80075FC0,
+    names.KRAKEN: 0x80075D40,
+    names.FIREFLY: 0x80075DE0,
+    names.ROSERED: 0x80076060,
+    names.PEGASUS: 0x80075F20,
+}
 RUSH_FP_ADDR = 0x0FA300
 # 256 BYTES, NOT 16 - corrected 2026-08-09 after a tester received rematch
 # checks for bosses he never fought (Squid Adler and The Skiver).
@@ -765,6 +814,7 @@ class MMX5Client(BizHawkClient):
         self.rush_prev_hp = None
         self.rush_saw_low = False
         self.rush_saw_fill = False
+        self.rush_identity_ok = False
         self.rush_sent = False
         # Reploid watcher: (stage id, lives) from the last poll that was
         # trusted gameplay in a Reploid stage - None anywhere else, so a
@@ -790,6 +840,7 @@ class MMX5Client(BizHawkClient):
         self.last_training_state = None
         self.tank_fix_present = None    # None = not yet probed
         self.tank_workaround_warned = False
+        self.sub_tank_overcap_warned = False
         self.unpowered_launch_warned = False
         self.armor_workaround_warned = False
         self.armor_setflags_pin = None
@@ -1234,6 +1285,66 @@ class MMX5Client(BizHawkClient):
             return False
         return None
 
+    @staticmethod
+    def _sub_tank_overcap_writes(save: bytes):
+        """Writes that clamp any sub-tank this client itself overfilled.
+
+        Fill is `value & 0x7F` and the engine caps it at 0x20; the pre-2026-08-13
+        energy path clamped to 0x7F instead. The drain routine does NOT cap, so
+        a poisoned byte hands out up to 127 HP from a single tank.
+        """
+        return [(SAVE_BASE + off, [SUB_TANK_FILL_MAX | 0x80], "MainRAM")
+                for off in OFF_SUB_TANK_FILL
+                if (save[off] & 0x7F) > SUB_TANK_FILL_MAX]
+
+    @staticmethod
+    def _energy_plan(count: int, hp_raw: int, max_hp: int, tanks_owned: int,
+                     fills: "tuple[int, int]", can_heal: bool):
+        """Deliver `count` Life Energy items the way the engine itself does.
+
+        Mirrors the vanilla pickup helper 0x80053E3C, per item:
+
+          * HP below max  -> heal SMALL_ENERGY_HEAL, clamped to max HP;
+          * HP at max     -> spill SUB_TANK_FILL_PER_ENERGY into the FIRST
+            sub-tank that is both owned (0x1C7E bit `0x1000 << idx`) and
+            under the 0x20 cap - tank 1 before tank 2;
+          * neither       -> discarded, exactly as vanilla discards energy
+            picked up at full HP with no room in any tank.
+
+        Returns `(hp_write | None, [fill_write | None, fill_write | None])`,
+        where each fill write already carries bit 7 the way the engine
+        stores it. `None` means "leave that byte alone" so a no-op grant
+        never writes.
+
+        `can_heal` is False on the results screen: the save struct is trusted
+        there but the player object is not live, so HP must not be touched -
+        the energy goes to the tanks instead.
+        """
+        hp = hp_raw & 0x7F
+        damaged_flag = hp_raw & 0x80
+        # A live-HP read is only believable during gameplay AND within range.
+        # 0 is death (and the wiped player block reads 0), so it heals nothing.
+        healing = can_heal and 0 < hp <= max_hp
+        new_fills = list(fills)
+
+        for _ in range(count):
+            if healing and hp < max_hp:
+                hp = min(max_hp, hp + SMALL_ENERGY_HEAL)
+                continue
+            for idx in (0, 1):
+                if not tanks_owned & SUB_TANK_BYTE_BITS[idx]:
+                    continue
+                if new_fills[idx] >= SUB_TANK_FILL_MAX:
+                    continue
+                new_fills[idx] = min(SUB_TANK_FILL_MAX,
+                                     new_fills[idx] + SUB_TANK_FILL_PER_ENERGY)
+                break
+
+        hp_write = hp | damaged_flag if healing and hp != (hp_raw & 0x7F) else None
+        fill_writes = [new_fills[i] | 0x80 if new_fills[i] != fills[i] else None
+                       for i in (0, 1)]
+        return hp_write, fill_writes
+
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if ctx.server is None or ctx.slot is None:
             return
@@ -1243,13 +1354,14 @@ class MMX5Client(BizHawkClient):
             # engine's stage id at +0x0C (below SAVE_BASE, so it is not in the
             # save block). The tank protection needs to know which stage the
             # player is standing in.
-            mode, save, ring, ring2, rush_hp, rush_fp, player_hp, player_xy = \
+            mode, save, ring, ring2, rush_obj, rush_fp, player_hp, player_xy = \
                 await bizhawk.read(ctx.bizhawk_ctx, [
                     (0x0D1C00, 0x10, "MainRAM"),  # game-mode controller: 0x0A gameplay / 0x0C results
                     (SAVE_BASE, SAVE_LEN, "MainRAM"),
                     (RING_ADDR, RING_SLOTS * 4, "MainRAM"),  # pickup-stub check records
                     (RING2_ADDR, RING2_SLOTS * 8, "MainRAM"),  # pickupsanity records
-                    (RUSH_BOSS_HP_ADDR, 1, "MainRAM"),    # live boss HP (rush watcher)
+                    (RUSH_OBJ_ADDR + RUSH_OBJ_TABLE_OFF, RUSH_OBJ_LEN,
+                     "MainRAM"),                          # slot 0: table ptr + HP
                     (RUSH_FP_ADDR, RUSH_FP_LEN, "MainRAM"),  # boss-module fingerprint
                     (PLAYER_HP_ADDR, 1, "MainRAM"),       # player HP (rush kill gate)
                     (PLAYER_XY_ADDR, 8, "MainRAM"),       # player x/y (reploid watcher)
@@ -1806,6 +1918,7 @@ class MMX5Client(BizHawkClient):
                     self.rush_prev_hp = None
                     self.rush_saw_low = False
                     self.rush_saw_fill = False
+                    self.rush_identity_ok = False
                     self.rush_sent = False
                 if fp_boss is not None:
                     if (player_hp[0] & 0x7F) == 0:
@@ -1820,8 +1933,20 @@ class MMX5Client(BizHawkClient):
                         self.rush_prev_hp = None
                         self.rush_saw_low = False
                         self.rush_saw_fill = False
+                        self.rush_identity_ok = False
                     else:
-                        hp_now = rush_hp[0]
+                        hp_now = rush_obj[RUSH_OBJ_HP_OFF - RUSH_OBJ_TABLE_OFF]
+                        slot_table = int.from_bytes(
+                            bytes(rush_obj[:4]), "little")
+                        # IDENTITY, LATCHED. The slot must be holding the boss
+                        # the fingerprint names - an ordinary object's table
+                        # pointer is something else entirely. Latched while the
+                        # fight is live rather than tested at the zero, because
+                        # the object may be torn down or re-pointed on death
+                        # and we would then never credit a real kill.
+                        if (hp_now >= RUSH_MIN_PEAK
+                                and slot_table == RUSH_BOSS_ATTACK_TABLE.get(fp_boss)):
+                            self.rush_identity_ok = True
                         # "The bar was seen to fill" - two ways to establish
                         # it, because polls are far sparser than the ~1s ramp
                         # and one rule alone is either brittle or leaky:
@@ -1846,6 +1971,7 @@ class MMX5Client(BizHawkClient):
                         self.rush_prev_hp = hp_now
                         self.rush_peak = max(self.rush_peak, hp_now)
                         if (hp_now == 0 and self.rush_saw_fill
+                                and self.rush_identity_ok
                                 and self.rush_peak >= RUSH_MIN_PEAK
                                 and not self.rush_sent):
                             check(names.rematch_location(fp_boss), True)
@@ -2269,6 +2395,32 @@ class MMX5Client(BizHawkClient):
                             "that check is collected. Re-patch with the current apworld to "
                             "remove this entirely.")
                     return   # re-read next cycle with the bit actually clear
+
+                # Repair sub-tanks this client itself overfilled. Before
+                # 2026-08-13 filler energy was written into 0x1C76/0x1C77 as
+                # if they were refill queues, clamped to 0x7F - four times
+                # the engine's own 0x20 cap. The drain routine does NOT cap,
+                # so a poisoned save hands out up to 127 HP from one tank,
+                # which is the sub-tank overcap testers reported. Clamp back
+                # to a legal fill; untouched tanks are already <= 0x20 and
+                # never write.
+                overfilled = self._sub_tank_overcap_writes(save)
+                if overfilled:
+                    await bizhawk.write(ctx.bizhawk_ctx, overfilled)
+                    if not self.sub_tank_overcap_warned:
+                        self.sub_tank_overcap_warned = True
+                        logger.info(
+                            "MMX5: a sub-tank held more than the game's own maximum - an "
+                            "older client version put received Life Energy straight into "
+                            "it. Clamped back to full; energy now heals you directly.")
+                    # Deliberately NO early return, unlike the withhold paths
+                    # above. Nothing later in this cycle reads the fill bytes
+                    # except the energy spill, which self-corrects on the next
+                    # poll. Returning here would mean that if this write ever
+                    # failed to stick, EVERY poll would bail out at this line
+                    # and the client would silently stop sending checks - a
+                    # hard stall traded for a one-poll inconsistency.
+
                 # Source of truth for "how many received items are already
                 # applied to THIS save" lives IN the save (u16 at 0x1C4E):
                 # memcard-persisted, savestate-coherent, restart-proof.
@@ -2295,6 +2447,7 @@ class MMX5Client(BizHawkClient):
                         # weapons/tanks/armor handled cumulatively below
 
                     writes = []
+                    extra_guards = []   # values this batch was computed FROM
                     # Weapons: OR ALL received bits into the capability byte
                     # (idempotent). AP-patched disc: 0x1C4D (0x1C4C keeps
                     # recording kills - story chapters advance on its
@@ -2380,17 +2533,45 @@ class MMX5Client(BizHawkClient):
                         writes.append((SAVE_BASE + OFF_MAX_HP_X, [new_max_x, new_max_z], "MainRAM"))
 
                     if new_energy:
-                        # Filler energy heals via the engine's own queued-
-                        # refill counter for the CURRENT character (drained
-                        # 1 HP/tick during gameplay, sub-tank style; persists
-                        # in the save until drained, so a grant landing at
-                        # the hub is delivered at the next stage). value &
-                        # 0x7F = pending, bit 7 = active.
+                        # Deliver filler energy exactly as a vanilla capsule
+                        # does: heal, then spill into an owned sub-tank.
+                        #
+                        # THIS USED TO WRITE 0x1C76 + charIdx AS A REFILL
+                        # QUEUE, which healed nothing at any HP: it poured
+                        # the energy into Sub-Tank 1 (Sub-Tank 2 whenever
+                        # Zero was selected, since the byte is per TANK and
+                        # was being indexed per CHARACTER), past the engine's
+                        # 0x20 cap to 0x7F, and without regard for whether
+                        # the player owned that tank at all. It is the
+                        # explanation for BOTH the "energy does not store"
+                        # report and the sub-tank OVERCAP report (§4.1c).
+                        #
+                        # Ownership comes from `merged_tanks`, not the raw
+                        # save byte, so a Sub-Tank granted in THIS batch can
+                        # take the spill and a withheld one cannot.
                         char = 1 if save[OFF_CHAR] else 0
-                        pending = save[OFF_REFILL + char] & 0x7F
-                        amount = min(0x7F, pending + SMALL_ENERGY_HEAL * new_energy)
-                        writes.append((SAVE_BASE + OFF_REFILL + char,
-                                       [amount | 0x80], "MainRAM"))
+                        hp_write, fill_writes = self._energy_plan(
+                            new_energy,
+                            player_hp[0],
+                            save[OFF_MAX_HP_X + char],
+                            merged_tanks,
+                            (save[OFF_SUB_TANK_FILL[0]] & 0x7F,
+                             save[OFF_SUB_TANK_FILL[1]] & 0x7F),
+                            mode[0] == GAMEPLAY_MODE,
+                        )
+                        if hp_write is not None:
+                            writes.append((PLAYER_HP_ADDR, [hp_write], "MainRAM"))
+                            # The heal is `HP-as-read + 4`, and HP was read at
+                            # the top of this poll. Damage taken in between
+                            # would be partly undone by writing it back, so
+                            # guard on it: if the player was hit, the batch
+                            # retries against a fresh read instead.
+                            extra_guards.append(
+                                (PLAYER_HP_ADDR, bytes([player_hp[0]]), "MainRAM"))
+                        for idx, fill_write in enumerate(fill_writes):
+                            if fill_write is not None:
+                                writes.append((SAVE_BASE + OFF_SUB_TANK_FILL[idx],
+                                               [fill_write], "MainRAM"))
 
                     # (Stamping happens at first trusted sight of a fresh
                     # save, up with the unstamped-progress hold - NOT here.
@@ -2407,7 +2588,8 @@ class MMX5Client(BizHawkClient):
                     success = await bizhawk.guarded_write(
                         ctx.bizhawk_ctx, writes,
                         [(SAVE_BASE + OFF_PROCESSED,
-                          bytes([processed & 0xFF, (processed >> 8) & 0xFF]), "MainRAM")],
+                          bytes([processed & 0xFF, (processed >> 8) & 0xFF]), "MainRAM")]
+                        + extra_guards,
                     )
                     logger.debug(f"MMX5: grants {'applied' if success else 'guard-failed, retrying'}: "
                                 f"items {processed}->{total}, "
