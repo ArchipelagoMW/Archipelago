@@ -1232,8 +1232,9 @@
     { "from": "OW - Lower Right Exit", "to": "OW - Root Node & Middle Exits", "requires": [
         { "region": "OW - Activate Crates And Return" },
         { "anyOf": [ // to jump from the lower crate track to the upper one
-            { "item": "Wall Climb" },
-            [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ]
+            [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ],
+            [ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ],
+            [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
         ] }
     ] },
     { "from": "OW - Root Node & Middle Exits", "to": "OW - Lower Right Exit", "requires": [] }, // fall down
