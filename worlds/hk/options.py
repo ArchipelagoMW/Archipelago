@@ -1,13 +1,28 @@
-import typing
 import re
+import typing
 from dataclasses import make_dataclass
 
-from .ExtractedData import logic_options, starts, pool_options
-from .Rules import cost_terms
-from schema import And, Schema, Optional
+from schema import And, Optional, Schema
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions
-from .Charms import vanilla_costs, names as charm_names
+from Options import (
+    Choice,
+    DeathLink,
+    DefaultOnToggle,
+    NamedRange,
+    Option,
+    OptionDict,
+    OptionGroup,
+    OptionSet,
+    PerGameCommonOptions,
+    Range,
+    Toggle,
+    Visibility,
+)
+
+from .charms import charm_names, vanilla_costs
+from .constants import NearbySoul
+from .parse_data import options_logic_mappings, options_pool_mappings, trando_starts, trando_transitions
+from .rules import cost_terms
 
 if typing.TYPE_CHECKING:
     # avoid import during runtime
@@ -15,16 +30,18 @@ if typing.TYPE_CHECKING:
 else:
     Random = typing.Any
 
-locations = {"option_" + start: i for i, start in enumerate(starts)}
+locations = {"option_" + start: i for i, start in enumerate(trando_starts.keys())}
 # This way the dynamic start names are picked up by the MetaClass Choice belongs to
 StartLocation = type("StartLocation", (Choice,), {
     "__module__": __name__,
     "auto_display_name": False,
     "display_name": "Start Location",
     "__doc__": "Choose your start location. "
-               "This is currently only locked to King's Pass.",
+               "Some start locations require specific Options to be enabled in order to be valid.",
     **locations,
 })
+StartLocation.options["king's_pass"] = StartLocation.option_kings_pass
+# ugly override to add the old, bad-name an an alias
 del (locations)
 
 option_docstrings = {
@@ -67,8 +84,8 @@ option_docstrings = {
     "RandomizeGrimmkinFlames": "Randomize Grimmkin Flames into the item pool and open their locations for "
                                "randomization.",
     "RandomizeJournalEntries": "Randomize the Hunter's Journal as well as the findable journal entries into the item "
-                               "pool, and open their locations\n    for randomization. Does not include journal entries "
-                               "gained by killing enemies.",
+                               "pool, and open their locations\n    for randomization. Does not include journal "
+                               "entries  gained by killing enemies.",
     "RandomizeNail": "Removes the ability to swing the nail left, right and up, and shuffles these into the item pool.",
     "RandomizeGeoRocks": "Randomize Geo Rock rewards into the item pool and open their locations for randomization.",
     "RandomizeBossGeo": "Randomize boss Geo drops into the item pool and open those locations for randomization.",
@@ -87,6 +104,10 @@ option_docstrings = {
     "ShadeSkips": "Places shade skips into logic which utilize the player's shade for pogoing or damage boosting.",
     "InfectionSkips": "Places skips into logic which are only possible after the crossroads become infected.",
     "FireballSkips": "Places skips into logic which require the use of spells to reset fall speed while in mid-air.",
+    "Slopeballs": "Places skips into logic which require the use of Vengeful Spirit on a slope to pogo off the "
+                  "projectile and gain height.",
+    "ShriekPogos": "Places skips into logic which require the use of Abyssal Shriek and Monarch Wings to pogo off "
+                   "the projectile to reset your air actions and gain height.",
     "SpikeTunnels": "Places skips into logic which require the navigation of narrow tunnels filled with spikes.",
     "AcidSkips": "Places skips into logic which require crossing a pool of acid without Isma's Tear, or water if swim "
                  "is disabled.",
@@ -111,7 +132,7 @@ default_on = {
     "RandomizeRancidEggs",
     "RandomizeRelics",
     "RandomizeStags",
-    "RandomizeLifebloodCocoons"
+    "RandomizeLifebloodCocoons",
 }
 
 shop_to_option = {
@@ -126,17 +147,13 @@ shop_to_option = {
     "Egg_Shop": "EggShopSlots",
 }
 
-hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
+hollow_knight_randomize_options: dict[str, type(Option)] = {}
 
-splitter_pattern = re.compile(r'(?<!^)(?=[A-Z])')
-for option_name, option_data in pool_options.items():
-    extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
+splitter_pattern = re.compile(r"(?<!^)(?=[A-Z])")
+for option_name, option_data in options_pool_mappings.items():
+    extra_data = {"__module__": __name__}
     if option_name in option_docstrings:
-        if option_name == "RandomizeFocus":
-            # pool options for focus are just lying
-            count = 1
-        else:
-            count = len([loc for loc in option_data[1] if loc != "Start"])
+        count = len(option_data["randomized"]["locations"])
         extra_data["__doc__"] = option_docstrings[option_name] + \
             f"\n    This option adds approximately {count} location{'s' if count != 1 else ''}."
     if option_name in default_on:
@@ -147,12 +164,12 @@ for option_name, option_data in pool_options.items():
     globals()[option.__name__] = option
     hollow_knight_randomize_options[option.__name__] = option
 
-hollow_knight_logic_options: typing.Dict[str, type(Option)] = {}
-for option_name in logic_options.values():
+hollow_knight_logic_options: dict[str, type(Option)] = {}
+for option_name in options_logic_mappings.values():
     if option_name in hollow_knight_randomize_options:
         continue
     extra_data = {"__module__": __name__}
-    # some options, such as elevator pass, appear in logic_options despite explicitly being
+    # some options, such as elevator pass, appear in options_logic_mappings despite explicitly being
     # handled below as classes.
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
@@ -186,6 +203,127 @@ class SplitCrystalHeart(Toggle):
     """Splits the Crystal Heart into left- and right-only versions of the item."""
     display_name = "Split Crystal Heart"
     default = False
+
+
+def get_target_trans_data(trans_data) -> dict | None:
+    return trans_data["vanilla_target"] and trando_transitions[trans_data["vanilla_target"]]
+
+
+class EntranceRandoType(Choice):
+    """
+    Entrance randomizer type.
+
+    none: use vanilla transitions
+    maparea: only shuffle the entrances between map areas
+    fullarea: only shuffle the entrances between Titled areas
+    room: shuffle all rooms entrances together
+    doors: shuffle all transitions through doors together
+    """
+    # connected_map_area: shuffle entrances inside map areas but leave the connections between them vanilla
+    # connected_titled_area: shuffle entrances inside Titled areas but leave the connections between them vanilla
+    display_name = "Entrance Rando Type"
+    option_none = 0
+    option_maparea = 1
+    option_fullarea = 2
+    option_room = 3
+    # option_connected_map_area = 4
+    # option_connected_titled_area = 5
+    option_doors = 6
+    default = option_none
+    tag_lookup: typing.ClassVar[dict[int, str]] = {
+        option_none: "ITEMRANDO",
+        option_maparea: "MAPAREARANDO",
+        option_fullarea: "FULLAREARANDO",
+        option_room: "ROOMRANDO",
+        # option_connected_map_area: "ROOMRANDO",  # treated like room rando internally
+        # option_connected_titled_area: "ROOMRANDO",  # treated like room rando internally
+        option_doors: "ROOMRANDO",  # treated like room rando internally
+    }
+    soul_lookup: typing.ClassVar[dict[int, NearbySoul]] = {
+        option_none: NearbySoul.ITEMSOUL,
+        option_maparea: NearbySoul.MAPAREASOUL,
+        option_fullarea: NearbySoul.AREASOUL,
+        option_room: NearbySoul.ROOMSOUL,
+        # option_connected_map_area: NearbySoul.ROOMSOUL,
+        # option_connected_titled_area: NearbySoul.ROOMSOUL,
+        option_doors: NearbySoul.ROOMSOUL,
+    }
+
+    @property
+    def tag(self) -> str:
+        """Tag for upstream requirements based on the chosen option"""
+        return self.tag_lookup[self.value]
+
+    def test_transition(self, trans_data: dict[str, typing.Any]) -> bool:
+        """Test whether a particular transition should be shuffled based on the chosen option"""
+        if self.value == self.option_none:
+            return False
+        elif self.value == self.option_maparea:  # noqa: RET505
+            return trans_data["is_map_area_transition"]
+        elif self.value == self.option_fullarea:
+            return trans_data["is_titled_area_transition"]
+        elif self.value == self.option_room:
+            return True
+        # elif self.value == self.option_connected_map_area:
+        #     target_trans_data = get_target_trans_data(trans_data)
+        #     ret = trans_data["sides"][:6] != "OneWay" and (
+        #         target_trans_data and target_trans_data["map_area"] == trans_data["map_area"])
+        #     assert ret == (trans_data["sides"][:6] != "OneWay"
+        #                    and not trans_data["is_map_area_transition"]), trans_data
+        #     return ret
+        # elif self.value == self.option_connected_titled_area:
+        #     target_trans_data = get_target_trans_data(trans_data)
+        #     ret = trans_data["sides"][:6] != "OneWay" and (
+        #         target_trans_data and target_trans_data["titled_area"] == trans_data["titled_area"])
+        #     assert ret == (trans_data["sides"][:6] != "OneWay"
+        #                    and not trans_data["is_titled_area_transition"]), trans_data
+        #     return ret
+
+        elif self.value == self.option_doors:
+            target_trans_data = get_target_trans_data(trans_data)
+            return bool(
+                trans_data["direction"] == "Door"
+                or (target_trans_data and target_trans_data["direction"] == "Door")
+            )
+        else:
+            raise Exception(f"Internal Error: unknown test transition {self.value} {trans_data}")
+
+    def get_subgroup(self, trans_data: dict[str, typing.Any]) -> str:
+        """Return a subgroup key for when entrances are shuffled together outside of the global scope"""
+        # if self.value == self.option_connected_map_area:
+        #     return trans_data["map_area"]
+        # elif self.value == self.option_connected_titled_area:
+        #     return trans_data["titled_area"]
+
+        return "global"
+
+    @property
+    def soul_mode(self) -> NearbySoul:
+        return self.soul_lookup[self.value]
+
+
+class SkipTitledAreaInER(OptionSet):
+    """Hidden option: skips randomizing any entrance related to the chosen regions"""
+    visibility = Visibility.spoiler
+    valid_keys = frozenset({trans_data["titled_area"] for trans_data in trando_transitions.values()})
+
+    def test_transition(self, trans_data: dict[str, typing.Any]) -> bool:
+        target_trans_data = get_target_trans_data(trans_data)
+        return trans_data["titled_area"] not in self.value and not (
+            target_trans_data and target_trans_data["titled_area"] in self.value)
+
+
+class ShuffleEntrancesMode(Choice):
+    """How entrances should be shuffled when `Randomize Entrances` is enabled.
+
+    **Coupled:** Transitions are paired so returning through an entrance takes you back.
+
+    **Decoupled:** Any exit can lead to any entrance (not necessarily reversible).
+    """
+    display_name = "Shuffle Entrances Mode"
+    option_coupled = 0
+    option_decoupled = 1
+    default = option_coupled
 
 
 class MinimumGrubPrice(Range):
@@ -222,7 +360,7 @@ class MinimumEggPrice(Range):
     rich_text_doc = False
     display_name = "Minimum Egg Price"
     range_start = 1
-    range_end = 20
+    range_end = 21
     default = 1
 
 
@@ -278,29 +416,28 @@ class RandomCharmCosts(NamedRange):
     range_start = 0
     range_end = 240
     default = -1
-    vanilla_costs: typing.List[int] = vanilla_costs
+    vanilla_costs: list[int] = vanilla_costs
     charm_count: int = len(vanilla_costs)
-    special_range_names = {
+    special_range_names: typing.ClassVar[dict[str, int]] = {
         "vanilla": -1,
         "shuffle": -2
     }
 
-    def get_costs(self, random_source: Random) -> typing.List[int]:
-        charms: typing.List[int]
+    def get_costs(self, random_source: Random) -> list[int]:
+        charms: list[int]
         if -1 == self.value:
             return self.vanilla_costs.copy()
-        elif -2 == self.value:
+        if -2 == self.value:
             charms = self.vanilla_costs.copy()
             random_source.shuffle(charms)
             return charms
-        else:
-            charms = [0] * self.charm_count
-            for x in range(self.value):
+        charms = [0] * self.charm_count
+        for _ in range(self.value):
+            index = random_source.randint(0, self.charm_count - 1)
+            while charms[index] > 5:
                 index = random_source.randint(0, self.charm_count - 1)
-                while charms[index] > 5:
-                    index = random_source.randint(0, self.charm_count - 1)
-                charms[index] += 1
-            return charms
+            charms[index] += 1
+        return charms
 
 
 class CharmCost(Range):
@@ -313,7 +450,8 @@ class PlandoCharmCosts(OptionDict):
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
     schema = Schema({
-        Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.") for name in charm_names
+        Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.")
+        for name in charm_names
         })
 
     def __init__(self, value):
@@ -326,7 +464,7 @@ class PlandoCharmCosts(OptionDict):
                 if data.lower() == "vanilla" and key in self.valid_keys:
                     self.value[key] = vanilla_costs[charm_names.index(key)]
                     continue
-                elif data.lower() == "default":
+                if data.lower() == "default":
                     # default is too easily confused with vanilla but actually 0
                     # skip CharmCost resolution to fail schema afterwords
                     self.value[key] = data
@@ -337,7 +475,7 @@ class PlandoCharmCosts(OptionDict):
                 # will fail schema afterwords
                 self.value[key] = data
 
-    def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
+    def get_costs(self, charm_costs: list[int]) -> list[int]:
         for name, cost in self.value.items():
             charm_costs[charm_names.index(name)] = cost
         return charm_costs
@@ -450,7 +588,7 @@ class GrubHuntGoal(NamedRange):
     display_name = "Grub Hunt Goal"
     range_start = 1
     range_end = 46
-    special_range_names = {"all": -1, "forty_six": 46}
+    special_range_names: typing.ClassVar[dict[str, int]] = {"all": -1, "forty_six": 46}
     default = 46
 
 
@@ -465,6 +603,19 @@ class WhitePalace(Choice):
     option_nopathofpain = 2  # Exclude Path of Pain locations.
     option_include = 3  # Include all White Palace locations, including Path of Pain.
     default = 0
+
+    def location_exclusions(self) -> set[str]:
+        """Set of Locations that should not be randomized based on the chosen value"""
+        from . import HKWorld
+        exclusions = set()
+        if self <= WhitePalace.option_nopathofpain:
+            exclusions.update(HKWorld.location_name_groups["Path of Pain"])
+        if self <= WhitePalace.option_kingfragment:
+            exclusions.update(HKWorld.location_name_groups["White Palace"])
+            exclusions.remove("King_Fragment")
+        if self == WhitePalace.option_exclude:
+            exclusions.add("King_Fragment")
+        return exclusions
 
 
 class ExtraPlatforms(DefaultOnToggle):
@@ -520,6 +671,14 @@ class StartingGeo(Range):
     default = 0
 
 
+class LimitGeoPrices(DefaultOnToggle):
+    """
+    Adds Geo limits for Hollow Knight items placed on your locations.
+    For example, Lore will not cost more than 1 Geo. Will ignore costsanity minimums.
+    """
+    display_name = "Limit Geo Prices"
+
+
 class CostSanity(Choice):
     """If enabled, most locations with costs (like stag stations) will have randomly determined costs.
     If set to shopsonly, CostSanity will only apply to shops (including Grubfather, Seer and Egg Shop).
@@ -544,8 +703,8 @@ class CostSanityHybridChance(Range):
     display_name = "Costsanity Hybrid Chance"
 
 
-cost_sanity_weights: typing.Dict[str, type(Option)] = {}
-for term, cost in cost_terms.items():
+cost_sanity_weights: dict[str, type(Option)] = {}
+for cost in cost_terms.values():
     option_name = f"CostSanity{cost.option}Weight"
     display_name = f"Costsanity {cost.option} Weight"
     extra_data = {
@@ -556,7 +715,7 @@ for term, cost in cost_terms.items():
         ),
         "default": cost.weight
     }
-    if cost == 'GEO':
+    if cost.term == "GEO":
         extra_data["__doc__"] += " Geo costs will never be chosen for Grubfather, Seer, or Egg Shop."
 
     option = type(option_name, (Range,), extra_data)
@@ -564,7 +723,7 @@ for term, cost in cost_terms.items():
     globals()[option.__name__] = option
     cost_sanity_weights[option.__name__] = option
 
-hollow_knight_options: typing.Dict[str, type(Option)] = {
+hollow_knight_options: dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
     RandomizeElevatorPass.__name__: RandomizeElevatorPass,
     **hollow_knight_logic_options,
@@ -573,6 +732,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
         for option in (
             StartLocation, Goal, GrubHuntGoal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
             DeathLink, DeathLinkShade, DeathLinkBreaksFragileCharms,
+            EntranceRandoType, ShuffleEntrancesMode, SkipTitledAreaInER,
             MinimumGeoPrice, MaximumGeoPrice,
             MinimumGrubPrice, MaximumGrubPrice,
             MinimumEssencePrice, MaximumEssencePrice,
@@ -584,10 +744,60 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
             LegEaterShopSlots, GrubfatherRewardSlots,
             SeerRewardSlots, ExtraShopSlots,
             SplitCrystalHeart, SplitMothwingCloak, SplitMantisClaw,
-            CostSanity, CostSanityHybridChance
+            CostSanity, CostSanityHybridChance,
+            LimitGeoPrices,
         )
     },
     **cost_sanity_weights
 }
 
-HKOptions = make_dataclass("HKOptions", [(name, option) for name, option in hollow_knight_options.items()], bases=(PerGameCommonOptions,))
+# https://github.com/python/mypy/issues/6063 unfortunatly mypy hates this
+HKOptions = make_dataclass("HKOptions", list(hollow_knight_options.items()), bases=(PerGameCommonOptions,))
+HKOptionGroups: list[OptionGroup] = [
+    OptionGroup("Randomize Options", [
+            *hollow_knight_randomize_options.values(),
+            RandomizeElevatorPass
+        ], start_collapsed=False),
+    OptionGroup("Miscellaneous", [
+            SplitCrystalHeart,
+            SplitMothwingCloak,
+            SplitMantisClaw,
+            WhitePalace,
+            ExtraPlatforms,
+            AddUnshuffledLocations,
+            StartingGeo,
+            RandomCharmCosts,
+            PlandoCharmCosts,
+        ], start_collapsed=True),
+    OptionGroup("Logic Options", hollow_knight_logic_options.values(), start_collapsed=False),
+    OptionGroup("Goal", [Goal, GrubHuntGoal], start_collapsed=False),
+    OptionGroup("DeathLink", [DeathLink, DeathLinkShade, DeathLinkBreaksFragileCharms], start_collapsed=True),
+    OptionGroup("Entrance Rando", [
+            StartLocation,
+            EntranceRandoType,
+            ShuffleEntrancesMode,
+            SkipTitledAreaInER
+        ], start_collapsed=True),
+    OptionGroup("Shop Slots", [
+            EggShopSlots,
+            SlyShopSlots,
+            SlyKeyShopSlots,
+            IseldaShopSlots,
+            SalubraShopSlots,
+            SalubraCharmShopSlots,
+            LegEaterShopSlots,
+            GrubfatherRewardSlots,
+            SeerRewardSlots,
+            ExtraShopSlots
+        ], start_collapsed=True),
+    OptionGroup("CostSanity", [
+            LimitGeoPrices,
+            MinimumGeoPrice, MaximumGeoPrice,
+            MinimumGrubPrice, MaximumGrubPrice,
+            MinimumEssencePrice, MaximumEssencePrice,
+            MinimumCharmPrice, MaximumCharmPrice,
+            MinimumEggPrice, MaximumEggPrice,
+            CostSanity, CostSanityHybridChance,
+            *cost_sanity_weights.values()
+        ], start_collapsed=True),
+]
