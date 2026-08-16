@@ -30,7 +30,7 @@
                 }
 
                 const data = await response.json();
-                if (data.queue_len === 1){
+                if (data.queue_len === 1) {
                     waitSeedDiv.innerHTML = `
                         <h1>Generation in Progress</h1>
                         <p>${data.text}</p>
