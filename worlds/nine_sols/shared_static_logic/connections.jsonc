@@ -1214,9 +1214,18 @@
         "from": "OW - Lower Right Exit", "to": "OW - Activate Crates And Return",
         "requires": [
             { "item": "Wall Climb" }, // climbing up to the hack point hard requires this
-            { "item": "Mystic Nymph: Scout Mode" }, // and the crushers on the return trip need Nymph to disable
+            { "anyOf": [
+                { "item": "Mystic Nymph Scout Mode" }, // The crushers on the way back are intended to be disabled by Nymph
+                { "item": "Cloud Leap" } // but CL and AD together let you stall a cycle to make it back without Nymph
+            ] },
             // The lasers on the return trip hard require AD AND TCK, unless we expect players to figure out you can
             // ground dash through the lasers from tiny ledges. All other platforming gets absorbed by that requirement.
+            { "item": "Air Dash" },
+            { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Tai-Chi Kick" } ] }
+        ],
+        "medium_requires:": [
+            { "item": "Wall Climb" },
+            { "item": "Trick - Bow Hover" }, // hover through the crushers on the return trip
             { "item": "Air Dash" },
             { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Tai-Chi Kick" } ] }
         ],
@@ -1224,9 +1233,8 @@
             { "item": "Ledge Grab" },
             { "item": "Cloud Leap" }, // triple jump replaces wall climb
             // the rest is the same
-            { "item": "Mystic Nymph: Scout Mode" },
             { "item": "Air Dash" }
-            // except no LG or TCK since we already require LG for the triple jump
+            // except we skip the (LG or TCK) and (Nymph or CL) because the triple jump already required LG and CL
         ]
     },
     { "from": "OW - Lower Right Exit", "to": "OW - Root Node & Middle Exits", "requires": [
