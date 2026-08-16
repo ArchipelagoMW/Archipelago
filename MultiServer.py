@@ -2152,8 +2152,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 await ctx.send_msgs(client, [{
                     "cmd": "InvalidPacket", "type": "arguments",
                     "text": "Bounce: Games list provided did not have the correct format.",
-                    "original_cmd": cmd
-                }])
+                    "original_cmd": cmd}])
+                return
+
             games = set(games)
 
             tags = args.get("tags", [])
@@ -2162,6 +2163,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     "cmd": "InvalidPacket", "type": "arguments",
                     "text": "Bounce: Tags list provided did not have the correct format.",
                     "original_cmd": cmd}])
+                return
+
             tags = set(tags)
 
             slots = args.get("slots", [])
@@ -2170,6 +2173,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     "cmd": "InvalidPacket", "type": "arguments",
                     "text": "Bounce: Slots list provided did not have the correct format.",
                     "original_cmd": cmd}])
+                return
+
             slots = set(slots)
 
             args["cmd"] = "Bounced"
