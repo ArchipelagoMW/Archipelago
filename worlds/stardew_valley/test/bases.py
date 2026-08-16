@@ -10,16 +10,17 @@ from copy import deepcopy
 from typing import Iterable
 
 from BaseClasses import CollectionState, Entrance, Item, Location, MultiWorld, Region, get_seed
-from test.bases import WorldTestBase
 from test.general import gen_steps
 from test.general import setup_solo_multiworld as setup_base_solo_multiworld
+
+from test.bases import WorldTestBase
 from worlds.AutoWorld import call_all
 
 from .. import StardewItem, StardewRule, StardewValleyWorld
 from ..logic.time_logic import MONTH_COEFFICIENT
-from ..options import StardewValleyOption, options
+from ..options import options
 from .assertion import RuleAssertMixin
-from .options.utils import fill_namespace_with_default, parse_class_option_keys
+from .options.utils import SVTestOptions, fill_namespace_with_default, parse_class_option_keys
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,9 @@ def skip_long_tests() -> bool:
     return not bool(os.environ.get("long", False))
 
 
+skip_if_no_long_tests = unittest.skipIf(skip_long_tests(), "Long tests disabled")
+
+
 class SVTestCase(unittest.TestCase):
     skip_default_tests: bool = skip_default_tests()
     """Set False to not skip the base fill tests"""
@@ -42,13 +46,9 @@ class SVTestCase(unittest.TestCase):
     """Set False to run tests that take long"""
 
     @contextmanager
-    def solo_world_sub_test(self, msg: str | None = None,
-                            /,
-                            world_options: dict[str | type[StardewValleyOption], typing.Any] | None = None,
-                            *,
-                            seed=DEFAULT_TEST_SEED,
-                            world_caching=True,
-                            **kwargs) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
+    def solo_world_sub_test(
+        self, msg: str | None = None, /, world_options: SVTestOptions | None = None, *, seed=DEFAULT_TEST_SEED, world_caching=True, **kwargs
+    ) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
         if msg is not None:
             msg += " "
         else:
@@ -63,7 +63,7 @@ class SVTestCase(unittest.TestCase):
 class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     game = "Stardew Valley"
     world: StardewValleyWorld
-    options: dict[str | type[StardewValleyOption], typing.Any]
+    options: SVTestOptions
 
     seed = DEFAULT_TEST_SEED
 
@@ -215,10 +215,9 @@ pre_generated_worlds = {}
 
 
 @contextmanager
-def solo_multiworld(world_options: dict[str | type[StardewValleyOption], typing.Any] | None = None,
-                    *,
-                    seed=DEFAULT_TEST_SEED,
-                    world_caching=True) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
+def solo_multiworld(
+    world_options: SVTestOptions | None = None, *, seed=DEFAULT_TEST_SEED, world_caching=True
+) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
     if not world_caching:
         multiworld = setup_solo_multiworld(world_options, seed, _cache={})
         yield multiworld, typing.cast(StardewValleyWorld, multiworld.worlds[1])
@@ -249,10 +248,12 @@ def get_permissive_settings(settings):
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options: dict[str | type[StardewValleyOption], str] | None = None,
-                          seed=DEFAULT_TEST_SEED,
-                          _cache: dict[frozenset, MultiWorld] = {},  # noqa
-                          _steps=gen_steps) -> MultiWorld:
+def setup_solo_multiworld(
+    test_options: SVTestOptions | None = None,
+    seed=DEFAULT_TEST_SEED,
+    _cache: dict[frozenset, MultiWorld] = {},  # noqa
+    _steps=gen_steps,
+) -> MultiWorld:
     test_options = parse_class_option_keys(test_options)
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds

@@ -2,10 +2,10 @@ import json
 import re
 import subprocess
 import sys
-import unittest
 
 from BaseClasses import get_seed
-from ..bases import SVTestCase
+
+from ..bases import SVTestCase, skip_if_no_long_tests
 
 # <function Location.<lambda> at 0x102ca98a0>
 lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")
@@ -15,10 +15,8 @@ class TestGenerationIsStable(SVTestCase):
     """Let it be known that I hate this tests, and if someone has a better idea than starting subprocesses, please fix this.
     """
 
+    @skip_if_no_long_tests
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
-        if self.skip_long_tests:
-            raise unittest.SkipTest("Long tests disabled")
-
         seed = get_seed()
 
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])

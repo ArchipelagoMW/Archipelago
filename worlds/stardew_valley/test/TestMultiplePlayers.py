@@ -1,7 +1,7 @@
-from .bases import SVTestCase, setup_multiworld
-from .. import True_
 from ..options import FestivalLocations, StartingMoney
+from ..stardew_rule import True_
 from ..strings.festival_check_names import FestivalCheck
+from .bases import SVTestCase, setup_multiworld
 
 
 def get_access_rule(multiworld, player: int, location_name: str):

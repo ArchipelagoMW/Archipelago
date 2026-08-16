@@ -1,13 +1,18 @@
 from argparse import Namespace
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any, TypeAlias
 
 from BaseClasses import PlandoOptions
+
 from Options import VerifyKeys
+
 from ... import StardewValleyWorld
-from ...options import StardewValleyOptions, StardewValleyOption
+from ...options import StardewValleyOption, StardewValleyOptions
+
+SVTestOptions: TypeAlias = dict[str | type[StardewValleyOption], Any]
 
 
-def parse_class_option_keys(test_options: dict[str | type[StardewValleyOption], Any] | None) -> dict:
+def parse_class_option_keys(test_options: SVTestOptions | None) -> dict:
     """ Now the option class is allowed as key. """
     if test_options is None:
         return {}
@@ -25,7 +30,7 @@ def parse_class_option_keys(test_options: dict[str | type[StardewValleyOption], 
     return parsed_options
 
 
-def fill_dataclass_with_default(test_options: dict[str | type[StardewValleyOption], Any] | None) -> StardewValleyOptions:
+def fill_dataclass_with_default(test_options: SVTestOptions | None) -> StardewValleyOptions:
     test_options = parse_class_option_keys(test_options)
 
     filled_options = {}

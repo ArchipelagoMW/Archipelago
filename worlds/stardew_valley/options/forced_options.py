@@ -241,10 +241,6 @@ def warn_suspicious_plando_connections(
                 f"This might cause issues with GER if not being careful"
             )
             continue
-        logger.warning(
-            f"Adding forced connection '{after_rev}: {before_rev}' due to "
-            f"'{plando_connection.entrance}: {plando_connection.exit}' existing for player {player} ({player_name})"
-        )
 
 
 def force_accessibility_to_full_when_goal_requires_all_locations(

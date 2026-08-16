@@ -1,7 +1,6 @@
-from ..bases import SVTestBase
-from ... import FarmType
-from ...options import ToolProgression, QuestLocations, Secretsanity
+from ...options import FarmType, QuestLocations, Secretsanity, ToolProgression
 from ...strings.ap_names.ap_option_names import SecretsanityOptionName
+from ..bases import SVTestBase
 
 
 class TestQuestsLogic(SVTestBase):

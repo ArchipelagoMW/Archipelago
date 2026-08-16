@@ -271,16 +271,7 @@ class EntranceRandomizationBehavior(OptionSet):
     default = frozenset() # frozenset({EntranceRandomizationBehaviorOptionName.same_type})
     internal_name = "entrance_randomization_behavior"
     display_name = "Entrance Randomizer Behavior"
-    valid_keys = frozenset(
-        {
-            EntranceRandomizationBehaviorOptionName.chaos,
-            EntranceRandomizationBehaviorOptionName.decoupled,
-            EntranceRandomizationBehaviorOptionName.shuffle_farmhouse,
-            EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere,
-            EntranceRandomizationBehaviorOptionName.same_direction,
-            EntranceRandomizationBehaviorOptionName.same_type,
-        }
-    )
+    valid_keys = frozenset(EntranceRandomizationBehaviorOptionName)
 
     preset_easy = frozenset() # frozenset({EntranceRandomizationBehaviorOptionName.same_type})
     preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse}) # frozenset({EntranceRandomizationBehaviorOptionName.same_type, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse})

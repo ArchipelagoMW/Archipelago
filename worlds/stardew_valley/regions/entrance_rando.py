@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 import typing
+from collections.abc import Container
+from typing import NamedTuple
 
 from BaseClasses import EntranceType, Region
-from entrance_rando import ERPlacementState
+from entrance_rando import EntranceRandomizationError, ERPlacementState
 
 from Options import PlandoConnection
 
@@ -13,28 +17,11 @@ if typing.TYPE_CHECKING:
     from ..content import StardewContent
 
 
-def create_base_randomization_flag(entrance_randomization_choice: EntranceRandomization) -> RandomizationFlag:
-    flag = RandomizationFlag.NOT_RANDOMIZED
-
-    if entrance_randomization_choice == EntranceRandomization.option_pelican_town:
-        flag |= RandomizationFlag.SET_PELICAN_TOWN
-    elif entrance_randomization_choice == EntranceRandomization.option_non_progression:
-        flag |= RandomizationFlag.SET_NON_PROGRESSION
-    elif entrance_randomization_choice == EntranceRandomization.option_buildings:
-        flag |= RandomizationFlag.SET_BUILDINGS
-    elif entrance_randomization_choice == EntranceRandomization.option_overworld:
-        flag |= RandomizationFlag.SET_OVERWORLD
-    elif entrance_randomization_choice == EntranceRandomization.option_everywhere:
-        flag |= RandomizationFlag.SET_EVERYTHING
-
-    return flag
-
-
 def create_player_randomization_flag(
     entrance_randomization_choice: EntranceRandomization,
     entrance_behavior_choice: set[str],
     include_endgame: bool,
-    content: "StardewContent",
+    content: StardewContent,
 ):
     """Return the flag that a connection is expected to have to be randomized. Only the bit corresponding to the player
     randomization choice will be enabled.
@@ -59,7 +46,24 @@ def create_player_randomization_flag(
     return flag
 
 
-def get_target_groups(entrance_randomization_behavior: "EntranceRandomizationBehavior"):
+def create_base_randomization_flag(entrance_randomization_choice: EntranceRandomization) -> RandomizationFlag:
+    flag = RandomizationFlag.NOT_RANDOMIZED
+
+    if entrance_randomization_choice == EntranceRandomization.option_pelican_town:
+        flag |= RandomizationFlag.SET_PELICAN_TOWN
+    elif entrance_randomization_choice == EntranceRandomization.option_non_progression:
+        flag |= RandomizationFlag.SET_NON_PROGRESSION
+    elif entrance_randomization_choice == EntranceRandomization.option_buildings:
+        flag |= RandomizationFlag.SET_BUILDINGS
+    elif entrance_randomization_choice == EntranceRandomization.option_overworld:
+        flag |= RandomizationFlag.SET_OVERWORLD
+    elif entrance_randomization_choice == EntranceRandomization.option_everywhere:
+        flag |= RandomizationFlag.SET_EVERYTHING
+
+    return flag
+
+
+def get_target_groups(entrance_randomization_behavior: EntranceRandomizationBehavior):
     direction_matching_group_lookup = {
         GroupFlag.TO_ANY: [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT, GroupFlag.DOOR],
         GroupFlag.UP: [GroupFlag.UP, GroupFlag.TO_ANY],
@@ -120,14 +124,80 @@ def connect_regions(
     regions_by_name: dict[str, Region],
     player_randomization_flag: RandomizationFlag,
     er_plando: list[PlandoConnection],
-    is_chaos: bool,
+    er_behavior: set[EntranceRandomizationBehaviorOptionName],
 ) -> dict[str, str]:
     special_randomized_entrances: dict[str, str] = {}
 
+    plando_details = prepare_plando_details(connection_data_by_name, er_plando)
+
+    if EntranceRandomizationBehaviorOptionName.decoupled not in er_behavior and plando_details.is_invalid_coupled_plando():
+        raise EntranceRandomizationError(
+            "Some entrances were disconnected by plando but not reconnected. "
+            "Make sure that both sides of the connections are planned or use the `both` direction."
+        )
+
+    for region_name, region_data in region_data_by_name.items():
+        origin_region = regions_by_name[region_name]
+
+        for exit_name in region_data.exits:
+            connection_data = connection_data_by_name[exit_name]
+            destination_region = regions_by_name[connection_data.destination]
+
+            eligible = connection_data.is_eligible_for_randomization(player_randomization_flag) or plando_details.is_disconnected(exit_name)
+            if eligible and EntranceRandomizationBehaviorOptionName.chaos in er_behavior:
+                special_randomized_entrances[connection_data.name] = connection_data.name
+                origin_region.connect(destination_region, connection_data.name)
+                plando_details.mark_target_created(exit_name)
+                continue
+
+            if connection_data.name in plando_details.decoupled_plando:
+                destination_entrance_name = plando_details.decoupled_plando[connection_data.name]
+                entrance_data = connection_data_by_name[destination_entrance_name]
+                plando_destination = regions_by_name[entrance_data.destination]
+                origin_region.connect(plando_destination, connection_data.name)
+                special_randomized_entrances[connection_data.name] = destination_entrance_name
+
+            if eligible:
+                create_entrance_rando_target(origin_region, destination_region, connection_data, plando_details)
+                plando_details.mark_target_created(exit_name)
+            elif connection_data.name not in plando_details.decoupled_plando:
+                origin_region.connect(destination_region, connection_data.name)
+
+    assert not plando_details.disconnected_connections, "Some connections were disconnected by plando ER exit/entrance was not created."
+
+    return special_randomized_entrances
+
+
+class PlandoDetails(NamedTuple):
+    decoupled_plando: dict[str, str]
+    plandoed_entrances: set[str]
+    disconnected_connections: set[str]
+    """When something out of the ER settings is plandoed, we need to make sure the other side of the transition also get
+    connected to something. Otherwise, the world might not fill."""
+
+    @staticmethod
+    def no_plando() -> PlandoDetails:
+        return PlandoDetails({}, set(), set())
+
+    @property
+    def plandoed_exits(self) -> Container[str]:
+        return self.decoupled_plando.keys()
+
+    def is_invalid_coupled_plando(self) -> bool:
+        """Check whether the plando configuration is valid for coupled ER or not."""
+        return bool(self.plandoed_entrances.symmetric_difference(self.decoupled_plando.keys()))
+
+    def is_disconnected(self, entrance_name: str) -> bool:
+        return entrance_name in self.disconnected_connections
+
+    def mark_target_created(self, exit_name: str) -> None:
+        self.disconnected_connections.discard(exit_name)
+
+
+def prepare_plando_details(connection_data_by_name: dict[str, ConnectionData], er_plando: list[PlandoConnection]) -> PlandoDetails:
     # Here by _entrance_ we mean, the connection entering the region. 'Town to Beach' represents the bottom exit of
     #  town, both when leaving the town from the bottom (that's the _exit_) and when entering the town (that's the
     #  _entrance_ or **er_target**).
-    plandoed_exits: set[str] = set()
     plandoed_entrances: set[str] = set()
 
     # All the regions to connect because of plando
@@ -143,69 +213,38 @@ def connect_regions(
         entrance_data = connection_data_by_name[entrance]
 
         if connection.direction in (PlandoConnection.Direction.entrance, PlandoConnection.Direction.both):
-            plandoed_exits.add(exit_)
-            plandoed_entrances.add(entrance_data.destination_entrance_name)
             decoupled_plando[exit_] = entrance
+            plandoed_entrances.add(entrance_data.destination_entrance_name)
 
-        if (
-            connection.direction in (PlandoConnection.Direction.exit, PlandoConnection.Direction.both)
-            and RandomizationFlag.IS_ONE_WAY not in exit_data.flag
-        ):
-            reversed_exit = entrance_data.reverse
-            assert reversed_exit is not None
-            reversed_entrance = exit_data.destination_entrance_name
-            assert reversed_entrance is not None
+        if RandomizationFlag.IS_ONE_WAY in exit_data.flag:
+            continue
 
-            plandoed_exits.add(reversed_exit)
-            plandoed_entrances.add(exit_)
+        reversed_exit = entrance_data.destination_entrance_name
+        reversed_entrance = exit_data.destination_entrance_name
+        if connection.direction in (PlandoConnection.Direction.exit, PlandoConnection.Direction.both):
             decoupled_plando[reversed_exit] = reversed_entrance
+            plandoed_entrances.add(exit_)
 
-    for region_name, region_data in region_data_by_name.items():
-        origin_region = regions_by_name[region_name]
-
-        for exit_name in region_data.exits:
-            connection_data = connection_data_by_name[exit_name]
-            destination_region = regions_by_name[connection_data.destination]
-
-            eligible = connection_data.is_eligible_for_randomization(player_randomization_flag)
-            if eligible and is_chaos:
-                special_randomized_entrances[connection_data.name] = connection_data.name
-                origin_region.connect(destination_region, connection_data.name)
-                continue
-
-            if connection_data.name in decoupled_plando:
-                destination_entrance_name = decoupled_plando[connection_data.name]
-                entrance_data = connection_data_by_name[destination_entrance_name]
-                plando_destination = regions_by_name[entrance_data.destination]
-                origin_region.connect(plando_destination, connection_data.name)
-                special_randomized_entrances[connection_data.name] = destination_entrance_name
-
-            if eligible:
-                create_entrance_rando_target(origin_region, destination_region, connection_data, plandoed_exits, plandoed_entrances)
-            elif connection_data.name not in decoupled_plando:
-                origin_region.connect(destination_region, connection_data.name)
-
-    return special_randomized_entrances
+    return PlandoDetails(decoupled_plando, plandoed_entrances, set(decoupled_plando.keys()).symmetric_difference(decoupled_plando.values()))
 
 
 def create_entrance_rando_target(
     origin: Region,
     destination: Region,
     connection_data: ConnectionData,
-    plandoed_exits: set[str],
-    plandoed_entrances: set[str],
+    plando_details: PlandoDetails,
 ) -> None:
     """We need our own function to create the GER targets, because the Stardew Mod have very specific expectations for
     the name of the entrances. We need to know exactly which entrances to swap in both directions."""
 
     if RandomizationFlag.IS_ONE_WAY in connection_data.flag:
-        if connection_data.name not in plandoed_exits:
+        if connection_data.name not in plando_details.plandoed_exits:
             exit_ = origin.create_exit(connection_data.name)
             exit_.randomization_type = EntranceType.ONE_WAY
             exit_.randomization_group = connection_data.group
 
         destination_entrance = f"{connection_data.name} Exit"
-        if destination_entrance not in plandoed_entrances:
+        if destination_entrance not in plando_details.plandoed_entrances:
             er_target = destination.create_er_target(destination_entrance)
             er_target.randomization_type = EntranceType.ONE_WAY
             er_target.randomization_group = connection_data.group
@@ -215,12 +254,12 @@ def create_entrance_rando_target(
     destination_entrance = connection_data.reverse
     assert destination_entrance is not None, f"Could not get reverse of '{connection_data.name}'"
 
-    if connection_data.name not in plandoed_exits:
+    if connection_data.name not in plando_details.plandoed_exits:
         exit_ = origin.create_exit(connection_data.name)
         exit_.randomization_type = EntranceType.TWO_WAY
         exit_.randomization_group = connection_data.group
 
-    if destination_entrance not in plandoed_entrances:
+    if destination_entrance not in plando_details.plandoed_entrances:
         # We use the reverse name so GER and find the coupled entrance when connecting the region.
         er_target = destination.create_er_target(destination_entrance)
         er_target.randomization_type = EntranceType.TWO_WAY

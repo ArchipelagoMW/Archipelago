@@ -1,3 +1,6 @@
+from enum import StrEnum
+
+
 class WalnutsanityOptionName:
     puzzles = "Puzzles"
     bushes = "Bushes"
@@ -43,7 +46,7 @@ class ChefsanityOptionName:
     friendship = "Friendship"
 
 
-class EntranceRandomizationBehaviorOptionName:
+class EntranceRandomizationBehaviorOptionName(StrEnum):
     chaos = "Chaos"
     decoupled = "Decoupled"
     same_direction = "Same Direction"
