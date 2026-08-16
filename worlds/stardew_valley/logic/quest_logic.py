@@ -1,7 +1,6 @@
 from typing import Dict
 
-from .base_logic import BaseLogicMixin, BaseLogic
-from ..stardew_rule import StardewRule, Has, True_
+from ..stardew_rule import Has, StardewRule, True_
 from ..strings.ap_names.ap_option_names import SecretsanityOptionName
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
@@ -13,15 +12,16 @@ from ..strings.food_names import Meal
 from ..strings.forageable_names import Forageable
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
-from ..strings.metal_names import MetalBar, Ore, Mineral
+from ..strings.metal_names import MetalBar, Mineral, Ore
 from ..strings.monster_drop_names import Loot
 from ..strings.quest_names import Quest
 from ..strings.region_names import LogicRegion, Region
 from ..strings.season_names import Season
 from ..strings.special_item_names import SpecialItem
-from ..strings.tool_names import Tool, FishingRod
+from ..strings.tool_names import FishingRod, Tool
 from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
+from .base_logic import BaseLogic, BaseLogicMixin
 
 
 class QuestLogicMixin(BaseLogicMixin):
@@ -38,7 +38,7 @@ class QuestLogic(BaseLogic):
             Quest.introductions: self.logic.relationship.can_meet_all(NPC.alex, NPC.elliott, NPC.harvey, NPC.sam, NPC.sebastian, NPC.shane, NPC.abigail,
                                                                       NPC.emily, NPC.haley, NPC.leah, NPC.maru, NPC.penny, NPC.caroline, NPC.clint,
                                                                       NPC.demetrius, NPC.evelyn, NPC.george, NPC.gus, NPC.jas, NPC.linus, NPC.marnie,
-                                                                      NPC.pam, NPC.pierre, NPC.vincent, NPC.willy, NPC.wizard),
+                                                                      NPC.pam, NPC.pierre, NPC.vincent, NPC.willy, NPC.wizard, NPC.robin, NPC.lewis),
             Quest.how_to_win_friends: self.logic.quest.can_complete_quest(Quest.introductions),
             Quest.getting_started: self.logic.has(Vegetable.parsnip),
             Quest.to_the_beach: self.logic.region.can_reach(Region.beach) & self.logic.relationship.exists(NPC.willy),
@@ -66,8 +66,9 @@ class QuestLogic(BaseLogic):
             Quest.knee_therapy: self.logic.season.has(Season.summer) & self.logic.has(Fruit.hot_pepper) & self.logic.relationship.can_meet(NPC.george),
             Quest.robins_request: self.logic.season.has(Season.winter) & self.logic.has(Material.hardwood) & self.logic.relationship.can_meet(NPC.robin),
             Quest.qis_challenge: True_(),  # The skull cavern floor 25 already has rules
-            Quest.the_mysterious_qi: (self.logic.region.can_reach_all(Region.bus_tunnel, Region.railroad, Region.mayor_house) &
-                                      self.logic.has_all(ArtisanGood.battery_pack, Forageable.rainbow_shell, Vegetable.beet, Loot.solar_essence)),
+            Quest.the_mysterious_qi: self.logic.region.can_reach_all(Region.bus_tunnel, Region.railroad, Region.mayor_house, Region.farm) &
+                                     self.logic.has_all(ArtisanGood.battery_pack, Forageable.rainbow_shell, Vegetable.beet, Loot.solar_essence) &
+                                     self.logic.building.has_building(Building.farm_house),
             Quest.carving_pumpkins: self.logic.season.has(Season.fall) & self.logic.has(Vegetable.pumpkin) & self.logic.relationship.can_meet(NPC.caroline),
             Quest.a_winter_mystery: self.logic.season.has(Season.winter) & self.logic.region.can_reach_all(Region.town, LogicRegion.bus_stop_krobus_cutscene) & self.logic.relationship.exists(NPC.krobus),
             Quest.strange_note: self.logic.region.can_reach(Region.secret_woods) & self.logic.has(Forageable.secret_note) & self.logic.has(ArtisanGood.maple_syrup),
