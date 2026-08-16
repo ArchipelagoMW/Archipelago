@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-08).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-15).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -111,10 +111,17 @@ finding no other copy):
   DAT_800d1c1c = 1; ... state=2 (death) }`.
 - **Pit/scroll kill** — `FUN_80029184`: sets `DAT_8009a0fc = 0x80` directly
   (hardcoded), `dmg_stat += old & 0x7F`.
-- **Heal/refill** — `FUN_80034140` (0x80034140): drains the queued-refill
-  counters `0x800D1C76` (X) / `0x800D1C77` (Zero) (value `& 0x7F`, bit 7 =
-  active flag — sub-tank/pickup heals), incrementing P+0x5C by 1 per tick,
-  clamped to max HP = `s8 [0x800D1C00 + charIdx + 0x47]`.
+- **Sub-tank consumption** — `FUN_80034140` (0x80034140): drains the fill of
+  **Sub-Tank 1 `0x800D1C76` / Sub-Tank 2 `0x800D1C77`** (value `& 0x7F` =
+  fill, bit 7 = tank present), incrementing P+0x5C by 1 per tick, clamped to
+  max HP = `s8 [0x800D1C00 + charIdx + 0x47]`. **Reached by function pointer —
+  zero `jal` callers** — so it runs only while a tank is being used, NOT every
+  frame. Corrected 2026-08-13: this was read as a per-character queued-refill
+  drain, which is what the client shipped against. The tank index comes from
+  `[a0+0x14]`, never from the character; `charIdx` for max HP is a separate
+  read of `[player+2]`. Note the drain does **not** re-apply the `0x20` cap,
+  so an over-large fill is handed out in full. See §9.17.5 and, for the
+  vanilla delivery rules, `0x80053E3C`.
 - **Full heal** — `FUN_80039bf0`: `P+0x5C = [0x800D1C00+charIdx+0x47]`.
 - **Virus DoT** — `FUN_8003a1fc`: `P+0x5C -= 2` every 300 frames when infected.
 
@@ -1059,14 +1066,30 @@ frames is a safe readiness signal for streamed data, exactly as §9.16.1's
 block-awareness is for scans. (`mmx5_testprep_watch.lua` now waits on
 populated data with a timeout; a stability wait is the remaining upgrade.)
 
-### 9.17.5 Refill-queue delivery is NOT mid-gameplay
+### 9.17.5 ~~Refill-queue delivery is NOT mid-gameplay~~ — RESOLVED 2026-08-13: there is no refill queue
 
 The engine never consumed the AP-queued refill (`0x1C76`) during gameplay:
 frozen through HP dips, deaths, respawns, savestate loads, and a stage load
 at full HP with a full sub-tank. No overcap occurred in any observed state
-and nothing in `0x1C70-90` moved. The consumption moment — and the tester's
-reported sub-tank overcap — remains unobserved; the untested case is a stage
-load with HP below max. The overcap fix stays blocked on seeing that once.
+and nothing in `0x1C70-90` moved.
+
+**Every observation above is correct. The interpretation was wrong.**
+`0x1C76`/`0x1C77` are **Sub-Tank 1 and Sub-Tank 2 fill**, not per-character
+refill queues — the pickup handler `0x80054264` selects the byte from the
+pickup record id (`idx = id - 0x27`), not from the character. And
+`FUN_80034140`, read here as a per-tick drain, has **zero `jal` callers**: it
+is an object handler that runs only while a tank is being consumed. A
+sub-tank nobody uses is frozen. Full correction, with the vanilla delivery
+rules from `0x80053E3C` and the `0x20` cap, in ram-notes
+"~~Refill queue~~ — SUB-TANK FILL".
+
+**The methodological lesson.** This entry closed with "the overcap fix stays
+blocked on seeing that once" — a live observation gated a fix that five
+minutes of disassembly would have unblocked, and the block held for five
+days. The instrument was pointed at a byte whose meaning had never been
+derived from code, only inferred from a cheat-code list. When a live probe
+returns "nothing ever happens", suspect the address before designing another
+session around it.
 
 **Vanilla economy (Ivor, 2026-08-06):** 16 Parts exist, but only **8 are
 obtainable per playthrough** - each Maverick offers one of its two depending
@@ -1076,6 +1099,53 @@ carries no boss grouping.
 
 **Screen slot order is not bit order.** The mask table is the authority; slot
 is only how the Parts menu lays them out.
+
+## 9.18 The damage pipeline, fully read — and weakness is NOT in it (2026-08-15)
+
+Offline, from `ramdump_stage_f284694.bin` plus the Squid-rematch and Axle-live
+dumps. Prompted by feature-backlog §3.2.
+
+**Attack side — the table pointer is per entity.**
+
+```
+80031FA0  sll   $a0, $s0, 1        ; attack id * 2
+80031FA4  lw    $a2, 0x58($a3)     ; the ATTACKER's own (STA,DMG) table
+80031FAC  addu  $v1, $a0, $a2
+80031FB0  lbu   $v0, ($v1)         ; STA
+80031FB8  sb    $v0, 0x63($a3)     ; recorded on the attacker
+80031FC4  bne   $v0, 2, 0x80031FD4 ; STA == 2 -> no damage, return 0
+80031FD4  addiu $v0, $s0, -0x1A    ; ids 0x1A..0x3E dispatch through
+80031FE0  sltiu $v1, $a0, 0x25     ;   the jump table at 0x80010C7C
+```
+
+`0x80074DA0` — the player's table — is referenced by **nothing**: no
+`lui`/`addiu` pair, no data word, anywhere in the 2 MB image. It is installed
+into `entity+0x58` at init, exactly as bosses install theirs
+(`[r17+0x58] = 0x80075FC0` for Burn Dinorex, `0x800755C0` in `Boss_Common`).
+
+**Boss contact damage is one immediate.** `movb [r17+0x60], r2` after
+`li r2, N` in each boss's init; `entity+0x60` is what the collision path reads
+(`lb $a1, 0x60($s1)` at `0x80031A54`).
+
+**Resolver `FUN_80031670(target, raw) -> effective`**, read end to end:
+
+| case | result |
+|---|---|
+| `raw == 0` | 0 |
+| `raw == 0x7F` | `0x7F` unchanged — **instakill sentinel, never scale it** |
+| `raw < 0` | halved if `[target+0xFC] & 0x80`; floors at −1 |
+| `[target+0xFC] & 0x20000` | halved |
+| player armor path `0x800316C0` | halved — keyed on live armor selector `player+0xFA`, plus `0x800D1C4A & 0x10` for Zero |
+| otherwise | unchanged; **never returns less than 1** |
+
+**There is no weakness multiplier in this path.** That is the finding, and it
+kills the backlog's "decode a 20 KB region" estimate: weakness is implemented
+per boss, in modules with no shared layout (Squid's opens with a pointer table
+and code, Axle's with animation frame lists). Ruled out as the discriminator:
+`entity+0x63`, the STA byte the attack path records — **zero** boss modules
+read that offset. The only weakness-labelled sites anywhere are Burn Dinorex
+*reaction* states (`0x800FA3B4` dispatcher, `0x800FD44C` countdown), not the
+decision. Full write-up: `mmx5-external-findings.md` §1.1, §2.1.
 
 # 2026-08-08 — Static analysis session 3 (offline only): object-type manifest, overlay ownership, and a scanner correction
 

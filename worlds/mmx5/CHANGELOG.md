@@ -1,5 +1,66 @@
 # Mega Man X5 apworld changelog
 
+## Unreleased
+
+**Fixed: a Boss Rush rematch could be credited without fighting it.** A player
+game-overed out of the Duff McWhalen rematch, returned to the Sigma stage,
+picked up an item near the drop-down and was handed the McWhalen rematch
+check. The address the client watched for boss HP is not a boss-only address —
+it is the HP field of the game's first object slot, which holds the boss
+during a rematch and holds ordinary objects the rest of the time. An object
+appearing in that slot and then going away reproduces exactly the pattern the
+client reads as "the boss filled its health bar, then died".
+
+The client now cross-checks identity: the object in that slot must be carrying
+the attack data belonging to the boss whose code is loaded, so an ordinary
+object can no longer stand in for one. On a multiworld this was worse than a
+free check — it releases someone else's item — so it is worth re-checking your
+seed if you saw a rematch complete on its own.
+
+Client-side; no re-patch.
+
+**New: Weapon Damage.** Randomizes how much damage *your* weapons do — `weak`
+50-90% of normal, `regular` 80-130%, `strong` 120-200%, `chaotic` 25-250%.
+Every attack X and Zero have is rolled separately and then fixed for the seed,
+so part of the run is working out which of your weapons turned out to be the
+good one. A weapon rolls once and keeps its shape: the charged shot scales by
+the same amount as the uncharged one, so a charged shot never ends up weaker
+than the plain shot, and X's buster stays ordered across all its charge levels.
+Nothing rolls to zero, and attacks that deal no damage or are instant kills
+are left exactly as they are. Off by default. It stacks with
+Boss HP Randomization, and weak weapons against strong bosses is a long
+afternoon. **Changes the disc.**
+
+**New: Boss Damage.** The mirror of Weapon Damage — randomizes how hard the
+eight Mavericks hit *you*. Same scale (`weak` 50-90%, `regular` 80-130%,
+`strong` 120-200%, `chaotic` 25-250%), and each boss rolls once so its light
+pokes stay light next to its big attack; the whole fight gets more or less
+dangerous together. Attacks the Mavericks share with ordinary enemies are left
+alone, and so are instant kills — a crush is still a crush. Separate from Boss
+HP Randomization: that one changes how long a boss lasts, this changes how
+badly it hurts. Off by default. **Changes the disc.**
+
+**Life Energy you receive now actually heals you.** It never did. The client
+was writing received energy into what it took for the game's own refill
+queue; those two bytes are in fact the fill levels of **Sub-Tank 1 and
+Sub-Tank 2**. So the energy healed nothing at any HP — it poured into a
+sub-tank instead, and into the *wrong* one whenever you were playing Zero,
+and into a tank you might not even own, in which case it went nowhere at all.
+
+Energy now behaves exactly like a capsule you pick up off the floor: it heals
+you, and if you are already at full health it tops up a sub-tank you own — 2
+per item, up to the tank's normal maximum, first tank first. If you are at
+full health with no room in any tank it is spent, which is what the game does
+with a capsule in the same situation.
+
+**Overfilled sub-tanks are repaired.** The same bug could push a tank far past
+its normal maximum, so a single tank could hold nearly four times what the
+game allows. If you are carrying one of those it is clamped back to full the
+next time the client sees it, and you will get a note in the log. This is the
+sub-tank overcap a tester reported back on 0.5.0.
+
+Client-side only — no re-patch, and nothing about your seed changes.
+
 ## 0.5.3 — 2026-08-11
 
 **You need to re-patch this time.** Exit Stage Anytime is on by default and

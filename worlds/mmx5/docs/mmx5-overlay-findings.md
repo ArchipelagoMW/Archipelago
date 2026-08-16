@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-03).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-13).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -51,11 +51,11 @@ item's **kind** byte (`itemObj+0x82`) through the jump table at **0x80011068**
 |---|---|---|
 | 0 | 0x800540A0 | **Heart tank** |
 | 1 | 0x80054100 | **EX item (Energy Up)** |
-| 2/3 | 0x80054164/0x80054198 | life / weapon-energy refill (queued via 0x80053E3C) |
+| 2/3 | 0x80054164/0x80054198 | life / weapon-energy refill (delivered via 0x80053E3C — heal, else spill into an owned sub-tank; rules in ram-notes "SUB-TANK FILL") |
 | 4 | 0x800541D8 | full-refill variant |
 | 5-7 | 0x80054204 | misc (helper 0x80053B68) |
 | 8 | 0x80054218 | 1-Up: `0x800D1C45 += 1`, clamp 9 |
-| 9 | 0x80054264 | **Sub-tank**: u16 0x800D1C7E \|= 0x1000 << (id−0x27) → bits 12/13; also sets refill-full flag 0x800D1C76 (X, id 0x27) / 0x800D1C77 (Zero) = 0x80 |
+| 9 | 0x80054264 | **Sub-tank**: u16 0x800D1C7E \|= 0x1000 << (id−0x27) → bits 12/13; also inits that tank's FILL byte = 0x80 (owned, empty): id 0x27 → 0x800D1C76 = **Sub-Tank 1**, id 0x28 → 0x800D1C77 = **Sub-Tank 2**. Corrected 2026-08-13 — these are per-TANK, NOT X/Zero |
 | 0xA | 0x800542D0 | **W-tank**: u16 0x800D1C7E \|= 0x4000 (bit14), clears 0x800D1C78 |
 | 0xB | 0x80054310 | **EX-tank (spare lives)**: u16 0x800D1C7E \|= 0x8000 (bit15) |
 | 0xC/0xD | 0x80054350/0x8005437C | subtract 4/0x10 from player+0xFB (usage counter) |

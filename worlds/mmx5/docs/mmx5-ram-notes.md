@@ -1,4 +1,4 @@
-> Research notes mirrored from the mmx5-ap-research workspace (2026-08-11).
+> Research notes mirrored from the mmx5-ap-research workspace (2026-08-15).
 > Working copies live there and are updated as addresses are confirmed;
 > re-sync this mirror when they change. No game data included.
 
@@ -323,7 +323,37 @@ stage back to stage select — to raise the base before the first bosses.)
 - Level 8+ also grants **equippable DNA Parts** (u32 0x800D1C84, §3.3) — an
   entire reward stream we do not model. Candidate future locations.
 
-## Boss fights, the rush, and the refill queue — live session 2026-08-08
+## ⚠️ `0x800920EC` IS OBJECT SLOT 0, NOT A BOSS-ONLY ADDRESS (corrected 2026-08-15)
+
+`0x80092090` is **entry 0 of a shared object table**, stride `0x1D4`
+(`DmgDef` independently names `0x80092264` as another entry), and
+`0x800920EC` is that entry's `+0x5C` HP field. A boss occupies the slot
+during a fight; **any object occupies it the rest of the time.**
+
+Evidence from our own dumps — slot 0, `+0x58` (attack-table pointer) and HP:
+
+| dump | `+0x58` | HP | what it is |
+|---|---|---|---|
+| `ramdump_squid_rematch_f430014` | `0x80075D40` | `0x2E` | Squid Adler — his module's own table |
+| `ramdump_rematch_before/after` | `0x00000000` | `0x00` | corridor, slot empty |
+| `ramdump_pre_sigma_f3336354` | `0x80076600` | `0x50` | **not a rematch boss** |
+| `ramdump_post_sigma_f3348519` | `0x800766A0` | `0x00` | **not a rematch boss** |
+
+Those last two are the false positive in captured form: a non-boss object
+supplying HP ≥ threshold and then 0, in the Sigma stage, which is exactly the
+"bar filled, then died" shape. **A tester was credited a Duff McWhalen
+rematch he never fought** this way (2026-08-15) after game-overing out of that
+portal and picking up an item on re-entry.
+
+**The discriminator is `slot0 + 0x58`** — each boss installs its own attack
+table there at init, and those eight addresses are distinct
+(`0x80075C00`-`0x80076100`, see external-findings §1.1). Requiring it to match
+the boss the module fingerprint names rejects every false state above and
+accepts the one real fight. The client latches that identity while HP is at
+fight scale rather than testing it at the zero, because the object may be torn
+down on death.
+
+## Boss fights, the rush, and the sub-tank bytes — live session 2026-08-08
 
 Source: `Scripts/mmx5_testprep_watch.lua` log + `ramdump_squid_rematch_f430014.bin`
 (mid-fight, player-confirmed Squid Adler) + disc analysis. Handoff:
@@ -482,19 +512,59 @@ fixing the fingerprint alone is NOT sufficient:**
 Minimum safe protocol: unique window **plus** one send per observed *module
 change* **plus** an observed low→high fill edge inside that arming.
 
-### Refill queue `0x800D1C76` (+1 for Zero) — delivery semantics
+### ~~Refill queue `0x800D1C76` (+1 for Zero)~~ — **SUB-TANK FILL, corrected 2026-08-13**
 
-The AP client queues granted energy here (4 per Small Energy, bit7 = active,
-cap 0x7F). Live, multi-trial: **the queue NEVER drains during gameplay** — it
-sat frozen through HP dips to 14/46 and 45/46, through multiple deaths and
-respawns (HP restored to full by respawn with the queue untouched), through
-savestate loads, and through a stage load at full HP with a full sub-tank
-(nothing spilled anywhere; no overcap occurred in any observed state). The
-sub-tank charge byte also never moved anywhere in `0x1C70–0x1C90` during any
-of it. ⚠️ Where/when the engine consumes this queue — and where the tester's
-reported overcap (bug (c)) actually happens — is still UNOBSERVED; the one
-untested delivery moment is a stage load with HP *below* max. Do not design
-the overcap fix until that is seen once.
+**`0x800D1C76` and `0x800D1C77` are Sub-Tank 1 and Sub-Tank 2 fill. They are
+NOT per-character refill queues, and there is no refill queue.** Layout:
+`value & 0x7F` = fill, **bit 7 = tank present**, engine cap **`0x20`**.
+
+Proof — the sub-tank pickup handler `0x80054264` picks the byte from the
+PICKUP RECORD ID, not from the character:
+
+```
+80054270  lb    $v1, 2($s1)      ; record id
+80054278  addiu $v1, $v1, -0x27  ; tank index = id - 0x27
+8005427C  sllv  $a0, $a0, $v1    ; ownership bit 0x1000 << idx
+80054290  sh    $v0, 0x7e($a2)   ; 0x1C7E |= bit
+8005429C  bne   $a0, $v0, ...    ; id == 0x27 ?
+800542AC  sb    $v0, 0x76($a2)   ;   yes -> 0x1C76 = 0x80
+800542B4  sb    $v0, 0x77($a2)   ;   no  -> 0x1C77 = 0x80
+```
+
+Two tanks, shared by both characters. `0x80034140`, previously read as a
+per-tick drain, has **zero `jal` callers** in the EXE — it is an object
+handler that runs only while a tank is being CONSUMED. That is the whole
+explanation for the live observation below, which was recorded as an
+unexplained anomaly: nothing was using a sub-tank, so nothing drained.
+
+> **Superseded observation (2026-08-08), kept because it was right about the
+> facts and wrong about the cause.** "The queue NEVER drains during gameplay"
+> — frozen through HP dips to 14/46 and 45/46, multiple deaths and respawns,
+> savestate loads, and a stage load at full HP with a full sub-tank. All
+> correct, and all exactly what a sub-tank does when you never press the
+> button. The conclusion drawn from it ("delivery moment unobserved, do not
+> design the overcap fix yet") held up the fix for five days.
+
+**Vanilla energy delivery is `0x80053E3C`**, the helper every energy pickup
+calls (kind 2 passes amount 4, tank-units 1):
+
+| HP state | effect |
+|---|---|
+| below max | heal by the capsule amount, clamped to max HP `[0x800D1C47 + charIdx]` |
+| at max | `+2` into the FIRST tank that is owned (`0x1C7E` bit `0x1000 << idx`) **and** under `0x20` — tank 1 before tank 2 |
+| neither | discarded |
+
+The fill store is always `fill | 0x80` (`0x80053FA4` / `0x80053FB4`), with
+sound `0x17` on a partial fill and `0x18` when it tops out.
+
+**This was a live client bug, fixed 2026-08-13** (`_energy_plan`). Granted
+Life Energy was written to `0x1C76 + charIdx` as a queue: it healed nothing at
+any HP, wrote Sub-Tank **2** whenever Zero was selected (the byte is per TANK,
+the index was per CHARACTER), ignored ownership entirely, and clamped to
+`0x7F` — four times the engine's cap. It is the single cause of **both** the
+"received energy does not store" report **and** the sub-tank overcap report
+(backlog §4.1c), which had been open and unexplained since 0.5.0. The client
+now also clamps tanks poisoned by the old behaviour back to `0x20`.
 
 ### Odds and ends
 

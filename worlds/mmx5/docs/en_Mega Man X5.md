@@ -80,9 +80,14 @@ X wears as the stage loads. **Black Zero** applies on the spot.
 
 ## Which options change the disc?
 
-Only three: **`text_skip`**, **`launch_odds`** and **`pickupsanity`**. If you
-change any of those, re-patch your disc — the `.apmmx5` you generate carries
-the difference. Everything else, including all three goals, `boss_difficulty`,
+Seven: **`text_skip`**, **`launch_odds`**, **`pickupsanity`**,
+**`exit_stage_anytime`**, **`water_stage_speed`**, **`weapon_damage`**
+and **`boss_damage`**. If
+you change any of those, re-patch your disc — the `.apmmx5` you generate
+carries the difference. Note `exit_stage_anytime` is **on by default**, so a
+disc patched before it existed needs re-patching even if you changed nothing.
+
+Everything else, including all three goals, `boss_difficulty`,
 `boss_hp_randomization`, `secret_armors_in_pool`, `stage_unlocks`,
 `rematch_checks`, `reploid_checks` and `dna_parts_in_pool`, is done entirely
 by the client, so it works on a disc you have already patched.
@@ -182,6 +187,26 @@ by the client, so it works on a disc you have already patched.
   share that stage's roll. The game caps HP at 127, so a very high roll on a
   late-game boss can hit that ceiling and come out lower than the multiplier
   suggests.
+- **`weapon_damage` rerolls how hard YOUR weapons hit.** `weak` is 50–90% of
+  normal, `regular` 80–130%, `strong` 120–200%, `chaotic` 25–250%. Every attack
+  X and Zero have is rolled separately and then fixed for the seed, so part of
+  a run is finding out which of your weapons turned out to be the good one. A
+  weapon rolls once and keeps its shape — the charged shot scales by the same
+  amount as the uncharged one, so a charged shot never ends up weaker than the
+  plain shot, and X's buster stays ordered across its charge levels. Nothing
+  rolls to zero (the game will not deal less than 1 damage anyway), and attacks
+  that deal no damage or are instant kills are left alone. It stacks with
+  `boss_hp_randomization`, and `weak` weapons against `strong` bosses is a long
+  afternoon. **This option changes the disc**, so re-patch if you change it.
+- **`boss_damage` rerolls how hard the Mavericks hit you.** The mirror of
+  `weapon_damage`, same scale: `weak` 50-90%, `regular` 80-130%, `strong`
+  120-200%, `chaotic` 25-250%. Each of the eight rolls once, so a boss keeps
+  the shape of its own move set - the light pokes stay light next to the big
+  attack and the whole fight gets more or less dangerous together. Attacks the
+  Mavericks share with ordinary enemies are untouched, and so are instant
+  kills. Note this is separate from `boss_hp_randomization`: that decides how
+  long a boss lasts, this decides how badly it hurts, and `strong` on both is
+  a considerably harder game. **This option changes the disc.**
 - **`secret_armors_in_pool` shuffles Ultimate Armor and Black Zero.** In the
   base game both come from one hidden capsule in Zero Space, so you only ever
   see them right at the end; shuffled into the multiworld they can turn up at

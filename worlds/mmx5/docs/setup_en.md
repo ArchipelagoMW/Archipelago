@@ -81,10 +81,17 @@ connected, play normally — checks send themselves and items arrive as you go.
   sends **three** checks at once (boss, DNA reward, DNA Part) — that is
   intended.
 - **Weapons work the moment they arrive.** Armor is the exception, and it is a
-  limitation of the game rather than a delay in delivery: X5 decides which
-  armor X wears while the stage is loading, so armor parts and the secret
-  armors only take effect at your **next stage entry**. Nothing is lost in the
-  meantime — it is written to your save immediately.
+  limitation of the game rather than a delay in delivery. Nothing is ever
+  lost — it is written to your save immediately — but two different waits
+  apply, and they catch people out:
+  - **Falcon and Gaea armor parts do nothing on their own.** X5 only grants an
+    armor once you hold **all four** of its parts, and it makes that grant on
+    a **results screen** — so after the fourth part arrives you must *clear a
+    stage* before the armor becomes selectable. Receiving one, two or three
+    parts is supposed to look like nothing happened.
+  - **The armor you wear is chosen while the stage loads**, so anything that
+    changes your armor takes effect at your **next stage entry**, not in the
+    stage you are standing in.
 - **Ultimate Armor needs one armorless stage entry to show up.** If you
   receive it as an item, enter a stage as X with no armor equipped and it will
   be there; jumping into an already-cleared stage and leaving again is enough.
