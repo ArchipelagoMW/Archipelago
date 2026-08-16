@@ -2147,26 +2147,27 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            games = set(args.get("games", []))
-            if games is None:
-                args["games"] = []
-            if games and not all(type(entry) is str for entry in games):
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                    "text": "Bounce: Games list provided did not have the correct format.", "original_cmd": cmd}])
+            games = args.get("games", [])
+            if games is None or not isinstance(games, (list, set)) or not all(type(entry) is str for entry in games):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Games list provided did not have the correct format.",
+                    "original_cmd": cmd
+                }])
 
-            tags = set(args.get("tags", []))
-            if tags is None:
-                args["tags"] = []
-            if tags and not all(type(entry) is str for entry in tags):
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                    "text": "Bounce: Tags list provided did not have the correct format.", "original_cmd": cmd}])
+            tags = args.get("tags", [])
+            if tags is None or not isinstance(tags, (list, set)) or not all(type(entry) is str for entry in tags):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Tags list provided did not have the correct format.",
+                    "original_cmd": cmd}])
 
-            slots = set(args.get("slots", []))
-            if slots is None:
-                args["slots"] = []
-            if slots and not all(type(entry) is int for entry in slots):
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                    "text": "Bounce: Slots list provided did not have the correct format.", "original_cmd": cmd}])
+            slots = args.get("slots", [])
+            if slots is None or not isinstance(slots, (list, set)) or not all(type(entry) is int for entry in slots):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Slots list provided did not have the correct format.",
+                    "original_cmd": cmd}])
 
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
