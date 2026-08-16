@@ -1,6 +1,10 @@
 # Mega Man X5 apworld changelog
 
-## Unreleased
+## 0.5.4 — 2026-08-16
+
+**No re-patch needed** unless you turn on one of the two new options. Both are
+off by default, and the fixes below are all client-side, so the disc a 0.5.3
+seed produced is still correct.
 
 **Fixed: a Boss Rush rematch could be credited without fighting it.** A player
 game-overed out of the Duff McWhalen rematch, returned to the Sigma stage,
