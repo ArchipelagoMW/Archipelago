@@ -66,11 +66,11 @@ class TerrariaSpoiler(Spoiler):
             if not options.compressed_playthrough.value or not loc.is_event:
                 continue
 
-            rule = rules[rule_indices[str(loc)]]
+            rule = rules[rule_indices[loc.name]]
             if options.health_logic.value and ("Health" in rule.flags or "Quarter Fruit" in rule.flags):
                 continue
 
-            hidden.add(str(loc))
+            hidden.add(loc.name)
 
         return hidden
 

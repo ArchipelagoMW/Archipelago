@@ -175,7 +175,7 @@ Sticky Situation;                   Not Getfixedboi | Achievement | Time;
 The Cavalry;                        Achievement;
 Solidifier;                         ;                                           #King Slime;
 Nerdy Slime;                        Pet;                                        #King Slime;
-Mutant NPC;                         Fargo;                                      Trojan Squirrel | King Slime | Eye of Cthulhu | Cursed Coffin | Evil Boss | Queen Bee | Skeletron | Deerclops | Deviantt | Wall of Flesh | Queen Slime | Banished Baron | The Twins | The Destroyer | Skeletron Prime | Lifelight | Plantera | Golem | Duke Fishron | Empress of Light | Betsy | Lunatic Cultist | Moon Lord | Champion of Timber | Champion of Terra | Champion of Earth | Champion of Nature | Champion of Life | Champion of Death | Champion of Spirit | Champion of Will | Eridanus, Champion of Cosmos | Abominationn | Mutant | (@calamity & (Desert Scourge | Crabulon | The Hive Mind | The Perforators | The Slime God | Cryogen | Aquatic Scourge | Cragmaw Mire | Brimstone Elemental | Calamitas Clone | Great Sand Shark | Leviathan and Anahita | Astrum Aureus | The Plaguebringer Goliath | Ravager | Astrum Deus | Profaned Guardians | Dragonfolly | Providence, the Profaned Goddess | Ceaseless Void | Storm Weaver | Signus, Envoy of the Devourer | Polterghast | Mauler | Nuclear Terror | The Old Duke | The Devourer of Gods | Yharon, Dragon of Rebirth | Exo Mechs | Supreme Witch, Calamitas));
+Mutant NPC;                         Fargo;                                      #King Slime;
 
 // Desert Scourge
 Desert Scourge;                     Calamity | Location | Item;                 @health(1);
@@ -676,7 +676,7 @@ Necromantic Geode;                  Calamity;                                   
 Bloodstone;                         Calamity;                                   Providence, the Profaned Goddess | Necromantic Geode;
 
 // Champions
-Sigil of Champions;                 Fargo;                                      Ancient Manipulator & Hellstone Bar & Frost Core & Soul of Light & Soul of Night & Forbidden Fragment & Luminite Bar & (~@calamity | Divine Geode);
+Sigil of Champions;                 Fargo;                                      (Mutant NPC & Eridanus, Champion of Cosmos) | (Ancient Manipulator & Hellstone Bar & Frost Core & Soul of Light & Soul of Night & Forbidden Fragment & Luminite Bar & (~@calamity | Divine Geode));
 Champion of Timber;                 Fargo | Location | Item;                    Sigil of Champions & @health(4);
 Champion of Terra;                  Fargo | Location | Item;                    Sigil of Champions & @health(4);
 Champion of Earth;                  Fargo | Location | Item;                    Sigil of Champions & @health(4);
@@ -958,7 +958,7 @@ Fishron Wings;                      ;                                           
 Betsy Wings;                        ;                                           #Betsy;
 Festive Wings;                      ;                                           #Everscream;
 Tattered Fairy Wings;               ;                                           Hardmode Anvil & Soul of Flight & #Pumpking;
-Flame Wings;                        ;                                           Hardmode Anvil & Soul of Flight & Wall of Flesh;
+Flame Wings;                        ;                                           Hardmode Anvil & Soul of Flight & Wall of Flesh & @mech_boss(1);
 Gravity Globe;                      ;                                           #Moon Lord;
 Celestial Starboard;                ;                                           #Moon Lord;
 Tarragon Wings;                     Calamity;                                   Hardmode Anvil & Soul of Flight & Uelibloom Bar;
