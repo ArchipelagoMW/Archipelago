@@ -1,7 +1,7 @@
 # OpenRCT2
 
 ## Quick Links
-- [Setup Guide](../../../../tutorial/OpenRCT2/setup/en)
+- [Setup Guide](../tutorial/OpenRCT2/setup/en)
 - [Options Page](../player-options)
 - [OpenRCT2](https://openrct2.io/)
 

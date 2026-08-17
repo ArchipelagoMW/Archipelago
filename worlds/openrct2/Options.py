@@ -236,6 +236,7 @@ class SelectedScenario(Choice):
     """Choose which scenario you'd like to play! Random won't choose scenarios that are unreasonably difficult/tedious.
     Future updates will allow custom scenarios.
     """
+    rich_text_doc = True
     display_name = "Scenario"
     option_random_RCT1 = Scenario.random_RCT1.value
     option_random_loopy_landscapes = Scenario.random_loopy_landscapes.value
@@ -396,13 +397,15 @@ class SelectedScenario(Choice):
 
 class openRCT2DeathLink(DeathLink):
     __doc__ = (DeathLink.__doc__ + "\nThis manifests itself in exploding rides. Somebody dying will cause a random ride to crash,"
-        + " and building rides badly will cause others to die. \n There's a 20 second timer between deathlink events."
-        + "Fix that coaster quickly!\n This option can be enabled/disabled in game as well by typing !!toggledeathlink"
+        + " and building rides badly will cause others to die.\nThere's a 20 second timer between deathlink events. "
+        + "Fix that coaster quickly!\nThis option can be enabled/disabled in game as well by typing !!toggledeathlink"
         + " in the chat tab of the unlock shop.")
+    rich_text_doc = True
 
 class openRCT2TrapLink(Toggle):
     """When your friends receive a trap, you get it too! Of course the same is true the other direction. Works with compatible games."""
     display_name = "Trap Link"
+    rich_text_doc = True
 
 
 class SelectedVisibility(Choice):
@@ -425,6 +428,7 @@ class SelectedVisibility(Choice):
     option_progression_recipient = Visibility.progression_recipient.value
     option_full = Visibility.full.value
     default = Visibility.recipient.value
+    rich_text_doc = True
 
 class SelectedAwards(Choice):
     """Choose what types (if any) of awards will have checks behind them. 
@@ -441,10 +445,12 @@ class SelectedAwards(Choice):
     option_positive = Awards.positive.value
     option_none = Awards.none.value
     default = Awards.all_awards.value
+    rich_text_doc = True
 
 class ExcludeSafestPark(Toggle):
     """Exclude the Safest Park Award from having a check. This may be useful depending on deathlink settings."""
     display_name = "Exclude Safest Park Award"
+    rich_text_doc = True
 
 
 class SelectedDifficulty(Choice):
@@ -458,6 +464,7 @@ class SelectedDifficulty(Choice):
     option_hard = Difficulty.hard.value
     option_extreme = Difficulty.extreme.value
     default = Difficulty.medium.value
+    rich_text_doc = True
 
 class SelectedIntensity(Choice):
     """Choose a preferred intensity for your guests. Less intense will limit guests to a maximum of 4 intensity, and more intense will limit guests
@@ -469,6 +476,7 @@ class SelectedIntensity(Choice):
     option_normal = PreferredIntensity.normal.value
     option_more_intense = PreferredIntensity.more_intense.value
     default = PreferredIntensity.normal.value
+    rich_text_doc = True
 
 class SelectedRandomizationRange(Choice):
     """Influences how spread random values will be (Mostly this affects the excitement, intensity, and nausea ratings). The more extreme this value,
@@ -481,10 +489,12 @@ class SelectedRandomizationRange(Choice):
     option_high = RandomizationRange.high.value
     option_extreme = RandomizationRange.extreme.value
     default = RandomizationRange.medium.value
+    rich_text_doc = True
 
 class IgnoreRideStatChanges(Toggle):
     """Disables changes to base ride stats. If enabled, rides will always behave like they do in the base game."""
     display_name = "Ignore Ride Stat Changes"
+    rich_text_doc = True
 
 class SelectedScenarioLength(Choice):
     """Choose how long this game will last. This will affect things such as unlock shop prices and if prerequisites are required before purchase. It's recommended to choose based on how long other worlds in the multi-world take to complete.
@@ -499,6 +509,7 @@ class SelectedScenarioLength(Choice):
     option_lengthy = ScenarioLength.lengthy.value
     option_marathon = ScenarioLength.marathon.value
     default = ScenarioLength.synchronous_short.value
+    rich_text_doc = True
 
 class SelectedStatReRolls(Choice):
     """How often to re-randomize the stats for ride types. Build the Theme Park of Theseus!
@@ -511,6 +522,7 @@ class SelectedStatReRolls(Choice):
     option_very_frequent = StatReRolls.very_frequent.value
     option_extremely_frequent = StatReRolls.extremely_frequent.value
     default = StatReRolls.infrequent.value
+    rich_text_doc = True
 
 class SelectedDifficultGuestGeneration(Choice):
     """Makes guests harder to generate. Unlockable puts an item in generation that disables the rule when found."""
@@ -519,6 +531,7 @@ class SelectedDifficultGuestGeneration(Choice):
     option_unlockable = DifficultGuestGeneration.unlockable.value
     option_on = DifficultGuestGeneration.on.value
     default = DifficultGuestGeneration.unlockable.value
+    rich_text_doc = True
 
 class SelectedDifficultParkRating(Choice):
     """Makes park rating harder to improve. Unlockable puts an item in generation that disables the rule when found."""
@@ -527,6 +540,7 @@ class SelectedDifficultParkRating(Choice):
     option_unlockable = DifficultParkRating.unlockable.value
     option_on = DifficultParkRating.on.value
     default = DifficultParkRating.unlockable.value
+    rich_text_doc = True
 
 class SelectedForbidHighConstruction(Choice):
     """Limits building to tree height. Unlockable puts an item in generation that disables the rule when found."""
@@ -535,6 +549,7 @@ class SelectedForbidHighConstruction(Choice):
     option_unlockable = ForbidHighConstruction.unlockable.value
     option_on = ForbidHighConstruction.on.value
     default = ForbidHighConstruction.unlockable.value
+    rich_text_doc = True
 
 class SelectedForbidLandscapeChanges(Choice):
     """Forbids the landscape from being altered. Unlockable puts an item in generation that disables the rule when found."""
@@ -543,6 +558,7 @@ class SelectedForbidLandscapeChanges(Choice):
     option_unlockable = ForbidLandscapeChanges.unlockable.value
     option_on = ForbidLandscapeChanges.on.value
     default = ForbidLandscapeChanges.unlockable.value
+    rich_text_doc = True
 
 class SelectedForbidMarketingCampaigns(Choice):
     """Forbids marketing campaigns. Unlockable puts an item in generation that disables the rule when found."""
@@ -551,6 +567,7 @@ class SelectedForbidMarketingCampaigns(Choice):
     option_unlockable = ForbidMarketingCampaigns.unlockable.value
     option_on = ForbidMarketingCampaigns.on.value
     default = ForbidMarketingCampaigns.unlockable.value
+    rich_text_doc = True
 
 class SelectedForbidTreeRemoval(Choice):
     """Forbids removing trees. Unlockable puts an item in generation that disables the rule when found."""
@@ -559,11 +576,13 @@ class SelectedForbidTreeRemoval(Choice):
     option_unlockable = ForbidTreeRemoval.unlockable.value
     option_on = ForbidTreeRemoval.on.value
     default = ForbidTreeRemoval.unlockable.value
+    rich_text_doc = True
 
 
 class RandomizeParkValues(DefaultOnToggle):
     """Randomizes values such as starting cash, starting bank loan amount, and the max bank loan"""
     display_name = "Randomize Park Values"
+    rich_text_doc = True
 
 # class Include_Guest_Objective(DefaultOnToggle):
 #     """Include an objective to reach a certain number of guests. Multiple objectives can be enabled!"""
@@ -575,6 +594,7 @@ class GuestObjective(Range):
     range_start = 1
     range_end = 7500
     default = 1000
+    rich_text_doc = True
 
 # class Include_Park_Value_Objective(DefaultOnToggle):
 #     """Include an objective to achieve a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
@@ -586,6 +606,7 @@ class ParkValueObjective(Range):
     range_start = 0
     range_end = 1000000
     default = 200000
+    rich_text_doc = True
 
 # class Include_Roller_Coaster_Objective(DefaultOnToggle):
 #     """Include an objective to build a certain number of Roller Coasters with optional parameters. Multiple objectives can be enabled!"""
@@ -597,6 +618,7 @@ class RollerCoasterObjective(Range):
     range_start = 0
     range_end = 20
     default = 5
+    rich_text_doc = True
 
 class RollerCoasterExcitement(Range):
     """Select the minimum excitement 😀 for a coaster to count towards your objective. 0 will disable a minimum excitement rating."""
@@ -604,6 +626,7 @@ class RollerCoasterExcitement(Range):
     range_start = 0
     range_end = 9
     default = 5
+    rich_text_doc = True
 
 class RollerCoasterIntensity(Range):
     """Select the minimum intensity 😬 for a coaster to count towards your objective. 0 will disable a minimum intensity rating."""
@@ -611,6 +634,7 @@ class RollerCoasterIntensity(Range):
     range_start = 0
     range_end = 9
     default = 5
+    rich_text_doc = True
 
 class RollerCoasterNausea(Range):
     """Select the minimum nausea 🤢 for a coaster to count towards your objective. 0 will disable a minimum nausea rating."""
@@ -618,6 +642,7 @@ class RollerCoasterNausea(Range):
     range_start = 0
     range_end = 6
     default = 4
+    rich_text_doc = True
 
 class ShopMinimumExcitement(Range):
     """If the shop determines you need a ride with a minimum excitement, this value will be the lowest it can ask for.
@@ -627,6 +652,7 @@ class ShopMinimumExcitement(Range):
     range_start = 0
     range_end = 10
     default = 0
+    rich_text_doc = True
 
 class ShopMinimumIntensity(Range):
     """If the shop determines you need a ride with a minimum intensity, this value will be the lowest it can ask for.
@@ -636,6 +662,7 @@ class ShopMinimumIntensity(Range):
     range_start = 0
     range_end = 7
     default = 0
+    rich_text_doc = True
 
 class ShopMinimumNausea(Range):
     """If the shop determines you need a ride with a minimum nausea, this value will be the lowest it can ask for.
@@ -645,6 +672,7 @@ class ShopMinimumNausea(Range):
     range_start = 0
     range_end = 4
     default = 0
+    rich_text_doc = True
 
 class ShopMinimumLength(Range):
     """If the shop determines you need a ride with a minimum length (In Meters), this value in meters will 
@@ -655,6 +683,7 @@ class ShopMinimumLength(Range):
     range_start = 0
     range_end = 2500
     default = 0
+    rich_text_doc = True
 
 class ShopMinimumTotalCustomers(Range):
     """If the shop determines you need a ride with a minimum total number of customers, this value will be the 
@@ -665,6 +694,7 @@ class ShopMinimumTotalCustomers(Range):
     range_start = 0
     range_end = 1000
     default = 0
+    rich_text_doc = True
 
 class ShopMaximumExcitement(Range):
     """If the shop determines you need a ride with a minimum excitement, this value will be the highest it can ask for.
@@ -673,6 +703,7 @@ class ShopMaximumExcitement(Range):
     range_start = 0
     range_end = 10
     default = 5
+    rich_text_doc = True
 
 class ShopMaximumIntensity(Range):
     """If the shop determines you need a ride with a minimum intensity, this value will be the highest it can ask for.
@@ -681,6 +712,7 @@ class ShopMaximumIntensity(Range):
     range_start = 0
     range_end = 7
     default = 5
+    rich_text_doc = True
 
 class ShopMaximumNausea(Range):
     """If the shop determines you need a ride with a minimum nausea, this value will be the highest it can ask for.
@@ -689,6 +721,7 @@ class ShopMaximumNausea(Range):
     range_start = 0
     range_end = 4
     default = 4
+    rich_text_doc = True
 
 class ShopMaximumLength(Range):
     """If the shop determines you need a ride with a minimum length (In Meters), 
@@ -698,6 +731,7 @@ class ShopMaximumLength(Range):
     range_start = 0
     range_end = 2500
     default = 500
+    rich_text_doc = True
 
 class ShopMaximumTotalCustomers(Range):
     """If the shop determines you need a ride with a minimum total number of customers, this value will be the 
@@ -707,6 +741,7 @@ class ShopMaximumTotalCustomers(Range):
     range_start = 0
     range_end = 1000
     default = 400
+    rich_text_doc = True
 
 class ShopMaximumRollerCoasters(Range):
     """When the shop requires multiple roller coasters, sets the maximum 
@@ -716,6 +751,7 @@ class ShopMaximumRollerCoasters(Range):
     range_start = 1
     range_end = 10
     default = 3
+    rich_text_doc = True
 
 class ShopMaximumTrackedRides(Range):
     """When the shop requires multiple tracked rides, sets the maximum 
@@ -725,6 +761,7 @@ class ShopMaximumTrackedRides(Range):
     range_start = 1
     range_end = 10
     default = 4
+    rich_text_doc = True
 
 class ShopMaximumSpecificRidesEarly(Range):
     """When the shop requires a specific, trackless ride 
@@ -735,6 +772,7 @@ class ShopMaximumSpecificRidesEarly(Range):
     range_start = 1
     range_end = 10
     default = 3
+    rich_text_doc = True
 
 class ShopMaximumSpecificRides(Range):
     """When the shop requires a specific, trackless ride 
@@ -745,6 +783,7 @@ class ShopMaximumSpecificRides(Range):
     range_start = 1
     range_end = 10
     default = 7
+    rich_text_doc = True
 
 class ShopMaximumTransportWater(Range):
     """When the shop requires transport rides, water rides, 
@@ -755,6 +794,7 @@ class ShopMaximumTransportWater(Range):
     range_start = 1
     range_end = 10
     default = 3
+    rich_text_doc = True
 
 class ShopMaximumStalls(Range):
     """When the shop requires shops and stalls, sets the 
@@ -765,6 +805,7 @@ class ShopMaximumStalls(Range):
     range_start = 1
     range_end = 10
     default = 10
+    rich_text_doc = True
 
 class ShopMaximumOtherRides(Range):
     """When the shop requires other rides and categories, 
@@ -775,6 +816,7 @@ class ShopMaximumOtherRides(Range):
     range_start = 1
     range_end = 10
     default = 10
+    rich_text_doc = True
 
 class BalanceGuestCounts(DefaultOnToggle):
     """Attempts to balance the minimum guest requirements to the ride they're attached to. Low throughput rides
@@ -782,6 +824,7 @@ class BalanceGuestCounts(DefaultOnToggle):
     tend towards the maximum.
     """
     display_name = "Balance Guest Counts"
+    rich_text_doc = True
 
 class RequiredUniqueRides(Range):
     """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game.
@@ -790,20 +833,13 @@ class RequiredUniqueRides(Range):
     range_start = 0
     range_end = 20
     default = 5
+    rich_text_doc = True
 
 class IncludeStalls(DefaultOnToggle):
     """Select whether shops and stalls should elligible to be included in the required rides list for completion.
     """
     display_name = "Include Shops for Goal"
-
-class LocalityOfUniqueRides(Choice):
-    """No-op; still here to prevent old YAMLs from breaking"""
-    display_name = "Placement of Unique Rides"
-    option_off = 0
-    option_local = 1
-    option_remote = 2
-    default = 0
-    visibility = OptionVisibility.none
+    rich_text_doc = True
 
 class ParkRatingObjective(Range):
     """If enabled, choose the minimum park rating needed to beat the scenario."""
@@ -811,14 +847,17 @@ class ParkRatingObjective(Range):
     range_start = 0
     range_end = 999
     default = 800
+    rich_text_doc = True
 
 class PayOffLoan(DefaultOnToggle):
     """Require Loan to be paid off before scenario completion is awarded. Multiple objectives can be enabled!"""
     display_name = "Pay Off Loan"
+    rich_text_doc = True
 
 class MonopolyMode(Toggle):
     """Monopoly Mode is a new objective type. Every unowned tile will be set to purchasable (Or purchasable construction rights for any unowned tile with a grounded path. Elevated paths will not be purchasable). To complete the objective, all tiles on the map must be purchased. Multiple Objectives can be enabled!"""
     display_name = "Monopoly Mode"
+    rich_text_doc = True
 
 class LandPrice(Range):
     """Sets the base price of land. Setting this to 201 will keep the default land price in the scenario, which will then be randomized based on randomization range. Monopoly mode overrides this setting."""
@@ -826,6 +865,7 @@ class LandPrice(Range):
     range_start = 10
     range_end = 201
     default = 201
+    rich_text_doc = True
 
 
 class ConstructionRightsPrice(Range):
@@ -834,6 +874,7 @@ class ConstructionRightsPrice(Range):
     range_start = 10
     range_end = 201
     default = 201
+    rich_text_doc = True
 
 class LandDiscounts(Range):
     """Adds Land Discounts to the pool. 0 means no discounts will be included in the pool. More discounts will make individual discounts easier to find, but less effective. Monopoly mode will raise the minimum to 20."""
@@ -841,6 +882,7 @@ class LandDiscounts(Range):
     range_start = 0
     range_end = 50
     default = 0
+    rich_text_doc = True
 
 class ConstructionRightsDiscounts(Range):
     """Adds Construction Rights Discounts to the pool. 0 means no discounts will be included in the pool. More discounts will make individual discounts easier to find, but less effective. Monopoly mode will raise the minimum to 20."""
@@ -848,13 +890,16 @@ class ConstructionRightsDiscounts(Range):
     range_start = 0
     range_end = 50
     default = 0
+    rich_text_doc = True
 class Fireworks(DefaultOnToggle):
     """Have an explosive firework display on victory! Strongly discouraged if you intend to keep playing after victory or if you expect to have a huge park."""
     display_name = "Fireworks"
+    rich_text_doc = True
 
 class IncludeGamespeedItems(DefaultOnToggle):
     """If included, the ability to use the speed toggle will be restricted behind an item. 4 items total will be added, each progressively unlocking a faster speed."""
     display_name = "Include Gamespeed Items"
+    rich_text_doc = True
 
 class FurryConventionTraps(Range):
     """When found, instantly hosts a furry convention in your park! Adding traps will increase the total number of items in the world."""
@@ -862,6 +907,7 @@ class FurryConventionTraps(Range):
     range_start = 0
     range_end = 20
     default = 5
+    rich_text_doc = True
 
 class BathroomTraps(Range):
     """When found, instantly maxes out the bathroom stat of every guest! Adding traps will increase the total number of items in the world."""
@@ -869,6 +915,7 @@ class BathroomTraps(Range):
     range_start = 0
     range_end = 20
     default = 5
+    rich_text_doc = True
 
 class SpamTraps(Range):
     """When found, spams ads all over the screen! Adding traps will increase the total number of items in the world."""
@@ -876,6 +923,7 @@ class SpamTraps(Range):
     range_start = 0
     range_end = 20
     default = 5
+    rich_text_doc = True
 
 class LoanSharkTraps(Range):
     """When found, increases your loan! Adding traps will increase the total number of items in the world."""
@@ -883,6 +931,7 @@ class LoanSharkTraps(Range):
     range_start = 0
     range_end = 20
     default = 5
+    rich_text_doc = True
 
 class FoodpoisoningTraps(Range):
     """When found, gives everybody with food in the park Norovirus! Adding traps will increase the total number of items in the world."""
@@ -890,30 +939,36 @@ class FoodpoisoningTraps(Range):
     range_start = 0
     range_end = 20
     default = 5
+    rich_text_doc = True
 
 class Filler(Range):
-    """How many extra filler items to add to the mix as a percentage. This will mostly consist of Cash Bonuses."""
+    """How many extra filler items to add to the mix as a percentage. This includes cash bonuses, weather events, and guest spawns."""
     display_name = "Filler"
     range_start = 1
     range_end = 50
     default = 10
+    rich_text_doc = True
 
 class IncludeATM(DefaultOnToggle):
     """Includes an ATM in the item list, regardless of whether it normally appears in the chosen scenario."""
     display_name = "Include ATM"
+    rich_text_doc = True
 
 class IncludeFirstAid(DefaultOnToggle):
     """Includes a First Aid Room in the item list, regardless of whether it normally appears in the chosen scenario."""
     display_name = "Include First Aid Room"
+    rich_text_doc = True
 
 class AllRidesAndSceneryBase(Toggle):
     """Adds every ride and scenery pack in the base game to the item pool. This will make for a significantly longer scenario."""
     display_name = "Include All Rides and Scenery (Base Game)"
+    rich_text_doc = True
 
 class AllRidesAndSceneryExpansion(Toggle):
     """Adds every ride and scenery pack in the RCT2 Expansion Packs to the item pool. If this is true the base game rides and 
     scenery will also be included. This will make for a significantly longer scenario."""
     display_name = "Include All Rides and Scenery (Expansion Packs)"
+    rich_text_doc = True
 
 class Skips(Range):
     """By default, every game starts with a single skip to ignore a shop requirement. This will add additional skips to 
@@ -922,6 +977,7 @@ class Skips(Range):
     range_start = 0
     range_end = 100
     default = 7
+    rich_text_doc = True
 
 openrct2_option_groups = [
     OptionGroup("Scenario Options", [
@@ -945,7 +1001,6 @@ openrct2_option_groups = [
         RollerCoasterNausea,
         RequiredUniqueRides,
         IncludeStalls,
-        LocalityOfUniqueRides,
         ParkRatingObjective,
         PayOffLoan,
         MonopolyMode,
@@ -1031,7 +1086,6 @@ class openRCT2Options(PerGameCommonOptions):
     roller_coaster_nausea: RollerCoasterNausea
     required_unique_rides: RequiredUniqueRides
     include_stalls: IncludeStalls
-    unique_rides_placement: LocalityOfUniqueRides
     # include_park_rating_objective: Include_Park_Rating_Objective
     park_rating_objective: ParkRatingObjective
     pay_off_loan: PayOffLoan
