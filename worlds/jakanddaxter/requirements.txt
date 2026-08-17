@@ -1,1 +1,1 @@
-PyMemoryEditor>=1.6.0
+PyMemoryEditor>=2.0.1
