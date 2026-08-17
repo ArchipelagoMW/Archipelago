@@ -32,8 +32,8 @@ class TestMiseryMire(TestDungeon):
             ["Misery Mire - Main Lobby", False, []],
             ["Misery Mire - Main Lobby", False, [], ['Pegasus Boots', 'Hookshot']],
             ["Misery Mire - Main Lobby", False, [], ['Small Key (Misery Mire)', 'Big Key (Misery Mire)']],
-            ["Misery Mire - Main Lobby", True, ['Small Key (Misery Mire)', 'Small Key (Misery Mire)', 'Hookshot', 'Progressive Sword']],
-            ["Misery Mire - Main Lobby", True, ['Small Key (Misery Mire)', 'Small Key (Misery Mire)', 'Pegasus Boots', 'Progressive Sword']],
+            ["Misery Mire - Main Lobby", True, ['Small Key (Misery Mire)', 'Small Key (Misery Mire)', 'Small Key (Misery Mire)', 'Hookshot', 'Progressive Sword']],
+            ["Misery Mire - Main Lobby", True, ['Small Key (Misery Mire)', 'Small Key (Misery Mire)', 'Small Key (Misery Mire)', 'Pegasus Boots', 'Progressive Sword']],
 
             ["Misery Mire - Big Key Chest", False, []],
             ["Misery Mire - Big Key Chest", False, [], ['Fire Rod', 'Lamp']],

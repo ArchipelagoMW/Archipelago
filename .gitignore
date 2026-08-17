@@ -45,6 +45,7 @@ EnemizerCLI/
 /SNI/
 /sni-*/
 /appimagetool*
+/VC_redist.x64.exe
 /host.yaml
 /options.yaml
 /config.yaml
@@ -56,7 +57,6 @@ success.txt
 output/
 Output Logs/
 /factorio/
-/Minecraft Forge Server/
 /WebHostLib/static/generated
 /freeze_requirements.txt
 /Archipelago.zip
@@ -64,7 +64,10 @@ Output Logs/
 /installdelete.iss
 /data/user.kv
 /datapackage
+/datapackage_export.json
 /custom_worlds
+# stubgen output
+/out/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -183,12 +186,6 @@ cython_debug/
 _speedups.c
 _speedups.cpp
 _speedups.html
-
-# minecraft server stuff
-jdk*/
-minecraft*/
-minecraft_versions.json
-!worlds/minecraft/
 
 # pyenv
 .python-version

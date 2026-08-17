@@ -42,7 +42,7 @@ _zz_empty = zz_item_name_to_zz_item["empty"]
 
 
 def make_id_to_others(start_char: Chars) -> tuple[
-    dict[int, str], dict[int, int], dict[int, ZzItem]
+    dict[int, str], dict[int, int], dict[int, ZzItem],
 ]:
     """ returns id_to_name, id_to_zz_id, id_to_zz_item """
     id_to_name: dict[int, str] = {}
@@ -53,19 +53,19 @@ def make_id_to_others(start_char: Chars) -> tuple[
         name_to_zz_item = {
             "Apple": _zz_rescue_0,
             "Champ": _zz_rescue_1,
-            "JJ": _zz_empty
+            "JJ": _zz_empty,
         }
     elif start_char == "Apple":
         name_to_zz_item = {
             "Apple": _zz_empty,
             "Champ": _zz_rescue_1,
-            "JJ": _zz_rescue_0
+            "JJ": _zz_rescue_0,
         }
     else:  # Champ
         name_to_zz_item = {
             "Apple": _zz_rescue_0,
             "Champ": _zz_empty,
-            "JJ": _zz_rescue_1
+            "JJ": _zz_rescue_1,
         }
 
     for name, ap_id in item_name_to_id.items():
@@ -150,10 +150,10 @@ def get_slot_info(regions: Iterable[RegionData],
             rescues[str(i)] = {
                 "start_char": ri.start_char,
                 "room_code": ri.room_code,
-                "mask": ri.mask
+                "mask": ri.mask,
             }
     return {
         "start_char": start_char,
         "rescues": rescues,
-        "loc_mem_to_id": loc_memory_to_loc_id
+        "loc_mem_to_id": loc_memory_to_loc_id,
     }

@@ -603,6 +603,28 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         self.assertTrue(player3.locations[2].item.advancement)
         self.assertTrue(player3.locations[3].item.advancement)
 
+    def test_deprioritized_does_not_land_on_priority(self):
+        multiworld = generate_test_multiworld(1)
+        player1 = generate_player_data(multiworld, 1, 2, prog_item_count=2)
+
+        player1.prog_items[0].classification |= ItemClassification.deprioritized
+        player1.locations[0].progress_type = LocationProgressType.PRIORITY
+
+        distribute_items_restrictive(multiworld)
+
+        self.assertFalse(player1.locations[0].item.deprioritized)
+
+    def test_deprioritized_still_goes_on_priority_ahead_of_filler(self):
+        multiworld = generate_test_multiworld(1)
+        player1 = generate_player_data(multiworld, 1, 2, prog_item_count=1, basic_item_count=1)
+
+        player1.prog_items[0].classification |= ItemClassification.deprioritized
+        player1.locations[0].progress_type = LocationProgressType.PRIORITY
+
+        distribute_items_restrictive(multiworld)
+
+        self.assertTrue(player1.locations[0].item.advancement)
+
     def test_can_remove_locations_in_fill_hook(self):
         """Test that distribute_items_restrictive calls the fill hook and allows for item and location removal"""
         multiworld = generate_test_multiworld()

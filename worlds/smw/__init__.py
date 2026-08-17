@@ -90,6 +90,7 @@ class SMWWorld(World):
             "blocksanity",
         )
         slot_data["active_levels"] = self.active_level_dict
+        slot_data["trap_weights"] = self.output_trap_weights()
 
         return slot_data
 
@@ -322,3 +323,15 @@ class SMWWorld(World):
 
     def set_rules(self):
         set_rules(self)
+
+    def output_trap_weights(self) -> dict[int, int]:
+        trap_data = {}
+
+        trap_data[0xBC0013] = self.options.ice_trap_weight.value
+        trap_data[0xBC0014] = self.options.stun_trap_weight.value
+        trap_data[0xBC0015] = self.options.literature_trap_weight.value
+        trap_data[0xBC0016] = self.options.timer_trap_weight.value
+        trap_data[0xBC001C] = self.options.reverse_trap_weight.value
+        trap_data[0xBC001D] = self.options.thwimp_trap_weight.value
+
+        return trap_data

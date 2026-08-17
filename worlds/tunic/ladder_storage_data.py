@@ -1,15 +1,15 @@
-from typing import Dict, List, Set, NamedTuple, Optional
+from typing import NamedTuple
 
 
 # ladders in overworld, since it is the most complex area for ladder storage
 class OWLadderInfo(NamedTuple):
-    ladders: Set[str]  # ladders where the top or bottom is at the same elevation
-    portals: List[str]  # portals at the same elevation, only those without doors
-    regions: List[str]  # regions where a melee enemy can hit you out of ladder storage
+    ladders: set[str]  # ladders where the top or bottom is at the same elevation
+    portals: list[str]  # portals at the same elevation, only those without doors
+    regions: list[str]  # regions where a melee enemy can hit you out of ladder storage
 
 
 # groups for ladders at the same elevation, for use in determing whether you can ls to entrances in diff rulesets
-ow_ladder_groups: Dict[str, OWLadderInfo] = {
+ow_ladder_groups: dict[str, OWLadderInfo] = {
     # lowest elevation
     "LS Elev 0": OWLadderInfo({"Ladders in Overworld Town", "Ladder to Ruined Atoll", "Ladder to Swamp"},
                               ["Swamp Redux 2_conduit", "Overworld Cave_", "Atoll Redux_lower", "Maze Room_",
@@ -49,7 +49,7 @@ ow_ladder_groups: Dict[str, OWLadderInfo] = {
 
 # ladders accessible within different regions of overworld, only those that are relevant
 # other scenes will just have them hardcoded since this type of structure is not necessary there
-region_ladders: Dict[str, Set[str]] = {
+region_ladders: dict[str, set[str]] = {
     "Overworld": {"Ladders near Weathervane", "Ladders near Overworld Checkpoint", "Ladders near Dark Tomb",
                   "Ladders in Overworld Town", "Ladder to Swamp", "Ladders in Well"},
     "Overworld Beach": {"Ladder to Ruined Atoll"},
@@ -63,11 +63,11 @@ region_ladders: Dict[str, Set[str]] = {
 class LadderInfo(NamedTuple):
     origin: str  # origin region
     destination: str  # destination portal
-    ladders_req: Optional[str] = None  # ladders required to do this
+    ladders_req: str | None = None  # ladders required to do this
     dest_is_region: bool = False  # whether it is a region that you are going to
 
 
-easy_ls: List[LadderInfo] = [
+easy_ls: list[LadderInfo] = [
     # In the furnace
     # Furnace ladder to the fuse entrance
     LadderInfo("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_upper_north"),
@@ -128,7 +128,7 @@ easy_ls: List[LadderInfo] = [
 ]
 
 # if we can gain elevation or get knocked down, add the harder ones
-medium_ls: List[LadderInfo] = [
+medium_ls: list[LadderInfo] = [
     # region-destination versions of easy ls spots
     LadderInfo("East Forest", "East Forest Dance Fox Spot", dest_is_region=True),
     # fortress courtyard knockdowns are never logically relevant, the fuse requires upper
@@ -169,7 +169,7 @@ medium_ls: List[LadderInfo] = [
     LadderInfo("Back of Swamp", "Swamp Redux 2, Overworld Redux_wall"),
 ]
 
-hard_ls: List[LadderInfo] = [
+hard_ls: list[LadderInfo] = [
     # lower ladder, go into the waterfall then above the bonfire, up a ramp, then through the right wall
     LadderInfo("Beneath the Well Front", "Sewer, Sewer_Boss_", "Ladders in Well"),
     LadderInfo("Beneath the Well Front", "Sewer, Overworld Redux_west_aqueduct", "Ladders in Well"),

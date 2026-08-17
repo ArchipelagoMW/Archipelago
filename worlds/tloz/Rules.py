@@ -12,6 +12,15 @@ def set_rules(tloz_world: "TLoZWorld"):
     player = tloz_world.player
     options = tloz_world.options
 
+    tloz_world.multiworld.completion_condition[player] = lambda state: state.has("Rescued Zelda!", player)
+    ganon = tloz_world.multiworld.get_location("Ganon", player)
+    ganon.place_locked_item(tloz_world.create_event("Triforce of Power"))
+    add_rule(ganon, lambda state: state.has("Silver Arrow", player) and state.has("Bow", player))
+
+    tloz_world.multiworld.get_location("Zelda", player).place_locked_item(tloz_world.create_event("Rescued Zelda!"))
+    add_rule(tloz_world.multiworld.get_location("Zelda", player),
+             lambda state: state.has("Triforce of Power", player))
+
     # Boss events for a nicer spoiler log play through
     for level in range(1, 9):
         boss = tloz_world.get_location(f"Level {level} Boss")

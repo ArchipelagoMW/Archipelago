@@ -215,7 +215,7 @@ def set_rules(world: "MM2World") -> None:
                     continue
                 highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
                 uses = weapon_energy[wp] // weapon_costs[wp]
-                if int(uses * boss_damage[wp]) > boss_health[boss]:
+                if int(uses * boss_damage[wp]) >= boss_health[boss]:
                     used = ceil(boss_health[boss] / boss_damage[wp])
                     weapon_energy[wp] -= weapon_costs[wp] * used
                     boss_health[boss] = 0
@@ -226,7 +226,7 @@ def set_rules(world: "MM2World") -> None:
                     # it should be impossible to be out of energy, simply because even if every boss took 1 from
                     # Quick Boomerang and no other, it would only be 28 off from defeating all 9,
                     # which Metal Blade should be able to cover
-                    wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon])
+                    max_uses, wp = max((weapon_energy[weapon] // weapon_costs[weapon], weapon)
                                        for weapon in weapon_weight
                                        if weapon != 0 and (weapon != 8 or boss != 12))
                     # Wily Machine cannot under any circumstances take damage from Time Stopper, prevent this

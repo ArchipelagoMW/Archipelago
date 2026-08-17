@@ -24,7 +24,7 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Big Key Chest", False, [], ['Open Floodgate']],
             ["Swamp Palace - Big Key Chest", False, [], ['Hammer']],
             ["Swamp Palace - Big Key Chest", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - Big Key Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
+            ["Swamp Palace - Big Key Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
 
             ["Swamp Palace - Map Chest", False, []],
             ["Swamp Palace - Map Chest", False, [], ['Flippers']],
@@ -38,7 +38,7 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - West Chest", False, [], ['Open Floodgate']],
             ["Swamp Palace - West Chest", False, [], ['Hammer']],
             ["Swamp Palace - West Chest", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - West Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
+            ["Swamp Palace - West Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
 
             ["Swamp Palace - Compass Chest", False, []],
             ["Swamp Palace - Compass Chest", False, [], ['Flippers']],

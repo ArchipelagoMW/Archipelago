@@ -1237,7 +1237,7 @@ saffron_gym_warps = [
 
 entrance_only = [
     "Route 4-W to Mt Moon 1F", "Saffron City-G to Saffron Gym-S", "Saffron City-Copycat to Saffron Copycat's House 1F",
-    "Saffron City-Pidgey to Saffron Pidgey House", "Celadon Game Corner-Hidden Stairs to Rocket Hideout B1F"
+    "Saffron City-Pidgey to Saffron Pidgey House", "Celadon Game Corner-Hidden Stairs to Rocket Hideout B1F",
     "Cinnabar Island-M to Pokemon Mansion 1F", "Mt Moon B2F to Mt Moon B1F-W", "Silph Co 7F-NW to Silph Co 11F-W",
     "Viridian City-G", "Cerulean City-Cave to Cerulean Cave 1F-SE", "Cerulean City-T to Cerulean Trashed House",
     "Route 10-P to Power Plant", "S.S. Anne 2F to S.S. Anne Captain's Room", "Pewter City-M to Pewter Museum 1F-E",
@@ -2640,9 +2640,13 @@ class PokemonRBWarp(Entrance):
         self.warp_id = warp_id
         self.address = address
         self.flags = flags
+        self.addresses = None
+        self.target = None
 
     def connect(self, entrance):
-        super().connect(entrance.parent_region, None, target=entrance.warp_id)
+        super().connect(entrance.parent_region)
+        self.addresses = None
+        self.target = entrance.warp_id
 
     def access_rule(self, state):
         if self.connected_region is None:

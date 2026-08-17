@@ -4,8 +4,8 @@ from typing import ClassVar
 
 from BaseClasses import get_seed
 from test.param import classvar_matrix
-from .. import SVTestCase, solo_multiworld, skip_long_tests
 from ..assertion.world_assert import WorldAssertMixin
+from ..bases import skip_long_tests, SVTestCase, solo_multiworld
 from ..options.option_names import all_option_choices
 from ... import options
 
@@ -15,8 +15,8 @@ class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
 
     def test_option_pair_debug(self):
         option_dict = {
-            options.Goal.internal_name: options.Goal.option_cryptic_note,
-            options.EntranceRandomization.internal_name: options.EntranceRandomization.option_buildings,
+            options.BundlePerRoom.internal_name: options.BundlePerRoom.option_two_fewer,
+            options.Hatsanity.internal_name: options.Hatsanity.option_post_perfection,
         }
         for i in range(1):
             seed = get_seed(76312028554502615508)

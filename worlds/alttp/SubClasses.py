@@ -2,11 +2,10 @@
 from typing import Optional, TYPE_CHECKING
 from enum import IntEnum
 
-from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
+from BaseClasses import Entrance, Location, Item, ItemClassification, Region, MultiWorld
 
 if TYPE_CHECKING:
     from .Dungeons import Dungeon
-    from .Regions import LTTPRegion
 
 
 class ALttPLocation(Location):
@@ -77,6 +76,19 @@ class ALttPItem(Item):
             return self.type
 
 
+Addresses = int | list[int] | tuple[int, int, int, int, int, int, int, int, int, int, int, int, int]
+
+
+class LTTPEntrance(Entrance):
+    addresses: Addresses | None = None
+    target: int | None = None
+
+    def connect(self, region: Region, addresses: Addresses | None = None, target: int | None = None) -> None:
+        super().connect(region)
+        self.addresses = addresses
+        self.target = target
+
+
 class LTTPRegionType(IntEnum):
     LightWorld = 1
     DarkWorld = 2
@@ -90,6 +102,7 @@ class LTTPRegionType(IntEnum):
 
 
 class LTTPRegion(Region):
+    entrance_type = LTTPEntrance
     type: LTTPRegionType
 
     # will be set after making connections.

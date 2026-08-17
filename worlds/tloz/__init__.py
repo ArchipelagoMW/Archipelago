@@ -188,14 +188,8 @@ class TLoZWorld(World):
     set_rules = set_rules
 
     def generate_basic(self):
-        ganon = self.multiworld.get_location("Ganon", self.player)
-        ganon.place_locked_item(self.create_event("Triforce of Power"))
-        add_rule(ganon, lambda state: state.has("Silver Arrow", self.player) and state.has("Bow", self.player))
+        pass
 
-        self.multiworld.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
-        add_rule(self.multiworld.get_location("Zelda", self.player),
-                 lambda state: state.has("Triforce of Power", self.player))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
 
     def apply_base_patch(self, rom):
         # The base patch source is on a different repo, so here's the summary of changes:

@@ -20,7 +20,7 @@ class Dungeon1:
         if options.owlstatues == "both" or options.owlstatues == "dungeon":
             Location(dungeon=1).add(OwlStatue(0x10A)).connect(dungeon1_right_side, STONE_BEAK1)
         dungeon1_3_of_a_kind = Location(dungeon=1).add(DungeonChest(0x10A)).connect(dungeon1_right_side, OR(r.attack_hookshot_no_bomb, SHIELD)) # three of a kind, shield stops the suit from changing
-        dungeon1_miniboss = Location(dungeon=1).connect(dungeon1_right_side, AND(r.miniboss_requirements[world_setup.miniboss_mapping[0]], FEATHER))
+        dungeon1_miniboss = Location(dungeon=1).connect(dungeon1_right_side, AND(r.miniboss_requirements[world_setup.miniboss_mapping['0']], FEATHER))
         dungeon1_boss = Location(dungeon=1).connect(dungeon1_miniboss, NIGHTMARE_KEY1)
         boss = Location(dungeon=1).add(HeartContainer(0x106), Instrument(0x102)).connect(dungeon1_boss, r.boss_requirements[world_setup.boss_mapping[0]])
 
@@ -30,7 +30,7 @@ class Dungeon1:
         
         if options.logic == 'glitched' or options.logic == 'hell':
             boss_key.connect(entrance, r.super_jump_feather)  # super jump
-            dungeon1_miniboss.connect(dungeon1_right_side, r.miniboss_requirements[world_setup.miniboss_mapping[0]]) # damage boost or buffer pause over the pit to cross or mushroom
+            dungeon1_miniboss.connect(dungeon1_right_side, r.miniboss_requirements[world_setup.miniboss_mapping['0']]) # damage boost or buffer pause over the pit to cross or mushroom
         
         if options.logic == 'hell':
             feather_chest.connect(dungeon1_upper_left, SWORD)  # keep slashing the spiked beetles until they keep moving 1 pixel close towards you and the pit, to get them to fall

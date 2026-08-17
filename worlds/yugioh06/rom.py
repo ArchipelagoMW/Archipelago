@@ -145,7 +145,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         md5hash = basemd5.hexdigest()
         if MD5Europe != md5hash and MD5America != md5hash:
             raise Exception(
-                "Supplied Base Rom does not match known MD5 for"
+                "Supplied Base Rom does not match known MD5 for "
                 "Yu-Gi-Oh! World Championship 2006 America or Europe "
                 "Get the correct game and version, then dump it"
             )

@@ -1,8 +1,4 @@
-from typing import Union
-
 from .base_logic import BaseLogic, BaseLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
 from .. import options
 from ..stardew_rule import StardewRule, True_
 from ..strings.region_names import Region
@@ -14,7 +10,7 @@ class ArcadeLogicMixin(BaseLogicMixin):
         self.arcade = ArcadeLogic(*args, **kwargs)
 
 
-class ArcadeLogic(BaseLogic[Union[ArcadeLogicMixin, RegionLogicMixin, ReceivedLogicMixin]]):
+class ArcadeLogic(BaseLogic):
 
     def has_jotpk_power_level(self, power_level: int) -> StardewRule:
         if self.options.arcade_machine_locations != options.ArcadeMachineLocations.option_full_shuffling:

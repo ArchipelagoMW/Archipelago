@@ -1,9 +1,20 @@
+import logging
 import os
 from uuid import UUID, uuid4, uuid5
 
 from flask import url_for
 
+from WebHostLib.customserver import set_up_logging, tear_down_logging
 from . import TestBase
+
+
+def _cleanup_logger(room_id: UUID) -> None:
+    from Utils import user_path
+    tear_down_logging(room_id)
+    try:
+        os.unlink(user_path("logs", f"{room_id}.txt"))
+    except OSError:
+        pass
 
 
 class TestHostFakeRoom(TestBase):
@@ -39,7 +50,7 @@ class TestHostFakeRoom(TestBase):
 
         try:
             os.unlink(self.log_filename)
-        except FileNotFoundError:
+        except OSError:
             pass
 
     def test_display_log_missing_full(self) -> None:
@@ -191,3 +202,27 @@ class TestHostFakeRoom(TestBase):
         with db_session:
             commands = select(command for command in Command if command.room.id == self.room_id)  # type: ignore
             self.assertNotIn("/help", (command.commandtext for command in commands))
+
+    def test_logger_teardown(self) -> None:
+        """Verify that room loggers are removed from the global logging manager."""
+        from WebHostLib.customserver import tear_down_logging
+        room_id = uuid4()
+        self.addCleanup(_cleanup_logger, room_id)
+        set_up_logging(room_id)
+        self.assertIn(f"RoomLogger {room_id}", logging.Logger.manager.loggerDict)
+        tear_down_logging(room_id)
+        self.assertNotIn(f"RoomLogger {room_id}", logging.Logger.manager.loggerDict)
+
+    def test_handler_teardown(self) -> None:
+        """Verify that handlers for room loggers are closed by tear_down_logging."""
+        from WebHostLib.customserver import tear_down_logging
+        room_id = uuid4()
+        self.addCleanup(_cleanup_logger, room_id)
+        logger = set_up_logging(room_id)
+        handlers = logger.handlers[:]
+        self.assertGreater(len(handlers), 0)
+
+        tear_down_logging(room_id)
+        for handler in handlers:
+            if isinstance(handler, logging.FileHandler):
+                self.assertTrue(handler.stream is None or handler.stream.closed)

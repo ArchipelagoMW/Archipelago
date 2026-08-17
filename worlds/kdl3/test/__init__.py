@@ -26,13 +26,13 @@ class KDL3TestBase(WorldTestBase):
         self.multiworld.game[1] = self.game
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed(seed)
-        self.multiworld.state = CollectionState(self.multiworld)
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })
         self.multiworld.set_options(args)
+        self.multiworld.state = CollectionState(self.multiworld)
         self.multiworld.plando_options = PlandoOptions.connections
         for step in gen_steps:
             call_all(self.multiworld, step)

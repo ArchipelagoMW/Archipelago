@@ -28,7 +28,6 @@
     font-weight: normal;
     font-family: LondrinaSolid-Regular, sans-serif;
     text-transform: uppercase;
-    cursor: pointer; /* TODO: remove once we drop showdown.js */
     width: 100%;
     text-shadow: 1px 1px 4px #000000;
 }
@@ -37,7 +36,6 @@
     font-size: 38px;
     font-weight: normal;
     font-family: LondrinaSolid-Light, sans-serif;
-    cursor: pointer; /* TODO: remove once we drop showdown.js */
     width: 100%;
     margin-top: 20px;
     margin-bottom: 0.5rem;
@@ -50,7 +48,6 @@
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     text-align: left;
-    cursor: pointer; /* TODO: remove once we drop showdown.js */
     width: 100%;
     margin-bottom: 0.5rem;
 }
@@ -59,7 +56,6 @@
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 24px;
-    cursor: pointer; /* TODO: remove once we drop showdown.js */
     margin-bottom: 24px;
 }
 
@@ -67,14 +63,12 @@
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 22px;
-    cursor: pointer; /* TODO: remove once we drop showdown.js */
 }
 
 .markdown h6, .markdown details summary.h6{
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 20px;
-    cursor: pointer; /* TODO: remove once we drop showdown.js */
 }
 
 .markdown h4, .markdown h5, .markdown h6{

@@ -13,8 +13,8 @@
 
 ## Installation
 
-Open the [Randomizer Repository](https://github.com/BrandenEK/AShortHike.Randomizer) and follow
-the installation instructions listed there.
+1. Read the [Randomizer readme](https://github.com/BrandenEK/AShortHike.Randomizer) to see all required dependencies
+1. Read the [Mod Installer readme](https://github.com/BrandenEK/AShortHike.Modding.Installer) to see how to download the required mods
 
 ## Connecting
 

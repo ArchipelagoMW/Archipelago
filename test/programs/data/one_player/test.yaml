@@ -2,8 +2,8 @@ description: Almost blank test yaml
 name: Player{NUMBER}
 
 game:
-  Timespinner: 1  # what else
+  APQuest: 1  # what else
 requires:
   version: 0.2.6
-Timespinner: {}
+APQuest: {}
 

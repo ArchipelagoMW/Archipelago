@@ -174,7 +174,7 @@ item_table: Dict[str, ItemData] = {
     'Corruption': ItemData('Orb Spell', 1337161),
     'Lightwall': ItemData('Orb Spell', 1337162, progression=True),
     'Bleak Ring': ItemData('Orb Passive', 1337163, useful=True),
-    'Scythe Ring': ItemData('Orb Passive', 1337164),
+    'Scythe Ring': ItemData('Orb Passive', 1337164, useful=True),
     'Pyro Ring': ItemData('Orb Passive', 1337165, progression=True),
     'Royal Ring': ItemData('Orb Passive', 1337166, progression=True),
     'Shield Ring': ItemData('Orb Passive', 1337167),
@@ -208,7 +208,11 @@ item_table: Dict[str, ItemData] = {
     'Lab Access Research': ItemData('Lab Access', 1337196, progression=True),
     'Lab Access Dynamo': ItemData('Lab Access', 1337197, progression=True),
     'Drawbridge Key': ItemData('Key', 1337198, progression=True),
-    # 1337199 - 1337248 Reserved
+    'Cube of Bodie': ItemData('Relic', 1337199, progression=True),
+    'Spider Trap': ItemData('Trap', 1337200, 0, trap=True),
+    'Lights Out Trap': ItemData('Trap', 1337201, 0, trap=True),
+    'Palm Punch Trap': ItemData('Trap', 1337202, 0, trap=True),
+    # 1337203 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 

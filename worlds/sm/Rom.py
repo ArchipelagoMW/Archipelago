@@ -1,6 +1,7 @@
 import hashlib
 import os
 
+import settings
 import json
 import Utils
 from Utils import read_snes_rom
@@ -77,7 +78,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
+    options: settings.Settings = settings.get_settings()
     if not file_name:
         file_name = options["sm_options"]["rom_file"]
     if not os.path.exists(file_name):

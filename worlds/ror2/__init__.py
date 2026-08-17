@@ -4,7 +4,10 @@ from .items import RiskOfRainItem, item_table, item_pool_weights, offset, filler
 from .locations import RiskOfRainLocation, item_pickups, get_locations
 from .rules import set_rules
 from .ror2environments import environment_vanilla_table, environment_vanilla_orderedstages_table, \
-    environment_sotv_orderedstages_table, environment_sotv_table, collapse_dict_list_vertical, shift_by_offset
+    environment_sotv_orderedstages_table, environment_sotv_table, environment_sost_orderedstages_table, \
+    environment_sost_table, collapse_dict_list_vertical, shift_by_offset, environment_vanilla_variants_table, \
+    environment_vanilla_variant_orderedstages_table, environment_sots_variants_table, \
+    environment_sots_variants_orderedstages_table
 
 from BaseClasses import Item, ItemClassification, Tutorial
 from .options import ItemWeights, ROR2Options, ror2_option_groups
@@ -46,7 +49,7 @@ class RiskOfRainWorld(World):
     }
     location_name_to_id = item_pickups
 
-    required_client_version = (0, 5, 0)
+    required_client_version = (0, 6, 4)
     web = RiskOfWeb()
     total_revivals: int
 
@@ -62,7 +65,9 @@ class RiskOfRainWorld(World):
                     scavengers=self.options.scavengers_per_stage.value,
                     scanners=self.options.scanner_per_stage.value,
                     altars=self.options.altars_per_stage.value,
-                    dlc_sotv=bool(self.options.dlc_sotv.value)
+                    dlc_sotv=bool(self.options.dlc_sotv.value),
+                    dlc_sots=bool(self.options.dlc_sots.value),
+                    stage_variants=bool(self.options.stage_variants)
                 )
             )
         self.total_revivals = int(self.options.total_revivals.value / 100 *
@@ -70,6 +75,8 @@ class RiskOfRainWorld(World):
         if self.options.start_with_revive:
             self.total_revivals -= 1
         if self.options.victory == "voidling" and not self.options.dlc_sotv:
+            self.options.victory.value = self.options.victory.option_any
+        if self.options.victory == "falseson" and not self.options.dlc_sots:
             self.options.victory.value = self.options.victory.option_any
 
     def create_regions(self) -> None:
@@ -105,16 +112,39 @@ class RiskOfRainWorld(World):
 
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
+            environments_pool = shift_by_offset(environment_vanilla_table, environment_offset)
+            # Vanilla Variants
+            if self.options.stage_variants:
+                environment_available_orderedstages_table = \
+                    collapse_dict_list_vertical(environment_available_orderedstages_table,
+                                                environment_vanilla_variant_orderedstages_table)
             if self.options.dlc_sotv:
                 environment_available_orderedstages_table = \
                     collapse_dict_list_vertical(environment_available_orderedstages_table,
                                                 environment_sotv_orderedstages_table)
+            if self.options.dlc_sots:
+                environment_available_orderedstages_table = \
+                    collapse_dict_list_vertical(environment_available_orderedstages_table,
+                                                environment_sost_orderedstages_table)
+            if self.options.dlc_sots and self.options.stage_variants:
+                environment_available_orderedstages_table = \
+                    collapse_dict_list_vertical(environment_available_orderedstages_table,
+                                                environment_sots_variants_orderedstages_table)
 
-            environments_pool = shift_by_offset(environment_vanilla_table, environment_offset)
-
+            if self.options.stage_variants:
+                environment_offset_table = shift_by_offset(environment_vanilla_variants_table, environment_offset)
+                environments_pool = {**environments_pool, **environment_offset_table}
             if self.options.dlc_sotv:
                 environment_offset_table = shift_by_offset(environment_sotv_table, environment_offset)
                 environments_pool = {**environments_pool, **environment_offset_table}
+            if self.options.dlc_sots:
+                environment_offset_table = shift_by_offset(environment_sost_table, environment_offset)
+                environments_pool = {**environments_pool, **environment_offset_table}
+            # SOTS Variant Environments
+            if self.options.dlc_sots and self.options.stage_variants:
+                environment_offset_table = shift_by_offset(environment_sots_variants_table, environment_offset)
+                environments_pool = {**environments_pool, **environment_offset_table}
+
             # percollect starting environment for stage 1
             unlock = self.random.choices(list(environment_available_orderedstages_table[0].keys()), k=1)
             self.multiworld.push_precollected(self.create_item(unlock[0]))
@@ -146,7 +176,9 @@ class RiskOfRainWorld(World):
                     scavengers=self.options.scavengers_per_stage.value,
                     scanners=self.options.scanner_per_stage.value,
                     altars=self.options.altars_per_stage.value,
-                    dlc_sotv=bool(self.options.dlc_sotv.value)
+                    dlc_sotv=bool(self.options.dlc_sotv.value),
+                    dlc_sots=bool(self.options.dlc_sots.value),
+                    stage_variants=bool(self.options.stage_variants)
                 )
             )
         # Create junk items
@@ -223,7 +255,7 @@ class RiskOfRainWorld(World):
                                             "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
                                             "scanner_per_stage", "altars_per_stage", "total_revivals",
                                             "start_with_revive", "final_stage_death", "death_link", "require_stages",
-                                            "progressive_stages", casing="camel")
+                                            "progressive_stages", "stage_variants", "show_seer_portals", casing="camel")
         return {
             **options_dict,
             "seed": "".join(self.random.choice(string.digits) for _ in range(16)),
@@ -254,7 +286,7 @@ class RiskOfRainWorld(World):
             event_loc.place_locked_item(RiskOfRainItem("Stage 5", ItemClassification.progression, None, self.player))
             event_loc.show_in_spoiler = False
             event_region.locations.append(event_loc)
-            event_loc.access_rule = lambda state: state.has("Sky Meadow", self.player)
+            event_loc.access_rule = lambda state: state.has("Sky Meadow", self.player) or state.has("Helminth Hatchery", self.player)
 
         victory_region = self.multiworld.get_region("Victory", self.player)
         victory_event = RiskOfRainLocation(self.player, "Victory", None, victory_region)

@@ -28,12 +28,14 @@ on:
       - 'requirements.txt'
       - '.github/workflows/scan-build.yml'
 
+permissions: {}
+
 jobs:
   scan-build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6.0.2
       with:
         submodules: recursive
     - name: Install newer Clang
@@ -45,7 +47,7 @@ jobs:
       run: |
         sudo apt install clang-tools-19
     - name: Get a recent python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6.2.0
       with:
         python-version: '3.11'
     - name: Install dependencies
@@ -59,7 +61,9 @@ jobs:
         scan-build-19 --status-bugs -o scan-build-reports -disable-checker deadcode.DeadStores python setup.py build -y
     - name: Store report
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.0
       with:
         name: scan-build-reports
         path: scan-build-reports
+        compression-level: 9  # highly compressible
+        if-no-files-found: error

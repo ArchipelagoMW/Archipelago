@@ -1,0 +1,61 @@
+services:
+  multiworld:
+    # Build only once. Web service uses the same image build
+    build:
+      context: ..
+    # Name image for use in web service
+    image: archipelago-base
+    # Use locally-built image
+    pull_policy: never
+    # Launch main process without website hosting (config override)
+    entrypoint: python WebHost.py --config_override selflaunch.yaml
+    volumes:
+      # Mount application volume
+      - app_volume:/app
+
+      # Mount configs
+      - ./example_config.yaml:/app/config.yaml
+      - ./example_selflaunch.yaml:/app/selflaunch.yaml
+
+    # Expose on host network for access to dynamically mapped ports
+    network_mode: host
+
+    # No Healthcheck in place yet for multiworld
+    healthcheck:
+      test: ["NONE"]
+  web:
+    # Use image build by multiworld service
+    image: archipelago-base
+    # Use locally-built image
+    pull_policy: never
+    # Launch gunicorn targeting WebHost application
+    entrypoint: gunicorn -c gunicorn.conf.py
+    volumes:
+      # Mount application volume
+      - app_volume:/app
+
+      # Mount configs
+      - ./example_config.yaml:/app/config.yaml
+      - ./example_gunicorn.conf.py:/app/gunicorn.conf.py
+    environment:
+      # Bind gunicorn on 8000
+      - PORT=8000
+
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      # Mount application volume
+      - app_volume:/app
+
+      # Mount config
+      - ./example_nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      # Nginx listening internally on port 80 -- mapped to 8080 on host
+      - 8080:80
+    depends_on:
+      - web
+
+volumes:
+  # Share application directory amongst multiworld and web services
+  # (for access to log files and the like), and nginx (for static files)
+  app_volume:

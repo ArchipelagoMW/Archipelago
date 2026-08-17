@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import ClassVar, Optional
+from typing import ClassVar
 
+from .base import FeatureBase
 from ...data.game_item import GameItem, ItemTag
 
 location_prefix = "Harvest "
@@ -10,14 +11,14 @@ def to_location_name(crop: str) -> str:
     return location_prefix + crop
 
 
-def extract_crop_from_location_name(location_name: str) -> Optional[str]:
+def extract_crop_from_location_name(location_name: str) -> str | None:
     if not location_name.startswith(location_prefix):
         return None
 
     return location_name[len(location_prefix):]
 
 
-class CropsanityFeature(ABC):
+class CropsanityFeature(FeatureBase, ABC):
     is_enabled: ClassVar[bool]
 
     to_location_name = staticmethod(to_location_name)

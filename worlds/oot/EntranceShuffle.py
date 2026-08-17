@@ -8,9 +8,9 @@ from .Hints import get_hint_area, HintAreaNotFound
 from .Regions import TimeOfDay
 
 
-def set_all_entrances_data(world, player):
+def set_all_entrances_data(multiworld, player):
     for type, forward_entry, *return_entry in entrance_shuffle_table:
-        forward_entrance = world.get_entrance(forward_entry[0], player)
+        forward_entrance = multiworld.get_entrance(forward_entry[0], player)
         forward_entrance.data = forward_entry[1]
         forward_entrance.type = type
         forward_entrance.primary = True
@@ -18,7 +18,7 @@ def set_all_entrances_data(world, player):
             forward_entrance.data['index'] = 0x1000 + forward_entrance.data['grotto_id']
         if return_entry:
             return_entry = return_entry[0]
-            return_entrance = world.get_entrance(return_entry[0], player)
+            return_entrance = multiworld.get_entrance(return_entry[0], player)
             return_entrance.data = return_entry[1]
             return_entrance.type = type
             forward_entrance.bind_two_way(return_entrance)

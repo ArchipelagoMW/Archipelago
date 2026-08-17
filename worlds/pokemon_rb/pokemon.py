@@ -1,9 +1,17 @@
 from copy import deepcopy
+import typing
+
+from worlds.Files import APTokenTypes
+
 from . import poke_data, logic
 from .rom_addresses import rom_addresses
 
+if typing.TYPE_CHECKING:
+    from . import PokemonRedBlueWorld
+    from .rom import PokemonRedProcedurePatch, PokemonBlueProcedurePatch
 
-def set_mon_palettes(world, random, data):
+
+def set_mon_palettes(world: "PokemonRedBlueWorld", patch: "PokemonRedProcedurePatch | PokemonBlueProcedurePatch"):
     if world.options.randomize_pokemon_palettes == "vanilla":
         return
     pallet_map = {
@@ -31,12 +39,9 @@ def set_mon_palettes(world, random, data):
               poke_data.evolves_from and poke_data.evolves_from[mon] != "Eevee"):
             pallet = palettes[-1]
         else:  # completely_random or follow_evolutions and it is not an evolved form (except eeveelutions)
-            pallet = random.choice(list(pallet_map.values()))
+            pallet = world.random.choice(list(pallet_map.values()))
         palettes.append(pallet)
-    address = rom_addresses["Mon_Palettes"]
-    for pallet in palettes:
-        data[address] = pallet
-        address += 1
+    patch.write_token(APTokenTypes.WRITE, rom_addresses["Mon_Palettes"], bytes(palettes))
 
 
 def choose_forced_type(chances, random):
@@ -253,9 +258,9 @@ def process_pokemon_data(self):
                     mon_data[f"start move {i}"] = learnsets[mon].pop(0)
 
         if self.options.randomize_pokemon_catch_rates:
-            mon_data["catch rate"] = self.random.randint(self.options.minimum_catch_rate, 255)
+            mon_data["catch rate"] = self.random.randint(self.options.minimum_catch_rate.value, 255)
         else:
-            mon_data["catch rate"] = max(self.options.minimum_catch_rate, mon_data["catch rate"])
+            mon_data["catch rate"] = max(self.options.minimum_catch_rate.value, mon_data["catch rate"])
 
         def roll_tm_compat(roll_move):
             if self.local_move_data[roll_move]["type"] in [mon_data["type1"], mon_data["type2"]]:
@@ -395,7 +400,7 @@ def verify_hm_moves(multiworld, world, player):
     last_intervene = None
     while True:
         intervene_move = None
-        test_state = multiworld.get_all_state(False)
+        test_state = multiworld.get_all_state(False, True, False)
         if not logic.can_learn_hm(test_state, world, "Surf", player):
             intervene_move = "Surf"
         elif not logic.can_learn_hm(test_state, world, "Strength", player):

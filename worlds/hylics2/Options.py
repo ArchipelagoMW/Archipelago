@@ -57,13 +57,8 @@ class ExtraLogic(DefaultOnToggle):
 
 
 class Hylics2DeathLink(DeathLink):
-    """
-    When you die, everyone dies. The reverse is also true.
-    
-    Note that this also includes death by using the PERISH gesture.
-    
-    Can be toggled via in-game console command "/deathlink".
-    """
+    __doc__ = (DeathLink.__doc__ + "\n\n    Note that this also includes death by using the PERISH gesture." +
+               "\n\n    Can be toggled via in-game console command \"/deathlink\".")
 
 
 @dataclass

@@ -5,7 +5,7 @@ import sys
 import unittest
 
 from BaseClasses import get_seed
-from .. import SVTestCase
+from ..bases import SVTestCase
 
 # <function Location.<lambda> at 0x102ca98a0>
 lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")

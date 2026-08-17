@@ -1,6 +1,8 @@
+from BaseClasses import ItemClassification
 from worlds.generic.Rules import set_rule, add_rule
-from .names import location_name, enemy_abilities, animal_friend_spawns
+from .items import KDL3Item
 from .locations import location_table
+from .names import location_name, enemy_abilities, animal_friend_spawns
 from .options import GoalSpeed
 import typing
 
@@ -111,6 +113,11 @@ def can_fix_angel_wings(state: "CollectionState", player: int, copy_abilities: t
 
 
 def set_rules(world: "KDL3World") -> None:
+    goal = world.options.goal.value
+    goal_location = world.multiworld.get_location(location_name.goals[goal], world.player)
+    goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, world.player))
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Love-Love Rod", world.player)
+
     # Level 1
     set_rule(world.multiworld.get_location(location_name.grass_land_muchi, world.player),
              lambda state: can_reach_chuchu(state, world.player))

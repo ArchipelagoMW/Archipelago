@@ -5,7 +5,7 @@ from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_
 from ...data import villagers_data, fish_data
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
-from ...data.requirement import YearRequirement, CombatRequirement, RelationshipRequirement, ToolRequirement, SkillRequirement, FishingRequirement
+from ...data.requirement import YearRequirement, CombatRequirement, SpecificFriendRequirement, ToolRequirement, SkillRequirement, FishingRequirement
 from ...data.shop import ShopSource
 from ...mods.mod_data import ModNames
 from ...strings.craftable_names import ModEdible
@@ -23,6 +23,9 @@ from ...strings.seed_names import SVESeed
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.villager_names import ModNPC
+
+# Used to adapt content not yet moved to content packs to easily detect when SVE and Ginger Island are both enabled.
+SVE_GINGER_ISLAND_PACK = ModNames.sve + "+" + ginger_island_content_pack.name
 
 
 class SVEContentPack(ContentPack):
@@ -67,6 +70,10 @@ class SVEContentPack(ContentPack):
             content.game_items.pop(SVESeed.slime)
             content.game_items.pop(SVEFruit.slime_berry)
 
+    def finalize_hook(self, content: StardewContent):
+        if ginger_island_content_pack.name in content.registered_packs:
+            content.registered_packs.add(SVE_GINGER_ISLAND_PACK)
+
 
 register_mod_content_pack(SVEContentPack(
     ModNames.sve,
@@ -75,17 +82,18 @@ register_mod_content_pack(SVEContentPack(
         ModNames.jasper,  # To override Marlon and Gunther
     ),
     shop_sources={
-        SVEGift.aged_blue_moon_wine: (ShopSource(money_price=28000, shop_region=SVERegion.blue_moon_vineyard),),
-        SVEGift.blue_moon_wine: (ShopSource(money_price=3000, shop_region=SVERegion.blue_moon_vineyard),),
-        ModEdible.lightning_elixir: (ShopSource(money_price=12000, shop_region=SVERegion.galmoran_outpost),),
-        ModEdible.barbarian_elixir: (ShopSource(money_price=22000, shop_region=SVERegion.galmoran_outpost),),
-        ModEdible.gravity_elixir: (ShopSource(money_price=4000, shop_region=SVERegion.galmoran_outpost),),
-        SVEMeal.grampleton_orange_chicken: (
-        ShopSource(money_price=650, shop_region=Region.saloon, other_requirements=(RelationshipRequirement(ModNPC.sophia, 6),)),),
-        ModEdible.hero_elixir: (ShopSource(money_price=8000, shop_region=SVERegion.isaac_shop),),
-        ModEdible.aegis_elixir: (ShopSource(money_price=28000, shop_region=SVERegion.galmoran_outpost),),
-        SVEBeverage.sports_drink: (ShopSource(money_price=750, shop_region=Region.hospital),),
-        SVEMeal.stamina_capsule: (ShopSource(money_price=4000, shop_region=Region.hospital),),
+        SVEGift.aged_blue_moon_wine: (ShopSource(price=28000, shop_region=SVERegion.blue_moon_vineyard),),
+        SVEGift.blue_moon_wine: (ShopSource(price=3000, shop_region=SVERegion.blue_moon_vineyard),),
+        ModEdible.lightning_elixir: (ShopSource(price=12000, shop_region=SVERegion.galmoran_outpost),),
+        ModEdible.barbarian_elixir: (ShopSource(price=22000, shop_region=SVERegion.galmoran_outpost),),
+        ModEdible.gravity_elixir: (ShopSource(price=4000, shop_region=SVERegion.galmoran_outpost),),
+        SVEMeal.grampleton_orange_chicken: (ShopSource(price=650,
+                                                       shop_region=Region.saloon,
+                                                       other_requirements=(SpecificFriendRequirement(ModNPC.sophia, 6),)),),
+        ModEdible.hero_elixir: (ShopSource(price=8000, shop_region=SVERegion.isaac_shop),),
+        ModEdible.aegis_elixir: (ShopSource(price=28000, shop_region=SVERegion.galmoran_outpost),),
+        SVEBeverage.sports_drink: (ShopSource(price=750, shop_region=Region.hospital),),
+        SVEMeal.stamina_capsule: (ShopSource(price=4000, shop_region=Region.hospital),),
     },
     harvest_sources={
         Mushroom.red: (
@@ -118,8 +126,8 @@ register_mod_content_pack(SVEContentPack(
 
         ModLoot.green_mushroom: (ForagingSource(regions=(SVERegion.highlands_pond,), seasons=Season.not_winter),),
         ModLoot.ornate_treasure_chest: (ForagingSource(regions=(SVERegion.highlands_outside,),
-                                                       other_requirements=(
-                                                       CombatRequirement(Performance.galaxy), ToolRequirement(Tool.axe, ToolMaterial.iron))),),
+                                                       other_requirements=(CombatRequirement(Performance.galaxy),
+                                                                           ToolRequirement(Tool.axe, ToolMaterial.iron))),),
         ModLoot.swirl_stone: (ForagingSource(regions=(SVERegion.crimson_badlands,), other_requirements=(CombatRequirement(Performance.galaxy),)),),
         ModLoot.void_soul: (ForagingSource(regions=(SVERegion.crimson_badlands,), other_requirements=(CombatRequirement(Performance.good),)),),
         SVEForage.winter_star_rose: (ForagingSource(regions=(SVERegion.summit,), seasons=(Season.winter,)),),
@@ -139,8 +147,9 @@ register_mod_content_pack(SVEContentPack(
         SVEForage.thistle: (ForagingSource(regions=(SVERegion.summit,)),),
         ModLoot.void_pebble: (ForagingSource(regions=(SVERegion.crimson_badlands,), other_requirements=(CombatRequirement(Performance.great),)),),
         ModLoot.void_shard: (ForagingSource(regions=(SVERegion.crimson_badlands,),
-                                            other_requirements=(
-                                            CombatRequirement(Performance.galaxy), SkillRequirement(Skill.combat, 10), YearRequirement(3),)),),
+                                            other_requirements=(CombatRequirement(Performance.galaxy),
+                                                                SkillRequirement(Skill.combat, 10),
+                                                                YearRequirement(3),)),),
         SVEWaterItem.dulse_seaweed: (ForagingSource(regions=(Region.beach,), other_requirements=(FishingRequirement(Region.beach),)),),
 
         # Fable Reef
@@ -207,7 +216,6 @@ register_mod_content_pack(SVEContentPack(
         villagers_data.scarlett,
         villagers_data.susan,
         villagers_data.morris,
-        # The wizard leaves his tower on sunday, for like 1 hour... Good enough for entrance rando!
-        override(villagers_data.wizard, locations=(Region.wizard_tower, Region.forest), bachelor=True, mod_name=ModNames.sve),
+        override(villagers_data.wizard, bachelor=True, mod_name=ModNames.sve),
     )
 ))
