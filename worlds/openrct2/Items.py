@@ -91,10 +91,8 @@ def set_openRCT2_items(options: Options.openRCT2Options, random: Random) -> tupl
             openRCT2_items.append(rule)  # Add an item to disable
 
     # Adds some useful filler items. 15 is the absolute minimum to not break generation.
-    count = 0
-    while count < 15:
+    for each in range(15):
         openRCT2_items.append(random.choice(item_info["filler_items"]))
-        count += 1
 
     # Add extra traps if there's not enough for the negative awards.
     if options.selected_awards == Options.Awards.all_awards: # 0: all awards
