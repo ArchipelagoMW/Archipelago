@@ -2243,8 +2243,6 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                               "text": "Bounce", "original_cmd": cmd}])
                 return
 
-
-
         elif cmd == "Get":
             if "keys" not in args or type(args["keys"]) != list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
