@@ -2147,9 +2147,36 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            games = set(args.get("games", []))
-            tags = set(args.get("tags", []))
-            slots = set(args.get("slots", []))
+            games = args.get("games", [])
+            if not isinstance(games, (list, set)) or not all(isinstance(entry, str) for entry in games):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Games list provided did not have the correct format.",
+                    "original_cmd": cmd}])
+                return
+
+            games = set(games)
+
+            tags = args.get("tags", [])
+            if not isinstance(tags, (list, set)) or not all(isinstance(entry, str) for entry in tags):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Tags list provided did not have the correct format.",
+                    "original_cmd": cmd}])
+                return
+
+            tags = set(tags)
+
+            slots = args.get("slots", [])
+            if not isinstance(slots, (list, set)) or not all(isinstance(entry, int) for entry in slots):
+                await ctx.send_msgs(client, [{
+                    "cmd": "InvalidPacket", "type": "arguments",
+                    "text": "Bounce: Slots list provided did not have the correct format.",
+                    "original_cmd": cmd}])
+                return
+
+            slots = set(slots)
+
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
