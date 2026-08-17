@@ -1,6 +1,6 @@
 import dataclasses
 from collections.abc import Callable, Iterable, Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Final, Generic, Never, Self, cast, override
+from typing import TYPE_CHECKING, Any, ClassVar, Final, Generic, Never, Self, cast
 
 from typing_extensions import TypeVar, dataclass_transform, override
 
