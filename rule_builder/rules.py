@@ -1,6 +1,6 @@
 import dataclasses
 from collections.abc import Callable, Iterable, Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Final, Generic, Never, Self, cast
+from typing import TYPE_CHECKING, Any, ClassVar, Final, Generic, Never, Self, cast, override
 
 from typing_extensions import TypeVar, dataclass_transform, override
 
@@ -141,7 +141,7 @@ class Rule(Generic[TWorld]):
                 result[name] = value
         return result
 
-    def __and__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
+    def __and__(self, other: "Rule[Any] | Rule.Resolved | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
         """Combines two rules or a rule and an option filter into an And rule"""
         if isinstance(other, OptionFilter):
             other = (other,)
@@ -149,6 +149,8 @@ class Rule(Generic[TWorld]):
             if not other:
                 return self
             return Filtered(self, options=other)
+        if isinstance(other, Rule.Resolved):
+            other = other.revert()
         if self.options == other.options:
             if isinstance(self, And):
                 if isinstance(other, And):
@@ -158,10 +160,10 @@ class Rule(Generic[TWorld]):
                 return And(self, *other.children, options=other.options)
         return And(self, other)
 
-    def __rand__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
+    def __rand__(self, other: "Rule[Any] | Rule.Resolved | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
         return self.__and__(other)
 
-    def __or__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
+    def __or__(self, other: "Rule[Any] | Rule.Resolved | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
         """Combines two rules or a rule and an option filter into an Or rule"""
         if isinstance(other, OptionFilter):
             other = (other,)
@@ -169,6 +171,8 @@ class Rule(Generic[TWorld]):
             if not other:
                 return self
             return Or(self, True_(options=other))
+        if isinstance(other, Rule.Resolved):
+            other = other.revert()
         if self.options == other.options:
             if isinstance(self, Or):
                 if isinstance(other, Or):
@@ -178,7 +182,7 @@ class Rule(Generic[TWorld]):
                 return Or(self, *other.children, options=self.options)
         return Or(self, other)
 
-    def __ror__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
+    def __ror__(self, other: "Rule[Any] | Rule.Resolved | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
         return self.__or__(other)
 
     def __bool__(self) -> Never:
@@ -277,6 +281,10 @@ class Rule(Generic[TWorld]):
             """Returns a human readable string describing this rule"""
             return str(self)
 
+        def revert(self) -> "Rule[Any]":
+            """Returns a new instance of the base rule that would resolve into this rule"""
+            raise NotImplementedError(f"{self.rule_name} cannot be reverted")
+
         @override
         def __str__(self) -> str:
             return self.rule_name
@@ -299,6 +307,10 @@ class True_(Rule[TWorld], game="Archipelago"):  # noqa: N801
             return [{"type": "color", "color": "green", "text": "True"}]
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return True_()
+
+        @override
         def __str__(self) -> str:
             return "True"
 
@@ -318,6 +330,10 @@ class False_(Rule[TWorld], game="Archipelago"):  # noqa: N801
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
             return [{"type": "color", "color": "salmon", "text": "False"}]
+
+        @override
+        def revert(self) -> "Rule[Any]":
+            return False_()
 
         @override
         def __str__(self) -> str:
@@ -425,6 +441,7 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
             return combined_deps
 
 
+@dataclasses.dataclass(init=False)
 class AtLeast(NestedRule[TWorld], game="Archipelago"):
     """A rule that returns true when at least N child rules evaluate as true"""
 
@@ -546,6 +563,10 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
             return f"At least {satisfied_count}/{self.count} of ({clauses})"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return AtLeast(self.count, *(c.revert() for c in self.children))
+
+        @override
         def __str__(self) -> str:
             clauses = ", ".join([str(c) for c in self.children])
             return f"At least {self.count} of ({clauses})"
@@ -636,6 +657,10 @@ class And(NestedRule[TWorld], game="Archipelago"):
             return f"({clauses})"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return And(*(c.revert() for c in self.children))
+
+        @override
         def __str__(self) -> str:
             clauses = " & ".join([str(c) for c in self.children])
             return f"({clauses})"
@@ -721,6 +746,10 @@ class Or(NestedRule[TWorld], game="Archipelago"):
         def explain_str(self, state: CollectionState | None = None) -> str:
             clauses = " | ".join([c.explain_str(state) for c in self.children])
             return f"({clauses})"
+
+        @override
+        def revert(self) -> "Rule[Any]":
+            return Or(*(c.revert() for c in self.children))
 
         @override
         def __str__(self) -> str:
@@ -896,6 +925,10 @@ class Has(Rule[TWorld], game="Archipelago"):
             return f"{prefix} {count}{self.item_name}"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return Has(self.item_name, self.count)
+
+        @override
         def __str__(self) -> str:
             count = f"{self.count}x " if self.count > 1 else ""
             return f"Has {count}{self.item_name}"
@@ -1014,6 +1047,10 @@ class HasAll(Rule[TWorld], game="Archipelago"):
             return f"{prefix} of ({found_str}{infix}{missing_str})"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return HasAll(*self.item_names)
+
+        @override
         def __str__(self) -> str:
             items = ", ".join(self.item_names)
             return f"Has all of ({items})"
@@ -1130,6 +1167,10 @@ class HasAny(Rule[TWorld], game="Archipelago"):
             missing_str = f"Missing: {', '.join(missing)}" if missing else ""
             infix = "; " if found and missing else ""
             return f"{prefix} of ({found_str}{infix}{missing_str})"
+
+        @override
+        def revert(self) -> "Rule[Any]":
+            return HasAny(*self.item_names)
 
         @override
         def __str__(self) -> str:
@@ -1255,6 +1296,10 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
             return f"{prefix} of ({found_str}{infix}{missing_str})"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return HasAllCounts(dict(self.item_counts))
+
+        @override
         def __str__(self) -> str:
             items = ", ".join([f"{item} x{count}" for item, count in self.item_counts])
             return f"Has all of ({items})"
@@ -1376,6 +1421,10 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
             missing_str = f"Missing: {', '.join([f'{item} x{count}' for item, count in missing])}" if missing else ""
             infix = "; " if found and missing else ""
             return f"{prefix} of ({found_str}{infix}{missing_str})"
+
+        @override
+        def revert(self) -> "Rule[Any]":
+            return HasAnyCount(dict(self.item_counts))
 
         @override
         def __str__(self) -> str:
@@ -1513,6 +1562,10 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             return f"Has {found_count}/{self.count} items from ({found_str}{infix}{missing_str})"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return HasFromList(*self.item_names, count=self.count)
+
+        @override
         def __str__(self) -> str:
             items = ", ".join(self.item_names)
             count = f"{self.count}x items" if self.count > 1 else "an item"
@@ -1645,6 +1698,10 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
             return f"Has {found_count}/{self.count} unique items from ({found_str}{infix}{missing_str})"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return HasFromListUnique(*self.item_names, count=self.count)
+
+        @override
         def __str__(self) -> str:
             items = ", ".join(self.item_names)
             count = f"{self.count}x unique items" if self.count > 1 else "a unique item"
@@ -1720,6 +1777,10 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
                 return str(self)
             count = state.count_group(self.item_name_group, self.player)
             return f"Has {count}/{self.count} items from {self.item_name_group}"
+
+        @override
+        def revert(self) -> "Rule[Any]":
+            return HasGroup(self.item_name_group, self.count)
 
         @override
         def __str__(self) -> str:
@@ -1801,6 +1862,10 @@ class HasGroupUnique(Rule[TWorld], game="Archipelago"):
             return f"Has {count}/{self.count} unique items from {self.item_name_group}"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return HasGroupUnique(self.item_name_group, self.count)
+
+        @override
         def __str__(self) -> str:
             count = f"{self.count}x unique items" if self.count > 1 else "a unique item"
             return f"Has {count} from {self.item_name_group}"
@@ -1880,6 +1945,10 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
             return f"{prefix} location {self.location_name}"
 
         @override
+        def revert(self) -> "Rule[Any]":
+            return CanReachLocation(self.location_name, self.parent_region_name, skip_indirect_connection=True)
+
+        @override
         def __str__(self) -> str:
             return f"Can reach location {self.location_name}"
 
@@ -1934,6 +2003,10 @@ class CanReachRegion(Rule[TWorld], game="Archipelago"):
                 return str(self)
             prefix = "Reached" if self(state) else "Cannot reach"
             return f"{prefix} region {self.region_name}"
+
+        @override
+        def revert(self) -> "Rule[Any]":
+            return CanReachRegion(self.region_name)
 
         @override
         def __str__(self) -> str:
@@ -2007,6 +2080,10 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
                 return str(self)
             prefix = "Reached" if self(state) else "Cannot reach"
             return f"{prefix} entrance {self.entrance_name}"
+
+        @override
+        def revert(self) -> "Rule[Any]":
+            return CanReachEntrance(self.entrance_name, self.parent_region_name)
 
         @override
         def __str__(self) -> str:
