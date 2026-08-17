@@ -2212,7 +2212,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
             slots = set(slots)
 
-            teams = args.get("teams", [])
+            teams = args.get("teams", [client.team])
             if not isinstance(teams, (list, set)) or not all(isinstance(entry, int) for entry in teams):
                 await ctx.send_msgs(client, [{
                     "cmd": "InvalidPacket", "type": "arguments",

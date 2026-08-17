@@ -221,12 +221,6 @@ class ClientCommandProcessor(CommandProcessor):
         async_start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
         return True
 
-    def _cmd_bounce(self) -> None:
-        async_start(self.ctx.send_msgs([{"cmd": "Bounce", "text": "abc"}]), name="send Say")
-
-    def _cmd_bounce_operator(self) -> None:
-        async_start(self.ctx.send_msgs([{"cmd": "Bounce", "text": "abc", "operator": "or"}]), name="send Say")
-
     def default(self, raw: str):
         """The default message parser to be used when parsing any messages that do not match a command"""
         raw = self.ctx.on_user_say(raw)
