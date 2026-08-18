@@ -592,6 +592,16 @@ class ServerOptions(Group):
         "auto" -> !countdown will be available for any room with less than 30 slots.
         """
 
+    class ReleaseThreshold(int):
+        """
+        Minimum percentage of checks a player must have found before being allowed to use !release or !collect.
+        Also applies to automatic releases/collects if those are enabled.
+
+        For example, a value of 0 means that a player can release/collect at any time (if also allowed by the release/collect mode),
+        a value of 50 means that a player must have found at least half of their locations before being allowed to release/collect,
+        and a value of 100 means that a player must have found all of their locations before being allowed to collect.
+        """
+
     class AutoShutdown(int):
         """Automatically shut down the server after this many seconds without new location checks, 0 to keep running"""
 
@@ -627,6 +637,7 @@ class ServerOptions(Group):
     collect_mode: CollectMode = CollectMode("auto")
     remaining_mode: RemainingMode = RemainingMode("goal")
     countdown_mode: CountdownMode = CountdownMode("auto")
+    release_threshold: ReleaseThreshold = ReleaseThreshold(0)
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
     log_network: LogNetwork = LogNetwork(0)

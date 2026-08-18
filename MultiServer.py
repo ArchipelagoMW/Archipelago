@@ -259,6 +259,7 @@ class Context:
                       "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
+                      "release_threshold": int,
                       "countdown_mode": str,
                       "item_cheat": bool,
                       "compatibility": int}
@@ -289,8 +290,9 @@ class Context:
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
-                 countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
-                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+                 countdown_mode: str = "auto", remaining_mode: str = "disabled", release_threshold: int = 0,
+                 auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2, log_network: bool = False,
+                 logger: logging.Logger = logging.getLogger()):
         self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
@@ -324,6 +326,7 @@ class Context:
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
         self.countdown_mode: str = countdown_mode
+        self.release_threshold: int = release_threshold
         self.item_cheat = item_cheat
         self.exit_event = asyncio.Event()
         self.client_activity_timers: typing.Dict[
@@ -710,7 +713,7 @@ class Context:
                              "server_password": self.server_password, "password": self.password,
                              "release_mode": self.release_mode,
                              "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
-                             "countdown_mode": self.countdown_mode,
+                             "countdown_mode": self.countdown_mode, "release_threshold": self.release_threshold,
                              "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
         }
@@ -746,6 +749,7 @@ class Context:
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.countdown_mode = savedata["game_options"].get("countdown_mode", self.countdown_mode)
+            self.release_threshold = savedata["game_options"].get("release_threshold", self.release_threshold)
             self.item_cheat = savedata["game_options"]["item_cheat"]
             self.compatibility = savedata["game_options"]["compatibility"]
 
@@ -882,22 +886,24 @@ class Context:
             if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
-    
+
     def replace_hint(self, team: int, slot: int, old_hint: Hint, new_hint: Hint) -> None:
         if old_hint in self.hints[team, slot]:
             self.hints[team, slot].remove(old_hint)
             self.hints[team, slot].add(new_hint)
-    
+
     # "events"
 
     def on_goal_achieved(self, client: Client):
         finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
                        f' has completed their goal.'
         self.broadcast_text_all(finished_msg, {"type": "Goal", "team": client.team, "slot": client.slot})
-        if "auto" in self.collect_mode:
-            collect_player(self, client.team, client.slot)
-        if "auto" in self.release_mode:
-            release_player(self, client.team, client.slot)
+        if len(self.location_checks[client.team, client.slot]) / len(self.locations[client.slot]) * 100 \
+                >= self.release_threshold:
+            if "auto" in self.collect_mode:
+                collect_player(self, client.team, client.slot)
+            if "auto" in self.release_mode:
+                release_player(self, client.team, client.slot)
         self.save()  # save goal completion flag
 
     def on_new_hint(self, team: int, slot: int):
@@ -1306,7 +1312,7 @@ def format_hint(ctx: Context, team: int, hint: Hint) -> str:
 
     if hint.entrance:
         text += f" at {hint.entrance}"
-    
+
     return text + ". " + status_names.get(hint.status, "(unknown)")
 
 
@@ -1546,6 +1552,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if self.ctx.allow_releases.get((self.client.team, self.client.slot), False):
             release_player(self.ctx, self.client.team, self.client.slot)
             return True
+        if len(self.ctx.location_checks[self.client.team, self.client.slot]) / len(self.ctx.locations[self.client.slot]) * 100 \
+                < self.ctx.release_threshold:
+            self.output("Sorry, you are not allowed to release your items until you have checked "
+                        f"{self.ctx.release_threshold}% of your locations.")
+            return False
         if "enabled" in self.ctx.release_mode:
             release_player(self.ctx, self.client.team, self.client.slot)
             return True
@@ -1565,6 +1576,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def _cmd_collect(self) -> bool:
         """Send your remaining items to yourself"""
+        if len(self.ctx.location_checks[self.client.team, self.client.slot]) / len(self.ctx.locations[self.client.slot]) * 100 \
+                < self.ctx.release_threshold:
+            self.output("Sorry, you are not allowed to collect your items until you have checked "
+                        f"{self.ctx.release_threshold}% of your locations.")
+            return False
         if "enabled" in self.ctx.collect_mode:
             collect_player(self.ctx, self.client.team, self.client.slot)
             return True
@@ -2120,7 +2136,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             # As of writing this code, only_new=True does not update status for existing hints
             ctx.notify_hints(client.team, hints, only_new=True, persist_even_if_found=True)
             ctx.save()
-        
+
         elif cmd == 'UpdateHint':
             location = args["location"]
             player = args["player"]
@@ -2700,6 +2716,7 @@ def parse_args() -> argparse.Namespace:
                              goal:     !release can be used after goal completion
                              auto-enabled: !release is available and automatically triggered on goal completion
                              ''')
+    parser.add_argument('--release_threshold', default=defaults["release_threshold"], type=int)
     parser.add_argument('--collect_mode', default=defaults["collect_mode"], nargs='?',
                         choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
                              Select !collect Accessibility. (default: %(default)s)
@@ -2781,7 +2798,7 @@ async def main(args: argparse.Namespace):
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
-                  args.countdown_mode, args.remaining_mode,
+                  args.countdown_mode, args.remaining_mode, args.release_threshold,
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
 
