@@ -396,3 +396,24 @@ useful: List[str] = [
     "Banlist March 2005",
     "Banlist September 2005",
 ]
+
+core_booster: List[str] = [
+    "LEGEND OF B.E.W.D.",
+    "METAL RAIDERS",
+    "PHARAOH'S SERVANT",
+    "PHARAONIC GUARDIAN",
+    "SPELL RULER",
+    "LABYRINTH OF NIGHTMARE",
+    "LEGACY OF DARKNESS",
+    "MAGICIAN'S FORCE",
+    "DARK CRISIS",
+    "INVASION OF CHAOS",
+    "ANCIENT SANCTUARY",
+    "SOUL OF THE DUELIST",
+    "RISE OF DESTINY",
+    "FLAMING ETERNITY",
+    "THE LOST MILLENIUM",
+    "CYBERNETIC REVOLUTION",
+    "ELEMENTAL ENERGY",
+    "SHADOW OF INFINITY",
+]
