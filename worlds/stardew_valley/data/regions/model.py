@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Container
+from collections.abc import Container, Iterable, Iterator
 from dataclasses import dataclass, field
 from enum import IntFlag
 
@@ -50,16 +50,19 @@ class RandomizationFlag(IntFlag):
 class GroupFlag(IntFlag):
     TO_ANY = 0b0
 
-    UP =             0b00000000001
-    DOWN =           0b00000000010
-    LEFT =           0b00000000100
-    RIGHT =          0b00000001000
-    DOOR =           0b00000010000  # doors/ladders etc.
-    FROM_INDOOR =    0b00000100000
-    FROM_OUTDOOR =   0b00001000000
-    TO_INDOOR =      0b00010000000
-    TO_OUTDOOR =     0b00100000000
-    FROM_FARMHOUSE = 0b01000000000
+    # fmt:off
+    UP =             0b000000000001
+    DOWN =           0b000000000010
+    LEFT =           0b000000000100
+    RIGHT =          0b000000001000
+    DOOR =           0b000000010000
+    LADDER =         0b000000100000
+    FROM_INDOOR =    0b000001000000
+    FROM_OUTDOOR =   0b000010000000
+    TO_INDOOR =      0b000100000000
+    TO_OUTDOOR =     0b001000000000
+    FROM_FARMHOUSE = 0b010000000000
+    # fmt:on
 
     IN_TO_OUT = FROM_INDOOR | TO_OUTDOOR
     IN_TO_IN = FROM_INDOOR | TO_INDOOR
@@ -67,8 +70,29 @@ class GroupFlag(IntFlag):
     OUT_TO_IN = FROM_OUTDOOR | TO_INDOOR
 
     NO_MASK = 0b0
-    DIR_MASK = UP | DOWN | LEFT | RIGHT | DOOR
+    DIR_MASK = UP | DOWN | LEFT | RIGHT | DOOR | LADDER
     AREA_MASK = IN_TO_IN | IN_TO_OUT | OUT_TO_IN | OUT_TO_OUT
+
+    @staticmethod
+    def directions() -> tuple[GroupFlag, ...]:
+        return GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT, GroupFlag.DOOR, GroupFlag.LADDER
+
+    @property
+    def reverse(self) -> GroupFlag:
+        match self:
+            case GroupFlag.UP:
+                return GroupFlag.DOWN
+            case GroupFlag.DOWN:
+                return GroupFlag.UP
+            case GroupFlag.LEFT:
+                return GroupFlag.RIGHT
+            case GroupFlag.RIGHT:
+                return GroupFlag.LEFT
+            case GroupFlag.DOOR:
+                return GroupFlag.LADDER
+            case GroupFlag.LADDER:
+                return GroupFlag.DOOR
+        raise ValueError(f"No reverse flag defined for {self}")
 
 
 @dataclass(frozen=True)

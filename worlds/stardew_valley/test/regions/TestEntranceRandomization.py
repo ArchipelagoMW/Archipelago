@@ -4,6 +4,8 @@ from unittest.mock import Mock, patch
 
 from BaseClasses import Entrance, MultiWorld, Region, get_seed
 
+from Options import PlandoConnection
+
 from ... import options
 from ...data.regions import ConnectionData, RandomizationFlag, RegionData
 from ...mods.mod_data import ModNames
@@ -36,7 +38,7 @@ class TestEntranceRando(SVTestCase):
         player_randomization_flag = RandomizationFlag.SET_PELICAN_TOWN
 
         with patch("worlds.stardew_valley.regions.entrance_rando.create_entrance_rando_target") as mock_create_entrance_rando_target:
-            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag, [], set())
+            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag, [], set(), Mock())
 
             expected_origin, expected_destination = regions_by_name["Region1"], regions_by_name["Region2"]
             expected_connection = connection_data_by_name["randomized_connection"]
@@ -134,21 +136,12 @@ class TestEntranceRandoSpecificCases(SVTestCase):
     def test_pierre_can_be_randomized_in_the_desert(self):
         world_options = {
             options.EntranceRandomization: EntranceRandomization.option_buildings,
+            options.EntrancePlando: [PlandoConnection("Desert to Oasis", "Town to Pierre's General Store", "both", 100)],
             options.ExcludeGingerIsland: ExcludeGingerIsland.option_true,
         }
 
         multiworld = setup_solo_multiworld(world_options, _steps=["generate_early", "create_regions", "create_items", "set_rules"])
         world = multiworld.worlds[1]
-        world.random = Mock()
-
-        def sort_entrances_to_place_pierre_and_oasis_first(entrances: list[Entrance]) -> None:
-            # This completely rely on the fact that
-            #  1. GER calls `shuffle` on the list of entrances and exits;
-            #  2. Both Pierre's and Oasis are not dead end so they are randomized in the first batch of entrances.
-            # Might break if the implementation changes :)
-            entrances.sort(key=lambda x: 0 if "Desert to Oasis" in x.name or "Pierre's General Store to Town" in x.name else 1)
-
-        world.random.shuffle = sort_entrances_to_place_pierre_and_oasis_first
 
         world.connect_entrances()
 

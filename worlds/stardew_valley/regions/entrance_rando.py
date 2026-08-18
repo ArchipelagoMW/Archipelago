@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import typing
 from collections.abc import Container
+from random import Random
 from typing import NamedTuple
 
 from BaseClasses import EntranceType, Region
@@ -9,9 +10,10 @@ from entrance_rando import EntranceRandomizationError, ERPlacementState
 
 from Options import PlandoConnection
 
+from ..content.override import override
 from ..data.regions import ConnectionData, GroupFlag, RandomizationFlag, RegionData, reverse_connection_name
 from ..options import EntranceRandomization, EntranceRandomizationBehavior
-from ..strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName
+from ..strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName as ERBehavior
 
 if typing.TYPE_CHECKING:
     from ..content import StardewContent
@@ -34,10 +36,7 @@ def create_player_randomization_flag(
 
     flag = create_base_randomization_flag(entrance_randomization_choice)
 
-    if (
-            EntranceRandomizationBehaviorOptionName.shuffle_farmhouse in entrance_behavior_choice
-            or EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere in entrance_behavior_choice
-    ):
+    if ERBehavior.shuffle_farmhouse in entrance_behavior_choice or ERBehavior.shuffle_farmhouse_anywhere in entrance_behavior_choice:
         flag |= RandomizationFlag.FARMHOUSE
     if content.features.skill_progression.are_masteries_shuffled:
         flag |= RandomizationFlag.MASTERY_CAVE
@@ -65,12 +64,13 @@ def create_base_randomization_flag(entrance_randomization_choice: EntranceRandom
 
 def get_target_groups(entrance_randomization_behavior: EntranceRandomizationBehavior):
     direction_matching_group_lookup = {
-        GroupFlag.TO_ANY: [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT, GroupFlag.DOOR],
-        GroupFlag.UP: [GroupFlag.UP, GroupFlag.TO_ANY],
-        GroupFlag.DOWN: [GroupFlag.DOWN, GroupFlag.DOOR, GroupFlag.TO_ANY],
+        GroupFlag.TO_ANY: [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT, GroupFlag.DOOR, GroupFlag.LADDER],
+        GroupFlag.UP: [GroupFlag.UP, GroupFlag.DOOR, GroupFlag.TO_ANY],
+        GroupFlag.DOWN: [GroupFlag.DOWN, GroupFlag.LADDER, GroupFlag.TO_ANY],
         GroupFlag.LEFT: [GroupFlag.LEFT, GroupFlag.TO_ANY],
         GroupFlag.RIGHT: [GroupFlag.RIGHT, GroupFlag.TO_ANY],
-        GroupFlag.DOOR: [GroupFlag.DOWN, GroupFlag.DOOR, GroupFlag.TO_ANY],
+        GroupFlag.DOOR: [GroupFlag.DOOR, GroupFlag.UP, GroupFlag.TO_ANY],
+        GroupFlag.LADDER: [GroupFlag.LADDER, GroupFlag.DOWN, GroupFlag.TO_ANY],
     }
 
     area_matching_group_lookup = {
@@ -84,16 +84,16 @@ def get_target_groups(entrance_randomization_behavior: EntranceRandomizationBeha
     dir_mask = GroupFlag.NO_MASK
     area_mask = GroupFlag.NO_MASK
 
-    if EntranceRandomizationBehaviorOptionName.same_direction in entrance_randomization_behavior:
+    if ERBehavior.same_direction in entrance_randomization_behavior:
         dir_mask = GroupFlag.DIR_MASK
 
-    if EntranceRandomizationBehaviorOptionName.same_type in entrance_randomization_behavior:
+    if ERBehavior.same_type in entrance_randomization_behavior:
         area_mask = GroupFlag.AREA_MASK
 
     groups = {}
 
     for inorout in [GroupFlag.TO_ANY, GroupFlag.IN_TO_IN, GroupFlag.IN_TO_OUT, GroupFlag.OUT_TO_IN, GroupFlag.OUT_TO_OUT]:
-        for direction in [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT, GroupFlag.DOOR]:
+        for direction in [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT, GroupFlag.DOOR, GroupFlag.LADDER]:
             direction_group = direction_matching_group_lookup[direction & dir_mask]
             area_group = area_matching_group_lookup[inorout & area_mask]
             group_key = direction | inorout
@@ -118,23 +118,56 @@ def get_target_groups(entrance_randomization_behavior: EntranceRandomizationBeha
     return groups
 
 
+def assign_balanced_directions(
+    connection_data_by_name: dict[str, ConnectionData], player_randomization_flag: RandomizationFlag, er_behavior: set[ERBehavior], random: Random
+):
+    """Transports like minecarts or parrot express don't have a direction. The expectation is that they could match with
+    any other entrances. However, to ensure that they do not create unbalanced paring in a group (like pairing with all
+    the Right connections, but none of the Left connections) we pre-assign them groups equally shared between up/down
+    and left/right connections.
+    """
+
+    assigned_directions: dict[str, GroupFlag] = {}
+
+    for name, connection in connection_data_by_name.items():
+        if (
+            GroupFlag.TO_ANY != (connection.group & GroupFlag.DIR_MASK)
+            or not connection.is_eligible_for_randomization(player_randomization_flag)
+            or RandomizationFlag.IS_ONE_WAY in connection.flag
+        ):
+            continue
+
+        if name in assigned_directions:
+            direction = assigned_directions[name]
+        else:
+            direction = random.choice(GroupFlag.directions())
+            if ERBehavior.decoupled not in er_behavior:
+                assigned_directions[connection.destination_entrance_name] = direction.reverse
+
+        connection_data_by_name[name] = override(connection, group=connection.group | direction)
+
+
 def connect_regions(
     region_data_by_name: dict[str, RegionData],
     connection_data_by_name: dict[str, ConnectionData],
     regions_by_name: dict[str, Region],
     player_randomization_flag: RandomizationFlag,
     er_plando: list[PlandoConnection],
-    er_behavior: set[EntranceRandomizationBehaviorOptionName],
+    er_behavior: set[ERBehavior],
+    random: Random,
 ) -> dict[str, str]:
     special_randomized_entrances: dict[str, str] = {}
 
     plando_details = prepare_plando_details(connection_data_by_name, er_plando)
 
-    if EntranceRandomizationBehaviorOptionName.decoupled not in er_behavior and plando_details.is_invalid_coupled_plando():
+    if ERBehavior.decoupled not in er_behavior and plando_details.is_invalid_coupled_plando():
         raise EntranceRandomizationError(
             "Some entrances were disconnected by plando but not reconnected. "
             "Make sure that both sides of the connections are planned or use the `both` direction."
         )
+
+    if ERBehavior.same_direction in er_behavior:
+        assign_balanced_directions(connection_data_by_name, player_randomization_flag, er_behavior, random)
 
     for region_name, region_data in region_data_by_name.items():
         origin_region = regions_by_name[region_name]
@@ -144,7 +177,7 @@ def connect_regions(
             destination_region = regions_by_name[connection_data.destination]
 
             eligible = connection_data.is_eligible_for_randomization(player_randomization_flag) or plando_details.is_disconnected(exit_name)
-            if eligible and EntranceRandomizationBehaviorOptionName.chaos in er_behavior:
+            if eligible and ERBehavior.chaos in er_behavior:
                 special_randomized_entrances[connection_data.name] = connection_data.name
                 origin_region.connect(destination_region, connection_data.name)
                 plando_details.mark_target_created(exit_name)

@@ -1,3 +1,4 @@
+from random import Random
 from typing import Protocol
 
 from BaseClasses import Region
@@ -18,8 +19,10 @@ class RegionFactory(Protocol):
         raise NotImplementedError
 
 
-def create_regions(region_factory: RegionFactory, world_options: StardewValleyOptions, content: StardewContent) -> tuple[dict[str, Region], dict[str, str]]:
-    # the ginger island regions are now a content pack instead of a special case, but this does mean the pack needs to be registerd
+def create_regions(
+    region_factory: RegionFactory, world_options: StardewValleyOptions, content: StardewContent, random: Random
+) -> tuple[dict[str, Region], dict[str, str]]:
+    # the ginger island regions are now a content pack instead of a special case, but this does mean the pack needs to be registered
     if not world_options.exclude_ginger_island.value:
         content.registered_packs.add(ModNames.ginger_island)
 
@@ -41,6 +44,7 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
         randomization_flag,
         world_options.entrance_plando.value,
         world_options.entrance_randomization_behavior.value,
+        random,
     )
 
     return regions_by_name, randomized_entrances

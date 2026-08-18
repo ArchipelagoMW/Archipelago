@@ -57,7 +57,11 @@ class EntranceRandomizationBehaviorOptionName(StrEnum):
 
     @staticmethod
     def str_values() -> Iterable[str]:
-        return (str(v) for v in EntranceRandomizationBehaviorOptionName)
+        return (v.value for v in EntranceRandomizationBehaviorOptionName)
+
+    @staticmethod
+    def enum_set(values: Iterable[str]) -> "set[EntranceRandomizationBehaviorOptionName]":
+        return {EntranceRandomizationBehaviorOptionName(v) for v in values}
 
 
 class StartWithoutOptionName:

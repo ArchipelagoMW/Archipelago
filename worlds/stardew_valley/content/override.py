@@ -1,7 +1,8 @@
-from typing import Any
+from typing import TypeVar
 
+T = TypeVar("T")
 
-def override(content: Any, **kwargs) -> Any:
+def override(content: T, **kwargs) -> T:
     attributes = dict(content.__dict__)
 
     # Annotations contain only the fields, not the cached properties

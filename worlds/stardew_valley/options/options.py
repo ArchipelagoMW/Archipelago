@@ -277,6 +277,10 @@ class EntranceRandomizationBehavior(OptionSet):
     preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse.value})
     preset_hard = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere.value})
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.value = EntranceRandomizationBehaviorOptionName.enum_set(self.value)
+
     def is_chaos(self) -> bool:
         return EntranceRandomizationBehaviorOptionName.chaos in self.value
 

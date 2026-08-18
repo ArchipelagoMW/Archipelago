@@ -225,7 +225,7 @@ class StardewValleyWorld(World):
         def create_region(name: str) -> Region:
             return Region(name, self.player, self.multiworld)
 
-        world_regions, randomized_connections = create_regions(create_region, self.options, self.content)
+        world_regions, randomized_connections = create_regions(create_region, self.options, self.content, self.random)
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options, self.player_name)

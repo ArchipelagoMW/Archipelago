@@ -1,5 +1,5 @@
 from typing import ClassVar
-from unittest import mock
+from unittest.mock import MagicMock, Mock
 
 from BaseClasses import MultiWorld, Region
 from entrance_rando import EntranceRandomizationError
@@ -29,11 +29,11 @@ class EntrancePlandoTestCase(SVTestCase):
 
     def setUp(self):
         self.__created_regions = {}
-        self.__multiworld = mock.MagicMock()
-        self.__multiworld.get_region = mock.Mock(side_effect=lambda name, player: self.__created_regions[name])
+        self.__multiworld = MagicMock()
+        self.__multiworld.get_region = Mock(side_effect=lambda name, player: self.__created_regions[name])
 
         self.world_options = fill_dataclass_with_default(self.options)
-        self.world_content = create_content(self.world_options, mock.Mock())
+        self.world_content = create_content(self.world_options, Mock())
 
     def create_region(self, name):
         return Region(name, 1, self.__multiworld)
@@ -64,7 +64,7 @@ class TestEntrancePlandoCoupled(EntrancePlandoTestCase):
     }
 
     def test_plando_of_randomized_entrances(self):
-        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content)
+        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content, Mock())
 
         self.assert_region_connections(
             [
@@ -113,7 +113,7 @@ class TestEntrancePlandoDecoupled(EntrancePlandoTestCase):
     }
 
     def test_plando_of_randomized_entrances(self):
-        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content)
+        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content, Mock())
 
         self.assert_region_connections(
             [
@@ -151,7 +151,7 @@ class TestGivenEntrancePlandoFarmhouseAndEntranceRandoOptionDisabledWhenCreateWo
     }
 
     def test_plando_of_randomized_entrances(self):
-        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content)
+        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content, Mock())
 
         self.assert_region_connections(
             [
@@ -190,7 +190,7 @@ class TestGivenIncompleteEntrancePlandoAndERDisabledWhenCreateWorldThenCreateReg
 
     def test_plando_of_randomized_entrances(self):
         with self.assertRaises(EntranceRandomizationError):
-            create_regions(self.create_region, self.world_options, self.world_content)
+            create_regions(self.create_region, self.world_options, self.world_content, Mock())
 
 
 class TestGivenPartialEntrancePlandoAndERDisabledWhenCreateWorldThenEntranceRandoIsCalledToCompleteEntrancePlacements(EntrancePlandoTestCase):
@@ -203,7 +203,7 @@ class TestGivenPartialEntrancePlandoAndERDisabledWhenCreateWorldThenEntranceRand
     }
 
     def test_plando_of_randomized_entrances(self):
-        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content)
+        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content, Mock())
 
         self.assert_region_connections(
             [
@@ -242,7 +242,7 @@ class TestPartialEntrancePlandoAndERDisabledAndDecoupled(EntrancePlandoTestCase)
     }
 
     def test_plando_of_randomized_entrances(self):
-        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content)
+        created_regions, forced_entrances = create_regions(self.create_region, self.world_options, self.world_content, Mock())
 
         self.assert_region_connections(
             [(RegionName.town, EntranceName.town_to_pierre_general_store, RegionName.jojamart)],

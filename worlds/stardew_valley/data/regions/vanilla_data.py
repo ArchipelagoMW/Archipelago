@@ -867,7 +867,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         Entrance.leave_wizard_basement,
         RegionName.wizard_tower,
         flag=RandomizationFlag.BUILDINGS,
-        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
+        group=GroupFlag.IN_TO_IN | GroupFlag.LADDER,
     ),
     ConnectionData(
         Entrance.forest_to_marnie_ranch,
@@ -944,7 +944,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         Entrance.sewer_to_town,
         RegionName.town,
         flag=RandomizationFlag.BUILDINGS,
-        group=GroupFlag.IN_TO_OUT | GroupFlag.DOOR,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.LADDER,
     ),
     ConnectionData(
         Entrance.enter_mutant_bug_lair,
@@ -1215,7 +1215,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         Entrance.leave_shorts_maze,
         RegionName.lewis_bedroom,
         flag=RandomizationFlag.BUILDINGS,
-        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
+        group=GroupFlag.IN_TO_IN | GroupFlag.LADDER,
     ),
     ConnectionData(
         Entrance.town_to_alex_house,
