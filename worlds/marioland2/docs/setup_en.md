@@ -46,8 +46,9 @@ You can generate a yaml or download a template by visiting the [Super Mario Land
 1. Create your options file (YAML).
 2. Follow the general Archipelago instructions for [generating a game](/tutorial/Archipelago/setup_en#generating-a-game).
 This will generate an output file for you. Your patch file will have a `.apsml2` file extension.
-3. Open `ArchipelagoLauncher.exe`
-4. Select "Open Patch" on the left side and select your patch file.
+This patch file can also be downloaded off the multiworld room page if you [host your multiworld on the website](../../Archipelago/setup#hosting-on-the-website).
+3. Open `ArchipelagoLauncher.exe`.
+4. Select "Open Patch" from the initial list or under `Misc -> Open Patch` and select your patch file.
 5. If this is your first time patching, you will be prompted to locate your vanilla ROM.
 6. A patched `.gb` file will be created in the same place as the patch file.
 7. On your first time opening a patch with BizHawk Client, you will also be asked to locate `EmuHawk.exe` in your
@@ -64,7 +65,7 @@ in case you have to close and reopen a window mid-game for some reason.
 game, you can re-open it from the launcher.
 2. Ensure EmuHawk is running the patched ROM.
 3. In EmuHawk, go to `Tools > Lua Console`. This window must stay open while playing.
-4. In the Lua Console window, go to `Script > Open Script…`.
+4. In the Lua Console window, go to `Script > Open Script...`.
 5. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
 6. The emulator may freeze every few seconds until it manages to connect to the client. This is expected. The BizHawk
 Client window should indicate that it connected and recognized Super Mario Land 2.
