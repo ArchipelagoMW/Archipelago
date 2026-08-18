@@ -356,6 +356,11 @@ def disconnect_entrance_for_randomization(entrance: Entrance, target_group: int 
     target.randomization_group = target_group or entrance.randomization_group
 
 
+class ERAlgorithm(IntEnum):
+    EXPANDING = 0
+    FAST = 1
+
+
 def randomize_entrances(
         world: World,
         coupled: bool,
@@ -363,7 +368,9 @@ def randomize_entrances(
         preserve_group_order: bool = False,
         er_targets: list[Entrance] | None = None,
         exits: list[Entrance] | None = None,
-        on_connect: Callable[[ERPlacementState, list[Entrance], list[Entrance]], bool | None] | None = None
+        on_connect: Callable[[ERPlacementState, list[Entrance], list[Entrance]], bool | None] | None = None,
+        *,
+        algorithm: ERAlgorithm = ERAlgorithm.EXPANDING,
 ) -> ERPlacementState:
     """
     Randomizes Entrances for a single world in the multiworld.
@@ -386,6 +393,13 @@ def randomize_entrances(
                        3. The entrances they were connected to.
                        If you use on_connect to make additional placements, you are expected to return True to inform
                        GER that an additional sweep is needed.
+    :param algorithm: Which algorithm to use when randomizing entrances. Options are:
+                      ERAlgorithm.EXPANDING - Prioritizes entrances that don't decrease placeable exits via running a
+                                              speculative sweep at the cost of performance. Will provide a lower failure
+                                              rate for worlds with complicated rules and target_group_lookups.
+                      ERAlgorithm.FAST - Prioritizes speed using a faster and less accurate heuristic for picking
+                                         entrances that will expand the region graph. Will provide faster randomization
+                                         times for games with a large number of entrances.
     """
     if not world.explicit_indirect_conditions:
         raise EntranceRandomizationError("Entrance randomization requires explicit indirect conditions in order "
@@ -417,9 +431,9 @@ def randomize_entrances(
     er_state.collection_state.update_reachable_regions(world.player)
 
     class ExitRequirement(IntEnum):
-        NONE = 1
-        NEW_REGIONS = 2
-        MORE_EXITS = 3
+        NONE = 0
+        NEW_REGIONS = 1
+        MORE_EXITS = 2
 
     def do_placement(source_exit: Entrance, target_entrance: Entrance) -> None:
         placed_exits, paired_entrances = er_state.connect(source_exit, target_entrance)
@@ -551,7 +565,8 @@ def randomize_entrances(
 
     # stage 1 - try to place all the non-dead-end entrances
     while er_state.entrance_lookup.others:
-        if not find_pairing(dead_end=False, exit_requirement=ExitRequirement.MORE_EXITS):
+        if not (algorithm == ERAlgorithm.EXPANDING and
+                find_pairing(dead_end=False, exit_requirement=ExitRequirement.MORE_EXITS)):
             if not find_pairing(dead_end=False, exit_requirement=ExitRequirement.NEW_REGIONS):
                 break
     # stage 2 - try to place all the dead-end entrances
