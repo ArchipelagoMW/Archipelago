@@ -92,3 +92,9 @@ Some games utilize a scouting feature where when the player "sees" the item it w
 client letting the players know what the exact item is, since if the item was for that game it would know but the item
 being foreign is a lot harder to represent visually.
 
+## Tracker
+Tracker is an umbrella term for various programs or mods that help you track your slot's progress. This tracking can
+be in the form of showing you which items you have received or which locations you already have sent out. Often a tracker
+will also track the game's logic for you, showing you what is currently available with the items you have at hand. The
+native Multiworld Tracker linked on every room page only shows you received items and sent locations, as well as an
+overview of all existing locations. 
