@@ -78,7 +78,7 @@ def stats():
     from worlds import network_data_package
     known_games = set(network_data_package["games"])
     plot = figure(title="Games Played Per Day", x_axis_type='datetime', x_axis_label="Date",
-                  y_axis_label="Games Played", sizing_mode="scale_both", width=PLOT_WIDTH, height=500)
+                  y_axis_label="Games Played", sizing_mode="scale_both", width=PLOT_WIDTH * 2, height=1000)
 
     total_games, games_played = get_db_data(known_games)
     days = sorted(games_played)
@@ -96,7 +96,7 @@ def stats():
     total = sum(total_games.values())
     pie = figure(title=f"Games Played in the Last 30 Days (Total: {total})", toolbar_location=None,
                  tools="hover", tooltips=[("Game:", "@games"), ("Played:", "@count")],
-                 sizing_mode="scale_both", width=PLOT_WIDTH, height=500, x_range=(-0.5, 1.2))
+                 sizing_mode="scale_both", width=PLOT_WIDTH * 2, height=1000, x_range=(-0.5, 1.2))
     pie.axis.visible = False
     pie.xgrid.visible = False
     pie.ygrid.visible = False
