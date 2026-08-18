@@ -267,15 +267,16 @@ class EntranceRandomizationBehavior(OptionSet):
     - Same Direction: Makes entrances you go in towards the top link up with entrances you go in downward etc.
     - Same Type: Makes Entrances that go from for example inside to inside mix with other entrances that go inside to inside
     """
-
-    default = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value})
     internal_name = "entrance_randomization_behavior"
     display_name = "Entrance Randomizer Behavior"
+    default = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value})
     valid_keys = frozenset(EntranceRandomizationBehaviorOptionName.str_values())
 
     preset_easy = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value})
     preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse.value})
     preset_hard = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere.value})
+
+    value: set[EntranceRandomizationBehaviorOptionName]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
