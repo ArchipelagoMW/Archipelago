@@ -668,7 +668,7 @@ class MenuSpeed(Choice):
     """How quickly the menu appears/disappears"""
     display_name = "Menu Speed"
     option_normal = 0
-    option_instant = 1,
+    option_instant = 1
     option_double = 2
     option_triple = 3
     option_quadruple = 4
