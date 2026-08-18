@@ -80,14 +80,21 @@ class AssembleOptions(abc.ABCMeta):
     def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
+        options_visibilities = attrs["options_visibilities"] if "options_visibilities" in attrs else {}
         # merge parent class options
         for base in bases:
             if getattr(base, "options", None):
                 options.update(base.options)
+                options_visibilities.update(base.options_visibilities)
                 name_lookup.update(base.name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
-
+        for option in new_options.keys():
+            value = new_options[option]
+            if value not in options_visibilities.keys():
+                options_visibilities[value] = Visibility.all
+        attrs["options_visibilities"] = options_visibilities
+        
         assert "random" not in new_options, "Choice option 'random' cannot be manually assigned."
         assert len(new_options) == len(set(new_options.values())), "same ID cannot be used twice. Try alias?"
 
@@ -188,6 +195,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     name_lookup: typing.ClassVar[typing.Dict[T, str]]  # type: ignore
     # https://github.com/python/typing/discussions/1460 the reason for this type: ignore
     options: typing.ClassVar[typing.Dict[str, int]]
+    options_visibilities: typing.ClassVar[typing.Dict[int, Visibility]]
     aliases: typing.ClassVar[typing.Dict[str, int]]
 
     def __repr__(self) -> str:
@@ -1850,6 +1858,9 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     def yaml_dump_scalar(scalar) -> str:
         # yaml dump may add end of document marker and newlines.
         return yaml.dump(scalar).replace("...\n", "").strip()
+    
+    def visible(id: int, option: type[Option[typing.Any]]) -> bool:
+        return option.options_visibilities.get(id, Visibility.all) & Visibility.template != 0
 
     with open(local_path("data", "options.yaml")) as f:
         file_data = f.read()
@@ -1873,6 +1884,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
                         cleandoc=cleandoc,
                         preset_name=name,
                         preset=preset,
+                        option_visible=visible
                     )
                     preset_name = f" - {name}" if name else ""
                     with open(os.path.join(preset_folder if name else target_folder,

@@ -21,8 +21,8 @@
             {% for id, name in option.name_lookup.items() %}
                 {% if name != "random" %}
                     {% if option.default == id %}
-                        <option value="{{ name }}" selected>{{ option.get_option_name(id) }}</option>
-                    {% else %}
+                        <option value="{{ name }}" selected {{ "hidden" if not option_visible(id, option) and option.value != id }}>{{ option.get_option_name(id) }}</option>
+                    {% elif option_visible(id, option) %}
                         <option value="{{ name }}">{{ option.get_option_name(id) }}</option>
                     {% endif %}
                 {% endif %}
@@ -100,11 +100,11 @@
             {% if option.default not in option.options.values()  %}
                 <option value="{{ option.default }}" selected>Default ({{ option.default }})</option>
             {% endif %}
-            {% for id, name in option.name_lookup.items()|sort %}
+            {% for id, name in option.name_lookup.items() %}
                 {% if name != "random" %}
                     {% if option.default == id %}
-                        <option value="{{ name }}" selected>{{ option.get_option_name(id) }}</option>
-                    {% else %}
+                        <option value="{{ name }}" selected {{ "hidden" if not option_visible(id, option) and option.value != id }}>{{ option.get_option_name(id) }}</option>
+                    {% elif option_visible(id, option) %}
                         <option value="{{ name }}">{{ option.get_option_name(id) }}</option>
                     {% endif %}
                 {% endif %}
