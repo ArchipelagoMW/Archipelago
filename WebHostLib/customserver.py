@@ -30,6 +30,7 @@ from Utils import restricted_loads, cache_argsless
 
 from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
+from . import LOGS_FOLDER
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -314,7 +315,7 @@ def set_up_logging(room_id) -> logging.Logger:
         handler.close()
 
     file_handler = logging.FileHandler(
-        os.path.join(Utils.user_path("logs"), f"{room_id}.txt"),
+        os.path.join(LOGS_FOLDER, f"{room_id}.txt"),
         "a",
         encoding="utf-8-sig")
     file_handler.setFormatter(logging.Formatter("[%(asctime)s]: %(message)s"))
