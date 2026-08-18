@@ -232,7 +232,7 @@ class CommonContext:
     # The following attributes are used to Connect and should be adjusted as needed in subclasses
     tags: typing.Set[str] = {"AP"}
     game: typing.Optional[str] = None
-    items_handling: typing.Optional[int] = None
+    items_handling: int
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
     class NameLookupDict:
