@@ -86,7 +86,7 @@ CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_SPAWN_ID = 1  # As a note, the lower isle's spa
 CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_DUMMY_STAGE_NAME = "CliPlaH"
 
 # Data storage key
-AP_VISITED_STAGE_NAMES_KEY_FORMAT = "tww_visited_stages_%i"
+AP_VISITED_STAGE_NAMES_KEY_FORMAT = "tww_visited_stages_%i_%i"
 
 
 class TWWCommandProcessor(ClientCommandProcessor):
@@ -207,13 +207,13 @@ class TWWContext(CommonContext):
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
             # Request the connected slot's dictionary (used as a set) of visited stages.
-            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
+            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % (self.slot, self.team)
             Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))
         elif cmd == "Retrieved":
             requested_keys_dict = args["keys"]
             # Read the connected slot's dictionary (used as a set) of visited stages.
             if self.slot is not None:
-                visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
+                visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % (self.slot, self.team)
                 if visited_stages_key in requested_keys_dict:
                     visited_stages = requested_keys_dict[visited_stages_key]
                     # If it has not been set before, the value in the response will be `None`.
@@ -249,21 +249,38 @@ class TWWContext(CommonContext):
         """
         Update the server's data storage of the visited stage names to include the newly visited stage name.
 
+        This sends two types of messages:
+        1. A dict-based update to tww_visited_stages_<slot> for PopTracker compatibility
+        2. Individual SET messages for tww_<team>_<slot>_<stagename> to trigger server-side reconnection
+
         :param newly_visited_stage_name: The name of the stage recently visited.
         """
         if self.slot is not None:
-            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
-            await self.send_msgs(
-                [
-                    {
-                        "cmd": "Set",
-                        "key": visited_stages_key,
-                        "default": {},
-                        "want_reply": False,
-                        "operations": [{"operation": "update", "value": {newly_visited_stage_name: True}}],
-                    }
-                ]
-            )
+            messages_to_send = []
+
+            # Message 1: Update the visited_stages dict (for PopTracker)
+            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % (self.slot, self.team)
+            messages_to_send.append({
+                "cmd": "Set",
+                "key": visited_stages_key,
+                "default": {},
+                "want_reply": False,
+                "operations": [{"operation": "update", "value": {newly_visited_stage_name: True}}],
+            })
+
+            # Message 2: Set individual stage key to trigger server-side world callback
+            # This matches the format expected by reconnect_found_entrances(): <GAME_ABBR>_<team>_<slot>_<stagename>
+            if self.team is not None:
+                stage_key = f"tww_{self.team}_{self.slot}_{newly_visited_stage_name}"
+                messages_to_send.append({
+                    "cmd": "Set",
+                    "key": stage_key,
+                    "default": 0,
+                    "want_reply": False,
+                    "operations": [{"operation": "replace", "value": 1}],
+                })
+
+            await self.send_msgs(messages_to_send)
 
     def update_salvage_locations_map(self) -> None:
         """
