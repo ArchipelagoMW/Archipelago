@@ -5,7 +5,7 @@ defined data (like location labels or usable pokemon species), some cleanup
 and sorting, and Warp methods.
 """
 from dataclasses import dataclass
-from enum import IntEnum, Enum
+from enum import IntEnum, StrEnum
 import orjson
 from typing import Dict, List, NamedTuple, Optional, Set, FrozenSet, Tuple, Any, Union
 import pkgutil
@@ -148,8 +148,7 @@ class EncounterTableData(NamedTuple):
     address: int
 
 
-# class EncounterType(StrEnum):  # StrEnum introduced in python 3.11
-class EncounterType(Enum):
+class PokemonSource(StrEnum):
     LAND = "LAND"
     WATER = "WATER"
     FISHING = "FISHING"
@@ -161,7 +160,7 @@ class MapData:
     name: str
     label: str
     header_address: int
-    encounters: Dict[EncounterType, EncounterTableData]
+    encounters: Dict[PokemonSource, EncounterTableData]
 
 
 class EventData(NamedTuple):
@@ -354,24 +353,24 @@ def _init() -> None:
         if map_name in IGNORABLE_MAPS:
             continue
 
-        encounter_tables: Dict[EncounterType, EncounterTableData] = {}
+        encounter_tables: Dict[PokemonSource, EncounterTableData] = {}
         if "land_encounters" in map_json:
-            encounter_tables[EncounterType.LAND] = EncounterTableData(
+            encounter_tables[PokemonSource.LAND] = EncounterTableData(
                 map_json["land_encounters"]["slots"],
                 map_json["land_encounters"]["address"]
             )
         if "water_encounters" in map_json:
-            encounter_tables[EncounterType.WATER] = EncounterTableData(
+            encounter_tables[PokemonSource.WATER] = EncounterTableData(
                 map_json["water_encounters"]["slots"],
                 map_json["water_encounters"]["address"]
             )
         if "fishing_encounters" in map_json:
-            encounter_tables[EncounterType.FISHING] = EncounterTableData(
+            encounter_tables[PokemonSource.FISHING] = EncounterTableData(
                 map_json["fishing_encounters"]["slots"],
                 map_json["fishing_encounters"]["address"]
             )
         if "rock_smash_encounters" in map_json:
-            encounter_tables[EncounterType.ROCK_SMASH] = EncounterTableData(
+            encounter_tables[PokemonSource.ROCK_SMASH] = EncounterTableData(
                 map_json["rock_smash_encounters"]["slots"],
                 map_json["rock_smash_encounters"]["address"]
             )
