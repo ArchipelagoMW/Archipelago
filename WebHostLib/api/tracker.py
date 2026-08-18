@@ -58,9 +58,10 @@ class PlayerLocationsTotal(TypedDict):
     total_locations: int
 
 
-class PlayerGame(TypedDict):
+class PlayerInfo(TypedDict):
     team: int
     player: int
+    player_name: str
     game: str
 
 
@@ -216,17 +217,23 @@ def static_tracker_data(tracker: UUID) -> dict[str, Any]:
             player_locations_total.append(
                 {"team": team, "player": player, "total_locations": len(tracker_data.get_player_locations(player))})
 
-    player_game: list[PlayerGame] = []
+    players_info: list[PlayerInfo] = []
     """The played game per player slot."""
     for team, players in all_players.items():
         for player in players:
-            player_game.append({"team": team, "player": player, "game": tracker_data.get_player_game(player)})
+            players_info.append(
+                {
+                    "team": team,
+                    "player": player,
+                    "player_name": tracker_data.get_player_name(player),
+                    "game": tracker_data.get_player_game(player)
+                })
 
     return {
         "groups": groups,
         "datapackage": tracker_data._multidata["datapackage"],
         "player_locations_total": player_locations_total,
-        "player_game": player_game,
+        "player_game": players_info,
     }
 
 
