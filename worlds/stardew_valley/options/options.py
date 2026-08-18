@@ -268,14 +268,14 @@ class EntranceRandomizationBehavior(OptionSet):
     - Same Type: Makes Entrances that go from for example inside to inside mix with other entrances that go inside to inside
     """
 
-    default = frozenset() # frozenset({EntranceRandomizationBehaviorOptionName.same_type})
+    default = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value})
     internal_name = "entrance_randomization_behavior"
     display_name = "Entrance Randomizer Behavior"
-    valid_keys = frozenset(EntranceRandomizationBehaviorOptionName)
+    valid_keys = frozenset(EntranceRandomizationBehaviorOptionName.str_values())
 
-    preset_easy = frozenset() # frozenset({EntranceRandomizationBehaviorOptionName.same_type})
-    preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse}) # frozenset({EntranceRandomizationBehaviorOptionName.same_type, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse})
-    preset_hard = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere})
+    preset_easy = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value})
+    preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse.value})
+    preset_hard = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere.value})
 
     def is_chaos(self) -> bool:
         return EntranceRandomizationBehaviorOptionName.chaos in self.value

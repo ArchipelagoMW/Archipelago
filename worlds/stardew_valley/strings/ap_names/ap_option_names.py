@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from enum import StrEnum
 
 
@@ -53,6 +54,10 @@ class EntranceRandomizationBehaviorOptionName(StrEnum):
     same_type = "Same Type"
     shuffle_farmhouse = "Shuffle Farmhouse"
     shuffle_farmhouse_anywhere = "Shuffle Farmhouse Anywhere"
+
+    @staticmethod
+    def str_values() -> Iterable[str]:
+        return (str(v) for v in EntranceRandomizationBehaviorOptionName)
 
 
 class StartWithoutOptionName:
