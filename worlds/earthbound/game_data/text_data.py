@@ -216,7 +216,31 @@ lumine_hall_text = [
     "I'm Ness... I could go for a burger right about now... That girl from Twoson sure is cute... I wonder if I should ask her out on a date... W...wha...? What's...? H-HEY! These thoughts are PRIVATE!",
     "Chris, when is Parasite Eve in AP?",
     "Praise the Fool!",
-    "Am I the only one who likes Sonic Unleashed?"
+    "Am I the only one who likes Sonic Unleashed?",
+    "Game of the Year 1994",
+    "I'm sorry, but as a psychic language model, I cannot assist you with the completion of your game. I can only provide information based on patterns on the data I was trained on from your brain. If there is something else I can assist you with, please let me know.",
+    "The sight of Lumine Hall fills you with DETERMINATION",
+    "SUBSCRIBE TO CONEY",
+    '"Tater Tots" is short for Potato Toddler',
+    "I see your wishes on the wall / that's all right with me / I see you run to make a call / hoping that there's someone free",
+    "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. ",
+    "Think, Ness! I'll outlast every fragile insignificant being on this planet. I'll live to see this world crumble to dust and blow away! Everyone and everything I know will be gone! What will I have after 500 years?",
+    "Am I glad he's frozen in there, and that we're out here, and that he's the sheriff, and that we're frozen out here, and that we're in there, and I just remembered we're out here.",
+    "oh hey. i was just bout to go to bed. i know we couldn't skype tonight, but, that's alright. goodnight girl, i'll see you tomorrow",
+    "We have cured every disease known to mousekind.",
+    "This is Jimmy",
+    "labubu salesman",
+    "Animation vs Minecraft is the greatest animated series, indie or otherwise, ever created. In this essay I will",
+    "girls kissing",
+    "Trans Pride!",
+    "you a bum",
+    ":3",
+    "Everything is going to be okay.",
+    "You think that just because something sucks... THAT makes it correct?!",
+    "YOU SEE THIS BURNING, BLOODY UNIVERSE? YOU SEE THIS ULTIMATE, UNLIMITED POWER?",
+    "READ MY BOOKS!",
+    "WHERE'S OMNI-MAN?!",
+    "Go Play Mad Rat Dead :3"
 ]
 
 spoiler_psi = {
