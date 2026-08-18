@@ -50,9 +50,16 @@
             </p>
 
             <div id="{{ world_name }}-container">
-                {% for group_name, group_options in option_groups.items() %}
+                {% for group_name, (group_options, description) in option_groups.items() %}
                     <details {% if not start_collapsed[group_name] %}open{% endif %}>
                         <summary class="h2">{{ group_name }}</summary>
+                        {%- if description: %}
+                            <text style="font-size: 90%">
+                                {% for line in description.split('\n\n')  %}
+                                {{line}}<br>
+                                {% endfor  %}
+                            </text>
+                        {%- endif %}
                         {% for option_name, option in group_options.items() %}
                             <div class="option-wrapper">
                                 <h4>{{ option.display_name|default(option_name) }}</h4>

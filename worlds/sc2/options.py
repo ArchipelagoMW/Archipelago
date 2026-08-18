@@ -2,6 +2,7 @@ import functools
 from dataclasses import fields, Field, dataclass
 from typing import *
 from datetime import timedelta
+from inspect import cleandoc
 
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
@@ -358,9 +359,9 @@ class RequiredTactics(Choice):
 
 class EnableVoidTrade(Toggle):
     """
-    Enables the Void Trade Wormhole to be built from the Advanced Construction tab of SCVs, Drones and Probes.  
-    This structure allows sending units to the Archipelago server, as well as buying random units from the server.  
-    
+    Enables the Void Trade Wormhole to be built from the Advanced Construction tab of SCVs, Drones and Probes.
+    This structure allows sending units to the Archipelago server, as well as buying random units from the server.
+
     Note: Always disabled if there is no other Starcraft II world with Void Trade enabled in the multiworld.  You cannot receive units that you send.
     """
     display_name = "Enable Void Trade"
@@ -583,7 +584,7 @@ class KerriganLevelsPerMissionCompleted(Range):
 
 class KerriganLevelsPerMissionCompletedCap(Range):
     """
-    Limits how many total levels Kerrigan can gain from beating missions.  This does not affect levels gained from items.  
+    Limits how many total levels Kerrigan can gain from beating missions.  This does not affect levels gained from items.
     Set to -1 to disable this limit.
 
     NOTE: The following missions have these level requirements:
@@ -1445,20 +1446,28 @@ class Starcraft2Options(PerGameCommonOptions):
 
 option_groups = [
     OptionGroup("Difficulty Settings", [
-        GameDifficulty,
-        GameSpeed,
-        StarterUnit,
-        RequiredTactics,
-        WarCouncilNerfs,
-        DifficultyCurve,
-    ]),
+            GameDifficulty,
+            GameSpeed,
+            StarterUnit,
+            RequiredTactics,
+            WarCouncilNerfs,
+            DifficultyCurve,
+        ],
+        description=cleandoc("""
+        Note the Logic Level option is the most impactful on difficulty early in the campaign.
+        For a first time player, we recommend playing a difficulty level down from your hardest vanilla playthrough.
+        Game difficulty can be changed after generation in the client.
+        """)
+    ),
     OptionGroup("Primary Campaign Settings", [
-        MissionOrder,
-        MaximumCampaignSize,
-        EnabledCampaigns,
-        EnableRaceSwapVariants,
-        ShuffleNoBuild,
-    ]),
+            MissionOrder,
+            MaximumCampaignSize,
+            EnabledCampaigns,
+            EnableRaceSwapVariants,
+            ShuffleNoBuild,
+        ],
+        description="The average mission takes around 20 minutes to complete, plan the campaign size accordingly."
+    ),
     OptionGroup("Optional Campaign Settings", [
         KeyMode,
         ShuffleCampaigns,
@@ -1509,26 +1518,43 @@ option_groups = [
         MercenaryHighlanders,
     ]),
     OptionGroup("Check Locations", [
-        VictoryCache,
-        VanillaLocations,
-        ExtraLocations,
-        ChallengeLocations,
-        MasteryLocations,
-        BasebustLocations,
-        SpeedrunLocations,
-        PreventativeLocations,
-    ]),
+            VictoryCache,
+            VanillaLocations,
+            ExtraLocations,
+            ChallengeLocations,
+            MasteryLocations,
+            BasebustLocations,
+            SpeedrunLocations,
+            PreventativeLocations,
+        ],
+        description=cleandoc("""
+        Extra, challenge, and mastery groups are roughly sorted by difficulty.
+        Extra locations are milestones that are usually gotten while completing a mission, such as rescuing units on The Moebius Factor.
+        Challenge locations are as difficult as regular achievements, such as beating the kill team on The Great Train Robbery.
+        Mastery locations are as difficult as mastery achievements, such as beating the base on Welcome to the Jungle.
+
+        Basebust, Speedrun, and Preventative locations are classifications on top of vanilla and the difficulty groups.
+        For locations with a classification, setting both their difficulty and classification groups to half chance
+        will result in the location having a 25% chance of appearing.
+        """)
+    ),
     OptionGroup("Filler Options", [
-        FillerPercentage,
-        MineralsPerItem,
-        VespenePerItem,
-        StartingSupplyPerItem,
-        MaximumSupplyPerItem,
-        MaximumSupplyReductionPerItem,
-        LowestMaximumSupply,
-        ResearchCostReductionPerItem,
-        FillerItemsDistribution,
-    ]),
+            FillerPercentage,
+            MineralsPerItem,
+            VespenePerItem,
+            StartingSupplyPerItem,
+            MaximumSupplyPerItem,
+            MaximumSupplyReductionPerItem,
+            LowestMaximumSupply,
+            ResearchCostReductionPerItem,
+            FillerItemsDistribution,
+        ],
+        description=cleandoc("""
+        In Archipelago, the item count must always match the location count for a world.
+        If there are too few items, the remaining count is made up by adding filler items.
+        If you are getting too many filler items, you must reduce your location count.
+        """)
+    ),
     OptionGroup("Inclusions & Exclusions", [
         LockedItems,
         ExcludedItems,
