@@ -14,18 +14,18 @@ class TestDarkPalace(TestDungeon):
             ["Palace of Darkness - The Arena - Ledge", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
             ["Palace of Darkness - The Arena - Ledge", True, ['Progressive Bow', 'Bomb Upgrade (+5)']],
 
-            ["Palace of Darkness - Map Chest", False, []],
-            ["Palace of Darkness - Map Chest", False, [], ['Progressive Bow']],
-            ["Palace of Darkness - Map Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
-            ["Palace of Darkness - Map Chest", True, ['Progressive Bow', 'Bomb Upgrade (+5)']],
-            ["Palace of Darkness - Map Chest", True, ['Progressive Bow', 'Pegasus Boots']],
+            ["Palace of Darkness - Mimic Chest", False, []],
+            ["Palace of Darkness - Mimic Chest", False, [], ['Progressive Bow']],
+            ["Palace of Darkness - Mimic Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
+            ["Palace of Darkness - Mimic Chest", True, ['Progressive Bow', 'Bomb Upgrade (+5)']],
+            ["Palace of Darkness - Mimic Chest", True, ['Progressive Bow', 'Pegasus Boots']],
 
             #Lower requirement for self-locking key
             #No lower requirement when bow/hammer is out of logic
-            ["Palace of Darkness - Big Key Chest", False, []],
-            ["Palace of Darkness - Big Key Chest", False, [key]*5, [key]],
-            ["Palace of Darkness - Big Key Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
-            ["Palace of Darkness - Big Key Chest", True, [key]*6 + ['Bomb Upgrade (+5)']],
+            ["Palace of Darkness - Central Island", False, []],
+            ["Palace of Darkness - Central Island", False, [key]*5, [key]],
+            ["Palace of Darkness - Central Island", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Palace of Darkness - Central Island", True, [key]*6 + ['Bomb Upgrade (+5)']],
 
             ["Palace of Darkness - The Arena - Bridge", False, []],
             ["Palace of Darkness - The Arena - Bridge", False, [], [key, 'Progressive Bow']],
@@ -43,9 +43,9 @@ class TestDarkPalace(TestDungeon):
             ["Palace of Darkness - Stalfos Basement", True, ['Progressive Bow', 'Hammer', 'Bomb Upgrade (+5)']],
             ["Palace of Darkness - Stalfos Basement", True, ['Progressive Bow', 'Hammer', 'Pegasus Boots']],
 
-            ["Palace of Darkness - Compass Chest", False, []],
-            ["Palace of Darkness - Compass Chest", False, [key]*3, [key]],
-            ["Palace of Darkness - Compass Chest", True, [key]*4],
+            ["Palace of Darkness - Turtle Room", False, []],
+            ["Palace of Darkness - Turtle Room", False, [key]*3, [key]],
+            ["Palace of Darkness - Turtle Room", True, [key]*4],
 
             #@todo: Advanced?
             ["Palace of Darkness - Dark Basement - Left", False, []],
