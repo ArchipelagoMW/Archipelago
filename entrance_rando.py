@@ -357,6 +357,13 @@ def disconnect_entrance_for_randomization(entrance: Entrance, target_group: int 
 
 
 class ERAlgorithm(IntEnum):
+    """
+    Changes the behavior of randomize_entrances.
+    EXPANDING -> Prioritizes entrances that don't decrease placeable exits via running a speculative sweep at the cost
+        of performance. Will provide a lower failure rate for worlds with complicated rules and target_group_lookups.
+    FAST -> Prioritizes speed using a faster and less accurate heuristic for picking entrances that will expand the
+        region graph. Will provide faster randomization times for games with a large number of entrances.
+    """
     EXPANDING = 0
     FAST = 1
 
@@ -393,13 +400,7 @@ def randomize_entrances(
                        3. The entrances they were connected to.
                        If you use on_connect to make additional placements, you are expected to return True to inform
                        GER that an additional sweep is needed.
-    :param algorithm: Which algorithm to use when randomizing entrances. Options are:
-                      ERAlgorithm.EXPANDING - Prioritizes entrances that don't decrease placeable exits via running a
-                                              speculative sweep at the cost of performance. Will provide a lower failure
-                                              rate for worlds with complicated rules and target_group_lookups.
-                      ERAlgorithm.FAST - Prioritizes speed using a faster and less accurate heuristic for picking
-                                         entrances that will expand the region graph. Will provide faster randomization
-                                         times for games with a large number of entrances.
+    :param algorithm: Which algorithm to use when randomizing entrances
     """
     if not world.explicit_indirect_conditions:
         raise EntranceRandomizationError("Entrance randomization requires explicit indirect conditions in order "
