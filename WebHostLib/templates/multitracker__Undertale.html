@@ -1,0 +1,96 @@
+{% extends "multitracker.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/lttpMultiTracker.js") }}"></script>
+{% endblock %}
+
+{# List all tracker-relevant icons. Format: (Name, Image URL) #}
+{% set icons = {
+    "Ruins Key"             : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyRuins.png?raw=true",
+    "Snowdin Key"           : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeySnowdin.png?raw=true",
+    "Waterfall Key"         : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyWaterfall.png?raw=true",
+    "Hotland Key"           : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyHotland.png?raw=true",
+    "Core Key"              : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyCore.png?raw=true",
+    "New Home Key"          : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHome.png?raw=true",
+    "New Home Key Left"     : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHomeLeft.png?raw=true",
+    "New Home Key Right"    : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHomeRight.png?raw=true",
+    "Key Piece"             : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyPiece.png?raw=true",
+    
+    "IsCompleted"           : "https://static.wikia.nocookie.net/undertale/images/0/0b/Annoying_Dog_sprite.gif"
+} %}
+
+{% set inventory_order = [
+    "Ruins Key",
+    "Snowdin Key",
+    "Waterfall Key",
+    "Hotland Key",
+    "Core Key",
+    "New Home Key",
+    "IsCompleted"
+] %}
+
+{% set multi_items = [
+    
+] %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    
+} %}
+
+{% set allItems = {
+    
+} %}
+
+{%- block custom_table_headers %}
+    {#- macro that creates a table header with display name and image -#}
+    {%- macro make_header(name, img_src) %}
+        <th class="center-column">
+            <img height="24" src="{{ img_src }}" title="{{ name }}" alt="{{ name }}">
+        </th>
+    {% endmacro -%}
+
+    {#- call the macro to build the table header -#}
+    {%- for item in inventory_order %}
+        <th class="center-column">
+            {%- if item in icons -%}
+                <img class="icon-sprite" src="{{ icons[item] }}" alt="{{ item | e }}" title="{{ item | e }}">
+            {% else %}
+                {{ item }}
+            {%- endif %}
+        </th>
+    {% endfor -%}
+{% endblock %}
+
+{# build each row of custom entries #}
+{% block custom_table_row scoped %}
+    {%- for item in inventory_order -%}
+        {%- if inventories[(team, player)][item] -%}
+            <td class="center-column item-acquired">
+                {% if item in multi_items %}
+                    {{ inventories[(team, player)][item] }}
+                {% else %}
+                    ✔️
+                {% endif %}
+            </td>
+        {%- else -%}
+            {% if item == "New Home Key" and inventories[(team, player)]["Key Piece"] > 0 %}
+                <td class="center-column item-acquired">
+                    {{ inventories[(team, player)]["Key Piece"] }}
+                    <img class="icon-sprite" style="height: 20px;" src="{{ icons["Key Piece"] }}" alt="{{ item | e }}" title="{{ item | e }}">
+                </td>
+            {% elif item == "New Home Key" and inventories[(team, player)]["Left Home Key"] %}
+                <td class="center-column item-acquired">
+                    <img class="icon-sprite" style="height: 20px;" src="{{ icons["New Home Key Left"] }}" alt="{{ item | e }}" title="{{ item | e }}">
+                </td>
+            {% elif item == "New Home Key" and inventories[(team, player)]["Right Home Key"] %}
+                <td class="center-column item-acquired">
+                    <img class="icon-sprite" style="height: 20px;" src="{{ icons["New Home Key Right"] }}" alt="{{ item | e }}" title="{{ item | e }}">
+                </td>
+            {% else %}
+                <td></td>
+            {% endif %}
+        {%- endif -%}
+    {% endfor %}
+{% endblock %}
