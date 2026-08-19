@@ -341,6 +341,10 @@ class CommonContext:
     """Name used in Connect packet"""
     seed_name: str | None
     """Seed name that will be validated on opening a socket if present"""
+    server_seed_name: str | None
+    """Actual seed_name reported by the server in RoomInfo"""
+    connected_identity: tuple[str, int, int] | None
+    """(server_seed_name, team, slot) of the last successful connection, used to detect a session switch"""
 
     # locations
     locations_checked: set[int]
@@ -399,6 +403,10 @@ class CommonContext:
         self.slot = None
         self.auth = None
         self.seed_name = None
+        self.server_seed_name = None
+        self.connected_identity = None
+        # decouple from the class-level mutable set so tag changes (e.g. DeathLink) don't leak across instances
+        self.tags = set(type(self).tags)
 
         self.locations_checked = set()  # local state
         self.locations_scouted = set()
@@ -459,6 +467,7 @@ class CommonContext:
         self.team = None
         self.items_received = []
         self.locations_info = {}
+        self.server_seed_name = None
         self.server_version = Version(0, 0, 0)
         self.generator_version = Version(0, 0, 0)
         self.server = None
@@ -469,6 +478,21 @@ class CommonContext:
             "collect": "disabled",
             "remaining": "disabled",
         }
+
+    def reset_session_state(self):
+        """Clear local progress and data-storage state tied to a single session."""
+        self.locations_checked = set()
+        self.locations_scouted = set()
+        self.locations_info = {}
+        self.items_received = []
+        self.missing_locations = set()
+        self.checked_locations = set()
+        self.server_locations = set()
+        self.finished_game = False
+        self.ready = False
+        self.stored_data = {}
+        self.stored_data_notification_keys = set()
+        self.current_energy_link_value = None
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         if not allow_autoreconnect:
@@ -924,6 +948,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         logger.exception(f"Could not get command from {args}")
         raise
     if cmd == 'RoomInfo':
+        ctx.server_seed_name = args["seed_name"]
         if ctx.seed_name and ctx.seed_name != args["seed_name"]:
             msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
             logger.info(msg, extra={'compact_gui': True})
@@ -1004,6 +1029,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.username = ctx.auth
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        # on a switch to a different session, clear session state before stale checks/goal are replayed below
+        identity = (ctx.server_seed_name, ctx.team, ctx.slot)
+        if ctx.connected_identity is not None and identity != ctx.connected_identity:
+            ctx.reset_session_state()
+        ctx.connected_identity = identity
         # int keys get lost in JSON transfer
         ctx.slot_info = {0: NetworkSlot("Archipelago", "Archipelago", SlotType.player)}
         ctx.slot_info.update({int(pid): data for pid, data in args["slot_info"].items()})
