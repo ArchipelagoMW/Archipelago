@@ -1,4 +1,5 @@
 from ... import options
+from ...mods.mod_data import ModNames
 from ...strings.ap_names.ap_option_names import EatsanityOptionName
 
 
@@ -88,18 +89,6 @@ def maxsanity_no_mods_6_x_x():
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_nightmare,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_all,
     }
-
-
-def maxsanity_mods_6_x_x_exclude_disabled():
-    maxsanity = maxsanity_no_mods_6_x_x()
-    maxsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
-    return maxsanity
-
-
-def maxsanity_mods_6_x_x():
-    maxsanity = maxsanity_no_mods_6_x_x()
-    maxsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
-    return maxsanity
 
 
 def default_7_x_x():
@@ -194,13 +183,7 @@ def maxsanity_no_mods_7_x_x():
 
 def maxsanity_mods_7_x_x():
     maxsanity = maxsanity_no_mods_7_x_x()
-    maxsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
-    return maxsanity
-
-
-def maxsanity_mods_7_x_x_exclude_disabled():
-    maxsanity = maxsanity_no_mods_7_x_x()
-    maxsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
+    maxsanity.update({options.Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations())})
     return maxsanity
 
 

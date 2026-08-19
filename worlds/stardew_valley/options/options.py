@@ -1,11 +1,11 @@
-import sys
 import typing
 from dataclasses import dataclass
-from typing import ClassVar, Protocol
+from enum import StrEnum
 
 from Options import (
     Choice,
     DeathLink,
+    FreezeValidKeys,
     NamedRange,
     OptionCounter,
     OptionList,
@@ -19,7 +19,7 @@ from Options import (
 )
 
 from ..data.regions import randomizable_entrances, randomizable_exits
-from ..mods.mod_data import ModNames, invalid_mod_combinations
+from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import (
     AllowedFillerOptionName,
     BuffOptionName,
@@ -45,8 +45,48 @@ from .jojapocalypse_options import (
 )
 
 
-class StardewValleyOption(Protocol):
-    internal_name: ClassVar[str]
+class StardewValleyOption(typing.Protocol):
+    internal_name: typing.ClassVar[str]
+
+
+EnumT = typing.TypeVar("EnumT", bound=StrEnum)
+
+
+class StrEnumToValidKeys(FreezeValidKeys):
+    def __new__(mcs, name: str, bases: tuple[type, ...], attrs: dict[str, typing.Any]):
+        if bases[0] is OptionSet:
+            return super().__new__(mcs, name, bases, attrs)
+
+        # Retrieve the generic type
+        enum_type: type[StrEnum] = next(iter(typing.get_args(attrs["__orig_bases__"][0])))
+        attrs["_enum_type"] = enum_type
+
+        if "valid_keys" not in attrs:
+            attrs["valid_keys"] = enum_type
+        attrs["valid_keys"] = frozenset(key.value for key in attrs["valid_keys"])
+
+        if attrs.get("default"):
+            attrs["default"] = frozenset(key.value for key in attrs["default"])
+
+        for preset_name, preset_value in attrs.items():
+            if not preset_name.startswith("preset"):
+                continue
+
+            attrs[preset_name] = frozenset(key.value for key in preset_value)
+
+        return super().__new__(mcs, name, bases, attrs)
+
+
+class OptionEnumSet(OptionSet, typing.Generic[EnumT], metaclass=StrEnumToValidKeys):
+    """Wrapper over OptionSet to support StrEnum as values."""
+
+    _enum_type: type[EnumT]
+
+    value: set[EnumT]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.value = {self._enum_type(v) for v in self.value}
 
 
 class Goal(Choice):
@@ -258,7 +298,7 @@ class EntranceRandomization(Choice):
         return self.value >= self.option_everywhere
 
 
-class EntranceRandomizationBehavior(OptionSet):
+class EntranceRandomizationBehavior(OptionEnumSet[EntranceRandomizationBehaviorOptionName]):
     """Modifications to how ER will behave within the randomized locations.
     - Chaos: all Enabled entrances are reshuffled every day! - This option is blocked by the website, and by the host unless changed
     - Decoupled: Going into an entrance and going back might bring you somewhere different - This option is blocked by the website, and by the host unless changed
@@ -269,18 +309,11 @@ class EntranceRandomizationBehavior(OptionSet):
     """
     internal_name = "entrance_randomization_behavior"
     display_name = "Entrance Randomizer Behavior"
-    default = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value})
-    valid_keys = frozenset(EntranceRandomizationBehaviorOptionName.str_values())
+    default = frozenset({EntranceRandomizationBehaviorOptionName.same_type})
 
-    preset_easy = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value})
-    preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.same_type.value, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse.value})
-    preset_hard = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere.value})
-
-    value: set[EntranceRandomizationBehaviorOptionName]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.value = EntranceRandomizationBehaviorOptionName.enum_set(self.value)
+    preset_easy = frozenset({EntranceRandomizationBehaviorOptionName.same_type})
+    preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.same_type, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse})
+    preset_hard = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere})
 
     def is_chaos(self) -> bool:
         return EntranceRandomizationBehaviorOptionName.chaos in self.value
@@ -1229,46 +1262,11 @@ class Gifting(Toggle):
     default = 1
 
 
-all_mods = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-            ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-            ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-            ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-            ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-            ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.distant_lands,
-            ModNames.alecto, ModNames.lacey, ModNames.boarding_house}
-
-# These mods have been disabled because either they are not updated for the current supported version of Stardew Valley,
-# or we didn't find the time to validate that they work or fix compatibility issues if they do.
-# Once a mod is validated to be functional, it can simply be removed from this list
-# SVE specifically is disabled because their main version is significantly ahead of ours, with breaking changes, and nobody is maintaining our integration.
-disabled_mods = {ModNames.deepwoods, ModNames.magic,
-                 ModNames.cooking_skill,
-                 ModNames.yoba, ModNames.eugene,
-                 ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
-                 ModNames.boarding_house, ModNames.sve}
-
-enabled_mods = all_mods.difference(disabled_mods)
-all_mods_except_invalid_combinations = set(all_mods)
-for mod_combination in invalid_mod_combinations:
-    priority_mod = mod_combination[0]
-    if priority_mod not in all_mods_except_invalid_combinations:
-        continue
-    for mod in mod_combination:
-        if mod == priority_mod:
-            continue
-        all_mods_except_invalid_combinations.remove(mod)
-enabled_mods_except_invalid_combinations = all_mods_except_invalid_combinations.difference(disabled_mods)
-
-
-class Mods(OptionSet):
+class Mods(OptionEnumSet[ModNames]):
     """List of mods that will be included in the shuffling."""
     internal_name = "mods"
     display_name = "Mods"
-    valid_keys = enabled_mods
-    # In tests, we keep even the disabled mods active, because we expect some of them to eventually get updated for SV 1.6
-    # In that case, we want to maintain content and logic for them, and therefore keep testing them
-    if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
-        valid_keys = all_mods
+    valid_keys = ModNames.enabled_mods()
 
 
 class BundlePlando(Removed):

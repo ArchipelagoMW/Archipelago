@@ -26,9 +26,9 @@ class TestVanillaRegionsConnectionsWithoutGingerIsland(unittest.TestCase):
 
 
 class TestModsConnections(unittest.TestCase):
-    options = {
+    options = {  # noqa: RUF012
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
-        options.Mods: frozenset(options.all_mods_except_invalid_combinations),
+        options.Mods: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
     content = create_content(fill_dataclass_with_default(options), Random(1))
     all_regions_by_name = create_all_regions(content.registered_packs)
@@ -36,9 +36,9 @@ class TestModsConnections(unittest.TestCase):
 
     def test_region_exits_lead_somewhere(self):
         for content_pack_name, mod_region_data in region_data_by_content_pack.items():
-            # NOTE: once GI is a full content pack we shouldn't break here anymore
-            if content_pack_name == ModNames.ginger_island:
-                break
+            if content_pack_name not in ModNames.enabled_mods_except_invalid_combinations():
+                continue
+
             for region in mod_region_data.regions:
                 if MergeFlag.REMOVE_EXITS in region.flag:
                     continue
@@ -49,9 +49,9 @@ class TestModsConnections(unittest.TestCase):
 
     def test_connection_lead_somewhere(self):
         for content_pack_name, mod_region_data in region_data_by_content_pack.items():
-            # NOTE: once GI is a full content pack we shouldn't break here anymore
-            if content_pack_name == ModNames.ginger_island:
-                break
+            if content_pack_name not in ModNames.enabled_mods_except_invalid_combinations():
+                continue
+
             for connection in mod_region_data.connections:
                 with self.subTest(mod=mod_region_data.content_pack, connection=connection.name):
                     self.assertIn(connection.destination, self.all_regions_by_name,

@@ -1,16 +1,18 @@
-from ..bases import SVTestBase
 from ... import options
 from ...mods.mod_data import ModNames
 from ...strings.ap_names.mods.mod_items import SVEQuestItem
 from ...strings.ap_names.transport_names import Transportation
 from ...strings.quest_names import ModQuest
 from ...strings.region_names import SVERegion
+from ..bases import SVTestBase
+from ..options.utils import skip_if_mod_disabled
 
 
+@skip_if_mod_disabled(ModNames.sve)
 class TestAuroraVineyard(SVTestBase):
-    options = {
-        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
-        options.Mods.internal_name: frozenset({ModNames.sve}),
+    options = {  # noqa: RUF012
+        options.Cropsanity: options.Cropsanity.option_enabled,
+        options.Mods: frozenset({ModNames.sve}),
     }
 
     def test_need_tablet_to_do_quest(self):

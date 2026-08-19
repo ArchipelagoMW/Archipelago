@@ -55,14 +55,6 @@ class EntranceRandomizationBehaviorOptionName(StrEnum):
     shuffle_farmhouse = "Shuffle Farmhouse"
     shuffle_farmhouse_anywhere = "Shuffle Farmhouse Anywhere"
 
-    @staticmethod
-    def str_values() -> Iterable[str]:
-        return (v.value for v in EntranceRandomizationBehaviorOptionName)
-
-    @staticmethod
-    def enum_set(values: Iterable[str]) -> "set[EntranceRandomizationBehaviorOptionName]":
-        return {EntranceRandomizationBehaviorOptionName(v) for v in values}
-
 
 class StartWithoutOptionName:
     tools = "Tools"

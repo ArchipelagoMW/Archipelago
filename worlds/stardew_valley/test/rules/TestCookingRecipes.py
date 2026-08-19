@@ -1,11 +1,12 @@
-from ..bases import SVTestBase
 from ... import options
+from ...mods.mod_data import ModNames
+from ..bases import SVTestBase
 
 
 class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandContentPack(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
-        options.Mods: frozenset(options.all_mods_except_invalid_combinations),
+        options.Mods: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_recipe_without_content_pack_contains_only_pure_vanilla_ingredients(self):
@@ -22,7 +23,7 @@ class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandConten
 
 
 class TestRecipeLearnLogic(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.BuildingProgression: options.BuildingProgression.option_progressive,
         options.Cropsanity: options.Cropsanity.option_enabled,
         options.Cooksanity: options.Cooksanity.option_all,
@@ -46,7 +47,7 @@ class TestRecipeLearnLogic(SVTestBase):
 
 
 class TestRecipeReceiveLogic(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.StartWithout: options.StartWithout.preset_none,
         options.BuildingProgression: options.BuildingProgression.option_progressive,
         options.Cropsanity: options.Cropsanity.option_enabled,

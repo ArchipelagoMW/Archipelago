@@ -1,14 +1,15 @@
 from ...logic.logic import StardewLogic
-from ...options import Mods, SkillProgression, ToolProgression, all_mods_except_invalid_combinations
+from ...mods.mod_data import ModNames
+from ...options import Mods, SkillProgression, ToolProgression
 from ...stardew_rule import HasProgressionPercent
 from ...strings.skill_names import Skill, all_skills, all_vanilla_skills
 from ..bases import SVTestBase
 
 
 class TestSkillProgressionVanilla(SVTestBase):
-    options = {
-        SkillProgression.internal_name: SkillProgression.option_vanilla,
-        ToolProgression.internal_name: ToolProgression.option_progressive,
+    options = {  # noqa: RUF012
+        SkillProgression: SkillProgression.option_vanilla,
+        ToolProgression: ToolProgression.option_progressive,
     }
 
     def test_skill_logic_has_level_only_uses_one_has_progression_percent(self):
@@ -24,13 +25,13 @@ class TestSkillProgressionVanilla(SVTestBase):
 
 
 class TestSkillProgressionProgressive(SVTestBase):
-    options = {
-        SkillProgression.internal_name: SkillProgression.option_progressive,
-        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
+    options = {  # noqa: RUF012
+        SkillProgression: SkillProgression.option_progressive,
+        Mods: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_all_skill_levels_require_previous_level(self):
-        for skill in all_skills:
+        for skill in self.world.content.skills:
             self.collect_everything()
             self.remove_by_name(f"{skill} Level")
 
@@ -69,10 +70,10 @@ class TestSkillProgressionProgressive(SVTestBase):
 
 
 class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
-    options = {
-        SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
-        ToolProgression.internal_name: ToolProgression.option_progressive,
-        Mods.internal_name: frozenset(),
+    options = {  # noqa: RUF012
+        SkillProgression: SkillProgression.option_progressive_with_masteries,
+        ToolProgression: ToolProgression.option_progressive,
+        Mods: frozenset(),
     }
 
     def test_has_mastery_requires_the_item(self):
@@ -104,7 +105,7 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
     def test_given_one_tool_missing_when_can_earn_mastery_then_cannot_earn_mastery(self):
         self.collect_everything()
 
-        self.remove_one_by_name(f"Progressive Pickaxe")
+        self.remove_one_by_name("Progressive Pickaxe")
         self.assert_cannot_reach_location("Mining Mastery")
 
         self.reset_collection_state()

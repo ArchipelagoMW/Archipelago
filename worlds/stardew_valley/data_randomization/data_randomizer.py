@@ -1,8 +1,10 @@
+from __future__ import annotations
+
+import typing
 from random import Random
 from typing import cast
 
-from .data_randomizer_behaviors import randomizers_per_behavior
-from ..content import StardewContent, content_packs
+from ..content import content_packs
 from ..content.override import override
 from ..data import season_data
 from ..data.fish_data import FishItem, crab_pot_difficulty
@@ -10,15 +12,18 @@ from ..data.harvest import HarvestCropSource
 from ..data.mod_only_data.crops_prices import all_crop_sell_prices
 from ..data.mod_only_data.fish_prices import all_fish_sell_prices
 from ..data.shop import ShopSource
-from ..options import StardewValleyOptions
-from ..options.options import DataRandomizationBehavior, FestivalLocations, Booksanity
+from ..options import Booksanity, DataRandomizationBehavior, FestivalLocations
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName, HatsanityOptionName
 from ..strings.fish_names import Fish
 from ..strings.generic_names import Generic
 from ..strings.region_names import LogicRegion, Region
 from ..strings.season_names import Season
 from ..strings.weather_names import Weather
+from .data_randomizer_behaviors import randomizers_per_behavior
 
+if typing.TYPE_CHECKING:
+    from ..content import StardewContent
+    from ..options import StardewValleyOptions
 
 def randomize_data(content: StardewContent, options: StardewValleyOptions, random: Random) -> StardewContent:
     behavior = options.data_randomization_behavior

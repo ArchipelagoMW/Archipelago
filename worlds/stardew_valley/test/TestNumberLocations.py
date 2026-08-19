@@ -1,17 +1,29 @@
 from BaseClasses import ItemClassification
-from .bases import SVTestBase
-from .options.presets import default_7_x_x, maxsanity_no_mods_7_x_x, get_minsanity_options, \
-    minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, maxsanity_mods_7_x_x_exclude_disabled
+
 from .. import location_table
 from ..items import Group, item_table
 from ..items.item_data import FILLER_GROUPS
+from .bases import SVTestBase
+from .options.presets import (
+    default_7_x_x,
+    get_minsanity_options,
+    maxsanity_mods_7_x_x,
+    maxsanity_no_mods_7_x_x,
+    minimal_locations_maximal_items,
+    minimal_locations_maximal_items_with_island,
+)
 
 
 def get_real_item_count(multiworld):
-    number_items = len([item for item in multiworld.itempool
-                        if all(filler_group not in item_table[item.name].groups for filler_group in FILLER_GROUPS) and Group.TRAP not in item_table[
-                            item.name].groups and (item.classification & ItemClassification.progression)])
-    return number_items
+    return len(
+        [
+            item
+            for item in multiworld.itempool
+            if all(filler_group not in item_table[item.name].groups for filler_group in FILLER_GROUPS)
+            and Group.TRAP not in item_table[item.name].groups
+            and (item.classification & ItemClassification.progression)
+        ]
+    )
 
 
 class TestLocationGeneration(SVTestBase):
@@ -91,7 +103,7 @@ class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
 
 
 class TestAllSanityWithModsSettingsHasAllExpectedLocations(SVTestBase):
-    options = maxsanity_mods_7_x_x_exclude_disabled()
+    options = maxsanity_mods_7_x_x()
 
     def test_maxsanity_with_mods_has_at_least_locations(self):
         expected_locations = 3225

@@ -10,7 +10,6 @@ from ... import options
 from ...data.regions import ConnectionData, RandomizationFlag, RegionData
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
-from ...options.options import all_mods
 from ...regions.entrance_rando import PlandoDetails, connect_regions, create_entrance_rando_target, prepare_mod_data
 from ...strings.entrance_names import Entrance as EntranceName
 from ...strings.region_names import Region as RegionName
@@ -72,11 +71,25 @@ class TestCanGenerateEachModWithEntranceRandomizationBuildings(WorldAssertMixin,
     Mods that do not interact with entrances are skipped
     Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
     """
-    mods = all_mods.difference([
-        ModNames.ginger, ModNames.distant_lands, ModNames.skull_cavern_elevator, ModNames.wellwick, ModNames.magic,
-        ModNames.binning_skill, ModNames.big_backpack, ModNames.luck_skill, ModNames.tractor, ModNames.shiko, ModNames.archaeology,
-        ModNames.delores, ModNames.socializing_skill, ModNames.cooking_skill
-    ])
+
+    mods = ModNames.enabled_mods().difference(
+        [
+            ModNames.ginger,
+            ModNames.distant_lands,
+            ModNames.skull_cavern_elevator,
+            ModNames.wellwick,
+            ModNames.magic,
+            ModNames.binning_skill,
+            ModNames.big_backpack,
+            ModNames.luck_skill,
+            ModNames.tractor,
+            ModNames.shiko,
+            ModNames.archaeology,
+            ModNames.delores,
+            ModNames.socializing_skill,
+            ModNames.cooking_skill,
+        ]
+    )
 
     def test_given_mod_when_generate_then_basic_checks(self) -> None:
         world_options = {

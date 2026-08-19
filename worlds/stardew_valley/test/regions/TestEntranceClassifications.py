@@ -68,7 +68,7 @@ class TestVanillaEntranceClassifications(EntranceRandomizationAssertMixin, SVTes
 class TestModdedEntranceClassifications(EntranceRandomizationAssertMixin, SVTestBase):
     options = {  # noqa: RUF012
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
-        options.Mods: frozenset(options.all_mods_except_invalid_combinations),
+        options.Mods: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_non_progression_are_all_accessible_with_empty_inventory(self):

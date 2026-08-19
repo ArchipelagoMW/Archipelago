@@ -1,5 +1,7 @@
+import sys
+import unittest
 from argparse import Namespace
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from typing import Any, TypeAlias
 
 from BaseClasses import PlandoOptions
@@ -7,9 +9,14 @@ from BaseClasses import PlandoOptions
 from Options import VerifyKeys
 
 from ... import StardewValleyWorld
+from ...mods.mod_data import ModNames
 from ...options import StardewValleyOption, StardewValleyOptions
 
 SVTestOptions: TypeAlias = dict[str | type[StardewValleyOption], Any]
+
+
+def skip_if_mod_disabled(mod_name: ModNames) -> Callable:
+    return unittest.skipUnless(mod_name.is_enabled, f"{mod_name} is disabled")
 
 
 def parse_class_option_keys(test_options: SVTestOptions | None) -> dict:

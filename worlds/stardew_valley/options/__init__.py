@@ -14,6 +14,8 @@ from .options import (
     Cooksanity,
     Craftsanity,
     Cropsanity,
+    DataRandomization,
+    DataRandomizationBehavior,
     DebrisMultiplier,
     Eatsanity,
     ElevatorProgression,
@@ -59,11 +61,6 @@ from .options import (
     TrapDistribution,
     TrapItems,
     Walnutsanity,
-    all_mods,
-    all_mods_except_invalid_combinations,
-    disabled_mods,
-    enabled_mods,
-    enabled_mods_except_invalid_combinations,
 )
 
 __all__ = [
@@ -82,6 +79,8 @@ __all__ = [
     "Cooksanity",
     "Craftsanity",
     "Cropsanity",
+    "DataRandomization",
+    "DataRandomizationBehavior",
     "DebrisMultiplier",
     "Eatsanity",
     "ElevatorProgression",
@@ -127,9 +126,4 @@ __all__ = [
     "TrapDistribution",
     "TrapItems",
     "Walnutsanity",
-    "all_mods",
-    "all_mods_except_invalid_combinations",
-    "disabled_mods",
-    "enabled_mods",
-    "enabled_mods_except_invalid_combinations",
 ]
