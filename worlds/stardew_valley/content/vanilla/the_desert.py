@@ -54,10 +54,10 @@ the_desert = ContentPack(
         Vegetable.beet: (HarvestCropSource(seed=Seed.beet, seasons=(Season.fall,), growth_time=6),),
     },
     shop_sources={
-        Seed.cactus: (ShopSource(price=150, shop_region=Region.oasis_shop),),
-        Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis_shop, seasons=(Season.spring,)),),
-        Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis_shop, seasons=(Season.summer,)),),
-        Seed.beet: (ShopSource(price=20, shop_region=Region.oasis_shop, seasons=(Season.fall,)),),
+        Seed.cactus: (ShopSource(price=150, shop_region=Region.oasis_shop, forbidden_items=(Vegetable.taro_root,)),),
+        Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis_shop, seasons=(Season.spring,), forbidden_items=(Vegetable.taro_root,)),),
+        Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis_shop, seasons=(Season.summer,), forbidden_items=(Vegetable.taro_root,)),),
+        Seed.beet: (ShopSource(price=20, shop_region=Region.oasis_shop, seasons=(Season.fall,), forbidden_items=(Vegetable.taro_root,)),),
 
         FestivalCheck.rarecrow_3: (ShopSource(price=10_000, currency=Currency.qi_coin, shop_region=Region.casino),),
         Gift.void_ghost_pendant: (ShopSource(price=0, items_price=((200, Loot.void_essence),), shop_region=Region.desert,

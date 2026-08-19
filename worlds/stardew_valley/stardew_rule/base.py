@@ -1,15 +1,16 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from collections import deque, Counter
+from collections import Counter, deque
 from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
 from threading import Lock
-from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional, cast
+from typing import Callable, Dict, Hashable, Iterable, List, Optional, Set, Sized, Tuple, Union, cast
 
 from BaseClasses import CollectionState
-from .literal import true_, false_, LiteralStardewRule
+
+from .literal import LiteralStardewRule, false_, true_
 from .protocol import StardewRule
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
@@ -498,9 +499,12 @@ class Has(BaseStardewRule):
         return f"Has {self.item} ({self.group})"
 
     def __repr__(self):
-        if self.item not in self.other_rules:
-            return f"Has {self.item} ({self.group}) -> {MISSING_ITEM}"
-        return f"Has {self.item} ({self.group}) -> {repr(self.other_rules[self.item])}"
+        try:
+            if self.item not in self.other_rules:
+                return f"Has {self.item} ({self.group}) -> {MISSING_ITEM}"
+            return f"Has {self.item} ({self.group}) -> {repr(self.other_rules[self.item])}"
+        except:
+            return f"Has {self.item} ({self.group})"
 
 
 class RepeatableChain(Iterable, Sized):
