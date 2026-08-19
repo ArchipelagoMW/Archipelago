@@ -258,3 +258,4 @@ class TestPartialEntrancePlandoAndERDisabledAndDecoupled(EntrancePlandoTestCase)
     def test_can_fill(self):
         with solo_multiworld(self.options) as (multiworld, _):
             distribute_items_restrictive(multiworld)
+

@@ -1,16 +1,23 @@
+import itertools
 from collections.abc import Iterable
 from typing import ClassVar
 from unittest import TestCase
 
 from test.param import classvar_matrix
 
-from ... import options
-from ...data.regions import ConnectionData, GroupFlag, ginger_island_connections, vanilla_connections
+from Options import PlandoConnection
+
+from ... import EntranceRandomizationBehaviorOptionName, options
+from ...data.regions import ConnectionData, GroupFlag, vanilla_connections
 from ...mods.region_data import region_data_by_content_pack
 from ...regions.entrance_rando import get_target_groups
+from ...strings.entrance_names import Entrance as EntranceName
+from ...strings.region_names import Region as RegionName
+from ..bases import SVTestBase
 
 
 @classvar_matrix(er_behavior=options.EntranceRandomizationBehavior.valid_keys)
+
 class TestSameTypeEntranceRandomization(TestCase):
     er_behavior: ClassVar[str]
 
@@ -49,3 +56,17 @@ class TestRegionsHasMatchingAmountOfTargetGroups(TestCase):
                 connections_in_second_group = sum(1 for connection in connections if any(group in connection.group for group in second_group))
 
                 self.assertEqual(connections_in_first_group, connections_in_second_group)
+
+
+class TestFarmhouseEntranceCanBePairedMatchWithSomething(SVTestBase):
+    options = {  # noqa: RUF012
+        options.EntranceRandomization: options.EntranceRandomization.option_disabled,
+        options.EntranceRandomizationBehavior: {EntranceRandomizationBehaviorOptionName.decoupled},
+        options.EntrancePlando: [
+            PlandoConnection(EntranceName.farmhouse_to_farm, EntranceName.town_to_sewer, "entrance", 100),
+        ],
+    }
+
+    def test_can_roll_entrance_rando(self):
+        farmhouse_exit = self.world.get_entrance(EntranceName.farmhouse_to_farm)
+        self.assertEqual(RegionName.sewer, farmhouse_exit.connected_region.name)

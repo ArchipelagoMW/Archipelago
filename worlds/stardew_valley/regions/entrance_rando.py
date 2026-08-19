@@ -103,6 +103,9 @@ def get_target_groups(entrance_randomization_behavior: EntranceRandomizationBeha
                     group_value = pair_direction | pair_inorout
                     groups[group_key].append(group_value)
 
+            if GroupFlag.DOWN | GroupFlag.IN_TO_OUT in groups[group_key]:
+                groups[group_key] += [GroupFlag.DOWN | GroupFlag.IN_TO_OUT | GroupFlag.FROM_FARMHOUSE]
+
     groups[GroupFlag.DOWN | GroupFlag.IN_TO_OUT | GroupFlag.FROM_FARMHOUSE] = [
         pair_direction | pair_inorout | farmhouse_flag
         for pair_direction in direction_matching_group_lookup[GroupFlag.DOWN & dir_mask]
