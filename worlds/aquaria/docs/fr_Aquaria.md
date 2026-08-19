@@ -70,4 +70,4 @@ Chaque fois qu'un objet est reçu, un message apparaît à l'écran pour en info
 - Le monde d'Aquaria ne contient aucune ressource (image, son, musique, etc.) générée par intelligence artificielle.
 - L'intelligence artificielle peut avoir été utilisée pour:
   - Obtenir de la documentation ou de l'information à propos d'outils, de bibliothèques logicielles, etc.
-  - Complétion simple, de ligne seule, dans l'éditeur de code.
+  - Complétion de ligne dans l'éditeur de code.
