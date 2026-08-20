@@ -6,7 +6,7 @@ from BaseClasses import Entrance, MultiWorld, Region, get_seed
 
 from Options import PlandoConnection
 
-from ... import options
+from ... import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName, options
 from ...data.regions import ConnectionData, RandomizationFlag, RegionData
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
@@ -14,7 +14,7 @@ from ...regions.entrance_rando import PlandoDetails, connect_regions, create_ent
 from ...strings.entrance_names import Entrance as EntranceName
 from ...strings.region_names import Region as RegionName
 from ..assertion import WorldAssertMixin
-from ..bases import SVTestCase, setup_solo_multiworld, solo_multiworld
+from ..bases import SVTestBase, SVTestCase, setup_solo_multiworld, solo_multiworld
 
 
 class TestEntranceRando(SVTestCase):
@@ -159,3 +159,33 @@ class TestEntranceRandoSpecificCases(SVTestCase):
         world.connect_entrances()
 
         self.assertEqual("Desert", multiworld.get_region("Pierre's General Store", 1).entrances[0].parent_region.name)
+
+
+class TestCannotAccessForage(SVTestBase):
+    options = {  # noqa: RUF012
+        options.EntranceRandomization: options.EntranceRandomization.option_everywhere,
+        options.EntranceRandomizationBehavior: {EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere},
+        options.Mods: frozenset(),
+        options.EntrancePlando: [
+            PlandoConnection(EntranceName.farm_to_backwoods, EntranceName.town_to_saloon, "both", 100),
+            PlandoConnection(EntranceName.farm_to_bus_stop, EntranceName.town_to_haley_house, "both", 100),
+            PlandoConnection(EntranceName.farm_to_farmcave, EntranceName.town_to_museum, "both", 100),
+            PlandoConnection(EntranceName.farm_to_forest, EntranceName.town_to_blacksmith, "both", 100),
+            PlandoConnection(EntranceName.farm_to_farmhouse, EntranceName.enter_witch_swamp, "both", 100),
+        ],
+        options.Eatsanity: frozenset(options.Eatsanity.preset_all),
+        options.StartWithout: frozenset([StartWithoutOptionName.house]),
+        options.Secretsanity: frozenset(options.Secretsanity.preset_all),
+        options.FarmType: options.FarmType.default,
+        options.SeasonRandomization: options.SeasonRandomization.option_progressive,
+    }
+
+    def test_can_do_secrets(self):
+        sphere_1_locations = ["Secret: Enjoy your new life here", "Secret: Nice Try", "Secret: 'What'd you expect?'"]
+        for loc in sphere_1_locations:
+            self.assert_can_reach_location(loc)
+
+    def test_cannot_do_foraging(self):
+        later_sphere_locations = ["Forage Clam", "Forage Leek", "Eat Leek", "Forage Dandelion", "Eat Dandelion"]
+        for loc in later_sphere_locations:
+            self.assert_cannot_reach_location(loc)

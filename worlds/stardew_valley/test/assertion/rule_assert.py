@@ -1,9 +1,10 @@
 from typing import List
 from unittest import TestCase
 
-from BaseClasses import CollectionState, Location, Region, Entrance
-from ...stardew_rule import StardewRule, false_, MISSING_ITEM, Reach
-from ...stardew_rule.rule_explain import explain
+from BaseClasses import CollectionState, Entrance, Location, Region
+
+from ...stardew_rule import MISSING_ITEM, Reach, StardewRule, false_
+from ...stardew_rule.rule_explain import ExplainMode, explain
 
 
 class RuleAssertMixin(TestCase):
