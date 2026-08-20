@@ -71,6 +71,7 @@ def set_all_entrance_rules(world: APQuestWorld) -> None:
     # Rule Builder is quite comprehensive, and even if you have really esoteric rules,
     # you can make custom rules by subclassing CustomRule.
 
+
 def set_all_location_rules(world: APQuestWorld) -> None:
     # Location rules work no differently from Entrance rules.
     # Most of our locations are chests that can simply be opened by walking up to them.

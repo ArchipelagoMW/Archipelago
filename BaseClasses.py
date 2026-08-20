@@ -49,7 +49,7 @@ class ThreadBarrierProxy:
             return getattr(self.obj, name)
         else:
             raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
-                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
+                               "Please use world.random or randomize ahead of output.")
 
 
 class HasNameAndPlayer(Protocol):
@@ -100,8 +100,6 @@ class MultiWorld():
     game: Dict[int, str]
 
     random: random.Random
-    per_slot_randoms: Utils.DeprecateDict[int, random.Random]
-    """Deprecated. Please use `self.random` instead."""
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -177,8 +175,6 @@ class MultiWorld():
             set_player_attr('game', "Archipelago")
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
-        self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
-                                                    "world's random object instead (usually self.random)", True)
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
