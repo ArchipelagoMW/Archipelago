@@ -1,13 +1,15 @@
 from typing import Callable, Union, Dict, Set
 
 from BaseClasses import MultiWorld
+from Options import OptionError
 from ..generic.Rules import add_rule, set_rule
 from .Locations import location_table
-from .Options import SM64Options
+from .Options import SM64Options, SM64PlandoConnections
 from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
 sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances,\
 valid_move_randomizer_start_courses
 from .Items import action_item_data_table
+
 
 def shuffle_dict_keys(multiworld: MultiWorld, dictionary: dict) -> dict:
     keys = list(dictionary.keys())
@@ -15,16 +17,84 @@ def shuffle_dict_keys(multiworld: MultiWorld, dictionary: dict) -> dict:
     multiworld.random.shuffle(keys)
     return dict(zip(keys, values))
 
+
 def fix_reg(entrance_map: Dict[SM64Levels, str], entrance: SM64Levels, invalid_regions: Set[str],
             swapdict: Dict[SM64Levels, str], multiworld: MultiWorld):
     if entrance_map[entrance] in invalid_regions: # Unlucky :C
         replacement_regions = [(rand_entrance, rand_region) for rand_entrance, rand_region in swapdict.items()
                                if rand_region not in invalid_regions]
+        if not replacement_regions:
+            raise Exception(
+                "Super Mario 64 Entrance Rando and Plando ran out usable regions to fix an invalid connection."
+            )
         rand_entrance, rand_region = multiworld.random.choice(replacement_regions)
         old_dest = entrance_map[entrance]
         entrance_map[entrance], entrance_map[rand_entrance] = rand_region, old_dest
         swapdict[entrance], swapdict[rand_entrance] = rand_region, old_dest
+    if entrance in swapdict:
+        swapdict.pop(entrance)
+
+
+def assign_reg(entrance_map: Dict[SM64Levels, str], entrance: SM64Levels, to_region: str,
+               swapdict: Dict[SM64Levels, str]):
+    """
+    Set entrance to go to one of the specified levels.
+    :param entrance_map: Dictionary of levels where entrance should be a key value in.
+    :param entrance: Level in entrance_map.
+    :param to_region: Level that entrance should go to.
+    :param swapdict: Dictionary of levels used for finding replacement levels.
+    """
+    old_dest = entrance_map[entrance]
+    if old_dest != to_region:
+        replacement_entrance = ""
+        for curr_ent, curr_lev in entrance_map.items():
+            if curr_lev == to_region:
+                replacement_entrance = curr_ent
+        # Swap
+        entrance_map[entrance] = to_region
+        entrance_map[replacement_entrance] = old_dest
     swapdict.pop(entrance)
+
+
+def validate_all_sm64_plando_connection(connections: SM64PlandoConnections, move_rando: int) -> tuple[bool, str]:
+    """
+    Validation for all plando connections against Super Mario 64 logic and requirements.
+    :param connections: Plando connections
+    :param move_rando: Flag for Move Randomizer
+    :return: Pass/Fail and Error Message
+    """
+    so_flags = []
+    for conn in connections:
+        entrance = conn.entrance
+        exit = conn.exit
+        # Must be valid Super Mario 64 levels
+        if entrance not in sm64_entrances_to_level.keys():
+            return False, f"Entrance {entrance} not a valid Super Mario 64 level entrance"
+        if exit not in sm64_entrances_to_level.keys():
+            return False, f"Exit {exit} not a valid Super Mario 64 level entrance"
+        # First order impossible connections
+        if move_rando and entrance == "Bob-omb Battlefield" and exit not in valid_move_randomizer_start_courses:
+            return False, f"Connection from {entrance} to {exit} is too strict with Move Randomizer"
+        if move_rando and entrance == "Whomp's Fortress" and exit not in valid_move_randomizer_start_courses:
+            return False, f"Connection from {entrance} to {exit} is too strict with Move Randomizer"
+        if entrance == "Bob-omb Battlefield" and exit in sm64_secrets_to_level.keys():
+            return False, f"Connection from {entrance} to {exit} is logically impossible"
+        if entrance == "Cavern of the Metal Cap" and exit == "Hazy Maze Cave":
+            return False, f"Connection from {entrance} to {exit} is logically impossible"
+        if entrance == "Bowser in the Fire Sea" and exit == "Dire, Dire Docks":
+            return False, f"Connection from {entrance} to {exit} is logically impossible"
+        # Flags for second order impossible connections
+        if entrance == "Bowser in the Fire Sea" and exit == "Hazy Maze Cave":
+            so_flags.append("BitFS->HMC")
+        if entrance == "Cavern of the Metal Cap" and exit == "Dire, Dire Docks":
+            so_flags.append("CotMC->DDD")
+    # Second order impossible connections
+    if "BitFS->HMC" in so_flags and "CotMC->DDD" in so_flags:
+        return False, ("Connection from Cavern of the Metal Cap to Dire, Dire Docks "
+                       "while Bowser in the Fire Sea connects to Hazy Maze Cave is logically impossible")
+    # Validated.
+    return True, ""
+
 
 def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_connections: dict, star_costs: dict, move_rando_bitvec: int):
     randomized_level_to_paintings = sm64_level_to_paintings.copy()
@@ -40,9 +110,26 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
 
     if options.area_rando == options.area_rando.option_Courses_and_Secrets:  # Randomize Courses and Secrets in one pool
         randomized_entrances = shuffle_dict_keys(multiworld, randomized_entrances)
-    
+
+    # Plando Connections
+    if options.plando_connections:
+        plando_swapdict = sm64_level_to_entrances.copy()
+        valid, msg = validate_all_sm64_plando_connection(options.plando_connections, move_rando_bitvec)
+        if not valid:
+            raise OptionError(
+                f"Invalid connection for player {multiworld.player_name[player]} ({msg})"
+            )
+        for conn in options.plando_connections:
+            plando_entrance = sm64_entrances_to_level[conn.entrance]
+            plando_exit = conn.exit
+            assign_reg(randomized_entrances, plando_entrance, plando_exit, plando_swapdict)
+
     # Now, fix assignment if necessary
     swapdict = randomized_entrances.copy()
+    if options.plando_connections:
+        for conn in options.plando_connections:
+            swapdict.pop(sm64_entrances_to_level[conn.exit])
+
     if move_rando_bitvec == 0:
         fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, sm64_secrets_to_level.keys(), swapdict, multiworld)
     else:
