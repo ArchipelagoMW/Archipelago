@@ -158,31 +158,34 @@ class SelectBox:
             self.move_pointer(down=False)
         elif key == curses.KEY_DOWN:
             self.move_pointer(down=True)
-        elif key == curses.KEY_RIGHT:
+        elif key in (curses.KEY_RIGHT, curses.KEY_NPAGE):
             self.page(down=True)
-        elif key == curses.KEY_LEFT:
+        elif key in (curses.KEY_LEFT, curses.KEY_PPAGE):
             self.page(down=False)
-        elif key == curses.ascii.ESC:
+        elif key in (curses.ascii.ESC, ord("q")):
             raise CursesCancel("User Cancelled")
         elif key == curses.KEY_RESIZE:
             self.resize()
-        else:
+        elif key in (curses.KEY_ENTER, curses.ascii.SP, ord("y")):
             return self.pointer
+        else:
+            pass  # ignore other inputs
 
 
-def curses_select(data: list[str], key: Callable[[int], str] | None = None) -> str | None:
+def curses_select(data: list[str], key: Callable[[int], str] | None = None, **kwargs) -> str | None:
     """
     Starts a curses select box the user can navigate with arrow keys around,
-    escape to quit, and any other key to select the current listed string
+    escape/q to quit, and enter/y to select the current selection
 
     :param data: list of selections for the user to pick from.
     :param key: optional Callable, when not present the string picked is returned else
-    the key callable is run on the index of data chosen
+    the key callable is run on the index of data chosen.
+    :param **kwargs: keyword args to be passed to SelectBox if present.
 
-    :return: None if cancelled, else the chosen string.
+    :return: None if cancelled, else the chosen string or key return value.
     """
 
-    window = SelectBox(data)
+    window = SelectBox(data, **kwargs)
 
     try:
         curses.wrapper(window.run)
