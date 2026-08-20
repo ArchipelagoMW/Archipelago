@@ -1,0 +1,723 @@
+from dataclasses import dataclass
+from enum import IntEnum
+from typing import Callable
+
+from Options import Range, Option, Choice, NamedRange, ItemDict, PerGameCommonOptions, OptionList, OptionSet, \
+    OptionCounter, DeathLink, OptionError, StartInventoryPool
+
+from .items import ItemizationMode, itemization_mode
+
+
+class Goal(Choice):
+    """
+    How victory is defined.
+
+    Single: Your opponent starts with an army of 7 pieces and 8 pawns. You have a king. Finding checkmate is your goal.
+    To get there, find checks, mate!
+
+    Ordered Progressive: Each checkmate unlocks the next board dimension in the sequence
+    8x8, 10x8, 10x10, 12x10, and 12x12. Checkmate the opponent on the final board to win.
+
+    Progressive: As Ordered Progressive, but the Board Files and Board Ranks unlocks are shuffled into the multiworld.
+
+    Super: You skip the 8x8 board immediately by starting with the first Board Files unlock; later dimensions remain
+    shuffled into the multiworld.
+    """
+    display_name = "Goal"
+    option_single = 0
+    option_ordered_progressive = 1
+    option_progressive = 2
+    option_super = 3
+    default = 1
+
+
+class Difficulty(Choice):
+    """
+    Which kinds of checks to expect of the player. In general, this mostly affects later checks (like Checkmate Maxima,
+    the victory condition).
+
+    Grandmaster: All checks are baseline. You will generally hope for equal material, and may find yourself struggling.
+    You will have about the same material as the AI for Checkmate Maxima to be considered in logic.
+
+    Daily: The player may expect some difficulty with early checks, but complex game states will be relaxed. You will
+    have about an extra Bishop and an extra Pawn for Checkmate Maxima to be considered in logic.
+
+    Bullet: All checks are relaxed. Material expectations are raised, so the player will have more material earlier. You
+    will have about an extra Rook and an extra Bishop for Checkmate Maxima to be considered in logic.
+
+    Relaxed: Most checks require almost twice as much material, so the player will have overwhelming forces. You will
+    have about an extra Queen and an extra Rook and an extra Pawn for Checkmate Maxima to be considered in logic.
+    """
+    display_name = "Difficulty"
+    option_grandmaster = 0
+    option_daily = 1
+    option_bullet = 2
+    option_relaxed = 3
+    default = 1
+
+
+class EnableTactics(Choice):
+    """
+    All: Adds the "Fork" and "Play Turns" locations to the pool. (This adds 10 locations and items.)
+
+    Turns: Adds the "Play Turns" locations to the pool. (This adds 4 locations and items.)
+
+    None: Neither "Fork" nor "Play Turns" locations will be in the pool.
+    """
+    display_name = "Enable Tactics"
+    option_all = 0
+    option_turns = 1
+    option_none = 2
+    default = 1
+
+
+class PieceLocations(Choice):
+    """
+    When you start a new match, chooses how to distribute player pieces.
+
+    Chaos: Puts pieces on the first rank until it's full, and pawns on second rank until it's full.
+    Changes every match - your games won't preserve starting position. Plays more like Chess960.
+
+    Stable: As Chaos, but doesn't change between matches.
+    """
+    display_name = "Piece Locations"
+    option_chaos = 0
+    option_stable = 1
+    # option_ordered = 2
+    default = 0
+
+
+class PieceTypes(Choice):
+    """
+    When you start a new match, chooses the player's piece types (such as whether a minor piece is a Knight or Bishop).
+
+    Chaos: Chooses random valid options.
+
+    Stable: As Chaos, but doesn't change between matches. You'll only ever add or upgrade pieces.
+    """
+    display_name = "Piece Types"
+    option_chaos = 0
+    option_stable = 1
+    # option_book = 2
+    default = 1
+
+
+class ProgressionItemization(Choice):
+    """Selects family-specific Legacy items or shared Chessmen/Material Fundamental items."""
+    display_name = "Progression Itemization"
+    option_legacy = 0
+    option_fundamental = 1
+    default = option_legacy
+
+
+class EarlyMaterialKind(IntEnum):
+    OFF = 0
+    PAWN = 1
+    MINOR = 2
+    MAJOR = 3
+    PIECE = 4
+    ANY = 5
+    JACK = 6
+
+
+class EarlyMaterial(Choice):
+    """
+    Guarantees that a King move directly onto the second rank within the first few moves will provide a piece or pawn
+    (chessman). When this option is set, this location (Move King E2/E7 Early) overrides any exclusion.
+
+    Four other Bongcloud moves also involve the King, but are not altered by this option. (A File: Move to the leftmost
+    File; Capture: Any capturing move; Center: Move to any of the center 4 squares; Promotion: Move to enemy back rank)
+
+    Pawn, Minor, Major: You will get an early chessman of the specified type (i.e. a pawn, minor piece, or major piece).
+
+    Piece: You will get an early minor or major piece.
+
+    Jack: You will get an early Progressive Jack when Jacks are enabled. When
+    Asymmetric Trades is disabled, this falls back to a Progressive Major Piece.
+
+    Any: You will get an early chessman.
+    """
+    display_name = "Early Material"
+    option_off = EarlyMaterialKind.OFF.value
+    option_pawn = EarlyMaterialKind.PAWN.value
+    option_minor = EarlyMaterialKind.MINOR.value
+    option_major = EarlyMaterialKind.MAJOR.value
+    option_jack = EarlyMaterialKind.JACK.value
+    option_piece = EarlyMaterialKind.PIECE.value
+    option_any = EarlyMaterialKind.ANY.value
+    default = 0
+
+
+LEGACY_EARLY_MATERIAL_CANDIDATES: dict[
+    EarlyMaterialKind, tuple[str, ...]
+] = {
+    EarlyMaterialKind.OFF: (),
+    EarlyMaterialKind.PAWN: ("Progressive Pawn",),
+    EarlyMaterialKind.MINOR: ("Progressive Minor Piece",),
+    EarlyMaterialKind.MAJOR: ("Progressive Major Piece",),
+    EarlyMaterialKind.PIECE: (
+        "Progressive Minor Piece",
+        "Progressive Major Piece",
+    ),
+    EarlyMaterialKind.ANY: (
+        "Progressive Pawn",
+        "Progressive Minor Piece",
+        "Progressive Major Piece",
+        "Progressive Jack",
+    ),
+    EarlyMaterialKind.JACK: ("Progressive Jack",),
+}
+
+
+def early_material_candidates(options) -> tuple[str, ...]:
+    choice = EarlyMaterialKind(options.early_material.value)
+    if choice is EarlyMaterialKind.OFF:
+        return ()
+    if itemization_mode(options) is ItemizationMode.FUNDAMENTAL:
+        return ("Chessmen",)
+
+    jacks_enabled = (
+        options.asymmetric_trades.value
+        == options.asymmetric_trades.option_jacks
+    )
+    if choice is EarlyMaterialKind.JACK and not jacks_enabled:
+        return ("Progressive Major Piece",)
+    candidates = LEGACY_EARLY_MATERIAL_CANDIDATES[choice]
+    if not jacks_enabled:
+        candidates = tuple(
+            name for name in candidates if name != "Progressive Jack"
+        )
+    return candidates
+
+
+class MaximumEnginePenalties(Range):
+    """
+    The number of times the engine will receive a reduction to their skill level. These reductions are currently named
+    "Progressive ELO Engine Lobotomy," and each level reduces the AI's access to both analysis and information.
+    """
+    display_name = "Maximum Engine Penalties"
+    range_start = 0
+    range_end = 5
+    default = 5
+
+
+class MaximumPocket(Range):
+    """
+    The number of Progressive Pocket Pieces the game is allowed to add to the multiworld.
+
+    Each Progressive Pocket Piece will improve your 1st, 2nd, or 3rd pocket slot up to 4 times, from Nothing to Pawn, to
+    Minor Piece (like a pocket Knight), to Major Piece (like a pocket Rook), to Queen.
+
+    This option does not alter filler item distribution. (Even if you have 0 Progressive Pockets, the item pool may
+    contain Progressive Pocket Gems and Progressive Pocket Range.)
+
+    Pocket Pieces are inspired by the Dutch game of paard in de zak (pocket knight).
+    """
+    display_name = "Maximum Pocket"
+    range_start = 0
+    range_end = 12
+    default = 12
+
+
+class MaximumKings(Range):
+    """
+    How many Royal pieces (Kings) to place, which must all be captured before one experiences defeat.
+
+    The player always starts with 1 King, but may find Progressive Consuls if this is set higher than 1. Progressive
+    Consuls add additional Kings to the player's starting board.
+    """
+    display_name = "Maximum Kings"
+    range_start = 1
+    range_end = 3
+    default = 1
+
+
+class FairyKings(Range):
+    """
+    Whether to use fairy king upgrades, such as the Knight's moves. Adding multiple upgrades to the pool will allow your
+    King to become a hyper-powerful invented piece if all upgrades are collected.
+    """
+    display_name = "Fairy Kings"
+    range_start = 0
+    range_end = 2
+    default = 0
+
+
+class FairyChessPieces(Choice):
+    """
+    Which collection of fairy pieces to allow, if any. Choose FIDE to disable fairy chess pieces. Choose Configure to
+    disable this option in favor of the more precise "Fairy Chess Pieces Configure" option.
+
+    FIDE: The default, which only allows the standard pieces defined by FIDE (Queen, Rook, Knight, Bishop).
+
+    Betza: Adds the pieces from Ralph Betza's "Chess With Different Armies", being the Remarkable Rookies, Colorbound
+    Clobberers, and Nutty Knights.
+
+    Full: Adds every implemented army, including Eurasian and custom pieces. The Cannon and Vao capture by jumping over
+    an intervening chessman.
+
+    Configure: Allows you to specify your own pieces using the "Fairy Chess Pieces Configure" option.
+    """
+    display_name = "Fairy Chess Pieces"
+    option_fide = 0
+    option_betza = 1
+    option_full = 2
+    option_configure = 3
+    default = 0
+
+
+class FairyChessPiecesConfigure(OptionSet):
+    """
+    THIS OPTION IS INCOMPATIBLE WITH "Fairy Chess Pieces". Set that option to "Configure" to use this option.
+
+    Whether to use fairy chess pieces. Most pieces below are from Ralph Betza's Chess with Different Armies. If omitted,
+    the default allows for all following fairy chess pieces, as well as the standard pieces defined by FIDE.
+
+    FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
+
+    Rookies: Adds the CwDA army inspired by Rooks, the Remarkable Rookies. The Half-Duck castles rather than the Short
+    Rook.
+
+    Clobberers: Adds the CwDA army inspired by Bishops, the Colorbound Clobberers. Fad and Bede may both castle.
+
+    Nutty: Adds the CwDA army inspired by Knights, the Nutty Knights.
+
+    Cannon: Adds the Rook-like Cannon, which captures a distal chessman by leaping over an intervening chessman, and the
+    Vao, a Bishop-like Cannon, in that it moves and captures diagonally. Also adds the Queennon, which moves as a King,
+    a Cannon, and a Vao.
+
+    Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0). (The Knight is a 2,1
+    leaper.)
+
+    Petal: Adds a custom army themed after pieces that move down angled paths. The Gardener is a 2,2 leaper with
+    additional pacifist moves. The Ribbon moves 1 space as a Bishop before rotating to move 2 more spaces. The Petal
+    moves 3 spaces as a Rook before rotating 3 more spaces. The Miracle moves as a Ribbon and as a Petal.
+    """
+    display_name = "Fairy Chess Pieces Configure"
+    valid_keys = frozenset([
+        "FIDE",
+        "Rookies",
+        "Clobberers",
+        "Nutty",
+        "Cannon",
+        "Camel",
+        "Petal",
+    ])
+    default = valid_keys
+
+
+class FairyChessArmy(Choice):
+    """
+    Whether to mix pieces between the Different Armies. Does not affect pawns. Note that the Cannon pieces, which
+    replace the Bishop and Knight with a Vao and Cannon, constitute a very powerful yet flawed Different Army.
+
+    Chaos: Chooses random enabled options. (You can disable armies by setting "Fairy Chess Pieces Configure".)
+
+    Stable: Chooses within one army. (If you want at most 2 Bishops, 2 Knights, 2 Rooks, and 1 Queen, add Piece Type
+    Limits below: 2 Minor, 2 Major, and 1 Queen.)
+    """
+    display_name = "Fairy Chess Army"
+    option_chaos = 0
+    option_stable = 1
+    default = 0
+
+
+class FairyChessPawns(Choice):
+    """
+    Whether to use fairy chess pawns.
+
+    Vanilla: Only use the standard pawn.
+
+    Mixed: Adds all implemented fairy chess pawns to the pool. You may receive a mix of different types of pawns.
+
+    Berolina: Only use the Berolina pawn (may appear to be a Ferz), which moves diagonally and captures forward.
+
+    Checkers: Only borrow Checkers, which move diagonally and capture by skipping over the intervening piece. Can capture many times.
+
+    Reserved: Not implemented. Option validation rejects this value with an
+    actionable error before generation starts.
+
+    Any Pawn: A mix of Vanilla and Berolina - anything referred to as a Pawn by the source text.
+
+    Any Fairy: A mix of Berolina and Checkers - anything except ordinary Pawns.
+
+    Any Classical: A mix of Vanilla and Checkers - anything a player would recognise from their childhood.
+    """
+    display_name = "Fairy Chess Pawns"
+    option_vanilla = 0
+    option_mixed = 1
+    option_berolina = 2
+    option_checkers = 3
+    option_reserved = 4
+    option_any_pawn = 5
+    option_any_fairy = 6
+    option_any_classical = 7
+
+    def verify(self, world, player_name, plando_options) -> None:
+        super().verify(world, player_name, plando_options)
+        if self.value == self.option_reserved:
+            raise OptionError(
+                f"{player_name}: ChecksMate Fairy Chess Pawns 'reserved' is "
+                "not implemented; choose vanilla, mixed, berolina, checkers, "
+                "any_pawn, any_fairy, or any_classical."
+            )
+
+
+class FairyChessPawnUpgrades(Choice):
+    """
+    Adds chances for stronger upgraded pieces to appear in your pawn rank, drawn from your pawn material budget.
+
+    Off: No upgrades; only standard pawns.
+
+    Pool (deprecated): Upgraded pieces are added as one extra option in the random pawn pool. The generator guards
+    against picking too many upgrades and leaving you short on overall pawn count. Equivalent to Configure with
+    Preference Priority {"new-pawn": 1, "pool-pawn-upgrade": 1, "better-pawn": 1, "major-to-queen": 1}, in that
+    order of priority. Prefer Configure with Preference Priority/Ratio directly; this mode may be removed in a
+    future update.
+
+    Max (deprecated): Prefer upgrades whenever possible, falling back to a regular pawn when adding another upgrade
+    would prevent reaching your earned pawn count. Equivalent to Configure with Preference Priority
+    {"new-pawn": 1, "better-pawn": 1, "major-to-queen": 1}, in that order of priority. Prefer Configure with
+    Preference Priority/Ratio directly; this mode may be removed in a future update.
+
+    Configure: Uses Piece Upgrade Preferences (and, if set, Preference Priority/Preference Ratio) to decide upgrade
+    order. See also the standalone Fair Board Guarantee option for the board-location-based pawn guarantee
+    previously offered by Super Max.
+    """
+    display_name = "Pawn Upgrades"
+    option_off = 0
+    option_pool = 1
+    option_max = 2
+    option_configure = 3
+    default = option_off
+
+
+VALID_PIECE_UPGRADE_PREFERENCES = frozenset([
+    "new-pawn",
+    "more-pawn",
+    "better-pawn",
+    "pool-pawn-upgrade",
+    "pawn-to-minor",
+    "pawn-to-major",
+    "major-to-queen",
+    "minor-to-major",
+    "major-to-jack",
+    "minor-to-jack",
+    "jack-to-queen",
+    "queen-to-amazon",
+])
+
+
+class PieceUpgradePreferences(OptionList):
+    """
+    Ordered action preference list used when Pawn Upgrades is set to Configure.
+
+    Valid configure-list actions include:
+    new-pawn, more-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen,
+    minor-to-major, major-to-jack, minor-to-jack, jack-to-queen, and queen-to-amazon.
+
+    Future upgrade-path actions round-trip for clients that understand them; no item-pool or rule behavior is implied.
+    The major-to-queen action is the major-piece queen-upgrade preference; clients may implement it by preferring literal
+    rooks before falling back to other major pieces.
+    """
+    display_name = "Piece Upgrade Preferences"
+    valid_keys = VALID_PIECE_UPGRADE_PREFERENCES
+    default = ()
+
+
+class PieceUpgradePriority(OptionCounter):
+    """
+    Assigns a relative priority to each upgrade action, used to rank upgrade order as an alternative to (and taking
+    precedence over) Piece Upgrade Preferences. Applies regardless of the Pawn Upgrades mode selected, including the
+    legacy Pool and Max presets.
+
+    Any action not listed defaults to a priority of 1. Higher priority actions are preferred first; ties keep their
+    relative order. A priority of -1 disables that action entirely.
+
+    Whenever this option has any entries at all, it takes precedence over Piece Upgrade Preferences and over any
+    legacy Pawn Upgrades preset ordering.
+
+    Valid actions are the same as for Piece Upgrade Preferences:
+    new-pawn, more-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen, minor-to-major,
+    major-to-jack, minor-to-jack, jack-to-queen, and queen-to-amazon.
+    """
+    display_name = "Preference Priority"
+    valid_keys = VALID_PIECE_UPGRADE_PREFERENCES
+    default = {}
+    min = -1
+
+
+DEFAULT_PIECE_UPGRADE_RATIO: dict[str, int] = {
+    "new-pawn": 7,
+    "more-pawn": 1,
+    "better-pawn": 3,
+    "pawn-to-minor": 6,
+    "pawn-to-major": 2,
+    "minor-to-major": 3,
+    "major-to-jack": 2,
+    "minor-to-jack": 2,
+    "major-to-queen": 1,
+    "jack-to-queen": 1,
+    "queen-to-amazon": 1,
+    "pool-pawn-upgrade": 1,
+}
+
+
+class PieceUpgradeRatio(OptionCounter):
+    """
+    Assigns a relative weight to each upgrade action, controlling how often it is chosen relative to the others
+    when the generator draws a weighted/random upgrade. Applies regardless of the Pawn Upgrades mode selected.
+
+    Any action not listed keeps its default weight, roughly mirroring the pawn-heavy bias already present in
+    today's item pool generation. Values are relative, not percentages; a 2:1 ratio between two actions means the
+    first is picked twice as often as the second.
+
+    Valid actions are the same as for Piece Upgrade Preferences:
+    new-pawn, more-pawn, better-pawn, pool-pawn-upgrade, pawn-to-minor, pawn-to-major, major-to-queen, minor-to-major,
+    major-to-jack, minor-to-jack, jack-to-queen, and queen-to-amazon.
+    """
+    display_name = "Preference Ratio"
+    valid_keys = VALID_PIECE_UPGRADE_PREFERENCES
+    default = {}
+    min = 0
+
+
+def rank_actions_by_priority(priority_map: dict[str, int]) -> list[str]:
+    """
+    Render a priority map (action -> priority; higher values are preferred first) into an ordered preference list.
+    Actions at or below the disabled threshold (0) are dropped. Ties preserve the input dict's iteration order,
+    since Python's sort is stable. This is the same ranking primitive used to derive the legacy Pool/Max preference
+    lists below, demonstrating that those legacy presets are just fixed Preference Priority presets.
+    """
+    return sorted(
+        (action for action, value in priority_map.items() if value > 0),
+        key=lambda action: priority_map[action],
+        reverse=True,
+    )
+
+
+# Deprecated: Pool and Max are fixed Preference Priority presets, expressed here as priority maps (rather than
+# hand-maintained ordered lists) and rendered to a list via rank_actions_by_priority, to prove they are fully
+# reproducible via Configure + Preference Priority. New content should prefer Configure + Preference Priority/Ratio
+# directly instead of these legacy presets.
+LEGACY_PAWN_UPGRADE_PRIORITY: dict[int, dict[str, int]] = {
+    FairyChessPawnUpgrades.option_off: {"new-pawn": 4, "more-pawn": 3, "better-pawn": 2, "major-to-queen": 1},
+    FairyChessPawnUpgrades.option_pool: {"new-pawn": 5, "pool-pawn-upgrade": 4, "more-pawn": 3, "better-pawn": 2,
+                                         "major-to-queen": 1},
+    FairyChessPawnUpgrades.option_max: {"new-pawn": 4, "better-pawn": 3, "more-pawn": 2, "major-to-queen": 1},
+}
+
+
+LEGACY_PAWN_UPGRADE_PREFERENCES: dict[int, list[str]] = {
+    mode: rank_actions_by_priority(priority_map) for mode, priority_map in LEGACY_PAWN_UPGRADE_PRIORITY.items()
+}
+
+
+def resolve_piece_upgrade_preferences(pawn_upgrades: FairyChessPawnUpgrades,
+                                      preferences: PieceUpgradePreferences,
+                                      priority: PieceUpgradePriority) -> list[str] | dict[str, int]:
+    if priority.value:
+        return {action: priority.value.get(action, 1) for action in VALID_PIECE_UPGRADE_PREFERENCES}
+
+    if pawn_upgrades.value == FairyChessPawnUpgrades.option_configure:
+        configured_preferences = [preference for preference in preferences.value
+                                  if preference in VALID_PIECE_UPGRADE_PREFERENCES]
+        return configured_preferences or list(LEGACY_PAWN_UPGRADE_PREFERENCES[FairyChessPawnUpgrades.option_off])
+
+    return list(LEGACY_PAWN_UPGRADE_PREFERENCES.get(
+        pawn_upgrades.value,
+        LEGACY_PAWN_UPGRADE_PREFERENCES[FairyChessPawnUpgrades.option_off],
+    ))
+
+
+def resolve_piece_upgrade_ratio(ratio: PieceUpgradeRatio) -> dict[str, int]:
+    return {**DEFAULT_PIECE_UPGRADE_RATIO, **{action: value for action, value in ratio.value.items()
+                                              if action in VALID_PIECE_UPGRADE_PREFERENCES}}
+
+
+class FairBoardGuarantee(Choice):
+    """
+    Whether excess pawn material may become upgrades once known non-pawn pieces satisfy some board-location
+    requirements, instead of forcing every earned pawn to deploy as a separate pawn. Independent of Pawn Upgrades
+    mode; replaces the old Super Max preset's board-guarantee behavior with a standalone option.
+
+    None: No board-location guarantee; pawn upgrades are governed purely by Pawn Upgrades mode (and Preference
+    Priority/Ratio, if set).
+
+    Standard Count: Once your found non-pawn pieces satisfy standard board-location requirements, excess pawn
+    material can become upgrades.
+
+    Standard And Pawns: As Standard Count, but pawns already found also count toward satisfying the board-location
+    requirements.
+    """
+    display_name = "Fair Board Guarantee"
+    option_none = 0
+    option_standard_count = 1
+    option_standard_and_pawns = 2
+    default = option_none
+
+
+class AsymmetricTrades(Choice):
+    """
+    Whether to add custom pieces to the pool of an unusual material type, enabling trades of asymmetric material values.
+
+    Disabled: Use the standard set of Pawn (1), Minor (3), Major (5), and Queen (9) pieces.
+    
+    Jacks: As Disabled, but also add the custom Jack family of pieces, which are worth 7 material each. They may castle.
+    """
+    display_name = "Asymmetric Trades"
+    option_disabled = 0
+    option_jacks = 1
+    default = 0
+
+
+class MinorPieceLimitByType(NamedRange):
+    """
+    How many of any given type of minor piece you might play with. If set to 1, you will never start with more than 1
+    Knight, nor 1 Bishop, but you may have both 1 Knight and 1 Bishop. If set to 0, this setting is disabled.
+    """
+    display_name = "Minor Piece Limit by Type"
+    range_start = 1
+    range_end = 15
+    default = 0
+    special_range_names = {
+        "disabled": 0,
+    }
+
+
+class MajorPieceLimitByType(NamedRange):
+    """
+    How many of any given type of major piece you might play with. If set to 1, you will never start with more than 1
+    Rook. If set to 0, this setting is disabled.
+    """
+    display_name = "Major Piece Limit by Type"
+    range_start = 1
+    range_end = 11
+    default = 0
+    special_range_names = {
+        "disabled": 0,
+    }
+
+
+class QueenPieceLimitByType(NamedRange):
+    """
+    How many of any given type of Queen-equivalent piece you might play with. If set to 1, you will never start with
+    more than 1 Queen. You may have both 1 Queen and 1 Amazon. If set to 0, this setting is disabled.
+    """
+    display_name = "Queen Piece Limit by Type"
+    range_start = 1
+    range_end = 9
+    default = 0
+    special_range_names = {
+        "disabled": 0,
+    }
+
+
+class PocketLimitByPocket(NamedRange):
+    """
+    How many Progressive Pocket items might be allocated to any given pocket. If this is set to 1, any given Pocket will
+    never hold anything more substantial than a Pawn. If this is set to 3, any given Pocket will never hold a Queen.
+
+    The default of 4 allows each of the 3 spaces to hold between 0-4 progressive items.
+
+    Disabling this option will remove Pocket items from the item pool.
+    """
+    display_name = "Pocket Limit by Pocket"
+    range_start = 1
+    range_end = 4
+    default = 4
+    special_range_names = {
+        "disabled": 0,
+    }
+
+
+class QueenPieceLimit(NamedRange):
+    """
+    How many Queen-equivalent pieces you might play with. If set to 1, you will never have more than 1 piece upgraded to
+    a Queen. (This does nothing when greater than 'Queen Piece Limit by Type'.) You may still promote pawns during a
+    game. If set to 0, this setting is disabled.
+    """
+    display_name = "Queen Piece Limit"
+    range_start = 1
+    range_end = 9
+    default = 0
+    special_range_names = {
+        "disabled": 0,
+    }
+
+
+class LockedItems(ItemDict):
+    """
+    Guarantees that these progression and filler items will be unlockable.
+
+    Implementation note: Currently forces this many items into the item pool before distribution begins. This behaviour
+    is not guaranteed - a future version may simply validate the pool contains these items.
+    """
+    display_name = "Locked Items"
+    min = 0
+
+    def verify_values(self) -> None:
+        negative = [
+            (name, count) for name, count in self.value.items() if count < 0
+        ]
+        if negative:
+            details = ", ".join(
+                f"{name}: {count}" for name, count in negative
+            )
+            raise OptionError(
+                "ChecksMate Locked Items counts must be zero or greater; "
+                f"received {details}."
+            )
+        super().verify_values()
+
+
+class ChessDeathLink(DeathLink):
+    """
+    Whenever you are checkmated or resign (close the game window), everyone who is also on Death Link dies. Whenever
+    you receive a Death Link event, your game window closes. (You cannot undo or review.)
+    """
+
+
+@dataclass
+class CMOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    goal: Goal
+    progression_itemization: ProgressionItemization
+    difficulty: Difficulty
+    enable_tactics: EnableTactics
+    piece_locations: PieceLocations
+    piece_types: PieceTypes
+    early_material: EarlyMaterial
+    max_engine_penalties: MaximumEnginePenalties
+    max_pocket: MaximumPocket
+    max_kings: MaximumKings
+    fairy_kings: FairyKings
+    fairy_chess_pieces: FairyChessPieces
+    fairy_chess_pieces_configure: FairyChessPiecesConfigure
+    fairy_chess_army: FairyChessArmy
+    fairy_chess_pawns: FairyChessPawns
+    fairy_chess_pawn_upgrades: FairyChessPawnUpgrades
+    piece_upgrade_preferences: PieceUpgradePreferences
+    piece_upgrade_priority: PieceUpgradePriority
+    piece_upgrade_ratio: PieceUpgradeRatio
+    fair_board_guarantee: FairBoardGuarantee
+    minor_piece_limit_by_type: MinorPieceLimitByType
+    major_piece_limit_by_type: MajorPieceLimitByType
+    queen_piece_limit_by_type: QueenPieceLimitByType
+    queen_piece_limit: QueenPieceLimit
+    pocket_limit_by_pocket: PocketLimitByPocket
+    locked_items: LockedItems
+    death_link: ChessDeathLink
+    asymmetric_trades: AsymmetricTrades
+
+
+piece_type_limit_options: dict[str, Callable[[CMOptions], Option]] = {
+    "Progressive Minor Piece": lambda cmoptions: cmoptions.minor_piece_limit_by_type,
+    "Progressive Major Piece": lambda cmoptions: cmoptions.major_piece_limit_by_type,
+    "Progressive Major To Queen": lambda cmoptions: cmoptions.queen_piece_limit_by_type,
+}
+
+
+piece_limit_options: dict[str, Callable[[CMOptions], Option]] = {
+    "Progressive Major To Queen": lambda cmoptions: cmoptions.queen_piece_limit,
+}
