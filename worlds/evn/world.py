@@ -412,13 +412,27 @@ class EVNWorld(World):
         multiworld_dict = {loc.name: loc for loc in self.multiworld.get_locations(self.player)}
         ref_cust_data_name_to_obj = {data["name"]: data for item_id, data in custom_outfits_ratio.items()}
         latest_outf_id = max(outfits.outf_table.keys(), default=0)
+        cust_outf_iter = iter(cust_outf_table.values())
 
+        # Create our helper AP locations
+        custom_outf = next(cust_outf_iter, None)
+        for column in outfits.outf_columns.keys():
+            current_val = custom_outf[column]
+            default_val = current_val + "\t"
+            col_anno = outfits.OutfDict.__annotations__[column]
+            if col_anno == str:
+                default_val = f'"{current_val}"\t'
+
+            output_file_string += default_val
+        output_file_string += "\r\n"
+        latest_outf_id += 1
+
+        # Now, create our dynamic locations / checks
         # Let's get our template custom outfit for populating game data
         # We don't care about the id, just grab the first entry.
-        template_outfit = next(iter(cust_outf_table.values()), None) 
+        template_outfit = next(cust_outf_iter, None) 
         # TODO: Handle "None" case.
 
-        
         # Loop and create game data based on the template, but with our values
         for loc_id, loc_data in custom_locations_dict.items():
             loc_name = loc_data.get('name', '')
@@ -479,9 +493,25 @@ class EVNWorld(World):
         # We need to get the starting ID of the custom outfits again
         last_real_outf_id = max(outfits.outf_table.keys(), default=0)
         starting_desc_id = last_real_outf_id + offsets_table.get('desc_alt', 0)
+        desc_iter = iter(cust_desc_table.values())
+
+        # Create our helper items first
+        custom_desc = next(desc_iter, None)
+        for column in desc.desc_columns.keys():
+            current_val = custom_desc.get(column, "")
+            default_val = current_val + "\t"
+            col_anno = desc.DescDict.__annotations__[column]
+            if col_anno == str:
+                default_val = f'"{current_val}"\t'
+
+            output_file_string += default_val
+        output_file_string += "\r\n"
+        starting_desc_id += 1
+
+        # Now create our dynamic checks
         # Let's get our template custom outfit for populating game data
-        # We don't care about the id, just grab the first entry.
-        template_desc = next(iter(cust_desc_table.values()), None) 
+        # We don't care about the id - we're going to replace it anyways.
+        template_desc = next(desc_iter, None) 
         # TODO: Handle "None" case.
 
         #while starting_desc_id <= latest_outf_id + offsets_table.get('desc_alt', 0):

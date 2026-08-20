@@ -15,6 +15,40 @@ from ..rezdata.outfits import OutfDict
 
 # IMPORTANT: Start at the END of the last outfit data's ID range.
 cust_outf_table: Dict[int, OutfDict] = {
+    # Our helper Clear Rep item, in case players are stuck due to angry govs.
+    444: {
+        "resource_type": "outf",
+        "id": "444",
+        "name": "Clean Rep (AP)",
+        "display_weight": "0",
+        "mass": "0",
+        "tech_level": "1",
+        "mod_type_1": "21",
+        "mod_value_1": "-1",
+        "mod_type_2": "-1",
+        "mod_value_2": "-1",
+        "mod_type_3": "-1",
+        "mod_value_3": "-1",
+        "mod_type_4": "-1",
+        "mod_value_4": "-1",
+        "max_count": "1",
+        "cost": "1000000",
+        "item_class": "0",
+        "scan_mask": "0x0000",
+        "buy_random": "100",
+        "availability": "",
+        "on_purchase": "",  # the bit to unlock the check
+        "on_sell": "",
+        "contribute_bits": "0x0000000000000000",
+        "require_bits": "0x0000000000000001",
+        "short_name": "Clean Rep\\\\n- Help -",  
+        "lower_case_name": "Clean Rep",
+        "lower_case_plural_name": "Clean Reps",
+        "requirments_government": "127",
+        "flags": "0x000C",
+        "end_of_resource": "EOR"
+    },
+    # Out template for dynamically created custom outfits.
     450: {
         "resource_type": "outf",
         "id": "450",
