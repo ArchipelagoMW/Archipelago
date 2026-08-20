@@ -64,7 +64,7 @@ class SelectBox:
         self.pointer = self.scroll_offset = 0
         y, x = self.window.getmaxyx()
 
-        self.computed_box_height = min(min(self.MAX_BOX_HEIGHT, y - 2), self.MAX_POINTER)
+        self.computed_box_height = min(min(self.MAX_BOX_HEIGHT, y - 2), self.MAX_POINTER + 1)
         self.computed_box_length = min(self.MAX_BOX_LENGTH, x - 3)
         # these seem to cause trouble with single digit resized terminals but i'm ok with that for now
 
