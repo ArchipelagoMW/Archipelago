@@ -529,7 +529,12 @@ class EVNWorld(World):
                 if col_anno == str:
                     default_val = f'"{current_val}"\t'
 
-                output_file_string += default_val
+                match column:
+                    case "on_start" if self.options.start_hypergate_access:
+                        # NOTE: We *could* test for current vals and concat, but we already know none have current vals
+                        output_file_string += f'"k147"\t' # client bit control logic for giving the rank that allows hypergate access
+                    case _:
+                        output_file_string += default_val
             output_file_string += "\r\n"
 
         # Crons

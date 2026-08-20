@@ -53,6 +53,12 @@ class AlwaysSellableOutfits(Toggle):
     # If it is awkward because of the ship retools and improvements, then just move it into vell-os fixes
     display_name = "Outfits Always Sellable"
 
+class StartWithHypergateAccess(Toggle):
+    """
+    When on, players will begin the game with access to the hypergates regardless of char choice when creating a character.
+    """
+    display_name = "Start with Hypergate Access"
+
 class ChosenString(Choice):
     """
     Pick which major story string the player will follow. Other story strings will be disabled.
@@ -100,6 +106,7 @@ class EVNOptions(PerGameCommonOptions):
     always_avail_shops: AlwaysAvailableShops
     ignore_tech: IgnoreTechReq
     always_sellable_outfits: AlwaysSellableOutfits
+    start_hypergate_access: StartWithHypergateAccess
 
 
 # We could group options usingg option_groups. Review apquest's options.
@@ -112,6 +119,7 @@ option_presets = {
         "always_avail_shops": True,
         "ignore_tech": True,
         "always_sellable_outfits": True,
+        "start_hypergate_access" : False,
     },
     "original": {
         "include_outfits": True,
@@ -119,6 +127,7 @@ option_presets = {
         "always_avail_shops": False,
         "ignore_tech": False,
         "always_sellable_outfits": False,
+        "start_hypergate_access" : False,
     },
     "ships only": {
         "include_outfits": False,
@@ -126,5 +135,6 @@ option_presets = {
         "always_avail_shops": False,
         "ignore_tech": False,
         "always_sellable_outfits": False,
+        "start_hypergate_access" : False,
     }
 }
