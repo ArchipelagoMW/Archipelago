@@ -533,6 +533,21 @@
                         { "item": "Wall Climb" }
                     ]
                 ] }
+            ],
+            [ // skip nymph and cloud leap and land on the crate side at the end with:
+                {"item": "Wall Climb"}, {"item":"Air Dash"}, {"item": "Tai-Chi Kick"}, // and T-dash
+                {"anyOf": [ 
+                    [ // use swift runner to preserve momentum on the TCK target
+                        {"item":"Trick - Long Jump with Swift Runner"} 
+                    
+                    ],
+                    [ // or use charged strike to gain the extra distance and reach the crate side
+                        {"item": "Charged Strike"}
+                    ]
+
+                ] }
+
+
             ]
         ] } ],
         "ls_requires": [ // instead of TCK, we use CL and slash vault inside the tunnel to get a 2nd AD and CL
