@@ -51,6 +51,12 @@ class SelectBox:
         """
         self.window = stdscr
         self.resize()
+        # clear any input queue
+        self.window.nodelay(True)
+        key = None
+        while key != -1:
+            key = self.window.getch()
+        self.window.nodelay(False)
         while self.ret is None:
             self.ret = self.poll()
             pass
@@ -166,7 +172,7 @@ class SelectBox:
             raise CursesCancel("User Cancelled")
         elif key == curses.KEY_RESIZE:
             self.resize()
-        elif key in (curses.KEY_ENTER, curses.ascii.SP, ord("y")):
+        elif key in (curses.ascii.LF, curses.ascii.CR, curses.ascii.SP, ord("y")):
             return self.pointer
         else:
             pass  # ignore other inputs
