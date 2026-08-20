@@ -9,7 +9,7 @@ class CursesCancel(Exception):
 
 
 class SelectBox:
-    ret: str | None
+    ret: int | None
     window: curses.window
     data: list[str]
 
@@ -30,7 +30,7 @@ class SelectBox:
     computed_box_length: int
     max_scroll_offset: int
 
-    def __init__(self, data: list[str], max_height=30, max_length=30):
+    def __init__(self, data: list[str], max_height: int = 30, max_length: int = 30):
         self.ret = None
         self.data = data
 
@@ -41,10 +41,10 @@ class SelectBox:
         self.DATA_COL = self.POINTER_COL + 1
         self.TOP_OF_SCREEN = 1
 
-        pointer = 0
-        scroll_offset = 0
+        self.pointer = 0
+        self.scroll_offset = 0
 
-    def run(self, stdscr):
+    def run(self, stdscr: curses.window):
         """
         Entry point for running curses on a new window
         Will run until a value is picked or is cancelled by the user
@@ -80,7 +80,7 @@ class SelectBox:
         self.window.addnstr(self.TOP_OF_SCREEN + line, self.DATA_COL, text, self.computed_box_length - 1)
 
     def write_data(self):
-        """writes all text from data to the appropriate scrolled position in the window"""
+        """Writes all text from data to the appropriate scrolled position in the window"""
         for index, text in enumerate(self.data):  # todo: switch to enumerating offset by slicing data first
             offset_index = index - self.scroll_offset
             if 0 <= offset_index < self.computed_box_height:
@@ -170,12 +170,14 @@ class SelectBox:
             return self.pointer
 
 
-def curses_select(data: list[str], key: Callable[int, str] | None = None) -> str | None:
+def curses_select(data: list[str], key: Callable[[int], str] | None = None) -> str | None:
     """
     Starts a curses select box the user can navigate with arrow keys around,
     escape to quit, and any other key to select the current listed string
 
     :param data: list of selections for the user to pick from.
+    :param key: optional Callable, when not present the string picked is returned else
+    the key callable is run on the index of data chosen
 
     :return: None if cancelled, else the chosen string.
     """
@@ -190,4 +192,4 @@ def curses_select(data: list[str], key: Callable[int, str] | None = None) -> str
         return None
     if key is None:
         return data[window.ret]
-    return key[window.ret]
+    return key(window.ret)
