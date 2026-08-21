@@ -1,0 +1,11 @@
+Program 0x73
+Party DEFAULT
+Mission 0x195 "HB32_FM_VEX"
+BattleLevel 99
+Spawn "b_80"
+
+Program 0x92
+Party DEFAULT
+Mission 0x195 "HB32_FM_VEX"
+BattleLevel 99
+Spawn "b_80"
