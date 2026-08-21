@@ -44,6 +44,9 @@
 # Celeste (Open World)
 /worlds/celeste_open_world/ @PoryGone
 
+# Core Keeper
+/worlds/core_keeper/ @URAQTDev
+
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
 
