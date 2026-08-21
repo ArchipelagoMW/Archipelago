@@ -14,6 +14,8 @@ env:
   BEFORE: ${{ github.event.before }}
   AFTER: ${{ github.event.after }}
 
+permissions: {}
+
 jobs:
   flake8-or-mypy:
     strategy:
@@ -25,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
 
       - name: "Determine modified files (pull_request)"
         if: github.event_name == 'pull_request'
@@ -50,7 +52,7 @@ jobs:
         run: |
           echo "diff=." >> $GITHUB_ENV
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6.2.0
         if: env.diff != ''
         with:
           python-version: '3.11'

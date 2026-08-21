@@ -1,3 +1,16 @@
+# 2.5.0
+
+### Features
+
+- Added a new option `dexsanity_encounter_types` to enable/disable dexsanity locations based on whether they can be
+found in the allowed encounters. In other words, if Bulbasaur can only be found by fishing and fishing is not enabled,
+a dexsanity location will not be created for Bulbasaur.
+
+### Fixes
+
+- Fixed generator error if Wailord or Relicanth are blacklisted during a dexsanity seed.
+- Fixed generator error if player greatly restricts allowed opponent pokemon while force fully evolved is active.
+
 # 2.4.1
 
 ### Fixes

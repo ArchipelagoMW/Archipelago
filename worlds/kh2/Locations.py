@@ -1281,7 +1281,7 @@ exclusion_table = {
         LocationName.HadesCupTrophyParadoxCups,
         LocationName.MusicalOrichalcumPlus,
     ],
-    "HitlistCasual":          {
+    "HitlistCasual":          [
         LocationName.FuturePete,
         LocationName.BetwixtandBetweenBondofFlame,
         LocationName.GrimReaper2,
@@ -1299,7 +1299,7 @@ exclusion_table = {
         LocationName.MCP,
         LocationName.Lvl50,
         LocationName.Lvl99
-    },
+    ],
     "Cups":          {
         LocationName.ProtectBeltPainandPanicCup,
         LocationName.SerenityGemPainandPanicCup,

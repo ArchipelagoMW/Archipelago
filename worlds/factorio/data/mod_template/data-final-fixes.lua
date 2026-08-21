@@ -130,6 +130,7 @@ end
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
+data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes_off_when_no_fluid_recipe = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes_off_when_no_fluid_recipe
 if mods["factory-levels"] then
     -- Factory-Levels allows the assembling machines to get faster (and depending on settings), more productive at crafting products, the more the
     -- assembling machine crafts the product.  If the machine crafts enough, it may auto-upgrade to the next tier.
@@ -153,6 +154,13 @@ technologies["{{ original_tech_name }}"].hidden_in_factoriopedia = true
 {#- the tech researched by the local player #}
 new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ location.address }}-"{# use AP ID #}
+{%- if location.revealed %}
+new_tree_copy.localised_name = {"technology-name.ap-technology-full", "{{ player_names[item.player] }}", "{{ item.name }}", "{{ location.name }}"}
+new_tree_copy.localised_description  = {"technology-description.ap-technology-full", "{{ item.name }}", "{{ player_names[item.player] }}", {% if item.advancement %}{"technology-description.ap-technology-item-advancement"}{% elif item.useful %}{"technology-description.ap-technology-item-useful"}{% elif item.trap %}{"technology-description.ap-technology-item-trap"}{% else %}""{% endif %}}
+{%- else  %}
+new_tree_copy.localised_name = {"technology-name.ap-technology-hidden", "{{location.name}}"}
+new_tree_copy.localised_description  = {"technology-description.ap-technology-hidden", {% if tech_tree_information == 1 and item.advancement %}{"technology-description.ap-technology-item-advancement"}{% else %}""{% endif %}}
+{% endif -%}
 {% if location.crafted_item is not none %}
 new_tree_copy.research_trigger = {
     type = "{{ 'craft-fluid' if location.crafted_item in liquids else 'craft-item' }}",

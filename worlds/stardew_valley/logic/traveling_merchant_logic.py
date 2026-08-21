@@ -1,7 +1,4 @@
-from typing import Union
-
 from .base_logic import BaseLogic, BaseLogicMixin
-from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import True_
 from ..strings.calendar_names import Weekday
 

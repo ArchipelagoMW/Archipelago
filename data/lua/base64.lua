@@ -5,11 +5,7 @@ local base64 = {}
 
 local extract = _G.bit32 and _G.bit32.extract -- Lua 5.2/Lua 5.3 in compatibility mode
 if not extract then
-    if _G._VERSION == "Lua 5.4" then
-        extract = load[[return function( v, from, width )
-            return ( v >> from ) & ((1 << width) - 1)
-        end]]()
-    elseif _G.bit then -- LuaJIT
+    if _G.bit then -- LuaJIT
         local shl, shr, band = _G.bit.lshift, _G.bit.rshift, _G.bit.band
         extract = function( v, from, width )
             return band( shr( v, from ), shl( 1, width ) - 1 )
@@ -27,6 +23,10 @@ if not extract then
             end
             return w
         end
+    else -- Lua 5.3+
+        extract = load[[return function( v, from, width )
+            return ( v >> from ) & ((1 << width) - 1)
+        end]]()
     end
 end
 

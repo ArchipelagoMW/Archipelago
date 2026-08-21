@@ -84,7 +84,7 @@ celeste_base_id: int = 0xCA10000
 
 
 class CelesteItem(Item):
-    game = "Celeste"
+    game = "Celeste (Open World)"
 
 
 class CelesteItemData(NamedTuple):
@@ -259,6 +259,7 @@ def generate_item_groups() -> dict[str, list[str]]:
         "Blue Bubbles":   [ItemName.blue_boosters],
         "Red Bubbles":    [ItemName.red_boosters],
         "Touch Switches": [ItemName.coins],
+        "Shields":        [ItemName.coins],
     }
 
     return item_groups

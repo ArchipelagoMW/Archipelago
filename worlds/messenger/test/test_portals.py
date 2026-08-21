@@ -35,3 +35,29 @@ class PortalTestBase(MessengerTestBase):
                         test_state.collect(item)
                     self.assertTrue(entrance.can_reach(test_state), grouping)
                 entrance.access_rule = lambda state: True
+
+
+class PortalUnlockTest(MessengerTestBase):
+    options = {
+        "available_portals": 3,
+    }
+
+    def test_unlocking_portal(self) -> None:
+        """Validate that unlocking the portal event actually unlock the portal in HQ"""
+
+        print(self.world.starting_portals)
+
+        for portal in PORTALS:
+            name = f"{portal} Portal"
+            if name in self.world.starting_portals:
+                continue
+
+            entrance_name = f"ToTHQ {name}"
+            with self.subTest(portal=name, entrance_name=entrance_name):
+                hq_portal = self.multiworld.get_entrance(entrance_name, self.player)
+                test_state = CollectionState(self.multiworld)
+                self.assertFalse(hq_portal.can_reach(test_state), "reachable with nothing")
+
+                event = self.multiworld.get_location(name, self.player)
+                test_state.collect(event.item)
+                self.assertTrue(hq_portal.can_reach(test_state))

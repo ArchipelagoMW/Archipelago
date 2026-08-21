@@ -2,7 +2,7 @@ from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes, SVEQuestItem
 from ...strings.quest_names import Quest, ModQuest
 from ...strings.region_names import Region, SVERegion
-from ...strings.tool_names import Tool, ToolMaterial
+from ...strings.tool_names import Tool
 from ...strings.wallet_item_names import Wallet
 
 
@@ -45,8 +45,8 @@ class SVELogic(BaseLogic):
         return self.logic.quest.can_complete_quest(Quest.strange_note)
 
     def can_buy_bear_recipe(self):
-        access_rule = (self.logic.quest.can_complete_quest(Quest.strange_note) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
-                       self.logic.tool.has_tool(Tool.pickaxe, ToolMaterial.basic))
-        forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods, Region.mountain))
+        access_rule = (self.logic.quest.can_complete_quest(Quest.strange_note) & self.logic.tool.has_tool(Tool.axe) &
+                       self.logic.tool.has_tool(Tool.pickaxe))
+        forage_rule = self.logic.region.can_reach_any(Region.forest, Region.backwoods, Region.mountain)
         knowledge_rule = self.has_bear_knowledge()
         return access_rule & forage_rule & knowledge_rule

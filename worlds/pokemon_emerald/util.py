@@ -100,7 +100,7 @@ def get_encounter_type_label(encounter_type: EncounterType, slot: int) -> str:
             8: "Super Rod",
             9: "Super Rod",
         }[slot]
-    
+
     return {
         EncounterType.LAND: 'Land',
         EncounterType.WATER: 'Water',

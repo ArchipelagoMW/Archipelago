@@ -122,6 +122,20 @@ class WitnessTestBase(WorldTestBase):
                 )
                 item_objects.append(removed_item)
 
+    def assert_quantities_in_itempool(self, expected_quantities: Mapping[str, int]) -> None:
+        for item, expected_quantity in expected_quantities.items():
+            with self.subTest(f"Verify that there are {expected_quantity} copies of {item} in the itempool."):
+                found_items = self.get_items_by_name(item)
+                self.assertEqual(len(found_items), expected_quantity)
+
+    def assert_item_exists_and_is_proguseful(self, item_name: str, proguseful=True):
+        items = self.get_items_by_name(item_name)
+        self.assertTrue(items)
+        if proguseful:
+            self.assertTrue(all(item.advancement and item.useful for item in items))
+        else:
+            self.assertTrue(all(item.advancement and not item.useful for item in items))
+
 
 class WitnessMultiworldTestBase(MultiworldTestBase):
     options_per_world: List[Dict[str, Any]]

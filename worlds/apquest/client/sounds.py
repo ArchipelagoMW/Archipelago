@@ -1,12 +1,12 @@
 import asyncio
 import pkgutil
 from asyncio import Task
-from collections.abc import Buffer
 from pathlib import Path
 from typing import cast
 
 from kivy import Config
 from kivy.core.audio import Sound, SoundLoader
+from typing_extensions import Buffer
 
 from CommonClient import logger
 
@@ -85,7 +85,7 @@ class SoundManager:
 
     def ensure_config(self) -> None:
         Config.adddefaultsection("APQuest")
-        Config.setdefault("APQuest", "volume", 50)
+        Config.setdefault("APQuest", "volume", 30)
         self.set_volume_percentage(Config.getint("APQuest", "volume"))
 
     async def sound_manager_loop(self) -> None:
@@ -149,6 +149,7 @@ class SoundManager:
                 continue
 
             if sound_name == audio_filename:
+                sound.volume = self.volume_percentage / 100
                 sound.play()
                 self.update_background_music()
                 higher_priority_sound_is_playing = True
@@ -213,6 +214,7 @@ class SoundManager:
                     # It ends up feeling better if this just always continues playing quietly after being started.
                     # Even "fading in at a random spot" is better than restarting the song after a jingle / math trap.
                     if self.game_started and song.state == "stop":
+                        song.volume = self.current_background_music_volume * self.volume_percentage / 100
                         song.play()
                         song.seek(0)
                     continue
@@ -228,6 +230,7 @@ class SoundManager:
 
             if self.current_background_music_volume != 0:
                 if song.state == "stop":
+                    song.volume = self.current_background_music_volume * self.volume_percentage / 100
                     song.play()
                     song.seek(0)
 

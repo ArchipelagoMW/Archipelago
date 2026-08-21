@@ -184,6 +184,8 @@ class KH2World(World):
                 if self.visitlocking_dict[item] == 0:
                     self.visitlocking_dict.pop(item)
                 self.multiworld.push_precollected(self.create_item(item))
+            # tt is 3 visits so 2nd visit locking unlocks only the third visit
+            self.multiworld.push_precollected(self.create_item(ItemName.IceCream))
 
         for _ in range(self.options.RandomVisitLockingItem.value):
             if sum(self.visitlocking_dict.values()) <= 0:

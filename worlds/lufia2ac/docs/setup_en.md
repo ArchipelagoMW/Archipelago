@@ -56,7 +56,6 @@ If you would like to validate your config file to make sure it works, you may do
 4. You will be presented with a server page, from which you can download your patch file.
 5. Double-click on your patch file, and SNIClient will launch automatically, create your ROM from the patch file, and
    open your emulator for you.
-6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 
 ## Joining a MultiWorld Game
 

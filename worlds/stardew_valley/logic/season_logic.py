@@ -1,11 +1,8 @@
 from functools import cached_property
-from typing import Iterable, Union
+from typing import Iterable
 
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .time_logic import TimeLogicMixin
 from ..options import SeasonRandomization
 from ..stardew_rule import StardewRule, True_, true_
 from ..strings.generic_names import Generic
@@ -38,6 +35,8 @@ class SeasonLogic(BaseLogic):
 
     @cache_self1
     def has(self, season: str) -> StardewRule:
+        assert isinstance(season, str), "use has_any() or has_all() to check multiple seasons at once"
+
         if season == Generic.any:
             return True_()
         seasons_order = [Season.spring, Season.summer, Season.fall, Season.winter]

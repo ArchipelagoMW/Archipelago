@@ -20,7 +20,8 @@ if typing.TYPE_CHECKING:
 Utils.local_path.cached_path = os.path.dirname(__file__)
 settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
-if not os.path.exists(configpath):  # fall back to config.yaml in home
+if not os.path.exists(configpath):
+    # fall back to config.yaml in user_path if config does not exist in cwd to match settings.py
     configpath = os.path.abspath(Utils.user_path('config.yaml'))
 
 
@@ -109,13 +110,14 @@ if __name__ == "__main__":
         logging.exception(e)
         logging.warning("Could not update LttP sprites.")
     app = get_app()
-    from worlds import AutoWorldRegister
+    from worlds import AutoWorldRegister, network_data_package
     # Update to only valid WebHost worlds
     invalid_worlds = {name for name, world in AutoWorldRegister.world_types.items()
                       if not hasattr(world.web, "tutorials")}
     if invalid_worlds:
         logging.error(f"Following worlds not loaded as they are invalid for WebHost: {invalid_worlds}")
     AutoWorldRegister.world_types = {k: v for k, v in AutoWorldRegister.world_types.items() if k not in invalid_worlds}
+    network_data_package["games"] = {k: v for k, v in network_data_package["games"].items() if k not in invalid_worlds}
     create_options_files()
     copy_tutorials_files_to_static()
     if app.config["SELFLAUNCH"]:

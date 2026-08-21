@@ -1,13 +1,16 @@
 import itertools
 import logging
+import math
 import os
 import threading
 import typing
 import unittest
 from collections.abc import Iterable
 from contextlib import contextmanager
+from copy import deepcopy
+from typing import Optional, Dict, Union, Any, List, Iterable
 
-from BaseClasses import get_seed, MultiWorld, Location, Item, Region, CollectionState, Entrance
+from BaseClasses import get_seed, MultiWorld, Location, Item, Region, Entrance, CollectionState
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
@@ -77,7 +80,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         world = self.multiworld.worlds[self.player]
 
         self.original_state = self.multiworld.state.copy()
-        self.original_itempool = self.multiworld.itempool.copy()
+        self.original_itempool = deepcopy(self.multiworld.itempool)
         self.unfilled_locations = self.multiworld.get_unfilled_locations(1)
         if self.constructed:
             self.world = world  # noqa
@@ -99,7 +102,8 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def collect_months(self, months: int) -> None:
         real_total_prog_items = self.world.total_progression_items
         percent = months * MONTH_COEFFICIENT
-        self.collect("Stardrop", real_total_prog_items * 100 // percent)
+        number_stardrops = math.ceil(real_total_prog_items * (percent / 100))
+        self.collect("Stardrop", number_stardrops)
         self.world.total_progression_items = real_total_prog_items
 
     def collect_lots_of_money(self, percent: float = 0.25):
@@ -112,12 +116,12 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.collect_lots_of_money(0.95)
 
     def collect_everything(self):
-        non_event_items = [item for item in self.multiworld.get_items() if item.code]
+        non_event_items = [i for i in self.multiworld.get_items() if i.advancement and i.code]
         for item in non_event_items:
             self.multiworld.state.collect(item)
 
     def collect_all_except(self, item_to_not_collect: str):
-        non_event_items = [item for item in self.multiworld.get_items() if item.code]
+        non_event_items = [i for i in self.multiworld.get_items() if i.advancement and i.code]
         for item in non_event_items:
             if item.name != item_to_not_collect:
                 self.multiworld.state.collect(item)
@@ -189,6 +193,16 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             state = self.multiworld.state
         return super().assert_cannot_reach_region(region, state)
 
+    def assert_can_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_can_reach_region(region, state)
+
+    def assert_cannot_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_cannot_reach_region(region, state)
+
     def assert_can_reach_entrance(self, entrance: Entrance | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
@@ -211,7 +225,7 @@ def solo_multiworld(world_options: dict[str | type[StardewValleyOption], typing.
         try:
             multiworld.lock.acquire()
             original_state = multiworld.state.copy()
-            original_itempool = multiworld.itempool.copy()
+            original_itempool = deepcopy(multiworld.itempool)
             unfilled_locations = multiworld.get_unfilled_locations(1)
 
             yield multiworld, typing.cast(StardewValleyWorld, multiworld.worlds[1])

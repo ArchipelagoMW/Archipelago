@@ -5,8 +5,11 @@ from ..locations import LocationTags, locations_by_tag
 from ..mods.mod_data import ModNames
 from ..options import options
 from ..stardew_rule import StardewRule
+from ..strings.ap_names.ap_option_names import SecretsanityOptionName
 from ..strings.building_names import Building
+from ..strings.crop_names import Fruit
 from ..strings.quest_names import Quest
+from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.wallet_item_names import Wallet
 
@@ -97,11 +100,8 @@ class GoalLogic(BaseLogic):
     def can_complete_gourmet_chef(self) -> StardewRule:
         cooksanity_prefix = "Cook "
         all_recipes_names = []
-        exclude_island = self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
         for location in locations_by_tag[LocationTags.COOKSANITY]:
-            if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
-                continue
-            if location.mod_name and location.mod_name not in self.options.mods:
+            if not self.content.are_all_enabled(location.content_packs):
                 continue
             all_recipes_names.append(location.name[len(cooksanity_prefix):])
         all_recipes = [all_cooking_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
@@ -110,17 +110,14 @@ class GoalLogic(BaseLogic):
     def can_complete_craft_master(self) -> StardewRule:
         craftsanity_prefix = "Craft "
         all_recipes_names = []
-        exclude_island = self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
         exclude_masteries = not self.content.features.skill_progression.are_masteries_shuffled
         for location in locations_by_tag[LocationTags.CRAFTSANITY]:
             if not location.name.startswith(craftsanity_prefix):
                 continue
-            if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
-                continue
             # FIXME Remove when recipes are in content packs
             if exclude_masteries and LocationTags.REQUIRES_MASTERIES in location.tags:
                 continue
-            if location.mod_name and location.mod_name not in self.options.mods:
+            if not self.content.are_all_enabled(location.content_packs):
                 continue
             all_recipes_names.append(location.name[len(craftsanity_prefix):])
         all_recipes = [all_crafting_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
@@ -133,7 +130,6 @@ class GoalLogic(BaseLogic):
         other_rules = []
         number_of_stardrops_to_receive = 0
         number_of_stardrops_to_receive += 1  # The Mines level 100
-        number_of_stardrops_to_receive += 1  # Old Master Cannoli
         number_of_stardrops_to_receive += 1  # Museum Stardrop
         number_of_stardrops_to_receive += 1  # Krobus Stardrop
 
@@ -154,10 +150,40 @@ class GoalLogic(BaseLogic):
         else:
             other_rules.append(self.logic.relationship.has_hearts_with_any_bachelor(13))
 
-        if ModNames.deepwoods in self.options.mods:  # Petting the Unicorn
+        # Old Master Cannoli
+        if SecretsanityOptionName.easy in self.options.secretsanity:
+            number_of_stardrops_to_receive += 1
+        else:
+            other_rules.append(self.logic.has(Fruit.sweet_gem_berry) & self.logic.region.can_reach(Region.secret_woods))
+
+        if self.content.is_enabled(ModNames.deepwoods):  # Petting the Unicorn
             number_of_stardrops_to_receive += 1
 
         return self.logic.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules, allow_empty=True)
+
+    def can_complete_mad_hatter(self, all_location_names_in_slot: list[str]) -> StardewRule:
+        if not self.content.features.hatsanity.is_enabled:
+            raise Exception("Cannot play Mad Hatter Goal without Hatsanity")
+
+        rules = []
+
+        for hatsanity_location in locations_by_tag[LocationTags.HATSANITY]:
+            if hatsanity_location.name not in all_location_names_in_slot:
+                continue
+            rules.append(self.logic.region.can_reach_location(hatsanity_location.name))
+        return self.logic.and_(*rules)
+
+    def can_complete_ultimate_foodie(self, all_location_names_in_slot: list[str]) -> StardewRule:
+        if not self.options.eatsanity.value:
+            raise Exception("Cannot play Ultimate Foodie Goal without Eatsanity")
+
+        rules = []
+
+        for eatsanity_location in locations_by_tag[LocationTags.EATSANITY]:
+            if eatsanity_location.name not in all_location_names_in_slot:
+                continue
+            rules.append(self.logic.region.can_reach_location(eatsanity_location.name))
+        return self.logic.and_(*rules)
 
     def can_complete_allsanity(self) -> StardewRule:
         return self.logic.has_progress_percent(100)

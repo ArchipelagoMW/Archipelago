@@ -1,5 +1,6 @@
-from typing import Dict, List, Tuple, Any, Callable, TYPE_CHECKING
+from typing import Dict, List, Tuple, Any, Callable, TYPE_CHECKING, Mapping
 from BaseClasses import CollectionState
+from worlds.generic.Rules import CollectionRule
 
 if TYPE_CHECKING:
     from . import BlasphemousWorld
@@ -7,10 +8,68 @@ else:
     BlasphemousWorld = object
 
 
+# Depending on a player's options, some logic can either always be True, or always be False.
+# When combining rules together in load_rule(), optimizations can be made by checking whether a rule being combined is
+# _always or _never.
+def _always(state: CollectionState):
+    return True
+
+
+def _never(state: CollectionState):
+    return False
+
+
+def _bool_rule(b) -> CollectionRule:
+    """Small helper to return the appropriate rule function for a rule that can be pre-calculated"""
+    if b:
+        return _always
+    else:
+        return _never
+
+
+# Player strengths required to logically beat bosses.
+# Mapping is an immutable type, so type hints should warn if attempts are made to modify it.
+BOSS_STRENGTHS: Mapping[str, float] = {
+    "warden": -0.10,
+    "ten-piedad": 0.05,
+    "charred-visage": 0.20,
+    "tres-angustias": 0.15,
+    "esdras": 0.25,
+    "melquiades": 0.25,
+    "exposito": 0.30,
+    "quirce": 0.35,
+    "crisanta": 0.50,
+    "isidora": 0.70,
+    "sierpes": 0.70,
+    "amanecida": 0.60,
+    "laudes": 0.60,
+    "perpetua": -0.05,
+    "legionary": 0.20
+}
+
+
 class BlasRules:
     player: int
     world: BlasphemousWorld
     string_rules: Dict[str, Callable[[CollectionState], bool]]
+
+    upwarp_skips_allowed: bool
+    mourning_skip_allowed: bool
+    enemy_skips_allowed: bool
+    obscure_skips_allowed: bool
+    precise_skips_allowed: bool
+    can_enemy_bounce: bool
+
+    # Player strengths required to logically beat bosses, adjusted by the player's difficulty option.
+    boss_strengths: Mapping[str, float]
+
+    can_enemy_upslash: CollectionRule
+    can_air_stall: CollectionRule
+    can_dawn_jump: CollectionRule
+    can_dive_laser: CollectionRule
+    can_survive_poison_1: CollectionRule
+    can_survive_poison_2: CollectionRule
+    can_survive_poison_3: CollectionRule
 
     def __init__(self, world: "BlasphemousWorld") -> None:
         self.player = world.player
@@ -18,19 +77,76 @@ class BlasRules:
         self.multiworld = world.multiworld
         self.indirect_conditions: List[Tuple[str, str]] = []
 
+        difficulty = world.options.difficulty.value
+
+        # Rules that can be fully or partially pre-calculated based on world.options.
+
+        # Special Skips
+        self.upwarp_skips_allowed = difficulty >= 2
+        self.mourning_skip_allowed = difficulty >= 2
+        self.enemy_skips_allowed = difficulty >= 2 and not world.options.enemy_randomizer.value
+        self.obscure_skips_allowed = difficulty >= 2
+        self.precise_skips_allowed = difficulty >= 2
+
+        if difficulty >= 2:
+            # Beating bosses ends up in logic earlier.
+            self.boss_strengths = {boss: strength - 0.1 for boss, strength in BOSS_STRENGTHS.items()}
+        elif difficulty >= 1:
+            self.boss_strengths = BOSS_STRENGTHS
+        else:
+            # Beating bosses ends up in logic later.
+            self.boss_strengths = {boss: strength + 0.1 for boss, strength in BOSS_STRENGTHS.items()}
+
+        # Enemy tech
+        if self.enemy_skips_allowed:
+            self.can_enemy_bounce = True
+            self.can_enemy_upslash = lambda state: self.combo(state) >= 2
+        else:
+            self.can_enemy_bounce = False
+            self.can_enemy_upslash = _never
+
+        # Movement tech
+        if difficulty >= 1:
+            self.can_air_stall = self.ranged
+            self.can_dawn_jump = lambda state: self.dawn_heart(state) and self.dash(state)
+        else:
+            self.can_air_stall = _never
+            self.can_dawn_jump = _never
+
+        # Breakable tech
+        if difficulty >= 2:
+            self.can_dive_laser = lambda state: self.dive(state) >= 3
+        else:
+            self.can_dive_laser = _never
+
+        # Lung tech
+        if difficulty >= 2:
+            self.can_survive_poison_1 = _always
+            self.can_survive_poison_2 = lambda state: self.lung(state) or self.tiento(state)
+            self.can_survive_poison_3 = lambda state: self.lung(state) or (self.tiento(state)
+                                                                           and self.total_fervour(state) >= 120)
+        elif difficulty >= 1:
+            self.can_survive_poison_1 = lambda state: self.lung(state) or self.tiento(state)
+            self.can_survive_poison_2 = lambda state: self.lung(state) or self.tiento(state)
+            self.can_survive_poison_3 = self.lung
+        else:
+            self.can_survive_poison_1 = self.lung
+            self.can_survive_poison_2 = self.lung
+            self.can_survive_poison_3 = self.lung
+
+
         # BrandenEK/Blasphemous.Randomizer/ItemRando/BlasphemousInventory.cs
-        self.string_rules = {
+        self.string_rules: dict[str, CollectionRule] = {
             # Visibility flags
-            "DoubleJump": lambda state: bool(self.world.options.purified_hand),
-            "NormalLogic": lambda state: self.world.options.difficulty >= 1,
-            "NormalLogicAndDoubleJump": lambda state: self.world.options.difficulty >= 1 \
-                and bool(self.world.options.purified_hand),
-            "HardLogic": lambda state: self.world.options.difficulty >= 2,
-            "HardLogicAndDoubleJump": lambda state: self.world.options.difficulty >= 2 \
-                and bool(self.world.options.purified_hand),
-            "EnemySkips": self.enemy_skips_allowed,
-            "EnemySkipsAndDoubleJump": lambda state: self.enemy_skips_allowed(state) \
-                and bool(self.world.options.purified_hand),
+            "DoubleJump": _bool_rule(self.world.options.purified_hand.value),
+            "NormalLogic": _bool_rule(self.world.options.difficulty.value >= 1),
+            "NormalLogicAndDoubleJump": _bool_rule(self.world.options.difficulty.value >= 1
+                                                   and bool(self.world.options.purified_hand.value)),
+            "HardLogic": _bool_rule(self.world.options.difficulty.value >= 2),
+            "HardLogicAndDoubleJump": _bool_rule(self.world.options.difficulty.value >= 2
+                                                 and bool(self.world.options.purified_hand.value)),
+            "EnemySkips": _bool_rule(self.enemy_skips_allowed),
+            "EnemySkipsAndDoubleJump": _bool_rule(self.enemy_skips_allowed and self.world.options.purified_hand.value),
 
             # Relics
             "blood": self.blood,
@@ -52,20 +168,20 @@ class BlasRules:
             "cherubs20": lambda state: self.cherubs(state) >= 20,
             "cherubs38": lambda state: self.cherubs(state) >= 38,
 
-            "bones4": lambda state: self.bones(state) >= 4,
-            "bones8": lambda state: self.bones(state) >= 8,
-            "bones12": lambda state: self.bones(state) >= 12,
-            "bones16": lambda state: self.bones(state) >= 16,
-            "bones20": lambda state: self.bones(state) >= 20,
-            "bones24": lambda state: self.bones(state) >= 24,
-            "bones28": lambda state: self.bones(state) >= 28,
-            "bones30": lambda state: self.bones(state) >= 30,
-            "bones32": lambda state: self.bones(state) >= 32,
-            "bones36": lambda state: self.bones(state) >= 36,
-            "bones40": lambda state: self.bones(state) >= 40,
-            "bones44": lambda state: self.bones(state) >= 44,
+            "bones4": lambda state: self.bones(state, 4),
+            "bones8": lambda state: self.bones(state, 8),
+            "bones12": lambda state: self.bones(state, 12),
+            "bones16": lambda state: self.bones(state, 16),
+            "bones20": lambda state: self.bones(state, 20),
+            "bones24": lambda state: self.bones(state, 24),
+            "bones28": lambda state: self.bones(state, 28),
+            "bones30": lambda state: self.bones(state, 30),
+            "bones32": lambda state: self.bones(state, 32),
+            "bones36": lambda state: self.bones(state, 36),
+            "bones40": lambda state: self.bones(state, 40),
+            "bones44": lambda state: self.bones(state, 44),
 
-            "tears0": lambda state: True,
+            "tears0": _always,
 
             # Special items
             "dash": self.dash,
@@ -118,13 +234,13 @@ class BlasRules:
             # skip "dive"
             # skip "lunge"
             "chargeBeam": self.charge_beam,
-            "rangedAttack": lambda state: self.ranged(state) > 0,
+            "rangedAttack": self.ranged,
 
             # Main quest
-            "holyWounds3": lambda state: self.holy_wounds(state) >= 3,
-            "masks1": lambda state: self.masks(state) >= 1,
-            "masks2": lambda state: self.masks(state) >= 2,
-            "masks3": lambda state: self.masks(state) >= 3,
+            "holyWounds3": lambda state: self.holy_wounds(state, 3),
+            "masks1": lambda state: self.masks(state, 1),
+            "masks2": lambda state: self.masks(state, 2),
+            "masks3": lambda state: self.masks(state, 3),
             "guiltBead": self.guilt_bead,
 
             # LOTL quest
@@ -133,17 +249,17 @@ class BlasRules:
             "hatchedEgg": self.hatched_egg,
 
             # Tirso quest
-            "herbs1": lambda state: self.herbs(state) >= 1,
-            "herbs2": lambda state: self.herbs(state) >= 2,
-            "herbs3": lambda state: self.herbs(state) >= 3,
-            "herbs4": lambda state: self.herbs(state) >= 4,
-            "herbs5": lambda state: self.herbs(state) >= 5,
-            "herbs6": lambda state: self.herbs(state) >= 6,
+            "herbs1": lambda state: self.herbs(state, 1),
+            "herbs2": lambda state: self.herbs(state, 2),
+            "herbs3": lambda state: self.herbs(state, 3),
+            "herbs4": lambda state: self.herbs(state, 4),
+            "herbs5": lambda state: self.herbs(state, 5),
+            "herbs6": lambda state: self.herbs(state, 6),
 
             # Tentudia quest
-            "tentudiaRemains1": lambda state: self.tentudia_remains(state) >= 1,
-            "tentudiaRemains2": lambda state: self.tentudia_remains(state) >= 2,
-            "tentudiaRemains3": lambda state: self.tentudia_remains(state) >= 3,
+            "tentudiaRemains1": lambda state: self.tentudia_remains(state, 1),
+            "tentudiaRemains2": lambda state: self.tentudia_remains(state, 2),
+            "tentudiaRemains3": lambda state: self.tentudia_remains(state, 3),
 
             # Gemino quest
             "emptyThimble": self.empty_thimble,
@@ -151,7 +267,7 @@ class BlasRules:
             "driedFlowers": self.dried_flowers,
 
             # Altasgracias quest
-            "ceremonyItems3": lambda state: self.ceremony_items(state) >= 3,
+            "ceremonyItems3": lambda state: self.ceremony_items(state, 3),
             "egg": self.egg,
 
             # Redento quest
@@ -159,13 +275,13 @@ class BlasRules:
             # skip "knots", not actually used
 
             # Cleofas quest
-            "marksOfRefuge3": lambda state: self.marks_of_refuge(state) >= 3,
+            "marksOfRefuge3": lambda state: self.marks_of_refuge(state, 3),
             "cord": self.cord,
 
             # Crisanta quest
             "scapular": self.scapular,
             "trueHeart": self.true_heart,
-            "traitorEyes2": lambda state: self.traitor_eyes(state) >= 2,
+            "traitorEyes2": lambda state: self.traitor_eyes(state, 2),
 
             # Jibrael quest
             "bell": self.bell,
@@ -190,32 +306,32 @@ class BlasRules:
             "canSurvivePoison3": self.can_survive_poison_3,
 
             # Enemy tech
-            "canEnemyBounce": self.can_enemy_bounce,
+            "canEnemyBounce": _bool_rule(self.can_enemy_bounce),
             "canEnemyUpslash": self.can_enemy_upslash,
 
             # Reaching rooms
-            "guiltRooms1": lambda state: self.guilt_rooms(state) >= 1,
-            "guiltRooms2": lambda state: self.guilt_rooms(state) >= 2,
-            "guiltRooms3": lambda state: self.guilt_rooms(state) >= 3,
-            "guiltRooms4": lambda state: self.guilt_rooms(state) >= 4,
-            "guiltRooms5": lambda state: self.guilt_rooms(state) >= 5,
-            "guiltRooms6": lambda state: self.guilt_rooms(state) >= 6,
-            "guiltRooms7": lambda state: self.guilt_rooms(state) >= 7,
+            "guiltRooms1": lambda state: self.guilt_rooms(state, 1),
+            "guiltRooms2": lambda state: self.guilt_rooms(state, 2),
+            "guiltRooms3": lambda state: self.guilt_rooms(state, 3),
+            "guiltRooms4": lambda state: self.guilt_rooms(state, 4),
+            "guiltRooms5": lambda state: self.guilt_rooms(state, 5),
+            "guiltRooms6": lambda state: self.guilt_rooms(state, 6),
+            "guiltRooms7": lambda state: self.guilt_rooms(state, 7),
 
-            "swordRooms1": lambda state: self.sword_rooms(state) >= 1,
-            "swordRooms2": lambda state: self.sword_rooms(state) >= 2,
-            "swordRooms3": lambda state: self.sword_rooms(state) >= 3,
-            "swordRooms4": lambda state: self.sword_rooms(state) >= 4,
-            "swordRooms5": lambda state: self.sword_rooms(state) >= 5,
-            "swordRooms6": lambda state: self.sword_rooms(state) >= 6,
-            "swordRooms7": lambda state: self.sword_rooms(state) >= 7,
+            "swordRooms1": lambda state: self.sword_rooms(state, 1),
+            "swordRooms2": lambda state: self.sword_rooms(state, 2),
+            "swordRooms3": lambda state: self.sword_rooms(state, 3),
+            "swordRooms4": lambda state: self.sword_rooms(state, 4),
+            "swordRooms5": lambda state: self.sword_rooms(state, 5),
+            "swordRooms6": lambda state: self.sword_rooms(state, 6),
+            "swordRooms7": lambda state: self.sword_rooms(state, 7),
 
-            "redentoRooms2": lambda state: self.redento_rooms(state) >= 2,
-            "redentoRooms3": lambda state: self.redento_rooms(state) >= 3,
-            "redentoRooms4": lambda state: self.redento_rooms(state) >= 4,
-            "redentoRooms5": lambda state: self.redento_rooms(state) >= 5,
+            "redentoRooms2": lambda state: self.redento_rooms(state, 2),
+            "redentoRooms3": lambda state: self.redento_rooms(state, 3),
+            "redentoRooms4": lambda state: self.redento_rooms(state, 4),
+            "redentoRooms5": lambda state: self.redento_rooms(state, 5),
 
-            "miriamRooms5": lambda state: self.miriam_rooms(state) >= 5,
+            "miriamRooms5": self.all_miriam_rooms,
 
             "amanecidaRooms1": lambda state: self.amanecida_rooms(state) >= 1,
             "amanecidaRooms2": lambda state: self.amanecida_rooms(state) >= 2,
@@ -254,11 +370,11 @@ class BlasRules:
             "openedBotSSLadder": self.opened_botss_ladder,
 
             # Special skips
-            "upwarpSkipsAllowed": self.upwarp_skips_allowed,
-            "mourningSkipAllowed": self.mourning_skip_allowed,
-            "enemySkipsAllowed": self.enemy_skips_allowed,
-            "obscureSkipsAllowed": self.obscure_skips_allowed,
-            "preciseSkipsAllowed": self.precise_skips_allowed,
+            "upwarpSkipsAllowed": _bool_rule(self.upwarp_skips_allowed),
+            "mourningSkipAllowed": _bool_rule(self.mourning_skip_allowed),
+            "enemySkipsAllowed": _bool_rule(self.enemy_skips_allowed),
+            "obscureSkipsAllowed": _bool_rule(self.obscure_skips_allowed),
+            "preciseSkipsAllowed": _bool_rule(self.precise_skips_allowed),
 
             # Bosses
             "canBeatBrotherhoodBoss": self.can_beat_brotherhood_boss,
@@ -498,30 +614,74 @@ class BlasRules:
 
     def load_rule(self, obj_is_region: bool, name: str, obj: Dict[str, Any]) -> Callable[[CollectionState], bool]:
         clauses = []
+        clauses_are_impossible_if_empty = False
+        rule_indirect_conditions = []
         for clause in obj["logic"]:
             reqs = []
+            clause_indirect_conditions = []
+            clause_is_impossible = False
             for req in clause["item_requirements"]:
                 if self.req_is_region(req):
                     if obj_is_region:
                         # add to indirect conditions if object and requirement are doors
-                        self.indirect_conditions.append((req, f"{name} -> {obj['target']}"))
+                        clause_indirect_conditions.append((req, f"{name} -> {obj['target']}"))
                     reqs.append(lambda state, req=req: state.can_reach_region(req, self.player))
                 else:
+                    string_rule = self.string_rules[req]
+                    if string_rule is _never:
+                        # This clause is not possible with the options this player has chosen.
+                        clause_is_impossible = True
+                        break
+                    elif string_rule is _always:
+                        # Don't need to add a rule that is always True with the options this player has chosen.
+                        # Continue to the next requirement.
+                        continue
                     if obj_is_region and req in self.indirect_regions:
                         # add to indirect conditions if object is door and requirement has list of regions
                         for region in self.indirect_regions[req]:
-                            self.indirect_conditions.append((region, f"{name} -> {obj['target']}"))
+                            clause_indirect_conditions.append((region, f"{name} -> {obj['target']}"))
                     reqs.append(self.string_rules[req])
+            if clause_is_impossible:
+                # At least one clause was impossible, so if all clauses were impossible, the entire rule is impossible.
+                clauses_are_impossible_if_empty = True
+                # Continue to the next clause.
+                continue
+            rule_indirect_conditions.extend(clause_indirect_conditions)
+
+            # Combine the requirements if there are multiple.
+            # Requirements are AND-ed together.
             if len(reqs) == 1:
                 clauses.append(reqs[0])
             else:
-                clauses.append(lambda state, reqs=reqs: all(req(state) for req in reqs))
+                def req_func(state, reqs=reqs):
+                    for req in reqs:
+                        if not req(state):
+                            return False
+                    return True
+                clauses.append(req_func)
+
+        # Combine the clauses if there are multiple.
+        # Clauses are OR-ed together.
         if not clauses:
-            return lambda state: True
+            # There is no need to register the indirect conditions if it turns out the rule is impossible or always
+            # possible.
+            rule_indirect_conditions.clear()
+            if clauses_are_impossible_if_empty:
+                to_return = _never
+            else:
+                to_return = _always
         elif len(clauses) == 1:
-            return clauses[0]
+            to_return = clauses[0]
         else:
-            return lambda state: any(clause(state) for clause in clauses)
+            def clause_func(state, clauses=clauses):
+                for clause in clauses:
+                    if clause(state):
+                        return True
+                return False
+            to_return = clause_func
+        # Update the list of indirect conditions to add.
+        self.indirect_conditions.extend(rule_indirect_conditions)
+        return to_return
 
     # Relics
     def blood(self, state: CollectionState) -> bool:
@@ -565,8 +725,10 @@ class BlasRules:
     def cherubs(self, state: CollectionState) -> int:
         return state.count("Child of Moonlight", self.player)
     
-    def bones(self, state: CollectionState) -> int:
-        return state.count_group_unique("bones", self.player)
+    def bones(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "bones" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("bones", self.player, count)
     
     # def tears():
 
@@ -594,7 +756,7 @@ class BlasRules:
 
     # Health boosts
     def flasks(self, state: CollectionState) -> int:
-        doors = {
+        doors = (
             "D01Z05S05[SW]",
             "D02Z02S04[W]",
             "D03Z02S08[W]",
@@ -602,10 +764,11 @@ class BlasRules:
             "D04Z02S13[W]",
             "D05Z01S08[NW]",
             "D20Z01S07[NE]"
-        }
-
-        return state.count("Empty Bile Vessel", self.player) \
-            if sum(state.can_reach_region(door, self.player) for door in doors) >= 1 else 0
+        )
+        for door in doors:
+            if state.can_reach_region(door, self.player):
+                return state.count("Empty Bile Vessel", self.player)
+        return 0
     
     def quicksilver(self, state: CollectionState) -> int:
         return state.count("Quicksilver", self.player) if state.can_reach_region("D01Z05S01[W]", self.player) else 0
@@ -613,7 +776,7 @@ class BlasRules:
     # Puzzles
     def red_wax(self, state: CollectionState) -> int:
         return state.count("Bead of Red Wax", self.player)
-    
+
     def blue_wax(self, state: CollectionState) -> int:
         return state.count("Bead of Blue Wax", self.player)
     
@@ -670,7 +833,7 @@ class BlasRules:
             or self.cante(state)
             or self.cantina(state)
             or self.tiento(state)
-            or state.has_any({
+            or state.has_any((
                 "Campanillero to the Sons of the Aurora",
                 "Mirabras of the Return to Port",
                 "Romance to the Crimson Mist",
@@ -678,7 +841,7 @@ class BlasRules:
                 "Seguiriya to your Eyes like Stars",
                 "Verdiales of the Forsaken Hamlet",
                 "Zambra to the Resplendent Crown"
-            }, self.player)
+            ), self.player)
         )
     
     def pillar(self, state: CollectionState) -> bool:
@@ -710,8 +873,8 @@ class BlasRules:
     def charged(self, state: CollectionState) -> int:
         return state.count("Charged Skill", self.player)
 
-    def ranged(self, state: CollectionState) -> int:
-        return state.count("Ranged Skill", self.player)
+    def ranged(self, state: CollectionState) -> bool:
+        return state.has("Ranged Skill", self.player)
     
     def dive(self, state: CollectionState) -> int:
         return state.count("Dive Skill", self.player)
@@ -723,11 +886,15 @@ class BlasRules:
         return self.charged(state) >= 3
     
     # Main quest
-    def holy_wounds(self, state: CollectionState) -> int:
-        return state.count_group_unique("wounds", self.player)
+    def holy_wounds(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "wounds" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("wounds", self.player, count)
     
-    def masks(self, state: CollectionState) -> int:
-        return state.count_group_unique("masks", self.player)
+    def masks(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "masks" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("masks", self.player, count)
     
     def guilt_bead(self, state: CollectionState) -> bool:
         return state.has("Weight of True Guilt", self.player)
@@ -743,12 +910,16 @@ class BlasRules:
         return state.has("Hatched Egg of Deformity", self.player)
     
     # Tirso quest
-    def herbs(self, state: CollectionState) -> int:
-        return state.count_group_unique("tirso", self.player)
+    def herbs(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "tirso" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("tirso", self.player, count)
     
     # Tentudia quest
-    def tentudia_remains(self, state: CollectionState) -> int:
-        return state.count_group_unique("tentudia", self.player)
+    def tentudia_remains(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "tentudia" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("tentudia", self.player, count)
     
     # Gemino quest
     def empty_thimble(self, state: CollectionState) -> bool:
@@ -761,23 +932,29 @@ class BlasRules:
         return state.has("Dried Flowers bathed in Tears", self.player)
     
     # Altasgracias quest
-    def ceremony_items(self, state: CollectionState) -> int:
-        return state.count_group_unique("egg", self.player)
+    def ceremony_items(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "egg" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("egg", self.player, count)
     
     def egg(self, state: CollectionState) -> bool:
         return state.has("Egg of Deformity", self.player)
     
     # Redento quest
-    def limestones(self, state: CollectionState) -> int:
-        return state.count_group_unique("toe", self.player)
+    def limestones(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "toe" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("toe", self.player, count)
     
     def knots(self, state: CollectionState) -> int:
         return state.count("Knot of Rosary Rope", self.player) if state.can_reach_region("D17Z01S07[NW]", self.player)\
             else 0
     
     # Cleofas quest
-    def marks_of_refuge(self, state: CollectionState) -> int:
-        return state.count_group_unique("marks", self.player)
+    def marks_of_refuge(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "marks" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("marks", self.player, count)
     
     def cord(self, state: CollectionState) -> bool:
         return state.has("Cord of the True Burying", self.player)
@@ -789,8 +966,10 @@ class BlasRules:
     def true_heart(self, state: CollectionState) -> bool:
         return state.has("Apodictic Heart of Mea Culpa", self.player)
     
-    def traitor_eyes(self, state: CollectionState) -> int:
-        return state.count_group_unique("eye", self.player)
+    def traitor_eyes(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "eye" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
+        return state.has("eye", self.player, count)
     
     # Jibrael quest
     def bell(self, state: CollectionState) -> bool:
@@ -800,19 +979,6 @@ class BlasRules:
         return state.count("Verses Spun from Gold", self.player)
     
     # Movement tech
-    def can_air_stall(self, state: CollectionState) -> bool:
-        return (
-            self.ranged(state) > 0
-            and self.world.options.difficulty >= 1
-        )
-    
-    def can_dawn_jump(self, state: CollectionState) -> bool:
-        return (
-            self.dawn_heart(state)
-            and self.dash(state)
-            and self.world.options.difficulty >= 1
-        )
-    
     def can_water_jump(self, state: CollectionState) -> bool:
         return (
             self.nail(state)
@@ -828,12 +994,6 @@ class BlasRules:
             or self.can_use_any_prayer(state)
         )
     
-    def can_dive_laser(self, state: CollectionState) -> bool:
-        return (
-            self.dive(state) >= 3
-            and self.world.options.difficulty >= 2
-        )
-    
     # Root tech
     def can_walk_on_root(self, state: CollectionState) -> bool:
         return self.root(state)
@@ -842,40 +1002,6 @@ class BlasRules:
         return (
             self.root(state)
             and self.wall_climb(state)
-        )
-    
-    # Lung tech
-    def can_survive_poison_1(self, state: CollectionState) -> bool:
-        return (
-            self.lung(state)
-            or self.world.options.difficulty >= 1
-            and self.tiento(state)
-            or self.world.options.difficulty >= 2
-        )
-    
-    def can_survive_poison_2(self, state: CollectionState) -> bool:
-        return (
-            self.lung(state)
-            or self.world.options.difficulty >= 1
-            and self.tiento(state)
-        )
-    
-    def can_survive_poison_3(self, state: CollectionState) -> bool:
-        return (
-            self.lung(state)
-            or self.world.options.difficulty >= 2
-            and self.tiento(state)
-            and self.total_fervour(state) >= 120
-        )
-    
-    # Enemy tech
-    def can_enemy_bounce(self, state: CollectionState) -> bool:
-        return self.enemy_skips_allowed(state)
-    
-    def can_enemy_upslash(self, state: CollectionState) -> bool:
-        return (
-            self.combo(state) >= 2
-            and self.enemy_skips_allowed(state)
         )
     
     # Crossing gaps
@@ -1021,7 +1147,7 @@ class BlasRules:
             or state.can_reach_region("D03Z02S03[E]", self.player)
             and (
                 self.can_cross_gap_5(state)
-                or self.can_enemy_bounce(state)
+                or self.can_enemy_bounce
                 and self.can_cross_gap_3(state)
             )
         )
@@ -1066,25 +1192,6 @@ class BlasRules:
             state.can_reach_region("D17Z01S05[S]", self.player)
             or state.can_reach_region("D17BZ02S01[FrontR]", self.player)
         )
-    
-    # Special skips
-    def upwarp_skips_allowed(self, state: CollectionState) -> bool:
-        return self.world.options.difficulty >= 2
-    
-    def mourning_skip_allowed(self, state: CollectionState) -> bool:
-        return self.world.options.difficulty >= 2
-    
-    def enemy_skips_allowed(self, state: CollectionState) -> bool:
-        return (
-            self.world.options.difficulty >= 2
-            and not self.world.options.enemy_randomizer
-        )
-    
-    def obscure_skips_allowed(self, state: CollectionState) -> bool:
-        return self.world.options.difficulty >= 2
-    
-    def precise_skips_allowed(self, state: CollectionState) -> bool:
-        return self.world.options.difficulty >= 2
     
     # Bosses
     def can_beat_brotherhood_boss(self, state: CollectionState) -> bool:
@@ -1183,18 +1290,18 @@ class BlasRules:
             and state.can_reach_region("D20Z02S07[W]", self.player)
         )
     
-    def can_beat_graveyard_boss(self, state: CollectionState) -> bool:
+    def can_beat_graveyard_boss(self, state: CollectionState, player_strength: float | None = None) -> bool:
         return (
-            self.has_boss_strength(state, "amanecida")
+            self.has_boss_strength(state, "amanecida", player_strength)
             and self.wall_climb(state)
             and state.can_reach_region("D01Z06S01[Santos]", self.player)
             and state.can_reach_region("D02Z03S18[NW]", self.player)
             and state.can_reach_region("D02Z02S03[NE]", self.player)
         )
     
-    def can_beat_jondo_boss(self, state: CollectionState) -> bool:
+    def can_beat_jondo_boss(self, state: CollectionState, player_strength: float | None = None) -> bool:
         return (
-            self.has_boss_strength(state, "amanecida")
+            self.has_boss_strength(state, "amanecida", player_strength)
             and state.can_reach_region("D01Z06S01[Santos]", self.player)
             and (
                 state.can_reach_region("D20Z01S06[NE]", self.player)
@@ -1206,9 +1313,9 @@ class BlasRules:
             )
         )
     
-    def can_beat_patio_boss(self, state: CollectionState) -> bool:
+    def can_beat_patio_boss(self, state: CollectionState, player_strength: float | None = None) -> bool:
         return (
-            self.has_boss_strength(state, "amanecida")
+            self.has_boss_strength(state, "amanecida", player_strength)
             and state.can_reach_region("D01Z06S01[Santos]", self.player)
             and state.can_reach_region("D06Z01S02[W]", self.player)
             and (
@@ -1218,9 +1325,9 @@ class BlasRules:
             )
         )
     
-    def can_beat_wall_boss(self, state: CollectionState) -> bool:
+    def can_beat_wall_boss(self, state: CollectionState, player_strength: float | None = None) -> bool:
         return (
-            self.has_boss_strength(state, "amanecida")
+            self.has_boss_strength(state, "amanecida", player_strength)
             and state.can_reach_region("D01Z06S01[Santos]", self.player)
             and state.can_reach_region("D09Z01S09[Cell24]", self.player)
             and (
@@ -1244,8 +1351,7 @@ class BlasRules:
     def can_beat_legionary(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "legionary")
 
-
-    def has_boss_strength(self, state: CollectionState, boss: str) -> bool:
+    def get_player_strength(self, state: CollectionState) -> float:
         life: int = state.count("Life Upgrade", self.player)
         sword: int = state.count("Mea Culpa Upgrade", self.player)
         fervour: int = state.count("Fervour Upgrade", self.player)
@@ -1259,30 +1365,16 @@ class BlasRules:
             + min(8, flasks) * 0.15 / 8
             + min(5, quicksilver) * 0.15 / 5
         )
+        return player_strength
 
-        bosses: Dict[str, float] = {
-            "warden": -0.10,
-            "ten-piedad": 0.05,
-            "charred-visage": 0.20,
-            "tres-angustias": 0.15,
-            "esdras": 0.25,
-            "melquiades": 0.25,
-            "exposito": 0.30,
-            "quirce": 0.35,
-            "crisanta": 0.50,
-            "isidora": 0.70,
-            "sierpes": 0.70,
-            "amanecida": 0.60,
-            "laudes": 0.60,
-            "perpetua": -0.05,
-            "legionary": 0.20
-        }
-        boss_strength: float = bosses[boss]
-        return player_strength >= (boss_strength - 0.10 if self.world.options.difficulty >= 2 else 
-                                   (boss_strength if self.world.options.difficulty >= 1 else boss_strength + 0.10))
+    def has_boss_strength(self, state: CollectionState, boss: str, player_strength: float | None = None) -> bool:
+        if player_strength is None:
+            return self.get_player_strength(state) >= self.boss_strengths[boss]
+        else:
+            return player_strength >= self.boss_strengths[boss]
 
-    def guilt_rooms(self, state: CollectionState) -> int:
-        doors = [
+    def guilt_rooms(self, state: CollectionState, count: int) -> bool:
+        doors = (
             "D01Z04S01[NE]",
             "D02Z02S11[W]",
             "D03Z03S02[NE]",
@@ -1290,20 +1382,25 @@ class BlasRules:
             "D05Z01S05[NE]",
             "D09Z01S05[W]",
             "D17Z01S04[W]",
-        ]
+        )
 
-        return sum(state.can_reach_region(door, self.player) for door in doors)
+        total: int = 0
+        for door in doors:
+            total += state.can_reach_region(door, self.player)
+            if total >= count:
+                return True
+        return False
     
-    def sword_rooms(self, state: CollectionState) -> int:
-        doors = [
-            ["D01Z02S07[E]", "D01Z02S02[SW]"],
-            ["D20Z01S04[E]", "D01Z05S23[W]"],
-            ["D02Z03S02[NE]"],
-            ["D04Z02S21[NE]"],
-            ["D05Z01S21[NW]"],
-            ["D06Z01S15[NE]"],
-            ["D17Z01S07[SW]"]
-        ]
+    def sword_rooms(self, state: CollectionState, count: int) -> bool:
+        doors = (
+            ("D01Z02S07[E]", "D01Z02S02[SW]"),
+            ("D20Z01S04[E]", "D01Z05S23[W]"),
+            ("D02Z03S02[NE]",),
+            ("D04Z02S21[NE]",),
+            ("D05Z01S21[NW]",),
+            ("D06Z01S15[NE]",),
+            ("D17Z01S07[SW]",)
+        )
 
         total: int = 0
         for subdoors in doors:
@@ -1311,72 +1408,90 @@ class BlasRules:
                 if state.can_reach_region(door, self.player):
                     total += 1
                     break
+            if total >= count:
+                return True
 
-        return total
+        return False
 
-    def redento_rooms(self, state: CollectionState) -> int:
-        if (
-            state.can_reach_region("D03Z01S04[E]", self.player)
-            or state.can_reach_region("D03Z02S10[N]", self.player)
+    def redento_rooms(self, state: CollectionState, count: int) -> bool:
+        if not (
+                state.can_reach_region("D03Z01S04[E]", self.player)
+                or state.can_reach_region("D03Z02S10[N]", self.player)
         ):
-            if (
+            # Realistically, count should never be zero or negative.
+            return count < 1
+
+        if count == 1:
+            return True
+
+        if not (
                 state.can_reach_region("D17Z01S05[S]", self.player)
                 or state.can_reach_region("D17BZ02S01[FrontR]", self.player)
-            ):
-                if (
-                    state.can_reach_region("D01Z03S04[E]", self.player)
-                    or state.can_reach_region("D08Z01S01[W]", self.player)
-                ):
-                    if (
-                        state.can_reach_region("D04Z01S03[E]", self.player)
-                        or state.can_reach_region("D04Z02S01[W]", self.player)
-                        or state.can_reach_region("D06Z01S18[-Cherubs]", self.player)
-                    ):
-                        if (
-                            self.knots(state) >= 1
-                            and self.limestones(state) >= 3
-                            and (
-                                state.can_reach_region("D04Z02S08[E]", self.player)
-                                or state.can_reach_region("D04BZ02S01[Redento]", self.player)
-                            )
-                        ):
-                            return 5
-                        return 4
-                    return 3
-                return 2
-            return 1
-        return 0
-    
-    def miriam_rooms(self, state: CollectionState) -> int:
-        doors = [
+        ):
+            return False
+
+        if count == 2:
+            return True
+
+        if not (state.can_reach_region("D01Z03S04[E]", self.player)
+                or state.can_reach_region("D08Z01S01[W]", self.player)):
+            return False
+
+        if count == 3:
+            return True
+
+        if not (state.can_reach_region("D04Z01S03[E]", self.player)
+                or state.can_reach_region("D04Z02S01[W]", self.player)
+                or state.can_reach_region("D06Z01S18[-Cherubs]", self.player)):
+            return False
+
+        if count == 4:
+            return True
+
+        if not (
+                self.knots(state) >= 1
+                and self.limestones(state, 3)
+                and (state.can_reach_region("D04Z02S08[E]", self.player)
+                     or state.can_reach_region("D04BZ02S01[Redento]", self.player))
+        ):
+            return False
+
+        return count == 5
+
+    def all_miriam_rooms(self, state: CollectionState) -> bool:
+        doors = (
             "D02Z03S07[NWW]",
             "D03Z03S07[NW]",
             "D04Z04S01[E]",
             "D05Z01S06[W]",
             "D06Z01S17[E]"
-        ]
+        )
 
-        return sum(state.can_reach_region(door, self.player) for door in doors)
+        for door in doors:
+            if not state.can_reach_region(door, self.player):
+                return False
+        return True
     
     def amanecida_rooms(self, state: CollectionState) -> int:
+        player_strength = self.get_player_strength(state)
         total: int = 0
-        if self.can_beat_graveyard_boss(state):
+        if self.can_beat_graveyard_boss(state, player_strength):
             total += 1
-        if self.can_beat_jondo_boss(state):
+        if self.can_beat_jondo_boss(state, player_strength):
             total += 1
-        if self.can_beat_patio_boss(state):
+        if self.can_beat_patio_boss(state, player_strength):
             total += 1
-        if self.can_beat_wall_boss(state):
+        if self.can_beat_wall_boss(state, player_strength):
             total += 1
 
         return total
     
     def chalice_rooms(self, state: CollectionState) -> int:
-        doors = [
-            ["D03Z01S02[E]", "D01Z05S02[W]", "D20Z01S03[N]"],
-            ["D05Z01S11[SE]", "D05Z02S02[NW]"],
-            ["D09Z01S09[E]", "D09Z01S10[W]", "D09Z01S08[SE]", "D09Z01S02[SW]"]
-        ]
+        doors = (
+            ("D03Z01S02[E]", "D01Z05S02[W]", "D20Z01S03[N]"),
+            ("D05Z01S11[SE]", "D05Z02S02[NW]"),
+            ("D09Z01S09[E]", "D09Z01S10[W]", "D09Z01S08[SE]", "D09Z01S02[SW]")
+        )
 
         total: int = 0
         for subdoors in doors:

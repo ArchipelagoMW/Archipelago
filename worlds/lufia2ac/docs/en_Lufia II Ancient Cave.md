@@ -9,8 +9,8 @@ config file.
 
 As you may or may not know, randomization was already a core feature of the Ancient Cave in Lufia II, basically being a
 whole game within a game. The Ancient Cave has 99 floors with increasingly hard enemies, red chests and blue chests. At
-the end of the Ancient Cave you get to fight the Royal Jelly... if you make it that far. You cannot lose the Royal
-Jelly fight as it kills itself after giving you three rounds to try and kill it (or manage to vanquish your own party, 
+the end of the Ancient Cave you get to fight the Master Jelly... if you make it that far. The Master
+Jelly gives you three rounds to try and kill it (or manage to vanquish your own party, 
 whichever one you can manage).
 
 The Randomizer allows you to set different goals and modify the game in several other ways

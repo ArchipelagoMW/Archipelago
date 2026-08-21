@@ -33,4 +33,9 @@ class TestBase(unittest.TestCase):
             cls.app = raw_app
 
     def setUp(self) -> None:
+        from WebHostLib.models import db
+        from pony.orm import db_session
+        with db_session:
+            for entity in db.entities.values():
+                entity.select().delete(bulk=True)
         self.client = self.app.test_client()
