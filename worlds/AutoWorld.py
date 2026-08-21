@@ -540,7 +540,6 @@ class World(metaclass=AutoWorldRegister):
 
         return group
 
-    # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
         """
         Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
@@ -686,6 +685,35 @@ class World(metaclass=AutoWorldRegister):
         if self.explicit_indirect_conditions:
             for indirect_region in resolved_rule.region_dependencies().keys():
                 self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
+
+
+class ProgressiveItemsMixin:
+    progressive_chains: dict[str, tuple[str]] = {}
+    """Progressive item chains that will be collected in order"""
+
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        if super().collect(state, item):
+            if item.name in self.progressive_chains:
+                progressive_chain = self.progressive_chains[item.name]
+                collected_index = state.count(item.name, self.player) - 1
+                if collected_index < len(progressive_chain):
+                    state.add_item(progressive_chain[collected_index], self.player)
+
+            return True
+
+        return False
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        if super().remove(state, item):
+            if item.name in self.progressive_chains:
+                progressive_chain = self.progressive_chains[item.name]
+                removed_index = state.count(item.name, self.player)
+                if removed_index < len(progressive_chain):
+                    state.remove_item(progressive_chain[removed_index], self.player)
+
+            return True
+
+        return False
 
 
 # any methods attached to this can be used as part of CollectionState,
