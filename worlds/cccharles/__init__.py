@@ -5,6 +5,7 @@ from .Rules import set_rules
 from .Regions import create_regions
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import InvalidItemError, World, WebWorld
+from typing import Any
 
 
 class CCCharlesWeb(WebWorld):
@@ -169,3 +170,10 @@ class CCCharlesWorld(World):
 
     def get_filler_item_name(self) -> str:
         return "Scraps"
+
+    def fill_slot_data(self) -> dict[str, Any]:
+        slot_data = {
+            # See world_version in archipelago.json: used to check mod compliance with apworld
+            "world_version": self.world_version.as_simple_string()
+        }
+        return slot_data
