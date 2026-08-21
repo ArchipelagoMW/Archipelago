@@ -39,6 +39,12 @@ logger = logging.getLogger("Worlds")
 logger.propagate = False
 logger.setLevel(logging.INFO)
 
+def normalize_game_names(games: str | Sequence[str] | None) -> Sequence[str]:
+    if isinstance(games, str):
+        return (games,)
+    return games or ()
+
+
 @dataclasses.dataclass(order=True)
 class WorldSource:
     path: str  # typically relative path from this module
@@ -134,10 +140,10 @@ for world_source in world_sources:
                     break
             if manifest:
                 break
-        game = manifest.get("game")
-        if game in AutoWorldRegister.world_types:
-            AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
-            AutoWorldRegister.world_types[game].manifest = manifest
+        for game in normalize_game_names(manifest.get("game")):
+            if game in AutoWorldRegister.world_types:
+                AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
+                AutoWorldRegister.world_types[game].manifest = manifest
 
 if apworlds:
     # encapsulation for namespace / gc purposes
@@ -146,9 +152,10 @@ if apworlds:
         from .Files import APWorldContainer, InvalidDataError
         core_compatible: list[tuple[WorldSource, APWorldContainer]] = []
 
-        def fail_world(game_name: str, reason: str, add_as_failed_to_load: bool = True) -> None:
+        def fail_worlds(game_names: Sequence[str], reason: str, add_as_failed_to_load: bool = True) -> None:
             if add_as_failed_to_load:
-                failed_world_loads[game_name] = reason
+                for game_name in game_names:
+                    failed_world_loads[game_name] = reason
             logging.warning(reason)
 
         for apworld_source in apworlds:
@@ -176,16 +183,17 @@ if apworlds:
                     messagebox("Couldn't load worlds", err_message, error=True)
                     sys.exit(1)
 
+            games = normalize_game_names(apworld.game)
             if apworld.minimum_ap_version and apworld.minimum_ap_version > version_tuple:
-                fail_world(apworld.game,
-                           f"Did not load {apworld_source.path} "
-                           f"as its minimum core version {apworld.minimum_ap_version} "
-                           f"is higher than current core version {version_tuple}.")
+                fail_worlds(games,
+                            f"Did not load {apworld_source.path} "
+                            f"as its minimum core version {apworld.minimum_ap_version} "
+                            f"is higher than current core version {version_tuple}.")
             elif apworld.maximum_ap_version and apworld.maximum_ap_version < version_tuple:
-                fail_world(apworld.game,
-                           f"Did not load {apworld_source.path} "
-                           f"as its maximum core version {apworld.maximum_ap_version} "
-                           f"is lower than current core version {version_tuple}.")
+                fail_worlds(games,
+                            f"Did not load {apworld_source.path} "
+                            f"as its maximum core version {apworld.maximum_ap_version} "
+                            f"is lower than current core version {version_tuple}.")
             else:
                 core_compatible.append((apworld_source, apworld))
         # load highest version first
@@ -203,11 +211,13 @@ if apworlds:
         sys.meta_path.insert(0, APWorldModuleFinder())
 
         for apworld_source, apworld in core_compatible:
-            if apworld.game and apworld.game in AutoWorldRegister.world_types:
-                fail_world(apworld.game,
-                           f"Did not load {apworld_source.path} "
-                           f"as its game {apworld.game} is already loaded.",
-                           add_as_failed_to_load=False)
+            games = normalize_game_names(apworld.game)
+            duplicate_games = [game for game in games if game in AutoWorldRegister.world_types]
+            if duplicate_games:
+                fail_worlds(duplicate_games,
+                            f"Did not load {apworld_source.path} "
+                            f"as its game(s) {', '.join(duplicate_games)} are already loaded.",
+                            add_as_failed_to_load=False)
             else:
                 importer = zipimport.zipimporter(apworld_source.resolved_path)
                 world_name = Path(apworld.path).stem
@@ -216,19 +226,25 @@ if apworlds:
                 apworld_module_specs[f"worlds.{world_name}"] = spec
 
                 apworld_source.load()
-                if apworld.game in AutoWorldRegister.world_types:
-                    # world could fail to load at this point
-                    if apworld.world_version:
-                        AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
+                missing_games = [game for game in games if game not in AutoWorldRegister.world_types]
+                if missing_games:
+                    fail_worlds(missing_games,
+                                f"Loaded {apworld_source.path}, but it did not register expected game(s): "
+                                f"{', '.join(missing_games)}.")
+                    continue
 
-                    assert apworld.path
-                    with ZipFile(apworld.path, "r") as zf:
-                        manifest = apworld.read_contents(zf)
-                    # version/compatible_version shouldn't be needed by world, makes it consistent with folder world
-                    manifest.pop("version", None)
-                    manifest.pop("compatible_version", None)
-                    AutoWorldRegister.world_types[apworld.game].manifest = manifest
+                if apworld.world_version:
+                    for game in games:
+                        AutoWorldRegister.world_types[game].world_version = apworld.world_version
 
+                assert apworld.path
+                with ZipFile(apworld.path, "r") as zf:
+                    manifest = apworld.read_contents(zf)
+                # version/compatible_version shouldn't be needed by world, makes it consistent with folder world
+                manifest.pop("version", None)
+                manifest.pop("compatible_version", None)
+                for game in games:
+                    AutoWorldRegister.world_types[game].manifest = manifest
     load_apworlds()
     del load_apworlds
 
@@ -249,4 +265,3 @@ logger.info("Datapackage")
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
-
