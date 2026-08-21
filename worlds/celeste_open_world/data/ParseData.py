@@ -1,5 +1,32 @@
 if __name__ == "__main__":
+    import itertools
     import json
+
+
+    def get_full_access_string(possible_access_str: str, multi_dashes: list[list[str]]) -> str:
+        output: str = ""
+
+        if len(multi_dashes) == 0:
+            output += f"[{possible_access_str}], "
+        else:
+            combinations = itertools.product(*multi_dashes)
+
+            filtered_combinations: list[list[str]] = list()
+            for comb in combinations:
+                comb_set = sorted(list(set(comb)))
+                if comb_set not in filtered_combinations:
+                    filtered_combinations.append(comb_set)
+
+            for filtered_comb in sorted(filtered_combinations):
+                output += f"["
+                if len(possible_access_str) > 0:
+                    output += possible_access_str
+                for dash_str in filtered_comb:
+                    output += f"ItemName.{dash_str}_dash, "
+                output += f"], "
+
+        return output
+
 
     all_doors: list[str] = []
     all_region_connections: list[str] = []
@@ -8,6 +35,7 @@ if __name__ == "__main__":
     all_room_connections: list[str] = []
     all_rooms: list[str] = []
     all_levels: list[str] = []
+    all_level_items: list[str] = []
 
 
     data_file = open('CelesteLevelData.json')
@@ -19,8 +47,14 @@ if __name__ == "__main__":
         level_str = (f"    \"{level['name']}\": Level(\"{level['name']}\", "
                      f"\"{level['display_name']}\", "
                      f"rooms_by_level[\"{level['name']}\"], "
-                     f"room_cons_by_level[\"{level['name']}\"]),"
+                     f"room_cons_by_level[\"{level['name']}\"], "
+                     f"set(["
                     )
+
+        for item in level["items"]:
+            level_str += f"ItemName.{item}, "
+
+        level_str += f"])),"
 
         all_levels.append(level_str)
 
@@ -65,44 +99,67 @@ if __name__ == "__main__":
 
                         location_str = (f"    \"{location_full_name}\": LevelLocation(\"{location_full_name}\", "
                                         f"\"{location_full_display_name}\", \"{region_full_name}\", "
-                                        f"LocationType.{location['type']}, ["
+                                        f"LocationType.{location['type']}"
                                        )
 
-                        if "rule" in location:
-                            for possible_access in location['rule']:
-                                location_str += f"["
-                                for item in possible_access:
-                                    if "Key" in item or "Gem" in item:
-                                        location_str += f"\"{level['display_name']} - {item}\", "
-                                    else:
-                                        location_str += f"ItemName.{item}, "
-                                location_str += f"], "
-                        elif "rules" in location:
-                            raise Exception(f"Location {location_full_name} uses 'rules' instead of 'rule")
+                        for rule_key in ['rule', 'vm_rule', 'assist_rule']:
+                            location_str += ", "
+                            if rule_key in location:
+                                location_str += "["
+                                for possible_access in location[rule_key]:
+                                    multi_dashes: list[list[str]] = []
+                                    possible_access_str = ""
+                                    for item in possible_access:
+                                        if "any_dash_" in item:
+                                            multi_dashes.append(list(item[9:].split("_")))
+                                        elif "Key" in item or "Gem" in item:
+                                            possible_access_str += f"\"{level['display_name']} - {item}\", "
+                                        else:
+                                            possible_access_str += f"ItemName.{item}, "
+                                    location_str += get_full_access_string(possible_access_str, multi_dashes)
+                                location_str += "]"
+                            else:
+                                location_str += "[]"
 
-                        location_str += "]),"
+                        location_str += "),"
 
                         all_locations.append(location_str)
+
+                        if location.keys() - { "name", "display_name", "type", "rule", "assist_rule", "vm_rule" }:
+                            print(location_full_name + "   |   " + str(location.keys() - { "name", "display_name", "type", "rule", "assist_rule", "vm_rule" }))
 
                 # Region Connections
                 for reg_con in region["connections"]:
                     dest_region_full_name = f"{room_full_name}_{reg_con['dest']}"
                     reg_con_full_name = f"{region_full_name}---{dest_region_full_name}"
 
-                    reg_con_str = f"    \"{reg_con_full_name}\": RegionConnection(\"{region_full_name}\", \"{dest_region_full_name}\", ["
+                    reg_con_str = f"    \"{reg_con_full_name}\": RegionConnection(\"{region_full_name}\", \"{dest_region_full_name}\""
 
-                    for possible_access in reg_con['rule']:
-                        reg_con_str += f"["
-                        for item in possible_access:
-                            if "Key" in item or "Gem" in item:
-                                reg_con_str += f"\"{level['display_name']} - {item}\", "
-                            else:
-                                reg_con_str += f"ItemName.{item}, "
-                        reg_con_str += f"], "
+                    for rule_key in ['rule', 'vm_rule', 'assist_rule']:
+                        reg_con_str += ", "
+                        if rule_key in reg_con:
+                            reg_con_str += "["
+                            for possible_access in reg_con[rule_key]:
+                                multi_dashes: list[list[str]] = []
+                                possible_access_str = ""
+                                for item in possible_access:
+                                    if "any_dash_" in item:
+                                        multi_dashes.append(list(item[9:].split("_")))
+                                    elif "Key" in item or "Gem" in item:
+                                        possible_access_str += f"\"{level['display_name']} - {item}\", "
+                                    else:
+                                        possible_access_str += f"ItemName.{item}, "
+                                reg_con_str += get_full_access_string(possible_access_str, multi_dashes)
+                            reg_con_str += "]"
+                        else:
+                            reg_con_str += "[]"
 
-                    reg_con_str += "]),"
+                    reg_con_str += "),"
 
                     all_region_connections.append(reg_con_str)
+
+                    if reg_con.keys() - { "dest", "rule", "assist_rule", "vm_rule" }:
+                        print(f"{region_full_name} -> {reg_con['dest']}    |    " + str(reg_con.keys() - { "dest", "rule", "assist_rule", "vm_rule" }))
 
             for door in room["doors"]:
                 door_full_name = f"{room_full_name}_{door['name']}"
