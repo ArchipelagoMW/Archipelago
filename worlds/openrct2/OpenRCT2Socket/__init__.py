@@ -90,6 +90,8 @@ class OpenRCT2Socket:
                         await asyncio.sleep(0.1)
                 except Exception as e:
                     logex("Error in connect game: ", e)
+        # These exceptions are expected and not fatal. As such, we catch them and move on without
+        # crashing the program. 
         except socket.timeout as e:
             #print('error connecting to game', e)
             pass

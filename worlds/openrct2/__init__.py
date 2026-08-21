@@ -660,6 +660,7 @@ class OpenRCT2World(World):
                           and item not in item_info["non_starters"]]
         eligible_rides = list(dict.fromkeys(eligible_rides))#Removes Duplicates
         self.random.shuffle(eligible_rides)
+        print("We need this many unique rides: " + str(self.options.required_unique_rides.value))
         if self.options.required_unique_rides.value:
             if len(eligible_rides) < self.options.required_unique_rides.value:
                 logging.warning(
@@ -671,6 +672,8 @@ class OpenRCT2World(World):
                     f" up."
                 )
                 self.unique_rides = eligible_rides[:len(eligible_rides)]
+            else:
+                self.unique_rides = eligible_rides[:self.options.required_unique_rides.value]
         print("Here's the eligible rides:")
         print(eligible_rides)
         print("Here's what was chosen:")
