@@ -1,4 +1,3 @@
-import itertools
 from collections.abc import Iterable
 from typing import ClassVar
 from unittest import TestCase
@@ -8,16 +7,19 @@ from test.param import classvar_matrix
 from Options import PlandoConnection
 
 from ... import EntranceRandomizationBehaviorOptionName, options
-from ...data.regions import ConnectionData, GroupFlag, vanilla_connections
+from ...data.regions import ConnectionData, GroupFlag, RandomizationFlag, vanilla_connections
 from ...mods.region_data import region_data_by_content_pack
 from ...regions.entrance_rando import get_target_groups
 from ...strings.entrance_names import Entrance as EntranceName
 from ...strings.region_names import Region as RegionName
 from ..bases import SVTestBase
 
+connections_by_content: dict[str, Iterable[ConnectionData]] = dict(
+    [("Vanilla", vanilla_connections), *((content_pack, data.connections) for content_pack, data in region_data_by_content_pack.items())]
+)
+
 
 @classvar_matrix(er_behavior=options.EntranceRandomizationBehavior.valid_keys)
-
 class TestSameTypeEntranceRandomization(TestCase):
     er_behavior: ClassVar[str]
 
@@ -28,14 +30,8 @@ class TestSameTypeEntranceRandomization(TestCase):
             with self.subTest(group=group):
                 self.assertIn(group, allowed_groups)
 
-
-connections_by_content: dict[str, Iterable[ConnectionData]] = dict(
-    [("Vanilla", vanilla_connections), *((content_pack, data.connections) for content_pack, data in region_data_by_content_pack.items())]
-)
-
-
 @classvar_matrix(content=connections_by_content.keys())
-class TestRegionsHasMatchingAmountOfTargetGroups(TestCase):
+class TestContentPacksEntranceTargetGroups(TestCase):
     content: ClassVar[str]
 
     def test_content_has_matching_amount_of_connection_for_each_group(self):
@@ -52,11 +48,29 @@ class TestRegionsHasMatchingAmountOfTargetGroups(TestCase):
         for matching_group in matching_groups:
             with self.subTest(matching_group=matching_group):
                 first_group, second_group = matching_group
-                connections_in_first_group = sum(1 for connection in connections if any(group in connection.group for group in first_group))
-                connections_in_second_group = sum(1 for connection in connections if any(group in connection.group for group in second_group))
+                connections_in_first_group = sum(
+                    1
+                    for connection in connections
+                    if any(group in connection.group for group in first_group)
+                    if RandomizationFlag.IS_ONE_WAY not in connection.flag
+                )
+                connections_in_second_group = sum(
+                    1
+                    for connection in connections
+                    if any(group in connection.group for group in second_group)
+                    if RandomizationFlag.IS_ONE_WAY not in connection.flag
+                )
 
                 self.assertEqual(connections_in_first_group, connections_in_second_group)
 
+    def test_all_connections_has_area_group_flag(self):
+        connections = connections_by_content[self.content]
+        for connection in connections:
+            if connection.flag == RandomizationFlag.NOT_RANDOMIZED:
+                continue
+
+            with self.subTest(connection=connection.name):
+                self.assertNotEqual(GroupFlag.TO_ANY, connection.group & GroupFlag.AREA_MASK)
 
 class TestFarmhouseEntranceCanBePairedMatchWithSomething(SVTestBase):
     options = {  # noqa: RUF012

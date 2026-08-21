@@ -148,6 +148,7 @@ ginger_island_connections = [
         Entrance.use_island_totem,
         Region.island_south,
         flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.use_farm_obelisk,
@@ -415,7 +416,8 @@ ginger_island_connections = [
     ConnectionData(
         Entrance.volcano_5_to_island_north,
         Region.island_north,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.IS_ONE_WAY | GroupFlag.DOOR | GroupFlag.IN_TO_OUT,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.DOOR | GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(Entrance.climb_to_volcano_10, Region.volcano_floor_10),
     ConnectionData(
