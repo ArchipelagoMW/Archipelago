@@ -591,7 +591,7 @@ class QuestLocations(NamedRange):
     Number: Story quests and help wanted quests are checks up to the specified amount.
     Random Help Wanted Quests will be picked from the pool of 56 available ones"""
     internal_name = "quest_locations"
-    default = 7
+    default = 8
     range_start = 0
     range_end = 56
     display_name = "Quest Locations"
