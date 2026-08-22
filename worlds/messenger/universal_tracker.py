@@ -1,5 +1,6 @@
 from Options import PlandoConnection
 from .connections import RANDOMIZED_CONNECTIONS
+from .options import ShuffleTransitions
 from .portals import REGION_ORDER, SHOP_POINTS, CHECKPOINTS
 from .shop import FIGURINES, SHOP_ITEMS
 from .transitions import TRANSITIONS
@@ -37,14 +38,15 @@ def reverse_shop_prices(
     )
 
 
-def reverse_transitions_into_plando_connections(transitions: list[list[int]]) -> list[PlandoConnection]:
+def reverse_transitions_into_plando_connections(shuffle_transitions: ShuffleTransitions,
+                                                transitions: list[list[int]]) -> list[PlandoConnection]:
     plando_connections = []
 
     for connection in [
-        PlandoConnection(REVERSED_RANDOMIZED_CONNECTIONS[TRANSITIONS[transition[0]]], TRANSITIONS[transition[1]], "both")
+        PlandoConnection(REVERSED_RANDOMIZED_CONNECTIONS[TRANSITIONS[transition[0]]], TRANSITIONS[transition[1]], "entrance")
         for transition in transitions
     ]:
-        if connection.exit in {con.entrance for con in plando_connections}:
+        if shuffle_transitions == ShuffleTransitions.option_coupled and connection.exit in {con.entrance for con in plando_connections}:
             continue
         plando_connections.append(connection)
 
