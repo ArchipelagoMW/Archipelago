@@ -2,11 +2,15 @@ from io import BytesIO
 import os
 import pickle
 import pkgutil
+import pytest
 import unittest
 
 from ..shared_static_logic.hash_file import hash_file
 
 
+IN_GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS") == "true"
+
+@pytest.mark.skipif(IN_GITHUB_ACTIONS, reason="We only want to test this locally before a release. On individual PRs it would force too many conflicts.")
 class TestPickleFile(unittest.TestCase):
     def test_pickle_file_hashes(self) -> None:
         pickled_data = pkgutil.get_data(__name__, "../shared_static_logic/static_logic.pickle")
