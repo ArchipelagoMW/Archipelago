@@ -89,6 +89,10 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
         LocationName.GeyserMinersSkull,
     ],
 
+    # Create Empty Regions for Scav Rewards to be placed inside
+    RegionName.CAGPScavHunt50: [],
+    RegionName.CAGPScavHunt100: [],
+
     # Main Campgrounds
     RegionName.CAMA: [
         LocationName.FenceNearKidsCabinsCard,
@@ -798,7 +802,7 @@ def create_figments_40_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.THMSStorage, {LocationName.THFigments40})
     _add_locations_to_existing_region(multiworld, player, RegionName.WWMA, {LocationName.WWFigments40})
     _add_locations_to_existing_region(multiworld, player, RegionName.BVRB, {LocationName.BVFigments40})
-    _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, {LocationName.MCFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MCTCLev, {LocationName.MCFigments40})
 
 
 def create_figments_60_locations(multiworld: MultiWorld, player: int):
@@ -867,6 +871,12 @@ def create_progressive_baggage_locations(multiworld: MultiWorld, player: int, va
         dufflebaglocation = getattr(LocationName, f"DufflebagProgressive{i}")
         _add_locations_to_existing_region(multiworld, player, dufflebagregion, {dufflebaglocation})
 
+def create_scav_hunt_location_50(multiworld: MultiWorld, player: int):
+    _add_locations_to_existing_region(multiworld, player, RegionName.CAGPScavHunt50, {LocationName.ScavengerHunt50})
+
+def create_scav_hunt_location_100(multiworld: MultiWorld, player: int):
+    _add_locations_to_existing_region(multiworld, player, RegionName.CAGPScavHunt100, {LocationName.ScavengerHunt100})
+    
 
 def create_psyregions(multiworld: MultiWorld, player: int):
     # Create all default regions.
@@ -987,11 +997,15 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.CAGP: {
             RegionName.CAGPSquirrel,
             RegionName.CAGPGeyser,
+            RegionName.CAGPScavHunt50,
             RegionName.CAMA,
             RegionName.CAKC,
             RegionName.CARE,
             RegionName.CABH,
             RegionName.CALI,
+        },
+        RegionName.CAGPScavHunt50: {
+            RegionName.CAGPScavHunt100,
         },
         RegionName.CAMA: {RegionName.CAMALev},
         RegionName.CAKC: {RegionName.CAKCLev, RegionName.CAKCPyro},

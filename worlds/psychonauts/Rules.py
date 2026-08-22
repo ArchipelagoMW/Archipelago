@@ -2,7 +2,7 @@ from typing import Dict, TYPE_CHECKING, Set
 
 from BaseClasses import CollectionState, Item
 from worlds.generic.Rules import add_item_rule, add_rule, CollectionRule
-from .Items import BRAIN_JARS, LOCAL_SET
+from .Items import BRAIN_JARS, SCAVENGER_HUNT_ITEMS, LOCAL_SET
 from .Locations import (
     DEEP_ARROWHEAD_LOCATIONS, 
     MENTAL_COBWEB_LOCATIONS, 
@@ -18,7 +18,9 @@ from .Locations import (
     PROG_PURSE_CHECKS, 
     PROG_HATBOX_CHECKS, 
     PROG_STEAMERTRUNK_CHECKS, 
-    PROG_DUFFLEBAG_CHECKS
+    PROG_DUFFLEBAG_CHECKS,
+    SCAV_HUNT_LOCATION_50,
+    SCAV_HUNT_LOCATION_100
 )
 from .Names import LocationName, ItemName, RegionName
 from .Options import Goal
@@ -270,8 +272,9 @@ class PsyRules:
 
             RegionName.MCTCLev: self.has_levitation,
 
-            RegionName.MCTCEscort: self.has_telekinesis,
+            RegionName.MCTCEscort: lambda state: self.has_telekinesis(state) or self.has_confusion(state),
 
+            RegionName.MCTCBoss: self.has_telekinesis,
         }
 
     def has_button(self, state: CollectionState) -> bool:
@@ -435,6 +438,13 @@ class PsyRules:
     def redeemed_brain_goal(self, state: CollectionState, amount) -> bool:
         return amount <= sum([state.has(item_name, self.player) for item_name in BRAIN_JARS])
 
+    def has_half_scav_hunt(self, state: CollectionState) -> bool:
+        return 8 <= sum([state.has(item_name, self.player) for item_name in SCAVENGER_HUNT_ITEMS])
+
+    def has_full_scav_hunt(self, state: CollectionState) -> bool:
+        return 16 <= sum([state.has(item_name, self.player) for item_name in SCAVENGER_HUNT_ITEMS])
+
+
     def set_psy_rules(self) -> None:
         multiworld = self.world.multiworld
         player = self.player
@@ -452,7 +462,7 @@ class PsyRules:
         local_only_forbidden: Set[str] = set()
 
         # Prevent local only items (baggage) from being placed at problematic locations
-        local_only_forbidden.update(LocationName.TunnelOfLoveRailDufflebagTag)
+        local_only_forbidden.add(LocationName.TunnelOfLoveRailDufflebagTag)
 
         # Ranks are now always spawned by Archipelago, no local only items
         if self.world.options.RankSanity:
@@ -598,6 +608,17 @@ class PsyRules:
             # BB Grindrail Wall requires Levitation because the ground around the cobweb is sloped and Raz bounces off
             # it when falling onto it too fast, so Levitation is needed to float down slowly.
             add_rule(multiworld.get_location(LocationName.CobwebGrindrailWall, player), self.has_levitation)
+
+        if self.world.options.ScavengerHuntRewards.value >=1:
+            # Scavenger Hunt Rewards, no local only items
+            local_only_forbidden.update(SCAV_HUNT_LOCATION_50.keys())
+            add_rule(multiworld.get_location(LocationName.ScavengerHunt50, player), self.has_half_scav_hunt)
+
+        if self.world.options.ScavengerHuntRewards.value >=2:
+            # Scavenger Hunt Rewards, no local only items
+            local_only_forbidden.update(SCAV_HUNT_LOCATION_100.keys())
+            add_rule(multiworld.get_location(LocationName.ScavengerHunt100, player), self.has_full_scav_hunt)
+
 
         if local_only_forbidden:
             def forbid_local_only(item: Item):

@@ -1,6 +1,6 @@
 {
   "game": "Psychonauts",
   "minimum_ap_version": "0.6.5",
-  "world_version": "0.9.3",
+  "world_version": "1.0.0",
   "authors": ["Akashortstack", "Mysteryem"]
 }

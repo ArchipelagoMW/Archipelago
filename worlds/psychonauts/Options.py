@@ -61,7 +61,8 @@ class BetterDowsingRod(Toggle):
 
 
 class OtherItemsModel(Choice): 
-    """Choose what your Archipelago items for other games look like inside Psychonauts
+    """Choose what your Archipelago items for other games look like inside Psychonauts.
+
     Archipelago: The standard Archipelago symbol.
 
     Bunny: The original PsychoRando model for Archipelago items, Bunnies!
@@ -109,7 +110,8 @@ class InstantDeathMode(Toggle):
 
 
 class Goal(Choice):
-    """Win Condition
+    """Your Victory Condition.
+
     Asylum Brain Tank: Climb the Asylum and defeat the Coach Oleander Brain Tank.
 
     Brain Hunt: Find the required amount of Camper Brains and re-brain them in Ford's Sanctuary.
@@ -184,20 +186,36 @@ class HintUnclaimedBaggage(DefaultOnToggle):
 
 
 class ProgressiveBaggage(Toggle):
-    """Turns Emotional Baggage into Progressive Locations
+    """Turns Emotional Baggage into Progressive Locations.
     
-    Each time you redeem a Baggage Tag with it's matching Baggage, you'll earn the next check for that type."""
+    Each time you redeem a Baggage Tag with it's matching Baggage, you'll earn the next check for that type.
+    
+    If toggled off, each Baggage redeemed will reward a Rank Up instead."""
     display_name = "Progressive Baggage"
 
 
 class MaximumProgressiveBaggage(Range):
     """Maximum amount of each type of Baggage that will give checks.
+
+    Progressive Baggage collected beyond the maximum will reward a Rank Up instead.
     
     Only works if Progressive Baggage is Enabled and value is greater than 0."""
     display_name = "Maximum Progressive Baggage"
     range_start = 0
     range_end = 10
     default = 5
+
+class ScavengerHuntRewards(Choice):
+    """Add Scavenger Hunt Completion Rewards as Locations.
+
+    Half: Adds a location for redeeming 8 scavenger hunt items with Ford in the camp.
+
+    All: Adds two locations for redeeming 8 and 16 scavenger hunt items with Ford in the camp."""
+    display_name = "Scavenger Hunt Rewards"
+    option_none = 0
+    option_half = 1
+    option_all = 2
+    default = 0
 
 
 @dataclass
@@ -227,6 +245,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     ProgressiveBaggage: ProgressiveBaggage
     MaximumProgressiveBaggage: MaximumProgressiveBaggage
     start_inventory: StartInventoryPool
+    ScavengerHuntRewards: ScavengerHuntRewards
 
 
 SLOT_DATA_OPTIONS: List[str] = [
@@ -254,6 +273,7 @@ SLOT_DATA_OPTIONS: List[str] = [
     "HintUnclaimedBaggage",
     "ProgressiveBaggage",
     "MaximumProgressiveBaggage",
+    "ScavengerHuntRewards",
 ]
 
 
@@ -278,7 +298,8 @@ OPTION_GROUPS: list [OptionGroup] = [
         RankSanity,
         FigmentPercentageChecks,
         DeepArrowheadShuffle,
-        MentalCobwebShuffle,       
+        MentalCobwebShuffle,
+        ScavengerHuntRewards,       
     ]),
     OptionGroup("Baggage Options", [
         HintUnclaimedBaggage,

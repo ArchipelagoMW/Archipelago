@@ -738,5 +738,9 @@ DufflebagProgressive8 = "(Baggage) Dufflebag Redeemed 8"
 DufflebagProgressive9 = "(Baggage) Dufflebag Redeemed 9"
 DufflebagProgressive10 = "(Baggage) Dufflebag Redeemed 10"
 
+# Scavenger Hunt Completion Locations
+ScavengerHunt50 = "(Scav Hunt) Redeem Half the Scavenger Hunt Items"
+ScavengerHunt100 = "(Scav Hunt) Redeem All of the Scavenger Hunt Items"
+
 # Ford's Shop, only a location if Cobweb Duster vanilla (not currently in AP)
 ShopCobwebDuster = "(CA Lodge) Ford's Shop Cobweb Duster"

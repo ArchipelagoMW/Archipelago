@@ -903,6 +903,20 @@ PROG_BAGGAGE_LOCATIONS: Dict[str, int] = {
     **PROG_DUFFLEBAG_CHECKS,
 }
 
+#Scavenger Hunt Completion Checks
+SCAV_HUNT_LOCATION_50:Dict[str, int] = {
+    LocationName.ScavengerHunt50: 806,
+}
+
+SCAV_HUNT_LOCATION_100:Dict[str, int] = {
+    LocationName.ScavengerHunt100: 807,
+}
+
+ALL_SCAV_HUNT_LOCATIONS: Dict[str, int] = {
+    **SCAV_HUNT_LOCATION_50,
+    **SCAV_HUNT_LOCATION_100,
+}
+
 # Includes locations that may not be enabled.
 ALL_FILLABLE_LOCATIONS: Dict[str, int] = {
     **CA_CHECKS,
@@ -922,6 +936,7 @@ ALL_FILLABLE_LOCATIONS: Dict[str, int] = {
     **RANK_LOCATIONS,
     **ALL_FIGMENT_LOCATIONS,
     **PROG_BAGGAGE_LOCATIONS,
+    **ALL_SCAV_HUNT_LOCATIONS,
 }
 
 ALL_LOCATIONS: Dict[str, int] = {
@@ -938,6 +953,7 @@ _FULLY_REMOTE_LOCATION_IDS: Set[int] = {
     *RANK_LOCATIONS.values(),
     *ALL_FIGMENT_LOCATIONS.values(),
     *PROG_BAGGAGE_LOCATIONS.values(),
+    *ALL_SCAV_HUNT_LOCATIONS.values(),
 }
 # IDs of locations that place items into the game world, and are therefore used in PsychoSeed generation.
 PSYCHOSEED_LOCATION_IDS: Set[int] = set(ALL_FILLABLE_LOCATIONS.values())

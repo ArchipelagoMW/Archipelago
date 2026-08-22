@@ -14,6 +14,7 @@ from .Items import (
     BRAIN_JARS,
     BAGGAGE,
     BAGGAGE_TAGS,
+    SCAVENGER_HUNT_ITEMS,
     LOCAL_SET,
     PROGRESSION_SET,
     USEFUL_SET,
@@ -130,6 +131,12 @@ class PSYWorld(World):
             for name in BAGGAGE_TAGS:
                 item_classifications[name] = ItemClassification.progression_skip_balancing
 
+        # Set Scavenger Hunt items to Progression if ScavengerHuntRewards enabled
+        # Skip balancing
+        if self.options.ScavengerHuntRewards !=0:
+            for name in SCAVENGER_HUNT_ITEMS:
+                item_classifications[name] = ItemClassification.progression_skip_balancing
+        
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Psychonauts" in self.multiworld.re_gen_passthrough:
@@ -145,6 +152,7 @@ class PSYWorld(World):
                 self.options.MentalCobwebShuffle.value = passthrough["MentalCobwebShuffle"]
                 self.options.ProgressiveBaggage.value = passthrough["ProgressiveBaggage"]
                 self.options.MaximumProgressiveBaggage.value = passthrough["MaximumProgressiveBaggage"]
+                self.options.ScavengerHuntRewards.value = passthrough["ScavengerHuntRewards"]
             else: 
                 self.using_ut = False
         else:
@@ -247,6 +255,11 @@ class PSYWorld(World):
         baggage_count = maxvalue*5
         item_counts[ItemName.ChallengeMarker] += baggage_count
 
+    @staticmethod
+    def _add_scavenger_hunt_location_items(item_counts: Dict[str, int], maxvalue: int):
+        # Add PSI Cards to the pool to fill empty Scav Hunt locations
+        scav_location_count = maxvalue
+        item_counts[ItemName.PsiCard] += scav_location_count
 
     def create_items(self):
         """
@@ -319,6 +332,9 @@ class PSYWorld(World):
         if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage.value !=0:
             self._add_progressive_baggage_items(adjusted_item_counts, self.options.MaximumProgressiveBaggage.value)
 
+        if self.options.ScavengerHuntRewards.value !=0:
+            self._add_scavenger_hunt_location_items(adjusted_item_counts, self.options.MaximumProgressiveBaggage.value)
+
         # Create the initial item pool.
         item_pool = list(map(self.create_item, repeated_item_names_gen(ITEM_DICTIONARY, adjusted_item_counts)))
 
@@ -359,6 +375,10 @@ class PSYWorld(World):
             Regions.create_100_rank_locations(self.multiworld, self.player)
         else:
             Regions.create_20_rank_locations(self.multiworld, self.player)
+        if self.options.ScavengerHuntRewards.value >=1:
+            Regions.create_scav_hunt_location_50(self.multiworld, self.player)
+        if self.options.ScavengerHuntRewards.value >=2:
+            Regions.create_scav_hunt_location_100(self.multiworld, self.player)
 
     def set_rules(self):
         """

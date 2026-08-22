@@ -221,6 +221,9 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # append progressiveBaggageMax setting
     randoseed_parts.append(f"           Ob.progressiveBaggageMax = {(self.options.MaximumProgressiveBaggage.value)}\n")
 
+    # append scavHuntLocations setting
+    randoseed_parts.append(f"           Ob.scavHuntLocations = {(self.options.ScavengerHuntRewards.value)}\n")
+
     # append Goal settings
     beat_oleander = _lua_bool(self.options.Goal == Goal.option_asylum_brain_tank
                               or self.options.Goal == Goal.option_asylum_brain_tank_and_brain_hunt)

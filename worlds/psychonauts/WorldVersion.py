@@ -3,7 +3,7 @@ from pkgutil import get_data
 # Used in PsychoSeed.py to show current versions in generated RandoSeed.lua
 # Helps with troubleshooting apworld and mod version mismatches
 # Update with each new PsychoRando Version released
-PSYCHORANDO_VERSION = "2.0.3"
+PSYCHORANDO_VERSION = "2.1.0"
 
 # Gets world_version from archipelago.json
 _MANIFEST = json.loads(get_data("worlds.psychonauts", "archipelago.json"))
