@@ -1,0 +1,192 @@
+[
+  {
+    "name": "Bamboo Creek",
+    "sections": [
+      {
+        "name": "Bamboo Creek - Claustro"
+      },
+      {
+        "name": "Bamboo Creek Seal - Spike Crushers and Doors"
+      },
+      {
+        "name": "Bamboo Creek Seal - Spike Ball Pits"
+      },
+      {
+        "name": "Bamboo Creek Seal - Spike Crushers and Doors v2"
+      },
+      {
+        "name": "Above Entrance Mega Shard"
+      },
+      {
+        "name": "Abandoned Mega Shard"
+      },
+      {
+        "name": "Time Loop Mega Shard"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 640,
+        "y": 390,
+        "size": 30
+      }
+    ]
+  },
+  {
+    "name": "Bamboo Creek - Key locations",
+    "children": [
+      {
+        "name": "Bamboo Creek - Claustro",
+        "sections": [
+          {
+            "name": "Bamboo Creek - Claustro"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 892,
+            "y": 302,
+            "size": 28
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bamboo Creek - Power Seals",
+    "children": [
+      {
+        "name": "Bamboo Creek Seal",
+        "sections": [
+          {
+            "name": "Bamboo Creek Seal - Spike Crushers and Doors"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 306,
+            "y": 255
+          }
+        ]
+      },
+      {
+        "name": "Bamboo Creek Seal",
+        "sections": [
+          {
+            "name": "Bamboo Creek Seal - Spike Ball Pits"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 540,
+            "y": 285
+          }
+        ]
+      },
+      {
+        "name": "Bamboo Creek Seal",
+        "sections": [
+          {
+            "name": "Bamboo Creek Seal - Spike Crushers and Doors v2"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 656,
+            "y": 228
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bamboo Creek - Mega Shards",
+    "children": [
+      {
+        "name": "Bamboo Creek Mega Shard",
+        "sections": [
+          {
+            "name": "Above Entrance Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 305,
+            "y": 70
+          }
+        ]
+      },
+      {
+        "name": "Bamboo Creek Mega Shard",
+        "sections": [
+          {
+            "name": "Abandoned Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 385,
+            "y": 75
+          }
+        ]
+      },
+      {
+        "name": "Bamboo Creek Mega Shard",
+        "sections": [
+          {
+            "name": "Time Loop Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 690,
+            "y": 300
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bamboo Creek - Transitions",
+    "children": [
+      {
+        "name": "Bamboo Creek - Top Left exit",
+        "sections": [
+          {
+            "name": "Bamboo Creek - Top Left exit"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      {
+        "name": "Bamboo Creek - Bottom Right exit",
+        "sections": [
+          {
+            "name": "Bamboo Creek - Bottom Right exit"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Bamboo Creek",
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  }
+]

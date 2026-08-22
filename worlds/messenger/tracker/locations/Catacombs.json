@@ -1,0 +1,144 @@
+[
+  {
+    "name": "Catacombs",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 456,
+        "y": 414,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Catacombs - Necro"
+      },
+      {
+        "name": "Catacombs - Ruxxtin's Amulet"
+      },
+      {
+        "name": "Catacombs Seal - Triple Spike Crushers"
+      },
+      {
+        "name": "Catacombs Seal - Crusher Gauntlet"
+      },
+      {
+        "name": "Catacombs Seal - Dirty Pond"
+      },
+      {
+        "name": "Catacombs Mega Shard"
+      },
+      {
+        "name": "Catacombs - Ruxxtin"
+      }
+    ]
+  },
+  {
+    "name": "Catacombs - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Catacombs - Necro"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Catacombs",
+            "x": 95,
+            "y": 165,
+            "size": 30
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Catacombs - Ruxxtin's Amulet"
+          },
+          {
+            "name": "Catacombs - Ruxxtin"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Catacombs",
+            "x": 780,
+            "y": 325,
+            "size": 30
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Catacombs - Power Seals",
+    "children": [
+      {
+        "name": "Catacombs Seal",
+        "sections": [
+          {
+            "name": "Catacombs Seal - Triple Spike Crushers"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Catacombs",
+            "x": 328,
+            "y": 208
+          }
+        ]
+      },
+      {
+        "name": "Catacombs Seal",
+        "sections": [
+          {
+            "name": "Catacombs Seal - Crusher Gauntlet"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Catacombs",
+            "x": 552,
+            "y": 206
+          }
+        ]
+      },
+      {
+        "name": "Catacombs Seal",
+        "sections": [
+          {
+            "name": "Catacombs Seal - Dirty Pond"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Catacombs",
+            "x": 609,
+            "y": 236
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Catacombs - Mega Shards",
+    "children": [
+      {
+        "name": "Catacombs Mega Shard",
+        "sections": [
+          {
+            "name": "Catacombs Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Catacombs",
+            "x": 255,
+            "y": 55
+          }
+        ]
+      }
+    ]
+  }
+]

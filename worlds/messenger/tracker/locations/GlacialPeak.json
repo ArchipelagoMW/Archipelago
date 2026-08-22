@@ -1,0 +1,97 @@
+[
+  {
+    "name": "Glacial Peak",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 1205,
+        "y": 188,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Glacial Peak Seal - Ice Climbers"
+      },
+      {
+        "name": "Glacial Peak Seal - Projectile Spike Pit"
+      },
+      {
+        "name": "Glacial Peak Seal - Glacial Air Swag"
+      },
+      {
+        "name": "Glacial Peak Mega Shard"
+      }
+    ]
+  },
+  {
+    "name": "Glacial Peak - Power Seals",
+    "children": [
+      {
+        "name": "Glacial Peak Seal",
+        "sections": [
+          {
+            "name": "Glacial Peak Seal - Ice Climbers"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Glacial Peak",
+            "x": 530,
+            "y": 2560
+          }
+        ]
+      },
+      {
+        "name": "Glacial Peak Seal",
+        "sections": [
+          {
+            "name": "Glacial Peak Seal - Projectile Spike Pit"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Glacial Peak",
+            "x": 755,
+            "y": 2105
+          }
+        ]
+      },
+      {
+        "name": "Glacial Peak Seal",
+        "sections": [
+          {
+            "name": "Glacial Peak Seal - Glacial Air Swag"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Glacial Peak",
+            "x": 755,
+            "y": 965
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Glacial Peak - Mega Shards",
+    "children": [
+      {
+        "name": "Glacial Peak Mega Shard",
+        "sections": [
+          {
+            "name": "Glacial Peak Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Glacial Peak",
+            "x": 900,
+            "y": 1710
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Overworld",
+    "location_size": 10,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/MessengerMap.png"
+  },
+  {
+    "name": "Ninja Village",
+    "location_size": 60,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/Ninja_Village_Map.png"
+  },
+  {
+    "name": "Autumn Hills",
+    "location_size": 17,
+    "location_border_thickness": 1,
+    "img": "TheMessengerTrackPack/images/maps/Autumn_Hills_Map.png"
+  },
+  {
+    "name": "Forlorn Temple",
+    "location_size": 32,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/Forlorn_Temple_Map.png"
+  },
+  {
+    "name": "Catacombs",
+    "location_size": 24,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/Catacombs_Map.png"
+  },
+  {
+    "name": "Bamboo Creek",
+    "location_size": 24,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/Bamboo_Creek_Map.png"
+  },
+  {
+    "name": "Howling Grotto",
+    "location_size": 30,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/Howling_Grotto_Map.png"
+  },
+  {
+    "name": "Quillshroom Marsh",
+    "location_size": 18,
+    "location_border_thickness": 1,
+    "img": "TheMessengerTrackPack/images/maps/Quillshroom_Marsh_Map.png"
+  },
+  {
+    "name": "Searing Crags",
+    "location_size": 30,
+    "location_border_thickness": 1,
+    "img": "TheMessengerTrackPack/images/maps/Searing_Crags_Map.png"
+  },
+  {
+    "name": "Glacial Peak",
+    "location_size": 62,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/Glacial_Peak_Map.png"
+  },
+  {
+    "name": "Tower of Time",
+    "location_size": 65,
+    "location_border_thickness": 4,
+    "img": "TheMessengerTrackPack/images/maps/Tower_of_Time_Map.png"
+  },
+  {
+    "name": "Cloud Ruins",
+    "location_size": 16,
+    "location_border_thickness": 1,
+    "img": "TheMessengerTrackPack/images/maps/Cloud_Ruins_Map.png"
+  },
+  {
+    "name": "Underworld",
+    "location_size": 30,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/Underworld_Map.png"
+  },
+  {
+    "name": "Riviere Turquoise",
+    "location_size": 70,
+    "location_border_thickness": 4,
+    "img": "TheMessengerTrackPack/images/maps/Riviere_Turquoise_Map.png"
+  },
+  {
+    "name": "Sunken Shrine",
+    "location_size": 55,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/Sunken_Shrine_Map.png"
+  },
+  {
+    "name": "Elemental Skylands",
+    "location_size": 36,
+    "location_border_thickness": 2,
+    "img": "TheMessengerTrackPack/images/maps/ElementalSkylandsMap2cropped.png"
+  }
+]

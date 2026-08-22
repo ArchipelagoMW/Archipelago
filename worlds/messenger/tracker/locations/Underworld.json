@@ -1,0 +1,174 @@
+[
+  {
+    "name": "Underworld",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 1237,
+        "y": 451,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Underworld - Key of Chaos"
+      },
+      {
+        "name": "Underworld Seal - Sharp and Windy Climb"
+      },
+      {
+        "name": "Underworld Seal - Spike Wall"
+      },
+      {
+        "name": "Underworld Seal - Fireball Wave"
+      },
+      {
+        "name": "Underworld Seal - Rising Fanta"
+      },
+      {
+        "name": "Under Entrance Mega Shard"
+      },
+      {
+        "name": "Hot Tub Mega Shard"
+      },
+      {
+        "name": "Projectile Pit Mega Shard"
+      }
+    ]
+  },
+  {
+    "name": "Underworld - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Underworld - Key of Chaos"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Underworld",
+            "x": 716,
+            "y": 570,
+            "size": 40
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Underworld - Power Seals",
+    "children": [
+      {
+        "name": "Underworld Seal",
+        "sections": [
+          {
+            "name": "Underworld Seal - Sharp and Windy Climb"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Underworld",
+            "x": 316,
+            "y": 221
+          }
+        ]
+      },
+      {
+        "name": "Underworld Seal",
+        "sections": [
+          {
+            "name": "Underworld Seal - Spike Wall"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Underworld",
+            "x": 424,
+            "y": 294
+          }
+        ]
+      },
+      {
+        "name": "Underworld Seal",
+        "sections": [
+          {
+            "name": "Underworld Seal - Fireball Wave"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Underworld",
+            "x": 424,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "name": "Underworld Seal",
+        "sections": [
+          {
+            "name": "Underworld Seal - Rising Fanta"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Underworld",
+            "x": 600,
+            "y": 225
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Underworld - Mega Shards",
+    "children": [
+      {
+        "name": "Underworld Mega Shard",
+        "sections": [
+          {
+            "name": "Under Entrance Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Underworld",
+            "x": 90,
+            "y": 390
+          }
+        ]
+      },
+      {
+        "name": "Underworld Mega Shard",
+        "sections": [
+          {
+            "name": "Hot Tub Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Underworld",
+            "x": 730,
+            "y": 75
+          }
+        ]
+      },
+      {
+        "name": "Underworld Mega Shard",
+        "sections": [
+          {
+            "name": "Projectile Pit Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Underworld",
+            "x": 780,
+            "y": 210
+          }
+        ]
+      }
+    ]
+  }
+]
