@@ -210,7 +210,6 @@ LocalOnlyItemAndMessage:
         call ItemMessage
         ret
     """ + get_asm("multiworld.asm")
-        + get_asm("link.asm")
         + get_asm("chest.asm")
         + get_asm("bowwow.asm")
         + get_asm("message.asm")
