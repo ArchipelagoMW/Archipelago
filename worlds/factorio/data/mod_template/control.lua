@@ -518,20 +518,31 @@ script.on_event(defines.events.on_research_finished, function(event)
         for _, effect in pairs(technology.prototype.effects) do
             if effect.type == "unlock-recipe" then
                 local recipe = prototypes.recipe[effect.recipe]
-                for _, result in pairs(recipe.products) do
-                    if result.type == "item" and result.amount then
-                        local name = result.name
-                        if FREE_SAMPLE_BLACKLIST[name] ~= 1 then
-                            local count
-                            if FREE_SAMPLES == 1 then
-                                count = result.amount
-                            else
-                                count = get_any_stack_size(result.name)
-                                if FREE_SAMPLES == 2 then
-                                    count = math.ceil(count / 2)
+                local recycling = false
+                for _, category in pairs(recipe.categories) do
+                    if category == "recycling" then
+                        -- Recycling recipes are now unlocked with the recycling tech
+                        -- This would create way too many free samples and fill your inventory.
+                        recycling = true
+                        break
+                    end
+                end
+                if not recycling then
+                    for _, result in pairs(recipe.products) do
+                        if result.type == "item" and result.amount then
+                            local name = result.name
+                            if FREE_SAMPLE_BLACKLIST[name] ~= 1 then
+                                local count
+                                if FREE_SAMPLES == 1 then
+                                    count = result.amount
+                                else
+                                    count = get_any_stack_size(result.name)
+                                    if FREE_SAMPLES == 2 then
+                                        count = math.ceil(count / 2)
+                                    end
                                 end
+                                add_samples(technology.force, name, count)
                             end
-                            add_samples(technology.force, name, count)
                         end
                     end
                 end
@@ -658,7 +669,7 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
                 new_entity = surface.create_entity(args)
                 if new_entity then
                     new_entity.destructible = false
-                    new_entity.minable = false
+                    new_entity.minable_flag = false
                     new_entity.rotatable = false
                     break
                 end
