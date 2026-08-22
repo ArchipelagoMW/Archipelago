@@ -1,0 +1,1 @@
+# EV Nova AP uses a separate client distributed independantly of AP
