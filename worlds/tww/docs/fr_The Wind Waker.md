@@ -124,6 +124,7 @@ Ce randomiseur ne pouvait pas être possible sans l'aide de :
 - BigSharkZ: (Dessinateur de l'îcone)
 - Celeste (Maëlle): (correction de logique et de fautes d'orthographe, programmation additionnelle)
 - Chavu: (document sur les difficultés de logique)
+- ChinchyPandora7: (Traduction du guide espagnol)
 - CrainWWR: (multiworld et assitance sur la mémoire de Dolphin, programmation additionnelle)
 - Cyb3R: (référence pour `TWWClient`)
 - DeamonHunter: (programmation additionnelle)

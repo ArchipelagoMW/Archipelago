@@ -101,6 +101,14 @@ class TWWWeb(WebWorld):
             "setup_fr.md",
             "setup/fr",
             ["mobby45"]
+        ),
+         Tutorial(
+            "Multiworld Setup Guide",
+            "A guide to setting up the Archipelago The Wind Waker software on your computer.",
+            "Español",
+            "setup_es.md",
+            "setup/es",
+            ["ChinchyPandora7"]
         )
     ]
     theme = "ocean"
