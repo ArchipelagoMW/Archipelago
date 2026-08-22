@@ -125,7 +125,7 @@ class KH2Context(CommonContext):
 
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
-            self.kh2_client_settings_join = os.path.join(self.game_communication_path,f"kh2_client_settings.json")
+            self.kh2_client_settings_join = os.path.join(self.game_communication_path, "kh2_client_settings.json")
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
             if not os.path.exists(self.kh2_client_settings_join):
