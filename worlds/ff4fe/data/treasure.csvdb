@@ -1,0 +1,404 @@
+ordr,flag,world,area,map,index,x,y,contents,jcontents,fight,exclude,spoilerarea,spoilersubarea,spoilerdetail
+0,0x00,Overworld,BaronTown,#BaronTown,0,8,2,#item.Heal,#item.Soft,,,Baron Town,Exterior,"grass, top"
+1,0x01,Overworld,BaronTown,#BaronTown,1,3,6,#item.Life,,,,Baron Town,Exterior,"grass, left"
+2,0x02,Overworld,BaronTown,#BaronTown,2,12,10,#item.Heal,#item.Soft,,,Baron Town,Exterior,"grass, bottom"
+3,0x03,Overworld,BaronTown,#BaronTown,3,18,19,#item.Cure1,,,,Baron Town,Exterior,pot outside Rosa's
+4,0x04,Overworld,BaronTown,#BaronTown,4,24,27,#item.Cure1,,,,Baron Town,Exterior,pot outside inn
+5,0x05,Overworld,BaronTown,#BaronTown,5,27,26,#item.Tent,,,,Baron Town,Exterior,"water, top"
+6,0x06,Overworld,BaronTown,#BaronTown,6,29,29,#item.Tent,#item.HrGlass1,,,Baron Town,Exterior,"water, bottom"
+7,0x07,Overworld,Mist,#Mist,0,21,8,100 gp,#item.Bomb,,,Mist Village,Exterior,north grass
+8,0x08,Overworld,Mist,#Mist,1,28,20,#item.Cure1,#item.Bomb,,,Mist Village,Exterior,"south grass, left"
+9,0x09,Overworld,Mist,#Mist,2,29,20,#item.Heal,#item.Bomb,,,Mist Village,Exterior,"south grass, right"
+10,0x0A,Overworld,Kaipo,#Kaipo,0,24,18,#item.Ether1,,,,Kaipo,Exterior,pot
+11,0x0B,Overworld,Silvera,#Silvera,0,13,8,5000 gp,,,,Silvera,Exterior,north grass
+12,0x0C,Overworld,Silvera,#Silvera,1,23,8,#item.SilverDagger,,,,Silvera,Exterior,northeast grass
+13,0x0D,Overworld,Silvera,#Silvera,2,30,17,#item.SilverStaff,,,,Silvera,Exterior,east grass
+14,0x0E,Overworld,ToroiaTown,#ToroiaTown,0,4,3,1000 gp,,,,Toroia Town,Exterior,"grass, top right"
+15,0x0F,Overworld,ToroiaTown,#ToroiaTown,1,1,5,#item.Cure2,#item.Illusion,,,Toroia Town,Exterior,"grass, left"
+16,0x10,Overworld,ToroiaTown,#ToroiaTown,2,1,7,#item.Ether1,,,,Toroia Town,Exterior,"grass, bottom left"
+17,0x11,Overworld,ToroiaTown,#ToroiaTown,3,4,7,#item.Ether2,,,,Toroia Town,Exterior,"grass, bottom right"
+18,0x12,Overworld,Agart,#Agart,0,9,15,#item.Cure2,#item.Boreas,,,Agart,Exterior,grass
+19,0x13,Overworld,BaronTown,#BaronInn,0,16,3,#item.Tent,#item.fe_EagleEye,,,Baron Town,Inn,"treasury, left"
+20,0x14,Overworld,BaronTown,#BaronInn,1,17,3,#item.Heal,#item.Tent,,,Baron Town,Inn,"treasury, middle"
+21,0x15,Overworld,BaronTown,#BaronInn,2,19,3,#item.Cure1,#item.EyeDrops,,,Baron Town,Inn,"treasury, right"
+22,0x16,Overworld,BaronTown,#BaronInn,3,10,17,#item.Cure1,,,,Baron Town,Inn,pot
+23,0x17,Overworld,BaronWeaponShop,#BaronEquipment,0,5,4,#item.ThunderClaw,#item.ZeusRage,,,Baron Town,Weapon/armor shop,weapon
+24,0x18,Overworld,BaronWeaponShop,#BaronEquipment,1,9,4,2000 gp,,,,Baron Town,Weapon/armor shop,armor
+25,0x19,Overworld,BaronTown,#RosaHouse,0,1,3,#item.Tent,#item.MaidKiss,,,Baron Town,Rosa's house,pot
+26,0x1A,Overworld,BaronTown,#RosaHouse,1,5,3,#item.Ether1,,,,Baron Town,Rosa's house,shelf
+27,0x1B,Overworld,Mist,#RydiaHouse,0,22,5,#item.Tiara,,,,Mist Village,Rydia's house,"crawlspace, top left"
+28,0x1C,Overworld,Mist,#RydiaHouse,1,23,5,#item.Cloth,,,,Mist Village,Rydia's house,"crawlspace, top right"
+29,0x1D,Overworld,Mist,#RydiaHouse,2,23,7,#item.RubyRing,,,,Mist Village,Rydia's house,"crawlspace, bottom right"
+30,0x1E,Overworld,Mist,#RydiaHouse,3,22,25,#item.Change,,,,Mist Village,Rydia's house,tiara room
+31,0x1F,Overworld,ChocoboForest,#BlackChocoboForest,0,31,8,#item.Carrot,,,,Black Chocobo Forest,,"northeast, top"
+32,0x20,Overworld,ChocoboForest,#BlackChocoboForest,1,31,9,#item.Carrot,,,,Black Chocobo Forest,,"northeast, bottom"
+33,0x21,Overworld,ChocoboForest,#BlackChocoboForest,2,20,29,#item.Carrot,,,,Black Chocobo Forest,,south grass
+34,0x22,Overworld,BaronCastle,#BaronCastleLobby,0,13,3,300 gp,480 gp,,,Baron Castle,1F,left
+35,0x23,Overworld,BaronCastle,#BaronCastleLobby,1,14,3,#item.Cure1,#item.Ether1,,,Baron Castle,1F,middle
+36,0x24,Overworld,BaronCastle,#BaronCastleLobby,2,15,3,#item.Tent,,,,Baron Castle,1F,right
+37,0x25,Overworld,BaronCastle,#BaronCastleEastHall,0,2,15,#item.Ether1,,,,Baron Castle,East hall treasury,top left
+38,0x26,Overworld,BaronCastle,#BaronCastleEastHall,1,3,15,#item.Ether1,,,,Baron Castle,East hall treasury,top middle
+39,0x27,Overworld,BaronCastle,#BaronCastleEastHall,2,4,15,#item.Cure2,#item.Unihorn,,,Baron Castle,East hall treasury,top right
+40,0x28,Overworld,BaronCastle,#BaronCastleEastHall,3,2,16,#item.Cure2,#item.Unihorn,,,Baron Castle,East hall treasury,bottom left
+41,0x29,Overworld,BaronCastle,#BaronCastleEastHall,4,3,16,#item.Life,,,,Baron Castle,East hall treasury,bottom middle
+42,0x2A,Overworld,BaronCastle,#BaronCastleEastHall,5,4,16,#item.Life,,,,Baron Castle,East hall treasury,bottom right
+43,0x2B,Overworld,BaronCastle,#BaronCastleEastTower1F,0,3,3,#item.Cure1,#item.Bacchus,,,Baron Castle,East tower 1F,top
+44,0x2C,Overworld,BaronCastle,#BaronCastleEastTower1F,1,1,4,#item.Cure1,#item.Bacchus,,,Baron Castle,East tower 1F,leftmost
+45,0x2D,Overworld,BaronCastle,#BaronCastleEastTower1F,2,2,4,#item.Heal,#item.Hermes,,,Baron Castle,East tower 1F,middle left
+46,0x2E,Overworld,BaronCastle,#BaronCastleEastTower1F,3,8,4,#item.Tent,#item.Hermes,,,Baron Castle,East tower 1F,right
+47,0x2F,Overworld,BaronCastle,#BaronCastleEastTower2F,0,1,4,#item.Life,#item.Cure2,,,Baron Castle,East tower 2F,"left, top"
+48,0x30,Overworld,BaronCastle,#BaronCastleEastTower2F,1,1,5,#item.Cure2,,,,Baron Castle,East tower 2F,"left, bottom"
+49,0x31,Overworld,BaronCastle,#BaronCastleEastTower3F,0,5,3,#item.Cure3,,,map tile is not trigger,Baron Castle,East tower 3F,
+50,0x32,Overworld,BaronCastle,#BaronCastleEastTower3F,1,7,4,#item.Ether1,,,,Baron Castle,East tower 3F,pot
+51,0x33,Overworld,BaronCastle,#BaronCastleEastTower3F,2,4,5,#item.Ether1,,,,Baron Castle,East tower 3F,left chest
+52,0x34,Overworld,BaronCastle,#BaronCastleEastTower3F,3,5,5,#item.Tent,,,,Baron Castle,East tower 3F,middle chest
+53,0x35,Overworld,BaronCastle,#BaronCastleEastTower3F,4,6,5,#item.Tent,,,,Baron Castle,East tower 3F,right chest
+54,0x36,Overworld,BaronCastle,#BaronCastleEastTowerB1,0,4,3,#item.Elixir,,,,Baron Castle,East tower B1,pot
+55,0x37,Overworld,Sewer,#SewerEntrance,0,13,29,#item.Cure2,,,,Old Water-way,B1F,left
+56,0x38,Overworld,Sewer,#SewerEntrance,1,16,29,#item.Ether1,,,,Old Water-way,B1F,middle
+57,0x39,Overworld,Sewer,#SewerEntrance,2,19,29,#item.Life,#item.ZeusRage,,,Old Water-way,B1F,right
+58,0x3A,Overworld,Sewer,#SewerB3,0,1,12,500 gp,#item.HrGlass1,,,Old Water-way,B3F,west
+59,0x3B,Overworld,Sewer,#SewerB3,1,7,19,#item.Life,#item.SilkWeb,,,Old Water-way,B3F,southwest
+60,0x3C,Overworld,Sewer,#SewerB3,2,20,17,#item.Life,#item.Hermes,,,Old Water-way,B3F,center
+61,0x3D,Overworld,Sewer,#SewerSaveRoom,0,17,5,#item.Ancient,,,,Old Water-way,Save room,hidden chest
+62,0x3E,Overworld,Sewer,#SewerB2,0,2,7,#item.Ether1,,,,Old Water-way,B2F,chest
+63,0x3F,Overworld,Damcyan,#Damcyan2F,0,11,4,#item.Tent,,,,Damcyan,2F,chest
+64,0x40,Overworld,Damcyan,#DamcyanTreasuryEntrance,0,1,3,#item.RubyRing,,,,Damcyan,Treasury entrance,west cell
+65,0x41,Overworld,Damcyan,#DamcyanTreasuryEntrance,1,4,3,#item.LeatherHat,,,,Damcyan,Treasury entrance,"middle cell, left"
+66,0x42,Overworld,Damcyan,#DamcyanTreasuryEntrance,2,5,3,#item.CrossBow,,,,Damcyan,Treasury entrance,"middle cell, right"
+67,0x43,Overworld,Damcyan,#DamcyanTreasuryDownstairs,0,3,4,#item.Cure1,,,,Damcyan,Treasury,top left chest
+68,0x44,Overworld,Damcyan,#DamcyanTreasuryDownstairs,1,4,4,#item.Cure1,#item.Antidote,,,Damcyan,Treasury,top middle chest
+69,0x45,Overworld,Damcyan,#DamcyanTreasuryDownstairs,2,5,4,300 gp,#item.EyeDrops,,,Damcyan,Treasury,top right chest
+70,0x46,Overworld,Damcyan,#DamcyanTreasuryDownstairs,3,7,4,#item.IronArrow,,,,Damcyan,Treasury,top right pot
+71,0x47,Overworld,Damcyan,#DamcyanTreasuryDownstairs,4,1,5,#item.WhiteArrow,,,,Damcyan,Treasury,bottom left pot
+72,0x48,Overworld,Damcyan,#DamcyanTreasuryDownstairs,5,3,5,#item.Ether1,,,,Damcyan,Treasury,bottom left chest
+73,0x49,Overworld,Damcyan,#DamcyanTreasuryDownstairs,6,4,5,#item.Life,,,,Damcyan,Treasury,bottom middle chest
+74,0x4A,Overworld,Damcyan,#DamcyanTreasuryDownstairs,7,5,5,200 gp,#item.Soft,,,Damcyan,Treasury,bottom right chest
+75,0x4B,Overworld,Damcyan,#DamcyanTreasuryDownstairs,8,7,5,#item.WhiteArrow,,,,Damcyan,Treasury,bottom right pot
+76,0x4C,Overworld,Sewer,#RoomToSewer,0,14,5,1000 gp,,,,Baron Town,Access to Old Water-way,hidden chest
+77,0x4D,Overworld,Fabul,#FabulThroneRoom,0,1,7,#item.Cure1,#item.Hermes,,,Fabul,Throne room,west pot
+78,0x4E,Overworld,Fabul,#FabulThroneRoom,1,28,7,#item.Cure1,#item.SilkWeb,,,Fabul,Throne room,top chest
+79,0x4F,Overworld,Fabul,#FabulThroneRoom,2,28,8,#item.BlackShield,,,,Fabul,Throne room,middle chest
+80,0x50,Overworld,Fabul,#FabulThroneRoom,3,28,9,#item.Ether1,,,,Fabul,Throne room,bottom chest
+81,0x51,Overworld,Fabul,#FabulEastTower2F,0,9,6,500 gp,#item.Bacchus,,,Fabul,East tower 2F,pot
+82,0x52,Overworld,Fabul,#FabulKingRoom,0,3,7,#item.Tent,,,,Fabul,East tower 3F (king's bedroom),chest
+83,0x53,Overworld,Fabul,#FabulWestTower1F,0,2,3,#item.Cure1,#item.Bomb,,,Fabul,West tower 1F,top chest
+84,0x54,Overworld,Fabul,#FabulWestTower1F,1,6,3,#item.Cure1,#item.ZeusRage,,,Fabul,West tower 1F,pot
+85,0x55,Overworld,Fabul,#FabulWestTower1F,2,1,4,#item.Heal,#item.Notus,,,Fabul,West tower 1F,middle chest
+86,0x56,Overworld,Fabul,#FabulWestTower1F,3,1,5,#item.Tent,#item.Cure1,,,Fabul,West tower 1F,bottom chest
+87,0x57,Overworld,ToroiaCastle,#ToroiaCastlePotRoom,0,5,6,#item.Ether1,#item.Bacchus,,,Toroia Castle,East wing pot room,pot
+88,0x58,Overworld,ToroiaCastle,#ToroiaCastleChestRoom,0,1,3,#item.Tent,,,,Toroia Castle,East wing chest room,"left cell, left"
+89,0x59,Overworld,ToroiaCastle,#ToroiaCastleChestRoom,1,2,3,#item.Tent,,,,Toroia Castle,East wing chest room,"left cell, right"
+90,0x5A,Overworld,ToroiaCastle,#ToroiaCastleChestRoom,2,4,3,#item.Cure2,,,,Toroia Castle,East wing chest room,"middle-left cell, left"
+91,0x5B,Overworld,ToroiaCastle,#ToroiaCastleChestRoom,3,5,3,#item.Cure2,#item.RubyRing,,,Toroia Castle,East wing chest room,"middle-left cell, right"
+92,0x5C,Overworld,ToroiaCastle,#ToroiaCastleChestRoom,4,7,3,#item.Ether1,,,,Toroia Castle,East wing chest room,"middle-right cell, left"
+93,0x5D,Overworld,ToroiaCastle,#ToroiaCastleChestRoom,5,8,3,#item.Ether1,,,,Toroia Castle,East wing chest room,"middle-right cell, right"
+94,0x5E,Overworld,ToroiaCastle,#ToroiaCastleChestRoom,6,10,3,#item.RubyRing,,,,Toroia Castle,East wing chest room,"right cell, left"
+95,0x5F,Overworld,ToroiaCastle,#ToroiaCastleChestRoom,7,11,3,#item.RubyRing,,,,Toroia Castle,East wing chest room,"right cell, right"
+96,0x60,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,0,3,5,#item.Cure2,,,,Toroia Castle,Treasury,"top row, 1"
+97,0x61,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,1,4,5,#item.Heal,,,,Toroia Castle,Treasury,"top row, 2"
+98,0x62,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,2,5,5,#item.Ether1,,,,Toroia Castle,Treasury,"top row, 3"
+99,0x63,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,3,6,5,#item.Ether2,,,,Toroia Castle,Treasury,"top row, 4"
+100,0x64,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,4,7,5,#item.Elixir,,,,Toroia Castle,Treasury,"top row, 5"
+101,0x65,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,5,8,5,1000 gp,#item.EchoNote,,,Toroia Castle,Treasury,"top row, 6"
+102,0x66,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,6,9,5,#item.GreatBow,,,,Toroia Castle,Treasury,"top row, 7"
+103,0x67,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,7,10,5,#item.FireArrow,,,,Toroia Castle,Treasury,"top row, 8"
+104,0x68,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,8,11,5,#item.FireArrow,,,,Toroia Castle,Treasury,"top row, 9"
+105,0x69,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,9,3,6,#item.Cure2,,,,Toroia Castle,Treasury,"bottom row, 1"
+106,0x6A,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,10,4,6,#item.Heal,,,,Toroia Castle,Treasury,"bottom row, 2"
+107,0x6B,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,11,5,6,#item.Ether1,,,,Toroia Castle,Treasury,"bottom row, 3"
+108,0x6C,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,12,6,6,#item.Ether2,,,,Toroia Castle,Treasury,"bottom row, 4"
+109,0x6D,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,13,7,6,#item.Elixir,#item.AgApple,,,Toroia Castle,Treasury,"bottom row, 5"
+110,0x6E,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,14,8,6,1000 gp,#item.EchoNote,,,Toroia Castle,Treasury,"bottom row, 6"
+111,0x6F,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,15,9,6,#item.IceArrow,,,,Toroia Castle,Treasury,"bottom row, 7"
+112,0x70,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,16,10,6,#item.IceArrow,,,,Toroia Castle,Treasury,"bottom row, 8"
+113,0x71,Overworld,ToroiaTreasury,#ToroiaCastleTreasury,17,11,6,#item.LitArrow,,,,Toroia Castle,Treasury,"bottom row, 9"
+114,0x72,Overworld,Eblan,#Eblan1F,0,13,4,#item.Cure2,,,,Eblan Castle,1F,chest
+115,0x73,Overworld,Eblan,#Eblan2F,0,4,3,#item.Heal,#item.Unihorn,,,Eblan Castle,2F,"west room, top"
+116,0x74,Overworld,Eblan,#Eblan2F,1,4,4,#item.Cure2,#item.Alarm,,,Eblan Castle,2F,"west room, bottom"
+117,0x75,Overworld,Eblan,#Eblan2F,2,14,3,#item.Cure2,#item.Soft,,,Eblan Castle,2F,"east room, top"
+118,0x76,Overworld,Eblan,#Eblan2F,3,14,4,#item.Cabin,,,,Eblan Castle,2F,"east room, bottom-left"
+119,0x77,Overworld,Eblan,#Eblan2F,4,15,4,#item.Life,#item.MaidKiss,,,Eblan Castle,2F,"east room, bottom-right"
+120,0x78,Overworld,Eblan,#EblanWestTower1F,0,1,5,#item.Ether1,#item.Kamikaze,,,Eblan Castle,West tower 1F,left
+121,0x79,Overworld,Eblan,#EblanWestTower1F,1,11,5,#item.Sleep,,0x1C0,,Eblan Castle,West tower 1F,right
+122,0x7A,Overworld,Eblan,#EblanWestTower2F,0,4,4,#item.Cure2,#item.Bacchus,,,Eblan Castle,West tower 2F,top-left pot
+123,0x7B,Overworld,Eblan,#EblanWestTower2F,1,8,8,#item.Cure2,#item.Bacchus,,,Eblan Castle,West tower 2F,bottom-right pot
+124,0x7C,Overworld,Eblan,#EblanWestTower2F,2,10,5,2000 gp,10000 gp,,,Eblan Castle,West tower 2F,left chest
+125,0x7D,Overworld,Eblan,#EblanWestTower2F,3,11,5,#item.MuteArrow,,,,Eblan Castle,West tower 2F,right chest
+126,0x7E,Overworld,Eblan,#EblanEastTower1F,0,2,5,600 gp,#item.Coffin,,,Eblan Castle,East tower 1F,left
+127,0x7F,Overworld,Eblan,#EblanEastTower1F,1,12,5,800 gp,#item.HrGlass2,,,Eblan Castle,East tower 1F,right
+128,0x80,Overworld,Eblan,#EblanEastTower2F,0,1,5,#item.Cure2,#item.Exit,,,Eblan Castle,East tower 2F,"left side, top chest"
+129,0x81,Overworld,Eblan,#EblanEastTower2F,1,1,6,#item.Ether1,,,,Eblan Castle,East tower 2F,"left side, bottom chest"
+130,0x82,Overworld,Eblan,#EblanEastTower2F,2,6,3,#item.Life,#item.Hermes,,,Eblan Castle,East tower 2F,pot
+131,0x83,Overworld,Eblan,#EblanEastTower2F,3,11,5,#item.DrainSpear,,0x1C1,,Eblan Castle,East tower 2F,"right side, top chest"
+132,0x84,Overworld,Eblan,#EblanEastTower2F,4,11,6,#item.Cabin,,,,Eblan Castle,East tower 2F,"right side, bottom chest"
+133,0x85,Overworld,Eblan,#EblanBasement,0,2,11,#item.Ether1,,,,Eblan Castle,Basement,left
+134,0x86,Overworld,Eblan,#EblanBasement,1,3,11,#item.Ether1,,,,Eblan Castle,Basement,middle
+135,0x87,Overworld,Eblan,#EblanBasement,2,8,12,#item.Elixir,#item.AgApple,0x1C2,,Eblan Castle,Basement,right
+136,0x88,Overworld,MistCave,#MistCave,0,6,3,#item.Cure1,,,,Mist Cave,,top left
+137,0x89,Overworld,MistCave,#MistCave,1,24,3,#item.Heal,#item.EyeDrops,,,Mist Cave,,top right
+138,0x8A,Overworld,MistCave,#MistCave,2,13,12,#item.Tent,,,,Mist Cave,,center
+139,0x8B,Overworld,MistCave,#MistCave,3,30,18,#item.Cure1,,,,Mist Cave,,bottom right
+140,0x8C,Overworld,WateryPass,#WateryPass1F,0,29,14,#item.Heal,#item.MaidKiss,,,Watery Pass,"Entrance (""South"")",rightmost
+141,0x8D,Overworld,WateryPass,#WateryPass1F,1,22,16,#item.Cure1,,,,Watery Pass,"Entrance (""South"")",center-right
+142,0x8E,Overworld,WateryPass,#WateryPass1F,2,4,28,#item.Tent,,,,Watery Pass,"Entrance (""South"")",bottom left
+143,0x8F,Overworld,WateryPass,#WateryPass1F,3,13,14,120 gp,#item.Bomb,,,Watery Pass,"Entrance (""South"")",center
+144,0x90,Overworld,WateryPass,#WateryPass1F,4,25,3,#item.IronRing,,,,Watery Pass,"Entrance (""South"")",top right
+145,0x91,Overworld,WateryPass,#WateryPass2F,0,21,5,#item.Cure1,,,,Watery Pass,"Camp level (""B2F"")",top right
+146,0x92,Overworld,WateryPass,#WateryPass2F,1,9,18,#item.Ether1,,,,Watery Pass,"Camp level (""B2F"")",bottom left
+147,0x93,Overworld,WateryPass,#WateryPass2F,2,13,3,#item.IceRod,,,,Watery Pass,"Camp level (""B2F"")",top left
+148,0x94,Overworld,WateryPass,#WateryPass3F,0,22,24,200 gp,580 gp,,,Watery Pass,B3F,right
+149,0x95,Overworld,WateryPass,#WateryPass3F,1,12,24,#item.Cure1,#item.Bomb,,,Watery Pass,B3F,left
+150,0x96,Overworld,WateryPass,#WateryPass4F,0,5,17,#item.Cure1,,,,Watery Pass,"Passage to exit (""B2F"")",left
+151,0x97,Overworld,WateryPass,#WateryPass4F,1,19,22,#item.LeatherHat,,,,Watery Pass,"Passage to exit (""B2F"")",right
+152,0x98,Overworld,WateryPass,#WateryPass5F,0,3,15,#item.Ether1,,,,Watery Pass,"Exit (""North"")",leftmost
+153,0x99,Overworld,WateryPass,#WateryPass5F,1,5,10,#item.Ether1,#item.Notus,,,Watery Pass,"Exit (""North"")",top left
+154,0x9A,Overworld,WateryPass,#WateryPass5F,2,17,17,#item.DarknessSword,,,,Watery Pass,"Exit (""North"")",bridge chest
+155,0x9B,Overworld,WateryPass,#WateryPass5F,3,20,20,#item.Heal,#item.HrGlass1,,,Watery Pass,"Exit (""North"")",bottom right
+156,0x9C,Overworld,Waterfall,#Waterfall1F,0,12,27,#item.DarknessHelm,,,,Waterfall,B2F,left
+157,0x9D,Overworld,Waterfall,#Waterfall1F,1,16,27,#item.DarknessGauntlet,,,,Waterfall,B2F,right
+158,0x9E,Overworld,Waterfall,#Waterfall2F,0,25,22,#item.DarknessArmor,,,,Waterfall,Lake,right
+159,0x9F,Overworld,Waterfall,#Waterfall2F,1,24,23,#item.Ether1,#item.Hermes,,,Waterfall,Lake,bottom
+160,0xA0,Overworld,AntlionCave,#AntlionCave1F,0,3,7,190 gp,,,,Antlion Cave,B1F,top left
+161,0xA1,Overworld,AntlionCave,#AntlionCave1F,1,10,4,#item.Cure1,,,,Antlion Cave,B1F,top center-left
+162,0xA2,Overworld,AntlionCave,#AntlionCave1F,2,2,23,#item.Tent,,,,Antlion Cave,B1F,bottom left
+163,0xA3,Overworld,AntlionCave,#AntlionCave1F,3,6,17,#item.Cure1,,,,Antlion Cave,B1F,middle left
+164,0xA4,Overworld,AntlionCave,#AntlionCave1F,4,27,4,210 gp,#item.SilkWeb,,,Antlion Cave,B1F,top right
+165,0xA5,Overworld,AntlionCave,#AntlionCave1F,5,23,9,#item.Cure1,#item.Cure2,,,Antlion Cave,B1F,middle right
+166,0xA6,Overworld,AntlionCave,#AntlionCave2F,0,23,4,#item.Heal,#item.HrGlass1,,,Antlion Cave,B2F,top right
+167,0xA7,Overworld,AntlionCave,#AntlionCave2F,1,29,23,#item.Life,#item.Notus,,,Antlion Cave,B2F,bottom right
+168,0xA8,Overworld,AntlionCave,#AntlionCave2F,2,8,5,250 gp,#item.SilkWeb,,,Antlion Cave,B2F,top left
+169,0xA9,Overworld,AntlionCave,#AntlionCaveSaveRoom,0,8,7,#item.Life,,,,Antlion Cave,Save room,right
+170,0xAA,Overworld,AntlionCave,#AntlionCaveSaveRoom,1,6,3,#item.Ether1,,,,Antlion Cave,Save room,top
+171,0xAB,Overworld,AntlionCave,#AntlionCaveSaveRoom,2,1,4,#item.Tent,#item.Exit,,,Antlion Cave,Save room,left
+172,0xAC,Overworld,AntlionCave,#AntlionCaveTreasureRoom,0,3,4,#item.CharmHarp,,,,Antlion Cave,Treasure room,chest
+173,0xAD,Overworld,MountHobs,#MountHobsSummit,0,20,24,#item.WhiteArrow,,,,Mt. Hobs,Summit,chest
+174,0xAE,Overworld,MountHobs,#MountHobsSave,0,11,19,#item.Tent,,,,Mt. Hobs,Save area,leftmost
+175,0xAF,Overworld,MountHobs,#MountHobsSave,1,16,17,#item.Cure1,,,,Mt. Hobs,Save area,center-left
+176,0xB0,Overworld,MountHobs,#MountHobsSave,2,18,18,#item.Heal,#item.Soft,,,Mt. Hobs,Save area,center-right
+177,0xB1,Overworld,MountHobs,#MountHobsSave,3,22,18,350 gp,960 gp,,,Mt. Hobs,Save area,rightmost
+178,0xB2,Overworld,WateryPass,#WateryPassWaterfallRoom,0,1,7,#item.Cure2,#item.Cure3,,,Watery Pass,Behind waterfall,left
+179,0xB3,Overworld,WateryPass,#WateryPassWaterfallRoom,1,2,8,#item.Elixir,#item.Ether2,,,Watery Pass,Behind waterfall,middle
+180,0xB4,Overworld,WateryPass,#WateryPassWaterfallRoom,2,7,6,1000 gp,#item.Life,,,Watery Pass,Behind waterfall,right
+181,0xB5,Overworld,MountOrdeals,#MountOrdeals1F,0,23,19,#item.Cure1,,,,Mt. Ordeals,1F,bottom
+182,0xB6,Overworld,MountOrdeals,#MountOrdeals1F,1,22,15,#item.Cure1,,,,Mt. Ordeals,1F,top
+183,0xB7,Overworld,MountOrdeals,#MountOrdeals3F,0,9,17,#item.Ether1,,,,Mt. Ordeals,"3F (""7th Station"")",left
+184,0xB8,Overworld,MountOrdeals,#MountOrdeals3F,1,16,13,#item.Ether1,,,,Mt. Ordeals,"3F (""7th Station"")",center
+185,0xB9,Overworld,CaveMagnes,#CaveMagnes1F,0,27,7,#item.Cure2,,,,Cave Magnes,B1F,top right
+186,0xBA,Overworld,CaveMagnes,#CaveMagnes1F,1,2,20,#item.Heal,#item.Unihorn,,,Cave Magnes,B1F,bottom left
+187,0xBB,Overworld,CaveMagnes,#CaveMagnes2F,0,4,19,#item.Ether1,,,,Cave Magnes,B2F,chest
+188,0xBC,Overworld,CaveMagnes,#CaveMagnesPitTreasureRoom,0,2,5,500 gp,2000 gp,,,Cave Magnes,Pit room,left
+189,0xBD,Overworld,CaveMagnes,#CaveMagnesPitTreasureRoom,1,11,7,#item.Ether1,,,,Cave Magnes,Pit room,right
+190,0xBE,Overworld,CaveMagnes,#CaveMagnesTorchTreasureRoom,0,4,6,#item.Cure2,,,,Cave Magnes,Torch room,left
+191,0xBF,Overworld,CaveMagnes,#CaveMagnesTorchTreasureRoom,1,8,5,#item.Cure3,#item.SilkWeb,,,Cave Magnes,Torch room,center
+192,0xC0,Overworld,CaveMagnes,#CaveMagnesTorchTreasureRoom,2,12,6,#item.Life,#item.HrGlass1,,,Cave Magnes,Torch room,right
+193,0xC1,Overworld,CaveMagnes,#CaveMagnes4F,0,14,5,#item.CharmClaw,,,,Cave Magnes,B3F to B4F passage,chest
+194,0xC2,Overworld,CaveMagnes,#CaveMagnes5F,0,7,8,#item.Ether2,#item.Exit,,,Cave Magnes,B4F,chest (left of crystal room entrance)
+195,0xC3,Overworld,Zot,#Zot1F,0,3,4,#item.FireArmor,,,,Tower of Zot,1F,chest
+196,0xC4,Overworld,Zot,#Zot2F,0,7,15,#item.FireBrand,,0x1C3,,Tower of Zot,2F,chest
+197,0xC5,Overworld,Zot,#Zot5F,0,11,9,#item.PoisonClaw,,,,Tower of Zot,5F (through 4F center-left door),top
+198,0xC6,Overworld,Zot,#Zot5F,1,11,10,#item.EarthHammer,,,,Tower of Zot,5F (through 4F center door),chest
+199,0xC7,Overworld,Zot,#Zot5F,2,10,23,#item.FireShield,,,,Tower of Zot,5F (through 4F center-left door),bottom
+200,0xC8,Overworld,Zot,#Zot5F,3,19,14,#item.WizardArmor,,,,Tower of Zot,5F (through 4F center-right door),chest
+201,0xC9,Underworld,UpperBabil,#BabilB1,0,18,4,#item.Cure3,#item.Unihorn,,,Tower of Bab-il (upper),1F,top
+202,0xCA,Underworld,UpperBabil,#BabilB1,1,26,12,#item.Cure3,#item.HrGlass2,,,Tower of Bab-il (upper),1F,right
+203,0xCB,Underworld,UpperBabil,#BabilB2,0,14,20,#item.Ogre,,0x1C4,,Tower of Bab-il (upper),B2F,chest (long bridge)
+204,0xCC,Underworld,UpperBabil,#BabilB3,0,20,21,2000 gp,#item.Succubus,,,Tower of Bab-il (upper),B3F,chest (ring bridge)
+205,0xCD,Underworld,UpperBabil,#BabilB4,0,12,18,#item.Middle,,,,Tower of Bab-il (upper),B4F,chest (U bridge)
+206,0xCE,Underworld,UpperBabil,#BabilB5,0,5,15,82000 gp,,,,Tower of Bab-il (upper),B5F,chest (left of crystal room entrance)
+207,0xCF,Moon,Giant,#GiantChest,0,9,8,#item.Shuriken,,,,Giant of Bab-il,Chest,top left
+208,0xD0,Moon,Giant,#GiantChest,1,11,19,#item.Cure2,,,,Giant of Bab-il,Chest,bottom left
+209,0xD1,Moon,Giant,#GiantChest,2,21,20,#item.Ether1,,,,Giant of Bab-il,Chest,middle
+210,0xD2,Moon,Giant,#GiantChest,3,27,6,#item.SamuraiArrow,,,,Giant of Bab-il,Chest,top right
+211,0xD3,Moon,Giant,#GiantChest,4,14,18,#item.Cabin,#item.Siren,,,Giant of Bab-il,Chest,bottom right
+212,0xD4,Moon,Giant,#GiantStomach,0,19,9,#item.Life,#item.AgApple,,,Giant of Bab-il,Stomach,center
+213,0xD5,Moon,Giant,#GiantStomach,1,26,6,#item.Life,#item.SomaDrop,,,Giant of Bab-il,Stomach,top right
+214,0xD6,Moon,Giant,#GiantPassage,0,14,21,#item.Elixir,,0x1C7,,Giant of Bab-il,Passage,chest
+215,0xD7,Underworld,CaveEblan,#CaveEblanEntrance,0,18,4,#item.Shuriken,,,,Cave Eblana,B1F,top middle
+216,0xD8,Underworld,CaveEblan,#CaveEblanEntrance,1,22,3,#item.Heal,,,,Cave Eblana,B1F,top right
+217,0xD9,Underworld,CaveEblan,#CaveEblanEntrance,2,26,25,1200 gp,#item.Vampire,,,Cave Eblana,B1F,bottom right
+218,0xDA,Underworld,CaveEblan,#CaveEblanPass,0,8,28,#item.Ether1,,,,Cave Eblana,Pass to Bab-il (west half),southwest entrance
+219,0xDB,Underworld,CaveEblan,#CaveEblanPass,1,4,10,#item.Tent,,,,Cave Eblana,Pass to Bab-il (west half),northwest exit
+220,0xDC,Underworld,CaveEblan,#CaveEblanPass,2,12,11,#item.Cure2,,,,Cave Eblana,Pass to Bab-il (east half),"north entrance, left"
+221,0xDD,Underworld,CaveEblan,#CaveEblanPass,3,16,11,#item.Cabin,,,,Cave Eblana,Pass to Bab-il (east half),"north entrance, right top"
+222,0xDE,Underworld,CaveEblan,#CaveEblanPass,4,16,12,#item.Cure2,,,,Cave Eblana,Pass to Bab-il (east half),"north entrance, right bottom"
+223,0xDF,Underworld,CaveEblan,#CaveEblanPass,5,20,12,#item.Elixir,,,,Cave Eblana,Pass to Bab-il (east half),"north entrance, secret path, top"
+224,0xE0,Underworld,CaveEblan,#CaveEblanPass,6,20,14,#item.Elixir,,,,Cave Eblana,Pass to Bab-il (east half),"north entrance, secret path, bottom"
+225,0xE1,Underworld,CaveEblan,#CaveEblanPass,7,10,26,#item.Cure2,,,,Cave Eblana,Pass to Bab-il (west half),"bottom, through secret path"
+226,0xE2,Underworld,CaveEblan,#CaveEblanPass,8,15,28,800 gp,#item.SilkWeb,,,Cave Eblana,Pass to Bab-il (east half),bottom
+227,0xE3,Underworld,CaveEblan,#CaveEblanPass,9,27,27,850 gp,#item.HrGlass2,,,Cave Eblana,Pass to Bab-il (east half),"southeast corner, left"
+228,0xE4,Underworld,CaveEblan,#CaveEblanPass,10,28,27,#item.Life,,,,Cave Eblana,Pass to Bab-il (east half),"southeast corner, middle"
+229,0xE5,Underworld,CaveEblan,#CaveEblanPass,11,29,27,#item.Life,,,,Cave Eblana,Pass to Bab-il (east half),"southeast corner, right"
+230,0xE6,Underworld,CaveEblan,#CaveEblanExit,0,14,8,#item.Cure3,#item.Kamikaze,,,Cave Eblana,Pass to Bab-il (north connection),top right
+231,0xE7,Underworld,CaveEblan,#CaveEblanExit,1,17,9,#item.Ether2,,,,Cave Eblana,Exit,"top left, through secret path"
+232,0xE8,Underworld,CaveEblan,#CaveEblanExit,2,18,16,#item.Life,#item.Soft,,,Cave Eblana,Exit,middle left
+233,0xE9,Underworld,CaveEblan,#CaveEblanExit,3,18,22,#item.Shuriken,,,,Cave Eblana,Exit,bottom left
+234,0xEA,Underworld,CaveEblan,#CaveEblanSaveRoom,0,17,5,#item.DrainSword,,0x1C6,,Cave Eblana,Save Room,hidden chest
+235,0xEB,Underworld,CaveEblan,#CaveEblanHospital,0,2,5,#item.Cure1,,,,Cave Eblana,Hospital,left pot
+236,0xEC,Underworld,CaveEblan,#CaveEblanHospital,1,14,7,#item.Cure1,,,,Cave Eblana,Hospital,right pot
+237,0xED,Overworld,ChocoboForest,#FabulChocoboForest,0,9,7,#item.Carrot,,,,Fabul Chocobo Forest,,grass
+238,0xEE,Overworld,ChocoboForest,#MountOrdealsChocoboForest,0,9,7,#item.Carrot,,,,Mt. Ordeals Chocobo Forest,,grass
+239,0xEF,Overworld,ChocoboForest,#BaronChocoboForest,0,9,7,#item.Carrot,,,,Baron Chocobo Forest,,grass
+240,0xF0,Overworld,ChocoboForest,#TroiaChocoboForest,0,9,7,#item.Carrot,,,,Toroia South Chocobo Forest,,grass
+241,0xF1,Overworld,ChocoboForest,#IslandChocoboForest,0,9,7,#item.Carrot,,,,Island Chocobo Forest,,grass
+242,0x100,Underworld,Smithy,#SmithyHouseMainFloor,0,10,3,#item.Cure2,,,,Kokkol's House,1F,top pot
+243,0x101,Underworld,Smithy,#SmithyHouseMainFloor,1,2,10,#item.Heal,,,,Kokkol's House,1F,left pot
+244,0x102,Underworld,Smithy,#SmithyHouseMainFloor,2,25,5,1000 gp,,,,Kokkol's House,1F,hidden chest
+245,0x103,Underworld,Smithy,#SmithyRoom,0,5,3,#item.Elixir,#item.SomaDrop,,,Kokkol's House,2F,shelf
+246,0x104,Underworld,Tomra,#TomraTreasury,0,3,5,490 gp,#item.Bomb,,,Tomra,Treasury,leftmost chest
+247,0x105,Underworld,Tomra,#TomraTreasury,1,3,6,470 gp,#item.Notus,,,Tomra,Treasury,left pot
+248,0x106,Underworld,Tomra,#TomraTreasury,2,4,6,#item.Cure2,#item.ZeusRage,,,Tomra,Treasury,bottom left chest
+249,0x107,Underworld,Tomra,#TomraTreasury,3,10,4,#item.Cure2,#item.Bestiary,,,Tomra,Treasury,right pot
+250,0x108,Underworld,Tomra,#TomraTreasury,4,11,5,#item.Cabin,#item.Ether2,,,Tomra,Treasury,right top chest
+251,0x109,Underworld,Tomra,#TomraTreasury,5,11,6,480 gp,2000 gp,,,Tomra,Treasury,right bottom chest
+252,0x10A,Underworld,DwarfCastle,#DwarfCastleFatChocobo,0,23,4,#item.Carrot,,,,Dwarf Castle,B1F (Fat Chocobo),left pot
+253,0x10B,Underworld,DwarfCastle,#DwarfCastleFatChocobo,1,24,3,#item.Carrot,,,,Dwarf Castle,B1F (Fat Chocobo),top pot
+254,0x10C,Underworld,DwarfCastle,#DwarfCastleFatChocobo,2,26,4,#item.Carrot,,,,Dwarf Castle,B1F (Fat Chocobo),right pot
+255,0x10D,Underworld,DwarfCastle,#DwarfCastleTunnel,0,27,18,#item.Cabin,,,,Dwarf Castle,B2F (tunnel),left chest
+256,0x10E,Underworld,DwarfCastle,#DwarfCastleTunnel,1,28,18,#item.Cabin,,,,Dwarf Castle,B2F (tunnel),middle chest
+257,0x10F,Underworld,DwarfCastle,#DwarfCastleTunnel,2,29,19,#item.Cabin,,,,Dwarf Castle,B2F (tunnel),right chest
+258,0x110,Underworld,DwarfCastle,#DwarfCastleEastTower1F,0,6,3,#item.Dwarf,,,,Dwarf Castle,East tower 1F,chest
+259,0x111,Underworld,DwarfCastle,#DwarfCastleInn,0,8,3,1000 gp,5000 gp,,,Dwarf Castle,Inn,pot
+260,0x112,Underworld,LowerBabil,#BabilIcebrandRoom,0,5,4,#item.IceBrand,,0x1E0,,Tower of Bab-il (lower),2F,east room chest
+261,0x113,Underworld,LowerBabil,#BabilBlizzardRoom,0,5,4,#item.BlizzardSpear,,0x1E1,,Tower of Bab-il (lower),2F,south room chest
+262,0x114,Underworld,LowerBabil,#BabilIceShieldRoom,0,5,4,#item.IceShield,,0x1E2,,Tower of Bab-il (lower),4F,east left room chest
+263,0x115,Underworld,LowerBabil,#BabilIceMailRoom,0,5,4,#item.IceArmor,,0x1E3,,Tower of Bab-il (lower),4F,northeast room chest
+264,0x116,Underworld,DwarfCastle,#DwarfCastleEastTower3F,0,6,3,#item.Strength,,,,Dwarf Castle,East tower 3F,top
+265,0x117,Underworld,DwarfCastle,#DwarfCastleEastTower3F,1,1,7,#item.Ether1,,,,Dwarf Castle,East tower 3F,left
+266,0x118,Underworld,DwarfCastle,#DwarfCastleEastTower3F,2,11,7,#item.Ether2,#item.HrGlass2,,,Dwarf Castle,East tower 3F,right
+267,0x119,Underworld,DwarfCastle,#DwarfCastleEastTower3F,3,6,11,#item.Elixir,,,,Dwarf Castle,East tower 3F,bottom
+268,0x11A,Underworld,DwarfCastle,#DwarfCastleWestTower3F,0,6,3,#item.Elixir,,,,Dwarf Castle,West tower 3F,top
+269,0x11B,Underworld,DwarfCastle,#DwarfCastleWestTower3F,1,1,7,#item.Cure2,,,,Dwarf Castle,West tower 3F,left
+270,0x11C,Underworld,DwarfCastle,#DwarfCastleWestTower3F,2,11,7,#item.Ether1,,,,Dwarf Castle,West tower 3F,right
+271,0x11D,Underworld,DwarfCastle,#DwarfCastleWestTower3F,3,6,11,#item.BlBelt,,,,Dwarf Castle,West tower 3F,bottom
+272,0x11E,Underworld,DwarfCastle,#DwarfCastleTower2F,0,8,10,500 gp,#item.Bacchus,,,Dwarf Castle,West tower 2F,pot
+273,0x11F,Underworld,DwarfCastle,#DwarfCastleTower2F,1,21,24,500 gp,#item.Bacchus,,,Dwarf Castle,East tower 2F,pot
+274,0x120,Underworld,UpperBabilAfterFall,#BabilFloorLugae,0,6,3,#item.Cure2,,,,Tower of Bab-il (upper),Trapdoor landing,chest
+275,0x121,Underworld,UpperBabilAfterFall,#BabilFloorAirship,0,28,11,#item.Cure2,,,,Tower of Bab-il (upper),Falcon level,chest
+276,0x122,Underworld,LowerBabil,#Babil1F,0,5,10,#item.IceArrow,,,,Tower of Bab-il (lower),1F,left top
+277,0x123,Underworld,LowerBabil,#Babil1F,1,6,20,#item.IceArrow,,,,Tower of Bab-il (lower),1F,left bottom
+278,0x124,Underworld,LowerBabil,#Babil1F,2,26,12,#item.Ether1,,,,Tower of Bab-il (lower),1F,right
+279,0x125,Underworld,LowerBabil,#Babil2F,0,8,7,#item.Bandanna,,,,Tower of Bab-il (lower),2F,chest
+280,0x126,Underworld,LowerBabil,#Babil3F,0,13,11,#item.CatClaw,,,,Tower of Bab-il (lower),3F,top left
+281,0x127,Underworld,LowerBabil,#Babil3F,1,26,19,#item.Cure2,#item.MoonVeil,,,Tower of Bab-il (lower),3F,right
+282,0x128,Underworld,LowerBabil,#Babil3F,2,15,25,#item.Life,,,,Tower of Bab-il (lower),3F,bottom
+283,0x129,Underworld,LowerBabil,#Babil4F,0,16,19,#item.Archer,,,,Tower of Bab-il (lower),4F (through 3F southeast door),left
+284,0x12A,Underworld,LowerBabil,#Babil4F,1,29,23,#item.Life,#item.Notus,,,Tower of Bab-il (lower),4F (through 3F southeast door),right
+285,0x12B,Underworld,LowerBabil,#Babil5F,0,6,12,2000 gp,#item.Boreas,,,Tower of Bab-il (lower),5F,left
+286,0x12C,Underworld,LowerBabil,#Babil5F,1,29,22,#item.Cure2,,,,Tower of Bab-il (lower),5F,right
+287,0x12D,Underworld,LowerBabil,#BabilFloorAirship2,0,28,11,#item.Cure2,,,unreachable,,,
+288,0x12E,Underworld,LowerBabil,#BabilFloorIceMail2,0,16,24,#item.Ether2,,,,Tower of Bab-il (lower),7F,chest
+289,0x12F,Underworld,LowerBabil,#BabilFloorLugae2,0,6,3,#item.PoisonArrow,,,unreachable,,,
+290,0x130,Underworld,CaveOfSummons,#CaveOfSummons1F,0,8,6,#item.Ether1,,,,Land of Monsters,B1F,"top left, through secret path"
+291,0x131,Underworld,CaveOfSummons,#CaveOfSummons1F,1,26,6,#item.Life,,,,Land of Monsters,B1F,top right
+292,0x132,Underworld,CaveOfSummons,#CaveOfSummons1F,2,25,21,#item.Cure2,,,,Land of Monsters,B1F,bottom right
+293,0x133,Underworld,CaveOfSummons,#CaveOfSummons2F,0,9,5,#item.Cabin,,,,Land of Monsters,B2F,top left
+294,0x134,Underworld,CaveOfSummons,#CaveOfSummons2F,1,24,25,#item.Cure2,,,,Land of Monsters,B2F,bottom right
+295,0x135,Underworld,CaveOfSummons,#CaveOfSummons3F,0,18,6,#item.Defense,,0x1E4,,Land of Monsters,B3F,top
+296,0x136,Underworld,CaveOfSummons,#CaveOfSummons3F,1,3,21,#item.Cure2,,,,Land of Monsters,B3F,"southwest room, through secret path, left"
+297,0x137,Underworld,CaveOfSummons,#CaveOfSummons3F,2,4,21,#item.PoisonAxe,,,,Land of Monsters,B3F,"southwest room, through secret path, middle"
+298,0x138,Underworld,CaveOfSummons,#CaveOfSummons3F,3,5,21,#item.NinjaSword,,,,Land of Monsters,B3F,"southwest room, through secret path, right"
+299,0x139,Underworld,CaveOfSummons,#CaveOfSummons3F,4,11,23,#item.Life,,,,Land of Monsters,B3F,bottom middle
+300,0x13A,Underworld,CaveOfSummons,#CaveOfSummons3F,5,25,21,#item.Cure3,#item.Bestiary,,,Land of Monsters,B3F,bottom right
+301,0x13B,Underworld,Feymarch,#Feymarch1F,0,6,3,2000 gp,#item.Bestiary,,,Town of Monsters,B4F (first area),top left
+302,0x13C,Underworld,Feymarch,#Feymarch1F,1,5,10,#item.Ether1,,,,Town of Monsters,B4F (first area),middle left
+303,0x13D,Underworld,Feymarch,#Feymarch1F,2,20,8,#item.Rat,,,key,,,
+304,0x13E,Underworld,Feymarch,#Feymarch1F,3,25,12,2000 gp,5000 gp,,,Town of Monsters,B4F (first area),right
+305,0x13F,Underworld,Feymarch,#Feymarch1F,4,18,21,3000 gp,6000 gp,,,Town of Monsters,B4F (first area),bottom
+306,0x140,Underworld,Feymarch,#FeymarchTreasury,0,15,9,#item.SamuraiBow,,,,Town of Monsters,Treasure platform,top left
+307,0x141,Underworld,Feymarch,#FeymarchTreasury,1,15,10,#item.SamuraiArrow,,,,Town of Monsters,Treasure platform,top right
+308,0x142,Underworld,Feymarch,#FeymarchTreasury,2,16,9,#item.Ether2,,,,Town of Monsters,Treasure platform,bottom left
+309,0x143,Underworld,Feymarch,#FeymarchTreasury,3,16,10,#item.Elixir,,,,Town of Monsters,Treasure platform,bottom right
+310,0x144,Underworld,Feymarch,#FeymarchSaveRoom,0,1,6,#item.Heal,#item.Bestiary,,,Town of Monsters,Save Room,left
+311,0x145,Underworld,Feymarch,#FeymarchSaveRoom,1,9,6,#item.Life,,,,Town of Monsters,Save Room,right
+312,0x146,Underworld,SylvanCave,#SylvanCave1F,0,5,4,#item.FireArrow,,,,Sylvan Cave,B1F (northwest area),"top row, left"
+313,0x147,Underworld,SylvanCave,#SylvanCave1F,1,6,4,#item.IceArrow,,,,Sylvan Cave,B1F (northwest area),"top row, middle"
+314,0x148,Underworld,SylvanCave,#SylvanCave1F,2,7,4,#item.LitArrow,,,,Sylvan Cave,B1F (northwest area),"top row, right"
+315,0x149,Underworld,SylvanCave,#SylvanCave1F,3,10,5,#item.Ether1,,,,Sylvan Cave,B1F (northwest area),"right side, top"
+316,0x14A,Underworld,SylvanCave,#SylvanCave1F,4,10,6,#item.Cure2,,,,Sylvan Cave,B1F (northwest area),"right side, bottom"
+317,0x14B,Underworld,SylvanCave,#SylvanCave1F,5,3,18,#item.Cabin,,,,Sylvan Cave,B1F (save area),"west end, left"
+318,0x14C,Underworld,SylvanCave,#SylvanCave1F,6,4,18,1000 gp,10000 gp,,,Sylvan Cave,B1F (save area),"west end, right"
+319,0x14D,Underworld,SylvanCave,#SylvanCave1F,7,28,5,#item.CharmArrow,,,,Sylvan Cave,B1F (entry area),"east side, top"
+320,0x14E,Underworld,SylvanCave,#SylvanCave1F,8,28,6,#item.Cure2,#item.Bestiary,,,Sylvan Cave,B1F (entry area),"east side, bottom"
+321,0x14F,Underworld,SylvanCave,#SylvanCave1F,9,29,5,#item.ElvenBow,,,,Sylvan Cave,B1F (save area),through northeast secret path
+322,0x150,Underworld,SylvanCave,#SylvanCave2F,0,29,29,#item.Cure3,#item.Exit,,,Sylvan Cave,B2F (east half),"pit chamber, bottom right"
+323,0x151,Underworld,SylvanCave,#SylvanCave2F,1,23,29,#item.Ether1,,,,Sylvan Cave,B2F (east half),"pit chamber, bottom left"
+324,0x152,Underworld,SylvanCave,#SylvanCave2F,2,29,28,#item.Cure2,#item.Bestiary,,,Sylvan Cave,B2F (east half),"pit chamber, right"
+325,0x153,Underworld,SylvanCave,#SylvanCave2F,3,25,28,#item.Heal,#item.MaidKiss,,,Sylvan Cave,B2F (east half),"pit chamber, middle"
+326,0x154,Underworld,SylvanCave,#SylvanCave2F,4,23,27,#item.Heal,#item.MaidKiss,,,Sylvan Cave,B2F (east half),"pit chamber, top left"
+327,0x155,Underworld,SylvanCave,#SylvanCave2F,5,23,13,#item.Heal,,,,Sylvan Cave,B2F (east half),"square chamber, top left"
+328,0x156,Underworld,SylvanCave,#SylvanCave2F,6,25,13,#item.Cure2,#item.Kamikaze,,,Sylvan Cave,B2F (east half),"square chamber, top right"
+329,0x157,Underworld,SylvanCave,#SylvanCave2F,7,23,15,2000 gp,,,,Sylvan Cave,B2F (east half),"square chamber, bottom left"
+330,0x158,Underworld,SylvanCave,#SylvanCave2F,8,25,15,3000 gp,,,,Sylvan Cave,B2F (east half),"square chamber, bottom right"
+331,0x159,Underworld,SylvanCave,#SylvanCave2F,9,11,6,#item.MuteDagger,,0x1E5,,Sylvan Cave,B2F (west half),"north room, through secret path"
+332,0x15A,Underworld,SylvanCave,#SylvanCave3F,0,10,4,#item.Cure2,,,,Sylvan Cave,B3F (northeast area),top left
+333,0x15B,Underworld,SylvanCave,#SylvanCave3F,1,11,4,#item.CharmRod,,,,Sylvan Cave,B3F (northeast area),top right
+334,0x15C,Underworld,SylvanCave,#SylvanCave3F,2,11,5,#item.Heal,#item.MaidKiss,,,Sylvan Cave,B3F (northeast area),bottom right
+335,0x15D,Underworld,SylvanCave,#SylvanCave3F,3,1,9,#item.Elixir,,,,Sylvan Cave,B3F (path to house),left of entrance
+336,0x15E,Underworld,SylvanCave,#SylvanCaveTreasury,0,7,5,#item.Elixir,#item.FireBomb,0x1E6,,Sylvan Cave,Poison treasury,top left
+337,0x15F,Underworld,SylvanCave,#SylvanCaveTreasury,1,9,5,#item.Elixir,#item.Blizzard,0x1E6,,Sylvan Cave,Poison treasury,top middle
+338,0x160,Underworld,SylvanCave,#SylvanCaveTreasury,2,11,5,#item.Elixir,#item.LitBolt,0x1E6,,Sylvan Cave,Poison treasury,top right
+339,0x161,Underworld,SylvanCave,#SylvanCaveTreasury,3,7,7,#item.FullMoon,,0x1E7,,Sylvan Cave,Poison treasury,bottom left
+340,0x162,Underworld,SylvanCave,#SylvanCaveTreasury,4,9,7,#item.Avenger,,0x1E8,,Sylvan Cave,Poison treasury,bottom middle
+341,0x163,Underworld,SylvanCave,#SylvanCaveTreasury,5,11,7,#item.MedusaArrow,,0x1E9,,Sylvan Cave,Poison treasury,bottom right
+342,0x164,Underworld,SylvanCave,#SylvanCaveYangRoom,0,13,3,#item.PoisonClaw,,,,Sylvan Cave,House,top
+343,0x165,Underworld,SylvanCave,#SylvanCaveYangRoom,1,13,5,#item.CatClaw,,,,Sylvan Cave,House,bottom
+344,0x166,Underworld,SealedCave,#SealedCave1F,0,18,28,#item.Life,#item.Bestiary,,,Sealed Cave,B1F,chest
+345,0x167,Underworld,SealedCave,#SealedCaveRoomKatanaEther,0,2,5,#item.Long,,,,Sealed Cave,B1F (southeast room),left
+346,0x168,Underworld,SealedCave,#SealedCaveRoomKatanaEther,1,14,5,#item.Ether1,,,,Sealed Cave,B1F (southeast room),right
+347,0x169,Underworld,SealedCave,#SealedCave2F,0,2,6,#item.Cure2,,,,Sealed Cave,B1F to B2F passage,left
+348,0x16A,Underworld,SealedCave,#SealedCave2F,1,16,7,#item.Ether1,,,,Sealed Cave,B1F to B2F passage,right
+349,0x16B,Underworld,SealedCave,#SealedCave3F,0,30,19,#item.Life,,,,Sealed Cave,B2F,center right
+350,0x16C,Underworld,SealedCave,#SealedCave3F,1,29,26,#item.Life,#item.StarVeil,,,Sealed Cave,B2F,bottom right
+351,0x16D,Underworld,SealedCave,#SealedCaveRoomKatanaNinjaHat,0,3,5,#item.Long,,,,Sealed Cave,"B2F (north side, leftmost door)",left
+352,0x16E,Underworld,SealedCave,#SealedCaveRoomKatanaNinjaHat,1,9,5,#item.NinjaHelm,,,,Sealed Cave,"B2F (north side, leftmost door)",right
+353,0x16F,Underworld,SealedCave,#SealedCaveRoomNinjaStarElixir,0,3,5,#item.Elixir,,,,Sealed Cave,"B2F (north side, third door from right)","left, top"
+354,0x170,Underworld,SealedCave,#SealedCaveRoomNinjaStarElixir,1,4,7,#item.NinjaStar,,,,Sealed Cave,"B2F (north side, third door from right)","left, bottom"
+355,0x171,Underworld,SealedCave,#SealedCaveRoomNinjaStarElixir,2,19,9,5000 gp,#item.StarVeil,,,Sealed Cave,"B2F (north side, third door from right)",right
+356,0x172,Underworld,SealedCave,#SealedCaveRoomLightSword,0,6,3,#item.Light,,,,Sealed Cave,"B2F,(north side, second door from right)",chest
+357,0x173,Underworld,SealedCave,#SealedCave4F,0,9,5,#item.Ether1,,,,Sealed Cave,B2F to B3F passage,chest
+358,0x174,Underworld,SealedCave,#SealedCave5F,0,25,9,#item.Life,#item.MuteBell,,,Sealed Cave,B3F,chest
+359,0x175,Underworld,SealedCave,#SealedCave6F,0,12,8,#item.Cure2,,,,Sealed Cave,B3F to B4F passage,right
+360,0x176,Underworld,SealedCave,#SealedCave6F,1,10,10,#item.Life,,,,Sealed Cave,B3F to B4F passage,bottom
+361,0x177,Underworld,SealedCave,#SealedCaveRoomBoxes,0,9,5,#item.Cure3,,,,Sealed Cave,Box room,top right
+362,0x178,Underworld,SealedCave,#SealedCaveRoomBoxes,1,3,10,#item.Ether2,,,,Sealed Cave,Box room,bottom left
+363,0x179,Moon,BahamutCave,#Bahamut1F,0,28,11,#item.SamuraiShield,,,,Cave Bahamut,B1F,"right, through secret path"
+364,0x17A,Moon,BahamutCave,#Bahamut1F,1,8,24,#item.SamuraiGauntlet,,,,Cave Bahamut,B1F,bottom left
+365,0x17B,Moon,BahamutCave,#Bahamut2F,0,6,11,#item.Genji,,,,Cave Bahamut,B2F,left
+366,0x17C,Moon,BahamutCave,#Bahamut2F,1,26,13,#item.SamuraiHelm,,,,Cave Bahamut,B2F,right
+367,0x17D,Moon,LunarPath,#LunarPassage1,0,26,22,#item.Elixir,#item.AuApple,0x1EA,,Lunar Path,,bottom right
+368,0x17E,Moon,LunarPath,#LunarPassage1,1,28,6,#item.Cure2,#item.MoonVeil,,,Lunar Path,,"northeast chamber, top"
+369,0x17F,Moon,LunarPath,#LunarPassage1,2,29,7,#item.Heal,#item.Stardust,,,Lunar Path,,"northeast chamber, right"
+370,0x180,Moon,LunarCore,#LunarSubterran1F,0,6,24,#item.NinjaArmor,,0x1EB,,Lunar Subterrane,B1,through secret path
+371,0x181,Moon,LunarCore,#LunarSubterran2F,0,10,4,#item.DragoonShield,,,,Lunar Subterrane,B2 (main route),top left
+372,0x182,Moon,LunarCore,#LunarSubterran2F,1,26,12,#item.LifeStaff,,0x1EC,,Lunar Subterrane,B2 (route to altar),chest
+373,0x183,Moon,LunarCore,#LunarSubterran2F,2,25,23,#item.FlameWhip,,,,Lunar Subterrane,B2 (main route),secret path chest
+374,0x184,Moon,LunarCore,#LunarSubterran3F,0,25,16,#item.DragoonHelm,,,,Lunar Subterrane,B3,secret path first chamber
+375,0x185,Moon,LunarCore,#LunarSubterran3F,1,23,24,#item.DragonArmor,,,,Lunar Subterrane,B3,"secret path second chamber, top"
+376,0x186,Moon,LunarCore,#LunarSubterran3F,2,14,28,#item.DragoonGauntlet,,,,Lunar Subterrane,B3,"secret path second chamber, left"
+377,0x187,Moon,LunarCore,#LunarSubterran4F,0,28,7,#item.ArtemisArrow,,,,Lunar Subterrane,B4,top right
+378,0x188,Moon,LunarCore,#LunarSubterran4F,1,6,24,#item.StardustRod,,0x1F3,,Lunar Subterrane,B4,bottom left
+379,0x189,Moon,LunarCore,#LunarSubterran5F,0,7,9,#item.CrystalShield,,0x1EE,,Lunar Subterrane,B5 (main route),top left
+380,0x18A,Moon,LunarCore,#LunarSubterran5F,1,1,15,#item.Protect,,0x1F4,,Lunar Subterrane,B5,on bridge to hidden altar
+381,0x18B,Moon,LunarCore,#LunarSubterran5F,2,26,11,#item.CrystalArmor,,0x1F0,,Lunar Subterrane,B5 (through first interior passage south exit),chest
+382,0x18C,Moon,LunarCore,#LunarSubterran5F,3,27,16,#item.CrystalGauntlet,,0x1F1,,Lunar Subterrane,B5 (main route),right
+383,0x18D,Moon,LunarCore,#LunarSubterran5F,4,5,20,#item.CrystalHelm,,0x1F2,,Lunar Subterrane,B5 (main route),bottom left
+384,0x18E,Moon,LunarCore,#LunarSubterran6F,0,15,5,#item.ArtemisArrow,,,,Lunar Subterrane,B6,left of entrance
+385,0x18F,Moon,LunarCore,#LunarSubterran6F,1,25,5,#item.NinjaStar,,,,Lunar Subterrane,B6,right of entrance
+386,0x190,Moon,LunarCore,#LunarSubterran6F,2,18,17,#item.Cabin,,,,Lunar Subterrane,B6,by hidden bridge
+387,0x191,Moon,LunarCore,#LunarSubterran6F,3,6,27,#item.Life,#item.AuApple,,,Lunar Subterrane,B6,en route to altar
+388,0x192,Moon,LunarCore,#LunarCore1F,0,7,11,#item.NinjaStar,,,,Lunar Subterrane,Core B1,chest
+389,0x193,Moon,LunarCore,#LunarCore1F,1,23,19,#item.Elixir,,,unreachable,,,
+390,0x194,Moon,LunarCore,#LunarCore2F,0,21,10,#item.Elixir,,,,Lunar Subterrane,Core B2,top right
+391,0x195,Moon,LunarCore,#LunarCore2F,1,13,24,#item.Whistle,,,,Lunar Subterrane,Core B2,bottom
+392,0x196,Moon,LunarCore,#LunarCore3F,0,7,15,#item.NinjaStar,,,,Lunar Subterrane,Core B3,left
+393,0x197,Moon,LunarCore,#LunarCore3F,1,24,14,#item.NinjaStar,,,,Lunar Subterrane,Core B3,right
+394,0x198,Moon,LunarCore,#LunarSubterranRoomElixir,0,3,6,#item.Elixir,,,,Lunar Subterrane,B4 (west room),chest
+395,0x199,Moon,LunarCore,#LunarSubterranTunnelCure3,0,23,5,#item.Cure3,#item.Blizzard,,,Lunar Subterrane,B4 (interior passage),top right
+396,0x19A,Moon,LunarCore,#LunarSubterranTunnelCure3,1,2,14,#item.Cure3,,,,Lunar Subterrane,B4 (interior passage),bottom left
+397,0x19B,Moon,LunarCore,#LunarSubterranTunnelProtectRing,0,13,4,#item.Protect,,,,Lunar Subterrane,B5 (first interior passage),chest
+398,0x19C,Moon,LunarCore,#LunarSubterranTunnelWhiteRobe,0,3,14,#item.WhiteRobe,,,,Lunar Subterrane,B5 (second interior passage),chest
+399,0x19D,Moon,LunarCore,#LunarSubterranPinkpuff,0,7,5,#item.Cabin,#item.FireBomb,,,Lunar Subterrane,B5 (PinkPuff room),chest
+400,0x19E,Moon,LunarCore,#LunarSubterranTunnelMinerva,0,2,4,#item.Heroine,,0x1ED,,Lunar Subterrane,B5 to B6 passage,chest
+401,0x19F,Moon,LunarCore,#LunarSubterranRoomRibbons,0,2,5,#item.Ribbon,,,key,,,
+402,0x1A0,Moon,LunarCore,#LunarSubterranRoomRibbons,1,4,5,#item.Ribbon,,,key,,,
