@@ -4,6 +4,8 @@ from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
+    world_relevant = True
+
     def test_entrance_connection_steps(self):
         """Tests that Entrances are connected and not changed after connect_entrances."""
         def get_entrance_name_to_source_and_target_dict(world: World):
@@ -15,7 +17,7 @@ class TestBase(unittest.TestCase):
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
         additional_steps = ("generate_basic", "pre_fill")
 
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
 
@@ -42,7 +44,7 @@ class TestBase(unittest.TestCase):
 
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
 
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, ())
 
