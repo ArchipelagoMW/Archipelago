@@ -1,8 +1,5 @@
-# The rest of this folder's contents is only for building the .pickle file before release,
-# and being imported into other repos that need the same data.
-shared_static_logic/
-!shared_static_logic/static_logic.pickle
-
-# Tests that the .pickle file matches the data files in shared_static_logic/,
-# which are being ignored above, so this test won't work after release.
-test/test_pickle_file.py
+# The serialized logic files are only used by the mod repo via a git submodule,
+# so our apworld build doesn't need anything related to that.
+shared_static_logic/*.jsonc
+shared_static_logic/serialize_static_logic.py
+test/test_logic_files.py
