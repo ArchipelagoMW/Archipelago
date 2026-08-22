@@ -9,6 +9,7 @@ from NetUtils import JSONMessagePart
 from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Range, Toggle
 from rule_builder.cached_world import CachedRuleBuilderWorld
 from rule_builder.field_resolvers import FieldResolver, FromOption, FromWorldAttr, resolve_field
+from rule_builder.optimise_rules import OptimisedRuleBuilderWorldMixin
 from rule_builder.options import Operator, OptionFilter
 from rule_builder.rules import (
     And,
@@ -31,7 +32,7 @@ from rule_builder.rules import (
     Rule,
     True_,
 )
-from test.general import setup_solo_multiworld
+from test.general import gen_steps, setup_solo_multiworld
 from test.param import classvar_matrix
 from worlds.AutoWorld import AutoWorldRegister, World
 
@@ -1513,3 +1514,24 @@ class TestFieldResolvers(RuleBuilderTestCase):
         rule, expected = self.rules
         resolved_rule = rule.resolve(world)
         self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")
+
+
+class TestOptimisedRuleBuilderWorldMixin(unittest.TestCase):
+    world_relevant = True
+
+    def test_optimise_rule_builder_cache_cleanup(self) -> None:
+        """
+        Test that worlds implementing OptimisedRuleBuilderWorldMixin cleans up their optimisation cache.
+        """
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
+            if not issubclass(world_type, OptimisedRuleBuilderWorldMixin):
+                continue
+
+            with self.subTest(game=game_name):
+                if world_type.settings is not None:
+                    world = setup_solo_multiworld(
+                        world_type, steps=gen_steps[: gen_steps.index("set_rules") + 1]
+                    ).worlds[1]
+
+                    # Means it was cleaned up.
+                    self.assertFalse(hasattr(world, "_memodict"))
