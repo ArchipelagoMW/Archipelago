@@ -227,9 +227,17 @@ class GrassRandomizer(Toggle):
 class LocalFill(NamedRange):
     """
     Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with this option enabled.
-    If you have Grass Randomizer enabled, this defaults to 95%. If you have Breakable Shuffle enabled, this defaults to 40%. If you have both enabled, this defaults to 96%.
-    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool.
-    The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml. This setting can only be changed with local generation, it cannot be changed on the website.
+    The default value for this option will be higher or lower depending on what combination of options you have enabled:
+    - Grass Randomizer + Breakable Shuffle or Shuffled Enemy Drops = 96%
+    - Grass Randomizer = 95%
+    - Shuffled Enemy Drops + Breakable Shuffle = 73%
+    - Shuffled Enemy Drops = 65%
+    - Breakable Shuffle = 40%
+    If you have any of the following options enabled, this option must be set greater than or equal to the corresponding value to avoid flooding the item pool:
+    - Grass Randomizer: >= 95%
+    - Shuffled Enemy Drops + Breakable Shuffle: >= 40%
+    - Shuffled Enemy Drops: >= 30%
+    The host can remove the above restriction by turning off the limit_local_fill setting in host.yaml.
     This option ignores items placed in your local_items or non_local_items.
     This option does nothing in single player games.
     """
@@ -347,6 +355,27 @@ class BreakableShuffle(Toggle):
     internal_name = "breakable_shuffle"
     display_name = "Breakable Shuffle"
 
+class ShuffleEnemyDrops(Choice):
+    """
+    Every individual enemy and boss drops a check when defeated (excluding The Heir).
+    On: Adds about ~600 locations.
+    Extra: Includes nighttime and New Game+ enemy spawns for an additional ~90 checks. (Note: These enemies will appear alongside the normal enemy pool, since nighttime is not in the randomizer.)
+    """
+    internal_name = "shuffle_enemy_drops"
+    display_name = "Shuffle Enemy Drops"
+    option_off = 0
+    option_on = 1
+    option_extra = 2
+    default = 0
+
+class ShuffleEnemySouls(Toggle):
+    """
+    Enemies do not appear until their corresponding "Soul" item is found. There are about 30 Enemy Soul items in total, including one for The Heir that is required to beat the game.
+    This option has no effect if you do not have Shuffle Enemy Drops enabled.
+    """
+    internal_name = "shuffle_enemy_souls"
+    display_name = "Shuffle Enemy Souls"
+
 
 class HiddenAllRandom(Toggle):
     """
@@ -377,8 +406,10 @@ class TunicOptions(PerGameCommonOptions):
     shuffle_ladders: ShuffleLadders
     shuffle_fuses: ShuffleFuses
     shuffle_bells: ShuffleBells
-    grass_randomizer: GrassRandomizer
     breakable_shuffle: BreakableShuffle
+    shuffle_enemy_drops: ShuffleEnemyDrops
+    shuffle_enemy_souls: ShuffleEnemySouls
+    grass_randomizer: GrassRandomizer
     local_fill: LocalFill
 
     entrance_rando: EntranceRando
@@ -463,6 +494,8 @@ def check_options(world: "TunicWorld"):
             logging.warning(f"TUNIC: Not enough Gold Hexagons in {world.player_name}'s item pool for Hexagon Ability "
                             "Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
             options.hexagon_quest_ability_type.value = HexagonQuestAbilityUnlockType.option_pages
+    if not options.shuffle_enemy_drops:
+        options.shuffle_enemy_souls.value = ShuffleEnemySouls.option_false
 
 
 def get_hexagons_in_pool(world: "TunicWorld"):

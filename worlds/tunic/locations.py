@@ -5,6 +5,7 @@ from .breakables import breakable_location_table
 from .constants import base_id
 from .fuses import fuse_location_table
 from .grass import grass_location_table
+from .enemy_drops import enemy_location_table
 
 
 class TunicLocationData(NamedTuple):
@@ -268,7 +269,7 @@ location_table: dict[str, TunicLocationData] = {
     "Ruined Atoll - [Southeast] Chest Near Fuse": TunicLocationData("Ruined Atoll", "Ruined Atoll Ladder Tops"),
     "Ruined Atoll - [Northeast] Key Pickup": TunicLocationData("Ruined Atoll", "Ruined Atoll"),
     "Cathedral Gauntlet - Gauntlet Reward": TunicLocationData("Swamp", "Cathedral Gauntlet"),
-    "Cathedral - Secret Legend Trophy Chest": TunicLocationData("Swamp", "Cathedral Secret Legend Room"),
+    "Cathedral - Secret Legend Trophy Chest": TunicLocationData("Swamp", "Cathedral Secret Legend Room", location_group="Holy Cross"),
     "Swamp - [Upper Graveyard] Obscured Behind Hill": TunicLocationData("Swamp", "Swamp Mid"),
     "Swamp - [South Graveyard] 4 Orange Skulls": TunicLocationData("Swamp", "Swamp Front"),
     "Swamp - [Central] Near Ramps Up": TunicLocationData("Swamp", "Swamp Mid"),
@@ -331,6 +332,7 @@ all_locations.update(grass_location_table)
 all_locations.update(breakable_location_table)
 all_locations.update(fuse_location_table)
 all_locations.update(bell_location_table)
+all_locations.update(enemy_location_table)
 
 location_name_groups: dict[str, set[str]] = {}
 for loc_name, loc_data in location_table.items():

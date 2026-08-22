@@ -1,6 +1,11 @@
+from enum import StrEnum
+
 base_id = 509342400
 
 laurels = "Hero's Laurels"
+stick = "Stick"
+sword = "Sword"
+sword_upgrade = "Sword Upgrade"
 grapple = "Magic Orb"
 ice_dagger = "Magic Dagger"
 fire_wand = "Magic Wand"
@@ -16,6 +21,7 @@ key = "Key"
 house_key = "Old House Key"
 vault_key = "Fortress Vault Key"
 mask = "Scavenger Mask"
+att_offering = "ATT Offering"
 red_hexagon = "Red Questagon"
 green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
@@ -45,7 +51,48 @@ atoll_southeast_fuse = "Atoll Southeast Fuse"
 atoll_southwest_fuse = "Atoll Southwest Fuse"
 library_lab_fuse = "Library Lab Fuse"
 
+
+class EnemySouls(StrEnum):
+    administrator = "Enemy Soul (Administrator)"
+    phrend = "Enemy Soul (Phrend)"
+    beefboy = "Enemy Soul (Beefboy)"
+    blobs = "Enemy Soul (Blobs)"
+    fleemers = "Enemy Soul (Fleemers)"
+    crabs = "Enemy Soul (Crabs)"
+    chompignom = "Enemy Soul (Chompignom)"
+    husher = "Enemy Soul (Husher)"
+    autobolt = "Enemy Soul (Autobolt)"
+    zombie_foxes = "Enemy Soul (Zombie Foxes)"
+    frogs = "Enemy Soul (Frogs)"
+    lost_echo = "Enemy Soul (Lost Echo)"
+    gunslinger = "Enemy Soul (Gunslinger)"
+    hedgehogs = "Enemy Soul (Hedgehogs)"
+    laser_trap = "Enemy Soul (Laser Trap)"
+    envoy = "Enemy Soul (Envoy)"
+    garden_knight = "Enemy Soul (Garden Knight)"
+    librarian = "Enemy Soul (Librarian)"
+    plover = "Enemy Soul (Plover)"
+    fairies = "Enemy Soul (Fairies)"
+    scavengers = "Enemy Soul (Scavengers)"
+    boss_scavenger = "Enemy Soul (Boss Scavenger)"
+    tentacle = "Enemy Soul (Tentacle)"
+    rudelings = "Enemy Soul (Rudelings)"
+    spiders = "Enemy Soul (Spiders)"
+    siege_engine = "Enemy Soul (Siege Engine)"
+    slorm = "Enemy Soul (Slorm)"
+    baby_slorm = "Enemy Soul (Baby Slorm)"
+    voidling = "Enemy Soul (Voidling)"
+    custodians = "Enemy Soul (Custodians)"
+    voidtouched = "Enemy Soul (Voidtouched)"
+    heir = "Enemy Soul (The Heir)"
+
+
 # "Quarry - [East] Bombable Wall" is excluded from this list since it has slightly different rules
-bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Wing] Bombable Wall",
-              "Overworld - [Central] Bombable Wall", "Overworld - [Southwest] Bombable Wall Near Fountain",
-              "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
+bomb_walls: dict[str, list[str]] = {
+    "East Forest - Bombable Wall": [EnemySouls.blobs, EnemySouls.rudelings],
+    "Eastern Vault Fortress - [East Wing] Bombable Wall": [EnemySouls.custodians],
+    "Overworld - [Central] Bombable Wall": [EnemySouls.blobs, EnemySouls.hedgehogs],
+    "Overworld - [Southwest] Bombable Wall Near Fountain": [EnemySouls.rudelings, EnemySouls.hedgehogs],
+    "Quarry - [West] Upper Area Bombable Wall": [EnemySouls.scavengers],
+    "Ruined Atoll - [Northwest] Bombable Wall": [EnemySouls.frogs],
+}
