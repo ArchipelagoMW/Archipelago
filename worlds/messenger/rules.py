@@ -129,11 +129,11 @@ class MessengerRules:
             # Glacial Peak
             "Glacial Peak - Portal -> Glacial Peak - Tower Entrance Shop":
                 self.has_vertical,
-            "Glacial Peak - Left -> Elemental Skylands - Air Shmup":
+            "Glacial Peak - Left exit":
                 lambda state: state.has("Magic Firefly", self.player)
                               and state.multiworld.get_location("Quillshroom Marsh - Queen of Quills", self.player)
                               .can_reach(state),
-            "Glacial Peak - Top -> Cloud Ruins - Left":
+            "Glacial Peak - Top exit":
                 lambda state: state.has("Ruxxtin's Amulet", self.player),
             "Glacial Peak - Projectile Spike Pit Checkpoint -> Glacial Peak - Left":
                 lambda state: self.has_dart(state) or (self.can_dboost(state) and self.has_wingsuit(state)),
@@ -200,7 +200,7 @@ class MessengerRules:
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (
-                            self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
+                        self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
             "Riviere Turquoise - Launch of Faith Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) and self.can_dboost(state),
             "Riviere Turquoise - Flower Flight Checkpoint -> Riviere Turquoise - Waterfall Shop":
@@ -233,7 +233,7 @@ class MessengerRules:
             "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Crushing Pits Shop": [
                 self.world.get_region("Howling Grotto - Emerald Golem Shop")
             ],
-            "Glacial Peak - Left -> Elemental Skylands - Air Shmup": [
+            "Glacial Peak - Left exit": [
                 self.world.get_location("Quillshroom Marsh - Queen of Quills").parent_region
             ],
         }
@@ -432,7 +432,7 @@ class MessengerHardRules(MessengerRules):
                 "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
                     self.true,
                 # Glacial Peak
-                "Glacial Peak - Left -> Elemental Skylands - Air Shmup":
+                "Glacial Peak - Left exit":
                     lambda state: self.has_windmill(state) or
                                   (state.has("Magic Firefly", self.player) and
                                    state.multiworld.get_location(
