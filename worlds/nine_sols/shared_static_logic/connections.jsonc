@@ -2431,6 +2431,17 @@
         // LS parry hover also works, but it turns out you need AD OR CL to reach the ledge by the pink pool anyway
         // (TCK would discard the LS), so LS logic ends up adding nothing new to vanilla + medium logic here
     },
+    // You can however reach the left pink pool without grapple on LS logic
+    {
+        "from": "ED (Passages) - Left Pink Pool", "to": "ED (Passages) - Statue In Left Chasm",
+        "ls_requires": [ //parry hover to reach the statue from the pool
+            { "item": "Ledge Grab" }, 
+            { "item": "Cloud Leap"}, // to obtain ledge storage from left side of pink pool
+            { "item": "Air Dash" } // to dash past the waterfall on right side of pink pool
+
+        ]
+        // bow hover would work but all these abilities are needed to reach the pool without grapple anyways so it is redundant
+    },
     {
         "from": "ED (Passages) - Statue In Left Chasm", "to": "ED (Passages) - Hack Statue In Left Chasm",
         "requires": [ { "item": "Charged Strike" } ], // and the statue itself has a shield
