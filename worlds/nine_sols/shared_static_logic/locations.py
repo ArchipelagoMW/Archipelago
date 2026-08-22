@@ -1,0 +1,2203 @@
+locations_data = [
+    # Apeman Facility (Monitoring)
+    {
+        "address": 101, "name": "AF (Monitoring): Break Corpse",
+        "region": "AF (Monitoring) - Root Node", "requires": [ { "anyOf": [
+            { "item": "Wall Climb" }, { "item": "Cloud Leap" }
+        ] } ] # just to climb out of the little tutorial vent
+    },
+    {
+        "address": 102, "name": "AF (Monitoring): Upper Right",
+        "region": "AF (Monitoring) - Vents", "requires": []
+    },
+    {
+        "address": 103, "name": "AF (Monitoring): Lower Vent",
+        "region": "AF (Monitoring) - Vents", "requires": []
+    },
+    {
+        "address": 104, "name": "AF (Monitoring): Examine Apeman Surveillance",
+        "region": "AF (Monitoring) - Exit", "requires": []
+    },
+
+    # Apeman Facility (Elevator)
+    {
+        "address": 201, "name": "AF (Elevator): Hidden Atop Upper Level Pagoda (Left Chest)",
+        "region": "AF (Elevator) - Upper Right Pagoda", "requires": []
+    },
+    {
+        "address": 207, "name": "AF (Elevator): Hidden Atop Upper Level Pagoda (Right Chest)",
+        "region": "AF (Elevator) - Upper Right Pagoda", "requires": []
+    },
+    {
+        "address": 202, "name": "AF (Elevator): Moving Boxes",
+        "region": "AF (Elevator) - Between Root Nodes", "requires": []
+    },
+    {
+        "address": 203, "name": "AF (Elevator): Elevator Shaft",
+        "region": "AF (Elevator) - Lower Root Node", "requires": []
+    },
+    {
+        "address": 204, "name": "AF (Elevator): Defeat Red Tiger Elite: Baichang",
+        "region": "AF (Elevator) - Baichang Arena", "requires": []
+    },
+    {
+        "address": 205, "name": "AF (Elevator): Hack Statue",
+        "region": "AF (Elevator) - Statue Chest", "requires": [
+            { "region": "AF (Elevator) - Below Root Node" },
+            { "item": "Tai-Chi Kick" }
+        ]
+    },
+    {
+        "address": 206, "name": "AF (Elevator): Over Electrified Floor",
+        "region": "AF (Elevator) - Moving Boxes Below Root Node", "requires": []
+    },
+
+    # Apeman Facility (Depths)
+    {
+        "address": 301, "name": "AF (Depths): Crystal Caves",
+        "region": "AF (Depths) - Crystal Caves", "requires": []
+    },
+    {
+        "address": 302, "name": "AF (Depths): Defeat Celestial Spectre: Shangui (1st Reward)",
+        "region": "AF (Depths) - Shangui Arena", "requires": []
+    },
+    {
+        "address": 303, "name": "AF (Depths): Defeat Celestial Spectre: Shangui (2nd Reward)",
+        "region": "AF (Depths) - Shangui Arena", "requires": []
+    },
+    {
+        "address": 304, "name": "AF (Depths): Below Root Node",
+        "region": "AF (Depths) - Small Chest Below Root Node", "requires": []
+    },
+    {
+        "address": 305, "name": "AF (Depths): Hack 3 Statues",
+        "region": "AF (Depths) - Lower Left Exit", "requires": [ # hacking 1 AND
+            { "item": "Tai-Chi Kick" }, # 1st statue is also in Lower Left Exit next to the chest; requires TCK
+            { "region": "AF (Depths) - Climb to Root Node" }, # hidden on left side of the shaft; requires parry only
+            { "region": "AF (Depths) - Upper Right" } # left of the box puzzle before the chest; requires parry only
+        ]
+    },
+    {
+        "address": 306, "name": "AF (Depths): Lower Level",
+        "region": "AF (Depths) - Lower Level", "requires": []
+    },
+    {
+        "address": 307, "name": "AF (Depths): Under Lower Left Exit",
+        "region": "AF (Depths) - Under Lower Left Exit", "requires": []
+    },
+    {
+        "address": 308, "name": "AF (Depths): Tianhuo Flower Under Elevator",
+        "region": "AF (Depths) - Climb to Root Node", "requires": [] # hacking 1
+    },
+    {
+        "address": 309, "name": "AF (Depths): Upper Right Chest (1st Reward)",
+        "region": "AF (Depths) - Upper Right Chest", "requires": []
+    },
+    {
+        "address": 310, "name": "AF (Depths): Upper Right Chest (2nd Reward)",
+        "region": "AF (Depths) - Upper Right Chest", "requires": []
+    },
+
+    # Central Hall
+    {
+        "address": 401, "name": "Central Hall: Examine Council Sign",
+        "region": "Central Hall - Center", "requires": []
+    },
+    {
+        "address": 402, "name": "Central Hall: Examine Launch Memorial",
+        "region": "Central Hall - Center", "requires": []
+    },
+    {
+        "address": 403, "name": "Central Hall: Examine Council Tenets",
+        "region": "Central Hall - Left", "requires": []
+    },
+    {
+        "address": 404, "name": "Central Hall: Turrets and Double Axe Robot Room",
+        "region": "Central Hall - Left", "requires": [
+            { "item": "Unbounded Counter" },
+            {
+                "option": "prevent_annoying_runbacks",
+                "true": [{ "item": "Mystic Nymph: Scout Mode" }],
+                "false": []
+            }
+        ]
+    },
+    {
+        "address": 405, "name": "Central Hall: Vents",
+        "region": "Central Hall - Left Vents", "requires": [] # hacking
+    },
+
+    # Four Seasons Pavilion
+    {
+        "address": 501, "name": "FSP: Kuafu's 1st Gift",
+        "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+        "address": 502, "name": "FSP: Kuafu's 2nd Gift",
+        "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+        "address": 503, "name": "FSP: Decode the Ancient Sheet Music",
+        "region": "FSP - Root Node", "requires": [
+            { "item": "(Artifact) Ancient Sheet Music" },
+            { "location": "Goumang's Vital Sanctum" }
+        ]
+    },
+    {
+        "address": 504, "name": "FSP: Have Yi's Portrait Painted",
+        "region": "FSP - Root Node", "requires": [
+            { "item": "(Artifact) The Four Treasures of the Study" },
+            { "item": "(Artifact) Kunlun Immortal Portrait" }
+        ]
+    },
+    {
+        "address": 505, "name": "FSP: Give Yi's Portrait to Chiyou",
+        "region": "FSP - Root Node", "requires": [
+            { "item": "Event - Chiyou in FSP" },
+            { "item": "(Artifact) Portrait of Yi" }
+        ]
+    },
+    {
+        "address": 506, "name": "FSP: Receive Peach Blossom Village Quest",
+        "region": "FSP - Root Node", "requires": []
+    },
+    {
+        "address": 507, "name": "FSP: Take Shuanshuan's Book",
+        "region": "FSP - Root Node", "requires": [
+            # these are the actual vanilla game conditions for spawning the book; prereqs like 4 Treasures are left implied
+            { "location": "FSP: Give Yi's Portrait to Chiyou" },
+            { "location": "Jiequan's Vital Sanctum" },
+            # but in rando it's possible to give Yi's portrait without Shuanshuan ever painting it, so we can't leave this implied
+            { "location": "FSP: Have Yi's Portrait Painted" }
+        ]
+    },
+    {
+        "address": 508, "name": "FSP: Give Shuanshuan's Book to Chiyou",
+        "region": "FSP - Root Node", "requires": [
+            # testing implies these can't be done out of order, Portrait scene must be first
+            { "location": "FSP: Give Yi's Portrait to Chiyou" },
+            { "item": "(Artifact) Legend of the Porky Heroes" }
+        ]
+    },
+    {
+        "address": 509, "name": "FSP: Reveal the Kunlun Immortal Portrait's Secret",
+        "region": "FSP - Root Node", "requires": [
+            # these are the actual vanilla game conditions for the cutscene; prereqs like 4 Treasures are left implied
+            { "item": "(Artifact) Kunlun Immortal Portrait" },
+            { "item": "Cloud Leap" }, # presumably so you can actually reach the treasure
+            { "location": "FSP: Have Yi's Portrait Painted" }
+        ]
+    },
+    {
+        "address": 510, "name": "FSP: Half-Grown Tree Chest", "region": "FSP - Root Node",
+        "requires": [ { "item": "(Artifact) Unknown Seed" }, { "item": "(Artifact) GM Fertilizer" } ], # and Shennong
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] # CL setup then CL + LS vault + CL again
+    },
+    {
+        "address": 511, "name": "FSP: Fully Grown Tree 1st Chest",
+        "region": "FSP - Roof", "requires": [] # and Shennong
+    },
+    {
+        "address": 512, "name": "FSP: Fully Grown Tree 2nd Chest",
+        "region": "FSP - Roof", "requires": []
+    },
+    {
+        "address": 513, "name": "FSP: Isolate the Mutant Gene Sequence",
+        "region": "FSP - Root Node", "requires": [ { "item": "Tianhuo Serum" }, { "item": "Ji's Hair" } ]
+    },
+    {
+        "address": 514, "name": "FSP: Give Kuafu the Homing Darts",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Homing Darts" } ]
+    },
+    {
+        "address": 515, "name": "FSP: Give Kuafu the Thunderburst Bomb",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Thunderburst Bomb" } ]
+    },
+
+    # Events
+    {
+        "address": None, "name": "Victory - Eggnog",
+        "region": "Central Hall - Center", "requires": [
+            { "item_group": "Sol Seals", "count_option": "seals_for_eigong" },
+            # the Eigong fight itself requires AD OR CL just for the judgement cut w/ crimson 3rd slash
+            { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } # combat logic
+        ]
+        # If the TRC->TRI->PonR content were included, this would also require:
+        # { "region": "TRC - Dusk Guardian HQ Lower Levels" },
+        # # movement required in TRI
+        # { "item": "Air Dash" }, { "item": "Cloud Leap" } # AND wall climb
+    },
+    {
+        "address": None, "name": "Event - Kuafu in FSP",
+        "region": "FSP - Root Node", "requires": [
+            {
+                "option": "shop_unlocks",
+                "vanilla_like_locations": { "region": "Radiant Pagoda - After Yingzhao" },
+                "sol_seals": { "item_group": "Sol Seals", "count_option": "kuafu_shop_unlock_sol_seals" },
+                "unlock_items": { "item": "Progressive Shop Unlock" }
+            }
+        ]
+    },
+    {
+        "address": None, "name": "Event - Chiyou in FSP",
+        "region": "FSP - Root Node", "requires": [
+            {
+                "option": "shop_unlocks",
+                "vanilla_like_locations": { "location": "Factory (GH): Raise the Bridge for Chiyou" },
+                "sol_seals": { "item_group": "Sol Seals", "count_option": "chiyou_shop_unlock_sol_seals" },
+                "unlock_items": { "item": "Progressive Shop Unlock", "count": 2 }
+            }
+        ]
+    },
+    {
+        "address": None, "name": "Event - Kuafu Extra Shop Inventory",
+        "region": "FSP - Root Node", "requires": [
+            { "item": "Event - Kuafu in FSP" },
+            {
+                "option": "shop_unlocks",
+                "vanilla_like_locations": { "item": "Event - Chiyou in FSP" },
+                "sol_seals": { "item_group": "Sol Seals", "count_option": "kuafu_extra_inventory_unlock_sol_seals" },
+                "unlock_items": { "item": "Progressive Shop Unlock", "count": 3 }
+            }
+        ]
+    },
+    # No Shennong event because rando moves him into FSP immediately
+    {
+        "address": None, "name": "Event - Jiequan 1 Fight Unlocked",
+        "region": "Factory (GH) - Lower Levels & Root Node",
+        "requires": [
+            { "item_group": "Sol Seals", "count_option": "seals_for_prison" },
+            # Prison weakened state disables AD, CS, Talismans, and nerfs horizontal distance of regular jump and CL.
+            # Most of the Prison requires either N(ymph) to hack ropes/doors or CL to platform around, regardless of weakened state.
+            # The exceptions are the gaps and climbs with a grapple point and the ledge immediately after the first such gap:
+            # - weakened, the first grapple gap requires G or parry hover (LG AND CL); unweakened, it requires G OR CL OR AD
+            # - the ledge afterward requires LG OR CL regardless of weakened state
+            # - the grapple climbs require CL OR G
+            # Putting all that together, we get:
+            # - unweakened Prison: CL OR (G AND LG AND N)
+            # - weakened (vanilla-logic) Prison: G AND (CL OR (LG AND N))
+            # - I won't implement this, but weakened LS-logic Prison is: (LG AND CL) OR (vanilla-logic)
+            {
+                "option": "prevent_weakened_prison_state",
+                "true": [
+                    { "anyOf": [
+                        { "item": "Cloud Leap" },
+                        [
+                            { "item": "Grapple" },
+                            { "item": "Ledge Grab" },
+                            { "item": "Mystic Nymph: Scout Mode" }
+                        ]
+                    ] }
+                ],
+                "false": [
+                    { "item": "Grapple" },
+                    { "anyOf": [
+                        { "item": "Cloud Leap" },
+                        [ { "item": "Ledge Grab" }, { "item": "Mystic Nymph: Scout Mode" } ]
+                    ] }
+                ]
+            }
+        ]
+    },
+    {
+        "address": None, "name": "Event - Lady Ethereal Soulscape Unlocked",
+        "region": "Cortex Center - Root Node", "requires": [ { "item_group": "Sol Seals", "count_option": "seals_for_ethereal" } ]
+    },
+
+    # Trick Events
+    {
+        "category": "medium_logic", "address": None, "name": "Trick - Long Jump with Swift Runner",
+        "region": "FSP - Root Node", "requires": [
+            {
+                "option": "randomize_skill_tree",
+                "true": [ { "item": "Swift Runner" } ],
+                "false": []
+            }
+        ]
+    },
+    {
+        "category": "medium_logic", "address": None, "name": "Trick - Bow Hover",
+        "region": "FSP - Root Node", "requires": [
+            {
+                "option": "randomize_shops",
+                "true": [ { "anyOf": [
+                    { "item": "Progressive Cloud Piercer" },
+                    { "item": "Progressive Thunder Buster" },
+                    { "item": "Progressive Shadow Hunter" }
+                ] } ],
+                "false": [ { "anyOf": [
+                    { "item": "Arrow: Cloud Piercer" },
+                    { "item": "Arrow: Thunder Buster" },
+                    { "item": "Arrow: Shadow Hunter" }
+                ] } ]
+            }
+        ]
+    },
+    {
+        "category": "medium_logic", "address": None, "name": "Trick - Break CS Barrier With Bow",
+        "region": "FSP - Root Node", "requires": [
+            {
+                "option": "randomize_shops",
+                "true": [ { "item": "Progressive Cloud Piercer", "count": 2 } ],
+                "false": [
+                    { "region": "FSP - Kuafu's Shop" }, # so you can actually buy S from him
+                    { "item": "Arrow: Cloud Piercer" },
+                    { "item": "Dark Steel" } # just 1 to afford Cloud Piercer S
+                ]
+            }
+        ]
+    },
+    {
+        "category": "medium_logic", "address": None, "name": "Trick - Break One-Way Barrier With Bow",
+        "region": "FSP - Root Node", "requires": [
+            {
+                "option": "randomize_shops",
+                "true": [ { "item": "Progressive Thunder Buster" } ],
+                "false": [ { "item": "Arrow: Thunder Buster" } ]
+            }
+        ]
+    },
+
+    # Cortex Center
+    {
+        "address": 601, "name": "Cortex Center: Defeat Lady Ethereal",
+        "region": "Cortex Center - Root Node After Boss", "requires": []
+    },
+    {
+        "address": 602, "name": "Cortex Center: Tianhuo Flower After Soulscape",
+        "region": "Cortex Center - Root Node After Boss", "requires": []
+    },
+    {
+        "address": 603, "name": "Cortex Center: Retrieve Chip From Shanhai 9000",
+        "region": "Cortex Center - Root Node After Boss", "requires": []
+    },
+    {
+        "address": 604, "name": "Cortex Center: Crystal Caves Upper Right",
+        "region": "Cortex Center - Caves Upper Right", "requires": []
+    },
+    {
+        "address": 605, "name": "Cortex Center: Crystal Caves Central Chamber",
+        "region": "Cortex Center - Caves Middle Left",
+        "requires": [
+            { "item": "Charged Strike" }, # to break in
+            { "anyOf": [ # we can't assume the single-use floor will be used optimally, so either...
+                { "item": "Mystic Nymph: Scout Mode" }, # unlock the ropes
+                { "item": "Cloud Leap" } # or jump to the one short rope that's already unlocked
+            ] }
+        ],
+        "medium_requires": [
+            { "anyOf": [ # to break in
+                { "item": "Charged Strike" },
+                { "item": "Trick - Break CS Barrier With Bow" }
+            ] }
+            # T-dash replaces the need to unlock ropes
+        ]
+    },
+    {
+        "address": 606, "name": "Cortex Center: Near Left Exit",
+        "region": "Cortex Center - Left Exit", "requires": []
+    },
+
+    # Central Transport Hub
+    {
+        "address": 701, "name": "CTH: Large Elevator Shaft",
+        "region": "CTH - Elevator Shaft Alcove", "requires": []
+    },
+    {
+        "address": 702, "name": "CTH: Defeat Red Tiger Elite: Yanren",
+        "region": "CTH - Yanren Arena", "requires": []
+    },
+    {
+        "address": 703, "name": "CTH: Side Room Near Right Exit",
+        "region": "CTH - Upper Right Exit", "requires": [
+            { "anyOf": [
+                { "item": "Cloud Leap" }, # bring boxes to the left, then simply jump on top of them and up to the chest
+                [ # the intended path all around the room
+                    { "item": "Mystic Nymph: Scout Mode" }, # hold upper box so it can shield your ride on the lower box
+                    { "item": "Wall Climb" }, # most of the green walls in here are required (without the CL shortcut)
+                    { "item": "Ledge Grab" } # from upper box to next ledge
+                ]
+            ] }
+        ]
+    },
+    {
+        "address": 704, "name": "CTH: Lower Left Vents",
+        "region": "CTH - Lower Left Vents", "requires": []
+    },
+    {
+        "address": 705, "name": "CTH: Examine Panel by Root Node",
+        "region": "CTH - Root Node", "requires": []
+    },
+    {
+        "address": 706, "name": "CTH: Hack 2 Statues",
+        "region": "CTH - Lower Exits", "requires": [
+            { "item": "Tai-Chi Kick" }, # to disable the statue down here
+            { "region": "CTH - Vents Statue" }
+        ]
+    },
+
+    # Power Reservoir (East)
+    {
+        "address": 801, "name": "PR (East): After Lasers",
+        "region": "PR (East) - Root Node", "requires": []
+    },
+    {
+        "address": 802, "name": "PR (East): Under Moving Box",
+        "region": "PR (East) - Root Node", "requires": []
+    },
+    {
+        "address": 803, "name": "PR (East): Top Platform in Upper Right Shaft", "region": "PR (East) - Upper Right",
+        "requires": [ { "item": "Mystic Nymph: Scout Mode" } ], # to lower rope
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] # "triple jump": CL, LS vault, CL again
+    }, # wall slide AND T-dash technically works, but the usable ledge is so far away I'm only putting the triple jump in logic
+    {
+        "address": 804, "name": "PR (East): Hack Statue",
+        "region": "PR (East) - Upper Right", "requires": [ { "item": "Tai-Chi Kick" } ] # AND hacking
+    },
+    {
+        "address": 805, "name": "PR (East): Upper Left Room",
+        "region": "PR (East) - Upper Left", "requires": []
+    },
+    {
+        "address": 806, "name": "PR (East): Defeat Celestial Guardian: Jiaoduan",
+        "region": "PR (East) - Jiaoduan Arena", "requires": []
+    },
+
+    # Power Reservoir (Central)
+    {
+        "address": 901, "name": "PR (Central): Breakable Wall Near Right Transporter",
+        "region": "PR (Central) - Right Transporter", "requires": []
+    },
+    {
+        "address": 902, "name": "PR (Central): Near Moving Box",
+        "region": "PR (Central) - Upper Right", "requires": []
+    },
+    {
+        "address": 903, "name": "PR (Central): Hack Statue",
+        "region": "PR (Central) - Upper Right", "requires": [
+            { "region": "PR (Central) - Upper Right Roof Statue" },
+            { "item": "Tai-Chi Kick" } # for the statue
+        ]
+    },
+    {
+        "address": 904, "name": "PR (Central): Guarded By Beetle",
+        "region": "PR (Central) - Building Right of Light Bridge", "requires": []
+    },
+    {
+        "address": 905, "name": "PR (Central): Near One-Way Door Right of Pagoda",
+        "region": "PR (Central) - Building Right of Light Bridge", "requires": []
+    },
+    {
+        "address": 906, "name": "PR (Central): Retrieve Chip From Shanhai 9000",
+        "region": "PR (Central) - Light Bridge", "requires": []
+    },
+    {
+        "address": 907, "name": "PR (Central): Examine Energy Meter",
+        "region": "PR (Central) - Left Transporter", "requires": []
+    },
+    {
+        "address": 908, "name": "PR (Central): Near Left Transporter",
+        "region": "PR (Central) - Chest Near Left Transporter", "requires": []
+    },
+    {
+        "address": 909, "name": "PR (Central): Left of Light Bridge",
+        "region": "PR (Central) - Chest Left of Light Bridge", "requires": []
+    },
+
+    # Power Reservoir (West)
+    {
+        "address": 1001, "name": "PR (West): Below Root Node",
+        "region": "PR (West) - Root Node", "requires": [] # hacking the lift
+    },
+    {
+        "address": 1002, "name": "PR (West): Guarded By Turret",
+        "region": "PR (West) - Guarded Chest", "requires": [ { "anyOf": [
+            { "item": "Mystic Nymph: Scout Mode" },
+            { "item": "Unbounded Counter" }
+        ] } ] # hacking 2
+    },
+    {
+        "address": 1003, "name": "PR (West): Vents",
+        "region": "PR (West) - Guarded Chest", "requires": []
+    },
+    {
+        "address": 1004, "name": "PR (West): Hack Statue",
+        "region": "PR (West) - Power Lines",
+        "requires": [
+            { "anyOf": [
+                { "item": "Unbounded Counter" }, # to destroy the turret
+                { "region": "PR (West) - Above Power Lines" }, # to move a box in between the turret and the hacking point
+                [ { "item": "Cloud Leap" }, { "item": "Wall Climb" } ] # to jump directly up to that box
+            ] },
+            { "item": "Tai-Chi Kick" } # required for the statue itself, and the easiest way to cross the red floor
+        ],
+        "medium_requires": [
+            { "item": "Trick - Break One-Way Barrier With Bow" }, # skip the whole turret hack and platforming
+            { "item": "Tai-Chi Kick" } # still required for the statue itself
+        ]
+    },
+    {
+        "address": 1005, "name": "PR (West): Dusk Guardian Recording Device",
+        "region": "PR (West) - Tao Fruit", "requires": []
+    },
+    {
+        "address": 1006, "name": "PR (West): Tianhuo Flower",
+        "region": "PR (West) - Tao Fruit", "requires": []
+    },
+    {
+        "address": 1007, "name": "PR (West): Near Right Transporter",
+        "region": "PR (West) - Above Power Lines", "requires": []
+    },
+
+    # Radiant Pagoda
+    {
+        "address": 1101, "name": "Examine Radiant Pagoda Control Panel",
+        "region": "Radiant Pagoda - Root Node", "requires": []
+    },
+    {
+        "address": 1102, "name": "Defeat General Yingzhao",
+        "region": "Radiant Pagoda - After Yingzhao", "requires": []
+    },
+    {
+        "address": 1103, "name": "Kuafu's Vital Sanctum",
+        "region": "Radiant Pagoda - After Yingzhao", "requires": []
+    },
+
+    # Lake Yaochi Ruins
+    {
+        "address": 1201, "name": "LYR: First Chest in Leftmost Pool",
+        "region": "LYR - Left Exit", "requires": []
+    },
+    {
+        "address": 1202, "name": "LYR: Second Chest in Leftmost Pool",
+        "region": "LYR - Left Exit", "requires": []
+    },
+    {
+        "address": 1203, "name": "LYR: Above Leftmost Pool",
+        "region": "LYR - Left Exit", "requires": [ { "anyOf": [
+            { "item": "Grapple" }, { "item": "Cloud Leap" }
+        ] } ] # LS tricks don't get us high enough
+    },
+    {
+        "address": 1204, "name": "LYR: Right of Leftmost Pool",
+        "region": "LYR - Root Node", "requires": []
+    },
+    {
+        "address": 1205, "name": "LYR: Hear Ji Reminisce About Daybreak Tower",
+        "region": "LYR - Root Node", "requires": []
+    },
+    {
+        "address": 1206, "name": "LYR: Daybreak Tower Chest",
+        "region": "LYR - Root Node", "requires": []
+    },
+    {
+        "address": 1207, "name": "LYR: Daybreak Tower Bell Puzzle",
+        "region": "LYR - Root Node", "requires": [
+            { "item": "Ancient Penglai Ballad" }, # for the combination
+            { "item": "Charged Strike" } # to ring the bells
+        ] # AND hacking the chest itself
+    },
+    {
+        "address": 1208, "name": "LYR: Above Root Node",
+        "region": "LYR - Root Node",
+        "requires": [{ "region": "LYR - Upper Exit" }], # just fall down
+        "medium_requires": [{ "item": "Trick - Bow Hover" }] # from the higher ground to the right
+        # ls_requires would be redundant since LS immediately gets you access to Upper Exit
+    },
+    {
+        "address": 1209, "name": "LYR: Statue Hack Room Near Root Node", "region": "LYR - Root Node",
+        "requires": [ { "item": "Charged Strike" } ], # AND hacking
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
+    },
+    {
+        "address": 1210, "name": "LYR: Examine Stele",
+        "region": "LYR - Right Exit", "requires": []
+    },
+    {
+        "address": 1211, "name": "LYR: Nymph Puzzle Room Near Stele",
+        "region": "LYR - Right Exit", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+    {
+        "address": 1212, "name": "LYR: Ropes Near Right Exit",
+        "region": "LYR - Right Exit", "requires": []
+    },
+
+    # Greenhouse
+    {
+        "address": 1301, "name": "Greenhouse: Hackable Rope Near Wreckage",
+        "region": "Greenhouse - Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+    {
+        "address": 1302, "name": "Greenhouse: Examine Water Report",
+        "region": "Greenhouse - Chiyou & 1st Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1303, "name": "Greenhouse: Retrieve Chip From Shanhai 9000",
+        "region": "Greenhouse - Chiyou & 1st Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1304, "name": "Greenhouse: Near Rightmost Hanging Pool",
+        "region": "Greenhouse - 2nd Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1305, "name": "Greenhouse: Hidden in Upper Level Foliage",
+        "region": "Greenhouse - 2nd Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1306, "name": "Greenhouse: Vase In Water Above Root Node",
+        "region": "Greenhouse - 2nd Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1307, "name": "Greenhouse: In Leftmost Hanging Pool",
+        "region": "Greenhouse - 3rd Waterfall Hack", "requires": []
+    },
+    {
+        "address": 1308, "name": "Greenhouse: Examine Mutated Crops",
+        "region": "Greenhouse - Mutated Crops", "requires": []
+    },
+    {
+        "address": 1309, "name": "Greenhouse: Defeat Celestial Spectre: Shuigui",
+        "region": "Greenhouse - Shuigui Arena", "requires": [{ "item": "Charged Strike" }] # Cloud Piercer S/X does not work
+    },
+
+    # Water & Oxygen Synthesis
+    {
+        "address": 1401, "name": "W&OS: High Platforms Right of Center",
+        "region": "W&OS - Center", "requires": []
+    },
+    {
+        "address": 1402, "name": "W&OS: High Platforms Left of Center",
+        "region": "W&OS - Pipeline Panel", "requires": []
+    },
+    {
+        "address": 1403, "name": "W&OS: Tianhuo Flower",
+        "region": "W&OS - Red Crystal Cave", "requires": []
+    },
+    {
+        "address": 1404, "name": "W&OS: Dusk Guardian Recording Device",
+        "region": "W&OS - Red Crystal Cave", "requires": []
+    },
+    {
+        "address": 1405, "name": "W&OS: Examine Pipeline Panel",
+        "region": "W&OS - Pipeline Panel", "requires": []
+    },
+    {
+        "address": 1406, "name": "W&OS: Climb Elevator Shaft By Root Node",
+        "region": "W&OS - Root Node", "requires": [
+            { "item": "Mystic Nymph: Scout Mode" },
+            { "anyOf": [
+                { "item": "Grapple" },
+                [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
+                # this is barely possible with CL alone, but too tight for default logic
+            ] }
+        ]
+    },
+
+    # Agrarian Hall
+    {
+        "address": 1501, "name": "Chest After Goumang (1st Reward)",
+        "region": "Agrarian Hall - After Goumang", "requires": []
+    },
+    {
+        "address": 1502, "name": "Chest After Goumang (2nd Reward)",
+        "region": "Agrarian Hall - After Goumang", "requires": []
+    },
+    {
+        "address": 1503, "name": "Goumang's Vital Sanctum",
+        "region": "Agrarian Hall - After Goumang", "requires": []
+    },
+
+    # Yinglong Canal
+    {
+        "address": 1601, "name": "Yinglong Canal: Top Left of Upper Caves",
+        "region": "Yinglong Canal - Upper Caves", "requires": [] # hacking
+    },
+    {
+        "address": 1602, "name": "Yinglong Canal: Bottom Left of Upper Caves",
+        "region": "Yinglong Canal - Farmland Markings", "requires": []
+    },
+    {
+        "address": 1603, "name": "Yinglong Canal: Examine Farmland Markings",
+        "region": "Yinglong Canal - Farmland Markings", "requires": []
+    },
+    {
+        "address": 1604, "name": "Yinglong Canal: Climbing Puzzle Above Farmland Markings",
+        "region": "Yinglong Canal - Farmland Markings", "requires": [ { "anyOf": [
+            [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ],
+            [
+                { "item": "Wall Climb" },
+                { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
+            ]
+        ] } ]
+    },
+    {
+        "address": 1605, "name": "Yinglong Canal: Between Egg Cave and Farmland Markings",
+        "region": "Yinglong Canal - Above Egg Cave", "requires": []
+    },
+    {
+        "address": 1606, "name": "Yinglong Canal: Break Center Yinglong Egg",
+        "region": "Yinglong Canal - Egg Cave & Left Exit", "requires": [ { "anyOf": [
+            { "item": "Wall Climb" }, { "item": "Cloud Leap" }
+        ] } ]
+    },
+    {
+        "address": 1607, "name": "Yinglong Canal: Near Root Node",
+        "region": "Yinglong Canal - Ledges Above Root Node", "requires": []
+    },
+
+    # Factory (Great Hall)
+    {
+        "address": 1701, "name": "Factory (GH): Near Rightmost Shield Orb",
+        "region": "Factory (GH) - Lower Levels & Root Node", "requires": []
+    },
+    {
+        "address": 1702, "name": "Factory (GH): Near Root Node",
+        "region": "Factory (GH) - Lower Levels & Root Node", "requires": []
+    },
+    {
+        "address": 1703, "name": "Factory (GH): Near Middle Shield Orb",
+        "region": "Factory (GH) - Lower Levels & Root Node", "requires": []
+    },
+    {
+        "address": 1704, "name": "Factory (GH): Tianhuo Flower Below Hammers",
+        "region": "Factory (GH) - Lower Levels & Root Node", "requires": []
+    },
+    {
+        "address": 1705, "name": "Factory (GH): Break the Hammers",
+        "region": "Factory (GH) - Lower Levels & Root Node", "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "address": 1706, "name": "Factory (GH): Examine Furnace Monitor",
+        "region": "Factory (GH) - Lower Levels & Root Node", "requires": []
+    },
+    {
+        "address": 1707, "name": "Factory (GH): Raise the Bridge for Chiyou",
+        "region": "Factory (GH) - Left Exit", "requires": []
+    },
+    {
+        "address": 1708, "name": "Factory (GH): Roof Above Root Node",
+        "region": "Factory (GH) - Above Root Node", "requires": []
+    },
+    {
+        "address": 1710, "name": "Factory (GH): Near Right Elevator",
+        "region": "Factory (GH) - Above Root Node", "requires": []
+    },
+    {
+        "address": 1711, "name": "Factory (GH): Ball Drop in Platform Puzzle Room",
+        "region": "Factory (GH) - Upper Platforms of Nymph Puzzle Room", "requires": [] # AND hacking
+    },
+    {
+        "address": 1712, "name": "Factory (GH): Recording Device in Platform Puzzle Room",
+        "region": "Factory (GH) - Upper Platforms of Nymph Puzzle Room", "requires": []
+    },
+    {
+        "address": 1713, "name": "Factory (GH): Tianhuo Flower in Platform Puzzle Room",
+        "region": "Factory (GH) - Upper Platforms of Nymph Puzzle Room", "requires": []
+    },
+
+    # Factory (Underground)
+    {
+        "address": 1801, "name": "Factory (U): Near Upper Right Exit",
+        "region": "Factory (U) - Upper Right Exit", "requires": [] # hacking
+    },
+    {
+        "address": 1802, "name": "Factory (U): Defeat Red Tiger Elite: Kuiyan",
+        "region": "Factory (U) - Kuiyan Arena", "requires": []
+    },
+    {
+        "address": 1803, "name": "Factory (U): Near Lower Elevator",
+        "region": "Factory (U) - Main Intersection", "requires": []
+    },
+    {
+        "address": 1804, "name": "Factory (U): Hack 2 Statues", "region": "Factory (U) - Main Intersection",
+        "requires": [
+            { "item": "Charged Strike" }, # to defeat the 1st statue
+            { "region": "Factory (U) - Middle Right Exit" } # has the platform above the 2nd statue
+            # actually getting onto the 2nd statue's ledge can be done with CL OR LG OR TCK OR AD OR CS-dash OR T-dash,
+            # but we already needed CS for the 1st statue, so this part doesn't affect logic
+        ],
+        "medium_requires": [
+            { "item": "Trick - Break CS Barrier With Bow" }, # 1st statue
+            { "region": "Factory (U) - Middle Right Exit" } # and T-dash to reach the 2nd statue's ledge
+        ]
+    },
+    {
+        "address": 1805, "name": "Factory (U): Find Broken Shanhai 9000",
+        "region": "Factory (U) - Broken Shanhai", "requires": []
+    },
+    {
+        "address": 1806, "name": "Factory (U): Examine Evacuation Notice",
+        "region": "Factory (U) - Middle Right Exit", "requires": []
+    },
+    {
+        "address": 1807, "name": "Factory (U): Above Root Node",
+        "region": "Factory (U) - Crystal Passage", "requires": []
+    },
+    {
+        "address": 1808, "name": "Factory (U): Below Walkway to Left Exit",
+        "region": "Factory (U) - Box After Laser", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ],
+        "medium_requires": [] # T-dash
+    },
+    {
+        "address": 1809, "name": "Factory (U): Behind Moving Boxes",
+        "region": "Factory (U) - Moving Boxes Right Side", "requires": []
+    },
+
+    # Outer Warehouse
+    {
+        "address": 1901, "name": "OW: Retrieve Chip From Shanhai 9000",
+        "region": "OW - Root Node & Middle Exits", "requires": []
+    },
+    {
+        "address": 1902, "name": "OW: Above Sol Statue",
+        "region": "OW - Root Node & Middle Exits", "requires": []
+    },
+    {
+        "address": 1903, "name": "OW: Crusher Gauntlet",
+        "region": "OW - Root Node & Middle Exits", "requires": [ { "anyOf": [
+            [
+                { "item": "Wall Climb" },
+                { "anyOf": [
+                    { "item": "Cloud Leap" },
+                    [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ]
+                ] }
+            ],
+            [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
+        ] } ], # AND hacking
+        "medium_requires": [ { "anyOf": [
+            { "item": "Cloud Leap" }, # using T-dash for the first big jump off the crates
+            [
+                { "anyOf": [
+                    [
+                        { "item": "Trick - Bow Hover"}, # to reach the climbable wall after the first piston
+                        { "item": "Trick - Long Jump With Swift Runner" } # to pass the 4 pistons as well as reach the last climbable wall
+                    ],
+                    { "item": "Charged Strike" } # CS Dash can replace what Bow Hover and SR do here
+                ] },
+                { "item": "Wall Climb" }, # not skippable here because we are not requiring CL
+                { "item": "Ledge Grab" } # and lastly this is needed for the very last jump
+                # the left crate track is mainly solved by WC + T-Dash here but both permutations also present another possible solve
+            ]
+        ] } ]
+        # the key constraints here are:
+        # - the final jump past the last horizontal red piston requires CL OR LG
+        # - the jump up to the horizontal piston's ledge *can* be done with a precise and inconsistent CL,
+        # but I'd rather have the logic for it be CL AND (WC OR AD OR LG)
+        # - all crates on the left crate track are either fragile or lack a safe top, so a WC-less route must
+        # get from the crusher stop to the ledge in one jump, which requires CL AND AD, or CL AND T-dash
+    },
+    {
+        "address": 1904, "name": "OW: Enemy Gauntlet Room",
+        "region": "OW - Outside Enemy Gauntlet Room",
+        "requires": [ { "item": "Charged Strike" } ], # to defeat the very last enemy, which happens to be a shielded beetle
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ] # Cloud Piercer S/X works on the beetle too
+    },
+    {
+        "address": 1905, "name": "OW: Vents Above Robot",
+        "region": "OW - Robot", "requires": []
+    },
+    {
+        "address": 1906, "name": "OW: Inside Crate Dropped From Vent Hack",
+        "region": "OW - Robot", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+    {
+        "address": 1907, "name": "OW: Examine Warehouse Database",
+        "region": "OW - Upper Left Exit", "requires": []
+    },
+
+    # Inner Warehouse
+    {
+        "address": 2001, "name": "IW: Hack 3 Statues",
+        "region": "IW - Root Node", "requires": [
+            { "item": "Tai-Chi Kick" }, # 1st and 2nd statues need this
+            { "region": "IW - Upper Right Statue" },
+            { "region": "IW - Above Frogs" },
+            { "region": "IW - Upper Left" },
+            { "item": "Air Dash" } # AND TCK to reach 3rd statue from Upper Left
+        ]
+    },
+    {
+        "address": 2002, "name": "IW: Shielded Walking Chest",
+        "region": "IW - Above Frogs",
+        "requires": [ { "item": "Charged Strike" } ],
+        "medium_requires": [
+            # simply firing two arrows is enough to kill the chest, so the shield recharging is a non-issue
+            { "item": "Trick - Break CS Barrier With Bow" }
+        ],
+        "ls_requires": [
+            # CL + LS vault gets you to the shield tower without fighting Tieyan
+            { "item": "Ledge Grab" }, { "item": "Cloud Leap" }
+        ]
+    },
+    {
+        "address": 2003, "name": "IW: Defeat Celestial Enforcer: Tieyan",
+        "region": "IW - Above Frogs", "requires": [
+            { "region": "IW - Upper Right Hack Point" },
+            # riding the boxes up is itemless
+            # ground dashing through the laser is itemless; this time I think the ledge is wide enough to be in logic
+            { "item": "Charged Strike" } # for once, the actual fight has combat logic
+        ],
+        # "Trick - Break CS Barrier With Bow" arguably applies, but it's out of logic because the shield recharges
+        # and we don't want to implement "can kill the miniboss fast enough" logic
+        "ls_requires": [
+            # CL + LS vault gets you to the shield tower, so you can fight an unshielded Tieyan
+            { "item": "Ledge Grab" }, { "item": "Cloud Leap" }
+        ]
+    },
+    {
+        "address": 2004, "name": "IW: Nymph Puzzle Room",
+        "region": "IW - Bottom Left", "requires": [
+            { "item": "Mystic Nymph: Scout Mode" },
+            { "item": "Air Dash" },
+            { "item": "Wall Climb" }
+        ]
+    },
+    {
+        "address": 2005, "name": "IW: Dusk Guardian Recording Device",
+        "region": "IW - Tao Fruit", "requires": []
+    },
+    {
+        "address": 2006, "name": "IW: Tianhuo Flower",
+        "region": "IW - Tao Fruit", "requires": []
+    },
+
+    # Boundless Repository
+    {
+        "address": 2101, "name": "BR: Examine Console",
+        "region": "BR - Root Node", "requires": []
+    },
+    {
+        "address": 2102, "name": "BR: Near Xingtian Console",
+        "region": "BR - Root Node", "requires": [] # hacking
+    },
+    {
+        "address": 2103, "name": "BR: Gauntlet Part 1 Chest",
+        "region": "BR - Gauntlet Part 1 (After Chest)", "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ] # LG is barely enough with coyote time, but let's skip that; you likely need AD OR CL to get here anyway
+    },
+    {
+        "address": 2104, "name": "BR: Gauntlet Part 2 First Chest",
+        "region": "BR - Gauntlet Part 2 (Before Laser Hallway)", "requires": []
+    },
+    {
+        "address": 2105, "name": "BR: Gauntlet Part 2 Chest Past Lasers",
+        "region": "BR - Gauntlet Part 2 (After Laser Hallway)", "requires": []
+    },
+    {
+        "address": 2106, "name": "BR: Gauntlet Part 2 Chest Past Beetle",
+        "region": "BR - Gauntlet Part 2 (After Laser Hallway)", "requires": []
+    },
+    {
+        "address": 2107, "name": "BR: Vault 1st Chest",
+        "region": "BR - Inside Vault", "requires": []
+    },
+    {
+        "address": 2108, "name": "BR: Vault 2nd Chest",
+        "region": "BR - Inside Vault", "requires": []
+    },
+    {
+        "address": 2109, "name": "BR: Examine Vault Scroll",
+        "region": "BR - Inside Vault", "requires": []
+    },
+    {
+        "address": 2110, "name": "BR: Vault 3rd Chest",
+        "region": "BR - Inside Vault", "requires": []
+    },
+    {
+        "address": 2111, "name": "BR: Vault 4th Chest",
+        "region": "BR - Inside Vault", "requires": []
+    },
+
+    # Yangu Hall
+    {
+        "address": 2201, "name": "Yanlao's Tianhuo Flower",
+        "region": "Yangu Hall - After Yanlao", "requires": []
+    },
+    {
+        "address": 2202, "name": "Yanlao's Vital Sanctum",
+        "region": "Yangu Hall - After Yanlao", "requires": []
+    },
+
+    # Abandoned Mines
+    {
+        "address": 2301, "name": "AM: Above Left Exit",
+        "region": "AM - Above Left Exit", "requires": [
+            { "anyOf": [ { "item": "Grapple" }, { "item": "Cloud Leap" } ] }
+        ]
+    },
+    {
+        "address": 2302, "name": "AM: Defeat Celestial Warden: Yinyue",
+        "region": "AM - Yinyue Arena", "requires": []
+    },
+    {
+        "address": 2303, "name": "AM: Near Root Node",
+        "region": "AM - Behind One-Way Barrier Next To Root Node", "requires": []
+    },
+    {
+        "address": 2304, "name": "AM: Walking Chest",
+        "region": "AM - Bottom Right", "requires": []
+    },
+    {
+        "address": 2305, "name": "AM: Tianhuo Flower",
+        "region": "AM - Tao Fruit", "requires": []
+    },
+    {
+        "address": 2306, "name": "AM: 1st Chest After Flower",
+        "region": "AM - After Tao Fruit", "requires": []
+    },
+    {
+        "address": 2307, "name": "AM: 2nd Chest After Flower",
+        "region": "AM - After Tao Fruit", "requires": []
+    },
+
+    # Prison
+    # see comments in connections.jsonc
+    {
+        "address": 2401, "name": "Prison: Examine Scroll in Lower Right Cell",
+        "region": "Prison - Up To Root Node", "requires": []
+    },
+    {
+        "address": 2402, "name": "Prison: Lower Left Cell",
+        "region": "Prison - Up To Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+    },
+    {
+        "address": 2403, "name": "Prison: Above Stairs on Second Level",
+        "region": "Prison - Up To Root Node", "requires": [] # might need to come back with an "un-weakened" single jump
+    },
+    {
+        "address": 2404, "name": "Prison: Near Root Node",
+        "region": "Prison - Up To Root Node",
+        "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ],
+        "medium_requires": [
+            { "item": "Trick - Bow Hover" }
+        ] # no one around for T-dash LS setup
+    },
+    {
+        "address": 2405, "name": "Prison: Examine Scroll in Upper Left Cell",
+        "region": "Prison - Kanghui Level", "requires": []
+    },
+    {
+        "address": 2406, "name": "Prison: 1st Chest in Room Before Kanghui",
+        "region": "Prison - Kanghui Level", "requires": []
+    },
+    {
+        "address": 2407, "name": "Prison: 2nd Chest in Room Before Kanghui",
+        "region": "Prison - Kanghui Level", "requires": []
+    },
+    {
+        "address": 2408, "name": "Prison: 3rd Chest in Room Before Kanghui",
+        "region": "Prison - Kanghui Level", "requires": []
+    },
+    {
+        "address": 2409, "name": "Prison: Defeat Kanghui",
+        "region": "Prison - After Kanghui", "requires": []
+    },
+
+    # Factory (Machine Room)
+    {
+        "address": 2501, "name": "Factory (MR): Below Right Elevator",
+        "region": "Factory (MR) - Right Elevator", "requires": []
+    },
+    {
+        "address": 2502, "name": "Factory (MR): Break Turret Below Elevator",
+        "region": "Factory (MR) - Right Elevator", "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "address": 2503, "name": "Factory (MR): Above Left Elevator",
+        "region": "Factory (MR) - Left Elevator",
+        "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ],
+        "medium_requires": [
+            { "item": "Trick - Bow Hover" }
+        ] # no parryable enemies or ledges
+    },
+    {
+        "address": 2504, "name": "Factory (MR): Walking Chest Above Green Pillar",
+        "region": "Factory (MR) - Walking Chest Above Green Pillar", "requires": []
+    },
+    {
+        "address": 2505, "name": "Factory (MR): Behind Turret Near Green Pillar",
+        "region": "Factory (MR) - Chest Right of Green Pillar", "requires": []
+    },
+    {
+        "address": 2506, "name": "Factory (MR): Near Moving Platforms",
+        "region": "Factory (MR) - Moving Platforms", "requires": []
+    },
+    {
+        "address": 2507, "name": "Factory (MR): Tianhuo Flower Above Right Elevator",
+        "region": "Factory (MR) - Moving Platforms",
+        "requires": [ # the intended upper route through the shielded enemies arena
+            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, # to reach upper ledge
+            { "item": "Mystic Nymph: Scout Mode" } # unlock arena door
+        ],
+        "medium_requires": [ { "anyOf": [ # the lower route, crossing the huge gap from WC ledge to flower ledge
+            { "item": "Trick - Bow Hover" },
+            [ { "item": "Air Dash" }, { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] # and T-dash
+        ] } ], # the NMG run does T-dash AD AND CS AND bow knockback, but I can't get this to work without LG at the end
+        "ls_requires": [ # also lower route
+            { "item": "Ledge Grab" } # parry hover with any setup
+        ]
+    },
+
+    # Factory (Production Area)
+    {
+        "address": 2601, "name": "Factory (PA): Behind Fire in Lower Left Vents",
+        "region": "Factory (PA) - Lower Left Elevator",
+        "requires": [ { "anyOf": [
+            { "item": "Mystic Nymph: Scout Mode" }, # turn off the fire
+            { "item": "Cloud Leap" } # or jump straight up to it from the far left
+        ] } ], # or you could tank the fire damage
+        "ls_requires": [ { "item": "Air Dash" } ] # AD setup earlier in vents, then parry vault up to chest
+        # T-dash setup is possible by UCing the enemies, but we don't want to assume players know about that
+    },
+    {
+        "address": 2602, "name": "Factory (PA): Hallway Near Jiequan Statue",
+        "region": "Factory (PA) - Lower Left Fire Zone", "requires": []
+    },
+    {
+        "address": 2603, "name": "Factory (PA): Three Guard Spawners",
+        "region": "Factory (PA) - Lower Left Fire Zone Platforms", "requires": []
+    },
+    {
+        "address": 2604, "name": "Factory (PA): Behind Hack in Upper Left Vents",
+        "region": "Factory (PA) - Left Vents", "requires": [] # hacking 1
+    },
+    {
+        "address": 2605, "name": "Factory (PA): Examine Production Station",
+        "region": "Factory (PA) - Guard Production Station", "requires": []
+    },
+    {
+        "address": 2606, "name": "Factory (PA): Vents Below Production Station",
+        "region": "Factory (PA) - Guard Production Station", "requires": [
+            { "item": "Mystic Nymph: Scout Mode" } # turn off the fire
+        ]
+    },
+    {
+        "address": 2607, "name": "Factory (PA): Below Double Sniper Zone",
+        "region": "Factory (PA) - Chest Platform Below Sniper Zone", "requires": []
+    },
+    {
+        "address": 2608, "name": "Factory (PA): Examine Pharmacy Panel",
+        "region": "Factory (PA) - Pharmacy Interior", "requires": []
+    },
+    {
+        "address": 2609, "name": "Factory (PA): Ball Drop in Pharmacy",
+        "region": "Factory (PA) - Pharmacy Interior", "requires": [] # hacking
+    },
+    {
+        "address": 2610, "name": "Factory (PA): Bottom of Right Fire Zone",
+        "region": "Factory (PA) - Right Fire Zone & Wuqiang Arena", "requires": []
+    },
+    {
+        "address": 2611, "name": "Factory (PA): Defeat Shanhai 9000",
+        "region": "Factory (PA) - Lower Right Exit", "requires": [ { "item": "Unbounded Counter" } ]
+    },
+    {
+        "address": 2612, "name": "Factory (PA): Top of Right Fire Zone",
+        "region": "Factory (PA) - Upper Elevator", "requires": []
+    },
+    {
+        "address": 2613, "name": "Factory (PA): Far Side of Wuqiang Arena",
+        "region": "Factory (PA) - Right Fire Zone & Wuqiang Arena", "requires": []
+    },
+    {
+        "address": 2614, "name": "Factory (PA): Defeat Celestial Sentinel: Wuqiang",
+        "region": "Factory (PA) - Right Fire Zone & Wuqiang Arena", "requires": []
+    },
+
+    # Shengwu Hall
+    {
+        "address": 2701, "name": "Examine Sphere Before Jiequan",
+        "region": "Shengwu Hall - Root Node", "requires": []
+    },
+    {
+        "address": 2702, "name": "Chest Before Jiequan",
+        "region": "Shengwu Hall - Root Node", "requires": []
+    },
+    {
+        "address": 2703, "name": "Jiequan's Tianhuo Flower",
+        "region": "Shengwu Hall - After Jiequan", "requires": []
+    },
+    {
+        "address": 2704, "name": "Chest After Jiequan",
+        "region": "Shengwu Hall - After Jiequan", "requires": []
+    },
+    {
+        "address": 2705, "name": "Jiequan's Vital Sanctum",
+        "region": "Shengwu Hall - After Jiequan", "requires": []
+    },
+
+    # Underground Cave + 95th Livestock Pen / Peach Blossom Village + Livestock Harvesting Platform
+    {
+        "address": 2801, "name": "UC: Examine Stone Inscription",
+        "region": "UC - Left Exit", "requires": []
+    },
+    {
+        "address": 2802, "name": "UC: Examine Note",
+        "region": "UC - Camp", "requires": []
+    },
+    {
+        "address": 2803, "name": "UC: Examine Scroll",
+        "region": "UC - Camp", "requires": []
+    },
+    {
+        "address": 2804, "name": "Village: Defeat Red Tiger Elite: Lieguan",
+        "region": "Lieguan Arena", "requires": []
+    },
+
+    # Galactic Dock
+    {
+        "address": 2901, "name": "Galactic Dock: Examine Sign",
+        "region": "Galactic Dock - Root Node & Right Exit", "requires": []
+    },
+    {
+        "address": 2902, "name": "Galactic Dock: Tianhuo Flower",
+        "region": "Galactic Dock - Root Node & Right Exit", "requires": [
+            { "anyOf": [ { "item": "Grapple" }, { "item": "Cloud Leap" } ] }
+        ]
+    },
+    {
+        "address": 2903, "name": "Galactic Dock: Shaman's Gift",
+        "region": "Galactic Dock - Left Exit", "requires": [] # hacking
+    },
+
+    # Grotto of Scriptures (Entry)
+    {
+        "address": 3001, "name": "GoS (Entry): Examine Painting",
+        "region": "GoS (Entry) - Root Node", "requires": []
+    },
+    {
+        "address": 3002, "name": "GoS (Entry): Examine Coffin",
+        "region": "GoS (Entry) - Coffin", "requires": []
+    },
+    {
+        "address": 3003, "name": "GoS (Entry): Poem Treasure 1st Chest",
+        "region": "GoS (Entry) - Treasure Room", "requires": []
+    },
+    {
+        "address": 3004, "name": "GoS (Entry): Poem Treasure 2nd Chest",
+        "region": "GoS (Entry) - Treasure Room", "requires": []
+    },
+    {
+        "address": 3005, "name": "GoS (Entry): Poem Treasure 3rd Chest",
+        "region": "GoS (Entry) - Treasure Room", "requires": []
+    },
+    {
+        "address": 3006, "name": "GoS (Entry): Poem Treasure 4th Chest",
+        "region": "GoS (Entry) - Treasure Room", "requires": []
+    },
+    {
+        "address": 3007, "name": "GoS (Entry): Poem Treasure 5th Chest",
+        "region": "GoS (Entry) - Treasure Room", "requires": []
+    },
+    {
+        "address": 3008, "name": "GoS (Entry): Poem Treasure 6th Chest",
+        "region": "GoS (Entry) - Treasure Room", "requires": []
+    },
+    {
+        "address": 3009, "name": "GoS (Entry): Lower Caves Portal",
+        "region": "GoS (Entry) - Middle Caves & Lower Portals", "requires": []
+    },
+    {
+        "address": 3010, "name": "GoS (Entry): Lower Left Caves",
+        "region": "GoS (Entry) - Lower Right Exit",
+        "requires": [ { "item": "Wall Climb" } ],
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] # use LS vault to get an extra CL
+    },
+    {
+        "address": 3011, "name": "GoS (Entry): Alcove Above Middle Caves Portal",
+        "region": "GoS (Entry) - Middle Caves & Lower Portals", "requires": []
+    },
+    {
+        "address": 3012, "name": "GoS (Entry): Yellow Pool Above Middle Caves Portal",
+        "region": "GoS (Entry) - Middle Caves & Lower Portals", "requires": []
+    },
+    {
+        "address": 3013, "name": "GoS (Entry): Upper Right Caves Portal 1st Chest",
+        "region": "GoS (Entry) - Below Elevator & Upper Cave Portals", "requires": []
+    },
+    {
+        "address": 3014, "name": "GoS (Entry): Upper Right Caves Portal 2nd Chest",
+        "region": "GoS (Entry) - Below Elevator & Upper Cave Portals", "requires": []
+    },
+    {
+        "address": 3015, "name": "GoS (Entry): Upper Right Caves Portal 3rd Chest",
+        "region": "GoS (Entry) - Below Elevator & Upper Cave Portals", "requires": []
+    },
+    {
+        "address": 3016, "name": "GoS (Entry): Near Greenhouse Roof",
+        "region": "GoS (Entry) - Below Elevator & Upper Cave Portals", "requires": []
+    },
+    {
+        "address": 3017, "name": "GoS (Entry): Greenhouse Between Elevators",
+        "region": "GoS (Entry) - Greenhouse", "requires": []
+    },
+    {
+        "address": 3018, "name": "GoS (Entry): Near Upper Right Exit",
+        "region": "GoS (Entry) - Upper Right Exit", "requires": [ { "item": "Charged Strike" } ],
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
+    },
+
+    # Grotto of Scriptures (East)
+    {
+        "address": 3101, "name": "GoS (East): Lurker Near Lower Exit",
+        "region": "GoS (East) - Lower Exit", "requires": []
+    },
+    {
+        "address": 3102, "name": "GoS (East): Guarded By Phantom Ninja",
+        "region": "GoS (East) - Above Lower Exit", "requires": []
+    },
+    {
+        "address": 3103, "name": "GoS (East): Spike Ball Hall Upper Right",
+        "region": "GoS (East) - Spike Ball Hall Platforms", "requires": []
+    },
+    {
+        "address": 3104, "name": "GoS (East): Spike Ball Hall Upper Left",
+        "region": "GoS (East) - Spike Ball Hall Platforms",
+        "requires": [ { "anyOf": [
+            { "item": "Cloud Leap" },
+            # the higher of the two tiny rock ledges in the middle is just low enough that you can't AD "under" it,
+            # but high enough that you can fall and AD from it, yet you need LG to get onto it in the first place
+            [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ]
+        ] } ],
+        # enemies here aren't reliable enough for qi, so you usually need AD OR CL even on higher difficulties
+        "medium_requires": [ # but if you can fall down from the root node, you can bring qi from one of the archers up there
+            { "region": "GoS (East) - Root Node" }, # then T-dash from the tiny rock platforms to the middle long platform
+            { "anyOf": [
+                [ # SR-jump over the final gap to the leftmost long platform
+                    { "item": "Ledge Grab" },
+                    { "item": "Trick - Long Jump with Swift Runner" }
+                ],
+                { "item": "Tai-Chi Kick" } # or get a 2nd qi / 2nd T-dash from the worm on this platform
+            ] }
+        ]
+    }, # LS up here would need CL setup anyway, so no LS logic
+    {
+        "address": 3105, "name": "GoS (East): Lurkers Under Tunnel Walkway",
+        "region": "GoS (East) - Root Node", "requires": []
+    },
+    {
+        "address": 3106, "name": "GoS (East): Portal Below Root Node",
+        "region": "GoS (East) - Root Node", "requires": []
+    },
+    {
+        "address": 3107, "name": "GoS (East): Alcove Between Tombs 1st Chest",
+        "region": "GoS (East) - Outside Yin Jifu's Tomb", "requires": []
+    },
+    {
+        "address": 3108, "name": "GoS (East): Alcove Between Tombs 2nd Chest",
+        "region": "GoS (East) - Outside Yin Jifu's Tomb", "requires": []
+    },
+    {
+        "address": 3109, "name": "GoS (East): Alcove Between Tombs 3rd Chest",
+        "region": "GoS (East) - Outside Yin Jifu's Tomb", "requires": []
+    },
+    {
+        "address": 3110, "name": "GoS (East): Upper Right of Room Above Yin Jifu's Tomb",
+        "region": "GoS (East) - Yin Jifu's Tomb", "requires": [ { "anyOf": [
+            [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ],
+            { "item": "Cloud Leap" }
+        ] } ]
+    },
+    {
+        "address": 3111, "name": "GoS (East): Examine Mural in Yin Jifu's Tomb",
+        "region": "GoS (East) - Yin Jifu's Tomb", "requires": [
+            {
+                "option": "randomize_skill_tree",
+                "true": [{ "item": "Progressive Bullet Deflect" }], # or UC + Divine Hand Jade
+                "false": []
+            }
+        ]
+    },
+    {
+        "address": 3112, "name": "GoS (East): Examine Stone Carvings",
+        "region": "GoS (East) - Stone Carvings", "requires": []
+    },
+    {
+        "address": 3113, "name": "GoS (East): Outside Guiguzi's Tomb",
+        "region": "GoS (East) - Guiguzi's Tomb", "requires": [ { "item": "Cloud Leap" } ]
+    }, # LS getup works, but I see no way to bring LS here without CL setup
+    {
+        "address": 3114, "name": "GoS (East): Examine Mural in Guiguzi's Tomb",
+        "region": "GoS (East) - Guiguzi's Tomb", "requires": [
+            { "item": "Unbounded Counter" },
+            { "item": "Tai-Chi Kick" }
+        ] # Bullet Deflect is optional here since UC covers those statues
+    },
+
+    # Grotto of Scriptures (West)
+    {
+        "address": 3201, "name": "GoS (West): Above Elevator",
+        "region": "GoS (West) - Lower Right Exits", "requires": [
+            { "item": "Cloud Leap" } # from the upper portal
+        ],
+        "ls_requires": [
+            { "item": "Ledge Grab" }, # T-dash setup from the ledge before the 3 wood platforms, falling down to portal
+            { "item": "Air Dash" } # then AD from 2nd to 3rd wooden platform
+            # and LS vault to the ropes
+        ]
+    },
+    {
+        "address": 3202, "name": "GoS (West): Platforms In Top Middle Room",
+        "region": "GoS (West) - Spike Ball Release", # portal next to SBR is the only way to the upper half of this room
+        "requires": [ { "item": "Cloud Leap" } ], # without the collapsing platforms, AD might also work
+        "ls_requires": [
+            { "item": "Ledge Grab" }, # do T-dash setup anywhere on the way to SBR
+            { "item": "Trick - Bow Hover" } # after going through portal, hover all the way to the rightmost platform
+            # single jump onto the next platform, then LS vault onto the final platform with the chest
+        ]
+    },
+    {
+        "address": 3203, "name": "GoS (West): Below Western Cliffs",
+        "region": "GoS (West) - Western Cliffs",
+        "requires": [ { "anyOf": [
+            { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        ] } ],
+        "medium_requires": [] # T-dash
+    },
+    {
+        "address": 3204, "name": "GoS (West): Below Luyan's Tomb",
+        "region": "GoS (West) - Luyan's Tomb", "requires": [] # does NOT require spike ball chase
+    },
+    {
+        "address": 3205, "name": "GoS (West): Examine Mural in Luyan's Tomb",
+        "region": "GoS (West) - Luyan's Tomb", "requires": [
+            { "item": "Cloud Leap" }, # to get from the chest platform up to the entrance
+            # the parry challenge
+            { "item": "Unbounded Counter" },
+            {
+                "option": "randomize_skill_tree",
+                "true": [{ "item": "Progressive Bullet Deflect" }], # or UC + Divine Hand Jade
+                "false": []
+            }
+        ] # DOES require spike ball chase, so if you spawned at GoSW node you may need to trigger it
+    },
+    {
+        "address": 3206, "name": "GoS (West): Yin Jifu's Tianhuo Flower",
+        "region": "GoS (West) - Lear's Grave", "requires": []
+    },
+    {
+        "address": 3207, "name": "GoS (West): Guiguzi's Tianhuo Flower",
+        "region": "GoS (West) - Lear's Grave", "requires": []
+    },
+    {
+        "address": 3208, "name": "GoS (West): Luyan's Tianhuo Flower",
+        "region": "GoS (West) - Lear's Grave", "requires": []
+    },
+    {
+        "address": 3209, "name": "GoS (West): Chest in Lear's Grave",
+        "region": "GoS (West) - Lear's Grave", "requires": []
+    },
+
+    # Ancient Stone Pillar
+    {
+        "address": 3301, "name": "Examine Ji",
+        "region": "Ancient Stone Pillar - After Ji", "requires": []
+    },
+    {
+        "address": 3302, "name": "Ji's Vital Sanctum",
+        "region": "Ancient Stone Pillar - After Ji", "requires": []
+    },
+    {
+        "address": 3303, "name": "Retrieve Chip From Shanhai 1000",
+        "region": "Ancient Stone Pillar - After Ji", "requires": []
+    },
+
+    # Sky Tower
+    {
+        "address": 3401, "name": "Sky Tower: Above Lower Elevator",
+        "region": "Sky Tower - Lower Chest", "requires": []
+    },
+    {
+        "address": 3402, "name": "Sky Tower: Middle Right Chest",
+        "region": "Sky Tower - Middle Chest", "requires": []
+    },
+    {
+        "address": 3403, "name": "Sky Tower: Surrounded By Hazards",
+        "region": "Sky Tower - Upper Checkpoint Platform", "requires": [ { "item": "Cloud Leap" } ]
+    },
+    {
+        "address": 3404, "name": "Sky Tower: Ropes Below Root Node",
+        "region": "Sky Tower - Upper Checkpoint Platform", "requires": [
+            { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Wall Climb" }
+        ]
+    },
+    {
+        "address": 3405, "name": "Sky Tower: Stowaway's Tianhuo Flower",
+        "region": "Sky Tower - Stowaway", "requires": []
+    },
+    {
+        "address": 3406, "name": "Sky Tower: Examine Stowaway's Belongings",
+        "region": "Sky Tower - Stowaway", "requires": []
+    },
+    {
+        "address": 3407, "name": "Sky Tower: By Root Node",
+        "region": "Sky Tower - Upper Exit & Root Node", "requires": []
+    },
+    {
+        "address": 3408, "name": "Sky Tower: Pink Water Near Root Node",
+        "region": "Sky Tower - Upper Exit & Root Node", "requires": []
+    },
+
+    # Empyrean Dist. (Passages)
+    {
+        "address": 3501, "name": "ED (Passages): Above Transporter",
+        "region": "ED (Passages) - Above Right Transporter",
+        "requires": [
+            { "item": "Grapple" },
+            { "item": "Tai-Chi Kick" },
+            { "anyOf": [
+                { "item": "Cloud Leap" }, # land on top of the right TCK wall, then jump to chest
+                [
+                    { "item": "Ledge Grab" }, # for the box ledge under the zipline
+                    { "item": "Wall Climb" }, # to climb the right TCK wall as intended
+                    { "item": "Air Dash" } # to actually reach the chest platform without CL
+                ]
+            ] }
+        ],
+        "medium_requires": [
+			{ "anyOf": [ 
+				{ "item": "Grapple" }, 
+				# Bow Hover from the platform left of the box (reachable via T-Dash + LG or CL) can replace Grapple
+				{ "item": "Trick - Bow Hover" }
+			] },
+            { "item": "Tai-Chi Kick" },
+            { "anyOf": [
+				[ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ], # to climb up the box at the start and the walls at the end
+				{ "item": "Cloud Leap" }
+			] }
+            # and the difference is you can bring a T-dash up here to replace the Air Dash
+        ],
+        "ls_requires": [
+            { "item": "Ledge Grab" }, # T-dash setup is viable here
+            { "anyOf": [
+                [ # this is the only way to completely avoid TCK:
+                    { "anyOf": [
+                        { "item": "Grapple" },
+                        [ { "item": "Trick - Bow Hover" }, { "item": "Cloud Leap" } ]
+                        # using a bow hover specifically requires cloud leap because there is no way to get ls
+                        # on the top platform left of the box without it and hovering from the box does not reach the rope
+                    ] },
+                    { "anyOf": [ # setup LS with...
+                        { "item": "Cloud Leap" }, # CL setup is easy
+                        { "item": "Air Dash" } # use AD to reach ledge left of box, do AD setup *and* T-dash to land on box with LS
+                    ] }
+                    # then wall slide up to the chest, using LS you got before the zipline
+                ],
+                [ # various ways of using LS to get onto the rope, then using TCK at the end as usual
+                    { "anyOf": [ # then get onto the rope without the Grapple/zipline/slider by using
+                        { "item": "Cloud Leap" }, # parry hover into Cloud Leap
+                        { "item": "Trick - Bow Hover" } # into LS vault (that's why this isn't in medium)
+                    ] },
+                    { "item": "Tai-Chi Kick" },
+                    { "anyOf": [
+                        { "item": "Cloud Leap" },
+                        [
+                            # already required LG above
+                            { "item": "Wall Climb" },
+                            { "item": "Air Dash" } # no T-dash substitute since we already spent it on LS setup
+                        ]
+                    ] }
+                ]
+            ] }
+        ]
+    },
+    {
+        "address": 3502, "name": "ED (Passages): Hack 2 Statues",
+        "region": "ED (Passages) - Around Root Node", # where the chest is
+        "requires": [
+            { "region": "ED (Passages) - Hack Statue In Left Chasm" },
+            { "region": "ED (Passages) - Hack Statue Under Robot" }
+        ]
+    },
+    {
+        "address": 3503, "name": "ED (Passages): Alcove Right of Root Node 1st Chest",
+        "region": "ED (Passages) - Alcove Right of Root Node", "requires": []
+    },
+    {
+        "address": 3504, "name": "ED (Passages): Alcove Right of Root Node 2nd Chest",
+        "region": "ED (Passages) - Alcove Right of Root Node", "requires": []
+    },
+    {
+        "address": 3505, "name": "ED (Passages): Slider Right Of Root Node",
+        "region": "ED (Passages) - Above Pink Waterfall Right Of Root Node", "requires": []
+    },
+    {
+        "address": 3506, "name": "ED (Passages): Above Pink Pool Left Of Root Node",
+        "region": "ED (Passages) - Above Left Pink Pool (Right)", "requires": []
+    },
+    {
+        "address": 3507, "name": "ED (Passages): Far Left Rooms",
+        "region": "ED (Passages) - Above Left Pink Pool (Left)",
+        "requires": [
+            { "item": "Wall Climb" }, { "item": "Air Dash" } # to climb and exit pink waterfall room
+            # the last jump is (AD OR DJ OR T-dash) so that's already covered by AD, then just fall down
+        ],
+        "ls_requires": [
+            { "item": "Tai-Chi Kick" }, # TCK platforms are the only viable ls setup here 
+            { "item": "Air Dash" }, # still hard required by waterfall room, and still solves most of the other platforming
+            { "item": "Ledge Grab" }, # do an AD setup using the TCK platforms
+            { "item": "Cloud Leap" } # then CL and wall slide up the right side of waterfall room to replace WC
+        ]
+    },
+    {
+        "address": 3508, "name": "ED (Passages): Defeat The Great Miner: Tianshou",
+        "region": "ED (Passages) - Tianshou Arena", "requires": [] # TODO: combat logic?
+    },
+    {
+        "address": 3509, "name": "ED (Passages): Examine Water Tower",
+        "region": "ED (Passages) - Upper Elevator", "requires": []
+    },
+    {
+        "address": 3510, "name": "ED (Passages): Alcove Between Lasers",
+        "region": "ED (Passages) - Laser Gauntlet", "requires": []
+    },
+    {
+        "address": 3511, "name": "ED (Passages): Covered By Lasers",
+        "region": "ED (Passages) - End Of Laser Gauntlet", "requires": [
+            { "item": "Mystic Nymph: Scout Mode" } # to disable the laser cover
+        ]
+    },
+    {
+        "address": 3512, "name": "ED (Passages): Above Upper Hallway Turret",
+        "region": "ED (Passages) - Upper Elevator", "requires": [
+            { "item": "Unbounded Counter" },
+            { "item": "Grapple" }
+        ]
+    },
+
+    # Empyrean Dist. (Living Area)
+    {
+        "address": 3601, "name": "ED (Living Area): Above Right Elevator",
+        "region": "ED (Living Area) - East Building Interior Part 1", "requires": [ { "item": "Cloud Leap" } ]
+        # feels weird to call this "Interior", but you do need to climb up to the right elevator to get here
+        # we can't use LS to replace CL here because you would need LG to get onto the elevator in the first place
+    },
+    {
+        "address": 3602, "name": "ED (Living Area): Retrieve Chip From Shanhai 9000",
+        "region": "ED (Living Area) - East Building Interior Part 1", "requires": []
+    },
+    {
+        "address": 3603, "name": "ED (Living Area): Examine Bulletin Board",
+        "region": "ED (Living Area) - East Building Interior Part 1", "requires": []
+    },
+    {
+        "address": 3604, "name": "ED (Living Area): Walking Chest In East Building",
+        "region": "ED (Living Area) - East Building Interior Part 2", "requires": []
+    },
+    {
+        "address": 3605, "name": "ED (Living Area): Above Root Node",
+        "region": "ED (Living Area) - East Building Interior Part 2", "requires": []
+    },
+    {
+        "address": 3606, "name": "ED (Living Area): Middle Elevator Chest Room",
+        "region": "ED (Living Area) - East Building Interior Part 2", "requires": []
+    },
+    {
+        "address": 3607, "name": "ED (Living Area): Defeat Mutated Zouyan in Middle Elevator Room",
+        "region": "ED (Living Area) - East Building Interior Part 2", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3608, "name": "ED (Living Area): Fuxi's Vital Sanctum",
+        "region": "ED (Living Area) - Opera Theater", "requires": []
+    },
+    {
+        "address": 3609, "name": "ED (Living Area): Upper Right of Five Bells Room",
+        "region": "ED (Living Area) - Opera Theater", "requires": []
+        # the OT region includes the top half of 5BR
+    },
+    {
+        "address": 3610, "name": "ED (Living Area): Defeat Mutated A-Shou in Five Bells Room",
+        "region": "ED (Living Area) - Opera Theater", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3611, "name": "ED (Living Area): Roof Right of Opera Theater",
+        "region": "ED (Living Area) - Opera Theater Roofs", "requires": []
+    },
+    {
+        "address": 3612, "name": "ED (Living Area): Roof Left of Opera Theater",
+        "region": "ED (Living Area) - Opera Theater Roofs", "requires": []
+    },
+    {
+        "address": 3613, "name": "ED (Living Area): East Building Rooftops",
+        "region": "ED (Living Area) - East Building Rooftops Chest", "requires": []
+    },
+    {
+        "address": 3614, "name": "ED (Living Area): Dusk Guardian Recording Device",
+        "region": "ED (Living Area) - Tao Fruit", "requires": []
+    },
+    {
+        "address": 3615, "name": "ED (Living Area): Tianhuo Flower",
+        "region": "ED (Living Area) - Tao Fruit", "requires": []
+    },
+    {
+        "address": 3616, "name": "ED (Living Area): Backer Room 1st Chest",
+        "region": "ED (Living Area) - Backer Room", "requires": []
+    },
+    {
+        "address": 3617, "name": "ED (Living Area): Backer Room 2nd Chest",
+        "region": "ED (Living Area) - Backer Room", "requires": []
+    },
+    {
+        "address": 3618, "name": "ED (Living Area): Backer Room 3rd Chest",
+        "region": "ED (Living Area) - Backer Room", "requires": []
+    },
+
+    # Empyrean Dist. (Sanctum)
+    {
+        "address": 3701, "name": "ED (Sanctum): Examine Monitoring Panel",
+        "region": "ED (Sanctum) - Monitoring Panel", "requires": []
+    },
+    {
+        "address": 3702, "name": "ED (Sanctum): East Rooftop Walking Chest",
+        "region": "ED (Sanctum) - East Rooftop", "requires": []
+    },
+    {
+        "address": 3703, "name": "ED (Sanctum): Right Of East Rooftop",
+        "region": "ED (Sanctum) - East Rooftop", "requires": []
+    },
+    {
+        "address": 3704, "name": "ED (Sanctum): Above East Rooftop",
+        "region": "ED (Sanctum) - East Rooftop", "requires": [ { "item": "Cloud Leap" } ]
+    },
+    {
+        "address": 3705, "name": "ED (Sanctum): Defeat Mutated Xipu Below Nobility Hall",
+        "region": "ED (Sanctum) - Below Nobility Hall", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3706, "name": "ED (Sanctum): Defeat Mutated Yangfan Below Root Node",
+        "region": "ED (Sanctum) - Ground Floor Below Root Node", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3707, "name": "ED (Sanctum): Lower Left Garden",
+        "region": "ED (Sanctum) - Elevator", "requires": []
+    },
+    {
+        "address": 3708, "name": "ED (Sanctum): Above Lower Left Garden",
+        "region": "ED (Sanctum) - Elevator",
+        "requires": [
+            { "item": "Cloud Leap" },
+            { "item": "Ledge Grab" }
+        ],
+        "ls_requires": [
+            { "item": "Grapple" }, # the nearest non-CL ledge is next to a grapple point,
+            # so we logically require Grapple just to make retries less painful
+            { "item": "Ledge Grab" }, # T-dash setup LS, wall slide up the big left wall
+            { "item": "Air Dash" }, # jump off the wall, then Air Dash and T-dash to finally reach the ledge
+            { "item": "Wall Climb" } # without CL, we need to use the green wall for the last part
+        ]
+    },
+
+    # Nobility Hall
+    {
+        "address": 3801, "name": "Nuwa's Vital Sanctum",
+        "region": "Nobility Hall - After Fengs", "requires": []
+    },
+    {
+        "address": 3802, "name": "Chest After Fengs",
+        "region": "Nobility Hall - After Fengs", "requires": []
+    },
+    {
+        "address": 3803, "name": "Nuwa's Tianhuo Flower",
+        "region": "Nobility Hall - After Fengs", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+
+    # Tiandao Research Center
+    {
+        "address": 3901, "name": "TRC: Find Broken Shanhai 9000",
+        "region": "TRC - Upper Exit", "requires": []
+    },
+    {
+        "address": 3902, "name": "TRC: Covered In Spikes",
+        "region": "TRC - Lower Mutant Spike Room", "requires": []
+    },
+    {
+        "address": 3903, "name": "TRC: Ground Floor Bookshelf",
+        "region": "TRC - Ground Floor & Exits", "requires": []
+    },
+    {
+        "address": 3904, "name": "TRC: Before Chien Arena",
+        "region": "TRC - Ground Floor & Exits", "requires": []
+    },
+    {
+        "address": 3905, "name": "TRC: Above Sol Statue",
+        "region": "TRC - Chest Above Sol Statue", "requires": []
+    },
+    {
+        "address": 3906, "name": "TRC: Past Spikes In Sickbay Vents",
+        "region": "TRC - Lower Sickbay", "requires": []
+    },
+    {
+        "address": 3907, "name": "TRC: Dusk Guardian Recording Device",
+        "region": "TRC - Upper Levels", "requires": []
+    },
+    {
+        "address": 3908, "name": "TRC: Destroy Tendril In The Highest Room",
+        "region": "TRC - Upper Levels", "requires": [
+            { "item": "Cloud Leap" }, # and parry the respawning enemy to CL again
+            { "item": "Ledge Grab" }, # probably not strictly necessary, but it's way too hard without this
+            { "item": "Super Mutant Buster" } # then destroy the tendril
+        ]
+    },
+    {
+        "address": 3909, "name": "TRC: Defeat Mutated Shiyangyue Near Xingtian Sickbay",
+        "region": "TRC - Xingtian Sickbay", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3910, "name": "TRC: Behind Mutant Barrier",
+        "region": "TRC - Mutant Barrier Platform", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3911, "name": "TRC: Destroy Tendril Near Sol Statue",
+        "region": "TRC - Lower Right Stairwell", "requires": [ { "item": "Super Mutant Buster" } ]
+    },
+    {
+        "address": 3912, "name": "TRC: Chest Near Dusk Guardian HQ Screen",
+        "region": "TRC - Dusk Guardian HQ Upper Levels", "requires": []
+    },
+    {
+        "address": 3913, "name": "TRC: Destroy Tendril Near Guardian HQ Screen",
+        "region": "TRC - Dusk Guardian HQ Upper Levels", "requires": [
+            { "item": "Cloud Leap" },
+            { "item": "Super Mutant Buster" }
+        ]
+    },
+    {
+        "address": 3914, "name": "TRC: Examine Dusk Guardian HQ Screen",
+        "region": "TRC - Dusk Guardian HQ Upper Levels", "requires": []
+    },
+
+    # Tianhuo Research Institute
+    # nothing for now
+
+    # Shop Randomization
+    {
+        "category": "shop", "address": 4001, "name": "Kuafu's Shop: 1st Normal Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+        "category": "shop", "address": 4002, "name": "Kuafu's Shop: 2nd Normal Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "region": "FSP Shops & Skill Tree (High Cost)" } ]
+    },
+    {
+        "category": "shop", "address": 4003, "name": "Kuafu's Extra Inventory: 1st Normal Purchase",
+        "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "region": "FSP Shops & Skill Tree (High Cost)" } ]
+    },
+    {
+        "category": "shop", "address": 4004, "name": "Kuafu's Shop: 1st Dark Steel Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Dark Steel", "count": 1 } ]
+    },
+    {
+        "category": "shop", "address": 4005, "name": "Kuafu's Shop: 2nd Dark Steel Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Dark Steel", "count": 2 } ]
+    },
+    {
+        "category": "shop", "address": 4006, "name": "Kuafu's Shop: 3rd Dark Steel Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Dark Steel", "count": 3 } ]
+    },
+    {
+        "category": "shop", "address": 4007, "name": "Kuafu's Extra Inventory: 1st Dark Steel Purchase",
+        "region": "FSP - Kuafu's Extra Inventory", "requires": [
+            { "item": "Dark Steel", "count": 4 },
+            { "region": "FSP Shops & Skill Tree (High Cost)" }
+        ]
+    },
+    {
+        "category": "shop", "address": 4008, "name": "Kuafu's Extra Inventory: 2nd Dark Steel Purchase",
+        "region": "FSP - Kuafu's Extra Inventory", "requires": [
+            { "item": "Dark Steel", "count": 5 },
+            { "region": "FSP Shops & Skill Tree (High Cost)" }
+        ]
+    },
+    {
+        "category": "shop", "address": 4009, "name": "Kuafu's Extra Inventory: 3rd Dark Steel Purchase",
+        "region": "FSP - Kuafu's Extra Inventory", "requires": [
+            { "item": "Dark Steel", "count": 6 },
+            { "region": "FSP Shops & Skill Tree (High Cost)" }
+        ]
+    },
+    {
+        "category": "shop", "address": 4010, "name": "Kuafu's Shop: 1st Herb Catalyst Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 1 } ]
+    },
+    {
+        "category": "shop", "address": 4011, "name": "Kuafu's Shop: 2nd Herb Catalyst Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 2 } ]
+    },
+    {
+        "category": "shop", "address": 4012, "name": "Kuafu's Shop: 3rd Herb Catalyst Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 3 } ]
+    },
+    {
+        "category": "shop", "address": 4013, "name": "Kuafu's Shop: 4th Herb Catalyst Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 4 } ]
+    },
+    {
+        "category": "shop", "address": 4014, "name": "Kuafu's Shop: 5th Herb Catalyst Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 5 } ]
+    },
+    {
+        "category": "shop", "address": 4015, "name": "Kuafu's Shop: 6th Herb Catalyst Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 6 } ]
+    },
+    {
+        "category": "shop", "address": 4016, "name": "Kuafu's Shop: 7th Herb Catalyst Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 7 } ]
+    },
+    {
+        "category": "shop", "address": 4017, "name": "Kuafu's Shop: 8th Herb Catalyst Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 8 } ]
+    },
+    {
+        "category": "shop", "address": 4018, "name": "Kuafu's Shop: 3rd Normal Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+        "category": "shop", "address": 4019, "name": "Kuafu's Shop: 4th Normal Purchase",
+        "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+        "category": "shop", "address": 4020, "name": "Kuafu's Extra Inventory: 2nd Normal Purchase",
+        "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "region": "FSP Shops & Skill Tree (Medium Cost)" } ]
+    },
+
+    {
+        "category": "shop", "address": 4101, "name": "Chiyou's Shop: 1st Low Cost Purchase",
+        "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+        "category": "shop", "address": 4102, "name": "Chiyou's Shop: 2nd Low Cost Purchase",
+        "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+        "category": "shop", "address": 4103, "name": "Chiyou's Shop: 3rd Low Cost Purchase",
+        "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+        "category": "shop", "address": 4104, "name": "Chiyou's Shop: 4th Low Cost Purchase",
+        "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+        "category": "shop", "address": 4105, "name": "Chiyou's Shop: 5th Low Cost Purchase",
+        "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+        "category": "shop", "address": 4111, "name": "Chiyou's Shop: 1st Medium Cost Purchase",
+        "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4112, "name": "Chiyou's Shop: 2nd Medium Cost Purchase",
+        "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4113, "name": "Chiyou's Shop: 3rd Medium Cost Purchase",
+        "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4114, "name": "Chiyou's Shop: 4th Medium Cost Purchase",
+        "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4115, "name": "Chiyou's Shop: 5th Medium Cost Purchase",
+        "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4116, "name": "Chiyou's Shop: 6th Medium Cost Purchase",
+        "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4121, "name": "Chiyou's Shop: 1st High Cost Purchase",
+        "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4122, "name": "Chiyou's Shop: 2nd High Cost Purchase",
+        "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4123, "name": "Chiyou's Shop: 3rd High Cost Purchase",
+        "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4124, "name": "Chiyou's Shop: 4th High Cost Purchase",
+        "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4125, "name": "Chiyou's Shop: 5th High Cost Purchase",
+        "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+
+    {
+        "category": "shop", "address": 4201, "name": "3D Printer: 1st Low Cost Purchase",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4202, "name": "3D Printer: 2nd Low Cost Purchase",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4203, "name": "3D Printer: 3rd Low Cost Purchase",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4204, "name": "3D Printer: 4th Low Cost Purchase",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4205, "name": "3D Printer: 1st Medium Cost Purchase",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4206, "name": "3D Printer: 1st High Cost Purchase",
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+    {
+        "category": "shop", "address": 4207, "name": "3D Printer: 2nd High Cost Purchase",
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+
+    # Skill Randomization
+    # "Low Cost" means it takes <=3 total skill points to buy the node and all prerequisite nodes
+    # "Medium Cost" means >=4 && <=9 total skill points
+    # "High Cost" means >=10 total skill points
+
+    # row 2
+    { # no prereqs (Immortal Dash doesn't count), 1 sp -> total 1 sp
+        "category": "skill", "address": 5021, "name": "Skill Tree Node: Swift Runner",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { # no prereqs (Qi Blast doesn't count), 1 sp -> total 1 sp
+        "category": "skill", "address": 5022, "name": "Skill Tree Node: Qi Boost (Top Left)",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { # no prereqs (Triple Slash doesn't count), 1 sp -> total 1 sp
+        "category": "skill", "address": 5023, "name": "Skill Tree Node: Shadow Strike",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { # no prereqs (Parry doesn't count), 1 sp -> total 1 sp
+        "category": "skill", "address": 5024, "name": "Skill Tree Node: Bullet Deflect",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+
+    # row 3
+    { # Swift Runner (1 sp), 1 sp -> total 2 sp
+        "category": "skill", "address": 5031, "name": "Skill Tree Node: Swift Rise",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { # Qi Boost 1 / Top Left (1 sp), 2 sp -> total 3 sp
+        "category": "skill", "address": 5032, "name": "Skill Tree Node: Life Recovery",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { # Shadow Strike (1 sp), 2 sp -> total 3 sp
+        "category": "skill", "address": 5033, "name": "Skill Tree Node: Qi Boost (Top Right)",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+    { # Tai-Chi Kick, 2 sp -> total 2 sp
+        "category": "skill", "address": 5034, "name": "Skill Tree Node: Backlash",
+        "region": "Skill Tree After Tai-Chi Kick (Low Cost)", "requires": []
+    },
+    { # Tai-Chi Kick, 2 sp -> total 2 sp
+        "category": "skill", "address": 5035, "name": "Skill Tree Node: Skull Kick",
+        "region": "Skill Tree After Tai-Chi Kick (Low Cost)", "requires": []
+    },
+    { # Bullet Deflect (1 sp), 2 sp -> total 3 sp
+        "category": "skill", "address": 5036, "name": "Skill Tree Node: Breathing Exercise",
+        "region": "FSP Shops & Skill Tree (Low Cost)", "requires": []
+    },
+
+    # row 4
+    { # Unbounded Counter, 2 sp
+        "category": "skill", "address": 5041, "name": "Skill Tree Node: Leverage",
+        "region": "Skill Tree After Unbounded Counter (Low Cost)", "requires": []
+    },
+    { # Swift Runner (1 sp), Life Recovery (3 sp), 2 sp -> total 6 sp
+        "category": "skill", "address": 5042, "name": "Skill Tree Node: Water Flow",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { # Qi Boost 2 / Top Right (3 sp), Life Recovery (3 sp), 2 sp -> total 8 sp
+        "category": "skill", "address": 5043, "name": "Skill Tree Node: Full Control",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { # Qi Boost 2 / Top Right (3 sp), Backlash (2 sp), 2 sp -> total 7 sp
+        "category": "skill", "address": 5044, "name": "Skill Tree Node: Incisive Drain",
+        "region": "Skill Tree After Tai-Chi Kick (Medium Cost)", "requires": []
+    },
+    { # Breathing Exercise (3 sp), 2 sp -> total 5 sp
+        "category": "skill", "address": 5045, "name": "Skill Tree Node: Enhanced Bullet Deflect",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+
+    # row 5
+    { # Leverage (2 sp), 2 sp -> total 4 sp
+        "category": "skill", "address": 5051, "name": "Skill Tree Node: Enhanced Blade (Left)",
+        "region": "Skill Tree After Unbounded Counter (Medium Cost)", "requires": []
+    },
+    { # Leverage (2 sp), 2 sp -> total 4 sp
+        "category": "skill", "address": 5052, "name": "Skill Tree Node: Unbounded Drain",
+        "region": "Skill Tree After Unbounded Counter (Medium Cost)", "requires": []
+    },
+    { # Water Flow (6 sp), 2 sp -> total 8 sp
+        "category": "skill", "address": 5053, "name": "Skill Tree Node: Enhanced Talisman (Left)",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { # Water Flow (6 sp), 2 sp -> total 8 sp
+        "category": "skill", "address": 5054, "name": "Skill Tree Node: Qi Boost (Bottom Left)",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": []
+    },
+    { # Life Recovery (3 sp), 2 sp -> total 5 sp
+        "category": "skill", "address": 5055, "name": "Skill Tree Node: Azure Recovery",
+        "region": "FSP Shops & Skill Tree (Medium Cost)", "requires": [
+            # Although this is the same logic as Trick - Bow Hover, it's not practical to share that logic
+            # because these two locations are conditional on different options, and a shared third location
+            # would fail unit tests when the arrow items are useful instead of progression.
+            {
+                "option": "randomize_shops",
+                "true": [ { "anyOf": [
+                    { "item": "Progressive Cloud Piercer" },
+                    { "item": "Progressive Thunder Buster" },
+                    { "item": "Progressive Shadow Hunter" }
+                ] } ],
+                "false": [ { "anyOf": [
+                    { "item": "Arrow: Cloud Piercer" },
+                    { "item": "Arrow: Thunder Buster" },
+                    { "item": "Arrow: Shadow Hunter" }
+                ] } ]
+            }
+        ]
+    },
+    { # Full Control (8 sp), 2 sp -> total 10 sp
+        "category": "skill", "address": 5056, "name": "Skill Tree Node: Qi Boost (Bottom Right)",
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+    { # Full Control (8 sp), 2 sp -> total 10 sp
+        "category": "skill", "address": 5057, "name": "Skill Tree Node: Enhanced Talisman (Right)",
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+    { # Incisive Drain (7 sp), Enhanced Bullet Deflect (5 sp), 2 sp -> total 14 sp
+        "category": "skill", "address": 5058, "name": "Skill Tree Node: Enhanced Blade (Right)",
+        "region": "Skill Tree After Tai-Chi Kick (High Cost)", "requires": []
+    },
+
+    # row 6
+    { # Unbounded Drain (4 sp), 3 sp -> total 7 sp
+        "category": "skill", "address": 5061, "name": "Skill Tree Node: Unbounded Charge",
+        "region": "Skill Tree After Unbounded Counter (Medium Cost)", "requires": []
+    },
+    { # Unbounded Drain (4 sp), Qi Boost 3/BL (8 sp), 3 sp -> total 15 sp
+        "category": "skill", "address": 5062, "name": "Skill Tree Node: Enhanced Water Flow",
+        "region": "Skill Tree After Unbounded Counter (High Cost)", "requires": []
+    },
+    { # Qi Boost 3/BL (8 sp), Qi Boost 4/BR (10 sp), 3 sp -> total 18 sp (if you avoid double counting QB1+LR)
+        "category": "skill", "address": 5063, "name": "Skill Tree Node: Enhanced Full Control",
+        "region": "FSP Shops & Skill Tree (High Cost)", "requires": []
+    },
+    { # Qi Boost 4/BR (10 sp), Incisive Drain (7 sp), 3 sp -> total 17 sp (if you avoid double counting SS+QB2)
+        "category": "skill", "address": 5064, "name": "Skill Tree Node: Enhanced Qi Blast",
+        "region": "Skill Tree After Tai-Chi Kick (High Cost)", "requires": []
+    }
+]

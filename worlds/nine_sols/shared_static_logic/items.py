@@ -1,0 +1,295 @@
+items_data = [
+    { "code": 1, "name": "Seal of Kuafu", "type": "progression" },
+    { "code": 2, "name": "Seal of Goumang", "type": "progression" },
+    { "code": 3, "name": "Seal of Yanlao", "type": "progression" },
+    { "code": 4, "name": "Seal of Jiequan", "type": "progression" },
+    { "code": 5, "name": "Seal of Lady Ethereal", "type": "progression" },
+    { "code": 6, "name": "Seal of Ji", "type": "progression" },
+    { "code": 7, "name": "Seal of Fuxi", "type": "progression" },
+    { "code": 8, "name": "Seal of Nuwa", "type": "progression" },
+
+    { "code": 10, "name": "Mystic Nymph: Scout Mode", "type": "progression" },
+    { "code": 11, "name": "Tai-Chi Kick", "type": "progression" },
+    { "code": 12, "name": "Charged Strike", "type": "progression" },
+    { "code": 13, "name": "Air Dash", "type": "progression" },
+    { "code": 14, "name": "Unbounded Counter", "type": "progression" },
+    { "code": 15, "name": "Cloud Leap", "type": "progression_skip_balancing" }, # CL tends to show up too early and blow the game wide open
+    { "code": 16, "name": "Super Mutant Buster", "type": "progression" },
+
+    {
+        "category": "!shop", "code": 21, "name": "Arrow: Cloud Piercer",
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
+    },
+    {
+        "category": "!shop", "code": 22, "name": "Arrow: Thunder Buster",
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
+    },
+    {
+        "category": "!shop", "code": 23, "name": "Arrow: Shadow Hunter",
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
+    },
+    {
+        "category": "shop", "code": 24, "name": "Progressive Cloud Piercer", "count": 3,
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
+    },
+    {
+        "category": "shop", "code": 25, "name": "Progressive Thunder Buster", "count": 3,
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
+    },
+    {
+        "category": "shop", "code": 26, "name": "Progressive Shadow Hunter", "count": 3,
+        "type": { "option": "randomize_skill_tree", "true": "progression", "false": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" } }
+    },
+
+    # "Material"s
+    {
+        "code": 31, "name": "Herb Catalyst", "count": 8,
+        "type": { "option": "randomize_shops", "true": "progression", "false": "useful" }
+    },
+    {
+        "code": 32, "name": "Dark Steel", "count": 6,
+        "type": {
+            "option": "randomize_shops",
+            "true": "progression",
+            "false": {
+                "option": "logic_difficulty",
+                "vanilla": "useful",
+                "default": "progression"
+            }
+        }
+    },
+
+    # "Equipment"
+    {
+        "code": 41, "name": "Pipe Vial", "type": "useful",
+        "count": { "option": "randomize_shops", "true": 6, "false": 2 }
+    },
+    {
+        "code": 42, "name": "Computing Unit", "type": "useful",
+        "count": { "option": "randomize_shops", "true": 8, "false": 4 }
+    },
+    { "category": "shop", "code": 43, "name": "Azure Sand Magazine", "type": "useful", "count": 3 },
+
+    # "Key Item"s that are really just upgrades
+    { "code": 51, "name": "Tao Fruit", "type": "useful", "count": 13 },
+    { "code": 52, "name": "Greater Tao Fruit", "type": "useful", "count": 4 },
+    { "code": 53, "name": "Twin Tao Fruit", "type": "useful" },
+
+    # other "Status" menu upgrades
+    { "category": "shop", "code": 61, "name": "Pipe Upgrade", "type": "useful", "count": 8 },
+    { "category": "shop", "code": 62, "name": "Transmute Unto Wealth", "type": "useful" },
+    { "category": "shop", "code": 63, "name": "Transmute Unto Life", "type": "useful" },
+    { "category": "shop", "code": 64, "name": "Transmute Unto Qi", "type": "useful" },
+
+    # progression "Artifact"s gifted to Shuanshuan
+    { "code": 101, "name": "(Artifact) Ancient Sheet Music", "type": "weak_progression" },
+    { "code": 102, "name": "(Artifact) Kunlun Immortal Portrait", "type": "progression" },
+    { "code": 103, "name": "(Artifact) The Four Treasures of the Study", "type": "progression" },
+    { "code": 104, "name": "(Artifact) Unknown Seed", "type": "progression" },
+    { "code": 105, "name": "(Artifact) GM Fertilizer", "type": "progression", "count": 2 },
+
+    # progression "Artifact"s created by Shuanshuan
+    { "code": 111, "name": "(Artifact) Portrait of Yi", "type": "progression" },
+    { "code": 112, "name": "(Artifact) Legend of the Porky Heroes", "type": "weak_progression" },
+
+    # other "Artifact"s gifted to Shuanshuan
+    { "code": 121, "name": "(Artifact) Fusang Amulet", "type": "useful" },
+    { "code": 122, "name": "(Artifact) Multi-tool Kit", "type": "useful" },
+    { "code": 123, "name": "(Artifact) Sword of Jie", "type": "useful" },
+    { "code": 124, "name": "(Artifact) Antique Vinyl Record", "type": "useful" },
+    { "code": 125, "name": "(Artifact) Qiankun Board", "type": "useful" },
+    { "code": 126, "name": "(Artifact) Red Guifang Clay", "type": "useful" },
+    { "code": 127, "name": "(Artifact) Penglai Recipe Collection", "type": "useful" },
+    { "code": 128, "name": "(Artifact) Tiandao Academy Periodical", "type": "useful" },
+    { "code": 129, "name": "(Artifact) Virtual Reality Device", "type": "useful" },
+    { "code": 130, "name": "(Artifact) Ready-to-Eat Rations", "type": "useful" },
+
+    # other "Key Item"s, roughly in order of (randomizer) importance
+    { "code": 141, "name": "Abandoned Mines Access Token", "type": "progression" },
+    { "code": 142, "name": "Elevator Access Token", "type": "progression" },
+    { "code": 143, "name": "Homing Darts", "type": "weak_progression" },
+    { "code": 144, "name": "Thunderburst Bomb", "type": "weak_progression" },
+    { "code": 145, "name": "Ancient Penglai Ballad", "type": "weak_progression" },
+    { "code": 146, "name": "Ji's Hair", "type": "weak_progression" },
+    { "code": 147, "name": "Tianhuo Serum", "type": "weak_progression" },
+    { "code": 148, "name": "Rhizomatic Bomb", "type": "useful" },
+    { "code": 149, "name": "Soul-Severing Blade", "type": "useful" },
+    { "code": 150, "name": "Firestorm Ring", "type": "useful" },
+    { "code": 151, "name": "Poem Hidden in the Immortal's Portrait", "type": "filler" },
+    { "code": 152, "name": "Bloody Crimson Hibiscus", "type": "filler" },
+
+    # unique recyclables (including Gene Eradicator since that's its best use)
+    { "code": 161, "name": "(Recyclable) Noble Ring", "type": "useful" },
+    { "code": 162, "name": "(Recyclable) Passenger Token: Zouyan", "type": "filler" },
+    { "code": 163, "name": "(Recyclable) Passenger Token: A-Shou", "type": "filler" },
+    { "code": 164, "name": "(Recyclable) Passenger Token: Xipu", "type": "filler" },
+    { "code": 165, "name": "(Recyclable) Passenger Token: Yangfan", "type": "filler" },
+    { "code": 166, "name": "(Recyclable) Passenger Token: Jihai", "type": "filler" },
+    { "code": 167, "name": "(Recyclable) Passenger Token: Aimu", "type": "filler" },
+    { "code": 168, "name": "(Recyclable) Passenger Token: Shiyangyue", "type": "filler" },
+    { "code": 169, "name": "Gene Eradicator", "type": "useful" },
+
+    { "code": 201, "name": "Central Core Chip", "type": "useful" },
+    { "code": 202, "name": "Power Reservoir Chip", "type": "useful" },
+    { "code": 203, "name": "Agricultural Zone Chip", "type": "useful" },
+    { "code": 204, "name": "Abandoned Mines Chip", "type": "useful" },
+    { "code": 205, "name": "Warehouse Zone Chip", "type": "useful" },
+    { "code": 206, "name": "Transmutation Zone Chip", "type": "useful" },
+    { "code": 207, "name": "Grotto of Scriptures Chip", "type": "useful" },
+    { "code": 208, "name": "Empyrean District Chip", "type": "useful" },
+    { "code": 209, "name": "Research Center Chip", "type": "useful" },
+
+    { "code": 301, "name": "Stasis Jade", "type": "useful" },
+    { "code": 302, "name": "Bearing Jade", "type": "useful" },
+    { "code": 303, "name": "Harness Force Jade", "type": "useful" },
+    { "code": 304, "name": "Iron Skin Jade", "type": "useful" },
+    { "code": 305, "name": "Hedgehog Jade", "type": "useful" },
+    { "code": 306, "name": "Pauper Jade", "type": "useful" },
+    { "code": 307, "name": "Steely Jade", "type": "useful" },
+    { "code": 308, "name": "Immovable Jade", "type": "useful" },
+    { "code": 309, "name": "Soul Reaper Jade", "type": "useful" },
+    { "code": 310, "name": "Avarice Jade", "type": "useful" },
+    { "code": 311, "name": "Revival Jade", "type": "useful" },
+    { "code": 312, "name": "Swift Descent Jade", "type": "useful" },
+    { "code": 313, "name": "Mob Quell Jade - Yin", "type": "useful" }, # 314 unused because I forgot Mob Quell Yang was a shop jade
+    { "code": 315, "name": "Focus Jade", "type": "useful" },
+    { "code": 316, "name": "Swift Blade Jade", "type": "useful" },
+    { "code": 317, "name": "Breather Jade", "type": "useful" },
+    { "code": 318, "name": "Qi Swipe Jade", "type": "useful" },
+    { "code": 319, "name": "Qi Blade Jade", "type": "useful" },
+    { "code": 320, "name": "Divine Hand Jade", "type": "useful" },
+    { "code": 321, "name": "Cultivation Jade", "type": "useful" },
+    # Chiyou shop jades
+    { "category": "shop", "code": 331, "name": "Recovery Jade", "type": "useful" },
+    { "category": "shop", "code": 332, "name": "Health Thief Jade", "type": "useful" },
+    { "category": "shop", "code": 333, "name": "Last Stand Jade", "type": "useful" },
+    { "category": "shop", "code": 334, "name": "Quick Dose Jade", "type": "useful" },
+    { "category": "shop", "code": 335, "name": "Reciprocation Jade", "type": "useful" },
+    # 3D printer jades
+    { "category": "shop", "code": 341, "name": "Ricochet Jade", "type": "useful" },
+    { "category": "shop", "code": 342, "name": "Medical Jade", "type": "useful" },
+    { "category": "shop", "code": 343, "name": "Mob Quell Jade - Yang", "type": "useful" },
+
+    { "code": 401, "name": "(Poison) Medicinal Citrine", "type": "useful" },
+    { "code": 402, "name": "(Poison) Golden Yinglong Egg", "type": "useful" },
+    { "code": 408, "name": "(Poison) Molted Tianma Hide", "type": "useful" },
+    { "code": 403, "name": "(Poison) Residual Hair", "type": "useful" },
+    { "code": 404, "name": "(Poison) Porcine Gem", "type": "useful" },
+    { "code": 405, "name": "(Poison) Plantago Frog", "type": "useful" },
+    { "code": 406, "name": "(Poison) Oriander", "type": "useful" },
+    { "code": 407, "name": "(Poison) Turtle Scorpion", "type": "useful" },
+    # Chiyou shop poisons
+    { "category": "shop", "code": 411, "name": "(Poison) Ball of Flavor", "type": "useful" },
+    { "category": "shop", "code": 412, "name": "(Poison) Dragon's Whip", "type": "useful" },
+    { "category": "shop", "code": 413, "name": "(Poison) Necroceps", "type": "useful" },
+    { "category": "shop", "code": 414, "name": "(Poison) Guiseng", "type": "useful" },
+    { "category": "shop", "code": 415, "name": "(Poison) Thunder Centipede", "type": "useful" },
+    { "category": "shop", "code": 416, "name": "(Poison) Wall-climbing Gecko", "type": "useful" },
+    { "category": "shop", "code": 417, "name": "(Poison) Gutwrench Fruit", "type": "useful" },
+
+    { "code": 502, "name": "(Database) Apeman Surveillance Footage", "type": "filler" },
+    { "code": 503, "name": "(Database) Council Digital Signage", "type": "filler" },
+    { "code": 504, "name": "(Database) New Kunlun Launch Memorial", "type": "filler" },
+    { "code": 505, "name": "(Database) Council Tenets", "type": "filler" },
+    { "code": 506, "name": "(Database) Anomalous Root Node", "type": "filler" },
+    { "code": 507, "name": "(Database) Rhizomatic Energy Meter", "type": "filler" },
+    { "code": 508, "name": "(Database) Radiant Pagoda Control Panel", "type": "filler" },
+    { "code": 509, "name": "(Database) Dusk Guardian Recording Device 1", "type": "filler" },
+    { "code": 510, "name": "(Database) Lake Yaochi Stele", "type": "filler" },
+    { "code": 511, "name": "(Database) Yellow Water Report", "type": "filler" },
+    { "code": 512, "name": "(Database) Mutated Crops", "type": "filler" },
+    { "code": 513, "name": "(Database) Dusk Guardian Recording Device 2", "type": "filler" },
+    { "code": 514, "name": "(Database) Water Synthesis Pipeline Panel", "type": "filler" },
+    { "code": 515, "name": "(Database) Jie Clan Family Precept", "type": "filler" },
+    { "code": 516, "name": "(Database) Transmutation Furnace Monitor", "type": "filler" },
+    { "code": 517, "name": "(Database) Dusk Guardian Recording Device 4", "type": "filler" },
+    { "code": 518, "name": "(Database) Guard Production Station", "type": "filler" },
+    { "code": 519, "name": "(Database) Cave Stone Inscription", "type": "filler" },
+    { "code": 520, "name": "(Database) Dead Person's Note", "type": "filler" },
+    { "code": 521, "name": "(Database) Camp Scroll", "type": "filler" },
+    { "code": 522, "name": "(Database) Warehouse Database", "type": "filler" },
+    { "code": 523, "name": "(Database) Dusk Guardian Recording Device 3", "type": "filler" },
+    { "code": 524, "name": "(Database) Ancient Weapon Console", "type": "filler" },
+    { "code": 525, "name": "(Database) Hexachrem Vault Scroll", "type": "filler" },
+    { "code": 526, "name": "(Database) Ancient Cave Painting", "type": "filler" },
+    { "code": 527, "name": "(Database) Coffin Inscription", "type": "filler" },
+    { "code": 528, "name": "(Database) Stone Carvings", "type": "filler" },
+    { "code": 529, "name": "(Database) Secret Mural I", "type": "filler" },
+    { "code": 530, "name": "(Database) Secret Mural II", "type": "filler" },
+    { "code": 531, "name": "(Database) Secret Mural III", "type": "filler" },
+    { "code": 532, "name": "(Database) Stowaway's Corpse", "type": "filler" },
+    { "code": 533, "name": "(Database) Empyrean Bulletin Board", "type": "filler" },
+    { "code": 534, "name": "(Database) Dusk Guardian Recording Device 5", "type": "filler" },
+    { "code": 535, "name": "(Database) Vital Sanctum Tower Monitoring Panel", "type": "filler" },
+    { "code": 536, "name": "(Database) Dusk Guardian Recording Device 6", "type": "filler" },
+    { "code": 537, "name": "(Database) Dusk Guardian Headquarters", "type": "filler" },
+    { "code": 538, "name": "(Database) Farmland Markings", "type": "filler" },
+    { "code": 539, "name": "(Database) Evacuation Notice For Miners", "type": "filler" },
+    { "code": 540, "name": "(Database) Prisoner's Bamboo Scroll I", "type": "filler" },
+    { "code": 541, "name": "(Database) Prisoner's Bamboo Scroll II", "type": "filler" },
+    { "code": 542, "name": "(Database) Pharmacy Panel", "type": "filler" },
+    { "code": 543, "name": "(Database) Haotian Sphere Model", "type": "filler" },
+    { "code": 544, "name": "(Database) Galactic Dock Sign", "type": "filler" },
+    { "code": 545, "name": "(Database) Underground Water Tower", "type": "filler" },
+
+    { "code": 601, "name": "Jin x800", "type": "filler" },
+    { "code": 602, "name": "Jin x320", "type": "filler" },
+    { "code": 603, "name": "Jin x50", "type": "filler" },
+    { "code": 604, "name": "(Recyclable) Basic Component", "type": "filler" },
+    { "code": 605, "name": "(Recyclable) Standard Component", "type": "filler" },
+    { "code": 606, "name": "(Recyclable) Advanced Component", "type": "filler" },
+
+    { "code": None, "name": "Victory - Eggnog", "type": "progression" },
+    { "code": None, "name": "Event - Kuafu in FSP", "type": "progression" },
+    { "code": None, "name": "Event - Chiyou in FSP", "type": "progression" },
+    { "code": None, "name": "Event - Kuafu Extra Shop Inventory", "type": "progression" },
+    { "code": None, "name": "Event - Jiequan 1 Fight Unlocked", "type": "progression" },
+    { "code": None, "name": "Event - Lady Ethereal Soulscape Unlocked", "type": "progression" },
+    { "category": "medium_logic", "code": None, "name": "Trick - Long Jump with Swift Runner", "type": "progression" },
+    { "category": "medium_logic", "code": None, "name": "Trick - Bow Hover", "type": "progression" },
+    { "category": "medium_logic", "code": None, "name": "Trick - Break CS Barrier With Bow", "type": "progression" },
+    { "category": "medium_logic", "code": None, "name": "Trick - Break One-Way Barrier With Bow", "type": "progression" },
+
+    # core movement abilities taken away by the randomizer
+    { "code": 701, "name": "Wall Climb", "type": "progression" },
+    { "code": 702, "name": "Grapple", "type": "progression" },
+    { "code": 703, "name": "Ledge Grab", "type": "progression" },
+
+    # pseudo-items that tell the rando mod to unlock something
+    { "code": 801, "name": "Progressive Shop Unlock", "type": "progression" },
+    # root node items
+    { "code": 810, "name": "Outer Warehouse Root Node", "type": "progression" },
+    { "code": 811, "name": "Factory (Great Hall) Root Node", "type": "progression" },
+    { "code": 812, "name": "Apeman Facility (Depths) Root Node", "type": "progression" },
+    { "code": 813, "name": "Power Reservoir (East) Root Node", "type": "progression" },
+    { "code": 814, "name": "Radiant Pagoda Root Node", "type": "progression" },
+    { "code": 815, "name": "Lake Yaochi Ruins Root Node", "type": "progression" },
+    { "code": 816, "name": "Grotto of Scriptures (East) Root Node", "type": "progression" },
+
+    # skill rando items
+    {
+        "category": "skill", "code": 901, "name": "Swift Runner",
+        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+    },
+    { "category": "skill", "code": 902, "name": "Progressive Bullet Deflect", "count": 2, "type": "progression" },
+
+    { "category": "skill", "code": 911, "name": "Progressive Water Flow", "count": 2, "type": "useful" },
+    { "category": "skill", "code": 912, "name": "Progressive Full Control", "count": 2, "type": "useful" },
+    { "category": "skill", "code": 913, "name": "Enhanced Qi Blast", "type": "useful" },
+
+    { "category": "skill", "code": 921, "name": "Shadow Strike", "type": "useful" },
+    { "category": "skill", "code": 922, "name": "Swift Rise", "type": "useful" },
+    { "category": "skill", "code": 923, "name": "Life Recovery", "type": "useful" },
+    { "category": "skill", "code": 924, "name": "Backlash", "type": "useful" },
+    { "category": "skill", "code": 925, "name": "Skull Kick", "type": "useful" },
+    { "category": "skill", "code": 926, "name": "Breathing Exercise", "type": "useful" },
+    { "category": "skill", "code": 927, "name": "Leverage", "type": "useful" },
+    { "category": "skill", "code": 928, "name": "Azure Recovery", "type": "useful" },
+    { "category": "skill", "code": 929, "name": "Incisive Drain", "type": "useful" },
+    { "category": "skill", "code": 930, "name": "Unbounded Drain", "type": "useful" },
+    { "category": "skill", "code": 931, "name": "Unbounded Charge", "type": "useful" },
+
+    { "category": "skill", "code": 941, "name": "Qi Boost", "count": 4, "type": "useful" },
+    { "category": "skill", "code": 942, "name": "Enhanced Talisman", "count": 2, "type": "useful" },
+    { "category": "skill", "code": 943, "name": "Enhanced Blade", "count": 2, "type": "useful" }
+]
