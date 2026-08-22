@@ -80,7 +80,10 @@ three_proofs = [
     ItemName.ProofofPeace,
     ItemName.ProofofNonexistence
 ]
-
+scom=[
+    ItemName.SecondChance,
+    ItemName.OnceMore,
+]
 auto_form_dict = {
     ItemName.FinalForm:  ItemName.AutoFinal,
     ItemName.MasterForm: ItemName.AutoMaster,
@@ -150,7 +153,8 @@ easy_terra_tools = {
     ItemName.Guard:          1,
     ItemName.DodgeRoll:      3,
     ItemName.AerialDodge:    3,
-    ItemName.Glide:          3
+    ItemName.Glide:          3,
+    ItemName.AerialRecovery: 1
 }
 normal_terra_tools = {
     ItemName.SlideDash:   1,
@@ -160,7 +164,8 @@ normal_terra_tools = {
     ItemName.Guard:       1,
     ItemName.DodgeRoll:   2,
     ItemName.AerialDodge: 2,
-    ItemName.Glide:       2
+    ItemName.Glide:       2,
+    ItemName.AerialRecovery: 1
 }
 hard_terra_tools = {
     ItemName.Explosion:   1,
@@ -168,7 +173,8 @@ hard_terra_tools = {
     ItemName.DodgeRoll:   2,
     ItemName.AerialDodge: 2,
     ItemName.Glide:       2,
-    ItemName.Guard:       1
+    ItemName.Guard:       1,
+    ItemName.AerialRecovery: 1
 }
 easy_data_luxord_tools = {
     ItemName.SlideDash:      1,
@@ -352,6 +358,7 @@ easy_sephiroth_tools = {
     ItemName.FinishingPlus:  1,
     ItemName.SecondChance:   1,
     ItemName.OnceMore:       1,
+    ItemName.AerialRecovery: 1
 }
 normal_sephiroth_tools = {
     ItemName.Guard:          1,
@@ -362,12 +369,14 @@ normal_sephiroth_tools = {
     ItemName.Explosion:      1,
     ItemName.DodgeRoll:      3,
     ItemName.FinishingPlus:  1,
+    ItemName.AerialRecovery: 1
 }
 hard_sephiroth_tools = {
     ItemName.Guard:          1,
     ItemName.ReflectElement: 1,
     ItemName.DodgeRoll:      2,
     ItemName.FinishingPlus:  1,
+    ItemName.AerialRecovery: 1
 }
 
 not_hard_cor_tools_dict = {
@@ -435,6 +444,7 @@ easy_data_roxas_tools = {
     ItemName.FinishingPlus:  1,
     ItemName.SecondChance:   1,
     ItemName.OnceMore:       1,
+    ItemName.AerialRecovery: 1,
 }
 normal_data_roxas_tools = {
     ItemName.Guard:          1,
@@ -445,6 +455,7 @@ normal_data_roxas_tools = {
     ItemName.Explosion:      1,
     ItemName.DodgeRoll:      3,
     ItemName.FinishingPlus:  1,
+    ItemName.AerialRecovery: 1,
 }
 hard_data_roxas_tools = {
     ItemName.Guard:          1,
@@ -464,6 +475,7 @@ easy_data_axel_tools = {
     ItemName.SecondChance:    1,
     ItemName.OnceMore:        1,
     ItemName.BlizzardElement: 3,
+    ItemName.ThunderElement:  1,
 }
 normal_data_axel_tools = {
     ItemName.Guard:           1,
@@ -475,6 +487,7 @@ normal_data_axel_tools = {
     ItemName.DodgeRoll:       3,
     ItemName.FinishingPlus:   1,
     ItemName.BlizzardElement: 3,
+    ItemName.ThunderElement:  1,
 }
 hard_data_axel_tools = {
     ItemName.Guard:           1,
@@ -482,6 +495,7 @@ hard_data_axel_tools = {
     ItemName.DodgeRoll:       2,
     ItemName.FinishingPlus:   1,
     ItemName.BlizzardElement: 2,
+    ItemName.ThunderElement:  1,
 }
 easy_roxas_tools = {
     ItemName.AerialDodge:     1,
