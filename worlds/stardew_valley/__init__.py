@@ -8,6 +8,7 @@ from typing import Dict, List, Any, ClassVar, TextIO, Optional
 
 import entrance_rando
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import components, Component, icon_paths, Type
@@ -34,6 +35,7 @@ from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
+from .stardew_rule.rule_explain import RuleExplanation
 from .strings.ap_names.ap_option_names import StartWithoutOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
@@ -87,28 +89,6 @@ class StardewWebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_fr]
-
-
-if TRACKER_ENABLED:
-    from .. import user_folder
-    import os
-
-    # Best effort to detect if universal tracker is installed
-    if any("tracker.apworld" in f.name for f in os.scandir(user_folder)):
-        def launch_client(*args):
-            from worlds.LauncherComponents import launch
-            from .client import launch as client_main
-            launch(client_main, name="Stardew Valley Tracker", args=args)
-
-
-        components.append(Component(
-            "Stardew Valley Tracker",
-            func=launch_client,
-            component_type=Type.CLIENT,
-            icon='stardew'
-        ))
-
-        icon_paths['stardew'] = f"ap:{__name__}/stardew.png"
 
 
 class StardewValleyWorld(World):
@@ -269,7 +249,6 @@ class StardewValleyWorld(World):
             while precollected_count < item_count:
                 self.multiworld.push_precollected(self.create_item(item_name))
                 precollected_count += 1
-
 
     def precollect_start_without_items(self):
         if StartWithoutOptionName.landslide not in self.options.start_without:
@@ -561,3 +540,13 @@ class StardewValleyWorld(World):
             # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
+
+    previous_explanation: RuleExplanation | None = None
+
+    def explain_rule(self, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
+        from .client import cmd_explain
+        return cmd_explain(self, target_name, state)
+
+    def explain_more(self, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
+        from .client import cmd_more
+        return cmd_more(self, target_name, state)
