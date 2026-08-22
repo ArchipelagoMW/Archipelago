@@ -34,6 +34,7 @@ def get_meta(options_source: dict, race: bool = False) -> dict[str, list[str] | 
         "remaining_mode": str(options_source.get("remaining_mode", ServerOptions.remaining_mode)),
         "collect_mode": str(options_source.get("collect_mode", ServerOptions.collect_mode)),
         "countdown_mode": str(options_source.get("countdown_mode", ServerOptions.countdown_mode)),
+        "player_locking": bool(int(options_source.get("player_locking", not ServerOptions.disable_player_locking))),
         "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
         "server_password": str(options_source.get("server_password", None)),
     }
