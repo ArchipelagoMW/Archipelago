@@ -96,7 +96,7 @@ class OSRSWorld(World):
         starting_area = self.options.starting_area
 
         #UT specific override, if we are in normal gen, resolve starting area, we will get it from slot_data in UT
-        if not hasattr(self.multiworld, "generation_is_fake"):
+        if not self.multiworld.generation_is_fake:
             if starting_area.value == StartingArea.option_any_bank:
                 self.starting_area_item = rnd.choice(starting_area_dict)
             elif starting_area.value < StartingArea.option_chunksanity:
@@ -198,7 +198,7 @@ class OSRSWorld(World):
         return True
 
     def roll_locations(self):
-        generation_is_fake = hasattr(self.multiworld, "generation_is_fake")  # UT specific override
+        generation_is_fake = self.multiworld.generation_is_fake  # UT specific override
         locations_required = 0
         for item_row in item_rows:
             if item_row.name == self.starting_area_item:
