@@ -29,10 +29,10 @@ if __name__ == "__main__":
     ModuleUpdate.update()
 
 import Utils
-from Utils import env_cleared_lib_path, init_logging, is_linux, is_macos, is_windows, local_path
+from Utils import env_cleared_lib_path, gui_enabled, init_logging, is_linux, is_macos, is_windows, local_path
 
 if __name__ == "__main__":
-    init_logging('Launcher')
+    init_logging("Launcher")
 
 def update_settings():
     from settings import get_settings
@@ -430,20 +430,29 @@ def main(args: argparse.Namespace | dict | None = None):
         if path.startswith("archipelago://"):
             args["args"] = (path, *args.get("args", ()))
             # add the url arg to the passthrough args
-            components, text_client_component = handle_uri(path)
-            if not components:
+            picked_components, text_client_component = handle_uri(path)
+            if not picked_components:
                 args["component"] = text_client_component
             else:
-                args['launch_components'] = [text_client_component, *components]
+                args["launch_components"] = [text_client_component, *picked_components]
         else:
             from worlds.LauncherComponents import identify
             file, component = identify(path)
             if file:
-                args['file'] = file
+                args["file"] = file
             if component:
-                args['component'] = component
+                args["component"] = component
             if not component:
                 logging.warning(f"Could not identify Component responsible for {path}")
+    elif not gui_enabled:
+        from worlds.LauncherComponents import components, Type
+        from utils.curses_utils import curses_select
+        component_lookup = {c.display_name: c for c in components if c.type != Type.HIDDEN}
+        component_name = curses_select(list(component_lookup.keys()))
+        if component_name is not None:
+            args["component"] = component_lookup[component_name]
+        else:
+            return
 
     if args["update_settings"]:
         update_settings()
@@ -455,11 +464,11 @@ def main(args: argparse.Namespace | dict | None = None):
         run_gui(args.get("launch_components", None), args.get("args", ()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(
-        description='Archipelago Launcher',
+        description="Archipelago Launcher",
         usage="[-h] [--update_settings] [Patch|Game|Component] [-- component args here]"
     )
     run_group = parser.add_argument_group("Run")
@@ -468,6 +477,7 @@ if __name__ == '__main__':
     run_group.add_argument("Patch|Game|Component|url", type=str, nargs="?",
                            help="Pass either a patch file, a generated game, the component name to run, or a url to "
                                 "connect with.")
+    run_group.add_argument("--nogui", action="store_true")
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
     main(parser.parse_args())
