@@ -1,1 +1,0 @@
-This is a vendored copy of https://github.com/n-takumasa/json-with-comments/blob/main/jsonc/__init__.py since Archipelago currently does not support apworlds declaring package dependencies
