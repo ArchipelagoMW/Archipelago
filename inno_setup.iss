@@ -212,6 +212,11 @@ Root: HKCR; Subkey: "{#MyAppName}mm3patch";                     ValueData: "Arch
 Root: HKCR; Subkey: "{#MyAppName}mm3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}mm3patch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
 
+Root: HKCR; Subkey: ".apmmx5";                                   ValueData: "{#MyAppName}mmx5patch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mmx5patch";                     ValueData: "Archipelago Mega Man X5 Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mmx5patch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mmx5patch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
+
 Root: HKCR; Subkey: ".apgl";                                   ValueData: "{#MyAppName}glpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}glpatch";                     ValueData: "Archipelago Gauntlet Legends Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}glpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoLauncher.exe,0";                           ValueType: string;  ValueName: "";
