@@ -166,27 +166,33 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
 
     args.multi = max(player_id - 1, args.multi)
 
-    if args.multi == 0:
+    if args.multi == 0 and args.weights_file_path in weights_cache:
         if player_errors:
             errors = "\n\n".join(player_errors)
             raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
                              f"See logs for full tracebacks.\n\n{errors}")
-        raise ValueError(
-            "No individual player files found and number of players is 0. "
-            "Provide individual player files or specify the number of players via host.yaml or --multi."
-        )
+        raise ValueError("Found only a weights file and number of players is set to 0. "
+                         "Provide individual player files or specify the number of players via host.yaml or --multi.")
 
-    logging.info(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, "
-                 f"{seed_name} Seed {seed} with plando: {args.plando}")
+    if player_id - 1 < args.multi and args.weights_file_path not in weights_cache:
+        if player_errors:
+            errors = "\n\n".join(player_errors)
+            raise ValueError("Specified player count is higher than number of players found (excluding "
+                             f"{len(player_errors)} with errors), and no general weights file is present. "
+                             f"See logs for full error tracebacks.\n\n{errors}")
+        raise ValueError("Specified player count is higher than number of players found, and no general weights "
+                         "file is present.")
 
     if not weights_cache:
         if player_errors:
             errors = "\n\n".join(player_errors)
             raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
                              f"See logs for full tracebacks.\n\n{errors}")
-        raise Exception(f"No weights found. "
-                        f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
-                        f"A mix is also permitted.")
+        raise ValueError(f"No player weights found. Provide your player files inside of the Players folder, "
+                         "reachable from 'Browse Files' in the Launcher.")
+
+    logging.info(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, "
+                 f"{seed_name} Seed {seed} with plando: {args.plando}")
 
     from worlds.AutoWorld import AutoWorldRegister
     args.outputname = seed_name
