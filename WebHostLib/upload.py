@@ -21,7 +21,7 @@ from . import app
 from .models import Seed, Room, Slot, GameDataPackage
 
 banned_extensions = (".sfc", ".z64", ".n64", ".nes", ".smc", ".sms", ".gb", ".gbc", ".gba")
-allowed_options_extensions = (".yaml", ".json", ".yml", ".txt", ".zip")
+allowed_options_extensions = (".yaml", ".json", ".yml", ".toml", ".txt", ".zip")
 allowed_generation_extensions = (".archipelago", ".zip")
 
 games_package_schema = schema.Schema({
