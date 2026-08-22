@@ -79,3 +79,28 @@ class StarCostAccessTestBase(SM64TestBase):
         self.collect([self.get_item_by_name("Power Star")] * bits_cost)
         self.assertTrue(self.can_reach_region("Third Floor"))
         self.assertTrue(self.can_reach_region("Bowser in the Sky"))
+
+
+class UTGlitchLogicTestBase(SM64TestBase):
+    options = {
+        "enable_move_rando": Options.EnableMoveRandomizer.option_true,
+        "buddy_checks": Options.BuddyChecks.option_true,
+    }
+
+    def test_ut_glitch_satisfies_moveless(self):
+        self.assertFalse(self.can_reach_location("BoB: Behind Chain Chomp's Gate"))
+        self.collect(self.world.create_item("ut_glitch"))
+        self.assertTrue(self.can_reach_location("BoB: Behind Chain Chomp's Gate"))
+
+    def test_ut_glitch_satisfies_capless(self):
+        self.collect(self.world.create_item("Cannon Unlock BoB"))
+        self.assertFalse(self.can_reach_location("BoB: Mario Wings to the Sky"))
+        self.collect(self.world.create_item("ut_glitch"))
+        self.assertTrue(self.can_reach_location("BoB: Mario Wings to the Sky"))
+
+    def test_ut_glitch_satisfies_cannonless(self):
+        self.collect(self.world.create_item("Wing Cap"))
+        self.collect(self.world.create_item("Triple Jump"))
+        self.assertFalse(self.can_reach_location("BoB: Shoot to the Island in the Sky"))
+        self.collect(self.world.create_item("ut_glitch"))
+        self.assertTrue(self.can_reach_location("BoB: Shoot to the Island in the Sky"))
