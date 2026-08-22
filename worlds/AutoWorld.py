@@ -7,11 +7,11 @@ import sys
 import time
 from collections.abc import Callable, Iterable, Mapping
 from random import Random
-from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, TextIO, Tuple,
+from typing import (Any, ClassVar, Dict, FrozenSet, List, Literal, Optional, Self, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
-from BaseClasses import CollectionState, Entrance
+from BaseClasses import DEFAULT_COLLECTION_RULE, CollectionState, Entrance
 from rule_builder.rules import CustomRuleRegister, Rule
 from Utils import Version
 
@@ -649,6 +649,37 @@ class World(metaclass=AutoWorldRegister):
             if isinstance(spot, Entrance):
                 self._register_rule_indirects(rule, spot)
         spot.access_rule = rule
+
+    def add_rule(
+        self,
+        spot: Location | Entrance,
+        rule: CollectionRule | Rule[Any],
+        combine: Literal["and", "or"] = "and",
+    ) -> None:
+        """Combines the given rule with an existing access rule for a location or entrance"""
+        old_rule = spot.access_rule
+        if isinstance(rule, Rule):
+            if old_rule is DEFAULT_COLLECTION_RULE:
+                if combine == "and":
+                    self.set_rule(spot, rule)
+                return
+            if isinstance(old_rule, Rule.Resolved):
+                if combine == "and":
+                    self.set_rule(spot, rule & old_rule)
+                else:
+                    self.set_rule(spot, rule | old_rule)
+            else:
+                raise ValueError("Cannot combine lambda rules with Rule Builder rules")
+        else:
+            if isinstance(old_rule, Rule.Resolved):
+                raise ValueError("Cannot combine lambda rules with Rule Builder rules")
+            if old_rule is DEFAULT_COLLECTION_RULE:
+                spot.access_rule = rule if combine == "and" else old_rule
+            else:
+                if combine == "and":
+                    spot.access_rule = lambda state: rule(state) and old_rule(state)
+                else:
+                    spot.access_rule = lambda state: rule(state) or old_rule(state)
 
     def set_completion_rule(self, rule: CollectionRule | Rule[Any]) -> None:
         """Set the completion rule for this world"""
