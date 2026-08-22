@@ -7,7 +7,9 @@ from Utils import snes_to_pc
 
 from .EnemizerPatches import apply_enemizer_base_patch
 from .Rom import LocalRom, get_base_rom_path
+from .enemizer_data.default_dungeon_room_enemies import DEFAULT_DUNGEON_ROOM_ENEMIES
 from .enemizer_data.dungeon_sprite_addresses import DUNGEON_SPRITE_ADDRESSES, KEYED_SPRITE_ID_ADDRESSES
+from .enemizer_data.enemy_combat_data import EnemyCombatModel, VANILLA_COMBAT_MODEL
 from .enemizer_data.enemy_room_metadata import (
     BOSS_ROOM_IDS,
     DONT_RANDOMIZE_ROOM_IDS,
@@ -22,6 +24,7 @@ from .enemizer_data.overworld_enemy_metadata import (
     DO_NOT_RANDOMIZE_AREA_IDS,
     FORCED_GROUP_REQUIREMENTS,
 )
+from .enemizer_data.room_names import ROOM_NAME_TO_ID
 from .enemizer_data.symbols import ENEMIZER_SYMBOLS
 
 if TYPE_CHECKING:
@@ -53,6 +56,12 @@ POTENTIAL_SUBGROUP_0 = (22, 31, 47, 14)
 POTENTIAL_SUBGROUP_1 = (44, 30, 32)
 POTENTIAL_SUBGROUP_2 = (12, 18, 23, 24, 28, 46, 34, 35, 39, 40, 38, 41, 36, 37, 42)
 POTENTIAL_SUBGROUP_3 = (17, 16, 27, 20, 82, 83)
+STANDARD_ESCAPE_OVERWORLD_AREA_IDS = frozenset((0x1B, 0x2B, 0x2C))
+# Standard opening escape uses the separate Beginning-mode overworld sheets rather than
+# the ordinary area graphics-block bytes. The three relevant groups are the runtime
+# Beginning sheet observed in Hyrule Castle courtyard (group 2) plus the first-part
+# graphics blocks used by the linked courtyard/Link's House screens (groups 0 and 1).
+STANDARD_BEGINNING_OVERWORLD_GROUP_IDS = frozenset((0x00, 0x01, 0x02))
 GUARD_SUBGROUP_1_DUNGEON_GROUP_IDS = frozenset((1, 2, 3, 4))
 SELECTED_BOSS_GROUP_REQUIREMENTS = {
     "Armos": (9, 83),
@@ -127,6 +136,7 @@ class EnemySpriteRequirement:
     excluded_rooms: tuple[int, ...]
     dont_randomize_rooms: tuple[int, ...]
     spawnable_rooms: tuple[int, ...]
+    combat_reference_id: Optional[int] = None
 
 
 @dataclass(frozen=True)
@@ -174,6 +184,7 @@ class DungeonEnemyRoom:
     is_water_room: bool
     do_not_randomize: bool
     no_special_enemies_standard: bool
+    all_sprites: tuple[DungeonEnemySprite, ...] = tuple()
 
 
 @dataclass(frozen=True)
@@ -185,6 +196,22 @@ class RandomizedDungeonEnemySprite:
     sprite_id: int
     is_overlord: bool
     has_key: bool
+
+    @property
+    def is_on_bg2(self) -> bool:
+        return bool(self.byte_0 & 0x80)
+
+    @property
+    def hm_param(self) -> int:
+        return ((self.byte_0 & 0x60) >> 2) | ((self.byte_1 & 0xE0) >> 5)
+
+    @property
+    def y_coord_pixels(self) -> int:
+        return (self.byte_0 & 0x1F) * 16
+
+    @property
+    def x_coord_pixels(self) -> int:
+        return (self.byte_1 & 0x1F) * 16
 
 
 @dataclass(frozen=True)
@@ -199,6 +226,22 @@ class RandomizedDungeonEnemyRoom:
     sort_sprites_value: int
     sprites: tuple[RandomizedDungeonEnemySprite, ...]
     skipped_randomization: bool
+
+
+@dataclass(frozen=True)
+class EffectiveDungeonEnemySprite:
+    requirement: EnemySpriteRequirement
+    has_key: bool
+    x_coord_pixels: int
+    y_coord_pixels: int
+
+
+@dataclass(frozen=True)
+class DefaultDungeonEnemySprite:
+    sprite_id: int
+    has_key: bool
+    x_coord_pixels: int
+    y_coord_pixels: int
 
 
 @dataclass(frozen=True)
@@ -258,6 +301,7 @@ class EnemyShuffleState:
     dont_randomize_overworld_area_ids: frozenset[int]
     randomized_dungeon_rooms: dict[int, RandomizedDungeonEnemyRoom]
     randomized_overworld_areas: dict[int, RandomizedOverworldEnemyArea]
+    combat_model: EnemyCombatModel = VANILLA_COMBAT_MODEL
 
 
 def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
@@ -279,9 +323,11 @@ def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
         group.group_id: group
         for group in _read_sprite_groups(rom_bytes)
     }
+    original_sprite_groups = _snapshot_sprite_groups(sprite_groups)
     _setup_required_dungeon_groups(world, sprite_groups, metadata["room_requirements"])
     _apply_selected_boss_group_requirements(world, sprite_groups, sprite_requirements)
     _randomize_dungeon_groups(world, sprite_groups)
+    _restore_skipped_room_sprite_groups(world, dungeon_rooms, sprite_groups, original_sprite_groups)
     randomized_dungeon_rooms = _randomize_dungeon_rooms(
         world,
         dungeon_rooms,
@@ -290,6 +336,11 @@ def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
     )
     _setup_required_overworld_groups(sprite_groups, overworld_metadata["forced_group_requirements"])
     _randomize_overworld_groups(world, sprite_groups)
+    _restore_standard_beginning_overworld_sprite_groups(
+        world,
+        sprite_groups,
+        original_sprite_groups,
+    )
     randomized_overworld_areas = _randomize_overworld_areas(
         world,
         overworld_areas,
@@ -351,6 +402,7 @@ def _read_dungeon_rooms(rom_bytes: bytes, moved_header_bank_address: int, metada
                 tag_2=rom_bytes[room_header_address + 6],
                 sort_sprites_value=rom_bytes[sprite_table_address],
                 sprites=_read_room_sprites(rom_bytes, room_id, sprite_table_address, dungeon_sprite_metadata),
+                all_sprites=_read_all_room_sprites(rom_bytes, sprite_table_address, dungeon_sprite_metadata),
                 required_group_id=merged_requirement.group_id,
                 required_subgroup_0=merged_requirement.subgroup_0,
                 required_subgroup_1=merged_requirement.subgroup_1,
@@ -388,6 +440,13 @@ def _read_sprite_groups(rom_bytes: bytes) -> tuple[DungeonSpriteGroup, ...]:
             )
         )
     return tuple(groups)
+
+
+def _snapshot_sprite_groups(sprite_groups: dict[int, DungeonSpriteGroup]) -> dict[int, tuple[int, int, int, int]]:
+    return {
+        group_id: (group.subgroup_0, group.subgroup_1, group.subgroup_2, group.subgroup_3)
+        for group_id, group in sprite_groups.items()
+    }
 
 
 def _setup_required_dungeon_groups(
@@ -586,6 +645,32 @@ def _randomize_dungeon_groups(world: "ALTTPWorld", sprite_groups: dict[int, Dung
             group.subgroup_3 = world.random.choice(POTENTIAL_SUBGROUP_3)
 
 
+def _restore_skipped_room_sprite_groups(
+    world: "ALTTPWorld",
+    dungeon_rooms: dict[int, DungeonEnemyRoom],
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    original_sprite_groups: dict[int, tuple[int, int, int, int]],
+) -> None:
+    if world.options.mode != "standard":
+        return
+
+    skipped_group_ids = {
+        room.graphics_block_id + 0x40
+        for room in dungeon_rooms.values()
+        if room.no_special_enemies_standard
+    }
+    for group_id in skipped_group_ids:
+        group = sprite_groups.get(group_id)
+        original_group = original_sprite_groups.get(group_id)
+        if group is None or original_group is None:
+            continue
+        group.subgroup_0, group.subgroup_1, group.subgroup_2, group.subgroup_3 = original_group
+        group.preserve_subgroup_0 = True
+        group.preserve_subgroup_1 = True
+        group.preserve_subgroup_2 = True
+        group.preserve_subgroup_3 = True
+
+
 def _randomize_overworld_groups(world: "ALTTPWorld", sprite_groups: dict[int, DungeonSpriteGroup]) -> None:
     for group in sprite_groups.values():
         if not (0 < group.group_id < 0x40):
@@ -598,6 +683,26 @@ def _randomize_overworld_groups(world: "ALTTPWorld", sprite_groups: dict[int, Du
             group.subgroup_2 = world.random.choice(POTENTIAL_SUBGROUP_2)
         if not group.preserve_subgroup_3:
             group.subgroup_3 = world.random.choice(POTENTIAL_SUBGROUP_3)
+
+
+def _restore_standard_beginning_overworld_sprite_groups(
+    world: "ALTTPWorld",
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    original_sprite_groups: dict[int, tuple[int, int, int, int]],
+) -> None:
+    if world.options.mode != "standard":
+        return
+
+    for group_id in STANDARD_BEGINNING_OVERWORLD_GROUP_IDS:
+        group = sprite_groups.get(group_id)
+        original_group = original_sprite_groups.get(group_id)
+        if group is None or original_group is None:
+            continue
+        group.subgroup_0, group.subgroup_1, group.subgroup_2, group.subgroup_3 = original_group
+        group.preserve_subgroup_0 = True
+        group.preserve_subgroup_1 = True
+        group.preserve_subgroup_2 = True
+        group.preserve_subgroup_3 = True
 
 
 def _read_room_header_address(rom_bytes: bytes, room_id: int, room_header_bank: int) -> int:
@@ -692,19 +797,44 @@ def _read_room_sprites(
     sprite_table_address: int,
     dungeon_sprite_metadata: dict[str, object],
 ) -> tuple[DungeonEnemySprite, ...]:
-    sprites: list[DungeonEnemySprite] = []
     keyed_sprite_id_addresses = dungeon_sprite_metadata["keyed_sprite_id_addresses"]
     editable_sprite_id_addresses = dungeon_sprite_metadata["room_sprite_id_addresses"].get(room_id)
 
     if editable_sprite_id_addresses is None:
-        sprite_addresses = []
-        index = sprite_table_address + 1  # byte 0 is sort-sprites metadata
-        while rom_bytes[index] != 0xFF:
-            sprite_addresses.append(index)
-            index += 3
+        sprite_addresses = _read_room_sprite_addresses(rom_bytes, sprite_table_address)
     else:
         sprite_addresses = [sprite_id_address - 2 for sprite_id_address in editable_sprite_id_addresses]
 
+    return _read_room_sprites_from_addresses(rom_bytes, sprite_addresses, keyed_sprite_id_addresses)
+
+
+def _read_all_room_sprites(
+    rom_bytes: bytes,
+    sprite_table_address: int,
+    dungeon_sprite_metadata: dict[str, object],
+) -> tuple[DungeonEnemySprite, ...]:
+    return _read_room_sprites_from_addresses(
+        rom_bytes,
+        _read_room_sprite_addresses(rom_bytes, sprite_table_address),
+        dungeon_sprite_metadata["keyed_sprite_id_addresses"],
+    )
+
+
+def _read_room_sprite_addresses(rom_bytes: bytes, sprite_table_address: int) -> list[int]:
+    sprite_addresses = []
+    index = sprite_table_address + 1  # byte 0 is sort-sprites metadata
+    while rom_bytes[index] != 0xFF:
+        sprite_addresses.append(index)
+        index += 3
+    return sprite_addresses
+
+
+def _read_room_sprites_from_addresses(
+    rom_bytes: bytes,
+    sprite_addresses: list[int],
+    keyed_sprite_id_addresses: frozenset[int],
+) -> tuple[DungeonEnemySprite, ...]:
+    sprites: list[DungeonEnemySprite] = []
     seen_sprite_addresses: set[int] = set()
     unique_sprite_addresses = []
     for address in sprite_addresses:
@@ -800,9 +930,110 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
             excluded_rooms=entry.excluded_rooms,
             dont_randomize_rooms=entry.dont_randomize_rooms,
             spawnable_rooms=entry.spawnable_rooms,
+            combat_reference_id=entry.combat_reference_id,
         )
         for entry in ENEMY_SPRITE_REQUIREMENTS
     )
+
+
+def get_room_name(room_id: int) -> Optional[str]:
+    return _load_room_names().get(room_id)
+
+
+def get_room_id(room_name: str) -> Optional[int]:
+    return _load_room_name_to_id().get(room_name)
+
+
+def get_effective_dungeon_room_sprite_requirements(world: "ALTTPWorld", room_id: int) -> tuple[EnemySpriteRequirement, ...]:
+    return tuple(
+        enemy.requirement
+        for enemy in get_effective_dungeon_room_enemies(world, room_id)
+    )
+
+
+def get_effective_dungeon_room_enemies(world: "ALTTPWorld", room_id: int) -> tuple[EffectiveDungeonEnemySprite, ...]:
+    sprite_requirements = _get_sprite_requirement_lookup()
+    room_sprites = _get_effective_dungeon_room_sprites(world, room_id)
+    return tuple(
+        EffectiveDungeonEnemySprite(
+            requirement=sprite_requirements[sprite.sprite_id],
+            has_key=sprite.has_key,
+            x_coord_pixels=sprite.x_coord_pixels,
+            y_coord_pixels=sprite.y_coord_pixels,
+        )
+        for sprite in room_sprites
+        if sprite.sprite_id in sprite_requirements
+        and sprite_requirements[sprite.sprite_id].is_enemy_sprite
+        and not sprite_requirements[sprite.sprite_id].npc
+        and not sprite_requirements[sprite.sprite_id].is_object
+    )
+
+
+def _get_effective_dungeon_room_sprites(
+    world: "ALTTPWorld",
+    room_id: int,
+) -> tuple[DefaultDungeonEnemySprite | RandomizedDungeonEnemySprite, ...]:
+    if world.options.enemy_shuffle and world.enemy_shuffle_state is not None:
+        randomized_room = world.enemy_shuffle_state.randomized_dungeon_rooms.get(room_id)
+        if randomized_room is not None:
+            return randomized_room.sprites
+
+    room_sprites = _load_default_dungeon_room_sprites().get(room_id)
+    if room_sprites is None:
+        raise KeyError(f"Unknown ALTTP room id {room_id}")
+    return room_sprites
+
+
+def _load_default_dungeon_room_sprites() -> dict[int, tuple[DefaultDungeonEnemySprite, ...]]:
+    room_sprites = getattr(_load_default_dungeon_room_sprites, "room_sprites", None)
+    if room_sprites is None:
+        room_sprites = {
+            room.room_id: tuple(
+                DefaultDungeonEnemySprite(
+                    sprite_id=sprite.sprite_id,
+                    has_key=sprite.has_key,
+                    x_coord_pixels=sprite.x_coord_pixels,
+                    y_coord_pixels=sprite.y_coord_pixels,
+                )
+                for sprite in room.sprites
+            )
+            for room in DEFAULT_DUNGEON_ROOM_ENEMIES
+        }
+        _load_default_dungeon_room_sprites.room_sprites = room_sprites
+    return room_sprites
+
+
+def _load_room_names() -> dict[int, str]:
+    room_names = getattr(_load_room_names, "room_names", None)
+    if room_names is None:
+        room_names = {
+            room_id: room_name
+            for room_name, room_id in ROOM_NAME_TO_ID.items()
+        }
+        _load_room_names.room_names = room_names
+    return room_names
+
+
+def _load_room_name_to_id() -> dict[str, int]:
+    room_name_to_id = getattr(_load_room_name_to_id, "room_name_to_id", None)
+    if room_name_to_id is None:
+        room_name_to_id = {
+            room_name: int(room_id)
+            for room_name, room_id in ROOM_NAME_TO_ID.items()
+        }
+        _load_room_name_to_id.room_name_to_id = room_name_to_id
+    return room_name_to_id
+
+
+def _get_sprite_requirement_lookup() -> dict[int, EnemySpriteRequirement]:
+    requirement_lookup = getattr(_get_sprite_requirement_lookup, "requirement_lookup", None)
+    if requirement_lookup is None:
+        requirement_lookup = {
+            requirement.sprite_id: requirement
+            for requirement in _load_enemy_sprite_requirements()
+        }
+        _get_sprite_requirement_lookup.requirement_lookup = requirement_lookup
+    return requirement_lookup
 
 
 def _load_overworld_enemy_metadata() -> dict[str, object]:
@@ -863,13 +1094,25 @@ def _merge_room_requirements(room_id: int, room_requirements: tuple[RoomGroupReq
 
 
 def get_room_do_not_update_requirements(state: EnemyShuffleState, room: DungeonEnemyRoom) -> tuple[EnemySpriteRequirement, ...]:
-    room_sprite_ids = {sprite.sprite_id for sprite in room.sprites}
+    editable_addresses = {sprite.address for sprite in room.sprites}
+    constraint_sprites = _get_room_constraint_sprites(room)
     return tuple(
         requirement for requirement in state.sprite_requirements
-        if (requirement.do_not_randomize or room.room_id in requirement.dont_randomize_rooms)
-        and requirement.sprite_id in room_sprite_ids
+        if any(
+            sprite.sprite_id == requirement.sprite_id
+            and (
+                sprite.address not in editable_addresses
+                or requirement.do_not_randomize
+                or room.room_id in requirement.dont_randomize_rooms
+            )
+            for sprite in constraint_sprites
+        )
         and can_spawn_in_room(requirement, room)
     )
+
+
+def _get_room_constraint_sprites(room: DungeonEnemyRoom) -> tuple[DungeonEnemySprite, ...]:
+    return room.all_sprites or room.sprites
 
 
 def get_possible_dungeon_sprite_groups(state: EnemyShuffleState, room: DungeonEnemyRoom) -> tuple[DungeonSpriteGroup, ...]:
@@ -1256,7 +1499,8 @@ def _randomize_overworld_areas(
     for area_id in sorted(overworld_areas):
         area = overworld_areas[area_id]
         selected_group = sprite_groups.get(area.graphics_block_id)
-        if not area.do_not_randomize:
+        skip_randomization = area.do_not_randomize
+        if not skip_randomization:
             possible_groups = get_possible_overworld_sprite_groups(state, area)
             if possible_groups:
                 selected_group = world.random.choice(possible_groups)
@@ -1272,7 +1516,7 @@ def _randomize_overworld_areas(
             state,
             area,
             selected_group,
-            area.do_not_randomize,
+            skip_randomization,
         )
 
     return randomized_areas
@@ -1519,7 +1763,7 @@ def validate_enemy_shuffle_state(state: EnemyShuffleState, is_standard_mode: boo
 
     for area_id, area in state.overworld_areas.items():
         randomized_area = state.randomized_overworld_areas[area_id]
-        _validate_overworld_area(state, area, randomized_area)
+        _validate_overworld_area(state, area, randomized_area, is_standard_mode)
 
 
 def _validate_dungeon_room(
@@ -1601,6 +1845,7 @@ def _validate_overworld_area(
     state: EnemyShuffleState,
     area: OverworldEnemyArea,
     randomized_area: RandomizedOverworldEnemyArea,
+    is_standard_mode: bool,
 ) -> None:
     selected_group = state.sprite_groups.get(randomized_area.graphics_block_id)
     if selected_group is None:
