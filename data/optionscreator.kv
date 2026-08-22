@@ -1,3 +1,4 @@
+#:import player_name_length OptionsCreator.player_name_length
 <VisualRange>:
     id: this
     spacing: 15
@@ -139,9 +140,10 @@ ContainerLayout:
                 padding: ["10dp", "30dp", "10dp", 0]
                 spacing: "10dp"
 
-                ResizableTextField:
+                ComputedLengthTextField:
                     id: player_name
                     multiline: False
+                    length_func: player_name_length
 
                     MDTextFieldHintText:
                         text: "Player Name"

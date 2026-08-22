@@ -68,6 +68,11 @@ def check_random(value: typing.Any):
     return value
 
 
+def player_name_length(text: str):
+    replaced = text.replace("{player}", "0").replace("{PLAYER}", "0").replace("{number}", "0").replace("{NUMBER}", "0")
+    return len(replaced.strip())
+
+
 class TrailingPressedIconButton(ButtonBehavior, RotateBehavior, MDListItemTrailingIcon):
     pass
 
@@ -161,6 +166,41 @@ class CounterItemValue(ResizableTextField):
 
     def insert_text(self, substring, from_undo=False):
         return super().insert_text(re.sub(self.pat, "", substring), from_undo=from_undo)
+
+
+class ComputedLengthTextField(ResizableTextField):
+    length_func: typing.Callable[[str], int]
+
+    def set_max_text_length(self) -> None:
+        if self._max_length_label:
+            length = self.length_func(self.text)
+
+            self._max_length_label.text = ""
+            self._max_length_label.text = f"{length}/{self._max_length_label.max_text_length}"
+            self._max_length_label.texture_update()
+            max_length_rect = self.canvas.before.get_group("max-length-rect")[0]
+            max_length_rect.texture = None
+            max_length_rect.texture = self._max_length_label.texture
+            max_length_rect.size = self._max_length_label.texture_size
+            max_length_rect.pos = (
+                (self.x + self.width)
+                - (self._max_length_label.texture_size[0] + dp(16)),
+                self.y - dp(18),
+            )
+
+    def _get_has_error(self) -> bool:
+        if (
+            self._max_length_label
+            and self._max_length_label.max_text_length is not None
+            and self.length_func(self.text) > self._max_length_label.max_text_length
+        ):
+            has_error = True
+        else:
+            if all((self.required, len(self.text) == 0)):
+                has_error = True
+            else:
+                has_error = False
+        return has_error
 
 
 class VisualListSetCounter(MDDialog):
@@ -258,7 +298,7 @@ class OptionsCreator(ThemedApp):
     main_panel: MainLayout
     player_options: MainLayout
     option_layout: MainLayout
-    name_input: ResizableTextField
+    name_input: ComputedLengthTextField
     game_label: MDLabel
     current_game: str
     options: typing.Dict[str, typing.Any]
@@ -301,7 +341,7 @@ class OptionsCreator(ThemedApp):
             raise
 
     def export_options(self, button: Widget) -> None:
-        if 0 < len(self.name_input.text) < 17 and self.current_game:
+        if 0 < player_name_length(self.name_input.text) <= 16 and self.current_game:
             import threading
             options = {
                 "name": self.name_input.text,
