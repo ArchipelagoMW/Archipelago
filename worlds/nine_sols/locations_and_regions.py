@@ -1,13 +1,13 @@
 import json
-import pkgutil
 import typing
 from typing import Any, NamedTuple
 
 from BaseClasses import CollectionState, Location, Region
-from Utils import restricted_loads
 from worlds.generic.Rules import set_rule
 from .options import FirstRootNode, LogicDifficulty, NineSolsGameOptions
 from .should_generate import should_generate
+from .shared_static_logic.locations import locations_data
+from .shared_static_logic.connections import connections_data
 
 # AP 0.6.7 moves CollectionRule to BaseClasses
 try:
@@ -36,12 +36,6 @@ class NineSolsLocationData(NamedTuple):
 
 class NineSolsRegionData(NamedTuple):
     connecting_regions: list[str] = []
-
-
-pickled_data = pkgutil.get_data(__name__, "shared_static_logic/static_logic.pickle")
-unpickled_data = restricted_loads(pickled_data)
-locations_data = unpickled_data["LOCATIONS"]
-connections_data = unpickled_data["CONNECTIONS"]
 
 
 location_data_table: dict[str, NineSolsLocationData] = {}
