@@ -116,7 +116,7 @@ class PokemonRBClient(BizHawkClient):
         ctx.auth = auth_name
 
     async def game_watcher(self, ctx):
-        if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed:
+        if not ctx.server:
             return
 
         data = await read(ctx.bizhawk_ctx, [(loc_data[0], loc_data[1], "WRAM")
@@ -301,7 +301,7 @@ def cmd_bank(self, cmd: str = "", amount: str = ""):
     if self.ctx.game != "Pokemon Red and Blue":
         logger.warning("This command can only be used while playing Pokémon Red and Blue")
         return
-    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+    if (not self.ctx.server) or not self.ctx.client_handler.game_state:
         logger.info(f"Must be connected to server and in game.")
         return
     elif not cmd:
