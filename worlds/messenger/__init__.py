@@ -95,6 +95,10 @@ class MessengerWorld(World):
                                *[f"The Shop - {shop_loc}" for shop_loc in SHOP_ITEMS],
                                *FIGURINES,
                                "Money Wrench",
+                               "Elemental Skylands - Shutdown Air Generator",
+                               "Elemental Skylands - Shutdown Earth Generator",
+                               "Elemental Skylands - Shutdown Water Generator",
+                               "Elemental Skylands - Shutdown Fire Generator",
                            ], base_offset)}
     item_name_groups = {
         "Notes": set(NOTES),
@@ -231,7 +235,7 @@ class MessengerWorld(World):
             for item in self.item_name_to_id
             if item not in {
                 "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
-                *precollected_names, *FILLER, *TRAPS,
+                *precollected_names, *FILLER, *TRAPS, "Progressive Generator Shutdown"
             }
         ]
 
@@ -239,6 +243,10 @@ class MessengerWorld(World):
             itempool.append(self.create_item(self.random.choice(main_movement_items)))
         else:
             itempool += [self.create_item(move_item) for move_item in main_movement_items]
+
+        if self.options.shuffle_skylands_generators:
+            for _ in range(4):
+                itempool.append(self.create_item("Progressive Generator Shutdown"))
 
         if self.options.goal == Goal.option_open_music_box:
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
@@ -449,6 +457,9 @@ class MessengerWorld(World):
 
         if name in TRAPS:
             return ItemClassification.trap
+
+        if name == "Progressive Generator Shutdown":
+            return ItemClassification.progression
 
         return ItemClassification.filler
 
