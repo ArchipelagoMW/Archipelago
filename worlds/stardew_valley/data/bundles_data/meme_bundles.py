@@ -46,9 +46,9 @@ amons_fall_items = [stone.as_amount(1)]
 amons_fall_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.amons_fall, amons_fall_items, 7, 7)
 
 screw_you_items = [tea_set, ostrich_egg.as_quality(AnimalProductQuality.iridium), snake_vertebrae.as_amount(5), mummified_bat.as_amount(5)]
-screw_you_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.screw_you, screw_you_items, 4, 4)
+screw_you_bundle = IslandBundleTemplate(CCRoom.boiler_room, MemeBundleName.screw_you, screw_you_items, 4, 4)
 
-sunmaid_items = [raisins.as_amount(28)]
+sunmaid_items = [raisins.as_amount(12)]
 sunmaid_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.sunmaid, sunmaid_items, 1, 1)
 
 rick_items = [pickles]
@@ -86,8 +86,8 @@ burger_king_revenge_items = [fossilized_tail, void_salmon, ostrich_egg.as_amount
                              moss_soup.as_amount(3), radioactive_ore.as_amount(5), mystic_syrup.as_amount(10), truffle, aged_crimsonfish_roe]
 burger_king_revenge_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.burger_king_revenge, burger_king_revenge_items, 8, 8)
 
-trout_items = [golden_tag.as_amount(10), golden_tag.as_amount(20), golden_tag.as_amount(30)]
-trout_bundle = BundleTemplate(CCRoom.fish_tank, MemeBundleName.trout, trout_items, 1, 1)
+trout_items = [golden_tag.as_amount(1), golden_tag.as_amount(2), golden_tag.as_amount(4), golden_tag.as_amount(6)]
+trout_bundle = BundleTemplate(CCRoom.fish_tank, MemeBundleName.trout, trout_items, 3, 3)
 
 eg_items = [egg, brown_egg, large_egg, large_brown_egg, duck_egg, void_egg, golden_egg, dinosaur_egg, fried_egg, ostrich_egg,
             thunder_egg, calico_egg, green_slime_egg, blue_slime_egg, purple_slime_egg, tiger_slime_egg, roe, aged_roe]
@@ -113,8 +113,8 @@ sappy_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.sappy, sappy
 honorable_items = [stone.as_amount(1), prismatic_shard.as_amount(1)]
 honorable_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.honorable, honorable_items, 2, 1)
 
-caffeinated_items = [coffee_bean.as_amount(500)]
-caffeinated_bundle = BundleTemplate(CCRoom.crafts_room, MemeBundleName.caffeinated, caffeinated_items, 1, 1)
+caffeinated_items = [coffee_bean.as_amount(200)]
+caffeinated_bundle = BundleTemplate(CCRoom.crafts_room, MemeBundleName.caffeinated, caffeinated_items, 2, 2)
 
 hats_off_to_you_items = [living_hat, garbage_hat, golden_helmet, laurel_wreath_crown, joja_cap,
                          deluxe_pirate_hat, dark_cowboy_hat, tiger_hat, mystery_hat, dark_ballcap]
@@ -231,7 +231,7 @@ pomnut_items = [pomegranate, hazelnut, carrot]
 pomnut_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.pomnut, pomnut_items, 3, 3)
 
 blossom_garden_items = [banana.as_amount(18), pizza.as_amount(32), spaghetti, single_bed, pink_cake, wood_floor, triple_shot_espresso, maple_bar, bug_steak, void_essence.as_amount(10), crystal_ball, solar_essence.as_amount(10)]
-blossom_garden_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.blossom_garden, blossom_garden_items, 12, 6)
+blossom_garden_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.blossom_garden, blossom_garden_items, 12, 4)
 
 cooperation_items = [*all_simple_items]
 cooperation_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.cooperation, cooperation_items, 4, 4)
@@ -275,7 +275,7 @@ exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhausti
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
 archipela_go_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.archipela_go, BundleItem(MemeCurrency.steps, 20000))
 clique_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clique, BundleItem(MemeCurrency.clic, 1))
-cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.cookies, 200000))
+cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.cookies, 400000))
 communism_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communism, BundleItem.money_bundle(1))
 death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.death, death)
 flashbang_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.flashbang, BundleItem.money_bundle(0))
@@ -286,11 +286,11 @@ firstborn_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName
 restraint_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.restraint, BundleItem.money_bundle(0))
 fast_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.fast, BundleItem(MemeCurrency.time_elapsed, 1000))
 floor_is_lava_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.floor_is_lava, BundleItem.money_bundle(0))
-joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joetg, BundleItem(MemeCurrency.dead_pumpkins, 750))
-bad_farmer_bundle = CurrencyBundleTemplate(CCRoom.pantry, MemeBundleName.bad_farmer, BundleItem(MemeCurrency.dead_crops, 400))
+joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joetg, BundleItem(MemeCurrency.dead_pumpkins, 250))
+bad_farmer_bundle = CurrencyBundleTemplate(CCRoom.pantry, MemeBundleName.bad_farmer, BundleItem(MemeCurrency.dead_crops, 200))
 bad_fisherman_bundle = CurrencyBundleTemplate(CCRoom.fish_tank, MemeBundleName.bad_fisherman, BundleItem(MemeCurrency.missed_fish, 20))
 honeywell_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.honeywell, BundleItem(MemeCurrency.honeywell, 1))
-gacha_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.gacha, BundleItem.money_bundle(10000))
+gacha_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.gacha, BundleItem.money_bundle(20000))
 hibernation_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.hibernation, BundleItem(MemeCurrency.sleep_days, 60))
 crowdfunding_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.crowdfunding, BundleItem(MemeCurrency.bank_money, 10000))
 clickbait_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clickbait, BundleItem.money_bundle(100))
