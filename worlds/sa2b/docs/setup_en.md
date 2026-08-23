@@ -68,7 +68,7 @@ Note: Ensure that you launch Sonic Adventure 2 from Steam directly on Linux, rat
 
 5. Click The `Save` button then hit `Save & Play` to launch the game. On Linux, launch Sonic Adventure 2 from Steam directly rather than using `Save & Play`.
 
-6. Create a new save to connect to the MultiWorld game. A "Connected to Archipelago" message will appear if you sucessfully connect. If you close the game during play, you can reconnect to the MultiWorld game by selecting the same save file slot.
+6. Create a new save to connect to the MultiWorld game. A "Connected to Archipelago" message will appear if you successfully connect. If you close the game during play, you can reconnect to the MultiWorld game by selecting the same save file slot.
 
 ## Additional Options
 

@@ -3,7 +3,7 @@
 Mixins are used to split the logic building methods in multiple classes, so it's more scoped and easier to extend specific methods.
 
 One single instance of Logic is necessary so mods can change the logics. This means that, when calling itself, a `Logic` class has to call its instance in
-the `logic`, because it might have been overriden.
+the `logic`, because it might have been overridden.
 
 ```python
 class TimeLogicMixin(BaseLogicMixin):

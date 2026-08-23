@@ -6,7 +6,7 @@ The [player options page for this game](../player-options) contains all the opti
 
 ## What does randomization do to this game?
 
-In Hylics 2, all unique items, equipment and skills are randomized. This includes items in chests, items that are freely standing in the world, items recieved from talking to certain characters, gestures learned from TVs, and so on. Items recieved from completing battles are not randomized, with the exception of the Jail Key recieved from defeating Viewax.
+In Hylics 2, all unique items, equipment and skills are randomized. This includes items in chests, items that are freely standing in the world, items received from talking to certain characters, gestures learned from TVs, and so on. Items received from completing battles are not randomized, with the exception of the Jail Key received from defeating Viewax.
 
 ## What Hylics 2 items can appear in other players' worlds?
 

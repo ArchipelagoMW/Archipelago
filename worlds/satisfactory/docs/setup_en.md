@@ -146,7 +146,7 @@ to spawn the items you desire.
 Advanced users can utilize the
 [Weighted Options Page](/games/Satisfactory/weighted-options)
 and [Plando](/tutorial/Archipelago/plando_en)
-to futher customize their experience.
+to further customize their experience.
 
 ### Generating and Hosting the Multiworld
 
