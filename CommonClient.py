@@ -555,6 +555,7 @@ class CommonContext:
         """Send new location checks to the server. Returns the set of actually new locations that were sent."""
         locations = set(locations) & self.missing_locations
         if locations:
+            self.missing_locations -= locations
             await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
         return locations
 
