@@ -15,6 +15,7 @@ from zipfile import ZipFile, BadZipFile
 
 from NetUtils import DataPackage
 from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
+from .Files import APWorldContainer
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -35,6 +36,9 @@ __all__ = [
 
 failed_world_loads: dict[str, str] = {}
 
+logger = logging.getLogger("Worlds")
+logger.propagate = False
+logger.setLevel(logging.INFO)
 
 @dataclasses.dataclass(order=True)
 class WorldSource:
@@ -56,7 +60,7 @@ class WorldSource:
     def load(self) -> bool:
         try:
             start = time.perf_counter()
-            importlib.import_module(f".{Path(self.path).stem}", "worlds")
+            importlib.import_module(f".{self.name}", "worlds")
             self.time_taken = time.perf_counter()-start
             return True
 
@@ -73,14 +77,44 @@ class WorldSource:
             failed_world_loads[os.path.basename(self.path).rsplit(".", 1)[0]] = reason
             return False
 
+    @property
+    def name(self) -> str:
+        return Path(self.path).stem
+
+# AP_TEST_WORLDS scopes auto-loading to the named worlds; these are always loaded for the
+# suite's fixtures but aren't themselves worlds under test.
+_SUITE_FIXTURE_WORLDS = {"generic", "apquest"}
+_test_worlds_env = os.environ.get("AP_TEST_WORLDS") if "pytest" in sys.modules or "unittest" in sys.modules else None
+_requested_worlds = {name.strip() for name in _test_worlds_env.split(",") if name.strip()} if _test_worlds_env else None
+test_worlds_filter = _requested_worlds | _SUITE_FIXTURE_WORLDS if _requested_worlds else None
+
+apworld_module_specs = {}
+class APWorldModuleFinder(importlib.abc.MetaPathFinder):
+    def find_spec(
+            self, fullname: str, _path: Sequence[str] | None, _target: ModuleType | None = None
+    ) -> importlib.machinery.ModuleSpec | None:
+        return apworld_module_specs.get(fullname)
+sys.meta_path.insert(0, APWorldModuleFinder())
+
+
+def add_apworld_spec(source: WorldSource, container: APWorldContainer):
+    importer = zipimport.zipimporter(source.resolved_path)
+    world_name = Path(container.path).stem
+
+    spec = importer.find_spec(f"worlds.{world_name}")
+    apworld_module_specs[f"worlds.{world_name}"] = spec
+
 
 # find potential world containers, currently folders and zip-importable .apworld's
+logger.info("Indexing worlds")
 world_sources: List[WorldSource] = []
 for folder in (folder for folder in (user_folder, local_folder) if folder):
     relative = folder == local_folder
     for entry in os.scandir(folder):
         # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
         if not entry.name.startswith(("_", ".")):
+            if test_worlds_filter is not None and Path(entry.name).stem not in test_worlds_filter:
+                continue
             file_name = entry.name if relative else os.path.join(folder, entry.name)
             if entry.is_dir():
                 if os.path.isfile(os.path.join(entry.path, '__init__.py')):
@@ -93,6 +127,7 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
                 world_sources.append(WorldSource(file_name, is_zip=True, relative=relative))
 
 # import all submodules to trigger AutoWorldRegister
+logger.info("Processing found worlds")
 world_sources.sort()
 apworlds: list[WorldSource] = []
 for world_source in world_sources:
@@ -100,6 +135,7 @@ for world_source in world_sources:
     if world_source.is_zip:
         apworlds.append(world_source)
     else:
+        logger.info(world_source.name)
         world_source.load()
 
 from .AutoWorld import AutoWorldRegister
@@ -125,7 +161,7 @@ if apworlds:
     # encapsulation for namespace / gc purposes
     def load_apworlds() -> None:
         global apworlds
-        from .Files import APWorldContainer, InvalidDataError
+        from .Files import InvalidDataError
         core_compatible: list[tuple[WorldSource, APWorldContainer]] = []
 
         def fail_world(game_name: str, reason: str, add_as_failed_to_load: bool = True) -> None:
@@ -134,6 +170,7 @@ if apworlds:
             logging.warning(reason)
 
         for apworld_source in apworlds:
+            logger.info(apworld_source.name)
             apworld: APWorldContainer = APWorldContainer(apworld_source.resolved_path)
             # populate metadata
             try:
@@ -174,15 +211,6 @@ if apworlds:
             key=lambda element: element[1].world_version if element[1].world_version else Version(0, 0, 0),
             reverse=True)
 
-        apworld_module_specs = {}
-        class APWorldModuleFinder(importlib.abc.MetaPathFinder):
-            def find_spec(
-                    self, fullname: str, _path: Sequence[str] | None, _target: ModuleType = None
-            ) -> importlib.machinery.ModuleSpec | None:
-                return apworld_module_specs.get(fullname)
-
-        sys.meta_path.insert(0, APWorldModuleFinder())
-
         for apworld_source, apworld in core_compatible:
             if apworld.game and apworld.game in AutoWorldRegister.world_types:
                 fail_world(apworld.game,
@@ -190,11 +218,7 @@ if apworlds:
                            f"as its game {apworld.game} is already loaded.",
                            add_as_failed_to_load=False)
             else:
-                importer = zipimport.zipimporter(apworld_source.resolved_path)
-                world_name = Path(apworld.path).stem
-
-                spec = importer.find_spec(f"worlds.{world_name}")
-                apworld_module_specs[f"worlds.{world_name}"] = spec
+                add_apworld_spec(apworld_source, apworld)
 
                 apworld_source.load()
                 if apworld.game in AutoWorldRegister.world_types:
@@ -215,7 +239,18 @@ if apworlds:
 
 del apworlds
 
+# snapshot the worlds under test (a copy, so tests reassigning world_types can't leak in), dropping the
+# force-loaded fixtures unless they were explicitly requested.
+if _requested_worlds:
+    AutoWorldRegister.testable_worlds = {
+        game: world for game, world in AutoWorldRegister.world_types.items()
+        if Path(world.__file__).parent.name in _requested_worlds
+    }
+else:
+    AutoWorldRegister.testable_worlds = dict(AutoWorldRegister.world_types)
+
 # Build the data package for each game.
+logger.info("Datapackage")
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
