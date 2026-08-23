@@ -363,6 +363,8 @@ class CommonContext:
     """Container of Locations that are unchecked per server state"""
     checked_locations: set[int]
     """Container of Locations that are checked per server state"""
+    pending_locations: set[int]
+    """Container of Locations that are in the process of changing from unchecked to checked server state"""
     server_locations: set[int]
     """Container of Locations that exist per server state; a combination between missing and checked locations"""
     locations_info: dict[int, NetworkItem]
@@ -411,6 +413,7 @@ class CommonContext:
         self.locations_checked = set()  # local state
         self.locations_scouted = set()
         self.items_received = []
+        self.pending_locations = set()  # local state
         self.missing_locations = set()  # server state
         self.checked_locations = set()  # server state
         self.server_locations = set()  # all locations the server knows of, missing_location | checked_locations
@@ -467,6 +470,7 @@ class CommonContext:
         self.team = None
         self.items_received = []
         self.locations_info = {}
+        self.pending_locations = set()
         self.server_seed_name = None
         self.server_version = Version(0, 0, 0)
         self.generator_version = Version(0, 0, 0)
@@ -485,6 +489,7 @@ class CommonContext:
         self.locations_scouted = set()
         self.locations_info = {}
         self.items_received = []
+        self.pending_locations = set()
         self.missing_locations = set()
         self.checked_locations = set()
         self.server_locations = set()
@@ -553,9 +558,9 @@ class CommonContext:
 
     async def check_locations(self, locations: typing.Collection[int]) -> set[int]:
         """Send new location checks to the server. Returns the set of actually new locations that were sent."""
-        locations = set(locations) & self.missing_locations
+        locations = set(locations) & (self.missing_locations - self.pending_locations)
         if locations:
-            self.missing_locations -= locations
+            self.pending_locations |= locations
             await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
         return locations
 
@@ -1071,6 +1076,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
         ctx.server_locations = ctx.missing_locations | ctx. checked_locations
+        ctx.pending_locations = set()
 
         server_url = urllib.parse.urlparse(ctx.server_address)
         Utils.persistent_store("client", "last_server_address", server_url.netloc)
@@ -1105,6 +1111,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             checked = set(args["checked_locations"])
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
+            ctx.pending_locations -= checked
         if "permissions" in args:
             ctx.update_permissions(args["permissions"])
 
