@@ -70,6 +70,7 @@ from .strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptio
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceNames
+from .strings.entrance_names import LogicEntrance
 from .strings.goal_names import Goal as GoalName
 from .strings.region_names import LogicRegion
 from .strings.region_names import Region as RegionNames
@@ -490,25 +491,26 @@ class StardewValleyWorld(World):
         is_chaos = self.options.entrance_randomization_behavior.is_chaos()
         # when the cutscene-relevant entrances aren't randomized, connect them manually
         if self.options.entrance_randomization.value < EntranceRandomization.option_overworld or is_chaos:
-            self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(LogicRegion.bus_stop_krobus_cutscene)
-            self.get_entrance(EntranceNames.bus_stop_to_town).connected_region = self.get_region(LogicRegion.town_community_center_cutscene)
+            farm = self.get_region(RegionNames.farm)
+            krobus_cutscene = self.get_region(LogicRegion.bus_stop_krobus_cutscene)
+            farm.connect(krobus_cutscene, LogicEntrance.watch_bus_stop_krobus_cutscene)
+
+            bus_stop = self.get_region(RegionNames.bus_stop)
+            cc_cutscene = self.get_region(LogicRegion.town_community_center_cutscene)
+            bus_stop.connect(cc_cutscene, LogicEntrance.watch_community_center_cutscene)
 
         def connect_cutscene_regions_as_well(state: entrance_rando.ERPlacementState, placed_exits: list[Entrance], placed_entrances: list[Entrance]):
             additional_sweep_needed = False
             for ex, entr in zip(placed_exits, placed_entrances):
                 if entr.name == EntranceNames.farm_to_bus_stop:
-                    assert ex.connected_region is not None
-                    ex.connected_region.entrances.remove(ex)
-                    new_region = self.get_region(LogicRegion.bus_stop_krobus_cutscene)
-                    ex.connected_region = new_region
-                    new_region.entrances.append(ex)
+                    parent_region = ex.parent_region
+                    krobus_cutscene = self.get_region(LogicRegion.bus_stop_krobus_cutscene)
+                    parent_region.connect(krobus_cutscene, LogicEntrance.watch_bus_stop_krobus_cutscene, ex.access_rule)
                     additional_sweep_needed = True
                 elif entr.name == EntranceNames.bus_stop_to_town:
-                    assert ex.connected_region is not None
-                    ex.connected_region.entrances.remove(ex)
-                    new_region = self.get_region(LogicRegion.town_community_center_cutscene)
-                    ex.connected_region = new_region
-                    new_region.entrances.append(ex)
+                    parent_region = ex.parent_region
+                    cc_cutscene = self.get_region(LogicRegion.town_community_center_cutscene)
+                    parent_region.connect(cc_cutscene, LogicEntrance.watch_community_center_cutscene, ex.access_rule)
                     additional_sweep_needed = True
 
             return additional_sweep_needed

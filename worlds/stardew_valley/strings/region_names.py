@@ -260,8 +260,8 @@ class LogicRegion:
     town_tide_pools_shortcut = "Path For Shortcut to Tide Pools"
     mountain_walkway_shortcut = "Mountian Walkway to Jojamart Shortcut"
     mountain_fence_shortcut = "Mountain Behind Fence Shortcut"
-    bus_stop_krobus_cutscene = "Enter Bus Stop From Farm"
-    town_community_center_cutscene = "Enter Town From Bus Stop"
+    bus_stop_krobus_cutscene = "Bus Stop Krobus Cutscene"
+    town_community_center_cutscene = "Town Community Center Cutscene"
 
     town_cutscenes = "Town Map Anywhere"
     beach_cutscenes = "Beach Map Anywhere"

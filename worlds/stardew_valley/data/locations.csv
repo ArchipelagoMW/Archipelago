@@ -214,7 +214,7 @@ id,region,name,tags,content_packs
 237,The Mines - Floor 120,Floor 120 Elevator,ELEVATOR,
 250,Shipping,Demetrius's Breakthrough,MANDATORY,
 251,Volcano - Floor 10,Volcano Caldera Treasure,"GINGER_ISLAND,MANDATORY",
-252,Enter Town From Bus Stop,Rat Problem Cutscene,MANDATORY,
+252,Town Community Center Cutscene,Rat Problem Cutscene,MANDATORY,
 253,Trash Bear,Trash Bear Foraging,TRASH_BEAR,
 254,Trash Bear,Trash Bear Cooking,TRASH_BEAR,
 255,Trash Bear,Trash Bear Farming,TRASH_BEAR,

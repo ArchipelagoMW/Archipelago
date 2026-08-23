@@ -71,7 +71,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.forage_in_bus_stop,
         ),
     ),
-    RegionData(LogicRegion.bus_stop_krobus_cutscene, (Entrance.bus_stop_cutscene_to_bus_stop,)),
+    RegionData(LogicRegion.bus_stop_krobus_cutscene),
     RegionData(
         RegionName.forest,
         (
@@ -156,7 +156,7 @@ vanilla_regions: tuple[RegionData, ...] = (
         ),
     ),
     RegionData(RegionName.bus_tunnel, (Entrance.bus_tunnel_to_tunnel_entrance,)),
-    RegionData(LogicRegion.town_community_center_cutscene, (Entrance.town_cutscene_to_town,)),
+    RegionData(LogicRegion.town_community_center_cutscene),
     RegionData(
         RegionName.town,
         (
@@ -602,7 +602,6 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.OVERWORLD,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
-    ConnectionData(Entrance.bus_stop_cutscene_to_bus_stop, RegionName.bus_stop),
     ConnectionData(
         Entrance.bus_stop_to_farm,
         RegionName.farm,
@@ -795,7 +794,6 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.OVERWORLD,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
-    ConnectionData(Entrance.town_cutscene_to_town, RegionName.town),
     ConnectionData(
         Entrance.town_to_bus_stop,
         RegionName.bus_stop,
@@ -1673,6 +1671,16 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.town_cutscenes_from_mountain_cave_shortcut, LogicRegion.town_cutscenes),
     ConnectionData(LogicEntrance.town_cutscenes_from_mountain_fence_shortcut, LogicRegion.town_cutscenes),
     ConnectionData(LogicEntrance.town_cutscenes_from_tide_pools_shortcut, LogicRegion.town_cutscenes),
+    ConnectionData(
+        LogicEntrance.watch_bus_stop_krobus_cutscene,
+        LogicRegion.bus_stop_krobus_cutscene,
+        flag=RandomizationFlag.NOT_RANDOMIZED,
+    ),
+    ConnectionData(
+        LogicEntrance.watch_community_center_cutscene,
+        LogicRegion.town_community_center_cutscene,
+        flag=RandomizationFlag.NOT_RANDOMIZED,
+    ),
 )
 
 connections_without_ginger_island_by_name: Mapping[str, ConnectionData] = MappingProxyType(
