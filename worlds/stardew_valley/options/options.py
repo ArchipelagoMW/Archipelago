@@ -88,6 +88,16 @@ class OptionEnumSet(OptionSet, typing.Generic[EnumT], metaclass=StrEnumToValidKe
         super().__init__(*args, **kwargs)
         self.value = {self._enum_type(v) for v in self.value}
 
+    # Restricted pickle in web host does not like it when we try to use StrEnum defined in another module. So we pass it as a str instead.
+    def __getstate__(self):
+        state = super().__getstate__()
+        state["value"] = state["value"].__class__(key.value for key in state["value"])
+        return state
+
+    def __setstate__(self, state):
+        getattr(super(), "__setstate__", self.__dict__.update)(state)
+        self.value = {self._enum_type(v) for v in state["value"]}
+
 
 class Goal(Choice):
     """Goal for this playthrough
