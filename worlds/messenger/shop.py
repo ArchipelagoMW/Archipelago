@@ -1,11 +1,11 @@
-from typing import Dict, List, NamedTuple, Optional, Set, TYPE_CHECKING, Tuple, Union
+from typing import NamedTuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import MessengerWorld
 else:
     MessengerWorld = object
 
-PROG_SHOP_ITEMS: List[str] = [
+PROG_SHOP_ITEMS: list[str] = [
     "Path of Resilience",
     "Meditation",
     "Strike of the Ninja",
@@ -14,7 +14,7 @@ PROG_SHOP_ITEMS: List[str] = [
     "Aerobatics Warrior",
 ]
 
-USEFUL_SHOP_ITEMS: List[str] = [
+USEFUL_SHOP_ITEMS: list[str] = [
     "Karuta Plates",
     "Serendipitous Bodies",
     "Kusari Jacket",
@@ -29,10 +29,10 @@ class ShopData(NamedTuple):
     internal_name: str
     min_price: int
     max_price: int
-    prerequisite: Optional[Union[str, Set[str]]] = None
+    prerequisite: str | set[str] | None = None
 
 
-SHOP_ITEMS: Dict[str, ShopData] = {
+SHOP_ITEMS: dict[str, ShopData] = {
     "Karuta Plates":        ShopData("HP_UPGRADE_1", 20, 200),
     "Serendipitous Bodies": ShopData("ENEMY_DROP_HP", 20, 300, "The Shop - Karuta Plates"),
     "Path of Resilience":   ShopData("DAMAGE_REDUCTION", 100, 500, "The Shop - Serendipitous Bodies"),
@@ -56,7 +56,7 @@ SHOP_ITEMS: Dict[str, ShopData] = {
     "Focused Power Sense":  ShopData("POWER_SEAL_WORLD_MAP", 300, 600, "The Shop - Power Sense"),
 }
 
-FIGURINES: Dict[str, ShopData] = {
+FIGURINES: dict[str, ShopData] = {
     "Green Kappa Figurine":         ShopData("GREEN_KAPPA", 100, 500),
     "Blue Kappa Figurine":          ShopData("BLUE_KAPPA", 100, 500),
     "Ountarde Figurine":            ShopData("OUNTARDE", 100, 500),
@@ -73,12 +73,12 @@ FIGURINES: Dict[str, ShopData] = {
 }
 
 
-def shuffle_shop_prices(world: MessengerWorld) -> Tuple[Dict[str, int], Dict[str, int]]:
+def shuffle_shop_prices(world: MessengerWorld) -> tuple[dict[str, int], dict[str, int]]:
     shop_price_mod = world.options.shop_price.value
     shop_price_planned = world.options.shop_price_plan
 
-    shop_prices: Dict[str, int] = {}
-    figurine_prices: Dict[str, int] = {}
+    shop_prices: dict[str, int] = {}
+    figurine_prices: dict[str, int] = {}
     for item, price in shop_price_planned.value.items():
         if not isinstance(price, int):
             price = world.random.choices(list(price.keys()), weights=list(price.values()))[0]

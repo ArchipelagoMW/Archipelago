@@ -1,4 +1,4 @@
-import worlds.oot.Messages as Messages
+from . import Messages
 
 # Least common multiple of all possible character widths. A line wrap must occur when the combined widths of all of the
 # characters on a line reach this value.

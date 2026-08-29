@@ -7,8 +7,9 @@ use that version. These steps are for developers or platforms without compiled r
 ## General
 
 What you'll need:
- * [Python 3.8.7 or newer](https://www.python.org/downloads/), not the Windows Store version
-   * **Python 3.12 is currently unsupported**
+ * [Python 3.11.9 or newer but less than 3.14](https://www.python.org/downloads/), not the Windows Store version
+   * On Windows, please consider only using the latest supported version in production environments since security
+     updates for older versions are not easily available.
  * pip: included in downloads from python.org, separate in many Linux distributions
  * Matching C compiler
    * possibly optional, read operating system specific sections
@@ -31,24 +32,50 @@ After this, you should be able to run the programs.
 
 Recommended steps
  * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
-   * **Python 3.12 is currently unsupported**
+   * [read above](#General) which versions are supported
 
  * **Optional**: Download and install Visual Studio Build Tools from
    [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
    * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details. 
      Generally, selecting the box for "Desktop Development with C++" will provide what you need.
    * Build tools are not required if all modules are installed pre-compiled. Pre-compiled modules are pinned on
-     [Discord in #archipelago-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
+     [Discord in #ap-core-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
 
  * It is recommended to use [PyCharm IDE](https://www.jetbrains.com/pycharm/)
- * Run Generate.py which will prompt installation of missing modules, press enter to confirm
-   * In PyCharm: right-click Generate.py and select `Run 'Generate'`
-   * Without PyCharm: open a command prompt in the source folder and type `py Generate.py`
+ * Run ModuleUpdate.py which will prompt installation of missing modules, press enter to confirm
+   * In PyCharm: right-click ModuleUpdate.py and select `Run 'ModuleUpdate'`
+   * Without PyCharm: open a command prompt in the source folder and type `py ModuleUpdate.py`
 
 
 ## macOS
 
 Refer to [Guide to Run Archipelago from Source Code on macOS](../worlds/generic/docs/mac_en.md).
+
+
+## Linux
+
+If your Linux distribution ships a compatible Python version (see [General](#general)) and pip, you can use that,
+otherwise you may need to install Python from a 3rd party. Refer to documentation of your Linux distribution.
+
+Installing a C compiler is usually optional. The package is typically named `gcc`, sometimes another package with the
+base build tools may be required, i.e. `build-essential` (Debian/Ubuntu) or `base-devel` (Arch).
+
+After getting the source code, it is strongly recommended to create a
+[venv](https://docs.python.org/3/tutorial/venv.html) (Virtual Environment)
+by hand or using an IDE, such as PyCharm, because Archipelago requires specific versions of Python packages.
+
+Run `python ModuleUpdate.py` in the project root to install packages, run `python Launcher.py` to run the Launcher.
+
+### Building
+
+Builds contain (almost) all dependencies to run Archipelago on any Linux distribution that is as new or newer than the
+one it was built on. Beware that currently only the oldest Ubuntu LTS available in GitHub actions is supported for that.
+This means the easiest way to generate a build is by running the `Build` action from GitHub actions instead of building
+locally. If you still want to, e.g. for local testing, you can by running
+
+`python setup.py build_exe` to generate a binary distribution of Archipelago in `build/`. Or to generate an AppImage
+first generate the binary distribution and then run `python setup.py bdist_appimage` to populate `dist/`. You need to
+put an `appimagetool` into the directory you run the command from, rename it to `appimagetool` and make it executable.
 
 
 ## Optional: A Link to the Past Enemizer
@@ -85,4 +112,4 @@ PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 
-Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.
+Information about running tests can be found in [tests.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/tests.md#running-tests)

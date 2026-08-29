@@ -1,5 +1,5 @@
 # Regions are areas in your game that you travel to.
-from typing import Dict, List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
 from . import locations
@@ -36,28 +36,21 @@ def create_region(world: "NoitaWorld", region_name: str) -> Region:
     return new_region
 
 
-def create_regions(world: "NoitaWorld") -> Dict[str, Region]:
+def create_regions(world: "NoitaWorld") -> dict[str, Region]:
     return {name: create_region(world, name) for name in noita_regions}
 
 
-# An "Entrance" is really just a connection between two regions
-def create_entrance(player: int, source: str, destination: str, regions: Dict[str, Region]) -> Entrance:
-    entrance = Entrance(player, f"From {source} To {destination}", regions[source])
-    entrance.connect(regions[destination])
-    return entrance
-
-
 # Creates connections based on our access mapping in `noita_connections`.
-def create_connections(player: int, regions: Dict[str, Region]) -> None:
+def create_connections(regions: dict[str, Region]) -> None:
     for source, destinations in noita_connections.items():
-        new_entrances = [create_entrance(player, source, destination, regions) for destination in destinations]
-        regions[source].exits = new_entrances
+        for destination in destinations:
+            regions[source].connect(regions[destination])
 
 
 # Creates all regions and connections. Called from NoitaWorld.
 def create_all_regions_and_connections(world: "NoitaWorld") -> None:
     created_regions = create_regions(world)
-    create_connections(world.player, created_regions)
+    create_connections(created_regions)
     create_all_events(world, created_regions)
 
     world.multiworld.regions += created_regions.values()
@@ -75,7 +68,7 @@ def create_all_regions_and_connections(world: "NoitaWorld") -> None:
 # - Lake is connected to The Laboratory, since the bosses are hard without specific set-ups (which means late game)
 # - Snowy Depths connects to Lava Lake orb since you need digging for it, so fairly early is acceptable
 # - Ancient Laboratory is connected to the Coal Pits, so that Ylialkemisti isn't sphere 1
-noita_connections: Dict[str, List[str]] = {
+noita_connections: dict[str, list[str]] = {
     "Menu": ["Forest"],
     "Forest": ["Mines", "Floating Island", "Desert", "Snowy Wasteland"],
     "Frozen Vault": ["The Vault"],
@@ -117,4 +110,4 @@ noita_connections: Dict[str, List[str]] = {
     ###
 }
 
-noita_regions: List[str] = sorted(set(noita_connections.keys()).union(*noita_connections.values()))
+noita_regions: list[str] = sorted(set(noita_connections.keys()).union(*noita_connections.values()))

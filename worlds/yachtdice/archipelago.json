@@ -1,0 +1,6 @@
+{
+    "game": "Yacht Dice",
+    "authors": ["Spineraks"],
+    "minimum_ap_version": "0.6.1",
+    "world_version": "2.1.4"
+}

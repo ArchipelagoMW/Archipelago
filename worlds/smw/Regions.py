@@ -808,7 +808,7 @@ def create_regions(world: World, active_locations):
                                lambda state: (state.has(ItemName.blue_switch_palace, player) and
                                               (state.has(ItemName.p_switch, player) or
                                                state.has(ItemName.green_switch_palace, player) or
-                                               (state.has(ItemName.yellow_switch_palace, player) or state.has(ItemName.red_switch_palace, player)))))
+                                               (state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.red_switch_palace, player)))))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_dragon)
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_4_region, LocationName.chocolate_island_4_dragon,
                                lambda state: (state.has(ItemName.p_switch, player) and

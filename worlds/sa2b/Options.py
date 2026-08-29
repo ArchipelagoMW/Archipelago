@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions
+from Options import Choice, Range, Option, OptionGroup, Toggle, DeathLink, DefaultOnToggle, PerGameCommonOptions, PlandoBosses
+
+from .Names import LocationName
 
 
 class Goal(Choice):
@@ -22,6 +24,8 @@ class Goal(Choice):
     Boss Rush Chaos Emerald Hunt: Find the Seven Chaos Emeralds, then beat all of the bosses in the Boss Rush, ending with Finalhazard
 
     Chaos Chao: Raise a Chaos Chao to win
+
+    Minigame Madness: Win a certain amount of each Minigame Trap, then defeat Finalhazard
     """
     display_name = "Goal"
     option_biolizard = 0
@@ -32,6 +36,7 @@ class Goal(Choice):
     option_cannons_core_boss_rush = 5
     option_boss_rush_chaos_emerald_hunt = 6
     option_chaos_chao = 7
+    option_minigame_madness = 8
     default = 0
 
     @classmethod
@@ -69,6 +74,66 @@ class BossRushShuffle(Choice):
     option_chaos = 2
     option_singularity = 3
     default = 0
+
+
+class GateBossPlando(PlandoBosses):
+    """
+    Possible Locations:
+    "Gate 1 Boss"
+    "Gate 2 Boss"
+    "Gate 3 Boss"
+    "Gate 4 Boss"
+    "Gate 5 Boss"
+
+    Possible Bosses:
+    "Sonic vs Shadow 1"
+    "Sonic vs Shadow 2"
+    "Tails vs Eggman 1"
+    "Tails vs Eggman 2"
+    "Knuckles vs Rouge 1"
+    "BIG FOOT"
+    "HOT SHOT"
+    "FLYING DOG"
+    "Egg Golem (Sonic)"
+    "Egg Golem (Eggman)"
+    "King Boom Boo"
+    """
+    bosses = frozenset(LocationName.boss_names.keys())
+
+    locations = frozenset(LocationName.boss_gate_names.keys())
+
+    duplicate_bosses = False
+
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        return True
+
+    display_name = "Boss Shuffle"
+    option_plando = 0
+
+
+class MinigameMadnessRequirement(Range):
+    """
+    Determines how many of each Minigame Trap must be won (for Minigame Madness goal)
+
+    Receiving this many of a Minigame Trap will allow you to replay that minigame at-will in the Chao World lobby
+    """
+    display_name = "Minigame Madness Trap Requirement"
+    range_start = 1
+    range_end = 10
+    default = 3
+
+
+class MinigameMadnessMinimum(Range):
+    """
+    Determines the minimum number of each Minigame Trap that are created (for Minigame Madness goal)
+
+    At least this many of each trap will be created as "Progression Traps", regardless of other trap option selections
+    """
+    display_name = "Minigame Madness Trap Minimum"
+    range_start = 1
+    range_end = 10
+    default = 5
 
 
 class BaseTrapWeight(Choice):
@@ -159,6 +224,34 @@ class ReverseTrapWeight(BaseTrapWeight):
     display_name = "Reverse Trap Weight"
 
 
+class LiteratureTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to read
+    """
+    display_name = "Literature Trap Weight"
+
+
+class ControllerDriftTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which causes your control sticks to drift
+    """
+    display_name = "Controller Drift Trap Weight"
+
+
+class PoisonTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which causes you to lose rings over time
+    """
+    display_name = "Poison Trap Weight"
+
+
+class BeeTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which spawns a swarm of bees
+    """
+    display_name = "Bee Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -166,14 +259,106 @@ class PongTrapWeight(BaseTrapWeight):
     display_name = "Pong Trap Weight"
 
 
+class BreakoutTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Breakout minigame
+    """
+    display_name = "Breakout Trap Weight"
+
+
+class FishingTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Fishing minigame
+    """
+    display_name = "Fishing Trap Weight"
+
+
+class TriviaTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Trivia minigame
+    """
+    display_name = "Trivia Trap Weight"
+
+
+class PokemonTriviaTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Pokemon Trivia minigame
+    """
+    display_name = "Pokemon Trivia Trap Weight"
+
+
+class PokemonCountTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Pokemon Count minigame
+    """
+    display_name = "Pokemon Count Trap Weight"
+
+
+class NumberSequenceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Number Sequence minigame
+    """
+    display_name = "Number Sequence Trap Weight"
+
+
+class LightUpPathTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Light Up Path minigame
+    """
+    display_name = "Light Up Path Trap Weight"
+
+
+class PinballTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Pinball minigame
+    """
+    display_name = "Pinball Trap Weight"
+
+
+class MathQuizTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to solve a math problem
+    """
+    display_name = "Math Quiz Trap Weight"
+
+
+class SnakeTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Snake minigame
+    """
+    display_name = "Snake Trap Weight"
+
+
+class InputSequenceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to press a sequence of inputs
+    """
+    display_name = "Input Sequence Trap Weight"
+
+
 class MinigameTrapDifficulty(Choice):
     """
     How difficult any Minigame-style traps are
+    Chaos causes the difficulty to be random per-minigame
     """
     display_name = "Minigame Trap Difficulty"
     option_easy = 0
     option_medium = 1
     option_hard = 2
+    option_chaos = 3
+    default = 1
+
+
+class BigFishingDifficulty(Choice):
+    """
+    How difficult Big's Fishing Minigames are
+    Chaos causes the difficulty to be random per-minigame
+    """
+    display_name = "Big Fishing Difficulty"
+    option_easy = 0
+    option_medium = 1
+    option_hard = 2
+    option_chaos = 3
     default = 1
 
 
@@ -197,7 +382,7 @@ class TrapFillPercentage(Range):
     default = 0
 
 
-class Keysanity(Toggle):
+class Keysanity(DefaultOnToggle):
     """
     Determines whether picking up Chao Keys grants checks
     (86 Locations)
@@ -225,7 +410,7 @@ class Whistlesanity(Choice):
     default = 0
 
 
-class Beetlesanity(Toggle):
+class Beetlesanity(DefaultOnToggle):
     """
     Determines whether destroying Gold Beetles grants checks
     (27 Locations)
@@ -244,11 +429,33 @@ class Omosanity(Toggle):
 class Animalsanity(Toggle):
     """
     Determines whether unique counts of animals grant checks.
-    (421 Locations)
+    (422 Locations)
 
     ALL animals must be collected in a single run of a mission to get all checks.
     """
     display_name = "Animalsanity"
+
+
+class ItemBoxsanity(Choice):
+    """
+    Determines whether collecting Item Boxes grants checks
+    None: No Item Boxes grant checks
+    Extra Lives: Extra Life Boxes grant checks (94 Locations)
+    All: All Item Boxes grant checks (502 Locations Total)
+    """
+    display_name = "Itemboxsanity"
+    option_none = 0
+    option_extra_lives = 1
+    option_all = 2
+    default = 0
+
+
+class Bigsanity(Toggle):
+    """
+    Determines whether helping Big fish grants checks.
+    (32 Locations)
+    """
+    display_name = "Bigsanity"
 
 
 class KartRaceChecks(Choice):
@@ -313,7 +520,7 @@ class LevelGateCosts(Choice):
     option_low = 0
     option_medium = 1
     option_high = 2
-    default = 2
+    default = 0
 
 
 class MaximumEmblemCap(Range):
@@ -523,109 +730,214 @@ class BaseMissionCount(Range):
     default = 2
 
 
-class SpeedMissionCount(BaseMissionCount):
+class SonicMissionCount(BaseMissionCount):
     """
-    The number of active missions to include for Sonic and Shadow stages
+    The number of active missions to include for Sonic stages
     """
-    display_name = "Speed Mission Count"
+    display_name = "Sonic Mission Count"
 
 
-class SpeedMission2(DefaultOnToggle):
+class SonicMission2(DefaultOnToggle):
     """
-    Determines if the Sonic and Shadow 100 rings missions should be included
+    Determines if the Sonic 100 rings missions should be included
     """
-    display_name = "Speed Mission 2"
+    display_name = "Sonic Mission 2"
 
 
-class SpeedMission3(DefaultOnToggle):
+class SonicMission3(DefaultOnToggle):
     """
-    Determines if the Sonic and Shadow lost chao missions should be included
+    Determines if the Sonic lost chao missions should be included
     """
-    display_name = "Speed Mission 3"
+    display_name = "Sonic Mission 3"
 
 
-class SpeedMission4(DefaultOnToggle):
+class SonicMission4(DefaultOnToggle):
     """
-    Determines if the Sonic and Shadow time trial missions should be included
+    Determines if the Sonic time trial missions should be included
     """
-    display_name = "Speed Mission 4"
+    display_name = "Sonic Mission 4"
 
 
-class SpeedMission5(DefaultOnToggle):
+class SonicMission5(DefaultOnToggle):
     """
-    Determines if the Sonic and Shadow hard missions should be included
+    Determines if the Sonic hard missions should be included
     """
-    display_name = "Speed Mission 5"
+    display_name = "Sonic Mission 5"
 
 
-class MechMissionCount(BaseMissionCount):
+class ShadowMissionCount(BaseMissionCount):
     """
-    The number of active missions to include for Tails and Eggman stages
+    The number of active missions to include for Shadow stages
     """
-    display_name = "Mech Mission Count"
+    display_name = "Shadow Mission Count"
 
 
-class MechMission2(DefaultOnToggle):
+class ShadowMission2(DefaultOnToggle):
     """
-    Determines if the Tails and Eggman 100 rings missions should be included
+    Determines if the Shadow 100 rings missions should be included
     """
-    display_name = "Mech Mission 2"
+    display_name = "Shadow Mission 2"
 
 
-class MechMission3(DefaultOnToggle):
+class ShadowMission3(DefaultOnToggle):
     """
-    Determines if the Tails and Eggman lost chao missions should be included
+    Determines if the Shadow lost chao missions should be included
     """
-    display_name = "Mech Mission 3"
+    display_name = "Shadow Mission 3"
 
 
-class MechMission4(DefaultOnToggle):
+class ShadowMission4(DefaultOnToggle):
     """
-    Determines if the Tails and Eggman time trial missions should be included
+    Determines if the Shadow time trial missions should be included
     """
-    display_name = "Mech Mission 4"
+    display_name = "Shadow Mission 4"
 
 
-class MechMission5(DefaultOnToggle):
+class ShadowMission5(DefaultOnToggle):
     """
-    Determines if the Tails and Eggman hard missions should be included
+    Determines if the Shadow hard missions should be included
     """
-    display_name = "Mech Mission 5"
+    display_name = "Shadow Mission 5"
 
 
-class HuntMissionCount(BaseMissionCount):
+class TailsMissionCount(BaseMissionCount):
     """
-    The number of active missions to include for Knuckles and Rouge stages
+    The number of active missions to include for Tails stages
     """
-    display_name = "Hunt Mission Count"
+    display_name = "Tails Mission Count"
 
 
-class HuntMission2(DefaultOnToggle):
+class TailsMission2(DefaultOnToggle):
     """
-    Determines if the Knuckles and Rouge 100 rings missions should be included
+    Determines if the Tails 100 rings missions should be included
     """
-    display_name = "Hunt Mission 2"
+    display_name = "Tails Mission 2"
 
 
-class HuntMission3(DefaultOnToggle):
+class TailsMission3(DefaultOnToggle):
     """
-    Determines if the Knuckles and Rouge lost chao missions should be included
+    Determines if the Tails lost chao missions should be included
     """
-    display_name = "Hunt Mission 3"
+    display_name = "Tails Mission 3"
 
 
-class HuntMission4(DefaultOnToggle):
+class TailsMission4(DefaultOnToggle):
     """
-    Determines if the Knuckles and Rouge time trial missions should be included
+    Determines if the Tails time trial missions should be included
     """
-    display_name = "Hunt Mission 4"
+    display_name = "Tails Mission 4"
 
 
-class HuntMission5(DefaultOnToggle):
+class TailsMission5(DefaultOnToggle):
     """
-    Determines if the Knuckles and Rouge hard missions should be included
+    Determines if the Tails hard missions should be included
     """
-    display_name = "Hunt Mission 5"
+    display_name = "Tails Mission 5"
+
+
+class EggmanMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Eggman stages
+    """
+    display_name = "Eggman Mission Count"
+
+
+class EggmanMission2(DefaultOnToggle):
+    """
+    Determines if the Eggman 100 rings missions should be included
+    """
+    display_name = "Eggman Mission 2"
+
+
+class EggmanMission3(DefaultOnToggle):
+    """
+    Determines if the Eggman lost chao missions should be included
+    """
+    display_name = "Eggman Mission 3"
+
+
+class EggmanMission4(DefaultOnToggle):
+    """
+    Determines if the Eggman time trial missions should be included
+    """
+    display_name = "Eggman Mission 4"
+
+
+class EggmanMission5(DefaultOnToggle):
+    """
+    Determines if the Eggman hard missions should be included
+    """
+    display_name = "Eggman Mission 5"
+
+
+class KnucklesMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Knuckles stages
+    """
+    display_name = "Knuckles Mission Count"
+
+
+class KnucklesMission2(DefaultOnToggle):
+    """
+    Determines if the Knuckles 100 rings missions should be included
+    """
+    display_name = "Knuckles Mission 2"
+
+
+class KnucklesMission3(DefaultOnToggle):
+    """
+    Determines if the Knuckles lost chao missions should be included
+    """
+    display_name = "Knuckles Mission 3"
+
+
+class KnucklesMission4(DefaultOnToggle):
+    """
+    Determines if the Knuckles time trial missions should be included
+    """
+    display_name = "Knuckles Mission 4"
+
+
+class KnucklesMission5(DefaultOnToggle):
+    """
+    Determines if the Knuckles hard missions should be included
+    """
+    display_name = "Knuckles Mission 5"
+
+
+class RougeMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Rouge stages
+    """
+    display_name = "Rouge Mission Count"
+
+
+class RougeMission2(DefaultOnToggle):
+    """
+    Determines if the Rouge 100 rings missions should be included
+    """
+    display_name = "Rouge Mission 2"
+
+
+class RougeMission3(DefaultOnToggle):
+    """
+    Determines if the Rouge lost chao missions should be included
+    """
+    display_name = "Rouge Mission 3"
+
+
+class RougeMission4(DefaultOnToggle):
+    """
+    Determines if the Rouge time trial missions should be included
+    """
+    display_name = "Rouge Mission 4"
+
+
+class RougeMission5(DefaultOnToggle):
+    """
+    Determines if the Rouge hard missions should be included
+    """
+    display_name = "Rouge Mission 5"
 
 
 class KartMissionCount(BaseMissionCount):
@@ -706,7 +1018,7 @@ class RingLoss(Choice):
 
     Modern: You lose 20 rings when hit
 
-    OHKO: You die immediately when hit (NOTE: Some Hard Logic tricks may require damage boosts!)
+    OHKO: You die immediately when hit (NOTE: Some Hard or Expert Logic tricks may require damage boosts!)
     """
     display_name = "Ring Loss"
     option_classic = 0
@@ -727,6 +1039,16 @@ class RingLink(Toggle):
     Whether your in-level ring gain/loss is linked to other players
     """
     display_name = "Ring Link"
+
+
+class TrapLink(Toggle):
+    """
+    Whether your received traps are linked to other players
+
+    You will also receive any linked traps from other players with Trap Link enabled,
+    if you have a weight above "none" set for that trap
+    """
+    display_name = "Trap Link"
 
 
 class SADXMusic(Choice):
@@ -823,11 +1145,14 @@ class LogicDifficulty(Choice):
 
     Standard: The logic assumes the "intended" usage of Upgrades to progress through levels
 
-    Hard: Some simple skips or sequence breaks may be required
+    Hard: Some simple skips or sequence breaks may be required, but no out-of-bounds
+
+    Expert: If it is humanly possible, it may be required
     """
     display_name = "Logic Difficulty"
     option_standard = 0
     option_hard = 1
+    option_expert = 2
     default = 0
 
 
@@ -835,6 +1160,8 @@ sa2b_option_groups = [
     OptionGroup("General Options", [
         Goal,
         BossRushShuffle,
+        MinigameMadnessRequirement,
+        MinigameMadnessMinimum,
         LogicDifficulty,
         RequiredRank,
         MaximumEmblemCap,
@@ -854,6 +1181,8 @@ sa2b_option_groups = [
         Beetlesanity,
         Omosanity,
         Animalsanity,
+        ItemBoxsanity,
+        Bigsanity,
         KartRaceChecks,
     ]),
     OptionGroup("Chao", [
@@ -885,29 +1214,68 @@ sa2b_option_groups = [
         SlowTrapWeight,
         CutsceneTrapWeight,
         ReverseTrapWeight,
+        LiteratureTrapWeight,
+        ControllerDriftTrapWeight,
+        PoisonTrapWeight,
+        BeeTrapWeight,
+    ]),
+    OptionGroup("Minigames", [
         PongTrapWeight,
+        BreakoutTrapWeight,
+        FishingTrapWeight,
+        TriviaTrapWeight,
+        PokemonTriviaTrapWeight,
+        PokemonCountTrapWeight,
+        NumberSequenceTrapWeight,
+        LightUpPathTrapWeight,
+        PinballTrapWeight,
+        MathQuizTrapWeight,
+        SnakeTrapWeight,
+        InputSequenceTrapWeight,
         MinigameTrapDifficulty,
+        BigFishingDifficulty,
     ]),
-    OptionGroup("Speed Missions", [
-        SpeedMissionCount,
-        SpeedMission2,
-        SpeedMission3,
-        SpeedMission4,
-        SpeedMission5,
+    OptionGroup("Sonic Missions", [
+        SonicMissionCount,
+        SonicMission2,
+        SonicMission3,
+        SonicMission4,
+        SonicMission5,
     ]),
-    OptionGroup("Mech Missions", [
-        MechMissionCount,
-        MechMission2,
-        MechMission3,
-        MechMission4,
-        MechMission5,
+    OptionGroup("Shadow Missions", [
+        ShadowMissionCount,
+        ShadowMission2,
+        ShadowMission3,
+        ShadowMission4,
+        ShadowMission5,
     ]),
-    OptionGroup("Hunt Missions", [
-        HuntMissionCount,
-        HuntMission2,
-        HuntMission3,
-        HuntMission4,
-        HuntMission5,
+    OptionGroup("Tails Missions", [
+        TailsMissionCount,
+        TailsMission2,
+        TailsMission3,
+        TailsMission4,
+        TailsMission5,
+    ]),
+    OptionGroup("Eggman Missions", [
+        EggmanMissionCount,
+        EggmanMission2,
+        EggmanMission3,
+        EggmanMission4,
+        EggmanMission5,
+    ]),
+    OptionGroup("Knuckles Missions", [
+        KnucklesMissionCount,
+        KnucklesMission2,
+        KnucklesMission3,
+        KnucklesMission4,
+        KnucklesMission5,
+    ]),
+    OptionGroup("Rouge Missions", [
+        RougeMissionCount,
+        RougeMission2,
+        RougeMission3,
+        RougeMission4,
+        RougeMission5,
     ]),
     OptionGroup("Kart Missions", [
         KartMissionCount,
@@ -931,11 +1299,13 @@ sa2b_option_groups = [
     ]),
 ]
 
-
 @dataclass
 class SA2BOptions(PerGameCommonOptions):
     goal: Goal
     boss_rush_shuffle: BossRushShuffle
+    minigame_madness_requirement: MinigameMadnessRequirement
+    minigame_madness_minimum: MinigameMadnessMinimum
+    gate_boss_plando: GateBossPlando
     logic_difficulty: LogicDifficulty
     required_rank: RequiredRank
     max_emblem_cap: MaximumEmblemCap
@@ -953,6 +1323,8 @@ class SA2BOptions(PerGameCommonOptions):
     beetlesanity: Beetlesanity
     omosanity: Omosanity
     animalsanity: Animalsanity
+    itemboxsanity: ItemBoxsanity
+    bigsanity: Bigsanity
     kart_race_checks: KartRaceChecks
 
     black_market_slots: BlackMarketSlots
@@ -983,31 +1355,65 @@ class SA2BOptions(PerGameCommonOptions):
     slow_trap_weight: SlowTrapWeight
     cutscene_trap_weight: CutsceneTrapWeight
     reverse_trap_weight: ReverseTrapWeight
+    literature_trap_weight: LiteratureTrapWeight
+    controller_drift_trap_weight: ControllerDriftTrapWeight
+    poison_trap_weight: PoisonTrapWeight
+    bee_trap_weight: BeeTrapWeight
     pong_trap_weight: PongTrapWeight
+    breakout_trap_weight: BreakoutTrapWeight
+    fishing_trap_weight: FishingTrapWeight
+    trivia_trap_weight: TriviaTrapWeight
+    pokemon_trivia_trap_weight: PokemonTriviaTrapWeight
+    pokemon_count_trap_weight: PokemonCountTrapWeight
+    number_sequence_trap_weight: NumberSequenceTrapWeight
+    light_up_path_trap_weight: LightUpPathTrapWeight
+    pinball_trap_weight: PinballTrapWeight
+    math_quiz_trap_weight: MathQuizTrapWeight
+    snake_trap_weight: SnakeTrapWeight
+    input_sequence_trap_weight: InputSequenceTrapWeight
     minigame_trap_difficulty: MinigameTrapDifficulty
+    big_fishing_difficulty: BigFishingDifficulty
 
     sadx_music: SADXMusic
     music_shuffle: MusicShuffle
     voice_shuffle: VoiceShuffle
     narrator: Narrator
 
-    speed_mission_count: SpeedMissionCount
-    speed_mission_2: SpeedMission2
-    speed_mission_3: SpeedMission3
-    speed_mission_4: SpeedMission4
-    speed_mission_5: SpeedMission5
+    sonic_mission_count: SonicMissionCount
+    sonic_mission_2: SonicMission2
+    sonic_mission_3: SonicMission3
+    sonic_mission_4: SonicMission4
+    sonic_mission_5: SonicMission5
 
-    mech_mission_count: MechMissionCount
-    mech_mission_2: MechMission2
-    mech_mission_3: MechMission3
-    mech_mission_4: MechMission4
-    mech_mission_5: MechMission5
+    shadow_mission_count: ShadowMissionCount
+    shadow_mission_2: ShadowMission2
+    shadow_mission_3: ShadowMission3
+    shadow_mission_4: ShadowMission4
+    shadow_mission_5: ShadowMission5
 
-    hunt_mission_count: HuntMissionCount
-    hunt_mission_2: HuntMission2
-    hunt_mission_3: HuntMission3
-    hunt_mission_4: HuntMission4
-    hunt_mission_5: HuntMission5
+    tails_mission_count: TailsMissionCount
+    tails_mission_2: TailsMission2
+    tails_mission_3: TailsMission3
+    tails_mission_4: TailsMission4
+    tails_mission_5: TailsMission5
+
+    eggman_mission_count: EggmanMissionCount
+    eggman_mission_2: EggmanMission2
+    eggman_mission_3: EggmanMission3
+    eggman_mission_4: EggmanMission4
+    eggman_mission_5: EggmanMission5
+
+    knuckles_mission_count: KnucklesMissionCount
+    knuckles_mission_2: KnucklesMission2
+    knuckles_mission_3: KnucklesMission3
+    knuckles_mission_4: KnucklesMission4
+    knuckles_mission_5: KnucklesMission5
+
+    rouge_mission_count: RougeMissionCount
+    rouge_mission_2: RougeMission2
+    rouge_mission_3: RougeMission3
+    rouge_mission_4: RougeMission4
+    rouge_mission_5: RougeMission5
 
     kart_mission_count: KartMissionCount
     kart_mission_2: KartMission2
@@ -1022,4 +1428,5 @@ class SA2BOptions(PerGameCommonOptions):
     cannons_core_mission_5: CannonsCoreMission5
 
     ring_link: RingLink
+    trap_link: TrapLink
     death_link: DeathLink

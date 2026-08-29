@@ -214,7 +214,7 @@ renon_item_dialogue = {
           "\"Banshee Boomerang.\"",
     0x10: "No weapon triangle\n"
           "advantages with this.",
-    0x12: "It looks sus? Trust me,"
+    0x12: "It looks sus? Trust me,\n"
           "my wares are genuine.",
     0x15: "This non-volatile kind\n"
           "is safe to handle.",

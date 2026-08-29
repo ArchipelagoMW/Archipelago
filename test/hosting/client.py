@@ -80,8 +80,8 @@ class Client:
             "version": {
                 "class": "Version",
                 "major": 0,
-                "minor": 4,
-                "build": 6,
+                "minor": 6,
+                "build": 0,
             },
             "items_handling": 0,
             "tags": [],

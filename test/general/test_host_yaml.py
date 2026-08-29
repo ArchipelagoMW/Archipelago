@@ -1,11 +1,12 @@
 import os
+import os.path
 import unittest
 from io import StringIO
-from tempfile import TemporaryFile
+from tempfile import TemporaryDirectory, TemporaryFile
 from typing import Any, Dict, List, cast
 
 import Utils
-from settings import Settings, Group
+from settings import Group, Settings, ServerOptions
 
 
 class TestIDs(unittest.TestCase):
@@ -80,3 +81,27 @@ class TestSettingsDumper(unittest.TestCase):
                 self.assertEqual(value_spaces[2], value_spaces[0])  # start of sub-list
                 self.assertGreater(value_spaces[3], value_spaces[0],
                                    f"{value_lines[3]} should have more indentation than {value_lines[0]} in {lines}")
+
+
+class TestSettingsSave(unittest.TestCase):
+    def test_save(self) -> None:
+        """Test that saving and updating works"""
+        with TemporaryDirectory() as d:
+            filename = os.path.join(d, "host.yaml")
+            new_release_mode = ServerOptions.ReleaseMode("enabled")
+            # create default host.yaml
+            settings = Settings(None)
+            settings.save(filename)
+            self.assertTrue(os.path.exists(filename),
+                            "Default settings could not be saved")
+            self.assertNotEqual(settings.server_options.release_mode, new_release_mode,
+                                "Unexpected default release mode")
+            # update host.yaml
+            settings.server_options.release_mode = new_release_mode
+            settings.save(filename)
+            self.assertFalse(os.path.exists(filename + ".tmp"),
+                             "Temp file was not removed during save")
+            # read back host.yaml
+            settings = Settings(filename)
+            self.assertEqual(settings.server_options.release_mode, new_release_mode,
+                             "Settings were not overwritten")

@@ -53,7 +53,7 @@ def isliteral(expr):
 class Rule_AST_Transformer(ast.NodeTransformer):
 
     def __init__(self, world, player):
-        self.multiworld = world
+        self.world = world
         self.player = player
         self.events = set()
         # map Region -> rule ast string -> item name
@@ -86,9 +86,9 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     ctx=ast.Load()),
                 args=[ast.Str(escaped_items[node.id]), ast.Constant(self.player)],
                 keywords=[])
-        elif node.id in self.multiworld.__dict__:
+        elif node.id in self.world.__dict__:
             # Settings are constant
-            return ast.parse('%r' % self.multiworld.__dict__[node.id], mode='eval').body
+            return ast.parse('%r' % self.world.__dict__[node.id], mode='eval').body
         elif node.id in State.__dict__:
             return self.make_call(node, node.id, [], [])
         elif node.id in self.kwarg_defaults or node.id in allowed_globals:
@@ -137,7 +137,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
 
         if isinstance(count, ast.Name):
             # Must be a settings constant
-            count = ast.parse('%r' % self.multiworld.__dict__[count.id], mode='eval').body
+            count = ast.parse('%r' % self.world.__dict__[count.id], mode='eval').body
 
         if iname in escaped_items:
             iname = escaped_items[iname]
@@ -182,7 +182,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         new_args = []
         for child in node.args:
             if isinstance(child, ast.Name):
-                if child.id in self.multiworld.__dict__:
+                if child.id in self.world.__dict__:
                     # child = ast.Attribute(
                     #     value=ast.Attribute(
                     #         value=ast.Name(id='state', ctx=ast.Load()),
@@ -190,7 +190,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     #         ctx=ast.Load()),
                     #     attr=child.id,
                     #     ctx=ast.Load())
-                    child = ast.Constant(getattr(self.multiworld, child.id))
+                    child = ast.Constant(getattr(self.world, child.id))
                 elif child.id in rule_aliases:
                     child = self.visit(child)
                 elif child.id in escaped_items:
@@ -242,7 +242,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # Fast check for json can_use
         if (len(node.ops) == 1 and isinstance(node.ops[0], ast.Eq)
                 and isinstance(node.left, ast.Name) and isinstance(node.comparators[0], ast.Name)
-                and node.left.id not in self.multiworld.__dict__ and node.comparators[0].id not in self.multiworld.__dict__):
+                and node.left.id not in self.world.__dict__ and node.comparators[0].id not in self.world.__dict__):
             return ast.NameConstant(node.left.id == node.comparators[0].id)
 
         node.left = escape_or_string(node.left)
@@ -378,7 +378,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     # Requires the target regions have been defined in the world.
     def create_delayed_rules(self):
         for region_name, node, subrule_name in self.delayed_rules:
-            region = self.multiworld.multiworld.get_region(region_name, self.player)
+            region = self.world.multiworld.get_region(region_name, self.player)
             event = OOTLocation(self.player, subrule_name, type='Event', parent=region, internal=True)
             event.show_in_spoiler = False
 
@@ -395,7 +395,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 set_rule(event, access_rule)
                 region.locations.append(event)
 
-                self.multiworld.make_event_item(subrule_name, event)
+                self.world.make_event_item(subrule_name, event)
         # Safeguard in case this is called multiple times per world
         self.delayed_rules.clear()
 
@@ -448,7 +448,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     ## Handlers for compile-time optimizations (former State functions)
 
     def at_day(self, node):
-        if self.multiworld.ensure_tod_access:
+        if self.world.ensure_tod_access:
             # tod has DAY or (tod == NONE and (ss or find a path from a provider))
             # parsing is better than constructing this expression by hand
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
@@ -456,7 +456,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         return ast.NameConstant(True)
 
     def at_dampe_time(self, node):
-        if self.multiworld.ensure_tod_access:
+        if self.world.ensure_tod_access:
             # tod has DAMPE or (tod == NONE and (find a path from a provider))
             # parsing is better than constructing this expression by hand
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
@@ -464,10 +464,10 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         return ast.NameConstant(True)
 
     def at_night(self, node):
-        if self.current_spot.type == 'GS Token' and self.multiworld.logic_no_night_tokens_without_suns_song:
+        if self.current_spot.type == 'GS Token' and self.world.logic_no_night_tokens_without_suns_song:
             # Using visit here to resolve 'can_play' rule
             return self.visit(ast.parse('can_play(Suns_Song)', mode='eval').body)
-        if self.multiworld.ensure_tod_access:
+        if self.world.ensure_tod_access:
             # tod has DAMPE or (tod == NONE and (ss or find a path from a provider))
             # parsing is better than constructing this expression by hand
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
@@ -501,7 +501,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         return ast.parse(f"state._oot_reach_as_age('{r.name}', 'adult', {self.player})", mode='eval').body
 
     def current_spot_starting_age_access(self, node): 
-        return self.current_spot_child_access(node) if self.multiworld.starting_age == 'child' else self.current_spot_adult_access(node)
+        return self.current_spot_child_access(node) if self.world.starting_age == 'child' else self.current_spot_adult_access(node)
 
     def has_bottle(self, node): 
         return ast.parse(f"state._oot_has_bottle({self.player})", mode='eval').body

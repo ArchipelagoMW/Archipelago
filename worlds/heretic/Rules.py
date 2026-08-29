@@ -388,9 +388,9 @@ def set_episode3_rules(player, multiworld, pro):
     set_rule(multiworld.get_entrance("The Chasm (E3M7) Green -> The Chasm (E3M7) Yellow", player), lambda state:
         state.has("The Chasm (E3M7) - Green key", player, 1))
 
-    # D'Sparil'S Keep (E3M8)
-    set_rule(multiworld.get_entrance("Hub -> D'Sparil'S Keep (E3M8) Main", player), lambda state:
-        state.has("D'Sparil'S Keep (E3M8)", player, 1) and
+    # D'Sparil's Keep (E3M8)
+    set_rule(multiworld.get_entrance("Hub -> D'Sparil's Keep (E3M8) Main", player), lambda state:
+        state.has("D'Sparil's Keep (E3M8)", player, 1) and
         state.has("Gauntlets of the Necromancer", player, 1) and
         state.has("Ethereal Crossbow", player, 1) and
         state.has("Dragon Claw", player, 1) and
@@ -398,23 +398,23 @@ def set_episode3_rules(player, multiworld, pro):
         state.has("Firemace", player, 1) and
         state.has("Hellstaff", player, 1))
 
-    # The Aquifier (E3M9)
-    set_rule(multiworld.get_entrance("Hub -> The Aquifier (E3M9) Main", player), lambda state:
-        state.has("The Aquifier (E3M9)", player, 1) and
+    # The Aquifer (E3M9)
+    set_rule(multiworld.get_entrance("Hub -> The Aquifer (E3M9) Main", player), lambda state:
+        state.has("The Aquifer (E3M9)", player, 1) and
         state.has("Gauntlets of the Necromancer", player, 1) and
         state.has("Ethereal Crossbow", player, 1) and
         state.has("Dragon Claw", player, 1) and
         state.has("Phoenix Rod", player, 1) and
         state.has("Firemace", player, 1) and
         state.has("Hellstaff", player, 1))
-    set_rule(multiworld.get_entrance("The Aquifier (E3M9) Main -> The Aquifier (E3M9) Yellow", player), lambda state:
-        state.has("The Aquifier (E3M9) - Yellow key", player, 1))
-    set_rule(multiworld.get_entrance("The Aquifier (E3M9) Yellow -> The Aquifier (E3M9) Green", player), lambda state:
-        state.has("The Aquifier (E3M9) - Green key", player, 1))
-    set_rule(multiworld.get_entrance("The Aquifier (E3M9) Yellow -> The Aquifier (E3M9) Main", player), lambda state:
-        state.has("The Aquifier (E3M9) - Yellow key", player, 1))
-    set_rule(multiworld.get_entrance("The Aquifier (E3M9) Green -> The Aquifier (E3M9) Yellow", player), lambda state:
-        state.has("The Aquifier (E3M9) - Green key", player, 1))
+    set_rule(multiworld.get_entrance("The Aquifer (E3M9) Main -> The Aquifer (E3M9) Yellow", player), lambda state:
+        state.has("The Aquifer (E3M9) - Yellow key", player, 1))
+    set_rule(multiworld.get_entrance("The Aquifer (E3M9) Yellow -> The Aquifer (E3M9) Green", player), lambda state:
+        state.has("The Aquifer (E3M9) - Green key", player, 1))
+    set_rule(multiworld.get_entrance("The Aquifer (E3M9) Yellow -> The Aquifer (E3M9) Main", player), lambda state:
+        state.has("The Aquifer (E3M9) - Yellow key", player, 1))
+    set_rule(multiworld.get_entrance("The Aquifer (E3M9) Green -> The Aquifer (E3M9) Yellow", player), lambda state:
+        state.has("The Aquifer (E3M9) - Green key", player, 1))
 
 
 def set_episode4_rules(player, multiworld, pro):
@@ -623,15 +623,17 @@ def set_episode5_rules(player, multiworld, pro):
        (state.has("Phoenix Rod", player, 1) or
         state.has("Firemace", player, 1) or
         state.has("Hellstaff", player, 1)))
-    set_rule(multiworld.get_entrance("Courtyard (E5M4) Main -> Courtyard (E5M4) Kakis", player), lambda state:
-        state.has("Courtyard (E5M4) - Yellow key", player, 1) or
-        state.has("Courtyard (E5M4) - Green key", player, 1))
+    set_rule(multiworld.get_entrance("Courtyard (E5M4) Main -> Courtyard (E5M4) Yellow", player), lambda state:
+        state.has("Courtyard (E5M4) - Yellow key", player, 1))
     set_rule(multiworld.get_entrance("Courtyard (E5M4) Main -> Courtyard (E5M4) Blue", player), lambda state:
         state.has("Courtyard (E5M4) - Blue key", player, 1))
     set_rule(multiworld.get_entrance("Courtyard (E5M4) Blue -> Courtyard (E5M4) Main", player), lambda state:
         state.has("Courtyard (E5M4) - Blue key", player, 1))
-    set_rule(multiworld.get_entrance("Courtyard (E5M4) Kakis -> Courtyard (E5M4) Main", player), lambda state:
-        state.has("Courtyard (E5M4) - Yellow key", player, 1) or
+    set_rule(multiworld.get_entrance("Courtyard (E5M4) Yellow -> Courtyard (E5M4) Main", player), lambda state:
+        state.has("Courtyard (E5M4) - Yellow key", player, 1))
+    set_rule(multiworld.get_entrance("Courtyard (E5M4) Yellow -> Courtyard (E5M4) Green", player), lambda state:
+        state.has("Courtyard (E5M4) - Green key", player, 1))
+    set_rule(multiworld.get_entrance("Courtyard (E5M4) Green -> Courtyard (E5M4) Yellow", player), lambda state:
         state.has("Courtyard (E5M4) - Green key", player, 1))
 
     # Hydratyr (E5M5)
@@ -695,13 +697,11 @@ def set_episode5_rules(player, multiworld, pro):
         state.has("Phoenix Rod", player, 1) and
         state.has("Firemace", player, 1) and
         state.has("Hellstaff", player, 1) and
-        state.has("Gauntlets of the Necromancer", player, 1) and
-        state.has("Bag of Holding", player, 1))
+        state.has("Gauntlets of the Necromancer", player, 1))
 
     # Skein of D'Sparil (E5M9)
     set_rule(multiworld.get_entrance("Hub -> Skein of D'Sparil (E5M9) Main", player), lambda state:
         state.has("Skein of D'Sparil (E5M9)", player, 1) and
-        state.has("Bag of Holding", player, 1) and
         state.has("Hellstaff", player, 1) and
         state.has("Phoenix Rod", player, 1) and
         state.has("Dragon Claw", player, 1) and

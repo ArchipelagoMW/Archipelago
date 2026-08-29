@@ -27,8 +27,14 @@
 # If you wish to deploy, uncomment the following line and set it to something not easily guessable.
 # SECRET_KEY: "Your secret key here"
 
-# TODO
-#JOB_THRESHOLD: 2
+# Slot limit to post a generation to Generator process pool instead of rolling directly in WebHost process
+#JOB_THRESHOLD: 1
+
+# After what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
+#JOB_TIME: 600
+
+# Memory limit for Generator processes in bytes, -1 for unlimited. Currently only works on Linux.
+#GENERATOR_MEMORY_LIMIT: 4294967296
 
 # waitress uses one thread for I/O, these are for processing of view that get sent
 #WAITRESS_THREADS: 10

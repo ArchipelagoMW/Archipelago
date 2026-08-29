@@ -1,0 +1,6 @@
+{
+    "game": "Timespinner",
+    "authors": ["Jarno"],
+    "minimum_ap_version": "0.6.3",
+    "world_version": "1.38.0"
+}

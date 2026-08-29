@@ -75,7 +75,7 @@ def addBank34(rom, item_list):
     .notCavesA:
         add  hl, de
         ret
-    """ + pkgutil.get_data(__name__, os.path.join("bank3e.asm", "message.asm")).decode().replace("\r", ""), 0x4000), fill_nop=True)
+    """ + pkgutil.get_data(__name__, "bank3e.asm/message.asm").decode().replace("\r", ""), 0x4000), fill_nop=True)
 
     nextItemLookup = ItemNameStringBufferStart
     nameLookup = {

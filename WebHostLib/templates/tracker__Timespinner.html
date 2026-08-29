@@ -99,6 +99,52 @@
                 {% endif %}
                 </div>
             </div>
+            {% if 'PrismBreak' in options or 'LockKeyAmadeus' in options or 'GateKeep' in options %}
+            <div class="table-row">
+                {% if 'PrismBreak' in options %}
+                <div class="C1">
+                    <div class="image-stack">
+                        <div class="stack-front">
+                            <div class="stack-top-left">
+                                <img src="{{ icons['Laser Access'] }}" class="hotpink {{ 'acquired' if 'Laser Access A' in acquired_items }}" title="Laser Access A" />
+                            </div>
+                            <div class="stack-top-right">
+                                <img src="{{ icons['Laser Access'] }}" class="lightsalmon {{ 'acquired' if 'Laser Access I' in acquired_items }}" title="Laser Access I" />
+                            </div>
+                            <div class="stack-bottum-left">
+                                <img src="{{ icons['Laser Access'] }}" class="crimson {{ 'acquired' if 'Laser Access M' in acquired_items }}" title="Laser Access M" />
+                            </div>
+                        </div>
+                    </div>
+		</div>
+                {% endif %}
+                {% if 'LockKeyAmadeus' in options %}
+                <div class="C2">
+                    <div class="image-stack">
+                        <div class="stack-front">
+                            <div class="stack-top-left">
+                                <img src="{{ icons['Lab Glasses'] }}" class="{{ 'acquired' if 'Lab Access Genza' in acquired_items }}" title="Lab Access Genza" />
+                            </div>
+                            <div class="stack-top-right">
+                                <img src="{{ icons['Eye Orb'] }}" class="{{ 'acquired' if 'Lab Access Dynamo' in acquired_items }}" title="Lab Access Dynamo" />
+                            </div>
+                            <div class="stack-bottum-left">
+                                <img src="{{ icons['Lab Coat'] }}" class="{{ 'acquired' if 'Lab Access Research' in acquired_items }}" title="Lab Access Research" />
+                            </div>
+                            <div class="stack-bottum-right">
+                                <img src="{{ icons['Demon'] }}" class="{{ 'acquired' if 'Lab Access Experiment' in acquired_items }}" title="Lab Access Experiment" />
+                            </div>
+                        </div>
+                    </div>
+		</div>
+                {% endif %}
+                {% if 'GateKeep' in options %}
+                <div class="C3">
+                    <span class="{{ 'acquired' if 'Drawbridge Key' in acquired_items }}" title="Drawbridge Key">&#10070;</span>
+		</div>
+                {% endif %}
+	    </div>
+            {% endif %}
         </div>
 
         <table id="location-table">

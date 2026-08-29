@@ -18,6 +18,7 @@ from json import loads, dumps
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 
 import Utils
+import settings
 from Utils import async_start
 from MultiServer import mark_raw
 if typing.TYPE_CHECKING:
@@ -243,6 +244,9 @@ class SNIContext(CommonContext):
                 # Once the games handled by SNIClient gets made to be remote items,
                 # this will no longer be needed.
                 async_start(self.send_msgs([{"cmd": "LocationScouts", "locations": list(new_locations)}]))
+                
+        if self.client_handler is not None:
+            self.client_handler.on_package(self, cmd, args)
 
     def run_gui(self) -> None:
         from kvui import GameManager
@@ -282,7 +286,7 @@ class SNESState(enum.IntEnum):
 
 
 def launch_sni() -> None:
-    sni_path = Utils.get_settings()["sni_options"]["sni_path"]
+    sni_path = settings.get_settings().sni_options.sni_path
 
     if not os.path.isdir(sni_path):
         sni_path = Utils.local_path(sni_path)
@@ -633,7 +637,13 @@ async def game_watcher(ctx: SNIContext) -> None:
         if not ctx.client_handler:
             continue
 
-        rom_validated = await ctx.client_handler.validate_rom(ctx)
+        try:
+            rom_validated = await ctx.client_handler.validate_rom(ctx)
+        except Exception as e:
+            snes_logger.error(f"An error occurred, see logs for details: {e}")
+            text_file_logger = logging.getLogger()
+            text_file_logger.exception(e)
+            rom_validated = False
 
         if not rom_validated or (ctx.auth and ctx.auth != ctx.rom):
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
@@ -649,12 +659,17 @@ async def game_watcher(ctx: SNIContext) -> None:
 
         perf_counter = time.perf_counter()
 
-        await ctx.client_handler.game_watcher(ctx)
+        try:
+            await ctx.client_handler.game_watcher(ctx)
+        except Exception as e:
+            snes_logger.error(f"An error occurred, see logs for details: {e}")
+            text_file_logger = logging.getLogger()
+            text_file_logger.exception(e)
+            await snes_disconnect(ctx)
 
 
 async def run_game(romfile: str) -> None:
-    auto_start = typing.cast(typing.Union[bool, str],
-                             Utils.get_settings()["sni_options"].get("snes_rom_start", True))
+    auto_start = settings.get_settings().sni_options.snes_rom_start
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
@@ -720,6 +735,6 @@ async def main() -> None:
 
 
 if __name__ == '__main__':
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

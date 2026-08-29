@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Dict, Set, Callable
+from typing import List, Tuple, Dict, Callable
 
+from .game_item import Source
 from ..mods.mod_data import ModNames
 from ..mods.mod_monster_locations import modded_monsters_locations
 from ..strings.monster_names import Monster, MonsterCategory
@@ -12,12 +13,18 @@ from ..strings.region_names import Region
 class StardewMonster:
     name: str
     category: str
-    locations: Tuple[str]
+    locations: Tuple[str, ...]
     difficulty: str
 
     def __repr__(self):
         return f"{self.name} [{self.category}] (Locations: {self.locations} |" \
                f" Difficulty: {self.difficulty}) |"
+
+
+@dataclass(frozen=True, kw_only=True)
+class MonsterSource(Source):
+    monsters: Tuple[StardewMonster, ...]
+    amount_tier: int = 0
 
 
 slime_hutch = (Region.slime_hutch,)
@@ -97,6 +104,8 @@ armored_bug = create_monster(Monster.armored_bug, MonsterCategory.cave_insects, 
 armored_bug_dangerous = create_monster(Monster.armored_bug_dangerous, MonsterCategory.cave_insects, skull_cavern,
                                        Performance.good)  # Requires 'Bug Killer' enchantment
 
+metal_head = create_monster(Monster.metal_head, MonsterCategory.metal_heads, mines_floor_100, Performance.good)
+
 duggy = create_monster(Monster.duggy, MonsterCategory.duggies, mines_floor_20, Performance.basic)
 duggy_dangerous = create_monster(Monster.duggy_dangerous, MonsterCategory.duggies, dangerous_mines_20, Performance.great)
 magma_duggy = create_monster(Monster.magma_duggy, MonsterCategory.duggies, volcano, Performance.galaxy)
@@ -122,6 +131,8 @@ royal_serpent = create_monster(Monster.royal_serpent, MonsterCategory.serpents, 
 magma_sprite = create_monster(Monster.magma_sprite, MonsterCategory.magma_sprites, volcano, Performance.galaxy)
 magma_sparker = create_monster(Monster.magma_sparker, MonsterCategory.magma_sprites, volcano_high, Performance.galaxy)
 
+haunted_skull = create_monster(Monster.haunted_skull, MonsterCategory.none, quarry_mine, Performance.great)
+
 register_monster_modification(ModNames.sve, shadow_brute_dangerous, update_monster_locations)
 register_monster_modification(ModNames.sve, shadow_sniper, update_monster_locations)
 register_monster_modification(ModNames.sve, shadow_shaman_dangerous, update_monster_locations)
@@ -145,7 +156,7 @@ register_monster_modification(ModNames.boarding_house, grub, update_monster_loca
 register_monster_modification(ModNames.boarding_house, bug, update_monster_locations)
 
 
-def all_monsters_by_name_given_mods(mods: Set[str]) -> Dict[str, StardewMonster]:
+def all_monsters_by_name_given_content_packs(mods: set[str]) -> dict[str, StardewMonster]:
     monsters_by_name = {}
     for monster in all_monsters:
         current_monster = monster
@@ -158,7 +169,7 @@ def all_monsters_by_name_given_mods(mods: Set[str]) -> Dict[str, StardewMonster]
     return monsters_by_name
 
 
-def all_monsters_by_category_given_mods(mods: Set[str]) -> Dict[str, Tuple[StardewMonster, ...]]:
+def all_monsters_by_category_given_content_packs(mods: set[str]) -> dict[str, Tuple[StardewMonster, ...]]:
     monsters_by_category = {}
     for monster in all_monsters:
         current_monster = monster

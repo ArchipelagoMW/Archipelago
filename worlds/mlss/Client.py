@@ -1,11 +1,11 @@
-from typing import TYPE_CHECKING, Optional, Set, List, Dict
+import asyncio
 import struct
 
+from typing import TYPE_CHECKING, Optional, Set, List, Dict
 from NetUtils import ClientStatus
 from .Locations import roomCount, nonBlock, beanstones, roomException, shop, badge, pants, eReward
 from .Items import items_by_id
 
-import asyncio
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -41,8 +41,6 @@ class MLSSClient(BizHawkClient):
         self.local_events = []
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
-        from CommonClient import logger
-
         try:
             # Check ROM name/patch version
             rom_name_bytes = await bizhawk.read(ctx.bizhawk_ctx, [(0xA0, 14, "ROM")])
@@ -72,23 +70,18 @@ class MLSSClient(BizHawkClient):
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         ctx.auth = self.player_name
 
-    def on_package(self, ctx, cmd, args) -> None:
-        if cmd == "RoomInfo":
-            ctx.seed_name = args["seed_name"]
-
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         from CommonClient import logger
-
         try:
-            if ctx.seed_name is None:
+            if ctx.server_seed_name is None:
                 return
             if not self.seed_verify:
-                seed = await bizhawk.read(ctx.bizhawk_ctx, [(0xDF00A0, len(ctx.seed_name), "ROM")])
+                seed = await bizhawk.read(ctx.bizhawk_ctx, [(0xDF00A0, len(ctx.server_seed_name), "ROM")])
                 seed = seed[0].decode("UTF-8")
-                if seed != ctx.seed_name:
+                if seed not in ctx.server_seed_name:
                     logger.info(
                         "ERROR: The ROM you loaded is for a different game of AP. "
-                        "Please make sure the host has sent you the correct patch file,"
+                        "Please make sure the host has sent you the correct patch file, "
                         "and that you have opened the correct ROM."
                     )
                     raise bizhawk.ConnectorError("Loaded ROM is for Incorrect lobby.")
@@ -143,17 +136,30 @@ class MLSSClient(BizHawkClient):
             # If RAM address isn't 0x0 yet break out and try again later to give the rest of the items
             for i in range(len(ctx.items_received) - received_index):
                 item_data = items_by_id[ctx.items_received[received_index + i].item]
-                b = await bizhawk.guarded_read(ctx.bizhawk_ctx, [(0x3057, 1, "EWRAM")], [(0x3057, [0x0], "EWRAM")])
-                if b is None:
+                result = False
+                total = 0
+                while not result:
+                    await asyncio.sleep(0.05)
+                    total += 0.05
+                    result = await bizhawk.guarded_write(
+                        ctx.bizhawk_ctx,
+                        [
+                            (0x3057, [id_to_RAM(item_data.itemID)], "EWRAM")
+                        ],
+                        [(0x3057, [0x0], "EWRAM")]
+                    )
+                    if result:
+                        total = 0
+                    if total >= 1:
+                        break
+                if not result:
                     break
                 await bizhawk.write(
                     ctx.bizhawk_ctx,
                     [
-                        (0x3057, [id_to_RAM(item_data.itemID)], "EWRAM"),
                         (0x4808, [(received_index + i + 1) // 0x100, (received_index + i + 1) % 0x100], "EWRAM"),
-                    ],
+                    ]
                 )
-                await asyncio.sleep(0.1)
 
             # Early return and location send if you are currently in a shop,
             # since other flags aren't going to change
@@ -256,7 +262,7 @@ class MLSSClient(BizHawkClient):
                 self.local_checked_locations = locs_to_send
 
                 if locs_to_send is not None:
-                    await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(locs_to_send)}])
+                    await ctx.check_locations(locs_to_send)
 
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect.

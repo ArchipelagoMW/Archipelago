@@ -7,9 +7,9 @@ config file.
 
 ## What is considered a location check in ChecksFinder?
 
-Location checks in are completed when the player finds a spot on a board that has the archipelago logo. The bottom of
-the screen has a number next to the archipelago logo, that number is how many you can find so far. You can only get as 
-many checks as you have gained items, plus five to start with being available.
+Location checks get cleared when you open all non-bomb cells in a board. The bottom
+of the screen has a number next to the Archipelago logo that displays how many location checks are left to be sent with
+your current inventory. You can only get as many checks as you have gained items plus five checks to start with.
 
 ## When the player receives an item, what happens?
 
@@ -24,8 +24,3 @@ next to an icon, the number is how many you have gotten and the icon represents 
 Victory is achieved when the player wins a board they were given after they have received all of their Map Width, Map
 Height, and Map Bomb items. The game will say at the bottom of the screen how many of each you have received.
 
-## Unique Local Commands
-
-The following command is only available when using the ChecksFinderClient to play with Archipelago.
-
-- `/resync` Manually trigger a resync.

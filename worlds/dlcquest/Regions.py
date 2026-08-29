@@ -45,35 +45,35 @@ def create_regions(multiworld: MultiWorld, player: int, world_options: Options.D
 
 
 def create_regions_basic_campaign(has_campaign_basic: bool, region_menu: Region, has_item_shuffle: bool, has_coinsanity: bool,
-                                  coin_bundle_size: int, player: int, world: MultiWorld):
+                                  coin_bundle_size: int, player: int, multiworld: MultiWorld):
     if not has_campaign_basic:
         return
 
     region_menu.exits += [Entrance(player, "DLC Quest Basic", region_menu)]
     locations_move_right = ["Movement Pack", "Animation Pack", "Audio Pack", "Pause Menu Pack"]
-    region_move_right = create_region_and_locations_basic("Move Right", locations_move_right, ["Moving"], player, world, 4)
+    region_move_right = create_region_and_locations_basic("Move Right", locations_move_right, ["Moving"], player, multiworld, 4)
     create_coinsanity_locations_dlc_quest(has_coinsanity, coin_bundle_size, player, region_move_right)
     locations_movement_pack = ["Time is Money Pack", "Psychological Warfare Pack", "Armor for your Horse Pack", "Shepherd Sheep"]
     locations_movement_pack += conditional_location(has_item_shuffle, "Sword")
-    create_region_and_locations_basic("Movement Pack", locations_movement_pack, ["Tree", "Cloud"], player, world, 46)
+    create_region_and_locations_basic("Movement Pack", locations_movement_pack, ["Tree", "Cloud"], player, multiworld, 46)
     locations_behind_tree = ["Double Jump Pack", "Map Pack", "Between Trees Sheep", "Hole in the Wall Sheep"] + conditional_location(has_item_shuffle, "Gun")
-    create_region_and_locations_basic("Behind Tree", locations_behind_tree, ["Behind Tree Double Jump", "Forest Entrance"], player, world, 60)
-    create_region_and_locations_basic("Psychological Warfare", ["West Cave Sheep"], ["Cloud Double Jump"], player, world, 100)
+    create_region_and_locations_basic("Behind Tree", locations_behind_tree, ["Behind Tree Double Jump", "Forest Entrance"], player, multiworld, 60)
+    create_region_and_locations_basic("Psychological Warfare", ["West Cave Sheep"], ["Cloud Double Jump"], player, multiworld, 100)
     locations_double_jump_left = ["Pet Pack", "Top Hat Pack", "North West Alcove Sheep"]
-    create_region_and_locations_basic("Double Jump Total Left", locations_double_jump_left, ["Cave Tree", "Cave Roof"], player, world, 50)
-    create_region_and_locations_basic("Double Jump Total Left Cave", ["Top Hat Sheep"], [], player, world, 9)
-    create_region_and_locations_basic("Double Jump Total Left Roof", ["North West Ceiling Sheep"], [], player, world, 10)
+    create_region_and_locations_basic("Double Jump Total Left", locations_double_jump_left, ["Cave Tree", "Cave Roof"], player, multiworld, 50)
+    create_region_and_locations_basic("Double Jump Total Left Cave", ["Top Hat Sheep"], [], player, multiworld, 9)
+    create_region_and_locations_basic("Double Jump Total Left Roof", ["North West Ceiling Sheep"], [], player, multiworld, 10)
     locations_double_jump_left_ceiling = ["Sexy Outfits Pack", "Double Jump Alcove Sheep", "Sexy Outfits Sheep"]
-    create_region_and_locations_basic("Double Jump Behind Tree", locations_double_jump_left_ceiling, ["True Double Jump"], player, world, 89)
-    create_region_and_locations_basic("True Double Jump Behind Tree", ["Double Jump Floating Sheep", "Cutscene Sheep"], [], player, world, 7)
-    create_region_and_locations_basic("The Forest", ["Gun Pack", "Night Map Pack"], ["Behind Ogre", "Forest Double Jump"], player, world, 171)
-    create_region_and_locations_basic("The Forest with double Jump", ["The Zombie Pack", "Forest Low Sheep"], ["Forest True Double Jump"], player, world, 76)
-    create_region_and_locations_basic("The Forest with double Jump Part 2", ["Forest High Sheep"], [], player, world, 203)
-    region_final_boss_room = create_region_and_locations_basic("The Final Boss Room", ["Finish the Fight Pack"], [], player, world)
+    create_region_and_locations_basic("Double Jump Behind Tree", locations_double_jump_left_ceiling, ["True Double Jump"], player, multiworld, 89)
+    create_region_and_locations_basic("True Double Jump Behind Tree", ["Double Jump Floating Sheep", "Cutscene Sheep"], [], player, multiworld, 7)
+    create_region_and_locations_basic("The Forest", ["Gun Pack", "Night Map Pack"], ["Behind Ogre", "Forest Double Jump"], player, multiworld, 171)
+    create_region_and_locations_basic("The Forest with double Jump", ["The Zombie Pack", "Forest Low Sheep"], ["Forest True Double Jump"], player, multiworld, 76)
+    create_region_and_locations_basic("The Forest with double Jump Part 2", ["Forest High Sheep"], [], player, multiworld, 203)
+    region_final_boss_room = create_region_and_locations_basic("The Final Boss Room", ["Finish the Fight Pack"], [], player, multiworld)
 
     create_victory_event(region_final_boss_room, "Winning Basic", "Victory Basic", player)
 
-    connect_entrances_basic(player, world)
+    connect_entrances_basic(player, multiworld)
 
 
 def create_regions_lfod_campaign(coin_bundle_size, has_campaign_lfod, has_coinsanity, has_item_shuffle, multiworld, player, region_menu):
@@ -141,20 +141,20 @@ def create_victory_event(region_victory: Region, event_name: str, item_name: str
     location_victory.place_locked_item(create_event(player, item_name))
 
 
-def connect_entrances_basic(player, world):
-    world.get_entrance("DLC Quest Basic", player).connect(world.get_region("Move Right", player))
-    world.get_entrance("Moving", player).connect(world.get_region("Movement Pack", player))
-    world.get_entrance("Tree", player).connect(world.get_region("Behind Tree", player))
-    world.get_entrance("Cloud", player).connect(world.get_region("Psychological Warfare", player))
-    world.get_entrance("Cloud Double Jump", player).connect(world.get_region("Double Jump Total Left", player))
-    world.get_entrance("Cave Tree", player).connect(world.get_region("Double Jump Total Left Cave", player))
-    world.get_entrance("Cave Roof", player).connect(world.get_region("Double Jump Total Left Roof", player))
-    world.get_entrance("Forest Entrance", player).connect(world.get_region("The Forest", player))
-    world.get_entrance("Behind Tree Double Jump", player).connect(world.get_region("Double Jump Behind Tree", player))
-    world.get_entrance("Behind Ogre", player).connect(world.get_region("The Final Boss Room", player))
-    world.get_entrance("Forest Double Jump", player).connect(world.get_region("The Forest with double Jump", player))
-    world.get_entrance("Forest True Double Jump", player).connect(world.get_region("The Forest with double Jump Part 2", player))
-    world.get_entrance("True Double Jump", player).connect(world.get_region("True Double Jump Behind Tree", player))
+def connect_entrances_basic(player, multiworld):
+    multiworld.get_entrance("DLC Quest Basic", player).connect(multiworld.get_region("Move Right", player))
+    multiworld.get_entrance("Moving", player).connect(multiworld.get_region("Movement Pack", player))
+    multiworld.get_entrance("Tree", player).connect(multiworld.get_region("Behind Tree", player))
+    multiworld.get_entrance("Cloud", player).connect(multiworld.get_region("Psychological Warfare", player))
+    multiworld.get_entrance("Cloud Double Jump", player).connect(multiworld.get_region("Double Jump Total Left", player))
+    multiworld.get_entrance("Cave Tree", player).connect(multiworld.get_region("Double Jump Total Left Cave", player))
+    multiworld.get_entrance("Cave Roof", player).connect(multiworld.get_region("Double Jump Total Left Roof", player))
+    multiworld.get_entrance("Forest Entrance", player).connect(multiworld.get_region("The Forest", player))
+    multiworld.get_entrance("Behind Tree Double Jump", player).connect(multiworld.get_region("Double Jump Behind Tree", player))
+    multiworld.get_entrance("Behind Ogre", player).connect(multiworld.get_region("The Final Boss Room", player))
+    multiworld.get_entrance("Forest Double Jump", player).connect(multiworld.get_region("The Forest with double Jump", player))
+    multiworld.get_entrance("Forest True Double Jump", player).connect(multiworld.get_region("The Forest with double Jump Part 2", player))
+    multiworld.get_entrance("True Double Jump", player).connect(multiworld.get_region("True Double Jump Behind Tree", player))
 
 
 def connect_entrances_lfod(multiworld, player):

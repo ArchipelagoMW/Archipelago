@@ -116,7 +116,7 @@ def versum_hill_rave(state: CollectionState, player: int, limit: bool, glitched:
         else:
             return (
                 graffitiL(state, player, limit, 85)
-                and graffitiXL(state, player, limit, 48)
+                and graffitiXL(state, player, limit, 49)
             )
     else:
         return (
@@ -1006,6 +1006,8 @@ def rules(brcworld):
         lambda state: mataan_challenge2(state, player, limit, glitched))
     set_rule(multiworld.get_location("Mataan: Score challenge reward", player),
         lambda state: mataan_challenge3(state, player))
+    set_rule(multiworld.get_location("Mataan: Coil joins the crew", player),
+        lambda state: mataan_deepest(state, player, limit, glitched))
     if photos:
         set_rule(multiworld.get_location("Mataan: Trash Polo", player),
             lambda state: camera(state, player))

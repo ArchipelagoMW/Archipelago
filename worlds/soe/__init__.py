@@ -20,7 +20,8 @@ if typing.TYPE_CHECKING:
     from BaseClasses import MultiWorld, CollectionState
 
 __all__ = ["pyevermizer", "SoEWorld"]
-
+__version__ = "0.50.1"
+__author__ = "black-sliver"
 
 """
 In evermizer:
@@ -188,6 +189,7 @@ class SoEWorld(World):
     connect_name: str
 
     _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
+    _fillers = sorted(item_name_groups["Ingredients"])
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.connect_name_available_event = threading.Event()
@@ -460,7 +462,7 @@ class SoEWorld(World):
             except FileNotFoundError:
                 pass
 
-    def modify_multidata(self, multidata: typing.Dict[str, typing.Any]) -> None:
+    def modify_multidata(self, multidata: typing.Mapping[str, typing.Any]) -> None:
         # wait for self.connect_name to be available.
         self.connect_name_available_event.wait()
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
@@ -469,7 +471,7 @@ class SoEWorld(World):
             multidata["connect_names"][self.connect_name] = payload
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(self.item_name_groups["Ingredients"]))
+        return self.random.choice(self._fillers)
 
 
 class SoEItem(Item):

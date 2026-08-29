@@ -63,6 +63,9 @@ def is_location_valid(world: "HatInTimeWorld", location: str) -> bool:
     if not world.options.ShuffleStorybookPages and location in storybook_pages.keys():
         return False
 
+    if not world.options.ShuffleDirectorTokens and location in director_tokens.keys():
+        return False
+
     if not world.options.ShuffleActContracts and location in contract_locations.keys():
         return False
 
@@ -206,7 +209,7 @@ ahit_locations = {
     "Subcon Village - Graveyard Ice Cube": LocData(2000325077, "Subcon Forest Area"),
     "Subcon Village - House Top": LocData(2000325471, "Subcon Forest Area"),
     "Subcon Village - Ice Cube House": LocData(2000325469, "Subcon Forest Area"),
-    "Subcon Village - Snatcher Statue Chest": LocData(2000323730, "Subcon Forest Area", paintings=1),
+    "Subcon Village - Snatcher Statue Chest": LocData(2000323730, "Subcon Forest Behind Boss Firewall"),
     "Subcon Village - Stump Platform Chest": LocData(2000323729, "Subcon Forest Area"),
     "Subcon Forest - Giant Tree Climb": LocData(2000325470, "Subcon Forest Area"),
 
@@ -233,7 +236,7 @@ ahit_locations = {
     "Subcon Forest - Long Tree Climb Chest": LocData(2000323734, "Subcon Forest Area",
                                                      required_hats=[HatType.DWELLER], paintings=2),
 
-    "Subcon Forest - Boss Arena Chest": LocData(2000323735, "Subcon Forest Area"),
+    "Subcon Forest - Boss Arena Chest": LocData(2000323735, "Subcon Forest Boss Arena"),
 
     "Subcon Forest - Manor Rooftop": LocData(2000325466, "Subcon Forest Area",
                                              hit_type=HitType.dweller_bell, paintings=1),
@@ -264,7 +267,6 @@ ahit_locations = {
                                              required_hats=[HatType.DWELLER], paintings=3),
 
     "Subcon Forest - Tall Tree Hookshot Swing": LocData(2000324766, "Subcon Forest Area",
-                                                        required_hats=[HatType.DWELLER],
                                                         hookshot=True,
                                                         paintings=3),
 
@@ -323,7 +325,7 @@ ahit_locations = {
     "Alpine Skyline - The Twilight Path": LocData(2000334434, "Alpine Skyline Area", required_hats=[HatType.DWELLER]),
     "Alpine Skyline - The Twilight Bell: Wide Purple Platform": LocData(2000336478, "The Twilight Bell"),
     "Alpine Skyline - The Twilight Bell: Ice Platform": LocData(2000335826, "The Twilight Bell"),
-    "Alpine Skyline - Goat Outpost Horn": LocData(2000334760, "Alpine Skyline Area"),
+    "Alpine Skyline - Goat Outpost Horn": LocData(2000334760, "Alpine Skyline Area (TIHS)", hookshot=True),
     "Alpine Skyline - Windy Passage": LocData(2000334776, "Alpine Skyline Area (TIHS)", hookshot=True),
     "Alpine Skyline - The Windmill: Inside Pon Cluster": LocData(2000336395, "The Windmill"),
     "Alpine Skyline - The Windmill: Entrance": LocData(2000335783, "The Windmill"),
@@ -407,12 +409,12 @@ act_completions = {
                                                hit_type=HitType.umbrella_or_brewing, hookshot=True, paintings=1),
 
     "Act Completion (Queen Vanessa's Manor)": LocData(2000312017, "Queen Vanessa's Manor",
-                                                      hit_type=HitType.umbrella, paintings=1),
+                                                      hit_type=HitType.dweller_bell, paintings=1),
 
     "Act Completion (Mail Delivery Service)": LocData(2000312032, "Mail Delivery Service",
                                                       required_hats=[HatType.SPRINT]),
 
-    "Act Completion (Your Contract has Expired)": LocData(2000311390, "Your Contract has Expired",
+    "Act Completion (Your Contract has Expired)": LocData(2000311390, "Your Contract has Expired - Post Fight",
                                                           hit_type=HitType.umbrella),
 
     "Act Completion (Time Rift - Pipe)": LocData(2000313069, "Time Rift - Pipe", hookshot=True),
@@ -478,7 +480,7 @@ act_completions = {
     "Act Completion (Rush Hour)": LocData(2000311210, "Rush Hour",
                                           dlc_flags=HatDLC.dlc2,
                                           hookshot=True,
-                                          required_hats=[HatType.ICE, HatType.BREWING]),
+                                          required_hats=[HatType.ICE, HatType.BREWING, HatType.DWELLER]),
 
     "Act Completion (Time Rift - Rumbi Factory)": LocData(2000312736, "Time Rift - Rumbi Factory",
                                                           dlc_flags=HatDLC.dlc2),
@@ -565,6 +567,34 @@ storybook_pages = {
     "Rumbi Factory - Page: Warehouse Boxes": LocData(2000345887, "Time Rift - Rumbi Factory", dlc_flags=HatDLC.dlc2),
     "Rumbi Factory - Page: Glass Shelf": LocData(2000345886, "Time Rift - Rumbi Factory", dlc_flags=HatDLC.dlc2),
     "Rumbi Factory - Page: Last Area": LocData(2000345883, "Time Rift - Rumbi Factory", dlc_flags=HatDLC.dlc2),
+}
+
+director_tokens = {
+    "Murder on the Owl Express - Conductor Token: Cafeteria": LocData(2001104767, "Murder on the Owl Express"),
+    "Murder on the Owl Express - Conductor Token: Recreational Room": LocData(2001104768, "Murder on the Owl Express"),
+    "Picture Perfect - DJ Grooves Token: Cardboard Puppy": LocData(2001203990, "Picture Perfect"),
+    "Picture Perfect - DJ Grooves Token: Card Guessing Game": LocData(2001203991, "Picture Perfect"),
+    "Picture Perfect - DJ Grooves Token: Back Alley": LocData(2001203992, "Picture Perfect"),
+    "Picture Perfect - DJ Grooves Token: Cooking Show": LocData(2001203993, "Picture Perfect"),
+    "Picture Perfect - DJ Grooves Token: Pon Cluster": LocData(2001203987, "Picture Perfect"),
+    "Train Rush - Time Bonus: 1st Room": LocData(2001305235, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Falling Platform": LocData(2001305189, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Acid Crates": LocData(2001305186, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Balloon": LocData(2001305239, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Ring of Fire": LocData(2001305237, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Blue Panels": LocData(2001305236, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Sinking Lava Platform": LocData(2001305234, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Lava Panels 1": LocData(2001305193, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Lava Panels 2": LocData(2001305190, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Lava Panels 3": LocData(2001305238, "Train Rush", hookshot=True),
+    "The Big Parade - DJ Grooves Token (1/8)": LocData(2001400000, "The Big Parade"),
+    "The Big Parade - DJ Grooves Token (2/8)": LocData(2001400001, "The Big Parade"),
+    "The Big Parade - DJ Grooves Token (3/8)": LocData(2001400002, "The Big Parade"),
+    "The Big Parade - DJ Grooves Token (4/8)": LocData(2001400003, "The Big Parade"),
+    "The Big Parade - DJ Grooves Token (5/8)": LocData(2001400004, "The Big Parade", hit_type=HitType.umbrella),
+    "The Big Parade - DJ Grooves Token (6/8)": LocData(2001400005, "The Big Parade", hit_type=HitType.umbrella),
+    "The Big Parade - DJ Grooves Token (7/8)": LocData(2001400006, "The Big Parade", hit_type=HitType.umbrella),
+    "The Big Parade - DJ Grooves Token (8/8)": LocData(2001400007, "The Big Parade", hit_type=HitType.umbrella),
 }
 
 shop_locations = {
@@ -878,7 +908,7 @@ snatcher_coins = {
                                                dlc_flags=HatDLC.death_wish),
 
     "Snatcher Coin - Top of HQ (DW: BTH)": LocData(0, "Beat the Heat", snatcher_coin="Snatcher Coin - Top of HQ",
-                                                   dlc_flags=HatDLC.death_wish),
+                                                   hit_type=HitType.umbrella, dlc_flags=HatDLC.death_wish),
 
     "Snatcher Coin - Top of Tower": LocData(0, "Mafia Town Area (HUMT)", snatcher_coin="Snatcher Coin - Top of Tower",
                                             dlc_flags=HatDLC.death_wish),
@@ -977,7 +1007,6 @@ event_locs = {
     **snatcher_coins,
     "HUMT Access": LocData(0, "Heating Up Mafia Town"),
     "TOD Access": LocData(0, "Toilet of Doom"),
-    "YCHE Access": LocData(0, "Your Contract has Expired"),
     "AFR Access": LocData(0, "Alpine Free Roam"),
     "TIHS Access": LocData(0, "The Illness has Spread"),
 
@@ -1052,6 +1081,7 @@ location_table = {
     **ahit_locations,
     **act_completions,
     **storybook_pages,
+    **director_tokens,
     **contract_locations,
     **shop_locations,
 }

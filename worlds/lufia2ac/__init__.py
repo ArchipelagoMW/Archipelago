@@ -5,11 +5,11 @@ from enum import IntFlag
 from typing import Any, ClassVar, Dict, Iterator, List, Set, Tuple, Type
 
 import settings
-from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import CollectionRule, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import add_rule, CollectionRule, set_rule
+from worlds.generic.Rules import add_rule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
 from .Locations import l2ac_location_name_to_id, L2ACLocation
@@ -118,7 +118,7 @@ class L2ACWorld(World):
                 L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player))
             chest_access.show_in_spoiler = False
             ancient_dungeon.locations.append(chest_access)
-        for iris in self.item_name_groups["Iris treasures"]:
+        for iris in sorted(self.item_name_groups["Iris treasures"]):
             treasure_name: str = f"Iris treasure {self.item_name_to_id[iris] - self.item_name_to_id['Iris sword'] + 1}"
             iris_treasure: Location = \
                 L2ACLocation(self.player, treasure_name, self.location_name_to_id[treasure_name], ancient_dungeon)

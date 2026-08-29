@@ -2,7 +2,7 @@ line-length = 120
 
 [lint]
 select = ["C", "E", "F", "R", "W", "I", "N", "Q", "UP", "RUF", "ISC", "T20"]
-ignore = ["C9", "RUF012", "RUF100"]
+ignore = ["C9", "RUF012", "RUF021", "RUF100", "UP006", "UP035"]
 
 [lint.per-file-ignores]
 # The way options definitions work right now, I am forced to break line length requirements.

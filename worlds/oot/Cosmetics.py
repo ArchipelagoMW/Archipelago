@@ -1,9 +1,9 @@
 from .Utils import data_path, __version__
 from .Colors import *
 import logging
-import worlds.oot.Music as music
-import worlds.oot.Sounds as sfx
-import worlds.oot.IconManip as icon
+from . import Music as music
+from . import Sounds as sfx
+from . import IconManip as icon
 from .JSONDump import dump_obj, CollapseList, CollapseDict, AlignedDict, SortedDict
 import json
 
@@ -105,7 +105,7 @@ def patch_tunic_colors(rom, ootworld, symbols):
 
         # handle random
         if tunic_option == 'Random Choice':
-            tunic_option = random.choice(tunic_color_list)
+            tunic_option = ootworld.random.choice(tunic_color_list)
         # handle completely random
         if tunic_option == 'Completely Random':
             color = generate_random_color()
@@ -156,9 +156,9 @@ def patch_navi_colors(rom, ootworld, symbols):
 
         # choose a random choice for the whole group
         if navi_option_inner == 'Random Choice':
-            navi_option_inner = random.choice(navi_color_list)
+            navi_option_inner = ootworld.random.choice(navi_color_list)
         if navi_option_outer == 'Random Choice':
-            navi_option_outer = random.choice(navi_color_list)
+            navi_option_outer = ootworld.random.choice(navi_color_list)
 
         if navi_option_outer == 'Match Inner':
             navi_option_outer = navi_option_inner
@@ -233,9 +233,9 @@ def patch_sword_trails(rom, ootworld, symbols):
 
         # handle random choice
         if option_inner == 'Random Choice':
-            option_inner = random.choice(sword_trail_color_list)
+            option_inner = ootworld.random.choice(sword_trail_color_list)
         if option_outer == 'Random Choice':
-            option_outer = random.choice(sword_trail_color_list)
+            option_outer = ootworld.random.choice(sword_trail_color_list)
 
         if option_outer == 'Match Inner':
             option_outer = option_inner
@@ -326,9 +326,9 @@ def patch_trails(rom, ootworld, trails):
 
         # handle random choice
         if option_inner == 'Random Choice':
-            option_inner = random.choice(trail_color_list)
+            option_inner = ootworld.random.choice(trail_color_list)
         if option_outer == 'Random Choice':
-            option_outer = random.choice(trail_color_list)
+            option_outer = ootworld.random.choice(trail_color_list)
 
         if option_outer == 'Match Inner':
             option_outer = option_inner
@@ -393,7 +393,7 @@ def patch_gauntlet_colors(rom, ootworld, symbols):
 
         # handle random
         if gauntlet_option == 'Random Choice':
-            gauntlet_option = random.choice(gauntlet_color_list)
+            gauntlet_option = ootworld.random.choice(gauntlet_color_list)
         # handle completely random
         if gauntlet_option == 'Completely Random':
             color = generate_random_color()
@@ -424,10 +424,10 @@ def patch_shield_frame_colors(rom, ootworld, symbols):
 
         # handle random
         if shield_frame_option == 'Random Choice':
-            shield_frame_option = random.choice(shield_frame_color_list)
+            shield_frame_option = ootworld.random.choice(shield_frame_color_list)
         # handle completely random
         if shield_frame_option == 'Completely Random':
-            color = [random.getrandbits(8), random.getrandbits(8), random.getrandbits(8)]
+            color = [ootworld.random.getrandbits(8), ootworld.random.getrandbits(8), ootworld.random.getrandbits(8)]
         # grab the color from the list
         elif shield_frame_option in shield_frame_colors:
             color = list(shield_frame_colors[shield_frame_option])
@@ -458,7 +458,7 @@ def patch_heart_colors(rom, ootworld, symbols):
 
         # handle random
         if heart_option == 'Random Choice':
-            heart_option = random.choice(heart_color_list)
+            heart_option = ootworld.random.choice(heart_color_list)
         # handle completely random
         if heart_option == 'Completely Random':
             color = generate_random_color()
@@ -495,7 +495,7 @@ def patch_magic_colors(rom, ootworld, symbols):
         magic_option = format_cosmetic_option_result(ootworld.__dict__[magic_setting])
 
         if magic_option == 'Random Choice':
-           magic_option = random.choice(magic_color_list)
+           magic_option = ootworld.random.choice(magic_color_list)
 
         if magic_option == 'Completely Random':
             color = generate_random_color()
@@ -559,7 +559,7 @@ def patch_button_colors(rom, ootworld, symbols):
 
         # handle random
         if button_option == 'Random Choice':
-            button_option = random.choice(list(button_colors.keys()))
+            button_option = ootworld.random.choice(list(button_colors.keys()))
         # handle completely random
         if button_option == 'Completely Random':
             fixed_font_color = [10, 10, 10]
@@ -618,11 +618,11 @@ def patch_sfx(rom, ootworld, symbols):
                 rom.write_int16(loc, sound_id)
         else:
             if selection == 'random-choice':
-                selection = random.choice(sfx.get_hook_pool(hook)).value.keyword
+                selection = ootworld.random.choice(sfx.get_hook_pool(hook)).value.keyword
             elif selection == 'random-ear-safe':
-                selection = random.choice(sfx.get_hook_pool(hook, "TRUE")).value.keyword
+                selection = ootworld.random.choice(sfx.get_hook_pool(hook, "TRUE")).value.keyword
             elif selection == 'completely-random':
-                selection = random.choice(sfx.standard).value.keyword
+                selection = ootworld.random.choice(sfx.standard).value.keyword
             sound_id  = sound_dict[selection]
             for loc in hook.value.locations:
                 rom.write_int16(loc, sound_id)
@@ -644,7 +644,7 @@ def patch_instrument(rom, ootworld, symbols):
 
     choice = ootworld.sfx_ocarina
     if choice == 'random-choice':
-        choice = random.choice(list(instruments.keys()))
+        choice = ootworld.random.choice(list(instruments.keys()))
 
     rom.write_byte(0x00B53C7B, instruments[choice])
     rom.write_byte(0x00B4BF6F, instruments[choice]) # For Lost Woods Skull Kids' minigame in Lost Woods
@@ -769,7 +769,6 @@ patch_sets[0x1F073FD9] = {
 
 def patch_cosmetics(ootworld, rom):
     # Use the world's slot seed for cosmetics
-    random.seed(ootworld.multiworld.per_slot_randoms[ootworld.player].random())
 
     # try to detect the cosmetic patch data format
     versioned_patch_set = None

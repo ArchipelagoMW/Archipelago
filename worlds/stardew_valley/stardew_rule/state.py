@@ -4,6 +4,7 @@ from typing import Iterable, Union, List, Tuple, Hashable
 from BaseClasses import CollectionState
 from .base import BaseStardewRule, CombinableStardewRule
 from .protocol import StardewRule
+from ..strings.ap_names.event_names import Event
 
 
 class TotalReceived(BaseStardewRule):
@@ -14,10 +15,10 @@ class TotalReceived(BaseStardewRule):
     def __init__(self, count: int, items: Union[str, Iterable[str]], player: int):
         items_list: List[str]
 
-        if isinstance(items, Iterable):
-            items_list = [*items]
-        else:
+        if isinstance(items, str):
             items_list = [items]
+        else:
+            items_list = [*items]
 
         self.player = player
         self.items = items_list
@@ -84,42 +85,13 @@ class Reach(BaseStardewRule):
         return f"Reach {self.resolution_hint} {self.spot}"
 
 
-@dataclass(frozen=True)
-class HasProgressionPercent(CombinableStardewRule):
-    player: int
-    percent: int
+class HasProgressionPercent(Received):
+    def __init__(self, player: int, percent: int):
+        super().__init__(Event.received_progression_percent, player, percent, event=True)
 
     def __post_init__(self):
-        assert self.percent > 0, "HasProgressionPercent rule must be above 0%"
-        assert self.percent <= 100, "HasProgressionPercent rule can't require more than 100% of items"
-
-    @property
-    def combination_key(self) -> Hashable:
-        return HasProgressionPercent.__name__
-
-    @property
-    def value(self):
-        return self.percent
-
-    def __call__(self, state: CollectionState) -> bool:
-        stardew_world = state.multiworld.worlds[self.player]
-        total_count = stardew_world.total_progression_items
-        needed_count = (total_count * self.percent) // 100
-        player_state = state.prog_items[self.player]
-
-        if needed_count <= len(player_state):
-            return True
-
-        total_count = 0
-        for item, item_count in player_state.items():
-            total_count += item_count
-            if total_count >= needed_count:
-                return True
-
-        return False
-
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self, self(state)
+        assert self.count > 0, "HasProgressionPercent rule must be above 0%"
+        assert self.count <= 100, "HasProgressionPercent rule can't require more than 100% of items"
 
     def __repr__(self):
-        return f"Received {self.percent}% progression items"
+        return f"Received {self.count}% progression items"

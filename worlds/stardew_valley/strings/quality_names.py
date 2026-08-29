@@ -57,7 +57,22 @@ class ArtisanQuality:
         return ArtisanQuality.basic
 
 
+class AnimalProductQuality:
+    basic = "Basic AnimalProduct"
+    silver = "Silver AnimalProduct"
+    gold = "Gold AnimalProduct"
+    iridium = "Iridium AnimalProduct"
+
+    @staticmethod
+    def get_highest(qualities: List[str]) -> str:
+        for quality in animal_product_qualities_in_desc_order:
+            if quality in qualities:
+                return quality
+        return AnimalProductQuality.basic
+
+
 crop_qualities_in_desc_order = [CropQuality.iridium, CropQuality.gold, CropQuality.silver, CropQuality.basic]
 fish_qualities_in_desc_order = [FishQuality.iridium, FishQuality.gold, FishQuality.silver, FishQuality.basic]
 forage_qualities_in_desc_order = [ForageQuality.iridium, ForageQuality.gold, ForageQuality.silver, ForageQuality.basic]
 artisan_qualities_in_desc_order = [ArtisanQuality.iridium, ArtisanQuality.gold, ArtisanQuality.silver, ArtisanQuality.basic]
+animal_product_qualities_in_desc_order = [AnimalProductQuality.iridium, AnimalProductQuality.gold, AnimalProductQuality.silver, AnimalProductQuality.basic]

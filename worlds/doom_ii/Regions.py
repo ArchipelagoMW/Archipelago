@@ -84,11 +84,12 @@ regions:List[RegionDict] = [
 
     # The Waste Tunnels (MAP05)
     {"name":"The Waste Tunnels (MAP05) Main",
-     "connects_to_hub":True,
+     "connects_to_hub":False,
      "episode":1,
      "connections":[
         {"target":"The Waste Tunnels (MAP05) Red","pro":False},
-        {"target":"The Waste Tunnels (MAP05) Blue","pro":False}]},
+        {"target":"The Waste Tunnels (MAP05) Blue","pro":False},
+        {"target":"The Waste Tunnels (MAP05) Start","pro":False}]},
     {"name":"The Waste Tunnels (MAP05) Blue",
      "connects_to_hub":False,
      "episode":1,
@@ -101,6 +102,10 @@ regions:List[RegionDict] = [
      "connections":[{"target":"The Waste Tunnels (MAP05) Blue","pro":False}]},
     {"name":"The Waste Tunnels (MAP05) Red",
      "connects_to_hub":False,
+     "episode":1,
+     "connections":[{"target":"The Waste Tunnels (MAP05) Main","pro":False}]},
+    {"name":"The Waste Tunnels (MAP05) Start",
+     "connects_to_hub":True,
      "episode":1,
      "connections":[{"target":"The Waste Tunnels (MAP05) Main","pro":False}]},
 
@@ -129,9 +134,13 @@ regions:List[RegionDict] = [
 
     # Dead Simple (MAP07)
     {"name":"Dead Simple (MAP07) Main",
+     "connects_to_hub":False,
+     "episode":1,
+     "connections":[{"target":"Dead Simple (MAP07) Start","pro":False}]},
+    {"name":"Dead Simple (MAP07) Start",
      "connects_to_hub":True,
      "episode":1,
-     "connections":[]},
+     "connections":[{"target":"Dead Simple (MAP07) Main","pro":False}]},
 
     # Tricks and Traps (MAP08)
     {"name":"Tricks and Traps (MAP08) Main",
@@ -151,11 +160,12 @@ regions:List[RegionDict] = [
 
     # The Pit (MAP09)
     {"name":"The Pit (MAP09) Main",
-     "connects_to_hub":True,
+     "connects_to_hub":False,
      "episode":1,
      "connections":[
         {"target":"The Pit (MAP09) Yellow","pro":False},
-        {"target":"The Pit (MAP09) Blue","pro":False}]},
+        {"target":"The Pit (MAP09) Blue","pro":False},
+        {"target":"The Pit (MAP09) Start","pro":False}]},
     {"name":"The Pit (MAP09) Blue",
      "connects_to_hub":False,
      "episode":1,
@@ -164,12 +174,18 @@ regions:List[RegionDict] = [
      "connects_to_hub":False,
      "episode":1,
      "connections":[{"target":"The Pit (MAP09) Main","pro":False}]},
+    {"name":"The Pit (MAP09) Start",
+     "connects_to_hub":True,
+     "episode":1,
+     "connections":[{"target":"The Pit (MAP09) Main","pro":False}]},
 
     # Refueling Base (MAP10)
     {"name":"Refueling Base (MAP10) Main",
-     "connects_to_hub":True,
+     "connects_to_hub":False,
      "episode":1,
-     "connections":[{"target":"Refueling Base (MAP10) Yellow","pro":False}]},
+     "connections":[
+        {"target":"Refueling Base (MAP10) Yellow","pro":False},
+        {"target":"Refueling Base (MAP10) Start","pro":False}]},
     {"name":"Refueling Base (MAP10) Yellow",
      "connects_to_hub":False,
      "episode":1,
@@ -180,6 +196,10 @@ regions:List[RegionDict] = [
      "connects_to_hub":False,
      "episode":1,
      "connections":[{"target":"Refueling Base (MAP10) Yellow","pro":False}]},
+    {"name":"Refueling Base (MAP10) Start",
+     "connects_to_hub":True,
+     "episode":1,
+     "connections":[{"target":"Refueling Base (MAP10) Main","pro":False}]},
 
     # Circle of Death (MAP11)
     {"name":"Circle of Death (MAP11) Main",
@@ -187,7 +207,8 @@ regions:List[RegionDict] = [
      "episode":1,
      "connections":[
         {"target":"Circle of Death (MAP11) Blue","pro":False},
-        {"target":"Circle of Death (MAP11) Red","pro":False}]},
+        {"target":"Circle of Death (MAP11) Red","pro":False},
+        {"target":"Circle of Death (MAP11) Ending","pro":True}]},
     {"name":"Circle of Death (MAP11) Blue",
      "connects_to_hub":False,
      "episode":1,
@@ -195,23 +216,40 @@ regions:List[RegionDict] = [
     {"name":"Circle of Death (MAP11) Red",
      "connects_to_hub":False,
      "episode":1,
+     "connections":[
+        {"target":"Circle of Death (MAP11) Main","pro":False},
+        {"target":"Circle of Death (MAP11) Ending","pro":False}]},
+    {"name":"Circle of Death (MAP11) Ending",
+     "connects_to_hub":False,
+     "episode":1,
      "connections":[{"target":"Circle of Death (MAP11) Main","pro":False}]},
 
     # The Factory (MAP12)
-    {"name":"The Factory (MAP12) Main",
-     "connects_to_hub":True,
+    {"name":"The Factory (MAP12) Indoors",
+     "connects_to_hub":False,
      "episode":2,
      "connections":[
         {"target":"The Factory (MAP12) Yellow","pro":False},
-        {"target":"The Factory (MAP12) Blue","pro":False}]},
+        {"target":"The Factory (MAP12) Blue","pro":False},
+        {"target":"The Factory (MAP12) Main","pro":False}]},
     {"name":"The Factory (MAP12) Blue",
      "connects_to_hub":False,
      "episode":2,
-     "connections":[{"target":"The Factory (MAP12) Main","pro":False}]},
+     "connections":[{"target":"The Factory (MAP12) Indoors","pro":False}]},
     {"name":"The Factory (MAP12) Yellow",
      "connects_to_hub":False,
      "episode":2,
      "connections":[]},
+    {"name":"The Factory (MAP12) Outdoors",
+     "connects_to_hub":True,
+     "episode":2,
+     "connections":[{"target":"The Factory (MAP12) Main","pro":False}]},
+    {"name":"The Factory (MAP12) Main",
+     "connects_to_hub":False,
+     "episode":2,
+     "connections":[
+        {"target":"The Factory (MAP12) Indoors","pro":False},
+        {"target":"The Factory (MAP12) Outdoors","pro":False}]},
 
     # Downtown (MAP13)
     {"name":"Downtown (MAP13) Main",
@@ -291,7 +329,8 @@ regions:List[RegionDict] = [
      "episode":2,
      "connections":[
         {"target":"Suburbs (MAP16) Red","pro":False},
-        {"target":"Suburbs (MAP16) Blue","pro":False}]},
+        {"target":"Suburbs (MAP16) Blue","pro":False},
+        {"target":"Suburbs (MAP16) Pro Exit","pro":True}]},
     {"name":"Suburbs (MAP16) Blue",
      "connects_to_hub":False,
      "episode":2,
@@ -299,7 +338,13 @@ regions:List[RegionDict] = [
     {"name":"Suburbs (MAP16) Red",
      "connects_to_hub":False,
      "episode":2,
-     "connections":[{"target":"Suburbs (MAP16) Main","pro":False}]},
+     "connections":[
+        {"target":"Suburbs (MAP16) Main","pro":False},
+        {"target":"Suburbs (MAP16) Pro Exit","pro":False}]},
+    {"name":"Suburbs (MAP16) Pro Exit",
+     "connects_to_hub":False,
+     "episode":2,
+     "connections":[{"target":"Suburbs (MAP16) Red","pro":False}]},
 
     # Tenements (MAP17)
     {"name":"Tenements (MAP17) Main",
@@ -358,7 +403,7 @@ regions:List[RegionDict] = [
 
     # Nirvana (MAP21)
     {"name":"Nirvana (MAP21) Main",
-     "connects_to_hub":True,
+     "connects_to_hub":False,
      "episode":3,
      "connections":[{"target":"Nirvana (MAP21) Yellow","pro":False}]},
     {"name":"Nirvana (MAP21) Yellow",
@@ -366,19 +411,31 @@ regions:List[RegionDict] = [
      "episode":3,
      "connections":[
         {"target":"Nirvana (MAP21) Main","pro":False},
-        {"target":"Nirvana (MAP21) Magenta","pro":False}]},
+        {"target":"Nirvana (MAP21) Magenta","pro":False},
+        {"target":"Nirvana (MAP21) Pro Magenta","pro":True}]},
     {"name":"Nirvana (MAP21) Magenta",
      "connects_to_hub":False,
      "episode":3,
-     "connections":[{"target":"Nirvana (MAP21) Yellow","pro":False}]},
+     "connections":[
+        {"target":"Nirvana (MAP21) Yellow","pro":False},
+        {"target":"Nirvana (MAP21) Pro Magenta","pro":False}]},
+    {"name":"Nirvana (MAP21) Start",
+     "connects_to_hub":True,
+     "episode":3,
+     "connections":[{"target":"Nirvana (MAP21) Main","pro":False}]},
+    {"name":"Nirvana (MAP21) Pro Magenta",
+     "connects_to_hub":False,
+     "episode":3,
+     "connections":[{"target":"Nirvana (MAP21) Magenta","pro":False}]},
 
     # The Catacombs (MAP22)
     {"name":"The Catacombs (MAP22) Main",
-     "connects_to_hub":True,
+     "connects_to_hub":False,
      "episode":3,
      "connections":[
         {"target":"The Catacombs (MAP22) Blue","pro":False},
-        {"target":"The Catacombs (MAP22) Red","pro":False}]},
+        {"target":"The Catacombs (MAP22) Red","pro":False},
+        {"target":"The Catacombs (MAP22) Early","pro":False}]},
     {"name":"The Catacombs (MAP22) Blue",
      "connects_to_hub":False,
      "episode":3,
@@ -387,34 +444,57 @@ regions:List[RegionDict] = [
      "connects_to_hub":False,
      "episode":3,
      "connections":[{"target":"The Catacombs (MAP22) Main","pro":False}]},
-
-    # Barrels o Fun (MAP23)
-    {"name":"Barrels o Fun (MAP23) Main",
+    {"name":"The Catacombs (MAP22) Early",
      "connects_to_hub":True,
      "episode":3,
-     "connections":[{"target":"Barrels o Fun (MAP23) Yellow","pro":False}]},
-    {"name":"Barrels o Fun (MAP23) Yellow",
+     "connections":[{"target":"The Catacombs (MAP22) Main","pro":False}]},
+
+    # Barrels o' Fun (MAP23)
+    {"name":"Barrels o' Fun (MAP23) Main",
+     "connects_to_hub":True,
+     "episode":3,
+     "connections":[{"target":"Barrels o' Fun (MAP23) Yellow","pro":False}]},
+    {"name":"Barrels o' Fun (MAP23) Yellow",
      "connects_to_hub":False,
      "episode":3,
-     "connections":[{"target":"Barrels o Fun (MAP23) Main","pro":False}]},
+     "connections":[{"target":"Barrels o' Fun (MAP23) Main","pro":False}]},
 
     # The Chasm (MAP24)
     {"name":"The Chasm (MAP24) Main",
      "connects_to_hub":True,
      "episode":3,
-     "connections":[{"target":"The Chasm (MAP24) Red","pro":False}]},
+     "connections":[
+        {"target":"The Chasm (MAP24) Blue","pro":False},
+        {"target":"The Chasm (MAP24) Blue Pro","pro":True}]},
     {"name":"The Chasm (MAP24) Red",
      "connects_to_hub":False,
      "episode":3,
-     "connections":[{"target":"The Chasm (MAP24) Main","pro":False}]},
+     "connections":[{"target":"The Chasm (MAP24) Blue","pro":False}]},
+    {"name":"The Chasm (MAP24) Blue",
+     "connects_to_hub":False,
+     "episode":3,
+     "connections":[
+        {"target":"The Chasm (MAP24) Red","pro":False},
+        {"target":"The Chasm (MAP24) Main","pro":False},
+        {"target":"The Chasm (MAP24) Blue Pro","pro":False}]},
+    {"name":"The Chasm (MAP24) Blue Pro",
+     "connects_to_hub":False,
+     "episode":3,
+     "connections":[{"target":"The Chasm (MAP24) Blue","pro":False}]},
 
     # Bloodfalls (MAP25)
     {"name":"Bloodfalls (MAP25) Main",
-     "connects_to_hub":True,
+     "connects_to_hub":False,
      "episode":3,
-     "connections":[{"target":"Bloodfalls (MAP25) Blue","pro":False}]},
+     "connections":[
+        {"target":"Bloodfalls (MAP25) Blue","pro":False},
+        {"target":"Bloodfalls (MAP25) Start","pro":False}]},
     {"name":"Bloodfalls (MAP25) Blue",
      "connects_to_hub":False,
+     "episode":3,
+     "connections":[{"target":"Bloodfalls (MAP25) Main","pro":False}]},
+    {"name":"Bloodfalls (MAP25) Start",
+     "connects_to_hub":True,
      "episode":3,
      "connections":[{"target":"Bloodfalls (MAP25) Main","pro":False}]},
 
@@ -484,19 +564,27 @@ regions:List[RegionDict] = [
 
     # Icon of Sin (MAP30)
     {"name":"Icon of Sin (MAP30) Main",
+     "connects_to_hub":False,
+     "episode":3,
+     "connections":[{"target":"Icon of Sin (MAP30) Start","pro":False}]},
+    {"name":"Icon of Sin (MAP30) Start",
      "connects_to_hub":True,
      "episode":3,
-     "connections":[]},
+     "connections":[{"target":"Icon of Sin (MAP30) Main","pro":False}]},
 
-    # Wolfenstein2 (MAP31)
-    {"name":"Wolfenstein2 (MAP31) Main",
+    # Wolfenstein (MAP31)
+    {"name":"Wolfenstein (MAP31) Main",
      "connects_to_hub":True,
      "episode":4,
      "connections":[]},
 
-    # Grosse2 (MAP32)
-    {"name":"Grosse2 (MAP32) Main",
+    # Grosse (MAP32)
+    {"name":"Grosse (MAP32) Main",
+     "connects_to_hub":False,
+     "episode":4,
+     "connections":[{"target":"Grosse (MAP32) Start","pro":False}]},
+    {"name":"Grosse (MAP32) Start",
      "connects_to_hub":True,
      "episode":4,
-     "connections":[]},
+     "connections":[{"target":"Grosse (MAP32) Main","pro":False}]},
 ]

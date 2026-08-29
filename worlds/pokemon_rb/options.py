@@ -1,4 +1,6 @@
-from Options import Toggle, Choice, Range, NamedRange, TextChoice, DeathLink
+from dataclasses import dataclass
+from Options import (PerGameCommonOptions, Toggle, Choice, Range, NamedRange, FreeText, TextChoice, DeathLink,
+                     ItemsAccessibility)
 
 
 class GameVersion(Choice):
@@ -263,12 +265,18 @@ class PrizeSanity(Toggle):
     default = 0
 
 
-class TrainerSanity(Toggle):
-    """Add a location check to every trainer in the game, which can be obtained by talking to a trainer after defeating
-    them. Does not affect gym leaders and some scripted event battles (including all Rival, Giovanni, and
-    Cinnabar Gym battles)."""
+class TrainerSanity(NamedRange):
+    """Add location checks to trainers, which can be obtained by talking to a trainer after defeating them. Does not
+    affect gym leaders and some scripted event battles. You may specify a number of trainers to have checks, and in
+    this case they will be randomly selected. There is no in-game indication as to which trainers have checks."""
     display_name = "Trainersanity"
     default = 0
+    range_start = 0
+    range_end = 317
+    special_range_names = {
+        "disabled": 0,
+        "full": 317
+    }
 
 
 class RequirePokedex(Toggle):
@@ -286,19 +294,19 @@ class AllPokemonSeen(Toggle):
 
 
 class DexSanity(NamedRange):
-    """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify a percentage of Pokemon to
-    have checks added. If Accessibility is set to locations, this will be the percentage of all logically reachable
-    Pokemon that will get a location check added to it. With items or minimal Accessibility, it will be the percentage
-    of all 151 Pokemon.
-    If Pokedex is required, the items for Pokemon acquired before acquiring the Pokedex can be found by talking to
-    Professor Oak or evaluating the Pokedex via Oak's PC."""
+    """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify the exact number of Dexsanity
+    checks to add, and they will be distributed to Pokemon randomly.
+    If Accessibility is set to Full, Dexsanity checks for Pokemon that are not logically reachable will be removed,
+    so the number could be lower than you specified.
+    If Pokedex is required, the Dexsanity checks for Pokemon you acquired before acquiring the Pokedex can be found by
+    talking to Professor Oak or evaluating the Pokedex via Oak's PC."""
     display_name = "Dexsanity"
     default = 0
     range_start = 0
-    range_end = 100
+    range_end = 151
     special_range_names = {
         "disabled": 0,
-        "full": 100
+        "full": 151
     }
 
 
@@ -418,10 +426,10 @@ class ExpModifier(NamedRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
     default = 16
-    range_start = default / 4
+    range_start = default // 4
     range_end = 255
     special_range_names = {
-        "half": default / 2,
+        "half": default // 2,
         "normal": default,
         "double": default * 2,
         "triple": default * 3,
@@ -519,7 +527,8 @@ class TrainerLegendaries(Toggle):
 
 class BlindTrainers(Range):
     """Chance each frame that you are standing on a tile in a trainer's line of sight that they will fail to initiate a
-    battle. If you move into and out of their line of sight without stopping, this chance will only trigger once."""
+    battle. If you move into and out of their line of sight without stopping, this chance will only trigger once.
+    Trainers which have Trainersanity location checks ignore the Blind Trainers setting."""
     display_name = "Blind Trainers"
     range_start = 0
     range_end = 100
@@ -704,6 +713,15 @@ class RandomizeTypeChart(Choice):
     default = 0
 
 
+class TypeChartSeed(FreeText):
+    """You can enter a number to use as a seed for the type chart. If you enter anything besides a number or "random",
+    it will be used as a type chart group name, and everyone using the same group name will get the same type chart,
+    made using the type chart options of one random player within the group. If a group name is used, the type matchup
+    information will not be made available for trackers."""
+    display_name = "Type Chart Seed"
+    default = "random"
+
+
 class NormalMatchups(Range):
     """If 'randomize' is chosen for Randomize Type Chart, this will be the weight for neutral matchups.
     No effect if 'chaos' is chosen"""
@@ -850,8 +868,8 @@ class BicycleGateSkips(Choice):
 
 
 class RandomizePokemonPalettes(Choice):
-    """Modify palettes of Pokemon. Primary Type will set Pokemons' palettes based on their primary type, Follow
-    Evolutions will randomize palettes but palettes will remain the same through evolutions (except Eeveelutions),
+    """Modify Super Gameboy palettes of Pokemon. Primary Type will set Pokemons' palettes based on their primary type,
+    Follow Evolutions will randomize palettes but they will remain the same through evolutions (except Eeveelutions),
     Completely Random will randomize all Pokemons' palettes individually"""
     display_name = "Randomize Pokemon Palettes"
     option_vanilla = 0
@@ -860,103 +878,105 @@ class RandomizePokemonPalettes(Choice):
     option_completely_random = 3
 
 
-pokemon_rb_options = {
-    "game_version": GameVersion,
-    "trainer_name": TrainerName,
-    "rival_name": RivalName,
-    #"goal": Goal,
-    "elite_four_badges_condition": EliteFourBadgesCondition,
-    "elite_four_key_items_condition": EliteFourKeyItemsCondition,
-    "elite_four_pokedex_condition": EliteFourPokedexCondition,
-    "victory_road_condition": VictoryRoadCondition,
-    "route_22_gate_condition": Route22GateCondition,
-    "viridian_gym_condition": ViridianGymCondition,
-    "cerulean_cave_badges_condition": CeruleanCaveBadgesCondition,
-    "cerulean_cave_key_items_condition": CeruleanCaveKeyItemsCondition,
-    "route_3_condition": Route3Condition,
-    "robbed_house_officer": RobbedHouseOfficer,
-    "second_fossil_check_condition": SecondFossilCheckCondition,
-    "fossil_check_item_types": FossilCheckItemTypes,
-    "exp_all": ExpAll,
-    "old_man": OldMan,
-    "badgesanity": BadgeSanity,
-    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
-    "key_items_only": KeyItemsOnly,
-    "tea": Tea,
-    "extra_key_items": ExtraKeyItems,
-    "split_card_key": SplitCardKey,
-    "all_elevators_locked": AllElevatorsLocked,
-    "extra_strength_boulders": ExtraStrengthBoulders,
-    "require_item_finder": RequireItemFinder,
-    "randomize_hidden_items": RandomizeHiddenItems,
-    "prizesanity": PrizeSanity,
-    "trainersanity": TrainerSanity,
-    "dexsanity": DexSanity,
-    "randomize_pokedex": RandomizePokedex,
-    "require_pokedex": RequirePokedex,
-    "all_pokemon_seen": AllPokemonSeen,
-    "oaks_aide_rt_2": OaksAidRt2,
-    "oaks_aide_rt_11": OaksAidRt11,
-    "oaks_aide_rt_15": OaksAidRt15,
-    "stonesanity": Stonesanity,
-    "door_shuffle": DoorShuffle,
-    "warp_tile_shuffle": WarpTileShuffle,
-    "randomize_rock_tunnel": RandomizeRockTunnel,
-    "dark_rock_tunnel_logic": DarkRockTunnelLogic,
-    "free_fly_location": FreeFlyLocation,
-    "town_map_fly_location": TownMapFlyLocation,
-    "blind_trainers": BlindTrainers,
-    "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
-    "level_scaling": LevelScaling,
-    "exp_modifier": ExpModifier,
-    "randomize_wild_pokemon": RandomizeWildPokemon,
-    "area_1_to_1_mapping": Area1To1Mapping,
-    "randomize_starter_pokemon": RandomizeStarterPokemon,
-    "randomize_static_pokemon": RandomizeStaticPokemon,
-    "randomize_legendary_pokemon": RandomizeLegendaryPokemon,
-    "catch_em_all": CatchEmAll,
-    "randomize_pokemon_stats": RandomizePokemonStats,
-    "randomize_pokemon_catch_rates": RandomizePokemonCatchRates,
-    "minimum_catch_rate": MinimumCatchRate,
-    "randomize_trainer_parties": RandomizeTrainerParties,
-    "trainer_legendaries": TrainerLegendaries,
-    "move_balancing": MoveBalancing,
-    "fix_combat_bugs": FixCombatBugs,
-    "randomize_pokemon_movesets": RandomizePokemonMovesets,
-    "confine_transform_to_ditto": ConfineTranstormToDitto,
-    "start_with_four_moves": StartWithFourMoves,
-    "same_type_attack_bonus": SameTypeAttackBonus,
-    "randomize_tm_moves": RandomizeTMMoves,
-    "tm_same_type_compatibility": TMSameTypeCompatibility,
-    "tm_normal_type_compatibility": TMNormalTypeCompatibility,
-    "tm_other_type_compatibility": TMOtherTypeCompatibility,
-    "hm_same_type_compatibility": HMSameTypeCompatibility,
-    "hm_normal_type_compatibility": HMNormalTypeCompatibility,
-    "hm_other_type_compatibility": HMOtherTypeCompatibility,
-    "inherit_tm_hm_compatibility": InheritTMHMCompatibility,
-    "randomize_move_types": RandomizeMoveTypes,
-    "randomize_pokemon_types": RandomizePokemonTypes,
-    "secondary_type_chance": SecondaryTypeChance,
-    "randomize_type_chart": RandomizeTypeChart,
-    "normal_matchups": NormalMatchups,
-    "super_effective_matchups": SuperEffectiveMatchups,
-    "not_very_effective_matchups": NotVeryEffectiveMatchups,
-    "immunity_matchups": ImmunityMatchups,
-    "safari_zone_normal_battles": SafariZoneNormalBattles,
-    "normalize_encounter_chances": NormalizeEncounterChances,
-    "reusable_tms": ReusableTMs,
-    "better_shops": BetterShops,
-    "master_ball_price": MasterBallPrice,
-    "starting_money": StartingMoney,
-    "lose_money_on_blackout": LoseMoneyOnBlackout,
-    "poke_doll_skip": PokeDollSkip,
-    "bicycle_gate_skips": BicycleGateSkips,
-    "trap_percentage": TrapPercentage,
-    "poison_trap_weight": PoisonTrapWeight,
-    "fire_trap_weight": FireTrapWeight,
-    "paralyze_trap_weight": ParalyzeTrapWeight,
-    "sleep_trap_weight": SleepTrapWeight,
-    "ice_trap_weight": IceTrapWeight,
-    "randomize_pokemon_palettes": RandomizePokemonPalettes,
-    "death_link": DeathLink
-}
+@dataclass
+class PokemonRBOptions(PerGameCommonOptions):
+    accessibility: ItemsAccessibility
+    game_version: GameVersion
+    trainer_name: TrainerName
+    rival_name: RivalName
+    # goal: Goal
+    elite_four_badges_condition: EliteFourBadgesCondition
+    elite_four_key_items_condition: EliteFourKeyItemsCondition
+    elite_four_pokedex_condition: EliteFourPokedexCondition
+    victory_road_condition: VictoryRoadCondition
+    route_22_gate_condition: Route22GateCondition
+    viridian_gym_condition: ViridianGymCondition
+    cerulean_cave_badges_condition: CeruleanCaveBadgesCondition
+    cerulean_cave_key_items_condition: CeruleanCaveKeyItemsCondition
+    route_3_condition: Route3Condition
+    robbed_house_officer: RobbedHouseOfficer
+    second_fossil_check_condition: SecondFossilCheckCondition
+    fossil_check_item_types: FossilCheckItemTypes
+    exp_all: ExpAll
+    old_man: OldMan
+    badgesanity: BadgeSanity
+    badges_needed_for_hm_moves: BadgesNeededForHMMoves
+    key_items_only: KeyItemsOnly
+    tea: Tea
+    extra_key_items: ExtraKeyItems
+    split_card_key: SplitCardKey
+    all_elevators_locked: AllElevatorsLocked
+    extra_strength_boulders: ExtraStrengthBoulders
+    require_item_finder: RequireItemFinder
+    randomize_hidden_items: RandomizeHiddenItems
+    prizesanity: PrizeSanity
+    trainersanity: TrainerSanity
+    dexsanity: DexSanity
+    randomize_pokedex: RandomizePokedex
+    require_pokedex: RequirePokedex
+    all_pokemon_seen: AllPokemonSeen
+    oaks_aide_rt_2: OaksAidRt2
+    oaks_aide_rt_11: OaksAidRt11
+    oaks_aide_rt_15: OaksAidRt15
+    stonesanity: Stonesanity
+    door_shuffle: DoorShuffle
+    warp_tile_shuffle: WarpTileShuffle
+    randomize_rock_tunnel: RandomizeRockTunnel
+    dark_rock_tunnel_logic: DarkRockTunnelLogic
+    free_fly_location: FreeFlyLocation
+    town_map_fly_location: TownMapFlyLocation
+    blind_trainers: BlindTrainers
+    minimum_steps_between_encounters: MinimumStepsBetweenEncounters
+    level_scaling: LevelScaling
+    exp_modifier: ExpModifier
+    randomize_wild_pokemon: RandomizeWildPokemon
+    area_1_to_1_mapping: Area1To1Mapping
+    randomize_starter_pokemon: RandomizeStarterPokemon
+    randomize_static_pokemon: RandomizeStaticPokemon
+    randomize_legendary_pokemon: RandomizeLegendaryPokemon
+    catch_em_all: CatchEmAll
+    randomize_pokemon_stats: RandomizePokemonStats
+    randomize_pokemon_catch_rates: RandomizePokemonCatchRates
+    minimum_catch_rate: MinimumCatchRate
+    randomize_trainer_parties: RandomizeTrainerParties
+    trainer_legendaries: TrainerLegendaries
+    move_balancing: MoveBalancing
+    fix_combat_bugs: FixCombatBugs
+    randomize_pokemon_movesets: RandomizePokemonMovesets
+    confine_transform_to_ditto: ConfineTranstormToDitto
+    start_with_four_moves: StartWithFourMoves
+    same_type_attack_bonus: SameTypeAttackBonus
+    randomize_tm_moves: RandomizeTMMoves
+    tm_same_type_compatibility: TMSameTypeCompatibility
+    tm_normal_type_compatibility: TMNormalTypeCompatibility
+    tm_other_type_compatibility: TMOtherTypeCompatibility
+    hm_same_type_compatibility: HMSameTypeCompatibility
+    hm_normal_type_compatibility: HMNormalTypeCompatibility
+    hm_other_type_compatibility: HMOtherTypeCompatibility
+    inherit_tm_hm_compatibility: InheritTMHMCompatibility
+    randomize_move_types: RandomizeMoveTypes
+    randomize_pokemon_types: RandomizePokemonTypes
+    secondary_type_chance: SecondaryTypeChance
+    randomize_type_chart: RandomizeTypeChart
+    normal_matchups: NormalMatchups
+    super_effective_matchups: SuperEffectiveMatchups
+    not_very_effective_matchups: NotVeryEffectiveMatchups
+    immunity_matchups: ImmunityMatchups
+    type_chart_seed: TypeChartSeed
+    safari_zone_normal_battles: SafariZoneNormalBattles
+    normalize_encounter_chances: NormalizeEncounterChances
+    reusable_tms: ReusableTMs
+    better_shops: BetterShops
+    master_ball_price: MasterBallPrice
+    starting_money: StartingMoney
+    lose_money_on_blackout: LoseMoneyOnBlackout
+    poke_doll_skip: PokeDollSkip
+    bicycle_gate_skips: BicycleGateSkips
+    trap_percentage: TrapPercentage
+    poison_trap_weight: PoisonTrapWeight
+    fire_trap_weight: FireTrapWeight
+    paralyze_trap_weight: ParalyzeTrapWeight
+    sleep_trap_weight: SleepTrapWeight
+    ice_trap_weight: IceTrapWeight
+    randomize_pokemon_palettes: RandomizePokemonPalettes
+    death_link: DeathLink

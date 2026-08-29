@@ -1,3 +1,5 @@
+from collections import Counter
+
 from BaseClasses import ItemClassification
 from .Locations import level_locations, all_level_locations, standard_level_locations, shop_locations
 from .Options import TriforceLocations, StartingPosition
@@ -58,11 +60,11 @@ map_compass_replacements = {
     "Small Key": 2,
     "Five Rupees": 2
 }
-basic_pool = {
-    item: overworld_items.get(item, 0) + shop_items.get(item, 0)
-    + major_dungeon_items.get(item, 0) + map_compass_replacements.get(item, 0)
-    for item in set(overworld_items) | set(shop_items) | set(major_dungeon_items) | set(map_compass_replacements)
-}
+basic_pool = Counter()
+basic_pool.update(overworld_items)
+basic_pool.update(shop_items)
+basic_pool.update(major_dungeon_items)
+basic_pool.update(map_compass_replacements)
 
 starting_weapons = ["Sword", "White Sword", "Magical Sword", "Magical Rod", "Red Candle"]
 guaranteed_shop_items = ["Small Key", "Bomb", "Water of Life (Red)", "Arrow"]
@@ -80,7 +82,7 @@ def generate_itempool(tlozworld):
             location.item.classification = ItemClassification.progression
 
 def get_pool_core(world):
-    random = world.multiworld.random
+    random = world.random
 
     pool = []
     placed_items = {}
@@ -132,21 +134,13 @@ def get_pool_core(world):
         else:
             pool.append(fragment)
 
-    # Level 9 junk fill
-    if world.options.ExpandedPool > 0:
-        spots = random.sample(level_locations[8], len(level_locations[8]) // 2)
-        for spot in spots:
-            junk = random.choice(list(minor_items.keys()))
-            placed_items[spot] = junk
-            minor_items[junk] -= 1
-
     # Finish Pool
     final_pool = basic_pool
     if world.options.ExpandedPool:
-        final_pool = {
-            item: basic_pool.get(item, 0) + minor_items.get(item, 0) + take_any_items.get(item, 0)
-            for item in set(basic_pool) | set(minor_items) | set(take_any_items)
-        }
+        final_pool = Counter()
+        final_pool.update(basic_pool)
+        final_pool.update(minor_items)
+        final_pool.update(take_any_items)
         final_pool["Five Rupees"] -= 1
     for item in final_pool.keys():
         for i in range(0, final_pool[item]):

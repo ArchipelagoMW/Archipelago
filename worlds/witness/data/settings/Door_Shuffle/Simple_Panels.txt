@@ -7,6 +7,7 @@ Quarry Stoneworks Panels
 Quarry Boathouse Panels
 Keep Hedge Maze Panels
 Monastery Panels
+Jungle Panels
 Town Church & RGB House Panels
 Town Maze Panels
 Windmill & Theater Panels
@@ -19,4 +20,3 @@ Caves Panels
 Tunnels Panels
 Glass Factory Entry (Panel)
 Shadows Door Timer (Panel)
-Jungle Popup Wall (Panel)

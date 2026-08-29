@@ -2233,8 +2233,8 @@
             "ZD Pot 3": "True",
             "ZD Pot 4": "True",
             "ZD Pot 5": "True",
-            "ZD In Front of King Zora Beehive 1": "is_child and can_break_upper_beehive",
-            "ZD In Front of King Zora Beehive 2": "is_child and can_break_upper_beehive",
+            "ZD In Front of King Zora Beehive 1": "can_break_upper_beehive_child",
+            "ZD In Front of King Zora Beehive 2": "can_break_upper_beehive_child",
             "ZD GS Frozen Waterfall": "
                 is_adult and at_night and
                 (Hookshot or Bow or Magic_Meter or logic_domain_gs)",
@@ -2259,7 +2259,7 @@
         "scene": "Zoras Domain",
         "hint": "ZORAS_DOMAIN",
         "locations": {
-            "ZD Behind King Zora Beehive": "is_child and can_break_upper_beehive"
+            "ZD Behind King Zora Beehive": "can_break_upper_beehive_child"
         },
         "exits": {
             "Zoras Domain": "

@@ -2,16 +2,10 @@ import collections
 import logging
 import typing
 
-from BaseClasses import LocationProgressType, MultiWorld, Location, Region, Entrance
+from BaseClasses import (CollectionRule, CollectionState, Entrance, Item, Location,
+                         LocationProgressType, MultiWorld, Region)
 
-if typing.TYPE_CHECKING:
-    import BaseClasses
-
-    CollectionRule = typing.Callable[[BaseClasses.CollectionState], bool]
-    ItemRule = typing.Callable[[BaseClasses.Item], bool]
-else:
-    CollectionRule = typing.Callable[[object], bool]
-    ItemRule = typing.Callable[[object], bool]
+ItemRule = typing.Callable[[Item], bool]
 
 
 def locality_needed(multiworld: MultiWorld) -> bool:
@@ -69,7 +63,7 @@ def locality_rules(multiworld: MultiWorld):
             if (location.player, location.item_rule) in func_cache:
                 location.item_rule = func_cache[location.player, location.item_rule]
             # empty rule that just returns True, overwrite
-            elif location.item_rule is location.__class__.item_rule:
+            elif location.item_rule is Location.item_rule:
                 func_cache[location.player, location.item_rule] = location.item_rule = \
                     lambda i, sending_blockers = forbid_data[location.player], \
                                             old_rule = location.item_rule: \
@@ -96,14 +90,14 @@ def exclusion_rules(multiworld: MultiWorld, player: int, exclude_locations: typi
                 logging.warning(f"Unable to exclude location {loc_name} in player {player}'s world.")
 
 
-def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule):
+def set_rule(spot: typing.Union[Location, Entrance], rule: CollectionRule):
     spot.access_rule = rule
 
 
-def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine="and"):
+def add_rule(spot: typing.Union[Location, Entrance], rule: CollectionRule, combine="and"):
     old_rule = spot.access_rule
     # empty rule, replace instead of add
-    if old_rule is spot.__class__.access_rule:
+    if old_rule is Location.access_rule or old_rule is Entrance.access_rule:
         spot.access_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":
@@ -112,30 +106,30 @@ def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
             spot.access_rule = lambda state: rule(state) or old_rule(state)
 
 
-def forbid_item(location: "BaseClasses.Location", item: str, player: int):
+def forbid_item(location: Location, item: str, player: int):
     old_rule = location.item_rule
     # empty rule
-    if old_rule is location.__class__.item_rule:
+    if old_rule is Location.item_rule:
         location.item_rule = lambda i: i.name != item or i.player != player
     else:
         location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
 
 
-def forbid_items_for_player(location: "BaseClasses.Location", items: typing.Set[str], player: int):
+def forbid_items_for_player(location: Location, items: typing.Set[str], player: int):
     old_rule = location.item_rule
     location.item_rule = lambda i: (i.player != player or i.name not in items) and old_rule(i)
 
 
-def forbid_items(location: "BaseClasses.Location", items: typing.Set[str]):
+def forbid_items(location: Location, items: typing.Set[str]):
     """unused, but kept as a debugging tool."""
     old_rule = location.item_rule
     location.item_rule = lambda i: i.name not in items and old_rule(i)
 
 
-def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str = "and"):
+def add_item_rule(location: Location, rule: ItemRule, combine: str = "and"):
     old_rule = location.item_rule
     # empty rule, replace instead of add
-    if old_rule is location.__class__.item_rule:
+    if old_rule is Location.item_rule:
         location.item_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":
@@ -144,7 +138,7 @@ def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str
             location.item_rule = lambda item: rule(item) or old_rule(item)
 
 
-def item_name_in_location_names(state: "BaseClasses.CollectionState", item: str, player: int,
+def item_name_in_location_names(state: CollectionState, item: str, player: int,
                                 location_name_player_pairs: typing.Sequence[typing.Tuple[str, int]]) -> bool:
     for location in location_name_player_pairs:
         if location_item_name(state, location[0], location[1]) == (item, player):
@@ -153,14 +147,14 @@ def item_name_in_location_names(state: "BaseClasses.CollectionState", item: str,
 
 
 def item_name_in_locations(item: str, player: int,
-                           locations: typing.Sequence["BaseClasses.Location"]) -> bool:
+                           locations: typing.Sequence[Location]) -> bool:
     for location in locations:
         if location.item and location.item.name == item and location.item.player == player:
             return True
     return False
 
 
-def location_item_name(state: "BaseClasses.CollectionState", location: str, player: int) -> \
+def location_item_name(state: CollectionState, location: str, player: int) -> \
         typing.Optional[typing.Tuple[str, int]]:
     location = state.multiworld.get_location(location, player)
     if location.item is None:

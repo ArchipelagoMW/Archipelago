@@ -61,12 +61,7 @@ def download_slot_file(room_id, player_id: int):
     else:
         import io
 
-        if slot_data.game == "Minecraft":
-            from worlds.minecraft import mc_update_output
-            fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apmc"
-            data = mc_update_output(slot_data.data, server=app.config['HOST_ADDRESS'], port=room.last_port)
-            return send_file(io.BytesIO(data), as_attachment=True, download_name=fname)
-        elif slot_data.game == "Factorio":
+        if slot_data.game == "Factorio":
             with zipfile.ZipFile(io.BytesIO(slot_data.data)) as zf:
                 for name in zf.namelist():
                     if name.endswith("info.json"):

@@ -4,7 +4,7 @@ Option definitions for Pokemon Emerald
 from dataclasses import dataclass
 
 from Options import (Choice, DeathLink, DefaultOnToggle, OptionSet, NamedRange, Range, Toggle, FreeText,
-                     PerGameCommonOptions)
+                     PerGameCommonOptions, OptionGroup, StartInventory, OptionList)
 
 from .data import data
 
@@ -123,8 +123,21 @@ class Dexsanity(Toggle):
     Defeating gym leaders provides dex info, allowing you to see where on the map you can catch species you need.
 
     Each pokedex entry adds a Poke Ball, Great Ball, or Ultra Ball to the pool.
+
+    Warning: This adds a lot of locations and will slow you down significantly.
     """
     display_name = "Dexsanity"
+
+
+class DexsanityEncounterTypes(OptionList):
+    """
+    Determines which Dexsanity encounter areas are in logic.
+
+    Logic will only consider access to Pokemon at these encounter types, but they may still be found elsewhere.
+    """
+    display_name = "Dexsanity Encounter Types"
+    valid_keys = {"Land", "Water", "Fishing"}
+    default = valid_keys.copy()
 
 
 class Trainersanity(Toggle):
@@ -132,6 +145,8 @@ class Trainersanity(Toggle):
     Defeating a trainer gives you an item.
 
     Trainers are no longer missable. Trainers no longer give you money for winning. Each trainer adds a valuable item (Nugget, Stardust, etc.) to the pool.
+
+    Warning: This adds a lot of locations and will slow you down significantly.
     """
     display_name = "Trainersanity"
 
@@ -265,6 +280,8 @@ class RandomizeWildPokemon(Choice):
     """
     Randomizes wild pokemon encounters (grass, caves, water, fishing).
 
+    Warning: Matching both base stats and type may severely limit the variety for certain pokemon.
+
     - Vanilla: Wild encounters are unchanged
     - Match Base Stats: Wild pokemon are replaced with species with approximately the same bst
     - Match Type: Wild pokemon are replaced with species that share a type with the original
@@ -327,6 +344,8 @@ class RandomizeTrainerParties(Choice):
     """
     Randomizes the parties of all trainers.
 
+    Warning: Matching both base stats and type may severely limit the variety for certain pokemon.
+
     - Vanilla: Parties are unchanged
     - Match Base Stats: Trainer pokemon are replaced with species with approximately the same bst
     - Match Type: Trainer pokemon are replaced with species that share a type with the original
@@ -357,6 +376,10 @@ class TrainerPartyBlacklist(OptionSet):
 class ForceFullyEvolved(Range):
     """
     When an opponent uses a pokemon of the specified level or higher, restricts the species to only fully evolved pokemon.
+
+    Only applies when trainer parties are randomized.
+
+    Warning: Combining a low value with matched base stats may severely limit the variety for certain pokemon.
     """
     display_name = "Force Fully Evolved"
     range_start = 1
@@ -714,6 +737,39 @@ class FreeFlyLocation(Toggle):
     display_name = "Free Fly Location"
 
 
+class FreeFlyBlacklist(OptionSet):
+    """
+    Disables specific locations as valid free fly locations.
+
+    Has no effect if Free Fly Location is disabled.
+    """
+    display_name = "Free Fly Blacklist"
+    valid_keys = [
+        "Littleroot Town",
+        "Oldale Town",
+        "Petalburg City",
+        "Rustboro City",
+        "Dewford Town",
+        "Slateport City",
+        "Mauville City",
+        "Verdanturf Town",
+        "Fallarbor Town",
+        "Lavaridge Town",
+        "Fortree City",
+        "Lilycove City",
+        "Mossdeep City",
+        "Sootopolis City",
+        "Ever Grande City",
+    ]
+    default = [
+        "Littleroot Town",
+        "Oldale Town",
+        "Petalburg City",
+        "Rustboro City",
+        "Dewford Town",
+    ]
+
+
 class HmRequirements(Choice):
     """
     Sets the requirements to use HMs outside of battle.
@@ -773,6 +829,10 @@ class RandomizeFanfares(Toggle):
     display_name = "Randomize Fanfares"
 
 
+class PokemonEmeraldDeathLink(DeathLink):
+    __doc__ = DeathLink.__doc__ + "\n\n    In Pokemon Emerald, whiting out sends a death and receiving a death causes you to white out."
+
+
 class WonderTrading(DefaultOnToggle):
     """
     Allows participation in wonder trading with other players in your current multiworld. Speak with the center receptionist on the second floor of any pokecenter.
@@ -798,6 +858,14 @@ class EasterEgg(FreeText):
     default = "EMERALD SECRET"
 
 
+class PokemonEmeraldStartInventory(StartInventory):
+    """
+    Start with these items.
+
+    They will be in your PC, which you can access from your home or a pokemon center.
+    """
+
+
 @dataclass
 class PokemonEmeraldOptions(PerGameCommonOptions):
     goal: Goal
@@ -813,6 +881,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     npc_gifts: RandomizeNpcGifts
     berry_trees: RandomizeBerryTrees
     dexsanity: Dexsanity
+    dexsanity_encounter_types: DexsanityEncounterTypes
     trainersanity: Trainersanity
     item_pool_type: ItemPoolType
 
@@ -864,6 +933,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     extra_bumpy_slope: ExtraBumpySlope
     modify_118: ModifyRoute118
     free_fly_location: FreeFlyLocation
+    free_fly_blacklist: FreeFlyBlacklist
     hm_requirements: HmRequirements
 
     turbo_a: TurboA
@@ -873,7 +943,18 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     music: RandomizeMusic
     fanfares: RandomizeFanfares
 
-    death_link: DeathLink
+    death_link: PokemonEmeraldDeathLink
 
     enable_wonder_trading: WonderTrading
     easter_egg: EasterEgg
+
+    start_inventory: PokemonEmeraldStartInventory
+
+
+OPTION_GROUPS = [
+    OptionGroup(
+        "Item & Location Options", [
+            PokemonEmeraldStartInventory,
+        ], True,
+    ),
+]

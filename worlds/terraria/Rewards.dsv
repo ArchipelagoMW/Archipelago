@@ -121,10 +121,9 @@ Corrupt Flask;              Calamity;
 Crimson Flask;              Calamity;
 Craw Carapace;              Calamity;
 Giant Shell;                Calamity;
-Fungal Carapace;            Calamity;
 Life Jelly;                 Calamity;
 Vital Jelly;                Calamity;
-Mana Jelly;                 Calamity;
+Cleansing Jelly;            Calamity;
 Giant Tortoise Shell;       Calamity;
 Coin of Deceit;             Calamity;
 Ink Bomb;                   Calamity;
@@ -152,3 +151,10 @@ Anechoic Plating;           Calamity;
 Iron Boots;                 Calamity;
 Sprit Glyph;                Calamity;
 Abyssal Amulet;             Calamity;
+
+# unshuffled
+
+Life Crystal;
+Enchanted Sword;
+Starfury;
+Defender Medal;

@@ -1,14 +1,4 @@
-from typing import Union
-
-from ... import options
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
-from ...logic.combat_logic import CombatLogicMixin
-from ...logic.cooking_logic import CookingLogicMixin
-from ...logic.has_logic import HasLogicMixin
-from ...logic.received_logic import ReceivedLogicMixin
-from ...logic.skill_logic import SkillLogicMixin
-from ...logic.tool_logic import ToolLogicMixin
-from ...mods.mod_data import ModNames
 from ...options import ElevatorProgression
 from ...stardew_rule import StardewRule, True_, true_
 from ...strings.ap_names.mods.mod_items import DeepWoodsItem
@@ -26,8 +16,7 @@ class DeepWoodsLogicMixin(BaseLogicMixin):
         self.deepwoods = DeepWoodsLogic(*args, **kwargs)
 
 
-class DeepWoodsLogic(BaseLogic[Union[SkillLogicMixin, ReceivedLogicMixin, HasLogicMixin, CombatLogicMixin, ToolLogicMixin, SkillLogicMixin,
-CookingLogicMixin]]):
+class DeepWoodsLogic(BaseLogic):
 
     def can_reach_woods_depth(self, depth: int) -> StardewRule:
         # Assuming you can always do the 10 first floor
@@ -45,9 +34,9 @@ CookingLogicMixin]]):
                          self.logic.received(ModTransportation.woods_obelisk))
 
         tier = int(depth / 25) + 1
-        if self.options.skill_progression >= options.SkillProgression.option_progressive:
-            combat_tier = min(10, max(0, tier + 5))
-            rules.append(self.logic.skill.has_level(Skill.combat, combat_tier))
+        if self.content.features.skill_progression.is_progressive:
+            combat_level = min(10, max(0, tier + 5))
+            rules.append(self.logic.skill.has_level(Skill.combat, combat_level))
 
         return self.logic.and_(*rules)
 
@@ -65,9 +54,9 @@ CookingLogicMixin]]):
         rules = [self.logic.received(DeepWoodsItem.pendant_depths) & self.logic.received(DeepWoodsItem.pendant_community) &
                  self.logic.received(DeepWoodsItem.pendant_elder),
                  self.logic.skill.has_total_level(40)]
-        if ModNames.luck_skill in self.options.mods:
+        if ModSkill.luck in self.content.skills:
             rules.append(self.logic.skill.has_level(ModSkill.luck, 7))
         else:
-            rules.append(
-                self.logic.has(Meal.magic_rock_candy))  # You need more luck than this, but it'll push the logic down a ways; you can get the rest there.
+            # You need more luck than this, but it'll push the logic down a ways; you can get the rest there.
+            rules.append(self.logic.has(Meal.magic_rock_candy))
         return self.logic.and_(*rules)
