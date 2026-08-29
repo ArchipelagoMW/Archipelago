@@ -9,6 +9,7 @@ from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryConditi
 from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, \
     SUNWARP_ENTRANCES, SUNWARP_EXITS
+from .steady import randomize_steady
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -94,6 +95,9 @@ class LingoPlayerLogic:
     sunwarp_entrances: List[str]
     sunwarp_exits: List[str]
 
+    door_panels_overlay: Dict[RoomAndDoor, List[RoomAndPanel]]
+    door_items_overlay: Dict[RoomAndDoor, Optional[str]]
+
     def add_location(self, room: str, name: str, code: Optional[int], panels: List[RoomAndPanel], world: "LingoWorld"):
         """
         Creates a location. This function determines the access requirements for the location by combining and
@@ -145,6 +149,8 @@ class LingoPlayerLogic:
         self.mastery_reqs = []
         self.counting_panel_reqs = {}
         self.sunwarp_mapping = []
+        self.door_panels_overlay = {}
+        self.door_items_overlay = {}
 
         door_shuffle = world.options.shuffle_doors
         color_shuffle = world.options.shuffle_colors
@@ -157,11 +163,38 @@ class LingoPlayerLogic:
             raise OptionError("You cannot have reduced location checks when door shuffle is on, because there would not"
                               " be enough locations for all of the door items.")
 
+        # Create the paintings mapping, if painting shuffle is on.
+        if painting_shuffle:
+            # Shuffle paintings until we get something workable.
+            workable_paintings = False
+            for i in range(0, 20):
+                workable_paintings = self.randomize_paintings(world)
+                if workable_paintings:
+                    break
+
+            if not workable_paintings:
+                raise Exception("This Lingo world was unable to generate a workable painting mapping after 20 "
+                                "iterations. This is very unlikely to happen on its own, and probably indicates some "
+                                "kind of logic error.")
+
+        if world.options.shuffle_layout:
+            steady_mapping = randomize_steady(world, self.painting_mapping)
+
+            for door, panel in steady_mapping.items():
+                self.door_panels_overlay[door] = [panel]
+
+                if world.options.shuffle_doors != ShuffleDoors.option_none and \
+                        panel == RoomAndPanel("Outside The Bold", "BEGIN") and \
+                        door != RoomAndDoor("Outside The Bold", "Steady Entrance"):
+                    self.door_items_overlay[door] = "The Steady - Entrance"
+                    self.door_items_overlay[RoomAndDoor("Outside The Bold", "Steady Entrance")] = None
+
         # Create door items, where needed.
         door_groups: Set[str] = set()
         for room_name, room_data in DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():
-                if door_data.skip_item is False and door_data.event is False:
+                if door_data.skip_item is False and door_data.event is False and\
+                        RoomAndDoor(room_name, door_name) not in self.door_items_overlay:
                     if door_data.type == DoorType.NORMAL and door_shuffle != ShuffleDoors.option_none:
                         if door_data.door_group is not None and door_shuffle == ShuffleDoors.option_simple:
                             # Grouped doors are handled differently if shuffle doors is on simple.
@@ -185,6 +218,11 @@ class LingoPlayerLogic:
                             self.real_items.append(door_data.item_name)
 
         self.real_items += door_groups
+
+        for door_name, item_name in self.door_items_overlay.items():
+            if item_name is not None:
+                self.set_door_item(door_name.room, door_name.door, item_name)
+                self.real_items.append(item_name)
         
         # Create color items, if needed.
         if color_shuffle:
@@ -269,20 +307,6 @@ class LingoPlayerLogic:
             self.sunwarp_entrances = SUNWARP_ENTRANCES
             self.sunwarp_exits = SUNWARP_EXITS
 
-        # Create the paintings mapping, if painting shuffle is on.
-        if painting_shuffle:
-            # Shuffle paintings until we get something workable.
-            workable_paintings = False
-            for i in range(0, 20):
-                workable_paintings = self.randomize_paintings(world)
-                if workable_paintings:
-                    break
-
-            if not workable_paintings:
-                raise Exception("This Lingo world was unable to generate a workable painting mapping after 20 "
-                                "iterations. This is very unlikely to happen on its own, and probably indicates some "
-                                "kind of logic error.")
-
         if door_shuffle != ShuffleDoors.option_none and location_checks != LocationChecks.option_insanity \
                 and not early_color_hallways and world.multiworld.players > 1:
             # Under the combination of door shuffle, normal location checks, and no early color hallways, sphere 1 is
@@ -352,6 +376,18 @@ class LingoPlayerLogic:
                 self.forced_good_item = world.random.choice(good_item_options)
                 self.real_items.remove(self.forced_good_item)
                 self.real_locations.remove("Second Room - Good Luck")
+
+    def get_game_id_door_panel_overlay(self):
+        doors_for_panels = {}
+
+        for door_name, panel_names in self.door_panels_overlay.items():
+            if door_name.room in self.item_by_door and door_name.door in self.item_by_door[door_name.room]:
+                pass
+            else:
+                doors_for_panels.update({
+                    internal_id: [PANELS_BY_ROOM[panel_name.room][panel_name.panel].id for panel_name in panel_names]
+                    for internal_id in DOORS_BY_ROOM[door_name.room][door_name.door].ids
+                })
 
     def randomize_paintings(self, world: "LingoWorld") -> bool:
         self.painting_mapping.clear()
@@ -482,7 +518,7 @@ class LingoPlayerLogic:
             access_reqs = AccessRequirements()
             door_object = DOORS_BY_ROOM[room][door]
 
-            for req_panel in door_object.panels:
+            for req_panel in self.door_panels_overlay.get(RoomAndDoor(room, door), None) or door_object.panels:
                 panel_room = room if req_panel.room is None else req_panel.room
                 access_reqs.rooms.add(panel_room)
                 sub_access_reqs = self.calculate_panel_requirements(panel_room, req_panel.panel, world)

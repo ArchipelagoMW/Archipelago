@@ -39,12 +39,12 @@ class DoorType(Enum):
 
 class Door(NamedTuple):
     name: str
+    ids: List[str]
     item_name: str
     location_name: Optional[str]
     panels: Optional[List[RoomAndPanel]]
     skip_location: bool
     skip_item: bool
-    has_doors: bool
     painting_ids: List[str]
     event: bool
     door_group: Optional[str]
@@ -54,6 +54,7 @@ class Door(NamedTuple):
 
 
 class Panel(NamedTuple):
+    id: str
     required_rooms: List[str]
     required_doors: List[RoomAndDoor]
     required_panels: List[RoomAndPanel]

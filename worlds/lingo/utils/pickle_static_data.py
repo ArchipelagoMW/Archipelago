@@ -232,7 +232,12 @@ def process_panel(room_name, panel_name, panel_data):
     else:
         location_name = None
 
-    panel_obj = Panel(required_rooms, required_doors, required_panels, colors, check, event, exclude_reduce,
+    if "id" in panel_data:
+        panel_id = panel_data["id"]
+    else:
+        panel_id = None
+
+    panel_obj = Panel(panel_id, required_rooms, required_doors, required_panels, colors, check, event, exclude_reduce,
                       achievement, non_counting, location_name)
     PANELS_BY_ROOM[room_name][panel_name] = panel_obj
 
@@ -312,7 +317,13 @@ def process_door(room_name, door_name, door_data):
 
     # The id field can be a single item, or a list of door IDs, in the event that the item for this logical door should
     # open more than one actual in-game door.
-    has_doors = "id" in door_data
+    if "id" in door_data:
+        if isinstance(door_data["id"], list):
+            ids = door_data["id"]
+        else:
+            ids = [door_data["id"]]
+    else:
+        ids = []
 
     # The painting_id field can be a single item, or a list of painting IDs, in the event that the item for this logical
     # door should move more than one actual in-game painting.
@@ -330,7 +341,7 @@ def process_door(room_name, door_name, door_data):
     elif room_name == "Pilgrim Antechamber" and door_name == "Sun Painting":
         door_type = DoorType.SUN_PAINTING
 
-    door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, has_doors,
+    door_obj = Door(door_name, ids, item_name, location_name, panels, skip_location, skip_item,
                     painting_ids, event, door_group, include_reduce, door_type, item_group)
 
     DOORS_BY_ROOM[room_name][door_name] = door_obj

@@ -54,7 +54,7 @@ def load_item_data():
 
             ALL_ITEM_TABLE[door.item_name] = \
                 ItemData(get_door_item_id(room_name, door_name), ItemClassification.progression, ItemType.NORMAL,
-                         door.has_doors, door.painting_ids)
+                         len(door.ids) > 0, door.painting_ids)
             ITEMS_BY_GROUP.setdefault("Doors", []).append(door.item_name)
 
             if door.item_group is not None:

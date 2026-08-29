@@ -3491,6 +3491,7 @@
         panels:
           - BEGIN
       Lilac Entrance:
+        id: Rock Room Doors/Door_1
         event: True
         panels:
           - room: The Steady (Rose)
@@ -4708,8 +4709,7 @@
         room: Outside The Bold
         door: Steady Entrance
       The Steady (Lilac):
-        room: The Steady
-        door: Reveal
+        door: Lilac Exit
       The Steady (Ruby):
         door: Forward Exit
       The Steady (Carnation):
@@ -4721,22 +4721,29 @@
         tag: topblack
     doors:
       Forward Exit:
+        id: Rock Room Doors/Door_6
         event: True
         panels:
           - SOAR
       Right Exit:
+        id: Rock Room Doors/Door_vert_2
         event: True
         panels:
           - room: The Steady (Lilac)
             panel: LIE LACK
+      Lilac Exit:
+        id: Rock Room Doors/Door_vert_1
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
   The Steady (Ruby):
     entrances:
       The Steady (Rose):
         room: The Steady (Rose)
         door: Forward Exit
       The Steady (Amethyst):
-        room: The Steady
-        door: Reveal
+        door: Amethyst Exit
       The Steady (Cherry):
         door: Forward Exit
       The Steady (Amber):
@@ -4748,26 +4755,32 @@
         tag: midyellow
     doors:
       Forward Exit:
+        id: Rock Room Doors/Door_12
         event: True
         panels:
           - room: The Steady (Lime)
             panel: LIMELIGHT
       Right Exit:
+        id: Rock Room Doors/Door_vert_7
         event: True
         panels:
           - room: The Steady (Carnation)
             panel: INCARNATION
+      Amethyst Exit:
+        id: Rock Room Doors/Door_vert_6
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
   The Steady (Carnation):
     entrances:
       The Steady (Rose):
         room: The Steady (Rose)
         door: Right Exit
       Outside The Bold:
-        room: The Steady
-        door: Reveal
+        door: Outside Exit
       The Steady (Amber):
-        room: The Steady
-        door: Reveal
+        door: Amber Exit
       The Steady (Sunflower):
         door: Right Exit
     panels:
@@ -4777,10 +4790,23 @@
         tag: midred
     doors:
       Right Exit:
+        id: Rock Room Doors/Door_vert_3
         event: True
         panels:
           - room: The Steady (Amethyst)
             panel: PACIFIST
+      Outside Exit:
+        id: Rock Room Doors/Door_3
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
+      Amber Exit:
+        id: Rock Room Doors/Door_7
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
   The Steady (Sunflower):
     entrances:
       The Steady (Carnation):
@@ -4796,17 +4822,16 @@
         tag: midblue
     doors:
       Back Exit:
+        id: Rock Room Doors/Door_4
         event: True
         panels:
           - SUN
   The Steady (Plum):
     entrances:
       The Steady (Amethyst):
-        room: The Steady
-        door: Reveal
+        door: Amethyst Exit
       The Steady (Blueberry):
-        room: The Steady
-        door: Reveal
+        door: Blueberry Exit
       The Steady (Cherry):
         room: The Steady (Cherry)
         door: Left Exit
@@ -4815,13 +4840,25 @@
         id: Rock Room/Panel_lump_plum
         colors: yellow
         tag: midyellow
+    doors:
+      Amethyst Exit:
+        id: Rock Room Doors/Door_11
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
+      Blueberry Exit:
+        id: Rock Room Doors/Door_vert_10
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
   The Steady (Lime):
     entrances:
       The Steady (Sunflower):
         warp: True
       The Steady (Emerald):
-        room: The Steady
-        door: Reveal
+        door: Emerald Exit
       The Steady (Blueberry):
         door: Right Exit
     panels:
@@ -4831,10 +4868,17 @@
         tag: midred
     doors:
       Right Exit:
+        id: Rock Room Doors/Door_vert_9
         event: True
         panels:
           - room: The Steady (Amber)
             panel: ANTECHAMBER
+      Emerald Exit:
+        id: Rock Room Doors/Door_9
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
     paintings:
       - id: pencil_painting5
         orientation: south
@@ -4843,8 +4887,7 @@
       The Steady (Emerald):
         warp: True
       The Steady (Orange):
-        room: The Steady
-        door: Reveal
+        door: Orange Exit
       The Steady (Topaz):
         door: Back Exit
     panels:
@@ -4854,9 +4897,16 @@
         tag: midyellow
     doors:
       Back Exit:
+        id: Rock Room Doors/Door_14
         event: True
         panels:
           - MELON
+      Orange Exit:
+        id: Rock Room Doors/Door_vert_13
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
     paintings:
       - id: pencil_painting4
         orientation: south
@@ -4866,8 +4916,7 @@
         room: The Steady (Lemon)
         door: Back Exit
       The Steady (Amber):
-        room: The Steady
-        door: Reveal
+        door: Amber Exit
       The Steady (Sunflower):
         door: Back Exit
     panels:
@@ -4884,17 +4933,23 @@
           door: Mastery
     doors:
       Back Exit:
+        id: Rock Room Doors/Door_8
         event: True
         panels:
           - TOP
+      Amber Exit:
+        id: Rock Room Doors/Door_vert_8
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
   The Steady (Orange):
     entrances:
       The Steady (Cherry):
-        room: The Steady
-        door: Reveal
+        door: Cherry Exit
       The Steady (Lemon):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Lemon)
+        door: Orange Exit
       The Steady (Amber):
         room: The Steady (Amber)
         door: Forward Exit
@@ -4903,13 +4958,19 @@
         id: Rock Room/Panel_blue_orange
         colors: black
         tag: botblack
+    doors:
+      Cherry Exit:
+        id: Rock Room Doors/Door_vert_12
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
   The Steady (Sapphire):
     entrances:
       The Steady (Emerald):
         door: Left Exit
       The Steady (Blueberry):
-        room: The Steady
-        door: Reveal
+        door: Blueberry Exit
       The Steady (Amethyst):
         room: The Steady (Amethyst)
         door: Left Exit
@@ -4920,23 +4981,30 @@
         tag: midblue
     doors:
       Left Exit:
+        id: Rock Room Doors/Door_vert_4
         event: True
         panels:
           - room: The Steady (Plum)
             panel: LUMP
           - room: The Steady (Orange)
             panel: BLUE
+      Blueberry Exit:
+        id: Rock Room Doors/Door_10
+        event: True
+        panels:
+          - room: The Steady
+            panel: Achievement
   The Steady (Blueberry):
     entrances:
       The Steady (Lime):
         room: The Steady (Lime)
         door: Right Exit
       The Steady (Sapphire):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Sapphire)
+        door: Blueberry Exit
       The Steady (Plum):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Plum)
+        door: Blueberry Exit
     panels:
       BLUE:
         id: Rock Room/Panel_blue_blueberry
@@ -4948,13 +5016,13 @@
         room: The Steady (Ruby)
         door: Right Exit
       The Steady (Carnation):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Carnation)
+        door: Amber Exit
       The Steady (Orange):
         door: Forward Exit
       The Steady (Topaz):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Topaz)
+        door: Amber Exit
     panels:
       ANTECHAMBER:
         id: Rock Room/Panel_antechamber_amber
@@ -4962,6 +5030,7 @@
         tag: midred
     doors:
       Forward Exit:
+        id: Rock Room Doors/Door_13
         event: True
         panels:
           - room: The Steady (Blueberry)
@@ -4972,8 +5041,8 @@
         room: The Steady (Sapphire)
         door: Left Exit
       The Steady (Lime):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Lime)
+        door: Emerald Exit
     panels:
       HERALD:
         id: Rock Room/Panel_herald_emerald
@@ -4987,11 +5056,11 @@
       The Steady (Sapphire):
         door: Left Exit
       The Steady (Plum):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Plum)
+        door: Amethyst Exit
       The Steady (Ruby):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Ruby)
+        door: Amethyst Exit
     panels:
       PACIFIST:
         id: Rock Room/Panel_thistle_amethyst
@@ -4999,6 +5068,7 @@
         tag: toppurp
     doors:
       Left Exit:
+        id: Rock Room Doors/Door_vert_5
         event: True
         panels:
           - room: The Steady (Sunflower)
@@ -5011,14 +5081,15 @@
       The Steady (Amethyst):
         door: Forward Exit
       The Steady (Rose):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Rose)
+        door: Lilac Exit
     panels:
       LIE LACK:
         id: Rock Room/Panel_lielack_lilac
         tag: topwhite
     doors:
       Forward Exit:
+        id: Rock Room Doors/Door_5
         event: True
         panels:
           - room: The Steady (Ruby)
@@ -5028,8 +5099,8 @@
       The Steady (Plum):
         door: Left Exit
       The Steady (Orange):
-        room: The Steady
-        door: Reveal
+        room: The Steady (Orange)
+        door: Cherry Exit
       The Steady (Ruby):
         room: The Steady (Ruby)
         door: Forward Exit
@@ -5040,6 +5111,7 @@
         tag: topblue
     doors:
       Left Exit:
+        id: Rock Room Doors/Door_vert_11
         event: True
         panels:
           - room: The Steady (Sapphire)
@@ -5088,11 +5160,6 @@
         tag: forbid
         check: True
         achievement: The Steady
-    doors:
-      Reveal:
-        event: True
-        panels:
-          - Achievement
   Knight Night (Outer Ring):
     entrances:
       Hidden Room:
