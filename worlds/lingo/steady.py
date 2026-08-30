@@ -27,10 +27,12 @@ class FloodEdge:
 class SteadyRoom:
     panel_name: str
     adjacent: List[FloodEdge]
+    paintings: List[str]
 
     def __init__(self):
         self.panel_name = ""
         self.adjacent = []
+        self.paintings = []
 
 
 def randomize_steady(world: "LingoWorld", painting_mapping: Dict[str, str]) -> Dict[RoomAndDoor, RoomAndPanel]:
@@ -53,6 +55,11 @@ def randomize_steady(world: "LingoWorld", painting_mapping: Dict[str, str]) -> D
                 if panel_name != "MASTERY":
                     steady_room.panel_name = panel_name
 
+    if len(painting_mapping) > 0:
+        for painting_name, painting in PAINTINGS.items():
+            if painting.room.startswith("The Steady"):
+                steady_rooms[painting.room].paintings.append(painting_name)
+
     visited: List[str] = []
     door_mapping: Dict[RoomAndDoor, RoomAndPanel] = {}
     flood_boundary: List[FloodEdge] = []
@@ -74,6 +81,11 @@ def randomize_steady(world: "LingoWorld", painting_mapping: Dict[str, str]) -> D
                 enter_room(edge.destination)
             else:
                 flood_boundary.append(edge)
+
+        for painting_name in steady_rooms[room].paintings:
+            if painting_name in painting_mapping and\
+                    PAINTINGS[painting_mapping[painting_name]].room.startswith("The Steady"):
+                enter_room(PAINTINGS[painting_mapping[painting_name]].room)
 
     def make_assignment():
         filtered = []
@@ -104,6 +116,12 @@ def randomize_steady(world: "LingoWorld", painting_mapping: Dict[str, str]) -> D
     # The painting mapping is only populated if painting shuffle is on.
     for painting_id, painting in PAINTINGS.items():
         if painting.room.startswith("The Steady") and painting_id in painting_mapping.values():
+            # Check for the edge case where the only entrances for this painting are also in The Steady.
+            if all(PAINTINGS[from_p].room.startswith("The Steady")
+                   for from_p, to_p in painting_mapping.items()
+                   if to_p == painting_id):
+                continue
+
             enter_room(painting.room)
 
     while len(panel_boundary) > 0:
