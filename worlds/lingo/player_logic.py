@@ -8,8 +8,7 @@ from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, \
-    SUNWARP_ENTRANCES, SUNWARP_EXITS, PROGRESSIVE_DOORS_BY_ROOM, PANEL_DOORS_BY_ROOM, PROGRESSIVE_PANELS_BY_ROOM, \
-    get_door_item_id
+    SUNWARP_ENTRANCES, SUNWARP_EXITS, PROGRESSIVE_DOORS_BY_ROOM, PANEL_DOORS_BY_ROOM, PROGRESSIVE_PANELS_BY_ROOM
 from .steady import randomize_steady
 
 if TYPE_CHECKING:
@@ -402,35 +401,6 @@ class LingoPlayerLogic:
 
                 pdoor = DOORS_BY_ROOM[painting_obj.required_door.room][painting_obj.required_door.door]
                 self.good_item_options.append(pdoor.item_name)
-
-    def get_game_id_door_panel_overlay(self):
-        doors_for_panels = {}
-
-        for door_name, panel_names in self.door_panels_overlay.items():
-            if door_name.room in self.item_by_door and door_name.door in self.item_by_door[door_name.room]:
-                pass
-            else:
-                doors_for_panels.update({
-                    internal_id: [PANELS_BY_ROOM[panel_name.room][panel_name.panel].id for panel_name in panel_names]
-                    for internal_id in DOORS_BY_ROOM[door_name.room][door_name.door].ids
-                })
-
-        return doors_for_panels
-
-    def get_game_id_door_items_overlay(self, world: "LingoWorld"):
-        doors_for_items = {}
-
-        for door_name, item_name in self.door_items_overlay.items():
-            door_id = -1
-            if item_name is not None:
-                door_id = world.item_name_to_id[item_name]
-
-            doors_for_items.update({
-                internal_id: door_id
-                for internal_id in DOORS_BY_ROOM[door_name.room][door_name.door].ids
-            })
-
-        return doors_for_items
 
     def randomize_paintings(self, world: "LingoWorld") -> bool:
         self.painting_mapping.clear()
