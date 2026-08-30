@@ -37,6 +37,7 @@ SPECIAL_ITEM_IDS: Dict[str, int] = {}
 PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
+DOOR_GENERAL_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
 PANEL_DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
 PANEL_GROUP_ITEM_IDS: Dict[str, int] = {}
@@ -79,6 +80,7 @@ def load_static_data(ll1_path, ids_path):
             for room_name in config["doors"].keys():
                 DOOR_LOCATION_IDS[room_name] = {}
                 DOOR_ITEM_IDS[room_name] = {}
+                DOOR_GENERAL_IDS[room_name] = {}
 
                 for door_name, door_data in config["doors"][room_name].items():
                     if "location" in door_data:
@@ -86,6 +88,9 @@ def load_static_data(ll1_path, ids_path):
 
                     if "item" in door_data:
                         DOOR_ITEM_IDS[room_name][door_name] = door_data["item"]
+
+                    if "general" in door_data:
+                        DOOR_GENERAL_IDS[room_name][door_name] = door_data["general"]
 
         if "door_groups" in config:
             for item_name, item_id in config["door_groups"].items():
@@ -598,6 +603,7 @@ if __name__ == '__main__':
         "PANEL_LOCATION_IDS": PANEL_LOCATION_IDS,
         "DOOR_LOCATION_IDS": DOOR_LOCATION_IDS,
         "DOOR_ITEM_IDS": DOOR_ITEM_IDS,
+        "DOOR_GENERAL_IDS": DOOR_GENERAL_IDS,
         "DOOR_GROUP_ITEM_IDS": DOOR_GROUP_ITEM_IDS,
         "PANEL_DOOR_ITEM_IDS": PANEL_DOOR_ITEM_IDS,
         "PANEL_GROUP_ITEM_IDS": PANEL_GROUP_ITEM_IDS,

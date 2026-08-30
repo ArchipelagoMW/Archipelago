@@ -969,491 +969,754 @@ doors:
     Back Right Door:
       item: 444416
       location: 444401
+      general: 2
     Rhyme Room Entrance:
       item: 444417
+      general: 3
+    Main Door:
+      general: 1
   Hidden Room:
     Dead End Door:
       item: 444419
+      general: 4
     Knight Night Entrance:
       item: 444421
+      general: 5
     Seeker Entrance:
       item: 444422
       location: 444407
+      general: 6
     Rhyme Room Entrance:
       item: 444423
+      general: 7
   Second Room:
     Exit Door:
       item: 444424
       location: 445203
+      general: 8
   Hub Room:
     Crossroads Entrance:
       item: 444425
       location: 444432
+      general: 9
     Tenacious Entrance:
       item: 444426
       location: 444433
+      general: 10
     Shortcut to Hedge Maze:
       item: 444430
       location: 444436
+      general: 11
     Near RAT Door:
       item: 444432
+      general: 12
     Traveled Entrance:
       item: 444433
       location: 444438
+      general: 13
   Sunwarps:
     1 Sunwarp:
       item: 444581
+      general: 14
     2 Sunwarp:
       item: 444588
+      general: 15
     3 Sunwarp:
       item: 444586
+      general: 16
     4 Sunwarp:
       item: 444585
+      general: 17
     5 Sunwarp:
       item: 444587
+      general: 18
     6 Sunwarp:
       item: 444584
+      general: 19
   Pilgrim Antechamber:
     Sun Painting:
       item: 444436
       location: 445205
+      general: 20
+    Exit:
+      general: 21
   Pilgrim Room:
     Shortcut to The Seeker:
       item: 444437
       location: 444449
+      general: 22
   Crossroads:
     Tenacious Entrance:
       item: 444438
       location: 444462
+      general: 23
     Discerning Entrance:
       item: 444439
       location: 444463
+      general: 24
     Tower Entrance:
       item: 444440
       location: 444465
+      general: 25
     Tower Back Entrance:
       item: 444442
       location: 445206
+      general: 26
     Words Sword Door:
       item: 444443
       location: 445207
+      general: 27
     Eye Wall:
       item: 444445
       location: 444469
+      general: 28
     Hollow Hallway:
       item: 444446
+      general: 29
     Roof Access:
       item: 444447
+      general: 30
   Lost Area:
     Exit:
       item: 444448
       location: 445208
+      general: 31
   Amen Name Area:
     Exit:
       item: 444449
       location: 445209
+      general: 32
   The Tenacious:
     Shortcut to Hub Room:
       item: 444450
       location: 445210
+      general: 33
     White Palindromes:
       location: 445211
+      general: 34
   Near Far Area:
     Door:
       item: 444428
       location: 445204
+      general: 35
   Warts Straw Area:
     Door:
       item: 444451
       location: 445212
+      general: 36
   Leaf Feel Area:
     Door:
       item: 444452
       location: 445213
+      general: 37
   Outside The Agreeable:
     Tenacious Entrance:
       item: 444453
       location: 444496
+      general: 38
     Black Door:
       item: 444454
       location: 444497
+      general: 39
     Agreeable Entrance:
       item: 444455
       location: 444498
+      general: 40
     Painting Shortcut:
       item: 444456
       location: 444501
+      general: 41
     Purple Barrier:
       item: 444457
+      general: 42
   Compass Room:
     Lookout Entrance:
       item: 444579
       location: 445271
+      general: 43
   Dread Hallway:
     Tenacious Entrance:
       item: 444462
       location: 444516
+      general: 44
   The Agreeable:
     Shortcut to Hedge Maze:
       item: 444463
       location: 444518
+      general: 45
   Hedge Maze:
     Perceptive Entrance:
       item: 444464
       location: 444530
+      general: 46
     Painting Shortcut:
       item: 444465
+      general: 47
     Observant Entrance:
       item: 444466
+      general: 48
     Hide and Seek:
       location: 445215
+      general: 49
   The Fearless (First Floor):
     Second Floor:
       item: 444468
       location: 445216
+      general: 50
   The Fearless (Second Floor):
     Third Floor:
       item: 444471
       location: 445217
+      general: 51
   The Observant:
     Backside Door:
       item: 444472
       location: 445218
+      general: 52
     Stairs:
       item: 444474
       location: 444569
+      general: 53
   The Incomparable:
     Eight Door:
       item: 444475
       location: 445219
+      general: 54
     Eight Door (Outside The Initiated):
       item: 444578
+      general: 55
   Orange Tower:
     Second Floor:
       item: 444476
+      general: 56
     Third Floor:
       item: 444477
+      general: 57
     Fourth Floor:
       item: 444478
+      general: 58
     Fifth Floor:
       item: 444479
+      general: 59
     Sixth Floor:
       item: 444480
+      general: 60
     Seventh Floor:
       item: 444481
+      general: 61
   Orange Tower First Floor:
     Shortcut to Hub Room:
       item: 444483
       location: 444602
+      general: 62
     Salt Pepper Door:
       item: 444485
       location: 445220
+      general: 63
   Orange Tower Third Floor:
     Red Barrier:
       item: 444486
+      general: 64
     Rhyme Room Entrance:
       item: 444487
+      general: 65
     Orange Barrier:
       item: 444488
       location: 445221
+      general: 66
   Orange Tower Fourth Floor:
     Hot Crusts Door:
       item: 444490
       location: 444610
+      general: 67
   Orange Tower Fifth Floor:
     Welcome Back:
       item: 444491
       location: 445222
+      general: 68
   Orange Tower Seventh Floor:
     Mastery:
       item: 444493
+      general: 70
     Mastery Panels:
       location: 445223
+      general: 71
   Courtyard:
     Painting Shortcut:
       item: 444494
+      general: 72
     Green Barrier:
       item: 444495
+      general: 73
   First Second Third Fourth:
     Backside Door:
       item: 444496
       location: 445224
+      general: 74
   The Colorful (White):
     Progress Door:
       item: 444497
       location: 445225
+      general: 75
   The Colorful (Black):
     Progress Door:
       item: 444499
       location: 445226
+      general: 76
   The Colorful (Red):
     Progress Door:
       item: 444500
       location: 445227
+      general: 77
   The Colorful (Yellow):
     Progress Door:
       item: 444501
       location: 445228
+      general: 78
   The Colorful (Blue):
     Progress Door:
       item: 444502
       location: 445229
+      general: 79
   The Colorful (Purple):
     Progress Door:
       item: 444503
       location: 445230
+      general: 80
   The Colorful (Orange):
     Progress Door:
       item: 444504
       location: 445231
+      general: 81
   The Colorful (Green):
     Progress Door:
       item: 444505
       location: 445232
+      general: 82
   The Colorful (Brown):
     Progress Door:
       item: 444506
       location: 445233
+      general: 83
   The Colorful (Gray):
     Progress Door:
       item: 444507
       location: 445234
+      general: 84
   Welcome Back Area:
     Shortcut to Starting Room:
       item: 444508
       location: 444653
+      general: 85
   Owl Hallway:
     Shortcut to Hedge Maze:
       item: 444509
       location: 444656
+      general: 86
   Outside The Initiated:
     Shortcut to Hub Room:
       item: 444510
       location: 444664
+      general: 87
     Blue Barrier:
       item: 444511
+      general: 88
     Orange Barrier:
       item: 444512
+      general: 89
     Initiated Entrance:
       item: 444513
       location: 444665
+      general: 90
     Green Barrier:
       item: 444514
       location: 445235
+      general: 91
     Purple Barrier:
       item: 444515
       location: 445236
+      general: 92
     Entrance:
       item: 444516
       location: 445237
+      general: 93
   The Traveled:
     Color Hallways Entrance:
       item: 444517
       location: 444698
+      general: 94
   Outside The Bold:
     Bold Entrance:
       item: 444518
       location: 444711
+      general: 95
     Painting Shortcut:
       item: 444519
+      general: 96
     Steady Entrance:
       item: 444520
       location: 444712
+      general: 97
+    Lilac Entrance:
+      general: 98
+    Stargazer Door:
+      general: 99
   Outside The Undeterred:
     Undeterred Entrance:
       item: 444521
       location: 444744
+      general: 100
     Painting Shortcut:
       item: 444522
+      general: 101
     Green Painting:
       item: 444523
+      general: 102
     Twos:
       item: 444524
       location: 444752
+      general: 103
     Threes:
       item: 444525
       location: 445238
+      general: 104
     Number Hunt:
       item: 444526
       location: 445239
+      general: 105
     Fours:
       item: 444527
+      general: 106
     Fives:
       item: 444528
       location: 445240
+      general: 107
     Challenge Entrance:
       item: 444529
       location: 444751
+      general: 108
   Number Hunt:
     Door to Directional Gallery:
       item: 444530
+      general: 109
     Sixes:
       item: 444532
       location: 445241
+      general: 110
     Sevens:
       item: 444533
       location: 445242
+      general: 112
     Eights:
       item: 444534
       location: 445243
+      general: 113
     Nines:
       item: 444535
       location: 445244
+      general: 115
     Zero Door:
       item: 444536
       location: 445245
+      general: 116
+    First Six:
+      general: 111
+    First Eight:
+      general: 114
   Directional Gallery:
     Shortcut to The Undeterred:
       item: 444537
       location: 445246
+      general: 117
     Yellow Barrier:
       item: 444538
+      general: 118
   Color Hunt:
     Shortcut to The Steady:
       item: 444539
       location: 444806
+      general: 119
   The Bearer:
     Entrance:
       item: 444540
       location: 444820
+      general: 120
     Backside Door:
       item: 444541
       location: 444821
+      general: 121
+    East Entrance:
+      general: 122
   Bearer Side Area:
     Shortcut to Tower:
       item: 444542
       location: 445247
+      general: 128
+    West Entrance:
+      general: 129
   Knight Night (Final):
     Exit:
       item: 444543
       location: 445248
+      general: 159
   The Artistic (Smiley):
     Door to Panda:
       item: 444544
       location: 445249
+      general: 160
   The Artistic (Panda):
     Door to Lattice:
       item: 444546
       location: 445250
+      general: 161
   The Artistic (Lattice):
     Door to Apple:
       item: 444547
       location: 445251
+      general: 162
   The Artistic (Apple):
     Door to Smiley:
       item: 444548
       location: 445252
+      general: 163
   The Eyes They See:
     Exit:
       item: 444549
       location: 444937
+      general: 164
   Outside The Wondrous:
     Wondrous Entrance:
       item: 444550
       location: 444940
+      general: 165
   The Wondrous (Doorknob):
     Painting Shortcut:
       item: 444551
+      general: 166
   The Wondrous:
     Exit:
       item: 444552
       location: 444947
+      general: 167
   Hallway Room (1):
     Exit:
       item: 444459
       location: 445214
+      general: 168
   Hallway Room (2):
     Exit:
       item: 444553
       location: 445253
+      general: 169
   Hallway Room (3):
     Exit:
       item: 444554
       location: 445254
+      general: 170
   Hallway Room (4):
     Exit:
       item: 444555
       location: 445255
+      general: 171
   Outside The Wanderer:
     Wanderer Entrance:
       item: 444556
       location: 444966
+      general: 172
     Tower Entrance:
       item: 444557
+      general: 173
   Art Gallery:
     Second Floor:
       item: 444558
+      general: 174
     Third Floor:
       item: 444559
+      general: 175
     Fourth Floor:
       item: 444560
+      general: 176
     Fifth Floor:
       item: 444561
+      general: 177
     Exit:
       item: 444562
       location: 444981
+      general: 178
   Art Gallery (First Floor):
     Puzzles:
       location: 445256
+      general: 179
   Art Gallery (Second Floor):
     Puzzles:
       location: 445257
+      general: 180
   Art Gallery (Third Floor):
     Puzzles:
       location: 445258
+      general: 181
   Art Gallery (Fourth Floor):
     Puzzles:
       location: 445259
+      general: 182
   Rhyme Room (Smiley):
     Door to Target:
       item: 444564
+      general: 183
     Door to Target (Location):
       location: 445260
+      general: 184
   Rhyme Room (Cross):
     Exit:
       item: 444565
       location: 445261
+      general: 185
   Rhyme Room (Circle):
     Door to Smiley:
       item: 444566
       location: 445262
+      general: 186
   Rhyme Room (Looped Square):
     Door to Circle:
       item: 444567
       location: 445263
+      general: 187
     Door to Cross:
       item: 444568
       location: 445264
+      general: 188
     Door to Target:
       item: 444569
       location: 445265
+      general: 189
   Rhyme Room (Target):
     Door to Cross:
       item: 444570
       location: 445266
+      general: 190
   Room Room:
     Cellar Exit:
       item: 444571
       location: 445076
+      general: 192
+    Excavation:
+      general: 191
   Outside The Wise:
     Wise Entrance:
       item: 444572
       location: 445267
+      general: 193
   Outside The Scientific:
     Scientific Entrance:
       item: 444573
       location: 445130
+      general: 194
   The Scientific:
     Chemistry Puzzles:
       location: 445268
+      general: 195
     Biology Puzzles:
       location: 445269
+      general: 196
     Physics Puzzles:
       location: 445270
+      general: 197
   Challenge Room:
     Welcome Door:
       item: 444574
       location: 445176
+      general: 198
+  Ending Area:
+    End:
+      general: 69
+  The Bearer (East):
+    North Entrance:
+      general: 123
+    Side Area Access:
+      general: 124
+  The Bearer (North):
+    South Entrance:
+      general: 125
+  The Bearer (South):
+    Side Area Shortcut:
+      general: 126
+  The Bearer (West):
+    Side Area Shortcut:
+      general: 127
+  The Steady (Rose):
+    Forward Exit:
+      general: 130
+    Right Exit:
+      general: 131
+    Lilac Exit:
+      general: 132
+  The Steady (Ruby):
+    Forward Exit:
+      general: 133
+    Right Exit:
+      general: 134
+    Amethyst Exit:
+      general: 135
+  The Steady (Carnation):
+    Right Exit:
+      general: 136
+    Outside Exit:
+      general: 137
+    Amber Exit:
+      general: 138
+  The Steady (Sunflower):
+    Back Exit:
+      general: 139
+  The Steady (Plum):
+    Amethyst Exit:
+      general: 140
+    Blueberry Exit:
+      general: 141
+  The Steady (Lime):
+    Right Exit:
+      general: 142
+    Emerald Exit:
+      general: 143
+  The Steady (Lemon):
+    Back Exit:
+      general: 144
+    Orange Exit:
+      general: 145
+  The Steady (Topaz):
+    Back Exit:
+      general: 146
+    Amber Exit:
+      general: 147
+  The Steady (Orange):
+    Cherry Exit:
+      general: 148
+  The Steady (Sapphire):
+    Left Exit:
+      general: 149
+    Blueberry Exit:
+      general: 150
+  The Steady (Amber):
+    Forward Exit:
+      general: 151
+  The Steady (Amethyst):
+    Left Exit:
+      general: 152
+  The Steady (Lilac):
+    Forward Exit:
+      general: 153
+  The Steady (Cherry):
+    Left Exit:
+      general: 154
+  Knight Night (Outer Ring):
+    Fore Door:
+      general: 155
+    New Door:
+      general: 156
+    To End:
+      general: 157
+  Knight Night (Right Upper Segment):
+    Segment Door:
+      general: 158
 door_groups:
   Rhyme Room Doors: 444418
   Dead End Area Access: 444420

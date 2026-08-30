@@ -17,6 +17,7 @@ require 'yaml'
 configpath = ARGV[0]
 outputpath = ARGV[1]
 
+next_door_id = 1
 next_item_id = 444400
 next_location_id = 444400
 
@@ -61,6 +62,11 @@ if old_generated.include? "doors" then
       if ids.include? "item" then
         if ids["item"] >= next_item_id then
           next_item_id = ids["item"] + 1
+        end
+      end
+      if ids.include? "general" then
+        if ids["general"] >= next_door_id then
+          next_door_id = ids["general"] + 1
         end
       end
     end
@@ -121,6 +127,15 @@ end
 config.each do |room_name, room_data|
   if room_data.include? "doors"
     room_data["doors"].each do |door_name, door|
+      unless old_generated.include? "doors" and old_generated["doors"].include? room_name and old_generated["doors"][room_name].include? door_name and old_generated["doors"][room_name][door_name].include? "general" then
+        old_generated["doors"] ||= {}
+        old_generated["doors"][room_name] ||= {}
+        old_generated["doors"][room_name][door_name] ||= {}
+        old_generated["doors"][room_name][door_name]["general"] = next_door_id
+
+        next_door_id += 1
+      end
+
       if door.include? "event" and door["event"] then
         next
       end
@@ -217,5 +232,6 @@ end
 
 File.write(outputpath, old_generated.to_yaml)
 
+puts "Next door ID: #{next_door_id}"
 puts "Next item ID: #{next_item_id}"
 puts "Next location ID: #{next_location_id}"
