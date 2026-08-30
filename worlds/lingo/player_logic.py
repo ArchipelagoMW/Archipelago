@@ -8,7 +8,8 @@ from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, \
-    SUNWARP_ENTRANCES, SUNWARP_EXITS, PROGRESSIVE_DOORS_BY_ROOM, PANEL_DOORS_BY_ROOM, PROGRESSIVE_PANELS_BY_ROOM
+    SUNWARP_ENTRANCES, SUNWARP_EXITS, PROGRESSIVE_DOORS_BY_ROOM, PANEL_DOORS_BY_ROOM, PROGRESSIVE_PANELS_BY_ROOM, \
+    get_door_item_id
 from .steady import randomize_steady
 
 if TYPE_CHECKING:
@@ -209,7 +210,7 @@ class LingoPlayerLogic:
             for door, panel in steady_mapping.items():
                 self.door_panels_overlay[door] = [panel]
 
-                if world.options.shuffle_doors != ShuffleDoors.option_none and \
+                if world.options.shuffle_doors == ShuffleDoors.option_doors and \
                         panel == RoomAndPanel("Outside The Bold", "BEGIN") and \
                         door != RoomAndDoor("Outside The Bold", "Steady Entrance"):
                     self.door_items_overlay[door] = "The Steady - Entrance"
@@ -413,6 +414,23 @@ class LingoPlayerLogic:
                     internal_id: [PANELS_BY_ROOM[panel_name.room][panel_name.panel].id for panel_name in panel_names]
                     for internal_id in DOORS_BY_ROOM[door_name.room][door_name.door].ids
                 })
+
+        return doors_for_panels
+
+    def get_game_id_door_items_overlay(self, world: "LingoWorld"):
+        doors_for_items = {}
+
+        for door_name, item_name in self.door_items_overlay.items():
+            door_id = -1
+            if item_name is not None:
+                door_id = world.item_name_to_id[item_name]
+
+            doors_for_items.update({
+                internal_id: door_id
+                for internal_id in DOORS_BY_ROOM[door_name.room][door_name.door].ids
+            })
+
+        return doors_for_items
 
     def randomize_paintings(self, world: "LingoWorld") -> bool:
         self.painting_mapping.clear()

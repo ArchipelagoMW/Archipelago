@@ -196,10 +196,8 @@ class LingoWorld(World):
             "seed": self.random.randint(0, 1000000),
             **self.options.as_dict(*slot_options),
             "door_panels_overlay": self.player_logic.get_game_id_door_panel_overlay(),
+            "door_items_overlay": self.player_logic.get_game_id_door_items_overlay(self),
         }
-
-        for hi, bye in self.player_logic.get_game_id_door_panel_overlay().items():
-            print(f"{hi} : {bye}")
 
         if self.options.shuffle_paintings:
             slot_data["painting_entrance_to_exit"] = self.player_logic.painting_mapping

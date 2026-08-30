@@ -75,14 +75,7 @@ def randomize_steady(world: "LingoWorld", painting_mapping: Dict[str, str]) -> D
             else:
                 flood_boundary.append(edge)
 
-    enter_room("Outside The Bold")
-
-    # The painting mapping is only populated if painting shuffle is on.
-    for painting_id, painting in PAINTINGS.items():
-        if painting.room in steady_rooms.keys() and painting_id in painting_mapping.values():
-            enter_room(painting.room)
-
-    while len(panel_boundary) > 0:
+    def make_assignment():
         filtered = []
 
         for edge in flood_boundary:
@@ -104,8 +97,17 @@ def randomize_steady(world: "LingoWorld", painting_mapping: Dict[str, str]) -> D
         enter_room(chosen_edge.destination)
         flood_boundary.remove(chosen_edge)
 
-    for door, panels in door_mapping.items():
-        print(f"{door} : {panels}")
+    # The first assignment should be in Outside The Bold.
+    enter_room("Outside The Bold")
+    make_assignment()
+
+    # The painting mapping is only populated if painting shuffle is on.
+    for painting_id, painting in PAINTINGS.items():
+        if painting.room.startswith("The Steady") and painting_id in painting_mapping.values():
+            enter_room(painting.room)
+
+    while len(panel_boundary) > 0:
+        make_assignment()
 
     for door in steady_doors:
         if door not in door_mapping:
