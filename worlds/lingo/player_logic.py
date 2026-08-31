@@ -360,7 +360,7 @@ class LingoPlayerLogic:
         if world.options.enable_pilgrimage and world.options.sunwarp_access == SunwarpAccess.option_disabled:
             raise OptionError("Sunwarps cannot be disabled when pilgrimage is enabled.")
 
-        if door_shuffle != ShuffleDoors.option_none and location_checks != LocationChecks.option_insanity \
+        if door_shuffle == ShuffleDoors.option_doors and location_checks != LocationChecks.option_insanity \
                 and not early_color_hallways and world.multiworld.players > 1:
             # Under the combination of door shuffle, normal location checks, and no early color hallways, sphere 1 is
             # only three checks. In a multiplayer situation, this can be frustrating for the player because they are
