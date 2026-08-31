@@ -154,8 +154,8 @@ class ShuffleSunwarps(Toggle):
 
 
 class ShuffleLayout(Toggle):
-    """If on, the layouts of certain areas will be randomized. Currently, this only includes The Steady, but it may be
-    expanded to more areas in the future."""
+    """If on, the layouts of certain areas will be randomized. Currently, this only includes The Bearer and The Steady,
+    but it may be expanded to more areas in the future."""
     display_name = "Shuffle Layout"
 
 

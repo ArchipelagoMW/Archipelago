@@ -4970,7 +4970,7 @@
       The Bearer (West):
         - static_painting: True
         - room: The Bearer (West)
-          door: Side Area Shortcut
+          door: Shortcut To Start
       Roof: True
     panels:
       Achievement:
@@ -5030,9 +5030,8 @@
           - red
           - yellow
         tag: mid red yellow
-        required_panel:
-          room: The Bearer (East)
-          panel: PEACE
+        required_door:
+          door: Part Blocker
       HEART:
         id: Cross Room/Panel_heart_tar
         colors:
@@ -5051,9 +5050,16 @@
         panels:
           - FARTHER
       East Entrance:
+        id: Cross Room Doors/Door_1
         event: True
         panels:
           - HEART
+      Part Blocker:
+        id: Cross Room Doors/Door_2
+        event: True
+        panels:
+          - room: The Bearer (East)
+            panel: PEACE
     panel_doors:
       FARTHER:
         panel_group: Backside Entrance Panels
@@ -5085,11 +5091,13 @@
         tag: mid red yellow
     doors:
       North Entrance:
+        id: Cross Room Doors/Door_3
         event: True
         panels:
           - room: The Bearer
             panel: PART
       Side Area Access:
+        id: Cross Room Doors/Door_east_inner2
         event: True
         panels:
           - room: The Bearer (North)
@@ -5106,18 +5114,16 @@
           - red
           - yellow
         tag: mid red yellow
-        required_panel:
-          room: The Bearer (West)
-          panel: SMILE
+        required_door:
+          door: Silent Blocker
       SILENT (2):
         id: Cross Room/Panel_silent_list_2
         colors:
           - red
           - yellow
         tag: mid yellow red
-        required_panel:
-          room: The Bearer (West)
-          panel: SMILE
+        required_door:
+          door: Silent Blocker
       SPACE:
         id: Cross Room/Panel_space_cape
         colors:
@@ -5130,15 +5136,27 @@
           - red
           - yellow
         tag: mid red yellow
-        required_panel:
-          room: The Bearer (West)
-          panel: SNOW
+        required_door:
+          door: Warts Blocker
     doors:
       South Entrance:
+        id: Cross Room Doors/Door_4
         event: True
         panels:
           - room: Bearer Side Area
             panel: POTS
+      Silent Blocker:
+        id: Cross Room Doors/Door_north_inner2
+        event: True
+        panels:
+          - room: The Bearer (West)
+            panel: SMILE
+      Warts Blocker:
+        id: Cross Room Doors/Door_6
+        event: True
+        panels:
+          - room: The Bearer (West)
+            panel: SNOW
   The Bearer (South):
     entrances:
       Cross Tower (South):
@@ -5166,20 +5184,26 @@
           - red
           - yellow
         tag: mid red yellow
-        required_panel:
-          panel: TENT
+        required_door:
+          door: Bowl Blocker
     doors:
       Side Area Shortcut:
+        id: Cross Room Doors/Door_south_inner2
         event: True
         panels:
           - room: The Bearer (North)
             panel: SILENT (1)
+      Bowl Blocker:
+        id: Cross Room Doors/Door_7
+        event: True
+        panels:
+          - TENT
   The Bearer (West):
     entrances:
       Cross Tower (West):
         static_painting: True
       The Bearer:
-        door: Side Area Shortcut
+        door: Shortcut To Start
       Bearer Side Area:
         door: Side Area Shortcut
       Roof: True
@@ -5190,9 +5214,8 @@
           - red
           - yellow
         tag: mid yellow red
-        required_panel:
-          room: The Bearer (North)
-          panel: WARTS
+        required_door:
+          door: Smile Blocker
       SNOW:
         id: Cross Room/Panel_snow_won
         colors:
@@ -5201,6 +5224,7 @@
         tag: mid red yellow
     doors:
       Side Area Shortcut:
+        id: Cross Room Doors/Door_end_2
         event: True
         panels:
           - room: Cross Tower (East)
@@ -5211,6 +5235,24 @@
             panel: FIRE
           - room: Cross Tower (West)
             panel: DIAMONDS
+      Shortcut To Start:
+        id: Cross Room Doors/Door_end
+        event: True
+        panels:
+          - room: Cross Tower (East)
+            panel: WINTER
+          - room: Cross Tower (North)
+            panel: NORTH
+          - room: Cross Tower (South)
+            panel: FIRE
+          - room: Cross Tower (West)
+            panel: DIAMONDS
+      Smile Blocker:
+        id: Cross Room Doors/Door_west_inner2
+        event: True
+        panels:
+          - room: The Bearer (North)
+            panel: WARTS
   Bearer Side Area:
     entrances:
       The Bearer (East):
@@ -5243,6 +5285,7 @@
         panels:
           - SHORTCUT
       West Entrance:
+        id: Cross Room Doors/Door_5
         event: True
         panels:
           - room: The Bearer (South)
@@ -5259,10 +5302,16 @@
         id: Cross Room/Panel_winter_winter
         colors: blue
         tag: forbid
-        required_panel:
-          room: The Bearer (North)
-          panel: SPACE
+        required_door:
+          door: Winter Blocker
         required_room: Orange Tower Fifth Floor
+    doors:
+      Winter Blocker:
+        id: Cross Room Doors/Door_east_inner
+        event: True
+        panels:
+          - room: The Bearer (North)
+            panel: SPACE
   Cross Tower (North):
     entrances:
       The Bearer (East):
@@ -5276,14 +5325,21 @@
         colors: blue
         tag: forbid
         required_panel:
-          - room: The Bearer (West)
-            panel: SMILE
           - room: Outside The Bold
             panel: SOUND
           - room: Outside The Bold
             panel: YEAST
           - room: Outside The Bold
             panel: WET
+        required_door:
+          door: North Blocker
+    doors:
+      North Blocker:
+        id: Cross Room Doors/Door_north_inner
+        event: True
+        panels:
+          - room: The Bearer (West)
+            panel: SMILE
   Cross Tower (South):
     entrances: # No roof access
       The Bearer (North):
@@ -5295,10 +5351,16 @@
         id: Cross Room/Panel_fire_fire
         colors: blue
         tag: forbid
-        required_panel:
-          room: The Bearer (North)
-          panel: SILENT (1)
+        required_door:
+          door: Fire Blocker
         required_room: Elements Area
+    doors:
+      Fire Blocker:
+        id: Cross Room Doors/Door_south_inner
+        event: True
+        panels:
+          - room: The Bearer (North)
+            panel: SILENT (1)
   Cross Tower (West):
     entrances:
       Bearer Side Area:
@@ -5311,10 +5373,16 @@
         id: Cross Room/Panel_diamonds_diamonds
         colors: blue
         tag: forbid
-        required_panel:
-          room: The Bearer (North)
-          panel: WARTS
+        required_door:
+          door: Diamonds Blocker
         required_room: Suits Area
+    doors:
+      Diamonds Blocker:
+        id: Cross Room Doors/Door_west_inner
+        event: True
+        panels:
+          - room: The Bearer (North)
+            panel: WARTS
   The Steady (Rose):
     entrances:
       Outside The Bold:

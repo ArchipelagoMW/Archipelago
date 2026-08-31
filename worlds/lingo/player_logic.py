@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from Options import OptionError
+from .bearer import randomize_bearer
 from .datatypes import Door, DoorType, Painting, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
@@ -214,6 +215,9 @@ class LingoPlayerLogic:
                         door != RoomAndDoor("Outside The Bold", "Steady Entrance"):
                     self.door_items_overlay[door] = "The Steady - Entrance"
                     self.door_items_overlay[RoomAndDoor("Outside The Bold", "Steady Entrance")] = None
+
+            bearer_mapping = randomize_bearer(world)
+            self.door_panels_overlay.update(bearer_mapping)
 
         # Create door items, where needed.
         door_groups: Set[str] = set()

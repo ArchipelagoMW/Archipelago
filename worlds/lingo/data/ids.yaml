@@ -1447,6 +1447,8 @@ doors:
       general: 121
     East Entrance:
       general: 122
+    Part Blocker:
+      general: 199
   Bearer Side Area:
     Shortcut to Tower:
       item: 444542
@@ -1637,12 +1639,22 @@ doors:
   The Bearer (North):
     South Entrance:
       general: 125
+    Silent Blocker:
+      general: 200
+    Warts Blocker:
+      general: 201
   The Bearer (South):
     Side Area Shortcut:
       general: 126
+    Bowl Blocker:
+      general: 202
   The Bearer (West):
     Side Area Shortcut:
       general: 127
+    Shortcut To Start:
+      general: 203
+    Smile Blocker:
+      general: 204
   The Steady (Rose):
     Forward Exit:
       general: 130
@@ -1717,6 +1729,18 @@ doors:
   Knight Night (Right Upper Segment):
     Segment Door:
       general: 158
+  Cross Tower (East):
+    Winter Blocker:
+      general: 205
+  Cross Tower (North):
+    North Blocker:
+      general: 206
+  Cross Tower (South):
+    Fire Blocker:
+      general: 207
+  Cross Tower (West):
+    Diamonds Blocker:
+      general: 208
 door_groups:
   Rhyme Room Doors: 444418
   Dead End Area Access: 444420
