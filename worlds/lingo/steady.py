@@ -93,11 +93,10 @@ def randomize_steady(world: "LingoWorld", painting_mapping: Dict[str, str]) -> D
         for edge in flood_boundary:
             if edge.door in door_mapping:
                 continue
-            if len(visited) < 18:
-                if edge.destination in visited:
-                    continue
-                if len(panel_boundary) == 1 and edge.destination == "The Steady":
-                    continue
+            if len(visited) < 18 and edge.destination in visited:
+                continue
+            if len(visited) < 17 and len(panel_boundary) == 1 and edge.destination == "The Steady":
+                continue
             if len(door_mapping) == 16 and edge.destination == "The Steady" and "The Steady" not in visited:
                 filtered = [edge]
                 break
