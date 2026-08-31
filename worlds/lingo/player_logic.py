@@ -190,6 +190,21 @@ class LingoPlayerLogic:
                                       f" panels mode door shuffle and individual or progressive sunwarp access because"
                                       f" there would not be enough locations for all of the items.")
 
+        # Create the sunwarp mapping, if sunwarp shuffle is on.
+        if world.options.shuffle_sunwarps:
+            if world.options.sunwarp_access == SunwarpAccess.option_disabled:
+                raise OptionError("Sunwarps cannot be shuffled if they are disabled.")
+
+            self.sunwarp_mapping = list(range(0, 12))
+            world.random.shuffle(self.sunwarp_mapping)
+
+            sunwarp_rooms = SUNWARP_ENTRANCES + SUNWARP_EXITS
+            self.sunwarp_entrances = [sunwarp_rooms[i] for i in self.sunwarp_mapping[0:6]]
+            self.sunwarp_exits = [sunwarp_rooms[i] for i in self.sunwarp_mapping[6:12]]
+        else:
+            self.sunwarp_entrances = SUNWARP_ENTRANCES
+            self.sunwarp_exits = SUNWARP_EXITS
+
         # Create the paintings mapping, if painting shuffle is on.
         if painting_shuffle:
             # Shuffle paintings until we get something workable.
@@ -344,20 +359,6 @@ class LingoPlayerLogic:
 
         if world.options.enable_pilgrimage and world.options.sunwarp_access == SunwarpAccess.option_disabled:
             raise OptionError("Sunwarps cannot be disabled when pilgrimage is enabled.")
-
-        if world.options.shuffle_sunwarps:
-            if world.options.sunwarp_access == SunwarpAccess.option_disabled:
-                raise OptionError("Sunwarps cannot be shuffled if they are disabled.")
-
-            self.sunwarp_mapping = list(range(0, 12))
-            world.random.shuffle(self.sunwarp_mapping)
-
-            sunwarp_rooms = SUNWARP_ENTRANCES + SUNWARP_EXITS
-            self.sunwarp_entrances = [sunwarp_rooms[i] for i in self.sunwarp_mapping[0:6]]
-            self.sunwarp_exits = [sunwarp_rooms[i] for i in self.sunwarp_mapping[6:12]]
-        else:
-            self.sunwarp_entrances = SUNWARP_ENTRANCES
-            self.sunwarp_exits = SUNWARP_EXITS
 
         if door_shuffle != ShuffleDoors.option_none and location_checks != LocationChecks.option_insanity \
                 and not early_color_hallways and world.multiworld.players > 1:
