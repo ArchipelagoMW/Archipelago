@@ -464,16 +464,6 @@
       LOW:
         id: Entry Room/Panel_low_low
         tag: forbid # This is a midwhite pretending to be a botwhite
-      ANOTHER TRY:
-        id: Entry Room/Panel_advance
-        tag: topwhite
-        non_counting: True # This is a counting panel in-game, but it can never count towards the LEVEL 2 panel hunt.
-      LEVEL 2:
-        # We will set up special rules for this in code.
-        id: EndPanel/Panel_level_2
-        tag: forbid
-        non_counting: True
-        check: True
     doors:
       Exit Door:
         id: Entry Room Area Doors/Door_hi_high
@@ -482,6 +472,27 @@
         panels:
           - HI
           - LOW
+      Panel Hunt:
+        # We will set up special rules for this in code.
+        event: True
+  Level 2 Room:
+    entrances:
+      Second Room:
+        room: Second Room
+        door: Panel Hunt
+        warp: True
+    panels:
+      ANOTHER TRY:
+        id: Entry Room/Panel_advance
+        tag: topwhite
+        non_counting: True # This is a counting panel in-game, but it can never count towards the LEVEL 2 panel hunt.
+        location_name: Second Room - ANOTHER TRY
+      LEVEL 2:
+        id: EndPanel/Panel_level_2
+        tag: forbid
+        non_counting: True
+        check: True
+        location_name: Second Room - LEVEL 2
   Hub Room:
     entrances:
       Second Room:

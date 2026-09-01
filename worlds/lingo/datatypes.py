@@ -41,6 +41,7 @@ class DoorType(Enum):
     NORMAL = 1
     SUNWARP = 2
     SUN_PAINTING = 3
+    PANEL_HUNT = 4
 
 
 class Door(NamedTuple):

@@ -33,7 +33,7 @@ def lingo_can_use_mastery_location(state: CollectionState, world: "LingoWorld"):
     return satisfied_count >= world.options.mastery_achievements.value
 
 
-def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld"):
+def _lingo_can_complete_panel_hunt(state: CollectionState, world: "LingoWorld"):
     counted_panels = 0
     state.update_reachable_regions(world.player)
     for region in state.reachable_regions[world.player]:
@@ -71,6 +71,9 @@ def _lingo_can_satisfy_requirements(state: CollectionState, access: AccessRequir
     if access.postgame and state.has("Prevent Victory", world.player):
         return False
 
+    if access.panel_hunt and not _lingo_can_complete_panel_hunt(state, world):
+        return False
+
     return True
 
 
@@ -92,9 +95,5 @@ def _lingo_can_open_door(state: CollectionState, room: str, door: str, world: "L
 def make_location_lambda(location: PlayerLocation, world: "LingoWorld"):
     if location.name == world.player_logic.mastery_location:
         return lambda state: lingo_can_use_mastery_location(state, world)
-
-    if world.options.level_2_requirement > 1\
-            and (location.name == "Second Room - ANOTHER TRY" or location.name == world.player_logic.level_2_location):
-        return lambda state: lingo_can_use_level_2_location(state, world)
 
     return lambda state: lingo_can_use_location(state, location, world)

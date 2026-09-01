@@ -396,6 +396,8 @@ def process_door(room_name, door_name, door_data):
         door_type = DoorType.SUNWARP
     elif room_name == "Pilgrim Antechamber" and door_name == "Sun Painting":
         door_type = DoorType.SUN_PAINTING
+    elif room_name == "Second Room" and door_name == "Panel Hunt":
+        door_type = DoorType.PANEL_HUNT
 
     door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, has_doors,
                     painting_ids, event, door_group, include_reduce, door_type, item_group)

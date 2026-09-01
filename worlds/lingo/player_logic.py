@@ -22,6 +22,7 @@ class AccessRequirements:
     progression: Dict[str, int]
     the_master: bool
     postgame: bool
+    panel_hunt: bool
 
     def __init__(self):
         self.rooms = set()
@@ -31,6 +32,7 @@ class AccessRequirements:
         self.progression = dict()
         self.the_master = False
         self.postgame = False
+        self.panel_hunt = False
 
     def merge(self, other: "AccessRequirements"):
         self.rooms |= other.rooms
@@ -39,6 +41,7 @@ class AccessRequirements:
         self.items |= other.items
         self.the_master |= other.the_master
         self.postgame |= other.postgame
+        self.panel_hunt |= other.panel_hunt
 
         for progression, index in other.progression.items():
             if progression not in self.progression or index > self.progression[progression]:
@@ -46,7 +49,8 @@ class AccessRequirements:
 
     def __str__(self):
         return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors}, items={self.items}," \
-               f" progression={self.progression}), the_master={self.the_master}, postgame={self.postgame}"
+               f" progression={self.progression}), the_master={self.the_master}, postgame={self.postgame}," \
+               f" panel_hunt={self.panel_hunt}"
 
 
 class PlayerLocation(NamedTuple):
@@ -187,7 +191,9 @@ class LingoPlayerLogic:
         door_groups: Set[str] = set()
         for room_name, room_data in DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():
-                if door_data.skip_item is False and door_data.event is False:
+                if door_data.type == DoorType.PANEL_HUNT:
+                    self.set_door_item(room_name, door_name, "Panel Hunt Complete")
+                elif door_data.skip_item is False and door_data.event is False:
                     if door_data.type == DoorType.NORMAL and door_shuffle == ShuffleDoors.option_doors:
                         if door_data.door_group is not None and world.options.group_doors:
                             # Grouped doors are handled differently if shuffle doors is on simple.
@@ -257,7 +263,7 @@ class LingoPlayerLogic:
             self.victory_condition = "Second Room - LEVEL 2"
             self.level_2_location = "Second Room - Unlock Level 2"
 
-            self.add_location("Second Room", self.level_2_location, None, [RoomAndPanel("Second Room", "LEVEL 2")],
+            self.add_location("Level 2 Room", self.level_2_location, None, [RoomAndPanel("Level 2 Room", "LEVEL 2")],
                               world)
             self.event_loc_to_item[self.level_2_location] = "Victory"
 
@@ -280,7 +286,14 @@ class LingoPlayerLogic:
                     self.mastery_reqs.append(access_req)
 
         # Create groups of counting panel access requirements for the LEVEL 2 check.
-        self.create_panel_hunt_events(world)
+        if world.options.level_2_requirement > 1:
+            self.create_panel_hunt_events(world)
+
+            reqs = AccessRequirements()
+            reqs.panel_hunt = True
+
+            self.locations_by_room.setdefault("Second Room", []).append(PlayerLocation("Panel Hunt", None, reqs))
+            self.event_loc_to_item["Panel Hunt"] = "Panel Hunt Complete"
 
         # Instantiate all real locations.
         location_classification = LocationClassification.normal
