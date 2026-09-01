@@ -715,6 +715,13 @@ class ProgressiveItemsMixin:
 
         return False
 
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        slot_data = super().fill_slot_data()
+
+        slot_data["progressive_chains"] = self.progressive_chains;
+
+        return slot_data
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
