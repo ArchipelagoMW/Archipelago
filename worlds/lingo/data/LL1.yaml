@@ -351,6 +351,9 @@
       - id: owl_painting
         display_name: Painting
         orientation: north
+    warps:
+      Circle Hallway:
+        id: Room Warps/Entry Room Warps/Warp_enter_3
   The Seeker:
     entrances:
       Hidden Room:
@@ -475,6 +478,11 @@
       Panel Hunt:
         # We will set up special rules for this in code.
         event: True
+    warps:
+      Circle Hallway:
+        id:
+          - Room Warps/Entry Room Warps/Warp_enter_1
+          - Room Warps/Entry Room Warps/Warp_enter_2
   Level 2 Room:
     entrances:
       Second Room:
@@ -493,6 +501,12 @@
         non_counting: True
         check: True
         location_name: Second Room - LEVEL 2
+    warps:
+      Level 2 Entrance:
+        id:
+          - Room Warps/Entry Room Warps/Warp_enter_5
+          - Room Warps/Entry Room Warps/Warp_enter_4
+        location_name: Second Room - Level 2 Entrance
   Hub Room:
     entrances:
       Second Room:
@@ -627,6 +641,17 @@
         direction: enter
         entrance_indicator_pos: [18, 2.5, -17.01]
         orientation: north
+    warps:
+      Welcome Back:
+        id: Welcome Back Warps/Warp_enter_3
+      First Hallway Start:
+        id: Room Warps/Three Halls Warps/Warp_enter_2
+      First Hallway Loop:
+        id: Room Warps/Three Halls Warps/Warp_enter_4
+      First Hallway Exit:
+        id: Room Warps/Three Halls Warps/Warp_enter_3
+      Third Hallway:
+        id: Room Warps/Three Halls Warps/Warp_enter_1
   Dead End Area:
     entrances:
       Hidden Room:
@@ -1006,6 +1031,21 @@
             panel_door: LOST
           - room: Amen Name Area
             panel_door: AMEN NAME
+    warps:
+      First Yellow Hallway:
+        id: Color Hallway Warps/Warp_yellow_enter_5
+      Third Yellow Hallway:
+        id: Color Hallway Warps/Warp_yellow_enter_3
+      Fourth Yellow Hallway:
+        id: Color Hallway Warps/Warp_yellow_enter_4
+      West Loop Hallway:
+        id: Room Warps/Shuffle Room Warps/Warp_enter_3
+      East Loop Hallway:
+        id: Room Warps/Shuffle Room Warps/Warp_enter_1
+      Swap Area Entrance:
+        id:
+          - Room Warps/Shuffle Room Warps/Warp_enter_4
+          - Room Warps/Shuffle Room Warps/Warp_enter_5
   Lost Area:
     entrances:
       Outside The Agreeable:
@@ -1424,6 +1464,19 @@
         direction: enter
         entrance_indicator_pos: [ 3, 2.5, -55.01 ]
         orientation: north
+    warps:
+      Welcome Back:
+        id: Welcome Back Warps/Warp_enter_5
+      Compass Room Entrance:
+        id:
+          - Room Warps/Antonym Room Warps/Warp_enter_1
+          - Room Warps/Antonym Room Warps/Warp_enter_2
+      Long Hallway Loop:
+        id: Room Warps/Shuffle Room Warps/Warp_enter_2
+      Hallway Room Entrance:
+        id:
+          - Room Warps/Hallway Room Warps/Warp_enter_entrance_1
+          - Room Warps/Hallway Room Warps/Warp_enter_leave
   Compass Room:
     entrances:
       Outside The Agreeable:
@@ -1698,6 +1751,13 @@
       DOWN:
         panels:
           - DOWN
+    warps:
+      Second Green Hallway:
+        id: Color Hallway Warps/Warp_green_enter_4
+      Third Green Hallway:
+        id: Color Hallway Warps/Warp_green_enter_5
+      Fourth Green Hallway:
+        id: Color Hallway Warps/Warp_green_enter_3
   The Perceptive:
     entrances:
       Starting Room:
@@ -1727,6 +1787,11 @@
       - id: garden_painting_tower
         display_name: Painting
         orientation: north
+    warps:
+      Fearless Entrance:
+        id:
+          - Room Warps/Naps Room Warps/Warp_enter_1
+          - Room Warps/Naps Room Warps/Warp_enter_2
   The Fearless (First Floor):
     entrances:
       The Perceptive:
@@ -1819,6 +1884,12 @@
           - SAFE
           - SAME
           - CAME
+    warps:
+      East Doorway:
+        id:
+          - Room Warps/Naps Room Warps/Warp_enter_3
+          - Room Warps/Naps Room Warps/Warp_enter_4
+        location_name: The Fearless (First Floor) - West Doorway
   The Fearless:
     entrances:
       The Fearless (First Floor):
@@ -1848,6 +1919,22 @@
         id: Naps Room/Panel_even_ordinary
         colors: black
         tag: bot black black
+    warps:
+      From First Floor:
+        id:
+          - Room Warps/Naps Room Warps/Warp_enter_5
+          - Room Warps/Naps Room Warps/Warp_enter_6
+        location_name: The Fearless (First Floor) - East Doorway
+      From Second Floor:
+        id:
+          - Room Warps/Naps Room Warps/Warp_enter_7
+          - Room Warps/Naps Room Warps/Warp_enter_8
+        location_name: The Fearless (Second Floor) - West Doorway
+      From Third Floor:
+        id:
+          - Room Warps/Naps Room Warps/Warp_enter_9
+          - Room Warps/Naps Room Warps/Warp_enter_10
+        location_name: The Fearless - Across Third Floor
   The Observant:
     entrances:
       Hedge Maze:
@@ -1990,6 +2077,13 @@
       STAIRS:
         panels:
           - SIX
+    warps:
+      Welcome Back:
+        id: Welcome Back Warps/Warp_enter_6
+      Swims Hallway:
+        id: Room Warps/Maze Warps/Warp_enter_5
+      Secret Hallway:
+        id: Welcome Back Warps/Warp_enter_7
   The Incomparable:
     entrances:
       The Observant:
@@ -2107,6 +2201,11 @@
       - id: crown_painting
         display_name: Near Achievement Painting
         orientation: east
+    warps:
+      Second Floor:
+        id:
+          - Room Warps/Maze Warps/Warp_enter_6
+          - Room Warps/Maze Warps/Warp_enter_7
   Eight Alcove:
     entrances:
       The Incomparable:
@@ -2289,6 +2388,11 @@
         direction: enter
         entrance_indicator_pos: [ -32, 2.5, -14.99 ]
         orientation: south
+    warps:
+      Tower E Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_a_1
+          - Room Warps/Tower Room Warps/Warp_enter_a_2
   Orange Tower Second Floor:
     entrances:
       Orange Tower First Floor:
@@ -2301,6 +2405,15 @@
         warp: True
       Outside The Undeterred:
         warp: True
+    warps:
+      First Floor:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_1
+          - Room Warps/Tower Room Warps/Warp_enter_2
+      Tower NW Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_b_1
+          - Room Warps/Tower Room Warps/Warp_enter_b_2
   Orange Tower Third Floor:
     entrances:
       Knight Night Exit:
@@ -2385,6 +2498,19 @@
         direction: enter
         entrance_indicator_pos: [ 28.01, 2.5, 29 ]
         orientation: west
+    warps:
+      Second Floor:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_3
+          - Room Warps/Tower Room Warps/Warp_enter_4
+      Tower W Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_d_1
+          - Room Warps/Tower Room Warps/Warp_enter_d_2
+      Tower E Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_c_1
+          - Room Warps/Tower Room Warps/Warp_enter_c_2
   Orange Tower Fourth Floor:
     entrances:
       Orange Tower Third Floor:
@@ -2447,6 +2573,25 @@
         direction: enter
         entrance_indicator_pos: [ -20, 3, -64.01 ]
         orientation: north
+    warps:
+      Near Orange Panel:
+        id: Room Warps/Shuffle Room Warps/Warp_enter_8
+      Third Floor:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_5
+          - Room Warps/Tower Room Warps/Warp_enter_6
+      Tower NW Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_e_1
+          - Room Warps/Tower Room Warps/Warp_enter_e_2
+      Tower NE Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_f_1
+          - Room Warps/Tower Room Warps/Warp_enter_f_2
+      Tower SW Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_g_1
+          - Room Warps/Tower Room Warps/Warp_enter_g_2
   Hot Crusts Area:
     entrances:
       Orange Tower Fourth Floor:
@@ -2573,6 +2718,27 @@
       - id: east_afar
         display_name: Seasons Area Painting
         orientation: north
+    warps:
+      Fourth Floor:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_7
+          - Room Warps/Tower Room Warps/Warp_enter_8
+      Tower NW Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_j_1
+          - Room Warps/Tower Room Warps/Warp_enter_j_2
+      Tower NE Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_k_1
+          - Room Warps/Tower Room Warps/Warp_enter_k_2
+      Tower SW Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_i_1
+          - Room Warps/Tower Room Warps/Warp_enter_i_2
+      Tower SE Doorway:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_h_1
+          - Room Warps/Tower Room Warps/Warp_enter_h_2
   Orange Tower Sixth Floor:
     entrances:
       Orange Tower Fifth Floor:
@@ -2612,6 +2778,11 @@
       - id: cherry_painting2
         display_name: Back Right Painting
         orientation: east
+    warps:
+      Entrance:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_9
+          - Room Warps/Tower Room Warps/Warp_enter_10
   Ending Area:
     entrances:
       Orange Tower Sixth Floor:
@@ -2711,6 +2882,11 @@
         orientation: north
         enter_only: True # otherwise you might just skip the whole game!
         req_blocked_when_no_doors: True # owl hallway in vanilla doors
+    warps:
+      Entrance:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_11
+          - Room Warps/Tower Room Warps/Warp_enter_12
   Roof:
     entrances:
       Orange Tower Seventh Floor: True
@@ -3318,6 +3494,11 @@
         include_reduce: True
         panels:
           - WELCOME BACK
+    warps:
+      Clockwise Area Entrance:
+        id:
+          - Welcome Back Warps/Warp_enter_1
+          - Welcome Back Warps/Warp_enter_2
   Owl Hallway:
     entrances:
       Hidden Room:
@@ -3791,6 +3972,23 @@
         room: The Observant
         door: Backside Door
         warp: True
+    warps:
+      Red Hallway:
+        id:
+          - Color Hallway Warps/Warp_red_enter_1
+          - Color Hallway Warps/Warp_red_enter_2
+      Blue Hallway:
+        id:
+          - Color Hallway Warps/Warp_blue_enter_1
+          - Color Hallway Warps/Warp_blue_enter_2
+      Yellow Hallway:
+        id:
+          - Color Hallway Warps/Warp_yellow_enter_1
+          - Color Hallway Warps/Warp_yellow_enter_2
+      Green Hallway:
+        id:
+          - Color Hallway Warps/Warp_green_enter_1
+          - Color Hallway Warps/Warp_green_enter_2
   Outside The Bold:
     entrances:
       Color Hallways:
@@ -3929,6 +4127,13 @@
       - id: north_missing2
         display_name: Directions Area Painting
         orientation: north
+    warps:
+      First Red Hallway:
+        id: Color Hallway Warps/Warp_red_enter_3
+      Second Red Hallway:
+        id: Color Hallway Warps/Warp_red_enter_4
+      Third Red Hallway:
+        id: Color Hallway Warps/Warp_red_enter_5
   The Bold:
     entrances:
       Outside The Bold:
@@ -4263,6 +4468,15 @@
         direction: exit
         entrance_indicator_pos: [ -89.01, 2.5, 4 ]
         orientation: east
+    warps:
+      Welcome Back:
+        id: Welcome Back Warps/Warp_enter_9
+      First Blue Hallway:
+        id: Color Hallway Warps/Warp_red_enter_5
+      Second Blue Hallway:
+        id: Color Hallway Warps/Warp_red_enter_4
+      Fourth Blue Hallway:
+        id: Color Hallway Warps/Warp_red_enter_3
   The Undeterred:
     entrances:
       Outside The Undeterred:
@@ -4934,6 +5148,11 @@
         direction: exit
         entrance_indicator_pos: [ 54, 2.5, 69.99 ]
         orientation: north
+    warps:
+      Entrance:
+        id:
+          - Room Warps/Rock Room Warps/Warp_enter_3
+          - Room Warps/Rock Room Warps/Warp_enter_4
   Champion's Rest:
     entrances:
       Color Hunt:
@@ -5422,6 +5641,10 @@
         event: True
         panels:
           - SUN
+    warps:
+      Warp:
+        id: Room Warps/Rock Room Warps/Warp_enter_2
+        display_name: West Warp
   The Steady (Plum):
     entrances:
       The Steady (Amethyst):
@@ -5604,6 +5827,10 @@
         id: Rock Room/Panel_herald_emerald
         colors: purple
         tag: midpurp
+    warps:
+      Warp:
+        id: Room Warps/Rock Room Warps/Warp_enter_1
+        display_name: East Warp
   The Steady (Amethyst):
     entrances:
       The Steady (Lilac):
@@ -5817,6 +6044,13 @@
           - RIGHT
           - room: Knight Night (Right Lower Segment)
             panel: LEFT
+    warps:
+      Near BEE:
+        id: Room Warps/Appendix Room Warps/Warp_enter_1
+      Near FORE:
+        id: Room Warps/Appendix Room Warps/Warp_enter_2
+      Near NEW:
+        id: Room Warps/Appendix Room Warps/Warp_enter_3
   Knight Night (Right Upper Segment):
     entrances:
       Knight Night Exit: True
@@ -5981,6 +6215,16 @@
         id: Appendix Room/Panel_warner_corner
         colors: purple
         tag: toppurp
+  The Artistic Exit Warp:
+    entrances:
+      The Artistic (Smiley): True
+      The Artistic (Panda): True
+      The Artistic (Lattice): True
+      The Artistic (Apple): True
+    warps:
+      Center:
+        id: Room Warps/Ceiling Room Warps/Warp_enter_1
+        location_name: The Artistic - Center
   The Artistic (Smiley):
     entrances:
       Dead End Area:
@@ -6558,6 +6802,20 @@
         id: Sun Room/Panel_seam_same
         colors: yellow
         tag: midyellow
+  The Eyes They See Warp:
+    # This is a double-sided warp, like the double-sided painting, and needs to
+    # be handled specially.
+    entrances:
+      Crossroads:
+        room: Crossroads
+        door: Eye Wall
+        painting: True
+      Directional Gallery:
+        warp: True
+    warps:
+      Entrance:
+        id: Room Warps/Shuffle Room Warps/Warp_enter_9
+        location_name: The Eyes They See - Entrance
   The Eyes They See:
     entrances:
       Crossroads:
@@ -6613,6 +6871,18 @@
       - id: arrows_painting_5
         display_name: Lobby Painting
         orientation: east
+    warps:
+      Wondrous Entrance:
+        id:
+          - Room Warps/Wonderland Warps/Warp_entry_enter_1
+          - Room Warps/Wonderland Warps/Warp_entry_enter_2
+        location_name: The Eyes They See - Wondrous Entrance
+      Above Wondrous Loop:
+        id: Room Warps/Wonderland Warps/Warp_entry_enter_3
+        location_name: The Eyes They See - Above Wondrous Loop
+      Striped Pipe:
+        id: Room Warps/Wonderland Warps/Warp_entry_enter_4
+        location_name: The Eyes They See - Striped Pipe
   Outside The Wondrous:
     entrances:
       Wondrous Lobby:
@@ -6636,6 +6906,9 @@
       SHRINK:
         panels:
           - SHRINK
+    warps:
+      Welcome Back:
+        id: Room Warps/Wonderland Warps/Warp_entry_enter_6
   The Wondrous (Doorknob):
     entrances:
       Outside The Wondrous:
@@ -6712,6 +6985,10 @@
         exit_only: True
       - id: symmetry_painting_a_4
         disable: True
+    warps:
+      Exit:
+        id: Room Warps/Wonderland Warps/Warp_entry_enter_5
+        display_name: Window Exit
   The Wondrous (Table):
     entrances:
       The Wondrous (Doorknob):
@@ -6739,6 +7016,10 @@
         orientation: south
         exit_only: True
         required: True
+    warps:
+      Exit:
+        id: Room Warps/Wonderland Warps/Warp_ceiling_enter
+        display_name: Table Exit
   The Wondrous:
     entrances:
       The Wondrous (Table):
@@ -6889,6 +7170,13 @@
             panel_door: TRANSFORMATION
           - room: Hallway Room (4)
             panel_door: WHEELBARROW
+    warps:
+      Entrance:
+        id: Room Warps/Hallway Room Warps/Warp_enter_room_2
+        display_name: 1 Entrance
+      Exit:
+        id: Room Warps/Hallway Room Warps/Warp_enter_entrance_2
+        display_name: 1 Exit
   Hallway Room (2):
     entrances:
       Hallway Room (1):
@@ -6936,6 +7224,13 @@
           - CLOCK
           - ER
           - COUNT
+    warps:
+      Entrance:
+        id: Room Warps/Hallway Room Warps/Warp_enter_room_3
+        display_name: 2 Entrance
+      Exit:
+        id: Room Warps/Hallway Room Warps/Warp_enter_entrance_3
+        display_name: 2 Exit
   Hallway Room (3):
     entrances:
       Hallway Room (2):
@@ -6983,6 +7278,13 @@
           - FORM
           - A
           - SHUN
+    warps:
+      Entrance:
+        id: Room Warps/Hallway Room Warps/Warp_enter_room_4
+        display_name: 3 Entrance
+      Exit:
+        id: Room Warps/Hallway Room Warps/Warp_enter_entrance_4
+        display_name: 3 Exit
   Hallway Room (4):
     entrances:
       Hallway Room (3):
@@ -7011,6 +7313,13 @@
         panel_group: Hallway Room Panels
         panels:
           - WHEEL
+    warps:
+      Entrance:
+        id: Room Warps/Hallway Room Warps/Warp_enter_room_5
+        display_name: 4 Entrance
+      Exit:
+        id: Room Warps/Hallway Room Warps/Warp_enter_entrance_5
+        display_name: 4 Exit
   Elements Area:
     entrances:
       Roof: True
@@ -7090,6 +7399,13 @@
       WANDERLUST:
         panels:
           - WANDERLUST
+    warps:
+      Welcome Back:
+        id: Welcome Back Warps/Warp_enter_8
+      Orange Room Entrance:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_orange
+          - Room Warps/Tower Room Warps/Warp_enter_orange_leave
   The Wanderer:
     entrances:
       Outside The Wanderer:
@@ -7237,6 +7553,25 @@
           - Third Floor
           - Fourth Floor
           - Fifth Floor
+    warps:
+      Welcome Back:
+        id: Welcome Back Warps/Warp_enter_10
+      Backrooms 1:
+        id:
+          - Room Warps/Painting Room Warps/Warp_hallway_enter_1
+          - Room Warps/Painting Room Warps/Warp_hallway_enter_2
+      Backrooms 2:
+        id:
+          - Room Warps/Painting Room Warps/Warp_hallway_enter_3
+          - Room Warps/Painting Room Warps/Warp_hallway_enter_4
+      Backrooms 3:
+        id:
+          - Room Warps/Painting Room Warps/Warp_hallway_enter_5
+          - Room Warps/Painting Room Warps/Warp_hallway_enter_6
+      Backrooms 4:
+        id:
+          - Room Warps/Painting Room Warps/Warp_hallway_enter_7
+          - Room Warps/Painting Room Warps/Warp_hallway_enter_8
   Art Gallery (First Floor):
     entrances:
       Art Gallery:
@@ -7267,6 +7602,10 @@
           - TRUSTWORTHY
           - FREE
           - OUR
+    warps:
+      Return:
+        id: Room Warps/Painting Room Warps/Warp_enter_1
+        display_name: First Floor Return
   Art Gallery (Second Floor):
     entrances:
       Art Gallery:
@@ -7299,6 +7638,10 @@
           - PATH
           - PARK
           - CARRIAGE
+    warps:
+      Return:
+        id: Room Warps/Painting Room Warps/Warp_enter_2
+        display_name: Second Floor Return
   Art Gallery (Third Floor):
     entrances:
       Art Gallery:
@@ -7331,6 +7674,10 @@
           - MAY
           - ANY
           - MAN
+    warps:
+      Return:
+        id: Room Warps/Painting Room Warps/Warp_enter_3
+        display_name: Third Floor Return
   Art Gallery (Fourth Floor):
     entrances:
       Art Gallery:
@@ -7373,6 +7720,20 @@
           - SEND - USE
           - TRUST
           - "062459"
+    warps:
+      Return:
+        id: Room Warps/Painting Room Warps/Warp_enter_4
+        display_name: Fourth Floor Return
+  Art Gallery (Fifth Floor):
+    entrances:
+      Art Gallery:
+        room: Art Gallery
+        door: Fifth Floor
+        static_painting: True
+    warps:
+      Return:
+        id: Room Warps/Painting Room Warps/Warp_enter_5
+        display_name: Fifth Floor Return
   Rhyme Room (Smiley):
     entrances:
       Orange Tower Third Floor:
@@ -7468,6 +7829,14 @@
           - FANTASY
           - HISTORY
           - SECRET
+    warps:
+      Toward Target:
+        id:
+          - Room Warps/Double Room Warps/Warp_enter_1
+          - Room Warps/Double Room Warps/Warp_enter_2
+        required_door:
+          door: Door to Target
+        display_name: Smiley to Target
   Rhyme Room (Cross):
     entrances:
       Rhyme Room (Target): # one-way
@@ -8044,6 +8413,13 @@
         room: Compass Room
         door: Lookout Entrance
         warp: True
+    warps:
+      Welcome Back:
+        id: Welcome Back Warps/Warp_enter_4
+      Lookout Connection:
+        id:
+          - Welcome Back Warps/Warp_enter_12
+          - Welcome Back Warps/Warp_enter_13
   Outside The Wise:
     entrances:
       Orange Tower Sixth Floor:
@@ -8159,6 +8535,41 @@
         display_name: Painting
         orientation: east
         req_blocked: True # outside the wise (with or without door shuffle)
+    warps:
+      Clockwise Blocker 1:
+        id: Room Warps/Clock Room Warps/Warp_enter_5
+      Clockwise Blocker 2:
+        id: Room Warps/Clock Room Warps/Warp_enter_11
+      Clockwise Blocker 3:
+        id: Room Warps/Clock Room Warps/Warp_enter_10
+      Clockwise Blocker 4:
+        id: Room Warps/Clock Room Warps/Warp_enter_12
+      NW Vestibule North:
+        id: Room Warps/Clock Room Warps/Warp_enter_7
+      NW Vestibule West:
+        id: Room Warps/Clock Room Warps/Warp_enter_4
+      NW Vestibule Counterclockwise Blocker:
+        id: Room Warps/Clock Room Warps/Warp_enter_14
+      NE Vestibule North:
+        id: Room Warps/Clock Room Warps/Warp_enter_6
+      NE Vestibule East:
+        id: Room Warps/Clock Room Warps/Warp_enter_2
+      NE Vestibule Counterclockwise Blocker:
+        id: Room Warps/Clock Room Warps/Warp_enter_15
+      SW Vestibule South:
+        id: Room Warps/Clock Room Warps/Warp_enter_8
+      SW Vestibule West:
+        id: Room Warps/Clock Room Warps/Warp_enter_3
+      SE Vestibule North:
+        id: Room Warps/Clock Room Warps/Warp_enter_17
+      SE Vestibule South:
+        id: Room Warps/Clock Room Warps/Warp_enter_9
+      SE Vestibule West:
+        id: Room Warps/Clock Room Warps/Warp_enter_13
+      SE Vestibule East:
+        id: Room Warps/Clock Room Warps/Warp_enter_1
+      SE Vestibule Counterclockwise Blocker:
+        id: Room Warps/Clock Room Warps/Warp_enter_16
   The Red:
     entrances:
       Roof: True
@@ -8335,6 +8746,23 @@
       OPEN:
         panels:
           - OPEN
+    warps:
+      First Nook:
+        id: Room Warps/Chemistry Room Warps/Warp_enter_1
+      Second Nook:
+        id: Room Warps/Chemistry Room Warps/Warp_enter_2
+      Third Nook:
+        id: Room Warps/Chemistry Room Warps/Warp_enter_3
+      Nook Around Corner:
+        id: Room Warps/Chemistry Room Warps/Warp_enter_8
+      First Closet:
+        id: Room Warps/Chemistry Room Warps/Warp_enter_7
+      Closet Area Exit:
+        id: Room Warps/Chemistry Room Warps/Warp_enter_4
+      Panel Closet Entrance:
+        id: Room Warps/Chemistry Room Warps/Warp_enter_6
+      Panel Closet Exit:
+        id: Room Warps/Chemistry Room Warps/Warp_enter_5
   The Scientific:
     entrances:
       Outside The Scientific:
@@ -8630,6 +9058,12 @@
         display_name: Painting
         orientation: south
         req_blocked_when_no_doors: True # owl hallway in vanilla doors
+    warps:
+      Welcome Back:
+        id: Welcome Back Warps/Warp_enter_11
+      Staircase Entrance:
+        # Only using the return warp because the forward direction uses a special script.
+        id: Room Warps/Entry Room Warps/Warp_enter_6
   Challenge Room:
     entrances:
       Welcome Back Area:
