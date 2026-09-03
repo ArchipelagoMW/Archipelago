@@ -7,7 +7,7 @@ sys.path.append(os.path.join("worlds", "lingo"))
 sys.path.append(".")
 sys.path.append("..")
 from datatypes import Door, DoorType, EntranceType, Painting, Panel, PanelDoor, Progression, Room, RoomAndDoor,\
-    RoomAndPanel, RoomAndPanelDoor, RoomEntrance
+    RoomAndPanel, RoomAndPanelDoor, RoomEntrance, Warp
 
 import hashlib
 import pickle
@@ -19,6 +19,7 @@ DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
 PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
 PANEL_DOORS_BY_ROOM: Dict[str, Dict[str, PanelDoor]] = {}
 PAINTINGS: Dict[str, Painting] = {}
+WARPS_BY_ROOM: Dict[str, Dict[str, Warp]] = {}
 
 PROGRESSIVE_ITEMS: Set[str] = set()
 PROGRESSIVE_DOORS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
@@ -41,6 +42,7 @@ DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
 PANEL_DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
 PANEL_GROUP_ITEM_IDS: Dict[str, int] = {}
 PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
+WARP_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 
 # This doesn't need to be stored in the datafile.
 PANEL_DOOR_BY_PANEL_BY_ROOM: Dict[str, Dict[str, str]] = {}
@@ -105,6 +107,13 @@ def load_static_data(ll1_path, ids_path):
         if "progression" in config:
             for item_name, item_id in config["progression"].items():
                 PROGRESSIVE_ITEM_IDS[item_name] = item_id
+
+        if "warps" in config:
+            for room_name in config["warps"].keys():
+                WARP_LOCATION_IDS[room_name] = {}
+
+                for warp_name, location_id in config["warps"][room_name].items():
+                    WARP_LOCATION_IDS[room_name][warp_name] = location_id
 
     # Process the main world file.
     with open(ll1_path, "r") as file:
@@ -505,6 +514,42 @@ def process_progressive_panel(room_name, progression_name, progression_panel_doo
         progression_index += 1
 
 
+def process_warp(room_name, warp_name, warp_data):
+    # id can either be a single id or a list of ids.
+    if "id" in warp_data:
+        if isinstance(warp_data["id"], list):
+            ids = warp_data["id"]
+        else:
+            ids = [warp_data["id"]]
+    else:
+        ids = []
+
+    # required_door can either be a single door or a list of doors. For convenience, the room key for each door does not
+    # need to be specified if the door is in this room.
+    required_doors = list()
+    if "required_door" in warp_data:
+        if isinstance(warp_data["required_door"], dict):
+            door = warp_data["required_door"]
+            required_doors.append(RoomAndDoor(
+                door["room"] if "room" in door else None,
+                door["door"]
+            ))
+        else:
+            for door in warp_data["required_door"]:
+                required_doors.append(RoomAndDoor(
+                    door["room"] if "room" in door else None,
+                    door["door"]
+                ))
+
+    if "location_name" in warp_data:
+        location_name = warp_data["location_name"]
+    else:
+        location_name = None
+
+    warp_obj = Warp(warp_name, ids, required_doors, location_name)
+    WARPS_BY_ROOM[room_name][warp_name] = warp_obj
+
+
 def process_room(room_name, room_data):
     room_obj = Room(room_name, [])
 
@@ -538,6 +583,12 @@ def process_room(room_name, room_data):
                 process_progressive_door(room_name, progression_name, pdata["doors"])
             if "panel_doors" in pdata:
                 process_progressive_panel(room_name, progression_name, pdata["panel_doors"])
+
+    if "warps" in room_data:
+        WARPS_BY_ROOM[room_name] = dict()
+
+        for warp_name, warp_data in room_data["warps"].items():
+            process_warp(room_name, warp_name, warp_data)
 
     ALL_ROOMS.append(room_obj)
 
@@ -575,6 +626,7 @@ if __name__ == '__main__':
         "DOORS_BY_ROOM": DOORS_BY_ROOM,
         "PANELS_BY_ROOM": PANELS_BY_ROOM,
         "PANEL_DOORS_BY_ROOM": PANEL_DOORS_BY_ROOM,
+        "WARPS_BY_ROOM": WARPS_BY_ROOM,
         "PROGRESSIVE_ITEMS": PROGRESSIVE_ITEMS,
         "PROGRESSIVE_DOORS_BY_ROOM": PROGRESSIVE_DOORS_BY_ROOM,
         "PROGRESSIVE_PANELS_BY_ROOM": PROGRESSIVE_PANELS_BY_ROOM,
@@ -593,6 +645,7 @@ if __name__ == '__main__':
         "PANEL_DOOR_ITEM_IDS": PANEL_DOOR_ITEM_IDS,
         "PANEL_GROUP_ITEM_IDS": PANEL_GROUP_ITEM_IDS,
         "PROGRESSIVE_ITEM_IDS": PROGRESSIVE_ITEM_IDS,
+        "WARP_LOCATION_IDS": WARP_LOCATION_IDS,
     }
     
     with open(output_path, "wb") as file:
