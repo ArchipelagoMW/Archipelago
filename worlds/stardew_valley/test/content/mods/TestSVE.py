@@ -1,7 +1,5 @@
 import unittest
 
-from worlds._sc2common.bot import unit
-
 from .... import options
 from ....content import content_packs
 from ....mods.mod_data import ModNames
