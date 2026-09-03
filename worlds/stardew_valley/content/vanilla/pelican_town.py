@@ -1538,7 +1538,7 @@ pelican_town = ContentPack(
         CraftingRecipe(name=Sign.dark, ingredients=((Loot.bat_wing, 5), (Fossil.bone_fragment, 5),), sources=(FriendshipSource(friend=NPC.krobus, hearts=3),),),
         CraftingRecipe(name=Sign.text, ingredients=((Material.wood, 25),), sources=(StarterSource(),),),
 
-        CraftingRecipe(name=Craftable.garden_pot, ingredients=((Material.clay, 1), (Material.stone, 10), (MetalBar.quartz, 1),), sources=(ArchipelagoSource(ap_items=("Greenhouse",)),),), # $8
+        CraftingRecipe(name=Craftable.garden_pot, ingredients=((Material.clay, 1), (Material.stone, 10), (MetalBar.quartz, 1),), sources=(ArchipelagoSource(ap_items=("Greenhouse",), other_requirements=SpecificFriendRequirement(npc=NPC.evelyn, hearts=0)),),),
         CraftingRecipe(name=Craftable.scarecrow, ingredients=((Material.wood, 50), (Material.coal, 1), (Material.fiber, 20),), sources=(SkillSource(skill=Skill.farming, level=1),),),
         CraftingRecipe(name=Craftable.deluxe_scarecrow, ingredients=((Material.wood, 50), (Material.fiber, 40), (Ore.iridium, 1),), sources=(ArchipelagoSource(ap_items=(f"{Craftable.deluxe_scarecrow} Recipe",)),),),
         CraftingRecipe(name=Craftable.staircase, ingredients=((Material.stone, 99),), sources=(SkillSource(skill=Skill.mining, level=2),),),
