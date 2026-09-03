@@ -1032,12 +1032,12 @@
           - room: Amen Name Area
             panel_door: AMEN NAME
     warps:
-      First Yellow Hallway:
-        id: Color Hallway Warps/Warp_yellow_enter_5
-      Third Yellow Hallway:
+      Outer Yellow Hallway:
+        id:
+          - Color Hallway Warps/Warp_yellow_enter_5
+          - Color Hallway Warps/Warp_yellow_enter_4
+      Inner Yellow Hallway:
         id: Color Hallway Warps/Warp_yellow_enter_3
-      Fourth Yellow Hallway:
-        id: Color Hallway Warps/Warp_yellow_enter_4
       West Loop Hallway:
         id: Room Warps/Shuffle Room Warps/Warp_enter_3
       East Loop Hallway:
@@ -1752,12 +1752,12 @@
         panels:
           - DOWN
     warps:
-      Second Green Hallway:
+      Inner Green Hallway:
         id: Color Hallway Warps/Warp_green_enter_4
-      Third Green Hallway:
-        id: Color Hallway Warps/Warp_green_enter_5
-      Fourth Green Hallway:
-        id: Color Hallway Warps/Warp_green_enter_3
+      Outer Green Hallway:
+        id:
+          - Color Hallway Warps/Warp_green_enter_5
+          - Color Hallway Warps/Warp_green_enter_3
   The Perceptive:
     entrances:
       Starting Room:
@@ -1890,6 +1890,7 @@
           - Room Warps/Naps Room Warps/Warp_enter_3
           - Room Warps/Naps Room Warps/Warp_enter_4
         location_name: The Fearless (First Floor) - West Doorway
+        display_name: First Floor West Doorway
   The Fearless:
     entrances:
       The Fearless (First Floor):
@@ -1925,16 +1926,17 @@
           - Room Warps/Naps Room Warps/Warp_enter_5
           - Room Warps/Naps Room Warps/Warp_enter_6
         location_name: The Fearless (First Floor) - East Doorway
+        display_name: First Floor East Doorway
       From Second Floor:
         id:
           - Room Warps/Naps Room Warps/Warp_enter_7
           - Room Warps/Naps Room Warps/Warp_enter_8
         location_name: The Fearless (Second Floor) - West Doorway
-      From Third Floor:
+        display_name: Second Floor West Doorway
+      Third Floor Doorway:
         id:
           - Room Warps/Naps Room Warps/Warp_enter_9
           - Room Warps/Naps Room Warps/Warp_enter_10
-        location_name: The Fearless - Across Third Floor
   The Observant:
     entrances:
       Hedge Maze:
@@ -4128,12 +4130,12 @@
         display_name: Directions Area Painting
         orientation: north
     warps:
-      First Red Hallway:
+      Outer Red Hallway:
         id: Color Hallway Warps/Warp_red_enter_3
-      Second Red Hallway:
-        id: Color Hallway Warps/Warp_red_enter_4
-      Third Red Hallway:
-        id: Color Hallway Warps/Warp_red_enter_5
+      Inner Red Hallway:
+        id:
+          - Color Hallway Warps/Warp_red_enter_4
+          - Color Hallway Warps/Warp_red_enter_5
   The Bold:
     entrances:
       Outside The Bold:
@@ -4471,12 +4473,12 @@
     warps:
       Welcome Back:
         id: Welcome Back Warps/Warp_enter_9
-      First Blue Hallway:
-        id: Color Hallway Warps/Warp_red_enter_5
-      Second Blue Hallway:
-        id: Color Hallway Warps/Warp_red_enter_4
-      Fourth Blue Hallway:
-        id: Color Hallway Warps/Warp_red_enter_3
+      Outer Blue Hallway:
+        id:
+          - Color Hallway Warps/Warp_blue_enter_5
+          - Color Hallway Warps/Warp_blue_enter_3
+      Inner Blue Hallway:
+        id: Color Hallway Warps/Warp_blue_enter_4
   The Undeterred:
     entrances:
       Outside The Undeterred:

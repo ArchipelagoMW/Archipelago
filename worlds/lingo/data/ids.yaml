@@ -1638,9 +1638,8 @@ warps:
     First Hallway Exit: 445278
     Third Hallway: 445279
   Crossroads:
-    First Yellow Hallway: 445280
-    Third Yellow Hallway: 445281
-    Fourth Yellow Hallway: 445282
+    Outer Yellow Hallway: 445280
+    Inner Yellow Hallway: 445281
     West Loop Hallway: 445283
     East Loop Hallway: 445284
     Swap Area Entrance: 445285
@@ -1650,9 +1649,8 @@ warps:
     Long Hallway Loop: 445288
     Hallway Room Entrance: 445289
   Hedge Maze:
-    Second Green Hallway: 445290
-    Third Green Hallway: 445291
-    Fourth Green Hallway: 445292
+    Inner Green Hallway: 445290
+    Outer Green Hallway: 445292
   The Perceptive:
     Fearless Entrance: 445293
   The Fearless (Second Floor):
@@ -1660,7 +1658,7 @@ warps:
   The Fearless:
     From First Floor: 445295
     From Second Floor: 445296
-    From Third Floor: 445297
+    Third Floor Doorway: 445297
   The Observant:
     Welcome Back: 445298
     Swims Hallway: 445299
@@ -1700,14 +1698,12 @@ warps:
     Yellow Hallway: 445323
     Green Hallway: 445324
   Outside The Bold:
-    First Red Hallway: 445325
-    Second Red Hallway: 445326
-    Third Red Hallway: 445327
+    Outer Red Hallway: 445325
+    Inner Red Hallway: 445326
   Outside The Undeterred:
     Welcome Back: 445328
-    First Blue Hallway: 445329
-    Second Blue Hallway: 445330
-    Fourth Blue Hallway: 445331
+    Outer Blue Hallway: 445329
+    Inner Blue Hallway: 445330
   Color Hunt:
     Entrance: 445332
   The Steady (Sunflower):
