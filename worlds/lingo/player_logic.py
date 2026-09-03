@@ -2,13 +2,13 @@ from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from Options import OptionError
-from .datatypes import Door, DoorType, Painting, RoomAndDoor, RoomAndPanel
+from .datatypes import Door, DoorType, Painting, RoomAndDoor, RoomAndPanel, RoomAndWarp
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, PROGRESSIVE_DOORS_BY_ROOM, \
-    PANEL_DOORS_BY_ROOM, PROGRESSIVE_PANELS_BY_ROOM, SUNWARP_ENTRANCES, SUNWARP_EXITS
+    PANEL_DOORS_BY_ROOM, PROGRESSIVE_PANELS_BY_ROOM, SUNWARP_ENTRANCES, SUNWARP_EXITS, WARPS_BY_ROOM
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -126,6 +126,21 @@ class LingoPlayerLogic:
 
         self.locations_by_room.setdefault(room, []).append(PlayerLocation(name, code, access_reqs))
 
+    def add_warp_location(self, room: str, name: str, code: Optional[int], warp: RoomAndWarp, world: "LingoWorld"):
+        access_reqs = AccessRequirements()
+        warp_object = WARPS_BY_ROOM[warp.room][warp.warp]
+
+        for req_door in warp_object.required_doors:
+            door_object = DOORS_BY_ROOM[room if req_door.room is None else req_door.room][req_door.door]
+            if door_object.event or world.options.shuffle_doors != ShuffleDoors.option_doors:
+                sub_access_reqs = self.calculate_door_requirements(
+                    room if req_door.room is None else req_door.room, req_door.door, world)
+                access_reqs.merge(sub_access_reqs)
+            else:
+                access_reqs.doors.add(RoomAndDoor(room if req_door.room is None else req_door.room, req_door.door))
+
+        self.locations_by_room.setdefault(room, []).append(PlayerLocation(name, code, access_reqs))
+
     def set_door_item(self, room: str, door: str, item: str):
         self.item_by_door.setdefault(room, {})[door] = item
 
@@ -169,23 +184,25 @@ class LingoPlayerLogic:
         victory_condition = world.options.victory_condition
         early_color_hallways = world.options.early_color_hallways
 
-        if location_checks == LocationChecks.option_reduced:
+        if location_checks == LocationChecks.option_reduced and not world.options.warpsanity:
             if door_shuffle == ShuffleDoors.option_doors:
-                raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks when door shuffle"
-                                  f" is on, because there would not be enough locations for all of the door items.")
+                raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks without warpsanity"
+                                  f" when door shuffle is on, because there would not be enough locations for all of"
+                                  f" the door items.")
             if door_shuffle == ShuffleDoors.option_panels:
                 if not world.options.group_doors:
-                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks when ungrouped"
-                                      f" panels mode door shuffle is on, because there would not be enough locations for"
-                                      f" all of the panel items.")
+                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks without"
+                                      f" warpsanity when ungrouped panels mode door shuffle is on, because there would"
+                                      f" not be enough locations for all of the panel items.")
                 if color_shuffle:
-                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks with both"
-                                      f" panels mode door shuffle and color shuffle because there would not be enough"
-                                      f" locations for all of the items.")
+                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks without"
+                                      f" warpsanity with both panels mode door shuffle and color shuffle because there"
+                                      f" would not be enough locations for all of the items.")
                 if world.options.sunwarp_access >= SunwarpAccess.option_individual:
-                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks with both"
-                                      f" panels mode door shuffle and individual or progressive sunwarp access because"
-                                      f" there would not be enough locations for all of the items.")
+                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks without"
+                                      f" warpsanity with both panels mode door shuffle and individual or progressive"
+                                      f" sunwarp access because there would not be enough locations for all of the"
+                                      f" items.")
 
         # Create door items, where needed.
         door_groups: Set[str] = set()
@@ -305,12 +322,21 @@ class LingoPlayerLogic:
         if door_shuffle == ShuffleDoors.option_doors and not early_color_hallways:
             location_classification |= LocationClassification.small_sphere_one
 
+        if world.options.warpsanity:
+            location_classification |= LocationClassification.warp
+
         for location_name, location_data in ALL_LOCATION_TABLE.items():
             if location_name != self.victory_condition:
                 if not (location_classification & location_data.classification):
                     continue
 
-                self.add_location(location_data.room, location_name, location_data.code, location_data.panels, world)
+                if location_data.warp is not None:
+                    self.add_warp_location(location_data.room, location_name, location_data.code, location_data.warp,
+                                           world)
+                else:
+                    self.add_location(location_data.room, location_name, location_data.code, location_data.panels,
+                                      world)
+
                 self.real_locations.append(location_name)
 
         if world.options.enable_pilgrimage and world.options.sunwarp_access == SunwarpAccess.option_disabled:
