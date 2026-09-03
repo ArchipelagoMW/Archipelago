@@ -1,10 +1,11 @@
-from Options import DeathLink
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
+
+from Options import DeathLink
+
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.hats_data import Hats
-from ..data.shop import ShopSource, HatMouseSource
-from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
+from ..data.shop import HatMouseSource, ShopSource
+from ..stardew_rule import False_, HasProgressionPercent, StardewRule, True_, true_
 from ..strings.animal_names import Animal
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.ap_names.event_names import Event
@@ -13,9 +14,11 @@ from ..strings.building_names import Building
 from ..strings.crop_names import Vegetable
 from ..strings.currency_names import Currency, MemeCurrency
 from ..strings.food_names import Beverage
-from ..strings.region_names import Region, LogicRegion
+from ..strings.region_names import LogicRegion, Region
 from ..strings.season_names import Season
 from ..strings.tool_names import Tool, ToolMaterial
+from ..strings.villager_names import NPC
+from .base_logic import BaseLogic, BaseLogicMixin
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
@@ -41,10 +44,11 @@ class MoneyLogic(BaseLogic):
         elif CustomLogicOptionName.easy_money in self.options.custom_logic:
             amount *= 4
 
+        shipping_rule = self.logic.shipping.can_use_any_shipping_bin
+
         if amount <= 1000:
             return self.logic.true_
 
-        shipping_rule = self.logic.shipping.can_use_any_shipping_bin
         farming_rule = self.logic.farming.can_plant_and_grow_item(Season.not_winter)
 
         if amount <= 5000:
