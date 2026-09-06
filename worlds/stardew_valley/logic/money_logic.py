@@ -159,7 +159,7 @@ class MoneyLogic(BaseLogic):
             return self.logic.time.has_lived_months(amount // 10000)
 
         if currency == MemeCurrency.cookies:
-            return self.logic.time.has_lived_months(amount // 10000)
+            return self.logic.relationship.can_meet(NPC.evelyn) & self.logic.time.has_lived_months(amount // 10000)
         if currency == MemeCurrency.child:
             return self.logic.relationship.has_children(1)
         if currency == MemeCurrency.dead_crops:
