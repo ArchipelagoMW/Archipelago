@@ -7404,10 +7404,6 @@
     warps:
       Welcome Back:
         id: Welcome Back Warps/Warp_enter_8
-      Orange Room Entrance:
-        id:
-          - Room Warps/Tower Room Warps/Warp_enter_orange
-          - Room Warps/Tower Room Warps/Warp_enter_orange_leave
   The Wanderer:
     entrances:
       Outside The Wanderer:
@@ -7453,6 +7449,12 @@
         id: Orange Room/Panel_wander
         colors: orange
         tag: midorange
+    warps:
+      Entrance:
+        id:
+          - Room Warps/Tower Room Warps/Warp_enter_orange
+          - Room Warps/Tower Room Warps/Warp_enter_orange_leave
+        display_name: Orange Room Entrance
   Art Gallery:
     entrances:
       Orange Tower Third Floor:
