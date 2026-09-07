@@ -33,11 +33,10 @@ CONNECTION_LOST_STATUS = "Dolphin Connection was lost. Please restart your emula
 CONNECTION_CONNECTED_STATUS = "Dolphin Connected"
 CONNECTION_INITIAL_STATUS = "Dolphin Connection has not been initiated"
 
+# Rev 0 Addresses
 SCENE_OBJ_LIST_PTR_ADDR = 0x8025f0e0
 SCENE_OBJ_LIST_SIZE_ADDR = 0x8025e5ac
-
 CUR_SCENE_ADDR = 0x8025f0d0
-
 HEALTH_ADDR = 0x80234DC8
 SNACK_COUNT_ADDR = 0x80235094  # 4 Bytes
 UPGRADE_INVENTORY_ADDR = 0x80235098  # 4 Bytes
@@ -48,9 +47,26 @@ PLAYER_CONTROL_OWNER = 0x80234e90
 MAP_ADDR = 0x8025F140
 WARP_ADDR = 0x801b7ef4
 VISITED_SCENES_ADDR = 0x8026af70
-
 SLOT_NAME_ADDR = 0x801c5c9c
 SEED_ADDR = SLOT_NAME_ADDR + 0x40
+
+# REV 1 Addresses
+SCENE_OBJ_LIST_PTR_ADDR_REV1 = 0x80270f78
+SCENE_OBJ_LIST_SIZE_ADDR_REV1 = 0x8027044c
+CUR_SCENE_ADDR_REV1 = 0x80270f68
+HEALTH_ADDR_REV1 = 0x80245478
+SNACK_COUNT_ADDR_REV1 = 0x80245744  # 4 Bytes  0x106B0 larger than rev0
+UPGRADE_INVENTORY_ADDR_REV1 = 0x80245748  # 4 Bytes
+MONSTER_TOKEN_INVENTORY_ADDR_REV1 = 0x8024574C  # 4 Bytes
+MAX_GUM_COUNT_ADDR_REV1 = 0x80245758
+MAX_SOAP_COUNT_ADDR_REV1 = 0x8024575c
+PLAYER_CONTROL_OWNER_REV1 = 0x80245540
+MAP_ADDR_REV1 = 0x80270fd8
+WARP_ADDR_REV1 = 0x801c68b4
+VISITED_SCENES_ADDR_REV1 = 0x8027CE40
+SLOT_NAME_ADDR_REV1 = 0x801d466c
+SEED_ADDR_REV1 = SLOT_NAME_ADDR_REV1 + 0x40
+
 # we currently write/read 0x20 bytes starting from 0x817f0000 to/from save game
 # expected received item index
 EXPECTED_INDEX_ADDR = 0x817f0000
@@ -7962,14 +7978,21 @@ class NO100FCommandProcessor(ClientCommandProcessor):
     def _cmd_resetscooby(self):
         """Force Kill Scooby to escape softlocks"""
         if dolphin_memory_engine.is_hooked():
-            dolphin_memory_engine.write_word(HEALTH_ADDR, 69)
+            if dolphin_memory_engine.read_byte(0x80000007) == 1:
+                dolphin_memory_engine.write_word(HEALTH_ADDR_REV1, 69)
+            else:
+                dolphin_memory_engine.write_word(HEALTH_ADDR, 69)
             logger.info("Killing Scooby :(")
 
     def _cmd_resend(self):
         """Use this command if somehow an item has erroneously not made it to your game"""
         if dolphin_memory_engine.is_hooked():
-            dolphin_memory_engine.write_word(MONSTER_TOKEN_INVENTORY_ADDR, 0x0000)
-            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, 0x0000)
+            if dolphin_memory_engine.read_byte(0x80000007) == 1:
+                dolphin_memory_engine.write_word(MONSTER_TOKEN_INVENTORY_ADDR_REV1, 0x0000)
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, 0x0000)
+            else:
+                dolphin_memory_engine.write_word(MONSTER_TOKEN_INVENTORY_ADDR, 0x0000)
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, 0x0000)
             for i in range(0, 21):
                 dolphin_memory_engine.write_word(KEY_COUNT_ADDR + i, 0x0)
             dolphin_memory_engine.write_word(EXPECTED_INDEX_ADDR, 0x0000)
@@ -8089,7 +8112,10 @@ class NO100FCommandProcessor(ClientCommandProcessor):
        \n NOTE: Bosses Killed only count if you leave the room in a standard way,  loading a savestate will not let you keep the boss kill"""
 
        bossesKilled = dolphin_memory_engine.read_byte(BOSS_KILLS_ADDR)
-       tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR)
+       if dolphin_memory_engine.read_byte(0x80000007) == 1:
+           tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR_REV1)
+       else:
+           tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR)
        snacks = dolphin_memory_engine.read_word(STORED_SNACK_ADDR)
        sum_tokens = 0
        for i in range(21):
@@ -8148,6 +8174,7 @@ class NO100FContext(CommonContext):
         self.use_snacks = False
         self.current_scene = None
         self.previous_scene = None
+        self.isRev1 = False
         self.CitM1_key = 0
         self.hedge_key = 0
         self.fish_key = 0
@@ -8245,7 +8272,10 @@ def _is_ptr_valid(ptr):
 
 
 def _is_scene_visited(target_scene: bytes):
-    current_index = VISITED_SCENES_ADDR
+    if dolphin_memory_engine.read_byte(0x80000007) == 1:
+        current_index = VISITED_SCENES_ADDR_REV1
+    else:
+        current_index = VISITED_SCENES_ADDR
     current_value = 1
     while not current_value == 0:
         current_value = dolphin_memory_engine.read_word(current_index)
@@ -8255,11 +8285,17 @@ def _is_scene_visited(target_scene: bytes):
     return False
 
 
-def _find_obj_in_obj_table(id: int, ptr: Optional[int] = None, size: Optional[int] = None):
+def _find_obj_in_obj_table(id: int, ptr: Optional[int] = None, size: Optional[int] = None, isrev1: bool = False):
     if size is None:
-        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
+        if isrev1:
+            size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR_REV1)
+        else:
+            size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
     if ptr is None:
-        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
+        if isrev1:
+            ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR_REV1)
+        else:
+            ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
         if not _is_ptr_valid(ptr): return None
     try:
         counter_list_entry = 0
@@ -8305,7 +8341,10 @@ def _give_snack(ctx: NO100FContext, offset: int):
 
 
 def _give_powerup(ctx: NO100FContext, bit: int):
-    cur_upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+    if ctx.isRev1:
+        cur_upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+    else:
+        cur_upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
 
     if bit == 4:    # Progressive Sneak Upgrade
         if not cur_upgrades & 2 ** 4:
@@ -8314,40 +8353,66 @@ def _give_powerup(ctx: NO100FContext, bit: int):
             cur_upgrades += 2 ** 5
         elif not cur_upgrades & 2 ** 6:
             cur_upgrades += 2 ** 6
-        dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, cur_upgrades)
+        if ctx.isRev1:
+            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, cur_upgrades)
+        else:
+            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, cur_upgrades)
 
     if bit == 9:    # Progressive Jump Upgrade
         if not cur_upgrades & 2 ** 9:
             cur_upgrades += 2 ** 9
         elif not cur_upgrades & 2 ** 12:
             cur_upgrades += 2 ** 12
-        dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, cur_upgrades)
+        if ctx.isRev1:
+            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, cur_upgrades)
+        else:
+            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, cur_upgrades)
 
     if (bit == 13) and cur_upgrades & 2 ** 7:  # Player is getting a shovel and currently has the fake
         cur_upgrades -= 2 ** 7
-        dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, cur_upgrades)
+        if ctx.isRev1:
+            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, cur_upgrades)
+        else:
+            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, cur_upgrades)
 
     if cur_upgrades & 2 ** bit == 0:
-        dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, cur_upgrades + 2 ** bit)
+        if ctx.isRev1:
+            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, cur_upgrades + 2 ** bit)
+        else:
+            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, cur_upgrades + 2 ** bit)
 
 
 def _give_gum_upgrade(ctx: NO100FContext):
-    cur_max_gum = dolphin_memory_engine.read_word(MAX_GUM_COUNT_ADDR)
-    dolphin_memory_engine.write_word(MAX_GUM_COUNT_ADDR, cur_max_gum + 5)
+    if ctx.isRev1:
+        cur_max_gum = dolphin_memory_engine.read_word(MAX_GUM_COUNT_ADDR_REV1)
+        dolphin_memory_engine.write_word(MAX_GUM_COUNT_ADDR_REV1, cur_max_gum + 5)
+    else:
+        cur_max_gum = dolphin_memory_engine.read_word(MAX_GUM_COUNT_ADDR)
+        dolphin_memory_engine.write_word(MAX_GUM_COUNT_ADDR, cur_max_gum + 5)
 
 
 def _give_soap_upgrade(ctx: NO100FContext):
-    cur_max_soap = dolphin_memory_engine.read_word(MAX_SOAP_COUNT_ADDR)
-    dolphin_memory_engine.write_word(MAX_SOAP_COUNT_ADDR, cur_max_soap + 5)
+    if ctx.isRev1:
+        cur_max_soap = dolphin_memory_engine.read_word(MAX_SOAP_COUNT_ADDR_REV1)
+        dolphin_memory_engine.write_word(MAX_SOAP_COUNT_ADDR_REV1, cur_max_soap + 5)
+    else:
+        cur_max_soap = dolphin_memory_engine.read_word(MAX_SOAP_COUNT_ADDR)
+        dolphin_memory_engine.write_word(MAX_SOAP_COUNT_ADDR, cur_max_soap + 5)
 
 
 def _give_monstertoken(ctx: NO100FContext):
-    cur_monster_tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR)
+    if ctx.isRev1:
+        cur_monster_tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR_REV1)
+    else:
+        cur_monster_tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR)
     i = 0
     while cur_monster_tokens & 2 ** i and i < 21:  #Advance Index to the smallest non-high bit
         i += 1
 
-    dolphin_memory_engine.write_word(MONSTER_TOKEN_INVENTORY_ADDR, cur_monster_tokens + 2 ** i)
+    if ctx.isRev1:
+        dolphin_memory_engine.write_word(MONSTER_TOKEN_INVENTORY_ADDR_REV1, cur_monster_tokens + 2 ** i)
+    else:
+        dolphin_memory_engine.write_word(MONSTER_TOKEN_INVENTORY_ADDR, cur_monster_tokens + 2 ** i)
 
 
 def _give_key(ctx: NO100FContext, offset: int):
@@ -8380,11 +8445,16 @@ def _give_death(ctx: NO100FContext):
     isPaused = (PauseRead1 == 0 and PauseRead2 == 0)
     if ctx.slot and dolphin_memory_engine.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS \
             and check_ingame(ctx) and check_control_owner(ctx, lambda owner: owner == 1) and not isPaused:
-        dolphin_memory_engine.write_word(HEALTH_ADDR, 0)
-
+        if ctx.isRev1:
+            dolphin_memory_engine.write_word(HEALTH_ADDR_REV1, 0)
+        else:
+            dolphin_memory_engine.write_word(HEALTH_ADDR, 0)
 
 def _check_cur_scene(ctx: NO100FContext, scene_id: bytes, scene_ptr: Optional[int] = None):
-    cur_scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
+    if ctx.isRev1:
+        cur_scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+    else:
+        cur_scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
     return cur_scene == scene_id
 
 
@@ -8457,92 +8527,99 @@ def _set_pickup_active(ctx: NO100FContext, ptr, state):
 
 
 async def apply_key_fixes(ctx: NO100FContext):
-    scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
-    ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
+    if ctx.isRev1:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR_REV1)
+    else:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
     if not _is_ptr_valid(ptr):
         return
-    size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
+    if ctx.isRev1:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR_REV1)
+    else:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
 
     if scene == b'I001':
-        fix_ptr = _find_obj_in_obj_table(0x1e1157c3, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x1e1157c3, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.CitM1_key >= 1:  # The Key is collected, allow door to open
-                fix_ptr = _find_obj_in_obj_table(0x1e1157c3, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1e1157c3, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
-                fix_ptr = _find_obj_in_obj_table(0x586E19B9, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x586E19B9, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
 
             if ctx.CitM1_key == 0:  # The Key is not collected, block door from opening
-                fix_ptr = _find_obj_in_obj_table(0x586E19B9, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x586E19B9, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
     if scene == b'H001' or b'h001':
-        fix_ptr = _find_obj_in_obj_table(0xC20224F3, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0xC20224F3, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.hedge_key >= 1:  # The Hedge key is collected, open the gate
-                fix_ptr = _find_obj_in_obj_table(0xC20224F3, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xC20224F3, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0xE8B3FF9B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xE8B3FF9B, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
-                fix_ptr = _find_obj_in_obj_table(0xD72B66B7, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD72B66B7, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
 
             else:  # Hedge Key is not collected, make sure the gate is closed
-                fix_ptr = _find_obj_in_obj_table(0xC20224F3, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xC20224F3, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0xE8B3FF9B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xE8B3FF9B, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
 
-                fix_ptr = _find_obj_in_obj_table(0xD72B66B7, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD72B66B7, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
-        fix_ptr = _find_obj_in_obj_table(0x42A3128E, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x42A3128E, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.fish_key >= 1:  # The Fishing key is collected, open the gate
-                fix_ptr = _find_obj_in_obj_table(0x42A3128E, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x42A3128E, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0xD74DB452, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD74DB452, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0x2E8B6D0E, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x2E8B6D0E, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1E)
 
             else:  # Fishing Key is not collected, make sure the gate is closed
-                fix_ptr = _find_obj_in_obj_table(0x42A3128E, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x42A3128E, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0xD74DB452, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD74DB452, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0x2E8B6D0E, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x2E8B6D0E, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
     if scene == b'B002':
-        fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.WYitC2_keys >= 3:
-                fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
 
-                fix_ptr = _find_obj_in_obj_table(0x0dcb1cd3, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x0dcb1cd3, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
             else:
-                fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
-                fix_ptr = _find_obj_in_obj_table(0x0dcb1cd3, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x0dcb1cd3, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
 
     if scene == b'B003':
-        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.WYitC3_keys >= 4:
-                fix_ptr = _find_obj_in_obj_table(0xE7196747, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xE7196747, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
                 return
@@ -8550,117 +8627,117 @@ async def apply_key_fixes(ctx: NO100FContext):
                 _set_counter_value(ctx, fix_ptr, 4)
 
     if scene == b'C005':
-        fix_ptr = _find_obj_in_obj_table(0xD6E6CB86, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0xD6E6CB86, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.MCaC_keys >= 4:  # Keys collected, open the gate
-                fix_ptr = _find_obj_in_obj_table(0xD6E6CB86, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD6E6CB86, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0x44BC97A7, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x44BC97A7, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x44BC97A8, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x44BC97A8, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x44BC97A9, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x44BC97A9, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x44BC97AA, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x44BC97AA, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
             else:  # Keys not collected, make sure the gate is closed
-                fix_ptr = _find_obj_in_obj_table(0xD6E6CB86, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD6E6CB86, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0x44BC97A7, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x44BC97A7, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x44BC97A8, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x44BC97A8, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x44BC97A9, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x44BC97A9, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x44BC97AA, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x44BC97AA, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
     if scene == b'F005':
-        fix_ptr = _find_obj_in_obj_table(0xD0798EC6, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0xD0798EC6, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.FCfS_keys >= 4:  # Keys collected, open the gate
-                fix_ptr = _find_obj_in_obj_table(0xD0798EC6, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD0798EC6, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
 
-                fix_ptr = _find_obj_in_obj_table(0x7D81EA8F, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7D81EA8F, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
             else:  # Keys not collected, make sure the gate is closed
-                fix_ptr = _find_obj_in_obj_table(0xD0798EC6, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD0798EC6, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
-                fix_ptr = _find_obj_in_obj_table(0x7D81EA8F, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7D81EA8F, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
     if scene == b'G001':
-        fix_ptr = _find_obj_in_obj_table(0x7fcdbe0f, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x7fcdbe0f, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.TSfaGP_keys >= 3:  # The keys are collected, open the gate
-                fix_ptr = _find_obj_in_obj_table(0x7fcdbe0f, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7fcdbe0f, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0xD77001EE, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD77001EE, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0xA433F2EC, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xA433F2EC, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
             else:  # Keys not collected, make sure the gate is closed
-                fix_ptr = _find_obj_in_obj_table(0x7fcdbe0f, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7fcdbe0f, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0xD77001EE, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD77001EE, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0xA433F2EC, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xA433F2EC, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
     if scene == b'G007':
-        fix_ptr = _find_obj_in_obj_table(0x0013c74b, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x0013c74b, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.GDDitT1_key >= 1:
-                fix_ptr2 = _find_obj_in_obj_table(0x4A884EB4, ptr, size)
+                fix_ptr2 = _find_obj_in_obj_table(0x4A884EB4, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr2, 0)
                 _set_platform_state(ctx, fix_ptr2, 0)
 
-                fix_ptr2 = _find_obj_in_obj_table(0x4A884EB5, ptr, size)
+                fix_ptr2 = _find_obj_in_obj_table(0x4A884EB5, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr2, 0)
                 _set_platform_state(ctx, fix_ptr2, 0)
 
-                fix_ptr2 = _find_obj_in_obj_table(0x7FCDBE0F, ptr, size)
+                fix_ptr2 = _find_obj_in_obj_table(0x7FCDBE0F, ptr, size, ctx.isRev1)
                 if _check_platform_state(ctx, fix_ptr2) == 1:
                     _set_pickup_active(ctx, fix_ptr, 0x1f)
                     _set_platform_state(ctx, fix_ptr, 1)
@@ -8673,7 +8750,7 @@ async def apply_key_fixes(ctx: NO100FContext):
                 _set_platform_state(ctx, fix_ptr, 1)
 
     if scene == b'G009':
-        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.GDDitT3_keys >= 2:
                 return
@@ -8681,24 +8758,24 @@ async def apply_key_fixes(ctx: NO100FContext):
                 _set_counter_value(ctx, fix_ptr, 2)
 
     if scene == b'I003':
-        fix_ptr = _find_obj_in_obj_table(0x13109411, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x13109411, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.CitM4_key >= 1:
                 _set_pickup_active(ctx, fix_ptr, 0x1d)
-                fix_ptr = _find_obj_in_obj_table(0x7B5AC815, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7B5AC815, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0xDa0349cc, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xDa0349cc, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0x1e)
             else:
                 _set_pickup_active(ctx, fix_ptr, 0x1c)
 
     if scene == b'I005':
-        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.MyM2_keys >= 4:
-                fix_ptr = _find_obj_in_obj_table(0xD4FBFFD9, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD4FBFFD9, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
                 return
@@ -8706,119 +8783,119 @@ async def apply_key_fixes(ctx: NO100FContext):
                 _set_counter_value(ctx, fix_ptr, 4)
 
     if scene == b'L011':
-        fix_ptr = _find_obj_in_obj_table(0xD14760E8, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0xD14760E8, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.CfsG1_keys >= 4:  # Keys collected, open the gate
-                fix_ptr = _find_obj_in_obj_table(0xD14760E8, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD14760E8, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1d)
 
-                fix_ptr = _find_obj_in_obj_table(0x7334b00b, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7334b00b, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
             else:  # Keys not collected, make sure the gate is closed
-                fix_ptr = _find_obj_in_obj_table(0xD14760E8, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD14760E8, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
-                fix_ptr = _find_obj_in_obj_table(0x7334b00b, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7334b00b, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
     if scene == b'O003':
-        fix_ptr = _find_obj_in_obj_table(0xB418244E, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0xB418244E, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.PitA2_keys >= 3:  # Keys collected, open the gate
-                fix_ptr = _find_obj_in_obj_table(0xB418244E, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xB418244E, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0x9F625B9C, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x9F625B9C, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
             else:  # Keys not collected, make sure the gate is closed
-                fix_ptr = _find_obj_in_obj_table(0xB418244E, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xB418244E, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0x09F625B9C, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x09F625B9C, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
     if scene == b'O006':
-        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.ADaSK2_keys >= 4:
-                fix_ptr = _find_obj_in_obj_table(0x4DE2CB91, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x4DE2CB91, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
-                fix_ptr = _find_obj_in_obj_table(0xc9e0fb6A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xc9e0fb6A, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
                 return
             else:
                 _set_counter_value(ctx, fix_ptr, 4)
 
     if scene == b'P002':
-        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.CCitH2_keys >= 4:
-                fix_ptr = _find_obj_in_obj_table(0xE7196746, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xE7196746, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
-                fix_ptr = _find_obj_in_obj_table(0x4ac3ac06, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x4ac3ac06, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
             else:
                 _set_counter_value(ctx, fix_ptr, 4)
 
-            fix_ptr = _find_obj_in_obj_table(0x0a1efb96, ptr, size)
+            fix_ptr = _find_obj_in_obj_table(0x0a1efb96, ptr, size, ctx.isRev1)
             if ctx.CCitH2_keys >= 5:
                 _set_pickup_active(ctx, fix_ptr, 0x1f)
-                fix_ptr = _find_obj_in_obj_table(0xE7196749, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xE7196749, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
     
-                fix_ptr = _find_obj_in_obj_table(0xE719674B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xE719674B, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
 
     if scene == b'P003':
-        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.CCitH3_keys >= 3:
                 return
@@ -8826,28 +8903,28 @@ async def apply_key_fixes(ctx: NO100FContext):
                 _set_counter_value(ctx, fix_ptr, 3)
 
     if scene == b'P004':
-        fix_ptr = _find_obj_in_obj_table(0x0a1efb92, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x0a1efb92, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.GAU1_key >= 1:
                 _set_pickup_active(ctx, fix_ptr, 0x1d)
-                fix_ptr = _find_obj_in_obj_table(0xE7196747, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xE7196747, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x18E5F2D9, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x18E5F2D9, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
             else:
                 _set_pickup_active(ctx, fix_ptr, 0x1c)
 
     if scene == b'P005':
-        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x060e343c, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.GAU2_keys >= 4:
-                fix_ptr = _find_obj_in_obj_table(0xB3FDF2CE, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xB3FDF2CE, ptr, size, ctx.isRev1)
                 _set_platform_collision_state(ctx, fix_ptr, 0)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0xA25C26B4, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xA25C26B4, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
                 _set_platform_state(ctx, fix_ptr, 0)
                 return
@@ -8855,61 +8932,61 @@ async def apply_key_fixes(ctx: NO100FContext):
                 _set_counter_value(ctx, fix_ptr, 4)
 
     if scene == b'R005':
-        fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.DLDS2_keys >= 3:
-                fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0x510f16db, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x510f16db, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1E)
 
             else:
-                fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xc71019dc, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0x510f16db, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x510f16db, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
     if scene == b'W027':
-        fix_ptr = _find_obj_in_obj_table(0xD2c0b719, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0xD2c0b719, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.SYTS1_keys >= 4:  # Keys collected, open the gate
-                fix_ptr = _find_obj_in_obj_table(0xD2c0b719, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD2c0b719, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0x7D81EA8F, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7D81EA8F, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 0)
 
             else:  # Keys not collected, make sure the gate is closed
-                fix_ptr = _find_obj_in_obj_table(0xD2c0b719, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD2c0b719, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-                fix_ptr = _find_obj_in_obj_table(0x7D81EA8F, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7D81EA8F, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1f)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB518, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB519, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51A, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
-                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x1F0FB51B, ptr, size, ctx.isRev1)
                 _set_platform_state(ctx, fix_ptr, 1)
 
 
@@ -9007,15 +9084,24 @@ def _set_pickup_state(ctx: NO100FContext, obj_ptr: int, state: int):
 
 
 async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_table: dict, check_cb: Callable):
-    scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
+    if ctx.isRev1:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+    else:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
 
     if scene == b'h001':
         scene = b'H001'
 
-    ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
+    if ctx.isRev1:
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR_REV1)
+    else:
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
     if not _is_ptr_valid(ptr):
         return
-    size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
+    if ctx.isRev1:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR_REV1)
+    else:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
 
     for k, v in id_table.items():
         if k in locations_checked:
@@ -9023,14 +9109,14 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
         if v[0] is not None and v[0] != scene:
             continue
         for i in range(1, len(v)):
-            obj_ptr = _find_obj_in_obj_table(v[i], ptr, size)
+            obj_ptr = _find_obj_in_obj_table(v[i], ptr, size, ctx.isRev1)
             if obj_ptr is None: break
             if obj_ptr == -1: continue  
 
             # Shovel Fix
             if v[1] == Upgrades.ShovelPower.value:  # Only do this for the Shovel Power Up in H001
 
-                fix_ptr = _find_obj_in_obj_table(0xD5159008, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xD5159008, ptr, size, ctx.isRev1)
                 if fix_ptr is None: break
 
                 dolphin_memory_engine.write_byte(fix_ptr + 0x7, 0x1d)  # Force Shovel Pickup Availability
@@ -9038,7 +9124,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
             # Slippers Fix
             if v[1] == Upgrades.SlippersPower.value:  # Only do this for the Slippers Powerup in E002
 
-                fix_ptr = _find_obj_in_obj_table(0xF08C8F07, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xF08C8F07, ptr, size, ctx.isRev1)
                 if fix_ptr is None: break
 
                 _set_counter_value(ctx, fix_ptr, 0xa0)  # Force Counter to large value
@@ -9046,7 +9132,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
             # Black Knight Fix
             if v[1] == Upgrades.BootsPower.value:  #Only do this for the Boots Power Up in O008
 
-                fix_ptr = _find_obj_in_obj_table(0x7B9BA1C7, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x7B9BA1C7, ptr, size, ctx.isRev1)
                 if fix_ptr is None: break
 
                 BK_Alive = dolphin_memory_engine.read_byte(fix_ptr + 0x15)  #Check Fight Over Counter
@@ -9061,7 +9147,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
             if v[1] == Upgrades.UmbrellaPower.value:  # Only do this for the Umbrella Power Up in G009
 
                 # Fix Check Itself
-                fix_ptr = _find_obj_in_obj_table(0xB6C6E412, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0xB6C6E412, ptr, size, ctx.isRev1)
                 if fix_ptr is None: break
 
                 GG_Defeated = dolphin_memory_engine.read_byte(fix_ptr + 0x16)
@@ -9073,13 +9159,13 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
                     dolphin_memory_engine.write_byte(BOSS_KILLS_ADDR, boss_kills)
 
                 # Fix Broken Fight Trigger
-                fix_ptr1 = _find_obj_in_obj_table(0x060E343c, ptr, size)
+                fix_ptr1 = _find_obj_in_obj_table(0x060E343c, ptr, size, ctx.isRev1)
                 if fix_ptr1 is None: break
 
                 dolphin_memory_engine.write_byte(fix_ptr1 + 0x7, 0x1d)  # Re-enable Key Counter
                 GG_Alive = dolphin_memory_engine.read_byte(fix_ptr + 0x14)
 
-                fix_ptr2 = _find_obj_in_obj_table(0xA11635BD, ptr, size)
+                fix_ptr2 = _find_obj_in_obj_table(0xA11635BD, ptr, size, ctx.isRev1)
                 if fix_ptr2 is None: break
 
                 if GG_Alive == 0 and GG_Defeated == 0x1b:  # Green Ghost has not been defeated, and he is not yet present
@@ -9090,7 +9176,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
             # Red Beard Fix
             if v[1] == Upgrades.GumPower.value:  # Only do this for the Gum Powerup in W028
 
-                fix_ptr = _find_obj_in_obj_table(0x5A3B5C98, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x5A3B5C98, ptr, size, ctx.isRev1)
                 if fix_ptr is None: break
 
                 RB_Alive = dolphin_memory_engine.read_byte(fix_ptr + 0x15)  # Check Fight Over Counter
@@ -9104,7 +9190,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
             if scene == b'P002':
                 if v[1] == Keys.KEY1.value:
 
-                    fix_ptr = _find_obj_in_obj_table(Keys.KEY1.value)
+                    fix_ptr = _find_obj_in_obj_table(Keys.KEY1.value, ptr, size, ctx.isRev1)
                     if fix_ptr is None: break
 
                     key_gone = _check_platform_state(ctx, fix_ptr)
@@ -9113,7 +9199,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
 
                 if v[1] == Keys.KEY2.value:
 
-                    fix_ptr = _find_obj_in_obj_table(Keys.KEY2.value)
+                    fix_ptr = _find_obj_in_obj_table(Keys.KEY2.value, ptr, size, ctx.isRev1)
                     if fix_ptr is None: break
 
                     key_gone = _check_platform_state(ctx, fix_ptr)
@@ -9122,7 +9208,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
 
                 if v[1] == Keys.KEY3.value:
 
-                    fix_ptr = _find_obj_in_obj_table(Keys.KEY3.value)
+                    fix_ptr = _find_obj_in_obj_table(Keys.KEY3.value, ptr, size, ctx.isRev1)
                     if fix_ptr is None: break
 
                     key_gone = _check_platform_state(ctx, fix_ptr)
@@ -9131,7 +9217,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
 
                 if v[1] == Keys.KEY4.value:
 
-                    fix_ptr = _find_obj_in_obj_table(Keys.KEY4.value)
+                    fix_ptr = _find_obj_in_obj_table(Keys.KEY4.value, ptr, size, ctx.isRev1)
                     if fix_ptr is None: break
 
                     key_gone = _check_platform_state(ctx, fix_ptr)
@@ -9146,7 +9232,7 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
                 if v[1] == Upgrades.SlippersPower.value:  # We are checking the slipper power up
                     locations_checked.add(k + 1)  # Add the lampshade check as well
 
-                    fix_ptr = _find_obj_in_obj_table(0xF08C8F07, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0xF08C8F07, ptr, size, ctx.isRev1)
                     _set_counter_value(ctx, fix_ptr, 0x1)  # Force Counter to 1
 
                 break
@@ -9173,11 +9259,18 @@ async def _check_snacks(ctx: NO100FContext, locations_checked: set):
 
 
 async def _check_warpgates_location(ctx: NO100FContext, locations_checked: set, id_table : dict):
-    scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
-    ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
+    if ctx.isRev1:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR_REV1)
+    else:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
     if not _is_ptr_valid(ptr):
         return
-    size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
+    if ctx.isRev1:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR_REV1)
+    else:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
 
     for k, v in id_table.items():
         if k in locations_checked:
@@ -9185,20 +9278,30 @@ async def _check_warpgates_location(ctx: NO100FContext, locations_checked: set, 
         if v[0] is not None and v[0] != scene:
             continue
         bit = k - 300 - base_id
-        value = dolphin_memory_engine.read_word(WARP_ADDR + (12 * bit))
+        if ctx.isRev1:
+            value = dolphin_memory_engine.read_word(WARP_ADDR_REV1 + (12 * bit))
+        else:
+            value = dolphin_memory_engine.read_word(WARP_ADDR + (12 * bit))
         if value == 1:
             locations_checked.add(k)
 
     await load_warp_gates(ctx)
 
 async def enable_map_warping(ctx: NO100FContext):
-    scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
-    ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
+    if ctx.isRev1:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR_REV1)
+    else:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
     if not _is_ptr_valid(ptr):
         return
-    size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
+    if ctx.isRev1:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR_REV1)
+    else:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
 
-    fix_ptr = _find_obj_in_obj_table(0x8542BAD4, ptr, size)
+    fix_ptr = _find_obj_in_obj_table(0x8542BAD4, ptr, size, ctx.isRev1)
     if not fix_ptr == None:
         for i in range(18):
             if i == 6:
@@ -9211,176 +9314,240 @@ async def enable_map_warping(ctx: NO100FContext):
             else:
                 _set_trigger_state(ctx, fix_ptr + (0x14 * i), 0x1d)
 
-    fix_ptr = _find_obj_in_obj_table(0x6887e731, ptr, size)
+    fix_ptr = _find_obj_in_obj_table(0x6887e731, ptr, size, ctx.isRev1)
     if not fix_ptr == None:
         for i in range(7):
             _set_trigger_state(ctx, fix_ptr + (0x14 * i), 0x1d)
         if ctx.use_warpgates:
             saved_warps = dolphin_memory_engine.read_word(SAVED_WARP_ADDR)
             if ((not saved_warps & 2**8) and saved_warps & 2**9):  # Give G005 Warp if we have received G008 as an item (Thanks Heavy Iron)
-                fix_ptr = _find_obj_in_obj_table(0x78A1C3B8, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x78A1C3B8, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
                 dolphin_memory_engine.write_word(0x801B7F54, 1)
             if (saved_warps & 2**8 and (not saved_warps & 2**9)):  # Prevent G008 Warp if we have received G005 as an item (Thanks Heavy Iron)
-                fix_ptr = _find_obj_in_obj_table(0x6B2EA611, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x6B2EA611, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
 
 async def apply_level_fixes(ctx: NO100FContext):
-    scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
-    ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
+    if ctx.isRev1:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR_REV1)
+    else:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
+        ptr = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_PTR_ADDR)
     if not _is_ptr_valid(ptr):
         return
-    size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
-
-    dolphin_memory_engine.write_word(MAP_ADDR, 0x1)  # Force the Map Into Inventory
+    if ctx.isRev1:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR_REV1)
+    else:
+        size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
+    if ctx.isRev1:
+        dolphin_memory_engine.write_word(MAP_ADDR_REV1, 0x1)  # Force the Map Into Inventory
+    else:
+        dolphin_memory_engine.write_word(MAP_ADDR, 0x1)  # Force the Map Into Inventory
 
     if scene == b'O001':
-        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if ctx.isRev1:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+        else:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 11:  # Player does not have the helmet, block entry to Black Knight
-            fix_ptr = _find_obj_in_obj_table(0xDEE3B081, ptr, size)  # O008 Loading Trigger Disabled
+            fix_ptr = _find_obj_in_obj_table(0xDEE3B081, ptr, size, ctx.isRev1)  # O008 Loading Trigger Disabled
             _set_trigger_state(ctx, fix_ptr, 0x1c)
         else:
-            fix_ptr = _find_obj_in_obj_table(0xDEE3B081, ptr, size)  # O008 Loading Trigger Enabled
+            fix_ptr = _find_obj_in_obj_table(0xDEE3B081, ptr, size, ctx.isRev1)  # O008 Loading Trigger Enabled
             _set_trigger_state(ctx, fix_ptr, 0x1d)
 
     if scene == b'O006':
-        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if ctx.isRev1:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+        else:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 11:  # Player does not have the helmet, block entry to Black Knight
-            fix_ptr = _find_obj_in_obj_table(0xD1AE493B, ptr, size)  # O008 Loading Trigger Disabled
+            fix_ptr = _find_obj_in_obj_table(0xD1AE493B, ptr, size, ctx.isRev1)  # O008 Loading Trigger Disabled
             _set_trigger_state(ctx, fix_ptr, 0x1c)
         else:
-            fix_ptr = _find_obj_in_obj_table(0xD1AE493B, ptr, size)  # O008 Loading Trigger Enabled
+            fix_ptr = _find_obj_in_obj_table(0xD1AE493B, ptr, size, ctx.isRev1)  # O008 Loading Trigger Enabled
             _set_trigger_state(ctx, fix_ptr, 0x1d)
 
 
     if scene == b'I001':
-        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if ctx.isRev1:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+        else:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 13:  # Player does not have the shovel, give them a fake
             upgrades += (2 ** 13 + 2 ** 7)
-            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
+            if ctx.isRev1:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, upgrades)
+            else:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
 
-        fix_ptr = _find_obj_in_obj_table(0x22B1A6E6, ptr, size)  # Holly Trigger #1
+        fix_ptr = _find_obj_in_obj_table(0x22B1A6E6, ptr, size, ctx.isRev1)  # Holly Trigger #1
         _set_trigger_state(ctx, fix_ptr, 0x1c)
 
-        fix_ptr = _find_obj_in_obj_table(0xC0E867E2, ptr, size)  # Holly Trigger #2
+        fix_ptr = _find_obj_in_obj_table(0xC0E867E2, ptr, size, ctx.isRev1)  # Holly Trigger #2
         _set_trigger_state(ctx, fix_ptr, 0x1e)
 
-        fix_ptr = _find_obj_in_obj_table(0xFA854786, ptr, size)  # Holly Collision and Visibility Disabled
+        fix_ptr = _find_obj_in_obj_table(0xFA854786, ptr, size, ctx.isRev1)  # Holly Collision and Visibility Disabled
         _set_platform_collision_state(ctx, fix_ptr, 0)
         _set_platform_state(ctx, fix_ptr, 0)
 
         if _is_scene_visited(b'R001'):
-            fix_ptr = _find_obj_in_obj_table(0x4f81e846, ptr, size)  # Doorway Trigger
+            fix_ptr = _find_obj_in_obj_table(0x4f81e846, ptr, size, ctx.isRev1)  # Doorway Trigger
             _set_trigger_state(ctx, fix_ptr, 0x1d)
 
-            fix_ptr = _find_obj_in_obj_table(0xDE90259F, ptr, size)  # Text Trigger
+            fix_ptr = _find_obj_in_obj_table(0xDE90259F, ptr, size, ctx.isRev1)  # Text Trigger
             _set_trigger_state(ctx, fix_ptr, 0x1c)
 
         if _is_scene_visited(b'S005'):
-            fix_ptr = _find_obj_in_obj_table(0xB0d216d1, ptr, size)  # Load Trigger
+            fix_ptr = _find_obj_in_obj_table(0xB0d216d1, ptr, size, ctx.isRev1)  # Load Trigger
             _set_trigger_state(ctx, fix_ptr, 0x1d)
 
-            fix_ptr = _find_obj_in_obj_table(0xc402cded, ptr, size)  # Disable Armoire Collision and Visibility
+            fix_ptr = _find_obj_in_obj_table(0xc402cded, ptr, size, ctx.isRev1)  # Disable Armoire Collision and Visibility
             _set_platform_collision_state(ctx, fix_ptr, 0)
             _set_platform_state(ctx, fix_ptr, 0x1c)
 
     if scene == b'E001':
-        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if ctx.isRev1:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+        else:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 13:  # Player does not have the shovel, give them a fake
             upgrades += (2 ** 13 + 2 ** 7)
-            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
+            if ctx.isRev1:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, upgrades)
+            else:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
 
         if upgrades & 2 ** 7:  # Player has a fake shovel, don't let them dig
-            fix_ptr = _find_obj_in_obj_table(0xb37f36c7, ptr, size)
+            fix_ptr = _find_obj_in_obj_table(0xb37f36c7, ptr, size, ctx.isRev1)
             _set_trigger_state(ctx, fix_ptr, 0x1c)
 
     if scene == b'F001':
-        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if ctx.isRev1:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+        else:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 13:  # Player does not have the shovel, give them a fake
             upgrades += (2 ** 13 + 2 ** 7)
-            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
+            if ctx.isRev1:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, upgrades)
+            else:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
 
     if scene == b'H002':
-        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if ctx.isRev1:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+        else:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 13:  # Player does not have the shovel, give them a fake
             upgrades += (2 ** 13 + 2 ** 7)
-            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
+            if ctx.isRev1:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, upgrades)
+            else:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
 
     if scene == b'H003':
-        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if ctx.isRev1:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+        else:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 13:  # Player does not have the shovel, give them a fake
             upgrades += (2 ** 13 + 2 ** 7)
-            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
+            if ctx.isRev1:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, upgrades)
+            else:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
 
     if not (scene == b'I001' or scene == b'E001' or scene == b'F001' or scene == b'H002' or scene == b'H003'):
-        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if ctx.isRev1:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR_REV1)
+        else:
+            upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if upgrades & 2 ** 7:  # Player has a fake shovel, get rid of it
             upgrades -= (2 ** 7 + 2 ** 13)
-            dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
+            if ctx.isRev1:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR_REV1, upgrades)
+            else:
+                dolphin_memory_engine.write_word(UPGRADE_INVENTORY_ADDR, upgrades)
 
     if scene == b'h001':
         if ctx.use_warpgates and not ctx.use_snacks:
-            cur_snacks = dolphin_memory_engine.read_word(SNACK_COUNT_ADDR)
+
+            if ctx.isRev1:
+                cur_snacks = dolphin_memory_engine.read_word(SNACK_COUNT_ADDR_REV1)
+            else:
+                cur_snacks = dolphin_memory_engine.read_word(SNACK_COUNT_ADDR)
             if cur_snacks == 0:
-                dolphin_memory_engine.write_word(SNACK_COUNT_ADDR, 400)
+                if ctx.isRev1:
+                    dolphin_memory_engine.write_word(SNACK_COUNT_ADDR_REV1, 400)
+                else:
+                    dolphin_memory_engine.write_word(SNACK_COUNT_ADDR, 400)
 
     if scene == b'H001' or b'h001':
 
         # Clear Monster Gallery Snack Gate
-        fix_ptr = _find_obj_in_obj_table(0x7E8E16F5, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x7E8E16F5, ptr, size, ctx.isRev1)
         if not fix_ptr == None and not ctx.use_snacks:
             _set_platform_state(ctx, fix_ptr, 0)
-            fix_ptr = _find_obj_in_obj_table(0xD7924F8A, ptr, size)
+            fix_ptr = _find_obj_in_obj_table(0xD7924F8A, ptr, size, ctx.isRev1)
             _set_trigger_state(ctx, fix_ptr, 0x1f)
 
         if ctx.use_keys == 0:
-            fix_ptr = _find_obj_in_obj_table(0xBBFA4948, ptr, size)
+            fix_ptr = _find_obj_in_obj_table(0xBBFA4948, ptr, size, ctx.isRev1)
             if not fix_ptr == None:
                 if _check_pickup_state(ctx, fix_ptr):  #The Hedge key is collected, open the gate
-                    fix_ptr = _find_obj_in_obj_table(0xC20224F3, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0xC20224F3, ptr, size, ctx.isRev1)
                     _set_platform_state(ctx, fix_ptr, 0)
 
-                    fix_ptr = _find_obj_in_obj_table(0xE8B3FF9B, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0xE8B3FF9B, ptr, size, ctx.isRev1)
                     _set_trigger_state(ctx, fix_ptr, 0x1c)
 
-                    fix_ptr = _find_obj_in_obj_table(0xD72B66B7, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0xD72B66B7, ptr, size, ctx.isRev1)
                     _set_trigger_state(ctx, fix_ptr, 0x1d)
 
-            fix_ptr = _find_obj_in_obj_table(0xBB82B3B3, ptr, size)
+            fix_ptr = _find_obj_in_obj_table(0xBB82B3B3, ptr, size, ctx.isRev1)
             if not fix_ptr == None:
                 if _check_pickup_state(ctx, fix_ptr):  #The Fishing key is collected, open the gate
-                    fix_ptr = _find_obj_in_obj_table(0x42A3128E, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x42A3128E, ptr, size, ctx.isRev1)
                     _set_platform_state(ctx, fix_ptr, 0)
 
     if scene == b'R021':
         if _is_scene_visited(b'R003'):
-            fix_ptr = _find_obj_in_obj_table(0xcbd0A98D, ptr, size)  # Holly Collision and Visibility Disabled
+            fix_ptr = _find_obj_in_obj_table(0xcbd0A98D, ptr, size, ctx.isRev1)  # Holly Collision and Visibility Disabled
             _set_platform_collision_state(ctx, fix_ptr, 0)
             _set_platform_state(ctx, fix_ptr, 0)
 
     if scene == b"P003":
-        fix_ptr = _find_obj_in_obj_table(0x0A1EFB92, ptr, size)
+        fix_ptr = _find_obj_in_obj_table(0x0A1EFB92, ptr, size, ctx.isRev1)
         if not fix_ptr == None:
             if ctx.previous_scene == b'P004' and _check_platform_state(ctx, fix_ptr) == 1:
-                dolphin_memory_engine.write_word(HEALTH_ADDR, 5)    # Give scooby health to teleport out if entering creepy backwards
+                if ctx.isRev1:
+                    dolphin_memory_engine.write_word(HEALTH_ADDR_REV1, 5)
+                else:
+                    dolphin_memory_engine.write_word(HEALTH_ADDR, 5)    # Give scooby health to teleport out if entering creepy backwards
 
     # Credits Location
     if scene == b"S005":  #We are in the final room
 
         if not ctx.completion_goal == 0:
-            fix_ptr = _find_obj_in_obj_table(0x79f90e17, ptr, size)
+            fix_ptr = _find_obj_in_obj_table(0x79f90e17, ptr, size, ctx.isRev1)
             if fix_ptr is not None:
                 in_arena = dolphin_memory_engine.read_byte(fix_ptr + 0x7)
-                fix_ptr = _find_obj_in_obj_table(0x11498CF8, ptr, size)
+                fix_ptr = _find_obj_in_obj_table(0x11498CF8, ptr, size, ctx.isRev1)
                 cutscene_played = dolphin_memory_engine.read_byte(fix_ptr + 0x23)
 
                 if cutscene_played == 2:
-                    fix_ptr = _find_obj_in_obj_table(0x2b2cea8a, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x2b2cea8a, ptr, size, ctx.isRev1)
                     _set_trigger_state(ctx, fix_ptr, 0x1e)
 
                 conditions_met = False
                 bossesKilled = dolphin_memory_engine.read_byte(BOSS_KILLS_ADDR)
-                tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR)
+                if ctx.isRev1:
+                    tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR_REV1)
+                else:
+                    tokens = dolphin_memory_engine.read_word(MONSTER_TOKEN_INVENTORY_ADDR)
                 snacks = dolphin_memory_engine.read_word(STORED_SNACK_ADDR)
                 sum_tokens = 0
                 for i in range(21):
@@ -9416,35 +9583,35 @@ async def apply_level_fixes(ctx: NO100FContext):
                         conditions_met = True
 
                 if conditions_met and in_arena == 0x1d and cutscene_played == 0:
-                    fix_ptr = _find_obj_in_obj_table(0x2b2cea8a, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x2b2cea8a, ptr, size, ctx.isRev1)
                     _set_trigger_state(ctx, fix_ptr, 0x1f)
                 elif not conditions_met:
-                    fix_ptr = _find_obj_in_obj_table(0x2b2cea8a, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x2b2cea8a, ptr, size, ctx.isRev1)
                     _set_trigger_state(ctx, fix_ptr, 0x1e)
-                    fix_ptr = _find_obj_in_obj_table(0x78CFEF58, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x78CFEF58, ptr, size, ctx.isRev1)
                     _set_trigger_state(ctx, fix_ptr, 0x1c)
-                    fix_ptr = _find_obj_in_obj_table(0x3C433393, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x3C433393, ptr, size, ctx.isRev1)
                     _set_trigger_state(ctx, fix_ptr, 0x1c)
-                    fix_ptr = _find_obj_in_obj_table(0x0C413492, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x0C413492, ptr, size, ctx.isRev1)
                     _set_platform_state(ctx, fix_ptr, 0)
-                    fix_ptr = _find_obj_in_obj_table(0x9AA96044, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x9AA96044, ptr, size, ctx.isRev1)
                     _set_platform_state(ctx, fix_ptr, 0)
-                    fix_ptr = _find_obj_in_obj_table(0xCF095CD7, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0xCF095CD7, ptr, size, ctx.isRev1)
                     _set_platform_state(ctx, fix_ptr, 0)
-                    fix_ptr = _find_obj_in_obj_table(0x1480DF86, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x1480DF86, ptr, size, ctx.isRev1)
                     _set_platform_state(ctx, fix_ptr, 0)
-                    fix_ptr = _find_obj_in_obj_table(0xD046F599, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0xD046F599, ptr, size, ctx.isRev1)
                     _set_platform_state(ctx, fix_ptr, 0)
-                    fix_ptr = _find_obj_in_obj_table(0x08E9D051, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x08E9D051, ptr, size, ctx.isRev1)
                     _set_platform_state(ctx, fix_ptr, 0)
 
                 if not conditions_met and in_arena == 0x1c:
-                    fix_ptr = _find_obj_in_obj_table(0x2854c118, ptr, size)
+                    fix_ptr = _find_obj_in_obj_table(0x2854c118, ptr, size, ctx.isRev1)
                     _set_platform_collision_state(ctx, fix_ptr, 0)
                     _set_platform_state(ctx, fix_ptr, 0)
 
         if not ctx.finished_game:  # We have not finished
-            fix_ptr = _find_obj_in_obj_table(0x21D3EDA4, ptr, size)
+            fix_ptr = _find_obj_in_obj_table(0x21D3EDA4, ptr, size, ctx.isRev1)
             if fix_ptr is not None:
                 MM_Alive = dolphin_memory_engine.read_byte(fix_ptr + 0x15)
                 if MM_Alive == 0:
@@ -9478,21 +9645,30 @@ async def check_locations(ctx: NO100FContext):
 
 
 async def check_alive(ctx: NO100FContext):
-    cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR)
+    if ctx.isRev1:
+        cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR_REV1)
+    else:
+        cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR)
     return not (cur_health <= 0 or check_control_owner(ctx, lambda owner: owner == 0))
 
 
 async def check_death(ctx: NO100FContext):
-    cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR)
+    if ctx.isRev1:
+        cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR_REV1)
+    else:
+        cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR)
 
     if cur_health > 0:
         ctx.forced_death = False
 
     if cur_health <= 0 and not ctx.forced_death and not ctx.post_boss:
-        if dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR,
-                                            0x4) == b'F003':  # Avoid Creepy Early Trigger causing erroneous DL Sends
+        if ctx.isRev1:
+            scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+        else:
+            scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
+        if scene == b'F003':  # Avoid Creepy Early Trigger causing erroneous DL Sends
             await asyncio.sleep(3)
-            if dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4) != b'F003':
+            if scene != b'F003':
                 return
         if not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
             ctx.has_send_death = True
@@ -9502,7 +9678,10 @@ async def check_death(ctx: NO100FContext):
 
 
 def check_ingame(ctx: NO100FContext, ignore_control_owner: bool = False) -> bool:
-    scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
+    if ctx.isRev1:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+    else:
+        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
     if scene not in valid_scenes:
         return False
     update_current_scene(ctx, scene.decode('ascii'))
@@ -9529,7 +9708,10 @@ def update_current_scene(ctx: NO100FContext, scene: str):
 
 
 def check_control_owner(ctx: NO100FContext, check_cb: Callable[[int], bool]) -> bool:
-    owner = dolphin_memory_engine.read_word(PLAYER_CONTROL_OWNER)
+    if ctx.isRev1:
+        owner = dolphin_memory_engine.read_word(PLAYER_CONTROL_OWNER_REV1)
+    else:
+        owner = dolphin_memory_engine.read_word(PLAYER_CONTROL_OWNER)
     return check_cb(owner)
 
 
@@ -9537,7 +9719,10 @@ async def save_warp_gates(ctx: NO100FContext):
     warp_gate_map = 0
     await asyncio.sleep(1)
     for i in range(26):
-        cur_gate = dolphin_memory_engine.read_word(WARP_ADDR + (12 * i))
+        if ctx.isRev1:
+            cur_gate = dolphin_memory_engine.read_word(WARP_ADDR_REV1 + (12 * i))
+        else:
+            cur_gate = dolphin_memory_engine.read_word(WARP_ADDR + (12 * i))
         if cur_gate == 1:
             warp_gate_map += 2 ** i
 
@@ -9556,24 +9741,43 @@ async def load_warp_gates(ctx: NO100FContext):
 
     for i in range(26):
         if warp_gates & 2 ** i == 2 ** i:
-            dolphin_memory_engine.write_word(WARP_ADDR + (12 * i), 1)
+            if ctx.isRev1:
+                dolphin_memory_engine.write_word(WARP_ADDR_REV1 + (12 * i), 1)
+            else:
+                dolphin_memory_engine.write_word(WARP_ADDR + (12 * i), 1)
         else:
-            dolphin_memory_engine.write_word(WARP_ADDR + (12 * i), 0)
+            if ctx.isRev1:
+                dolphin_memory_engine.write_word(WARP_ADDR_REV1 + (12 * i), 0)
+            else:
+                dolphin_memory_engine.write_word(WARP_ADDR + (12 * i), 0)
 
 
 async def force_death(ctx: NO100FContext):
-    cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR)
+    if ctx.isRev1:
+        cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR_REV1)
+    else:
+        cur_health = dolphin_memory_engine.read_word(HEALTH_ADDR)
 
     if cur_health == 69 and not ctx.post_boss:  # Funny number, but also good luck accidentally setting your health this high
         ctx.forced_death = True
-        dolphin_memory_engine.write_word(HEALTH_ADDR, 0)
+        if ctx.isRev1:
+            dolphin_memory_engine.write_word(HEALTH_ADDR_REV1, 0)
+        else:
+            dolphin_memory_engine.write_word(HEALTH_ADDR, 0)
 
 
 def validate_save(ctx: NO100FContext) -> bool:
     saved_slot_bytes = dolphin_memory_engine.read_bytes(SAVED_SLOT_NAME_ADDR, 0x40).strip(b'\0')
-    slot_bytes = dolphin_memory_engine.read_bytes(SLOT_NAME_ADDR, 0x40).strip(b'\0')
+
     saved_seed_bytes = dolphin_memory_engine.read_bytes(SAVED_SEED_ADDR, 0x10).strip(b'\0')
-    seed_bytes = dolphin_memory_engine.read_bytes(SEED_ADDR, 0x10).strip(b'\0')
+
+    if ctx.isRev1:
+        slot_bytes = dolphin_memory_engine.read_bytes(SLOT_NAME_ADDR_REV1, 0x40).strip(b'\0')
+        seed_bytes = dolphin_memory_engine.read_bytes(SEED_ADDR_REV1, 0x10).strip(b'\0')
+    else:
+        slot_bytes = dolphin_memory_engine.read_bytes(SLOT_NAME_ADDR, 0x40).strip(b'\0')
+        seed_bytes = dolphin_memory_engine.read_bytes(SEED_ADDR, 0x10).strip(b'\0')
+
     if len(slot_bytes) > 0 and len(seed_bytes) > 0:
         if len(saved_slot_bytes) == 0 and len(saved_seed_bytes) == 0:
             # write info to save
@@ -9612,7 +9816,10 @@ async def dolphin_sync_task(ctx: NO100FContext):
                     ctx.current_scene_key = f"NO100F_current_scene_T{ctx.team}_P{ctx.slot}"
                     ctx.set_notify(ctx.current_scene_key)
                     if not _check_cur_scene(ctx, ctx.current_scene):
-                        scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 4)
+                        if ctx.isRev1:
+                            scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR_REV1, 0x4)
+                        else:
+                            scene = dolphin_memory_engine.read_bytes(CUR_SCENE_ADDR, 0x4)
                         ctx.previous_scene = ctx.current_scene
                         ctx.current_scene = scene
                     if "DeathLink" in ctx.tags:
@@ -9629,7 +9836,10 @@ async def dolphin_sync_task(ctx: NO100FContext):
                         await apply_key_fixes(ctx)
                     if ctx.use_snacks:
                         cur_snacks = dolphin_memory_engine.read_word(STORED_SNACK_ADDR)
-                        dolphin_memory_engine.write_word(SNACK_COUNT_ADDR, cur_snacks)
+                        if ctx.isRev1:
+                            dolphin_memory_engine.write_word(SNACK_COUNT_ADDR_REV1, cur_snacks)
+                        else:
+                            dolphin_memory_engine.write_word(SNACK_COUNT_ADDR, cur_snacks)
                     await force_death(ctx)
                     await enable_map_warping(ctx)
 
@@ -9642,8 +9852,10 @@ async def dolphin_sync_task(ctx: NO100FContext):
                         ctx.post_boss = False
                 else:
                     if not ctx.auth:
-                        ctx.auth = dolphin_memory_engine.read_bytes(SLOT_NAME_ADDR, 0x40).decode('utf-8').strip(
-                            '\0')
+                        if ctx.isRev1:
+                            ctx.auth = dolphin_memory_engine.read_bytes(SLOT_NAME_ADDR_REV1, 0x40).decode('utf-8').strip('\0')
+                        else:
+                            ctx.auth = dolphin_memory_engine.read_bytes(SLOT_NAME_ADDR, 0x40).decode('utf-8').strip('\0')
                         if ctx.auth == '\x02\x00\x00\x00\x04\x00\x00\x00\x02\x00\x00\x00\x04\x00\x00\x00\x02\x00\x00' \
                                        '\x00\x02\x00\x00\x00\x04\x00\x00\x00\x04':
                             logger.info("Vanilla game detected. Please load the patched game.")
@@ -9663,6 +9875,11 @@ async def dolphin_sync_task(ctx: NO100FContext):
                 dolphin_memory_engine.hook()
                 if dolphin_memory_engine.is_hooked():
                     if dolphin_memory_engine.read_bytes(0x80000000, 6) == b'GIHE78':
+                        ctx.isRev1 = dolphin_memory_engine.read_byte(0x80000007) == 1
+                        if ctx.isRev1:
+                            logger.info("Connected Using Revision 1 Scooby Doo: Night of 100 Frights .iso")
+                        else:
+                            logger.info("Connected Using Revision 0 Scooby Doo: Night of 100 Frights .iso")
                         logger.info(CONNECTION_CONNECTED_STATUS)
                         ctx.dolphin_status = CONNECTION_CONNECTED_STATUS
                         ctx.locations_checked = set()

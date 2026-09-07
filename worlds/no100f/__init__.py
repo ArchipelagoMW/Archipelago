@@ -134,37 +134,75 @@ class NO100FContainer(APPlayerContainer):
         manifest = NO100FContainer.get_json_obj(opened_zipfile, "archipelago.json")
         slot_name = manifest["player_name"]
         slot_name_bytes = slot_name.encode('utf-8')
-        slot_name_offset = 0x1e0c9c
+        slot_name_offset_rev0 = 0x1e0c9c
+        slot_name_offset_rev1 = 0x1ef64c
         seed_hash = NO100FContainer.get_seed_hash(opened_zipfile)
-        seed_hash_offset = slot_name_offset + 0x40
-        # always apply these patches
-        patches = [Patches.AP_SAVE_LOAD, Patches.UPGRADE_REWARD_FIX]
-        # conditional patches
-        include_monster_tokens = NO100FContainer.get_bool(opened_zipfile, "include_monster_tokens")
-        include_snacks = NO100FContainer.get_bool(opened_zipfile, "include_snacks")
-        if include_monster_tokens:
-            patches += [Patches.MONSTER_TOKEN_FIX]
-        if include_snacks:
-            patches += [Patches.SNACK_REWARD_FIX]
+        seed_hash_offset_rev0 = slot_name_offset_rev0 + 0x40
+        seed_hash_offset_rev1 = slot_name_offset_rev1 + 0x40
 
-        with open(iso, "rb+") as stream:
-            # write patches
-            for patch in patches:
-                cls.logger.info(f"applying patch {patches.index(patch) + 1}/{len(patches)}")
-                for addr, val in patch.items():
-                    stream.seek(addr, 0)
-                    if isinstance(val, bytes):
-                        stream.write(val)
-                    else:
-                        stream.write(val.to_bytes(0x4, "big"))
-            # write slot name
-            cls.logger.debug(f"writing slot_name to 0x{slot_name_offset:x} ({slot_name_bytes})")
-            stream.seek(slot_name_offset, 0)
-            stream.write(slot_name_bytes)
-            cls.logger.debug(f"writing seed_hash {seed_hash} to 0x{seed_hash_offset:x}")
-            stream.seek(seed_hash_offset, 0)
-            stream.write(seed_hash)
-        cls.logger.info('--binary patching done--')
+        rev = determine_rev()
+
+        if rev == 1:
+            cls.logger.info('--REV 1 Game Detected--')
+            # always apply these patches
+            patches = [Patches.AP_SAVE_LOAD_REV1, Patches.UPGRADE_REWARD_FIX_REV1]
+            # conditional patches
+            include_monster_tokens = NO100FContainer.get_bool(opened_zipfile, "include_monster_tokens")
+            include_snacks = NO100FContainer.get_bool(opened_zipfile, "include_snacks")
+            if include_monster_tokens:
+                patches += [Patches.MONSTER_TOKEN_FIX_REV1]
+            if include_snacks:
+                patches += [Patches.SNACK_REWARD_FIX_REV1]
+
+            with open(iso, "rb+") as stream:
+                # write patches
+                for patch in patches:
+                    cls.logger.info(f"applying patch {patches.index(patch) + 1}/{len(patches)}")
+                    for addr, val in patch.items():
+                        stream.seek(addr, 0)
+                        if isinstance(val, bytes):
+                            stream.write(val)
+                        else:
+                            stream.write(val.to_bytes(0x4, "big"))
+                # write slot name
+                cls.logger.debug(f"writing slot_name to 0x{slot_name_offset_rev1:x} ({slot_name_bytes})")
+                stream.seek(slot_name_offset_rev1, 0)
+                stream.write(slot_name_bytes)
+                cls.logger.debug(f"writing seed_hash {seed_hash} to 0x{seed_hash_offset_rev1:x}")
+                stream.seek(seed_hash_offset_rev1, 0)
+                stream.write(seed_hash)
+            cls.logger.info('--binary patching done--')
+
+        else:
+            cls.logger.info('--REV 0 Game Detected--')
+            # always apply these patches
+            patches = [Patches.AP_SAVE_LOAD, Patches.UPGRADE_REWARD_FIX]
+            # conditional patches
+            include_monster_tokens = NO100FContainer.get_bool(opened_zipfile, "include_monster_tokens")
+            include_snacks = NO100FContainer.get_bool(opened_zipfile, "include_snacks")
+            if include_monster_tokens:
+                patches += [Patches.MONSTER_TOKEN_FIX]
+            if include_snacks:
+                patches += [Patches.SNACK_REWARD_FIX]
+
+            with open(iso, "rb+") as stream:
+                # write patches
+                for patch in patches:
+                    cls.logger.info(f"applying patch {patches.index(patch) + 1}/{len(patches)}")
+                    for addr, val in patch.items():
+                        stream.seek(addr, 0)
+                        if isinstance(val, bytes):
+                            stream.write(val)
+                        else:
+                            stream.write(val.to_bytes(0x4, "big"))
+                # write slot name
+                cls.logger.debug(f"writing slot_name to 0x{slot_name_offset_rev0:x} ({slot_name_bytes})")
+                stream.seek(slot_name_offset_rev0, 0)
+                stream.write(slot_name_bytes)
+                cls.logger.debug(f"writing seed_hash {seed_hash} to 0x{seed_hash_offset_rev0:x}")
+                stream.seek(seed_hash_offset_rev0, 0)
+                stream.write(seed_hash)
+            cls.logger.info('--binary patching done--')
 
     @classmethod
     def get_rom_path(cls) -> str:
@@ -202,6 +240,15 @@ def validate_hash(file_name: str = ""):
     basemd5 = hashlib.md5()
     basemd5.update(base_rom_bytes)
     return NO100F_HASH == basemd5.hexdigest()
+
+def determine_rev(file_name: str = ""):
+    file_name = get_base_rom_path(file_name)
+    rev = 0
+    with open(file_name, "rb") as file:
+        file.seek(7)
+        byte_data = file.read(1)
+        rev = byte_data[0]
+    return rev
 
 
 class NO100FWeb(WebWorld):
