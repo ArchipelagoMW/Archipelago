@@ -168,13 +168,13 @@ alec_entrances = [
         AlecEntrance.forest_to_petshop,
         AlecRegion.pet_store,
         flag=RandomizationFlag.NON_PROGRESSION,
-        group=GroupFlag.OUT_TO_IN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         AlecEntrance.petshop_to_forest,
         Region.forest,
         flag=RandomizationFlag.NON_PROGRESSION,
-        group=GroupFlag.IN_TO_OUT,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(AlecEntrance.petshop_to_petshop_back, AlecRegion.pet_store_back),
     ConnectionData(AlecEntrance.petshop_back_to_petshop, AlecRegion.pet_store),
@@ -182,13 +182,13 @@ alec_entrances = [
         AlecEntrance.enter_alec_room,
         AlecRegion.alec_bedroom,
         flag=RandomizationFlag.BUILDINGS,
-        group=GroupFlag.IN_TO_IN,
+        group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         AlecEntrance.leave_alec_room,
         AlecRegion.pet_store_back,
         flag=RandomizationFlag.BUILDINGS,
-        group=GroupFlag.IN_TO_IN,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
 ]
 
