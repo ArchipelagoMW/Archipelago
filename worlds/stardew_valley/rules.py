@@ -1,11 +1,13 @@
 import itertools
 import logging
 from dataclasses import dataclass
-from typing import List, Dict, Set, Iterable, Type
+from typing import Dict, Iterable, List, Set, Type
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState, MultiWorld
+
 from worlds.generic.Rules import add_rule as _add_rule
 from worlds.generic.Rules import set_rule as _set_rule
+
 from . import locations
 from .bundles.bundle_room import BundleRoom
 from .content import StardewContent
@@ -13,27 +15,44 @@ from .content.feature import friendsanity
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
 from .data.game_item import ItemTag
-from .data.harvest import HarvestCropSource, HarvestFruitTreeSource, ForagingSource
-from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, \
-    all_museum_items_by_name, all_museum_minerals, \
-    all_museum_artifacts, Artifact
+from .data.harvest import ForagingSource, HarvestCropSource, HarvestFruitTreeSource
+from .data.museum_data import (
+    Artifact,
+    all_museum_artifacts,
+    all_museum_items,
+    all_museum_items_by_name,
+    all_museum_minerals,
+    dwarf_scrolls,
+    skeleton_back,
+    skeleton_front,
+    skeleton_middle,
+)
 from .data.requirement import EndgameItemReceivedRequirement
-from .data.secret_note_data import gift_requirements, SecretNote
+from .data.secret_note_data import SecretNote, gift_requirements
+from .data.time import MAX_MONTHS
 from .data.tool import get_tool_upgrade_name
 from .locations import LocationTags
 from .logic.logic import StardewLogic
-from .data.time import MAX_MONTHS
 from .mods.mod_data import ModNames
-from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, Cooksanity, StardewValleyOptions, Walnutsanity
-from .options.options import FarmType, Moviesanity, Eatsanity, Friendsanity, ExcludeGingerIsland, \
-    IncludeEndgameLocations, JourneyOfThePrairieKing, JunimoKart
+from .options import (
+    BackpackProgression,
+    Chefsanity,
+    Cooksanity,
+    Craftsanity,
+    Monstersanity,
+    Museumsanity,
+    Shipsanity,
+    SpecialOrderLocations,
+    StardewValleyOptions,
+    Walnutsanity,
+)
+from .options.options import Eatsanity, ExcludeGingerIsland, FarmType, Friendsanity, IncludeEndgameLocations, JourneyOfThePrairieKing, JunimoKart, Moviesanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
 from .strings.animal_product_names import AnimalProduct
-from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, StartWithoutOptionName, CustomLogicOptionName
-from .strings.ap_names.community_upgrade_names import CommunityUpgrade, Bookseller
+from .strings.ap_names.ap_option_names import CustomLogicOptionName, SecretsanityOptionName, StartWithoutOptionName, WalnutsanityOptionName
+from .strings.ap_names.community_upgrade_names import Bookseller, CommunityUpgrade
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.shop_location_names import ShopLocation
 from .strings.ap_names.transport_names import Transportation
@@ -43,11 +62,21 @@ from .strings.building_names import Building, WizardBuilding
 from .strings.bundle_names import CCRoom
 from .strings.calendar_names import Weekday
 from .strings.catalogue_names import Catalogue
-from .strings.craftable_names import Bomb, Furniture, Consumable, Craftable
+from .strings.craftable_names import Bomb, Consumable, Craftable, Furniture
 from .strings.crop_names import Fruit, Vegetable
-from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \
-    DeepWoodsEntrance, AlecEntrance, \
-    SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance, JunaEntrance
+from .strings.entrance_names import (
+    AlecEntrance,
+    BoardingHouseEntrance,
+    DeepWoodsEntrance,
+    Entrance,
+    JunaEntrance,
+    LaceyEntrance,
+    LogicEntrance,
+    SVEEntrance,
+    dig_to_mines_floor,
+    dig_to_skull_floor,
+    move_to_woods_depth,
+)
 from .strings.fish_names import Fish
 from .strings.food_names import Meal
 from .strings.forageable_names import Forageable
@@ -56,16 +85,17 @@ from .strings.geode_names import Geode
 from .strings.gift_names import Gift
 from .strings.machine_names import Machine
 from .strings.material_names import Material
-from .strings.metal_names import Artifact as ArtifactName, MetalBar, Mineral
+from .strings.metal_names import Artifact as ArtifactName
+from .strings.metal_names import MetalBar, Mineral
 from .strings.monster_names import Monster
 from .strings.performance_names import Performance
 from .strings.quest_names import Quest
-from .strings.region_names import Region, LogicRegion
+from .strings.region_names import LogicRegion, Region
 from .strings.season_names import Season
 from .strings.skill_names import Skill
 from .strings.special_item_names import SpecialItem
 from .strings.special_order_names import SpecialOrder
-from .strings.tool_names import Tool, ToolMaterial, FishingRod
+from .strings.tool_names import FishingRod, Tool, ToolMaterial
 from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC, ModNPC
 from .strings.wallet_item_names import Wallet
@@ -533,7 +563,8 @@ def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, cont
     rule_collector.set_entrance_rule(Entrance.enter_lewis_bedroom, logic.relationship.has_hearts(NPC.lewis, 2))
     rule_collector.set_entrance_rule(Entrance.leave_lewis_bedroom, logic.relationship.has_hearts(NPC.lewis, 2))
     if content.is_enabled(ModNames.alec):
-        rule_collector.set_entrance_rule(AlecEntrance.petshop_to_bedroom, (logic.relationship.has_hearts(ModNPC.alec, 2) | logic.mod.magic.can_blink()))
+        rule_collector.set_entrance_rule(AlecEntrance.petshop_to_petshop_back, (logic.relationship.has_hearts(ModNPC.alec, 2) | logic.mod.magic.can_blink()))
+        rule_collector.set_entrance_rule(AlecEntrance.petshop_back_to_petshop, (logic.relationship.has_hearts(ModNPC.alec, 2) | logic.mod.magic.can_blink()))
     if content.is_enabled(ModNames.lacey):
         rule_collector.set_entrance_rule(LaceyEntrance.forest_to_hat_house, logic.relationship.has_hearts(ModNPC.lacey, 2))
     if content.is_enabled(ModNames.juna):

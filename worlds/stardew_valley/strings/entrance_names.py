@@ -546,8 +546,10 @@ class JasperEntrance:
 class AlecEntrance:
     forest_to_petshop = "Forest to Alec's Pet Shop"
     petshop_to_forest = "Alec's Pet Shop to Forest"
-    petshop_to_bedroom = "Alec's Pet Shop to Alec's Bedroom"
-    bedroom_to_petshop = "Alec's Bedroom to Alec's Pet Shop"
+    petshop_to_petshop_back = "Alec's Pet Shop to Alec's Pet Shop Back"
+    petshop_back_to_petshop = "Alec's Pet Shop Back to Alec's Pet Shop"
+    enter_alec_room = "Alec's Pet Shop to Alec's Bedroom"
+    leave_alec_room = "Alec's Bedroom to Alec's Pet Shop"
 
 
 @final

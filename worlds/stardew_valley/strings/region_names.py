@@ -301,6 +301,7 @@ class JasperRegion:
 
 class AlecRegion:
     pet_store = "Alec's Pet Shop"
+    pet_store_back = "Alec's Pet Shop Back"
     alec_bedroom = "Alec's Bedroom"
 
 

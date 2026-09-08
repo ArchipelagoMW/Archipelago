@@ -158,8 +158,9 @@ jasper_entrances = [
 ]
 alec_regions = [
     RegionData(Region.forest, (AlecEntrance.forest_to_petshop,)),
-    RegionData(AlecRegion.pet_store, (AlecEntrance.petshop_to_bedroom, AlecEntrance.petshop_to_forest)),
-    RegionData(AlecRegion.alec_bedroom, (AlecEntrance.bedroom_to_petshop,)),
+    RegionData(AlecRegion.pet_store, (AlecEntrance.petshop_to_petshop_back, AlecEntrance.petshop_to_forest)),
+    RegionData(AlecRegion.pet_store_back, (AlecEntrance.enter_alec_room, AlecEntrance.petshop_back_to_petshop)),
+    RegionData(AlecRegion.alec_bedroom, (AlecEntrance.leave_alec_room,)),
 ]
 
 alec_entrances = [
@@ -175,15 +176,17 @@ alec_entrances = [
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT,
     ),
+    ConnectionData(AlecEntrance.petshop_to_petshop_back, AlecRegion.pet_store_back),
+    ConnectionData(AlecEntrance.petshop_back_to_petshop, AlecRegion.pet_store),
     ConnectionData(
-        AlecEntrance.petshop_to_bedroom,
+        AlecEntrance.enter_alec_room,
         AlecRegion.alec_bedroom,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN,
     ),
     ConnectionData(
-        AlecEntrance.bedroom_to_petshop,
-        AlecRegion.pet_store,
+        AlecEntrance.leave_alec_room,
+        AlecRegion.pet_store_back,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN,
     ),
