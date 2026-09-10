@@ -10,16 +10,16 @@ if TYPE_CHECKING:
 
 LOCATION_LOGIC = {
     "Radio Towers FM Radio":
-        Has("Boost") | Has("Bat Form") | Has("Spin Form"),
+        Has("Boost") | Has("Bat Form") | Has("Spin Form"), 
 
     "Radio Towers FM Rings":
-        Has("Boost") | Has("Bat Form") | Has("Spin Form"),
+        Has("Boost") | Has("Bat Form") | Has("Spin Form"), 
 
     "Smuggler's Den Roof Chest":
-        Has("Boost"),
+        Has("Boost"), 
 
     "Smuggler's Den Rings":
-        None,
+        None, 
 
     "Smuggler's Den Chest Crane":
         Has("Boost"),
@@ -37,7 +37,7 @@ LOCATION_LOGIC = {
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
 
     "Stacked Outpost Rings":
-        None,
+        None, 
 
     "Sunken Neighborhood Chest":
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
@@ -64,7 +64,7 @@ LOCATION_LOGIC = {
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
 
     "Trading Outpost Rings":
-        None,
+        None, 
 
     "Trading Outpost Chest":
         Has("Bat Form") | Has("Spin Form"),
@@ -76,16 +76,16 @@ LOCATION_LOGIC = {
         Has("Boost"),
 
     "Merchant's Fleet Lever Chest":
-        Has("Boost"),
+        None,
 
     "Merchant's Fleet Chest":
-        None,
+        Has("Boost"),
 
     "Runa's Village Lever Chest":
-        None,
+        None, 
 
     "Runa's Village Kappa Baby":
-        None,
+        None, 
 
     "Vindra's Mills Fix Windmill":
         Has("Snake Form") & Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
@@ -97,7 +97,7 @@ LOCATION_LOGIC = {
         HasAll("Snake Form", "Boost", "Bat Form", "Spin Form"),
 
     "Stiltsville Ruins Rescue Kid":
-        None,
+        None, 
 
     "Jester's Minery Minery Chest":
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
@@ -124,7 +124,7 @@ LOCATION_LOGIC = {
         Has("Boost"),
 
     "Gravity Well Chest":
-        Has("Boost") | Has("Bat Form") | Has("Spin Form"),
+        Has("Boost") | Has("Bat Form") | Has("Spin Form"), 
 
     "Baby Storage Kappa Baby":
         Has("Boost"),
@@ -142,7 +142,7 @@ LOCATION_LOGIC = {
         HasAll("Bat Form", "Boost"),
 
     "Altar of Hands Chest":
-        None,
+        None, 
 
     "Jester":
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
@@ -160,7 +160,7 @@ LOCATION_LOGIC = {
         Has("Bat Form") | Has("Spin Form"),
 
     "Frosty Bait Rings":
-        Has("Boost") | Has("Bat Form") | Has("Spin Form"),
+        Has("Boost") | Has("Bat Form") | Has("Spin Form"), 
 
     "Frosty Bait Gear Bits":
         Has("Boost") & Has("Bat Form"),
@@ -241,31 +241,31 @@ LOCATION_LOGIC = {
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
 
     "Blazing Bonanza Rings":
-        Has("Boost") | Has("Bat Form") | Has("Spin Form"),
+        Has("Boost") | Has("Bat Form") | Has("Spin Form"), 
 
     "Blazing Bonanza Kappa Baby":
-        None,
+        None, 
 
     "Giant's Fire Chest":
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
 
     "Giant's Fire Drone Rings":
-        None,
+        None, 
 
     "Logtown High Chest":
         Has("Bat Form"),
 
     "Logtown Well Chest":
-        None,
+        None, 
 
     "Rotund Ice Rings":
         Has("Spin Form") | (Has("Boost") & Has("Bat Form")),
 
     "Laser Marathon Laser Challenge":
-        None,
+        None, 
 
     "Night Sight Chest":
-        None,
+        None, 
 
     "Frozen Gears Gearserker":
         Has("Boost"),
@@ -274,13 +274,13 @@ LOCATION_LOGIC = {
         Has("Boost") & Has("Spin Form"),
 
     "Aurum Mine Chest":
-        None,
+        None, 
 
     "Aurum Mine Mr. Mint":
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
 
     "Aurum Mine Rat":
-        None,
+        None, 
 
     "Fungal Depths Surface Chest":
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
@@ -304,7 +304,7 @@ LOCATION_LOGIC = {
         Has("Boost") & Has("Bat Form"),
 
     "Uisge Whirlpool Gear Bits":
-        None,
+        None, 
 
     "Sgudal Ruins Rings":
         Has("Boost") & Has("Snake Form"),
@@ -313,10 +313,10 @@ LOCATION_LOGIC = {
         Has("Boost") & (Has("Bat Form") | Has("Spin Form")),
 
     "Sgudal Ruins Kappa Baby":
-        None,
+        None, 
 
     "Bhaile Ruins Peak Chest":
-        Has("Boost") | Has("Bat Form") | Has("Spin Form"),
+        Has("Boost") | Has("Bat Form") | Has("Spin Form"), 
 
     "Bhaile Ruins Building Chest":
         Has("Boost"),
@@ -361,7 +361,7 @@ LOCATION_LOGIC = {
         HasAll("Boost", "Bat Form", "Spin Form"),
 
     "Flooded Manachainn Kappa Baby":
-        None,
+        None, 
 
     "Slocfall Ghost":
         Has("Boost") & Has("Bat Form"),
@@ -376,7 +376,7 @@ LOCATION_LOGIC = {
         Has("Boost"),
 
     "Tartar Village Kappa Baby":
-        Has("Boost") | Has("Bat Form") | Has("Spin Form"),
+        Has("Boost") | Has("Bat Form") | Has("Spin Form"), 
 
     "Golden Inneal Gearserker":
         Has("Boost"),
