@@ -48,11 +48,16 @@ class DungeonFillTestBase(TestCase):
                         continue
                     self.assertIs(location.item.dungeon, location.parent_region.dungeon,
                                   f"{location.item} was not placed in its original dungeon.")
+                    self.assertEqual(
+                        location.progression_balancing_sphere,
+                        location.item.type not in {"SmallKey", "BigKey"},
+                    )
 
     def test_own_dungeons(self):
         self.generate_with_options(DungeonItem.option_own_dungeons)
         for location in self.multiworld.get_filled_locations():
             with self.subTest(location_name=location.name):
+                self.assertTrue(location.progression_balancing_sphere)
                 if location.parent_region.dungeon is None:
                     self.assertIs(location.item.dungeon, None)
                 else:
