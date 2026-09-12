@@ -159,6 +159,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
     default: typing.ClassVar[typing.Any]  # something that __init__ will be able to convert to the correct type
     visibility = Visibility.all
+    value_determined_randomly: bool = False  # The value this option has, came from a random source
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
@@ -456,7 +457,9 @@ class Toggle(NumericOption):
     @classmethod
     def from_text(cls, text: str) -> Toggle:
         if text == "random":
-            return cls(random.choice(list(cls.name_lookup)))
+            res = cls(random.choice(list(cls.name_lookup)))
+            res.value_determined_randomly = True
+            return res
         elif text.lower() in {"off", "0", "false", "none", "null", "no", "disabled"}:
             return cls(0)
         elif text.lower() in {"on", "1", "true", "yes", "enabled"}:
@@ -492,7 +495,9 @@ class Choice(NumericOption):
     def from_text(cls, text: str) -> Choice:
         text = text.lower()
         if text == "random":
-            return cls(random.choice(list(cls.name_lookup)))
+            res = cls(random.choice(list(cls.name_lookup)))
+            res.value_determined_randomly = True
+            return res
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
@@ -581,7 +586,9 @@ class TextChoice(Choice):
     @classmethod
     def from_text(cls, text: str) -> TextChoice:
         if text.lower() == "random":  # chooses a random defined option but won't use any free text options
-            return cls(random.choice(list(cls.name_lookup)))
+            res = cls(random.choice(list(cls.name_lookup)))
+            res.value_determined_randomly = True
+            return res
         for option_name, value in cls.options.items():
             if option_name.lower() == text.lower():
                 return cls(value)
@@ -636,7 +643,9 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         # set all of our text to lower case for name checking
         text = text.lower()
         if text == "random":
-            return cls(random.choice(list(cls.options.values())))
+            res = cls(random.choice(list(cls.options.values())))
+            res.value_determined_randomly = True
+            return res
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
@@ -655,6 +664,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
             option_list.remove("random")
             options = ";".join(option_list) + f";{shuffle}"
             boss_class = cls(options)
+            boss_class.value_determined_randomly = True
         else:
             for option in option_list:
                 if option in cls.options:
@@ -741,7 +751,9 @@ class Range(NumericOption):
     def from_text(cls, text: str) -> Range:
         text = text.lower()
         if text.startswith("random"):
-            return cls.weighted_range(text)
+            res = cls.weighted_range(text)
+            res.value_determined_randomly = True
+            return res
         elif text == "default" and hasattr(cls, "default"):
             return cls.from_any(cls.default)
         elif text == "high":
@@ -1037,7 +1049,9 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
         check_text = text.lower().split(",")
         if ((cls.valid_keys or cls.verify_item_name or cls.verify_location_name)
                 and len(check_text) == 1 and check_text[0].startswith("random")):
-            return cls((), check_text[0])
+            res = cls((), check_text[0])
+            res.value_determined_randomly = True
+            return res
         return cls([option.strip() for option in text.split(",")])
 
     @classmethod
