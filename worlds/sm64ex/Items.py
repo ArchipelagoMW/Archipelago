@@ -19,7 +19,21 @@ generic_item_data_table: dict[str, SM64ItemData] = {
     "Wing Cap": SM64ItemData(sm64ex_base_id + 181),
     "Metal Cap": SM64ItemData(sm64ex_base_id + 182),
     "Vanish Cap": SM64ItemData(sm64ex_base_id + 183),
+}
+
+filler_item_data_table: dict[str, SM64ItemData] = {
     "1Up Mushroom": SM64ItemData(sm64ex_base_id + 184, ItemClassification.filler),
+    "Health Restore 1 Pip": SM64ItemData(sm64ex_base_id + 1750, ItemClassification.filler),
+    "Health Restore 2 Pip": SM64ItemData(sm64ex_base_id + 1751, ItemClassification.filler),
+    "Health Restore 3 Pip": SM64ItemData(sm64ex_base_id + 1752, ItemClassification.filler),
+    "Health Restore 4 Pip": SM64ItemData(sm64ex_base_id + 1753, ItemClassification.filler),
+    "Health Full Restore":  SM64ItemData(sm64ex_base_id + 1754, ItemClassification.filler),
+    "Bonk Trap": SM64ItemData(sm64ex_base_id + 1760, ItemClassification.filler),
+    "Fire Trap": SM64ItemData(sm64ex_base_id + 1761, ItemClassification.filler),
+    "Amp Trap": SM64ItemData(sm64ex_base_id + 1762, ItemClassification.filler),
+    "Chuckya Trap": SM64ItemData(sm64ex_base_id + 1763, ItemClassification.filler),
+    "Spin Trap":  SM64ItemData(sm64ex_base_id + 1764, ItemClassification.filler),
+    "Gust Trap":  SM64ItemData(sm64ex_base_id + 1765, ItemClassification.filler),
 }
 
 action_item_data_table: dict[str, SM64ItemData] = {
@@ -65,6 +79,7 @@ painting_unlock_item_data_table: dict[str, SM64ItemData] = {
 
 item_data_table = {
     **generic_item_data_table,
+    **filler_item_data_table,
     **action_item_data_table,
     **cannon_item_data_table,
     **painting_unlock_item_data_table
