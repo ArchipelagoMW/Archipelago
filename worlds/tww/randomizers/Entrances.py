@@ -342,16 +342,24 @@ class EntranceRandomizer:
 
         self.banned_exits: list[ZoneExit] = []
         self.islands_with_a_banned_dungeon: set[str] = set()
+        self.skip_randomization = False
 
     def randomize_entrances(self) -> None:
         """
         Randomize entrances for The Wind Waker.
+
+        If skip_randomization is True, entrances will not be randomized but will still be
+        finalized to connect regions. This is used when entrances were pre-loaded from
+        UT slot_data to preserve the server's original mappings.
         """
-        self.init_banned_exits()
+        # If entrances were not pre-loaded from server, randomize them
+        if not self.skip_randomization:
+            self.init_banned_exits()
 
-        for relevant_entrances, relevant_exits in self.get_all_entrance_sets_to_be_randomized():
-            self.randomize_one_set_of_entrances(relevant_entrances, relevant_exits)
+            for relevant_entrances, relevant_exits in self.get_all_entrance_sets_to_be_randomized():
+                self.randomize_one_set_of_entrances(relevant_entrances, relevant_exits)
 
+        # Always finalize to connect regions, whether randomized or pre-loaded
         self.finalize_all_randomized_sets_of_entrances()
 
     def init_banned_exits(self) -> None:
