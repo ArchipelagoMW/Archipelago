@@ -1,5 +1,7 @@
-from typing import Counter
+from collections import Counter
+
 from BaseClasses import Item, ItemClassification as IC
+
 from zilliandomizer.logic_components.items import Item as ZzItem
 
 _useful_thresholds = {
