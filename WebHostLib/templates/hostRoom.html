@@ -43,7 +43,7 @@
                 in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
             {% endif %}
         </span>
-        {{ macros.list_patches_room(room) }}
+        {{ macros.list_patches_room(room, slot_downloads) }}
         {% if room.owner == session["_id"] %}
             <div style="display: flex; align-items: center;">
                 <form method="post" id="command-form" style="flex-grow: 1; margin-right: 1em;">
