@@ -7,11 +7,10 @@ import sys
 import time
 from collections.abc import Callable, Iterable, Mapping
 from random import Random
-from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, TextIO, Tuple,
-                    TYPE_CHECKING, Type, Union)
+from typing import Any, ClassVar, Self, TextIO, TYPE_CHECKING, Type
 
-from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState, Entrance
+from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from rule_builder.rules import CustomRuleRegister, Rule
 from Utils import Version
 
@@ -32,7 +31,7 @@ class AutoWorldRegister(type):
     testable_worlds: dict[str, Type[World]] = world_types
     """worlds under test; scoped to AP_TEST_WORLDS by worlds/__init__"""
     __file__: str
-    zip_path: Optional[str]
+    zip_path: str | None
     settings_key: str
     __settings: Any
 
@@ -47,7 +46,7 @@ class AutoWorldRegister(type):
                 return None
         return cls.__settings
 
-    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
+    def __new__(mcs, name: str, bases: tuple[type, ...], dct: dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
             assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
 
@@ -107,7 +106,7 @@ class AutoWorldRegister(type):
 
 
 class AutoLogicRegister(type):
-    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoLogicRegister:
+    def __new__(mcs, name: str, bases: tuple[type, ...], dct: dict[str, Any]) -> AutoLogicRegister:
         new_class = super().__new__(mcs, name, bases, dct)
         function: Callable[..., Any]
         for item_name, function in dct.items():
@@ -133,10 +132,10 @@ class AutoLogicRegister(type):
 
 
 class WebWorldRegister(type):
-    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> WebWorldRegister:
+    def __new__(mcs, name: str, bases: tuple[type, ...], dct: dict[str, Any]) -> WebWorldRegister:
         # don't allow an option to appear in multiple groups, allow "Item & Location Options" to appear anywhere by the
         # dev, putting it at the end if they don't define options in it
-        option_groups: List[OptionGroup] = dct.get("option_groups", [])
+        option_groups: list[OptionGroup] = dct.get("option_groups", [])
         prebuilt_options = ["Game Options", "Item & Location Options"]
         seen_options = []
         item_group_in_list = False
@@ -166,7 +165,7 @@ class WebWorldRegister(type):
 
 
 def _timed_call(method: Callable[..., Any], *args: Any,
-                multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
+                multiworld: MultiWorld | None = None, player: int | None = None) -> Any:
     start = time.perf_counter()
     ret = method(*args)
     taken = time.perf_counter() - start
@@ -200,7 +199,7 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
 
 
 def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
-    world_types: Set[AutoWorldRegister] = set()
+    world_types: set[AutoWorldRegister] = set()
     for player in multiworld.player_ids:
         prev_item_count = len(multiworld.itempool)
         world_types.add(multiworld.worlds[player].__class__)
@@ -227,26 +226,26 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 class WebWorld(metaclass=WebWorldRegister):
     """Webhost integration"""
 
-    options_page: Union[bool, str] = True
+    options_page: bool | str = True
     """display a settings page. Can be a link to a specific page or external tool."""
 
-    game_info_languages: List[str] = ['en']
+    game_info_languages: list[str] = ['en']
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
-    tutorials: List["Tutorial"]
+    tutorials: list["Tutorial"]
     """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
     theme: str = "grass"
     """Choose a theme for you /game/* pages.
     Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
-    bug_report_page: Optional[str]
+    bug_report_page: str | None
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
-    options_presets: Dict[str, Dict[str, Any]] = {}
+    options_presets: dict[str, dict[str, Any]] = {}
     """A dictionary containing a collection of developer-defined game option presets."""
 
-    option_groups: ClassVar[List[OptionGroup]] = []
+    option_groups: ClassVar[list[OptionGroup]] = []
     """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
 
     rich_text_options_doc = False
@@ -264,10 +263,10 @@ class WebWorld(metaclass=WebWorldRegister):
     .. _reStructuredText: https://docutils.sourceforge.io/rst.html
     """
 
-    location_descriptions: Dict[str, str] = {}
+    location_descriptions: dict[str, str] = {}
     """An optional map from location names (or location group names) to brief descriptions for users."""
 
-    item_descriptions: Dict[str, str] = {}
+    item_descriptions: dict[str, str] = {}
     """An optional map from item names (or item group names) to brief descriptions for users."""
 
 
@@ -285,31 +284,31 @@ class World(metaclass=AutoWorldRegister):
     topology_present: bool = False
     """indicate if this world has any meaningful layout/pathing"""
 
-    all_item_and_group_names: ClassVar[FrozenSet[str]] = frozenset()
+    all_item_and_group_names: ClassVar[frozenset[str]] = frozenset()
     """gets automatically populated with all item and item group names"""
 
-    item_name_to_id: ClassVar[Dict[str, int]] = {}
+    item_name_to_id: ClassVar[dict[str, int]] = {}
     """map item names to their IDs"""
-    location_name_to_id: ClassVar[Dict[str, int]] = {}
+    location_name_to_id: ClassVar[dict[str, int]] = {}
     """map location names to their IDs"""
 
-    item_name_groups: ClassVar[Dict[str, Set[str]]] = {}
+    item_name_groups: ClassVar[dict[str, set[str]]] = {}
     """maps item group names to sets of items. Example: {"Weapons": {"Sword", "Bow"}}"""
 
-    location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
+    location_name_groups: ClassVar[dict[str, set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
-    required_client_version: Tuple[int, int, int] = (0, 1, 6)
+    required_client_version: tuple[int, int, int] = (0, 1, 6)
     """
     override this if changes to a world break forward-compatibility of the client
     The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
     future. Protocol level compatibility check moved to MultiServer.min_client_version.
     """
 
-    required_server_version: Tuple[int, int, int] = (0, 5, 0)
+    required_server_version: tuple[int, int, int] = (0, 5, 0)
     """update this if the resulting multidata breaks forward-compatibility of the server"""
 
-    hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()
+    hint_blacklist: ClassVar[frozenset[str]] = frozenset()
     """any names that should not be hintable"""
 
     hidden: ClassVar[bool] = False
@@ -331,14 +330,14 @@ class World(metaclass=AutoWorldRegister):
     player: int
     """autoset on creation. The player number for this World"""
 
-    item_id_to_name: ClassVar[Dict[int, str]]
+    item_id_to_name: ClassVar[dict[int, str]]
     """automatically generated reverse lookup of item id to name"""
-    location_id_to_name: ClassVar[Dict[int, str]]
+    location_id_to_name: ClassVar[dict[int, str]]
     """automatically generated reverse lookup of location id to name"""
 
-    item_names: ClassVar[Set[str]]
+    item_names: ClassVar[set[str]]
     """set of all potential item names"""
-    location_names: ClassVar[Set[str]]
+    location_names: ClassVar[set[str]]
     """set of all potential location names"""
 
     random: Random
@@ -346,10 +345,10 @@ class World(metaclass=AutoWorldRegister):
 
     settings_key: ClassVar[str]
     """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
-    settings: ClassVar[Optional["Group"]]
+    settings: ClassVar[Group | None]
     """loaded settings from host.yaml"""
 
-    zip_path: ClassVar[Optional[pathlib.Path]] = None
+    zip_path: ClassVar[pathlib.Path | None] = None
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
     """path it was loaded from"""
@@ -358,7 +357,7 @@ class World(metaclass=AutoWorldRegister):
     manifest: ClassVar[dict[str, Any]] = {}
     """Mapping of the world's archipelago.json manifest. Use game and world_version attrs instead for those values."""
 
-    def __init__(self, multiworld: "MultiWorld", player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
@@ -420,10 +419,10 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_hook(self,
-                  progitempool: List["Item"],
-                  usefulitempool: List["Item"],
-                  filleritempool: List["Item"],
-                  fill_locations: List["Location"]) -> None:
+                  progitempool: list["Item"],
+                  usefulitempool: list["Item"],
+                  filleritempool: list["Item"],
+                  fill_locations: list["Location"]) -> None:
         """Special method that gets called as part of distribute_items_restrictive (main fill)."""
         pass
 
@@ -474,7 +473,7 @@ class World(metaclass=AutoWorldRegister):
         # so you can have more specific typing in your world implementation.
         return {}
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(self, hint_data: dict[int, dict[int, str]]):
         """
         Fill in additional entrance information text into locations, which is displayed when hinted.
         structure is {player_id: {location_id: text}} You will need to insert your own player_id.
@@ -506,7 +505,7 @@ class World(metaclass=AutoWorldRegister):
 
     # end of ordered Main.py calls
 
-    def create_item(self, name: str) -> "Item":
+    def create_item(self, name: str) -> Item:
         """
         Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer
@@ -528,7 +527,7 @@ class World(metaclass=AutoWorldRegister):
         return self.random.choice(tuple(self.item_name_to_id.keys()))
 
     @classmethod
-    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+    def create_group(cls, multiworld: MultiWorld, new_player_id: int, players: set[int]) -> World:
         """
         Creates a group, which is an instance of World that is responsible for multiple others.
         An example case is ItemLinks creating these.
@@ -541,7 +540,7 @@ class World(metaclass=AutoWorldRegister):
         return group
 
     # decent place to implement progressive items, in most cases can stay as-is
-    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
+    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> str | None:
         """
         Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
@@ -553,7 +552,7 @@ class World(metaclass=AutoWorldRegister):
             return item.name
         return None
 
-    def get_pre_fill_items(self) -> List["Item"]:
+    def get_pre_fill_items(self) -> list["Item"]:
         """
         Used to return items that need to be collected when creating a fresh all_state, but don't exist in the
         multiworld itempool.
