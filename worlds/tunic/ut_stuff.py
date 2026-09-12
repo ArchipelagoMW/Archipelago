@@ -30,11 +30,13 @@ def setup_options_from_slot_data(world: "TunicWorld") -> None:
             world.options.shuffle_bells.value = world.passthrough.get("shuffle_bells", 0)
             world.options.grass_randomizer.value = world.passthrough.get("grass_randomizer", 0)
             world.options.breakable_shuffle.value = world.passthrough.get("breakable_shuffle", 0)
+            world.options.shuffle_enemy_drops.value = world.passthrough.get("shuffle_enemy_drops", 0)
+            world.options.shuffle_enemy_souls.value = world.passthrough.get("shuffle_enemy_souls", 0)
             world.options.entrance_layout.value = EntranceLayout.option_standard
             if ("ziggurat2020_3, ziggurat2020_1_zig2_skip" in world.passthrough["Entrance Rando"].keys()
                     or "ziggurat2020_3, ziggurat2020_1_zig2_skip" in world.passthrough["Entrance Rando"].values()):
                 world.options.entrance_layout.value = EntranceLayout.option_fixed_shop
-            world.options.decoupled = world.passthrough.get("decoupled", 0)
+            world.options.decoupled.value = world.passthrough.get("decoupled", 0)
             world.options.laurels_location.value = LaurelsLocation.option_anywhere
             world.options.combat_logic.value = world.passthrough.get("combat_logic", 0)
         else:
