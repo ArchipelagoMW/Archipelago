@@ -27,6 +27,7 @@ CONNECTION_LOST_STATUS = (
 )
 CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
 CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
+GAME_ID_UNEXPECTED_MESSAGE = "Editing the Game ID is something you do 'at your own risk', you have been warned."
 
 
 # This address is used to check/set the player's health for DeathLink.
@@ -671,12 +672,18 @@ async def dolphin_sync_task(ctx: TWWContext) -> None:
                 logger.info("Attempting to connect to Dolphin...")
                 dolphin_memory_engine.hook()
                 if dolphin_memory_engine.is_hooked():
-                    if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GZLE99":
+                    game_id = dolphin_memory_engine.read_bytes(0x80000000, 6)
+                    # Editing the Game ID is a useful method of isolating game data without memory card changes,
+                    # Supporting 2 additional IDs is reasonable. J/P is in line with the normal GC ID Schema.
+                    if game_id not in [b"GZLE99", b"GZLP99", b"GZLJ99"]:
                         logger.info(CONNECTION_REFUSED_GAME_STATUS)
                         ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
                         dolphin_memory_engine.un_hook()
                         sleep_time = 5
                     else:
+                        if game_id != b"GZLE99":
+                            # Supported doesn't mean preferred, so still throw a message in the log.
+                            logger.info(GAME_ID_UNEXPECTED_MESSAGE)
                         logger.info(CONNECTION_CONNECTED_STATUS)
                         ctx.dolphin_status = CONNECTION_CONNECTED_STATUS
                         ctx.locations_checked = set()
