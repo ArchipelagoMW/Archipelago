@@ -1846,8 +1846,17 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     self.output(f"Nothing found for recognized location name \"{hint_name}\". "
                                 f"Location appears to not exist in this multiworld.")
                 else:
-                    self.output(f"Nothing found for recognized item name \"{hint_name}\". "
-                                f"Item appears to not exist in this multiworld.")
+                    chain_name = None
+                    for chain_name, chain_items in self.ctx.slot_data[self.client.slot].get("progressive_chains", {}).items():
+                        if hint_name in chain_items:
+                            break
+
+                    if chain_name:
+                        self.output(f"Nothing found for recognized item name \"{hint_name}\". "
+                                    f"Item is part of the \"{chain_name}\" progressive chain, maybe try hinting for that instead.")
+                    else:
+                        self.output(f"Nothing found for recognized item name \"{hint_name}\". "
+                                    f"Item appears to not exist in this multiworld.")
             else:
                 self.output(f"You can't afford the hint. "
                             f"You have {points_available} points and need at least "
