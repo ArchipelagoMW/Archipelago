@@ -95,6 +95,40 @@ class BounceTarget(typing.NamedTuple):
             (self._teams_match(target), self._games_match(target), self._tags_match(target), self._games_match(target)),
         )
 
+OPERATOR_NAME_TO_OPERATOR = {
+    "or": operator.or_,
+    "and": operator.and_,
+}
+
+class BounceTarget(typing.NamedTuple):
+    teams: set[int]
+    games: set[str]
+    tags: set[str]
+    slots: set[int]
+
+    def _teams_match(self, target: Client) -> bool:
+        return target.team in self.teams
+
+    def _games_match(self, target: Client) -> bool:
+        return len(self.games) == 0 or target.ctx.games[target.slot] in self.games
+
+    def _tags_match(self, target: Client) -> bool:
+        return len(self.tags) == 0 or bool(set(target.tags) & self.tags)
+
+    def _slots_match(self, target: Client) -> bool:
+        return len(self.slots) == 0 or target.slot in self.slots
+
+    def matches_client_legacy(self, target: Client) -> bool:
+        return self._teams_match(target) and (
+            self._games_match(target) or self._tags_match(target) or self._slots_match(target)
+        )
+
+    def matches_client_operator(self, target: Client, op: typing.Callable[[typing.Any, typing.Any], bool]):
+        return reduce(
+            op,
+            (self._teams_match(target), self._games_match(target), self._tags_match(target), self._games_match(target)),
+        )
+
 
 def remove_from_list(container, value):
     try:
