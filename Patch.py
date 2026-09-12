@@ -17,10 +17,20 @@ class RomMeta(TypedDict):
     player_name: str
 
 
+class IncompatiblePatchError(Exception):
+    """
+    Used to report a version mismatch between a patch's world version and
+    a user's installed world version that is too important to be compatible
+    """
+    pass
+
+
 def create_rom_file(patch_file: str) -> Tuple[RomMeta, str]:
     auto_handler = AutoPatchRegister.get_handler(patch_file)
     if auto_handler:
         handler: APAutoPatchInterface = auto_handler(patch_file)
+        handler.read()
+        handler.verify_version()
         target = os.path.splitext(patch_file)[0]+handler.result_file_ending
         handler.patch(target)
         return {"server": handler.server,
