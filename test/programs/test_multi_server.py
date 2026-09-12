@@ -4,7 +4,7 @@ from MultiServer import Context, ServerCommandProcessor
 
 class TestResolvePlayerName(unittest.TestCase):
     def test_resolve(self) -> None:
-        p = ServerCommandProcessor(Context("", 0, "", "", 0, 0, False))
+        p = ServerCommandProcessor(Context("", 0, "", "", False, 0, 0, False))
         p.ctx.player_names = {
             (1, 1): "AAA",
             (1, 2): "aBc",
