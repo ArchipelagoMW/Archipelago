@@ -219,7 +219,7 @@ class SA2BWorld(World):
         # Not Generate Basic
         self.black_market_costs = dict()
 
-        if self.options.goal.value in [0, 2, 4, 5, 6, 8]:
+        if self.options.goal.value in [0, 2, 4, 5, 6, 8, 9]:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.options.goal.value == 1:
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
@@ -246,7 +246,7 @@ class SA2BWorld(World):
             for item in {**upgrades_table}:
                 itempool += [self.create_item(item, None, self.options.goal.value)]
 
-            if self.options.goal.value in [1, 2, 6]:
+            if self.options.goal.value in [1, 2, 6, 9]:
                 # Some flavor of Chaos Emerald Hunt
                 for item in {**emeralds_table}:
                     itempool.append(self.create_item(item))
