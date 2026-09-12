@@ -1,0 +1,227 @@
+[
+  {
+    "name": "Sunken Shrine",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 1000,
+        "y": 575,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Sunken Shrine - Lightfoot Tabi"
+      },
+      {
+        "name": "Sunken Shrine - Sun Crest"
+      },
+      {
+        "name": "Sunken Shrine - Moon Crest"
+      },
+      {
+        "name": "Sunken Shrine - Key of Love"
+      },
+      {
+        "name": "Sunken Shrine Seal - Ultra Lifeguard"
+      },
+      {
+        "name": "Sunken Shrine Seal - Waterfall Paradise"
+      },
+      {
+        "name": "Sunken Shrine Seal - Tabi Gauntlet"
+      },
+      {
+        "name": "Mega Shard of the Moon"
+      },
+      {
+        "name": "Beginner's Mega Shard"
+      },
+      {
+        "name": "Mega Shard of the Stars"
+      },
+      {
+        "name": "Mega Shard of the Sun"
+      }
+    ]
+  },
+  {
+    "name": "Sunken Shrine - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Sunken Shrine - Lightfoot Tabi"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 392,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Sunken Shrine - Sun Crest"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 380,
+            "y": 730
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Sunken Shrine - Moon Crest"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 516,
+            "y": 700
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Sunken Shrine - Key of Love"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 715,
+            "y": 415
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sunken Shrine - Power Seals",
+    "children": [
+      {
+        "name": "Sunken Shrine Seal",
+        "sections": [
+          {
+            "name": "Sunken Shrine Seal - Ultra Lifeguard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 785,
+            "y": 300,
+            "size": 46
+          }
+        ]
+      },
+      {
+        "name": "Sunken Shrine Seal",
+        "sections": [
+          {
+            "name": "Sunken Shrine Seal - Waterfall Paradise"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 838,
+            "y": 878,
+            "size": 46
+          }
+        ]
+      },
+      {
+        "name": "Sunken Shrine Seal",
+        "sections": [
+          {
+            "name": "Sunken Shrine Seal - Tabi Gauntlet"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 208,
+            "y": 508,
+            "size": 46
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sunken Shrine - Mega Shards",
+    "children": [
+      {
+        "name": "Sunken Shrine Mega Shard",
+        "sections": [
+          {
+            "name": "Mega Shard of the Moon"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 435,
+            "y": 875
+          }
+        ]
+      },
+      {
+        "name": "Sunken Shrine Mega Shard",
+        "sections": [
+          {
+            "name": "Beginner's Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 795,
+            "y": 550
+          }
+        ]
+      },
+      {
+        "name": "Sunken Shrine Mega Shard",
+        "sections": [
+          {
+            "name": "Mega Shard of the Stars"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 525,
+            "y": 130
+          }
+        ]
+      },
+      {
+        "name": "Sunken Shrine Mega Shard",
+        "sections": [
+          {
+            "name": "Mega Shard of the Sun"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Sunken Shrine",
+            "x": 115,
+            "y": 650
+          }
+        ]
+      }
+    ]
+  }
+]

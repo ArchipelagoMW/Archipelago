@@ -1,0 +1,138 @@
+[
+  {
+    "name": "Elemental Skylands",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 1020,
+        "y": 110,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Elemental Skylands - Key of Symbiosis"
+      },
+      {
+        "name": "Elemental Skylands Seal - Air"
+      },
+      {
+        "name": "Elemental Skylands Seal - Water"
+      },
+      {
+        "name": "Elemental Skylands Seal - Fire"
+      },
+      {
+        "name": "Earth Mega Shard"
+      },
+      {
+        "name": "Water Mega Shard"
+      }
+    ]
+  },
+  {
+    "name": "Elemental Skylands - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Elemental Skylands - Key of Symbiosis"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Elemental Skylands",
+            "x": 1521,
+            "y": 143,
+            "size": 64
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Elemental Skylands - Power Seals",
+    "children": [
+      {
+        "name": "Elemental Skylands Seal",
+        "sections": [
+          {
+            "name": "Elemental Skylands Seal - Air"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Elemental Skylands",
+            "x": 131,
+            "y": 38
+          }
+        ]
+      },
+      {
+        "name": "Elemental Skylands Seal",
+        "sections": [
+          {
+            "name": "Elemental Skylands Seal - Water"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Elemental Skylands",
+            "x": 903,
+            "y": 165
+          }
+        ]
+      },
+      {
+        "name": "Elemental Skylands Seal",
+        "sections": [
+          {
+            "name": "Elemental Skylands Seal - Fire"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Elemental Skylands",
+            "x": 1343,
+            "y": 165
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Elemental Skylands - Mega Shards",
+    "children": [
+      {
+        "name": "Elemental Skylands Mega Shard",
+        "sections": [
+          {
+            "name": "Earth Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Elemental Skylands",
+            "x": 500,
+            "y": 251
+          }
+        ]
+      },
+      {
+        "name": "Elemental Skylands Mega Shard",
+        "sections": [
+          {
+            "name": "Water Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Elemental Skylands",
+            "x": 902,
+            "y": 124
+          }
+        ]
+      }
+    ]
+  }
+]

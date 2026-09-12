@@ -1,0 +1,172 @@
+[
+  {
+    "name": "Howling Grotto",
+    "sections": [
+      {
+        "name": "Howling Grotto - Wingsuit"
+      },
+      {
+        "name": "Howling Grotto Seal - Windy Saws and Balls"
+      },
+      {
+        "name": "Howling Grotto Seal - Crushing Pits"
+      },
+      {
+        "name": "Howling Grotto Seal - Breezy Crushers"
+      },
+      {
+        "name": "Bottom Left Mega Shard"
+      },
+      {
+        "name": "Near Portal Mega Shard"
+      },
+      {
+        "name": "Pie in the Sky Mega Shard"
+      },
+      {
+        "name": "Howling Grotto - Emerald Golem"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 814,
+        "y": 389,
+        "size": 30
+      }
+    ]
+  },
+  {
+    "name": "Howling Grotto - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Howling Grotto - Wingsuit"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Howling Grotto",
+            "x": 308,
+            "y": 70
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Howling Grotto - Emerald Golem"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Howling Grotto",
+            "x": 910,
+            "y": 280
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Howling Grotto - Power Seals",
+    "children": [
+      {
+        "name": "Howling Grotto Seal",
+        "sections": [
+          {
+            "name": "Howling Grotto Seal - Windy Saws and Balls"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Howling Grotto",
+            "x": 415,
+            "y": 69
+          }
+        ]
+      },
+      {
+        "name": "Howling Grotto Seal",
+        "sections": [
+          {
+            "name": "Howling Grotto Seal - Crushing Pits"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Howling Grotto",
+            "x": 624,
+            "y": 212
+          }
+        ]
+      },
+      {
+        "name": "Howling Grotto Seal",
+        "sections": [
+          {
+            "name": "Howling Grotto Seal - Breezy Crushers"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Howling Grotto",
+            "x": 800,
+            "y": 388
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Howling Grotto - Mega Shards",
+    "children": [
+      {
+        "name": "Howling Grotto Mega Shard",
+        "sections": [
+          {
+            "name": "Bottom Left Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Howling Grotto",
+            "x": 345,
+            "y": 320
+          }
+        ]
+      },
+      {
+        "name": "Howling Grotto Mega Shard",
+        "sections": [
+          {
+            "name": "Near Portal Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Howling Grotto",
+            "x": 700,
+            "y": 480
+          }
+        ]
+      },
+      {
+        "name": "Howling Grotto Mega Shard",
+        "sections": [
+          {
+            "name": "Pie in the Sky Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Howling Grotto",
+            "x": 755,
+            "y": 210
+          }
+        ]
+      }
+    ]
+  }
+]
