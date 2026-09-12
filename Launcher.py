@@ -267,7 +267,6 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             self.navigation = self.top_screen.ids.navigation
             self.button_layout = self.top_screen.ids.button_layout
             self.search_box = self.top_screen.ids.search_box
-            self.top_screen.md_bg_color = self.theme_cls.backgroundColor
 
             Window.bind(on_drop_file=self._on_drop_file)
             Window.bind(on_keyboard=self._on_keyboard)
