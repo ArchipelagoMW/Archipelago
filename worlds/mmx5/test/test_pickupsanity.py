@@ -1,0 +1,311 @@
+"""Pickupsanity: location set, id stability, stub integrity, disc edits."""
+import unittest
+
+from worlds.mmx5 import disc, pickups
+from worlds.mmx5.items import BASE_ID
+from worlds.mmx5.locations import location_table
+
+from . import MMX5TestBase
+from .test_client import FakeContext, MMX5Client, make_save, run_watcher
+
+BASE_LOCATION_COUNT = 45          # v0.2.0 shipped count (incl. event-free real locations)
+PICKUP_COUNT = 32                 # 33 freestanding consumables minus the intro's
+
+
+class TestPickupsanityOff(MMX5TestBase):
+    options = {"pickupsanity": False}
+
+    def test_no_pickup_locations(self) -> None:
+        placed = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        for name in pickups.RECORD_TO_LOCATION.values():
+            self.assertNotIn(name, placed,
+                             "pickup location created with the option off")
+
+
+class TestPickupsanityOn(MMX5TestBase):
+    # endgame_checks off on purpose: this class pins the 45 + 32 arithmetic, so
+    # it has to hold the rest of the world still. Its own count is covered in
+    # test_endgame_checks.
+    options = {"pickupsanity": True, "endgame_checks": False}
+
+    def test_pickup_locations_created(self) -> None:
+        placed = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        for name in pickups.RECORD_TO_LOCATION.values():
+            self.assertIn(name, placed, f"missing pickup location {name}")
+
+    def test_location_count(self) -> None:
+        real = [loc for loc in self.multiworld.get_locations(self.player)
+                if loc.address is not None]
+        self.assertEqual(len(real), BASE_LOCATION_COUNT + PICKUP_COUNT)
+
+    def test_pool_fills(self) -> None:
+        # Filler must top the pool up to the new location count - a mismatch
+        # here means create_items and the location set disagree.
+        real = [loc for loc in self.multiworld.get_locations(self.player)
+                if loc.address is not None]
+        pool = [i for i in self.multiworld.itempool]
+        self.assertEqual(len(pool), len(real))
+
+    def test_all_reachable(self) -> None:
+        # With every progression item collected, every pickup location must be
+        # reachable - the endgame ones through the Sigma Stages entrance rule.
+        state = self.multiworld.get_all_state(False)
+        for name in pickups.RECORD_TO_LOCATION.values():
+            self.assertTrue(
+                self.multiworld.get_location(name, self.player).can_reach(state),
+                f"{name} unreachable even with everything")
+
+
+class TestPickupData(MMX5TestBase):
+    """Dataset invariants - no multiworld needed but the base class is cheap."""
+    options = {}
+
+    def test_count_and_ids(self) -> None:
+        self.assertEqual(len(pickups.PICKUPS), PICKUP_COUNT)
+        # Id layout: BASE_ID + 200 + list position, append-only.
+        for i, (_s, _a, _idx, _iid, name) in enumerate(pickups.PICKUPS):
+            self.assertEqual(location_table[name], BASE_ID + 200 + i)
+
+    def test_no_intro_pickup(self) -> None:
+        # The intro capsule is permanently missable (stage not re-enterable)
+        # and must never become a location.
+        for stage, _a, _idx, _iid, _name in pickups.PICKUPS:
+            self.assertNotEqual(stage, 0, "intro pickup must stay excluded")
+
+    def test_record_addresses_unique(self) -> None:
+        self.assertEqual(len(pickups.RECORD_TO_LOCATION), len(pickups.PICKUPS))
+
+    def test_stage_ids_are_mapped(self) -> None:
+        for stage, _a, _idx, _iid, name in pickups.PICKUPS:
+            self.assertIn(stage, pickups.STAGE_PREFIX)
+            self.assertEqual(pickups.LOCATION_STAGE_ID[name], stage)
+
+    def test_stub_and_edits(self) -> None:
+        # v3: 55 instruction words + a 7-word vanilla-handler jump table +
+        # 13 words of CHECKED_TABLE the client owns. Was 52 words in v2 (which
+        # could only decide per stage) and 21 while the stub ate everything.
+        self.assertEqual(len(disc.PICKUPSANITY_STUB), 75 * 4)
+        self.assertEqual(len(disc.PICKUPSANITY_STUB) % 4, 0)
+        # The consume tail is no longer the last word - the jump table is - so
+        # look for it where the placed-pickup path actually ends (word 30).
+        consume_j = 0x08000000 | ((0x800543C8 >> 2) & 0x03FFFFFF)
+        self.assertEqual(
+            int.from_bytes(disc.PICKUPSANITY_STUB[40 * 4:41 * 4], "little"),
+            consume_j, "placed pickups must still consume with no vanilla effect")
+        # Stub must fit the free-space run measured in the vanilla EXE:
+        # 0x800776A0..0x800778F8 is zero, i.e. 102 words from the stub base.
+        self.assertLessEqual(disc.PICKUPSANITY_STUB_ADDR + len(disc.PICKUPSANITY_STUB),
+                             0x800778F8)
+        edits = disc.pickupsanity_edits()
+        # stub + 7 dispatch redirects, every redirect pointing at the stub.
+        self.assertEqual(len(edits), 1 + len(disc.CONSUMABLE_KINDS))
+        for addr, payload, region in edits[1:]:
+            self.assertEqual(payload,
+                             disc.PICKUPSANITY_STUB_ADDR.to_bytes(4, "little"))
+            self.assertEqual(region, "SLUS exe")
+            kind = (addr - disc.DISPATCH_TABLE_ADDR) // 4
+            self.assertIn(kind, disc.CONSUMABLE_KINDS)
+
+    def test_ring2_no_overlap_with_ring1(self) -> None:
+        # Ring 1: 16*4 at 0x801FA020, count 0x801FA080.
+        # Ring 2: 32*8 at 0x801FA100, count 0x801FA200.
+        ring2_lo, ring2_hi = 0x801FA100, 0x801FA100 + 32 * 8
+        self.assertGreaterEqual(ring2_lo, 0x801FA084)
+        self.assertLessEqual(ring2_hi, 0x801FA200)
+
+
+def ring2_with(records: list[tuple[int, int, int, int]]) -> bytes:
+    """Build a ring2 image: (stage, kind, item_id, recptr) per record."""
+    import worlds.mmx5.client as c
+    ring = bytearray(c.RING2_SLOTS * 8)
+    for slot, (stage, kind, iid, recptr) in enumerate(records):
+        base = slot * 8
+        ring[base:base + 4] = bytes([stage, kind, iid, 0x80 | slot])
+        ring[base + 4:base + 8] = recptr.to_bytes(4, "little")
+    return bytes(ring)
+
+
+class TestPickupsanityClient(unittest.IsolatedAsyncioTestCase):
+    """Ring-2 record -> location check, via the same harness as the other
+    client regression tests."""
+
+    PICKUP = pickups.PICKUPS[0]     # Grizzly Slash - Large Life Energy
+
+    def _ctx(self) -> FakeContext:
+        ctx = FakeContext()
+        ctx.slot_data = {"goal": 0, "boss_difficulty": 1, "pickupsanity": 1}
+        return ctx
+
+    def _client(self) -> MMX5Client:
+        client = MMX5Client()
+        client.ring2_present = True
+        return client
+
+    async def test_record_sends_check(self) -> None:
+        stage, area, idx, iid, name = self.PICKUP
+        recptr = pickups.record_addr(stage, area, idx)
+        ring2 = ring2_with([(stage, 0x3, iid, recptr)])
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                client=self._client(), ctx=self._ctx(),
+                                ring2=ring2)
+        self.assertIn(location_table[name], ctx.checked_location_ids())
+
+    async def test_stage_mismatch_does_not_send(self) -> None:
+        # A pointer that maps but a stage byte that disagrees is corruption,
+        # not a check - it must be dropped, not mis-sent.
+        stage, area, idx, iid, name = self.PICKUP
+        recptr = pickups.record_addr(stage, area, idx)
+        ring2 = ring2_with([(stage + 1, 0x3, iid, recptr)])
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                client=self._client(), ctx=self._ctx(),
+                                ring2=ring2)
+        self.assertNotIn(location_table[name], ctx.checked_location_ids())
+
+    async def test_option_off_ignores_ring(self) -> None:
+        # Records with the option off (stale RAM, wrong slot_data) must not
+        # send anything.
+        stage, area, idx, iid, name = self.PICKUP
+        recptr = pickups.record_addr(stage, area, idx)
+        ring2 = ring2_with([(stage, 0x3, iid, recptr)])
+        ctx = self._ctx()
+        ctx.slot_data["pickupsanity"] = 0
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                client=self._client(), ctx=ctx, ring2=ring2)
+        self.assertNotIn(location_table[name], ctx.checked_location_ids())
+
+    async def test_confirmed_location_acks_record(self) -> None:
+        import worlds.mmx5.client as c
+        stage, area, idx, iid, name = self.PICKUP
+        recptr = pickups.record_addr(stage, area, idx)
+        ring2 = ring2_with([(stage, 0x3, iid, recptr)])
+        ctx = self._ctx()
+        ctx.checked_locations = {location_table[name]}
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                client=self._client(), ctx=ctx, ring2=ring2)
+        ack_addrs = [w[0] for w in ctx.writes]
+        self.assertIn(c.RING2_ADDR + 0 * 8 + 3, ack_addrs,
+                      "confirmed record was not acked")
+
+    async def test_unmapped_records_log_once_per_kind_not_per_pointer(self) -> None:
+        """Enemy-dropped consumables land in the unmapped branch.
+
+        The pickupsanity stub is indexed by ITEM KIND, so while it is
+        installed EVERY consumable goes through it - including the ones
+        enemies drop, which have no placement record and so never resolve to
+        a location (tester report 2026-08-09: enemy health drops do nothing
+        until every pickup in the stage is checked and the client hands the
+        vanilla handlers back).
+
+        That branch was raised to `info` so the situation is visible in a
+        player's log at the default level. It therefore MUST NOT be deduped on
+        the record pointer: drops carry a different pointer every time, so a
+        pointer-keyed dedup emits a fresh line per drop and buries the log.
+        """
+        import logging
+        import worlds.mmx5.client as c
+        stage, area, idx, iid, name = self.PICKUP
+        client, ctx = self._client(), self._ctx()
+        with self.assertLogs("Client", level="INFO") as caught:
+            for ptr in range(0x800F4000, 0x800F4000 + 40 * 8, 8):
+                ring2 = ring2_with([(stage, 0x3, iid, ptr)])
+                await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                  client=client, ctx=ctx, ring2=ring2)
+            # assertLogs fails if nothing is emitted, so guarantee one line.
+            logging.getLogger("Client").info("sentinel")
+        unmapped = [m for m in caught.output if "unmapped pickupsanity" in m]
+        self.assertEqual(len(unmapped), 1,
+                         f"40 distinct garbage pointers produced {len(unmapped)} "
+                         f"info lines - the dedup key still includes the pointer")
+
+
+class TestCheckedTable(unittest.IsolatedAsyncioTestCase):
+    """v3: the stub decides per capsule from a table the client writes.
+
+    v2 could only flip the whole kind-indexed dispatch table once a stage was
+    fully checked, which cannot express "heal this capsule, record that one".
+    Two reports needed exactly that:
+
+      * a capsule stays inert on a revisit long after its check was sent;
+      * a multiworld COLLECT marks locations checked in this world without the
+        player touching them, and those capsules were then consumed with no
+        heal and no check.
+    """
+    import worlds.mmx5.client as c
+
+    STAGE = 3                       # Duff McWhalen: 4 pickup locations
+
+    def _ctx(self, checked=()) -> FakeContext:
+        ctx = FakeContext()
+        ctx.slot_data = {"goal": 0, "boss_difficulty": 1, "pickupsanity": 1}
+        ctx.checked_locations = set(checked)
+        return ctx
+
+    def _client(self, v3=True) -> MMX5Client:
+        client = MMX5Client()
+        client.ring2_present = True
+        client.checked_table_present = v3
+        return client
+
+    def _table_writes(self, ctx) -> list:
+        import worlds.mmx5.client as c
+        return [bytes(w[1]) for w in ctx.writes
+                if w[0] == c.RING2_CHECKED_TABLE_ADDR]
+
+    def _stage_locs(self):
+        return [(pickups.record_addr(s, a, i), location_table[n])
+                for s, a, i, _iid, n in pickups.PICKUPS if s == self.STAGE]
+
+    async def test_checked_pickups_are_listed_for_the_stub(self) -> None:
+        import worlds.mmx5.client as c
+        locs = self._stage_locs()
+        ptr, loc = locs[0]
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(),
+                                ctx=self._ctx(checked=[loc]))
+        writes = self._table_writes(ctx)
+        self.assertTrue(writes, "no CHECKED_TABLE write at all")
+        words = [int.from_bytes(writes[-1][i:i + 4], "little")
+                 for i in range(0, len(writes[-1]), 4)]
+        self.assertEqual(words[0], ptr, "the checked record was not listed")
+        self.assertEqual(words[1], 0, "list must be zero-terminated")
+
+    async def test_unchecked_pickups_are_not_listed(self) -> None:
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(),
+                                ctx=self._ctx())
+        writes = self._table_writes(ctx)
+        if writes:
+            self.assertEqual(int.from_bytes(writes[-1][0:4], "little"), 0,
+                             "listed a capsule whose check is outstanding")
+
+    async def test_only_the_current_stage_is_listed(self) -> None:
+        # Another stage's checked pickup must not appear - the table is read
+        # against whichever placement list is live.
+        other = [(pickups.record_addr(s, a, i), location_table[n])
+                 for s, a, i, _iid, n in pickups.PICKUPS if s != self.STAGE]
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(),
+                                ctx=self._ctx(checked=[other[0][1]]))
+        writes = self._table_writes(ctx)
+        if writes:
+            self.assertEqual(int.from_bytes(writes[-1][0:4], "little"), 0,
+                             "another stage's record leaked into the table")
+
+    async def test_not_written_on_a_pre_v3_disc(self) -> None:
+        locs = self._stage_locs()
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(v3=False),
+                                ctx=self._ctx(checked=[locs[0][1]]))
+        self.assertEqual(self._table_writes(ctx), [],
+                         "wrote a table the disc has no stub to read")
+
+    async def test_dispatch_toggle_stands_down_on_v3(self) -> None:
+        """The whole-stage toggle - and its misleading message - must not run
+        alongside the per-capsule table, or the all-or-nothing behaviour comes
+        straight back."""
+        locs = self._stage_locs()
+        ctx = await run_watcher(make_save(max_hp=0x20, intro=2, weapons=1),
+                                stage_id=self.STAGE, client=self._client(),
+                                ctx=self._ctx(checked=[l for _p, l in locs]))
+        self.assertEqual(ctx.dispatch_writes(), {},
+                         "v3 disc still had its dispatch table rewritten")
