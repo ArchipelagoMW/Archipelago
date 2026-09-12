@@ -9,7 +9,7 @@
 
 ## Installation Procedures
 
-1. Install Raft. The currently-supported Raft version is Version 1.0: The Final Chapter. Any minor version (such as 1.09) should be compatible.
+1. Install Raft. The currently-supported Raft version is Version 1.0: The Final Chapter. Any minor version (such as 1.09) should be compatible. On Steam, you will need to opt into the `1.09_precrossplayupdate` beta. To do so, right click Raft on Steam, select `Properties`, select `Game Versions & Betas` on the left, and select `1.09_precrossplayupdate`.
 
 2. Install RML.
 
