@@ -7,6 +7,7 @@ import webbrowser
 from enum import Enum
 from typing import Optional, Callable, Iterable, Sequence
 
+from Launcher import launch as launch_exe
 from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore, \
     is_windows
 
@@ -189,7 +190,9 @@ def _install_apworld(apworld_src: str = "") -> Optional[tuple[pathlib.Path, path
                         "so a Launcher restart is required to use the new installation.")
     world_source = worlds.WorldSource(str(target), is_zip=True, relative=False)
     bisect.insort(worlds.world_sources, world_source)
-    world_source.load()
+    worlds.add_apworld_spec(world_source, worlds.APWorldContainer(world_source.resolved_path))
+    if not world_source.load():
+        raise Exception(f"World was installed, but failed to load. See the Launcher log for details.")
 
     return apworld_path, target
 
@@ -242,7 +245,7 @@ def open_patch():
             if exe is None or not isfile(exe[-1]):
                 exe = get_exe("Launcher")
 
-            launch([*exe, file], component.cli)
+            launch_exe([*exe, file], component.cli)
 
 
 def get_exe(component: str | Component) -> Sequence[str] | None:

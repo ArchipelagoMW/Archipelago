@@ -1012,23 +1012,6 @@ def deprecate(message: str, add_stacklevels: int = 0):
     warnings.warn(message, stacklevel=2 + add_stacklevels)
 
 
-class DeprecateDict(dict):
-    log_message: str
-    should_error: bool
-
-    def __init__(self, message: str, error: bool = False) -> None:
-        self.log_message = message
-        self.should_error = error
-        super().__init__()
-
-    def __getitem__(self, item: Any) -> Any:
-        if self.should_error:
-            deprecate(self.log_message, add_stacklevels=1)
-        elif __debug__:
-            warnings.warn(self.log_message, stacklevel=2)
-        return super().__getitem__(item)
-
-
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows and without setting spawn method first."""
     # original upstream issue: https://github.com/python/cpython/issues/76327
