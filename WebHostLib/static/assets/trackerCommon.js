@@ -33,6 +33,12 @@ const secondsToHours = (seconds) => {
 };
 
 window.addEventListener('load', () => {
+    // Numeric sorting according to documentation on https://datatables.net/blog/2017/locale-based-sorting
+    const {compare} = new Intl.Collator('en', {numeric: true});
+    const types = $.fn.dataTable.ext.type;
+    delete types.order['string-pre'];
+    types.order['string-asc'] = compare;
+    types.order['string-desc'] = (a, b) => -compare(a, b);
     const tables = $(".table").DataTable({
         paging: false,
         info: false,
