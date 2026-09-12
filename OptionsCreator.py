@@ -17,10 +17,12 @@ from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
 from kivymd.uix.dialog import MDDialog
-from kivy.core.text.markup import MarkupLabel
+from kivy.core.text import Label as CoreLabel
+from kivy.core.window import Window
+from kivy.metrics import sp
 from kivy.utils import escape_markup
 from kivy.lang.builder import Builder
-from kivy.properties import ObjectProperty
+from kivy.properties import BooleanProperty, ObjectProperty, StringProperty
 from textwrap import dedent
 from copy import deepcopy
 import Utils
@@ -163,6 +165,30 @@ class CounterItemValue(ResizableTextField):
         return super().insert_text(re.sub(self.pat, "", substring), from_undo=from_undo)
 
 
+class VisualKeyCheckbox(MDBoxLayout):
+    key = StringProperty("")
+    selected = BooleanProperty(False)
+
+    def toggle(self):
+        self.selected = not self.selected
+
+
+class VisualValidKeys(MDDialog):
+    option: typing.Type[OptionSet]
+    scrollbox: ScrollBox = ObjectProperty(None)
+    save: MDButton = ObjectProperty(None)
+    entries: list[VisualKeyCheckbox]
+
+    def __init__(self, *args, option: typing.Type[OptionSet],
+                 name: str, valid_keys: typing.Iterable[str], selected_keys: typing.Collection[str], **kwargs):
+        self.option = option
+        self.name = name
+        super().__init__(*args, **kwargs)
+        self.entries = [VisualKeyCheckbox(key=key, selected=key in selected_keys) for key in valid_keys]
+        for entry in self.entries:
+            self.scrollbox.layout.add_widget(entry)
+
+
 class VisualListSetCounter(MDDialog):
     button: MDIconButton = ObjectProperty(None)
     option: typing.Type[OptionSet] | typing.Type[OptionList] | typing.Type[OptionCounter]
@@ -170,19 +196,57 @@ class VisualListSetCounter(MDDialog):
     add: MDIconButton = ObjectProperty(None)
     save: MDButton = ObjectProperty(None)
     input: ResizableTextField = ObjectProperty(None)
+    key_picker: MDIconButton = ObjectProperty(None)
     dropdown: MDDropdownMenu
     valid_keys: typing.Iterable[str]
+    picker_enabled = BooleanProperty(False)
 
-    def __init__(self, *args, option: typing.Type[OptionSet] | typing.Type[OptionList],
+    def __init__(self, *args, option: typing.Type[OptionSet] | typing.Type[OptionList] | typing.Type[OptionCounter],
                  name: str, valid_keys: typing.Iterable[str], **kwargs):
         self.option = option
         self.name = name
         self.valid_keys = valid_keys
+        self.picker_enabled = bool(valid_keys) and issubclass(option, OptionList)
         super().__init__(*args, **kwargs)
-        self.dropdown = MarkupDropdown(caller=self.input, border_margin=dp(2),
-                                       width=self.input.width, position="bottom")
+        self.dropdown = MarkupDropdown(caller=self.key_picker, border_margin=dp(8),
+                                       max_height=dp(320), position="auto", hor_growth="left")
+        label = CoreLabel(font_size=sp(16))
+        self.dropdown_content_width = max(
+            (label.get_extents(key)[0] for key in self.valid_keys),
+            default=0,
+        ) + dp(48)
         self.input.bind(text=self.on_text)
         self.input.bind(on_text_validate=self.validate_add)
+
+    def update_dropdown_width(self):
+        self.dropdown.width = min(
+            max(self.input.width, self.dropdown_content_width),
+            Window.width - dp(16),
+        )
+
+    def populate_dropdown(self, filter_text: str = ""):
+        lowered = filter_text.lower()
+        self.dropdown.items = [
+            {
+                "text": escape_markup(key),
+                "on_release": lambda selected_key=key: self.select_key(selected_key),
+            }
+            for key in self.valid_keys
+            if lowered in key.lower()
+        ]
+
+    def select_key(self, key: str):
+        self.add_set_item(key)
+        self.input.set_text(self.input, "")
+        self.dropdown.dismiss()
+
+    def show_valid_keys(self):
+        if not self.picker_enabled:
+            return
+        self.update_dropdown_width()
+        self.populate_dropdown(self.input.text)
+        if not self.dropdown.parent:
+            self.dropdown.open()
 
     def validate_add(self, instance):
         if self.valid_keys:
@@ -218,32 +282,11 @@ class VisualListSetCounter(MDDialog):
         self.scrollbox.layout.add_widget(item)
 
     def on_text(self, instance, value):
-        if not self.valid_keys:
+        if not self.picker_enabled:
             return
         if len(value) >= 3:
-            self.dropdown.items.clear()
-
-            def on_press(txt):
-                split_text = MarkupLabel(text=txt, markup=True).markup
-                self.input.set_text(self.input, "".join(text_frag for text_frag in split_text
-                                                        if not text_frag.startswith("[")))
-                self.input.focus = True
-                self.dropdown.dismiss()
-
-            lowered = value.lower()
-            for item_name in self.valid_keys:
-                try:
-                    index = item_name.lower().index(lowered)
-                except ValueError:
-                    pass  # substring not found
-                else:
-                    text = escape_markup(item_name)
-                    text = text[:index] + "[b]" + text[index:index + len(value)] + "[/b]" + text[index + len(value):]
-                    self.dropdown.items.append({
-                        "text": text,
-                        "on_release": lambda txt=text: on_press(txt),
-                        "markup": True
-                    })
+            self.update_dropdown_width()
+            self.populate_dropdown(value)
             if not self.dropdown.parent:
                 self.dropdown.open()
         else:
@@ -452,7 +495,7 @@ class OptionsCreator(ThemedApp):
     def create_popup(self, option: typing.Type[OptionList] | typing.Type[OptionSet] | typing.Type[OptionCounter],
                      name: str, world: typing.Type[World]):
 
-        valid_keys = sorted(option.valid_keys)
+        valid_keys = list(option.valid_keys)
         if option.verify_item_name:
             valid_keys += list(world.item_name_to_id.keys())
             if option.convert_name_groups:
@@ -461,11 +504,28 @@ class OptionsCreator(ThemedApp):
             valid_keys += list(world.location_name_to_id.keys())
             if option.convert_name_groups:
                 valid_keys += list(world.location_name_groups.keys())
+        valid_keys = list(dict.fromkeys(valid_keys))
+
+        if valid_keys and issubclass(option, OptionSet):
+            def apply_valid_key_changes(button):
+                self.options[name].clear()
+                self.options[name].extend(entry.key for entry in dialog.entries if entry.selected)
+                dialog.dismiss()
+
+            dialog = VisualValidKeys(option=option, name=name, valid_keys=valid_keys,
+                                     selected_keys=self.options[name])
+            dialog.scrollbox.layout.theme_bg_color = "Custom"
+            dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
+            dialog.scrollbox.layout.spacing = dp(2)
+            dialog.scrollbox.layout.padding = [0, dp(5), 0, dp(5)]
+            dialog.save.bind(on_release=apply_valid_key_changes)
+            dialog.open()
+            return
 
         if not issubclass(option, OptionCounter):
             def apply_changes(button):
                 self.options[name].clear()
-                for list_item in dialog.scrollbox.layout.children:
+                for list_item in reversed(dialog.scrollbox.layout.children):
                     self.options[name].append(getattr(list_item.text, "text"))
                 dialog.dismiss()
         else:
@@ -486,7 +546,7 @@ class OptionsCreator(ThemedApp):
             for value in sorted(self.options[name]):
                 dialog.add_set_item(value, self.options[name].get(value, None))
         else:
-            for value in sorted(self.options[name]):
+            for value in self.options[name]:
                 dialog.add_set_item(value)
 
         dialog.save.bind(on_release=apply_changes)
