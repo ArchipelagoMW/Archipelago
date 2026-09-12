@@ -23,13 +23,6 @@ class ChoiceIsRandom(Choice):
             f'known options are {", ".join(f"{option}" for option in cls.name_lookup.values())}')
 
 
-class PrieDieuWarp(DefaultOnToggle):
-    """
-    Automatically unlocks the ability to warp between Prie Dieu shrines.
-    """
-    display_name = "Unlock Fast Travel"
-
-
 class SkipCutscenes(DefaultOnToggle):
     """
     Automatically skips most cutscenes.
@@ -213,7 +206,6 @@ class BlasphemousDeathLink(DeathLink):
 @dataclass
 class BlasphemousOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
-    prie_dieu_warp: PrieDieuWarp
     skip_cutscenes: SkipCutscenes
     corpse_hints: CorpseHints
     difficulty: Difficulty
@@ -237,7 +229,6 @@ class BlasphemousOptions(PerGameCommonOptions):
 
 blas_option_groups = [
     OptionGroup("Quality of Life",  [
-        PrieDieuWarp,
         SkipCutscenes,
         CorpseHints,
         SkipLongQuests,
