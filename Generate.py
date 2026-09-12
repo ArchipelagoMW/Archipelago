@@ -7,8 +7,6 @@ import os
 import random
 import string
 import sys
-import urllib.parse
-import urllib.request
 from collections import Counter
 from itertools import chain
 from typing import Any
@@ -20,7 +18,7 @@ ModuleUpdate.update()
 import Utils
 import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version
+from Utils import read_config, read_configs, version_tuple, __version__, tuplize_version
 
 
 def mystery_argparse(argv: list[str] | None = None) -> argparse.Namespace:
@@ -101,22 +99,26 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     weights_cache: dict[str, tuple[Any, ...]] = {}
     if args.weights_file_path and os.path.exists(args.weights_file_path):
         try:
-            weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
+            weights_cache[args.weights_file_path] = read_configs(args.weights_file_path)
+        except (OSError, UnicodeError) as e:
+            raise Exception(f"Failed to read weights ({args.weights_file_path})") from e
         except Exception as e:
-            raise ValueError(f"File {args.weights_file_path} is invalid. Please fix your yaml.") from e
+            raise ValueError(f"File {args.weights_file_path} is invalid. Please fix your options.") from e
         logging.info(f"Weights: {args.weights_file_path} >> "
                      f"{get_choice('description', weights_cache[args.weights_file_path][-1], 'No description specified')}")
 
     if args.meta_file_path and os.path.exists(args.meta_file_path):
         try:
-            meta_weights = read_weights_yamls(args.meta_file_path)[-1]
+            meta_weights = read_config(args.meta_file_path)
+        except (OSError, UnicodeError) as e:
+            raise Exception(f"Failed to read meta file ({args.meta_file_path})") from e
         except Exception as e:
-            raise ValueError(f"File {args.meta_file_path} is invalid. Please fix your yaml.") from e
+            raise ValueError(f"File {args.meta_file_path} is invalid. Please fix your meta file.") from e
         logging.info(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
         try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
             del(meta_weights["meta_description"])
         except Exception as e:
-            raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
+            raise ValueError("No meta description found for meta file. Unable to verify.") from e
         if args.sameoptions:
             raise Exception("Cannot mix --sameoptions with --meta")
     else:
@@ -133,25 +135,27 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
             path = os.path.join(args.player_files_path, fname)
             try:
                 weights_for_file = []
-                for doc_idx, yaml in enumerate(read_weights_yamls(path)):
-                    if yaml is None:
-                        logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
+                for idx, doc in enumerate(read_configs(path), start=1):
+                    if doc is None:
+                        logging.warning(f"Ignoring empty document #{idx} in {fname}")
                     else:
-                        quantity = yaml.get("quantity", 1)
+                        quantity = doc.get("quantity", 1)
                         if quantity <= 0:
                             raise ValueError("A quantity of 0 or less is invalid. Please change it to at least 1.")
                         if not allow_quantity and quantity > 1:
                             raise ValueError("Quantity greater than 1 is deactivated by host settings.")
 
                         for _ in range(quantity):
-                            weights_for_file.append(yaml)
+                            weights_for_file.append(doc)
                 weights_cache[fname] = tuple(weights_for_file)
 
+            except (OSError, UnicodeError) as e:
+                raise Exception(f"Failed to read weights ({path})") from e
             except Exception as e:
                 logging.exception(f"Exception reading weights in file {fname}")
                 player_errors.append(
                     f"{len(player_errors) + 1}. "
-                    f"File {fname} is invalid. Please fix your yaml.\n{Utils.get_all_causes(e)}"
+                    f"File {fname} is invalid. Please fix your options.\n{Utils.get_all_causes(e)}"
                 )
 
     # sort dict for consistent results across platforms:
@@ -225,7 +229,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                 logging.exception(f"Exception reading settings in file {fname}")
                 player_errors.append(
                     f"{len(player_errors) + 1}. "
-                    f"File {fname} is invalid. Please fix your yaml.\n{Utils.get_all_causes(e)}"
+                    f"File {fname} is invalid. Please fix your options.\n{Utils.get_all_causes(e)}"
                 )
         # Exit early here to avoid throwing the same errors again later
         if player_errors:
@@ -280,7 +284,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                 player_errors.append(
                     f"{len(player_errors) + 1}. "
                     f"File {path} document #{doc_index + 1} (with name: {args.name.get(player, name)}) is invalid. "
-                    f"Please fix your yaml.\n{Utils.get_all_causes(e)}")
+                    f"Please fix your options.\n{Utils.get_all_causes(e)}")
 
             # increment for each yaml document in the file
             player += 1
@@ -297,32 +301,6 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                          f"See logs for full tracebacks.\n\n{errors}")
 
     return args, seed
-
-
-def read_weights_yamls(path) -> tuple[Any, ...]:
-    try:
-        if urllib.parse.urlparse(path).scheme in ('https', 'file'):
-            yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
-        else:
-            with open(path, 'rb') as f:
-                yaml = str(f.read(), "utf-8-sig")
-    except Exception as e:
-        raise Exception(f"Failed to read weights ({path})") from e
-
-    from yaml.error import MarkedYAMLError
-    try:
-        return tuple(parse_yamls(yaml))
-    except MarkedYAMLError as ex:
-        if ex.problem_mark:
-            lines = yaml.splitlines()
-            if ex.context_mark:
-                relevant_lines = "\n".join(lines[ex.context_mark.line:ex.problem_mark.line+1])
-            else:
-                relevant_lines = lines[ex.problem_mark.line]
-            error_line = " " * ex.problem_mark.column + "^"
-            raise Exception(f"{ex.context} {ex.problem} on line {ex.problem_mark.line}:"
-                            f"\n{relevant_lines}\n{error_line}")
-        raise ex
 
 
 def interpret_on_off(value) -> bool:
@@ -488,7 +466,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
         try:
             currently_targeted_weights = weights
             category = option_set.get("option_category", None)
-            if category:
+            if category and category != "null":
                 currently_targeted_weights = currently_targeted_weights[category]
             key = get_choice("option_name", option_set)
             if key not in currently_targeted_weights:
@@ -501,7 +479,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
             if result == trigger_result and Options.roll_percentage(get_choice("percentage", option_set, 100)):
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
-                    if category_name:
+                    if category_name and category_name != "null":
                         currently_targeted_weights = currently_targeted_weights[category_name]
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
             valid_keys.add(key)
