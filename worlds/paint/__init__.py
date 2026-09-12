@@ -36,11 +36,15 @@ class PaintWorld(World):
     item_name_to_id = item_table
     origin_region_name = "Canvas"
 
+    per_pixel_logic_percent: float
+
     def generate_early(self) -> None:
         if self.options.canvas_size_increment < 50 and self.options.logic_percent <= 55:
             if self.multiworld.players == 1:
                 raise OptionError("Logic Percent must be greater than 55 when generating a single-player world with "
                                   "Canvas Size Increment below 50.")
+        # The full canvas size is 800*600, so 480000 pixels.
+        self.per_pixel_logic_percent = self.options.logic_percent.value / 480000
 
     def get_filler_item_name(self) -> str:
         if self.random.randint(0, 99) >= self.options.trap_count:
@@ -114,9 +118,11 @@ class PaintWorld(World):
 
 def location_exists_with_options(world: PaintWorld, location: int):
     l = location % 198600
-    return l <= world.options.logic_percent * 4 and (l % 4 == 0 or
-                                                    (l > world.options.half_percent_checks * 4 and l % 2 == 0) or
-                                                    l > world.options.quarter_percent_checks * 4)
+    return l <= world.options.logic_percent.value * 4 and (
+            l % 4 == 0 or
+            (l > world.options.half_percent_checks.value * 4 and l % 2 == 0) or
+            l > world.options.quarter_percent_checks.value * 4
+    )
 
 
 class PaintState(LogicMixin):
