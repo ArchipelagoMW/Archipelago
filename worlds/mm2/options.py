@@ -4,7 +4,7 @@ from Options import (Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Ran
                      Visibility)
 from schema import Schema, And, Use, Optional
 
-bosses = {
+bosses: dict[str, int] = {
     "Heat Man": 0,
     "Air Man": 1,
     "Wood Man": 2,
@@ -21,7 +21,7 @@ bosses = {
     "Alien": 13
 }
 
-weapons_to_id = {
+weapons_to_id: dict[str, int] = {
     "Mega Buster": 0,
     "Atomic Fire": 1,
     "Air Shooter": 2,
@@ -211,6 +211,7 @@ class RandomMusic(Choice):
     option_shuffled = 1
     option_randomized = 2
     option_none = 3
+
 
 @dataclass
 class MM2Options(PerGameCommonOptions):
