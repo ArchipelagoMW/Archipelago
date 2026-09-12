@@ -10,18 +10,19 @@
 Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts) or [Steam](https://store.steampowered.com/app/2552430/KINGDOM_HEARTS_HD_1525_ReMIX/)
 
 - Follow this Guide to set up these requirements [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)
-    1. Version 25.03.16.0 or greater OpenKH Mod Manager with Panacea
+    1. Version 26.08.26.0 or greater OpenKH Mod Manager with Panacea
     2. Lua Backend from the OpenKH Mod Manager
-    3. Install the mod `KH2FM-Mods-Num/GoA-ROM-Edition` using OpenKH Mod Manager
-    4. [Archipelago Launcher](https://github.com/ArchipelagoMW/Archipelago/releases)
-    5. Install the Archipelago Companion mod from `JaredWeakStrike/APCompanion` using OpenKH Mod Manager
-    6. Install the mod from `TopazTK/KH2-ArchipelagoEnablers` using OpenKH Mod manager
-       1. Do Note that if you have `KH2FM-Mods-equations19/auto-save` OR `KH2FM-Mods-equations19/soft-reset` you should download `TopazTK/KH2-ArchipelagoEnablersLITE` instead
-       2. This mod overwrites slot 99 with an autosave. Make sure to copy your save data to another slot before installing.
-    7. AP Randomizer Seed
-    8. Optional Quality of Life Mods for Archipelago
-       1. Optionally Install the Archipelago Quality Of Life mod from `JaredWeakStrike/AP_QOL` using OpenKH Mod Manager
-       2. Optionally Install the Quality Of Life mod from `shananas/BearSkip` using OpenKH Mod Manager
+    3. Install the Garden of Assemblage mod with OpenKH Mod Manager
+- At the bottom of the first page click the link labled `PC (Epic/Steam) Archielago Setup Guide by JaredWeakStrike & Shananas` to continue installing
+    1. Install the Archipelago Companion mod with OpenKH Mod Manager
+    2. Install the KH2 Archipelago Enablers mod with OpenKH Mod manager
+       1. This mod overwrites slot 99 with an autosave. Make sure to copy your save data to another slot before installing.
+       2. Do Note that if you want to use a seperate Auto Save or Soft Reset mod you should download the LITE version of KH2 Archipelago Enablers instead
+    3. AP Randomizer Seed
+    4. Optional Quality of Life Mods for Archipelago
+       1. Optionally Install the Archipelago Quality Of Life mod using OpenKH Mod Manager
+       2. Optionally Install the Quality Of Life mod to skip 100 Acre Woods minigames using OpenKH Mod Manager
+- Finally install the [Archipelago Launcher](https://github.com/ArchipelagoMW/Archipelago/releases/latest) to be able to use the KH2 Client
 
 ### Installing A Seed
 
@@ -37,7 +38,7 @@ After Installing the seed click "Mod Loader -> Build/Build and Run". Every slot 
 ## Common Pitfalls
 
 - Having an old GOA Lua Script in your `C:\Users\*YourName*\Documents\KINGDOM HEARTS HD 1.5+2.5 ReMIX\scripts\kh2` folder.
-    - Pressing F2 while in game should look like this. ![image](https://i.imgur.com/ABSdtPC.png)
+    - Pressing F2 while in game should look like this. ![Lua Backend Console Image](Common_Pitfalls.png) 
 - Not having Lua Backend Configured Correctly.
     - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Lua Backend Configuration Step.
 
@@ -81,7 +82,7 @@ This pack will handle logic, received items, checked locations and autotabbing f
 - Why is my Client giving me a "Cannot Open Process: " error?
     - Due to how the client reads kingdom hearts 2 memory some people's computer flags it as a virus. Run the client as admin.
 - Why is my HP/MP continuously increasing without stopping?
-    - You do not have `JaredWeakStrike/APCompanion` set up correctly. Make sure it is above the GoA ROM Edition Mod in the mod manager.
+    - You do not have the APCompanion mod set up correctly. Make sure it is above the GoA ROM Edition Mod in the mod manager.
 - Why is my HP/MP continuously increasing without stopping when I have the APCompanion Mod?
     - You have a leftover GOA lua script in your `Documents\KINGDOM HEARTS HD 1.5+2.5 ReMIX\scripts\KH2`.
 - Why am I missing worlds/portals in the GoA?
@@ -100,7 +101,7 @@ This pack will handle logic, received items, checked locations and autotabbing f
     - The port of Kingdom Hearts 2 can and will randomly crash, this is the fault of the game not the randomizer or the archipelago client.
       - If you have a continuous/constant crash (in the same area/event every time) you will want to reverify your installed files. This can be done by doing the following: Open Epic Game Store --> Library --> Click Triple Dots --> Manage --> Verify
 - Why am I getting dummy items or letters?
-    - You will need to get the `JaredWeakStrike/APCompanion` (you can find how to get this if you scroll up)
+    - You will need to get the APCompanion mod (you can find how to get this if you scroll up)
 - Why am I not sending or receiving items?
     - Make sure you are connected to the KH2 client and the correct room (for more information scroll up). You may need to run the client/launcher as admin
 - How do I load an auto save?
