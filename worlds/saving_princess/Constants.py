@@ -1,12 +1,26 @@
+from enum import Enum
+from typing import List
+
 GAME_NAME: str = "Saving Princess"
 BASE_ID: int = 0x53565052494E  # SVPRIN
+CLIENT_VERSION: List[int] = [1, 1, 0]
+
+
+class DoorType(Enum):
+    DOOR_TYPE_NONE = 0
+    DOOR_TYPE_POWER = 1
+    DOOR_TYPE_FIRE = 2
+    DOOR_TYPE_ICE = 3
+    DOOR_TYPE_VOLT = 4
+
 
 # client installation data
 CLIENT_NAME = f"{GAME_NAME.replace(' ', '')}Client"
 GAME_HASH = "35a111d0149fae1f04b7b3fea42c5319"
 PATCH_NAME = "saving_princess_basepatch.bsdiff4"
 DOWNLOAD_NAME = "saving_princess_archipelago.zip"
-DOWNLOAD_URL = "https://api.github.com/repos/LeonarthCG/saving-princess-archipelago/releases"
+DOWNLOAD_URL = (f"https://api.github.com/repos/LeonarthCG/saving-princess-archipelago/releases/"
+                f"tags/saving-princess-basepatch-{'.'.join(map(str, CLIENT_VERSION))}")
 
 # item names
 ITEM_WEAPON_CHARGE: str = "Powered Blaster"
@@ -25,6 +39,9 @@ EP_ITEM_ACE_GONE: str = "Arctic Key"
 EP_ITEM_SNAKE_GONE: str = "Swamp Key"
 EP_ITEM_POWER_ON: str = "System Power"
 
+BL_ITEM_ARMOR_UP: str = "Armor Up"
+BL_ITEM_WEAPON_UP: str = "Weapon Up"
+
 FILLER_ITEM_HEAL: str = "Full Heal"
 FILLER_ITEM_QUICK_FIRE: str = "Quick-fire Mode"
 FILLER_ITEM_ACTIVE_CAMO: str = "Active Camouflage"
@@ -32,6 +49,7 @@ FILLER_ITEM_ACTIVE_CAMO: str = "Active Camouflage"
 TRAP_ITEM_ICE: str = "Ice Trap"
 TRAP_ITEM_SHAKES: str = "Shake Trap"
 TRAP_ITEM_NINJA: str = "Ninja Trap"
+TRAP_ITEM_TEXT: str = "Text Trap"
 
 EVENT_ITEM_GUARD_GONE: str = "Guard neutralized"
 EVENT_ITEM_CLIFF_GONE: str = "Cliff neutralized"
@@ -79,6 +97,31 @@ EP_LOCATION_ELECTRICAL_MINIBOSS: str = "Electrical: Generator (Boss)"
 EP_LOCATION_ELECTRICAL_BOSS: str = "Electrical: Malakhov (Boss)"
 EP_LOCATION_ELECTRICAL_FINAL_BOSS: str = "Electrical: BRAINOS (Boss)"
 
+BL_LOCATION_CRAB: str = "Battle Log: Crab (White)"
+BL_LOCATION_TURRET: str = "Battle Log: Turret"
+BL_LOCATION_GUARD: str = "Battle Log: Guard"
+BL_LOCATION_BLUE_CRAB: str = "Battle Log: Crab (Blue)"
+BL_LOCATION_ROLLER: str = "Battle Log: Roller"
+BL_LOCATION_BEETLE: str = "Battle Log: Beetle"
+BL_LOCATION_CAVE_MINIBOSS: str = "Battle Log: Wallboss"
+BL_LOCATION_CAVE_BOSS: str = "Battle Log: Guardboss"
+BL_LOCATION_GOLD_CRAB: str = "Battle Log: Crab (Gold)"
+BL_LOCATION_FLY: str = "Battle Log: Fly"
+BL_LOCATION_HOPPER: str = "Battle Log: Hopper"
+BL_LOCATION_FIRE_GUARD: str = "Battle Log: Fire Guard"
+BL_LOCATION_VOLCANIC_BOSS: str = "Battle Log: Cliff"
+BL_LOCATION_BAT: str = "Battle Log: Bat"
+BL_LOCATION_FLEA_EGG: str = "Battle Log: Flea Egg"
+BL_LOCATION_FLEA: str = "Battle Log: Egg"
+BL_LOCATION_ARCTIC_BOSS: str = "Battle Log: Ace"
+BL_LOCATION_MIDGE: str = "Battle Log: Midge"
+BL_LOCATION_SWAMP_BOSS: str = "Battle Log: Snake"
+BL_LOCATION_NINJA_FIGHT: str = "Battle Log: Ninja"
+BL_LOCATION_ELECTRICAL_MINIBOSS: str = "Battle Log: Generator"
+BL_LOCATION_ELECTRICAL_BOSS: str = "Battle Log: Malakhov"
+BL_LOCATION_ELECTRICAL_FINAL_BOSS: str = "Battle Log: BRAINOS"
+BL_LOCATION_ELECTRIC_ORB: str = "Battle Log: Electric Orb"
+
 EVENT_LOCATION_GUARD_GONE: str = "Cave status"
 EVENT_LOCATION_CLIFF_GONE: str = "Volcanic status"
 EVENT_LOCATION_ACE_GONE: str = "Arctic status"
@@ -95,3 +138,4 @@ REGION_HUB: str = "Hub"
 REGION_SWAMP: str = "Swamp"
 REGION_ELECTRICAL: str = "Electrical"
 REGION_ELECTRICAL_POWERED: str = "Electrical (Power On)"
+REGION_BATTLE_LOG: str = "Battle Log"
