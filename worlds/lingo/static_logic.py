@@ -4,13 +4,14 @@ import pickle
 from io import BytesIO
 from typing import Dict, List, Set
 
-from .datatypes import Door, Painting, Panel, PanelDoor, Progression, Room
+from .datatypes import Door, Painting, Panel, PanelDoor, Progression, Room, Warp
 
 ALL_ROOMS: List[Room] = []
 DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
 PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
 PANEL_DOORS_BY_ROOM: Dict[str, Dict[str, PanelDoor]] = {}
 PAINTINGS: Dict[str, Painting] = {}
+WARPS_BY_ROOM: Dict[str, Dict[str, Warp]] = {}
 
 PROGRESSIVE_ITEMS: Set[str] = set()
 PROGRESSIVE_DOORS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
@@ -33,6 +34,7 @@ DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
 PANEL_DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
 PANEL_GROUP_ITEM_IDS: Dict[str, int] = {}
 PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
+WARP_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 
 HASHES: Dict[str, str] = {}
 
@@ -93,6 +95,13 @@ def get_progressive_item_id(name: str):
     return PROGRESSIVE_ITEM_IDS[name]
 
 
+def get_warp_location_id(room: str, name: str):
+    if room not in WARP_LOCATION_IDS or name not in WARP_LOCATION_IDS[room]:
+        raise Exception(f"Location ID for warp {room} - {name} not found in ids.yaml.")
+
+    return WARP_LOCATION_IDS[room][name]
+
+
 def load_static_data_from_file():
     global PAINTING_ENTRANCES, PAINTING_EXITS
 
@@ -116,6 +125,7 @@ def load_static_data_from_file():
     DOORS_BY_ROOM.update(pickdata["DOORS_BY_ROOM"])
     PANELS_BY_ROOM.update(pickdata["PANELS_BY_ROOM"])
     PANEL_DOORS_BY_ROOM.update(pickdata["PANEL_DOORS_BY_ROOM"])
+    WARPS_BY_ROOM.update(pickdata["WARPS_BY_ROOM"])
     PROGRESSIVE_ITEMS.update(pickdata["PROGRESSIVE_ITEMS"])
     PROGRESSIVE_DOORS_BY_ROOM.update(pickdata["PROGRESSIVE_DOORS_BY_ROOM"])
     PROGRESSIVE_PANELS_BY_ROOM.update(pickdata["PROGRESSIVE_PANELS_BY_ROOM"])
@@ -134,6 +144,7 @@ def load_static_data_from_file():
     PANEL_DOOR_ITEM_IDS.update(pickdata["PANEL_DOOR_ITEM_IDS"])
     PANEL_GROUP_ITEM_IDS.update(pickdata["PANEL_GROUP_ITEM_IDS"])
     PROGRESSIVE_ITEM_IDS.update(pickdata["PROGRESSIVE_ITEM_IDS"])
+    WARP_LOCATION_IDS.update(pickdata["WARP_LOCATION_IDS"])
 
 
 # Initialize the static data at module scope.

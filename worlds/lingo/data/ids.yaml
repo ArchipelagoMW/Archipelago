@@ -53,6 +53,7 @@ panels:
   Second Room:
     HI: 444428
     LOW: 444429
+  Level 2 Room:
     ANOTHER TRY: 444430
     LEVEL 2: 444431
   Hub Room:
@@ -1623,3 +1624,174 @@ panel_groups:
   Color Hunt Panels: 444657
   Hallway Room Panels: 444668
   Room Room Panels: 444675
+warps:
+  Hidden Room:
+    Circle Hallway: 445272
+  Second Room:
+    Circle Hallway: 445273
+  Level 2 Room:
+    Level 2 Entrance: 445274
+  Hub Room:
+    Welcome Back: 445275
+    First Hallway Start: 445276
+    First Hallway Loop: 445277
+    First Hallway Exit: 445278
+    Third Hallway: 445279
+  Crossroads:
+    Outer Yellow Hallway: 445280
+    Inner Yellow Hallway: 445281
+    West Loop Hallway: 445283
+    East Loop Hallway: 445284
+    Swap Area Entrance: 445285
+  Outside The Agreeable:
+    Welcome Back: 445286
+    Compass Room Entrance: 445287
+    Long Hallway Loop: 445288
+    Hallway Room Entrance: 445289
+  Hedge Maze:
+    Inner Green Hallway: 445290
+    Outer Green Hallway: 445292
+  The Perceptive:
+    Fearless Entrance: 445293
+  The Fearless (Second Floor):
+    East Doorway: 445294
+  The Fearless:
+    From First Floor: 445295
+    From Second Floor: 445296
+    Third Floor Doorway: 445297
+  The Observant:
+    Welcome Back: 445298
+    Swims Hallway: 445299
+    Secret Hallway: 445300
+  The Incomparable:
+    Second Floor: 445301
+  Orange Tower First Floor:
+    Tower E Doorway: 445302
+  Orange Tower Second Floor:
+    First Floor: 445303
+    Tower NW Doorway: 445304
+  Orange Tower Third Floor:
+    Second Floor: 445305
+    Tower W Doorway: 445306
+    Tower E Doorway: 445307
+  Orange Tower Fourth Floor:
+    Near Orange Panel: 445308
+    Third Floor: 445309
+    Tower NW Doorway: 445310
+    Tower NE Doorway: 445311
+    Tower SW Doorway: 445312
+  Orange Tower Fifth Floor:
+    Fourth Floor: 445313
+    Tower NW Doorway: 445314
+    Tower NE Doorway: 445315
+    Tower SW Doorway: 445316
+    Tower SE Doorway: 445317
+  Orange Tower Sixth Floor:
+    Entrance: 445318
+  Orange Tower Seventh Floor:
+    Entrance: 445319
+  Welcome Back Area:
+    Clockwise Area Entrance: 445320
+  Color Hallways:
+    Red Hallway: 445321
+    Blue Hallway: 445322
+    Yellow Hallway: 445323
+    Green Hallway: 445324
+  Outside The Bold:
+    Outer Red Hallway: 445325
+    Inner Red Hallway: 445326
+  Outside The Undeterred:
+    Welcome Back: 445328
+    Outer Blue Hallway: 445329
+    Inner Blue Hallway: 445330
+  Color Hunt:
+    Entrance: 445332
+  The Steady (Sunflower):
+    Warp: 445333
+  The Steady (Emerald):
+    Warp: 445334
+  Knight Night (Outer Ring):
+    Near BEE: 445335
+    Near FORE: 445336
+    Near NEW: 445337
+  The Artistic Exit Warp:
+    Center: 445338
+  The Eyes They See Warp:
+    Entrance: 445339
+  Wondrous Lobby:
+    Wondrous Entrance: 445340
+    Above Wondrous Loop: 445341
+    Striped Pipe: 445342
+  Outside The Wondrous:
+    Welcome Back: 445343
+  The Wondrous (Window):
+    Exit: 445344
+  The Wondrous (Table):
+    Exit: 445345
+  Hallway Room (1):
+    Entrance: 445346
+    Exit: 445347
+  Hallway Room (2):
+    Entrance: 445348
+    Exit: 445349
+  Hallway Room (3):
+    Entrance: 445350
+    Exit: 445351
+  Hallway Room (4):
+    Entrance: 445352
+    Exit: 445353
+  Outside The Wanderer:
+    Welcome Back: 445354
+  The Wanderer:
+    Orange Room Entrance: 445355
+  Art Gallery:
+    Welcome Back: 445356
+    Backrooms 1: 445357
+    Backrooms 2: 445358
+    Backrooms 3: 445359
+    Backrooms 4: 445360
+  Art Gallery (First Floor):
+    Return: 445361
+  Art Gallery (Second Floor):
+    Return: 445362
+  Art Gallery (Third Floor):
+    Return: 445363
+  Art Gallery (Fourth Floor):
+    Return: 445364
+  Art Gallery (Fifth Floor):
+    Return: 445365
+  Rhyme Room (Smiley):
+    Toward Target: 445366
+  Cellar:
+    Welcome Back: 445367
+    Lookout Connection: 445368
+  The Wise:
+    Clockwise Blocker 1: 445369
+    Clockwise Blocker 2: 445370
+    Clockwise Blocker 3: 445371
+    Clockwise Blocker 4: 445372
+    NW Vestibule North: 445373
+    NW Vestibule West: 445374
+    NW Vestibule Counterclockwise Blocker: 445375
+    NE Vestibule North: 445376
+    NE Vestibule East: 445377
+    NE Vestibule Counterclockwise Blocker: 445378
+    SW Vestibule South: 445379
+    SW Vestibule West: 445380
+    SE Vestibule North: 445381
+    SE Vestibule South: 445382
+    SE Vestibule West: 445383
+    SE Vestibule East: 445384
+    SE Vestibule Counterclockwise Blocker: 445385
+  Outside The Scientific:
+    First Nook: 445386
+    Second Nook: 445387
+    Third Nook: 445388
+    Nook Around Corner: 445389
+    First Closet: 445390
+    Closet Area Exit: 445391
+    Panel Closet Entrance: 445392
+    Panel Closet Exit: 445393
+  The Scientific:
+    Welcome Back: 445394
+    Staircase Entrance: 445395
