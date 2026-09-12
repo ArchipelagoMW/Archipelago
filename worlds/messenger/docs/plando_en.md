@@ -64,22 +64,21 @@ will exit to the Sunny Day checkpoint, and the Searing Crags Portal will exit to
 ## Transition Plando
 
 This option allows you to specify certain connections when using transition shuffle. This will only work if
-transition shuffle and the `connections` plando host setting are enabled. 
+transition shuffle and the `connections` plando host setting are enabled.
 
 Each transition connection is plandoed by specifying its attributes:
 
-* `entrance` is where you will enter this transition from.
+* `entrance` is the name of the transition (level exit).
 * `exit` is where the transition will lead.
 * `percentage` is the chance this connection will happen at all.
 * `direction` is used to specify whether this connection will also go in reverse. This entry will be ignored if the
   transition shuffle is set to `coupled` or if the specified connection can only occur in one direction, such as exiting
   to Riviere Turquoise. The default direction is "both", which will make it so that returning through the exit
-  transition will return you to where you entered it from. "entrance" and "exit" are treated the same, with them both
-  making this transition only one-way.
+  transition will return you to where you entered it from. 
 
 Valid connections can be found in the [`RANDOMIZED_CONNECTIONS` dictionary](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/connections.py#L640).
 The keys (left) are entrances, and values (right) are exits. Whether you want the connection to go both ways or not,
-both sides must either be two-way or one-way; E.g. connecting Artificer (Corrupted Future Portal) to one of the
+both sides must either be two-way or one-way; E.g. connecting Artificer's Portal (Corrupted Future Portal) to one of the
 Quillshroom Marsh entrances is not a valid pairing. A pairing can be determined to be two-way if both the entrance and
 exit of that pair are an exit and entrance of another pairing, respectively.
 
@@ -88,14 +87,15 @@ exit of that pair are an exit and entrance of another pairing, respectively.
 ```yaml
 The Messenger:
   plando_connections:
-    - entrance: Searing Crags - Top
+    - entrance: Searing Crags - Top exit
       exit: Dark Cave - Right
-    - entrance: Glacial Peak - Left
+    - entrance: Glacial Peak - Left exit
       exit: Corrupted Future
 ```
 
 This block will create the following connections:
+
 1. Leaving Searing Crags towards Glacial Peak will take you to the beginning of Dark Cave, and leaving the Dark Cave
    door will return you to the top of Searing Crags.
 2. Taking Manfred to leave Glacial Peak, will take you to Corrupted Future. There is no reverse connection here so it
-   will always be one-way.
+   will always be one-way. Taking the Corrupted Future portals sends you to the HQ.
