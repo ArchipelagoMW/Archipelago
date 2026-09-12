@@ -1,4 +1,5 @@
 import collections
+import shutil
 from collections.abc import Mapping
 import concurrent.futures
 import logging
@@ -381,12 +382,15 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
         if args.spoiler:
             multiworld.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
 
-        zipfilename = output_path(f"AP_{multiworld.seed_name}.zip")
-        logger.info(f"Creating final archive at {zipfilename}")
-        with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
-                             compresslevel=9) as zf:
-            for file in os.scandir(temp_dir):
-                zf.write(file.path, arcname=file.name)
+        if args.unzipped:
+            shutil.copytree(temp_dir, output_path(f"AP_{multiworld.seed_name}"), dirs_exist_ok=True)
+        else:
+            zipfilename = output_path(f"AP_{multiworld.seed_name}.zip")
+            logger.info(f"Creating final archive at {zipfilename}")
+            with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
+                                 compresslevel=9) as zf:
+                for file in os.scandir(temp_dir):
+                    zf.write(file.path, arcname=file.name)
 
     logger.info('Done. Enjoy. Total Time: %s', time.perf_counter() - start)
     return multiworld
