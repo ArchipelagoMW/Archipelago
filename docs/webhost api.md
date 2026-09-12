@@ -7,6 +7,8 @@ The following API requests are formatted as: `https://<Archipelago URL>/api/<end
 The returned data will be formatted in a combination of JSON lists or dicts, with their keys or values being notated in `blocks` (if applicable)
 
 Current endpoints:
+- Core API
+    - [`/version`](#apiversion)
 - Datapackage API
     - [`/datapackage`](#datapackage)
     - [`/datapackage/<string:checksum>`](#datapackagestringchecksum)
@@ -28,6 +30,46 @@ Current endpoints:
 To reduce the strain on an Archipelago WebHost, many API endpoints will cache their data and only poll new data in timed intervals. Each endpoint has their own caching time related to the type of data being served. More dynamic data is refreshed more frequently, while static data is cached for longer.  
 Each API endpoint will have their "Cache timer" listed under their definition (if any).
 API calls to these endpoints should not be faster than the listed timer. This will result in wasted processing for your client and (more importantly) the Archipelago WebHost, as the data will not be refreshed by the WebHost until the internal timer has elapsed.
+
+
+## Core Endpoints
+These endpoints are used to query details about the running API stack for the WebHost. These are server-wide
+and not tied to an individual room, seed, tracker, or user.
+
+### `/version`
+<a name="apiversion"></a>
+In order to provide the ability for applications to verify they have the correct API specs, the running Archipelago
+Core version and each API endpoint version are accessible to you. 
+
+You'll receive a dict that contains two entries:
+- `ap_core_version` will report the running release of the Archipelago server.
+- `tracker_api_version` will report the version of the tracker endpoint that the WebHost is running.
+
+Example:
+```json
+{
+    "ap_core_version": "0.6.7",
+    "tracker_api_version": "1"
+}
+```
+
+If your application is programmed for a specfic version of the Archipelago API and your query returns a version you
+haven't accounted for, you should error accordingly, and update your application's API code.  
+You will also have the ability to support multiple versions of the Archipelago API in this manner.
+Allowing you to support more than just a single version of Archipelago at a time.
+
+**As changes are made to the API, an endpoint's version may increase independently of the Archipelago Core version.**
+In most cases, the endpoint's version will always be `1`. However, you should be prepared to handle other versions
+if changes to the API are deployed out-of-release.
+
+#### Historical API Documentation
+Below are the 5 most recent versions of the API spec.
+- [0.6.7](https://github.com/ArchipelagoMW/Archipelago/blob/0.6.7/docs/webhost%20api.md)
+- [0.6.6](https://github.com/ArchipelagoMW/Archipelago/blob/0.6.6/docs/webhost%20api.md)
+  (Note: This was a core security-only release)
+- [0.6.5](https://github.com/ArchipelagoMW/Archipelago/blob/0.6.5/docs/webhost%20api.md)
+- [0.6.4](https://github.com/ArchipelagoMW/Archipelago/blob/0.6.4/docs/webhost%20api.md)
+- [0.6.3](https://github.com/ArchipelagoMW/Archipelago/blob/0.6.3/docs/webhost%20api.md)
 
 
 ## Datapackage Endpoints
@@ -276,134 +318,50 @@ can either be viewed while on a room tracker page, or from the [room's endpoint]
 
 Will provide a dict of tracker data with the following keys:
 
-- A list of players current alias data (`aliases`)
-  - Each item containing a dict with, their alias `alias`, their player number `player`, and their team `team`
-  - `alias` will return `null` if there is no alias set
-- A list of items each player has received as a [NetworkItem](network%20protocol.md#networkitem) (`player_items_received`)
-  - Each item containing a dict with, a list of NetworkItems `items`, their player number `player`, their team `team`
-- A list of checks done by each player as a list of the location id's (`player_checks_done`)
-  - Each item containing a dict with, a list of checked location id's `locations`, their player number `player`, and their team `team`
-- A list of the total number of checks done by all players (`total_checks_done`)
-  - Each item will contain a dict with, the total checks done `checks_done`, and the team `team`  
-- A list of [Hints](network%20protocol.md#hint) data that players have used or received (`hints`)
-  - Each item containing a dict containing, a list of hint data `hints`, the player number `player`, and their team `team`
-- A list containing the last activity time for each player, formatted in RFC 1123 format (`activity_timers`)
-  - Each item containing, last activity time `time`, their player number `player`, and their team `team`
-- A list containing the last connection time for each player, formatted in RFC 1123 format (`connection_timers`)
-  - Each item containing, the time of their last connection `time`, their player number `player`, and their team `team`
-- A list of the current [ClientStatus](network%20protocol.md#clientstatus) of each player (`player_status`)
-  - Each item will contain, their status `status`, their player number `player`, and their team `team`
+- The total number of checks done by all players (`total_checks_done`)
+- A per player object (`player_data`) with the following keys:
+  - The player's current alias data (`alias`)
+    - Will return `null` if there is no alias set
+  - A list of items the player has received as a [NetworkItem](network%20protocol.md#networkitem) (`items`)
+  - A list of checks done by the player as a list of the location id's (`checked_locations`)
+  - A list of [Hints](network%20protocol.md#hint) data that player has used or received (`hints`)
+  - The time of last activity of the player, formatted in RFC 1123 format (`activity_time`)
+  - The time of last active connection of the player, formatted in RFC 1123 format (`connection_time`)
+  - The current [ClientStatus](network%20protocol.md#clientstatus) of the player (`status`)
+  - The slot number of that player (`player`)
+  - The team number of that player (`team`)
 
 Example:
 ```json
 {
-  "aliases": [
-    {
-      "team": 0,
-      "player": 1,
-      "alias": "Incompetence"
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "alias": "Slot_Name_2"
-    },
-    {
-      "team": 0,
-      "player": 3,
-      "alias": null
-    },
-  ],
-  "player_items_received": [
-    {
-      "team": 0,
-      "player": 1,
-      "items": [
-        [1, 1, 1, 0],
-        [2, 2, 2, 1]
-      ]
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "items": [
-        [1, 1, 1, 2],
-        [2, 2, 2, 0]
-      ]
-    }
-  ],
-  "player_checks_done": [
-    {
-      "team": 0,
-      "player": 1,
-      "locations": [
-        1,
-        2
-      ]
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "locations": [
-        1,
-        2
-      ]
-    }
-  ],
   "total_checks_done": [
     {
       "team": 0,
       "checks_done": 4
     }
   ],
-  "hints": [
+  "player_data": [
     {
-      "team": 0,
+      "activity_time": null,
+      "alias": null,
+      "checked_locations": [],
+      "connection_time": null,
+      "hints": [],
+      "items": [],
+      "status": 30,
       "player": 1,
-      "hints": [
-        [1, 2, 4, 6, 0, "", 4, 0]
-      ]
+      "team": 0
     },
     {
-      "team": 0,
+      "activity_time": null,
+      "alias": null,
+      "checked_locations": [],
+      "connection_time": null,
+      "hints": [],
+      "items": [],
+      "status": 0,
       "player": 2,
-      "hints": []
-    }
-  ],
-  "activity_timers": [
-    {
-      "team": 0,
-      "player": 1,
-      "time": "Fri, 18 Apr 2025 20:35:45 GMT"
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "time": "Fri, 18 Apr 2025 20:42:46 GMT"
-    }
-  ],
-  "connection_timers": [
-    {
-      "team": 0,
-      "player": 1,
-      "time": "Fri, 18 Apr 2025 20:38:25 GMT"
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "time": "Fri, 18 Apr 2025 21:03:00 GMT"
-    }
-  ],
-  "player_status": [
-    {
-      "team": 0,
-      "player": 1,
-      "status": 0
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "status": 0
+      "team": 0
     }
   ]
 }
@@ -421,11 +379,15 @@ Will provide a dict of static tracker data with the following keys:
   - Each item is a named dict of the game's name.
     - Each game contains two keys, the datapackage's checksum hash `checksum`, and the version `version`
   - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
-- A list of number of checks found vs. total checks available per player (`player_locations_total`)
-  - Each list item contains a dict with three keys, the total locations for that slot `total_locations`, their player number `player`, and their team `team`
-  - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
-- The game each player is playing (`player_game`)
-  - Provided as a list of objects with `team`, `player`, and `game`.
+- A per player object (`player_data`) with the following keys:
+  - The game name for that player (`game`)
+  - The number of checks found vs. total checks available per player (`locations_count`)
+    - Same logic as the multitracker template:
+      found = len(checked_locations) / total = locations_count.total_locations(all available checks).
+  - The list of all location ids known for that player (`locations`)
+  - The slot name of that player (`name`)
+  - The slot number of that player (`player`)
+  - The team number of that player (`team`)
 
 Example:
 ```json
@@ -456,28 +418,22 @@ Example:
       "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b"
     }
   },
-  "player_locations_total": [
+  "player_data": [
     {
+      "game": "Archipelago",
+      "location_count": 0,
+      "locations": [],
+      "name": "Foo",
       "player": 1,
-      "team" : 0,
-      "total_locations": 10
+      "team": 0
     },
     {
+      "game": "The Messenger",
+      "location_count": 106,
+      "locations": [11390976, 11390977, 11390978, 11390979, 11390980, 11390981],
+      "name": "Bar",
       "player": 2,
-      "team" : 0,
-      "total_locations": 20
-    }
-  ],
-  "player_game": [
-    {
-      "team": 0,
-      "player": 1,
-      "game": "Archipelago"
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "game": "The Messenger"
+      "team": 0
     }
   ]
 }
