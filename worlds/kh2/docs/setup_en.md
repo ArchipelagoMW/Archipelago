@@ -13,7 +13,7 @@ Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.
     1. Version 26.08.26.0 or greater OpenKH Mod Manager with Panacea
     2. Lua Backend from the OpenKH Mod Manager
     3. Install the Garden of Assemblage mod with OpenKH Mod Manager
-- At the bottom of the first page click the link labled `PC (Epic/Steam) Archielago Setup Guide by JaredWeakStrike & Shananas` to continue installing
+- At the bottom of the first page click the link labled [PC (Epic/Steam) Archielago Setup Guide](https://tommadness.github.io/KH2Randomizer/setup/Archipelago/) to continue installing
     1. Install the Archipelago Companion mod with OpenKH Mod Manager
     2. Install the KH2 Archipelago Enablers mod with OpenKH Mod manager
        1. This mod overwrites slot 99 with an autosave. Make sure to copy your save data to another slot before installing.
