@@ -16,7 +16,7 @@ yoshis_island_4_hidden_1up  = "Yoshi's Island 4 - Hidden 1-Up"
 yoshis_island_castle    = "#1 Iggy's Castle - Normal Exit"
 yoshis_island_koopaling = "#1 Iggy's Castle - Boss"
 
-yellow_switch_palace = "Yellow Switch Palace"
+yellow_switch_palace = "Yellow Switch Palace - Normal Exit"
 
 donut_plains_1_exit_1     = "Donut Plains 1 - Normal Exit"
 donut_plains_1_exit_2     = "Donut Plains 1 - Secret Exit"
@@ -45,7 +45,7 @@ donut_plains_castle       = "#2 Morton's Castle - Normal Exit"
 donut_plains_castle_hidden_1up       = "#2 Morton's Castle - Hidden 1-Up"
 donut_plains_koopaling    = "#2 Morton's Castle - Boss"
 
-green_switch_palace = "Green Switch Palace"
+green_switch_palace = "Green Switch Palace - Normal Exit"
 
 vanilla_dome_1_exit_1       = "Vanilla Dome 1 - Normal Exit"
 vanilla_dome_1_exit_2       = "Vanilla Dome 1 - Secret Exit"
@@ -75,7 +75,7 @@ vanilla_reznor              = "Vanilla Fortress - Boss"
 vanilla_dome_castle         = "#3 Lemmy's Castle - Normal Exit"
 vanilla_dome_koopaling      = "#3 Lemmy's Castle - Boss"
 
-red_switch_palace = "Red Switch Palace"
+red_switch_palace = "Red Switch Palace - Normal Exit"
 
 butter_bridge_1_exit_1 = "Butter Bridge 1 - Normal Exit"
 butter_bridge_1_dragon = "Butter Bridge 1 - Dragon Coins"
@@ -118,7 +118,7 @@ forest_castle               = "#5 Roy's Castle - Normal Exit"
 forest_castle_dragon        = "#5 Roy's Castle - Dragon Coins"
 forest_koopaling            = "#5 Roy's Castle - Boss"
 
-blue_switch_palace = "Blue Switch Palace"
+blue_switch_palace = "Blue Switch Palace - Normal Exit"
 
 chocolate_island_1_exit_1    = "Chocolate Island 1 - Normal Exit"
 chocolate_island_1_dragon    = "Chocolate Island 1 - Dragon Coins"
@@ -226,7 +226,8 @@ yoshis_island_4_region      = "Yoshi's Island 4"
 yoshis_island_castle_tile   = "#1 Iggy's Castle - Tile"
 yoshis_island_castle_region = "#1 Iggy's Castle"
 
-yellow_switch_palace_tile = "Yellow Switch Palace - Tile"
+yellow_switch_palace_tile   = "Yellow Switch Palace - Tile"
+yellow_switch_palace_region = "Yellow Switch Palace"
 
 donut_plains_1_tile          = "Donut Plains 1 - Tile"
 donut_plains_1_region        = "Donut Plains 1"
@@ -250,7 +251,8 @@ donut_plains_top_secret      = "Top Secret Area"
 donut_plains_top_secret_tile = "Top Secret Area - Tile"
 donut_plains_star_road       = "Donut Plains - Star Road"
 
-green_switch_palace_tile = "Green Switch Palace - Tile"
+green_switch_palace_tile   = "Green Switch Palace - Tile"
+green_switch_palace_region = "Green Switch Palace"
 
 vanilla_dome_1_tile         = "Vanilla Dome 1 - Tile"
 vanilla_dome_1_region       = "Vanilla Dome 1"
@@ -274,7 +276,8 @@ vanilla_dome_castle_tile    = "#3 Lemmy's Castle - Tile"
 vanilla_dome_castle_region  = "#3 Lemmy's Castle"
 vanilla_dome_star_road      = "Vanilla Dome - Star Road"
 
-red_switch_palace_tile = "Red Switch Palace - Tile"
+red_switch_palace_tile   = "Red Switch Palace - Tile"
+red_switch_palace_region = "Red Switch Palace"
 
 butter_bridge_1_tile       = "Butter Bridge 1 - Tile"
 butter_bridge_1_region     = "Butter Bridge 1"
@@ -308,7 +311,8 @@ forest_castle_tile          = "#5 Roy's Castle - Tile"
 forest_castle_region        = "#5 Roy's Castle"
 forest_star_road            = "Forest of Illusion - Star Road"
 
-blue_switch_palace_tile = "Blue Switch Palace - Tile"
+blue_switch_palace_tile   = "Blue Switch Palace - Tile"
+blue_switch_palace_region = "Blue Switch Palace"
 
 chocolate_island_1_tile      = "Chocolate Island 1 - Tile"
 chocolate_island_1_region    = "Chocolate Island 1"

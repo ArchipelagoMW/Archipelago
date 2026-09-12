@@ -160,11 +160,38 @@ class BossShuffle(Choice):
     default = 0
 
 
+class KoopalingHealth(Range):
+    """
+    How many hits Morton, Lemmy, Ludwig, Roy, and Wendy take to kill
+    """
+    display_name = "Koopaling Health"
+    range_start = 1
+    range_end = 9
+    default = 3
+
+
+class BowserHealth(Range):
+    """
+    How many hits Bowser takes to kill, per phase
+    """
+    display_name = "Bowser Health"
+    range_start = 2
+    range_end = 5
+    default = 2
+
+
 class LevelShuffle(Toggle):
     """
     Whether levels are shuffled
     """
     display_name = "Level Shuffle"
+
+
+class CastlesAnywhere(Toggle):
+    """
+    Whether Castles and Fortresses can appear in any overworld tile when levels are shuffled, or only on Castle/Fortress tiles
+    """
+    display_name = "Castles Anywhere"
 
 
 class ExcludeSpecialZone(Toggle):
@@ -185,6 +212,56 @@ class SwapDonutGhostHouseExits(Toggle):
     True: Normal Exit goes right, Secret Exit goes up.
     """
     display_name = "Swap Donut GH Exits"
+
+
+class LevelNameShuffle(Choice):
+    """
+    How level names are shuffled, when viewed on the world map in-game
+    NOTE: Location names are not affected by this option. They will still use the vanilla level names.
+
+    Vanilla: Level Names are not shuffled
+
+    Consistent: Each piece of a level name is randomly changed to something new, meaning levels from the same vanilla world will have the same starting word(s)
+
+    Sane: Levels from the same vanilla world may have entirely unrelated names, but no levels will have exactly the same name
+
+    Full: Level names will be fully randomized, with no guarantee that two levels do not share a name
+
+    Singularity: Every level will have the same name
+    """
+    display_name = "Level Name Shuffle"
+    option_vanilla = 0
+    option_consistent = 1
+    option_sane = 2
+    option_full = 3
+    option_singularity = 4
+    default = 0
+
+
+class LevelTileShuffle(Choice):
+    """
+    How level tiles on the overworld map are shuffled
+
+    Vanilla: Level tiles indicate the vanilla contents of that level tile
+
+    Matching: Level tiles indicate the randomized contents of that level tile
+
+    Consistent Vanilla: Level tiles indicate the vanilla contents of that level tile, but with the tile types consistently shuffled to other tile types
+
+    Consistent Matching: Level tiles indicate the randomized contents of that level tile, but with the tile types consistently shuffled to other tile types
+
+    Full: Every level tile is randomly selected, indepent of all other level tiles
+
+    Singularity: Every level tile will be the same tile type
+    """
+    display_name = "Level Tile Shuffle"
+    option_vanilla = 0
+    option_matching = 1
+    option_consistent_vanilla = 2
+    option_consistent_matching = 3
+    option_full = 4
+    option_singularity = 5
+    default = 1
 
 
 class DisplayReceivedItemPopups(Choice):
@@ -263,14 +340,42 @@ class ReverseTrapWeight(BaseTrapWeight):
     Likelihood of a receiving a trap which causes the controls to be reversed in the current level
     """
     display_name = "Reverse Trap Weight"
-    
-    
+
+
 class ThwimpTrapWeight(BaseTrapWeight):
     """
     Likelihood of a receiving a trap which causes a Thwimp to spawn above the player
     """
     display_name = "Thwimp Trap Weight"
-    
+
+
+class DryTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which removes your stored item
+    """
+    display_name = "Dry Trap Weight"
+
+
+class IceUntrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving an untrap which causes the level to stop being slippery
+    """
+    display_name = "Ice Untrap Weight"
+
+
+class TimerUntrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving an untrap which causes the timer to run high
+    """
+    display_name = "Timer Untrap Weight"
+
+
+class ReverseUntrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving an untrap which causes the controls to stop being reversed
+    """
+    display_name = "Reverse Untrap Weight"
+
 
 class Autosave(DefaultOnToggle):
     """
@@ -428,11 +533,18 @@ smw_option_groups = [
     ]),
     OptionGroup("Level Shuffling", [
         LevelShuffle,
+        CastlesAnywhere,
         ExcludeSpecialZone,
         BowserCastleDoors,
         BowserCastleRooms,
-        BossShuffle,
         SwapDonutGhostHouseExits,
+        LevelNameShuffle,
+        LevelTileShuffle,
+    ]),
+    OptionGroup("Bosses", [
+        BossShuffle,
+        KoopalingHealth,
+        BowserHealth,
     ]),
     OptionGroup("Junk and Traps", [
         JunkFillPercentage,
@@ -443,6 +555,10 @@ smw_option_groups = [
         TimerTrapWeight,
         ReverseTrapWeight,
         ThwimpTrapWeight,
+        DryTrapWeight,
+        IceUntrapWeight,
+        TimerUntrapWeight,
+        ReverseUntrapWeight,
     ]),
     OptionGroup("Aesthetics", [
         DisplayReceivedItemPopups,
@@ -475,9 +591,14 @@ class SMWOptions(PerGameCommonOptions):
     bowser_castle_doors: BowserCastleDoors
     bowser_castle_rooms: BowserCastleRooms
     level_shuffle: LevelShuffle
+    castles_anywhere: CastlesAnywhere
     exclude_special_zone: ExcludeSpecialZone
     boss_shuffle: BossShuffle
+    koopaling_health: KoopalingHealth
+    bowser_health: BowserHealth
     swap_donut_gh_exits: SwapDonutGhostHouseExits
+    level_name_shuffle: LevelNameShuffle
+    level_tile_shuffle: LevelTileShuffle
     display_received_item_popups: DisplayReceivedItemPopups
     junk_fill_percentage: JunkFillPercentage
     trap_fill_percentage: TrapFillPercentage
@@ -487,6 +608,10 @@ class SMWOptions(PerGameCommonOptions):
     timer_trap_weight: TimerTrapWeight
     reverse_trap_weight: ReverseTrapWeight
     thwimp_trap_weight: ThwimpTrapWeight
+    dry_trap_weight: DryTrapWeight
+    ice_untrap_weight: IceUntrapWeight
+    timer_untrap_weight: TimerUntrapWeight
+    reverse_untrap_weight: ReverseUntrapWeight
     autosave: Autosave
     early_climb: EarlyClimb
     overworld_speed: OverworldSpeed
