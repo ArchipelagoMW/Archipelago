@@ -67,27 +67,32 @@
     background-color: rgb(220, 226, 189);
 }
 
-.table-wrapper .table-wrapper-left .table-wrapper-right .table-wrapper-clear {
+#tables-container {
+    padding: 0 3%;
+}
+
+.table-wrapper {
     overflow-y: auto;
     overflow-x: auto;
     margin-bottom: 1rem;
     resize: vertical;
 }
 
-.table-wrapper-left {
+#table-wrapper-left {
     width: 45%;
     float: left;
     min-height: 32em;
 }
 
-.table-wrapper-right {
+#table-wrapper-right {
     width: 45%;
     float: right;
     min-height: 32em;
 }
 
-.table-wrapper-clear {
+#table-wrapper-clear {
     clear: both;
+    min-height: 32em;
 }
 
 #search {
