@@ -6,6 +6,7 @@ from . import setup_solo_multiworld, gen_steps
 
 
 class TestBase(unittest.TestCase):
+    world_relevant = True
     gen_steps = gen_steps
 
     default_settings_unreachable_regions = {
@@ -45,11 +46,11 @@ class TestBase(unittest.TestCase):
 
     def test_default_all_state_can_reach_everything(self):
         """Ensure all state can reach everything and complete the game with the defined options"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
-                state = multiworld.get_all_state(False)
+                state = multiworld.get_all_state()
                 for location in multiworld.get_locations():
                     with self.subTest("Location should be reached", location=location.name):
                         self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
@@ -67,7 +68,7 @@ class TestBase(unittest.TestCase):
 
     def test_default_empty_state_can_reach_something(self):
         """Ensure empty state can reach at least one location with the defined options"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
                 state = CollectionState(multiworld)

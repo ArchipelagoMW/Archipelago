@@ -115,6 +115,7 @@ class TestGenerateWeights(TestGenerateMain):
         settings = get_settings()
         settings.generator.player_files_path = settings.generator.PlayerFilesPath(self.yaml_input_dir)
         settings.generator.players = 5  # arbitrary number, should be enough
+        settings.generator.race = 0 # make sure race mode is disabled so the below seed is actually respected
         settings._filename = None
         user_path_backup = user_path.cached_path
         user_path.cached_path = local_path()
