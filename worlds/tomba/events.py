@@ -809,3 +809,7 @@ class EventHandler:
     for index, event in enumerate(event_table):
         by_name[event.name] = event
         by_id[event.id] = event
+
+    @staticmethod
+    def get_event_region(event_name: str) -> str:
+        return EventHandler.by_name[event_name].region
