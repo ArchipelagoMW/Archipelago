@@ -279,7 +279,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                 logger.debug("Attempting to connect to GBA")
                 ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 28922), timeout=10)
                 ctx.gba_status = CONNECTION_TENTATIVE_STATUS
-            except TimeoutError:
+            except (TimeoutError, OSError):
                 logger.debug("Connection Timed Out, Trying Again")
                 ctx.gba_status = CONNECTION_TIMING_OUT_STATUS
                 continue
