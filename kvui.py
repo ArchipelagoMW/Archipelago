@@ -113,6 +113,10 @@ else:
 remove_between_brackets = re.compile(r"\[.*?]")
 
 
+def kv_unescape(text: str) -> str:
+    return text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]")
+
+
 class ThemedApp(MDApp):
     def set_colors(self):
         text_colors = KivyJSONtoTextParser.TextColors()
@@ -120,6 +124,22 @@ class ThemedApp(MDApp):
         self.theme_cls.primary_palette = text_colors.primary_palette
         self.theme_cls.dynamic_scheme_name = text_colors.dynamic_scheme_name
         self.theme_cls.dynamic_scheme_contrast = text_colors.dynamic_scheme_contrast
+
+
+class LogtoLoadingScreen(logging.Handler):
+    def __init__(self, on_log):
+        super().__init__()
+        self.on_log = on_log
+
+    def handle(self, record: logging.LogRecord):
+        self.on_log(record.getMessage())
+
+
+class LoadingScreen(MDScreen):
+    label = ObjectProperty(None)
+
+    def update_text(self, text):
+        self.label.text = text
 
 
 class ImageIcon(MDButtonIcon, AsyncImage):
@@ -350,7 +370,7 @@ class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
             ctx = self.ctx
             text = f"Connected to: {ctx.server_address}."
             if ctx.slot is not None:
-                text += f"\nYou are Slot Number {ctx.slot} in Team Number {ctx.team}, " \
+                text += f"\nYou are Slot Number {ctx.slot} in Team Number {ctx.team + 1}, " \
                         f"named {ctx.player_names[ctx.slot]}."
                 if ctx.items_received:
                     text += f"\nYou have received {len(ctx.items_received)} items. " \
@@ -424,14 +444,14 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
             else:
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
-                text = "".join(part for part in temp if not part.startswith("["))
+                text = kv_unescape("".join(part for part in temp if not part.startswith("[")))
                 cmdinput = MDApp.get_running_app().textinput
                 if not cmdinput.text:
                     input_text = get_input_text_from_response(text, MDApp.get_running_app().last_autofillable_command)
                     if input_text is not None:
                         cmdinput.text = input_text
 
-                Clipboard.copy(text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
+                Clipboard.copy(text)
                 return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -544,9 +564,7 @@ class AutocompleteHintInput(ResizableTextField):
             item_names = ctx.item_names._game_store[ctx.game].values()
 
             def on_press(text):
-                split_text = MarkupLabel(text=text).markup
-                self.set_text(self, "".join(text_frag for text_frag in split_text
-                                            if not text_frag.startswith("[")))
+                self.set_text(self, text)
                 self.dropdown.dismiss()
                 self.focus = True
 
@@ -557,11 +575,13 @@ class AutocompleteHintInput(ResizableTextField):
                 except ValueError:
                     pass  # substring not found
                 else:
-                    text = escape_markup(item_name)
-                    text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
+                    prefix = escape_markup(item_name[:index])
+                    matching = escape_markup(item_name[index:index+len(value)])
+                    postfix = escape_markup(item_name[index+len(value):])
+                    text = f"{prefix}[b]{matching}[/b]{postfix}"
                     self.dropdown.items.append({
                         "text": text,
-                        "on_release": lambda txt=text: on_press(txt),
+                        "on_release": lambda txt=item_name: on_press(txt),
                         "markup": True
                     })
             if not self.dropdown.parent:
@@ -653,7 +673,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                                     else "", ". (", self.status_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
                     text = "".join(part for part in temp if not part.startswith("["))
-                    Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
+                    Clipboard.copy(kv_unescape(text))
                     return self.parent.select_with_touch(self.index, touch)
         else:
             parent = self.parent

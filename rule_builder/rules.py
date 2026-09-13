@@ -843,9 +843,12 @@ class Has(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        count = resolve_field(self.count, world, int)
+        if count <= 0:
+            return True_().resolve(world)
         return self.Resolved(
             resolve_field(self.item_name, world, str),
-            count=resolve_field(self.count, world, int),
+            count=count,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
