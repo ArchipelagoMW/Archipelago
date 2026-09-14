@@ -52,6 +52,7 @@ class Door:
         back_end_id: int | None = None,
         rule: CollectionRule | Rule[Any] | None = None,
         related_events: list[str] = [],
+        related_regions: list[str] = [],
     ):
         self.raw_name = name
         self.name = f"{source.name}: {name}"
@@ -64,6 +65,7 @@ class Door:
         self.back_end_id = back_end_id
         self.rule = rule
         self.related_events = related_events
+        self.related_regions = related_regions
 
         if self.back_end_id is None or self.back_start_id is None:
             self.randomization_type = EntranceType.ONE_WAY
@@ -529,6 +531,8 @@ def get_randomizable_doors(player: int) -> list[Door]:
             end_id=0x00,
             back_start_id=0x00,
             back_end_id=0x00,
+            rule=lambda state: state.can_reach_region(Sections.BACCUS_LAKE_PIER.name, player),
+            related_regions=[Sections.BACCUS_LAKE_PIER.name],
         ),
         Door(
             "Crying Door",
@@ -654,15 +658,15 @@ def get_randomizable_doors(player: int) -> list[Door]:
             start_id=0x01,
             end_id=0x03,
         ),
-        Door(
-            "Pier Door",
-            source=Sections.BACCUS_LAKE,
-            target=Sections.BACCUS_LAKE_PIER,
-            start_id=0x01,
-            end_id=0x00,
-            back_start_id=0x00,
-            back_end_id=0x01,
-        ),
+        # Door(
+        #     "Pier Door",
+        #     source=Sections.BACCUS_LAKE,
+        #     target=Sections.BACCUS_LAKE_PIER,
+        #     start_id=0x01,
+        #     end_id=0x00,
+        #     back_start_id=0x00,
+        #     back_end_id=0x01,
+        # ),
         Door(
             "Background Door",
             source=Sections.MASAKARI_JUNGLE,
@@ -701,8 +705,9 @@ def get_randomizable_doors(player: int) -> list[Door]:
             target=Sections.TRICK_VILLAGE,
             start_id=0x02,
             end_id=0x04,
-            rule=lambda state: state.can_reach_location(Cleared(Events.TRICK_VILLAGE), player),
-            related_events=[Events.TRICK_VILLAGE],
+            rule=lambda state: state.can_reach_location(Cleared(Events.TRICK_VILLAGE), player)
+            & state.can_reach_location(Cleared(Events.I_CANT_SWIM), player),
+            related_events=[Events.TRICK_VILLAGE, Events.I_CANT_SWIM],
         ),
         Door(
             "Right Chute",
@@ -817,9 +822,12 @@ def connect_regions(world: TombaWorld) -> None:
     def register_related_events(entrance: Entrance, related_events: list[str]):
         for event_name in related_events:
             event = EventHandler.by_name[event_name]
-            for region_name in event.related_regions:
-                region = world.get_region(region_name)
-                world.multiworld.register_indirect_condition(region, entrance)
+            register_related_regions(entrance, event.related_regions)
+
+    def register_related_regions(entrance: Entrance, related_regions: list[str]):
+        for region_name in related_regions:
+            region = world.get_region(region_name)
+            world.multiworld.register_indirect_condition(region, entrance)
 
     def connect(
         source_name: str,
@@ -828,38 +836,45 @@ def connect_regions(world: TombaWorld) -> None:
         rule: CollectionRule | Rule[Any] | None = None,
         suffix: str = "",
         related_events: list[str] = [],
+        related_regions: list[str] = [],
+        name: str | None = None,
+        back_name: str | None = None,
     ):
+        if name is None:
+            name = f"{source_name} to {target_name}{suffix}"
+        if back_name is None:
+            back_name = f"{target_name} to {source_name}{suffix}"
+
         source = world.get_region(source_name)
         target = world.get_region(target_name)
 
-        entrance = source.connect(target, f"{source_name} to {target_name}{suffix}", rule)
+        entrance = source.connect(target, name, rule)
         entrance.randomization_type = entrance_type
 
         register_related_events(entrance, related_events)
+        register_related_regions(entrance, related_regions)
 
         # Add the return direction
         if entrance_type is EntranceType.TWO_WAY:
-            entrance = target.connect(source, f"{target_name} to {source_name}{suffix}", rule)
+            entrance = target.connect(source, back_name, rule)
             entrance.randomization_type = entrance_type
 
             register_related_events(entrance, related_events)
+            register_related_regions(entrance, related_regions)
 
     # Connect all randomizable doors
     for door in get_randomizable_doors(world.player):
-        source = world.get_region(door.source.name)
-        target = world.get_region(door.target.name)
-
-        entrance = source.connect(target, door.name, door.rule)
-        entrance.randomization_type = door.randomization_type
-
-        register_related_events(entrance, door.related_events)
-
-        # Add the return direction
-        if door.randomization_type is EntranceType.TWO_WAY:
-            entrance = target.connect(source, door.back_name, door.rule)
-            entrance.randomization_type = door.randomization_type
-
-            register_related_events(entrance, door.related_events)
+        connect(
+            source_name=door.source.name,
+            target_name=door.target.name,
+            entrance_type=door.randomization_type,
+            rule=door.rule,
+            suffix="",
+            name=door.name,
+            back_name=door.back_name,
+            related_events=door.related_events,
+            related_regions=door.related_regions,
+        )
 
     connect(
         "Menu",
@@ -952,6 +967,11 @@ def connect_regions(world: TombaWorld) -> None:
         Sections.STORMY_MOUNTAINS_PART_2.name,
         Sections.BACCUS_VILLAGE.name,
         entrance_type=EntranceType.ONE_WAY,
+    )
+    connect(
+        Sections.BACCUS_LAKE.name,
+        Sections.BACCUS_LAKE_PIER.name,
+        entrance_type=EntranceType.TWO_WAY,
     )
     connect(
         Sections.PHOENIXS_NEST.name,
