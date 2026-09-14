@@ -92,7 +92,6 @@ class TombaContext(CommonContext):
         self.periodic_handlers: list[Handler] = [
             Handler(self.tomba.keep_alive, interval_ms=KEEP_ALIVE_INTERVAL),
             Handler(self.tomba.patch_game, interval_ms=1000),
-            Handler(self.tomba.update_section, interval_ms=2000),
             Handler(self.tomba.update_events, interval_ms=250),
             Handler(self.tomba.update_inventory, interval_ms=750),
             Handler(self.check_handler.update_locations, interval_ms=500),
@@ -263,7 +262,7 @@ class TombaContext(CommonContext):
 
                         await self.process_items_received()
 
-                        await self.found_handler.update_found_items()
+                        await self.tomba.update_section()
 
                     now = time.time()
                     tick_duration = now - last_tick

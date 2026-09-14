@@ -99,7 +99,7 @@ class TransitionHandler(AbstractHandler):
 
             await self.tomba.playstation.write_memory(entrance_address + 5, data)
 
-            logger.info(
+            logger.debug(
                 f"Update transition 0x{entrance_address:08X} "
                 f"0x{int(entrance_id):02X} "
                 f"to 0x{target_area:02X}-0x{target_section:02X} "
