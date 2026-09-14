@@ -25,7 +25,13 @@ class PickupHandler(AbstractHandler):
             Items.JEWEL_OF_WATER: Handler(self.on_jewel_of_water),
             Items.JEWEL_OF_WIND: Handler(self.on_jewel_of_wind),
             Items.BOMB: Handler(self.on_bomb),
+            Items.BUCKET: Handler(self.on_bucket),
         }
+
+    async def on_bucket(self):
+        """Make sure it's equipable"""
+        if await self.tomba.playstation.read_int(0x09C215) == 0:
+            await self.tomba.playstation.write_memory(0x09C215, 0x01.to_bytes())
 
     async def on_bomb(self):
         """Start break the rusty door if not already started"""

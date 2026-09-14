@@ -266,6 +266,8 @@ class TombaGame:
         await self.events_handler.update_events()
 
     async def update_inventory(self):
+        """Checks modification to the player inventory and
+        tries to give items manually added"""
         await self.inventory_handler.update_inventory()
 
     async def update_messages(self):

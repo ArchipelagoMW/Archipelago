@@ -13,14 +13,30 @@ class EventsHandler(AbstractHandler):
 
     handlers_by_value: dict[Hashable, Handler]
 
-    event_states: bytearray = bytearray(0xFF)
+    _event_states: bytearray = bytearray(0xFF)
     externaly_triggered: list[str] = []
+
+    initialized: bool = False
+
+    async def get_event_states(self) -> bytearray:
+        if not self.initialized:
+            await self.update_events()
+
+            self.initialized = True
+
+        return self._event_states
 
     async def start_beginner_dwarf_language(self):
         await self.tomba.events_handler.start(Events.BEGINNERS_DWARF_LANGUAGE)
 
         # Event giver state to make sure Dwarf Language is correctly started
         await self.tomba.playstation.write_memory(0x09C214, 0x05.to_bytes())
+
+    async def clear_i_cant_swim(self):
+        await self.clear(Events.I_CANT_SWIM)
+
+        # Make sure access to river is possible
+        await self.tomba.playstation.write_memory(0x09C3E0, 0x04.to_bytes())
 
     async def clear_save_the_dwarves(self):
         await self.clear(Events.SAVE_THE_DWARVES)
@@ -113,7 +129,7 @@ class EventsHandler(AbstractHandler):
 
         # The Swimming event is bugged upon clearing the Jungle (Tomba! will learn to swim in the trees...)
         await self.clear(Events.A_REFRESHING_DRINK)
-        await self.clear(Events.I_CANT_SWIM)
+        await self.clear_i_cant_swim()
 
     async def on_baccus_village(self):
         """Clear related events"""
@@ -205,7 +221,7 @@ class EventsHandler(AbstractHandler):
         event = EventHandler.by_name[event_name]
 
         try:
-            return EventStatus(self.event_states[event.id])
+            return EventStatus((await self.get_event_states())[event.id])
         except Exception:
             return EventStatus.STARTED
 
@@ -218,10 +234,10 @@ class EventsHandler(AbstractHandler):
             await self.tomba.show_event(event, status)
 
     async def update_events(self):
-        old_states = self.event_states
+        old_states = self._event_states
         new_states = await self.tomba.playstation.read_memory_block(Addresses.EVENT_FLAGS, 0xFF)
 
-        self.event_states = new_states
+        self._event_states = new_states
 
         for id in range(len(new_states)):
             if old_states[id] == new_states[id]:

@@ -1,6 +1,7 @@
-from rule_builder.rules import Has, CanReachLocation
+from rule_builder.rules import Has, CanReachLocation, CanReachRegion
 
 from .constants import Events, Items
+from .sections import Sections
 
 
 def Started(event_name: str):
@@ -47,6 +48,7 @@ class Rules:
         | HAS_ANY_FISH
         | HAS_BLUE_POWDER
     )
+    CAN_CHANGE_MOOD = CanReachRegion(Sections.MUSHROOM_FOREST.name) | Has(Items.MYSTERIOUS_MUSHROOM)
 
 
 def codify(name: str) -> str:
