@@ -25,7 +25,7 @@ class Entrance:
     farmhouse_to_farm = "Farmhouse to Farm"
     farm_to_farmhouse = "Farm to Farmhouse"
     downstairs_to_cellar = "Farmhouse to Cellar"
-    cellar_to_downstairs = "Cellar to Farmhouse"
+    cellar_to_farmhouse = "Cellar to Farmhouse"
     downstairs_to_farmhouse = "Downstairs to Farmhouse"
     farm_to_backwoods = "Farm to Backwoods"
     backwoods_to_farm = "Backwoods to Farm"
