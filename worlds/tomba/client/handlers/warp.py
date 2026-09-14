@@ -105,7 +105,6 @@ class WarpHandler(AbstractHandler):
             Sections.WOBBLY_WHARF: Handler(self.on_wobbly_wharf_entry),
             Sections.WATCH_TOWER: Handler(self.on_watch_tower_entry),
             Sections.FOREST_OF_ALL_BEGINNING_PART_1: Handler(self.on_forest_of_all_beginning_part_1_entry),
-            Sections.STORMY_MOUNTAINS_PART_1: Handler(self.on_stormy_mountains_part_1_entry),
             Sections.TRICK_VILLAGE: Handler(self.on_trick_village_entry),
             Sections.OL_POND: Handler(self.on_ol_pond_entry),
             Sections.HUNDREDS_YEAR_OLD_MANS_HUT: Handler(self.on_100_year_old_man_hut_entry),
@@ -142,6 +141,12 @@ class WarpHandler(AbstractHandler):
         # When entrance randomization is enabled, we disable haunted mansion initial events
         if self.ctx.slot_data.get("entrance_randomization", False):
             await self.on_haunted_mansion_irregular_entry(coming_from)
+
+            # Door will open from Baccus Village
+            # await self.tomba.playstation.write_memory(Doors.BACCUS_DOOR.address, 0x01.to_bytes())
+
+            # Door is open both side
+            await self.tomba.doors_handler.open(Doors.BACCUS_DOOR)
 
     async def on_ol_pond_entry(self, coming_from: Section):
         await self.fix_forest_of_all_beginning()
@@ -180,11 +185,6 @@ class WarpHandler(AbstractHandler):
 
         if await self.tomba.events_handler.get_event_state(Events.BEGINNERS_DWARF_LANGUAGE) is EventStatus.UNDISCOVERED:
             await self.tomba.events_handler.start_beginner_dwarf_language()
-
-    async def on_stormy_mountains_part_1_entry(self, coming_from: Section):
-        """Open the bacccus door if entrance randomizer is enabled"""
-        if self.ctx.slot_data.get("entrance_randomization", False):
-            await self.tomba.doors_handler.open(Doors.BACCUS_DOOR)
 
     async def on_forest_of_all_beginning_part_1_entry(self, coming_from: Section):
         """Open the maze door as soon as the thief door is unlocked"""

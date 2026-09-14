@@ -549,7 +549,7 @@ def get_randomizable_doors(player: int) -> list[Door]:
             end_id=0x07,
             back_start_id=0x00,
             back_end_id=0x02,
-            rule=lambda state: state.can_reach_location(Cleared(Events.A_DRINK_FOR_GROWNUPS), player),
+            rule=lambda state: state.can_reach_location(Started(Events.A_DRINK_FOR_GROWNUPS), player),
             related_events=[Events.A_DRINK_FOR_GROWNUPS],
         ),
         Door(
