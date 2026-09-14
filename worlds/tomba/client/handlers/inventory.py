@@ -69,14 +69,12 @@ class InventoryHandler(AbstractHandler):
             return
 
         # Check if this is enabled
-        if self.ctx.slot_data["keep_blackjack"]:
-            return
+        if not self.ctx.slot_data["keep_blackjack"]:
+            logger.debug("Removing starting Blackjack")
 
-        logger.debug("Removing starting Blackjack")
-
-        blackjack = ItemHandler.by_name[Items.BLACKJACK]
-        await self.tomba.inventory_handler.remove_item(blackjack)
-        await self.tomba.inventory_handler.equip_weapon(Weapons.NOTHING)
+            blackjack = ItemHandler.by_name[Items.BLACKJACK]
+            await self.tomba.inventory_handler.remove_item(blackjack)
+            await self.tomba.inventory_handler.equip_weapon(Weapons.NOTHING)
 
     async def get_inventory_counter(self) -> int:
         return (await self.tomba.playstation.async_read_memory(Addresses.INVENTORY_COUNTER))[0]
