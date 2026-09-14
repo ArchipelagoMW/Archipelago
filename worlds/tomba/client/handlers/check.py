@@ -20,7 +20,7 @@ class CheckHandler(AbstractHandler):
         await self.ctx.check_locations([location.id])
 
         if location.at is not None:
-            await self.tomba.playstation.set_flag(location.at.address, location.at.mask, location.at.target_value)
+            await self.tomba.playstation.set_flag(location.at.address, location.at.mask)
 
     async def check(self, location_name: str, region_name: str):
         location = self.get_location(location_name, region_name)
@@ -48,6 +48,14 @@ class CheckHandler(AbstractHandler):
             if location.id in self.ctx.missing_locations:
                 if await psx.get_flag(location.at.address, location.at.mask):
                     await self._check(location)
+
+        # Check location with triggers
+        for location in LocationHandler.with_trigger:
+            assert location.trigger is not None
+
+            value = await psx.read_int(location.trigger.address)
+            if location.trigger.is_triggered(value):
+                await self._check(location)
 
         # Check direct memory readings
         for bitmask, handler in self.ram_update_handlers.items():

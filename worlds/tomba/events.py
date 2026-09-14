@@ -16,7 +16,17 @@ class EventData:
     started_rule: Rule  # Check to start the event
     cleared_rule: Rule  # Check to clear the event
 
-    def __init__(self, id, name: str, region: str, started_rule: Rule | None = None, cleared_rule: Rule | None = None):
+    related_regions: list[str]
+
+    def __init__(
+        self,
+        id,
+        name: str,
+        region: str,
+        started_rule: Rule | None = None,
+        cleared_rule: Rule | None = None,
+        related_regions: list[str] | None = None,
+    ):
         self.id = id
         self.name = name
         self.region = region
@@ -30,6 +40,10 @@ class EventData:
         self.started_rule = started_rule
         self.cleared_rule = HasStarted(name) & cleared_rule
 
+        self.related_regions = [self.region]
+        if related_regions is not None:
+            self.related_regions.extend(related_regions)
+
     def __repr__(self) -> str:
         return self.name
 
@@ -39,19 +53,19 @@ class EventHandler:
         # EventData(
         #     0x00,
         #     Events.GRANDPAS_BRACELET,
-        #     Regions.VILLAGE_OF_ALL_BEGINNINGS,
+        #     Sections.VILLAGE_OF_ALL_BEGINNING.name,
         #     cleared_rule=CanReachRegion(Regions.THE_STRANGE_SMALL_ROOM) & HasCleared(Events.SEVEN_FRIENDS),
         # ),
         EventData(
             0x01,
             Events.THE_100_YEAR_OLD_WISE_MAN,
-            Regions.VILLAGE_OF_ALL_BEGINNINGS,
-            cleared_rule=CanReachRegion(Regions.FOREST_OF_ALL_BEGINNINGS),
+            Sections.VILLAGE_OF_ALL_BEGINNING.name,
+            cleared_rule=CanReachRegion(Sections.HUNDREDS_YEAR_OLD_MANS_HUT.name),
         ),
         EventData(
-            0x02, Events.CLEAR_THE_FOG, Regions.VILLAGE_OF_ALL_BEGINNINGS, cleared_rule=Has(Items.FURIOUS_TORNADO)
+            0x02, Events.CLEAR_THE_FOG, Sections.VILLAGE_OF_ALL_BEGINNING.name, cleared_rule=Has(Items.FURIOUS_TORNADO)
         ),
-        EventData(0x03, Events.TAKE_ME_HOME, Regions.OL_POND, started_rule=Rules.CAN_BREAK_STUFF),
+        EventData(0x03, Events.TAKE_ME_HOME, Sections.OL_POND.name, started_rule=Rules.CAN_BREAK_STUFF),
         EventData(
             0x04,
             Events.MOTOCROSS_COURSE,
@@ -60,30 +74,35 @@ class EventHandler:
         EventData(
             0x05,
             Events.WHO_ARE_YOU,
-            Regions.FOREST_OF_ALL_BEGINNINGS,
+            Sections.FOREST_OF_ALL_BEGINNING_PART_1.name,
             cleared_rule=HasCleared(Events.THE_100_YEAR_OLD_WISE_MAN),
         ),
-        # EventData(0x06, Events., Regions.), # Unused
+        # EventData(0x06, Events., Sections.), # Unused
         EventData(
             0x07,
             Events.HIDE_AND_GO_SEEK,
-            Regions.FOREST_OF_ALL_BEGINNINGS,
+            Sections.FOREST_OF_ALL_BEGINNING_PART_1.name,
             started_rule=HasCleared(Events.WHO_ARE_YOU),
-            cleared_rule=CanReachRegion(Regions.HIDDEN_VILLAGE) & Has(Items.JEWEL_OF_FIRE),
+            cleared_rule=CanReachRegion(Sections.HIDDEN_VILLAGE.name) & Has(Items.JEWEL_OF_FIRE),
+            related_regions=[Sections.HIDDEN_VILLAGE.name],
         ),
         EventData(
             0x08,
             Events.I_CANT_SWIM,
-            Regions.OL_POND,
-            cleared_rule=CanReachRegion(Regions.MASAKARI_JUNGLE) & HasCleared(Events.A_REFRESHING_DRINK),
+            Sections.OL_POND.name,
+            cleared_rule=CanReachRegion(Sections.MASAKARI_JUNGLE.name) & HasCleared(Events.A_REFRESHING_DRINK),
+            related_regions=[Sections.MASAKARI_JUNGLE.name],
         ),
         EventData(
-            0x09, Events.INSIDE_THE_KOKKA_EGGS, Regions.FOREST_OF_ALL_BEGINNINGS, cleared_rule=Has(Items.CHICK, 4)
+            0x09,
+            Events.INSIDE_THE_KOKKA_EGGS,
+            Sections.HUNDREDS_YEAR_OLD_MANS_HUT.name,
+            cleared_rule=Has(Items.CHICK, 4),
         ),
         EventData(
             0x0A,
             Events.TALE_OF_THE_EVIL_PIGS,
-            Regions.FOREST_OF_ALL_BEGINNINGS,
+            Sections.HUNDREDS_YEAR_OLD_MANS_HUT.name,
             started_rule=HasCleared(Events.INSIDE_THE_KOKKA_EGGS),
         ),
         EventData(
@@ -95,109 +114,120 @@ class EventHandler:
         EventData(
             0x0C,
             Events.DWARF_ELDER,
-            Regions.DWARF_VILLAGE,
-            started_rule=CanReachRegion(Regions.FOREST_OF_ALL_BEGINNINGS),
+            Sections.DWARF_ELDER_HUT.name,
+            cleared_rule=HasCleared(Events.A_LOST_CHILD)
+            & HasCleared(Events.SAVE_THE_DWARVES)
+            & HasCleared(Events.BEGINNERS_DWARF_LANGUAGE),
         ),
-        EventData(0x0D, Events.BEGINNERS_DWARF_LANGUAGE, Regions.DWARF_VILLAGE),
-        EventData(0x0E, Events.A_LOST_CHILD, Regions.DWARF_VILLAGE),
+        EventData(0x0D, Events.BEGINNERS_DWARF_LANGUAGE, Sections.DWARF_VILLAGE.name),
+        EventData(0x0E, Events.A_LOST_CHILD, Sections.DWARF_VILLAGE.name),
         EventData(
             0x0F,
             Events.FLOWER_SEEDS,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=HasCleared(Events.A_LOST_CHILD) & HasCleared(Events.DEATH_FRUIT_JUICE),
-            cleared_rule=Has(Items.FLOWER_SEEDS) & CanReachRegion(Regions.DWARF_VILLAGE),
+            cleared_rule=Has(Items.FLOWER_SEEDS) & CanReachRegion(Sections.DWARF_VILLAGE.name),
         ),
-        EventData(0x10, Events.THE_AP_BOX, Regions.FOREST_OF_ALL_BEGINNINGS),
+        EventData(0x10, Events.THE_AP_BOX, Sections.FOREST_OF_ALL_BEGINNING_PART_2.name),
         EventData(
             0x11,
             Events.SAVE_THE_DWARVES,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=HasCleared(Events.BEGINNERS_DWARF_LANGUAGE),
         ),
-        # EventData(0x12, Events., Regions.), # Unused
+        # EventData(0x12, Events., Sections.), # Unused
         EventData(
             0x13,
             Events.LOST_AND_FOUND,
-            Regions.FOREST_OF_100_FLOWERS,
+            Sections.FOREST_OF_100_FLOWERS_PART_1.name,
             started_rule=HasStarted(Events.SAVE_THE_DWARVES),
-            cleared_rule=CanReachRegion(Regions.CHARITY_SQUARE),
+            cleared_rule=CanReachRegion(Sections.CHARITY_SQUARE.name),
+            related_regions=[Sections.CHARITY_SQUARE.name],
         ),
         EventData(
             0x14,
             Events.STOP_THE_FIGHT,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=HasCleared(Events.WHERED_THE_LIGHTS_GO),
         ),
-        EventData(0x15, Events.THE_GREAT_ESCAPE, Regions.DWARF_VILLAGE, started_rule=HasCleared(Events.STOP_THE_FIGHT)),
-        EventData(0x16, Events.LOOK_AND_SEE, Regions.WATCH_TOWER, cleared_rule=Has(Items.TELESCOPE)),
+        EventData(
+            0x15, Events.THE_GREAT_ESCAPE, Sections.DWARF_VILLAGE.name, started_rule=HasCleared(Events.STOP_THE_FIGHT)
+        ),
+        EventData(0x16, Events.LOOK_AND_SEE, Sections.WATCH_TOWER.name, cleared_rule=Has(Items.TELESCOPE)),
         EventData(
             0x17,
             Events.A_MANS_BEST_FRIEND,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=HasStarted(Events.SAVE_THE_DWARVES),
             cleared_rule=HasCleared(Events.DELICIOUS_KNOWLEDGE_FRUIT) & HasCleared(Events.HEALING_HERBS_FOR_BARON),
         ),
-        EventData(0x18, Events.WHAT_IS_THIS, Regions.WATCH_TOWER, cleared_rule=HasCleared(Events.WE_NEED_POWER)),
+        EventData(0x18, Events.WHAT_IS_THIS, Sections.WATCH_TOWER.name, cleared_rule=HasCleared(Events.WE_NEED_POWER)),
         EventData(
             0x19, Events.TREASURES_FROM_THE_MANSION, Regions.MANSION, started_rule=HasStarted(Events.THE_GREAT_ESCAPE)
         ),
         EventData(
             0x1A,
             Events.TO_PHOENIX_MOUNTAIN,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=HasCleared(Events.SAVE_THE_DWARVES),
             cleared_rule=HasCleared(Events.THE_WORLDS_GREATEST_POUT),
         ),
         EventData(
             0x1B,
             Events.THE_BROKEN_FOUNTAIN,
-            Regions.CHARITY_SQUARE,
+            Sections.CHARITY_SQUARE.name,
             cleared_rule=HasCleared(Events.THE_100_FLOWER_FOREST) & Has(Items.FLOWER_TEARS),
         ),
         EventData(0x1C, Events.A_FAMILIAR_LOOKING_MANSION, Regions.MANSION),
         EventData(
             0x1D,
             Events.A_STORMY_PIG_BAG,
-            Regions.STORMY_MOUNTAIN,
-            cleared_rule=Has(Items.BIG_KEY) & CanReachRegion(Regions.STORMY_MOUNTAIN),
+            Sections.STORMY_MOUNTAINS_PART_2.name,
+            cleared_rule=Has(Items.BIG_KEY) & CanReachRegion(Sections.STORMY_MOUNTAINS_PART_2.name),
         ),
         EventData(
             0x1E,
             Events.PHOENIX_MOUNTAIN,
-            Regions.STORMY_MOUNTAIN,
-            started_rule=HasCleared(Events.A_STORMY_PIG_BAG),
-            cleared_rule=Has(Items.RED_EVIL_PIG_BAG) & CanReachRegion(Regions.CHARITY_SQUARE),
+            Sections.STORMY_MOUNTAINS_PART_2.name,
+            started_rule=Has(Items.RED_EVIL_PIG_BAG),
+            cleared_rule=CanReachRegion(Sections.CHARITY_SQUARE.name) & Rules.CAN_BIG_JUMP,
+            related_regions=[Regions.CHARITY_SQUARE],
         ),
-        EventData(0x1F, Events.WHERE_DID_I_COME_FROM, Regions.STORMY_MOUNTAIN),
-        # EventData(0x20, Events., Regions.), # Unused
+        EventData(0x1F, Events.WHERE_DID_I_COME_FROM, Sections.STORMY_MOUNTAINS_PART_2.name),
+        # EventData(0x20, Events., Sections.), # Unused
         EventData(
-            0x21, Events.THE_FAMOUS_DIGGER, Regions.STORMY_MOUNTAIN, cleared_rule=HasCleared(Events.PHOENIX_MOUNTAIN)
+            0x21,
+            Events.THE_FAMOUS_DIGGER,
+            Sections.STORMY_MOUNTAINS_PART_2.name,
+            cleared_rule=HasCleared(Events.PHOENIX_MOUNTAIN),
         ),
         EventData(
             0x22,
             Events.LAVA_CAVES,
-            Regions.LAVA_CAVES,
+            Sections.LAVA_CAVES.name,
             cleared_rule=Has(Items.GREEN_EVIL_PIG_BAG) & CanReachRegion(Sections.LAUGHING_ROOM.name),
+            related_regions=[Sections.LAUGHING_ROOM.name],
         ),
         EventData(
             0x23,
             Events.THE_MASTER_OF_THE_SKIES,
-            Regions.STORMY_MOUNTAIN,
-            cleared_rule=Has(Items.BUNK_FLOWER, 5) & CanReachRegion(Regions.PHOENIXS_NEST),
+            Sections.STORMY_MOUNTAINS_PART_2.name,
+            cleared_rule=Has(Items.BUNK_FLOWER, 5) & CanReachRegion(Sections.PHOENIXS_NEST.name),
+            related_regions=[Sections.PHOENIXS_NEST.name],
         ),
         EventData(
             0x24,
             Events.WHATS_A_FUNGA,
-            Regions.STORMY_MOUNTAIN,
+            Sections.STORMY_MOUNTAINS_PART_1.name,
             started_rule=HasCleared(Events.PHOENIX_MOUNTAIN),
-            cleared_rule=Has(Items.FUNGA_DRUM) & CanReachRegion(Regions.STORMY_MOUNTAIN),
+            cleared_rule=Has(Items.FUNGA_DRUM) & CanReachRegion(Sections.STORMY_MOUNTAINS_PART_1.name),
         ),
         EventData(0x25, Events.MONSTER_HUNT, Regions.MUSHROOM_FOREST),
         EventData(0x26, Events.DEATH_FRUIT_JUICE, Regions.BACCUS_VILLAGE, cleared_rule=Has(Items.WEED_KILLER)),
         EventData(
             0x27,
             Events.PLANT_A_FLOWER_GARDEN,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=Has(Items.FLOWER_SEEDS),
             cleared_rule=HasCleared(Events.THE_100_FLOWER_FOREST),
         ),  # TODO: Check this one, only 97.000 AP required or evil pig dead too ?
@@ -210,12 +240,13 @@ class EventHandler:
         EventData(
             0x29,
             Events.SMILE,
-            Regions.STORMY_MOUNTAIN,
-            started_rule=CanReachRegion(Sections.MUSHROOM_FOREST.name)
-            & (
-                CanReachRegion(Sections.STORMY_MOUNTAINS_PART_1.name)
+            Sections.STORMY_MOUNTAINS_PART_2.name,
+            started_rule=(
+                CanReachRegion(Sections.STORMY_MOUNTAINS_PART_2.name)
                 | CanReachRegion(Sections.HAUNTED_MANSION_NORTH.name)
             ),
+            cleared_rule=Rules.CAN_CHANGE_MOOD,
+            related_regions=[Sections.HAUNTED_MANSION_NORTH.name],
         ),
         EventData(0x2A, Events.CRY_BABY, Sections.HAUNTED_MANSION_WEST.name),
         EventData(
@@ -224,6 +255,7 @@ class EventHandler:
             Regions.BACCUS_VILLAGE,
             started_rule=HasCleared(Events.WHERES_THE_BABY_MOUSE),
             cleared_rule=CanReachRegion(Regions.MUSHROOM_FOREST),
+            related_regions=[Sections.MUSHROOM_FOREST.name],
         ),
         EventData(
             0x2C,
@@ -289,7 +321,7 @@ class EventHandler:
             cleared_rule=HasStarted(Events.THE_5_GOLDEN_ITEMS),
         ),
         EventData(0x3F, Events.THE_PUMPS_ROCK, Regions.OLD_TREE_HILL),
-        EventData(0x40, Events.A_REFRESHING_DRINK, Regions.MASAKARI_JUNGLE, cleared_rule=Has(Items.BANANA_JUICE)),
+        EventData(0x40, Events.A_REFRESHING_DRINK, Sections.MASAKARI_JUNGLE.name, cleared_rule=Has(Items.BANANA_JUICE)),
         EventData(
             0x41,
             Events.I_NEED_A_TEAR_BOTTLE,
@@ -310,6 +342,7 @@ class EventHandler:
             Regions.CLOCK_TOWER_ENGINE_ROOM,
             started_rule=CanReachRegion(Regions.CLOCK_TOWER_ENGINE_ROOM) & HasCleared(Events.A_REFRESHING_DRINK),
             cleared_rule=Has(Items.BOMB) & CanReachRegion(Regions.IRON_CASTLE_ENTRANCE),
+            related_regions=[Regions.CLOCK_TOWER_ENGINE_ROOM, Regions.IRON_CASTLE_ENTRANCE],
         ),
         # EventData(0x4A, Events., Regions.), # Unused
         # EventData(0x4B, Events., Regions.), # Unused
@@ -320,7 +353,7 @@ class EventHandler:
             Regions.IRON_CASTLE_ENTRANCE,
             started_rule=HasCleared(Events.WE_NEED_POWER),
         ),
-        EventData(0x4E, Events.FIND_CHARLES, Regions.MASAKARI_JUNGLE, cleared_rule=Has(Items.MINERS_HAT)),
+        EventData(0x4E, Events.FIND_CHARLES, Sections.MASAKARI_JUNGLE.name, cleared_rule=Has(Items.MINERS_HAT)),
         EventData(
             0x4F,
             Events.WHATS_UNDER_THE_FOREST,
@@ -330,9 +363,10 @@ class EventHandler:
         EventData(
             0x50,
             Events.THE_100_FLOWER_FOREST,
-            Regions.FOREST_OF_100_FLOWERS,
+            Sections.FOREST_OF_100_FLOWERS_PART_1.name,
             started_rule=HasCleared(Events.SAVE_THE_DWARVES),
             cleared_rule=CanReachRegion(Regions.MILLION_YEAR_OLD_MANS_ROOM) & Has(Items.BLUE_EVIL_PIG_BAG),
+            related_regions=[Sections.MILLION_YEAR_OLD_MANS_ROOM.name],
         ),
         EventData(
             0x51,
@@ -344,7 +378,7 @@ class EventHandler:
         EventData(
             0x52,
             Events.IM_SO_HUNGRY,
-            Regions.HIDDEN_VILLAGE,
+            Sections.HIDDEN_VILLAGE.name,
             cleared_rule=Has(Items.LUNCH_BOX) | Has(Items.LARGE_LUNCH_BOX),
         ),
         # EventData(0x53, Events., Regions.), # Unused
@@ -355,31 +389,37 @@ class EventHandler:
             Regions.OLD_TREE_HILL,
             started_rule=HasCleared(Events.THE_JUNGLE_PIG_BAG),
             cleared_rule=CanReachRegion(Regions.MANSION) & Has(Items.NAVY_EVIL_PIG_BAG),
+            related_regions=[Sections.MANSION.name],
         ),
         EventData(
             0x56,
             Events.HEALING_HERBS_FOR_BARON,
             Regions.WOBBLY_WHARF,
             started_rule=HasStarted(Events.SAVE_THE_DWARVES),
-            cleared_rule=Has(Items.HEALING_HERBS) & CanReachRegion(Regions.DWARF_VILLAGE),
+            cleared_rule=Has(Items.HEALING_HERBS) & CanReachRegion(Sections.DWARF_VILLAGE.name),
+            related_regions=[Sections.DWARF_VILLAGE.name],
         ),
         EventData(
             0x57,
             Events.DELICIOUS_KNOWLEDGE_FRUIT,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=Has(Items.HEALING_HERBS) & HasStarted(Events.A_MANS_BEST_FRIEND),
             cleared_rule=Has(Items.KNOWLEDGE_FRUIT),
         ),
         EventData(
             0x58,
             Events.SEAWEED_FOR_YOUR_HEALTH,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=HasCleared(Events.A_MANS_BEST_FRIEND),
-            cleared_rule=Has(Items.SEAWEED) & CanReachRegion(Regions.DWARF_VILLAGE),
+            cleared_rule=Has(Items.SEAWEED) & CanReachRegion(Sections.DWARF_VILLAGE.name),
+            related_regions=[Sections.DWARF_VILLAGE.name],
         ),
         # EventData(0x59, Events., Regions.), # Unused
         EventData(
-            0x5A, Events.BLUE_HIDDEN_POWERS, Regions.TRICK_VILLAGE, started_rule=HasCleared(Events.WHATS_UNDERWATER)
+            0x5A,
+            Events.BLUE_HIDDEN_POWERS,
+            Sections.TRICK_VILLAGE.name,
+            started_rule=HasCleared(Events.WHATS_UNDERWATER),
         ),
         # EventData(0x5B, Events., Regions.), # Unused
         # EventData(0x5C, Events., Regions.), # Unused
@@ -402,7 +442,7 @@ class EventHandler:
         EventData(
             0x67,
             Events.THE_CUTE_WITCH,
-            Regions.VILLAGE_OF_ALL_BEGINNINGS,
+            Sections.VILLAGE_OF_ALL_BEGINNING.name,
             started_rule=HasCleared(Events.WE_NEED_POWER),
         ),
         EventData(
@@ -413,6 +453,7 @@ class EventHandler:
             cleared_rule=HasCleared(Events.THE_CIVILIZATION_MACHINE)
             & Has(Items.WINE)
             & CanReachRegion(Regions.LUMBERJACK_FACTORY),
+            related_regions=[Sections.LUMBERJACK_FACTORY.name],
         ),
         EventData(
             0x69,
@@ -420,6 +461,7 @@ class EventHandler:
             Regions.LUMBERJACK_FACTORY,
             started_rule=HasStarted(Events.WE_NEED_POWER),
             cleared_rule=Has(Items.BOMB) & CanReachRegion(Regions.LUMBERJACK_FACTORY),
+            related_regions=[Sections.LUMBERJACK_FACTORY.name],
         ),
         # EventData(0x6A, Events., Regions.), # Unused
         # EventData(0x6B, Events., Regions.), # Unused
@@ -431,25 +473,27 @@ class EventHandler:
             Events.BACCUS_VILLAGE,
             Regions.BACCUS_VILLAGE,
             cleared_rule=Has(Items.ORANGE_EVIL_PIG_BAG) & CanReachRegion(Regions.CLOCK_TOWER_ENTRANCE),
+            related_regions=[Sections.CLOCK_TOWER_ENTRANCE.name],
         ),
         EventData(
             0x70,
             Events.THE_MERMAIDS_NECKLACE,
-            Regions.TRICK_VILLAGE,
+            Sections.TRICK_VILLAGE.name,
             started_rule=Has(Items.THOUSAND_YEAR_OLD_KEY),
             cleared_rule=Has(Items.SEASHELL_NECKLACE) & CanReachRegion(Sections.HIDING_ROOM.name),
+            related_regions=[Sections.HIDING_ROOM.name],
         ),
         EventData(
             0x71,
             Events.BARONS_STRENGTH,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=HasCleared(Events.A_MANS_BEST_FRIEND),
             cleared_rule=HasCleared(Events.SEAWEED_FOR_YOUR_HEALTH),
         ),
         EventData(
             0x72,
             Events.WHAT_THE_WITCH_LOST,
-            Regions.WITCHS_HUT,
+            Sections.WITCH_HUT.name,
             cleared_rule=Has(Items.THREE_CRYSTAL_BALLS) & Has(Items.DIRTY_MIRROR),
         ),
         EventData(
@@ -462,7 +506,7 @@ class EventHandler:
         EventData(
             0x74,
             Events.POWER_UP_FOR_TOOLS,
-            Regions.WITCHS_HUT,
+            Sections.WITCH_HUT.name,
             cleared_rule=Has(Items.GRAPPLE)
             & Has(Items.BLACKJACK)
             & Has(Items.THREE_CRYSTAL_BALLS)
@@ -472,9 +516,9 @@ class EventHandler:
         EventData(
             0x76,
             Events.THE_10000_YEAR_OLD_MAN,
-            Regions.TRICK_VILLAGE,
+            Sections.TRICK_VILLAGE.name,
             started_rule=HasCleared(Events.WE_NEED_POWER),
-            cleared_rule=CanReachRegion(Regions.TRICK_VILLAGE),
+            cleared_rule=CanReachRegion(Sections.TRICK_VILLAGE.name),
         ),
         EventData(
             0x77,
@@ -483,15 +527,16 @@ class EventHandler:
             started_rule=Has(Items.SEASHELL_NECKLACE) & HasCleared(Events.THE_10000_YEAR_OLD_MAN),
             cleared_rule=Has(Items.MIGHTY_FISH_FOOD)
             & (
-                CanReachRegion(Regions.OL_POND)
-                | CanReachRegion(Regions.MASAKARI_JUNGLE)
-                | CanReachRegion(Regions.HIDING_ROOM)
+                CanReachRegion(Sections.OL_POND.name)
+                | CanReachRegion(Sections.MASAKARI_JUNGLE.name)
+                | CanReachRegion(Sections.HIDING_ROOM.name)
             ),
+            related_regions=[Sections.OL_POND.name, Sections.MASAKARI_JUNGLE.name, Sections.HIDING_ROOM.name],
         ),
         EventData(
             0x78,
             Events.LETS_MAKE_CANDY,
-            Regions.WITCHS_HUT,
+            Sections.WITCH_HUT.name,
             cleared_rule=Has(Items.BITING_PLANT_FLOWER)
             & Has(Items.BUTAMUSHI_THORN)
             & Has(Items.KOKKA_CLAW)
@@ -504,21 +549,22 @@ class EventHandler:
         EventData(
             0x7B,
             Events.THE_UNDERWATER_PIG_BAG,
-            Regions.TRICK_VILLAGE,
+            Sections.TRICK_VILLAGE.name,
             cleared_rule=Has(Items.TEN_THOUSAND_YEAR_OLD_KEY) & HasCleared(Events.WHATS_UNDERWATER),
         ),
         EventData(
             0x7C,
             Events.TRICK_VILLAGE,
-            Regions.TRICK_VILLAGE,
+            Sections.TRICK_VILLAGE.name,
             started_rule=HasCleared(Events.WHATS_UNDERWATER) & Has(Items.TEN_THOUSAND_YEAR_OLD_KEY),
             cleared_rule=Has(Items.YELLOW_EVIL_PIG_BAG) & CanReachRegion(Regions.CLOCK_TOWER_ENTRANCE),
+            related_regions=[Sections.CLOCK_TOWER_ENTRANCE.name],
         ),
         EventData(0x7D, Events.THE_THIEFS_DOOR, Sections.UNDERGROUND_MAZE.name, cleared_rule=Has(Items.THIEFS_WIRE)),
         EventData(
             0x7E,
             Events.THE_10_MATH_BEADS,
-            Regions.TRICK_VILLAGE,
+            Sections.TRICK_VILLAGE.name,
             cleared_rule=Has(Items.MATH_BEAD_1)
             & Has(Items.MATH_BEAD_2)
             & Has(Items.MATH_BEAD_3)
@@ -533,8 +579,8 @@ class EventHandler:
         EventData(
             0x7F,
             Events.THE_5_GOLDEN_ITEMS,
-            Regions.TRICK_VILLAGE,
-            started_rule=CanReachRegion(Regions.TRICK_VILLAGE)
+            Sections.TRICK_VILLAGE.name,
+            started_rule=CanReachRegion(Sections.TRICK_VILLAGE.name)
             & Has(Items.MATH_BEAD_1)
             & Has(Items.MATH_BEAD_2)
             & Has(Items.MATH_BEAD_3)
@@ -556,11 +602,12 @@ class EventHandler:
             Events.UNBREAKABLE_WIRE,
             Regions.UNDERGROUND_MAZE_INNER,
             cleared_rule=CanReachRegion(Sections.TRIBULATION_ROOM.name),
+            related_regions=[Sections.TRIBULATION_ROOM.name],
         ),
         EventData(
             0x81,
             Events.GREEN_HIDDEN_POWERS,
-            Regions.PHOENIXS_NEST,
+            Sections.PHOENIXS_NEST.name,
             started_rule=HasCleared(Events.THE_PHOENIXS_FAVORITE),
         ),
         # EventData(0x82, Events., Regions.), # Unused
@@ -568,7 +615,7 @@ class EventHandler:
         EventData(
             0x84,
             Events.TAKE_TWO_OF_THESE,
-            Regions.VILLAGE_OF_ALL_BEGINNINGS,
+            Sections.VILLAGE_OF_ALL_BEGINNING.name,
             started_rule=HasCleared(Events.POWER_UP_FOR_TOOLS),
             cleared_rule=Has(Items.COLD_MEDICINE),
         ),
@@ -613,9 +660,10 @@ class EventHandler:
             Regions.IRON_CASTLE_ENTRANCE,
             started_rule=HasCleared(Events.WE_NEED_POWER),
             cleared_rule=Has(Items.RAFT) & CanReachRegion(Regions.OLD_TREE_HILL),
+            related_regions=[Sections.OLD_TREE_HILL.name],
         ),
         EventData(
-            0x97, Events.TAKE_OUT, Regions.HIDDEN_VILLAGE, cleared_rule=Has(Items.YANS_LUNCH_BOX)
+            0x97, Events.TAKE_OUT, Sections.HIDDEN_VILLAGE.name, cleared_rule=Has(Items.YANS_LUNCH_BOX)
         ),  # TODO: Fix this event
         # EventData(0x98, Events., Regions.), # Unused
         EventData(
@@ -629,7 +677,7 @@ class EventHandler:
         EventData(
             0x9C,
             Events.SOURCE_OF_EVIL_MAGIC,
-            Regions.TRICK_VILLAGE,
+            Sections.TRICK_VILLAGE.name,
             started_rule=Has(Items.MATH_BEAD_1)
             & Has(Items.MATH_BEAD_2)
             & Has(Items.MATH_BEAD_3)
@@ -641,18 +689,27 @@ class EventHandler:
             & Has(Items.MATH_BEAD_9)
             & Has(Items.MATH_BEAD_10),
             cleared_rule=CanReachRegion(Regions.MILLION_YEAR_OLD_MANS_ROOM),
+            related_regions=[Sections.MILLION_YEAR_OLD_MANS_ROOM.name],
         ),
         EventData(
             0x9D,
             Events.SEVEN_FRIENDS,
             Regions.THE_STRANGE_SMALL_ROOM,
             started_rule=HasCleared(Events.MILLION_YEAR_OLD_WISH),
-            cleared_rule=CanReachRegion(Regions.DWARF_VILLAGE)
+            cleared_rule=CanReachRegion(Sections.DWARF_VILLAGE.name)
             & CanReachRegion(Regions.BACCUS_VILLAGE)
             & CanReachRegion(Sections.KEYHOLE_ROOM.name)
             & CanReachRegion(Regions.Y_CROSSING)
             & CanReachRegion(Regions.LUMBERJACK_FACTORY)
             & CanReachRegion(Regions.IRON_CASTLE_ENTRANCE),
+            related_regions=[
+                Sections.DWARF_VILLAGE.name,
+                Sections.BACCUS_VILLAGE.name,
+                Sections.KEYHOLE_ROOM.name,
+                Sections.Y_CROSSING.name,
+                Sections.LUMBERJACK_FACTORY.name,
+                Sections.IRON_CASTLE_ENTRANCE.name,
+            ],
         ),
         # EventData(0x9E, Events., Regions.), # Unused
         EventData(
@@ -680,28 +737,30 @@ class EventHandler:
         EventData(
             0xA4,
             Events.THE_FLOWER_TOWER,
-            Regions.CHARITY_SQUARE,
+            Sections.CHARITY_SQUARE.name,
             started_rule=HasCleared(Events.THE_BROKEN_FOUNTAIN),
         ),
         # EventData(0xA5, Events., Regions.), # Unused
-        EventData(0xA6, Events.A_HUNGRY_MONKEY, Regions.VILLAGE_OF_ALL_BEGINNINGS, cleared_rule=Has(Items.BANANAS)),
+        EventData(
+            0xA6, Events.A_HUNGRY_MONKEY, Sections.VILLAGE_OF_ALL_BEGINNING.name, cleared_rule=Has(Items.BANANAS)
+        ),
         EventData(
             0xA7,
             Events.PEACH_FLOWER_GAS,
-            Regions.VILLAGE_OF_ALL_BEGINNINGS,
+            Sections.VILLAGE_OF_ALL_BEGINNING.name,
             cleared_rule=HasCleared(Events.CANT_STOP_CRYING) & Has(Items.BABY_PIG),
         ),
         EventData(
             0xA8,
             Events.THE_EVIL_PIG_BAG,
-            Regions.DWARF_VILLAGE,
+            Sections.DWARF_VILLAGE.name,
             started_rule=HasCleared(Events.SAVE_THE_DWARVES),
             cleared_rule=HasCleared(Events.SAVE_THE_DWARVES),
         ),
         EventData(
             0xA9,
             Events.BITING_PLANT_FLOWER,
-            Regions.FOREST_OF_ALL_BEGINNINGS,
+            Sections.FOREST_OF_ALL_BEGINNING_PART_1.name,
             cleared_rule=HasStarted(Events.LETS_MAKE_CANDY) & Has(Items.BITING_PLANT_FLOWER),
         ),
         EventData(
@@ -713,11 +772,13 @@ class EventHandler:
         EventData(
             0xAB,
             Events.THE_PHOENIXS_FAVORITE,
-            Regions.LAVA_CAVES,
+            Sections.LAVA_CAVES.name,
             started_rule=HasCleared(Events.DEATH_FRUIT_JUICE),
             cleared_rule=HasCleared(Events.LAVA_CAVES) & Has(Items.BUNK_FLOWER, 5),
         ),
-        EventData(0xAC, Events.THE_FIRE_PIG_BAG, Regions.LAVA_CAVES, cleared_rule=Has(Items.THOUSAND_YEAR_OLD_KEY)),
+        EventData(
+            0xAC, Events.THE_FIRE_PIG_BAG, Sections.LAVA_CAVES.name, cleared_rule=Has(Items.THOUSAND_YEAR_OLD_KEY)
+        ),
         EventData(0xAD, Events.CHARLES_PANTS, Regions.STORMY_MOUNTAIN, cleared_rule=Has(Items.CHARLES_PANTS)),
         EventData(
             0xAE,
@@ -727,13 +788,19 @@ class EventHandler:
         ),
         EventData(0xAF, Events.THE_WORLDS_GREATEST_SMILE, Regions.MUSHROOM_FOREST),
         EventData(0xB0, Events.THE_WORLDS_GREATEST_POUT, Regions.MUSHROOM_FOREST),
-        EventData(0xB1, Events.SOMETHINGS_COOKIN, Regions.FOREST_OF_100_FLOWERS, cleared_rule=Has(Items.BAKED_YAM)),
+        EventData(
+            0xB1,
+            Events.SOMETHINGS_COOKIN,
+            Sections.FOREST_OF_100_FLOWERS_PART_1.name,
+            cleared_rule=Has(Items.BAKED_YAM),
+        ),
         EventData(
             0xB2,
             Events.LEAF_BUTTERFLIES,
-            Regions.CHARITY_SQUARE,
-            started_rule=CanReachRegion(Regions.FOREST_OF_100_FLOWERS),
+            Sections.CHARITY_SQUARE.name,
+            started_rule=CanReachRegion(Sections.FOREST_OF_100_FLOWERS_PART_1.name),
             cleared_rule=Has(Items.LEAF_BUTTERFLY, 29),
+            related_regions=[Sections.FOREST_OF_100_FLOWERS_PART_1.name],
         ),
         EventData(
             0xB3,
@@ -758,15 +825,17 @@ class EventHandler:
         EventData(
             0xB6,
             Events.A_MAGIC_MIRROR,
-            Regions.WATCH_TOWER,
+            Sections.WATCH_TOWER.name,
             started_rule=Has(Items.DIRTY_MIRROR),
-            cleared_rule=Has(Items.THREE_CRYSTAL_BALLS) & CanReachRegion(Regions.WITCHS_HUT),
+            cleared_rule=Has(Items.THREE_CRYSTAL_BALLS) & CanReachRegion(Sections.WITCH_HUT.name),
+            related_regions=[Sections.WITCH_HUT.name],
         ),
         EventData(
             0xB7,
             Events.THE_JUNGLE_PIG_BAG,
-            Regions.MASAKARI_JUNGLE,
+            Sections.MASAKARI_JUNGLE.name,
             cleared_rule=Has(Items.TEN_THOUSAND_YEAR_OLD_KEY) & CanReachRegion(Regions.OLD_TREE_HILL),
+            related_regions=[Sections.OLD_TREE_HILL.name],
         ),
         # EventData(0xB8, Events., Regions.), # Unused
         EventData(
@@ -777,28 +846,36 @@ class EventHandler:
         ),
         # EventData(0xBA, Events., Regions.), # Unused
         EventData(
-            0xBB, Events.THE_MYSTERIOUS_MUSHROOM, Regions.CHARITY_SQUARE, cleared_rule=Has(Items.THOUSAND_YEAR_OLD_KEY)
+            0xBB,
+            Events.THE_MYSTERIOUS_MUSHROOM,
+            Sections.CHARITY_SQUARE.name,
+            cleared_rule=Has(Items.THOUSAND_YEAR_OLD_KEY),
         ),
         EventData(
-            0xBC, Events.LEAF_SLIDER, Regions.CHARITY_SQUARE, cleared_rule=CanReachRegion(Regions.MUSHROOM_FOREST)
+            0xBC,
+            Events.LEAF_SLIDER,
+            Sections.CHARITY_SQUARE.name,
+            cleared_rule=Rules.CAN_CHANGE_MOOD,
+            related_regions=[Sections.MUSHROOM_FOREST.name],
         ),
         EventData(
             0xBD,
             Events.RED_BLUE,
-            Regions.CHARITY_SQUARE,
-            cleared_rule=CanReachRegion(Regions.CHARITY_SQUARE) & CanReachRegion(Regions.MUSHROOM_FOREST),
+            Sections.CHARITY_SQUARE.name,
+            cleared_rule=CanReachRegion(Sections.CHARITY_SQUARE.name) & CanReachRegion(Sections.MUSHROOM_FOREST.name),
+            related_regions=[Sections.MUSHROOM_FOREST.name],
         ),
         EventData(
             0xBE,
             Events.THE_TROUBLED_THIEF,
-            Regions.LAVA_CAVES,
+            Sections.LAVA_CAVES.name,
             started_rule=HasCleared(Events.LAVA_CAVES),
             cleared_rule=Has(Items.WHAT_THE_THIEF_LOST),
         ),
         EventData(
             0xBF,
             Events.WHAT_THE_THIEF_FORGOT,
-            Regions.LAVA_CAVES,
+            Sections.LAVA_CAVES.name,
             started_rule=HasCleared(Events.THE_TROUBLED_THIEF),
             cleared_rule=HasCleared(Events.THE_HAUNTED_MANSION) & Has(Items.WHAT_THE_THIEF_FORGOT),
         ),
@@ -809,3 +886,7 @@ class EventHandler:
     for index, event in enumerate(event_table):
         by_name[event.name] = event
         by_id[event.id] = event
+
+    @staticmethod
+    def get_event_region(event_name: str) -> str:
+        return EventHandler.by_name[event_name].region

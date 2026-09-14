@@ -263,7 +263,7 @@ class TombaContext(CommonContext):
 
                         await self.process_items_received()
 
-                        await self.found_handler.update_found_items()
+                        # await self.found_handler.update_found_items()
 
                     now = time.time()
                     tick_duration = now - last_tick

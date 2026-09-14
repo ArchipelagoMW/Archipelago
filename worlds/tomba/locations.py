@@ -14,7 +14,7 @@ from .items import ItemHandler, ItemData, TombaItem, PANTS
 from .sections import Section, Sections
 from .helpers import HasStarted, HasCleared, Started, Cleared, Rules
 from .events import EventHandler
-from .bitutils import Bitmask
+from .bitutils import Bitmask, Trigger
 
 if TYPE_CHECKING:
     from .world import TombaWorld
@@ -43,6 +43,7 @@ class LocationData:
     rule: Rule | None
     at: Bitmask | None
     type: LocationType
+    trigger: Trigger | None
 
     def __init__(
         self,
@@ -54,6 +55,7 @@ class LocationData:
         rule: Rule | None = None,
         at: Bitmask | None = None,
         type: LocationType = LocationType.PICKUP,
+        trigger: Trigger | None = None,
     ):
         self.id = LocationData._id_counter
         LocationData._id_counter += 1
@@ -66,6 +68,7 @@ class LocationData:
         self.rule = rule
         self.at = at
         self.type = type
+        self.trigger = trigger
 
     def with_section(self, section: Section) -> Self:
         self.section = section
@@ -97,6 +100,7 @@ class ItemLocData(LocationData):
         at: Bitmask | None = None,
         event: str | None = None,
         type: LocationType = LocationType.PICKUP,
+        trigger: Trigger | None = None,
     ):
         self.base_name = name
 
@@ -106,7 +110,7 @@ class ItemLocData(LocationData):
         if item is None:
             raise Exception(f"Trying to create a location {name} with an unknown item: {item_name}")
 
-        super().__init__(name, region, item, section, progress_type, rule, at, type)
+        super().__init__(name, region, item, section, progress_type, rule, at, type, trigger)
 
         self.event = event
 
@@ -284,6 +288,7 @@ class LocationHandler:
                 Sections.FOREST_OF_100_FLOWERS_PART_1.name,
                 Items.LEAF_BUTTERFLY,
                 Sections.FOREST_OF_100_FLOWERS_PART_1,
+                trigger=Trigger(0x09C272, lambda value, butterfly_index=index: value >= butterfly_index),
             )
             for index in range(1, 26)
         ],
@@ -414,7 +419,7 @@ class LocationHandler:
             Sections.WOBBLY_WHARF.name,
             Items.BUCKET,
             rule=Rules.CAN_BIG_JUMP,
-            at=Bitmask(0x09C215, 0x07),
+            at=Bitmask(0x09C215, 0x03),
         ),
         # Dwarf Village
         # TODO: Find where this is called in game (reverse)
@@ -466,8 +471,15 @@ class LocationHandler:
             Sections.DWARF_VILLAGE.name,
             Items.TORCH,
             rule=HasStarted(Events.WHERED_THE_LIGHTS_GO),
+            at=Bitmask(0x09C1BF, 0x03),
         ),
-        ItemLocData(Locations.JAIL, Sections.UNDERGROUND_PRISON.name, Items.BROKEN_VASE, rule=Has(Items.TORCH)),
+        ItemLocData(
+            Locations.JAIL,
+            Sections.UNDERGROUND_PRISON.name,
+            Items.BROKEN_VASE,
+            rule=Has(Items.TORCH),
+            at=Bitmask(0x09C23E, 0x01),
+        ),
         # Mushroom Forest
         ChestLocData(
             "100 Year Old AP Crystal",
@@ -477,9 +489,19 @@ class LocationHandler:
             rule=Has(Items.HUNDRED_YEAR_OLD_KEY),
             at=Bitmask(0x09BE1E, 0x80),
         ),
-        ItemLocData("AP Box", Sections.MUSHROOM_FOREST.name, Items.ORDINARY_MUSHROOM, rule=Has(Locations.AP_150_000)),
         ItemLocData(
-            "Tear Jar", Sections.MUSHROOM_FOREST.name, Items.TEAR_JAR, rule=HasCleared(Events.THE_100_FLOWER_FOREST)
+            "AP Box",
+            Sections.MUSHROOM_FOREST.name,
+            Items.ORDINARY_MUSHROOM,
+            rule=Has(Locations.AP_150_000),
+            event=Events.A_SAFE_MUSHROOM,
+        ),
+        ItemLocData(
+            "Tear Jar",
+            Sections.MUSHROOM_FOREST.name,
+            Items.TEAR_JAR,
+            rule=HasCleared(Events.THE_100_FLOWER_FOREST),
+            event=Events.I_NEED_A_TEAR_BOTTLE,
         ),
         ChestLocData(
             "Mysterious Mushroom",
@@ -574,7 +596,12 @@ class LocationHandler:
             rule=Has(Items.TEN_THOUSAND_YEAR_OLD_KEY),
             at=Bitmask(0x09BE1F, 0x02),
         ),
-        ItemLocData(Locations.MONSTER_HUNT, Sections.MUSHROOM_FOREST.name, Items.RISE_AND_SHINE_POWDER),
+        ItemLocData(
+            Locations.MONSTER_HUNT,
+            Sections.MUSHROOM_FOREST.name,
+            Items.RISE_AND_SHINE_POWDER,
+            event=Events.MONSTER_HUNT,
+        ),
         # Charity Square
         ChestLocData(
             "10,000 Year Old AP Crystal",
@@ -591,7 +618,13 @@ class LocationHandler:
             at=Bitmask(0x09BD1F, 0x01),
             rule=Has(Items.THOUSAND_YEAR_OLD_KEY),
         ),
-        ItemLocData("Sacred Fish", Regions.CHARITY_SQUARE, Items.SACRED_FISH, rule=HasCleared(Events.THE_FLOWER_TOWER)),
+        ItemLocData(
+            "Sacred Fish",
+            Regions.CHARITY_SQUARE,
+            Items.SACRED_FISH,
+            rule=HasCleared(Events.THE_FLOWER_TOWER),
+            at=Bitmask(0x09BE9C, 0x01),
+        ),
         ItemLocData(
             "Crystal Balls",
             Regions.CHARITY_SQUARE,
@@ -604,6 +637,7 @@ class LocationHandler:
             | Has(Items.JEWEL_OF_FIRE)
             | Has(Items.JEWEL_OF_WATER)
             | Has(Items.JEWEL_OF_WIND),
+            at=Bitmask(0x09C11F, 0x03),
         ),
         ChestLocData(
             "1Up 1",
@@ -681,7 +715,15 @@ class LocationHandler:
             rule=Has(Items.MILLION_YEAR_OLD_KEY),
             at=Bitmask(0x09BE1D, 0x02),
         ),
-        ItemLocData("Familiar Beach", Regions.MANSION, Items.SEAWEED, rule=HasStarted(Events.SEAWEED_FOR_YOUR_HEALTH)),
+        ItemLocData(
+            "Familiar Beach",
+            Regions.MANSION,
+            Items.SEAWEED,
+            rule=HasStarted(Events.SEAWEED_FOR_YOUR_HEALTH)
+            & HasCleared(Events.DELICIOUS_KNOWLEDGE_FRUIT)
+            & HasCleared(Events.HEALING_HERBS_FOR_BARON),
+            at=Bitmask(0x09BE1E, 0x40),
+        ),
         # Stormy Mountain
         ChestLocData(
             "100 Year Old Chest",
@@ -777,6 +819,7 @@ class LocationHandler:
                 | Rules.HAS_ANY_JEWEL
                 | Rules.HAS_BLUE_POWDER
             ),
+            at=Bitmask(0x09C36A, 0x01),
         ),
         ItemLocData(
             "Smile Wing",
@@ -890,7 +933,12 @@ class LocationHandler:
             at=Bitmask(0x09BD5D, 0x40),
         ),
         # Lava Caves
-        ItemLocData(Locations.CHARLES_PANTS, Regions.LAVA_CAVES, Items.CHARLES_PANTS),
+        ItemLocData(
+            Locations.CHARLES_PANTS,
+            Regions.LAVA_CAVES,
+            Items.CHARLES_PANTS,
+            at=Bitmask(0x09C364, 0x01),
+        ),
         ChestLocData(
             "Green Evil Pig Bag Chest",
             Regions.LAVA_CAVES,
@@ -1031,6 +1079,7 @@ class LocationHandler:
             Regions.LAVA_CAVES_PURIFIED,
             Items.WHAT_THE_THIEF_FORGOT,
             rule=HasCleared(Events.THE_HAUNTED_MANSION),
+            at=Bitmask(0x09C1CB, 0x01),
         ),
         ChestLocData(
             "10,000 Year Charity Wing 1",
@@ -1105,19 +1154,27 @@ class LocationHandler:
             rule=Has(Items.CHEESE, 10),
             event=Events.SOME_CHEESE_PLEASE,
         ),
-        ItemLocData(Locations.GOLDEN_FRUIT, Regions.BACCUS_VILLAGE, Items.GOLDEN_FRUIT, rule=Has(Items.CHEESE, 15)),
+        ItemLocData(
+            Locations.GOLDEN_FRUIT,
+            Regions.BACCUS_VILLAGE,
+            Items.GOLDEN_FRUIT,
+            rule=Has(Items.CHEESE, 15),
+            at=Bitmask(0x09C374, 0x02),
+        ),
         ItemLocData(
             Locations.DEATH_FRUIT_JUICE_STARTED,
             Regions.BACCUS_VILLAGE,
             Items.WEED_KILLER,
             rule=HasCleared(Events.MONSTER_HUNT),
+            at=Bitmask(0x09C132, 0x01),
         ),
         ItemLocData(
             "Give the Baby Pig",
             Regions.BACCUS_VILLAGE,
             Items.KOKKA_CLAW,
             Sections.BACCUS_VILLAGE,
-            rule=Has(Items.BABY_PIG) & HasCleared(Events.CANT_STOP_CRYING),
+            rule=Has(Items.BABY_PIG) & HasCleared(Events.CANT_STOP_CRYING) & HasStarted(Events.PEACH_FLOWER_GAS),
+            event=Events.PEACH_FLOWER_GAS,
         ),
         ItemLocData(
             "Death Fuit Juice cleared",
@@ -1192,6 +1249,7 @@ class LocationHandler:
             Items.MIGHTY_FISH_FOOD,
             Sections.HIDING_ROOM,
             rule=Has(Items.SEASHELL_NECKLACE) & HasCleared(Events.THE_10000_YEAR_OLD_MAN),
+            at=Bitmask(0x09BD7D, 0x40),
         ),
         ChestLocData(
             "1,000 Year Old Chest near Yan",
@@ -1206,7 +1264,7 @@ class LocationHandler:
             Sections.SWIMMING_ROOM.name,
             Items.LARGE_LUNCH_BOX,
             Sections.SWIMMING_ROOM,
-            rule=Has(Items.THOUSAND_YEAR_OLD_KEY),
+            rule=Has(Items.THOUSAND_YEAR_OLD_KEY) & (Rules.CAN_GRAPPLE | Rules.CAN_SWIM),
             at=Bitmask(0x09BD7C, 0x02),
         ),
         ChestLocData(
@@ -1390,7 +1448,11 @@ class LocationHandler:
         ),
         *[
             ItemLocData(
-                f"Leaf Butterfly {index}", Regions.MASAKARI_JUNGLE, Items.LEAF_BUTTERFLY, Sections.MASAKARI_JUNGLE
+                f"Leaf Butterfly {index}",
+                Regions.MASAKARI_JUNGLE,
+                Items.LEAF_BUTTERFLY,
+                Sections.MASAKARI_JUNGLE,
+                trigger=Trigger(0x09C330, lambda value, butterfly_index=index: value >= butterfly_index),
             )
             for index in range(1, 5)
         ],
@@ -1487,7 +1549,8 @@ class LocationHandler:
             "Fuel Bar",
             Regions.LUMBERJACK_FACTORY,
             Items.FUEL_BAR,
-            rule=Has(Items.WINE) & HasStarted(Events.FOOD_FOR_FUEL),
+            rule=Has(Items.WINE) & HasStarted(Events.FOOD_FOR_FUEL) & HasCleared(Events.THE_CIVILIZATION_MACHINE),
+            at=Bitmask(0x09C3EA, 0x05),
         ),
         # Iron Castle
         ItemLocData(
@@ -1877,7 +1940,12 @@ class LocationHandler:
             rule=Has(Items.THOUSAND_YEAR_OLD_KEY),
             at=Bitmask(0x09BD3C, 0x02),
         ),
-        ItemLocData("Million Year Old Key", Regions.MILLION_YEAR_OLD_MANS_ROOM, Items.MILLION_YEAR_OLD_KEY),
+        ItemLocData(
+            "Million Year Old Key",
+            Regions.MILLION_YEAR_OLD_MANS_ROOM,
+            Items.MILLION_YEAR_OLD_KEY,
+            event=Events.SOURCE_OF_EVIL_MAGIC,
+        ),
         # The Mermaid's Singing Rock
         # TODO: Find where this is called in game (reverse)
         # Not yet working. This Max Vit+1 is given by the Mermaid after getting the Bronze Medal which clears the event I Want a Bronze Medal
@@ -1963,6 +2031,7 @@ class LocationHandler:
     by_event: dict[str, list[int]] = defaultdict(list)
     name_to_id: dict[str, int] = {}
     with_bitmask: list[LocationData] = []
+    with_trigger: list[LocationData] = []
 
     for location in location_table:
         by_id[location.id] = location
@@ -1979,6 +2048,9 @@ class LocationHandler:
 
         if location.at is not None:
             with_bitmask.append(location)
+
+        if location.trigger is not None:
+            with_trigger.append(location)
 
     @staticmethod
     def filter_and_sort(item: ItemData, section: Section) -> list[ItemLocData]:
@@ -2028,24 +2100,24 @@ def create_regular_locations(world: TombaWorld) -> None:
 
     if not world.options.furious_tornado_randomized:
         # Force furious tornado to be on Mailbox
-        MAILBOX = world.get_location(get_name(Locations.MAILBOX, Regions.VILLAGE_OF_ALL_BEGINNINGS))
+        MAILBOX = world.get_location(get_name(Locations.MAILBOX, Sections.VILLAGE_OF_ALL_BEGINNING.name))
         MAILBOX.place_locked_item(ItemHandler.create_item(world, Items.FURIOUS_TORNADO))
 
     if not world.options.chick_randomized:
-        CHICK_1 = world.get_location(get_name(Locations.KOKKA_EGG_1, Regions.VILLAGE_OF_ALL_BEGINNINGS))
+        CHICK_1 = world.get_location(get_name(Locations.KOKKA_EGG_1, Sections.VILLAGE_OF_ALL_BEGINNING.name))
         CHICK_1.place_locked_item(ItemHandler.create_item(world, Items.CHICK))
 
-        CHICK_2 = world.get_location(get_name(Locations.KOKKA_EGG_2, Regions.FOREST_OF_ALL_BEGINNINGS))
+        CHICK_2 = world.get_location(get_name(Locations.KOKKA_EGG_2, Sections.FOREST_OF_ALL_BEGINNING_PART_1.name))
         CHICK_2.place_locked_item(ItemHandler.create_item(world, Items.CHICK))
 
-        CHICK_3 = world.get_location(get_name(Locations.KOKKA_EGG_3, Regions.FOREST_OF_ALL_BEGINNINGS))
+        CHICK_3 = world.get_location(get_name(Locations.KOKKA_EGG_3, Sections.FOREST_OF_ALL_BEGINNING_PART_2.name))
         CHICK_3.place_locked_item(ItemHandler.create_item(world, Items.CHICK))
 
-        CHICK_4 = world.get_location(get_name(Locations.KOKKA_EGG_4, Regions.FOREST_OF_ALL_BEGINNINGS))
+        CHICK_4 = world.get_location(get_name(Locations.KOKKA_EGG_4, Sections.FOREST_OF_ALL_BEGINNING_PART_2.name))
         CHICK_4.place_locked_item(ItemHandler.create_item(world, Items.CHICK))
 
     # Force baron to be on the original location
-    BARON = world.get_location(get_name(Locations.BARON, Regions.DWARF_VILLAGE))
+    BARON = world.get_location(get_name(Locations.BARON, Sections.DWARF_VILLAGE.name))
     BARON.place_locked_item(ItemHandler.create_item(world, Items.BARON))
 
     if not world.options.optional_randomized:
@@ -2054,7 +2126,7 @@ def create_regular_locations(world: TombaWorld) -> None:
         PIPE.place_locked_item(ItemHandler.create_item(world, Items.PIPE))
 
         # Force Broken Vase
-        JAIL = world.get_location(get_name(Locations.JAIL, Regions.DWARF_VILLAGE))
+        JAIL = world.get_location(get_name(Locations.JAIL, Sections.DWARF_VILLAGE.name))
         JAIL.place_locked_item(ItemHandler.create_item(world, Items.BROKEN_VASE))
 
 
