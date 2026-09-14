@@ -3,6 +3,7 @@ import importlib.abc
 import importlib.machinery
 import logging
 import os
+import re
 import sys
 import zipimport
 import time
@@ -148,7 +149,10 @@ for world_source in world_sources:
             for file in filenames:
                 if file.endswith("archipelago.json"):
                     with open(os.path.join(dirpath, file), mode="r", encoding="utf-8") as manifest_file:
-                        manifest = json.load(manifest_file)
+                        manifest_text = manifest_file.read()
+                        # remove comments from manifest
+                        manifest_text = re.sub(r'//.*?$|/\*[\s\S]*?\*/', '', manifest_text, flags=re.MULTILINE)
+                        manifest = json.loads(manifest_text)
                     break
             if manifest:
                 break

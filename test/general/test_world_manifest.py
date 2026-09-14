@@ -1,6 +1,7 @@
 """Check world sources' manifest files"""
 
 import json
+import re
 import unittest
 from pathlib import Path
 from typing import Any, ClassVar
@@ -54,7 +55,9 @@ class TestWorldManifest(unittest.TestCase):
         manifest_path = get_source_world_manifest_path(cls.game)
         assert manifest_path  # make mypy happy
         with manifest_path.open("r", encoding="utf-8") as f:
-            cls.manifest = json.load(f)
+            manifest_text = f.read()
+            manifest_text = re.sub(r'//.*?$|/\*[\s\S]*?\*/', '', manifest_text, flags=re.MULTILINE)
+            cls.manifest = json.loads(manifest_text)
 
     def test_game(self) -> None:
         """Test that 'game' will be correctly defined when generating APWorld manifest from source."""
