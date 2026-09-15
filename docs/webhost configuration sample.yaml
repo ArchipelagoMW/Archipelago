@@ -17,6 +17,9 @@
 # Web hosting port
 #PORT: 80
 
+# Public URL used to construct endpoints for game clients connecting to webhost'd multiservers
+#PUBLIC_URL: https://archipelago.gg
+
 # Ports used for game hosting. Values can be specific ports, port ranges or both. Default is: [49152-65535, 0]
 # Zero means it will use a random free port if there is no free port in the ranges specified
 # Examples of valid values: [40000-41000, 49152-65535]
