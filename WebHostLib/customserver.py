@@ -298,7 +298,7 @@ def get_static_server_data() -> dict:
             world_name: world.location_name_groups
             for world_name, world in worlds.AutoWorldRegister.world_types.items()
         },
-        "datapackage_url": app.config["PUBLIC_URL"] + "/api/datapackage"
+        "datapackage_url": app.config["PUBLIC_URL"] + "/api/datapackage" if app.config["PUBLIC_URL"] else None
     }
 
     return data

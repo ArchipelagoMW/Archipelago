@@ -957,7 +957,7 @@ async def server(websocket: "ServerConnection", path: str = "/", ctx: Context = 
 async def on_client_connected(ctx: Context, client: Client):
     games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
     games.add("Archipelago")
-    await ctx.send_msgs(client, [{
+    msg = {
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
         'games': games,
@@ -969,12 +969,14 @@ async def on_client_connected(ctx: Context, client: Client):
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
-        'datapackage_url': ctx.datapackage_url,
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
                                   in ctx.gamespackage.items() if game in games and "checksum" in game_data},
         'seed_name': ctx.seed_name,
         'time': time.time(),
-    }])
+    }
+    if ctx.datapackage_url:
+        msg['datapackage_url'] = ctx.datapackage_url
+    await ctx.send_msgs(client, [msg])
 
 
 def get_permissions(ctx) -> typing.Dict[str, Permission]:
