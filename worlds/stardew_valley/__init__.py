@@ -180,6 +180,14 @@ class StardewValleyWorld(World):
         super().__init__(multiworld, player)
         self.filler_item_pool_names = None
         self.total_progression_items = 0
+        self.prog_items_counts = None # This only exists for UT
+
+        # These fields are useful for debugging but too expensive to keep in real releases
+        # self.all_prog_items = []
+        # self.counted_prog_items = dict()
+        # self.skipped_prog_items = dict()
+        # self.not_prog_prog_items = dict()
+
         self.classifications_to_override_post_fill = []
 
         passthrough_data = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY)
@@ -281,10 +289,29 @@ class StardewValleyWorld(World):
         # with plando where additional progression items can be created without being accounted for, which impact the real amount of progression items. This can
         # ultimately create unwinnable seeds where some items (like Blueberry seeds) are locked in Shipsanity: Blueberry, but world is deemed winnable as the
         # winning rule only check the count of collected progression items.
-        self.total_progression_items += sum(1 for i in self.multiworld.precollected_items[self.player] if i.advancement)
-        self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement)
-        self.total_progression_items += sum(1 for i in created_items if i.advancement)
+        all_prog_items = []
+        all_prog_items.extend([i.name for i in self.multiworld.precollected_items[self.player] if i.advancement])
+        all_prog_items.extend([i.item.name for i in self.multiworld.get_filled_locations(self.player) if i.advancement])
+        all_prog_items.extend([i.name for i in created_items if i.player == self.player and i.advancement])
+
+        # self.total_progression_items += sum(1 for i in self.multiworld.precollected_items[self.player] if i.advancement)
+        # self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement)
+        # self.total_progression_items += sum(1 for i in created_items if i.advancement)
+        self.total_progression_items += len(all_prog_items)
         self.total_progression_items -= 1  # -1 for the victory event
+
+        generation_is_fake = hasattr(self.multiworld, "generation_is_fake")  # UT specific override
+        if generation_is_fake:
+            self.prog_items_counts = dict()
+            for prog_item in all_prog_items:
+                if prog_item not in self.prog_items_counts:
+                    self.prog_items_counts[prog_item] = 0
+                self.prog_items_counts[prog_item] += 1
+
+        # These fields are useful for debugging but too expensive to keep in real releases
+        # self.counted_prog_items = dict()
+        # self.skipped_prog_items = dict()
+        # self.not_prog_prog_items = dict()
 
         player_state = self.multiworld.state.prog_items[self.player]
         self.update_received_progression_percent(player_state)
@@ -499,20 +526,35 @@ class StardewValleyWorld(World):
             cc_cutscene = self.get_region(LogicRegion.town_community_center_cutscene)
             bus_stop.connect(cc_cutscene, LogicEntrance.watch_community_center_cutscene)
 
+        def get_parent_region(exit: Entrance):
+            if exit.parent_region:
+                return exit.parent_region
+            from worlds.stardew_valley.data.regions.model import connector_keyword
+            exit_name = exit.name
+            parent_region_name = exit_name.split(connector_keyword)[0]
+            print(f"{exit_name} ({parent_region_name})")
+            parent_region = self.get_region(parent_region_name)
+            return parent_region
+
+        def connect_cutscene_region(exit: Entrance, connected_entrance: Entrance | str):
+            if isinstance(connected_entrance, Entrance):
+                connected_entrance = connected_entrance.name
+            if connected_entrance == EntranceNames.farm_to_bus_stop:
+                parent_region = get_parent_region(exit)
+                krobus_cutscene = self.get_region(LogicRegion.bus_stop_krobus_cutscene)
+                parent_region.connect(krobus_cutscene, LogicEntrance.watch_bus_stop_krobus_cutscene, exit.access_rule)
+                return True
+            elif connected_entrance == EntranceNames.bus_stop_to_town:
+                parent_region = get_parent_region(exit)
+                cc_cutscene = self.get_region(LogicRegion.town_community_center_cutscene)
+                parent_region.connect(cc_cutscene, LogicEntrance.watch_community_center_cutscene, exit.access_rule)
+                return True
+            return False
+
         def connect_cutscene_regions_as_well(state: entrance_rando.ERPlacementState, placed_exits: list[Entrance], placed_entrances: list[Entrance]):
             additional_sweep_needed = False
             for ex, entr in zip(placed_exits, placed_entrances):
-                if entr.name == EntranceNames.farm_to_bus_stop:
-                    parent_region = ex.parent_region
-                    krobus_cutscene = self.get_region(LogicRegion.bus_stop_krobus_cutscene)
-                    parent_region.connect(krobus_cutscene, LogicEntrance.watch_bus_stop_krobus_cutscene, ex.access_rule)
-                    additional_sweep_needed = True
-                elif entr.name == EntranceNames.bus_stop_to_town:
-                    parent_region = ex.parent_region
-                    cc_cutscene = self.get_region(LogicRegion.town_community_center_cutscene)
-                    parent_region.connect(cc_cutscene, LogicEntrance.watch_community_center_cutscene, ex.access_rule)
-                    additional_sweep_needed = True
-
+                additional_sweep_needed = connect_cutscene_region(ex, entr)
             return additional_sweep_needed
 
         # in reading of the slot_data the randomized entrances are set when UT is active.
@@ -528,12 +570,13 @@ class StardewValleyWorld(World):
             self.randomized_entrances = prepare_mod_data(placement, self.forced_entrances)
         elif not is_chaos:
 
-            for en, ex in self.randomized_entrances.items():
-                en = self.get_entrance(en)
-                if en.connected_region is not None:
-                    en.connected_region.create_er_target(ex).randomization_type = EntranceType.ONE_WAY
-                    en.connected_region.entrances.remove(en)
-                    en.connected_region = None
+            for entrance_name, exit_name in self.randomized_entrances.items():
+                entrance = self.get_entrance(entrance_name)
+                connect_cutscene_region(entrance, exit_name)
+                if entrance.connected_region is not None:
+                    entrance.connected_region.create_er_target(exit_name).randomization_type = EntranceType.ONE_WAY
+                    entrance.connected_region.entrances.remove(entrance)
+                    entrance.connected_region = None
 
             # randomized_entrances were in the slot_data, connecting them as entered
             entrances = {entrance.name: entrance for region in self.get_regions() for entrance in region.entrances if entrance.parent_region is None}
@@ -652,8 +695,16 @@ class StardewValleyWorld(World):
             return False
 
         player_state = state.prog_items[self.player]
-        player_state.update(item.events_to_collect)
+        # These fields are useful for debugging but too expensive to keep in real releases
+        # state_id = id(state)
+        # if state_id not in self.counted_prog_items:
+        #     self.counted_prog_items[state_id] = []
+        # if state_id not in self.skipped_prog_items:
+        #     self.skipped_prog_items[state_id] = []
+        # if state_id not in self.not_prog_prog_items:
+        #     self.not_prog_prog_items[state_id] = []
 
+        self.increment_events_to_collect(item, player_state)
         self.update_received_progression_percent(player_state)
 
         if item.name in APWeapon.all_weapons:
@@ -661,12 +712,30 @@ class StardewValleyWorld(World):
 
         return True
 
+    def increment_events_to_collect(self, item: StardewItem, player_state: Counter[str]):
+        events_to_collect = Counter(item.events_to_collect)
+        generation_is_fake = hasattr(self.multiworld, "generation_is_fake")  # UT specific override
+        if generation_is_fake and item.advancement and self.prog_items_counts:
+            max_prog_count = self.prog_items_counts[item.name] if item.name in self.prog_items_counts else 0
+            current_prog_count = player_state[item.name] if item.name in player_state else 0
+            if Event.received_progression_item in events_to_collect:
+                if current_prog_count > max_prog_count:
+                    events_to_collect.pop(Event.received_progression_item)
+                    # self.skipped_prog_items[state_id].append(item.name)
+                # else:
+                    # self.counted_prog_items[state_id].append(item.name)
+            # else:
+                # self.not_prog_prog_items[state_id].append(item.name)
+        player_state.update(events_to_collect)
+
     def remove(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().remove(state, item)
         if not change:
             return False
 
         player_state = state.prog_items[self.player]
+        if Event.received_progression_item in item.events_to_collect:
+            self.skipped_prog_items.remove(item.name)
         player_state.subtract(item.events_to_collect)
 
         self.update_received_progression_percent(player_state)
@@ -679,6 +748,7 @@ class StardewValleyWorld(World):
     def update_received_progression_percent(self, player_state: Counter[str]) -> None:
         if self.total_progression_items:
             received_progression_count = player_state[Event.received_progression_item]
+            # print(received_progression_count)
             # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = (received_progression_count * 100 // self.total_progression_items)
