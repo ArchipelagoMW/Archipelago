@@ -184,6 +184,41 @@ class WorldTestBase(unittest.TestCase):
         """Asserts that the game can be beaten with the current state"""
         self.assertEqual(self.multiworld.can_beat_game(self.multiworld.state), beatable)
 
+    def assertAccessWith(self, spots: list[str], item_names: list[str],
+                         initial_items: list[str] | None = None,
+                         resolution_hint: typing.Literal["Location", "Region", "Entrance"] = "Location") -> None:
+        """
+        Assert that when the items are not collect, the spots are not reachable, but when
+        the items are collected, the spots became reachable. Also assert that no other new spots can be
+        accessed when the items are collected.
+
+        :param spots: The name of the locations/regions/entrances that should become reachable with the items
+        :param item_names: The name of the items that should enable the spots
+        :param initial_items: The initial items that should be initially collected
+        :param resolution_hint: The type of "spots" (can be "Location", "Region" or "Entrance")
+        """
+        if initial_items is None:
+            initial_items = []
+        assert resolution_hint in ("Location", "Region", "Entrance")
+        state = CollectionState(self.multiworld)
+        for item in initial_items:
+            state.collect(self.get_item_by_name(item))
+        reachable_spot_before = state.reachable_spots(self.player, resolution_hint)
+        for spot in spots:
+            self.assertFalse(state.can_reach(spot, resolution_hint, self.player),
+                             f"{spot} is reachable without {item_names}")
+        items = self.get_items_by_name(item_names)
+        for item in items:
+            state.collect(item)
+        reachable_spot_after = state.reachable_spots(self.player, resolution_hint) - reachable_spot_before
+        for spot in spots:
+            self.assertTrue(state.can_reach(spot, resolution_hint, self.player),
+                            f"{spot} is not reachable with {item_names}")
+            reachable_spot_after.remove(spot)
+        if len(reachable_spot_after) > 0:
+            self.assertEqual(len(reachable_spot_after), 0,
+                            f"Reachable with {item_names} but not without: {reachable_spot_after}")
+
     # following tests are automatically run
     @property
     def run_default_tests(self) -> bool:
