@@ -368,7 +368,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_upgrade_kitchen, logic.building.has_building(Building.kitchen))
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_upgrade_crib, logic.building.has_building(Building.kids_room))
-    rule_collector.set_entrance_rule(LogicEntrance.farmhouse_upgrade_cellar, logic.building.has_building(Building.cellar))
+    rule_collector.set_entrance_rule(Entrance.farmhouse_to_cellar, logic.building.has_building(Building.cellar))
     rule_collector.set_entrance_rule(LogicEntrance.shipping, logic.shipping.can_use_shipping_bin)
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false:
         rule_collector.set_entrance_rule(LogicEntrance.island_shipping, logic.shipping.can_use_island_shipping_bin)

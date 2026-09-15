@@ -3,7 +3,6 @@ class Region:
     farm_house = "Farmhouse"
     farm_house_kitchen = "Farmhouse Kitchen"
     farm_house_crib = "Farmhouse Crib"
-    farm_house_cellar = "Farmhouse Cellar Entrance"
     cellar = "Cellar"
     farm = "Farm"
     coop = "Coop"

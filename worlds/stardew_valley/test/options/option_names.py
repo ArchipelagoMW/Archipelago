@@ -2,8 +2,10 @@ import random
 from typing import Iterable
 
 from Options import NamedRange, Option, Range
+
 from ... import StardewValleyWorld
 from ...options import StardewValleyOption
+from ...options.options import StrEnumToValidKeys
 
 options_to_exclude = {"profit_margin", "starting_money",
                       "multiple_day_sleep_enabled", "multiple_day_sleep_cost",
@@ -35,6 +37,8 @@ def get_option_choices(option: type[Option]) -> dict[str, int]:
         max_steps = 10
         step = max(1, range_size // max_steps)
         return {f"{val}": val for val in range(option.range_start, option.range_end + 1, step)}
+    # if issubclass(option, StrEnumToValidKeys):
+    #     option.valid_keys
     elif option.options:
         return option.options
     return {}
