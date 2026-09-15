@@ -30,7 +30,7 @@ from Utils import restricted_loads, cache_argsless
 
 from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
-
+from WebHostLib import app
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
     ctx: WebHostContext
@@ -298,6 +298,7 @@ def get_static_server_data() -> dict:
             world_name: world.location_name_groups
             for world_name, world in worlds.AutoWorldRegister.world_types.items()
         },
+        "datapackage_url": app.config["PUBLIC_URL"] + "/api/datapackage"
     }
 
     return data
