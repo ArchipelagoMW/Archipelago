@@ -290,7 +290,7 @@ class Context:
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
-                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+                 compatibility: int = 2, log_network: bool = False, datapackage_url: str | None = None, logger: logging.Logger = logging.getLogger()):
         self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
@@ -310,6 +310,7 @@ class Context:
         self.port = port
         self.server_password = server_password
         self.password = password
+        self.datapackage_url = datapackage_url
         self.server = None
         self.countdown_timer = 0
         self.received_items = {}
@@ -956,7 +957,7 @@ async def server(websocket: "ServerConnection", path: str = "/", ctx: Context = 
 async def on_client_connected(ctx: Context, client: Client):
     games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
     games.add("Archipelago")
-    await ctx.send_msgs(client, [{
+    msg = {
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
         'games': games,
@@ -972,7 +973,10 @@ async def on_client_connected(ctx: Context, client: Client):
                                   in ctx.gamespackage.items() if game in games and "checksum" in game_data},
         'seed_name': ctx.seed_name,
         'time': time.time(),
-    }])
+    }
+    if ctx.datapackage_url:
+        msg['datapackage_url'] = ctx.datapackage_url
+    await ctx.send_msgs(client, [msg])
 
 
 def get_permissions(ctx) -> typing.Dict[str, Permission]:

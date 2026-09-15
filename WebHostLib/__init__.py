@@ -53,6 +53,8 @@ app.config["MAX_ROOM_TIMEOUT"] = 259200
 app.config["ROOM_AUTO_DELETE"] = 0
 # memory limit for generator processes in bytes
 app.config["GENERATOR_MEMORY_LIMIT"] = 4294967296
+# used to expose endpoints to multiserver clients, where they don't have existing context. e.g `https://archipelago.gg`
+app.config["PUBLIC_URL"] = None
 
 # waitress uses one thread for I/O, these are for processing of views that then get sent
 # archipelago.gg uses gunicorn + nginx; ignoring this option

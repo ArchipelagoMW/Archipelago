@@ -120,6 +120,11 @@ if __name__ == "__main__":
     network_data_package["games"] = {k: v for k, v in network_data_package["games"].items() if k not in invalid_worlds}
     create_options_files()
     copy_tutorials_files_to_static()
+
+    # trim extra slashes on the public url
+    if app.config["PUBLIC_URL"]:
+        app.config["PUBLIC_URL"] = app.config["PUBLIC_URL"].rstrip("/")
+
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFGEN"]:
