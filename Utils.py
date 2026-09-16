@@ -229,6 +229,35 @@ def output_path(*path: str) -> str:
     return path
 
 
+def get_commit_name() -> str:
+    """Get text identifying current git commit, if one can be found"""
+    tag_proc = subprocess.run(["git", "describe", "--tags", "--exact-match"], capture_output=True)
+    if not tag_proc.returncode:
+        tag = tag_proc.stdout.strip().decode()
+        if tag == __version__:
+            return ""
+        return tag
+
+    hash_proc = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True)
+    if not hash_proc.returncode:
+        return hash_proc.stdout.strip().decode()
+
+    return "unknown commit"
+
+
+try:
+    with open(local_path("data", ".version_suffix")) as f:
+        version_suffix = f.read()
+except FileNotFoundError:
+    commit = get_commit_name()
+    if commit:
+        version_suffix = f" ({get_commit_name()})"
+    else:
+        version_suffix = ""
+
+full_version = __version__ + version_suffix
+
+
 def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
     if is_windows:
         os.startfile(filename)  # type: ignore
@@ -611,7 +640,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
     threading.Thread(target=_cleanup, name="LogCleaner").start()
     import platform
     logging.info(
-        f"Archipelago ({__version__}) logging initialized"
+        f"Archipelago {full_version} logging initialized"
         f" on {platform.platform()} process {os.getpid()}"
         f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
         f"{' (frozen)' if is_frozen() else ''}"
