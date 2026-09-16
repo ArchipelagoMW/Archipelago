@@ -297,12 +297,12 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
                 self.launch_args = None
 
         def do_loading(self):
-            import importlib
-            import time
-            start = time.perf_counter()
             if "worlds" in sys.modules:
                 logging.warning("worlds module already loaded.")
             else:
+                import importlib
+                import time
+                start = time.perf_counter()
                 importlib.import_module("worlds")
                 logging.error(f"Worlds module loaded in {time.perf_counter() - start:.2f} seconds")
 
