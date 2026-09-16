@@ -734,8 +734,8 @@ class StardewValleyWorld(World):
             return False
 
         player_state = state.prog_items[self.player]
-        if Event.received_progression_item in item.events_to_collect:
-            self.skipped_prog_items.remove(item.name)
+        # if Event.received_progression_item in item.events_to_collect:
+        #     self.skipped_prog_items.remove(item.name)
         player_state.subtract(item.events_to_collect)
 
         self.update_received_progression_percent(player_state)
