@@ -60,6 +60,7 @@ class SA2BWorld(World):
     options_dataclass = SA2BOptions
     options: SA2BOptions
     topology_present = False
+    disable_ut = True
 
     item_name_groups = item_groups
     location_name_groups = location_groups
