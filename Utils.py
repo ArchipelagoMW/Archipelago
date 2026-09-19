@@ -782,7 +782,7 @@ def run_in_terminal(exe: Sequence[str]) -> bool:
 
             # Terminals have started deprecating `-e` flag with some not implementing it at all
             # `modern_terminals` is a list of terminals which we want/need to use `--` instead
-            modern_terminals = {"cosmic-term", "ptyxis"}
+            modern_terminals = {"cosmic-term", "ptyxis", "gnome-terminal"}
             real_terminal_name = pathlib.Path(terminal).resolve().name
             if real_terminal_name in modern_terminals:
                 subprocess.Popen([terminal, "--", "sh", "-c", lib_path_setter + shlex.join(exe)], env=env)
