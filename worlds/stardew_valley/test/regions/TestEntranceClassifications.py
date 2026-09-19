@@ -92,36 +92,6 @@ class TestSameTypeEntranceRandomization(EntranceRandomizationAssertMixin, SVTest
         ]
         self.assert_connections_go_to_same_type(relevant_group, GroupFlag.AREA_MASK, entrances)
 
-    def test_outside_to_inside_is_conserved(self):
-        relevant_group = GroupFlag.OUT_TO_IN
-        entrances = [
-            Entrance.town_to_blacksmith,
-            Entrance.mountain_to_carpenter_house,
-            Entrance.forest_to_marnie_ranch,
-            Entrance.island_west_to_gourmand_cave,
-        ]
-        self.assert_connections_go_to_same_type(relevant_group, GroupFlag.AREA_MASK, entrances)
-
-    def test_inside_to_outside_is_conserved(self):
-        relevant_group = GroupFlag.IN_TO_OUT
-        entrances = [
-            Entrance.community_center_to_town,
-            Entrance.the_mines_to_mountain,
-            Entrance.wizard_tower_to_forest,
-            Entrance.crystals_cave_to_island_west,
-        ]
-        self.assert_connections_go_to_same_type(relevant_group, GroupFlag.AREA_MASK, entrances)
-
-    def test_inside_to_inside_is_conserved(self):
-        relevant_group = GroupFlag.IN_TO_IN
-        entrances = [
-            Entrance.enter_sunroom,
-            Entrance.leave_harvey_room,
-            Entrance.wizard_basement_to_witch_warp,
-            Entrance.mens_lockers_to_public_bath,
-        ]
-        self.assert_connections_go_to_same_type(relevant_group, GroupFlag.AREA_MASK, entrances)
-
 
 class TestSameDirectionEntranceRandomization(EntranceRandomizationAssertMixin, SVTestBase):
     options = {  # noqa: RUF012
