@@ -34,34 +34,39 @@ class TestSameTypeEntranceRandomization(TestCase):
 class TestContentPacksEntranceTargetGroups(TestCase):
     content: ClassVar[str]
 
-    def test_content_has_matching_amount_of_connection_for_each_group(self):
-        matching_groups: list[tuple[Iterable[GroupFlag], Iterable[GroupFlag]]] = [
-            ((GroupFlag.RIGHT,), (GroupFlag.LEFT,)),
-            ((GroupFlag.UP, GroupFlag.DOOR), (GroupFlag.DOWN, GroupFlag.LADDER)),
-            ((GroupFlag.OUT_TO_OUT,), (GroupFlag.OUT_TO_OUT,)),
-            ((GroupFlag.IN_TO_IN,), (GroupFlag.IN_TO_IN,)),
-            ((GroupFlag.OUT_TO_IN,), (GroupFlag.IN_TO_OUT,)),
-        ]
+    def test_both_side_of_the_same_connection_has_matching_groups(self):
+        checked_connections = set()
+        connections_by_name = {c.name: c for c in connections_by_content[self.content]}
 
-        connections = connections_by_content[self.content]
+        for connection in connections_by_content[self.content]:
+            if connection.name in checked_connections or RandomizationFlag.IS_ONE_WAY in connection.flag or connection.group == GroupFlag.TO_ANY:
+                continue
 
-        for matching_group in matching_groups:
-            with self.subTest(matching_group=matching_group):
-                first_group, second_group = matching_group
-                connections_in_first_group = sum(
-                    1
-                    for connection in connections
-                    if any(group in connection.group for group in first_group)
-                    if RandomizationFlag.IS_ONE_WAY not in connection.flag
-                )
-                connections_in_second_group = sum(
-                    1
-                    for connection in connections
-                    if any(group in connection.group for group in second_group)
-                    if RandomizationFlag.IS_ONE_WAY not in connection.flag
-                )
+            opposite_connection = connection.destination_entrance_name
+            checked_connections.add(opposite_connection)
 
-                self.assertEqual(connections_in_first_group, connections_in_second_group)
+            with self.subTest(connection=connection.name):
+                if GroupFlag.LEFT in connection.group:
+                    self.assertIn(GroupFlag.RIGHT, connections_by_name[opposite_connection].group)
+                elif GroupFlag.RIGHT in connection.group:
+                    self.assertIn(GroupFlag.LEFT, connections_by_name[opposite_connection].group)
+                elif GroupFlag.UP in connection.group:
+                    self.assertIn(GroupFlag.DOWN, connections_by_name[opposite_connection].group)
+                elif GroupFlag.LADDER in connection.group:
+                    self.assertIn(GroupFlag.DOOR, connections_by_name[opposite_connection].group)
+                elif GroupFlag.DOOR in connection.group:
+                    self.assertIn(connections_by_name[opposite_connection].group & GroupFlag.DIR_MASK, (GroupFlag.DOWN, GroupFlag.LADDER))
+                elif GroupFlag.DOWN in connection.group:
+                    self.assertIn(connections_by_name[opposite_connection].group & GroupFlag.DIR_MASK, (GroupFlag.DOOR, GroupFlag.UP))
+
+                if GroupFlag.IN_TO_IN in connection.group:
+                    self.assertIn(GroupFlag.IN_TO_IN, connections_by_name[opposite_connection].group)
+                elif GroupFlag.OUT_TO_OUT in connection.group:
+                    self.assertIn(GroupFlag.OUT_TO_OUT, connections_by_name[opposite_connection].group)
+                elif GroupFlag.IN_TO_OUT in connection.group:
+                    self.assertIn(GroupFlag.OUT_TO_IN, connections_by_name[opposite_connection].group)
+                elif GroupFlag.OUT_TO_IN in connection.group:
+                    self.assertIn(GroupFlag.IN_TO_OUT, connections_by_name[opposite_connection].group)
 
     def test_all_connections_has_area_group_flag(self):
         connections = connections_by_content[self.content]
