@@ -17,6 +17,7 @@ import collections
 import importlib
 import logging
 import warnings
+import pathlib
 
 from argparse import Namespace
 from collections.abc import Collection, Iterable, Sequence
@@ -37,7 +38,6 @@ except ImportError:
 
 if typing.TYPE_CHECKING:
     import tkinter
-    import pathlib
     from BaseClasses import Region
     import multiprocessing
 
