@@ -651,6 +651,8 @@ async def _patch_opt():
     target_settings = {
         "mupen64plus-CountPerOp": "1",
         "mupen64plus-virefresh": "2200",
+        "mupen64plus-rdp-plugin": "angrylion",
+        "mupen64plus-rsp-plugin": "cxd4",
     }
 
     if override_path not in _original_opt_content:
