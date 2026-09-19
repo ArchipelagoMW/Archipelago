@@ -764,7 +764,7 @@ def env_cleared_lib_path() -> Mapping[str, str]:
 
 def run_in_terminal(exe: Sequence[str]) -> bool:
     """
-    Runs the given command/args in `exe` in a new ternminal window
+    Runs the given command/args in `exe` in a new terminal window
 
     Returns value indicates if a valid terminal was located
     """
