@@ -784,7 +784,7 @@ def run_in_terminal(exe: Sequence[str]) -> bool:
             # `modern_terminals` is a list of terminals which we want/need to use `--` instead
             modern_terminals = {"cosmic-term", "ptyxis"}
             real_terminal_name = pathlib.Path(terminal).resolve().name
-            if any(terminal == real_terminal_name for terminal in modern_terminals):
+            if real_terminal_name in modern_terminals:
                 subprocess.Popen([terminal, "--", "sh", "-c", lib_path_setter + shlex.join(exe)], env=env)
             else:
                 subprocess.Popen([terminal, "-e", "sh", "-c", lib_path_setter + shlex.join(exe)], env=env)
