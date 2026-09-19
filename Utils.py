@@ -773,7 +773,8 @@ def run_in_terminal(exe: Sequence[str]) -> bool:
         subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
         return True
     elif is_linux:
-        terminal = which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm")
+        terminal = (which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm") or
+                    which("cosmic-term") or which("ptyxis"))
         if terminal:
             # Clear LD_LIB_PATH during terminal startup, but set it again when running command in case it's needed
             ld_lib_path = os.environ.get("LD_LIBRARY_PATH")
