@@ -436,3 +436,4 @@ def set_rules(world: "MM3World") -> None:
 
     for location, rule in location_rules.items():
         world.set_rule(world.get_location(location), rule)
+        
