@@ -1,7 +1,8 @@
+import itertools
 import random
-from typing import Iterable
+from typing import Any, Iterable, Optional
 
-from Options import NamedRange, Option, Range
+from Options import NamedRange, Option, OptionSet, Range
 
 from ... import StardewValleyWorld
 from ...options import StardewValleyOption
@@ -29,7 +30,7 @@ options_to_include: list[type[StardewValleyOption | Option]] = [
 ]
 
 
-def get_option_choices(option: type[Option]) -> dict[str, int]:
+def get_option_choices(option: type[Option], rng: random.Random | None) -> dict[str, Any]:
     if issubclass(option, NamedRange):
         return option.special_range_names
     if issubclass(option, Range):
@@ -37,8 +38,18 @@ def get_option_choices(option: type[Option]) -> dict[str, int]:
         max_steps = 10
         step = max(1, range_size // max_steps)
         return {f"{val}": val for val in range(option.range_start, option.range_end + 1, step)}
-    # if issubclass(option, StrEnumToValidKeys):
-    #     option.valid_keys
+    if issubclass(option, OptionSet):
+        if not rng:
+            rng = random.Random()
+        key_combinations = []
+        valid_keys = list(option.valid_keys)
+        available_keys = valid_keys if len(valid_keys) <= 16 else rng.sample(valid_keys, 16)
+        max_combination_size = min(8, len(available_keys) + 1)
+        for r in range(max_combination_size):
+            for combination in itertools.combinations(available_keys, r):
+                key_combinations.append(combination)
+        key_combinations = sorted(key_combinations)
+        return {"_".join(sorted(combination), ): frozenset(combination) for combination in key_combinations}
     elif option.options:
         return option.options
     return {}
@@ -50,7 +61,7 @@ def generate_random_world_options(seed: int) -> dict[str, int]:
     rng = random.Random(seed)
     for option_index in range(0, num_options):
         option = options_to_include[option_index]
-        option_choices = get_option_choices(option)
+        option_choices = get_option_choices(option, rng)
         if not option_choices:
             continue
         chosen_option_value = rng.choice(list(option_choices.values()))
@@ -61,7 +72,7 @@ def generate_random_world_options(seed: int) -> dict[str, int]:
 all_option_choices = []
 for option in options_to_include:
     if option.options:
-        option_choices = get_option_choices(option)
+        option_choices = get_option_choices(option, None)
         for choice_name, choice_value in option_choices.items():
             if option.default != choice_value:
                 all_option_choices.append((option.internal_name, choice_name))
