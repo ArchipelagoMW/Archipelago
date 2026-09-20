@@ -2248,8 +2248,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             elif boolean_operator == "and":
                 match_function = bounce_target.match_clients_and
             else:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": "Bounce", "original_cmd": cmd}])
+                await ctx.send_msgs(client, [{
+                    'cmd': 'InvalidPacket', "type": "arguments",
+                    'text': f'Bounce: Unknown operator. Supported: legacy, or, and. Found: {operator}',
+                    'original_cmd': cmd
+                }])
                 return
 
             for matching_client in match_function(ctx.endpoints):
