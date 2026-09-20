@@ -314,7 +314,7 @@ async def verifyItems(self):
                         amount_found_in_slots += 1
             if item_name in self.kh2_seed_save["SoldEquipment"]:
                 amount_found_in_slots += self.kh2_seed_save["SoldEquipment"][item_name]
-            inInventory = self.kh2_seed_save_cache["AmountInvo"]["Equipment"][item_name] - amount_found_in_slots
+            inInventory = max(self.kh2_seed_save_cache["AmountInvo"]["Equipment"][item_name] - amount_found_in_slots, 0)
             if inInventory != self.kh2_read_byte(self.Save + item_data.memaddr):
                 self.kh2_write_byte(self.Save + item_data.memaddr, inInventory)
 
