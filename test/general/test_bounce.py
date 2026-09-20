@@ -38,12 +38,12 @@ class TestBounceTargetLegacy(unittest.TestCase):
     def test_legacy_bounce_target_default(self):
         bounce_target = BounceTarget(None, None, None, None)
 
-        assert list(bounce_target.match_clients_legacy(ALL_CLIENTS)) == []
+        self.assertEqual(list(bounce_target.match_clients_legacy(ALL_CLIENTS)), [])
 
     def test_legacy_bounce_team_only(self):
         bounce_target = BounceTarget({1}, None, None, None)
 
-        assert list(bounce_target.match_clients_legacy(ALL_CLIENTS)) == []
+        self.assertEqual(list(bounce_target.match_clients_legacy(ALL_CLIENTS)), [])
 
     def test_legacy_tags_condition_only(self):
         bounce_target = BounceTarget(None, None, {"DeathLink"}, None)
@@ -118,12 +118,15 @@ class TestBounceTargetOr(unittest.TestCase):
     def test_or_bounce_target_default(self):
         bounce_target = BounceTarget(None, None, None, None)
 
-        assert list(bounce_target.match_clients_or(ALL_CLIENTS)) == []
+        self.assertEqual(list(bounce_target.match_clients_or(ALL_CLIENTS)), [])
 
     def test_or_bounce_team_only(self):
         bounce_target = BounceTarget({1}, None, None, None)
 
-        assert list(bounce_target.match_clients_or(ALL_CLIENTS)) == [TEAM_1_SLOT_1, TEAM_1_SLOT_2, TEAM_1_SLOT_3]
+        self.assertEqual(
+            list(bounce_target.match_clients_or(ALL_CLIENTS)),
+            [TEAM_1_SLOT_1, TEAM_1_SLOT_2, TEAM_1_SLOT_3],
+        )
 
     def test_or_tags_condition_only(self):
         bounce_target = BounceTarget(None, None, {"DeathLink"}, None)
@@ -201,12 +204,15 @@ class TestBounceTargetAnd(unittest.TestCase):
     def test_and_bounce_target_default(self):
         bounce_target = BounceTarget(None, None, None, None)
 
-        assert list(bounce_target.match_clients_and(ALL_CLIENTS)) == ALL_CLIENTS
+        self.assertEqual(list(bounce_target.match_clients_and(ALL_CLIENTS)), ALL_CLIENTS)
 
     def test_and_bounce_team_only(self):
         bounce_target = BounceTarget({1}, None, None, None)
 
-        assert list(bounce_target.match_clients_and(ALL_CLIENTS)) == [TEAM_1_SLOT_1, TEAM_1_SLOT_2, TEAM_1_SLOT_3]
+        self.assertEqual(
+            list(bounce_target.match_clients_and(ALL_CLIENTS)),
+            [TEAM_1_SLOT_1, TEAM_1_SLOT_2, TEAM_1_SLOT_3],
+        )
 
     def test_and_tags_condition_only(self):
         bounce_target = BounceTarget(None, None, {"DeathLink"}, None)
