@@ -22,7 +22,7 @@ import ModuleUpdate
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
 from NetUtils import ClientStatus
-from PyMemoryEditor import OpenProcess, ProcessNotFoundError
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError, AmbiguousProcessNameError
 
 # Jak imports
 from .game_id import jak1_name, jak1_gk, jak1_goalc
@@ -471,17 +471,25 @@ async def run_game(ctx: JakAndDaxterContext):
     # These may already be running. If they are not running, try to start them.
     gk_running = False
     try:
-        OpenProcess(process_name=jak1_gk)  # The GOAL Kernel
+        OpenProcess(name=jak1_gk)  # The GOAL Kernel
         gk_running = True
     except ProcessNotFoundError:
         ctx.on_log_warn(logger, "Game not running, attempting to start.")
+    except AmbiguousProcessNameError:
+        ctx.on_log_error(logger, "Two or more instances of the game were found. "
+                                 "Please close one and restart this client.")
+        return
 
     goalc_running = False
     try:
-        OpenProcess(process_name=jak1_goalc)  # The GOAL Compiler and REPL
+        OpenProcess(name=jak1_goalc)  # The GOAL Compiler and REPL
         goalc_running = True
     except ProcessNotFoundError:
         ctx.on_log_warn(logger, "Compiler not running, attempting to start.")
+    except AmbiguousProcessNameError:
+        ctx.on_log_error(logger, "Two or more instances of the compiler were found. "
+                                 "Please close one and restart this client.")
+        return
 
     try:
         auto_detect_root_directory = JakAndDaxterWorld.settings.auto_detect_root_directory

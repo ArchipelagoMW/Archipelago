@@ -904,7 +904,6 @@ class TrapDistribution(OptionCounter):
     internal_name = "trap_distribution"
     display_name = "Trap Distribution"
     default_weight = trap_default_weight
-    visibility = Visibility.all ^ Visibility.simple_ui
     min = 0
     max = 1000
     valid_keys = frozenset(all_traps)
@@ -1088,7 +1087,6 @@ enabled_mods_except_invalid_combinations = all_mods_except_invalid_combinations.
 
 class Mods(OptionSet):
     """List of mods that will be included in the shuffling."""
-    visibility = Visibility.all & ~Visibility.simple_ui
     internal_name = "mods"
     display_name = "Mods"
     valid_keys = enabled_mods
@@ -1117,7 +1115,6 @@ class BundleWhitelist(OptionSet):
     If more bundles are specified than what fits in their parent room, that room will randomly pick from only the whitelist ones"""
     internal_name = "bundle_whitelist"
     display_name = "Bundle Whitelist"
-    visibility = Visibility.template | Visibility.spoiler
     valid_keys = set(all_cc_bundle_names)
 
     def prioritizes(self, bundle_name):
@@ -1136,7 +1133,6 @@ class BundleBlacklist(OptionSet):
     If too many bundles are blacklisted for a given room, that room will pick all the non-blacklist bundles, then random blacklisted ones."""
     internal_name = "bundle_blacklist"
     display_name = "Bundle Blacklist"
-    visibility = Visibility.template | Visibility.spoiler
     valid_keys = set(all_cc_bundle_names)
 
     def allows(self, bundle_name):
@@ -1170,7 +1166,6 @@ class AllowedFillerItems(OptionSet):
     """
     internal_name = "allowed_filler_items"
     display_name = "Allowed Filler Items"
-    visibility = Visibility.template | Visibility.spoiler
     valid_keys = frozenset({AllowedFillerOptionName.farming, AllowedFillerOptionName.fishing, AllowedFillerOptionName.fruit_trees,
                             AllowedFillerOptionName.food, AllowedFillerOptionName.buff_food, AllowedFillerOptionName.consumables,
                             AllowedFillerOptionName.machines, AllowedFillerOptionName.storage, AllowedFillerOptionName.quality_of_life,
