@@ -22,7 +22,7 @@ TEAM_1_SLOT_1 = create_mock_client(1, "TestGame", set(), 1)
 TEAM_1_SLOT_2 = create_mock_client(1, "TestGame", {"DeathLink", "TrapLink"}, 2)
 TEAM_1_SLOT_3 = create_mock_client(1, "TestGame 2", {"DeathLink"}, 3)
 TEAM_2_SLOT_1 = create_mock_client(2, "TestGame", set(), 1)
-TEAM_2_SLOT_2 = create_mock_client(2, "TestGame", {"DeathLink", "TrapLink"}, 2)
+TEAM_2_SLOT_2 = create_mock_client(2, "TestGame", {"TrapLink"}, 2)
 TEAM_2_SLOT_3 = create_mock_client(2, "TestGame 2", {"DeathLink"}, 3)
 
 ALL_CLIENTS = [TEAM_1_SLOT_1, TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_1, TEAM_2_SLOT_2, TEAM_2_SLOT_3]
@@ -50,7 +50,7 @@ class TestBounceTargetLegacy(unittest.TestCase):
 
         self.assertEqual(
             list(bounce_target.match_clients_legacy(ALL_CLIENTS)),
-            [TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_2, TEAM_2_SLOT_3],
+            [TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_3],
         )
 
     def test_legacy_slot_condition_only(self):
@@ -74,7 +74,7 @@ class TestBounceTargetLegacy(unittest.TestCase):
         self.assertEqual(list(bounce_target.match_clients_legacy(ALL_CLIENTS)), [TEAM_1_SLOT_2, TEAM_1_SLOT_3])
 
     def test_legacy_all(self):
-        bounce_target = BounceTarget({2}, {"TestGame 2"}, {"DeathLink"}, {1})
+        bounce_target = BounceTarget({2}, {"TestGame 2"}, {"TrapLink"}, {1})
 
         self.assertEqual(
             list(bounce_target.match_clients_legacy(ALL_CLIENTS)), [TEAM_2_SLOT_1, TEAM_2_SLOT_2, TEAM_2_SLOT_3]
@@ -133,7 +133,7 @@ class TestBounceTargetOr(unittest.TestCase):
 
         self.assertEqual(
             list(bounce_target.match_clients_or(ALL_CLIENTS)),
-            [TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_2, TEAM_2_SLOT_3],
+            [TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_3],
         )
 
     def test_or_slot_condition_only(self):
@@ -156,7 +156,7 @@ class TestBounceTargetOr(unittest.TestCase):
 
         self.assertEqual(
             list(bounce_target.match_clients_or(ALL_CLIENTS)),
-            [TEAM_1_SLOT_1, TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_2, TEAM_2_SLOT_3],
+            [TEAM_1_SLOT_1, TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_3],
         )
 
     def test_or_all(self):
@@ -219,7 +219,7 @@ class TestBounceTargetAnd(unittest.TestCase):
 
         self.assertEqual(
             list(bounce_target.match_clients_and(ALL_CLIENTS)),
-            [TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_2, TEAM_2_SLOT_3],
+            [TEAM_1_SLOT_2, TEAM_1_SLOT_3, TEAM_2_SLOT_3],
         )
 
     def test_and_slot_condition_only(self):
