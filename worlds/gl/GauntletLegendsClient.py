@@ -63,17 +63,44 @@ class RetroSocket:
         except Exception as e:
             raise Exception("An error occurred while sending a message.")
 
+    def drain(self):
+        while True:
+            try:
+                self.socket.recv(65536)
+            except (BlockingIOError, OSError):
+                break
+
     async def read(self, message: str) -> Optional[bytes]:
+        parts = message.split(" ")
+        req_addr = int(parts[1], 16)
+        req_size = int(parts[2])
+        self.drain()
         self.send(message)
+        loop = asyncio.get_event_loop()
+        deadline = loop.time() + 1.0
         try:
-            response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 30000), 1.0)
-            data = response.decode().strip("\n").split(" ")
-            b = b""
-            for s in data[2:]:
-                if "-1" in s:
-                    raise Exception("Client tried to read from an invalid address or ROM is not open...")
-                b += bytes.fromhex(s)
-            return b
+            while True:
+                remaining = deadline - loop.time()
+                if remaining <= 0:
+                    raise asyncio.TimeoutError
+                response = await asyncio.wait_for(loop.sock_recv(self.socket, 30000), remaining)
+                data = response.decode().strip("\n").split(" ")
+                if len(data) < 2 or data[0] != parts[0]:
+                    continue
+                try:
+                    if int(data[1], 16) != req_addr:
+                        continue
+                except ValueError:
+                    continue
+                b = b""
+                for s in data[2:]:
+                    if "-1" in s:
+                        raise Exception("Client tried to read from an invalid address or ROM is not open...")
+                    b += bytes.fromhex(s)
+                if len(b) != req_size:
+                    logger.error(f"Malformed RAM read at {parts[1]}: expected {req_size} bytes, got {len(b)}")
+                    return None
+                return b
         except asyncio.TimeoutError:
             logger.error("Timeout while waiting for socket response...")
             await asyncio.sleep(2)
@@ -89,6 +116,7 @@ class RetroSocket:
 
     async def status(self) -> str | None:
         message = "GET_STATUS"
+        self.drain()
         self.send(message)
         try:
             data = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
@@ -221,8 +249,8 @@ class GauntletLegendsContext(CommonContext):
     # Update inventory based on items received from server
     # Also adds starting items based on a few yaml options
     async def handle_items(self):
-        self.players = list(await self._read_ram(MOD_PLAYERS_LIST, 4))
-        self.players = [player for player in self.players if player != 0]
+        players_raw = await self._read_ram(MOD_PLAYERS_LIST, 4)
+        self.players = [player for player in players_raw if player != 0] if players_raw else []
         if not self.players:
             return
         for player in self.players:
@@ -277,9 +305,10 @@ class GauntletLegendsContext(CommonContext):
         val = await self._read_ram_int(PLAYER_KILL + (0x1F0 * (self.players[0] - 1)), 1)
         return (val & 0xF) == 0x8 or (val & 0xF) == 0x1
 
-    async def get_seed_name(self) -> str:
+    async def get_seed_name(self) -> str | None:
         seed_name = await self._read_ram(0x3FC7F0, 0x10)
-        return seed_name.decode("utf-8").strip()
+
+        return seed_name.decode("utf-8").strip() if seed_name else None
 
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
         try:
@@ -441,6 +470,11 @@ class GauntletLegendsContext(CommonContext):
             self.current_level = self.level
             self.level_id = (self.current_zone << 4) + self.current_level
 
+        if not self.players:
+            self.current_zone = self.zone
+            self.current_level = self.level
+            return []
+
         zone_or_level_changed = self.zone != self.current_zone or self.level != self.current_level
         if zone_or_level_changed:
             if self.current_level & 0x8 == 0x8 and not await self.dead_or_menu():
@@ -588,6 +622,11 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 continue
 
             seed_name = await ctx.get_seed_name()
+            if seed_name is None:
+                logger.info("Unable to read seed name from ROM, waiting...")
+                await asyncio.sleep(3)
+                continue
+
             if seed_name != ctx.seed_name[0:16]:
                 logger.info(f"ROM seed does not match room seed ({seed_name} != {ctx.seed_name}), "
                             f"please load the correct ROM.")
