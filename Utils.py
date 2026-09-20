@@ -773,17 +773,24 @@ def run_in_terminal(exe: Sequence[str]) -> bool:
         subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
         return True
     elif is_linux:
-        terminal = (which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm") or
-                    which("cosmic-term") or which("ptyxis"))
+        # Terminals have started deprecating `-e` flag with some not implementing it at all
+        # `modern_terminals` is a list of terminals which we want/need to use `--` instead
+        # `legacy_terminals` are common aliases for terminals people want to use so checking these are prioritized
+        legacy_terminals = ["x-terminal-emulator", "konsole", "xterm", "alacritty", "kitty"]
+        modern_terminals = ["gnome-terminal", "cosmic-term", "ptyxis"]
+
+        terminal = None
+        for term in itertools.chain(legacy_terminals, modern_terminals):
+            terminal = which(term)
+            if terminal:
+                break
+
         if terminal:
             # Clear LD_LIB_PATH during terminal startup, but set it again when running command in case it's needed
             ld_lib_path = os.environ.get("LD_LIBRARY_PATH")
             lib_path_setter = f"env LD_LIBRARY_PATH={shlex.quote(ld_lib_path)} " if ld_lib_path else ""
             env = env_cleared_lib_path()
 
-            # Terminals have started deprecating `-e` flag with some not implementing it at all
-            # `modern_terminals` is a list of terminals which we want/need to use `--` instead
-            modern_terminals = {"cosmic-term", "ptyxis", "gnome-terminal"}
             real_terminal_name = pathlib.Path(terminal).resolve().name
             if real_terminal_name in modern_terminals:
                 subprocess.Popen([terminal, "--", "sh", "-c", lib_path_setter + shlex.join(exe)], env=env)
