@@ -682,7 +682,7 @@ _original_opt_content: dict[str, str | None] = {}
 
 
 async def _patch_opt():
-    """Create RetroArch core options override for CountPerOp=1 and virefresh=2200."""
+    """Create RetroArch core options override for various settings."""
     retroarch_path = settings.get_settings().gl_options.retroarch_path
     override_dir = os.path.join(retroarch_path, "config", "Mupen64Plus-Next")
     os.makedirs(override_dir, exist_ok=True)
