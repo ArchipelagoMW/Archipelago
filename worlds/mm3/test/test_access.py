@@ -48,7 +48,7 @@ class TestAccess(MM3TestBase):
         self.assertAccessDependency(locations, items, True)
 
     def test_hard_knuckle(self) -> None:
-        locations = [wily_1_c4, wily_1_c5, wily_1_c6, wily_1_c7, wily_1_c8, ]
+        locations = [wily_1_c4, wily_1_c5, wily_1_c6, wily_1_c7, wily_1_c8, wily_3_c1, wily_3_c2, ]
         items = [[hard_knuckle]]
         self.assertAccessDependency(locations, items, True)
 
