@@ -776,11 +776,11 @@ def run_in_terminal(exe: Sequence[str]) -> bool:
         # Terminals have started deprecating `-e` flag with some not implementing it at all
         # `modern_terminals` is a list of terminals which we want/need to use `--` instead
         # `legacy_terminals` are common aliases for terminals people want to use so checking these are prioritized
-        legacy_terminals = ["x-terminal-emulator", "konsole", "xterm", "alacritty", "kitty"]
-        modern_terminals = ["gnome-terminal", "cosmic-term", "ptyxis"]
+        legacy_terminals = ("x-terminal-emulator", "konsole", "alacritty", "kitty")
+        modern_terminals = ("gnome-terminal", "cosmic-term", "ptyxis")
 
         terminal = None
-        for term in itertools.chain(legacy_terminals, modern_terminals):
+        for term in itertools.chain(legacy_terminals, modern_terminals, ("xterm",)):
             terminal = which(term)
             if terminal:
                 break
