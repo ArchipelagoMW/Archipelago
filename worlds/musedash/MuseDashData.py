@@ -719,4 +719,11 @@ SONG_DATA: Dict[str, SongData] = {
     "YURUSHITE": SongData(2900843, "97-3", "DASH AND SHOOT!", False, 6, 8, 11),
     "girls.exe": SongData(2900844, "97-4", "DASH AND SHOOT!", False, 6, 8, 11),
     "Baqeela": SongData(2900845, "97-5", "DASH AND SHOOT!", False, 6, 8, 10),
+    "Help me, ERINNNNNN!!": SongData(2900846, "43-74", "MD Plus Project", False, 4, 8, 10),
+    "Utakata, Ai no Mahoroba": SongData(2900847, "98-0", "Touhou Mugakudan -V-", False, 3, 5, 7),
+    "dynamite": SongData(2900848, "98-1", "Touhou Mugakudan -V-", False, 5, 7, 9),
+    "Matsuyoi Nightbug": SongData(2900849, "98-2", "Touhou Mugakudan -V-", False, 5, 7, 10),
+    "Coooonsultant!": SongData(2900850, "98-3", "Touhou Mugakudan -V-", False, 6, 8, 10),
+    "Stop at the affected part and melt quickly - Madness Udine Quarter": SongData(2900851, "98-4", "Touhou Mugakudan -V-", False, 4, 6, 10),
+    "Ultimate taste": SongData(2900852, "98-5", "Touhou Mugakudan -V-", False, 6, 8, 11),
 }
