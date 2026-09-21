@@ -779,7 +779,7 @@ def run_in_terminal(exe: Sequence[str]) -> bool:
         legacy_terminals = ("x-terminal-emulator", "konsole", "alacritty", "kitty")
         modern_terminals = ("gnome-terminal", "cosmic-term", "ptyxis")
 
-        terminal = None
+        terminal: str | None = None
         for term in itertools.chain(legacy_terminals, modern_terminals, ("xterm",)):
             terminal = which(term)
             if terminal:
