@@ -24,7 +24,7 @@ if __name__ == "__main__":
 from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
-from Utils import Version, stream_input, async_start
+from Utils import gui_enabled, Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
 import ssl
@@ -34,9 +34,6 @@ if typing.TYPE_CHECKING:
     import argparse
 
 logger = logging.getLogger("Client")
-
-# without terminal, we have to use gui mode
-gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 
 @Utils.cache_argsless
@@ -65,6 +62,8 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Close connections and client"""
+        if self.ctx.ui:
+            self.ctx.ui.stop()
         self.ctx.exit_event.set()
         return True
 
@@ -99,17 +98,6 @@ class ClientCommandProcessor(CommandProcessor):
             self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
         return True
 
-    def get_current_datapackage(self) -> dict[str, typing.Any]:
-        """
-        Return datapackage for current game if known.
-
-        :return: The datapackage for the currently registered game. If not found, an empty dictionary will be returned.
-        """
-        if not self.ctx.game:
-            return {}
-        checksum = self.ctx.checksums[self.ctx.game]
-        return Utils.load_data_package_for_checksum(self.ctx.game, checksum)
-
     def _cmd_missing(self, filter_text = "") -> bool:
         """List all missing location checks, from your local game state.
         Can be given text, which will be used as filter."""
@@ -119,8 +107,8 @@ class ClientCommandProcessor(CommandProcessor):
         count = 0
         checked_count = 0
 
-        lookup = self.get_current_datapackage().get("location_name_to_id", {})
-        for location, location_id in lookup.items():
+        lookup = self.ctx.location_names[self.ctx.game]
+        for location_id, location in lookup.items():
             if filter_text and filter_text not in location:
                 continue
             if location_id < 0:
@@ -141,11 +129,10 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-    def output_datapackage_part(self, key: str, name: str) -> bool:
+    def output_datapackage_part(self, name: typing.Literal["Item Names", "Location Names"]) -> bool:
         """
         Helper to digest a specific section of this game's datapackage.
 
-        :param key: The dictionary key in the datapackage.
         :param name: Printed to the user as context for the part.
 
         :return: Whether the process was successful.
@@ -154,23 +141,20 @@ class ClientCommandProcessor(CommandProcessor):
             self.output(f"No game set, cannot determine {name}.")
             return False
 
-        lookup = self.get_current_datapackage().get(key)
-        if lookup is None:
-            self.output("datapackage not yet loaded, try again")
-            return False
-
+        lookup = self.ctx.item_names if name == "Item Names" else self.ctx.location_names
+        lookup = lookup[self.ctx.game]
         self.output(f"{name} for {self.ctx.game}")
-        for key in lookup:
-            self.output(key)
+        for name in lookup.values():
+            self.output(name)
         return True
 
     def _cmd_items(self) -> bool:
         """List all item names for the currently running game."""
-        return self.output_datapackage_part("item_name_to_id", "Item Names")
+        return self.output_datapackage_part("Item Names")
 
     def _cmd_locations(self) -> bool:
         """List all location names for the currently running game."""
-        return self.output_datapackage_part("location_name_to_id", "Location Names")
+        return self.output_datapackage_part("Location Names")
 
     def output_group_part(self, group_key: typing.Literal["item_name_groups", "location_name_groups"],
                           filter_key: str,
@@ -338,7 +322,7 @@ class CommonContext:
     hint_cost: int | None
     """Current Hint Cost per Hint from the server"""
     hint_points: int | None
-    """Current avaliable Hint Points from the server"""
+    """Current available Hint Points from the server"""
     player_names: dict[int, str]
     """Current lookup of slot number to player display name from server (includes aliases)"""
 
@@ -357,6 +341,10 @@ class CommonContext:
     """Name used in Connect packet"""
     seed_name: str | None
     """Seed name that will be validated on opening a socket if present"""
+    server_seed_name: str | None
+    """Actual seed_name reported by the server in RoomInfo"""
+    connected_identity: tuple[str, int, int] | None
+    """(server_seed_name, team, slot) of the last successful connection, used to detect a session switch"""
 
     # locations
     locations_checked: set[int]
@@ -415,6 +403,10 @@ class CommonContext:
         self.slot = None
         self.auth = None
         self.seed_name = None
+        self.server_seed_name = None
+        self.connected_identity = None
+        # decouple from the class-level mutable set so tag changes (e.g. DeathLink) don't leak across instances
+        self.tags = set(type(self).tags)
 
         self.locations_checked = set()  # local state
         self.locations_scouted = set()
@@ -475,6 +467,7 @@ class CommonContext:
         self.team = None
         self.items_received = []
         self.locations_info = {}
+        self.server_seed_name = None
         self.server_version = Version(0, 0, 0)
         self.generator_version = Version(0, 0, 0)
         self.server = None
@@ -485,6 +478,21 @@ class CommonContext:
             "collect": "disabled",
             "remaining": "disabled",
         }
+
+    def reset_session_state(self):
+        """Clear local progress and data-storage state tied to a single session."""
+        self.locations_checked = set()
+        self.locations_scouted = set()
+        self.locations_info = {}
+        self.items_received = []
+        self.missing_locations = set()
+        self.checked_locations = set()
+        self.server_locations = set()
+        self.finished_game = False
+        self.ready = False
+        self.stored_data = {}
+        self.stored_data_notification_keys = set()
+        self.current_energy_link_value = None
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         if not allow_autoreconnect:
@@ -587,6 +595,10 @@ class CommonContext:
         return print_json_packet.get("type", "") == "ItemSend" \
             and not self.slot_concerns_self(print_json_packet["receiving"]) \
             and not self.slot_concerns_self(print_json_packet["item"].player)
+    
+    def is_connection_change(self, print_json_packet: dict) -> bool:
+        """Helper function for filtering out connection changes."""
+        return print_json_packet.get("type", "") in ["Join","Part"]
 
     def on_print(self, args: dict):
         logger.info(args["text"])
@@ -785,7 +797,7 @@ class CommonContext:
         if len(parts) == 1:
             parts = title.split(', ', 1)
         if len(parts) > 1:
-            text = parts[1] + '\n\n' + text
+            text = f"{parts[1]}\n\n{text}" if text else parts[1]
             title = parts[0]
         # display error
         self._messagebox = MessageBox(title, text, error=True)
@@ -871,9 +883,9 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
 
     server_url = urllib.parse.urlparse(address)
     if server_url.username:
-        ctx.username = server_url.username
+        ctx.username = urllib.parse.unquote(server_url.username)
     if server_url.password:
-        ctx.password = server_url.password
+        ctx.password = urllib.parse.unquote(server_url.password)
 
     def reconnect_hint() -> str:
         return ", type /connect to reconnect" if ctx.server_address else ""
@@ -908,6 +920,8 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
                                    "May not be running Archipelago on that address or port.")
     except websockets.InvalidURI:
         ctx.handle_connection_loss("Failed to connect to the multiworld server (invalid URI)")
+    except asyncio.TimeoutError:
+        ctx.handle_connection_loss("Failed to connect to the multiworld server. Connection timed out.")
     except OSError:
         ctx.handle_connection_loss("Failed to connect to the multiworld server")
     except Exception:
@@ -934,6 +948,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         logger.exception(f"Could not get command from {args}")
         raise
     if cmd == 'RoomInfo':
+        ctx.server_seed_name = args["seed_name"]
         if ctx.seed_name and ctx.seed_name != args["seed_name"]:
             msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
             logger.info(msg, extra={'compact_gui': True})
@@ -1014,6 +1029,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.username = ctx.auth
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        # on a switch to a different session, clear session state before stale checks/goal are replayed below
+        identity = (ctx.server_seed_name, ctx.team, ctx.slot)
+        if ctx.connected_identity is not None and identity != ctx.connected_identity:
+            ctx.reset_session_state()
+        ctx.connected_identity = identity
         # int keys get lost in JSON transfer
         ctx.slot_info = {0: NetworkSlot("Archipelago", "Archipelago", SlotType.player)}
         ctx.slot_info.update({int(pid): data for pid, data in args["slot_info"].items()})
@@ -1079,13 +1099,17 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if "players" in args:
             ctx.consume_players_package(args["players"])
         if "hint_points" in args:
-            ctx.hint_points = args['hint_points']
+            ctx.hint_points = args["hint_points"]
         if "checked_locations" in args:
             checked = set(args["checked_locations"])
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
         if "permissions" in args:
             ctx.update_permissions(args["permissions"])
+
+        # Update hint info for local display
+        if "hint_cost" in args:
+            ctx.hint_cost = int(args["hint_cost"])
 
     elif cmd == 'Print':
         ctx.on_print(args)
@@ -1098,9 +1122,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "Bounced":
         tags = args.get("tags", [])
-        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
-        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
-            ctx.on_deathlink(args["data"])
+        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been sent this
+        if "DeathLink" in tags:
+            data = args.get("data", {})
+            time = data.get("time")
+            if time is not None and ctx.last_death_link != time:
+                ctx.on_deathlink(args["data"])
 
     elif cmd == "Retrieved":
         ctx.stored_data.update(args["keys"])

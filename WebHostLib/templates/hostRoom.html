@@ -58,8 +58,7 @@
                     Open Log File...
                 </a>
             </div>
-        {%  set log = get_log() -%}
-        {%- set log_len = log | length - 1 if log.endswith("…") else log | length -%}
+        {%  set log, log_len = get_log() -%}
         <div id="logger" style="white-space: pre">{{ log }}</div>
         <script>
           let url = '{{ url_for('display_log', room = room.id) }}';

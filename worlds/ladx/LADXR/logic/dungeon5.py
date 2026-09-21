@@ -15,7 +15,7 @@ class Dungeon5:
             Location(dungeon=5).add(OwlStatue(0x19A)).connect(area2, STONE_BEAK5)
         Location(dungeon=5).add(DungeonChest(0x19B)).connect(area2, r.attack_hookshot_powder)  # map chest
         blade_trap_chest = Location(dungeon=5).add(DungeonChest(0x197)).connect(area2, HOOKSHOT)  # key chest on the left
-        post_gohma = Location(dungeon=5).connect(area2, AND(HOOKSHOT, r.miniboss_requirements[world_setup.miniboss_mapping[4]], KEY5, FOUND(KEY5,2))) # staircase after gohma
+        post_gohma = Location(dungeon=5).connect(area2, AND(HOOKSHOT, r.miniboss_requirements[world_setup.miniboss_mapping['4']], KEY5, FOUND(KEY5,2))) # staircase after gohma
         staircase_before_boss = Location(dungeon=5).connect(post_gohma, AND(HOOKSHOT, FEATHER)) # bottom right section pits room before boss door. Path via gohma
         after_keyblock_boss = Location(dungeon=5).connect(staircase_before_boss, AND(KEY5, FOUND(KEY5, 3))) # top right section pits room before boss door
         after_stalfos = Location(dungeon=5).add(DungeonChest(0x196)).connect(area2, AND(SWORD, BOMB)) # Need to defeat master stalfos once for this empty chest; l2 sword beams kill but obscure

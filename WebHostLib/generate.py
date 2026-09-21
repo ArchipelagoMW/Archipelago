@@ -12,12 +12,11 @@ from flask import flash, redirect, render_template, request, session, url_for
 from pony.orm import commit, db_session
 
 from BaseClasses import get_seed, seeddigits
-from Generate import PlandoOptions, handle_name
+from Generate import PlandoOptions, handle_name, mystery_argparse
 from Main import main as ERmain
-from Utils import __version__, restricted_dumps
+from Utils import __version__, restricted_dumps, DaemonThreadPoolExecutor
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions
-from worlds.alttp.EntranceRandomizer import parse_arguments
 from .check import get_yaml_data, roll_options
 from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
@@ -34,6 +33,7 @@ def get_meta(options_source: dict, race: bool = False) -> dict[str, list[str] | 
         "release_mode": str(options_source.get("release_mode", ServerOptions.release_mode)),
         "remaining_mode": str(options_source.get("remaining_mode", ServerOptions.remaining_mode)),
         "collect_mode": str(options_source.get("collect_mode", ServerOptions.collect_mode)),
+        "countdown_mode": str(options_source.get("countdown_mode", ServerOptions.countdown_mode)),
         "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
         "server_password": str(options_source.get("server_password", None)),
     }
@@ -73,6 +73,10 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
+def format_exception(e: BaseException) -> str:
+    return f"{e.__class__.__name__}: {e}"
+
+
 def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
     results, gen_options = roll_options(options, set(meta["plando_options"]))
 
@@ -93,7 +97,9 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
         except PicklingError as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            return render_template("seedError.html", seed_error=("PicklingError: " + str(e)))
+            meta["error"] = format_exception(e)
+            details = json.dumps(meta, indent=4).strip()
+            return render_template("seedError.html", seed_error=meta["error"], details=details)
 
         commit()
 
@@ -101,16 +107,18 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
     else:
         try:
             seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
-                               meta=meta, owner=session["_id"].int)
+                               meta=meta, owner=session["_id"].int, timeout=app.config["JOB_TIME"])
         except BaseException as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
+            meta["error"] = format_exception(e)
+            details = json.dumps(meta, indent=4).strip()
+            return render_template("seedError.html", seed_error=meta["error"], details=details)
 
         return redirect(url_for("view_seed", seed=seed_id))
 
 
-def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None):
+def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None, timeout: int|None = None):
     if meta is None:
         meta = {}
 
@@ -129,43 +137,47 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
 
         seedname = "W" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
-        erargs = parse_arguments(['--multi', str(playercount)])
-        erargs.seed = seed
-        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = meta["generator_options"].get("spoiler", 0)
-        erargs.race = race
-        erargs.outputname = seedname
-        erargs.outputpath = target.name
-        erargs.teams = 1
-        erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
-                                                                       {"bosses", "items", "connections", "texts"}))
-        erargs.skip_prog_balancing = False
-        erargs.skip_output = False
-        erargs.spoiler_only = False
-        erargs.csv_output = False
+        args = mystery_argparse([])  # Just to set up the Namespace with defaults
+        args.multi = playercount
+        args.seed = seed
+        args.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
+        args.spoiler = meta["generator_options"].get("spoiler", 0)
+        args.race = race
+        args.outputname = seedname
+        args.outputpath = target.name
+        args.teams = 1
+        args.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
+                                                                     {"bosses", "items", "connections", "texts"}))
+        args.skip_prog_balancing = False
+        args.skip_output = False
+        args.spoiler_only = False
+        args.csv_output = False
+        args.sprite = dict.fromkeys(range(1, args.multi+1), None)
+        args.sprite_pool = dict.fromkeys(range(1, args.multi+1), None)
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
             for k, v in settings.items():
                 if v is not None:
-                    if hasattr(erargs, k):
-                        getattr(erargs, k)[player] = v
+                    if hasattr(args, k):
+                        getattr(args, k)[player] = v
                     else:
-                        setattr(erargs, k, {player: v})
+                        setattr(args, k, {player: v})
 
-            if not erargs.name[player]:
-                erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
-            erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
-        if len(set(erargs.name.values())) != len(erargs.name):
-            raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
-        ERmain(erargs, seed, baked_server_options=meta["server_options"])
+            if not args.name[player]:
+                args.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
+            args.name[player] = handle_name(args.name[player], player, name_counter)
+        if len(set(args.name.values())) != len(args.name):
+            raise Exception(f"Names have to be unique. Names: {Counter(args.name.values())}")
+        ERmain(args, seed, baked_server_options=meta["server_options"])
 
         return upload_to_db(target.name, sid, owner, race)
-    thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+
+    thread_pool = DaemonThreadPoolExecutor(max_workers=1)
     thread = thread_pool.submit(task)
 
     try:
-        return thread.result(app.config["JOB_TIME"])
+        return thread.result(timeout)
     except concurrent.futures.TimeoutError as e:
         if sid:
             with db_session:
@@ -173,11 +185,14 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                 if gen is not None:
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
-                    meta["error"] = (
-                            "Allowed time for Generation exceeded, please consider generating locally instead. " +
-                            e.__class__.__name__ + ": " + str(e))
+                    meta["error"] = ("Allowed time for Generation exceeded, " +
+                                     "please consider generating locally instead. " +
+                                     format_exception(e))
                     gen.meta = json.dumps(meta)
                     commit()
+    except (KeyboardInterrupt, SystemExit):
+        # don't update db, retry next time
+        raise
     except BaseException as e:
         if sid:
             with db_session:
@@ -185,10 +200,15 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                 if gen is not None:
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
-                    meta["error"] = (e.__class__.__name__ + ": " + str(e))
+                    meta["error"] = format_exception(e)
                     gen.meta = json.dumps(meta)
                     commit()
         raise
+    finally:
+        # free resources claimed by thread pool, if possible
+        # NOTE: Timeout depends on the process being killed at some point
+        #       since we can't actually cancel a running gen at the moment.
+        thread_pool.shutdown(wait=False, cancel_futures=True)
 
 
 @app.route('/wait/<suuid:seed>')
@@ -202,7 +222,9 @@ def wait_seed(seed: UUID):
     if not generation:
         return "Generation not found."
     elif generation.state == STATE_ERROR:
-        return render_template("seedError.html", seed_error=generation.meta)
+        meta = json.loads(generation.meta)
+        details = json.dumps(meta, indent=4).strip()
+        return render_template("seedError.html", seed_error=meta["error"], details=details)
     return render_template("waitSeed.html", seed_id=seed_id)
 
 

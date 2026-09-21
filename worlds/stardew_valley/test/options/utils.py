@@ -7,7 +7,7 @@ from ... import StardewValleyWorld
 from ...options import StardewValleyOptions, StardewValleyOption
 
 
-def parse_class_option_keys(test_options: dict[str | StardewValleyOption, Any] | None) -> dict:
+def parse_class_option_keys(test_options: dict[str | type[StardewValleyOption], Any] | None) -> dict:
     """ Now the option class is allowed as key. """
     if test_options is None:
         return {}
@@ -25,7 +25,7 @@ def parse_class_option_keys(test_options: dict[str | StardewValleyOption, Any] |
     return parsed_options
 
 
-def fill_dataclass_with_default(test_options: dict[str | StardewValleyOption, Any] | None) -> StardewValleyOptions:
+def fill_dataclass_with_default(test_options: dict[str | type[StardewValleyOption], Any] | None) -> StardewValleyOptions:
     test_options = parse_class_option_keys(test_options)
 
     filled_options = {}

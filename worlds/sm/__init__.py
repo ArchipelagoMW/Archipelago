@@ -116,10 +116,10 @@ class SMWorld(World):
 
     Logic.factory('vanilla')
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
 
     def generate_early(self):
         Logic.factory('vanilla')
@@ -233,8 +233,8 @@ class SMWorld(World):
                 for key, value1 in accessPoint.intraTransitions.items():
                     set_entrance_rule(self.multiworld.get_entrance(accessPoint.Name + "->" + key, self.player), self.player, value1)
 
-    def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-        ret = Region(name, player, world)
+    def create_region(self, multiworld: MultiWorld, player: int, name: str, locations=None, exits=None):
+        ret = Region(name, player, multiworld)
         if locations:
             for loc in locations:
                 location = self.locations[loc]
@@ -420,10 +420,10 @@ class SMWorld(World):
         self.variaRando.randoExec.postProcessItemLocs(self.itemLocs, self.variaRando.args.hideItems)
 
     @classmethod
-    def stage_post_fill(cls, world):
-        new_state = CollectionState(world)
+    def stage_post_fill(cls, multiworld):
+        new_state = CollectionState(multiworld)
         progitempool = []
-        for item in world.itempool:
+        for item in multiworld.itempool:
             if item.game == "Super Metroid" and item.advancement:
                 progitempool.append(item)
 
@@ -431,10 +431,10 @@ class SMWorld(World):
             new_state.collect(item, True)
 
         bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
-        for player in world.get_game_players("Super Metroid"):
+        for player in multiworld.get_game_players("Super Metroid"):
             for bossLoc in bossesLoc:
-                if not world.get_location(bossLoc, player).can_reach(new_state):
-                    world.state.smbm[player].onlyBossLeft = True
+                if not multiworld.get_location(bossLoc, player).can_reach(new_state):
+                    multiworld.state.smbm[player].onlyBossLeft = True
                     break
 
     def getWordArray(self, w: int) -> List[int]:

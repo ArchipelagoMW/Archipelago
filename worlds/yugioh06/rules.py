@@ -668,7 +668,7 @@ def only_dragon(state, player):
     ], player) and (state.count_from_list_unique([
         "Luster Dragon",
         "Spear Dragon",
-        "Cave Dragon"
+        "Cave Dragon",
         "Armed Dragon LV3",
         "Masked Dragon",
         "Twin-Headed Behemoth",

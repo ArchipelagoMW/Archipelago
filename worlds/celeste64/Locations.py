@@ -27,7 +27,7 @@ strawberry_location_data_table: Dict[str, Celeste64LocationData] = {
     LocationName.strawberry_8:  Celeste64LocationData(RegionName.nw_girders_island,    celeste_64_base_id + 0x07),
     LocationName.strawberry_9:  Celeste64LocationData(RegionName.granny_island,        celeste_64_base_id + 0x08),
     LocationName.strawberry_10: Celeste64LocationData(RegionName.granny_island,        celeste_64_base_id + 0x09),
-    LocationName.strawberry_11: Celeste64LocationData(RegionName.granny_island,        celeste_64_base_id + 0x0A),
+    LocationName.strawberry_11: Celeste64LocationData(RegionName.highway_island,       celeste_64_base_id + 0x0A),
     LocationName.strawberry_12: Celeste64LocationData(RegionName.badeline_tower_lower, celeste_64_base_id + 0x0B),
     LocationName.strawberry_13: Celeste64LocationData(RegionName.highway_island,       celeste_64_base_id + 0x0C),
     LocationName.strawberry_14: Celeste64LocationData(RegionName.ne_feathers_island,   celeste_64_base_id + 0x0D),

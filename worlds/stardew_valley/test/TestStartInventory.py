@@ -24,7 +24,7 @@ class TestStartInventoryAllsanity(WorldAssertMixin, SVTestBase):
         options.Monstersanity.internal_name: options.Monstersanity.option_one_per_category,
         options.Shipsanity.internal_name: options.Shipsanity.option_crops,
         options.Cooksanity.internal_name: options.Cooksanity.option_queen_of_sauce,
-        options.Chefsanity.internal_name: 0b1001,
+        options.Chefsanity.internal_name: options.Chefsanity.preset_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Friendsanity.internal_name: options.Friendsanity.option_bachelors,
         options.FriendsanityHeartSize.internal_name: 3,

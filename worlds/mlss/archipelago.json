@@ -1,0 +1,6 @@
+{
+    "game": "Mario & Luigi Superstar Saga",
+	"authors": [ "jamesbrq" ],
+    "minimum_ap_version": "0.6.3",
+    "world_version": "1.10.2"
+}

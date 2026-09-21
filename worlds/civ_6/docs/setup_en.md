@@ -14,25 +14,27 @@ The following are required in order to play Civ VI in Archipelago:
 
 - A copy of the game `Civilization VI` including the two expansions `Rise & Fall` and `Gathering Storm` (both the Steam and Epic version should work).
 
-## Enabling the tuner
-
-In the main menu, navigate to the "Game Options" page. On the "Game" menu, make sure that "Tuner (disables achievements)" is enabled.
-
 ## Mod Installation
 
 1. Download and unzip the latest release of the mod from [GitHub](https://github.com/hesto2/civilization_archipelago_mod/releases/latest).
 
 2. Copy the folder containing the mod files to your Civ VI mods folder. On Windows, this is usually located at `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods`. If you use OneDrive, check if the folder is instead located in your OneDrive file structure, and use that path when relevant in future steps.
 
-3. After the Archipelago host generates a game, you should be given a `.apcivvi` file. Associate the file with the Archipelago Launcher and double click it.
+3. After the Archipelago host generates a game, you should be given a `.apcivvi` file. You can open it as a zip file, you can do this by either right clicking it and opening it with a program that handles zip files (if you associate that file with the program it will open it with that program in the future by double clicking it), or by right clicking and renaming the file extension from `apcivvi` to `zip` (only works if you are displaying file extensions). You can also associate the file with the Archipelago Launcher and double click it and it will create a folder with the mod files inside of it.
 
-4. Copy the contents of the new folder it generates (it will have the same name as the `.apcivvi` file) into your Civilization VI Archipelago Mod folder. If double clicking the `.apcivvi` file doesn't generate a folder, you can instead open it as a zip file. You can do this by either right clicking it and opening it with a program that handles zip files, or by right clicking and renaming the file extension from `apcivvi` to `zip`.
+4. Copy the contents of the zip file or folder it generated (the name of the folder should be the same as the apcivvi file) into your Civilization VI Archipelago Mod folder (there should be five files placed there from the `.apcivvi` file, overwrite if asked).
 
-5. Place the files generated from the `.apcivvi` in your archipelago mod folder (there should be five files placed there from the apcivvi file, overwrite if asked). Your mod path should look something like `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods\civilization_archipelago_mod`. 
+5. Your mod path should look something like `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods\civilization_archipelago_mod`. If everything was done correctly you can now connect to the game.
 
-## Configuring your game
+## Connecting to a game
 
-Make sure you enable the mod in the main title under Additional Content > Mods. When configuring your game, make sure to start the game in the Ancient Era and leave all settings related to starting technologies and civics as the defaults. Other than that, configure difficulty, AI, etc. as you normally would.
+1. In the main menu, navigate to the "Game Options" page. On the "Game" menu, make sure that "Tuner (disables achievements)" is enabled.
+
+2. In the main menu, navigate to the "Additional Content" page, then go to "Mods" and make sure the Archipelago mod is enabled. 
+
+3. When starting the game make sure you are on the Gathering Storm ruleset in a Single Player game. Additionally you must start in the ancient era, other settings and game modes can be customised to your own liking. An important thing to note is that settings preset saves the mod list from when you created it, so if you want to use a setting preset with this you must create it after installing the Archipelago mod.
+
+4. To connect to the room open the Archipelago Launcher, from within the launcher open the Civ6 client and connect to the room. Once connected to the room enter your slot name and if everything went right you should now be connected.
 
 ## Troubleshooting
 
@@ -51,3 +53,8 @@ Make sure you enable the mod in the main title under Additional Content > Mods. 
 - If you still have any errors make sure the two expansions Rise & Fall and Gathering Storm are active in the mod selector (all the official DLC works without issues but Rise & Fall and Gathering Storm are required for the mod).
 
 - If boostsanity is enabled and those items are not being sent out but regular techs are, make sure you placed the files from your new room in the mod folder.
+
+- If you are neither receiving or sending items, make sure you have the correct client open. The client should be the Civ6 and NOT the Text Client.
+
+- This should be compatible with a lot of other mods, but if you are having issues try disabling all mods other than the Archipelago mod and see if the problem still persists. 
+

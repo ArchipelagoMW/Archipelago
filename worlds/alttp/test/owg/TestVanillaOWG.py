@@ -1,11 +1,10 @@
-from worlds.alttp.Dungeons import get_dungeon_item_pool
-from worlds.alttp.InvertedRegions import mark_dark_world_regions
-from worlds.alttp.ItemPool import difficulties
-from worlds.alttp.Items import item_factory
-from test.bases import TestBase
-from worlds.alttp.Options import GlitchesRequired
+from ...Dungeons import get_dungeon_item_pool
+from ...InvertedRegions import mark_dark_world_regions
+from ...ItemPool import difficulties
+from ...Items import item_factory
+from ...Options import GlitchesRequired
 
-from worlds.alttp.test import LTTPTestBase
+from ..bases import LTTPTestBase, TestBase
 
 
 class TestVanillaOWG(TestBase, LTTPTestBase):

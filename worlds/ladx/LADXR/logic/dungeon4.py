@@ -29,7 +29,7 @@ class Dungeon4:
         left_water_area = Location(dungeon=4).connect(before_miniboss, OR(FEATHER, FLIPPERS)) # area left with zol chest and 5 symbol puzzle (water area)
         left_water_area.add(DungeonChest(0x16D))  # gel chest
         left_water_area.add(DungeonChest(0x168))  # key chest near the puzzle
-        miniboss = Location(dungeon=4).connect(before_miniboss, AND(KEY4, FOUND(KEY4, 5), r.miniboss_requirements[world_setup.miniboss_mapping[3]])) 
+        miniboss = Location(dungeon=4).connect(before_miniboss, AND(KEY4, FOUND(KEY4, 5), r.miniboss_requirements[world_setup.miniboss_mapping['3']])) 
         terrace_zols_chest = Location(dungeon=4).connect(before_miniboss, FLIPPERS) # flippers to move around miniboss through 5 tile room
         miniboss = Location(dungeon=4).connect(terrace_zols_chest, POWER_BRACELET, one_way=True) # reach flippers chest through the miniboss room
         terrace_zols_chest.add(DungeonChest(0x160))  # flippers chest

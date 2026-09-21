@@ -79,7 +79,7 @@ Sent to clients when they connect to an Archipelago server.
 | generator_version     | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which generated the multiworld.                                                                                                                                                            |
 | tags                  | list\[str\]                                   | Denotes special features or capabilities that the sender is capable of. Example: `WebHost`                                                                                                                                            |
 | password              | bool                                          | Denoted whether a password is required to join this room.                                                                                                                                                                             |
-| permissions           | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
+| permissions           | dict\[str, [Permission](#Permission)\]        | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
 | hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                          |
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
@@ -220,12 +220,14 @@ Sent to clients to provide what is known as a 'data package' which contains info
 Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) package.
 
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| games | list\[str\] | Optional. Game names this message is targeting |
-| slots | list\[int\] | Optional. Player slot IDs that this message is targeting |
-| tags | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting |
-| data | dict | The data in the [Bounce](#Bounce) package copied |
+| Name     | Type        | Notes                                                                                                                                      |
+|----------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| teams    | list\[int\] | Optional. Teams this message is targeting. Default assumed value when the key is not present is own team.                                  |
+| games    | list\[str\] | Optional. Game names this message is targeting                                                                                             |
+| slots    | list\[int\] | Optional. Player slot IDs that this message is targeting                                                                                   |
+| tags     | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting                                                                                   |
+| operator | str         | Optional. Specifies whether the "teams", games", "slots" and "tags" conditions are chained via "or", "and" or using the "legacy" operator. |
+| data     | dict        | Optional. The data in the [Bounce](#Bounce) package copied                                                                                 |
 
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
@@ -416,16 +418,22 @@ Requests the data package from the server. Does not require client authenticatio
 | games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
 ### Bounce
-Send this message to the server, tell it which clients should receive the message and 
-the server will forward the message to all those targets to which any one requirement applies.
+Send this message to the server, tell it which clients should receive the message and the server will forward
+the message to all those targets to which the requirements ("teams", "games", "slots", "tags") apply according
+to the operator chosen:
+- "or": Conditions are chained with "or".
+- "and": Conditions are chained with "and". (Important note: A completely missing key evaluates as **True**, whereas an empty list evaluates as **False**)
+- "legacy": Evaluates as `teams and (games or slots or tags)`.
 
 #### Arguments
-| Name | Type | Notes |
-| ------ | ----- | ------ |
-| games | list\[str\] | Optional. Game names that should receive this message |
-| slots | list\[int\] | Optional. Player IDs that should receive this message |
-| tags | list\[str\] | Optional. Client tags that should receive this message |
-| data | dict | Any data you want to send |
+| Name     | Type        | Notes                                                                                                                                           |
+|----------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| teams    | list\[int\] | Optional. Teams that should receive this message. Defaults to own team.                                                                         |
+| games    | list\[str\] | Optional. Game names that should receive this message                                                                                           |
+| slots    | list\[int\] | Optional. Player IDs that should receive this message                                                                                           |
+| tags     | list\[str\] | Optional. Client tags that should receive this message                                                                                          |
+| operator | str         | Optional. Controls how the "teams", games", "slots" and "tags" conditions are chained. Options are "or", "and" and "legacy". Default: "legacy". |
+| data     | dict        | Optional. Any data you want to send                                                                                                             |
 
 ### Get
 Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.
@@ -647,6 +655,16 @@ class Version(NamedTuple):
     build: int
 ```
 
+If constructing version information as a dict for a custom client rather than as a NamedTuple built into the CommonClient, you must add the `class` key to allow Archipelago to compare version support.
+```
+"version": {
+      "class": "Version",
+      "build": X,
+      "major": Y,
+      "minor": Z
+    }
+```
+
 ### SlotType
 An enum representing the nature of a slot.
 
@@ -662,13 +680,14 @@ class SlotType(enum.IntFlag):
 An object representing static information about a slot.
 
 ```python
-import typing
+from collections.abc import Sequence
+from typing import NamedTuple
 from NetUtils import SlotType
-class NetworkSlot(typing.NamedTuple):
+class NetworkSlot(NamedTuple):
    name: str
    game: str
    type: SlotType
-   group_members: typing.List[int] = []  # only populated if type == group
+   group_members: Sequence[int] = []  # only populated if type == group
 ```
 
 ### Permission
@@ -686,8 +705,8 @@ class Permission(enum.IntEnum):
 ### Hint
 An object representing a Hint.
 ```python
-import typing
-class Hint(typing.NamedTuple):
+from typing import NamedTuple
+class Hint(NamedTuple):
     receiving_player: int
     finding_player: int
     location: int

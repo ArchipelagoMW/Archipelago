@@ -2,15 +2,17 @@ from typing import Optional
 
 from BaseClasses import ItemClassification
 from .base_logic import BaseLogic, BaseLogicMixin
-from .has_logic import HasLogicMixin
 from .logic_event import all_events
 from ..items import item_table
-from ..stardew_rule import StardewRule, Received, TotalReceived
+from ..stardew_rule import StardewRule, Received, TotalReceived, True_
 
 
 class ReceivedLogicMixin(BaseLogic, BaseLogicMixin):
     def received(self, item: str, count: Optional[int] = 1) -> StardewRule:
         assert count >= 0, "Can't receive a negative amount of item."
+
+        if count == 0:
+            return True_()
 
         if item in all_events:
             return Received(item, self.player, count, event=True)

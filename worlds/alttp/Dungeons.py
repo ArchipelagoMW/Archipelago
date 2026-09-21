@@ -239,7 +239,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                 multiworld.worlds[item.player].collect(all_state_base, item)
             pre_fill_items = []
             for player in in_dungeon_player_ids:
-                pre_fill_items += multiworld.worlds[player].get_pre_fill_items()
+                pre_fill_items += [item for item in multiworld.worlds[player].get_pre_fill_items() if not item.crystal]
             for item in in_dungeon_items:
                 try:
                     pre_fill_items.remove(item)

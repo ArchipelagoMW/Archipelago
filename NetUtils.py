@@ -170,10 +170,44 @@ def _object_hook(o: typing.Any) -> typing.Any:
     return o
 
 
-decode = JSONDecoder(object_hook=_object_hook).decode
+_decode = JSONDecoder(object_hook=_object_hook).decode
+
+
+try:
+    from _speedups import check_json_depth as _check_depth
+except ImportError:
+    def _check_depth(s: str, limit: int = 16) -> None:
+        depth = 1
+        in_quotes = False
+        escape = False
+        for c in s:
+            if c == "\\" and not escape:
+                escape = True
+                continue
+            if c == '"' and not escape:
+                in_quotes = not in_quotes
+                continue
+            if not in_quotes:
+                if c in "[{":
+                    depth += 1
+                    if depth > limit:
+                        raise ValueError("JSON document too complex")
+                elif c in "}]":
+                    depth -= 1
+            escape = False
+
+        if depth != 1:  # free check
+            raise ValueError("JSON document malformed")
+
+
+def decode(s: str) -> typing.Any:
+    _check_depth(s)  # raises ValueError
+    return _decode(s)
 
 
 class Endpoint:
+    __slots__ = ("socket",)
+
     socket: "ServerConnection"
 
     def __init__(self, socket):
@@ -525,7 +559,11 @@ else:
         except ImportError:
             pyximport = None
         try:
+            import logging
+            logger = logging.getLogger()
+            old_level = logger.level
             from _speedups import LocationStore
+            logger.setLevel(old_level)
         except ImportError:
             warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
                           "Install a matching C++ compiler for your platform to compile _speedups.")

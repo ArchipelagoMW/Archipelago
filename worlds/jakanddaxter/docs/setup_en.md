@@ -5,11 +5,11 @@
 - A legally purchased copy of *Jak And Daxter: The Precursor Legacy.*
 - [The OpenGOAL Launcher](https://opengoal.dev/)
 
-At this time, this method of setup works on Windows only, but Linux support is a strong likelihood in the near future as OpenGOAL itself supports Linux.
+This method of setup works on Windows and Linux.
 
 ## Installation via OpenGOAL Launcher
 
-**You must set up a vanilla installation of Jak and Daxter before you can install mods for it.**
+**You must set up a vanilla installation of Jak and Daxter before you can install mods for it.** These instructions will work on both NTSC and PAL versions of the game.
 
 - Follow the installation process for the official OpenGOAL Launcher. See [here](https://opengoal.dev/docs/usage/installation). 
 - Follow the setup process for adding mods to the OpenGOAL Launcher. See [here](https://jakmods.dev/).
@@ -18,45 +18,7 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - Click `Features` in the bottom right corner, then click `Mods`.
 - Under `Available Mods`, click `ArchipelaGOAL`. The mod should begin installing. When it is done, click `Continue` in the bottom right corner.
 - **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Archipelago Client should handle everything for you.
-
-### For NTSC versions of the game, follow these steps.
-
-- Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
-- Click the Jak and Daxter logo on the left sidebar.
-- Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
-- In the bottom right corner, click `Advanced`, then click `Compile`.
-
-### For PAL versions of the game, follow these steps.
-
-PAL versions of the game seem to require additional troubleshooting/setup in order to work properly.
-Below are some instructions that may help. 
-If you see `-- Compilation Error! --` after pressing `Compile` or Launching the ArchipelaGOAL mod, try these steps.
-
-- Remove these folders if you have them: 
-    - `<opengoal active version directory>/iso_data`
-    - `<archipelagoal directory>/iso_data`
-    - `<archipelagoal directory>/data/iso_data`
-- Place your Jak1 ISO in `<archipelagoal directory>` and rename it to `JakAndDaxter.iso`
-- Type `cmd` in Windows search, right click `Command Prompt`, and pick `Run as Administrator`
-- Run `cd <archipelagoal directory>`
-- Then run `.\extractor.exe --extract --extract-path .\data\iso_data "JakAndDaxter.iso"` 
-    - This command should end by saying `Uses Decompiler Config Version - ntsc_v1` or `... - pal`. Take note of this message.
-- If you saw `ntsc_v1`:
-    - In cmd, run `.\decompiler.exe data\decompiler\config\jak1\jak1_config.jsonc --version "ntsc_v1" data\iso_data data\decompiler_out`
-- If you saw `pal`:
-    - Rename `<archipelagoal directory>\data\iso_data\jak1` to `jak1_pal`
-    - Back in cmd, run `.\decompiler.exe data\decompiler\config\jak1\jak1_config.jsonc --version "pal" data\iso_data data\decompiler_out`
-    - Rename `<archipelagoal directory>\data\iso_data\jak1_pal` back to `jak1`
-    - Rename `<archipelagoal directory>\data\decompiler_out\jak1_pal` back to `jak1`
-- Open a **brand new** console window and launch the compiler:
-    - `cd <archipelagoal directory>`
-    - `.\goalc.exe --user-auto --game jak1`
-    - From the compiler (in the same window): `(mi)`. This should compile the game. **Note that the parentheses are important.** 
-    - **Don't close this first terminal, you will need it at the end.**
-- Then, open **another brand new** console window and execute the game:
-    - `cd <archipelagoal directory>`
-    - `.\gk.exe -v --game jak1 -- -boot -fakeiso -debug`
-- Finally, **from the first console still in the GOALC compiler**, connect to the game: `(lt)`.
+- Once the mod is installed, in the bottom right corner, click `Advanced`, then click `Compile`.
 
 ## Updates and New Releases via OpenGOAL Launcher
 
@@ -82,7 +44,7 @@ If you are in the middle of an async game, and you do not want to update the mod
     - The game window itself will launch, and Jak will be standing outside Samos's Hut. 
         - Once compilation is complete, the title sequence will start.
     - Finally, the Archipelago text client will open.
-        - If you see **BOTH** `The REPL is ready!` and `The Memory Reader is ready!` then that should indicate a successful startup. If you do not, see the Troubleshooting section.
+        - If you see **BOTH** `The Compiler is ready!` and `The Memory Reader is ready!` then that should indicate a successful startup. If you do not, see the Troubleshooting section.
 - Once you see `CONNECT TO ARCHIPELAGO NOW` on the title screen, use the text client to connect to the Archipelago server. This will communicate your current settings and slot info to the game.
 - If you see `RECEIVING ITEMS, PLEASE WAIT...`, the game is busy receiving items from your starting inventory, assuming you have some.
 - Once you see `READY! PRESS START TO CONTINUE` on the title screen, you can press Start.
@@ -122,7 +84,7 @@ If it cannot, you may have to tell it yourself. Follow these instructions.
   root_directory: "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal"
 ```
 
-- Second, find the `root_directory` entry. Change this to `false`. You do not need to use double quotes.
+- Second, find the `auto_detect_root_directory` entry. Change this to `false`. You do not need to use double quotes.
 
 ```yaml
   auto_detect_root_directory: true
@@ -138,7 +100,7 @@ You may start the game via the Text Client, but it never loads in the title scre
 -- Compilation Error! --
 ```
 
-If this happens, follow these instructions. If you are using a PAL version of the game, you should skip these instructions and follow the `Special PAL Instructions` above.
+If this happens, follow these instructions.
 
 - Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
 - Click the Jak and Daxter logo on the left sidebar, then click `Advanced`, then click `Open Game Data Folder`. Copy the `iso_data` folder from this directory.
@@ -150,9 +112,9 @@ If this happens, follow these instructions. If you are using a PAL version of th
 - Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
 - In the bottom right corner, click `Advanced`, then click `Compile`.
 
-### The Text Client Says "Error reading game memory!" or "Error sending data to compiler"
+### The Text Client Says "Error reading game memory!" or "Error sending data to compiler!"
 
-If at any point the text client says this, you will need to restart the **all** of these applications.
+If at any point the text client says this in big red letters, you will need to restart the **all** of these applications.
 
 - Close all open windows: the client, the compiler, and the game.
 - Run the OpenGOAL Launcher, then click `Features`, then click `Mods`, then click `ArchipelaGOAL`.
@@ -161,20 +123,24 @@ If at any point the text client says this, you will need to restart the **all** 
 - Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.
 - Once these are done, you can enter `/repl status` and `/memr status` in the text client to verify.
 
-### The Client Cannot Open A REPL Connection
+### The Client Cannot Open A Compiler Connection
 
-If the client cannot open a REPL connection to the game, you may need to check the following steps:
+If the client cannot open a REPL (compiler) connection to the game, you may need to check the following steps:
 
 - Ensure you are not hosting anything on ports `8181` and `8112`. Those are for the REPL (goalc) and the game (gk) respectively.
 - Ensure that Windows Defender and Windows Firewall are not blocking those programs from hosting or listening on those ports.
 - You can use Windows Resource Monitor to verify those ports are open when the programs are running.
 - Ensure that you only opened those ports for your local network, not the wider internet.
 
+### Your Linux Installation Does Not Have A Supported Terminal Application
+
+If you are running Linux and your client shows this error, you will need to install a compatible terminal application like xterm.
+
 ## Known Issues
 
 - The game needs to boot in debug mode in order to allow the compiler to connect to it. **Clicking "Play" on the mod page in the OpenGOAL Launcher will not work.**
 - The Compiler console window is orphaned once you close the game - you will have to kill it manually when you stop playing.
-- The console windows cannot be run as background processes due to how the REPL works, so the best we can do is minimize them.
+- The console windows cannot be run as background processes due to how the compiler works, so the best we can do is minimize them.
 - Orbsanity checks may show up out of order in the text client.
 - Large item releases may take up to several minutes for the game to process them all. Item Messages will usually take longer to appear than Items themselves.
 - In Lost Precursor City, if you die in the Color Platforms room, the game may crash after you respawn. The cause is unknown.

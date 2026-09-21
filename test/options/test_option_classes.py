@@ -1,6 +1,8 @@
 import unittest
 
-from Options import Choice, DefaultOnToggle, Toggle
+from collections import Counter
+
+from Options import Choice, DefaultOnToggle, Toggle, OptionDict, OptionError, OptionSet, OptionList, OptionCounter
 
 
 class TestNumericOptions(unittest.TestCase):
@@ -74,3 +76,97 @@ class TestNumericOptions(unittest.TestCase):
             self.assertTrue(toggle_string)
             self.assertTrue(toggle_int)
             self.assertTrue(toggle_alias)
+
+
+class TestContainerOptions(unittest.TestCase):
+    def test_option_dict(self):
+        class TestOptionDict(OptionDict):
+            valid_keys = frozenset({"A", "B", "C"})
+
+        unknown_key_init_dict = {"D": "Foo"}
+        test_option_dict = TestOptionDict(unknown_key_init_dict)
+        self.assertRaises(OptionError, test_option_dict.verify_keys)
+
+        init_dict = {"A": "foo", "B": "bar"}
+        test_option_dict = TestOptionDict(init_dict)
+
+        self.assertEqual(test_option_dict, init_dict)  # Implicit value comparison
+        self.assertEqual(test_option_dict["A"], "foo")
+        self.assertIn("B", test_option_dict)
+        self.assertNotIn("C", test_option_dict)
+        self.assertRaises(KeyError, lambda: test_option_dict["C"])
+
+    def test_option_set(self):
+        class TestOptionSet(OptionSet):
+            valid_keys = frozenset({"A", "B", "C"})
+
+        unknown_key_init_set = {"D"}
+        test_option_set = TestOptionSet(unknown_key_init_set)
+        self.assertRaises(OptionError, test_option_set.verify_keys)
+
+        init_set = {"A", "B"}
+        test_option_set = TestOptionSet(init_set)
+
+        self.assertEqual(test_option_set, init_set)  # Implicit value comparison
+        self.assertIn("B", test_option_set)
+        self.assertNotIn("C", test_option_set)
+
+    def test_option_list(self):
+        class TestOptionList(OptionList):
+            valid_keys = frozenset({"A", "B", "C"})
+
+        unknown_key_init_list = ["D"]
+        test_option_list = TestOptionList(unknown_key_init_list)
+        self.assertRaises(OptionError, test_option_list.verify_keys)
+
+        init_list = ["A", "B"]
+        test_option_list = TestOptionList(init_list)
+
+        self.assertEqual(test_option_list, init_list)
+        self.assertIn("B", test_option_list)
+        self.assertNotIn("C", test_option_list)
+
+
+    def test_option_counter(self):
+        class TestOptionCounter(OptionCounter):
+            valid_keys = frozenset({"A", "B", "C"})
+
+            max = 10
+            min = 0
+
+        unknown_key_init_dict = {"D": 5}
+        test_option_counter = TestOptionCounter(unknown_key_init_dict)
+        self.assertRaises(OptionError, test_option_counter.verify_keys)
+
+        wrong_value_type_init_dict = {"A": "B"}
+        self.assertRaises(TypeError, TestOptionCounter, wrong_value_type_init_dict)
+
+        violates_max_init_dict = {"A": 5, "B": 11}
+        test_option_counter = TestOptionCounter(violates_max_init_dict)
+        self.assertRaises(OptionError, test_option_counter.verify_values)
+
+        violates_min_init_dict = {"A": -1, "B": 5}
+        test_option_counter = TestOptionCounter(violates_min_init_dict)
+        self.assertRaises(OptionError, test_option_counter.verify_values)
+
+        init_dict = {"A": 0, "B": 10}
+        test_option_counter = TestOptionCounter(init_dict)
+        self.assertEqual(test_option_counter, Counter(init_dict))
+        self.assertIn("A", test_option_counter)
+        self.assertNotIn("C", test_option_counter)
+        self.assertEqual(test_option_counter["A"], 0)
+        self.assertEqual(test_option_counter["B"], 10)
+        self.assertEqual(test_option_counter["C"], 0)
+
+    def test_culling_option_counter(self):
+        class TestCullingCounter(OptionCounter):
+            valid_keys = frozenset({"A", "B", "C"})
+            cull_zeroes = True
+
+        init_dict = {"A": 0, "B": 10}
+        test_option_counter = TestCullingCounter(init_dict)
+        self.assertNotIn("A", test_option_counter)
+        self.assertIn("B", test_option_counter)
+        self.assertNotIn("C", test_option_counter)
+        self.assertEqual(test_option_counter["A"], 0)  # It's still a Counter! cull_zeroes is about "in" checks.
+        self.assertEqual(test_option_counter, Counter({"B": 10}))

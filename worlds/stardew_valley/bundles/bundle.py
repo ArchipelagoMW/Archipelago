@@ -3,10 +3,13 @@ from dataclasses import dataclass
 from random import Random
 from typing import List, Tuple
 
+from Options import DeathLink
 from .bundle_item import BundleItem
 from ..content import StardewContent
-from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
-from ..strings.currency_names import Currency
+from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations, TrapDifficulty, \
+    MultipleDaySleepEnabled, Gifting, EntranceRandomization
+from ..strings.bundle_names import MemeBundleName
+from ..strings.currency_names import Currency, MemeCurrency
 
 
 @dataclass
@@ -18,6 +21,10 @@ class Bundle:
 
     def __repr__(self):
         return f"{self.name} -> {self.number_required} from {repr(self.items)}"
+
+    def special_behavior(self, world):
+        if self.name == MemeBundleName.clickbait:
+            world.options.exclude_locations.value.add(MemeBundleName.clickbait)
 
 
 @dataclass
@@ -42,7 +49,42 @@ class BundleTemplate:
                               template.number_required_items)
 
     def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
-        number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
+        try:
+            number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
+            filtered_items = [item for item in self.items if item.can_appear(content, options)]
+            number_items = len(filtered_items)
+            number_chosen_items = self.number_possible_items
+            if number_chosen_items < number_required:
+                number_chosen_items = number_required
+
+            if number_chosen_items > number_items:
+                chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
+            else:
+                chosen_items = random.sample(filtered_items, number_chosen_items)
+            chosen_items = [item.as_amount(min(999, max(1, math.floor(item.amount * price_multiplier)))) for item in chosen_items]
+            return Bundle(self.room, self.name, chosen_items, number_required)
+        except Exception as e:
+            raise Exception(f"Failed at creating bundle '{self.name}'. Error: {e}")
+
+
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        if self.name == MemeBundleName.trap and options.trap_items.value == TrapDifficulty.option_no_traps:
+            return False
+        if self.name == MemeBundleName.hibernation and options.multiple_day_sleep_enabled == MultipleDaySleepEnabled.option_false:
+            return False
+        if self.name == MemeBundleName.cooperation and options.gifting == Gifting.option_false:
+            return False
+        return True
+
+
+class FixedMultiplierBundleTemplate(BundleTemplate):
+
+    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int,
+                 number_required_items: int):
+        super().__init__(room, name, items, number_possible_items, number_required_items)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        number_required = get_number_required_items(options.bundle_price, self.number_required_items)
         filtered_items = [item for item in self.items if item.can_appear(content, options)]
         number_items = len(filtered_items)
         number_chosen_items = self.number_possible_items
@@ -53,11 +95,53 @@ class BundleTemplate:
             chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
         else:
             chosen_items = random.sample(filtered_items, number_chosen_items)
-        chosen_items = [item.as_amount(max(1, math.floor(item.amount * price_multiplier))) for item in chosen_items]
+        chosen_items = [item.as_amount(min(999, max(1, item.amount))) for item in chosen_items]
         return Bundle(self.room, self.name, chosen_items, number_required)
 
-    def can_appear(self, options: StardewValleyOptions) -> bool:
-        return True
+
+class FixedPriceBundleTemplate(BundleTemplate):
+
+    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int,
+                 number_required_items: int):
+        super().__init__(room, name, items, number_possible_items, number_required_items)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        filtered_items = [item for item in self.items if item.can_appear(content, options)]
+        number_items = len(filtered_items)
+        number_chosen_items = self.number_possible_items
+        if number_chosen_items < self.number_required_items:
+            number_chosen_items = self.number_required_items
+
+        if number_chosen_items > number_items:
+            chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
+        else:
+            chosen_items = random.sample(filtered_items, number_chosen_items)
+        chosen_items = [item.as_amount(max(1, math.floor(item.amount))) for item in chosen_items]
+        return Bundle(self.room, self.name, chosen_items, self.number_required_items)
+
+
+# This type of bundle will always match the number of slots and the number of items
+class FixedSlotsBundleTemplate(BundleTemplate):
+
+    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int,
+                 number_required_items: int):
+        super().__init__(room, name, items, number_possible_items, number_required_items)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        try:
+            number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
+            filtered_items = [item for item in self.items if item.can_appear(content, options)]
+            number_items = len(filtered_items)
+            number_chosen_items = number_required
+            if number_chosen_items > number_items:
+                chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
+            else:
+                chosen_items = random.sample(filtered_items, number_chosen_items)
+            chosen_items = [item.as_amount(min(999, max(1, math.floor(item.amount * price_multiplier)))) for item in chosen_items]
+            return Bundle(self.room, self.name, chosen_items, number_required)
+        except Exception as e:
+            raise Exception(f"Failed at creating bundle '{self.name}'. Error: {e}")
+
 
 
 class CurrencyBundleTemplate(BundleTemplate):
@@ -77,13 +161,31 @@ class CurrencyBundleTemplate(BundleTemplate):
         return currency_amount
 
     def can_appear(self, options: StardewValleyOptions) -> bool:
+        if not super().can_appear(options):
+            return False
         if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
             if self.item.item_name == Currency.qi_gem or self.item.item_name == Currency.golden_walnut or self.item.item_name == Currency.cinder_shard:
                 return False
         if options.festival_locations == FestivalLocations.option_disabled:
             if self.item.item_name == Currency.star_token:
                 return False
+        if options.entrance_randomization != EntranceRandomization.option_disabled:
+            if self.item.item_name == MemeCurrency.time_elapsed:
+                return False
+        if options.death_link != DeathLink.option_true:
+            if self.item.item_name == MemeCurrency.deathlinks:
+                return False
         return True
+
+
+class FixedPriceCurrencyBundleTemplate(CurrencyBundleTemplate):
+
+    def __init__(self, room: str, name: str, item: BundleItem):
+        super().__init__(room, name, item)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        currency_amount = self.item.amount
+        return Bundle(self.room, self.name, [BundleItem(self.item.item_name, currency_amount)], 1)
 
 
 class MoneyBundleTemplate(CurrencyBundleTemplate):
@@ -111,11 +213,15 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
 
 class IslandBundleTemplate(BundleTemplate):
     def can_appear(self, options: StardewValleyOptions) -> bool:
+        if not super().can_appear(options):
+            return False
         return options.exclude_ginger_island == ExcludeGingerIsland.option_false
 
 
 class FestivalBundleTemplate(BundleTemplate):
     def can_appear(self, options: StardewValleyOptions) -> bool:
+        if not super().can_appear(options):
+            return False
         return options.festival_locations != FestivalLocations.option_disabled
 
 
@@ -145,6 +251,96 @@ class DeepBundleTemplate(BundleTemplate):
             filtered_items = [item for item in category if item.can_appear(content, options)]
             chosen_items.append(random.choice(filtered_items))
 
+        chosen_items = [item.as_amount(max(1, math.floor(item.amount * price_multiplier))) for item in chosen_items]
+        return Bundle(self.room, self.name, chosen_items, number_required)
+
+
+class FixedPriceDeepBundleTemplate(DeepBundleTemplate):
+
+    def __init__(self, room: str, name: str, categories: List[List[BundleItem]], number_possible_items: int,
+                 number_required_items: int):
+        super().__init__(room, name, categories, number_possible_items, number_required_items)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        number_required = self.number_required_items
+        number_categories = len(self.categories)
+        number_chosen_categories = self.number_possible_items
+        if number_chosen_categories < number_required:
+            number_chosen_categories = number_required
+
+        if number_chosen_categories > number_categories:
+            chosen_categories = self.categories + random.choices(self.categories,
+                                                                 k=number_chosen_categories - number_categories)
+        else:
+            chosen_categories = random.sample(self.categories, number_chosen_categories)
+
+        chosen_items = []
+        for category in chosen_categories:
+            filtered_items = [item for item in category if item.can_appear(content, options)]
+            chosen_items.append(random.choice(filtered_items))
+
+        chosen_items = [item.as_amount(max(1, math.floor(item.amount))) for item in chosen_items]
+        return Bundle(self.room, self.name, chosen_items, number_required)
+
+
+@dataclass
+class BureaucracyBundleTemplate(BundleTemplate):
+
+    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int,
+                 number_required_items: int):
+        super(BureaucracyBundleTemplate, self).__init__(room, name, items, number_possible_items, number_required_items)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        number_required = self.number_required_items + options.bundle_price.value
+        number_required = min(12, max(4, number_required))
+        if options.bundle_price == BundlePrice.option_minimum:
+            number_required = 4
+        if options.bundle_price == BundlePrice.option_maximum:
+            number_required = 12
+        price_multiplier = 1
+
+        filtered_items = [item for item in self.items if item.can_appear(content, options)]
+        number_items = len(filtered_items)
+        number_chosen_items = self.number_possible_items
+        if number_chosen_items < number_required:
+            number_chosen_items = number_required
+
+        if number_chosen_items > number_items:
+            chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
+        else:
+            chosen_items = random.sample(filtered_items, number_chosen_items)
+        chosen_items = [item.as_amount(max(1, math.floor(item.amount * price_multiplier))) for item in chosen_items]
+        return Bundle(self.room, self.name, chosen_items, number_required)
+
+
+@dataclass
+class RecursiveBundleTemplate(BundleTemplate):
+    number_sub_bundles: int
+
+    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int,
+                 number_required_items: int, number_sub_bundles: int):
+        super(RecursiveBundleTemplate, self).__init__(room, name, items, number_possible_items, number_required_items)
+        self.number_sub_bundles = number_sub_bundles
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        number_required = self.number_required_items + (options.bundle_price.value * self.number_sub_bundles)
+        if options.bundle_price == BundlePrice.option_minimum:
+            number_required = self.number_sub_bundles
+        if options.bundle_price == BundlePrice.option_maximum:
+            number_required = self.number_sub_bundles * 8
+        number_required = min(self.number_sub_bundles * 8, max(self.number_sub_bundles, number_required))
+        price_multiplier = get_price_multiplier(options.bundle_price, False)
+
+        filtered_items = [item for item in self.items if item.can_appear(content, options)]
+        number_items = len(filtered_items)
+        number_chosen_items = self.number_possible_items
+        if number_chosen_items < number_required:
+            number_chosen_items = number_required
+
+        if number_chosen_items > number_items:
+            chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
+        else:
+            chosen_items = random.sample(filtered_items, number_chosen_items)
         chosen_items = [item.as_amount(max(1, math.floor(item.amount * price_multiplier))) for item in chosen_items]
         return Bundle(self.room, self.name, chosen_items, number_required)
 

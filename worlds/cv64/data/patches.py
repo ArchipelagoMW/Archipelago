@@ -2034,7 +2034,7 @@ new_game_extras = [
     0x24090000,  # ADDIU T1, R0, 0x0000  <- Starting Ice Traps
     0xA1099BE2,  # SB    T1, 0x9BE2 (T0)
     0x240C0000,  # ADDIU T4, R0, 0x0000
-    0x240D0022,  # ADDIU T5, R0, 0x0022
+    0x240D0023,  # ADDIU T5, R0, 0x0023
     0x11AC0007,  # BEQ   T5, T4, [forward 0x07]
     0x3C0A8040,  # LUI   T2, 0x8040
     0x014C5021,  # ADDU  T2, T2, T4
