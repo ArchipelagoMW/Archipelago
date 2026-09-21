@@ -16,3 +16,4 @@ There are a number of community-supported libraries available that implement the
 | Lua                     | [lua-apclientpp](https://github.com/black-sliver/lua-apclientpp)                                   |                                                                                 |
 | Game Maker + Studio 1.x | [gm-apclientpp](https://github.com/black-sliver/gm-apclientpp)                                     | For GM7, GM8 and GMS1.x, maybe older                                            |
 | GameMaker: Studio 2.x+  | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
+| Godot                   | [GodotAP](https://github.com/EmilyV99/GodotAP)                                                     | For Godot 4.4+                                                                  |
