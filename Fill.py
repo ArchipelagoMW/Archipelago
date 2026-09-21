@@ -546,8 +546,8 @@ class _RestrictiveFillBatcher:
         self._item_pool = item_pool
         self._one_item_per_player = one_item_per_player
         # With a low number of players, adjust the minimum items to take per player so that there is at least
-        # MIN_TOTAL_ITEMS_PER_BATCH total items in the batch. Some players could have fewer items remaining  assuming each player has enough items remaining to fully
-        # fill out the batch.
+        # MIN_TOTAL_ITEMS_PER_BATCH total items in the batch. Some players could have fewer items remaining assuming
+        # each player has enough items remaining to fully fill out the batch.
         num_players = len(reachable_items)
         if num_players > 0 and self._MIN_BATCH_ITEMS_PER_PLAYER * num_players < self._MIN_TOTAL_ITEMS_PER_BATCH:
             self._min_batch_size = self._MIN_TOTAL_ITEMS_PER_BATCH // num_players
