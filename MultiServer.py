@@ -21,8 +21,8 @@ import time
 import typing
 import weakref
 import zlib
-from functools import reduce
 from signal import SIGINT, SIGTERM, signal
+from typing import Sequence
 
 import ModuleUpdate
 
@@ -61,39 +61,66 @@ server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     compress_settings={"memLevel": 4},
 )
 
-OPERATOR_NAME_TO_OPERATOR = {
-    "or": operator.or_,
-    "and": operator.and_,
-}
-
 class BounceTarget(typing.NamedTuple):
-    teams: set[int]
-    games: set[str]
-    tags: set[str]
-    slots: set[int]
+    teams: set[int] | None
+    games: set[str] | None
+    tags: set[str] | None
+    slots: set[int] | None
 
     def _teams_match(self, target: Client) -> bool:
         return target.team in self.teams
 
     def _games_match(self, target: Client) -> bool:
-        return len(self.games) == 0 or target.ctx.games[target.slot] in self.games
+        return target.ctx().games[target.slot] in self.games
 
     def _tags_match(self, target: Client) -> bool:
-        return len(self.tags) == 0 or bool(set(target.tags) & self.tags)
+        return bool(set(target.tags) & self.tags)
 
     def _slots_match(self, target: Client) -> bool:
-        return len(self.slots) == 0 or target.slot in self.slots
+        return target.slot in self.slots
 
-    def matches_client_legacy(self, target: Client) -> bool:
-        return self._teams_match(target) and (
-            self._games_match(target) or self._tags_match(target) or self._slots_match(target)
-        )
+    def _get_conditions(self, include_teams: bool = True) -> Sequence[typing.Callable[[Client], bool]]:
+        conditions = []
+        if self.teams is not None and include_teams:
+            conditions.append(self._teams_match)
+        if self.games is not None:
+            conditions.append(self._games_match)
+        if self.tags is not None:
+            conditions.append(self._tags_match)
+        if self.slots is not None:
+            conditions.append(self._slots_match)
 
-    def matches_client_operator(self, target: Client, op: typing.Callable[[typing.Any, typing.Any], bool]):
-        return reduce(
-            op,
-            (self._teams_match(target), self._games_match(target), self._tags_match(target), self._games_match(target)),
-        )
+        return conditions
+
+    def match_clients_legacy(self, clients: typing.Iterable[Client]) -> typing.Generator[Client, None, None]:
+        non_team_conditions = self._get_conditions(include_teams=False)
+
+        # Do as little work as possible: Pre-check teams is None
+        if self.teams is None:
+            for bounce_client in clients:
+                if any(condition(bounce_client) for condition in non_team_conditions):
+                    yield bounce_client
+        else:
+            for bounce_client in clients:
+                if self._teams_match(bounce_client) and any(
+                    condition(bounce_client) for condition in non_team_conditions
+                ):
+                    yield bounce_client
+
+    def match_clients_or(self, clients: typing.Iterable[Client]) -> typing.Generator[Client, None, None]:
+        conditions = self._get_conditions(include_teams=True)
+
+        for bounce_client in clients:
+            if any(condition(bounce_client) for condition in conditions):
+                yield bounce_client
+
+    def match_clients_and(self, clients: typing.Iterable[Client]) -> typing.Generator[Client, None, None]:
+        conditions = self._get_conditions(include_teams=True)
+
+        for bounce_client in clients:
+            if all(condition(bounce_client) for condition in conditions):
+                yield bounce_client
+
 
 
 def remove_from_list(container, value):
@@ -2182,45 +2209,30 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            games = args.get("games", [])
-            if not isinstance(games, (list, set)) or not all(isinstance(entry, str) for entry in games):
-                await ctx.send_msgs(client, [{
-                    "cmd": "InvalidPacket", "type": "arguments",
-                    "text": "Bounce: Games list provided did not have the correct format.",
-                    "original_cmd": cmd}])
-                return
+            for name, expected_type in (
+                ("teams", int), ("games", str), ("tags", str), ("slots", int)
+            ):
+                if name not in args:
+                    continue
 
-            games = set(games)
+                value = args[name]
 
-            tags = args.get("tags", [])
-            if not isinstance(tags, (list, set)) or not all(isinstance(entry, str) for entry in tags):
-                await ctx.send_msgs(client, [{
-                    "cmd": "InvalidPacket", "type": "arguments",
-                    "text": "Bounce: Tags list provided did not have the correct format.",
-                    "original_cmd": cmd}])
-                return
+                if (
+                    value is None
+                    or not isinstance(value, (list, set))
+                    or not all(isinstance(entry, expected_type) for entry in value)
+                ):
+                    await ctx.send_msgs(client, [{
+                        "cmd": "InvalidPacket", "type": "arguments",
+                        "text": f'Bounce: "{name}" list provided did not have the correct format.',
+                        "original_cmd": cmd}])
+                    return
 
-            tags = set(tags)
-
-            slots = args.get("slots", [])
-            if not isinstance(slots, (list, set)) or not all(isinstance(entry, int) for entry in slots):
-                await ctx.send_msgs(client, [{
-                    "cmd": "InvalidPacket", "type": "arguments",
-                    "text": "Bounce: Slots list provided did not have the correct format.",
-                    "original_cmd": cmd}])
-                return
-
-            slots = set(slots)
-
-            teams = args.get("teams", [client.team])
-            if not isinstance(teams, (list, set)) or not all(isinstance(entry, int) for entry in teams):
-                await ctx.send_msgs(client, [{
-                    "cmd": "InvalidPacket", "type": "arguments",
-                    "text": "Bounce: Teams list provided did not have the correct format.",
-                    "original_cmd": cmd}])
-                return
-
-            teams = set(teams)
+            # We now know that if a key is present, it is not None, so this should be the best way to get "set or None"
+            teams = set(args["teams"]) if "teams" in args else {client.team}  # Team default is only same team
+            games = set(args["games"]) if "games" in args else None
+            tags = set(args["tags"]) if "tags" in args else None
+            slots = set(args["slots"]) if "slots" in args else None
 
             bounce_target = BounceTarget(teams, games, tags, slots)
 
@@ -2230,18 +2242,23 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             boolean_operator = args.get("operator", "legacy")
 
             if boolean_operator == "legacy":
-                for bounce_client in ctx.endpoints:
-                    if bounce_target.matches_client_legacy(bounce_client):
-                        await ctx.send_encoded_msgs(bounce_client, msg)
-            elif boolean_operator in OPERATOR_NAME_TO_OPERATOR:
-                op = OPERATOR_NAME_TO_OPERATOR[boolean_operator]
-                for bounce_client in ctx.endpoints:
-                    if bounce_target.matches_client_operator(bounce_client, op):
-                        await ctx.send_encoded_msgs(bounce_client, msg)
+                match_function = bounce_target.match_clients_legacy
+            elif boolean_operator == "or":
+                match_function = bounce_target.match_clients_or
+            elif boolean_operator == "and":
+                match_function = bounce_target.match_clients_and
             else:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": "Bounce", "original_cmd": cmd}])
+                await ctx.send_msgs(client, [{
+                    'cmd': 'InvalidPacket', "type": "arguments",
+                    'text': f'Bounce: Unknown operator. Supported: legacy, or, and. Found: {operator}',
+                    'original_cmd': cmd
+                }])
                 return
+
+            for matching_client in match_function(ctx.endpoints):
+                await ctx.send_encoded_msgs(matching_client, msg)
+
+            return
 
         elif cmd == "Get":
             if "keys" not in args or type(args["keys"]) != list:
