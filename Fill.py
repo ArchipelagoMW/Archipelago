@@ -3,7 +3,7 @@ from collections import Counter, defaultdict, deque
 from collections.abc import Iterable, Sequence
 import itertools
 import logging
-from typing import Callable, Literal
+from typing import Callable, Literal, ClassVar
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, PlandoItemBlock
 from Options import Accessibility
@@ -83,19 +83,19 @@ class _RestrictiveFillBatcher:
 
     # Adjust these ClassVars to adjust batch sizes, as needed, when external changes to generation performance are made.
 
-    _MIN_BATCH_ITEMS_PER_PLAYER: typing.ClassVar[int] = 5
+    _MIN_BATCH_ITEMS_PER_PLAYER: ClassVar[int] = 5
     """
     Pick no fewer than this many items per player for each batch, unless that player does not have enough items
     remaining. This is a magic number and will typically be used for most batches.
     """
-    _MIN_TOTAL_ITEMS_PER_BATCH: typing.ClassVar[int] = 40
+    _MIN_TOTAL_ITEMS_PER_BATCH: ClassVar[int] = 40
     """
     Try to pick no fewer than this many items total for each batch. If a player does not have enough items remaining to
     fully fill out a batch, then the total number of items in a batch can end up lower than this value.
     With a low number of players, try to keep the total number of items in the batch from being too small, to prevent
     fills with few players from creating lots of very small batches.
     """
-    _MAX_PERCENT_OF_LARGEST_STARTING_POOL_TO_PLACE: typing.ClassVar[float] = 0.02  # 2%
+    _MAX_PERCENT_OF_LARGEST_STARTING_POOL_TO_PLACE: ClassVar[float] = 0.02  # 2%
     """
     When players have items pools with different sizes, the percentage of remaining items to place gradually approaches
     being 100% the player with the largest item pool. While this happens, gradually increase the number of items in each
