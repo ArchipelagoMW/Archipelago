@@ -4,9 +4,9 @@ from typing import ClassVar, List, Tuple, Any
 from unittest import TestCase
 
 from BaseClasses import CollectionState, Location, MultiWorld
-from Fill import distribute_items_restrictive
 from Options import Accessibility
 from worlds.AutoWorld import AutoWorldRegister, call_all, call_single, call_stage
+from Fill import distribute_items_restrictive
 from ..general import gen_steps, setup_multiworld
 from ..param import classvar_matrix
 
