@@ -246,7 +246,7 @@ def get_commit_name() -> str:
 
 
 try:
-    with open(local_path("data", ".version_suffix")) as f:
+    with open(local_path("data", ".version_suffix"), encoding="utf-8-sig") as f:
         version_suffix = f.read()
 except FileNotFoundError:
     commit = get_commit_name()

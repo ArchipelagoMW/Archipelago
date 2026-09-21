@@ -448,7 +448,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
 
         self.create_manifest()
 
-        with open(self.buildfolder / "data" / ".version_suffix", "w") as f:
+        with open(self.buildfolder / "data" / ".version_suffix", "w", encoding="utf-8") as f:
             f.write(version_suffix)
 
         if is_windows:
