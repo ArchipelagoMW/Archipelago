@@ -264,7 +264,7 @@ class OptionsCreator(ThemedApp):
     options: typing.Dict[str, typing.Any]
 
     def __init__(self):
-        self.title = self.base_title + " " + Utils.full_version
+        self.title = f"{self.base_title} {Utils.full_version}"
         self.icon = r"data/icon.png"
         self.current_game = ""
         self.options = {}

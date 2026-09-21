@@ -49,7 +49,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
         dump_player_options(multiworld)
     multiworld.set_item_links()
     multiworld.state = CollectionState(multiworld)
-    logger.info('Archipelago Version %s  -  Seed: %s\n', full_version, multiworld.seed)
+    logger.info(f"Archipelago Version {full_version}  -  Seed: {multiworld.seed}\n")
 
     logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)

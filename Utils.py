@@ -234,9 +234,7 @@ def get_commit_name() -> str:
     tag_proc = subprocess.run(["git", "describe", "--tags", "--exact-match"], capture_output=True)
     if not tag_proc.returncode:
         tag = tag_proc.stdout.strip().decode()
-        if tag == __version__:
-            return ""
-        return tag
+        return tag if tag != __version__ else ""
 
     hash_proc = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True)
     if not hash_proc.returncode:

@@ -152,7 +152,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
         failed_worlds: bool = False
 
         def __init__(self, ctx=None, components=None, args=None):
-            self.title = self.base_title + " " + Utils.full_version
+            self.title = f"{self.base_title} {Utils.full_version}"
             self.ctx = ctx
             self.icon = r"data/icon.png"
             self.favorites = []
