@@ -26,8 +26,8 @@ class TestOptions(unittest.TestCase):
                     with self.subTest(game=gamename, option=option_key):
                         # Standard "can default generate" test
                         if (issubclass(option, TextChoice)
-                            and ("validate_text" not in option.__dict__ or
-                            option.__dict__["validate_text"] is TextChoice.__dict__["validate_text"])):
+                            and option.validate_text.__code__ is TextChoice.validate_text.__code__
+                        ):
                             self.assertTrue(option.default in option.name_lookup,
                                 f"TextChoice option {option.__name__} in {gamename} does not define "
                                 f"'validate_text' while default value {option.default} does not resolve "
