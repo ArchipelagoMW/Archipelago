@@ -140,18 +140,17 @@ class JakAndDaxterReplClient:
                 self.processed_initial_items = True
                 await self.send_connection_status("ready")
 
-        # Receive Items from AP. Handle 1 item per tick.
+        # Receive Items from AP. receive_item() will update the inbox index
         if len(self.item_inbox) > self.inbox_index:
             await self.receive_item()
             await self.save_data()
-            self.inbox_index += 1
 
         if self.received_deathlink:
             await self.receive_deathlink()
             self.received_deathlink = False
 
         # Progressively empty the queue during each tick
-        # if text messages happen to be too slow we could pool dequeuing here, 
+        # if text messages happen to be too slow we could pool dequeuing here,
         # but it'd slow down the ItemReceived message during release
         if not self.json_message_queue.empty():
             json_txt_data = self.json_message_queue.get_nowait()
@@ -315,105 +314,112 @@ class JakAndDaxterReplClient:
         await self.send_form(f"(begin {body} (none))", print_ok=False)
 
     async def receive_item(self):
-        ap_id = getattr(self.item_inbox[self.inbox_index], "item")
+        # orbs and pills are just increment the in game counter, so just tally them up.
+        # The rest are kept in an array to be fed in one big command.
+        receivedOrbs = 0
+        receivedPills = 0
 
-        # Determine the type of item to receive.
-        if ap_id in range(jak1_id, jak1_id + flies.fly_offset):
-            await self.receive_power_cell(ap_id)
-        elif ap_id in range(jak1_id + flies.fly_offset, jak1_id + specials.special_offset):
-            await self.receive_scout_fly(ap_id)
-        elif ap_id in range(jak1_id + specials.special_offset, jak1_id + caches.orb_cache_offset):
-            await self.receive_special(ap_id)
-        elif ap_id in range(jak1_id + caches.orb_cache_offset, jak1_id + orbs.orb_offset):
-            await self.receive_move(ap_id)
-        elif ap_id in range(jak1_id + orbs.orb_offset, jak1_max - max(trap_item_table)):
-            await self.receive_precursor_orb(ap_id)  # Ponder the orbs.
-        elif ap_id in range(jak1_max - max(trap_item_table), jak1_max):
-            await self.receive_trap(ap_id)
-        elif ap_id == jak1_max:
-            await self.receive_green_eco()  # Ponder why I chose to do ID's this way.
-        else:
-            self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
+        receivedCells = []
+        receivedScoutFlies = []
+        receivedSpecial = []
+        receivedMoves = []
+        receivedTraps = []
 
-    async def receive_power_cell(self, ap_id: int) -> bool:
-        cell_id = cells.to_game_id(ap_id)
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type fuel-cell) "
-                                  "(the float " + str(cell_id) + "))")
+        # an attempt to make the code easier to read
+        flyStart = jak1_id + flies.fly_offset
+        specialStart = jak1_id + specials.special_offset
+        cacheStart = jak1_id + caches.orb_cache_offset
+        orbStart = jak1_id + orbs.orb_offset
+        trapStart = jak1_max - max(trap_item_table)
+
+        # why is this not just an array????? I wanted to do `self.item_inbox[self.inbox_index:]`
+        while self.inbox_index < len(self.item_inbox):
+            ap_id = self.item_inbox[self.inbox_index].item
+            self.inbox_index += 1
+
+            if ap_id < jak1_id or ap_id > jak1_max: # bail early instead of wasting time checking all of them
+                self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
+                continue
+
+            # not bothering with array searches since >= and < are enough.
+            # Since I checked if less than minimum I can remove all of the lower bound checks, elif already skips once range is found.
+            if ap_id < flyStart:
+                cell_id = cells.to_game_id(ap_id)
+                receivedCells.append(str(cell_id))
+
+            elif ap_id < specialStart:
+                fly_id = flies.to_game_id(ap_id)
+                receivedScoutFlies.append(str(fly_id))
+
+            elif ap_id < cacheStart:
+                special_id = specials.to_game_id(ap_id)
+                receivedSpecial.append(str(special_id))
+
+            elif ap_id < orbStart:
+                move_id = caches.to_game_id(ap_id)
+                receivedMoves.append(str(move_id))
+
+            elif ap_id < trapStart:
+                orb_amount = orbs.to_game_id(ap_id)
+                receivedOrbs += orb_amount
+
+            elif ap_id < jak1_max:
+                receivedTraps.append(ap_id)
+
+            elif ap_id == jak1_max:
+                receivedPills += 1
+
+            else:
+                self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
+                continue
+
+        # Traps and pills are useless on the title screen so I don't bother sending them
+        if len(receivedCells) > 0:
+            await self.receive_items("Power Cells", "fuel-cell", receivedCells)
+        if len(receivedScoutFlies) > 0:
+            await self.receive_items("Scout Flies", "buzzer", receivedScoutFlies)
+        if len(receivedSpecial) > 0:
+            await self.receive_items("Special Unlocks", "ap-special", receivedSpecial)
+        if len(receivedMoves) > 0:
+            await self.receive_items("moves", "ap-move", receivedMoves)
+        if self.processed_initial_items and len(receivedTraps) > 0:
+            await self.receive_items(", ".join([item_table[jak1_max - trapId] for trapId in receivedTraps]), "ap-trap", receivedTraps)
+        if receivedOrbs > 0:
+            await self.receive_orbs(receivedOrbs)
+        if self.processed_initial_items and receivedPills > 0:
+            await self.receive_eco_pills(receivedPills)
+
+    async def receive_items(self, pretty_name : str, pickup_type : str, items : list[str]):
+        # An int array is created instead of floats because with highest move id it turns it into hex for some reason idky
+        ok = await self.send_form(f"(let ((arr (new 'static 'array int {len(items)} {' '.join(items)})))"
+                                  f"(dotimes (i {len(items)})"
+                                   "(send-event "
+                                   "*target* \'get-archipelago "
+                                  f"(pickup-type {pickup_type}) "
+                                   "(the float (-> arr i)) )))")
         if ok:
-            logger.debug(f"Received a Power Cell!")
+            logger.debug(f"Received {len(items)} {pretty_name}!")
         else:
-            self.log_error(logger, f"Unable to receive a Power Cell!")
+            self.log_error(logger, f"Unable to receive {len(items)} {pretty_name}s!")
         return ok
 
-    async def receive_scout_fly(self, ap_id: int) -> bool:
-        fly_id = flies.to_game_id(ap_id)
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type buzzer) "
-                                  "(the float " + str(fly_id) + "))")
-        if ok:
-            logger.debug(f"Received a {item_table[ap_id]}!")
-        else:
-            self.log_error(logger, f"Unable to receive a {item_table[ap_id]}!")
-        return ok
-
-    async def receive_special(self, ap_id: int) -> bool:
-        special_id = specials.to_game_id(ap_id)
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type ap-special) "
-                                  "(the float " + str(special_id) + "))")
-        if ok:
-            logger.debug(f"Received special unlock {item_table[ap_id]}!")
-        else:
-            self.log_error(logger, f"Unable to receive special unlock {item_table[ap_id]}!")
-        return ok
-
-    async def receive_move(self, ap_id: int) -> bool:
-        move_id = caches.to_game_id(ap_id)
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type ap-move) "
-                                  "(the float " + str(move_id) + "))")
-        if ok:
-            logger.debug(f"Received the ability to {item_table[ap_id]}!")
-        else:
-            self.log_error(logger, f"Unable to receive the ability to {item_table[ap_id]}!")
-        return ok
-
-    async def receive_precursor_orb(self, ap_id: int) -> bool:
-        orb_amount = orbs.to_game_id(ap_id)
+    async def receive_orbs(self, orb_count : int):
         ok = await self.send_form("(send-event "
                                   "*target* \'get-archipelago "
                                   "(pickup-type money) "
-                                  "(the float " + str(orb_amount) + "))")
+                                  "(the float " + str(orb_count) + "))")
         if ok:
-            logger.debug(f"Received {orb_amount} Precursor orbs!")
+            logger.debug(f"Received {orb_count} Precursor orbs!")
         else:
-            self.log_error(logger, f"Unable to receive {orb_amount} Precursor orbs!")
+            self.log_error(logger, f"Unable to receive {orb_count} Precursor orbs!")
         return ok
 
-    async def receive_trap(self, ap_id: int) -> bool:
-        trap_id = jak1_max - ap_id
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type ap-trap) "
-                                  "(the float " + str(trap_id) + "))")
+    async def receive_eco_pills(self, pill_count : int):
+        ok = await self.send_form(f"(dotimes (i {pill_count}) (send-event *target* \'get-pickup (pickup-type eco-pill) (the float 1)))")
         if ok:
-            logger.debug(f"Received a {item_table[ap_id]}!")
+            logger.debug(f"Received {pill_count} green eco pills!")
         else:
-            self.log_error(logger, f"Unable to receive a {item_table[ap_id]}!")
-        return ok
-
-    # Green eco pills are our filler item. Use the get-pickup event instead to handle being full health.
-    async def receive_green_eco(self) -> bool:
-        ok = await self.send_form("(send-event *target* \'get-pickup (pickup-type eco-pill) (the float 1))")
-        if ok:
-            logger.debug(f"Received a green eco pill!")
-        else:
-            self.log_error(logger, f"Unable to receive a green eco pill!")
+            self.log_error(logger, f"Unable to receive {pill_count} green eco pills!")
         return ok
 
     async def receive_deathlink(self) -> bool:
