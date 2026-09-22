@@ -68,7 +68,7 @@ class JakAndDaxterReplClient:
     gk_process: OpenProcess | None = None
     goalc_process: OpenProcess | None = None
 
-    item_inbox: dict[int, NetworkItem] = {}
+    item_inbox: list[NetworkItem] = []
     inbox_index = 0
     json_message_queue: Queue[JsonMessageData] = queue.Queue()
 
@@ -316,26 +316,24 @@ class JakAndDaxterReplClient:
     async def receive_item(self):
         # orbs and pills are just increment the in game counter, so just tally them up.
         # The rest are kept in an array to be fed in one big command.
-        receivedOrbs = 0
-        receivedPills = 0
+        received_orbs = 0
+        received_pills = 0
 
-        receivedCells = []
-        receivedScoutFlies = []
-        receivedSpecial = []
-        receivedMoves = []
-        receivedTraps = []
+        received_cells = []
+        received_scout_flies = []
+        received_special = []
+        received_moves = []
+        received_traps = []
 
         # an attempt to make the code easier to read
-        flyStart = jak1_id + flies.fly_offset
-        specialStart = jak1_id + specials.special_offset
-        cacheStart = jak1_id + caches.orb_cache_offset
-        orbStart = jak1_id + orbs.orb_offset
-        trapStart = jak1_max - max(trap_item_table)
+        fly_start = jak1_id + flies.fly_offset
+        special_start = jak1_id + specials.special_offset
+        cache_start = jak1_id + caches.orb_cache_offset
+        orb_start = jak1_id + orbs.orb_offset
+        trap_start = jak1_max - max(trap_item_table)
 
-        # why is this not just an array????? I wanted to do `self.item_inbox[self.inbox_index:]`
-        while self.inbox_index < len(self.item_inbox):
-            ap_id = self.item_inbox[self.inbox_index].item
-            self.inbox_index += 1
+        for new_item in self.item_inbox[self.inbox_index:]:
+            ap_id = new_item.item
 
             if ap_id < jak1_id or ap_id > jak1_max: # bail early instead of wasting time checking all of them
                 self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
@@ -343,51 +341,54 @@ class JakAndDaxterReplClient:
 
             # not bothering with array searches since >= and < are enough.
             # Since I checked if less than minimum I can remove all of the lower bound checks, elif already skips once range is found.
-            if ap_id < flyStart:
+            if ap_id < fly_start:
                 cell_id = cells.to_game_id(ap_id)
-                receivedCells.append(str(cell_id))
+                received_cells.append(str(cell_id))
 
-            elif ap_id < specialStart:
+            elif ap_id < special_start:
                 fly_id = flies.to_game_id(ap_id)
-                receivedScoutFlies.append(str(fly_id))
+                received_scout_flies.append(str(fly_id))
 
-            elif ap_id < cacheStart:
+            elif ap_id < cache_start:
                 special_id = specials.to_game_id(ap_id)
-                receivedSpecial.append(str(special_id))
+                received_special.append(str(special_id))
 
-            elif ap_id < orbStart:
+            elif ap_id < orb_start:
                 move_id = caches.to_game_id(ap_id)
-                receivedMoves.append(str(move_id))
+                received_moves.append(str(move_id))
 
-            elif ap_id < trapStart:
+            elif ap_id < trap_start:
                 orb_amount = orbs.to_game_id(ap_id)
-                receivedOrbs += orb_amount
+                received_orbs += orb_amount
 
             elif ap_id < jak1_max:
-                receivedTraps.append(ap_id)
+                received_traps.append(str(ap_id))
 
             elif ap_id == jak1_max:
-                receivedPills += 1
+                received_pills += 1
 
             else:
                 self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
                 continue
 
         # Traps and pills are useless on the title screen so I don't bother sending them
-        if len(receivedCells) > 0:
-            await self.receive_items("Power Cells", "fuel-cell", receivedCells)
-        if len(receivedScoutFlies) > 0:
-            await self.receive_items("Scout Flies", "buzzer", receivedScoutFlies)
-        if len(receivedSpecial) > 0:
-            await self.receive_items("Special Unlocks", "ap-special", receivedSpecial)
-        if len(receivedMoves) > 0:
-            await self.receive_items("moves", "ap-move", receivedMoves)
-        if self.processed_initial_items and len(receivedTraps) > 0:
-            await self.receive_items(", ".join([item_table[jak1_max - trapId] for trapId in receivedTraps]), "ap-trap", receivedTraps)
-        if receivedOrbs > 0:
-            await self.receive_orbs(receivedOrbs)
-        if self.processed_initial_items and receivedPills > 0:
-            await self.receive_eco_pills(receivedPills)
+        if len(received_cells) > 0:
+            await self.receive_items("Power Cells", "fuel-cell", received_cells)
+        if len(received_scout_flies) > 0:
+            await self.receive_items("Scout Flies", "buzzer", received_scout_flies)
+        if len(received_special) > 0:
+            await self.receive_items("Special Unlocks", "ap-special", received_special)
+        if len(received_moves) > 0:
+            await self.receive_items("Moves", "ap-move", received_moves)
+        if self.processed_initial_items and len(received_traps) > 0:
+            await self.receive_items("Traps", "ap-trap", received_traps)
+        if received_orbs > 0:
+            await self.receive_item_amount("Precursor orbs", "money", received_orbs)
+        if self.processed_initial_items and received_pills > 0:
+            await self.receive_item_amount("Green Eco Pills", "eco-pill", received_pills)
+
+        self.inbox_index = len(self.item_inbox)
+
 
     async def receive_items(self, pretty_name : str, pickup_type : str, items : list[str]):
         # An int array is created instead of floats because with highest move id it turns it into hex for some reason idky
@@ -403,23 +404,15 @@ class JakAndDaxterReplClient:
             self.log_error(logger, f"Unable to receive {len(items)} {pretty_name}s!")
         return ok
 
-    async def receive_orbs(self, orb_count : int):
+    async def receive_item_amount(self, pretty_name : str, pickup_type : str, count : int):
         ok = await self.send_form("(send-event "
                                   "*target* \'get-archipelago "
-                                  "(pickup-type money) "
-                                  "(the float " + str(orb_count) + "))")
+                                 f"(pickup-type {pickup_type})"
+                                 f"(the float {count}))")
         if ok:
-            logger.debug(f"Received {orb_count} Precursor orbs!")
+            logger.debug(f"Received {count} {pretty_name}!")
         else:
-            self.log_error(logger, f"Unable to receive {orb_count} Precursor orbs!")
-        return ok
-
-    async def receive_eco_pills(self, pill_count : int):
-        ok = await self.send_form(f"(dotimes (i {pill_count}) (send-event *target* \'get-pickup (pickup-type eco-pill) (the float 1)))")
-        if ok:
-            logger.debug(f"Received {pill_count} green eco pills!")
-        else:
-            self.log_error(logger, f"Unable to receive {pill_count} green eco pills!")
+            self.log_error(logger, f"Unable to receive {count} {pretty_name}!")
         return ok
 
     async def receive_deathlink(self) -> bool:
@@ -512,10 +505,10 @@ class JakAndDaxterReplClient:
             dump = {
                 "inbox_index": self.inbox_index,
                 "item_inbox": [{
-                    "item": self.item_inbox[k].item,
-                    "location": self.item_inbox[k].location,
-                    "player": self.item_inbox[k].player,
-                    "flags": self.item_inbox[k].flags
+                    "item": k.item,
+                    "location": k.location,
+                    "player": k.player,
+                    "flags": k.flags
                     } for k in self.item_inbox
                 ]
             }
@@ -526,12 +519,12 @@ class JakAndDaxterReplClient:
             with open("jakanddaxter_item_inbox.json", "r") as f:
                 load = json.load(f)
                 self.inbox_index = load["inbox_index"]
-                self.item_inbox = {k: NetworkItem(
+                self.item_inbox = [NetworkItem(
                         item=load["item_inbox"][k]["item"],
                         location=load["item_inbox"][k]["location"],
                         player=load["item_inbox"][k]["player"],
                         flags=load["item_inbox"][k]["flags"]
                     ) for k in range(0, len(load["item_inbox"]))
-                }
+                ]
         except FileNotFoundError:
             pass
