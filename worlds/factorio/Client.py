@@ -366,9 +366,17 @@ async def factorio_server_watcher(ctx: FactorioContext):
     savegame_name = os.path.abspath(os.path.join(ctx.write_data_path, "saves", "Archipelago", ctx.savegame_name))
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
-        subprocess.run((
-            executable, "--create", savegame_name, "--preset", "archipelago", "--config", ctx.config_file
-        ), check=True)
+        try:
+            subprocess.run(
+                (executable, "--create", savegame_name, "--preset", "archipelago", "--config", ctx.config_file),
+                check=True,
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE,
+                encoding="utf-8",
+            )
+        except subprocess.CalledProcessError as e:
+            logger.error(e.output)
+            return False
     factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *ctx.server_args),
                                         stderr=subprocess.PIPE,
@@ -480,9 +488,17 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
     savegame_name = user_path("factorio", "saves", "Archipelago.zip")
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
-        subprocess.run((
-            executable, "--create", savegame_name, "--config", ctx.config_file
-        ), check=True)
+        try:
+            subprocess.run(
+                (executable, "--create", savegame_name, "--config", ctx.config_file),
+                check=True,
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE,
+                encoding="utf-8",
+            )
+        except subprocess.CalledProcessError as e:
+            logger.error(e.output)
+            return False
     factorio_process = subprocess.Popen(
         (executable, "--start-server", savegame_name, *ctx.server_args),
         stderr=subprocess.PIPE,
