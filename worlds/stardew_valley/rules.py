@@ -559,7 +559,7 @@ def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, cont
     rule_collector.set_entrance_rule(Entrance.enter_elliott_house, logic.relationship.has_hearts(NPC.elliott, 2))
     rule_collector.set_entrance_rule(Entrance.enter_sunroom, logic.relationship.has_hearts(NPC.caroline, 2))
     rule_collector.set_entrance_rule(Entrance.enter_wizard_basement, logic.relationship.has_hearts(NPC.wizard, 4))
-    rule_collector.set_entrance_rule(Entrance.wizard_basement_to_witch_warp, logic.quest.can_complete_quest(Quest.goblin_problem))
+    rule_collector.set_entrance_rule(Entrance.wizard_basement_to_witch_warp, logic.quest.can_complete_quest(Quest.goblin_problem) & logic.region.can_reach(Region.witch_hut))
     rule_collector.set_entrance_rule(Entrance.enter_lewis_bedroom, logic.relationship.has_hearts(NPC.lewis, 2))
     rule_collector.set_entrance_rule(Entrance.leave_lewis_bedroom, logic.relationship.has_hearts(NPC.lewis, 2))
     if content.is_enabled(ModNames.alec):
