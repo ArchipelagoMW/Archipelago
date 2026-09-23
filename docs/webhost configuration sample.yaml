@@ -17,6 +17,11 @@
 # Web hosting port
 #PORT: 80
 
+# Public URL used to share webhost endpoints to game clients connecting to webhosted multiservers. Default is nothing.
+# If no value is set, these endpoints will not be shared with game clients.
+# Examples of valid values: http://localhost, https://example.com
+#PUBLIC_URL: null
+
 # Ports used for game hosting. Values can be specific ports, port ranges or both. Default is: [49152-65535, 0]
 # Zero means it will use a random free port if there is no free port in the ranges specified
 # Examples of valid values: [40000-41000, 49152-65535]
