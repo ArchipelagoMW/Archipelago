@@ -132,6 +132,7 @@ def is_frozen() -> bool:
     return typing.cast(bool, getattr(sys, 'frozen', False))
 
 def make_writable(target_path: str) -> None:
+    """Ensure the target path and any nested files or directories are user-writable."""
     if not os.path.exists(target_path):
         return
 
