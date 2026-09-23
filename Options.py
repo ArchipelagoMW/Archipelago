@@ -738,6 +738,17 @@ class Range(NumericOption):
         self.value = value
 
     @classmethod
+    def _allowed_values(cls) -> typing.Iterable[str]:
+        values = ["<int>", "high", "low"]
+        if hasattr(cls, "default"):
+            values.append("default")
+            if cls.range_start == 0 and cls.default != 0:
+                values.extend(("\"true\"", "\"false\""))
+
+        values.extend(_RANDOM_OPTS)
+        return values
+
+    @classmethod
     def from_text(cls, text: str) -> Range:
         text = text.lower()
         if text.startswith("random"):
@@ -762,16 +773,7 @@ class Range(NumericOption):
             num = int(text)
         except ValueError:
             # text is not a number
-            # Handle conditionally acceptable values here rather than in the f-string
-            default = ""
-            truefalse = ""
-            if hasattr(cls, "default"):
-                default = ", default"
-                if cls.range_start == 0 and cls.default != 0:
-                    truefalse = ", \"true\", \"false\""
-            raise Exception(f"Invalid range value '{text}'. Acceptable values are: "
-                            f"<int>{default}, high, low{truefalse}, "
-                            f"{', '.join(_RANDOM_OPTS)}.")
+            raise Exception(f"Invalid range value '{text}'. Acceptable values are: {', '.join(cls._allowed_values())}")
 
         return cls(num)
 
@@ -831,6 +833,18 @@ class NamedRange(Range):
                 raise Exception(f"{self.__class__.__name__} has an invalid special_range_names key: {key}. "
                                 f"NamedRange keys must use only lowercase letters, and ideally should be snake_case.")
         self.value = value
+
+    @classmethod
+    def _allowed_values(cls) -> typing.Iterable[str]:
+        values = ["<int>", "high", "low"]
+        if hasattr(cls, "default"):
+            values.append("default")
+            if cls.range_start == 0 and cls.default != 0:
+                values.extend(("\"true\"", "\"false\""))
+
+        values.extend(cls.special_range_names)
+        values.extend(_RANDOM_OPTS)
+        return values
 
     @classmethod
     def from_text(cls, text: str) -> Range:
