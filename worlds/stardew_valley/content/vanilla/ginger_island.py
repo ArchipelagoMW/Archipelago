@@ -59,6 +59,7 @@ from ...strings.special_order_names import SpecialOrder
 from ...strings.tool_names import Tool
 from ...strings.villager_names import NPC
 from ..game_content import ContentPack, StardewContent
+from .forbidden_items import forbidden_items_for_seeds
 from .pelican_town import pelican_town as pelican_town_content_pack
 
 
@@ -112,8 +113,8 @@ ginger_island_content_pack = GingerIslandContentPack(
 
     },
     shop_sources={
-        Seed.taro: (ShopSource(price=0, currency=Currency.money, items_price=((2, Fossil.bone_fragment),), shop_region=Region.island_trader, forbidden_items=(Vegetable.taro_root,)),),
-        Seed.pineapple: (ShopSource(price=0, currency=Currency.money, items_price=((1, Mushroom.magma_cap),), shop_region=Region.island_trader, forbidden_items=(Vegetable.taro_root,)),),
+        Seed.taro: (ShopSource(price=0, currency=Currency.money, items_price=((2, Fossil.bone_fragment),), shop_region=Region.island_trader, forbidden_items=forbidden_items_for_seeds),),
+        Seed.pineapple: (ShopSource(price=0, currency=Currency.money, items_price=((1, Mushroom.magma_cap),), shop_region=Region.island_trader, forbidden_items=forbidden_items_for_seeds),),
         Sapling.banana: (ShopSource(price=0, currency=Currency.money, items_price=((5, Forageable.dragon_tooth),), shop_region=Region.island_trader),),
         Sapling.mango: (ShopSource(price=0, currency=Currency.money, items_price=((75, Fish.mussel),), shop_region=Region.island_trader),),
 

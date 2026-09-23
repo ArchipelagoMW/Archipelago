@@ -489,6 +489,9 @@ class Has(BaseStardewRule):
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         item_rule = self.other_rules[self.item]
+        # stack_size = stack_size2a()
+        # if stack_size > 100:
+        #     print(self.item)
         # print(self.item)
         result = item_rule.evaluate_while_simplifying(state)
         return result

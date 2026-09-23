@@ -55,7 +55,7 @@ def get_option_choices(option: type[Option], rng: random.Random | None) -> dict[
     return {}
 
 
-def generate_random_world_options(seed: int) -> dict[str, int]:
+def generate_random_world_options(seed: int) -> dict[str, Any]:
     num_options = len(options_to_include)
     world_options = dict()
     rng = random.Random(seed)
