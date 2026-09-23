@@ -356,7 +356,7 @@ class id1CommonWorld(World, metaclass=AutoLoadJsonData):  # noqa: N801
         # Check to see if CheckSanity is present.
         # This option may not exist in all games. If it isn't, we assume it's enabled (spawn all checks)
         check_sanity = True
-        if check_sanity_opt := getattr(self.options, "check_sanity", None):
+        if (check_sanity_opt := getattr(self.options, "check_sanity", None)) is not None:
             if typing.TYPE_CHECKING:
                 assert type(check_sanity_opt) is CheckSanity
             check_sanity = bool(check_sanity_opt.value)
@@ -417,7 +417,7 @@ class id1CommonWorld(World, metaclass=AutoLoadJsonData):  # noqa: N801
         level_unlock_list: list[str] = []  # Only used for specific or random levels
 
         if self.options.goal.value in [GOAL_COMPLETE_SPECIFIC, GOAL_COMPLETE_HYBRID]:
-            if levelset_opt := getattr(self.options, "goal_specific_levels", None):
+            if (levelset_opt := getattr(self.options, "goal_specific_levels", None)) is not None:
                 if typing.TYPE_CHECKING:
                     assert type(levelset_opt) is OptionSet
                 level_unlock_list = list(levelset_opt.value)
@@ -437,7 +437,7 @@ class id1CommonWorld(World, metaclass=AutoLoadJsonData):  # noqa: N801
 
         if self.options.goal.value == GOAL_COMPLETE_RANDOM:
             # We basically treat this as "specific levels" where we choose the levels instead of the player.
-            if count_opt := getattr(self.options, "goal_num_levels", None):
+            if (count_opt := getattr(self.options, "goal_num_levels", None)) is not None:
                 if typing.TYPE_CHECKING:
                     assert type(count_opt) is Range
                 level_unlock_list = self.get_random_levels(count_opt.value)
@@ -456,7 +456,7 @@ class id1CommonWorld(World, metaclass=AutoLoadJsonData):  # noqa: N801
 
         if self.options.goal.value in [GOAL_COMPLETE_SOME, GOAL_COMPLETE_HYBRID]:
             # Silently limit the number of levels required to the number of levels available.
-            if count_opt := getattr(self.options, "goal_num_levels", None):
+            if (count_opt := getattr(self.options, "goal_num_levels", None)) is not None:
                 if typing.TYPE_CHECKING:
                     assert type(count_opt) is Range
                 self._required_level_complete_count = max(0, min(count_opt.value, len(self.level_complete_list)))
