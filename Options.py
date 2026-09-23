@@ -29,8 +29,8 @@ _RANDOM_OPTS = [
         "random-range-low-<min>-<max>", "random-range-middle-<min>-<max>",
         "random-range-high-<min>-<max>", "random-range-<min>-<max>",
 ]
-    
-    
+
+
 def triangular(lower: int, end: int, tri: float = 0.5) -> int:
     """
     Integer triangular distribution for `lower` inclusive to `end` inclusive.
@@ -41,7 +41,7 @@ def triangular(lower: int, end: int, tri: float = 0.5) -> int:
     # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
     # when a != b, so ensure the result is never more than `end`.
     return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
-  
+
 
 def random_weighted_range(text: str, range_start: int, range_end: int):
     if text == "random-low":
@@ -53,10 +53,10 @@ def random_weighted_range(text: str, range_start: int, range_end: int):
     elif text == "random":
         return random.randint(range_start, range_end)
     else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                            f"Acceptable values are: {', '.join(_RANDOM_OPTS)}.")
+        raise Exception(f"Random text '{text}' did not resolve to a recognized pattern. "
+                        f"Acceptable values are: {', '.join(_RANDOM_OPTS)}.")
 
-        
+
 def roll_percentage(percentage: int | float) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
@@ -769,7 +769,7 @@ class Range(NumericOption):
                 default = ", default"
                 if cls.range_start == 0 and cls.default != 0:
                     truefalse = ", \"true\", \"false\""
-            raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
+            raise Exception(f"Invalid range value '{text}'. Acceptable values are: "
                             f"<int>{default}, high, low{truefalse}, "
                             f"{', '.join(_RANDOM_OPTS)}.")
 
