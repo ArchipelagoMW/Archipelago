@@ -376,3 +376,27 @@ cdef class PlayerLocationProxy:
         count = self._store.sender_index[self._player].count
         for entry in self._store.entries[start:start+count]:
             yield entry.location, (entry.item, entry.receiver, entry.flags)
+
+
+cpdef void check_json_depth(s: str, limit: int = 16):
+    cdef Py_ssize_t depth = 1
+    cdef bool in_quotes = False
+    cdef bool escape = False
+    for c in s:
+        if c == "\\" and not escape:
+            escape = True
+            continue
+        if c == '"' and not escape:
+            in_quotes = not in_quotes
+            continue
+        if not in_quotes:
+            if c in "[{":
+                depth += 1
+                if depth > limit:
+                    raise ValueError("JSON document too complex")
+            elif c in "}]":
+                depth -= 1
+        escape = False
+
+    if depth != 1:  # free check
+        raise ValueError("JSON document malformed")

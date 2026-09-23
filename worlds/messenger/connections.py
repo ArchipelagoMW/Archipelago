@@ -90,7 +90,6 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
             "Forlorn Temple - Sunny Day Checkpoint",
         ],
         "Climb Shop": [
-            "Forlorn Temple - Rocket Maze Checkpoint",
             "Forlorn Temple - Rocket Sunset Shop",
         ],
         "Rocket Sunset Shop": [
