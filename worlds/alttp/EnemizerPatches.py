@@ -385,10 +385,11 @@ def _randomize_enemy_damage(rom: "LocalRom", rng: random.Random, allow_zero_dama
     for sprite_id in range(0xF3):
         if sprite_id in EXCLUDED_ENEMY_TABLE_SPRITE_IDS:
             continue
+        damage_address = ENEMY_DAMAGE_TABLE_ADDRESS + sprite_id
         new_damage = rng.randrange(8)
         if not allow_zero_damage and new_damage == 2:
             continue
-        rom.write_byte(ENEMY_DAMAGE_TABLE_ADDRESS + sprite_id, new_damage)
+        rom.write_byte(damage_address, (rom.read_byte(damage_address) & 0xF0) | new_damage)
 
 
 def _shuffle_damage_groups(

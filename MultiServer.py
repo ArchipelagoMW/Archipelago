@@ -22,6 +22,7 @@ import typing
 import weakref
 import zlib
 from signal import SIGINT, SIGTERM, signal
+from typing import Sequence
 
 import ModuleUpdate
 
@@ -59,6 +60,67 @@ server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     client_max_window_bits=11,
     compress_settings={"memLevel": 4},
 )
+
+class BounceTarget(typing.NamedTuple):
+    teams: set[int] | None
+    games: set[str] | None
+    tags: set[str] | None
+    slots: set[int] | None
+
+    def _teams_match(self, target: Client) -> bool:
+        return target.team in self.teams
+
+    def _games_match(self, target: Client) -> bool:
+        return target.ctx().games[target.slot] in self.games
+
+    def _tags_match(self, target: Client) -> bool:
+        return bool(set(target.tags) & self.tags)
+
+    def _slots_match(self, target: Client) -> bool:
+        return target.slot in self.slots
+
+    def _get_conditions(self, include_teams: bool = True) -> Sequence[typing.Callable[[Client], bool]]:
+        conditions = []
+        if self.teams is not None and include_teams:
+            conditions.append(self._teams_match)
+        if self.games is not None:
+            conditions.append(self._games_match)
+        if self.tags is not None:
+            conditions.append(self._tags_match)
+        if self.slots is not None:
+            conditions.append(self._slots_match)
+
+        return conditions
+
+    def match_clients_legacy(self, clients: typing.Iterable[Client]) -> typing.Generator[Client, None, None]:
+        non_team_conditions = self._get_conditions(include_teams=False)
+
+        # Do as little work as possible: Pre-check teams is None
+        if self.teams is None:
+            for bounce_client in clients:
+                if any(condition(bounce_client) for condition in non_team_conditions):
+                    yield bounce_client
+        else:
+            for bounce_client in clients:
+                if self._teams_match(bounce_client) and any(
+                    condition(bounce_client) for condition in non_team_conditions
+                ):
+                    yield bounce_client
+
+    def match_clients_or(self, clients: typing.Iterable[Client]) -> typing.Generator[Client, None, None]:
+        conditions = self._get_conditions(include_teams=True)
+
+        for bounce_client in clients:
+            if any(condition(bounce_client) for condition in conditions):
+                yield bounce_client
+
+    def match_clients_and(self, clients: typing.Iterable[Client]) -> typing.Generator[Client, None, None]:
+        conditions = self._get_conditions(include_teams=True)
+
+        for bounce_client in clients:
+            if all(condition(bounce_client) for condition in conditions):
+                yield bounce_client
+
 
 
 def remove_from_list(container, value):
@@ -2147,17 +2209,56 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            games = set(args.get("games", []))
-            tags = set(args.get("tags", []))
-            slots = set(args.get("slots", []))
+            for name, expected_type in (
+                ("teams", int), ("games", str), ("tags", str), ("slots", int)
+            ):
+                if name not in args:
+                    continue
+
+                value = args[name]
+
+                if (
+                    value is None
+                    or not isinstance(value, (list, set))
+                    or not all(isinstance(entry, expected_type) for entry in value)
+                ):
+                    await ctx.send_msgs(client, [{
+                        "cmd": "InvalidPacket", "type": "arguments",
+                        "text": f'Bounce: "{name}" list provided did not have the correct format.',
+                        "original_cmd": cmd}])
+                    return
+
+            # We now know that if a key is present, it is not None, so this should be the best way to get "set or None"
+            teams = set(args["teams"]) if "teams" in args else {client.team}  # Team default is only same team
+            games = set(args["games"]) if "games" in args else None
+            tags = set(args["tags"]) if "tags" in args else None
+            slots = set(args["slots"]) if "slots" in args else None
+
+            bounce_target = BounceTarget(teams, games, tags, slots)
+
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
-            for bounceclient in ctx.endpoints:
-                if client.team == bounceclient.team and (ctx.games[bounceclient.slot] in games or
-                                                         set(bounceclient.tags) & tags or
-                                                         bounceclient.slot in slots):
-                    await ctx.send_encoded_msgs(bounceclient, msg)
+            boolean_operator = args.get("operator", "legacy")
+
+            if boolean_operator == "legacy":
+                match_function = bounce_target.match_clients_legacy
+            elif boolean_operator == "or":
+                match_function = bounce_target.match_clients_or
+            elif boolean_operator == "and":
+                match_function = bounce_target.match_clients_and
+            else:
+                await ctx.send_msgs(client, [{
+                    'cmd': 'InvalidPacket', "type": "arguments",
+                    'text': f'Bounce: Unknown operator. Supported: legacy, or, and. Found: {operator}',
+                    'original_cmd': cmd
+                }])
+                return
+
+            for matching_client in match_function(ctx.endpoints):
+                await ctx.send_encoded_msgs(matching_client, msg)
+
+            return
 
         elif cmd == "Get":
             if "keys" not in args or type(args["keys"]) != list:
@@ -2541,7 +2642,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
         if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
             self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
         elif option_name in {"hint_cost", "location_check_points"}:
-            self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
+            # Update hint point amounts per slot
+            for team, players in self.ctx.clients.items():
+                for slot, clients in players.items():
+                    self.ctx.broadcast(clients, [{
+                        "cmd": "RoomUpdate",
+                        option_name: getattr(self.ctx, option_name),
+                        "hint_points": get_slot_points(self.ctx, team, slot),
+                    }])
         return True
 
     def _cmd_datastore(self):

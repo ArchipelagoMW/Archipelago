@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import concurrent.futures
 import json
+import shlex
 import typing
 import builtins
 import os
@@ -16,10 +17,12 @@ import collections
 import importlib
 import logging
 import warnings
+import pathlib
 
 from argparse import Namespace
-from collections.abc import Collection, Iterable
+from collections.abc import Collection, Iterable, Sequence
 from datetime import datetime, timezone
+from shutil import which
 
 from settings import Settings, get_settings
 from time import sleep
@@ -35,7 +38,6 @@ except ImportError:
 
 if typing.TYPE_CHECKING:
     import tkinter
-    import pathlib
     from BaseClasses import Region
     import multiprocessing
 
@@ -760,6 +762,48 @@ def env_cleared_lib_path() -> Mapping[str, str]:
     return env
 
 
+def run_in_terminal(exe: Sequence[str]) -> bool:
+    """
+    Runs the given command/args in `exe` in a new terminal window
+
+    Returns value indicates if a valid terminal was located
+    """
+    if is_windows:
+        # intentionally using a window title with a space so it gets quoted and treated as a title
+        subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
+        return True
+    elif is_linux:
+        # Terminals have started deprecating `-e` flag with some not implementing it at all
+        # `modern_terminals` is a list of terminals which we want/need to use `--` instead
+        # `legacy_terminals` are common aliases for terminals people want to use so checking these are prioritized
+        legacy_terminals = ("x-terminal-emulator", "konsole", "alacritty", "kitty")
+        modern_terminals = ("gnome-terminal", "cosmic-term", "ptyxis")
+
+        terminal: str | None = None
+        for term in itertools.chain(legacy_terminals, modern_terminals, ("xterm",)):
+            terminal = which(term)
+            if terminal:
+                break
+
+        if terminal:
+            # Clear LD_LIB_PATH during terminal startup, but set it again when running command in case it's needed
+            ld_lib_path = os.environ.get("LD_LIBRARY_PATH")
+            lib_path_setter = f"env LD_LIBRARY_PATH={shlex.quote(ld_lib_path)} " if ld_lib_path else ""
+            env = env_cleared_lib_path()
+
+            real_terminal_name = pathlib.Path(terminal).resolve().name
+            if real_terminal_name in modern_terminals:
+                subprocess.Popen([terminal, "--", "sh", "-c", lib_path_setter + shlex.join(exe)], env=env)
+            else:
+                subprocess.Popen([terminal, "-e", "sh", "-c", lib_path_setter + shlex.join(exe)], env=env)
+            return True
+    elif is_macos:
+        terminal = [which("open"), "-W", "-a", "Terminal.app"]
+        subprocess.Popen([*terminal, *exe])
+        return True
+    return False
+
+
 def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
@@ -1010,23 +1054,6 @@ def deprecate(message: str, add_stacklevels: int = 0):
     if __debug__:
         raise Exception(message)
     warnings.warn(message, stacklevel=2 + add_stacklevels)
-
-
-class DeprecateDict(dict):
-    log_message: str
-    should_error: bool
-
-    def __init__(self, message: str, error: bool = False) -> None:
-        self.log_message = message
-        self.should_error = error
-        super().__init__()
-
-    def __getitem__(self, item: Any) -> Any:
-        if self.should_error:
-            deprecate(self.log_message, add_stacklevels=1)
-        elif __debug__:
-            warnings.warn(self.log_message, stacklevel=2)
-        return super().__getitem__(item)
 
 
 def _extend_freeze_support() -> None:
