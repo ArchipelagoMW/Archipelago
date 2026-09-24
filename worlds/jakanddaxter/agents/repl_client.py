@@ -318,8 +318,8 @@ class JakAndDaxterReplClient:
         # The rest are kept in an array to be fed in one big command.
         received_orbs = 0
         received_pills = 0
+        received_cells = 0
 
-        received_cells = []
         received_scout_flies = []
         received_special = []
         received_moves = []
@@ -342,8 +342,7 @@ class JakAndDaxterReplClient:
             # not bothering with array searches since >= and < are enough.
             # Since I checked if less than minimum I can remove all of the lower bound checks, elif already skips once range is found.
             if ap_id < fly_start:
-                cell_id = cells.to_game_id(ap_id)
-                received_cells.append(str(cell_id))
+                received_cells += 1
 
             elif ap_id < special_start:
                 fly_id = flies.to_game_id(ap_id)
@@ -372,8 +371,8 @@ class JakAndDaxterReplClient:
                 continue
 
         # Traps and pills are useless on the title screen so I don't bother sending them
-        if len(received_cells) > 0:
-            await self.receive_items("Power Cells", "fuel-cell", received_cells)
+        if received_cells > 0:
+            await self.receive_item_amount("Power Cells", "fuel-cell", received_cells)
         if len(received_scout_flies) > 0:
             await self.receive_items("Scout Flies", "buzzer", received_scout_flies)
         if len(received_special) > 0:
@@ -385,7 +384,7 @@ class JakAndDaxterReplClient:
         if received_orbs > 0:
             await self.receive_item_amount("Precursor orbs", "money", received_orbs)
         if self.processed_initial_items and received_pills > 0:
-            await self.receive_item_amount("Green Eco Pills", "eco-pill", received_pills)
+            await self.receive_item_amount("Green Eco Pills", "eco-pill", received_pills, event="get-pickup")
 
         self.inbox_index = len(self.item_inbox)
 
@@ -404,9 +403,9 @@ class JakAndDaxterReplClient:
             self.log_error(logger, f"Unable to receive {len(items)} {pretty_name}s!")
         return ok
 
-    async def receive_item_amount(self, pretty_name : str, pickup_type : str, count : int):
+    async def receive_item_amount(self, pretty_name : str, pickup_type : str, count : int, event : str = "get-archipelago"):
         ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
+                                 f"*target* \'{event} "
                                  f"(pickup-type {pickup_type})"
                                  f"(the float {count}))")
         if ok:
