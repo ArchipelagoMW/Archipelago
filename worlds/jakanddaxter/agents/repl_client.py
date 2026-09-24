@@ -361,7 +361,7 @@ class JakAndDaxterReplClient:
                 received_orbs += orb_amount
 
             elif ap_id < jak1_max:
-                received_traps.append(str(ap_id))
+                received_traps.append(str(jak1_max - ap_id))
 
             elif ap_id == jak1_max:
                 received_pills += 1
