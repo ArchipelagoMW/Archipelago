@@ -217,7 +217,7 @@ class JakAndDaxterContext(CommonContext):
             # This enumeration should run on every ReceivedItems packet,
             # regardless of it being on initial connection or midway through a game.
             for index, item in enumerate(args["items"], start=args["index"]):
-                logger.debug(f"index: {len(self.repl.item_inbox)}, item: {str(item)}")
+                logger.debug(f"index: {index}, item: {str(item)}")
                 self.repl.item_inbox.append(item)
 
     async def json_to_game_text(self, args: dict):
