@@ -3,6 +3,7 @@ import string
 import typing
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
+from . import Items
 from .Items import item_table, faction_table
 from .Locations import location_table
 from .Regions import create_regions
