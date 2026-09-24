@@ -11,7 +11,7 @@ from argparse import Namespace
 from collections import Counter, deque, defaultdict
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import Any, ClassVar, Literal, NamedTuple, Protocol, TYPE_CHECKING, overload
+from typing import Any, ClassVar, Literal, NamedTuple, Protocol, TYPE_CHECKING, overload, TypeAlias
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -715,7 +715,7 @@ class MultiWorld:
         return False
 
 
-PathValue = tuple[str, 'PathValue' | None]
+PathValue: TypeAlias = tuple[str, 'PathValue' | None]
 
 
 class CollectionState:
