@@ -1274,10 +1274,7 @@ class Region:
             return self._list[index]
 
         def __setitem__(self, index: int, value: Location) -> None:
-            return self._list.__setitem__(index, value)
-
-        def __delitem__(self, index):
-            return self._list.__delitem__(index)
+            return NotImplementedError
 
         def __len__(self) -> int:
             return len(self._list)
