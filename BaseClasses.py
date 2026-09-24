@@ -1997,7 +1997,7 @@ class PlandoOptions(IntFlag):
 seeddigits = 20
 
 
-def get_seed(seed: int = None) -> int:
+def get_seed(seed: int | None = None) -> int:
     if seed is None:
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
