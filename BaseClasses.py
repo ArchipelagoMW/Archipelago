@@ -715,7 +715,7 @@ class MultiWorld:
         return False
 
 
-PathValue: TypeAlias = tuple[str, 'PathValue' | None]
+PathValue: TypeAlias = tuple[str, "PathValue | None"]
 
 
 class CollectionState:
