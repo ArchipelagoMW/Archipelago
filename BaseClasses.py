@@ -1503,12 +1503,12 @@ class Location:
 
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         return ((
-                self.always_allow(state, item)
-                and item.name not in state.multiworld.worlds[item.player].options.non_local_items
+            self.always_allow(state, item)
+            and item.name not in state.multiworld.worlds[item.player].options.non_local_items
         ) or (
-                (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
-                and self.item_rule(item)
-                and (not check_access or self.can_reach(state))
+            (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
+            and self.item_rule(item)
+            and (not check_access or self.can_reach(state))
         ))
 
     def can_reach(self, state: CollectionState) -> bool:

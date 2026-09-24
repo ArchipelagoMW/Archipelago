@@ -927,7 +927,6 @@ def _mp_open_directory(res: "multiprocessing.Queue[str | None]", *args: Any) -> 
     res.put(open_directory(*args))
 
 
-
 def open_directory(title: str, suggest: str = "") -> str | None:
     if is_linux:
         # prefer native dialog
