@@ -715,7 +715,8 @@ class MultiWorld:
         return False
 
 
-PathValue = tuple[str, ...]
+PathValue = tuple[str, 'PathValue' | None]
+
 
 class CollectionState:
     prog_items: dict[int, Counter[str]]
