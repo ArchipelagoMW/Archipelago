@@ -1288,9 +1288,6 @@ class Region:
         def copy(self):
             return self._list.copy()
 
-        def insert(self, index: int, value: Location):
-            self._list.insert(index, value)
-
     class LocationRegister(Register):
         def __delitem__(self, index: int) -> None:
             location: Location = self._list[index]
