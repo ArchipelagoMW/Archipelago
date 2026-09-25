@@ -747,4 +747,12 @@ SONG_DATA: Dict[str, SongData] = {
     "UROSOUSETSU": SongData(2900871, "100-3", "maimai DX Limited Suite_Vol.02", False, 7, 9, 11),
     "World's end loneliness": SongData(2900872, "100-4", "maimai DX Limited Suite_Vol.02", False, 6, 8, 10),
     "Go! Run! Sh1ne!": SongData(2900873, "100-5", "maimai DX Limited Suite_Vol.02", False, 6, 8, 10),
+    "Cryogenic": SongData(2900874, "0-61", "Default Music", False, 3, 5, 8),
+    "Two Faces feat. Chen-U": SongData(2900875, "101-0", "Calling Card from R", False, 4, 6, 8),
+    "Welcome to the Universe Dance Party": SongData(2900876, "102-0", "Slumbering Golden Mark", False, 6, 8, 10),
+    "Runaway": SongData(2900877, "102-1", "Slumbering Golden Mark", False, 2, 5, 8),
+    "Beyond the Starline feat. Eye": SongData(2900878, "102-2", "Slumbering Golden Mark", True, 3, 6, 9),
+    "$trange Attraktor": SongData(2900879, "102-3", "Slumbering Golden Mark", True, 5, 7, 10),
+    "Euphoria": SongData(2900880, "102-4", "Slumbering Golden Mark", False, 5, 7, 9),
+    "Kirameku Metamorphose": SongData(2900881, "102-5", "Slumbering Golden Mark", True, 3, 6, 9),
 }
