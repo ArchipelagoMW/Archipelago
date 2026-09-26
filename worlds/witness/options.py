@@ -287,7 +287,7 @@ class EasterEggHunt(RelevanceMixin, Choice):
     """
     relevance = OptionRelevance.all
 
-    visibility = Visibility.all if is_easter_time() else Visibility.none
+    visibility = Visibility.all if is_easter_time() else Visibility.options_dump
 
     display_name = "Easter Egg Hunt"
     option_off = 0
