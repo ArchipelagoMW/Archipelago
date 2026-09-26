@@ -40,6 +40,9 @@ def level_scaling(multiworld):
                     # fossil location, it may not be in logic until much later, despite your ability to potentially
                     # reach them earlier. We treat them both as reachable right away for this purpose
                     return True
+                if "Saffron Fighting Dojo - Gift" in location.name and state.can_reach("Saffron Fighting Dojo",
+                                                                                       "Region", location.player):
+                    return True
                 if (location.name == "Route 25 - Item" and state.can_reach("Route 25", "Region", location.player)
                         and multiworld.worlds[location.player].options.blind_trainers.value < 100
                         and "Route 25 - Jr. Trainer M" not in multiworld.regions.location_cache[location.player]):
