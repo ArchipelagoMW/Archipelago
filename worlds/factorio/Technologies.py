@@ -219,7 +219,12 @@ del techs_future
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 # add uranium mining to logic graph. TODO: add to automatic extractor for mod support
-raw_recipes = recipes_future.result()
+raw_recipes = {}
+for recipe_name, recipe_data in sorted(recipes_future.result().items()):
+    raw_recipes[recipe_name] = recipe_data
+    recipe_data["category"] = recipe_data["categories"][0]
+    #TODO: select the cheapest recipe category
+
 del recipes_future
 for resource_name, resource_data in resources_future.result().items():
     raw_recipes[f"mining-{resource_name}"] = {
@@ -259,7 +264,6 @@ for name, categories in machines_future.result().items():
 machines["electric-mining-drill"] = Machine("electric-mining-drill", {"basic-solid"})
 machines["pumpjack"] = Machine("pumpjack", {"basic-fluid"})
 machines["assembling-machine-1"].categories.add("crafting-with-fluid")  # mod enables this
-machines["character"].categories.add("basic-crafting")  # somehow this is implied and not exported
 
 del machines_future
 
