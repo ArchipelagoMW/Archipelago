@@ -6,6 +6,7 @@ import json
 import pkgutil
 import bsdiff4
 import binascii
+import logging
 from typing import TYPE_CHECKING
 from .Common import *
 from .LADXR import generator
@@ -16,14 +17,13 @@ LADX_HASH = "07c211479386825042efb4ad31bb525f"
 if TYPE_CHECKING:
     from . import LinksAwakeningWorld
 
-
 class LADXPatchExtensions(worlds.Files.APPatchExtension):
     game = LINKS_AWAKENING
 
     @staticmethod
     def generate_rom(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
         patch_data = json.loads(caller.get_file(data_file).decode("utf-8"))
-        # TODO local option overrides
+        apply_overrides(patch_data)
         rom_name = get_base_rom_path()
         out_name = f"{patch_data['out_base']}{caller.result_file_ending}"
         parser = get_parser()
@@ -33,6 +33,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
     @staticmethod
     def patch_title_screen(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
         patch_data = json.loads(caller.get_file(data_file).decode("utf-8"))
+        apply_overrides(patch_data)
         if patch_data["ladxr_settings_dict"]["aptitlescreen"] == 'true':
             return bsdiff4.patch(rom, pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
         return rom
@@ -100,3 +101,30 @@ def get_base_rom_path(file_name: str = "") -> str:
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
+
+
+def apply_overrides(patch_data: dict) -> None:
+    from Options import OptionError
+    from .Options import convert_ap_options_to_ladxr, Override
+    from . import LinksAwakeningWorld
+    # option_overrides should look like an options block for this game in a player yaml
+    option_overrides = getattr(LinksAwakeningWorld.settings, "option_overrides", None)
+    if not option_overrides:
+        return
+    wrapped_overrides = {
+        "game": LINKS_AWAKENING,
+        LINKS_AWAKENING: option_overrides,
+    }
+    from Generate import roll_settings
+    try:
+        rolled_settings = roll_settings(wrapped_overrides)
+    except OptionError:
+        logger = logging.getLogger("Link's Awakening Logger")
+        logger.warning("Failed to apply option overrides, check that they are formatted correctly.")
+        return
+    override_level = Override.ALWAYS if patch_data["is_race"] else Override.NOT_RACE
+    # only options specified by player, and only those they are allowed to override
+    override_dict = { k:v for k, v in vars(rolled_settings).items() 
+                      if k in option_overrides.keys() and getattr(v, 'may_override', Override.NEVER) >= override_level}
+    ladxr_overrides = convert_ap_options_to_ladxr(override_dict)
+    patch_data["ladxr_settings_dict"].update(ladxr_overrides)
