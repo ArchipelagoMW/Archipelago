@@ -1141,8 +1141,13 @@ def distribute_early_items(multiworld: MultiWorld,
     for player in multiworld.player_ids:
         items = itertools.chain(multiworld.early_items[player], multiworld.local_early_items[player])
         for item in items:
-            early_items_count[item, player] = [multiworld.early_items[player].get(item, 0),
-                                               multiworld.local_early_items[player].get(item, 0)]
+            early_counts = [multiworld.early_items[player].get(item, 0), multiworld.local_early_items[player].get(item, 0)]
+            if early_counts[0] < 0:
+                raise ValueError(f"Item {item} has an early_items count of less than 0.")
+            if early_counts[1] < 0:
+                raise ValueError(f"Item {item} has a local_early_items count of less than 0.")
+            if early_counts != [0, 0]:
+                early_items_count[item, player] = early_counts
     if early_items_count:
         early_locations: list[Location] = []
         early_priority_locations: list[Location] = []
