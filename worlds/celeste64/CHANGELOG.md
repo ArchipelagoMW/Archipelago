@@ -1,6 +1,29 @@
 # Celeste 64 - Changelog
 
 
+## v1.4 - The Final Update
+
+### Features:
+
+- Traps
+    - Bald Trap
+    - Bubble Trap
+    - Hiccup Trap
+    - Ice Trap
+    - Invisible Trap
+    - Literature Trap
+    - Reverse Trap
+    - Stun Trap
+    - Zoom In Trap
+    - Zoom Out Trap
+- Trap Link
+- Cassette Shuffle
+    - Shuffle which cassettes send you to which sub-levels
+- Hair Length
+    - Allows for setting of Maddy's hair length
+- A game option allows you to die from touching ghosts of other Celeste 64 players in the multiworld
+
+
 ## v1.3
 
 ### Features:
