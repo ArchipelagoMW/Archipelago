@@ -86,7 +86,7 @@ class SM64World(World):
         # Nudge MIPS 1 to match vanilla on default percentage
         if self.number_of_stars == 120 and self.options.mips1_cost == 12:
             self.star_costs['MIPS1Cost'] = 15
-        self.topology_present = self.options.area_rando
+        self.topology_present = self.options.area_rando or self.options.plando_connections
 
     def create_regions(self):
         create_regions(self.multiworld, self.options, self.player)
