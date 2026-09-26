@@ -1748,6 +1748,11 @@ class PerGameCommonOptions(CommonOptions):
 
 
 @dataclass
+class StartInventoryPoolMixin:
+    start_inventory_from_pool: StartInventoryPool
+
+
+@dataclass
 class DeathLinkMixin:
     death_link: DeathLink
 
