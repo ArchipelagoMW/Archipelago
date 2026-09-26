@@ -153,6 +153,12 @@ class ShuffleSunwarps(Toggle):
     display_name = "Shuffle Sunwarps"
 
 
+class ShuffleLayout(Toggle):
+    """If on, the layouts of certain areas will be randomized. Currently, this only includes The Bearer and The Steady,
+    but it may be expanded to more areas in the future."""
+    display_name = "Shuffle Layout"
+
+
 class VictoryCondition(Choice):
     """Change the victory condition.
 
@@ -290,6 +296,7 @@ class LingoOptions(PerGameCommonOptions):
     pilgrimage_allows_paintings: PilgrimageAllowsPaintings
     sunwarp_access: SunwarpAccess
     shuffle_sunwarps: ShuffleSunwarps
+    shuffle_layout: ShuffleLayout
     victory_condition: VictoryCondition
     mastery_achievements: MasteryAchievements
     level_2_requirement: Level2Requirement

@@ -12,6 +12,7 @@ from .locations import ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
 from .options import LingoOptions, lingo_option_groups, SunwarpAccess, VictoryCondition
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
+from .static_logic import get_door_general_id, get_panel_location_id
 
 
 class LingoWebWorld(WebWorld):
@@ -192,9 +193,23 @@ class LingoWorld(World):
             "group_doors", "speed_boost_mode", "shuffle_postgame"
         ]
 
+        door_panels_overlay = {
+            get_door_general_id(door.room, door.door): [
+                get_panel_location_id(panel.room, panel.panel) for panel in panels
+            ]
+            for door, panels in self.player_logic.door_panels_overlay.items()
+        }
+
+        door_items_overlay = {
+            get_door_general_id(door.room, door.door): -1 if item is None else self.item_name_to_id[item]
+            for door, item in self.player_logic.door_items_overlay.items()
+        }
+
         slot_data = {
             "seed": self.random.randint(0, 1000000),
             **self.options.as_dict(*slot_options),
+            "door_panels_overlay": door_panels_overlay,
+            "door_items_overlay": door_items_overlay,
         }
 
         if self.options.shuffle_paintings:
