@@ -2,6 +2,8 @@ import collections
 import logging
 import typing
 
+from typing_extensions import deprecated
+
 from BaseClasses import (CollectionRule, CollectionState, Entrance, Item, Location,
                          LocationProgressType, MultiWorld, Region)
 
@@ -90,12 +92,18 @@ def exclusion_rules(multiworld: MultiWorld, player: int, exclude_locations: typi
                 logging.warning(f"Unable to exclude location {loc_name} in player {player}'s world.")
 
 
+@deprecated("Use world.set_rule() instead, which supports both Rule Builder and lambdas")
 def set_rule(spot: typing.Union[Location, Entrance], rule: CollectionRule):
+    from rule_builder.rules import Rule
+    assert not isinstance(rule, Rule), "You must use world.set_rule() for Rule Builder rules"
     spot.access_rule = rule
 
 
 def add_rule(spot: typing.Union[Location, Entrance], rule: CollectionRule, combine="and"):
+    from rule_builder.rules import Rule
     old_rule = spot.access_rule
+    assert not isinstance(rule, Rule) and not isinstance(old_rule, Rule), \
+        "You cannot use add_rule() for Rule Builder rules, they must be combined with & and | before being set"
     # empty rule, replace instead of add
     if old_rule is Location.access_rule or old_rule is Entrance.access_rule:
         spot.access_rule = rule if combine == "and" else old_rule
