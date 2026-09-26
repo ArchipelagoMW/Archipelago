@@ -1508,7 +1508,20 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
 
         def get_sphere_locations(sphere_state: CollectionState,
                                  locations: set[Location]) -> set[Location]:
-            return {loc for loc in locations if sphere_state.can_reach(loc)}
+            sphere_locations: set[Location] = set()
+            while True:
+                newly_reachable = {
+                    location for location in locations - sphere_locations
+                    if sphere_state.can_reach(location)
+                }
+                if not newly_reachable:
+                    return sphere_locations
+
+                sphere_locations |= newly_reachable
+                for location in newly_reachable:
+                    if (not location.progression_balancing_sphere and location.advancement
+                            and location not in sphere_state.locations_checked):
+                        sphere_state.collect(location.item, True, location)
 
         def item_percentage(player: int, num: int) -> float:
             return num / total_locations_count[player]
@@ -1560,7 +1573,8 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
                         # Check locations in the current sphere and gather progression items to swap earlier
                         for location in balancing_sphere:
                             if location.advancement:
-                                balancing_state.collect(location.item, True, location)
+                                if location not in balancing_state.locations_checked:
+                                    balancing_state.collect(location.item, True, location)
                                 player = location.item.player
                                 # only replace items that end up in another player's world
                                 if (not location.locked and not location.item.skip_in_prog_balancing and
@@ -1616,7 +1630,11 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
 
                     # sort then shuffle to maintain deterministic behaviour,
                     # while allowing use of set for better algorithm growth behaviour elsewhere
-                    replacement_locations = sorted(l for l in checked_locations if not l.advancement and not l.locked)
+                    replacement_locations = sorted(
+                        location for location in checked_locations
+                        if (not location.advancement and not location.locked
+                            and not location.item.skip_in_prog_balancing)
+                    )
                     multiworld.random.shuffle(replacement_locations)
                     items_to_replace.sort()
                     multiworld.random.shuffle(items_to_replace)
@@ -1647,7 +1665,7 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
                             sphere_locations.add(location)
 
             for location in sphere_locations:
-                if location.advancement:
+                if location.advancement and location not in state.locations_checked:
                     state.collect(location.item, True, location)
             checked_locations |= sphere_locations
 
