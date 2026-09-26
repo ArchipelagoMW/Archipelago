@@ -1,0 +1,138 @@
+[
+  {
+    "name": "Forlorn Temple",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 486,
+        "y": 341,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Forlorn Temple - Demon King"
+      },
+      {
+        "name": "Forlorn Temple Seal - Rocket Maze"
+      },
+      {
+        "name": "Forlorn Temple Seal - Rocket Sunset"
+      },
+      {
+        "name": "Hidden Entrance Mega Shard"
+      },
+      {
+        "name": "Sunny Day Mega Shard"
+      },
+      {
+        "name": "Down Under Mega Shard"
+      }
+    ]
+  },
+  {
+    "name": "Forlorn Temple - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Forlorn Temple - Demon King"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Forlorn Temple",
+            "x": 734,
+            "y": 483,
+            "size": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Forlorn Temple - Power Seals",
+    "children": [
+      {
+        "name": "Forlorn Temple Seal",
+        "sections": [
+          {
+            "name": "Forlorn Temple Seal - Rocket Maze"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Forlorn Temple",
+            "x": 462,
+            "y": 417
+          }
+        ]
+      },
+      {
+        "name": "Forlorn Temple Seal",
+        "sections": [
+          {
+            "name": "Forlorn Temple Seal - Rocket Sunset"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Forlorn Temple",
+            "x": 426,
+            "y": 160
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Forlorn Temple - Mega Shards",
+    "children": [
+      {
+        "name": "Forlorn Temple Mega Shard",
+        "sections": [
+          {
+            "name": "Hidden Entrance Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Forlorn Temple",
+            "x": 200,
+            "y": 315
+          }
+        ]
+      },
+      {
+        "name": "Forlorn Temple Mega Shard",
+        "sections": [
+          {
+            "name": "Sunny Day Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Forlorn Temple",
+            "x": 315,
+            "y": 270
+          }
+        ]
+      },
+      {
+        "name": "Forlorn Temple Mega Shard",
+        "sections": [
+          {
+            "name": "Down Under Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Forlorn Temple",
+            "x": 625,
+            "y": 545
+          }
+        ]
+      }
+    ]
+  }
+]
