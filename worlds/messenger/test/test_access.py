@@ -1,12 +1,11 @@
-import typing
-
-from ..constants import NOTES, PHOBEKINS
+from ..constants import NOTES
 from . import MessengerTestBase
 
 
 class AccessTest(MessengerTestBase):
     options = {
         "shuffle_shards": "true",
+        "shuffle_skylands_generators": "true",
     }
 
     def test_tabi(self) -> None:
@@ -42,6 +41,9 @@ class AccessTest(MessengerTestBase):
             "Elemental Skylands - Key of Symbiosis",
             "Elemental Skylands Seal - Water",
             "Elemental Skylands Seal - Fire",
+            "Elemental Skylands - Shutdown Earth Generator",
+            "Elemental Skylands - Shutdown Water Generator",
+            "Elemental Skylands - Shutdown Fire Generator",
             "Earth Mega Shard",
             "Water Mega Shard",
             "Rescue Phantom",
@@ -84,6 +86,9 @@ class AccessTest(MessengerTestBase):
             "Elemental Skylands Seal - Air",
             "Elemental Skylands Seal - Water",
             "Elemental Skylands Seal - Fire",
+            "Elemental Skylands - Shutdown Earth Generator",
+            "Elemental Skylands - Shutdown Water Generator",
+            "Elemental Skylands - Shutdown Fire Generator",
             "Elemental Skylands - Key of Symbiosis",
             "Forlorn Temple Seal - Rocket Maze",
             "Forlorn Temple Seal - Rocket Sunset",
@@ -111,34 +116,83 @@ class AccessTest(MessengerTestBase):
     def test_vertical(self) -> None:
         """locations that require either the Rope Dart or the Wingsuit"""
         locations = [
-            "Ninja Village Seal - Tree House", "Howling Grotto Seal - Crushing Pits",
-            "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster",
-            "Underworld Seal - Rising Fanta", "Elemental Skylands - Key of Symbiosis",
-            "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire", "Ninja Village - Candle",
-            "Autumn Hills - Climbing Claws", "Autumn Hills - Key of Hope", "Autumn Hills Seal - Trip Saws",
-            "Autumn Hills Seal - Double Swing Saws", "Autumn Hills Seal - Spike Ball Swing",
-            "Autumn Hills Seal - Spike Ball Darts", "Catacombs - Necro", "Catacombs - Ruxxtin's Amulet",
-            "Catacombs Seal - Triple Spike Crushers", "Catacombs Seal - Crusher Gauntlet",
-            "Catacombs Seal - Dirty Pond", "Bamboo Creek - Claustro", "Cloud Ruins - Acro",
-            "Bamboo Creek Seal - Spike Crushers and Doors", "Bamboo Creek Seal - Spike Ball Pits",
-            "Bamboo Creek Seal - Spike Crushers and Doors v2", "Howling Grotto Seal - Crushing Pits",
-            "Howling Grotto Seal - Windy Saws and Balls", "Forlorn Temple - Demon King", "Cloud Ruins Seal - Ghost Pit",
-            "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
-            "Tower of Time Seal - Lantern Climb", "Tower of Time Seal - Arcane Orbs",
-            "Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Fireball Wave",
-            "Elemental Skylands Seal - Air", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
-            "Searing Crags - Power Thistle", "Searing Crags - Key of Strength",
-            "Glacial Peak Seal - Projectile Spike Pit", "Glacial Peak Seal - Glacial Air Swag",
-            "Riviere Turquoise - Butterfly Matriarch", "Riviere Turquoise Seal - Flower Power",
+            "Ninja Village Seal - Tree House",
+            "Howling Grotto Seal - Crushing Pits",
+            "Glacial Peak Seal - Ice Climbers",
+            "Tower of Time Seal - Time Waster",
+            "Underworld Seal - Rising Fanta",
+            "Elemental Skylands - Key of Symbiosis",
+            "Elemental Skylands Seal - Water",
+            "Elemental Skylands Seal - Fire",
+            "Elemental Skylands - Shutdown Air Generator",
+            "Elemental Skylands - Shutdown Earth Generator",
+            "Elemental Skylands - Shutdown Water Generator",
+            "Elemental Skylands - Shutdown Fire Generator",
+            "Ninja Village - Candle",
+            "Autumn Hills - Climbing Claws",
+            "Autumn Hills - Key of Hope",
+            "Autumn Hills Seal - Trip Saws",
+            "Autumn Hills Seal - Double Swing Saws",
+            "Autumn Hills Seal - Spike Ball Swing",
+            "Autumn Hills Seal - Spike Ball Darts",
+            "Catacombs - Necro",
+            "Catacombs - Ruxxtin's Amulet",
+            "Catacombs Seal - Triple Spike Crushers",
+            "Catacombs Seal - Crusher Gauntlet",
+            "Catacombs Seal - Dirty Pond",
+            "Bamboo Creek - Claustro",
+            "Cloud Ruins - Acro",
+            "Bamboo Creek Seal - Spike Crushers and Doors",
+            "Bamboo Creek Seal - Spike Ball Pits",
+            "Bamboo Creek Seal - Spike Crushers and Doors v2",
+            "Howling Grotto Seal - Crushing Pits",
+            "Howling Grotto Seal - Windy Saws and Balls",
+            "Forlorn Temple - Demon King",
+            "Cloud Ruins Seal - Ghost Pit",
+            "Cloud Ruins Seal - Toothbrush Alley",
+            "Cloud Ruins Seal - Saw Pit",
+            "Cloud Ruins Seal - Money Farm Room",
+            "Tower of Time Seal - Lantern Climb",
+            "Tower of Time Seal - Arcane Orbs",
+            "Underworld Seal - Sharp and Windy Climb",
+            "Underworld Seal - Fireball Wave",
+            "Elemental Skylands Seal - Air",
+            "Forlorn Temple Seal - Rocket Maze",
+            "Forlorn Temple Seal - Rocket Sunset",
+            "Searing Crags - Power Thistle",
+            "Searing Crags - Key of Strength",
+            "Glacial Peak Seal - Projectile Spike Pit",
+            "Glacial Peak Seal - Glacial Air Swag",
+            "Riviere Turquoise - Butterfly Matriarch",
+            "Riviere Turquoise Seal - Flower Power",
             "Riviere Turquoise Seal - Launch of Faith",
-            "Searing Crags Seal - Triple Ball Spinner", "Searing Crags Seal - Raining Rocks",
-            "Searing Crags Seal - Rhythm Rocks", "Ninja Village - Astral Seed", "Searing Crags - Astral Tea Leaves",
-            "Rescue Phantom", "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard", "Sunny Day Mega Shard",
-            "Down Under Mega Shard", "Catacombs Mega Shard", "Above Entrance Mega Shard", "Abandoned Mega Shard",
-            "Time Loop Mega Shard", "Searing Crags Mega Shard", "Glacial Peak Mega Shard", "Cloud Entrance Mega Shard",
-            "Time Warp Mega Shard", "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
-            "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2", "Earth Mega Shard", "Water Mega Shard",
-            "Autumn Hills - Leaf Golem", "Catacombs - Ruxxtin", "Howling Grotto - Emerald Golem"
+            "Searing Crags Seal - Triple Ball Spinner",
+            "Searing Crags Seal - Raining Rocks",
+            "Searing Crags Seal - Rhythm Rocks",
+            "Ninja Village - Astral Seed",
+            "Searing Crags - Astral Tea Leaves",
+            "Rescue Phantom",
+            "Autumn Hills Mega Shard",
+            "Hidden Entrance Mega Shard",
+            "Sunny Day Mega Shard",
+            "Down Under Mega Shard",
+            "Catacombs Mega Shard",
+            "Above Entrance Mega Shard",
+            "Abandoned Mega Shard",
+            "Time Loop Mega Shard",
+            "Searing Crags Mega Shard",
+            "Glacial Peak Mega Shard",
+            "Cloud Entrance Mega Shard",
+            "Time Warp Mega Shard",
+            "Money Farm Room Mega Shard 1",
+            "Money Farm Room Mega Shard 2",
+            "Quick Restock Mega Shard 1",
+            "Quick Restock Mega Shard 2",
+            "Earth Mega Shard",
+            "Water Mega Shard",
+            "Autumn Hills - Leaf Golem",
+            "Catacombs - Ruxxtin",
+            "Howling Grotto - Emerald Golem",
         ]
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
@@ -157,9 +211,17 @@ class AccessTest(MessengerTestBase):
     def test_firefly(self) -> None:
         """Elemental Skylands and Corrupted Future require the Magic Firefly"""
         locations = [
-            "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Fire",
-            "Elemental Skylands Seal - Water", "Corrupted Future - Key of Courage", "Earth Mega Shard",
-            "Water Mega Shard"
+            "Elemental Skylands - Key of Symbiosis",
+            "Elemental Skylands Seal - Air",
+            "Elemental Skylands Seal - Fire",
+            "Elemental Skylands Seal - Water",
+            "Elemental Skylands - Shutdown Air Generator",
+            "Elemental Skylands - Shutdown Earth Generator",
+            "Elemental Skylands - Shutdown Water Generator",
+            "Elemental Skylands - Shutdown Fire Generator",
+            "Corrupted Future - Key of Courage",
+            "Earth Mega Shard",
+            "Water Mega Shard",
         ]
         items = [["Magic Firefly"]]
         self.assertAccessDependency(locations, items)
@@ -212,6 +274,10 @@ class AccessTest(MessengerTestBase):
         ]
         items = [["Strike of the Ninja"]]
         self.assertAccessDependency(locations, items)
+
+    def test_generators(self) -> None:
+        """Reaching the key of symbiosis requires all 4 generators"""
+        self.assertAccessDependency(["Elemental Skylands - Key of Symbiosis"], [["Progressive Generator Shutdown"] * 4])
 
     def test_goal(self) -> None:
         """Test some different states to verify goal requires the correct items"""
