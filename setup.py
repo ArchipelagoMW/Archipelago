@@ -58,7 +58,7 @@ if __name__ == "__main__":
     ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
 
 from worlds.LauncherComponents import components, icon_paths
-from Utils import version_tuple, is_windows, is_linux
+from Utils import version_suffix, version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
@@ -294,7 +294,9 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         manifest = {
             "buildtime": self.buildtime.isoformat(sep=" ", timespec="seconds"),
             "hashes": {path: hash.result() for path, hash in hashes.items()},
-            "version": version_tuple}
+            "version": version_tuple,
+            "version_suffix": version_suffix,
+        }
 
         json.dump(manifest, open(manifestpath, "wt"), indent=4)
         print("Created Manifest")
@@ -445,6 +447,9 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttp" / "remote")
 
         self.create_manifest()
+
+        with open(self.buildfolder / "data" / ".version_suffix", "w", encoding="utf-8") as f:
+            f.write(version_suffix)
 
         if is_windows:
             # Inno setup stuff

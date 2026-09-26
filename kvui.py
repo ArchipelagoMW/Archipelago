@@ -1063,9 +1063,8 @@ class GameManager(ThemedApp):
         if hasattr(self.screens.current_tab.content, "fix_heights"):
             getattr(self.screens.current_tab.content, "fix_heights")()
         if self.ctx.server:
-            self.title = self.base_title + " " + Utils.__version__ + \
-                         f" | Connected to: {self.ctx.server_address} " \
-                         f"{'.'.join(str(e) for e in self.ctx.server_version)}"
+            self.title = (f"{self.base_title} {Utils.full_version} | Connected to: {self.ctx.server_address} " +
+                          self.ctx.server_version.as_simple_string())
             self.server_connect_button._button_text.text = "Disconnect"
             self.server_connect_bar.readonly = True
             self.progressbar.max = len(self.ctx.checked_locations) + len(self.ctx.missing_locations)
@@ -1073,7 +1072,7 @@ class GameManager(ThemedApp):
         else:
             self.server_connect_button._button_text.text = "Connect"
             self.server_connect_bar.readonly = False
-            self.title = self.base_title + " " + Utils.__version__
+            self.title = f"{self.base_title} {Utils.full_version}"
             self.progressbar.value = 0
 
     def command_button_action(self, button):
