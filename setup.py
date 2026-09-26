@@ -674,6 +674,11 @@ cx_Freeze.setup(
         "bdist_appimage": {
            "build_folder": buildfolder,
         },
+        "bdist_mac": {
+            # without this, cx_Freeze names the bundle "<name>-<version>.app"; we want a
+            # stable "Archipelago.app" so upgrades overwrite in place.
+            "bundle_name": "Archipelago",
+        },
     },
     # override commands to get custom stuff in
     cmdclass={
