@@ -655,6 +655,9 @@ class OptionsCreator(ThemedApp):
         self.root = self.container
         self.main_layout = self.container.ids.main
         self.scrollbox = self.container.ids.scrollbox
+        self.world_buttons = {}
+        self.search_input = self.container.ids.search_input
+        self.search_input.bind(text = self.search_worlds)
 
         def world_button_action(world_btn: WorldButton):
             if self.current_game != world_btn.world_cls.game:
@@ -680,6 +683,7 @@ class OptionsCreator(ThemedApp):
             world_button.bind(on_release=world_button_action)
             world_button.world_cls = cls
             self.scrollbox.layout.add_widget(world_button)
+            self.world_buttons[world] = world_button
         self.main_panel = self.container.ids.player_layout
         self.player_options = self.container.ids.player_options
         self.game_label = self.container.ids.game
@@ -698,6 +702,13 @@ class OptionsCreator(ThemedApp):
         # create_console(Window, self.container)
 
         return self.container
+        
+    def search_worlds(self, instance, text):
+        self.scrollbox.layout.clear_widgets()
+        for world, world_button in self.world_buttons.items():
+            if (text != "") and (text.lower() not in world.lower()):
+                continue
+            self.scrollbox.layout.add_widget(world_button)
 
 
 def launch():
