@@ -239,7 +239,6 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
                 self.button_layout.layout.add_widget(card)
 
         def build(self):
-            self.set_colors()
             self.screen_manager = MDScreenManager()
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
             self.loading_screen = LoadingScreen(name="loading")
@@ -248,6 +247,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             self.navigation = self.top_screen.ids.navigation
             self.button_layout = self.top_screen.ids.button_layout
             self.search_box = self.top_screen.ids.search_box
+            self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
 
             Window.bind(on_drop_file=self._on_drop_file)
