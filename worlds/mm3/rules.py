@@ -1,8 +1,12 @@
+from dataclasses import dataclass
 from math import ceil
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Sequence
+from typing_extensions import override
+from BaseClasses import CollectionState
+from NetUtils import JSONMessagePart
 from . import names
-from .locations import get_boss_locations, get_oneup_locations, get_energy_locations
-from worlds.generic.Rules import add_rule
+from .locations import get_boss_locations, mm3_regions
+from rule_builder.rules import CanReachLocation, HasAll, HasAny, Has, OptionFilter, Rule, True_, TWorld
 
 if TYPE_CHECKING:
     from . import MM3World
@@ -104,32 +108,140 @@ weapon_costs = {
 }
 
 
-def can_defeat_enough_rbms(state: "CollectionState", player: int,
-                           required: int, boss_requirements: dict[int, list[int]]) -> bool:
-    can_defeat = 0
-    for boss, reqs in boss_requirements.items():
-        if boss in robot_masters:
-            if state.has_all(map(lambda x: weapons_to_name[x], reqs), player):
-                can_defeat += 1
-                if can_defeat >= required:
-                    return True
-    return False
+@dataclass
+class CanDefeatEnoughRBMs(Rule["MM3World"], game="Mega Man 3"):
+    @override
+    def _instantiate(self, world: "MM3World") -> Rule.Resolved:
+        return self.Resolved(tuple([(key, tuple(map(lambda x: weapons_to_name[x], val))) for key, val in
+                                    sorted(world.wily_4_weapons.items())]), world.options.wily_4_requirement.value,
+                             player=world.player, caching_enabled=getattr(world, "rule_caching_enabled", False))
+
+    class Resolved(Rule.Resolved):
+        boss_requirements: tuple[tuple[int, tuple[str, ...]], ...]
+        required: int
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {
+                x: {id(self)} for boss, weapons in self.boss_requirements for x in weapons
+            }
+
+        @override
+        def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
+            explain_strs = self.explain_str(state).splitlines()
+            messages: list[JSONMessagePart] = [{"type": "text", "text": explain_strs[0]}]
+            for rbm in explain_strs[1:]:
+                color = "salmon" if "Cannot" in rbm else "green"
+                messages.append({"type": "color", "text": rbm, "color": color})
+            return messages
+
+        @override
+        def explain_str(self, state: CollectionState | None = None) -> str:
+            explain_str = f"Required RBMs: {self.required}"
+            for boss, reqs in self.boss_requirements:
+                if boss in robot_masters:
+                    if state:
+                        verb = "Can Defeat" if state.has_all(reqs, self.player) \
+                            else "Cannot Defeat"
+                    else:
+                        verb = ", ".join(reqs)
+                    explain_str += f"\n{robot_masters[boss][:-9]}: {verb}"
+            return explain_str
+
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            can_defeat = 0
+            for boss, reqs in self.boss_requirements:
+                if boss in robot_masters:
+                    if state.has_all(reqs, self.player):
+                        can_defeat += 1
+                        if can_defeat >= self.required:
+                            return True
+            return False
 
 
-def has_rush_vertical(state: "CollectionState", player: int) -> bool:
-    return state.has_any([names.rush_coil, names.rush_jet], player)
+HasRushVertical = HasAny(names.rush_jet, names.rush_coil)
+CanTraverseLongWater = HasAny(names.rush_jet, names.rush_marine)
+HasAnyRush = HasAny(names.rush_jet, names.rush_coil, names.rush_marine)
+HasRushJet = Has(names.rush_jet)
+HasHardKnuckle = Has(names.hard_knuckle)
 
 
-def can_traverse_long_water(state: "CollectionState", player: int) -> bool:
-    return state.has_any([names.rush_marine, names.rush_jet], player)
+STATIC_LOCATION_RULES: dict[str, Rule] = {
+    names.gemini_man: HasAnyRush,
+    names.get_gemini_laser: HasAnyRush,
+    names.hard_man: HasRushVertical,
+    names.get_hard_knuckle: HasRushVertical,
+    names.wily_1_boss: HasRushVertical,
+    names.wily_stage_1: HasRushVertical,
+    names.wily_2_boss: HasRushJet,
+    names.wily_stage_2: HasRushJet,
+    # Wily 3 technically needs vertical
+    # However, Wily 3 requires beating Wily 2, and Wily 2 explicitly needs Jet
+    # So we can skip the additional rule on Wily 3
+}
 
+STATIC_ENTRANCE_RULES: dict[str, Rule] = {
+    "To Doc Robot (Needle) - Air": HasRushVertical,
+    "To Doc Robot (Needle) - Crash": CanReachLocation(names.doc_air, "Doc Robot (Needle) - Air") & HasRushJet,
+    "To Doc Robot (Gemini) - Bubble": CanReachLocation(names.doc_flash, "Doc Robot (Gemini) - Flash") & CanTraverseLongWater & HasRushVertical,
+    "To Doc Robot (Shadow) - Heat": CanReachLocation(names.doc_wood, "Doc Robot (Shadow) - Wood"),
+    "To Doc Robot (Spark) - Metal": HasRushVertical & HasAny(names.shadow_blade, names.gemini_laser),
+    "To Doc Robot (Spark) - Quick": CanReachLocation(names.doc_metal, "Doc Robot (Spark) - Metal"),
 
-def has_any_rush(state: "CollectionState", player: int) -> bool:
-    return state.has_any([names.rush_coil, names.rush_jet, names.rush_marine], player)
+}
 
+STATIC_1UP_RULES: dict[str, Rule] = {
+    names.needle_man_c2: HasRushJet,
+    names.gemini_man_c1: HasRushJet,
+    names.gemini_man_c3: HasRushVertical & HasAny(names.gemini_laser, names.shadow_blade),
+    names.gemini_man_c6: HasAnyRush,
+    names.gemini_man_c7: HasAnyRush,
+    names.gemini_man_c10: HasAnyRush,
+    names.hard_man_c3: HasRushVertical,
+    names.top_man_c6: HasRushVertical,
+    names.doc_needle_c2: HasRushJet,
+    names.doc_needle_c3: HasRushJet,
+    names.doc_gemini_c1: HasRushVertical,
+    names.doc_gemini_c2: HasRushVertical,
+    names.wily_1_c4: HasHardKnuckle,
+    names.wily_1_c8: HasRushVertical & HasHardKnuckle,
+    names.wily_2_c9: HasRushJet,
+    names.wily_2_c11: HasRushJet,
+}
 
-def has_rush_jet(state: "CollectionState", player: int) -> bool:
-    return state.has(names.rush_jet, player)
+STATIC_ENERGY_RULES: dict[str, Rule] = {
+    names.gemini_man_c2: HasRushVertical,
+    names.gemini_man_c4: HasRushVertical,
+    names.gemini_man_c5: HasRushVertical,
+    names.gemini_man_c8: HasAnyRush,
+    names.gemini_man_c9: HasAnyRush,
+    names.hard_man_c2: HasRushVertical,
+    names.hard_man_c4: HasRushVertical,
+    names.hard_man_c5: HasRushVertical,
+    names.hard_man_c6: HasRushVertical,
+    names.hard_man_c7: HasRushVertical,
+    names.top_man_c2: HasRushVertical,
+    names.top_man_c3: HasRushVertical,
+    names.top_man_c4: HasRushVertical,
+    names.top_man_c7: HasRushVertical,
+    names.spark_man_c1: HasRushVertical,
+    names.spark_man_c2: HasRushVertical,
+    names.wily_1_c5: HasHardKnuckle,
+    names.wily_1_c6: HasRushVertical & HasHardKnuckle,
+    names.wily_1_c7: HasRushVertical & HasHardKnuckle,
+    names.wily_1_c11: HasRushVertical,
+    names.wily_1_c12: HasRushVertical,
+    names.wily_2_c5: HasRushJet,
+    names.wily_2_c6: HasRushJet,
+    names.wily_2_c7: HasRushJet,
+    names.wily_2_c8: HasRushJet,
+    names.wily_2_c10: HasRushJet,
+    names.wily_2_c12: HasRushJet,
+    names.wily_2_c13: HasRushJet,
+    names.wily_3_c1: HasHardKnuckle,
+    names.wily_3_c2: HasHardKnuckle,
+}
 
 
 def set_rules(world: "MM3World") -> None:
@@ -256,6 +368,8 @@ def set_rules(world: "MM3World") -> None:
 
             world.wily_4_weapons = {boss: sorted(weapons) for boss, weapons in used_weapons.items()}
 
+    location_rules: dict[str, Rule] = {}
+
     for i, boss_locations in zip(range(22), [
         get_boss_locations("Needle Man Stage"),
         get_boss_locations("Magnet Man Stage"),
@@ -291,98 +405,34 @@ def set_rules(world: "MM3World") -> None:
         if not weapons:
             raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
         for location in boss_locations:
+            static_rule = STATIC_LOCATION_RULES.get(location, True_())
             if i in (20, 21):
                 # multi-phase fights, get all potential weaknesses
                 # we should probably do this smarter, but this works for now
-                add_rule(world.get_location(location),
-                         lambda state, weps=tuple(weapons): state.has_all(weps, world.player))
+                location_rules[location] = static_rule & HasAll(*weapons)
             else:
-                add_rule(world.get_location(location),
-                         lambda state, weps=tuple(weapons): state.has_any(weps, world.player))
+                location_rules[location] = static_rule & HasAny(*weapons)
 
-    # Need to defeat x amount of robot masters for Wily 4
-    add_rule(world.get_location(names.wily_stage_4),
-             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_4_requirement.value,
-                                                  world.wily_4_weapons))
+    for location in STATIC_LOCATION_RULES:
+        if location not in location_rules:
+            location_rules[location] = STATIC_LOCATION_RULES[location]
 
-    # Handle Doc Robo stage connections
-    for entrance, location in (("To Doc Robot (Needle) - Crash", names.doc_air),
-                               ("To Doc Robot (Gemini) - Bubble", names.doc_flash),
-                               ("To Doc Robot (Shadow) - Heat", names.doc_wood),
-                               ("To Doc Robot (Spark) - Quick", names.doc_metal)):
-        entrance_object = world.get_entrance(entrance)
-        add_rule(entrance_object, lambda state, loc=location: state.can_reach(loc, "Location", world.player))
+    # Handle entrance rules
+    for region, info in mm3_regions.items():
+        entrance = world.get_entrance(f"To {region}")
+        static_rule = STATIC_ENTRANCE_RULES.get(entrance.name, True_())
+        world.set_rule(entrance, static_rule & HasAll(*info.required_items))
 
-    # finally, real logic
-    for location in get_boss_locations("Hard Man Stage"):
-        add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-
-    for location in get_boss_locations("Gemini Man Stage"):
-        add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
-
-    add_rule(world.get_entrance("To Doc Robot (Spark) - Metal"),
-             lambda state: has_rush_vertical(state, world.player) and
-                           state.has_any([names.shadow_blade, names.gemini_laser], world.player))
-    add_rule(world.get_entrance("To Doc Robot (Needle) - Air"),
-             lambda state: has_rush_vertical(state, world.player))
-    add_rule(world.get_entrance("To Doc Robot (Needle) - Crash"),
-             lambda state: has_rush_jet(state, world.player))
-    add_rule(world.get_entrance("To Doc Robot (Gemini) - Bubble"),
-             lambda state: has_rush_vertical(state, world.player) and can_traverse_long_water(state, world.player))
-
-    for location in get_boss_locations("Wily Stage 1"):
-        add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-
-    for location in get_boss_locations("Wily Stage 2"):
-        add_rule(world.get_location(location), lambda state: has_rush_jet(state, world.player))
-
-    # Wily 3 technically needs vertical
-    # However, Wily 3 requires beating Wily 2, and Wily 2 explicitly needs Jet
-    # So we can skip the additional rule on Wily 3
-
+    # Consumable rules
     if world.options.consumables in (world.options.consumables.option_1up_etank,
                                      world.options.consumables.option_all):
-        add_rule(world.get_location(names.needle_man_c2), lambda state: has_rush_jet(state, world.player))
-        add_rule(world.get_location(names.gemini_man_c1), lambda state: has_rush_jet(state, world.player))
-        add_rule(world.get_location(names.gemini_man_c3),
-                 lambda state: has_rush_vertical(state, world.player)
-                               or state.has_any([names.gemini_laser, names.shadow_blade], world.player))
-        for location in (names.gemini_man_c6, names.gemini_man_c7, names.gemini_man_c10):
-            add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
-        for location in get_oneup_locations("Hard Man Stage"):
-            add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-        add_rule(world.get_location(names.top_man_c6), lambda state: has_rush_vertical(state, world.player))
-        add_rule(world.get_location(names.doc_needle_c2), lambda state: has_rush_jet(state, world.player))
-        add_rule(world.get_location(names.doc_needle_c3), lambda state: has_rush_jet(state, world.player))
-        add_rule(world.get_location(names.doc_gemini_c1), lambda state: has_rush_vertical(state, world.player))
-        add_rule(world.get_location(names.doc_gemini_c2), lambda state: has_rush_vertical(state, world.player))
-        add_rule(world.get_location(names.wily_1_c8), lambda state: has_rush_vertical(state, world.player))
-        for location in [names.wily_1_c4, names.wily_1_c8]:
-            add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
-        for location in get_oneup_locations("Wily Stage 2"):
-            if location == names.wily_2_c3:
-                continue
-            add_rule(world.get_location(location), lambda state: has_rush_jet(state, world.player))
+        for location in STATIC_1UP_RULES:
+            location_rules[location] = STATIC_1UP_RULES[location]
+
     if world.options.consumables in (world.options.consumables.option_weapon_health,
                                      world.options.consumables.option_all):
-        add_rule(world.get_location(names.gemini_man_c2), lambda state: has_rush_vertical(state, world.player))
-        add_rule(world.get_location(names.gemini_man_c4), lambda state: has_rush_vertical(state, world.player))
-        add_rule(world.get_location(names.gemini_man_c5), lambda state: has_rush_vertical(state, world.player))
-        for location in (names.gemini_man_c8, names.gemini_man_c9):
-            add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
-        for location in get_energy_locations("Hard Man Stage"):
-            if location == names.hard_man_c1:
-                continue
-            add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-        for location in (names.spark_man_c1, names.spark_man_c2):
-            add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-        for location in [names.top_man_c2, names.top_man_c3, names.top_man_c4, names.top_man_c7]:
-            add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-        for location in [names.wily_1_c5, names.wily_1_c6, names.wily_1_c7]:
-            add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
-        for location in [names.wily_1_c6, names.wily_1_c7, names.wily_1_c11, names.wily_1_c12]:
-            add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-        for location in get_energy_locations("Wily Stage 2"):
-            if location in (names.wily_2_c1, names.wily_2_c2, names.wily_2_c4):
-                continue
-            add_rule(world.get_location(location), lambda state: has_rush_jet(state, world.player))
+        for location in STATIC_ENERGY_RULES:
+            location_rules[location] = STATIC_ENERGY_RULES[location]
+
+    for location, rule in location_rules.items():
+        world.set_rule(world.get_location(location), rule)
