@@ -199,7 +199,7 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
+        if ctx.server is None or ctx.slot_data is None:
             return
 
         if ctx.slot_data["goal"] == Goal.option_champion:
