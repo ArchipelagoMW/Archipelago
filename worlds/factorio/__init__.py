@@ -251,7 +251,7 @@ class Factorio(World):
         for ingredient in self.options.max_science_pack.get_allowed_packs():
             location = self.get_location(f"Automate {ingredient}")
 
-            if self.options.recipe_ingredients:
+            if self.options.science_packs:
                 custom_recipe = self.custom_recipes[ingredient]
 
                 location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
@@ -294,7 +294,7 @@ class Factorio(World):
         if self.options.silo != Silo.option_spawn:
             silo_recipe = self.get_recipe("rocket-silo")
             cargo_pad_recipe = self.get_recipe("cargo-landing-pad")
-        part_recipe = self.custom_recipes["rocket-part"]
+        part_recipe = self.get_recipe("rocket-part")
         satellite_recipe = self.get_recipe("satellite")
         victory_tech_names = get_rocket_requirements(
             silo_recipe, part_recipe,
@@ -518,44 +518,47 @@ class Factorio(World):
         return custom_technologies
 
     def set_custom_recipes(self):
-        ingredients_offset = self.options.recipe_ingredients_offset
-        original_rocket_part = recipes["rocket-part"]
-        science_pack_pools = get_science_pack_pools()
-        valid_pool = sorted(science_pack_pools[self.options.max_science_pack.get_max_pack()]
-                            & valid_ingredients)
-        self.random.shuffle(valid_pool)
-        self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,
-                                                     {valid_pool[x]: 10 for x in range(3 + ingredients_offset)},
-                                                     original_rocket_part.products,
-                                                     original_rocket_part.energy)}
+        self.custom_recipes = {}
 
-        if self.options.recipe_ingredients:
+        ingredients_offset = self.options.recipe_ingredients_offset
+        science_pack_pools = get_science_pack_pools()
+
+        if self.options.rocket_part:
+            original_rocket_part = recipes["rocket-part"]
+            valid_pool = sorted(science_pack_pools[self.options.recipe_ingredients_pool.get_max_pack()]
+                                & valid_ingredients)
+            self.random.shuffle(valid_pool)
+            self.custom_recipes["rocket-part"] = Recipe("rocket-part", original_rocket_part.category,
+                                                        {valid_pool[x]: 10 for x in range(3 + ingredients_offset)},
+                                                        original_rocket_part.products,
+                                                        original_rocket_part.energy)
+
+        if self.options.science_packs:
             valid_pool = []
-            for pack in self.options.max_science_pack.get_ordered_science_packs():
+            for pack in MaxSciencePack.get_ordered_science_packs():
                 valid_pool += sorted(science_pack_pools[pack])
                 self.random.shuffle(valid_pool)
-                if pack in recipes:  # skips over space science pack
-                    new_recipe = self.make_quick_recipe(recipes[pack], valid_pool, ingredients_offset=
-                                                        ingredients_offset.value)
-                    self.custom_recipes[pack] = new_recipe
+                new_recipe = self.make_quick_recipe(recipes[pack], valid_pool, ingredients_offset=
+                                                    ingredients_offset.value)
+                self.custom_recipes[pack] = new_recipe
 
         if self.options.silo.value == Silo.option_randomize_recipe \
                 or self.options.satellite.value == Satellite.option_randomize_recipe:
             valid_pool = set()
-            for pack in sorted(self.options.max_science_pack.get_allowed_packs()):
+            for pack in sorted(self.options.recipe_ingredients_pool.get_allowed_packs()):
                 valid_pool |= science_pack_pools[pack]
 
             if self.options.silo.value == Silo.option_randomize_recipe:
                 new_recipe = self.make_balanced_recipe(
                     recipes["rocket-silo"], valid_pool,
-                    factor=(self.options.max_science_pack.value + 1) / 7,
+                    factor=(self.options.recipe_ingredients_pool.value + 1) / 7,
                     ingredients_offset=ingredients_offset.value)
                 self.custom_recipes["rocket-silo"] = new_recipe
 
             if self.options.satellite.value == Satellite.option_randomize_recipe:
                 new_recipe = self.make_balanced_recipe(
                     recipes["satellite"], valid_pool,
-                    factor=(self.options.max_science_pack.value + 1) / 7,
+                    factor=(self.options.recipe_ingredients_pool.value + 1) / 7,
                     ingredients_offset=ingredients_offset.value)
                 self.custom_recipes["satellite"] = new_recipe
         bridge = "ap-energy-bridge"
@@ -563,7 +566,7 @@ class Factorio(World):
             Recipe(bridge, "crafting", {"replace_1": 1, "replace_2": 1, "replace_3": 1,
                                         "replace_4": 1, "replace_5": 1, "replace_6": 1},
                    {bridge: 1}, 10),
-            sorted(science_pack_pools[self.options.max_science_pack.get_ordered_science_packs()[0]]),
+            sorted(science_pack_pools[MaxSciencePack.get_ordered_science_packs()[0]]),
             ingredients_offset=ingredients_offset.value)
         for ingredient_name in new_recipe.ingredients:
             new_recipe.ingredients[ingredient_name] = self.random.randint(50, 500)
