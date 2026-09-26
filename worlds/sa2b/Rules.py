@@ -445,7 +445,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
 
         add_rule(multiworld.get_location(LocationName.cannon_core_chao_2, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
-                               state.has(ItemName.eggman_jet_engine, player))
+                               state.has(ItemName.eggman_jet_engine, player) and
+                               state.has(ItemName.rouge_iron_boots, player))
 
         add_rule(multiworld.get_location(LocationName.metal_harbor_chao_3, player),
                  lambda state: state.has(ItemName.sonic_light_shoes, player))
@@ -3560,7 +3561,8 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
     add_rule_safe(multiworld, LocationName.sand_ocean_5, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(multiworld, LocationName.egg_quarters_5, player,
-                  lambda state: state.has(ItemName.rouge_treasure_scope, player))
+                  lambda state: state.has(ItemName.rouge_treasure_scope, player) or
+                                state.has(ItemName.rouge_pick_nails, player))
     add_rule_safe(multiworld, LocationName.lost_colony_5, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player) and
                                 state.has(ItemName.eggman_large_cannon, player))
@@ -3968,9 +3970,6 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
                                state.has(ItemName.tails_bazooka, player))
         add_rule(multiworld.get_location(LocationName.crazy_gadget_animal_16, player),
                  lambda state: state.has(ItemName.sonic_flame_ring, player))
-
-        add_rule(multiworld.get_location(LocationName.final_chase_animal_17, player),
-                 lambda state: state.has(ItemName.shadow_flame_ring, player))
 
         add_rule(multiworld.get_location(LocationName.cannon_core_animal_17, player),
                  lambda state: state.has(ItemName.eggman_large_cannon, player) or
