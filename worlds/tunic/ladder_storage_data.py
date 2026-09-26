@@ -17,11 +17,12 @@ ow_ladder_groups: dict[str, OWLadderInfo] = {
                               ["Overworld Beach"]),
     # also the east filigree room
     "LS Elev 1": OWLadderInfo({"Ladders near Weathervane", "Ladders in Overworld Town", "Ladder to Swamp"},
-                              ["Furnace_gyro_lower", "Furnace_gyro_west", "Swamp Redux 2_wall"],
+                              ["Furnace_gyro_lower", "Furnace_gyro_west", "Swamp Redux 2_wall",
+                               "Archipelagos Redux_upper"],
                               ["Overworld Tunnel Turret"]),
     # also the fountain filigree room and ruined passage door
     "LS Elev 2": OWLadderInfo({"Ladders near Weathervane", "Ladders to West Bell"},
-                              ["Archipelagos Redux_upper", "Ruins Passage_east"],
+                              ["Ruins Passage_east"],
                               ["After Ruined Passage"]),
     # also old house door
     "LS Elev 3": OWLadderInfo({"Ladders near Weathervane", "Ladder to Quarry", "Ladders to West Bell",
