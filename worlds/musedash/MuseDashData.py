@@ -753,6 +753,6 @@ SONG_DATA: Dict[str, SongData] = {
     "Runaway": SongData(2900877, "102-1", "Slumbering Golden Mark", False, 2, 5, 8),
     "Beyond the Starline feat. Eye": SongData(2900878, "102-2", "Slumbering Golden Mark", True, 3, 6, 9),
     "$trange Attraktor": SongData(2900879, "102-3", "Slumbering Golden Mark", True, 5, 7, 10),
-    "Euphoria": SongData(2900880, "102-4", "Slumbering Golden Mark", False, 5, 7, 9),
+    "Euphoria Laur": SongData(2900880, "102-4", "Slumbering Golden Mark", False, 5, 7, 9),
     "Kirameku Metamorphose": SongData(2900881, "102-5", "Slumbering Golden Mark", True, 3, 6, 9),
 }
