@@ -11,6 +11,24 @@ valid_move_randomizer_start_entrances = {
 }
 
 
+class UniversalTrackerRegenerationTest(SM64TestBase):
+    def test_create_items_is_skipped(self):
+        slot_data = self.world.fill_slot_data()
+        itempool_size = len(self.multiworld.itempool)
+        self.multiworld.re_gen_passthrough = {self.game: slot_data}
+        del self.world.number_of_stars
+        del self.world.filler_count
+
+        self.world.generate_early()
+        self.world.create_items()
+
+        self.assertEqual(len(self.multiworld.itempool), itempool_size)
+        self.assertEqual(self.world.move_rando_bitvec, slot_data["MoveRandoVec"])
+        for cost_name in ("FirstBowserDoorCost", "BasementDoorCost", "SecondFloorDoorCost",
+                          "MIPS1Cost", "MIPS2Cost", "StarsToFinish"):
+            self.assertEqual(self.world.star_costs[cost_name], slot_data[cost_name])
+
+
 # Coin Star Logic
 class EnableCoinStarsTestBase(SM64TestBase):
     options = {
