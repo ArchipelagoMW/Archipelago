@@ -859,9 +859,9 @@ class VerifyKeys(metaclass=FreezeValidKeys):
 
     def verify_keys(self) -> None:
         if self.valid_keys:
-            data = set(self.value)
-            dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
-            extra = dataset - self._valid_keys
+            given = set(word.casefold() for word in self.value) if self.valid_keys_casefold else set(self.value)
+            valid = set(word.casefold() for word in self._valid_keys) if self.valid_keys_casefold else self._valid_keys
+            extra = given - valid
             if extra:
                 raise OptionError(
                     f"Found unexpected key {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
