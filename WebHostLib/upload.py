@@ -133,24 +133,22 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 flash("Could not load multidata. File may be corrupted or incompatible.")
                 multidata = None
 
-
-        # Factorio
-        elif file.filename.endswith(".zip"):
-            try:
-                _, _, slot_id, *_ = file.filename.split('_')[0].split('-', 3)
-            except ValueError:
-                flash("Error: Unexpected file found in .zip: " + file.filename)
-                return
-            data = zfile.open(file, "r").read()
-            files[int(slot_id[1:])] = data
-
-        # All other files using the standard MultiWorld.get_out_file_name_base method
+        # APPlayerContainer
         else:
-            try:
-                _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
-            except ValueError:
-                flash("Error: Unexpected file found in .zip: " + file.filename)
-                return
+            # Factorio
+            if file.filename.endswith(".zip"):
+                try:
+                    _, _, slot_id, *_ = file.filename.split('_')[0].split('-', 3)
+                    matched = True
+                except ValueError:
+                    matched = False
+            if not matched:
+                # All other files using the standard MultiWorld.get_out_file_name_base method
+                try:
+                    _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
+                except ValueError:
+                    flash("Error: Unexpected file found in .zip: " + file.filename)
+                    return
             data = zfile.open(file, "r").read()
             files[int(slot_id[1:])] = data
 
