@@ -1,4 +1,5 @@
 from .TestDungeon import TestDungeon
+from worlds.alttp.PotShuffle import FilledPot, POT_SWITCH
 
 
 class TestDarkPalace(TestDungeon):
@@ -86,4 +87,22 @@ class TestDarkPalace(TestDungeon):
             ["Palace of Darkness - Boss", False, [], ['Big Key (Palace of Darkness)']],
             ["Palace of Darkness - Boss", False, [key]*5, [key]],
             ["Palace of Darkness - Boss", True, ['Lamp', 'Hammer', 'Progressive Bow', 'Big Key (Palace of Darkness)'] + [key]*6],
+        ])
+
+    def testDarkPalacePotShuffleStalfosBasementLogic(self):
+        self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state())
+        self.starting_regions = ['Palace of Darkness (Entrance)']
+        key = 'Small Key (Palace of Darkness)'
+        self.run_tests([
+            ["Palace of Darkness - Stalfos Basement", True, [key]],
+        ])
+
+        self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state({
+            0x0A: (FilledPot(156, 17, POT_SWITCH),),
+        }))
+        self.starting_regions = ['Palace of Darkness (Entrance)']
+        key = 'Small Key (Palace of Darkness)'
+        self.run_tests([
+            ["Palace of Darkness - Stalfos Basement", False, [key]],
+            ["Palace of Darkness - Stalfos Basement", True, [key, 'Bomb Upgrade (+5)']],
         ])
