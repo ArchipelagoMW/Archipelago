@@ -218,6 +218,7 @@ if apworlds:
                            f"as its game {apworld.game} is already loaded.",
                            add_as_failed_to_load=False)
             else:
+                logger.info(apworld_source.name)
                 add_apworld_spec(apworld_source, apworld)
 
                 apworld_source.load()
