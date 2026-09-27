@@ -22,7 +22,7 @@ ow_ladder_groups: dict[str, OWLadderInfo] = {
                               ["Overworld Tunnel Turret"]),
     # also the fountain filigree room and ruined passage door
     "LS Elev 2": OWLadderInfo({"Ladders near Weathervane", "Ladders to West Bell"},
-                              ["Ruins Passage_east", "Archipelagos Redux_upper"],
+                              ["Archipelagos Redux_upper", "Ruins Passage_east"],
                               ["After Ruined Passage"]),
     # also old house door
     "LS Elev 3": OWLadderInfo({"Ladders near Weathervane", "Ladder to Quarry", "Ladders to West Bell",
