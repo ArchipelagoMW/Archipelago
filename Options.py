@@ -771,7 +771,7 @@ class Range(NumericOption):
                     truefalse = ", \"true\", \"false\""
             raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
                             f"<int>{default}, high, low{truefalse}, "
-                            f"{', '.join(cls._RANDOM_OPTS)}.")
+                            f"{', '.join(_RANDOM_OPTS)}.")
 
         return cls(num)
 
