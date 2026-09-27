@@ -231,6 +231,7 @@ def output_path(*path: str) -> str:
     return path
 
 
+@cache_argsless
 def get_commit_name() -> str:
     """Get text identifying current git commit, if one can be found"""
     tag_proc = subprocess.run(["git", "describe", "--tags", "--exact-match"], capture_output=True)
@@ -251,7 +252,7 @@ try:
 except FileNotFoundError:
     commit = get_commit_name()
     if commit:
-        version_suffix = f" ({get_commit_name()})"
+        version_suffix = f" ({commit})"
     else:
         version_suffix = ""
 
