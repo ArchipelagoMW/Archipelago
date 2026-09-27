@@ -1932,7 +1932,7 @@ class Spoiler:
                     path_lines: List[str] = []
                     for region, exit in path:
                         if exit is not None:
-                            path_lines.append("{} -> {}".format(region, exit))
+                            path_lines.append("{} => {}".format(region, exit))
                         else:
                             path_lines.append(region)
                     path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
