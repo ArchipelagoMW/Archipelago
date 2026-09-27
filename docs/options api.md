@@ -274,6 +274,10 @@ section below.
 - `start_inventory` (*)
 - `start_location_hints` (*)
 - `weights_file_path`
+ 
+**This list may not be up-to-date with new reserved option names.**  
+Always double-check your world's options with the available core options, to ensure you don't have any overlapping option names. 
+
 
 ## Generic Option Classes
 These options are generically available to every game automatically, but can be overridden for slightly different
