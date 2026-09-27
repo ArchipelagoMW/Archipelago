@@ -23,6 +23,7 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
                       LaurelsLocation, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
                       check_options, LocalFill, get_hexagons_in_pool, HexagonQuestAbilityUnlockType)
 from . import ut_stuff
+from . import launcher
 
 
 class TunicSettings(Group):
@@ -37,9 +38,15 @@ class TunicSettings(Group):
         description = "TUNIC Poptracker Pack zip file"
         required = False
 
+    class GamePath(FilePath):
+        """Name of the TUNIC executable file."""
+        description = "TUNIC Game Executable"
+        is_exe = True
+
     disable_local_spoiler: DisableLocalSpoiler | bool = False
     limit_grass_rando: LimitGrassRando | bool = True
     ut_poptracker_path: UTPoptrackerPath | str = UTPoptrackerPath()
+    game_path: GamePath = GamePath(["Tunic.exe", "Secret Legend.exe"])
 
 
 class TunicWeb(WebWorld):
