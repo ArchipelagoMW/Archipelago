@@ -2,7 +2,7 @@ from dataclasses import fields
 from logging import warning
 from typing import Any, TypedDict, ClassVar, TextIO
 
-from BaseClasses import Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from BaseClasses import Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState, Entrance, Region
 from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, Removed
 from settings import Group, Bool, FilePath
 from worlds.AutoWorld import WebWorld, World
@@ -23,6 +23,7 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
                       LaurelsLocation, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
                       check_options, LocalFill, get_hexagons_in_pool, HexagonQuestAbilityUnlockType)
 from . import ut_stuff
+from . import launcher
 
 
 class TunicSettings(Group):
@@ -37,9 +38,15 @@ class TunicSettings(Group):
         description = "TUNIC Poptracker Pack zip file"
         required = False
 
+    class GamePath(FilePath):
+        """Name of the TUNIC executable file."""
+        description = "TUNIC Game Executable"
+        is_exe = True
+
     disable_local_spoiler: DisableLocalSpoiler | bool = False
     limit_grass_rando: LimitGrassRando | bool = True
     ut_poptracker_path: UTPoptrackerPath | str = UTPoptrackerPath()
+    game_path: GamePath = GamePath(["Tunic.exe", "Secret Legend.exe"])
 
 
 class TunicWeb(WebWorld):
@@ -136,6 +143,8 @@ class TunicWorld(World):
     passthrough: dict[str, Any]
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
     tracker_world: ClassVar = ut_stuff.tracker_world
+    disconnected_entrances: dict[Entrance, Region]
+    found_entrances_datastorage_key: list[str]
 
     def generate_early(self) -> None:
         # if you have multiple APWorlds, we want it to fail here instead of at the end of gen
@@ -647,6 +656,18 @@ class TunicWorld(World):
 
     def set_rules(self) -> None:
         set_er_location_rules(self)
+
+    def connect_entrances(self) -> None:
+        if (self.options.entrance_rando and self.using_ut
+                and self.multiworld.enforce_deferred_connections in ("on", "default")):
+            ut_stuff.disconnect_entrances(self)
+            ut_stuff.setup_found_entrances_datastorage(self)
+
+    def reconnect_found_entrances(self, key: str, value: Any) -> None:
+        if not value:
+            return
+        else:
+            ut_stuff.reconnect_found_entrance(self, key.split(":")[-1])
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
