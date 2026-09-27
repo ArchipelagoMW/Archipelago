@@ -22,7 +22,7 @@ including the exclamation point.
 - `!options` Returns the current server options, including password in plaintext.
 - `!players` Returns info about the currently connected and non-connected players.
 - `!status [tag name]` Returns information about the connection status and check completion numbers for all players in
-  the current room. If included, returns information on who has the given tag. (e.g. `!status DeathLink`)
+  the current room. If tag name is given, returns information on who has the tag. (e.g. `!status DeathLink`)
 
 
 ### Utilities
@@ -39,7 +39,7 @@ including the exclamation point.
   given, filters to location names containing the text, or instead to locations in a location group if the filter
   matches one's name.
 - `!checked [filter text]` Lists all the location checks you've done from the server's perspective. Filters as with
-  `!missing` if given.
+  `!missing` if filter text is given.
 
 ### Hints
 - `!hint` Lists all hints relevant to your world, the number of points you have for hints, and how much a hint costs.
