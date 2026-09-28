@@ -156,7 +156,7 @@ class Goal(Choice):
 
 
 class FarmType(Choice):
-    """What farm to play on?
+    """Farm to play on.
     Custom farms are not supported"""
     internal_name = "farm_type"
     display_name = "Farm Type"
@@ -191,7 +191,8 @@ class StartingMoney(NamedRange):
 
 
 class ProfitMargin(NamedRange):
-    """Multiplier over all gold earned in-game by the player."""
+    """Multiplier over all gold earned in-game by the player.
+    This does not affect shop prices, so some items may become ridiculously profitable or unprofitable."""
     internal_name = "profit_margin"
     display_name = "Profit Margin"
     range_start = 25
@@ -288,11 +289,6 @@ class EntranceRandomization(Choice):
     Overworld: Buildings and all normal overworld map transitions like from the farm to the forest - This option can be blocked by the host
     Everywhere: Overworld as well as the special transitions like the minecarts, the bus and warps - This option can be blocked by the host
     """
-    # Everything: All buildings and areas are randomized with each other
-    # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
-    # Buildings One-way: Entrance pairs are disconnected, they aren't two-way!
-    # Everything One-way: Entrance pairs are disconnected, and every entrance is in the shuffle
-    # Chaos One-way: Entrance pairs are disconnected, and they change every day!
 
     internal_name = "entrance_randomization"
     display_name = "Entrance Randomization"
@@ -314,8 +310,8 @@ class EntranceRandomizationBehavior(OptionEnumSet[EntranceRandomizationBehaviorO
     - Decoupled: Going into an entrance and going back might bring you somewhere different - This option is blocked by the website, and by the host unless changed
     - Shuffle Farmhouse: shuffles the farmhouse exit to some outside entrance
     - Shuffle Farmhouse Anywhere: Like Shuffle Farmhouse but the farmhouse could end up inside and in any direction
-    - Same Direction: Makes entrances you go in towards the top link up with entrances you go in downward etc.
-    - Same Type: Makes Entrances that go from for example inside to inside mix with other entrances that go inside to inside
+    - Same Direction: Makes entrances you go in towards the top link up with entrances you go in downward etc. - This option can cause generation failures
+    - Same Type: Makes Entrances that go from for example inside to inside mix with other entrances that go inside to inside - This option can cause generation failures
     """
     internal_name = "entrance_randomization_behavior"
     display_name = "Entrance Randomizer Behavior"
@@ -358,7 +354,7 @@ class StartWithout(OptionSet):
     If the relevant item is not randomized, this option will do nothing.
     Tools: Start without an Axe, Pickaxe, Hoe, Watering can and Scythe
     Backpack: Start with 4 backpack slots, instead of 12, if your backpack size allows it
-    Landslide: Start without the landslide that leads to the mines
+    Landslide: Start without the ability to remove the landslide that leads to the mines. You must find "Landslide Removed" to unlock this path.
     Community Center: Start without the key to the Community Center, and the Forest Magic to allow reading the bundles
     Buildings: Start without the Shipping Bin and Pet Bowl
     House: Start without your farmhouse. You will spawn on the farm instead

@@ -4,17 +4,20 @@
 
 - Stardew Valley 1.6 on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
 - SMAPI ([Mod loader for Stardew Valley](https://smapi.io/) ([Nexus](https://www.nexusmods.com/stardewvalley/mods/2400?tab=files) | [Github](https://github.com/Pathoschild/SMAPI/releases))
-- [StardewArchipelago Mod Release 7.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
-    - It is important to use a mod release of version 7.x.x to play seeds that have been generated here. Later releases 
+- [StardewArchipelago Mod Release 8.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
+    - It is important to use a mod release of version 8.x.x to play seeds that have been generated here. Later releases 
   can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
 
 ## Optional Software
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     * This provides access to various built-in tools, text client, and local generation and hosting
 - [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases?q=Tracker)
-    * If you installed Archipelago, you can use a custom Stardew Tracker that depends on Universal Tracker.
+    * If you installed Archipelago, you can use Universal Tracker with it to track Stardew Valley slots. You will still need your **resolved** (no randomness remaining) yaml file with it.
 - Other Stardew Valley Mods [Nexus Mods](https://www.nexusmods.com/stardewvalley)
-    * There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/7.x.x/Documentation/Supported%20Mods.md) 
+    * Recommended Mods:
+      * [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098): Allows customizing the in-game config for many mods, including Archipelago. A lot of tweaking is possible from the config file, even after a game is started.
+      * [Visible Fish](https://www.nexusmods.com/stardewvalley/mods/8897): If using DataRandomization, this mod makes it much easier to track, than the vanilla tv channel FIBS.
+    * There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/8.x.x/Documentation/Supported%20Mods.md) 
   that you can add to your yaml to include them with the Archipelago randomization
 
     * It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. 
@@ -29,9 +32,12 @@ You can customize your options by visiting the [Stardew Valley Player Options Pa
 
 From there, you can customize all your options, or use a preset. Then, you can either Generate a single player game, or export a yaml file.
 
+Some of the more advanced or difficult options cannot be generated from the website. You can still make a YAML file with them from the website, but you'll need to generate your multiworld locally for them to properly work.
+You can still host the multiworld on the website afterwards.
+
 ### What is a YAML file and do I need one?
 
-A yaml file serves to configure your game in the multiworld. If you play a solo game, you can skip it entirely.
+A yaml file serves to configure your game in the multiworld. If you play a solo game, you can skip it entirely and simply press "Generate Single Player Game" on the options page.
 
 If you intend to play in a multiworld, you will need to provide your yaml file to the person who is hosting the multiworld.
 
@@ -95,9 +101,11 @@ full history as well and may be better suited to read older messages.
 For a better chat experience, you can also use the official Archipelago Text Client, although it will not allow you to run 
 Stardew-exclusive commands.
 
+There are also a few StardewArchipelago "cheat codes" that can be used from SMAPI. For example, overriding Trap Difficulty to a lower one if you bit off more than you can chew, or disabling Deathlink.
+
 ### Playing with supported mods
 
-See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/7.x.x/Documentation/Supported%20Mods.md)
+See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/8.x.x/Documentation/Supported%20Mods.md)
 
 ### Multiplayer
 
