@@ -43,7 +43,6 @@ def create_regions_and_locations(multiworld: MultiWorld, player: int, options: T
         create_region(multiworld, player, locations_per_region, 'Lower Lake Serene'),
         create_region(multiworld, player, locations_per_region, 'Caves of Banishment (upper)'),
         create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Maw)'),
-        create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Flooded)'),
         create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Sirens)'),
         create_region(multiworld, player, locations_per_region, 'Castle Ramparts'),
         create_region(multiworld, player, locations_per_region, 'Castle Keep'),
