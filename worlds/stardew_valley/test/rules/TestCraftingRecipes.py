@@ -1,6 +1,6 @@
-from ..bases import SVTestBase
-from ... import options, StartWithoutOptionName
+from ... import StartWithoutOptionName, options
 from ...options import StartWithout
+from ..bases import SVTestBase
 
 
 class TestCraftsanityLogic(SVTestBase):
@@ -142,6 +142,7 @@ class TestNoCraftsanityLogic(SVTestBase):
         self.multiworld.state.collect(self.create_item("Furnace Recipe"))
         self.collect([self.create_item("Combat Level")] * 10)
         self.collect([self.create_item("Fishing Level")] * 10)
+        self.collect([self.create_item("Mining Level")] * 1)
         self.collect_all_the_money()
         self.assert_rules_false(rules_easy, self.multiworld.state)
 
@@ -149,7 +150,7 @@ class TestNoCraftsanityLogic(SVTestBase):
         self.assert_rules_true(rules_easy, self.multiworld.state)
         self.assert_rules_false(rules_hard, self.multiworld.state)
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
-        self.collect([self.create_item("Mining Level")] * 10)
+        self.collect([self.create_item("Mining Level")] * 9)
         self.assert_rules_true(rules_hard, self.multiworld.state)
 
 

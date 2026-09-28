@@ -185,7 +185,7 @@ class SourceLogic(BaseLogic):
 
     @has_access_to.register
     def _(self, source: StarterSource):
-        return self.logic.true_
+        return self.logic.requirement.meet_all_requirements(source.other_requirements)
 
     @has_access_to.register
     def _(self, source: SpecialOrderSource):

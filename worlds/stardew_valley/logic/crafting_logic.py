@@ -1,12 +1,13 @@
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
+
 from .. import options
 from ..data.craftable_data import CraftingRecipe
 from ..data.game_item import Source
-from ..data.recipe_source import ArchipelagoSource, SpecialOrderSource, QuestSource, StarterSource, SkillCraftsanitySource
+from ..data.recipe_source import ArchipelagoSource, QuestSource, SkillCraftsanitySource, SpecialOrderSource, StarterSource
 from ..data.shop import ShopSource
 from ..options import Craftsanity, SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_
+from .base_logic import BaseLogic, BaseLogicMixin
 
 
 class CraftingLogicMixin(BaseLogicMixin):
@@ -47,7 +48,7 @@ class CraftingLogic(BaseLogic):
 
     def knows_recipe_source(self, source: Source, item_name: str) -> StardewRule:
         if isinstance(source, ArchipelagoSource):
-            return self.logic.received_all(*source.ap_items)
+            return self.logic.received_all(*source.ap_items) & self.logic.requirement.meet_all_requirements(source.other_requirements)
         if isinstance(source, ShopSource):
             shop_suffix = " - Shop"
             shop_name = source.shop_region
