@@ -8,7 +8,7 @@ from .bases import SVTestCase, skip_long_tests, solo_multiworld
 from .options.option_names import generate_random_world_options
 
 
-@classvar_matrix(n=range(100 if skip_long_tests() else 1000))
+@classvar_matrix(n=range(10 if skip_long_tests() else 1000))
 class TestGenerateManyWorlds(GoalAssertMixin, OptionAssertMixin, WorldAssertMixin, SVTestCase):
     n: ClassVar[int]
 

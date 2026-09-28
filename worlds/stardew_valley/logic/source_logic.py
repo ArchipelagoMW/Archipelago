@@ -1,7 +1,9 @@
 import functools
+import math
 from collections.abc import Iterable
 from typing import Any
 
+from ...factorio.Technologies import source
 from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
 from ..data.fish_data import FishingSource
@@ -63,6 +65,24 @@ class SourceLogic(BaseLogic):
     def has_access_to_any(self, sources: Iterable[Source]):
         return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
                                 for source in sources))
+
+    def has_access_to_any_with_multiplier(self, sources: Iterable[Source], multiplier: float):
+        multiplied_sources = []
+        for source in sources:
+            # There might be other source types to multiply later, but for now it's the only one so I didn't code them all
+            if isinstance(source, ShopSource):
+                multiplied_source = ShopSource(shop_region=source.shop_region,
+                                               price=math.ceil(source.price * multiplier),
+                                               items_price=tuple((math.ceil(price * multiplier), item) for price, item in source.items_price) if source.items_price else None,
+                                               seasons=source.seasons,
+                                               currency=source.currency,
+                                               forbidden_items=source.forbidden_items,
+                                               other_requirements=source.other_requirements)
+            else:
+                multiplied_source = source
+            multiplied_sources.append(multiplied_source)
+        return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
+                                for source in multiplied_sources))
 
     def has_access_to_any_without_other_requirements(self, sources: Iterable[Source]):
         return self.logic.or_(*(self.logic.source.has_access_to(source) for source in sources))
