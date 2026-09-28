@@ -281,23 +281,23 @@ class Rule(Generic[TWorld]):
         def __str__(self) -> str:
             return self.rule_name
 
-        def combine_and(self, other_rule: "Rule.Resolved", world: "World") -> "Sequence[Rule.Resolved] | None":
+        def combine_and(self, other_rule: "Rule.Resolved", world: "World") -> "Sequence[Rule.Resolved]":
             """
             Returns a resolved rule that corresponds to the intersection of this rule with other_rule.
             If no such rule exists, None should be returned.
             """
             if self == other_rule:
                 return [self]
-            return None
+            return NotImplemented
 
-        def combine_or(self, other_rule: "Rule.Resolved", world: "World") -> "Sequence[Rule.Resolved] | None":
+        def combine_or(self, other_rule: "Rule.Resolved", world: "World") -> "Sequence[Rule.Resolved]":
             """
             Returns a resolved rule that corresponds to the union of this rule with other_rule.
             If no such rule exists, None should be returned.
             """
             if self == other_rule:
                 return [self]
-            return None
+            return NotImplemented
 
 
 @dataclasses.dataclass()
@@ -598,7 +598,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
             for i in range(len(clauses) - 1, -1, -1):
                 clause = clauses[i]
                 intersection = clause.combine_and(child, world)
-                if intersection is not None:
+                if intersection is not NotImplemented:
                     if len(intersection) == 1 and clause == intersection[0]:
                         # The child was destroyed, nothing new can happen
                         break
@@ -679,7 +679,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
             for i in range(len(clauses) - 1, -1, -1):
                 clause = clauses[i]
                 intersection = clause.combine_or(child, world)
-                if intersection is not None:
+                if intersection is not NotImplemented:
                     if len(intersection) == 1 and clause == intersection[0]:
                         # The child was destroyed, nothing new can happen
                         break
@@ -906,9 +906,9 @@ class Has(Rule[TWorld], game="Archipelago"):
             return f"Has {count}{self.item_name}"
 
         @override
-        def combine_and(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved] | None:
+        def combine_and(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved]:
             result = super().combine_and(other_rule, world)
-            if result is not None:
+            if result is not NotImplemented:
                 return result
 
             if isinstance(other_rule, Has.Resolved):
@@ -935,12 +935,12 @@ class Has(Rule[TWorld], game="Archipelago"):
                 items[self.item_name] = self.count
                 return [HasAllCounts(items).resolve(world)]
 
-            return None
+            return NotImplemented
 
         @override
-        def combine_or(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved] | None:
+        def combine_or(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved]:
             result = super().combine_or(other_rule, world)
-            if result is not None:
+            if result is not NotImplemented:
                 return result
 
             if isinstance(other_rule, Has.Resolved):
@@ -967,7 +967,7 @@ class Has(Rule[TWorld], game="Archipelago"):
                 items[self.item_name] = self.count
                 return [HasAnyCount(items).resolve(world)]
 
-            return None
+            return NotImplemented
 
 
 @dataclasses.dataclass(init=False)
@@ -1088,9 +1088,9 @@ class HasAll(Rule[TWorld], game="Archipelago"):
             return f"Has all of ({items})"
 
         @override
-        def combine_and(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved] | None:
+        def combine_and(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved]:
             result = super().combine_and(other_rule, world)
-            if result is not None:
+            if result is not NotImplemented:
                 return result
 
             if isinstance(other_rule, Has.Resolved):
@@ -1122,7 +1122,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
                     return [other_rule]
                 return [HasAllCounts(items).resolve(world)]
 
-            return None
+            return NotImplemented
 
 
 @dataclasses.dataclass(init=False)
@@ -1243,9 +1243,9 @@ class HasAny(Rule[TWorld], game="Archipelago"):
             return f"Has any of ({items})"
 
         @override
-        def combine_or(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved] | None:
+        def combine_or(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved]:
             result = super().combine_or(other_rule, world)
-            if result is not None:
+            if result is not NotImplemented:
                 return result
 
             if isinstance(other_rule, Has.Resolved):
@@ -1277,7 +1277,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
                     return [other_rule]
                 return [HasAnyCount(items).resolve(world)]
 
-            return None
+            return NotImplemented
 
 
 @dataclasses.dataclass()
@@ -1415,9 +1415,9 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
             return f"Has all of ({items})"
 
         @override
-        def combine_and(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved] | None:
+        def combine_and(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved]:
             result = super().combine_and(other_rule, world)
-            if result is not None:
+            if result is not NotImplemented:
                 return result
 
             if isinstance(other_rule, Has.Resolved):
@@ -1444,7 +1444,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
                     items[item] = max(items[item], count)
                 return [HasAllCounts(items).resolve(world)]
 
-            return None
+            return NotImplemented
 
 
 @dataclasses.dataclass()
@@ -1582,9 +1582,9 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
             return f"Has any of ({items})"
 
         @override
-        def combine_or(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved] | None:
+        def combine_or(self, other_rule: Rule.Resolved, world: "World") -> Sequence[Rule.Resolved]:
             result = super().combine_or(other_rule, world)
-            if result is not None:
+            if result is not NotImplemented:
                 return result
 
             if isinstance(other_rule, Has.Resolved):
@@ -1611,7 +1611,7 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
                     items[item] = min(items[item], count)
                 return [HasAnyCount(items).resolve(world)]
 
-            return None
+            return NotImplemented
 
 
 @dataclasses.dataclass(init=False)
