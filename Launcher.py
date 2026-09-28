@@ -12,12 +12,10 @@ import argparse
 import logging
 import multiprocessing
 import os
-import shlex
 import subprocess
 import sys
 import urllib.parse
 from collections.abc import Callable, Sequence
-from shutil import which
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -29,7 +27,7 @@ if __name__ == "__main__":
     ModuleUpdate.update()
 
 import Utils
-from Utils import env_cleared_lib_path, init_logging, is_linux, is_macos, is_windows, local_path
+from Utils import init_logging, local_path
 
 if __name__ == "__main__":
     init_logging('Launcher')
@@ -72,25 +70,8 @@ def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
 
     If `in_terminal` is True, it will attempt to run in a terminal window,
     and the return value will indicate whether one was found."""
-    if in_terminal:
-        if is_windows:
-            # intentionally using a window title with a space so it gets quoted and treated as a title
-            subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
-            return True
-        elif is_linux:
-            terminal = which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm")
-            if terminal:
-                # Clear LD_LIB_PATH during terminal startup, but set it again when running command in case it's needed
-                ld_lib_path = os.environ.get("LD_LIBRARY_PATH")
-                lib_path_setter = f"env LD_LIBRARY_PATH={shlex.quote(ld_lib_path)} " if ld_lib_path else ""
-                env = env_cleared_lib_path()
-
-                subprocess.Popen([terminal, "-e", lib_path_setter + shlex.join(exe)], env=env)
-                return True
-        elif is_macos:
-            terminal = [which("open"), "-W", "-a", "Terminal.app"]
-            subprocess.Popen([*terminal, *exe])
-            return True
+    if in_terminal and Utils.run_in_terminal(exe):
+        return True
     subprocess.Popen(exe)
     return False
 
@@ -258,7 +239,6 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
                 self.button_layout.layout.add_widget(card)
 
         def build(self):
-            self.set_colors()
             self.screen_manager = MDScreenManager()
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
             self.loading_screen = LoadingScreen(name="loading")
@@ -267,6 +247,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             self.navigation = self.top_screen.ids.navigation
             self.button_layout = self.top_screen.ids.button_layout
             self.search_box = self.top_screen.ids.search_box
+            self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
 
             Window.bind(on_drop_file=self._on_drop_file)
@@ -297,12 +278,14 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
                 self.launch_args = None
 
         def do_loading(self):
-            import importlib
-            import time
-            start = time.perf_counter()
-            assert "worlds" not in sys.modules, "worlds module already loaded."
-            importlib.import_module("worlds")
-            logging.error(f"Worlds module loaded in {time.perf_counter() - start:.2f} seconds")
+            if "worlds" in sys.modules:
+                logging.warning("worlds module already loaded.")
+            else:
+                import importlib
+                import time
+                start = time.perf_counter()
+                importlib.import_module("worlds")
+                logging.error(f"Worlds module loaded in {time.perf_counter() - start:.2f} seconds")
 
             global refresh_components
             logger = logging.getLogger("Worlds")
