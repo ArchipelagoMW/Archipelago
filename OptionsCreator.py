@@ -381,13 +381,14 @@ class OptionsCreator(ThemedApp):
         self.options[name] = default
         return box
 
-    def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str):
+    def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str, bind=True):
         text = VisualFreeText(option=option, name=name)
 
         def set_value(instance, value):
             self.options[name] = value
 
-        text.bind(text=set_value)
+        if bind:
+            text.bind(text=set_value)
         self.options[name] = option.default
         return text
 
@@ -401,6 +402,9 @@ class OptionsCreator(ThemedApp):
             dropdown.dismiss()
 
         def open_dropdown(button):
+            # clicking the edge of a choice button apparently still runs this?
+            if button.disabled:
+                return
             # for some reason this fixes an issue causing some to not open
             dropdown.open()
 
@@ -426,13 +430,13 @@ class OptionsCreator(ThemedApp):
                     child.text = text
 
         box = VisualTextChoice(option=option, name=name, choice=self.create_choice(option, name),
-                               text=self.create_free_text(option, name))
+                               text=self.create_free_text(option, name, bind=False))
 
-        def set_value(instance):
+        def set_value(instance, value):
             set_button_text(box.choice, "Custom")
-            self.options[name] = instance.text
+            self.options[name] = value
 
-        box.text.bind(on_text_validate=set_value)
+        box.text.bind(text=set_value)
         return box
 
     def create_toggle(self, option: typing.Type[Toggle], name: str) -> Widget:
@@ -529,11 +533,12 @@ class OptionsCreator(ThemedApp):
             option_base.add_widget(self.create_choice(option, name))
         elif issubclass(option, FreeText):
             option_base.add_widget(self.create_free_text(option, name))
-        elif any(issubclass(option, cls) for cls in (OptionSet, OptionList, OptionCounter)):
+        elif issubclass(option, (OptionSet, OptionList, OptionCounter)):
             option_base.add_widget(self.create_option_set_list_counter(option, name, world))
         else:
             option_base.add_widget(MDLabel(text="This option isn't supported by the option creator.\n"
                                                 "Please edit your yaml manually to set this option."))
+            return option_base
 
         if option_can_be_randomized(option):
             def randomize_option(instance: Widget, value: str):
@@ -559,6 +564,12 @@ class OptionsCreator(ThemedApp):
             random_toggle.bind(state=randomize_option)
             label_box.add_widget(random_toggle)
             if default_random:
+                # change stored value to match displayed one before randomizing it
+                if issubclass(option, Range):
+                    self.options[name] = option.range_start
+                elif issubclass(option, Choice):
+                    self.options[name] = list(option.options.values())[0]
+
                 randomize_option(random_toggle, "down")
 
         return option_base
