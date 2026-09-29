@@ -1,7 +1,8 @@
-import typing
 from dataclasses import dataclass
-from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet, OptionGroup
+from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet, OptionGroup, \
+    PlandoConnections
 from .Items import action_item_data_table
+
 
 class EnableCoinStars(Choice):
     """
@@ -18,6 +19,7 @@ class EnableCoinStars(Choice):
     option_off = 0
     option_on = 1
     option_vanilla = 2
+
 
 class EnableLockedPaintings(Toggle):
     """
@@ -133,16 +135,19 @@ class ProgressiveKeys(DefaultOnToggle):
     """Keys will first grant you access to the Basement, then to the Second Floor"""
     display_name = "Progressive Keys"
 
+
 class StrictMoveRequirements(DefaultOnToggle):
     """If disabled, Stars that expect certain moves may have to be acquired without them. Only makes a difference
     if Move Randomization is enabled"""
     display_name = "Strict Move Requirements"
+
 
 class EnableMoveRandomizer(Toggle):
     """Mario is unable to perform some actions until a corresponding item is picked up.
     This option is incompatible with builds using a 'nomoverando' branch.
     Specific actions to randomize can be specified in the YAML."""
     display_name = "Enable Move Randomizer"
+
 
 class MoveRandomizerActions(OptionSet):
     """Which actions to randomize when Move Randomizer is enabled"""
@@ -151,9 +156,41 @@ class MoveRandomizerActions(OptionSet):
     valid_keys = [action for action in action_item_data_table if action != 'Double Jump']
     default = valid_keys
 
+
+class SM64PlandoConnections(PlandoConnections):
+    display_name = "Entrance Plando"
+    entrances = exits = [
+        "Bob-omb Battlefield",
+        "Whomp's Fortress",
+        "Jolly Roger Bay",
+        "Cool, Cool Mountain",
+        "Big Boo's Haunt",
+        "Hazy Maze Cave",
+        "Lethal Lava Land",
+        "Shifting Sand Land",
+        "Dire, Dire Docks",
+        "Snowman's Land",
+        "Wet-Dry World",
+        "Tall, Tall Mountain",
+        "Tiny-Huge Island (Tiny)",
+        "Tiny-Huge Island (Huge)",
+        "Tick Tock Clock",
+        "Rainbow Ride",
+        "The Princess's Secret Slide",
+        "The Secret Aquarium",
+        "Bowser in the Dark World",
+        "Tower of the Wing Cap",
+        "Cavern of the Metal Cap",
+        "Vanish Cap under the Moat",
+        "Bowser in the Fire Sea",
+        "Wing Mario over the Rainbow"
+    ]
+
+
 sm64_options_groups = [
     OptionGroup("Logic Options", [
         AreaRandomizer,
+        SM64PlandoConnections,
         BuddyChecks,
         ExclamationBoxes,
         ProgressiveKeys,
@@ -178,9 +215,11 @@ sm64_options_groups = [
     ]),
 ]
 
+
 @dataclass
 class SM64Options(PerGameCommonOptions):
     area_rando: AreaRandomizer
+    plando_connections: SM64PlandoConnections
     buddy_checks: BuddyChecks
     exclamation_boxes: ExclamationBoxes
     progressive_keys: ProgressiveKeys
