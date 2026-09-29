@@ -3,7 +3,6 @@ import math
 from collections.abc import Iterable
 from typing import Any
 
-from ...factorio.Technologies import source
 from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
 from ..data.fish_data import FishingSource
