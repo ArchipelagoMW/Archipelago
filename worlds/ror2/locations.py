@@ -4,7 +4,11 @@ from .options import TotalLocations, ChestsPerEnvironment, ShrinesPerEnvironment
     ScannersPerEnvironment, AltarsPerEnvironment
 from .ror2environments import compress_dict_list_horizontal, environment_vanilla_orderedstages_table, \
     environment_sotv_orderedstages_table, environment_sost_orderedstages_table, \
-    environment_sots_variants_orderedstages_table, environment_vanilla_variant_orderedstages_table
+    environment_sots_variants_orderedstages_table, environment_vanilla_variant_orderedstages_table, \
+    environment_ac_orderedstages_table
+
+# Environments that never spawn a newt altar in-game (the in-game mod skips its newt locations).
+environments_without_newt_altars: set[str] = {"Conduit Canyon"}
 
 
 class RiskOfRainLocation(Location):
@@ -59,7 +63,7 @@ def get_environment_locations(chests: int, shrines: int, scavengers: int, scanne
 
 
 def get_locations(chests: int, shrines: int, scavengers: int, scanners: int, altars: int, dlc_sotv: bool,
-                  dlc_sots: bool, stage_variants: bool) \
+                  dlc_sots: bool, dlc_alloyed: bool, stage_variants: bool) \
         -> Dict[str, int]:
     """Get a dictionary of locations for the orderedstage environments with the locations from the parameters."""
     locations = {}
@@ -72,6 +76,8 @@ def get_locations(chests: int, shrines: int, scavengers: int, scanners: int, alt
         orderedstages.update(compress_dict_list_horizontal(environment_sost_orderedstages_table))
     if dlc_sots and stage_variants:
         orderedstages.update(compress_dict_list_horizontal(environment_sots_variants_orderedstages_table))
+    if dlc_alloyed:
+        orderedstages.update(compress_dict_list_horizontal(environment_ac_orderedstages_table))
     # for every environment, generate the respective locations
     for environment_name, environment_index in orderedstages.items():
         locations.update(get_environment_locations(
@@ -79,7 +85,7 @@ def get_locations(chests: int, shrines: int, scavengers: int, scanners: int, alt
             shrines=shrines,
             scavengers=scavengers,
             scanners=scanners,
-            altars=altars,
+            altars=0 if environment_name in environments_without_newt_altars else altars,
             environment_name=environment_name,
             environment_index=environment_index),
         )
@@ -95,5 +101,6 @@ location_table.update(get_locations(
     altars=AltarsPerEnvironment.range_end,
     dlc_sotv=True,
     dlc_sots=True,
+    dlc_alloyed=True,
     stage_variants=True
 ))
