@@ -12,7 +12,7 @@ from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
     USEFUL_ITEMS
-from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
+from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions, ShufflePortals
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
@@ -213,10 +213,12 @@ class MessengerWorld(World):
                            for reg_name in sub_region]
 
         for region in complex_regions:
-            region_name = region.name.removeprefix(f"{region.parent} - ")
-            connection_data = CONNECTIONS[region.parent][region_name]
+            parent_name = region.parent
+            region_name = region.name.removeprefix(f"{parent_name} - ")
+            connection_data: list[str] = CONNECTIONS[parent_name][region_name]
             for exit_region in connection_data:
-                region.connect(self.get_region(exit_region))
+                connection_name = region.name + " exit" if not exit_region.startswith(parent_name) else None
+                region.connect(self.get_region(exit_region), name=connection_name)
 
         # all regions need to be created before i can do these connections so we create and connect the complex first
         for region in [level for level in simple_regions if level.name in REGION_CONNECTIONS]:
@@ -298,7 +300,6 @@ class MessengerWorld(World):
     def connect_entrances(self) -> None:
         if self.options.shuffle_transitions:
             disconnect_entrances(self)
-            keep_entrance_logic = False
 
         if hasattr(self.multiworld, "re_gen_passthrough"):
             slot_data = self.multiworld.re_gen_passthrough.get(self.game)
@@ -306,7 +307,7 @@ class MessengerWorld(World):
                 self.multiworld.plando_options |= PlandoOptions.connections
                 self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
                 self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
-                keep_entrance_logic = True
+
 
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
@@ -324,7 +325,7 @@ class MessengerWorld(World):
                 raise RuntimeError("Unable to generate valid portal output.")
 
         if self.options.shuffle_transitions:
-            shuffle_transitions(self, keep_entrance_logic)
+            shuffle_transitions(self)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
@@ -352,7 +353,7 @@ class MessengerWorld(World):
                         and (transition.connected_region.name, "both", self.player) in spoiler.entrances):
                     continue
                 spoiler.set_entrance(
-                    transition.name if "->" not in transition.name else transition.parent_region.name,
+                    transition.name if " exit" not in transition.name else transition.parent_region.name,
                     transition.connected_region.name,
                     "both" if transition.randomization_type == EntranceType.TWO_WAY
                               and self.options.shuffle_transitions == ShuffleTransitions.option_coupled else "",
@@ -398,8 +399,7 @@ class MessengerWorld(World):
             "required_seals": self.required_seals,
             "starting_portals": self.starting_portals,
             "portal_exits": self.portal_mapping,
-            "transitions": [[TRANSITIONS.index("Corrupted Future") if transition.name == "Artificer's Portal"
-                             else TRANSITIONS.index(RANDOMIZED_CONNECTIONS[transition.parent_region.name]),
+            "transitions": [[TRANSITIONS.index(RANDOMIZED_CONNECTIONS[transition.name]),
                              TRANSITIONS.index(transition.connected_region.name)]
                             for transition in self.transitions],
             **self.options.as_dict("music_box", "death_link", "logic_level"),
