@@ -1,0 +1,171 @@
+[
+  {
+    "name": "Autumn Hills",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 278,
+        "y": 333,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Autumn Hills - Climbing Claws"
+      },
+      {
+        "name": "Autumn Hills - Key of Hope"
+      },
+      {
+        "name": "Autumn Hills Seal - Trip Saws"
+      },
+      {
+        "name": "Autumn Hills Seal - Double Swing Saws"
+      },
+      {
+        "name": "Autumn Hills Seal - Spike Ball Swing"
+      },
+      {
+        "name": "Autumn Hills Seal - Spike Ball Darts"
+      },
+      {
+        "name": "Autumn Hills Mega Shard"
+      },
+      {
+        "name": "Autumn Hills - Leaf Golem"
+      }
+    ]
+  },
+  {
+    "name": "Autumn Hills - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Autumn Hills - Climbing Claws"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Autumn Hills",
+            "x": 281,
+            "y": 130
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Autumn Hills - Key of Hope"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Autumn Hills",
+            "x": 366,
+            "y": 77
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Autumn Hills - Leaf Golem"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Autumn Hills",
+            "x": 849,
+            "y": 53
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Autumn Hills - Power Seals",
+    "children": [
+      {
+        "name": "Autumn Hills Seal",
+        "sections": [
+          {
+            "name": "Autumn Hills Seal - Trip Saws"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Autumn Hills",
+            "x": 281,
+            "y": 92
+          }
+        ]
+      },
+      {
+        "name": "Autumn Hills Seal",
+        "sections": [
+          {
+            "name": "Autumn Hills Seal - Double Swing Saws"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Autumn Hills",
+            "x": 641,
+            "y": 73
+          }
+        ]
+      },
+      {
+        "name": "Autumn Hills Seal",
+        "sections": [
+          {
+            "name": "Autumn Hills Seal - Spike Ball Swing"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Autumn Hills",
+            "x": 754,
+            "y": 110
+          }
+        ]
+      },
+      {
+        "name": "Autumn Hills Seal",
+        "sections": [
+          {
+            "name": "Autumn Hills Seal - Spike Ball Darts"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Autumn Hills",
+            "x": 754,
+            "y": 129
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Autumn Hills - Mega Shards",
+    "children": [
+      {
+        "name": "Autumn Hills Mega Shard",
+        "sections": [
+          {
+            "name": "Autumn Hills Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Autumn Hills",
+            "x": 485,
+            "y": 195
+          }
+        ]
+      }
+    ]
+  }
+]
