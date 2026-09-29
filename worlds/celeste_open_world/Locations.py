@@ -1,9 +1,9 @@
 from typing import NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Location, Region
-from worlds.generic.Rules import set_rule
+from rule_builder.rules import Has, HasAll, Or
 
-from .Levels import Level, LocationType
+from .Levels import Level, LocationType, level_id_to_name
 from .Names import ItemName
 
 if TYPE_CHECKING:
@@ -40,6 +40,7 @@ location_id_offsets: dict[LocationType, int | None] = {
     LocationType.binoculars:        celeste_base_id + 0x7000,
     LocationType.room_enter:        celeste_base_id + 0x8000,
     LocationType.clutter:           None,
+    LocationType.breaker:           None,
 }
 
 
@@ -47,6 +48,8 @@ def generate_location_table() -> dict[str, int]:
     from .Levels import Level, LocationType, load_logic_data
     level_data: dict[str, Level] = load_logic_data()
     location_table = {}
+
+    location_table["Poetry Slam"] = celeste_base_id - 1
 
     location_counts: dict[LocationType, int] = {
         LocationType.strawberry:        0,
@@ -62,7 +65,27 @@ def generate_location_table() -> dict[str, int]:
         LocationType.room_enter:        0,
     }
 
+    per_level_side_items: dict[str, set[str]] = {}
+    per_level_items: dict[str, set[str]] = {}
+    per_side_items: dict[str, set[str]] = {}
+
     for _, level in level_data.items():
+        if level.name[:-1] not in per_level_items:
+            per_level_items[level.name[:-1]] = level.items.copy()
+        else:
+            per_level_items[level.name[:-1]].update(level.items)
+
+        if level.name[:-1] != "10":
+            per_level_side_items[level.name] = level.items.copy()
+
+            if level.name[-1] not in per_side_items:
+                per_side_items[level.name[-1]] = level.items.copy()
+            else:
+                per_side_items[level.name[-1]].update(level.items)
+        else:
+            per_side_items["a"].update(level.items)
+
+
         for room in level.rooms:
             if room.name != "10b_GOAL":
                 location_table[room.display_name] = location_id_offsets[LocationType.room_enter] + location_counts[LocationType.room_enter]
@@ -93,18 +116,77 @@ def generate_location_table() -> dict[str, int]:
                             from .Items import add_gem_to_table
                             add_gem_to_table(location_id, location.display_name)
 
+    from .Items import add_interactable_to_table
+    for level_name, level_items in per_level_side_items.items():
+        for item_name in sorted(level_items):
+            add_interactable_to_table(item_name, level_name[:-1], level_name[-1])
+
+    for level_name, level_items in per_level_items.items():
+        for item_name in sorted(level_items):
+            add_interactable_to_table(item_name, level_name, None)
+
+    for side_name, side_items in per_side_items.items():
+        for item_name in sorted(side_items):
+            add_interactable_to_table(item_name, None, side_name)
+
     return location_table
+
+
+def convert_item(world: CelesteOpenWorld, level: Level, item: str) -> str:
+    converted_item = item
+
+    from .Items import interactable_item_data_table
+    if item in interactable_item_data_table:
+        if world.options.split_interactables.value == 1:
+            converted_item = level_id_to_name[level.name[:-1]] + " - " + item
+        elif world.options.split_interactables.value == 2:
+            if level.name[:-1] != "10":
+                converted_item = level.name[-1].upper() + "-Side " + item
+            else:
+                converted_item = "A-Side " + item
+        elif world.options.split_interactables.value == 3:
+            if level.name[:-1] != "10":
+                converted_item = level_id_to_name[level.name[:-1]] + " " + level.name[-1].upper() + " - " + item
+            else:
+                converted_item = level_id_to_name[level.name[:-1]] + " - " + item
+
+    return converted_item
+
+def convert_item_list(world: CelesteOpenWorld, level: Level, item_list: list[str]) -> list[str]:
+    converted_list: list[str] = []
+
+    for item in item_list:
+        converted_list.append(convert_item(world, level, item))
+
+    return converted_list
+
+def convert_item_list_list(world: CelesteOpenWorld, level: Level, item_list_list: list[list[str]]) -> list[list[str]]:
+    converted_list_list: list[list[str]] = []
+
+    for item_list in item_list_list:
+        converted_list_list.append(convert_item_list(world, level, item_list))
+
+    return converted_list_list
 
 
 def create_regions_and_locations(world: CelesteOpenWorld):
     menu_region = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu_region)
 
+    if world.options.goal_area.value == 9:
+        from .Items import crystal_heart_item_data_table
+        poetry_location = CelesteLocation(world.player, "Poetry Slam", world.location_name_to_id["Poetry Slam"], menu_region)
+        world.set_rule(poetry_location, HasAll(*(crystal_heart_item_data_table.keys())))
+        menu_region.locations.append(poetry_location)
+
     world.active_checkpoint_names: list[str] = []
     world.goal_checkpoint_names: dict[str, str] = dict()
     world.active_key_names: list[str] = []
     world.active_gem_names: list[str] = []
     world.active_clutter_names: list[str] = []
+    world.active_breaker_names: list[str] = []
+
+    golden_items: list[list[str]]
 
     for _, level in world.level_data.items():
         if level.name not in world.active_levels:
@@ -119,10 +201,18 @@ def create_regions_and_locations(world: CelesteOpenWorld):
                 world.multiworld.regions.append(region)
 
                 for level_location in pre_region.locations:
+                    active_possible_access: list[list[str]] = level_location.possible_access
+
+                    if world.options.logic_difficulty.value == 1:
+                        active_possible_access = level_location.possible_access_vanilla
+                    elif world.options.logic_difficulty.value == 2:
+                        active_possible_access = level_location.possible_access_assist
+
                     if level_location.loc_type == LocationType.golden_strawberry:
                         if level_location.display_name == "Farewell - Golden Strawberry":
                             if not world.options.goal_area == "farewell_golden":
                                 continue
+                            golden_items = convert_item_list_list(world, level, active_possible_access)
                         elif not world.options.include_goldens:
                             continue
 
@@ -139,63 +229,64 @@ def create_regions_and_locations(world: CelesteOpenWorld):
                         world.active_gem_names.append(level_location.display_name)
 
                     location_rule = None
-                    if len(level_location.possible_access) == 1:
-                        only_access = level_location.possible_access[0]
+                    if len(active_possible_access) == 1:
+                        only_access = convert_item_list(world, level, active_possible_access[0])
                         if len(only_access) == 1:
-                            only_item = level_location.possible_access[0][0]
-                            def location_rule_func(state, only_item=only_item):
-                                return state.has(only_item, world.player)
-                            location_rule = location_rule_func
+                            location_rule = Has(only_access[0])
                         else:
-                            def location_rule_func(state, only_access=only_access):
-                                return state.has_all(only_access, world.player)
-                            location_rule = location_rule_func
-                    elif len(level_location.possible_access) > 0:
-                        def location_rule_func(state, level_location=level_location):
-                            for sublist in level_location.possible_access:
-                                if state.has_all(sublist, world.player):
-                                    return True
-                            return False
-                        location_rule = location_rule_func
+                            location_rule = HasAll(*only_access)
+                    elif len(active_possible_access) > 0:
+                        possible_access = convert_item_list_list(world, level, active_possible_access)
+                        location_rule = Or(*[HasAll(*sublist) for sublist in possible_access])
 
                     if level_location.loc_type == LocationType.clutter:
                         world.active_clutter_names.append(level_location.display_name)
                         location = CelesteLocation(world.player, level_location.display_name, None, region)
                         if location_rule is not None:
-                            set_rule(location, location_rule)
+                            world.set_rule(location, location_rule)
+                        region.locations.append(location)
+                        continue
+
+                    if level_location.loc_type == LocationType.breaker:
+                        world.active_breaker_names.append(level_location.display_name)
+                        location = CelesteLocation(world.player, level_location.display_name, None, region)
+                        if location_rule is not None:
+                            world.set_rule(location, location_rule)
                         region.locations.append(location)
                         continue
 
                     location = CelesteLocation(world.player, level_location.display_name, world.location_name_to_id[level_location.display_name], region)
                     if location_rule is not None:
-                        set_rule(location, location_rule)
+                        world.set_rule(location, location_rule)
                     region.locations.append(location)
 
             for pre_region in room.regions:
                 region = world.get_region(pre_region.name)
                 for connection in pre_region.connections:
+                    active_possible_access: list[list[str]] = connection.possible_access
+
+                    if world.options.logic_difficulty.value == 1:
+                        active_possible_access = connection.possible_access_vanilla
+                    elif world.options.logic_difficulty.value == 2:
+                        active_possible_access = connection.possible_access_assist
+
                     connection_rule = None
-                    if len(connection.possible_access) == 1:
-                        only_access = connection.possible_access[0]
+                    if len(active_possible_access) == 1:
+                        only_access = convert_item_list(world, level, active_possible_access[0])
                         if len(only_access) == 1:
-                            only_item = connection.possible_access[0][0]
-                            def connection_rule_func(state, only_item=only_item):
-                                return state.has(only_item, world.player)
-                            connection_rule = connection_rule_func
+                            if only_access[0] == ItemName.cannot_access:
+                                connection_rule = False
+                            else:
+                                connection_rule = Has(only_access[0])
                         else:
-                            def connection_rule_func(state, only_access=only_access):
-                                return state.has_all(only_access, world.player)
-                            connection_rule = connection_rule_func
-                    elif len(connection.possible_access) > 0:
-                        def connection_rule_func(state, connection=connection):
-                            for sublist in connection.possible_access:
-                                if state.has_all(sublist, world.player):
-                                    return True
-                            return False
+                            connection_rule = HasAll(*only_access)
+                    elif len(active_possible_access) > 0:
+                        possible_access = convert_item_list_list(world, level, active_possible_access)
+                        connection_rule = Or(*[HasAll(*sublist) for sublist in possible_access])
 
-                        connection_rule = connection_rule_func
-
-                    if connection_rule is None:
+                    if connection_rule == False:
+                        continue
+                    elif connection_rule is None:
                         region.add_exits([connection.destination_name])
                     else:
                         region.add_exits([connection.destination_name], {connection.destination_name: connection_rule})
@@ -212,7 +303,7 @@ def create_regions_and_locations(world: CelesteOpenWorld):
                 else:
                     checkpoint_location_name = level.display_name + " - " + room.checkpoint
                     world.active_checkpoint_names.append(checkpoint_location_name)
-                    checkpoint_rule = lambda state, checkpoint_location_name=checkpoint_location_name: state.has(checkpoint_location_name, world.player)
+                    checkpoint_rule = Has(checkpoint_location_name)
                     room_region.add_locations({
                         checkpoint_location_name: world.location_name_to_id[checkpoint_location_name]
                     }, CelesteLocation)
@@ -243,13 +334,16 @@ def create_regions_and_locations(world: CelesteOpenWorld):
 
         if level.name == "10c":
             # Manually connect the Golden room of Farewell
-            golden_items: list[str] = [ItemName.traffic_blocks, ItemName.dash_refills, ItemName.double_dash_refills, ItemName.dream_blocks, ItemName.swap_blocks, ItemName.move_blocks, ItemName.blue_boosters, ItemName.springs, ItemName.feathers, ItemName.coins, ItemName.red_boosters, ItemName.kevin_blocks, ItemName.core_blocks, ItemName.fire_ice_balls, ItemName.badeline_boosters, ItemName.bird, ItemName.breaker_boxes, ItemName.pufferfish, ItemName.jellyfish, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.yellow_cassette_blocks, ItemName.green_cassette_blocks]
-            golden_rule = lambda state: state.has_all(golden_items, world.player)
+            def golden_access_rule_func(state, golden_items=golden_items.copy()):
+                for sublist in golden_items:
+                    if state.has_all(sublist, world.player):
+                        return True
+                return False
 
             source_region_end = world.get_region("10b_j-19_top")
-            source_region_end.add_exits(["10c_end-golden_bottom"], {"10c_end-golden_bottom": golden_rule})
+            source_region_end.add_exits(["10c_end-golden_bottom"], {"10c_end-golden_bottom": golden_access_rule_func})
             source_region_moon = world.get_region("10b_j-16_east")
-            source_region_moon.add_exits(["10c_end-golden_bottom"], {"10c_end-golden_bottom": golden_rule})
+            source_region_moon.add_exits(["10c_end-golden_bottom"], {"10c_end-golden_bottom": golden_access_rule_func})
             source_region_golden = world.get_region("10c_end-golden_top")
             source_region_golden.add_exits(["10b_GOAL_main"])
 

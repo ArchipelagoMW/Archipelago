@@ -1,10 +1,17 @@
 # Collectables
-strawberry = "Strawberry"
-raspberry = "Raspberry"
+strawberry     = "Strawberry"
+raspberry      = "Raspberry"
+blue_raspberry = "Blue Raspberry"
+blueberry      = "Blueberry"
+blackberry     = "Blackberry"
+boysenberry    = "Boysenberry"
+bananaberry    = "Banana"
+cranberry      = "Cranberry"
+gold_raspberry = "Golden Raspberry"
 
 # Goal Items
 house_keys = "Granny's House Keys"
-victory = "Victory"
+victory    = "Victory"
 
 # Traps
 bald_trap        = "Bald Trap"
@@ -19,17 +26,24 @@ screen_flip_trap = "Screen Flip Trap"
 laughter_trap    = "Laughter Trap"
 hiccup_trap      = "Hiccup Trap"
 zoom_trap        = "Zoom Trap"
+tiny_trap        = "Tiny Trap"
 
 # Movement
 dash    = "Dash"
 u_dash  = "Up Dash"
-r_dash  = "Right Dash"
-d_dash  = "Down Dash"
-l_dash  = "Left Dash"
 ur_dash = "Up-Right Dash"
+r_dash  = "Right Dash"
 dr_dash = "Down-Right Dash"
+d_dash  = "Down Dash"
 dl_dash = "Down-Left Dash"
+l_dash  = "Left Dash"
 ul_dash = "Up-Left Dash"
+
+climb   = "Climb"
+r_climb = "Right Climb"
+l_climb = "Left Climb"
+
+crouch = "Crouch"
 
 # Interactables
 springs              = "Springs"
@@ -49,10 +63,11 @@ blue_clouds      = "Blue Clouds"
 move_blocks      = "Move Blocks"
 white_block      = "White Block"
 
-swap_blocks  = "Swap Blocks"
-red_boosters = "Red Boosters"
-torches      = "Torches"
-theo_crystal = "Theo Crystal"
+swap_blocks    = "Swap Blocks"
+red_boosters   = "Red Boosters"
+torches        = "Blue Torches"
+yellow_torches = "Yellow Torches"
+theo_crystal   = "Theo Crystal"
 
 feathers     = "Feathers"
 bumpers      = "Bumpers"
@@ -80,6 +95,8 @@ bird          = "Bird"
 brown_clutter = "Celestial Resort A - Brown Clutter"
 green_clutter = "Celestial Resort A - Green Clutter"
 pink_clutter  = "Celestial Resort A - Pink Clutter"
+
+power_source_breaker = "Farewell - Power Source - Breaker Disable"
 
 cannot_access = "Cannot Access"
 
