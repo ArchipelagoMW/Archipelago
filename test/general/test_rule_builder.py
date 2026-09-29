@@ -308,9 +308,14 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
             False_.Resolved(player=1),
         ),
         (
-            # Test lazy simplification of AtLeast
+            # Test lazy simplification of AtLeast (True)
             AtLeast(2, True_(), True_(), Has("A", FromWorldAttr("inexistent"))),
             True_.Resolved(player=1),
+        ),
+        (
+            # Test lazy simplification of AtLeast (False)
+            AtLeast(2, False_(), False_(), Has("A", FromWorldAttr("inexistent"))),
+            False_.Resolved(player=1),
         )
     )
 )

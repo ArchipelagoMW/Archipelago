@@ -444,14 +444,19 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         count = resolve_field(self.count, world, int)
-        if count == 0:
+        if count <= 0:
             return True_().resolve(world)
+        num_clauses = len(self.children)
+        if count > num_clauses:
+            return False_().resolve(world)
 
         children_to_process = (c.resolve(world) for c in self.children)
-        return AtLeast.from_resolved(count, world, children_to_process)
+        return AtLeast.from_resolved(count, world, children_to_process, num_clauses)
 
     @classmethod
-    def from_resolved(cls, count: int, world: TWorld, children_to_process: Iterator[Rule.Resolved]) -> Rule.Resolved:
+    def from_resolved(
+        cls, count: int, world: TWorld, children_to_process: Iterator[Rule.Resolved], num_clauses: int
+    ) -> Rule.Resolved:
         clauses: list[Rule.Resolved] = []
 
         for child in children_to_process:
@@ -462,12 +467,14 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
                 continue
             if child.always_false:
                 # falses can be ignored
+                if num_clauses == count:
+                    # Not enough clauses to ever be true
+                    return child
+                num_clauses -= 1
                 continue
 
             clauses.append(child)
 
-        if len(clauses) < count:
-            return False_().resolve(world)
         if count == 1:
             # Switch to Or which has more optimized handling
             return Or.from_resolved(world, clauses.__iter__())
