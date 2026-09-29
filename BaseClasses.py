@@ -1869,7 +1869,7 @@ class Spoiler:
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
                 'Archipelago Version %s  -  Seed: %s\n\n' % (
-                    Utils.__version__, self.multiworld.seed))
+                    Utils.full_version, self.multiworld.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
             outfile.write('Players:                         %d\n' % self.multiworld.players)
             if self.multiworld.players > 1:
