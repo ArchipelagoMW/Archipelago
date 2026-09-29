@@ -1,6 +1,6 @@
 import dataclasses
 from collections.abc import Callable, Iterable, Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Final, Generic, Never, Self, cast
+from typing import TYPE_CHECKING, Any, ClassVar, Final, Generic, Never, Self, cast, Iterator
 
 from typing_extensions import TypeVar, dataclass_transform, override
 
@@ -447,15 +447,14 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
         if count == 0:
             return True_().resolve(world)
 
-        children_to_process = [c.resolve(world) for c in self.children]
+        children_to_process = (c.resolve(world) for c in self.children)
         return AtLeast.from_resolved(count, world, children_to_process)
 
     @classmethod
-    def from_resolved(cls, count: int, world: TWorld, children_to_process: list[Rule.Resolved]) -> Rule.Resolved:
+    def from_resolved(cls, count: int, world: TWorld, children_to_process: Iterator[Rule.Resolved]) -> Rule.Resolved:
         clauses: list[Rule.Resolved] = []
 
-        while children_to_process:
-            child = children_to_process.pop(0)
+        for child in children_to_process:
             if child.always_true:
                 if count == 1:
                     return child
@@ -471,10 +470,10 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
             return False_().resolve(world)
         if count == 1:
             # Switch to Or which has more optimized handling
-            return Or.from_resolved(world, clauses)
+            return Or.from_resolved(world, clauses.__iter__())
         if count == len(clauses):
             # Switch to And which has more optimized handling
-            return And.from_resolved(world, clauses)
+            return And.from_resolved(world, clauses.__iter__())
         return AtLeast.Resolved(
             tuple(clauses),
             count=count,
@@ -558,16 +557,23 @@ class And(NestedRule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        return And.from_resolved(world, [c.resolve(world) for c in self.children])
+        return And.from_resolved(world, (c.resolve(world) for c in self.children))
 
     @classmethod
-    def from_resolved(cls, world: TWorld, children_to_process: list[Rule.Resolved]) -> Rule.Resolved:
+    def from_resolved(cls, world: TWorld, children_to_process: Iterator[Rule.Resolved]) -> Rule.Resolved:
+        children_to_reprocess: list[Rule.Resolved] = []
         clauses: list[Rule.Resolved] = []
         items: dict[str, int] = {}
         true_rule: Rule.Resolved | None = None
 
-        while children_to_process:
-            child = children_to_process.pop(0)
+        while True:
+            if children_to_reprocess:
+                child = children_to_reprocess.pop(0)
+            else:
+                child = next(children_to_process, None)
+                if child is None:
+                    break
+
             if child.always_false:
                 # false always wins
                 return child
@@ -576,7 +582,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
                 true_rule = child
                 continue
             if isinstance(child, And.Resolved):
-                children_to_process.extend(child.children)
+                children_to_reprocess.extend(child.children)
                 continue
 
             if isinstance(child, Has.Resolved):
@@ -648,15 +654,22 @@ class Or(NestedRule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        return Or.from_resolved(world, [c.resolve(world) for c in self.children])
+        return Or.from_resolved(world, (c.resolve(world) for c in self.children))
 
     @classmethod
-    def from_resolved(cls, world: TWorld, children_to_process: list[Rule.Resolved]) -> Rule.Resolved:
+    def from_resolved(cls, world: TWorld, children_to_process: Iterator[Rule.Resolved]) -> Rule.Resolved:
+        children_to_reprocess: list[Rule.Resolved] = []
         clauses: list[Rule.Resolved] = []
         items: dict[str, int] = {}
 
-        while children_to_process:
-            child = children_to_process.pop(0)
+        while True:
+            if children_to_reprocess:
+                child = children_to_reprocess.pop(0)
+            else:
+                child = next(children_to_process, None)
+                if child is None:
+                    break
+
             if child.always_true:
                 # true always wins
                 return child
@@ -664,7 +677,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
                 # falses can be ignored
                 continue
             if isinstance(child, Or.Resolved):
-                children_to_process.extend(child.children)
+                children_to_reprocess.extend(child.children)
                 continue
 
             if isinstance(child, Has.Resolved):
