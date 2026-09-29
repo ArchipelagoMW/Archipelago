@@ -401,10 +401,24 @@ AP will pick up your world automatically due to the `AutoWorld` implementation.
 
 ### Requirements
 
-If your world needs specific python packages, they can be listed in `worlds/<world_name>/requirements.txt`.
-ModuleUpdate.py will automatically pick up and install them.
+Separate worlds being shipped as standalone `.apworld` files for use on existing installations will need to vendor any
+additional dependencies used by the world, typically by bundling them inside of their release. World authors doing so
+should ensure that the dependency's license allows for such direct redistribution.
 
-See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format).
+Pure-python packages can be imported directly from the archive, but dependencies including native code components will
+likely have to extract the dependency to a temporary directory and then add the directory to `sys.path` for them to be
+imported.
+
+If a dependency is python version-specific, then copies of it should be included for each currently
+[supported version](/docs/running%20from%20source.md#general) of python in order to work across installations. If
+intendding to support multiple platforms, then copies for different platforms may be necessary as well.
+
+Worlds that are included within the project directly can instead list their requirements inside of a
+`worlds/<world_name>/requirements.txt`. `ModuleUpdate.py` will automatically pick up and install them when ran on
+source, and they will be bundled inside a build created with `setup.py`.
+
+For the format of `requirements.txt`, see
+[pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format).
 
 ### Relative Imports
 
