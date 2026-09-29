@@ -88,10 +88,14 @@ item_dict_events: Dict[str, ItemData] = {
     EVENT_ITEM_VICTORY: ItemData(ItemClass.progression),
 }
 
-item_dict: Dict[str, ItemData] = {
+item_dict_no_events: Dict[str, ItemData] = {
     **item_dict_expanded,
     **item_dict_filler,
     **item_dict_traps,
+}
+
+item_dict: Dict[str, ItemData] = {
+    **item_dict_no_events,
     **item_dict_events,
 }
 
