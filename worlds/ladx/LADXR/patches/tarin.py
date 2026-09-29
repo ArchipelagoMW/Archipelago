@@ -16,7 +16,7 @@ def updateTarin(rom):
         ld   a, $91
         call $2385
     """), ASM("""
-        ld   a, $0B ; GiveItemAndMessageForRoom
+        ld   a, $0E ; GiveItemAndMessageForRoomMultiworld
         rst  8
     """), fill_nop=True)
 
