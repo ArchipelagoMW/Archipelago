@@ -23,6 +23,8 @@
 *.gb
 *.gbc
 *.gba
+*.nds
+*.iso
 *.wixobj
 *.lck
 *.db3
