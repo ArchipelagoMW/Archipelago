@@ -52,7 +52,7 @@ jobs:
       - name: Install python
         uses: actions/setup-python@v6.2.0
         with:
-          python-version: '~3.12.7'
+          python-version: '~3.13.15'
           check-latest: true
       - name: Download run-time dependencies
         run: |
@@ -125,11 +125,11 @@ jobs:
       - name: Get a recent python
         uses: actions/setup-python@v6.2.0
         with:
-          python-version: '~3.12.7'
+          python-version: '~3.13.15'
           check-latest: true
       - name: Install build-time dependencies
         run: |
-          echo "PYTHON=python3.12" >> $GITHUB_ENV
+          echo "PYTHON=python3.13" >> $GITHUB_ENV
           wget -nv https://github.com/$APPIMAGE_FORK/appimagetool/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
           echo "$APPIMAGETOOL_X86_64_HASH appimagetool-x86_64.AppImage" | sha256sum -c
           wget -nv https://github.com/$APPIMAGE_FORK/type2-runtime/releases/download/$APPIMAGE_RUNTIME_VERSION/runtime-x86_64
