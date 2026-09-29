@@ -3,15 +3,15 @@ from .Items import CCCharlesItem
 from .Options import CCCharlesOptions
 from .Locations import (
     CCCharlesLocation, loc_start_camp, loc_tony_tiddle_mission, loc_barn, loc_candice_mission, \
-    loc_tutorial_house, loc_swamp_edges, loc_swamp_mission, loc_junkyard_area, loc_south_house, \
+    loc_tutorial_house, loc_swamp, loc_swamp_mission, loc_junkyard_area, loc_south_house, \
     loc_junkyard_shed, loc_military_base, loc_south_mine_outside, loc_south_mine_inside, \
     loc_middle_station, loc_canyon, loc_watchtower, loc_boulder_field, loc_haunted_house, \
     loc_santiago_house, loc_port, loc_trench_house, loc_doll_woods, loc_lost_stairs, loc_east_house, \
-    loc_rockets_testing_ground, loc_rockets_testing_bunker, loc_workshop, loc_east_tower, \
+    loc_rocket_grounds, loc_rocket_bunker, loc_workshop, loc_east_tower, \
     loc_lighthouse, loc_north_mine_outside, loc_north_mine_inside, loc_wood_bridge, loc_museum, \
     loc_barbed_shelter, loc_west_beach, loc_church, loc_west_cottage, loc_caravan, loc_trailer_cabin, \
     loc_towers, loc_north_beach, loc_mine_shaft, loc_mob_camp, loc_mob_camp_locked_room, \
-    loc_mine_elevator_exit, loc_mountain_ruin_outside, loc_mountain_ruin_inside, loc_prism_temple, \
+    loc_mine_elevator_exit, loc_mountain_ruin_outside, loc_mountain_ruin_inside, loc_temple, \
     loc_pickle_val, loc_shrine_near_temple, loc_morse_bunker
 )
 
@@ -40,9 +40,9 @@ def create_regions(multiworld: MultiWorld, options: CCCharlesOptions, player: in
     tutorial_house_region.add_locations(loc_tutorial_house, CCCharlesLocation)
     multiworld.regions.append(tutorial_house_region)
 
-    swamp_edges_region = Region("Swamp Edges", player, multiworld)
-    swamp_edges_region.add_locations(loc_swamp_edges, CCCharlesLocation)
-    multiworld.regions.append(swamp_edges_region)
+    swamp_region = Region("Swamp", player, multiworld)
+    swamp_region.add_locations(loc_swamp, CCCharlesLocation)
+    multiworld.regions.append(swamp_region)
 
     swamp_mission_region = Region("Swamp Mission", player, multiworld)
     swamp_mission_region.add_locations(loc_swamp_mission, CCCharlesLocation)
@@ -116,13 +116,13 @@ def create_regions(multiworld: MultiWorld, options: CCCharlesOptions, player: in
     east_house_region.add_locations(loc_east_house, CCCharlesLocation)
     multiworld.regions.append(east_house_region)
 
-    rockets_testing_ground_region = Region("Rockets Testing Ground", player, multiworld)
-    rockets_testing_ground_region.add_locations(loc_rockets_testing_ground, CCCharlesLocation)
-    multiworld.regions.append(rockets_testing_ground_region)
+    rocket_grounds_region = Region("Rocket Grounds", player, multiworld)
+    rocket_grounds_region.add_locations(loc_rocket_grounds, CCCharlesLocation)
+    multiworld.regions.append(rocket_grounds_region)
 
-    rockets_testing_bunker_region = Region("Rockets Testing Bunker", player, multiworld)
-    rockets_testing_bunker_region.add_locations(loc_rockets_testing_bunker, CCCharlesLocation)
-    multiworld.regions.append(rockets_testing_bunker_region)
+    rocket_bunker_region = Region("Rocket Bunker", player, multiworld)
+    rocket_bunker_region.add_locations(loc_rocket_bunker, CCCharlesLocation)
+    multiworld.regions.append(rocket_bunker_region)
 
     workshop_region = Region("Workshop", player, multiworld)
     workshop_region.add_locations(loc_workshop, CCCharlesLocation)
@@ -208,9 +208,9 @@ def create_regions(multiworld: MultiWorld, options: CCCharlesOptions, player: in
     mountain_ruin_inside_region.add_locations(loc_mountain_ruin_inside, CCCharlesLocation)
     multiworld.regions.append(mountain_ruin_inside_region)
 
-    prism_temple_region = Region("Prism Temple", player, multiworld)
-    prism_temple_region.add_locations(loc_prism_temple, CCCharlesLocation)
-    multiworld.regions.append(prism_temple_region)
+    temple_region = Region("Temple", player, multiworld)
+    temple_region.add_locations(loc_temple, CCCharlesLocation)
+    multiworld.regions.append(temple_region)
 
     pickle_val_region = Region("Pickle Val", player, multiworld)
     pickle_val_region.add_locations(loc_pickle_val, CCCharlesLocation)
@@ -225,9 +225,9 @@ def create_regions(multiworld: MultiWorld, options: CCCharlesOptions, player: in
     multiworld.regions.append(morse_bunker_region)
 
     # Place "Victory" event at "Final Boss" location
-    loc_final_boss = CCCharlesLocation(player, "Final Boss", None, prism_temple_region)
+    loc_final_boss = CCCharlesLocation(player, "Final Boss", None, temple_region)
     loc_final_boss.place_locked_item(CCCharlesItem("Victory", ItemClassification.progression, None, player))
-    prism_temple_region.locations.append(loc_final_boss)
+    temple_region.locations.append(loc_final_boss)
 
     # Connect the Regions by named Entrances that must have access Rules
     menu_region.connect(start_camp_region)
@@ -235,7 +235,7 @@ def create_regions(multiworld: MultiWorld, options: CCCharlesOptions, player: in
     menu_region.connect(barn_region, "Barn Door")
     menu_region.connect(candice_mission_region)
     menu_region.connect(tutorial_house_region, "Tutorial House Door")
-    menu_region.connect(swamp_edges_region)
+    menu_region.connect(swamp_region)
     menu_region.connect(swamp_mission_region)
     menu_region.connect(junkyard_area_region)
     menu_region.connect(south_house_region)
@@ -254,8 +254,8 @@ def create_regions(multiworld: MultiWorld, options: CCCharlesOptions, player: in
     menu_region.connect(doll_woods_region)
     menu_region.connect(lost_stairs_region)
     menu_region.connect(east_house_region)
-    menu_region.connect(rockets_testing_ground_region)
-    rockets_testing_ground_region.connect(rockets_testing_bunker_region, "Stuck Bunker Door")
+    menu_region.connect(rocket_grounds_region)
+    rocket_grounds_region.connect(rocket_bunker_region, "Stuck Bunker Door")
     menu_region.connect(workshop_region)
     menu_region.connect(east_tower_region)
     menu_region.connect(lighthouse_region)
@@ -277,7 +277,7 @@ def create_regions(multiworld: MultiWorld, options: CCCharlesOptions, player: in
     menu_region.connect(mine_elevator_exit_region)
     menu_region.connect(mountain_ruin_outside_region)
     mountain_ruin_outside_region.connect(mountain_ruin_inside_region, "Mountain Ruin Gate")
-    menu_region.connect(prism_temple_region)
+    menu_region.connect(temple_region)
     menu_region.connect(pickle_val_region)
     menu_region.connect(shrine_near_temple_region)
     menu_region.connect(morse_bunker_region)
