@@ -1070,7 +1070,11 @@ def remaining_fill(multiworld: MultiWorld,
                 logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
                 multiworld.push_precollected(item)
                 last_batch.append(multiworld.worlds[item.player].create_filler())
-            remaining_fill(multiworld, locations, unplaced_items, name + " Start Inventory Retry")
+            remaining_fill(multiworld, locations, last_batch, name + " Start Inventory Retry")
+            itempool.extend(last_batch)
+            # remaining_fill removes the items from the batch when they're placed.
+            # This will only add to the pool the new fillers that were not placed, hopefully none.
+            return
         else:
             raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
                             f"Unplaced items:\n"
@@ -1889,7 +1893,7 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: list[Plando
                           for candidate in locations
                           if candidate.item is None and bool(candidate.address) == is_real]
             multiworld.random.shuffle(candidates)
-            allstate = multiworld.get_all_state(False)
+            allstate = multiworld.get_all_state()
             mincount = placement.count["min"]
             allowed_margin = len(item_candidates) - mincount
             fill_restrictive(multiworld, allstate, candidates, item_candidates, lock=True,
