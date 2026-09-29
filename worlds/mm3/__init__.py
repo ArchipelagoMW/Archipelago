@@ -5,6 +5,7 @@ from typing import Any, Sequence, ClassVar
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
+from .color import check_for_known_worlds
 from .names import (gamma, gemini_man_stage, needle_man_stage, hard_man_stage, magnet_man_stage, top_man_stage,
                     snake_man_stage, spark_man_stage, shadow_man_stage, rush_marine, rush_jet, rush_coil)
 from .items import (item_table, item_names, MM3Item, filler_item_weights, robot_master_weapon_table,
@@ -113,8 +114,7 @@ class MM3World(World):
                              lambda state, req=tuple(region.required_items): state.has_all(req, self.player))
             else:
                 old_stage = self.get_region(region.parent)
-                old_stage.connect(stage, f"To {name}",
-                                  lambda state, req=tuple(region.required_items): state.has_all(req, self.player))
+                old_stage.connect(stage, f"To {name}")
             stage.add_locations({loc: data.location_id for loc, data in region.locations.items()
                                  if (not data.energy or self.options.consumables.value in (Consumables.option_weapon_health, Consumables.option_all))
                                  and (not data.oneup_tank or self.options.consumables.value in (Consumables.option_1up_etank, Consumables.option_all))})
@@ -237,6 +237,10 @@ class MM3World(World):
                 weapon_location.place_locked_item(placed_weapon)
                 prog_item_pool.remove(placed_weapon)
                 fill_locations.remove(weapon_location)
+
+    @classmethod
+    def stage_pre_output(cls, multiworld: MultiWorld):
+        check_for_known_worlds()
 
     def generate_output(self, output_directory: str) -> None:
         try:
