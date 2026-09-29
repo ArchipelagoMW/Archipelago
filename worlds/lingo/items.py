@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, List, NamedTuple, Set
+from typing import Dict, List, NamedTuple
 
 from BaseClasses import Item, ItemClassification
 from .static_logic import DOORS_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, get_door_item_id, \
@@ -63,14 +63,14 @@ def load_item_data():
                                          ItemType.COLOR, False, [])
         ITEMS_BY_GROUP.setdefault("Colors", []).append(color)
 
-    door_groups: Set[str] = set()
+    door_groups: List[str] = []
     for room_name, doors in DOORS_BY_ROOM.items():
         for door_name, door in doors.items():
             if door.skip_item is True or door.event is True:
                 continue
 
             if door.door_group is not None:
-                door_groups.add(door.door_group)
+                door_groups.append(door.door_group)
 
             ALL_ITEM_TABLE[door.item_name] = \
                 ItemData(get_door_item_id(room_name, door_name), get_prog_item_classification(door.item_name),
@@ -85,11 +85,11 @@ def load_item_data():
                                          ItemType.NORMAL, True, [])
         ITEMS_BY_GROUP.setdefault("Doors", []).append(group)
 
-    panel_groups: Set[str] = set()
+    panel_groups: List[str] = []
     for room_name, panel_doors in PANEL_DOORS_BY_ROOM.items():
         for panel_door_name, panel_door in panel_doors.items():
             if panel_door.panel_group is not None:
-                panel_groups.add(panel_door.panel_group)
+                panel_groups.append(panel_door.panel_group)
 
             ALL_ITEM_TABLE[panel_door.item_name] = ItemData(get_panel_door_item_id(room_name, panel_door_name),
                                                             get_prog_item_classification(panel_door.item_name),
