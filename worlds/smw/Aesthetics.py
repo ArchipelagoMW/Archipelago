@@ -492,102 +492,102 @@ game_sfx_calls = [
     0x657D8        # Cutscene: Castle being mopped away
 ]
 
-def generate_shuffled_sfx(rom, world: World):
+def generate_shuffled_sfx(patch, world: World):
     # Adjust "hitting sprites in succession" codes
-    rom.write_bytes(0x0A60B, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Thrown sprites combo #1
-    rom.write_bytes(0x0A659, bytearray([0x22, 0x47, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE47 : nop #2     # Thrown sprites combo #2
-    rom.write_bytes(0x0A865, bytearray([0x22, 0x47, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE47 : nop #2     # Star combo
-    rom.write_bytes(0x0AB57, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Bouncing off enemies
-    rom.write_bytes(0x172C0, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Star combo (wigglers)
-    rom.write_bytes(0x1961D, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Star combo (rexes)
-    rom.write_bytes(0x19639, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Bouncing off rexes
+    patch.write_bytes(0x0A60B, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Thrown sprites combo #1
+    patch.write_bytes(0x0A659, bytearray([0x22, 0x47, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE47 : nop #2     # Thrown sprites combo #2
+    patch.write_bytes(0x0A865, bytearray([0x22, 0x47, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE47 : nop #2     # Star combo
+    patch.write_bytes(0x0AB57, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Bouncing off enemies
+    patch.write_bytes(0x172C0, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Star combo (wigglers)
+    patch.write_bytes(0x1961D, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Star combo (rexes)
+    patch.write_bytes(0x19639, bytearray([0x22, 0x00, 0xFE, 0x0F, 0xEA, 0xEA]))    # jsl $0FFE00 : nop #2     # Bouncing off rexes
 
     COMBO_SFX_ADDR = 0x7FE00
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0000, bytearray([0xC0, 0x01]))                         # COMBO_Y:                    CPY #$01
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0002, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE0A
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0004, bytearray([0xA9, 0x13]))                         #                             LDA #$13
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0006, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0009, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x000A, bytearray([0xC0, 0x02]))                         # label_0FFE0A:               CPY #$02
-    rom.write_bytes(COMBO_SFX_ADDR + 0x000C, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE14
-    rom.write_bytes(COMBO_SFX_ADDR + 0x000E, bytearray([0xA9, 0x14]))                         #                             LDA #$14
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0010, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0013, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0014, bytearray([0xC0, 0x03]))                         # label_0FFE14:               CPY #$03
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0016, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE1E
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0018, bytearray([0xA9, 0x15]))                         #                             LDA #$15
-    rom.write_bytes(COMBO_SFX_ADDR + 0x001A, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x001D, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x001E, bytearray([0xC0, 0x04]))                         # label_0FFE1E:               CPY #$04
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0020, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE28
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0022, bytearray([0xA9, 0x16]))                         #                             LDA #$16
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0024, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0027, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0028, bytearray([0xC0, 0x05]))                         # label_0FFE28:               CPY #$05
-    rom.write_bytes(COMBO_SFX_ADDR + 0x002A, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE32
-    rom.write_bytes(COMBO_SFX_ADDR + 0x002C, bytearray([0xA9, 0x17]))                         #                             LDA #$17
-    rom.write_bytes(COMBO_SFX_ADDR + 0x002E, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0031, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0032, bytearray([0xC0, 0x06]))                         # label_0FFE32:               CPY #$06
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0034, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE3C
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0036, bytearray([0xA9, 0x18]))                         #                             LDA #$18
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0038, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x003B, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x003C, bytearray([0xC0, 0x07]))                         # label_0FFE3C:               CPY #$07
-    rom.write_bytes(COMBO_SFX_ADDR + 0x003E, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE46
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0040, bytearray([0xA9, 0x19]))                         #                             LDA #$19
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0042, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0045, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0046, bytearray([0x6B]))                               # label_0FFE46:               RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0047, bytearray([0xE0, 0x01]))                         # COMBO_X:                    CPX #$01
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0049, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE51
-    rom.write_bytes(COMBO_SFX_ADDR + 0x004B, bytearray([0xA9, 0x13]))                         #                             LDA #$13
-    rom.write_bytes(COMBO_SFX_ADDR + 0x004D, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0050, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0051, bytearray([0xE0, 0x02]))                         # label_0FFE51:               CPX #$02
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0053, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE5B
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0055, bytearray([0xA9, 0x14]))                         #                             LDA #$14
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0057, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x005A, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x005B, bytearray([0xE0, 0x03]))                         # label_0FFE5B:               CPX #$03
-    rom.write_bytes(COMBO_SFX_ADDR + 0x005D, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE65
-    rom.write_bytes(COMBO_SFX_ADDR + 0x005F, bytearray([0xA9, 0x15]))                         #                             LDA #$15
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0061, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0064, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0065, bytearray([0xE0, 0x04]))                         # label_0FFE65:               CPX #$04
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0067, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE6F
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0069, bytearray([0xA9, 0x16]))                         #                             LDA #$16
-    rom.write_bytes(COMBO_SFX_ADDR + 0x006B, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x006E, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x006F, bytearray([0xE0, 0x05]))                         # label_0FFE6F:               CPX #$05
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0071, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE79
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0073, bytearray([0xA9, 0x17]))                         #                             LDA #$17
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0075, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0078, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0079, bytearray([0xE0, 0x06]))                         # label_0FFE79:               CPX #$06
-    rom.write_bytes(COMBO_SFX_ADDR + 0x007B, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE83
-    rom.write_bytes(COMBO_SFX_ADDR + 0x007D, bytearray([0xA9, 0x18]))                         #                             LDA #$18
-    rom.write_bytes(COMBO_SFX_ADDR + 0x007F, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0082, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0083, bytearray([0xE0, 0x07]))                         # label_0FFE83:               CPX #$07
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0085, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE8D
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0087, bytearray([0xA9, 0x19]))                         #                             LDA #$19
-    rom.write_bytes(COMBO_SFX_ADDR + 0x0089, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
-    rom.write_bytes(COMBO_SFX_ADDR + 0x008C, bytearray([0x6B]))                               #                             RTL
-    rom.write_bytes(COMBO_SFX_ADDR + 0x008D, bytearray([0x6B]))                               # label_0FFE8D:               RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0000, bytearray([0xC0, 0x01]))                         # COMBO_Y:                    CPY #$01
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0002, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE0A
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0004, bytearray([0xA9, 0x13]))                         #                             LDA #$13
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0006, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0009, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x000A, bytearray([0xC0, 0x02]))                         # label_0FFE0A:               CPY #$02
+    patch.write_bytes(COMBO_SFX_ADDR + 0x000C, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE14
+    patch.write_bytes(COMBO_SFX_ADDR + 0x000E, bytearray([0xA9, 0x14]))                         #                             LDA #$14
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0010, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0013, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0014, bytearray([0xC0, 0x03]))                         # label_0FFE14:               CPY #$03
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0016, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE1E
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0018, bytearray([0xA9, 0x15]))                         #                             LDA #$15
+    patch.write_bytes(COMBO_SFX_ADDR + 0x001A, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x001D, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x001E, bytearray([0xC0, 0x04]))                         # label_0FFE1E:               CPY #$04
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0020, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE28
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0022, bytearray([0xA9, 0x16]))                         #                             LDA #$16
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0024, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0027, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0028, bytearray([0xC0, 0x05]))                         # label_0FFE28:               CPY #$05
+    patch.write_bytes(COMBO_SFX_ADDR + 0x002A, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE32
+    patch.write_bytes(COMBO_SFX_ADDR + 0x002C, bytearray([0xA9, 0x17]))                         #                             LDA #$17
+    patch.write_bytes(COMBO_SFX_ADDR + 0x002E, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0031, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0032, bytearray([0xC0, 0x06]))                         # label_0FFE32:               CPY #$06
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0034, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE3C
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0036, bytearray([0xA9, 0x18]))                         #                             LDA #$18
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0038, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x003B, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x003C, bytearray([0xC0, 0x07]))                         # label_0FFE3C:               CPY #$07
+    patch.write_bytes(COMBO_SFX_ADDR + 0x003E, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE46
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0040, bytearray([0xA9, 0x19]))                         #                             LDA #$19
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0042, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0045, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0046, bytearray([0x6B]))                               # label_0FFE46:               RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0047, bytearray([0xE0, 0x01]))                         # COMBO_X:                    CPX #$01
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0049, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE51
+    patch.write_bytes(COMBO_SFX_ADDR + 0x004B, bytearray([0xA9, 0x13]))                         #                             LDA #$13
+    patch.write_bytes(COMBO_SFX_ADDR + 0x004D, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0050, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0051, bytearray([0xE0, 0x02]))                         # label_0FFE51:               CPX #$02
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0053, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE5B
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0055, bytearray([0xA9, 0x14]))                         #                             LDA #$14
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0057, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x005A, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x005B, bytearray([0xE0, 0x03]))                         # label_0FFE5B:               CPX #$03
+    patch.write_bytes(COMBO_SFX_ADDR + 0x005D, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE65
+    patch.write_bytes(COMBO_SFX_ADDR + 0x005F, bytearray([0xA9, 0x15]))                         #                             LDA #$15
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0061, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0064, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0065, bytearray([0xE0, 0x04]))                         # label_0FFE65:               CPX #$04
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0067, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE6F
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0069, bytearray([0xA9, 0x16]))                         #                             LDA #$16
+    patch.write_bytes(COMBO_SFX_ADDR + 0x006B, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x006E, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x006F, bytearray([0xE0, 0x05]))                         # label_0FFE6F:               CPX #$05
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0071, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE79
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0073, bytearray([0xA9, 0x17]))                         #                             LDA #$17
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0075, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0078, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0079, bytearray([0xE0, 0x06]))                         # label_0FFE79:               CPX #$06
+    patch.write_bytes(COMBO_SFX_ADDR + 0x007B, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE83
+    patch.write_bytes(COMBO_SFX_ADDR + 0x007D, bytearray([0xA9, 0x18]))                         #                             LDA #$18
+    patch.write_bytes(COMBO_SFX_ADDR + 0x007F, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0082, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0083, bytearray([0xE0, 0x07]))                         # label_0FFE83:               CPX #$07
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0085, bytearray([0xD0, 0x06]))                         #                             BNE label_0FFE8D
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0087, bytearray([0xA9, 0x19]))                         #                             LDA #$19
+    patch.write_bytes(COMBO_SFX_ADDR + 0x0089, bytearray([0x8D, 0xF9, 0x1D]))                   #                             STA $1DF9
+    patch.write_bytes(COMBO_SFX_ADDR + 0x008C, bytearray([0x6B]))                               #                             RTL
+    patch.write_bytes(COMBO_SFX_ADDR + 0x008D, bytearray([0x6B]))                               # label_0FFE8D:               RTL
 
     # Adjust "Hit head on ceiling" code
-    rom.write_bytes(0x06D41 + 0x00, bytearray([0xA9, 0x01]))                # lda #$01
-    rom.write_bytes(0x06D41 + 0x02, bytearray([0x8D, 0xF9, 0x1D]))          # sta $1DF9
-    rom.write_bytes(0x06D41 + 0x05, bytearray([0xEA, 0xEA, 0xEA, 0xEA]))    # nop #4
+    patch.write_bytes(0x06D41 + 0x00, bytearray([0xA9, 0x01]))                # lda #$01
+    patch.write_bytes(0x06D41 + 0x02, bytearray([0x8D, 0xF9, 0x1D]))          # sta $1DF9
+    patch.write_bytes(0x06D41 + 0x05, bytearray([0xEA, 0xEA, 0xEA, 0xEA]))    # nop #4
 
     # Manually add "Map: Stepping onto a level tile" random SFX
     selected_sfx = world.random.choice(valid_sfxs)
-    rom.write_byte(0x2169F + 0x01, selected_sfx[0])
-    rom.write_byte(0x2169F + 0x04, selected_sfx[1] + 0xF9)
+    patch.write_byte(0x2169F + 0x01, selected_sfx[0])
+    patch.write_byte(0x2169F + 0x04, selected_sfx[1] + 0xF9)
 
     # Disable panning on Bowser's flames
-    rom.write_bytes(0x1A83D, bytearray([0xEA, 0xEA, 0xEA]))    # nop #3
+    patch.write_bytes(0x1A83D, bytearray([0xEA, 0xEA, 0xEA]))    # nop #3
 
     # Randomize SFX calls
     for address in game_sfx_calls:
@@ -595,9 +595,9 @@ def generate_shuffled_sfx(rom, world: World):
         if world.options.sfx_shuffle != "singularity":
             selected_sfx = world.random.choice(valid_sfxs)
         # Write randomized SFX num
-        rom.write_byte(address + 0x01, selected_sfx[0])
+        patch.write_byte(address + 0x01, selected_sfx[0])
         # Write randomized SFX port
-        rom.write_byte(address + 0x03, selected_sfx[1] + 0xF9)
+        patch.write_byte(address + 0x03, selected_sfx[1] + 0xF9)
 
 def generate_shuffled_level_music(world: World):
     shuffled_level_music = level_music_value_data.copy()
@@ -621,58 +621,15 @@ def generate_shuffled_ow_music(world: World):
 
     return shuffled_ow_music
 
-def generate_shuffled_ow_palettes(rom, world: World):
+def generate_shuffled_ow_palettes(patch, world: World):
     if world.options.overworld_palette_shuffle != "on_legacy":
         return
 
     for address, valid_palettes in valid_ow_palettes.items():
         chosen_palette = world.random.choice(valid_palettes)
-        rom.write_byte(address, chosen_palette)
+        patch.write_byte(address, chosen_palette)
 
-def generate_shuffled_header_data(rom, world: World):
-    if world.options.music_shuffle != "full" and world.options.level_palette_shuffle != "on_legacy":
-        return
-
-    for level_id in range(0, 0x200):
-        layer1_ptr_list = list(rom.read_bytes(0x2E000 + level_id * 3, 3))
-        layer1_ptr = (layer1_ptr_list[2] << 16 | layer1_ptr_list[1] << 8 | layer1_ptr_list[0])
-
-        if layer1_ptr == 0x68000:
-            # Unused Levels
-            continue
-
-        if layer1_ptr >= 0x70000:
-            layer1_ptr -= 0x8000
-
-        layer1_ptr -= 0x38000
-
-        level_header = list(rom.read_bytes(layer1_ptr, 5))
-
-        tileset = level_header[4] & 0x0F
-
-        if world.options.music_shuffle == "full":
-            level_header[2] &= 0x8F
-            level_header[2] |= (world.random.randint(0, 7) << 5)
-
-        if world.options.level_palette_shuffle == "on_legacy":
-            if tileset in valid_foreground_palettes:
-                level_header[3] &= 0xF8
-                level_header[3] |= world.random.choice(valid_foreground_palettes[tileset])
-
-            layer2_ptr_list = list(rom.read_bytes(0x2E600 + level_id * 3, 3))
-            layer2_ptr = (layer2_ptr_list[2] << 16 | layer2_ptr_list[1] << 8 | layer2_ptr_list[0])
-
-            if layer2_ptr in valid_background_palettes:
-                level_header[0] &= 0x1F
-                level_header[0] |= (world.random.choice(valid_background_palettes[layer2_ptr]) << 5)
-
-            if layer2_ptr in valid_background_colors:
-                level_header[1] &= 0x1F
-                level_header[1] |= (world.random.choice(valid_background_colors[layer2_ptr]) << 5)
-
-        rom.write_bytes(layer1_ptr, bytes(level_header))
-
-def generate_curated_level_palette_data(rom, world: World):
+def generate_curated_level_palette_data(patch, world: World):
     PALETTE_LEVEL_CODE_ADDR = 0x88000
     PALETTE_INDEX_ADDR = 0x8F000
     PALETTE_LEVEL_TILESET_ADDR = 0x8F200
@@ -684,132 +641,132 @@ def generate_curated_level_palette_data(rom, world: World):
     snes_level_palette_pointers_2 = bytearray([0xBF, (addr+2)&0xFF, (addr>>8)&0xFF, (addr>>16)&0xFF])
 
     # Enable curated palette loader
-    rom.write_bytes(0x02BED, bytearray([0x5C, 0x00, 0x80, 0x11])) # org $00ABED : jml custom_palettes
-    rom.write_bytes(0x02330, bytearray([0x5C, 0x02, 0x80, 0x11])) # org $00A318 : jml custom_palettes_original
-    rom.write_bytes(0x013D7, bytearray([0x20, 0x30, 0xA3]))       # org $0093D7 : jmp $A330
-    rom.write_bytes(0x014DA, bytearray([0x20, 0x30, 0xA3]))       # org $0094DA : jmp $A330
-    rom.write_bytes(0x015EC, bytearray([0x20, 0x30, 0xA3]))       # org $0095EC : jmp $A330
-    rom.write_bytes(0x0165B, bytearray([0x20, 0x30, 0xA3]))       # org $00965B : jmp $A330
-    rom.write_bytes(0x02DD9, bytearray([0x20, 0x30, 0xA3]))       # org $00ADD9 : jmp $A330
-    rom.write_bytes(0x02E1F, bytearray([0x20, 0x30, 0xA3]))       # org $00AE1F : jmp $A330
+    patch.write_bytes(0x02BED, bytearray([0x5C, 0x00, 0x80, 0x11])) # org $00ABED : jml custom_palettes
+    patch.write_bytes(0x02330, bytearray([0x5C, 0x02, 0x80, 0x11])) # org $00A318 : jml custom_palettes_original
+    patch.write_bytes(0x013D7, bytearray([0x20, 0x30, 0xA3]))       # org $0093D7 : jmp $A330
+    patch.write_bytes(0x014DA, bytearray([0x20, 0x30, 0xA3]))       # org $0094DA : jmp $A330
+    patch.write_bytes(0x015EC, bytearray([0x20, 0x30, 0xA3]))       # org $0095EC : jmp $A330
+    patch.write_bytes(0x0165B, bytearray([0x20, 0x30, 0xA3]))       # org $00965B : jmp $A330
+    patch.write_bytes(0x02DD9, bytearray([0x20, 0x30, 0xA3]))       # org $00ADD9 : jmp $A330
+    patch.write_bytes(0x02E1F, bytearray([0x20, 0x30, 0xA3]))       # org $00AE1F : jmp $A330
     
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0000, bytearray([0x80, 0x09]))                #                     bra custom_palettes
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0002, bytearray([0xC2, 0x30]))                # .original           rep #$30
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0004, bytearray([0xA9, 0xDD, 0x7F]))          #                     lda #$7FDD
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0007, bytearray([0x5C, 0xF2, 0xAB, 0x00]))    #                     jml $00ABF2
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x000B, bytearray([0xC2, 0x30]))                # custom_palettes:    rep #$30
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x000D, bytearray([0xA9, 0x70, 0xB1]))          #                     lda #$B170
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0010, bytearray([0x85, 0x0A]))                #                     sta !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0012, bytearray([0x64, 0x0C]))                #                     stz !_ptr+$02
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0014, bytearray([0xA9, 0x10, 0x00]))          #                     lda.w #$0010
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0017, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0019, bytearray([0xA9, 0x07, 0x00]))          #                     lda #$0007
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x001C, bytearray([0x85, 0x06]))                #                     sta !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x001E, bytearray([0xA9, 0x01, 0x00]))          #                     lda #$0001
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0021, bytearray([0x85, 0x08]))                #                     sta !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0023, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0026, bytearray([0xAE, 0x0B, 0x01]))          # .get_index          ldx $010B
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0029, bytearray([0xBF, 0x00, 0xF2, 0x11]))    #                     lda.l level_tilesets,x
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x002D, bytearray([0x29, 0xFF, 0x00]))          #                     and #$00FF
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0030, bytearray([0xEB]))                      #                     xba 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0031, bytearray([0x85, 0x00]))                #                     sta !_tileset
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0033, bytearray([0xBF, 0x00, 0xF0, 0x11]))    #                     lda.l level_index,x
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0037, bytearray([0x29, 0xFF, 0x00]))          #                     and #$00FF
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003A, bytearray([0x05, 0x00]))                #                     ora !_tileset
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003C, bytearray([0x85, 0x0A]))                #                     sta !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003E, bytearray([0x0A]))                      #                     asl 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003F, bytearray([0x18]))                      #                     clc 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0040, bytearray([0x65, 0x0A]))                #                     adc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0042, bytearray([0x85, 0x0E]))                #                     sta !_num
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0044, bytearray([0xAA]))                      #                     tax 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0045, snes_level_palette_pointers_1)          # .back_color         lda.l palette_pointers,x
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0049, bytearray([0x85, 0x0A]))                #                     sta !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x004B, snes_level_palette_pointers_2)          #                     lda.l palette_pointers+$02,x
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x004F, bytearray([0x85, 0x0C]))                #                     sta !_ptr+$02
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0051, bytearray([0xA7, 0x0A]))                #                     lda [!_ptr]
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0053, bytearray([0x8D, 0x01, 0x07]))          #                     sta $0701
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0056, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0058, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x005A, bytearray([0xA9, 0x02, 0x00]))          # .background         lda.w #$0001*$02
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x005D, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x005F, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0062, bytearray([0x85, 0x06]))                #                     sta !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0064, bytearray([0xA9, 0x01, 0x00]))          #                     lda #$0001
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0067, bytearray([0x85, 0x08]))                #                     sta !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0069, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x006C, bytearray([0xA9, 0x42, 0x00]))          # .foreground         lda.w #$0021*$02
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x006F, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0071, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0074, bytearray([0x85, 0x06]))                #                     sta !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0076, bytearray([0xA9, 0x01, 0x00]))          #                     lda #$0001
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0079, bytearray([0x85, 0x08]))                #                     sta !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x007B, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x007E, bytearray([0xA9, 0x52, 0x00]))          # .berries            lda.w #$0029*$02
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0081, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0083, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0086, bytearray([0x85, 0x06]))                #                     sta !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0088, bytearray([0xA9, 0x02, 0x00]))          #                     lda #$0002
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008B, bytearray([0x85, 0x08]))                #                     sta !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008D, bytearray([0xA5, 0x0A]))                #                     lda !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008F, bytearray([0x48]))                      #                     pha 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0090, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0093, bytearray([0x68]))                      #                     pla 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0094, bytearray([0x85, 0x0A]))                #                     sta !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0096, bytearray([0xA9, 0x32, 0x01]))          #                     lda.w #$0099*$02
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0099, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x009B, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x009E, bytearray([0x85, 0x06]))                #                     sta !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00A0, bytearray([0xA9, 0x02, 0x00]))          #                     lda #$0002
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00A3, bytearray([0x85, 0x08]))                #                     sta !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00A5, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00A8, bytearray([0xA9, 0x82, 0x00]))          # .global             lda.w #$0041*$02
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00AB, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00AD, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B0, bytearray([0x85, 0x06]))                #                     sta !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B2, bytearray([0xA9, 0x0B, 0x00]))          #                     lda #$000B
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B5, bytearray([0x85, 0x08]))                #                     sta !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B7, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BA, bytearray([0xA5, 0x00]))                # .sprite_specific    lda !_tileset
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BC, bytearray([0xC9, 0x00, 0x05]))          #                     cmp #$0500
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BF, bytearray([0xD0, 0x1D]))                #                     bne .end 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C1, bytearray([0xAD, 0x2E, 0x19]))          #                     lda $192E
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C4, bytearray([0x29, 0x0F, 0x00]))          #                     and #$000F
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C7, bytearray([0xC9, 0x02, 0x00]))          #                     cmp #$0002
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00CA, bytearray([0xD0, 0x12]))                #                     bne .end
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00CC, bytearray([0xA9, 0xC2, 0x01]))          #                     lda.w #$00E1*$02
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00CF, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00D1, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00D4, bytearray([0x85, 0x06]))                #                     sta !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00D6, bytearray([0xA9, 0x01, 0x00]))          #                     lda #$0001
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00D9, bytearray([0x85, 0x08]))                #                     sta !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00DB, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00DE, bytearray([0xE2, 0x30]))                # .end                sep #$30
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E0, bytearray([0x5C, 0xEC, 0xAC, 0x00]))    #                     jml $00ACEC
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0000, bytearray([0x80, 0x09]))                #                     bra custom_palettes
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0002, bytearray([0xC2, 0x30]))                # .original           rep #$30
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0004, bytearray([0xA9, 0xDD, 0x7F]))          #                     lda #$7FDD
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0007, bytearray([0x5C, 0xF2, 0xAB, 0x00]))    #                     jml $00ABF2
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x000B, bytearray([0xC2, 0x30]))                # custom_palettes:    rep #$30
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x000D, bytearray([0xA9, 0x70, 0xB1]))          #                     lda #$B170
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0010, bytearray([0x85, 0x0A]))                #                     sta !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0012, bytearray([0x64, 0x0C]))                #                     stz !_ptr+$02
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0014, bytearray([0xA9, 0x10, 0x00]))          #                     lda.w #$0010
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0017, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0019, bytearray([0xA9, 0x07, 0x00]))          #                     lda #$0007
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x001C, bytearray([0x85, 0x06]))                #                     sta !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x001E, bytearray([0xA9, 0x01, 0x00]))          #                     lda #$0001
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0021, bytearray([0x85, 0x08]))                #                     sta !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0023, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0026, bytearray([0xAE, 0x0B, 0x01]))          # .get_index          ldx $010B
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0029, bytearray([0xBF, 0x00, 0xF2, 0x11]))    #                     lda.l level_tilesets,x
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x002D, bytearray([0x29, 0xFF, 0x00]))          #                     and #$00FF
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0030, bytearray([0xEB]))                      #                     xba 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0031, bytearray([0x85, 0x00]))                #                     sta !_tileset
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0033, bytearray([0xBF, 0x00, 0xF0, 0x11]))    #                     lda.l level_index,x
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0037, bytearray([0x29, 0xFF, 0x00]))          #                     and #$00FF
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003A, bytearray([0x05, 0x00]))                #                     ora !_tileset
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003C, bytearray([0x85, 0x0A]))                #                     sta !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003E, bytearray([0x0A]))                      #                     asl 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003F, bytearray([0x18]))                      #                     clc 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0040, bytearray([0x65, 0x0A]))                #                     adc !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0042, bytearray([0x85, 0x0E]))                #                     sta !_num
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0044, bytearray([0xAA]))                      #                     tax 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0045, snes_level_palette_pointers_1)          # .back_color         lda.l palette_pointers,x
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0049, bytearray([0x85, 0x0A]))                #                     sta !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x004B, snes_level_palette_pointers_2)          #                     lda.l palette_pointers+$02,x
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x004F, bytearray([0x85, 0x0C]))                #                     sta !_ptr+$02
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0051, bytearray([0xA7, 0x0A]))                #                     lda [!_ptr]
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0053, bytearray([0x8D, 0x01, 0x07]))          #                     sta $0701
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0056, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0058, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x005A, bytearray([0xA9, 0x02, 0x00]))          # .background         lda.w #$0001*$02
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x005D, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x005F, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0062, bytearray([0x85, 0x06]))                #                     sta !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0064, bytearray([0xA9, 0x01, 0x00]))          #                     lda #$0001
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0067, bytearray([0x85, 0x08]))                #                     sta !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0069, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x006C, bytearray([0xA9, 0x42, 0x00]))          # .foreground         lda.w #$0021*$02
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x006F, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0071, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0074, bytearray([0x85, 0x06]))                #                     sta !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0076, bytearray([0xA9, 0x01, 0x00]))          #                     lda #$0001
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0079, bytearray([0x85, 0x08]))                #                     sta !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x007B, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x007E, bytearray([0xA9, 0x52, 0x00]))          # .berries            lda.w #$0029*$02
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0081, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0083, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0086, bytearray([0x85, 0x06]))                #                     sta !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0088, bytearray([0xA9, 0x02, 0x00]))          #                     lda #$0002
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008B, bytearray([0x85, 0x08]))                #                     sta !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008D, bytearray([0xA5, 0x0A]))                #                     lda !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008F, bytearray([0x48]))                      #                     pha 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0090, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0093, bytearray([0x68]))                      #                     pla 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0094, bytearray([0x85, 0x0A]))                #                     sta !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0096, bytearray([0xA9, 0x32, 0x01]))          #                     lda.w #$0099*$02
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0099, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x009B, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x009E, bytearray([0x85, 0x06]))                #                     sta !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00A0, bytearray([0xA9, 0x02, 0x00]))          #                     lda #$0002
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00A3, bytearray([0x85, 0x08]))                #                     sta !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00A5, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00A8, bytearray([0xA9, 0x82, 0x00]))          # .global             lda.w #$0041*$02
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00AB, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00AD, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B0, bytearray([0x85, 0x06]))                #                     sta !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B2, bytearray([0xA9, 0x0B, 0x00]))          #                     lda #$000B
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B5, bytearray([0x85, 0x08]))                #                     sta !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B7, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BA, bytearray([0xA5, 0x00]))                # .sprite_specific    lda !_tileset
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BC, bytearray([0xC9, 0x00, 0x05]))          #                     cmp #$0500
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BF, bytearray([0xD0, 0x1D]))                #                     bne .end 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C1, bytearray([0xAD, 0x2E, 0x19]))          #                     lda $192E
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C4, bytearray([0x29, 0x0F, 0x00]))          #                     and #$000F
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C7, bytearray([0xC9, 0x02, 0x00]))          #                     cmp #$0002
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00CA, bytearray([0xD0, 0x12]))                #                     bne .end
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00CC, bytearray([0xA9, 0xC2, 0x01]))          #                     lda.w #$00E1*$02
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00CF, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00D1, bytearray([0xA9, 0x06, 0x00]))          #                     lda #$0006
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00D4, bytearray([0x85, 0x06]))                #                     sta !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00D6, bytearray([0xA9, 0x01, 0x00]))          #                     lda #$0001
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00D9, bytearray([0x85, 0x08]))                #                     sta !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00DB, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00DE, bytearray([0xE2, 0x30]))                # .end                sep #$30
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E0, bytearray([0x5C, 0xEC, 0xAC, 0x00]))    #                     jml $00ACEC
     
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E4, bytearray([0xA6, 0x04]))                # load_colors:        ldx !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E6, bytearray([0xA4, 0x06]))                #                     ldy !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E8, bytearray([0xA7, 0x0A]))                # .x_loop             lda [!_ptr]
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EA, bytearray([0x9D, 0x03, 0x07]))          #                     sta $0703,x
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00ED, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EF, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F1, bytearray([0xE8]))                      #                     inx 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F2, bytearray([0xE8]))                      #                     inx 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F3, bytearray([0x88]))                      #                     dey 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F4, bytearray([0x10, 0xF2]))                #                     bpl .x_loop
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F6, bytearray([0xA5, 0x04]))                #                     lda !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F8, bytearray([0x18]))                      #                     clc 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F9, bytearray([0x69, 0x20, 0x00]))          #                     adc #$0020
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FC, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FE, bytearray([0xC6, 0x08]))                #                     dec !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0100, bytearray([0x10, 0xE2]))                #                     bpl load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0102, bytearray([0x60]))                      #                     rts 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E4, bytearray([0xA6, 0x04]))                # load_colors:        ldx !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E6, bytearray([0xA4, 0x06]))                #                     ldy !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E8, bytearray([0xA7, 0x0A]))                # .x_loop             lda [!_ptr]
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EA, bytearray([0x9D, 0x03, 0x07]))          #                     sta $0703,x
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00ED, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EF, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F1, bytearray([0xE8]))                      #                     inx 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F2, bytearray([0xE8]))                      #                     inx 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F3, bytearray([0x88]))                      #                     dey 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F4, bytearray([0x10, 0xF2]))                #                     bpl .x_loop
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F6, bytearray([0xA5, 0x04]))                #                     lda !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F8, bytearray([0x18]))                      #                     clc 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F9, bytearray([0x69, 0x20, 0x00]))          #                     adc #$0020
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FC, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FE, bytearray([0xC6, 0x08]))                #                     dec !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0100, bytearray([0x10, 0xE2]))                #                     bpl load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0102, bytearray([0x60]))                      #                     rts 
 
     # Load palette paths
     data = pkgutil.get_data(__name__, f"data/palettes/level/palettes.json").decode("utf-8")
     tilesets = json.loads(data)
 
     # Writes the level tileset index to ROM
-    rom.write_bytes(PALETTE_LEVEL_TILESET_ADDR, bytearray(level_palette_index))
+    patch.write_bytes(PALETTE_LEVEL_TILESET_ADDR, bytearray(level_palette_index))
 
     # Builds the table in ROM that holds the palette index for each level, including sublevels
     for level_id in range(0x200):
@@ -819,7 +776,7 @@ def generate_curated_level_palette_data(rom, world: World):
         else:
             tileset = tileset_names[0x19]
         palette = world.random.randint(0, len(tilesets[tileset])-1)
-        rom.write_bytes(PALETTE_INDEX_ADDR + level_id, bytearray([palette]))
+        patch.write_bytes(PALETTE_INDEX_ADDR + level_id, bytearray([palette]))
         
     # Writes the actual level palette data and pointer to said data to the ROM
     pal_offset = 0x0000
@@ -833,27 +790,27 @@ def generate_curated_level_palette_data(rom, world: World):
                 bank_palette_count = 0
             # Write pointer
             data_ptr = pc_to_snes(PALETTE_LEVEL_DATA_ADDR + pal_offset)
-            rom.write_bytes(PALETTE_LEVEL_PTR_ADDR + ((tileset_num*3)<<8) + (palette*3), bytearray([data_ptr & 0xFF, (data_ptr>>8)&0xFF, (data_ptr>>16)&0xFF]))
+            patch.write_bytes(PALETTE_LEVEL_PTR_ADDR + ((tileset_num*3)<<8) + (palette*3), bytearray([data_ptr & 0xFF, (data_ptr>>8)&0xFF, (data_ptr>>16)&0xFF]))
             # Write data
-            rom.write_bytes(PALETTE_LEVEL_DATA_ADDR + pal_offset, read_palette_file(tileset, tilesets[tileset][palette], "level"))
+            patch.write_bytes(PALETTE_LEVEL_DATA_ADDR + pal_offset, read_palette_file(tileset, tilesets[tileset][palette], "level"))
             pal_offset += 0x128
             bank_palette_count += 1
         tileset_num += 1
 
     # Fix eaten berry tiles
     EATEN_BERRY_ADDR = 0x68248
-    rom.write_byte(EATEN_BERRY_ADDR + 0x01, 0x04)
-    rom.write_byte(EATEN_BERRY_ADDR + 0x03, 0x04)
-    rom.write_byte(EATEN_BERRY_ADDR + 0x05, 0x04)
-    rom.write_byte(EATEN_BERRY_ADDR + 0x07, 0x04)
+    patch.write_byte(EATEN_BERRY_ADDR + 0x01, 0x04)
+    patch.write_byte(EATEN_BERRY_ADDR + 0x03, 0x04)
+    patch.write_byte(EATEN_BERRY_ADDR + 0x05, 0x04)
+    patch.write_byte(EATEN_BERRY_ADDR + 0x07, 0x04)
 
     # Fix title screen changing background colors
-    rom.write_bytes(0x1D30, bytearray([0xEA, 0xEA, 0xEA]))
+    patch.write_bytes(0x1D30, bytearray([0xEA, 0xEA, 0xEA]))
 
     # Skips level intros automatically
-    rom.write_byte(0x4896, 0x80)
+    patch.write_byte(0x4896, 0x80)
 
-def generate_curated_map_palette_data(rom, world: World):
+def generate_curated_map_palette_data(patch, world: World):
     PALETTE_MAP_CODE_ADDR = 0x88200
     PALETTE_UPLOADER_EDIT = 0x88400
     PALETTE_MAP_INDEX_ADDR = 0x8F400
@@ -864,109 +821,109 @@ def generate_curated_map_palette_data(rom, world: World):
     snes_map_palette_pointers_1 = bytearray([0xBF, (addr)&0xFF, (addr>>8)&0xFF, (addr>>16)&0xFF])
     snes_map_palette_pointers_2 = bytearray([0xBF, (addr+2)&0xFF, (addr>>8)&0xFF, (addr>>16)&0xFF])
 
-    rom.write_bytes(0x02D25, bytearray([0x5C, 0x09, 0x82, 0x11])) # org $00AD25 : jml map_palettes
+    patch.write_bytes(0x02D25, bytearray([0x5C, 0x09, 0x82, 0x11])) # org $00AD25 : jml map_palettes
 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0000, bytearray([0xC2, 0x30]))                  # map_og_palettes:    rep #$30
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0002, bytearray([0xA0, 0xD8, 0xB3]))            #                     ldy #$B3D8
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0005, bytearray([0x5C, 0x2A, 0xAD, 0x00]))      #                     jml $00AD2A
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0009, bytearray([0xC2, 0x30]))                  # map_palettes:       rep #$30
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x000B, bytearray([0xAD, 0x31, 0x19]))            # .prepare_index      lda $1931
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x000E, bytearray([0x29, 0x0F, 0x00]))            #                     and #$000F
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0011, bytearray([0x3A]))                        #                     dec 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0012, bytearray([0xAA]))                        #                     tax 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0013, bytearray([0xEB]))                        #                     xba 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0014, bytearray([0x85, 0x0E]))                  #                     sta !_num
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0016, bytearray([0xBF, 0x00, 0xF4, 0x11]))      #                     lda.l map_index,x
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001A, bytearray([0x29, 0xFF, 0x00]))            #                     and #$00FF
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001D, bytearray([0x05, 0x0E]))                  #                     ora !_num
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001F, bytearray([0x85, 0x0A]))                  #                     sta !_ptr
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0021, bytearray([0x0A]))                        #                     asl 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0022, bytearray([0x18]))                        #                     clc 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0023, bytearray([0x65, 0x0A]))                  #                     adc !_ptr
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0025, bytearray([0xAA]))                        #                     tax 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0026, snes_map_palette_pointers_1)              #                     lda.l map_palette_pointers,x
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x002A, bytearray([0x85, 0x0A]))                  #                     sta !_ptr
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x002C, snes_map_palette_pointers_2)              #                     lda.l map_palette_pointers+$02,x
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0030, bytearray([0x85, 0x0C]))                  #                     sta !_ptr+$02
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0032, bytearray([0xA7, 0x0A]))                  # .load_back_color    lda [!_ptr]
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0034, bytearray([0x8D, 0x01, 0x07]))            #                     sta $0701
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0037, bytearray([0xE6, 0x0A]))                  #                     inc !_ptr
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0039, bytearray([0xE6, 0x0A]))                  #                     inc !_ptr
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x003B, bytearray([0xA9, 0x82, 0x00]))            # .load_layer_2       lda.w #$0041*$02
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x003E, bytearray([0x85, 0x04]))                  #                     sta !_index
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0040, bytearray([0xA9, 0x06, 0x00]))            #                     lda #$0006
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0043, bytearray([0x85, 0x06]))                  #                     sta !_x_span
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0045, bytearray([0xA9, 0x03, 0x00]))            #                     lda #$0003
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0048, bytearray([0x85, 0x08]))                  #                     sta !_y_span
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x004A, bytearray([0x20, 0xE4, 0x80]))            #                     jsr load_colors
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x004D, bytearray([0xA9, 0x52, 0x00]))            # .load_layer_1       lda.w #$0029*$02
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0050, bytearray([0x85, 0x04]))                  #                     sta !_index
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0052, bytearray([0xA9, 0x06, 0x00]))            #                     lda #$0006
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0055, bytearray([0x85, 0x06]))                  #                     sta !_x_span
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0057, bytearray([0xA9, 0x05, 0x00]))            #                     lda #$0005
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x005A, bytearray([0x85, 0x08]))                  #                     sta !_y_span
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x005C, bytearray([0x20, 0xE4, 0x80]))            #                     jsr load_colors
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x005F, bytearray([0xA9, 0x10, 0x00]))            # .load_layer_3       lda.w #$0008*$02
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0062, bytearray([0x85, 0x04]))                  #                     sta !_index
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0064, bytearray([0xA9, 0x07, 0x00]))            #                     lda #$0007
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0067, bytearray([0x85, 0x06]))                  #                     sta !_x_span
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0069, bytearray([0xA9, 0x01, 0x00]))            #                     lda #$0001
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x006C, bytearray([0x85, 0x08]))                  #                     sta !_y_span
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x006E, bytearray([0x20, 0xE4, 0x80]))            #                     jsr load_colors
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0071, bytearray([0xA9, 0x02, 0x01]))            # .load_sprites       lda.w #$0081*$02
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0074, bytearray([0x85, 0x04]))                  #                     sta !_index
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0076, bytearray([0xA9, 0x06, 0x00]))            #                     lda #$0006
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0079, bytearray([0x85, 0x06]))                  #                     sta !_x_span
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x007B, bytearray([0xA9, 0x07, 0x00]))            #                     lda #$0007
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x007E, bytearray([0x85, 0x08]))                  #                     sta !_y_span
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0080, bytearray([0x20, 0xE4, 0x80]))            #                     jsr load_colors
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0083, bytearray([0x5C, 0xA3, 0xAD, 0x00]))      # .return             jml $00ADA3
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0000, bytearray([0xC2, 0x30]))                  # map_og_palettes:    rep #$30
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0002, bytearray([0xA0, 0xD8, 0xB3]))            #                     ldy #$B3D8
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0005, bytearray([0x5C, 0x2A, 0xAD, 0x00]))      #                     jml $00AD2A
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0009, bytearray([0xC2, 0x30]))                  # map_palettes:       rep #$30
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x000B, bytearray([0xAD, 0x31, 0x19]))            # .prepare_index      lda $1931
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x000E, bytearray([0x29, 0x0F, 0x00]))            #                     and #$000F
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0011, bytearray([0x3A]))                        #                     dec 
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0012, bytearray([0xAA]))                        #                     tax 
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0013, bytearray([0xEB]))                        #                     xba 
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0014, bytearray([0x85, 0x0E]))                  #                     sta !_num
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0016, bytearray([0xBF, 0x00, 0xF4, 0x11]))      #                     lda.l map_index,x
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001A, bytearray([0x29, 0xFF, 0x00]))            #                     and #$00FF
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001D, bytearray([0x05, 0x0E]))                  #                     ora !_num
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001F, bytearray([0x85, 0x0A]))                  #                     sta !_ptr
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0021, bytearray([0x0A]))                        #                     asl 
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0022, bytearray([0x18]))                        #                     clc 
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0023, bytearray([0x65, 0x0A]))                  #                     adc !_ptr
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0025, bytearray([0xAA]))                        #                     tax 
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0026, snes_map_palette_pointers_1)              #                     lda.l map_palette_pointers,x
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x002A, bytearray([0x85, 0x0A]))                  #                     sta !_ptr
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x002C, snes_map_palette_pointers_2)              #                     lda.l map_palette_pointers+$02,x
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0030, bytearray([0x85, 0x0C]))                  #                     sta !_ptr+$02
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0032, bytearray([0xA7, 0x0A]))                  # .load_back_color    lda [!_ptr]
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0034, bytearray([0x8D, 0x01, 0x07]))            #                     sta $0701
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0037, bytearray([0xE6, 0x0A]))                  #                     inc !_ptr
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0039, bytearray([0xE6, 0x0A]))                  #                     inc !_ptr
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x003B, bytearray([0xA9, 0x82, 0x00]))            # .load_layer_2       lda.w #$0041*$02
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x003E, bytearray([0x85, 0x04]))                  #                     sta !_index
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0040, bytearray([0xA9, 0x06, 0x00]))            #                     lda #$0006
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0043, bytearray([0x85, 0x06]))                  #                     sta !_x_span
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0045, bytearray([0xA9, 0x03, 0x00]))            #                     lda #$0003
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0048, bytearray([0x85, 0x08]))                  #                     sta !_y_span
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x004A, bytearray([0x20, 0xE4, 0x80]))            #                     jsr load_colors
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x004D, bytearray([0xA9, 0x52, 0x00]))            # .load_layer_1       lda.w #$0029*$02
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0050, bytearray([0x85, 0x04]))                  #                     sta !_index
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0052, bytearray([0xA9, 0x06, 0x00]))            #                     lda #$0006
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0055, bytearray([0x85, 0x06]))                  #                     sta !_x_span
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0057, bytearray([0xA9, 0x05, 0x00]))            #                     lda #$0005
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x005A, bytearray([0x85, 0x08]))                  #                     sta !_y_span
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x005C, bytearray([0x20, 0xE4, 0x80]))            #                     jsr load_colors
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x005F, bytearray([0xA9, 0x10, 0x00]))            # .load_layer_3       lda.w #$0008*$02
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0062, bytearray([0x85, 0x04]))                  #                     sta !_index
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0064, bytearray([0xA9, 0x07, 0x00]))            #                     lda #$0007
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0067, bytearray([0x85, 0x06]))                  #                     sta !_x_span
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0069, bytearray([0xA9, 0x01, 0x00]))            #                     lda #$0001
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x006C, bytearray([0x85, 0x08]))                  #                     sta !_y_span
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x006E, bytearray([0x20, 0xE4, 0x80]))            #                     jsr load_colors
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0071, bytearray([0xA9, 0x02, 0x01]))            # .load_sprites       lda.w #$0081*$02
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0074, bytearray([0x85, 0x04]))                  #                     sta !_index
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0076, bytearray([0xA9, 0x06, 0x00]))            #                     lda #$0006
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0079, bytearray([0x85, 0x06]))                  #                     sta !_x_span
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x007B, bytearray([0xA9, 0x07, 0x00]))            #                     lda #$0007
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x007E, bytearray([0x85, 0x08]))                  #                     sta !_y_span
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0080, bytearray([0x20, 0xE4, 0x80]))            #                     jsr load_colors
+    patch.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0083, bytearray([0x5C, 0xA3, 0xAD, 0x00]))      # .return             jml $00ADA3
 
-    rom.write_bytes(0x2488, bytearray([0x5C, 0x00, 0x84, 0x11])) # org $00A488 : jml palette_upload
+    patch.write_bytes(0x2488, bytearray([0x5C, 0x00, 0x84, 0x11])) # org $00A488 : jml palette_upload
 
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0000, bytearray([0xAD, 0x00, 0x01]))            # palette_upload:     lda $0100
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0003, bytearray([0xC9, 0x0E]))                  #                     cmp #$0E
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0005, bytearray([0xF0, 0x0A]))                  #                     beq .map
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0007, bytearray([0xAC, 0x80, 0x06]))            # .regular            ldy $0680
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x000A, bytearray([0xBE, 0x81, 0xA4]))            #                     ldx.w $A47F+2,y
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x000D, bytearray([0x5C, 0x8E, 0xA4, 0x00]))      #                     jml $00A48E
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0011, bytearray([0xAD, 0xD9, 0x13]))            # .map                lda $13D9
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0014, bytearray([0xC9, 0x0A]))                  #                     cmp #$0A
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0016, bytearray([0xD0, 0xEF]))                  #                     bne .regular
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0018, bytearray([0xAD, 0xE8, 0x1D]))            #                     lda $1DE8
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x001B, bytearray([0xC9, 0x06]))                  #                     cmp #$06
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x001D, bytearray([0xD0, 0xE8]))                  #                     bne .regular
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x001F, bytearray([0x9C, 0x03, 0x07]))            #                     stz $0703
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0022, bytearray([0x9C, 0x04, 0x07]))            #                     stz $0704
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0025, bytearray([0x9C, 0x21, 0x21]))            #                     stz $2121
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0028, bytearray([0xA2, 0x06]))                  #                     ldx #$06
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x002A, bytearray([0xBD, 0x49, 0x92]))            # .loop               lda.w $9249,x
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x002D, bytearray([0x9D, 0x20, 0x43]))            #                     sta $4320,x
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0030, bytearray([0xCA]))                        #                     dex 
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0031, bytearray([0x10, 0xF7]))                  #                     bpl .loop
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0033, bytearray([0xA9, 0x04]))                  #                     lda #$04
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0035, bytearray([0x8D, 0x0B, 0x42]))            #                     sta $420B
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0038, bytearray([0x5C, 0xCF, 0xA4, 0x00]))      #                     jml $00A4CF
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0000, bytearray([0xAD, 0x00, 0x01]))            # palette_upload:     lda $0100
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0003, bytearray([0xC9, 0x0E]))                  #                     cmp #$0E
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0005, bytearray([0xF0, 0x0A]))                  #                     beq .map
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0007, bytearray([0xAC, 0x80, 0x06]))            # .regular            ldy $0680
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x000A, bytearray([0xBE, 0x81, 0xA4]))            #                     ldx.w $A47F+2,y
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x000D, bytearray([0x5C, 0x8E, 0xA4, 0x00]))      #                     jml $00A48E
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0011, bytearray([0xAD, 0xD9, 0x13]))            # .map                lda $13D9
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0014, bytearray([0xC9, 0x0A]))                  #                     cmp #$0A
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0016, bytearray([0xD0, 0xEF]))                  #                     bne .regular
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0018, bytearray([0xAD, 0xE8, 0x1D]))            #                     lda $1DE8
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x001B, bytearray([0xC9, 0x06]))                  #                     cmp #$06
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x001D, bytearray([0xD0, 0xE8]))                  #                     bne .regular
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x001F, bytearray([0x9C, 0x03, 0x07]))            #                     stz $0703
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0022, bytearray([0x9C, 0x04, 0x07]))            #                     stz $0704
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0025, bytearray([0x9C, 0x21, 0x21]))            #                     stz $2121
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0028, bytearray([0xA2, 0x06]))                  #                     ldx #$06
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x002A, bytearray([0xBD, 0x49, 0x92]))            # .loop               lda.w $9249,x
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x002D, bytearray([0x9D, 0x20, 0x43]))            #                     sta $4320,x
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0030, bytearray([0xCA]))                        #                     dex 
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0031, bytearray([0x10, 0xF7]))                  #                     bpl .loop
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0033, bytearray([0xA9, 0x04]))                  #                     lda #$04
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0035, bytearray([0x8D, 0x0B, 0x42]))            #                     sta $420B
+    patch.write_bytes(PALETTE_UPLOADER_EDIT + 0x0038, bytearray([0x5C, 0xCF, 0xA4, 0x00]))      #                     jml $00A4CF
 
     # Insert this piece of ASM again in case levels are disabled
     PALETTE_LEVEL_CODE_ADDR = 0x88000
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E4, bytearray([0xA6, 0x04]))                # load_colors:        ldx !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E6, bytearray([0xA4, 0x06]))                #                     ldy !_x_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E8, bytearray([0xA7, 0x0A]))                # .x_loop             lda [!_ptr]
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EA, bytearray([0x9D, 0x03, 0x07]))          #                     sta $0703,x
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00ED, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EF, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F1, bytearray([0xE8]))                      #                     inx 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F2, bytearray([0xE8]))                      #                     inx 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F3, bytearray([0x88]))                      #                     dey 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F4, bytearray([0x10, 0xF2]))                #                     bpl .x_loop
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F6, bytearray([0xA5, 0x04]))                #                     lda !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F8, bytearray([0x18]))                      #                     clc 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F9, bytearray([0x69, 0x20, 0x00]))          #                     adc #$0020
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FC, bytearray([0x85, 0x04]))                #                     sta !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FE, bytearray([0xC6, 0x08]))                #                     dec !_y_span
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0100, bytearray([0x10, 0xE2]))                #                     bpl load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0102, bytearray([0x60]))                      #                     rts 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E4, bytearray([0xA6, 0x04]))                # load_colors:        ldx !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E6, bytearray([0xA4, 0x06]))                #                     ldy !_x_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E8, bytearray([0xA7, 0x0A]))                # .x_loop             lda [!_ptr]
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EA, bytearray([0x9D, 0x03, 0x07]))          #                     sta $0703,x
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00ED, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EF, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F1, bytearray([0xE8]))                      #                     inx 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F2, bytearray([0xE8]))                      #                     inx 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F3, bytearray([0x88]))                      #                     dey 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F4, bytearray([0x10, 0xF2]))                #                     bpl .x_loop
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F6, bytearray([0xA5, 0x04]))                #                     lda !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F8, bytearray([0x18]))                      #                     clc 
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F9, bytearray([0x69, 0x20, 0x00]))          #                     adc #$0020
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FC, bytearray([0x85, 0x04]))                #                     sta !_index
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FE, bytearray([0xC6, 0x08]))                #                     dec !_y_span
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0100, bytearray([0x10, 0xE2]))                #                     bpl load_colors
+    patch.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0102, bytearray([0x60]))                      #                     rts 
 
     # Load palette paths
     data = pkgutil.get_data(__name__, f"data/palettes/map/palettes.json").decode("utf-8")
@@ -975,7 +932,7 @@ def generate_curated_map_palette_data(rom, world: World):
     for map_id in range(0x07):
         current_map_name = map_names[map_id]
         palette = world.random.randint(0, len(maps[current_map_name])-1)
-        rom.write_bytes(PALETTE_MAP_INDEX_ADDR + map_id, bytearray([palette]))
+        patch.write_bytes(PALETTE_MAP_INDEX_ADDR + map_id, bytearray([palette]))
 
     # Writes the actual map palette data and pointer to said data to the ROM
     pal_offset = 0x0000
@@ -989,12 +946,12 @@ def generate_curated_map_palette_data(rom, world: World):
                 bank_palette_count = 0
             # Write pointer
             data_ptr = pc_to_snes(PALETTE_MAP_DATA_ADDR + pal_offset)
-            rom.write_bytes(PALETTE_MAP_PTR_ADDR + ((map_num*3)<<8) + (palette*3), bytearray([data_ptr & 0xFF, (data_ptr>>8)&0xFF, (data_ptr>>16)&0xFF]))
+            patch.write_bytes(PALETTE_MAP_PTR_ADDR + ((map_num*3)<<8) + (palette*3), bytearray([data_ptr & 0xFF, (data_ptr>>8)&0xFF, (data_ptr>>16)&0xFF]))
             # Write data
-            rom.write_bytes(PALETTE_MAP_DATA_ADDR + pal_offset, read_palette_file(current_map, maps[current_map][palette], "map"))
+            patch.write_bytes(PALETTE_MAP_DATA_ADDR + pal_offset, read_palette_file(current_map, maps[current_map][palette], "map"))
             # Update map mario palette
             chosen_palette = world.options.mario_palette.value
-            rom.write_bytes(PALETTE_MAP_DATA_ADDR + pal_offset + 206, bytes(ow_mario_palettes[chosen_palette]))
+            patch.write_bytes(PALETTE_MAP_DATA_ADDR + pal_offset + 206, bytes(ow_mario_palettes[chosen_palette]))
             pal_offset += 0x11C
             bank_palette_count += 1
         map_num += 1
