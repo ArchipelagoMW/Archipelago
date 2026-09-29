@@ -310,7 +310,6 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | 0b001 | Indicates you get items sent from other worlds. |
 | 0b010 | Indicates you get items sent from your own world. Requires 0b001 to be set. |
 | 0b100 | Indicates you get your starting inventory sent. Requires 0b001 to be set. |
-| null  | Null or undefined loads settings from world definition for backwards compatibility. This is deprecated. |
 
 #### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
@@ -422,7 +421,7 @@ Send this message to the server, tell it which clients should receive the messag
 the message to all those targets to which the requirements ("teams", "games", "slots", "tags") apply according
 to the operator chosen:
 - "or": Conditions are chained with "or".
-- "and": Conditions are chained with "and". Important note: If a condition is empty, it evaluates as **True**.
+- "and": Conditions are chained with "and". (Important note: A completely missing key evaluates as **True**, whereas an empty list evaluates as **False**)
 - "legacy": Evaluates as `teams and (games or slots or tags)`.
 
 #### Arguments
