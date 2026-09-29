@@ -402,7 +402,8 @@ AP will pick up your world automatically due to the `AutoWorld` implementation.
 ### Requirements
 
 Separate worlds being shipped as standalone `.apworld` files for use on existing installations will need to vendor any
-additional dependencies used by the world, typically by bundling them inside of their release.
+additional dependencies used by the world, typically by bundling them inside of their release. World authors doing so
+should ensure that the dependency's license allows for such direct redistribution.
 
 Pure-python packages can be imported directly from the archive, but dependencies including native code components will
 likely have to extract the dependency to a temporary directory and then add the directory to `sys.path` for them to be
