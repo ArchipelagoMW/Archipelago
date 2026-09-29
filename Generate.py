@@ -362,6 +362,21 @@ def get_choice(option, root, value=None) -> Any:
     raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
+def get_choice_and_random(option, root, value=None) -> tuple[Any, bool]:
+    if option not in root:
+        return value, False
+    if type(root[option]) is list:
+        return random.choices(root[option])[0], len(root[option]) > 1
+    if type(root[option]) is not dict:
+        return root[option], False
+    if not root[option]:
+        return value, False
+    if any(root[option].values()):
+        return (random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0],
+                len(root[option]) > 1)
+    raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
+
+
 class SafeFormatter(string.Formatter):
     def get_value(self, key, args, kwargs):
         if isinstance(key, int):
@@ -517,7 +532,10 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             if not option.supports_weighting:
                 player_option = option.from_any(game_weights[option_key])
             else:
-                player_option = option.from_any(get_choice(option_key, game_weights))
+                result, is_weighted = get_choice_and_random(option_key, game_weights)
+                player_option = option.from_any(result)
+                if not player_option.value_determined_randomly and is_weighted:
+                    player_option.value_determined_randomly = True
         else:
             player_option = option.from_any(option.default)  # call the from_any here to support default "random"
         setattr(ret, option_key, player_option)
