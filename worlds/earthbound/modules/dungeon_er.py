@@ -2,7 +2,7 @@ import struct
 from typing import Optional, TYPE_CHECKING
 from dataclasses import dataclass
 from ..game_data.local_data import item_id_table
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from dataclasses import dataclass
 from ..game_data.local_data import item_id_table
 if TYPE_CHECKING:
@@ -15,7 +15,7 @@ class EBDungeonDoor:
     address: int
     copyaddress: int
     direction: int
-    is_script: bool = False # Script warps invert the x and y coordinate
+    is_script: bool = False  # Script warps invert the x and y coordinate
 
 
 def shuffle_dungeons(world: "EarthBoundWorld") -> None:
