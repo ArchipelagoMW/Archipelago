@@ -63,17 +63,44 @@ class RetroSocket:
         except Exception as e:
             raise Exception("An error occurred while sending a message.")
 
+    def drain(self):
+        while True:
+            try:
+                self.socket.recv(65536)
+            except (BlockingIOError, OSError):
+                break
+
     async def read(self, message: str) -> Optional[bytes]:
+        parts = message.split(" ")
+        req_addr = int(parts[1], 16)
+        req_size = int(parts[2])
+        self.drain()
         self.send(message)
+        loop = asyncio.get_event_loop()
+        deadline = loop.time() + 1.0
         try:
-            response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 30000), 1.0)
-            data = response.decode().strip("\n").split(" ")
-            b = b""
-            for s in data[2:]:
-                if "-1" in s:
-                    raise Exception("Client tried to read from an invalid address or ROM is not open...")
-                b += bytes.fromhex(s)
-            return b
+            while True:
+                remaining = deadline - loop.time()
+                if remaining <= 0:
+                    raise asyncio.TimeoutError
+                response = await asyncio.wait_for(loop.sock_recv(self.socket, 30000), remaining)
+                data = response.decode().strip("\n").split(" ")
+                if len(data) < 2 or data[0] != parts[0]:
+                    continue
+                try:
+                    if int(data[1], 16) != req_addr:
+                        continue
+                except ValueError:
+                    continue
+                b = b""
+                for s in data[2:]:
+                    if "-1" in s:
+                        raise Exception("Client tried to read from an invalid address or ROM is not open...")
+                    b += bytes.fromhex(s)
+                if len(b) != req_size:
+                    logger.error(f"Malformed RAM read at {parts[1]}: expected {req_size} bytes, got {len(b)}")
+                    return None
+                return b
         except asyncio.TimeoutError:
             logger.error("Timeout while waiting for socket response...")
             await asyncio.sleep(2)
@@ -87,14 +114,16 @@ class RetroSocket:
             await asyncio.sleep(2)
             return None
 
-    async def status(self) -> str:
+    async def status(self) -> str | None:
         message = "GET_STATUS"
+        self.drain()
         self.send(message)
         try:
             data = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
             return data.decode()
         except (asyncio.TimeoutError, ConnectionResetError, OSError):
             pass
+        return None
 
 
 def message_format(arg: str, params: str) -> str:
@@ -220,8 +249,8 @@ class GauntletLegendsContext(CommonContext):
     # Update inventory based on items received from server
     # Also adds starting items based on a few yaml options
     async def handle_items(self):
-        self.players = list(await self._read_ram(MOD_PLAYERS_LIST, 4))
-        self.players = [player for player in self.players if player != 0]
+        players_raw = await self._read_ram(MOD_PLAYERS_LIST, 4)
+        self.players = [player for player in players_raw if player != 0] if players_raw else []
         if not self.players:
             return
         for player in self.players:
@@ -276,9 +305,10 @@ class GauntletLegendsContext(CommonContext):
         val = await self._read_ram_int(PLAYER_KILL + (0x1F0 * (self.players[0] - 1)), 1)
         return (val & 0xF) == 0x8 or (val & 0xF) == 0x1
 
-    async def get_seed_name(self) -> str:
+    async def get_seed_name(self) -> str | None:
         seed_name = await self._read_ram(0x3FC7F0, 0x10)
-        return seed_name.decode("utf-8").strip()
+
+        return seed_name.decode("utf-8").strip() if seed_name else None
 
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
         try:
@@ -440,10 +470,15 @@ class GauntletLegendsContext(CommonContext):
             self.current_level = self.level
             self.level_id = (self.current_zone << 4) + self.current_level
 
+        if not self.players:
+            self.current_zone = self.zone
+            self.current_level = self.level
+            return []
+
         zone_or_level_changed = self.zone != self.current_zone or self.level != self.current_level
         if zone_or_level_changed:
-            if self.current_level & 0x8 == 0x8 and self.level_id != 0x58 and not await self.dead_or_menu():
-                await self.check_locations([loc.id for loc in level_locations[self.level_id]
+            if self.current_level & 0x8 == 0x8 and not await self.dead_or_menu():
+                await self.check_locations([loc.id for loc in level_locations.get(self.level_id, [])
                                             if "Mirror Shard" in loc.name or "Skorne" in loc.name])
             self.current_zone = self.zone
             self.current_level = self.level
@@ -564,6 +599,10 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
             if not ctx.retro_connected:
                 logger.info("Attempting to connect to Retroarch...")
                 status = await ctx.socket.status()
+                if status is None:
+                    logger.info("Retroarch not running or not responding, waiting...")
+                    await asyncio.sleep(3)
+                    continue
                 ctx.retro_connected = True
                 ctx.rom_loaded = "CONTENTLESS" not in status
                 logger.info("Connected to Retroarch")
@@ -583,6 +622,11 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 continue
 
             seed_name = await ctx.get_seed_name()
+            if seed_name is None:
+                logger.info("Unable to read seed name from ROM, waiting...")
+                await asyncio.sleep(3)
+                continue
+
             if seed_name != ctx.seed_name[0:16]:
                 logger.info(f"ROM seed does not match room seed ({seed_name} != {ctx.seed_name}), "
                             f"please load the correct ROM.")
@@ -630,6 +674,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
             logger.error(f"Error: {e}\n{traceback.format_exc()}")
             ctx.socket = RetroSocket()
             ctx.retro_connected = False
+            ctx.rom_loaded = False
             await asyncio.sleep(2)
 
 
@@ -637,24 +682,30 @@ _original_opt_content: dict[str, str | None] = {}
 
 
 async def _patch_opt():
-    """Create RetroArch core options override for CountPerOp=1."""
+    """Create RetroArch core options override for various settings."""
     retroarch_path = settings.get_settings().gl_options.retroarch_path
     override_dir = os.path.join(retroarch_path, "config", "Mupen64Plus-Next")
     os.makedirs(override_dir, exist_ok=True)
     override_path = os.path.join(override_dir, "Mupen64Plus-Next.opt")
-    target_setting = 'mupen64plus-CountPerOp = "1"'
+    target_settings = {
+        "mupen64plus-CountPerOp": "1",
+        "mupen64plus-virefresh": "2200",
+        "mupen64plus-rdp-plugin": "angrylion",
+        "mupen64plus-rsp-plugin": "cxd4",
+    }
 
     if override_path not in _original_opt_content:
         _original_opt_content[override_path] = open(override_path).read() if os.path.exists(override_path) else None
 
     content = _original_opt_content[override_path] or ""
-    if target_setting in content:
-        return
-
-    if "mupen64plus-CountPerOp" in content:
-        content = re.sub(r'mupen64plus-CountPerOp\s*=\s*"[^"]*"', target_setting, content)
-    else:
-        content = content.rstrip("\n") + f"\n{target_setting}\n" if content else f"{target_setting}\n"
+    for key, value in target_settings.items():
+        target_setting = f'{key} = "{value}"'
+        if target_setting in content:
+            continue
+        if key in content:
+            content = re.sub(rf'{re.escape(key)}\s*=\s*"[^"]*"', target_setting, content)
+        else:
+            content = content.rstrip("\n") + f"\n{target_setting}\n" if content else f"{target_setting}\n"
 
     with open(override_path, "w") as f:
         f.write(content)
