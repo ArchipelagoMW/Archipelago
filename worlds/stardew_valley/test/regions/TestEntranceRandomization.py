@@ -166,6 +166,7 @@ class TestCannotAccessForage(SVTestBase):
         options.EntranceRandomization: options.EntranceRandomization.option_everywhere,
         options.EntranceRandomizationBehavior: {EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere},
         options.Mods: frozenset(),
+        # This test will fail fill if someone attempts to run it, due to this locked down plando
         options.EntrancePlando: [
             PlandoConnection(EntranceName.farm_to_backwoods, EntranceName.town_to_saloon, "both", 100),
             PlandoConnection(EntranceName.farm_to_bus_stop, EntranceName.town_to_haley_house, "both", 100),
