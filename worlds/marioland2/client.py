@@ -223,7 +223,7 @@ class MarioLand2Client(BizHawkClient):
                      {"operation": "max", "value": 0}],
             }])
 
-        if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed:
+        if not ctx.server:
             return
 
         if locations_checked and locations_checked != self.locations_array:
