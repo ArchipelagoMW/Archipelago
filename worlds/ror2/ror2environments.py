@@ -85,6 +85,24 @@ environment_sost_special_table: Dict[str, int] = {
     "Prime Meridian":                          40,  # meridian
 }
 
+# Alloyed Collective
+environment_ac_orderstage_2_table: Dict[str, int] = {
+    "Pretender's Precipice":                    48,  # nest
+}
+environment_ac_orderstage_3_table: Dict[str, int] = {
+    "Iron Alluvium":                           78,  # ironalluvium
+    "Iron Auroras":                            29,  # ironalluvium2
+    "Conduit Canyon":                          73,  # conduitcanyon
+}
+environment_ac_orderstage_4_table: Dict[str, int] = {
+    "Repurposed Crater":                       50,  # repurposedcrater
+}
+environment_ac_special_table: Dict[str, int] = {
+    "Solutional Haunt":                        57,  # solutionalhaunt
+    "Computational Exchange":                  72,  # computationalexchange
+    "Neural Sanctum":                          56,  # solusweb
+}
+
 X = TypeVar("X")
 Y = TypeVar("Y")
 
@@ -149,6 +167,12 @@ environment_sost_orderedstages_table = \
      environment_sost_orderstage_3_table, {}, environment_sost_orderstage_5_table] # There is no new stage 4 in SoST
 environment_sost_table = \
     {**compress_dict_list_horizontal(environment_sost_orderedstages_table), **environment_sost_special_table}
+# AC (tier 1 and tier 5 slots are empty - AC adds no new stage 1 or stage 5 environments)
+environment_ac_orderedstages_table = \
+    [{}, environment_ac_orderstage_2_table,
+     environment_ac_orderstage_3_table, environment_ac_orderstage_4_table, {}]
+environment_ac_table = \
+    {**compress_dict_list_horizontal(environment_ac_orderedstages_table), **environment_ac_special_table}
 # SOTS Variants
 environment_sots_variants_orderedstages_table = \
     [environment_sost_variant_orderstage_1_table, {}, environment_sost_variant_orderstage_3_table]
@@ -156,6 +180,7 @@ environment_sots_variants_table = \
     {**compress_dict_list_horizontal(environment_sots_variants_orderedstages_table)}
 
 environment_all_table = {**environment_vanilla_table, **environment_sotv_table, **environment_sost_table,
+                         **environment_ac_table,
                          **environment_vanilla_variants_table, **environment_sots_variants_table}
 
 

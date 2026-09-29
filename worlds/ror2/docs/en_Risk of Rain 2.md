@@ -102,6 +102,12 @@ DLC Seekers of the Storm (SOTS) items
 * `Prime Meridian`
 * `Helminth Hatchery`
 
+DLC Alloyed Collective (AC) items
+
+* `Pretender's Precipice`
+* `Iron Alluvium`, `Iron Auroras`
+* `Conduit Canyon`, `Repurposed Crater`
+
 
 When an explore item is granted, it will unlock that environment and will now be accessible! The 
 game will still pick randomly which environment is next, but it will first check to see if they are available. If you have
@@ -119,7 +125,8 @@ item pickup step based on how many items the other players in the multiworld hav
 ballpark if you want to have a similar number of items to most other games.)
 
 In explore mode, the amount of checks are based on how many **chests, shrines, scavengers, radio scanners, and newt altars**
-are in the pool. With just the base game, checks can range from **52 to 516**, with the DLC expanding it to **60 to 660**. 
+are in the pool. With just the base game, checks can range from **52 to 516**, with the DLCs expanding it to
+**60 to 660+** (Alloyed Collective adds five more environments on top of that).
 Leaving everything on default, the total number of checks comes out to **216** locations.
 
 After you have completed the specified number of checks, you won't send anything else to the multiworld. You can
