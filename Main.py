@@ -375,8 +375,18 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 future.result()
 
         if args.spoiler > 1:
-            logger.info('Calculating playthrough.')
-            multiworld.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+            logger.info("Calculating playthrough.")
+            try:
+                # Playthrough calculation intermittently messes with precollected items, so if cancelled mid-way, it may
+                # need to be restored
+                precollected_copy = {slot: val.copy() for slot, val in multiworld.precollected_items.items()}
+
+                multiworld.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+            except KeyboardInterrupt:
+                logger.info("Cancelled playthrough calculation. Press Ctrl-C again to exit generation.")
+                # Clear out a potentially partially completed playthrough and restore multiworld state
+                multiworld.spoiler.playthrough = {}
+                multiworld.precollected_items = precollected_copy
 
         if args.spoiler:
             multiworld.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
