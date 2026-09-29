@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Tuple
+from typing import Optional, Dict
 
 from BaseClasses import Item, ItemClassification as ItemClass
 
@@ -48,6 +48,11 @@ item_dict_upgrades: Dict[str, ItemData] = {
     ITEM_SPECIAL_AMMO: ItemData(ItemClass.useful, 7),
 }
 
+item_dict_battle_log: Dict[str, ItemData] = {
+    BL_ITEM_ARMOR_UP: ItemData(ItemClass.useful, 50, 5),
+    BL_ITEM_WEAPON_UP: ItemData(ItemClass.useful, 51, 5),
+}
+
 item_dict_base: Dict[str, ItemData] = {
     **item_dict_weapons,
     **item_dict_upgrades,
@@ -77,6 +82,7 @@ item_dict_traps: Dict[str, ItemData] = {
     TRAP_ITEM_ICE: ItemData(ItemClass.trap, 17),
     TRAP_ITEM_SHAKES: ItemData(ItemClass.trap, 18),
     TRAP_ITEM_NINJA: ItemData(ItemClass.trap, 19),
+    TRAP_ITEM_TEXT: ItemData(ItemClass.trap, 20),
 }
 
 item_dict_events: Dict[str, ItemData] = {
@@ -92,6 +98,7 @@ item_dict: Dict[str, ItemData] = {
     **item_dict_expanded,
     **item_dict_filler,
     **item_dict_traps,
+    **item_dict_battle_log,
     **item_dict_events,
 }
 
