@@ -27,7 +27,15 @@ class DBGamesPackageCache(GamesPackageCache):
         if all(value is not None for value in cached):
             return cached  # type: ignore # mypy doesn't understand all value is not None
 
-        return super().get(game, full_games_package)
+        if "checksum" not in full_games_package:
+            return super().get(game, full_games_package)  # no checksum, assume fully populated
+
+        from WebHostLib.models import GameDataPackage
+
+        row: GameDataPackage | None = GameDataPackage.get(checksum=full_games_package["checksum"])
+        if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8 ...
+            return super().get(game, restricted_loads(row.data))
+        return super().get(game, full_games_package)  # ... in which case full_games_package should be populated
 
     @override
     def get_static(self, game: str) -> tuple[GamesPackage, ItemNameGroups, LocationNameGroups]:
