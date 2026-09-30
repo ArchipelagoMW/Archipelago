@@ -23,15 +23,6 @@ def to_khscii(self, item_name):
         elif '0' <= char <= '9':
             out_list.append(ord(char) + 0x60)
             char_count += 1
-        # If it hits a "{", we will know it's a command, not a character.
-        elif char == '{':
-            # A command is 6 characters long, in the format of "{0xTT}",
-            # with the "TT" being the 2-digit encode for that command.
-            command = item_name[char_count:char_count + 6]
-            if re.match(r'^{0x[a-fA-F0-9][a-fA-F0-9]}$', command):
-                value = command[1:5]
-                out_list.append(int(value, 16))
-                char_count += 6
         # Should it be anything we do not know, we look through
         # the special dictionary.
         else:
