@@ -58,6 +58,7 @@ from .strings.ap_names.shop_location_names import ShopLocation
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.backpack_tiers import Backpack
+from .strings.book_names import Book
 from .strings.building_names import Building, WizardBuilding
 from .strings.bundle_names import CCRoom
 from .strings.calendar_names import Weekday
@@ -450,7 +451,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.purchase_from_pierre, logic.relationship.can_meet(NPC.pierre))
     rule_collector.set_entrance_rule(Entrance.purchase_from_robin, logic.relationship.can_meet(NPC.robin))
     rule_collector.set_entrance_rule(Entrance.purchase_from_clint, logic.relationship.can_meet(NPC.clint))
-    rule_collector.set_entrance_rule(Entrance.purchase_from_marnie, logic.relationship.can_meet(NPC.marnie))
+    rule_collector.set_entrance_rule(Entrance.purchase_from_marnie, logic.relationship.can_meet(NPC.marnie) | logic.received("Power: Animal Catalogue"))
     rule_collector.set_entrance_rule(Entrance.purchase_from_gus, logic.relationship.can_meet(NPC.gus))
     rule_collector.set_entrance_rule(Entrance.purchase_from_willy, logic.relationship.can_meet(NPC.willy))
     rule_collector.set_entrance_rule(Entrance.purchase_from_dwarf, logic.relationship.can_meet(NPC.dwarf))
