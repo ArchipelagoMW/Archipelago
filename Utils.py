@@ -1150,7 +1150,7 @@ def visualize_regions(
 
     Example usage in World code:
     from Utils import visualize_regions
-    state = self.multiworld.get_all_state(False)
+    state = self.multiworld.get_all_state()
     state.update_reachable_regions(self.player)
     visualize_regions(self.get_region("Menu"), "my_world.puml", show_entrance_names=True,
                       regions_to_highlight=state.reachable_regions[self.player])
@@ -1412,3 +1412,13 @@ def get_all_causes(ex: Exception) -> str:
     top = causes[-1]
     others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
     return f"{top}{others}"
+
+
+_empty_frozenset = frozenset()  # empty frozenset singleton
+
+
+def empty_frozenset_factory() -> frozenset:
+    """
+    returns empty frozenset singleton when called
+    """
+    return _empty_frozenset
