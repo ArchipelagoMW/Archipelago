@@ -91,6 +91,7 @@ class SC2World(World):
     game = "Starcraft 2"
     web = Starcraft2WebWorld()
     settings: ClassVar[settings.Starcraft2Settings]
+    disable_ut = True
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in DEFAULT_LOCATION_LIST}
@@ -433,7 +434,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         if max_count and count > max_count:
             return max_count
         return count
-    
+
     auto_excludes = Counter({item_name: 1 for item_name in item_groups.legacy_items})
     if world.options.exclude_overpowered_items.value == ExcludeOverpoweredItems.option_true:
         for item_name in item_groups.overpowered_items:
@@ -1066,7 +1067,7 @@ def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[StarcraftIte
         or (world.options.grant_story_levels and not kerrigan_build_missions)
     ):
         return
-    
+
     def add_kerrigan_level_items(level_amount: int, item_amount: int):
         name = f"{level_amount} Kerrigan Level"
         if level_amount > 1:
