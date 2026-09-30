@@ -1,4 +1,6 @@
-from PyMemoryEditor import OpenProcess, ProcessNotFoundError
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError, AmbiguousProcessNameError
+
+from CommonClient import logger
 
 KH2_PROCESS_NAME = "KINGDOM HEARTS II FINAL MIX"
 
@@ -6,7 +8,11 @@ KH2_PROCESS_NAME = "KINGDOM HEARTS II FINAL MIX"
 def kh2_open_process(self) -> None:
     """Opens the game's process and caches the base address of its executable"""
     # exact_match is off so the name also matches "KINGDOM HEARTS II FINAL MIX.exe"
-    self.kh2 = OpenProcess(name=KH2_PROCESS_NAME, exact_match=False)
+    try:
+        self.kh2 = OpenProcess(name=KH2_PROCESS_NAME, exact_match=False)
+    except AmbiguousProcessNameError:
+        logger.error("Two or more instances of the game were found. Please close one and restart this client.")
+        raise
 
     # The first module of a process is its own executable, which is what every address here is relative to
     main_module = next(self.kh2.get_modules(), None)
@@ -19,7 +25,11 @@ def kh2_open_process(self) -> None:
 def kh2_close_process(self) -> None:
     """Closes the handle of the game's process if it is open"""
     if self.kh2 is not None:
-        self.kh2.close()
+        try:
+            self.kh2.close()
+        except OSError as e:
+            # The game may have already exited, so the handle is dropped regardless
+            logger.warning(f"Failed to close the game's process handle: {e}")
     self.kh2 = None
     self.kh2_base_address = None
 
