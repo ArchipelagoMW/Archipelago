@@ -1,0 +1,425 @@
+syntax = "proto3";
+
+option go_package = "github.com/alttpo/sni/protos/sni";
+option csharp_namespace = "SNI";
+option java_package = "com.github.alttpo.sni";
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// services
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+service Devices {
+  // detect and list devices currently connected to the system:
+  rpc ListDevices(DevicesRequest) returns (DevicesResponse) {}
+}
+
+service DeviceControl {
+  // only available if DeviceCapability ResetSystem is present
+  rpc ResetSystem(ResetSystemRequest) returns (ResetSystemResponse) {}
+
+  // only available if DeviceCapability ResetToMenu is present
+  rpc ResetToMenu(ResetToMenuRequest) returns (ResetToMenuResponse) {}
+
+  // only available if DeviceCapability PauseUnpauseEmulation is present
+  rpc PauseUnpauseEmulation(PauseEmulationRequest) returns (PauseEmulationResponse) {}
+
+  // only available if DeviceCapability PauseToggleEmulation is present
+  rpc PauseToggleEmulation(PauseToggleEmulationRequest) returns (PauseToggleEmulationResponse) {}
+}
+
+service DeviceMemory {
+  // detect the current memory mapping for the given device by reading 00:FFB0 header:
+  rpc MappingDetect(DetectMemoryMappingRequest) returns (DetectMemoryMappingResponse) {}
+
+  // read a single memory segment with a given size from the given device:
+  rpc SingleRead(SingleReadMemoryRequest) returns (SingleReadMemoryResponse) {}
+  // write a single memory segment with given data to the given device:
+  rpc SingleWrite(SingleWriteMemoryRequest) returns (SingleWriteMemoryResponse) {}
+
+  // read multiple memory segments with given sizes from the given device:
+  rpc MultiRead(MultiReadMemoryRequest) returns (MultiReadMemoryResponse) {}
+  // write multiple memory segments with given data to the given device:
+  rpc MultiWrite(MultiWriteMemoryRequest) returns (MultiWriteMemoryResponse) {}
+
+  // stream read multiple memory segments with given sizes from the given device:
+  rpc StreamRead(stream MultiReadMemoryRequest) returns (stream MultiReadMemoryResponse) {}
+  // stream write multiple memory segments with given data to the given device:
+  rpc StreamWrite(stream MultiWriteMemoryRequest) returns (stream MultiWriteMemoryResponse) {}
+}
+
+service DeviceFilesystem {
+  rpc ReadDirectory(ReadDirectoryRequest) returns (ReadDirectoryResponse) {}
+  rpc MakeDirectory(MakeDirectoryRequest) returns (MakeDirectoryResponse) {}
+  rpc RemoveFile(RemoveFileRequest) returns (RemoveFileResponse) {}
+  rpc RenameFile(RenameFileRequest) returns (RenameFileResponse) {}
+  rpc PutFile(PutFileRequest) returns (PutFileResponse) {}
+  rpc GetFile(GetFileRequest) returns (GetFileResponse) {}
+  rpc BootFile(BootFileRequest) returns (BootFileResponse) {}
+}
+
+service DeviceInfo {
+  rpc FetchFields(FieldsRequest) returns (FieldsResponse) {}
+}
+
+service DeviceNWA {
+  rpc NWACommand(NWACommandRequest) returns (NWACommandResponse) {}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// enums
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+// address space used to interpret an address in:
+enum AddressSpace {
+  // The default is the FX Pak Pro / SD2SNES's address space:
+  // $00_0000..$DF_FFFF =   ROM contents, linearly mapped
+  // $E0_0000..$EF_FFFF =  SRAM contents, linearly mapped
+  // $F5_0000..$F6_FFFF =  WRAM contents, linearly mapped
+  // $F7_0000..$F7_FFFF =  VRAM contents, linearly mapped
+  // $F8_0000..$F8_FFFF =   APU contents, linearly mapped
+  // $F9_0000..$F9_01FF = CGRAM contents, linearly mapped
+  // $F9_0200..$F9_041F =   OAM contents, linearly mapped
+  // $F9_0420..$F9_04FF =  MISC contents, linearly mapped
+  // $F9_0500..$F9_06FF =         PPUREG, linearly mapped
+  // $F9_0700..$F9_08FF =         CPUREG, linearly mapped
+  // translated device address depends on device being talked to and its current MemoryMapping mode
+  FxPakPro = 0; // SNES
+  // The SNES's main A-bus; address depends on device's current MemoryMapping mode, e.g. LoROM, HiROM, ExHiROM, etc.
+  SnesABus = 1;
+  // Do not do any address translation; simply pass the raw address to the device as-is:
+  Raw = 2;
+}
+
+// memory mapping mode of a SNES cart:
+enum MemoryMapping {
+  Unknown = 0;
+  HiROM = 1;
+  LoROM = 2;
+  ExHiROM = 3; // (48-64Mbit)
+  SA1 = 4;
+  // TODO: BSX = 5;
+}
+
+// capabilities of a device
+enum DeviceCapability {
+  None = 0;
+  ReadMemory = 1;
+  WriteMemory = 2;
+  ExecuteASM = 3;
+  ResetSystem = 4;
+  PauseUnpauseEmulation = 5;
+  PauseToggleEmulation = 6;
+  ResetToMenu = 7;
+  FetchFields = 8;
+
+  ReadDirectory = 10;
+  MakeDirectory = 11;
+  RemoveFile = 12;
+  RenameFile = 13;
+  PutFile = 14;
+  GetFile = 15;
+  BootFile = 16;
+
+  NWACommand = 20;
+}
+
+// fields to query from DeviceInfo.FetchFields
+enum Field {
+  DeviceName = 0;
+  DeviceVersion = 1;
+  DeviceStatus = 2;
+
+  CoreName = 20;
+  CoreVersion = 21;
+  CorePlatform = 22;
+
+  RomFileName = 40;
+  RomHashType = 41;
+  RomHashValue = 42;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// devices messages
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+message DevicesRequest {
+  // optional list of device kind filters
+  repeated string kinds = 1;
+  // TODO: repeated DeviceCapability capabilities;
+}
+message DevicesResponse {
+  message Device {
+    // URI that describes exactly how to connect to the device, e.g.:
+    // RetroArch:  "ra://127.0.0.1:55355"
+    // FX Pak Pro: "fxpakpro://./dev/cu.usbmodemDEMO000000001" (MacOS)
+    //             "fxpakpro://./COM4"                         (Windows)
+    //             "fxpakpro://./dev/ttyACM0"                  (Linux)
+    // uri is used as the unique identifier of the device for clients to refer to
+    string uri = 1;
+    // friendly display name of the device
+    string displayName = 2;
+    // device kind, e.g. "fxpakpro", "retroarch", "lua"
+    string kind = 3;
+    // all device capabilities:
+    repeated DeviceCapability capabilities = 4;
+    // default address space for the device:
+    AddressSpace defaultAddressSpace = 5;
+
+    // [DEPRECATED] console system supported, e.g. "snes", "n64"
+    // since devices can support multiple systems, it's better to fetch platform from DeviceInfo.FetchFields method
+    string system = 6 [deprecated = true];
+  }
+
+  repeated Device devices = 1;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// control messages
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+message ResetSystemRequest {
+  string uri = 1;
+}
+message ResetSystemResponse {
+  string uri = 1;
+}
+
+message ResetToMenuRequest {
+  string uri = 1;
+}
+message ResetToMenuResponse {
+  string uri = 1;
+}
+
+message PauseEmulationRequest {
+  string uri = 1;
+  // true to pause emulation, false to unpause
+  bool paused = 2;
+}
+message PauseEmulationResponse {
+  string uri = 1;
+  bool paused = 2;
+}
+
+message PauseToggleEmulationRequest {
+  string uri = 1;
+}
+message PauseToggleEmulationResponse {
+  string uri = 1;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// memory messages
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+message DetectMemoryMappingRequest {
+  string uri = 1;
+  // optional fallback value to set in case detection fails for some reason
+  optional MemoryMapping fallbackMemoryMapping = 2;
+  // optional ROM header (from bus address $00:FFB0, at least $30 bytes long) to use for detection
+  // if not provided, the header will be read from the device
+  optional bytes romHeader00FFB0 = 3;
+}
+message DetectMemoryMappingResponse {
+  string uri = 1;
+  // the memory mapping mode detected
+  MemoryMapping memoryMapping = 2;
+  // true if confident we detected a mapping; false if using a fallback or default value
+  bool confidence = 3;
+  // the ROM header read from $00:FFB0, length is $50 bytes if server reads it, otherwise length of `romHeader00FFB0` from request
+  bytes romHeader00FFB0 = 4;
+}
+
+message ReadMemoryRequest {
+  uint32        requestAddress = 1;
+  AddressSpace  requestAddressSpace = 2;
+  MemoryMapping requestMemoryMapping = 4;
+
+  uint32 size = 3;
+}
+message ReadMemoryResponse {
+  uint32        requestAddress = 1;
+  AddressSpace  requestAddressSpace = 2;
+  MemoryMapping requestMemoryMapping = 6;
+
+  // the address sent to the device and its space
+  uint32       deviceAddress = 3;
+  AddressSpace deviceAddressSpace = 4;
+
+  bytes data = 5;
+}
+message WriteMemoryRequest {
+  uint32        requestAddress = 1;
+  AddressSpace  requestAddressSpace = 2;
+  MemoryMapping requestMemoryMapping = 4;
+
+  bytes data = 3;
+}
+message WriteMemoryResponse {
+  uint32        requestAddress = 1;
+  AddressSpace  requestAddressSpace = 2;
+  MemoryMapping requestMemoryMapping = 6;
+
+  uint32       deviceAddress = 3;
+  AddressSpace deviceAddressSpace = 4;
+
+  uint32 size = 5;
+}
+
+message SingleReadMemoryRequest {
+  string uri = 1;
+  ReadMemoryRequest request = 2;
+}
+message SingleReadMemoryResponse {
+  string uri = 1;
+  ReadMemoryResponse response = 2;
+}
+
+message SingleWriteMemoryRequest {
+  string uri = 1;
+  WriteMemoryRequest request = 2;
+}
+message SingleWriteMemoryResponse {
+  string uri = 1;
+  WriteMemoryResponse response = 2;
+}
+
+message MultiReadMemoryRequest {
+  string uri = 1;
+  repeated ReadMemoryRequest requests = 2;
+}
+message MultiReadMemoryResponse {
+  string uri = 1;
+  repeated ReadMemoryResponse responses = 2;
+}
+
+message MultiWriteMemoryRequest {
+  string uri = 1;
+  repeated WriteMemoryRequest requests = 2;
+}
+message MultiWriteMemoryResponse {
+  string uri = 1;
+  repeated WriteMemoryResponse responses = 2;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// filesystem messages
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+message ReadDirectoryRequest {
+  string uri = 1;
+  string path = 2;
+}
+
+enum DirEntryType {
+  Directory = 0;
+  File = 1;
+}
+
+message DirEntry {
+  string name = 1;
+  DirEntryType type = 2;
+}
+
+message ReadDirectoryResponse {
+  string uri = 1;
+  string path = 2;
+  repeated DirEntry entries = 3;
+}
+
+message MakeDirectoryRequest {
+  string uri = 1;
+  string path = 2;
+}
+message MakeDirectoryResponse {
+  string uri = 1;
+  string path = 2;
+}
+
+message RemoveFileRequest {
+  string uri = 1;
+  string path = 2;
+}
+message RemoveFileResponse {
+  string uri = 1;
+  string path = 2;
+}
+
+message RenameFileRequest {
+  string uri = 1;
+  string path = 2;
+  string newFilename = 3;
+}
+message RenameFileResponse {
+  string uri = 1;
+  string path = 2;
+  string newFilename = 3;
+}
+
+message PutFileRequest {
+  string uri = 1;
+  string path = 2;
+  bytes data = 3;
+}
+message PutFileResponse {
+  string uri = 1;
+  string path = 2;
+  uint32 size = 3;
+}
+
+message GetFileRequest {
+  string uri = 1;
+  string path = 2;
+}
+message GetFileResponse {
+  string uri = 1;
+  string path = 2;
+  uint32 size = 3;
+  bytes data = 4;
+}
+
+message BootFileRequest {
+  string uri = 1;
+  string path = 2;
+}
+message BootFileResponse {
+  string uri = 1;
+  string path = 2;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// info messages
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+message FieldsRequest {
+  string uri = 1;
+  repeated Field fields = 2;
+}
+message FieldsResponse {
+  string uri = 1;
+  repeated Field fields = 2;
+  repeated string values = 3;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// NWA messages (emu-nwaccess protocol pass through)
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+message NWACommandRequest {
+  string uri = 1;
+  // emu-nwaccess command name:
+  string command = 2;
+  // command arguments:
+  string args = 3;
+  // an optional binary argument:
+  optional bytes binaryArg = 4;
+}
+message NWACommandResponse {
+  message NWAASCIIItem {
+    map<string, string> item = 1;
+  }
+
+  string uri = 1;
+  repeated NWAASCIIItem asciiReply = 2;
+  optional bytes binaryReplay = 3;
+}
