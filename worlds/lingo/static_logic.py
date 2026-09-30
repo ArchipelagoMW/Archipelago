@@ -116,7 +116,7 @@ def load_static_data_from_file():
     DOORS_BY_ROOM.update(pickdata["DOORS_BY_ROOM"])
     PANELS_BY_ROOM.update(pickdata["PANELS_BY_ROOM"])
     PANEL_DOORS_BY_ROOM.update(pickdata["PANEL_DOORS_BY_ROOM"])
-    PROGRESSIVE_ITEMS.extend(sorted(pickdata["PROGRESSIVE_ITEMS"]))
+    PROGRESSIVE_ITEMS.extend(pickdata["PROGRESSIVE_ITEMS"])
     PROGRESSIVE_DOORS_BY_ROOM.update(pickdata["PROGRESSIVE_DOORS_BY_ROOM"])
     PROGRESSIVE_PANELS_BY_ROOM.update(pickdata["PROGRESSIVE_PANELS_BY_ROOM"])
     PAINTING_ENTRANCES = pickdata["PAINTING_ENTRANCES"]

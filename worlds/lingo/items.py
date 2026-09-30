@@ -63,14 +63,14 @@ def load_item_data():
                                          ItemType.COLOR, False, [])
         ITEMS_BY_GROUP.setdefault("Colors", []).append(color)
 
-    door_groups: List[str] = []
+    door_groups: Set[str] = set()
     for room_name, doors in DOORS_BY_ROOM.items():
         for door_name, door in doors.items():
             if door.skip_item is True or door.event is True:
                 continue
 
             if door.door_group is not None:
-                door_groups.append(door.door_group)
+                door_groups.add(door.door_group)
 
             ALL_ITEM_TABLE[door.item_name] = \
                 ItemData(get_door_item_id(room_name, door_name), get_prog_item_classification(door.item_name),
@@ -80,23 +80,23 @@ def load_item_data():
             if door.item_group is not None:
                 ITEMS_BY_GROUP.setdefault(door.item_group, []).append(door.item_name)
 
-    for group in door_groups:
+    for group in sorted(door_groups):
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group), get_prog_item_classification(group),
                                          ItemType.NORMAL, True, [])
         ITEMS_BY_GROUP.setdefault("Doors", []).append(group)
 
-    panel_groups: List[str] = []
+    panel_groups: Set[str] = set()
     for room_name, panel_doors in PANEL_DOORS_BY_ROOM.items():
         for panel_door_name, panel_door in panel_doors.items():
             if panel_door.panel_group is not None:
-                panel_groups.append(panel_door.panel_group)
+                panel_groups.add(panel_door.panel_group)
 
             ALL_ITEM_TABLE[panel_door.item_name] = ItemData(get_panel_door_item_id(room_name, panel_door_name),
                                                             get_prog_item_classification(panel_door.item_name),
                                                             ItemType.NORMAL, False, [])
             ITEMS_BY_GROUP.setdefault("Panels", []).append(panel_door.item_name)
 
-    for group in panel_groups:
+    for group in sorted(panel_groups):
         ALL_ITEM_TABLE[group] = ItemData(get_panel_group_item_id(group), get_prog_item_classification(group),
                                          ItemType.NORMAL, False, [])
         ITEMS_BY_GROUP.setdefault("Panels", []).append(group)
