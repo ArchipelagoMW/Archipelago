@@ -975,22 +975,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                 f"A !hint costs {args['hint_cost']}% of your total location count as points"
                 f" and you get {args['location_check_points']}"
                 f" for each location checked. Use !hint for more information.")
-            ctx.hint_cost = int(args['hint_cost'])
-            ctx.check_points = int(args['location_check_points'])
-
-            if "players" in args:  # TODO remove when servers sending this are outdated
-                players = args.get("players", [])
-                if len(players) < 1:
-                    logger.info('No player connected')
-                else:
-                    players.sort()
-                    current_team = -1
-                    logger.info('Connected Players:')
-                    for network_player in players:
-                        if network_player.team != current_team:
-                            logger.info(f'  Team #{network_player.team + 1}')
-                            current_team = network_player.team
-                        logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
+            ctx.hint_cost = int(args["hint_cost"])
+            ctx.check_points = int(args["location_check_points"])
 
             # update data package
             data_package_checksums = args.get("datapackage_checksums", {})
@@ -1217,7 +1203,7 @@ def run_as_textclient(*args):
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
         tags = CommonContext.tags | {"TextOnly"}
-        game = ""  # empty matches any game since 0.3.2
+        game = ""  # empty matches any game
         items_handling = 0b111  # receive all items for /received
         want_slot_data = False  # Can't use game specific slot_data
 
