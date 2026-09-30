@@ -776,7 +776,7 @@ def find_terminal() -> str | None:
         return which("open")
     if is_linux:
         terminal: str | None = None
-        for term in itertools.chain(legacy_terminals, modern_terminals, ("xterm",)):
+        for term in itertools.chain(_legacy_terminals, _modern_terminals, ("xterm",)):
             terminal = which(term)
             if terminal:
                 break
