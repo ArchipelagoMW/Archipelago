@@ -19,10 +19,7 @@ def kh2_open_process(self) -> None:
 def kh2_close_process(self) -> None:
     """Closes the handle of the game's process if it is open"""
     if self.kh2 is not None:
-        try:
-            self.kh2.close()
-        except OSError:
-            pass
+        self.kh2.close()
     self.kh2 = None
     self.kh2_base_address = None
 
