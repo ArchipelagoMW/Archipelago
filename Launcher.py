@@ -27,7 +27,7 @@ if __name__ == "__main__":
     ModuleUpdate.update()
 
 import Utils
-from Utils import find_terminal, init_logging, local_path
+from Utils import init_logging, local_path
 
 if __name__ == "__main__":
     init_logging('Launcher')
@@ -65,12 +65,12 @@ def build_uri_popup(component_list: list["Component"], launch_args: tuple[str, .
 
 
 
-def launch(exe: Sequence[str], in_terminal: bool = False, terminal: str | None = None) -> bool:
+def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
     """Runs the given command/args in `exe` in a new process.
 
     If `in_terminal` is True, it will attempt to run in a terminal window,
     and the return value will indicate whether one was found."""
-    if in_terminal and Utils.run_in_terminal(exe, terminal=terminal):
+    if in_terminal and Utils.run_in_terminal(exe):
         return True
     subprocess.Popen(exe)
     return False
