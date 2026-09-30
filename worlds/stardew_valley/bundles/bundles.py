@@ -1,17 +1,29 @@
 from random import Random
-from typing import List, Tuple, Dict
+from typing import Dict, List, Tuple
 
-from .bundle import Bundle
-from .bundle_room import BundleRoom, BundleRoomTemplate
 from ..content import StardewContent
-from ..data.bundles_data.bundle_data import pantry_remixed, \
-    crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, \
-    all_bundle_items_except_money, \
-    abandoned_joja_mart_remixed, giant_stump_remixed
-from ..data.bundles_data.bundle_set import vanilla_bundles, remixed_bundles, thematic_bundles
-from ..data.bundles_data.meme_bundles import community_center_meme_bundles, pantry_meme, crafts_room_meme, \
-    fish_tank_meme, bulletin_board_meme, \
-    boiler_room_meme, vault_meme, community_center_easy_meme_bundles
+from ..data.bundles_data.bundle_data import (
+    abandoned_joja_mart_remixed,
+    all_bundle_items_except_money,
+    boiler_room_remixed,
+    bulletin_board_remixed,
+    crafts_room_remixed,
+    fish_tank_remixed,
+    giant_stump_remixed,
+    pantry_remixed,
+    vault_remixed,
+)
+from ..data.bundles_data.bundle_set import remixed_bundles, thematic_bundles, vanilla_bundles
+from ..data.bundles_data.meme_bundles import (
+    boiler_room_meme,
+    bulletin_board_meme,
+    community_center_easy_meme_bundles,
+    community_center_meme_bundles,
+    crafts_room_meme,
+    fish_tank_meme,
+    pantry_meme,
+    vault_meme,
+)
 from ..data.bundles_data.remixed_anywhere_bundles import community_center_remixed_anywhere
 from ..data.game_item import ItemTag
 from ..locations import LocationTags, locations_by_tag
@@ -23,6 +35,8 @@ from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar, Mineral
 from ..strings.monster_names import Monster
 from ..strings.villager_names import NPC
+from .bundle import Bundle
+from .bundle_room import BundleRoom, BundleRoomTemplate
 
 
 def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent, options: StardewValleyOptions, player_name: str) -> List[BundleRoom]:
@@ -127,9 +141,12 @@ def get_shuffled_bundles(random: Random, logic: StardewLogic, content: StardewCo
     random.shuffle(rooms)
 
     # Remove duplicates of the same item
-    valid_bundle_items = [item1 for i, item1 in enumerate(valid_bundle_items)
+    valid_unique_bundle_items = [item1 for i, item1 in enumerate(valid_bundle_items)
                           if not any(item1.item_name == item2.item_name and item1.quality == item2.quality for item2 in valid_bundle_items[:i])]
-    chosen_bundle_items = random.sample(valid_bundle_items, required_items)
+    if required_items > len(valid_unique_bundle_items):
+        chosen_bundle_items = random.sample(valid_bundle_items, required_items)
+    else:
+        chosen_bundle_items = random.sample(valid_unique_bundle_items, required_items)
     for room in rooms:
         for bundle in room.bundles:
             num_items = len(bundle.items)
