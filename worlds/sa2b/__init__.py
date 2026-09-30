@@ -123,6 +123,7 @@ class SA2BWorld(World):
             "BlackMarketUnlockCosts": self.black_market_costs,
             "BlackMarketUnlockSetting": self.options.black_market_unlock_costs.value,
             "ChaoERLayout": self.generate_er_layout(),
+            "ChaoBreeding": self.options.chao_breeding.value,
             "DeathLink": self.options.death_link.value,
             "EmblemPercentageForCannonsCore": self.options.emblem_percentage_for_cannons_core.value,
             "RequiredCannonsCoreMissions": self.options.required_cannons_core_missions.value,
@@ -225,7 +226,7 @@ class SA2BWorld(World):
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.options.goal.value == 3:
             self.multiworld.get_location(LocationName.grand_prix, self.player).place_locked_item(self.create_item(ItemName.maria))
-        elif self.options.goal.value == 7:
+        elif self.options.goal.value in [7, 9]:
             self.multiworld.get_location(LocationName.chaos_chao, self.player).place_locked_item(self.create_item(ItemName.maria))
 
             for animal_name in chao_animal_event_location_table.keys():
@@ -614,7 +615,7 @@ class SA2BWorld(World):
            self.options.chao_animal_parts or \
            self.options.chao_kindergarten or \
            self.options.black_market_slots.value > 0 or \
-           self.options.goal.value == 7:
+           self.options.goal.value in [7, 9]:
             return True;
 
         return False

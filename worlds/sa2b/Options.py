@@ -26,6 +26,8 @@ class Goal(Choice):
     Chaos Chao: Raise a Chaos Chao to win
 
     Minigame Madness: Win a certain amount of each Minigame Trap, then defeat Finalhazard
+
+    Perfect Chaos Chao: Raise a Chaos Chao with an S in Swim, Fly, Run, Power, and Stamina
     """
     display_name = "Goal"
     option_biolizard = 0
@@ -37,6 +39,7 @@ class Goal(Choice):
     option_boss_rush_chaos_emerald_hunt = 6
     option_chaos_chao = 7
     option_minigame_madness = 8
+    option_perfect_chaos_chao = 9
     default = 0
 
     @classmethod
@@ -1156,6 +1159,13 @@ class LogicDifficulty(Choice):
     default = 0
 
 
+class ChaoBreeding(Toggle):
+    """
+    Forces black market to always contain an unlimited stock of heart fruits
+    """
+    display_name = "Chao Breeding"
+
+
 sa2b_option_groups = [
     OptionGroup("General Options", [
         Goal,
@@ -1200,6 +1210,7 @@ sa2b_option_groups = [
         ChaoKindergarten,
         ShuffleStartingChaoEggs,
         ChaoEntranceRandomization,
+        ChaoBreeding,
     ]),
     OptionGroup("Junk and Traps", [
         JunkFillPercentage,
@@ -1341,6 +1352,7 @@ class SA2BOptions(PerGameCommonOptions):
     chao_kindergarten: ChaoKindergarten
     shuffle_starting_chao_eggs: ShuffleStartingChaoEggs
     chao_entrance_randomization: ChaoEntranceRandomization
+    chao_breeding: ChaoBreeding
 
     junk_fill_percentage: JunkFillPercentage
     trap_fill_percentage: TrapFillPercentage
