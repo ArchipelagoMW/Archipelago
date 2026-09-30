@@ -27,7 +27,7 @@ if __name__ == "__main__":
     ModuleUpdate.update()
 
 import Utils
-from Utils import init_logging, local_path
+from Utils import find_terminal, init_logging, local_path
 
 if __name__ == "__main__":
     init_logging('Launcher')
@@ -65,12 +65,12 @@ def build_uri_popup(component_list: list["Component"], launch_args: tuple[str, .
 
 
 
-def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
+def launch(exe: Sequence[str], in_terminal: bool = False, terminal: str | None = None) -> bool:
     """Runs the given command/args in `exe` in a new process.
 
     If `in_terminal` is True, it will attempt to run in a terminal window,
     and the return value will indicate whether one was found."""
-    if in_terminal and Utils.run_in_terminal(exe):
+    if in_terminal and Utils.run_in_terminal(exe, terminal=terminal):
         return True
     subprocess.Popen(exe)
     return False
@@ -311,8 +311,11 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
         def component_action(button):
             open_text = "Opening in a new window..."
             if button.component.func:
-                # Note: if we want to draw the Snackbar before running func, func needs to be wrapped in schedule_once
-                button.component.func()
+                # TODO: Once opening a terminal works for func components, tailor the message to whether one is found
+                if button.component.cli:
+                    open_text = "Running in the background..."
+                thread = threading.Thread(target=button.component.func)
+                thread.start()
             else:
                 # if launch returns False, it started the process in background (not in a new terminal)
                 from worlds.LauncherComponents import get_exe
