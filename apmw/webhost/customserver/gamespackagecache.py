@@ -1,4 +1,4 @@
-from typing_extensions import override
+from typing import override
 
 from NetUtils import GamesPackage
 from Utils import restricted_loads
