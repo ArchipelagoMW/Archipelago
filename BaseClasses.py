@@ -10,11 +10,9 @@ from argparse import Namespace
 from collections import Counter, deque, defaultdict
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, MutableSequence, Set as AbstractSet
 from enum import IntEnum, IntFlag
-from typing import (Any, ClassVar, Dict, List, Literal, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING, overload)
+from typing import (Any, ClassVar, Dict, List, Literal, NamedTuple, NotRequired,
+                    Optional, Protocol, Set, Tuple, TypedDict, Union, TYPE_CHECKING, overload)
 import dataclasses
-
-from typing_extensions import NotRequired, TypedDict
 
 import NetUtils
 import Options

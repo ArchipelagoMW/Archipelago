@@ -2,9 +2,7 @@ import dataclasses
 import importlib
 from abc import ABC, abstractmethod
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Self, TypeVar, cast, overload
-
-from typing_extensions import override
+from typing import TYPE_CHECKING, Any, ClassVar, Self, TypeVar, cast, overload, override
 
 from Options import Option
 
