@@ -13,6 +13,7 @@
 ## Setting up the required software
 
 - Before beginning, ensure that KH1 has been launched to the title screen at least once before.
+- Set the language for the game to English if that is not your default. This implementation only works properly in English.
 - Verify game files via Steam/Epic; clean files are needed for the modding process to work.
 
 ### OpenKH
@@ -36,12 +37,12 @@
 - After downloading this zip, open `mod_generator.exe` in your Kingdom Hearts 1FM Randomizer Software folder.
 - Direct `mod_generator.exe` to both your patch zip and your KH1 data folder extracted during your OpenKH set up.
 - Click `start`.
-- After some time, you will find a file in your `Output` folder called `mod_YYYYMMDDHHMMSS.zip`
+- After some time, within your 'Output' folder in the Kingdom Hearts 1FM Randomizer Softer folder, you find a file called `mod_YYYYMMDDHHMMSS.zip`
 - Open `OpenKh.Tools.ModsManager.exe` and ensure that the dropdown in the top right is set to `Kingdom Hearts 1`
 - Click the green plus, choose `Select and install Mod Archive or Lua Script`, and direct the prompt to your new mod zip.
 - You should now see a mod on your list called `KH1 Randomizer Seed XYZ` where XYZ is your seed hex value.
 - Ensure this mod is checked `[x]`.
-- Click `Mod Loader` at the top, then click `Build and Run`.  Your modded game should now open.
+- Click `Mod Loader` at the top left, then click `Build and Run`.  Your modded game should now open.
 
 ## Connecting to your multiworld via the KH1 Client
 
@@ -59,9 +60,20 @@
 
 Yes, the game and client communicate via a game communication path set up in your in your `%AppData%` folder, and therefore don't need to establish a socket connection.
 
+### Why isn't Traverse Town progressing like I would expect?
+
+During the first visit, you must defeat 5 heartless OR see every Donald and Goofy scene and visit the 3rd District, then go to the accessory shop, leave, fight Leon, and then enter the 3rd District to fight Guard Armor.<br>
+You can then speak with Leon twice in the Secret Waterway, and use Fire to access the Mystical House. The book to enter 100 Acre Wood will spawn after talking with Leon and Cid in the 1st District.
+
+### I have Hollow Bastion but it's not on the world map! Where is it!?
+
+Hollow Bastion won't appear until you talk with Leon twice in the Secret Waterway.<br>
+After defeating Riku-Ansem, Hollow Bastion will disappear from the world map again. You must revisit Traverse Town, talk with Cid in the First District, and then go through the scenes with Kairi in the Secret Waterway.<br>
+In order to fight the Behemoth in the keyhole during the second visit, you must enter the Rising Falls. There is a cutscene that plays there that is necessary to see in order for the world to enter the proper state.
+
 ### Why aren't the evidence boxes spawning in Wonderland?
 
-You'll need to find `Footprints`, or a second `Wonderland`, in your multiworld.
+You'll need to find `Footprints`, or a second `Wonderland`, in your multiworld. The evidence boxes are not locations and do not spawn.
 
 ### Why won't Phil let me start the Prelims?
 
@@ -69,7 +81,7 @@ You'll need to find `Entry Pass`, or a second `Olympus Colosseum`, in the multiw
 
 ### Why aren't the slides spawning in Deep Jungle?
 
-You'll need to find `Slides`, or a second `Deep Jungle`, in the multiworld.
+You'll need to find `Slides`, or a second `Deep Jungle`, in the multiworld. The slides in the camp are not locations and do not spawn.
 
 ### Why can't I make progress in Atlantica?
 
@@ -103,20 +115,20 @@ You need at least one magic spell before you can use summons.
 
 ### Why am I not sending or receiving any items, despite being connected to the server?
 
-Make sure you are using the KH1 Client and not the Text Client. You will need to open the client via the Archipelago Launcher.
-If the correct client is being used, try reinstalling both Panacea and Lua Backend via the Setup Wizard under Settings.
+Make sure you are using the KH1 Client and not the Text Client. You will need to open the KH1 client via the Archipelago Launcher.<br>
+If the correct client is being used, try reinstalling both Panacea and Lua Backend via the Setup Wizard under Settings.<br>
 Uncommonly, the folder `KH1FM` failed to generate within `%LocalAppData%`, and needs to be manually created. Alternately, the contents within `%LocalAppData%/KH1FM/` may need to be deleted.
 
 ### Why am I sending and/or receiving the wrong items?
 
 Make sure you are using the correct seed zip and mod for your Archipelago game.<br>
-It's also possible you are playing on a non-English language. Unfortunately, only English is supported.
+It's also possible you are playing on a non-English language. Unfortunately, only English is supported, as the game logic is tied to language.
 
 ### Why don't I have any worlds on the world map? Am I supposed to play through the Dive to the Heart?
 
-If you have any of these symptoms: you find that the title screen does not have the Archipelago logo, that you had to do the entirety of Dive to the Heart, that you do not warp to the world map after choosing your Dream Weapons, or that when you get to the world map there are no worlds there;<br><br>
+This is likely due to the mod not being applied properly. First, reinstall both Panacea and Lua Backend via the Setup Wizard under Settings. Second, make sure the seed mod is enabled [x]. Finally, ensure the game builds with no errors after selecting Build and Run under Mod Loader.<br><br>
 
-This is likely due to the mod not being applied properly. First, reinstall both Panacea and Lua Backend via the Setup Wizard under Settings. Second, make sure the seed mod is enabled [x]. Finally, ensure the game builds with no errors after selecting Build and Run under Mod Loader.
+Symptoms to look out for: you find that the title screen does not have the Archipelago logo, that you had to do the entirety of Dive to the Heart, that you do not warp to the world map after choosing your Dream Weapons, or that when you get to the world map there are no worlds there.
 
 ### Why did the game send checks that I had not collected?
 
@@ -124,5 +136,5 @@ The client caches your inventory and does not clear the cache when switching slo
 
 ### Why is my seed missing important world progression items?
 
-This is likely related to the Stacking World Items setting. When it is off, each world will have unique items that allow progression at some point in the world. When it is on, that item is replaced with a second world item.
+This is likely related to the Stacking World Items setting. When it is off, each world will have unique items that allow progression at some point in the world. When it is on, that item is replaced with a second world item.<br>
 Even when Stacking World Items is off, if Halloween Town Key Item Bundle is on then only the Forget-me-not is to be collected.
