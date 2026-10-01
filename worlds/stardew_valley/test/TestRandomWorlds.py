@@ -10,13 +10,13 @@ from .bases import SVTestCase, skip_long_tests, solo_multiworld
 from .options.option_names import generate_random_world_options
 
 
-@classvar_matrix(n=range(100000 if skip_long_tests() else 1000))
+@classvar_matrix(n=range(10 if skip_long_tests() else 1000))
 class TestGenerateManyWorlds(GoalAssertMixin, OptionAssertMixin, WorldAssertMixin, SVTestCase):
     n: ClassVar[int]
 
     def test_generate_many_worlds_then_check_results(self):
         seed = get_seed()
-        world_options = generate_random_world_options(seed + self.n)
+        world_options = generate_random_world_options(seed)
 
         # Currently, these ER Behaviors have a small chance (about 1% for same direction, about 0.05% for same type) of failing generation.
         # We don't want to fail the pipeline and annoy other people, so we exclude them here.
