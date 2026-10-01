@@ -1,11 +1,14 @@
 from typing import NamedTuple
 
+from .constants import EnemySouls
+
 
 # ladders in overworld, since it is the most complex area for ladder storage
 class OWLadderInfo(NamedTuple):
     ladders: set[str]  # ladders where the top or bottom is at the same elevation
     portals: list[str]  # portals at the same elevation, only those without doors
-    regions: list[str]  # regions where a melee enemy can hit you out of ladder storage
+    # regions where an enemy can hit you out of ladder storage at melee range
+    regions: list[tuple[str, tuple[EnemySouls, ...]]]
 
 
 # groups for ladders at the same elevation, for use in determing whether you can ls to entrances in diff rulesets
@@ -14,20 +17,21 @@ ow_ladder_groups: dict[str, OWLadderInfo] = {
     "LS Elev 0": OWLadderInfo({"Ladders in Overworld Town", "Ladder to Ruined Atoll", "Ladder to Swamp"},
                               ["Swamp Redux 2_conduit", "Overworld Cave_", "Atoll Redux_lower", "Maze Room_",
                               "Town Basement_beach", "Archipelagos Redux_lower", "Archipelagos Redux_lowest"],
-                              ["Overworld Beach"]),
+                              [("Overworld Beach", (EnemySouls.autobolt,))]),
     # also the east filigree room
     "LS Elev 1": OWLadderInfo({"Ladders near Weathervane", "Ladders in Overworld Town", "Ladder to Swamp"},
                               ["Furnace_gyro_lower", "Furnace_gyro_west", "Swamp Redux 2_wall"],
-                              ["Overworld Tunnel Turret"]),
+                              [("Overworld Tunnel Turret", (EnemySouls.autobolt,))]),
     # also the fountain filigree room and ruined passage door
     "LS Elev 2": OWLadderInfo({"Ladders near Weathervane", "Ladders to West Bell"},
                               ["Archipelagos Redux_upper", "Ruins Passage_east"],
-                              ["After Ruined Passage"]),
+                              [("After Ruined Passage", (EnemySouls.blobs,))]),
     # also old house door
     "LS Elev 3": OWLadderInfo({"Ladders near Weathervane", "Ladder to Quarry", "Ladders to West Bell",
                                "Ladders in Overworld Town"},
                               [],
-                              ["Overworld after Envoy", "East Overworld"]),
+                              [("Overworld after Envoy", (EnemySouls.envoy,)),
+                               ("East Overworld", (EnemySouls.blobs, EnemySouls.hedgehogs))]),
     # skip top of top ladder next to weathervane level, does not provide logical access to anything
     "LS Elev 4": OWLadderInfo({"Ladders near Dark Tomb", "Ladder to Quarry", "Ladders to West Bell", "Ladders in Well",
                                "Ladders in Overworld Town"},
@@ -35,15 +39,15 @@ ow_ladder_groups: dict[str, OWLadderInfo] = {
                               []),
     "LS Elev 5": OWLadderInfo({"Ladders near Overworld Checkpoint", "Ladders near Patrol Cave"},
                               ["PatrolCave_", "Forest Belltower_", "Fortress Courtyard_", "ShopSpecial_"],
-                              ["East Overworld"]),
+                              [("East Overworld", (EnemySouls.blobs, EnemySouls.hedgehogs))]),
     # skip top of belltower, middle of dark tomb ladders, and top of checkpoint, does not grant access to anything
     "LS Elev 6": OWLadderInfo({"Ladders near Patrol Cave", "Ladder near Temple Rafters"},
                               ["Temple_rafters"],
-                              ["Overworld above Patrol Cave"]),
+                              [("Overworld above Patrol Cave", (EnemySouls.hedgehogs,))]),
     # in-line with the chest above dark tomb, gets you up the mountain stairs
     "LS Elev 7": OWLadderInfo({"Ladders near Patrol Cave", "Ladder near Temple Rafters", "Ladders near Dark Tomb"},
                               ["Mountain_"],
-                              ["Upper Overworld"]),
+                              [("Upper Overworld", (EnemySouls.rudelings, EnemySouls.phrend))]),
 }
 
 
@@ -64,7 +68,7 @@ class LadderInfo(NamedTuple):
     origin: str  # origin region
     destination: str  # destination portal
     ladders_req: str | None = None  # ladders required to do this
-    dest_is_region: bool = False  # whether it is a region that you are going to
+    enemy_req: tuple[EnemySouls, ...] | None = None  # if it's a region you're going to, and which enemies you need for it
 
 
 easy_ls: list[LadderInfo] = [
@@ -91,6 +95,8 @@ easy_ls: list[LadderInfo] = [
     # East Forest
     # Entrance by the dancing fox holy cross spot
     LadderInfo("East Forest", "East Forest Redux, East Forest Redux Laddercave_upper"),
+    # Entrance to grave path upper, only relevant with enemy shuffle
+    LadderInfo("East Forest", "East Forest Redux, Sword Access_upper"),
 
     # From the west side of Guard House 1 to the east side
     LadderInfo("Guard House 1 West", "East Forest Redux Laddercave, East Forest Redux_gate"),
@@ -130,10 +136,11 @@ easy_ls: list[LadderInfo] = [
 # if we can gain elevation or get knocked down, add the harder ones
 medium_ls: list[LadderInfo] = [
     # region-destination versions of easy ls spots
-    LadderInfo("East Forest", "East Forest Dance Fox Spot", dest_is_region=True),
+    LadderInfo("East Forest", "East Forest Dance Fox Spot", enemy_req=(EnemySouls.hedgehogs,)),
+    LadderInfo("East Forest", "East Forest above Guard House 2", enemy_req=(EnemySouls.rudelings, EnemySouls.envoy)),
     # fortress courtyard knockdowns are never logically relevant, the fuse requires upper
-    LadderInfo("Back of Swamp", "Swamp Mid", dest_is_region=True),
-    LadderInfo("Back of Swamp", "Swamp Front", dest_is_region=True),
+    LadderInfo("Back of Swamp", "Swamp Mid", enemy_req=(EnemySouls.gunslinger, EnemySouls.fleemers, EnemySouls.lost_echo)),
+    LadderInfo("Back of Swamp", "Swamp Front", enemy_req=(EnemySouls.gunslinger, EnemySouls.fleemers)),
 
     # gain height off the northeast fuse ramp
     LadderInfo("Ruined Atoll", "Atoll Redux, Frog Stairs_eye"),
@@ -142,15 +149,15 @@ medium_ls: list[LadderInfo] = [
     LadderInfo("Forest Grave Path Main", "Sword Access, East Forest Redux_upper"),
 
     # Upper exits from the courtyard. Use the ramp in the courtyard, then the blocks north of the first fuse
-    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard Upper", dest_is_region=True),
+    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard Upper", enemy_req=(EnemySouls.custodians,)),
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Reliquary_Upper"),
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress East_"),
-    LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard Upper", dest_is_region=True),
+    LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard Upper", enemy_req=(EnemySouls.custodians,)),
     LadderInfo("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Upper",
                "Ladder to Beneath the Vault"),
     LadderInfo("Fortress Exterior near cave", "Fortress Courtyard, Fortress East_", "Ladder to Beneath the Vault"),
     LadderInfo("Fortress Exterior near cave", "Fortress Courtyard Upper", "Ladder to Beneath the Vault",
-               dest_is_region=True),
+               enemy_req=(EnemySouls.custodians,)),
 
     # need to gain height to get up the stairs
     LadderInfo("Lower Mountain", "Mountain, Mountaintop_"),
@@ -161,8 +168,10 @@ medium_ls: list[LadderInfo] = [
     LadderInfo("Quarry Back", "Quarry Redux, Monastery_back"),
 
     LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_2_"),
-    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Entry", dest_is_region=True),
-    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Mid Checkpoint", dest_is_region=True),
+    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Entry",
+               enemy_req=(EnemySouls.voidling, EnemySouls.autobolt)),
+    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Miniboss Platform",
+               enemy_req=(EnemySouls.voidling, EnemySouls.administrator)),
 
     # Swamp to Overworld upper
     LadderInfo("Swamp Mid", "Swamp Redux 2, Overworld Redux_wall", "Ladders in Swamp"),
@@ -173,12 +182,12 @@ hard_ls: list[LadderInfo] = [
     # lower ladder, go into the waterfall then above the bonfire, up a ramp, then through the right wall
     LadderInfo("Beneath the Well Front", "Sewer, Sewer_Boss_", "Ladders in Well"),
     LadderInfo("Beneath the Well Front", "Sewer, Overworld Redux_west_aqueduct", "Ladders in Well"),
-    LadderInfo("Beneath the Well Front", "Beneath the Well Back", "Ladders in Well", dest_is_region=True),
+    LadderInfo("Beneath the Well Front", "Beneath the Well Back", "Ladders in Well", enemy_req=(EnemySouls.phrend,)),
     # go through the hexagon engraving above the vault door
     LadderInfo("Frog's Domain Front", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
     # the turret at the end here is not affected by enemy rando
-    LadderInfo("Frog's Domain Front", "Frog's Domain Back", "Ladders to Frog's Domain", dest_is_region=True),
-    # todo: see if we can use that new laurels strat here
+    LadderInfo("Frog's Domain Front", "Frog's Domain Back", "Ladders to Frog's Domain", enemy_req=(EnemySouls.frogs,)),
+    # todo: when we have the effort, add this one with a laurels + sword requirement
     # LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_FTRoom_"),
     # go behind the cathedral to reach the door, pretty easily doable
     LadderInfo("Swamp Mid", "Swamp Redux 2, Cathedral Redux_main", "Ladders in Swamp"),
