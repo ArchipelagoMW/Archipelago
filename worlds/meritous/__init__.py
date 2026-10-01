@@ -89,11 +89,11 @@ class MeritousWorld(World):
     def get_filler_item_name(self) -> str:
         rand_crystals = self.multiworld.random.randrange(0, 32)
         if rand_crystals < 16:
-            return "Crystals x500"
+            return "Small Crystal Cache"
         elif rand_crystals < 28:
-            return "Crystals x1000"
+            return "Medium Crystal Cache"
         else:
-            return "Crystals x2000"
+            return "Large Crystal Cache"
 
     def generate_early(self):
         self.goal = self.options.goal.value
