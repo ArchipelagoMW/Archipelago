@@ -11,18 +11,24 @@ from .bundles.bundle_room import BundleRoom
 from .content.game_content import StardewContent
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
-from .data.game_item import ItemTag
+from .data.fish_data import FishItem, crab_pot_difficulty
+from .data.game_item import ItemTag, GameItem
+from .data.harvest import HarvestCropSource
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
-from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
+from .options import SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity, Fishsanity, SkillProgression, Cropsanity
-from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName
+from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity, Fishsanity, SkillProgression, Cropsanity, JunimoKart, \
+    JourneyOfThePrairieKing, DataRandomizationBehavior
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName, \
+    DataRandomizationOptionName
 from .strings.backpack_tiers import Backpack
+from .strings.crop_names import Fruit
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
 from .strings.region_names import Region, LogicRegion
+from .strings.season_names import Season
 from .strings.villager_names import NPC
 
 LOCATION_CODE_OFFSET = 717000
@@ -71,8 +77,15 @@ class LocationTags(enum.Enum):
     ARCADE_MACHINE = enum.auto()
     ARCADE_MACHINE_VICTORY = enum.auto()
     JOTPK = enum.auto()
+    JOTPK_VICTORY = enum.auto()
     JUNIMO_KART = enum.auto()
+    JUNIMO_KART_VICTORY = enum.auto()
     HELP_WANTED = enum.auto()
+    HELP_WANTED_ITEM_DELIVERY = enum.auto()
+    HELP_WANTED_GATHERING = enum.auto()
+    HELP_WANTED_SLAYING = enum.auto()
+    HELP_WANTED_FISHING = enum.auto()
+    HELP_WANTED_HELLO = enum.auto()
     TRAVELING_MERCHANT = enum.auto()
     FISHSANITY = enum.auto()
     MUSEUM_MILESTONES = enum.auto()
@@ -146,6 +159,19 @@ class LocationTags(enum.Enum):
     ENDGAME_LOCATIONS = enum.auto()
     REQUIRES_FRIENDSANITY = enum.auto()
     REQUIRES_FRIENDSANITY_MARRIAGE = enum.auto()
+    MEET_VILLAGER = enum.auto()
+    MEET_VILLAGER_ALWAYS = enum.auto()
+    FORAGING = enum.auto()
+    SPRING_FORAGING = enum.auto()
+    SUMMER_FORAGING = enum.auto()
+    FALL_FORAGING = enum.auto()
+    WINTER_FORAGING = enum.auto()
+    BEACH_FORAGING = enum.auto()
+    MINES_FORAGING = enum.auto()
+    DESERT_FORAGING = enum.auto()
+    ISLAND_FORAGING = enum.auto()
+    BASIC_FORAGING = enum.auto()
+    TOOL_FORAGING = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
@@ -243,16 +269,23 @@ def initialize_groups():
 initialize_groups()
 
 
-def extend_cropsanity_locations(randomized_locations: List[LocationData], content: StardewContent):
+def extend_cropsanity_locations(randomized_locations: List[LocationData], content: StardewContent, options: StardewValleyOptions):
     cropsanity = content.features.cropsanity
     if not cropsanity.is_enabled:
         return
 
-    randomized_locations.extend(location_table[cropsanity.to_location_name(item.name)]
-                                for item in content.find_tagged_items(ItemTag.CROPSANITY))
+    tagged_items = content.find_tagged_items(ItemTag.CROPSANITY)
+    location_datas = {location_table[cropsanity.to_location_name(item.name)]: item for item in tagged_items}
+    modified_locations_data = [modify_crop_region_according_to_data_randomization(location_data, item, options) for location_data, item in location_datas.items()]
+    randomized_locations.extend(modified_locations_data)
 
 
-def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent, help_wanted_quests: Dict[str, str]):
+    extend_story_quests_locations(randomized_locations, options, content)
+    extend_help_wanted_quests_locations(randomized_locations, options, content, help_wanted_quests)
+
+
+def extend_story_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     if options.quest_locations.has_no_story_quests():
         return
 
@@ -260,21 +293,12 @@ def extend_quests_locations(randomized_locations: List[LocationData], options: S
     story_quest_locations = filter_disabled_locations(options, content, story_quest_locations)
     randomized_locations.extend(story_quest_locations)
 
-    for i in range(0, options.quest_locations.value):
-        batch = i // 7
-        index_this_batch = i % 7
-        if index_this_batch < 4:
-            randomized_locations.append(
-                location_table[f"Help Wanted: Item Delivery {(batch * 4) + index_this_batch + 1}"])
-        elif index_this_batch == 4:
-            randomized_locations.append(location_table[f"Help Wanted: Fishing {batch + 1}"])
-        elif index_this_batch == 5:
-            randomized_locations.append(location_table[f"Help Wanted: Slay Monsters {batch + 1}"])
-        elif index_this_batch == 6:
-            randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
+def extend_help_wanted_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent, help_wanted_quests: Dict[str, str]):
+    for location_name in help_wanted_quests:
+        randomized_locations.append(location_table[location_name])
 
-def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random):
+def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random, options: StardewValleyOptions):
     fishsanity = content.features.fishsanity
     if not fishsanity.is_enabled:
         return
@@ -286,7 +310,9 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], conten
         if fishsanity.is_randomized and random.random() >= fishsanity.randomization_ratio:
             continue
 
-        randomized_locations.append(location_table[fishsanity.to_location_name(fish.name)])
+        location_data = location_table[fishsanity.to_location_name(fish.name)]
+        modified_location_data = modify_fish_region_according_to_data_randomization(location_data, fish, options)
+        randomized_locations.append(modified_location_data)
 
 
 def extend_museumsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
@@ -372,9 +398,9 @@ def extend_special_order_locations(randomized_locations: List[LocationData], opt
         randomized_locations.extend(board_locations)
 
     if content.is_enabled(qi_board_content_pack):
-        include_arcade = options.arcade_machine_locations != ArcadeMachineLocations.option_disabled
+        include_jk = options.junimo_kart != JunimoKart.option_disabled
         qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if
-                     include_arcade or LocationTags.JUNIMO_KART not in location.tags]
+                     include_jk or LocationTags.JUNIMO_KART not in location.tags]
         randomized_locations.extend(qi_orders)
 
 
@@ -664,6 +690,17 @@ def extend_endgame_locations(randomized_locations: List[LocationData], options: 
     randomized_locations.extend(endgame_locations)
 
 
+def extend_villager_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    villager_locations = []
+    villager_locations.extend(locations_by_tag[LocationTags.MEET_VILLAGER_ALWAYS])
+
+    if StartWithoutOptionName.villagers in options.start_without:
+        villager_meet_locations = [loc for loc in locations_by_tag[LocationTags.MEET_VILLAGER] if loc.name[len("Meet "):] in content.villagers]
+        villager_locations.extend(villager_meet_locations)
+
+    randomized_locations.extend(villager_locations)
+
+
 def extend_filler_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     number_locations_to_add_per_day = 0
@@ -711,6 +748,7 @@ def extend_filler_locations(randomized_locations: List[LocationData], options: S
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      trash_bear_requests: Dict[str, List[str]],
+                     help_wanted_quests: Dict[str, str],
                      options: StardewValleyOptions,
                      content: StardewContent,
                      random: Random):
@@ -735,14 +773,10 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_building_locations(randomized_locations, content)
 
-    if options.arcade_machine_locations != ArcadeMachineLocations.option_disabled:
-        randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE_VICTORY])
+    extend_arcade_locations(options, randomized_locations)
 
-    if options.arcade_machine_locations == ArcadeMachineLocations.option_full_shuffling:
-        randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE])
-
-    extend_cropsanity_locations(randomized_locations, content)
-    extend_fishsanity_locations(randomized_locations, content, random)
+    extend_cropsanity_locations(randomized_locations, content, options)
+    extend_fishsanity_locations(randomized_locations, content, random, options)
     extend_museumsanity_locations(randomized_locations, options, random)
     extend_friendsanity_locations(randomized_locations, content)
 
@@ -755,7 +789,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_cooksanity_locations(randomized_locations, options, content)
     extend_chefsanity_locations(randomized_locations, options, content)
     extend_craftsanity_locations(randomized_locations, options, content)
-    extend_quests_locations(randomized_locations, options, content)
+    extend_quests_locations(randomized_locations, options, content, help_wanted_quests)
     extend_book_locations(randomized_locations, content)
     extend_walnutsanity_locations(randomized_locations, options)
     extend_movies_locations(randomized_locations, options, content)
@@ -763,6 +797,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_hats_locations(randomized_locations, content)
     extend_eatsanity_locations(randomized_locations, options, content)
     extend_endgame_locations(randomized_locations, options, content)
+    extend_villager_locations(randomized_locations, options, content)
 
     # Mods
     extend_situational_quest_locations(randomized_locations, options, content)
@@ -771,6 +806,25 @@ def create_locations(location_collector: StardewLocationCollector,
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
+
+
+def extend_arcade_locations(options, randomized_locations):
+    extend_jotpk_locations(options, randomized_locations)
+    extend_junimo_kart_locations(options, randomized_locations)
+
+
+def extend_jotpk_locations(options, randomized_locations):
+    if options.journey_of_the_prairie_king == JourneyOfThePrairieKing.option_full_shuffle:
+        randomized_locations.extend(locations_by_tag[LocationTags.JOTPK])
+    elif options.journey_of_the_prairie_king != JourneyOfThePrairieKing.option_disabled:
+        randomized_locations.extend(locations_by_tag[LocationTags.JOTPK_VICTORY])
+
+
+def extend_junimo_kart_locations(options, randomized_locations):
+    if options.junimo_kart == JunimoKart.option_full_shuffle:
+        randomized_locations.extend([loc for loc in locations_by_tag[LocationTags.JUNIMO_KART] if LocationTags.SPECIAL_ORDER_QI not in loc.tags])
+    elif options.junimo_kart != JunimoKart.option_disabled:
+        randomized_locations.extend(locations_by_tag[LocationTags.JUNIMO_KART_VICTORY])
 
 
 def filter_deprecated_locations(locations: Iterable[LocationData]) -> Iterable[LocationData]:
@@ -827,3 +881,50 @@ def filter_disabled_locations(options: StardewValleyOptions, content: StardewCon
     locations_masteries_filter = filter_masteries_locations(content, locations_qi_filter)
     locations_mod_filter = filter_modded_locations(locations_masteries_filter, content)
     return locations_mod_filter
+
+
+def modify_fish_region_according_to_data_randomization(location_data: LocationData, fish: FishItem, options: StardewValleyOptions) -> LocationData:
+    if options.data_randomization_behavior == DataRandomizationBehavior.option_off:
+        return location_data
+
+    if DataRandomizationOptionName.fish_catch_method not in options.data_randomization:
+        return location_data
+
+    new_region = location_data.region
+    if fish.difficulty == crab_pot_difficulty:
+        if LogicRegion.crab_pot_seawater in fish.locations:
+            new_region = LogicRegion.crab_pot_seawater
+        else:
+            new_region = LogicRegion.crab_pot_freshwater
+    else:
+        new_region = LogicRegion.fishing
+    return LocationData(location_data.code_without_offset, new_region, location_data.name, location_data.content_packs, location_data.tags)
+
+
+def modify_crop_region_according_to_data_randomization(location_data: LocationData, crop_item: GameItem, options: StardewValleyOptions) -> LocationData:
+    if options.data_randomization_behavior == DataRandomizationBehavior.option_off or DataRandomizationOptionName.growth_season not in options.data_randomization:
+        return location_data
+
+    harvest_sources = [source for source in crop_item.sources if isinstance(source, HarvestCropSource)]
+    if not any(harvest_sources):
+        return location_data
+
+    harvest_source = harvest_sources[0]
+    new_region = location_data.region
+    if crop_item.name == Fruit.qi_fruit or harvest_source.growth_time > 20:
+        new_region = LogicRegion.indoor_farming
+    elif len(harvest_source.seasons) >= 4:
+        new_region = LogicRegion.any_farming
+    elif len(harvest_source.seasons) == 3 and Season.winter not in harvest_source.seasons:
+        new_region = LogicRegion.not_winter_farming
+    elif len(harvest_source.seasons) == 2 and Season.summer in harvest_source.seasons and Season.fall in harvest_source.seasons:
+        new_region = LogicRegion.summer_or_fall_farming
+    elif Season.spring in harvest_source.seasons:
+        new_region = LogicRegion.spring_farming
+    elif Season.summer in harvest_source.seasons:
+        new_region = LogicRegion.summer_farming
+    elif Season.fall in harvest_source.seasons:
+        new_region = LogicRegion.fall_farming
+    elif Season.winter in harvest_source.seasons:
+        new_region = LogicRegion.winter_farming
+    return LocationData(location_data.code_without_offset, new_region, location_data.name, location_data.content_packs, location_data.tags)

@@ -1,4 +1,6 @@
-from .base_logic import BaseLogicMixin, BaseLogic
+from ..data.game_item import Source
+from ..data.hats_data import Hats
+from ..data.requirement import FestivalItemReceivedRequirement
 from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
@@ -13,6 +15,9 @@ from ..strings.machine_names import Machine
 from ..strings.monster_names import Monster
 from ..strings.region_names import Region
 from ..strings.season_names import Season
+from ..strings.seed_names import Seed
+from ..strings.villager_names import NPC
+from .base_logic import BaseLogic, BaseLogicMixin
 
 
 class FestivalLogicMixin(BaseLogicMixin):
@@ -26,28 +31,28 @@ class FestivalLogic(BaseLogic):
     def initialize_rules(self):
         self.registry.festival_rules.update({
             FestivalCheck.egg_hunt: self.logic.festival.can_win_egg_hunt(),
-            FestivalCheck.strawberry_seeds: self.logic.money.can_spend(1000),
-            FestivalCheck.dance: self.logic.relationship.has_hearts_with_any_bachelor(4),
-            FestivalCheck.tub_o_flowers: self.logic.money.can_spend(2000),
-            FestivalCheck.rarecrow_5: self.logic.money.can_spend(2500),
-            FestivalCheck.luau_soup: self.logic.festival.can_succeed_luau_soup(),
-            FestivalCheck.moonlight_jellies: self.logic.true_,
-            FestivalCheck.moonlight_jellies_banner: self.logic.money.can_spend(800),
-            FestivalCheck.starport_decal: self.logic.money.can_spend(1000),
+            FestivalCheck.strawberry_seeds: self.logic.source.has_access_to_any_with_multiplier(self.content.game_items[Seed.strawberry].sources, 10),
+            FestivalCheck.dance: self.logic.relationship.has_hearts_with_any_bachelor(4) & self.logic.relationship.exists(NPC.lewis),
+            FestivalCheck.tub_o_flowers: self.logic.festival.has_access_to_source(FestivalCheck.tub_o_flowers),
+            FestivalCheck.rarecrow_5: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_5),
+            FestivalCheck.luau_soup: self.logic.festival.can_succeed_luau_soup() & self.logic.relationship.exists(NPC.lewis),
+            FestivalCheck.moonlight_jellies: self.logic.relationship.exists(NPC.lewis),
+            FestivalCheck.moonlight_jellies_banner: self.logic.festival.has_access_to_source(FestivalCheck.moonlight_jellies_banner),
+            FestivalCheck.starport_decal: self.logic.festival.has_access_to_source(FestivalCheck.starport_decal),
             FestivalCheck.smashing_stone: self.logic.true_,
-            FestivalCheck.grange_display: self.logic.festival.can_succeed_grange_display(),
-            FestivalCheck.rarecrow_1: self.logic.true_,  # only cost star tokens
-            FestivalCheck.fair_stardrop: self.logic.true_,  # only cost star tokens
+            FestivalCheck.grange_display: self.logic.festival.can_succeed_grange_display() & self.logic.relationship.exists(NPC.lewis),
+            FestivalCheck.rarecrow_1: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_1),
+            FestivalCheck.fair_stardrop: self.logic.festival.has_access_to_source(FestivalCheck.fair_stardrop),
             FestivalCheck.spirit_eve_maze: self.logic.true_,
-            FestivalCheck.jack_o_lantern: self.logic.money.can_spend(2000),
-            FestivalCheck.rarecrow_2: self.logic.money.can_spend(5000),
-            FestivalCheck.fishing_competition: self.logic.festival.can_win_fishing_competition(),
-            FestivalCheck.rarecrow_4: self.logic.money.can_spend(5000),
+            FestivalCheck.jack_o_lantern: self.logic.festival.has_access_to_source(FestivalCheck.jack_o_lantern),
+            FestivalCheck.rarecrow_2: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_2),
+            FestivalCheck.fishing_competition: self.logic.festival.can_win_fishing_competition() & self.logic.relationship.exists(NPC.lewis),
+            FestivalCheck.rarecrow_4: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_4),
             FestivalCheck.mermaid_show: self.logic.true_,
-            FestivalCheck.cone_hat: self.logic.money.can_spend(2500),
-            FestivalCheck.iridium_fireplace: self.logic.money.can_spend(15000),
-            FestivalCheck.rarecrow_7: self.logic.money.can_spend(5000) & self.logic.museum.can_donate_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.logic.money.can_spend(5000) & self.logic.museum.can_donate_museum_items(40),
+            FestivalCheck.cone_hat: self.logic.festival.has_access_to_source(Hats.cone_hat.clarified_name),
+            FestivalCheck.iridium_fireplace: self.logic.festival.has_access_to_source(FestivalCheck.iridium_fireplace),
+            FestivalCheck.rarecrow_7: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_7),
+            FestivalCheck.rarecrow_8: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_8),
             FestivalCheck.lupini_red_eagle: self.logic.money.can_spend(1200),
             FestivalCheck.lupini_portrait_mermaid: self.logic.money.can_spend(1200),
             FestivalCheck.lupini_solar_kingdom: self.logic.money.can_spend(1200),
@@ -57,14 +62,14 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.lupini_the_serpent: self.logic.time.has_year_three & self.logic.money.can_spend(1200),
             FestivalCheck.lupini_tropical_fish: self.logic.time.has_year_three & self.logic.money.can_spend(1200),
             FestivalCheck.lupini_land_of_clay: self.logic.time.has_year_three & self.logic.money.can_spend(1200),
-            FestivalCheck.secret_santa: self.logic.gifts.has_any_universal_love,
-            FestivalCheck.legend_of_the_winter_star: self.logic.true_,
-            FestivalCheck.rarecrow_3: self.logic.true_,
+            FestivalCheck.secret_santa: self.logic.gifts.has_any_universal_love & self.logic.relationship.people_exist(5),
+            FestivalCheck.legend_of_the_winter_star: self.logic.relationship.exists(NPC.willy) & self.logic.relationship.people_exist(5),
+            FestivalCheck.rarecrow_3: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_3),
             FestivalCheck.all_rarecrows: self.logic.region.can_reach(Region.farm) & self.logic.festival.has_all_rarecrows(),
             FestivalCheck.calico_race: self.logic.true_,
-            FestivalCheck.mummy_mask: self.logic.true_,
-            FestivalCheck.calico_statue: self.logic.true_,
-            FestivalCheck.emily_outfit_service: self.logic.true_,
+            FestivalCheck.mummy_mask: self.logic.festival.has_access_to_source(Hats.mummy_mask.clarified_name),
+            FestivalCheck.calico_statue: self.logic.festival.has_access_to_source(FestivalCheck.calico_statue),
+            FestivalCheck.emily_outfit_service: self.logic.relationship.exists(NPC.emily),
             FestivalCheck.earthy_mousse: self.logic.true_,
             FestivalCheck.sweet_bean_cake: self.logic.true_,
             FestivalCheck.skull_cave_casserole: self.logic.true_,
@@ -92,7 +97,7 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.treasure_hunt: self.logic.region.can_reach(Region.skull_cavern_25),
             FestivalCheck.touch_calico_statue: self.logic.region.can_reach(Region.skull_cavern_25),
             FestivalCheck.real_calico_egg_hunter: self.logic.region.can_reach(Region.skull_cavern_100),
-            FestivalCheck.willy_challenge: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.scorpion_carp]),
+            FestivalCheck.willy_challenge: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.scorpion_carp]) & self.logic.relationship.can_meet(NPC.willy),
             FestivalCheck.desert_scholar: self.logic.true_,
             FestivalCheck.squidfest_day_1_copper: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]),
             FestivalCheck.squidfest_day_1_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.can_use_any_bait(),
@@ -117,7 +122,7 @@ class FestivalLogic(BaseLogic):
             return self.logic.received(f"Book: {Book.the_art_o_crabbing}")
 
     def can_win_egg_hunt(self) -> StardewRule:
-        return self.logic.true_
+        return self.logic.relationship.exists(NPC.lewis)
 
     def can_succeed_luau_soup(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
@@ -126,7 +131,7 @@ class FestivalLogic(BaseLogic):
 
     def can_get_luau_soup_delight(self) -> StardewRule:
         eligible_fish = (Fish.blobfish, Fish.crimsonfish, Fish.ice_pip, Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish,
-                         Fish.mutant_carp, Fish.spookfish, Fish.stingray, Fish.sturgeon, Fish.super_cucumber)
+                         Fish.mutant_carp, Fish.spook_fish, Fish.stingray, Fish.sturgeon, Fish.super_cucumber)
         fish_rule = self.logic.has_any(*(f for f in eligible_fish if f in self.content.fishes))  # To filter stingray
         eligible_kegables = (Fruit.ancient_fruit, Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.melon,
                              Fruit.orange, Fruit.peach, Fruit.pineapple, Fruit.pomegranate, Fruit.rhubarb, Fruit.starfruit, Fruit.strawberry,
@@ -157,7 +162,7 @@ class FestivalLogic(BaseLogic):
         artisan_rule = self.logic.artisan.can_keg(Generic.any) | self.logic.artisan.can_preserves_jar(Generic.any)
 
         # Salads at the bar are good enough
-        cooking_rule = self.logic.money.can_spend_at(Region.saloon, 220)
+        cooking_rule = self.logic.money.can_spend_at(Region.saloon_shop, 220)
 
         fish_rule = self.logic.fishing.can_fish_anywhere(50)
 
@@ -196,3 +201,10 @@ class FestivalLogic(BaseLogic):
         if self.options.festival_locations == FestivalLocations.option_disabled:
             return self.logic.season.has(Season.fall)
         return self.logic.received(Gift.golden_pumpkin) & self.logic.season.has(Season.fall)
+
+    def has_access_to_source(self, item_name: str, sources: list[Source] = None) -> StardewRule:
+        if item_name not in self.content.game_items:
+            return self.logic.false_
+        if sources is None:
+            sources = self.content.game_items[item_name].sources
+        return self.logic.source.has_access_to_any_without_other_requirements_of_types(sources, [FestivalItemReceivedRequirement])

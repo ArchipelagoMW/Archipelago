@@ -13,10 +13,13 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     LuauDelightRequirementRequirement, MovieRequirement, CookedRecipesRequirement, CraftedItemsRequirement, \
     HelpWantedRequirement, ShipOneCropRequirement, ReceivedRaccoonsRequirement, PrizeMachineRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
-    DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, CatalogueRequirement
-from ..options import IncludeEndgameLocations
+    DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement, MasteryRequirement, ReceivedRequirement, \
+    BachelorFriendRequirement, SpeakJunimoRequirement, EndgameItemReceivedRequirement, FestivalItemReceivedRequirement, MuseumArtifactsRequirement, \
+    MuseumMineralsRequirement, CraftedSpecificItemRequirement
+from ..options import IncludeEndgameLocations, FestivalLocations
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region, LogicRegion
+from ..strings.villager_names import NPC
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -37,6 +40,10 @@ class RequirementLogic(BaseLogic):
         raise ValueError(f"Requirements of type{type(requirement)} have no rule registered.")
 
     @meet_requirement.register
+    def _(self, requirement: ReceivedRequirement):
+        return self.logic.received(requirement.item)
+
+    @meet_requirement.register
     def _(self, requirement: HasItemRequirement):
         return self.logic.has(requirement.item)
 
@@ -47,6 +54,10 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: SkillRequirement):
         return self.logic.skill.has_level(requirement.skill, requirement.level)
+
+    @meet_requirement.register
+    def _(self, requirement: MasteryRequirement):
+        return self.logic.skill.has_mastery(requirement.skill)
 
     @meet_requirement.register
     def _(self, requirement: RegionRequirement):
@@ -82,7 +93,14 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: SpecificFriendRequirement):
-        return self.logic.relationship.has_hearts(requirement.npc, requirement.hearts)
+        hearts_rule = self.logic.relationship.has_hearts(requirement.npc, requirement.hearts)
+        if requirement.hearts > 10:
+            return hearts_rule & self.logic.relationship.can_marry(requirement.npc)
+        return hearts_rule
+
+    @meet_requirement.register
+    def _(self, requirement: BachelorFriendRequirement):
+        return self.logic.relationship.has_hearts_with_any_bachelor(requirement.hearts)
 
     @meet_requirement.register
     def _(self, requirement: NumberOfFriendsRequirement):
@@ -110,7 +128,7 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: LuauDelightRequirementRequirement):
-        return self.logic.region.can_reach(LogicRegion.luau) & self.logic.festival.can_get_luau_soup_delight()
+        return self.logic.region.can_reach(LogicRegion.luau) & self.logic.festival.can_get_luau_soup_delight() & self.logic.relationship.exists(NPC.lewis)
 
     @meet_requirement.register
     def _(self, requirement: ForgeInfinityWeaponRequirement):
@@ -121,6 +139,14 @@ class RequirementLogic(BaseLogic):
         if requirement.unique:
             return self.logic.fishing.can_catch_many_fish(requirement.number_fish)
         return self.logic.fishing.can_catch_many_fish(math.ceil(requirement.number_fish / 10)) & self.logic.time.has_lived_months(requirement.number_fish // 20)
+
+    @meet_requirement.register
+    def _(self, requirement: MuseumMineralsRequirement):
+        return self.logic.museum.can_donate_museum_minerals(requirement.number_donated)
+
+    @meet_requirement.register
+    def _(self, requirement: MuseumArtifactsRequirement):
+        return self.logic.museum.can_donate_museum_artifacts(requirement.number_donated)
 
     @meet_requirement.register
     def _(self, requirement: MuseumCompletionRequirement):
@@ -145,6 +171,10 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: CraftedItemsRequirement):
         return self.logic.crafting.can_have_crafted_recipes(requirement.number_of_recipes)
+
+    @meet_requirement.register
+    def _(self, requirement: CraftedSpecificItemRequirement):
+        return self.logic.crafting.can_craft(requirement.item)
 
     @meet_requirement.register
     def _(self, requirement: HelpWantedRequirement):
@@ -194,7 +224,17 @@ class RequirementLogic(BaseLogic):
         return self.logic.monster.can_kill_any(requirement.monsters, math.floor(math.log10(requirement.amount)))
 
     @meet_requirement.register
-    def _(self, requirement: CatalogueRequirement):
+    def _(self, requirement: FestivalItemReceivedRequirement):
+        if self.options.festival_locations == FestivalLocations.option_disabled:
+            return self.logic.true_
+        return self.logic.received(requirement.item_name)
+
+    @meet_requirement.register
+    def _(self, requirement: EndgameItemReceivedRequirement):
         if self.options.include_endgame_locations == IncludeEndgameLocations.option_true:
-            return self.logic.received(requirement.catalogue)
+            return self.logic.received(requirement.item_name)
         return self.logic.true_
+
+    @meet_requirement.register
+    def _(self, requirement: SpeakJunimoRequirement):
+        return self.logic.action.can_speak_junimo()

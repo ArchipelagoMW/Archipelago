@@ -44,7 +44,7 @@ class Fish:
     midnight_squid = fish("Midnight Squid")
     ms_angler = fish("Ms. Angler")
     mussel = fish("Mussel")
-    mussel_node = fish("Mussel Node")
+    mussel_node = "Mussel Node"
     mutant_carp = fish("Mutant Carp")
     octopus = fish("Octopus")
     oyster = fish("Oyster")
@@ -68,7 +68,6 @@ class Fish:
     snail = fish("Snail")
     son_of_crimsonfish = fish("Son of Crimsonfish")
     spook_fish = fish("Spook Fish")
-    spookfish = fish("Spook Fish")
     squid = fish("Squid")
     stingray = fish("Stingray")
     stonefish = fish("Stonefish")

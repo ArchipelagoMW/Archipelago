@@ -74,7 +74,7 @@ class ModSkillLogic(BaseLogic):
         shifter_rule = True_()
         preservation_rule = True_()
         if self.content.features.skill_progression.is_progressive:
-            shifter_rule = self.logic.has(ModCraftable.water_sifter)
+            shifter_rule = self.logic.has(ModCraftable.water_shifter)
             preservation_rule = self.logic.has(ModMachine.hardwood_preservation_chamber)
         if level > 8:
             tool_rule = self.logic.tool.has_pan(ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)
@@ -88,7 +88,7 @@ class ModSkillLogic(BaseLogic):
 
     def can_earn_cooking_skill_level(self, level: int) -> StardewRule:
         if level >= 6:
-            return self.logic.cooking.can_cook() & self.logic.region.can_reach(Region.saloon) & \
+            return self.logic.cooking.can_cook() & self.logic.region.can_reach(Region.saloon_shop) & \
                 self.logic.building.has_building(Building.coop) & self.logic.building.has_building(Building.barn)
         else:
             return self.logic.cooking.can_cook()

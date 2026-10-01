@@ -1,7 +1,7 @@
-from ..bases import SVTestBase
-from ... import options, SeasonRandomization, StartWithoutOptionName
+from ... import SeasonRandomization, StartWithoutOptionName, options
 from ...options import BundleRandomization, StartWithout
 from ...strings.bundle_names import BundleName
+from ..bases import SVTestBase
 
 
 class TestBundlesLogic(SVTestBase):
@@ -41,38 +41,37 @@ class TestRemixedBundlesLogic(SVTestBase):
         self.assert_can_reach_location("Sticky Bundle")
 
 
-# The Randomness changed
+class TestRaccoonBundlesLogic(SVTestBase):
+    options = {
+        options.SeasonRandomization: SeasonRandomization.option_disabled,
+        options.BundleRandomization: BundleRandomization.option_vanilla,
+        options.BundlePrice: options.BundlePrice.option_normal,
+        options.Craftsanity: options.Craftsanity.option_all,
+        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
+    }
 
-# class TestRaccoonBundlesLogic(SVTestBase):
-#     options = {
-#         options.BundleRandomization: BundleRandomization.option_vanilla,
-#         options.BundlePrice: options.BundlePrice.option_normal,
-#         options.Craftsanity: options.Craftsanity.option_all,
-#     }
-#     seed = 2  # Magic seed that does what I want. Might need to get changed if we change the randomness behavior of raccoon bundles
-#
-#     def test_raccoon_bundles_rely_on_previous_ones(self):
-#         self.collect("Forest Magic")
-#         self.collect("Landslide Removed")
-#         self.collect("Progressive Raccoon", 6)
-#         self.collect("Progressive Mine Elevator", 24)
-#         self.collect("Mining Level", 12)
-#         self.collect("Combat Level", 12)
-#         self.collect("Progressive Axe", 4)
-#         self.collect("Progressive Pickaxe", 4)
-#         self.collect("Progressive Weapon", 4)
-#         self.collect("Dehydrator Recipe")
-#         self.collect("Mushroom Boxes")
-#         self.collect("Progressive Fishing Rod", 4)
-#         self.collect("Fishing Level", 10)
-#         self.collect("Furnace Recipe")
-#
-#         # The first raccoon bundle is a fishing one
-#         self.assert_cannot_reach_location("Raccoon Request 1")
-#         # The third raccoon bundle is a foraging one
-#         self.assert_cannot_reach_location("Raccoon Request 3")
-#
-#         self.collect("Fish Smoker Recipe")
-#
-#         self.assert_can_reach_location("Raccoon Request 1")
-#         self.assert_can_reach_location("Raccoon Request 3")
+    def test_raccoon_bundles_dont_rely_on_previous_ones(self):
+        self.collect("Forest Magic")
+        self.collect("Progressive Raccoon", 8)
+        self.collect("Progressive Mine Elevator", 24)
+        self.collect("Mining Level", 12)
+        self.collect("Combat Level", 12)
+        self.collect("Progressive Axe", 4)
+        self.collect("Progressive Pickaxe", 4)
+        self.collect("Progressive Weapon", 4)
+        self.collect("Progressive Fishing Rod", 4)
+        self.collect("Fishing Level", 10)
+        self.collect("Progressive Coop", 3)
+        self.collect("Furnace Recipe")
+        self.collect("Dehydrator Recipe")
+        self.collect("Mushroom Boxes")
+
+        # The first raccoon bundle is a fishing one
+        self.assert_cannot_reach_location("Raccoon Request 1")
+        # The third raccoon bundle is a foraging one
+        self.assert_can_reach_location("Raccoon Request 3")
+
+        self.collect("Fish Smoker Recipe")
+
+        self.assert_can_reach_location("Raccoon Request 1")
+        self.assert_can_reach_location("Raccoon Request 3")

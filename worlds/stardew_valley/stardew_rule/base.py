@@ -1,18 +1,38 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from collections import deque, Counter
+from collections import Counter, deque
 from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
 from threading import Lock
-from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional, cast
+from typing import Callable, Dict, Hashable, Iterable, List, Optional, Set, Sized, Tuple, Union, cast
 
 from BaseClasses import CollectionState
-from .literal import true_, false_, LiteralStardewRule
+
+from .literal import LiteralStardewRule, false_, true_
 from .protocol import StardewRule
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
+
+
+def stack_size2a(size=2):
+    """
+    Get stack size for caller's frame.
+    This is used to debug infinite recursions that might happen in the rules below.
+    Example of a way to debug an infinite recursion:
+        stack = stack_size2a()
+        if stack > 200: # 200 is arbitrary. Just put a high value there. This is the stack size at which you want to breakpoint
+            a = 5 # <---- Place a break point on this line here
+    """
+    import sys
+    from itertools import count
+    frame = sys._getframe(size)
+
+    for size in count(size):
+        frame = frame.f_back
+        if not frame:
+            return size
 
 
 class BaseStardewRule(StardewRule, ABC):
@@ -148,6 +168,12 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
     @property
     def original_rules(self):
         return RepeatableChain(self.combinable_rules.values(), self.simplification_state.original_simplifiable_rules)
+
+    @property
+    def simple_rules(self):
+        return RepeatableChain(
+            set(self.combinable_rules.values()), set(self.simplification_state.original_simplifiable_rules)
+        )
 
     @property
     def current_rules(self):
@@ -289,7 +315,7 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
             return self.short_circuit_evaluation(simplified)
 
     def __str__(self):
-        return f"({self.symbol.join(str(rule) for rule in self.original_rules)})"
+        return f"({self.symbol.join(str(rule) for rule in self.simple_rules)})"
 
     def __repr__(self):
         return f"({self.symbol.join(repr(rule) for rule in self.original_rules)})"
@@ -338,6 +364,9 @@ class And(AggregatingStardewRule):
     symbol = " & "
 
     def __call__(self, state: CollectionState) -> bool:
+        # stack_size = stack_size2a()
+        # if stack_size > 100:
+        #     print(self)
         return self.evaluate_while_simplifying(state)[1]
 
     def __and__(self, other):
@@ -459,7 +488,13 @@ class Has(BaseStardewRule):
         return self.evaluate_while_simplifying(state)[1]
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self.other_rules[self.item].evaluate_while_simplifying(state)
+        item_rule = self.other_rules[self.item]
+        # stack_size = stack_size2a()
+        # if stack_size > 100:
+        #     print(self.item)
+        # print(self.item)
+        result = item_rule.evaluate_while_simplifying(state)
+        return result
 
     def __str__(self):
         if self.item not in self.other_rules:
@@ -467,9 +502,12 @@ class Has(BaseStardewRule):
         return f"Has {self.item} ({self.group})"
 
     def __repr__(self):
-        if self.item not in self.other_rules:
-            return f"Has {self.item} ({self.group}) -> {MISSING_ITEM}"
-        return f"Has {self.item} ({self.group}) -> {repr(self.other_rules[self.item])}"
+        try:
+            if self.item not in self.other_rules:
+                return f"Has {self.item} ({self.group}) -> {MISSING_ITEM}"
+            return f"Has {self.item} ({self.group}) -> {repr(self.other_rules[self.item])}"
+        except:
+            return f"Has {self.item} ({self.group})"
 
 
 class RepeatableChain(Iterable, Sized):

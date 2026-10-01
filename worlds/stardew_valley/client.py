@@ -3,21 +3,25 @@ from __future__ import annotations
 import re
 
 import Utils
-from BaseClasses import CollectionState, Location
+from BaseClasses import CollectionState, Location, Entrance
 from NetUtils import JSONMessagePart
 from . import StardewValleyWorld
 from .logic.logic import StardewLogic
+from .regions.entrance_rando import reverse_connection_name
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 
 def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionState) -> list[JSONMessagePart]:
     logic = world.logic
 
+    is_item_explain = False
+    is_entrance_explain = False
     if target_name.startswith("item "):
         is_item_explain = True
         target_name = target_name[len("item "):]
-    else:
-        is_item_explain = False
+    elif target_name.startswith("entrance "):
+        is_entrance_explain = True
+        target_name = target_name[len("entrance "):]
 
     if target_name.startswith("missing "):
         expected = True
@@ -28,11 +32,15 @@ def cmd_explain(world: StardewValleyWorld, target_name: str, state: CollectionSt
     else:
         expected = None
 
-    possible_answers = logic.registry.item_rules.keys() if is_item_explain else world.get_all_location_names()
+    possible_answers = logic.registry.item_rules.keys() if is_item_explain else [entr.name for entr in world.get_entrances()] if is_entrance_explain else world.get_all_location_names()
     result, usable, response = Utils.get_intended_text(target_name, possible_answers)
     if usable:
         if is_item_explain:
             rule = logic.has(result)
+        elif is_entrance_explain:
+            entrance = world.get_entrance(result)
+            rule = logic.region.can_reach(entrance.parent_region.name) & entrance.access_rule
+            print(f"searching for rule {rule}")
         else:
             rule = logic.region.can_reach_location(result)
         expl = explain(rule, state, expected=expected, mode=ExplainMode.CLIENT)
@@ -57,7 +65,7 @@ def cmd_more(world: StardewValleyWorld, index: str, state: CollectionState) -> l
     return parse_explanation(expl)
 
 
-def parse_explanation(explanation: RuleExplanation) -> list[list[JSONMessagePart]]:
+def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
     # Split the explanation in parts, by isolating all the delimiters, being \(, \), & , -> , | , \d+x , \[ , \] , \(\w+\), \n\s*
     result_regex = r"\s*(\(|\)| & | -> | \| |\d+x | \[|\](?: ->)?\s*| \(\w+\)|\n)"
     splits = re.split(result_regex, str(explanation).strip())
@@ -74,6 +82,8 @@ def parse_explanation(explanation: RuleExplanation) -> list[list[JSONMessagePart
         if s == "True":
             messages.append({"type": "color", "color": "green", "text": s})
         elif s == "False":
+            messages.append({"type": "color", "color": "salmon", "text": s})
+        elif s == "Undiscovered":
             messages.append({"type": "color", "color": "salmon", "text": s})
         elif s.startswith("Reach Location "):
             messages.append({"type": "text", "text": "Reach Location "})
@@ -103,12 +113,19 @@ def parse_explanation(explanation: RuleExplanation) -> list[list[JSONMessagePart
         else:
             messages.append({"text": s, "type": "text"})
 
-        if content_length > 5000 and s.endswith("\n"):
-            contents[-1]["text"] = contents[-1]["text"][:-1]
-            messages.append(contents)
-            contents = []
-            content_length = 0
-
-    messages.append(contents)
-
     return messages
+
+
+def setup_ut_deferred_entrances(randomized_entrances: dict[str, str], entrances: dict[str, Entrance], exits: dict[str, Entrance]):
+    sorted_entrance_names = sorted(randomized_entrances.items())
+
+    entrance_data = []
+
+    for original, randomized in sorted_entrance_names:
+        rev_random = reverse_connection_name(randomized) or randomized
+        ex = exits[original]
+        entr = entrances[rev_random]
+
+        entrance_data.append((ex, entr))
+
+    return entrance_data

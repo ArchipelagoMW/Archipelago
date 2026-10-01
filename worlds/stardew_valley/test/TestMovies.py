@@ -1,7 +1,7 @@
 from .bases import SVTestBase
 from .. import SeasonRandomization
 from ..data.movies import movies_by_name
-from ..options import Moviesanity
+from ..options import Moviesanity, StartWithout
 
 
 class MovieTestBase(SVTestBase):
@@ -35,7 +35,7 @@ class MovieTestBase(SVTestBase):
 class TestOneMovie(SVTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
-        Moviesanity.internal_name: Moviesanity.option_one
+        Moviesanity.internal_name: Moviesanity.option_one,
     }
 
     def test_all_movies_require_theater_and_season(self):
@@ -53,33 +53,36 @@ class TestOneMovie(SVTestBase):
 class TestAllMovies(MovieTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
-        Moviesanity.internal_name: Moviesanity.option_all_movies
+        Moviesanity.internal_name: Moviesanity.option_all_movies,
     }
 
 
 class TestAllMoviesLoved(MovieTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
-        Moviesanity.internal_name: Moviesanity.option_all_movies_loved
+        Moviesanity.internal_name: Moviesanity.option_all_movies_loved,
+        StartWithout.internal_name: StartWithout.preset_none,
     }
 
 
 class TestAllMoviesAndAllSnacks(MovieTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
-        Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_snacks
+        Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_snacks,
     }
 
 
 class TestAllMoviesWithLovedSnack(MovieTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
-        Moviesanity.internal_name: Moviesanity.option_all_movies_with_loved_snack
+        Moviesanity.internal_name: Moviesanity.option_all_movies_with_loved_snack,
+        StartWithout.internal_name: StartWithout.preset_none,
     }
 
 
 class TestAllMoviesAndAllLovedSnacks(MovieTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
-        Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks
+        Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
+        StartWithout.internal_name: StartWithout.preset_none,
     }

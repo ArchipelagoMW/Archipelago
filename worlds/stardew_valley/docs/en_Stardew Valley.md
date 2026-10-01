@@ -53,7 +53,6 @@ Location checks in Stardew Valley always include:
 - [Mineshaft Chest Rewards](https://stardewvalleywiki.com/The_Mines#Remixed_Rewards)
 - [Traveling Merchant Items](https://stardewvalleywiki.com/Traveling_Cart)
 - Isolated objectives such as the [beach bridge](https://stardewvalleywiki.com/The_Beach#Tide_Pools),
-  [Old Master Cannoli](https://stardewvalleywiki.com/Secret_Woods#Old_Master_Cannoli),
   [Grim Reaper Statue](https://stardewvalleywiki.com/Golden_Scythe), etc
 
 There also are a number of location checks that are optional, and individual players choose to include them or not in their shuffling:
@@ -103,11 +102,6 @@ A player can enable some options that will add some items to the pool that are r
       seed and harvesting the resulting crop sends a location check
     - The way merchants sell seeds is considerably changed. Pierre sells fewer seeds at a high price, while Joja sells unlimited seeds but in huge discount
       packs, not individually.
-- Museumsanity:
-    - The items that are normally obtained from museum donation milestones are added to the item pool. Some items, like the magic rock candy, are duplicated for
-      convenience.
-    - The Traveling Merchant now sells artifacts and minerals, with a bias towards undonated ones, to mitigate randomness. She will sell these items as the
-      player receives "Traveling Merchant Metal Detector" items.
 - TV Channels
 - Babies
     - Only if Friendsanity is enabled
