@@ -4029,7 +4029,7 @@ def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int
 
         if world.options.goal.value in [0, 2, 4, 5, 6, 8]:
             location_table.update({**final_boss_location_table})
-        elif world.options.goal.value in [7]:
+        elif world.options.goal.value in [7, 9]:
             location_table.update({**chaos_chao_location_table})
 
         if world.options.goal.value in [1, 2]:
