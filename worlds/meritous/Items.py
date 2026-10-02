@@ -152,6 +152,8 @@ class MeritousItem(Item):
             self.type = "PSI Key"
         elif "upgrade" in name:
             self.type = "Enhancement"
+            if advancement:
+                self.classification = ItemClassification.progression_deprioritized_skip_balancing
         elif "Crystals x" in name:
             self.type = "Crystals"
         elif name == "Nothing":
