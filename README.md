@@ -5,87 +5,87 @@ presently, Archipelago is also the randomizer itself.
 
 Currently, the following games are supported:
 
-* The Legend of Zelda: A Link to the Past
-* Factorio
-* Subnautica
-* Risk of Rain 2
-* The Legend of Zelda: Ocarina of Time
-* Timespinner
-* Super Metroid
-* Secret of Evermore
-* Final Fantasy
-* VVVVVV
-* Raft
-* Super Mario 64
-* Meritous
-* Super Metroid/Link to the Past combo randomizer (SMZ3)
+* A Hat in Time
+* A Short Hike
+* APQuest
+* Adventure
+* Aquaria
+* Blasphemous
+* Bomb Rush Cyberfunk
+* Bumper Stickers
+* Castlevania 64
+* Castlevania: Circle of the Moon
+* Celeste (Open World)
+* Celeste 64
 * ChecksFinder
+* Choo-Choo Charles
+* Civilization VI
+* DLC Quest
+* DOOM 1993
+* DOOM II
+* Dark Souls 3
+* EarthBound
+* Factorio
+* Faxanadu
+* Final Fantasy
+* Final Fantasy Mystic Quest
+* Gauntlet Legends
+* Heretic
 * Hollow Knight
-* The Witness
+* Hylics 2
+* Inscryption
+* Jak and Daxter: The Precursor Legacy
+* Kingdom Hearts 1
+* Kingdom Hearts 2
+* Kirby's Dream Land 3
+* Landstalker: The Treasures of King Nole
+* Lingo
+* Lufia II Ancient Cave
+* Mario & Luigi: Superstar Saga
+* Mega Man 2
+* Mega Man 3
+* Mega Man Battle Network 3: Blue Version
+* Meritous
+* Muse Dash
+* Noita
+* Old School Runescape
+* Overcooked! 2
+* Paint
+* Pokémon Emerald
+* Pokémon Red and Blue
+* Raft
+* Risk of Rain 2
+* Satisfactory
+* Saving Princess
+* Secret of Evermore
+* shapez
+* Shivers
 * Sonic Adventure 2: Battle
 * Starcraft 2
-* Dark Souls 3
-* Super Mario World
-* Pokémon Red and Blue
-* Hylics 2
-* Overcooked! 2
-* Zillion
-* Lufia II Ancient Cave
-* Blasphemous
-* Wargroove
 * Stardew Valley
-* The Legend of Zelda
-* The Messenger
-* Kingdom Hearts 2
-* The Legend of Zelda: Link's Awakening DX
-* Adventure
-* DLC Quest
-* Noita
-* Undertale
-* Bumper Stickers
-* Mega Man Battle Network 3: Blue Version
-* Muse Dash
-* DOOM 1993
-* Terraria
-* Lingo
-* Pokémon Emerald
-* DOOM II
-* Shivers
-* Heretic
-* Landstalker: The Treasures of King Nole
-* Final Fantasy Mystic Quest
-* TUNIC
-* Kirby's Dream Land 3
-* Celeste 64
-* Castlevania 64
-* A Short Hike
-* Yoshi's Island
-* Mario & Luigi: Superstar Saga
-* Bomb Rush Cyberfunk
-* Aquaria
-* Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
-* A Hat in Time
-* Old School Runescape
-* Kingdom Hearts 1
-* Mega Man 2
-* Yacht Dice
-* Faxanadu
-* Saving Princess
-* Castlevania: Circle of the Moon
-* Inscryption
-* Civilization VI
-* The Legend of Zelda: The Wind Waker
-* Jak and Daxter: The Precursor Legacy
+* Subnautica
+* Super Mario 64
 * Super Mario Land 2: 6 Golden Coins
-* shapez
-* Paint
-* Celeste (Open World)
-* Choo-Choo Charles
-* APQuest
-* Satisfactory
-* EarthBound
-* Mega Man 3
-* Gauntlet Legends
+* Super Mario World
+* Super Metroid
+* Super Metroid/Link to the Past combo randomizer (SMZ3)
+* TUNIC
+* Terraria
+* The Legend of Zelda
+* The Legend of Zelda: A Link to the Past
+* The Legend of Zelda: Link's Awakening DX
+* The Legend of Zelda: Ocarina of Time
+* The Legend of Zelda: The Wind Waker
+* The Messenger
+* The Witness
+* Timespinner
+* Undertale
+* VVVVVV
+* Wargroove
+* Yacht Dice
+* Yoshi's Island
+* Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
+* Zillion
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
