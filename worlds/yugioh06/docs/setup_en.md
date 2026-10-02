@@ -17,17 +17,14 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
 
 Once Bizhawk has been installed, open Bizhawk and change the following settings:
 
-- Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". This is required for the Lua script to function correctly.
-  **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
-  **"NLua+KopiLua" until this step is done.**
-- Under Config > Customize > Advanced, make sure the box for AutoSaveRAM is checked, and click the 5s button.
-  This reduces the possibility of losing save data in emulator crashes.
-- Under Config > Customize, check the "Run in background" and "Accept background input" boxes. This will allow you to
-  continue playing in the background, even if another window is selected, such as the Client.
-- Under Config > Hotkeys, many hotkeys are listed, with many bound to common keys on the keyboard. You will likely want
-  to disable most of these, which you can do quickly using `Esc`.
+- If you're using BizHawk 2.7 or 2.8, go to `Config > Customize`. On the Advanced tab, switch the Lua Core from
+`NLua+KopiLua` to `Lua+LuaInterface`, then restart EmuHawk. (If you're using BizHawk 2.9, you can skip this step.)
+- Under `Config > Customize`, check the "Run in background" option to prevent disconnecting from the client while you're
+tabbed out of EmuHawk.
+- Open a `.gba` file in EmuHawk and go to `Config > Controllers…` to configure your inputs. If you can't click
+`Controllers…`, load any `.gba` ROM first.
+- Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to
+clear it.
 
 It is strongly recommended to associate GBA rom extensions (\*.gba) to the Bizhawk we've just installed.
 To do so, we simply have to search any GBA rom we happened to own, right click and select "Open with...", unfold
