@@ -37,7 +37,7 @@
 - After downloading this zip, open `mod_generator.exe` in your Kingdom Hearts 1FM Randomizer Software folder.
 - Direct `mod_generator.exe` to both your patch zip and your KH1 data folder extracted during your OpenKH set up.
 - Click `start`.
-- After some time, within your 'Output' folder in the Kingdom Hearts 1FM Randomizer Softer folder, you find a file called `mod_YYYYMMDDHHMMSS.zip`
+- After some time, within your 'Output' folder in the Kingdom Hearts 1FM Randomizer Softer folder, you will find a file called `mod_YYYYMMDDHHMMSS.zip`
 - Open `OpenKh.Tools.ModsManager.exe` and ensure that the dropdown in the top right is set to `Kingdom Hearts 1`
 - Click the green plus, choose `Select and install Mod Archive or Lua Script`, and direct the prompt to your new mod zip.
 - You should now see a mod on your list called `KH1 Randomizer Seed XYZ` where XYZ is your seed hex value.
