@@ -332,7 +332,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
     chao_karate_super_region = create_region(multiworld, player, active_locations, LocationName.chao_karate_super_region,
                                              chao_karate_super_region_locations)
 
-    if world.options.goal == 7 or world.options.chao_animal_parts:
+    if world.options.goal in [7, 9] or world.options.chao_animal_parts:
         animal_penguin_region_locations = [
             LocationName.animal_penguin,
             LocationName.chao_penguin_arms,
@@ -625,7 +625,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         biolizard_region = create_region(multiworld, player, active_locations, LocationName.biolizard_region,
                                          biolizard_region_locations)
         conditional_regions += [biolizard_region]
-    elif world.options.goal == 7:
+    elif world.options.goal in [7, 9]:
         chaos_chao_region_locations = [
             LocationName.chaos_chao,
         ]
@@ -770,7 +770,7 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
                 connect(multiworld, player, names, "Boss Rush " + str(i + 1), "Boss Rush " + str(i + 2))
 
         connect(multiworld, player, names, LocationName.boss_rush_16_region, LocationName.biolizard_region)
-    elif world.options.goal == 7:
+    elif world.options.goal in [7, 9]:
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.chaos_chao,
                 lambda state: (state.has_all(chao_animal_event_location_table.keys(), player)))
     elif world.options.goal == 8:
@@ -988,7 +988,7 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
                 gate_region.locations.append(location_intelligence)
 
     # Handle access to Animal Parts
-    if world.options.goal == 7 or world.options.chao_animal_parts:
+    if world.options.goal in [7, 9] or world.options.chao_animal_parts:
         connect(multiworld, player, names, LocationName.city_escape_region, LocationName.animal_rabbit)
         connect(multiworld, player, names, LocationName.city_escape_region, LocationName.animal_skunk)
         connect(multiworld, player, names, LocationName.city_escape_region, LocationName.animal_sheep)
