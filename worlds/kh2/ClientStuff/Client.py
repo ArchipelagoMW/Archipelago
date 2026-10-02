@@ -122,26 +122,29 @@ class KH2Context(CommonContext):
             "receive_popup_type":     "chest",  # can be Puzzle, Info, Chest or None
         }
 
-        if "localappdata" in os.environ:
-            self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
-            self.kh2_client_settings_join = os.path.join(self.game_communication_path, "kh2_client_settings.json")
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
-            if not os.path.exists(self.kh2_client_settings_join):
-                # make the json with the settings
-                with open(self.kh2_client_settings_join, "wt") as f:
-                    f.close()
-            elif os.path.exists(self.kh2_client_settings_join):
-                with open(self.kh2_client_settings_join) as f:
-                    # if the file isnt empty load it
-                    # this is the best I could fine to valid json stuff https://stackoverflow.com/questions/23344948/validate-and-format-json-files
-                    try:
-                        self.client_settings = json.load(f)
-                    except json.decoder.JSONDecodeError:
-                        pass
-                        # this is what is effectively doing on
-                        # self.client_settings = default
-                    f.close()
+        if Utils.is_windows:
+            base_path = os.path.expandvars("%localappdata%")
+        else:
+            base_path = os.getenv("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
+        self.game_communication_path = os.path.join(base_path, "KH2AP")
+        self.kh2_client_settings_join = os.path.join(self.game_communication_path, "kh2_client_settings.json")
+        if not os.path.exists(self.game_communication_path):
+            os.makedirs(self.game_communication_path)
+        if not os.path.exists(self.kh2_client_settings_join):
+            # make the json with the settings
+            with open(self.kh2_client_settings_join, "wt") as f:
+                f.close()
+        elif os.path.exists(self.kh2_client_settings_join):
+            with open(self.kh2_client_settings_join) as f:
+                # if the file isnt empty load it
+                # this is the best I could fine to valid json stuff https://stackoverflow.com/questions/23344948/validate-and-format-json-files
+                try:
+                    self.client_settings = json.load(f)
+                except json.decoder.JSONDecodeError:
+                    pass
+                    # this is what is effectively doing on
+                    # self.client_settings = default
+                f.close()
 
         self.hitlist_bounties = 0
         # hooked object
