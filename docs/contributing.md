@@ -15,8 +15,7 @@ game contributions:
 
 * **Do not introduce unit test failures/regressions.**
   Archipelago supports multiple versions of Python. You may need to download older Python versions to fully test
-  your changes. Currently, the oldest supported version
-  is [Python 3.11](https://www.python.org/downloads/release/python-31113/).
+  your changes. The oldest supported version is listed in [Running From Source](running%20from%20source.md#general).
   It is recommended that automated github actions are turned on in your fork to have github run unit tests after
   pushing.
   You can turn them on here:  
