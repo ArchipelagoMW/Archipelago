@@ -154,7 +154,7 @@ class MeritousItem(Item):
             self.type = "Enhancement"
             if advancement:
                 self.classification = ItemClassification.progression_deprioritized_skip_balancing
-        elif "Crystals x" in name:
+        elif "Crystal Cache" in name:
             self.type = "Crystals"
         elif name == "Nothing":
             self.type = "Nothing"
