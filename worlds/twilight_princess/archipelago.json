@@ -1,6 +1,10 @@
 {
   "game": "Twilight Princess",
-  "authors": ["WritingHusky", "Twilight Princess Archipelago contributors"],
+  "authors": [
+    "WritingHusky",
+    "Draglife54",
+    "Twilight Princess Archipelago contributors"
+  ],
   "minimum_ap_version": "0.6.8",
   "world_version": "0.3.0"
 }
