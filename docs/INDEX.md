@@ -1,8 +1,8 @@
 # Archipelago Docs Index
 
-This is an index meant to act as a quick reference/description for the different files part of Archipelago's
-documentation. The docs are organized into sections depending on which purpose they are most relevant to, as for most
-devs it is not necessary to read all of them.
+This is an index meant to act as a quick reference/description for the different parts of Archipelago's documentation.
+The docs are organized into sections depending on which purpose they are most relevant to, as for most devs it is not
+necessary to read all of them.
 
 ## General/Main Repository
 
@@ -57,6 +57,11 @@ recommendations, but does not include main technical specification.
 
 Specification for APWorld plugins to the generation system. Includes expectations for structure and examples for
 implementations of world methods.
+
+### [APQuest](/worlds/apquest/)
+
+Example of a fully implemented APWorld meant to act as a reference for new devs. Written with many explanatory comments
+throughout on the world API and common pitfalls.
 
 ### [APWorld Specification](/docs/apworld%20specification.md)
 
