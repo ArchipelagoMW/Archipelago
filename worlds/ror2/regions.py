@@ -60,7 +60,6 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
     dlc_ac_regions: Dict[str, RoRRegionData] = {
         "Pretender's Precipice":                 RoRRegionData([], ["OrderedStage_2"]),
         "Iron Alluvium":                         RoRRegionData([], ["OrderedStage_3", "Conduit Canyon"]),
-        "Iron Auroras":                          RoRRegionData([], ["OrderedStage_3"]),
         "Conduit Canyon":                        RoRRegionData([], ["OrderedStage_3", "Solutional Haunt"]),
         "Repurposed Crater":                     RoRRegionData([], ["OrderedStage_4"]),
     }
@@ -170,7 +169,6 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
     if ror2_options.dlc_alloyed:
         other_regions["OrderedStage_1"].region_exits.append("Pretender's Precipice")
         other_regions["OrderedStage_2"].region_exits.append("Iron Alluvium")
-        other_regions["OrderedStage_2"].region_exits.append("Iron Auroras")
         other_regions["OrderedStage_3"].region_exits.append("Repurposed Crater")
 
     if ror2_options.dlc_sotv:

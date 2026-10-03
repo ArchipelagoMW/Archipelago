@@ -91,7 +91,7 @@ environment_ac_orderstage_2_table: Dict[str, int] = {
 }
 environment_ac_orderstage_3_table: Dict[str, int] = {
     "Iron Alluvium":                           78,  # ironalluvium
-    "Iron Auroras":                            29,  # ironalluvium2
+    # Iron Auroras (29, ironalluvium2) is omitted: the client mod doesn't consistently offer it before looping
     "Conduit Canyon":                          73,  # conduitcanyon
 }
 environment_ac_orderstage_4_table: Dict[str, int] = {

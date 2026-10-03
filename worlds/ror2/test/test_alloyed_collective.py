@@ -7,8 +7,8 @@ class AlloyedCollectiveTest(RoR2TestBase):
         "progressive_stages": "false",
     }
 
-    ac_stages = ["Pretender's Precipice", "Iron Alluvium", "Iron Auroras",
-                 "Conduit Canyon", "Repurposed Crater"]
+    ac_stages = ["Pretender's Precipice", "Iron Alluvium", "Conduit Canyon",
+                 "Repurposed Crater"]
 
     def test_ac_stages_in_item_pool(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]

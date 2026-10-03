@@ -105,7 +105,7 @@ DLC Seekers of the Storm (SOTS) items
 DLC Alloyed Collective (AC) items
 
 * `Pretender's Precipice`
-* `Iron Alluvium`, `Iron Auroras`
+* `Iron Alluvium`
 * `Conduit Canyon`, `Repurposed Crater`
 
 
