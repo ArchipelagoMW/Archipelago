@@ -13,12 +13,12 @@ and may be useful for developers as well.
 ### [Running from Source](/docs/running%20from%20source.md)
 
 Setup instructions for using a source install of Archipelago (as opposed to a built/"frozen" release), which should be
-followed for developing any changes to either Archipelago's core or creating a world.
+used for development of any changes to Archipelago's core or when working on worlds.
 
 ### [Contributing Guidelines](/docs/contributing.md)
 
-Guidelines for contributing or reviewing changes to the Archipelago repo, including for either the core software or
-contained worlds.
+Guidelines for contributing or reviewing changes to the Archipelago repo, for either the core software or the contained
+worlds.
 
 ### [Code of Conduct](/docs/code_of_conduct.md)
 
@@ -26,8 +26,8 @@ Expectations for interactions with others involving the Archipelago repo.
 
 ### [Style Guide](/docs/style.md)
 
-Style guidelines for code/documentation contributions to the Archipelago repo, especially for parts the core software.
-Standalone worlds may follow them as well if desired.
+Style guidelines for code/documentation contributions to the Archipelago repo, especially for parts of the core
+software. Standalone worlds may follow them as well if desired.
 
 ### [Codeowners Listing](/docs/CODEOWNERS)
 
