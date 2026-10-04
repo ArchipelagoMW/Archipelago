@@ -69,7 +69,7 @@ T = TypeVar("T")
 def _to_rule(req: AutopelagoGameRequirement) -> Rule:
     if "all" in req:
         req: AutopelagoAllRequirement
-        return And(*(_to_rule(sub_req) for sub_req in req["all"])) if req["all"] else True_()
+        return And(*(_to_rule(sub_req) for sub_req in req["all"]))
     if "any" in req:
         req: AutopelagoAnyRequirement
         return Or(*(_to_rule(sub_req) for sub_req in req["any"]))
