@@ -59,9 +59,6 @@
 # Dark Souls III
 /worlds/dark_souls_3/ @Marechal-L @nex3
 
-# Donkey Kong Country 3
-/worlds/dkc3/ @PoryGone
-
 # DLCQuest
 /worlds/dlcquest/ @axe-y @agilbert1412
 
@@ -85,6 +82,9 @@
 
 # Final Fantasy Mystic Quest
 /worlds/ffmq/ @Alchav @wildham0
+
+# Gauntlet Legends
+/worlds/gl/ @jamesbrq
 
 # Heretic
 /worlds/heretic/ @Daivuk @KScl
@@ -215,7 +215,7 @@
 /worlds/subnautica/ @Berserker66
 
 # Terraria
-/worlds/terraria/ @Seldom-SE
+/worlds/terraria/ @desperandos101
 
 # Timespinner
 /worlds/timespinner/ @Jarno458

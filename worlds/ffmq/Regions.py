@@ -33,10 +33,10 @@ def process_rules(spot, access):
     add_rule(spot, lambda state: state.has_all(access, spot.player))
 
 
-def create_region(world: MultiWorld, player: int, name: str, room_id=None, locations=None, links=None):
+def create_region(multiworld: MultiWorld, player: int, name: str, room_id=None, locations=None, links=None):
     if links is None:
         links = []
-    ret = Region(name, player, world)
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             location.parent_region = ret

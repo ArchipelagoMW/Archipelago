@@ -2,8 +2,8 @@ Symbols:
 0 - Dots
 1 - Colored Dots
 2 - Full Dots
-3 - Invisible Dots
 5 - Sound Dots
+7 - Sparse Dots
 10 - Symmetry
 20 - Triangles
 30 - Eraser
@@ -12,12 +12,16 @@ Symbols:
 50 - Negative Shapers
 60 - Stars
 61 - Stars + Same Colored Symbol
+67 - Simple Stars
 71 - Black/White Squares
 72 - Colored Squares
 80 - Arrows
-200 - Progressive Dots - Dots,Full Dots
-210 - Progressive Symmetry - Symmetry,Colored Dots
-260 - Progressive Stars - Stars,Stars + Same Colored Symbol
+200 - Progressive Dots
+240 - Progressive Shapers
+210 - Progressive Symmetry
+260 - Progressive Stars
+270 - Progressive Squares
+280 - Progressive Discard Symbols
 
 Useful:
 510 - Puzzle Skip

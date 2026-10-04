@@ -80,9 +80,10 @@ class LinksAwakeningSettings(settings.Group):
 
     class GfxModFile(settings.FilePath):
         """
-        Gfxmod file, get it from upstream: https://github.com/daid/LADXR/tree/master/gfx
-        Only .bin or .bdiff files
-        The same directory will be checked for a matching text modification file
+        Gfxmod file, select one from the `Archipelago/data/sprites/ladx/` folder,
+        or make your own. You can generate a template here: https://ladx-gfx.3and3.dev/
+        Only .bin or .bdiff files.
+        Extended spritesheets from the upstream randomizer are not supported.
         """
         def browse(self, filetypes=None, **kwargs):
             filetypes = [("Binary / Patch files", [".bin", ".bdiff"])]

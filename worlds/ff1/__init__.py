@@ -50,8 +50,8 @@ class FF1World(World):
 
     web = FF1Web()
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.locked_items = []
         self.locked_locations = []
 

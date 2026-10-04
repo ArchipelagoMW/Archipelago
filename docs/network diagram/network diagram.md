@@ -69,12 +69,6 @@ flowchart LR
     end
     SNI <-- Various, depending on SNES device --> SMZ
 
-    %% Donkey Kong Country 3
-    subgraph Donkey Kong Country 3
-        DK3[SNES]
-    end
-    SNI <-- Various, depending on SNES device --> DK3
-
     %% Super Mario World
     subgraph Super Mario World
         SMW[SNES]

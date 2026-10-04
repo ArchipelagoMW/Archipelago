@@ -77,15 +77,6 @@ Changes made to `docker-compose.yaml` can be applied by running `docker compose 
 It is possible to carry out these deployment steps on Windows under [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install).
 
 
-## Optional: A Link to the Past Enemizer
-
-Only required to generate seeds that include A Link to the Past with certain options enabled. You will receive an
-error if it is required.
-Enemizer can be enabled on `x86_64` platform architecture, and is included in the image build process. Enemizer requires a version 1.0 Japanese "Zelda no Densetsu" `.sfc` rom file to be placed in the application directory:
-`docker run archipelago -v "/path/to/zelda.sfc:/app/Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"`.
-Enemizer is not currently available for `aarch64`.
-
-
 ## Optional: Git
 
 Building the image requires a local copy of the ArchipelagoMW source code.

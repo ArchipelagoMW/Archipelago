@@ -36,7 +36,7 @@ class DisabledMuseumRule(LiteralStardewRule):
 
 class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBase):
     options = {
-        **presets.allsanity_mods_7_x_x(),
+        **presets.maxsanity_mods_7_x_x(),
         options.Museumsanity.internal_name: options.Museumsanity.option_none
     }
 

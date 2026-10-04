@@ -31,6 +31,16 @@ class TestBase(unittest.TestCase):
             if "register_blueprint" not in e.args[0]:
                 raise
             cls.app = raw_app
+        except ValueError as e:
+            # as above, for more recent versions of flask this is now a ValueError
+            if "is already registered for this blueprint" not in e.args[0]:
+                raise
+            cls.app = raw_app
 
     def setUp(self) -> None:
+        from WebHostLib.models import db
+        from pony.orm import db_session
+        with db_session:
+            for entity in db.entities.values():
+                entity.select().delete(bulk=True)
         self.client = self.app.test_client()

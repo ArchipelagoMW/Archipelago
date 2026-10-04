@@ -246,7 +246,7 @@ def create_gameboard(hard_mode: bool, hammer_exists: bool, extra_chest: bool) ->
     breakable_block = BreakableBlock() if hammer_exists else Empty()
 
     normal_enemy = EnemyWithLoot(2 if hard_mode else 1, Location.ENEMY_DROP)
-    boss = FinalBoss(5 if hard_mode else 3)
+    boss = FinalBoss(5 if hard_mode else 2)
 
     gameboard = (
         (Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),

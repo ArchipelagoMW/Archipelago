@@ -34,6 +34,7 @@ class Game:
         self.gameboard = create_gameboard(hard_mode, hammer_exists, extra_chest)
         self.player = Player(self.gameboard, self.queued_events.append)
         self.active_math_problem = None
+        self.active_math_problem_input = None
         self.remotely_received_items = set()
 
         if random_object is None:
@@ -236,24 +237,20 @@ class Game:
         target_x, target_y = self.auto_target_path.pop(0)
         movement = target_x - self.player.current_x, target_y - self.player.current_y
         direction = Direction(movement)
+
+        facing_before = self.player.facing
         moved = self.attempt_player_movement(direction, cancel_auto_move=False)
+        direction_changed = self.player.facing != facing_before
 
         if moved:
             return True
 
-        # We are attempting to interact with something on the path.
-        # First, make the player face it.
-        if self.player.facing != direction:
-            self.player.facing = direction
-            self.auto_target_path.insert(0, (target_x, target_y))
-            return True
-
-        # If we are facing it, attempt to interact with it.
+        # We are trying to interact with something to clear the path.
         changed = self.attempt_interact()
 
         if not changed:
             self.cancel_auto_move()
-            return False
+            return direction_changed
 
         # If the interaction was successful, and this was the end of the path, stop
         # (i.e. don't try to attack the attacked enemy over and over until it's dead)

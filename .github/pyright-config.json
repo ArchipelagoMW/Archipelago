@@ -19,6 +19,7 @@
     "../test/programs/test_multi_server.py",
     "../test/utils/__init__.py",
     "../test/webhost/test_descriptions.py",
+    "../test/webhost/test_suuid.py",
     "../worlds/AutoSNIClient.py",
     "type_check.py"
   ],
