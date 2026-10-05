@@ -190,7 +190,9 @@ def _install_apworld(apworld_src: str = "") -> Optional[tuple[pathlib.Path, path
                         "so a Launcher restart is required to use the new installation.")
     world_source = worlds.WorldSource(str(target), is_zip=True, relative=False)
     bisect.insort(worlds.world_sources, world_source)
-    world_source.load()
+    worlds.add_apworld_spec(world_source, worlds.APWorldContainer(world_source.resolved_path))
+    if not world_source.load():
+        raise Exception(f"World was installed, but failed to load. See the Launcher log for details.")
 
     return apworld_path, target
 
