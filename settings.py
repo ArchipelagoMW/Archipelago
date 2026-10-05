@@ -816,7 +816,7 @@ class Settings(Group):
             with open(location, encoding="utf-8-sig") as f:
                 from yaml.error import MarkedYAMLError
                 try:
-                    options = parse_yaml(f.read())
+                    options = parse_yaml(f.read().replace("\\", "/")) # Prevent user error for paths
                 except MarkedYAMLError as ex:
                     if ex.problem_mark:
                         f.seek(0)
